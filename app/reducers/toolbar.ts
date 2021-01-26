@@ -1,17 +1,27 @@
-import { Action } from 'redux';
-import { DELETE_ALL } from '../actions/toolbar';
+import {
+  Dispatch as ReduxDispatch,
+  Store as ReduxStore,
+  Action,
+  AnyAction
+} from 'redux';
+
+import { CHANGE_DELETE_STATUS } from '../actions/toolbar';
+
+export interface ToolbarState {
+  deleteStatus: boolean;
+}
 
 export default function toolbar(
   state = {
     deleteStatus: false
   },
-  action: Action<string>
+  action: AnyAction
 ) {
   switch (action.type) {
-    case DELETE_ALL:
+    case CHANGE_DELETE_STATUS:
       return {
         ...state,
-        deleteStatus: true
+        deleteStatus: action.payload
       };
     default:
       return state;

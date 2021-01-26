@@ -1,0 +1,16 @@
+.bar {
+  background-color: #f5f5f5;
+  height: 40px;
+  width: 100%;
+  z-index: 2;
+  bottom: 0;
+  left: 0;
+  position: fixed;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+
+  svg{
+    cursor: pointer;
+  }
+}

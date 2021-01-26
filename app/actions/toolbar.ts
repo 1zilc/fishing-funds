@@ -1,15 +1,18 @@
 import { GetState, Dispatch } from '../reducers/types';
 
-export const DELETE_ALL = 'DELETE_ALL';
+export const CHANGE_DELETE_STATUS = 'CHANGE_DELETE_STATUS';
 
-export function enableDeleteAll() {
-  return {
-    type: DELETE_ALL
+export function toggleToolbarDeleteStatus() {
+  return (dispatch: Dispatch, getState: GetState) => {
+    const { toolbar } = getState();
+    const { deleteStatus } = toolbar;
+    dispatch(changeToolbarDeleteStatus(!deleteStatus));
   };
 }
 
-export function deleteAll() {
+export function changeToolbarDeleteStatus(status: boolean) {
   return {
-    type: DELETE_ALL
+    type: CHANGE_DELETE_STATUS,
+    payload: status
   };
 }
