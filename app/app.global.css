@@ -4,6 +4,8 @@
  */
 @import '~@fortawesome/fontawesome-free/css/all.css';
 @import './styles/collapse.css';
+@import './styles/re-drawer.css';
+@import './styles/button.css';
 
 body {
   position: relative;

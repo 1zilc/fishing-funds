@@ -1,0 +1,54 @@
+@import '../../styles//varible.scss';
+
+.content {
+  border-radius: 10px;
+  height: 100vh;
+  overflow: hidden;
+  padding: 15px;
+  box-sizing: border-box;
+
+  h3 {
+    font-size: 14px;
+    margin: 0;
+  }
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+
+
+  .close {
+    color: $text-color-dark;
+    background-color: $cancel-color;
+  }
+
+  .save {
+    color: $text-color-light;
+    background-color: $primary-color;
+  }
+}
+
+.body {
+  padding: 10px 0;
+
+  section {
+    padding: 5px 0;
+  }
+
+  label {
+    font-size: 12px;
+    width: 100px;
+    margin-bottom: 5px;
+    display: block;
+  }
+
+  input {
+    width: 100%;
+    outline: none;
+    border: 1px solid $border-color;
+    height: 20px;
+  }
+}

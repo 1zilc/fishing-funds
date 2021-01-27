@@ -3,32 +3,25 @@ import { useBoolean } from 'ahooks';
 import { Collapse } from 'react-collapse';
 import classnames from 'classnames';
 import { connect } from 'react-redux';
-import { bindActionCreators, Dispatch } from 'redux';
+import Drawer from 'rc-drawer';
+import EditContent from '../EditContent';
 import { StoreState } from '../../reducers/types';
 import { ToolbarState } from '../../reducers/toolbar';
-import { ReactComponent as MoneyIcon } from 'assets/icons/consumption.svg';
+import { ReactComponent as EditorIcon } from 'assets/icons/editor.svg';
 import { ReactComponent as RemoveIcon } from 'assets/icons/remove.svg';
 import { ReactComponent as ArrowDownIcon } from 'assets/icons/arrow-down.svg';
 import { ReactComponent as ArrowUpIcon } from 'assets/icons/arrow-up.svg';
 
 import * as Utils from '../../utils';
+import CONST_STORAGE from '../../constants/storage.json';
 
 import styles from './index.scss';
 
-export interface Fund {
-  name: string;
-  fundcode: string;
-  gztime: string;
-  gszzl: string;
-  jzrq: string;
-  dwjz: string;
-  gsz: string;
-}
-
 export interface RowProps {
-  fund: Fund;
+  fund: Fund.ResponseItem;
   index: number;
   toolbar: ToolbarState;
+  onFresh: () => Promise<Fund.ResponseItem[]>;
 }
 export const codes = [
   {
@@ -53,20 +46,50 @@ export const codes = [
   }
 ];
 
-const codeMap = codes.reduce((r, c) => {
-  r[c.code] = c;
-  return r;
-}, {} as { [index: string]: { code: string; cyfe: number } });
+const arrowSize = {
+  width: 12,
+  height: 12
+};
 
 const FundRow: React.FC<RowProps> = props => {
   const { fund, toolbar } = props;
-  const [collapse, { toggle }] = useBoolean(false);
   const { deleteStatus } = toolbar;
+  const [collapse, { toggle }] = useBoolean(false);
 
-  const cyfe = codeMap[fund?.fundcode]?.cyfe || 0;
+  const [
+    showEditDrawer,
+    {
+      setTrue: openEditDrawer,
+      setFalse: closeEditDrawer,
+      toggle: ToggleEditDrawer
+    }
+  ] = useBoolean(false);
+
+  const fundConfig: Fund.SettingItem[] = Utils.GetStorage(
+    CONST_STORAGE.FUND_SETTING,
+    []
+  );
+
+  const codeMap = fundConfig.reduce((r, c) => {
+    r[c.code] = c;
+    return r;
+  }, {} as { [index: string]: Fund.SettingItem });
+
+  const cyfe = (codeMap[fund?.fundcode]?.cyfe || 0).toFixed(2);
   const bjz = Utils.Minus(fund.gsz, fund.dwjz);
   const jrsygz = Utils.Multiply(cyfe, bjz).toFixed(2);
   const gszz = Utils.Multiply(fund.gsz, cyfe).toFixed(2);
+
+  const remove = () => {
+    fundConfig.forEach((item, index) => {
+      if (fund.fundcode === item.code) {
+        const cloneFundSetting = JSON.parse(JSON.stringify(fundConfig));
+        cloneFundSetting.splice(index, 1);
+        Utils.SetStorage(CONST_STORAGE.FUND_SETTING, cloneFundSetting);
+        props.onFresh();
+      }
+    });
+  };
 
   return (
     <div>
@@ -81,9 +104,9 @@ const FundRow: React.FC<RowProps> = props => {
         >
           <div className={styles.arrow}>
             {collapse ? (
-              <ArrowUpIcon style={{ width: 12, height: 12 }} />
+              <ArrowUpIcon style={{ ...arrowSize }} />
             ) : (
-              <ArrowDownIcon style={{ width: 12, height: 12 }} />
+              <ArrowDownIcon style={{ ...arrowSize }} />
             )}
           </div>
           <div style={{ flex: 1 }}>
@@ -108,13 +131,18 @@ const FundRow: React.FC<RowProps> = props => {
               Number(fund.gszzl) < 0 ? styles.down : styles.up
             )}
           >
-            {Utils.yang(fund.gszzl)} %
+            {Utils.Yang(fund.gszzl)} %
           </div>
           <div
             className={styles.remove}
             style={{ width: deleteStatus ? 20 : 0 }}
           >
-            <RemoveIcon />
+            <RemoveIcon
+              onClick={e => {
+                remove();
+                e.stopPropagation();
+              }}
+            />
           </div>
         </div>
       </div>
@@ -127,15 +155,18 @@ const FundRow: React.FC<RowProps> = props => {
           <section>
             <span>估算值：</span>
             <span>{fund.gsz}</span>
-            <span style={{ float: 'right' }}>({Utils.yang(bjz)})</span>
+            <span style={{ flex: 1, textAlign: 'right' }}>
+              ({Utils.Yang(bjz)})
+            </span>
           </section>
           <section>
             <span>持有份额：</span>
             <span>{cyfe}</span>
+            <EditorIcon className={styles.editor} onClick={openEditDrawer} />
           </section>
           <section>
             <span>今日收益估值：</span>
-            <span>¥ {Utils.yang(jrsygz)}</span>
+            <span>¥ {Utils.Yang(jrsygz)}</span>
           </section>
           <section>
             <span>截止日期：</span>
@@ -147,6 +178,24 @@ const FundRow: React.FC<RowProps> = props => {
           </section>
         </div>
       </Collapse>
+      <Drawer
+        open={showEditDrawer}
+        showMask
+        maskClosable
+        level={null}
+        handler={false}
+        onClose={closeEditDrawer}
+        placement="bottom"
+      >
+        <EditContent
+          onEnter={() => {
+            props.onFresh();
+            closeEditDrawer();
+          }}
+          onClose={closeEditDrawer}
+          fund={{ cyfe, code: fund.fundcode }}
+        />
+      </Drawer>
     </div>
   );
 };

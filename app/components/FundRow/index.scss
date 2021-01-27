@@ -1,19 +1,22 @@
+@import '../../styles//varible.scss';
+
 .row {
   /* display: flex; */
   width: 100%;
   transition: all 0.2s;
   padding: 8px 8px;
   box-sizing: border-box;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid $border-color;
   z-index: 2;
   cursor: pointer;
+
+  &:hover {
+    background-color: $primary-color;
+    color: #fff;
+    border-radius: 2px;
+  }
 }
 
-.row:hover {
-  background-color: #40a9ff;
-  color: #fff;
-  border-radius: 2px;
-}
 
 .fundName {
   font-weight: 600;
@@ -42,11 +45,11 @@
 }
 
 .up {
-  background-color: #f5222d;
+  background-color: $increase-color;
 }
 
 .down {
-  background-color: #52c41a;
+  background-color: $reduce-color;
 }
 
 
@@ -81,12 +84,20 @@
   flex-wrap: wrap;
   font-size: 10px;
   color: #888;
-  background-color: #efefef;
+  background-color: $cancel-color;
   word-wrap: break-word;
+
+  section {
+    width: 50%;
+    padding: 5px;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+  }
 }
 
-.collapseContent>section {
-  width: 50%;
-  padding: 5px;
-  box-sizing: border-box;
+.editor {
+  margin-left: 5px;
+  cursor: pointer;
 }

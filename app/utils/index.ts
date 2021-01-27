@@ -1,10 +1,11 @@
-export const yang = num => {
+export const Yang = num => {
   if (num < 0) {
     return num;
   } else {
     return `+${num}`;
   }
 };
+
 export const CalcWithPrefix = (a: any, b: any) => {
   if (b >= a) {
     return `+${Minus(b, a)}`;
@@ -13,7 +14,6 @@ export const CalcWithPrefix = (a: any, b: any) => {
   }
 };
 
-//修改之后的减法
 export const Minus = (arg1, arg2) => {
   var r1, r2, m, n;
   try {
@@ -46,4 +46,28 @@ export const Multiply = (arg1, arg2) => {
     (Number(s1.replace('.', '')) * Number(s2.replace('.', ''))) /
     Math.pow(10, m)
   );
+};
+
+export const DeepCopy = data => {
+  let dataTmp = undefined;
+
+  if (data === null || !(typeof data === 'object')) {
+    dataTmp = data;
+  } else {
+    dataTmp = data.constructor.name === 'Array' ? [] : {};
+
+    for (let key in data) {
+      dataTmp[key] = deepCopy(data[key]);
+    }
+  }
+
+  return dataTmp;
+};
+
+export const GetStorage = (key: string, init: any) => {
+  const json = localStorage.getItem(key);
+  return json ? JSON.parse(json) : init;
+};
+export const SetStorage = (key: string, data: any) => {
+  localStorage.setItem(key, JSON.stringify(data));
 };

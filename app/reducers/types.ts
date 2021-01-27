@@ -5,6 +5,7 @@ import {
   AnyAction
 } from 'redux';
 import { ToolbarState } from './toolbar';
+
 export interface StoreState {
   toolbar: ToolbarState;
 }
