@@ -23,15 +23,7 @@
   }
 }
 
-.minMode {
-  height: 20px;
-  box-shadow: 0 20px 20px rgba(0, 0, 0, .1);
 
-  svg {
-    height: 20px;
-    width: 20px;
-  }
-}
 
 .info {
   flex: 1;
@@ -54,6 +46,7 @@
     // justify-content: space-around;
     width: 100%;
     align-items: center;
+    transition: all .2s;
 
     i {
       height: 10px;
@@ -61,4 +54,31 @@
       margin: 0 10px;
     }
   }
+}
+
+.minMode {
+  height: 20px;
+  box-shadow: 0 20px 20px rgba(0, 0, 0, .1);
+
+  svg {
+    height: 20px;
+    width: 20px;
+  }
+
+  .info {
+
+
+    .last {
+      height: 0;
+      overflow: hidden;
+    }
+
+    .moneyBar {
+      font-size: 12px;
+      font-weight: 600;
+
+      i {}
+    }
+  }
+
 }
