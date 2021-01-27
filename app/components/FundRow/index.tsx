@@ -54,7 +54,7 @@ const arrowSize = {
 const FundRow: React.FC<RowProps> = props => {
   const { fund, toolbar } = props;
   const { deleteStatus } = toolbar;
-  const [collapse, { toggle }] = useBoolean(false);
+  const [collapse, { toggle }] = useBoolean(true);
 
   const [
     showEditDrawer,
@@ -193,7 +193,7 @@ const FundRow: React.FC<RowProps> = props => {
             closeEditDrawer();
           }}
           onClose={closeEditDrawer}
-          fund={{ cyfe, code: fund.fundcode }}
+          fund={{ cyfe: Number(cyfe), code: fund.fundcode }}
         />
       </Drawer>
     </div>

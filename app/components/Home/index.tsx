@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { bindActionCreators, Dispatch } from 'redux';
 import { connect } from 'react-redux';
-import { useLocalStorageState } from 'ahooks';
-import superagent from 'superagent';
-import FundRow, { codes } from '../../components/FundRow';
+import request from 'request';
+import FundRow from '../../components/FundRow';
 import Toolbar from '../../components/Toolbar';
+import Wallet from '../../components/Wallet';
 
 import {
   toggleToolbarDeleteStatus,
@@ -13,18 +13,27 @@ import {
 import { StoreState } from '../../reducers/types';
 import { ToolbarState } from '../../reducers/toolbar';
 
+import * as Utils from '../../utils';
+import '../../utils/jsonpgz';
+
 import styles from './index.scss';
 import CONST_STORAGE from '../../constants/storage.json';
 
-export const getFund = async (code: string) => {
-  try {
-    const { text } = await superagent.get(
-      `http://fundgz.1234567.com.cn/js/${code}.js`
+export const getFund: (
+  code: string
+) => Promise<Fund.ResponseItem> = async code => {
+  return new Promise((resolve, reject) => {
+    request.get(
+      `http://fundgz.1234567.com.cn/js/${code}.js`,
+      (error, response, body) => {
+        if (!error) {
+          resolve(eval(body));
+        } else {
+          reject({});
+        }
+      }
     );
-    return eval(text);
-  } catch {
-    return null;
-  }
+  });
 };
 
 export interface HomeProps {
@@ -36,12 +45,15 @@ const Home: React.FC<HomeProps> = ({ toggleToolbarDeleteStatus }) => {
   const [funds, setFunds] = useState<Fund.ResponseItem[]>([]);
 
   const fresh = async () => {
-    const fundSetting: Fund.SettingItem[] = JSON.parse(
-      localStorage.getItem(CONST_STORAGE.FUND_SETTING)!
+    const fundConfig: Fund.SettingItem[] = Utils.GetStorage(
+      CONST_STORAGE.FUND_SETTING,
+      []
     );
+
     const result: Fund.ResponseItem[] = await Promise.all(
-      fundSetting!.map(({ code }) => getFund(code))
+      fundConfig.map(({ code }) => getFund(code))
     );
+
     setFunds(result);
     return result;
   };
@@ -50,12 +62,9 @@ const Home: React.FC<HomeProps> = ({ toggleToolbarDeleteStatus }) => {
     fresh();
   }, []);
 
-  const a = [1, 23, 4];
-  a.splice(1, 1);
-  console.log(a);
-
   return (
     <div className={styles.layout}>
+      <Wallet />
       <div className={styles.container}>
         {funds.map((fund, index) => {
           return (
@@ -63,7 +72,7 @@ const Home: React.FC<HomeProps> = ({ toggleToolbarDeleteStatus }) => {
           );
         })}
       </div>
-      <Toolbar onFresh={fresh} onDelete={toggleToolbarDeleteStatus} />
+      <Toolbar onFresh={fresh} />
     </div>
   );
 };

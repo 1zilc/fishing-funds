@@ -21,7 +21,6 @@ import styles from './index.scss';
 
 export interface ToolBarProps {
   onFresh: () => Promise<Fund.ResponseItem[]>;
-  onDelete: () => void;
   toggleToolbarDeleteStatus: () => void;
 }
 

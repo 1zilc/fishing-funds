@@ -196,6 +196,7 @@
     "@types/react-router-dom": "^5.1.5",
     "@types/react-test-renderer": "^16.9.2",
     "@types/redux-logger": "^3.0.7",
+    "@types/request": "^2.48.5",
     "@types/sinon": "^7.5.2",
     "@types/superagent": "^4.1.10",
     "@types/tapable": "^1.0.5",
@@ -299,6 +300,7 @@
     "react-router-dom": "^5.1.2",
     "redux": "^4.0.5",
     "redux-thunk": "^2.3.0",
+    "request": "^2.88.2",
     "source-map-support": "^0.5.16",
     "superagent": "^6.1.0"
   },

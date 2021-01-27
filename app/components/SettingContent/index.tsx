@@ -17,7 +17,9 @@ const SettingContent: React.FC<SettingContentProps> = props => {
           保存
         </button>
       </div>
-      <div className={styles.body}></div>
+      <div className={styles.body}>
+        
+      </div>
     </div>
   );
 };
