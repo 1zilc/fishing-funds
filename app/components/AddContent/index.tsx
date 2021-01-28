@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import InputNumber from 'rc-input-number';
-import CONST_STORAGE from '../../constants/storage.json';
-import * as Utils from '../../utils';
+import { addFund } from '../../actions/storage';
 import styles from './index.scss';
 
 export interface AddContentProps {
@@ -13,22 +12,11 @@ const AddContent: React.FC<AddContentProps> = props => {
   const [code, setCode] = useState<string>('');
   const [num, setNum] = useState<number>(0);
 
-  const onAdd = () => {
-    const fundConfig: Fund.SettingItem[] = Utils.GetStorage(
-      CONST_STORAGE.FUND_SETTING,
-      []
-    );
-    const notExist = fundConfig.filter(item => code === item.code).length === 0;
-    if (notExist) {
-      Utils.SetStorage(CONST_STORAGE.FUND_SETTING, [
-        ...fundConfig,
-        {
-          code,
-          cyfe: num
-        }
-      ]);
-    } else {
-    }
+  const onAdd = async () => {
+    await addFund({
+      code,
+      cyfe: num
+    });
     props.onEnter();
   };
 

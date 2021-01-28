@@ -1,14 +1,23 @@
 import React from 'react';
 import { useScroll } from 'ahooks';
 import classnames from 'classnames';
+import { connect } from 'react-redux';
 import { ReactComponent as ConsumptionIcon } from 'assets/icons/consumption.svg';
 import { ReactComponent as WalletIcon } from 'assets/icons/wallet.svg';
-
+import { StoreState } from '../../reducers/types';
+import * as Utils from '../../utils';
+import { calcFunds } from '../../actions/storage';
+import { WalletState } from '../../reducers/wallet';
 import styles from './index.scss';
 
-const Wallet = () => {
+export interface WalletProps {
+  funds: Fund.ResponseItem[];
+  wallet: WalletState;
+}
+const Wallet: React.FC<WalletProps> = ({ funds, wallet }) => {
   const position = useScroll(document, val => val.top <= 400);
-  const now = new Date().toLocaleString();
+  const { zje, sygz } = calcFunds(funds);
+
   return (
     <div className={styles.layout}>
       <div
@@ -19,17 +28,25 @@ const Wallet = () => {
         <WalletIcon />
         <div className={styles.info}>
           <div>
-            <div className={styles.last}>刷新时间：{now}</div>
+            <div className={styles.last}>刷新时间：{wallet.updateTime}</div>
             <div></div>
           </div>
           <div className={styles.moneyBar}>
-            <div>总金额：20000</div>
+            <div>
+              <ConsumptionIcon />
+              持有金额：{zje.toFixed(2)}
+            </div>
             <i></i>
-            <div>收益估值：388</div>
+            <div>
+              <ConsumptionIcon />
+              收益估值：{sygz.toFixed(2)}
+            </div>
           </div>
         </div>
       </div>
     </div>
   );
 };
-export default Wallet;
+export default connect((state: StoreState) => ({
+  wallet: state.wallet
+}))(Wallet);

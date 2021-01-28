@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { bindActionCreators, Dispatch } from 'redux';
 import { connect } from 'react-redux';
-import request from 'request';
+
 import FundRow from '../../components/FundRow';
 import Toolbar from '../../components/Toolbar';
 import Wallet from '../../components/Wallet';
@@ -10,6 +10,8 @@ import {
   toggleToolbarDeleteStatus,
   changeToolbarDeleteStatus
 } from '../../actions/toolbar';
+import { updateUpdateTime } from '../../actions/wallet';
+import { getFund } from '../../actions/fund';
 import { StoreState } from '../../reducers/types';
 import { ToolbarState } from '../../reducers/toolbar';
 
@@ -19,29 +21,13 @@ import '../../utils/jsonpgz';
 import styles from './index.scss';
 import CONST_STORAGE from '../../constants/storage.json';
 
-export const getFund: (
-  code: string
-) => Promise<Fund.ResponseItem> = async code => {
-  return new Promise((resolve, reject) => {
-    request.get(
-      `http://fundgz.1234567.com.cn/js/${code}.js`,
-      (error, response, body) => {
-        if (!error) {
-          resolve(eval(body));
-        } else {
-          reject({});
-        }
-      }
-    );
-  });
-};
-
 export interface HomeProps {
   toolbar: ToolbarState;
   toggleToolbarDeleteStatus: () => void;
+  updateUpdateTime: (time: string) => void;
 }
 
-const Home: React.FC<HomeProps> = ({ toggleToolbarDeleteStatus }) => {
+const Home: React.FC<HomeProps> = ({ updateUpdateTime }) => {
   const [funds, setFunds] = useState<Fund.ResponseItem[]>([]);
 
   const fresh = async () => {
@@ -54,7 +40,10 @@ const Home: React.FC<HomeProps> = ({ toggleToolbarDeleteStatus }) => {
       fundConfig.map(({ code }) => getFund(code))
     );
 
+    const now = new Date().toLocaleString();
+
     setFunds(result);
+    updateUpdateTime(now);
     return result;
   };
 
@@ -64,7 +53,7 @@ const Home: React.FC<HomeProps> = ({ toggleToolbarDeleteStatus }) => {
 
   return (
     <div className={styles.layout}>
-      <Wallet />
+      <Wallet funds={funds} />
       <div className={styles.container}>
         {funds.map((fund, index) => {
           return (
@@ -83,7 +72,11 @@ export default connect(
   }),
   (dispatch: Dispatch) =>
     bindActionCreators(
-      { toggleToolbarDeleteStatus, changeToolbarDeleteStatus },
+      {
+        toggleToolbarDeleteStatus,
+        changeToolbarDeleteStatus,
+        updateUpdateTime
+      },
       dispatch
     )
 )(Home);

@@ -30,7 +30,7 @@
   box-sizing: border-box;
   padding: 0 10px;
   display: flex;
-  justify-content: center;
+  justify-content: space-around;
   flex-direction: column;
 
   .last {
@@ -48,10 +48,21 @@
     align-items: center;
     transition: all .2s;
 
+
     i {
       height: 10px;
       border-right: 1px solid $border-color;
       margin: 0 10px;
+    }
+
+    div {
+      display: flex;
+      align-items: center;
+    }
+
+    svg {
+      height: 14px;
+      width: 14px;
     }
   }
 }

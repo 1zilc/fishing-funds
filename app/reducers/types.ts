@@ -5,9 +5,10 @@ import {
   AnyAction
 } from 'redux';
 import { ToolbarState } from './toolbar';
-
+import { WalletState } from './wallet';
 export interface StoreState {
   toolbar: ToolbarState;
+  wallet: WalletState;
 }
 
 export type GetState = () => StoreState;

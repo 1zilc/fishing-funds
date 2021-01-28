@@ -13,7 +13,7 @@ import { ReactComponent as ArrowDownIcon } from 'assets/icons/arrow-down.svg';
 import { ReactComponent as ArrowUpIcon } from 'assets/icons/arrow-up.svg';
 
 import * as Utils from '../../utils';
-import CONST_STORAGE from '../../constants/storage.json';
+import { deleteFund, calcFund } from '../../actions/storage';
 
 import styles from './index.scss';
 
@@ -64,31 +64,11 @@ const FundRow: React.FC<RowProps> = props => {
       toggle: ToggleEditDrawer
     }
   ] = useBoolean(false);
+  const { cyfe, bjz, jrsygz, gszz } = calcFund(fund);
 
-  const fundConfig: Fund.SettingItem[] = Utils.GetStorage(
-    CONST_STORAGE.FUND_SETTING,
-    []
-  );
-
-  const codeMap = fundConfig.reduce((r, c) => {
-    r[c.code] = c;
-    return r;
-  }, {} as { [index: string]: Fund.SettingItem });
-
-  const cyfe = (codeMap[fund?.fundcode]?.cyfe || 0).toFixed(2);
-  const bjz = Utils.Minus(fund.gsz, fund.dwjz);
-  const jrsygz = Utils.Multiply(cyfe, bjz).toFixed(2);
-  const gszz = Utils.Multiply(fund.gsz, cyfe).toFixed(2);
-
-  const remove = () => {
-    fundConfig.forEach((item, index) => {
-      if (fund.fundcode === item.code) {
-        const cloneFundSetting = JSON.parse(JSON.stringify(fundConfig));
-        cloneFundSetting.splice(index, 1);
-        Utils.SetStorage(CONST_STORAGE.FUND_SETTING, cloneFundSetting);
-        props.onFresh();
-      }
-    });
+  const remove = async () => {
+    await deleteFund(fund);
+    props.onFresh();
   };
 
   return (
@@ -166,7 +146,7 @@ const FundRow: React.FC<RowProps> = props => {
           </section>
           <section>
             <span>今日收益估值：</span>
-            <span>¥ {Utils.Yang(jrsygz)}</span>
+            <span>¥ {Utils.Yang(jrsygz.toFixed(2))}</span>
           </section>
           <section>
             <span>截止日期：</span>
@@ -174,7 +154,7 @@ const FundRow: React.FC<RowProps> = props => {
           </section>
           <section>
             <span>今日估算总值：</span>
-            <span>¥ {gszz}</span>
+            <span>¥ {gszz.toFixed(2)}</span>
           </section>
         </div>
       </Collapse>

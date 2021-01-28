@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
 import { useLocalStorageState } from 'ahooks';
 import InputNumber from 'rc-input-number';
-
-import * as Utils from '../../utils';
-import CONST_STORAGE from '../../constants/storage.json';
+import { updateFund } from '../../actions/storage';
 import styles from './index.scss';
 
 export interface AddContentProps {
@@ -15,18 +13,12 @@ export interface AddContentProps {
 const EditContent: React.FC<AddContentProps> = props => {
   const { fund } = props;
   const [num, setNum] = useState<number>(fund.cyfe);
-  const fundConfig: Fund.SettingItem[] = Utils.GetStorage(
-    CONST_STORAGE.FUND_SETTING,
-    []
-  );
 
-  const onSave = () => {
-    fundConfig.forEach(item => {
-      if (fund.code === item.code) {
-        item.cyfe = num;
-      }
+  const onSave = async () => {
+    await updateFund({
+      code: fund.code,
+      cyfe: num
     });
-    Utils.SetStorage(CONST_STORAGE.FUND_SETTING, fundConfig);
     props.onEnter();
   };
 
