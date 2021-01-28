@@ -1,4 +1,4 @@
-# fishing-funds
+# Fishing Funds
 > 显示基金涨跌状态栏小应用,数据源来自天天基金
 ### 使用截图
 ![image](https://github.com/1zilc/fishing-funds/blob/master/screenshots/index.png)
@@ -20,9 +20,10 @@
 
 ## 支持一下～
 #### 支付宝
-![image](https://github.com/1zilc/fishing-funds/blob/master/app/assets/qrcode/alipay.png)
+<img src="https://github.com/1zilc/fishing-funds/blob/master/app/assets/qrcode/alipay.png" width="200px"  height="200px"/>
+
 #### 微信
-![image](https://github.com/1zilc/fishing-funds/blob/master/app/assets/qrcode/wechat.png)
+<img src="https://github.com/1zilc/fishing-funds/blob/master/app/assets/qrcode/wechat.png" width="200px"  height="200px"/>
 
 ## 感谢
 [Jr Prévost](https://github.com/3on)  

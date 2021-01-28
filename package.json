@@ -1,8 +1,8 @@
 {
   "name": "fishing-funds",
-  "productName": "fishing-funds",
+  "productName": "Fishing Funds",
   "version": "1.0.0",
-  "description": "显示基金涨跌状态栏小应用",
+  "description": "显示基金涨跌状态栏小应用,数据源来自天天基金",
   "scripts": {
     "build": "concurrently \"yarn build-main\" \"yarn build-renderer\"",
     "build-dll": "cross-env NODE_ENV=development webpack --config ./configs/webpack.config.renderer.dev.dll.babel.js --colors",
