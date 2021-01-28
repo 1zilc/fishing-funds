@@ -1,11 +1,12 @@
 @import '../../styles//varible.scss';
 
+
 .content {
   border-radius: 10px;
-  height: 100vh;
-  overflow: hidden;
-  padding: 15px;
+  max-height: 100vh;
+  padding: 15px 15px 0 15px;
   box-sizing: border-box;
+  // background-color: $cancel-color;
 
   h3 {
     font-size: 14px;
@@ -51,4 +52,76 @@
     border: 1px solid $border-color;
     height: 20px;
   }
+}
+
+.title {
+  font-size: 12px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+
+  svg {
+    width: 20px;
+    height: 20px;
+    margin-right: 5px;
+  }
+
+  &::after {
+    content: '';
+    display: block;
+    flex: 1;
+    margin-left: 10px;
+    border-top: 1px solid $border-color;
+  }
+}
+
+.pay {
+  display: flex;
+  // flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.qrcode {
+  width: 50%;
+  position: relative;
+  padding: 30px;
+  box-sizing: border-box;
+  margin: 20px 0;
+  transform-style: preserve-3d;
+  box-shadow: 0 0 20px rgba(0, 0, 0, .3);
+  border-radius: 10px;
+
+  img {
+    display: block;
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    transform: translateZ(50px);
+    box-shadow: 0 0 10px rgba(0, 0, 0, .2);
+  }
+}
+
+.alipay {
+  background-color: $alipay-color;
+}
+
+.wechat {
+  background-color: $wechat-color;
+}
+
+.link {
+  font-size: 12px;
+  text-align: center;
+  padding: 15px;
+}
+
+.version {
+  color: #888;
+  font-size: 10px;
+  text-align: center;
+  padding: 15px 0;
+  background-color: $cancel-color;
+  border-top: 1px solid $border-color;
+  margin: 0 -15px;
 }

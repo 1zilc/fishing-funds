@@ -300,6 +300,7 @@
     "react-redux": "^7.1.3",
     "react-router": "^5.1.2",
     "react-router-dom": "^5.1.2",
+    "react-tilt": "^0.1.4",
     "redux": "^4.0.5",
     "redux-thunk": "^2.3.0",
     "request": "^2.88.2",

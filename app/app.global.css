@@ -33,9 +33,9 @@ li {
 }
 
 a {
-  color: white;
+  /* color: white;
   opacity: 0.75;
-  text-decoration: none;
+  text-decoration: none; */
 }
 
 a:hover {
