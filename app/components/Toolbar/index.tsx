@@ -68,6 +68,7 @@ const ToolBar: React.FC<ToolBarProps> = ({
         placement="bottom"
       >
         <AddContent
+          show={showAddDrawer}
           onEnter={() => {
             onFresh();
             closeAddDrawer();
@@ -83,8 +84,10 @@ const ToolBar: React.FC<ToolBarProps> = ({
         handler={false}
         onClose={closeAddDrawer}
         placement="bottom"
+        height="100vh"
       >
         <SettingContent
+          show={showSettingDrawer}
           onEnter={closeSettingDrawer}
           onClose={closeSettingDrawer}
         />

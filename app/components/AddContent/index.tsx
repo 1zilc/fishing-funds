@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import InputNumber from 'rc-input-number';
 import { addFund } from '../../actions/fund';
 import styles from './index.scss';
 
 export interface AddContentProps {
+  show?: boolean;
   onEnter: () => void;
   onClose: () => void;
 }
@@ -19,6 +20,11 @@ const AddContent: React.FC<AddContentProps> = props => {
     });
     props.onEnter();
   };
+
+  useEffect(() => {
+    setCode('');
+    setNum(0);
+  }, [props.show]);
 
   return (
     <div className={styles.content}>

@@ -7,7 +7,7 @@
 .content {
   padding: 10px;
   display: flex;
-  border: 1px solid $border-color;
+  border-bottom: 1px solid $border-color;
   top: 0;
   z-index: 2;
   transition: height .2s;
@@ -90,7 +90,7 @@
 }
 
 .minMode {
-  height: 40px;
+  height: 45px;
   box-shadow: 0 20px 20px rgba(0, 0, 0, .1);
 
   svg {

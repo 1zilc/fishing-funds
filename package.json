@@ -291,6 +291,7 @@
     "history": "^4.10.1",
     "menubar": "^9.0.1",
     "number-precision": "^1.5.0",
+    "rc-checkbox": "^2.3.2",
     "rc-drawer": "^4.2.2",
     "rc-input-number": "^6.2.0",
     "react": "^16.12.0",

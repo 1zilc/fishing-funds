@@ -9,11 +9,11 @@
   text-align: center;
   color: #888;
   background-color: $cancel-color;
+  overflow: hidden;
 }
 
 .disable {
   height: 0;
- overflow: hidden;
 }
 
 .jump {
