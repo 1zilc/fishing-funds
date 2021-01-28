@@ -47,7 +47,6 @@ export default {
       NODE_ENV: 'production'
     }),
 
-    new webpack.NamedModulesPlugin(),
-    new webpack.DefinePlugin({ 'global.GENTLY': false })
+    new webpack.NamedModulesPlugin()
   ]
 };

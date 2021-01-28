@@ -14,14 +14,20 @@
 1. 发布v1版本
 2. 支持基金自选添加、删除、份额修改，收益估计等基础功能
 3. 添加钱夹，自动计算总估值，当日收益
+
+
+
+
+## 支持一下～
+#### 支付宝
+![image](https://github.com/1zilc/fishing-funds/blob/master/app/assets/qrcode/alipay.png)
+#### 微信
+![image](https://github.com/1zilc/fishing-funds/blob/master/app/assets/qrcode/wechat.png)
+
 ## 感谢
 [Jr Prévost](https://github.com/3on)  
 [Electron React Boilerplate
 ](https://github.com/electron-react-boilerplate/electron-react-boilerplate)  
 [ahooks](https://github.com/alibaba/hooks)
-
-
-
-
 ## 许可证
 GPLv3
