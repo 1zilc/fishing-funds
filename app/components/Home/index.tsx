@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { bindActionCreators, Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import { useRequest } from 'ahooks';
+import { useInterval } from 'ahooks';
 
 import FundRow from '../../components/FundRow';
 import Toolbar from '../../components/Toolbar';
@@ -14,6 +15,7 @@ import {
 } from '../../actions/toolbar';
 import { updateUpdateTime } from '../../actions/wallet';
 import { getFund, getFundConfig } from '../../actions/fund';
+import { getSystemSetting } from '../../actions/setting';
 import { StoreState } from '../../reducers/types';
 import { ToolbarState } from '../../reducers/toolbar';
 import * as Utils from '../../utils';
@@ -29,6 +31,7 @@ export interface HomeProps {
 }
 
 const Home: React.FC<HomeProps> = ({ updateUpdateTime }) => {
+  const { freshDelaySetting, autoFreshSetting } = getSystemSetting();
   const { fundConfig } = getFundConfig();
   const [funds, setFunds] = useState<Fund.ResponseItem[]>([]);
   const { run, loading } = useRequest(
@@ -44,6 +47,10 @@ const Home: React.FC<HomeProps> = ({ updateUpdateTime }) => {
       }
     }
   );
+
+  useInterval(() => {
+    autoFreshSetting && fresh();
+  }, freshDelaySetting * 1000 * 60);
 
   const fresh = async () => {
     window.scrollTo({
