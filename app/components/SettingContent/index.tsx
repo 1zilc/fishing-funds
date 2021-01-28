@@ -5,7 +5,7 @@ import InputNumber from 'rc-input-number';
 import Checkbox from 'rc-checkbox';
 import wechatQRcodeImage from 'assets/qrcode/wechat.png';
 import alipayQRcodeImage from 'assets/qrcode/alipay.png';
-import { ReactComponent as QRcodeIcon } from 'assets/icons/QRcode.svg';
+import { ReactComponent as QRcodeIcon } from 'assets/icons/qr-code.svg';
 import { ReactComponent as SettingIcon } from 'assets/icons/setting.svg';
 import { ReactComponent as LinkIcon } from 'assets/icons/link.svg';
 import { getSystemSetting, setSystemSetting } from '../../actions/setting';

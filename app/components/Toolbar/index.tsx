@@ -9,7 +9,7 @@ import SettingContent from '../SettingContent';
 import { ReactComponent as AddIcon } from 'assets/icons/add.svg';
 import { ReactComponent as SettingIcon } from 'assets/icons/setting.svg';
 import { ReactComponent as DeleteIcon } from 'assets/icons/delete.svg';
-import { ReactComponent as FreshIcon } from 'assets/icons/fresh.svg';
+import { ReactComponent as RefreshIcon } from 'assets/icons/refresh.svg';
 import {
   toggleToolbarDeleteStatus,
   changeToolbarDeleteStatus
@@ -24,7 +24,7 @@ export interface ToolBarProps {
   toggleToolbarDeleteStatus: () => void;
 }
 
-const iconSize = { height: 24, width: 24 };
+const iconSize = { height: 18, width: 18 };
 
 const ToolBar: React.FC<ToolBarProps> = ({
   onFresh,
@@ -55,7 +55,7 @@ const ToolBar: React.FC<ToolBarProps> = ({
           style={{ ...iconSize }}
           onClick={toggleToolbarDeleteStatus}
         />
-        <FreshIcon style={{ ...iconSize }} onClick={onFresh} />
+        <RefreshIcon style={{ ...iconSize }} onClick={onFresh} />
         <SettingIcon style={{ ...iconSize }} onClick={openSettingDrawer} />
       </div>
       <Drawer

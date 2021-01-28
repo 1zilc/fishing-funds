@@ -7,7 +7,7 @@ import Drawer from 'rc-drawer';
 import EditContent from '../EditContent';
 import { StoreState } from '../../reducers/types';
 import { ToolbarState } from '../../reducers/toolbar';
-import { ReactComponent as EditorIcon } from 'assets/icons/editor.svg';
+import { ReactComponent as EditIcon } from 'assets/icons/edit.svg';
 import { ReactComponent as RemoveIcon } from 'assets/icons/remove.svg';
 import { ReactComponent as ArrowDownIcon } from 'assets/icons/arrow-down.svg';
 import { ReactComponent as ArrowUpIcon } from 'assets/icons/arrow-up.svg';
@@ -142,7 +142,7 @@ const FundRow: React.FC<RowProps> = props => {
           <section>
             <span>持有份额：</span>
             <span>{cyfe}</span>
-            <EditorIcon className={styles.editor} onClick={openEditDrawer} />
+            <EditIcon className={styles.editor} onClick={openEditDrawer} />
           </section>
           <section>
             <span>今日收益估值：</span>
