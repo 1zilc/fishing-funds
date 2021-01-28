@@ -1,7 +1,8 @@
 # Fishing Funds
 > 显示基金涨跌状态栏小应用,数据源来自天天基金
 ### 使用截图
-![image](https://github.com/1zilc/fishing-funds/blob/master/screenshots/index.png)
+<img src="https://github.com/1zilc/fishing-funds/blob/master/screenshots/index.png" width="300px"  />
+
 ### 项目介绍
 * 本项目基于[electron-react-boilerplate-menubar](https://github.com/3on/electron-react-boilerplate-menubar)开发
 * 采用天天基金数据源接口，实时显示当前基金涨跌情况，计算显示收益等数据
