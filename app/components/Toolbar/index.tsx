@@ -20,7 +20,7 @@ import * as Enums from '../../utils/enums';
 import styles from './index.scss';
 
 export interface ToolBarProps {
-  onFresh: () => Promise<Fund.ResponseItem[]>;
+  onFresh: () => Promise<void>;
   toggleToolbarDeleteStatus: () => void;
 }
 

@@ -21,7 +21,7 @@ export interface RowProps {
   fund: Fund.ResponseItem;
   index: number;
   toolbar: ToolbarState;
-  onFresh: () => Promise<Fund.ResponseItem[]>;
+  onFresh: () => Promise<void>;
 }
 export const codes = [
   {

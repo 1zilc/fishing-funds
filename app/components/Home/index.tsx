@@ -1,20 +1,21 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { bindActionCreators, Dispatch } from 'redux';
 import { connect } from 'react-redux';
+import { useRequest } from 'ahooks';
 
 import FundRow from '../../components/FundRow';
 import Toolbar from '../../components/Toolbar';
 import Wallet from '../../components/Wallet';
+import LoadingBar from '../../components/LoadingBar';
 
 import {
   toggleToolbarDeleteStatus,
   changeToolbarDeleteStatus
 } from '../../actions/toolbar';
 import { updateUpdateTime } from '../../actions/wallet';
-import { getFund } from '../../actions/fund';
+import { getFund, getFundConfig } from '../../actions/fund';
 import { StoreState } from '../../reducers/types';
 import { ToolbarState } from '../../reducers/toolbar';
-
 import * as Utils from '../../utils';
 import '../../utils/jsonpgz';
 
@@ -28,23 +29,28 @@ export interface HomeProps {
 }
 
 const Home: React.FC<HomeProps> = ({ updateUpdateTime }) => {
+  const { fundConfig } = getFundConfig();
   const [funds, setFunds] = useState<Fund.ResponseItem[]>([]);
+  const { run, loading } = useRequest(
+    async () => Promise.all(fundConfig.map(({ code }) => getFund(code))),
+    {
+      manual: true,
+      // loadingDelay: 1000,
+      throttleInterval: 1000 * 2, // 3秒请求一次
+      onSuccess: result => {
+        const now = new Date().toLocaleString();
+        setFunds(result);
+        updateUpdateTime(now);
+      }
+    }
+  );
 
   const fresh = async () => {
-    const fundConfig: Fund.SettingItem[] = Utils.GetStorage(
-      CONST_STORAGE.FUND_SETTING,
-      []
-    );
-
-    const result: Fund.ResponseItem[] = await Promise.all(
-      fundConfig.map(({ code }) => getFund(code))
-    );
-
-    const now = new Date().toLocaleString();
-
-    setFunds(result);
-    updateUpdateTime(now);
-    return result;
+    window.scrollTo({
+      behavior: 'smooth',
+      top: 0
+    });
+    run();
   };
 
   useEffect(() => {
@@ -54,6 +60,7 @@ const Home: React.FC<HomeProps> = ({ updateUpdateTime }) => {
   return (
     <div className={styles.layout}>
       <Wallet funds={funds} />
+      <LoadingBar show={loading} />
       <div className={styles.container}>
         {funds.map((fund, index) => {
           return (

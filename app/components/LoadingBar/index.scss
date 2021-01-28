@@ -1,0 +1,36 @@
+@import '../../styles//varible.scss';
+
+
+.content {
+  height: 30px;
+  transition: height .2s;
+  font-size: 10px;
+  line-height: 30px;
+  text-align: center;
+  color: #888;
+  background-color: $cancel-color;
+}
+
+.disable {
+  height: 0;
+ overflow: hidden;
+}
+
+.jump {
+  animation: jump 1s infinite;
+  display: inline-block;
+}
+
+@keyframes jump {
+  0% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-3px);
+  }
+
+  100% {
+    transform: translateY(0);
+  }
+}

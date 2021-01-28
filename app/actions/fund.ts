@@ -68,7 +68,9 @@ export const getFund: (
       (error, response, body) => {
         if (!error) {
           try {
-            resolve(eval(body));
+            setTimeout(() => {
+              resolve(eval(body));
+            }, 1000);
           } catch {
             reject({});
           }

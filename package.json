@@ -1,8 +1,8 @@
 {
-  "name": "electron-react-boilerplate",
-  "productName": "ElectronReact",
-  "version": "1.1.0",
-  "description": "Electron application boilerplate based on React, React Router, Webpack, React Hot Loader for rapid application development",
+  "name": "fishing-funds",
+  "productName": "fishing-funds",
+  "version": "1.0.0",
+  "description": "显示基金涨跌状态栏小应用",
   "scripts": {
     "build": "concurrently \"yarn build-main\" \"yarn build-renderer\"",
     "build-dll": "cross-env NODE_ENV=development webpack --config ./configs/webpack.config.renderer.dev.dll.babel.js --colors",
@@ -105,9 +105,9 @@
     "url": "git+https://github.com/electron-react-boilerplate/electron-react-boilerplate.git"
   },
   "author": {
-    "name": "Electron React Boilerplate Maintainers",
-    "email": "electronreactboilerplate@gmail.com",
-    "url": "https://electron-react-boilerplate.js.org"
+    "name": "1zilc",
+    "email": "dywzzjx@163.com",
+    "url": "https://github.com/1zilc"
   },
   "contributors": [
     {
@@ -121,11 +121,12 @@
       "url": "https://github.com/amilajack"
     }
   ],
-  "license": "MIT",
+  "license": "(ISC OR GPL-3.0)",
   "bugs": {
-    "url": "https://github.com/electron-react-boilerplate/electron-react-boilerplate/issues"
+    "url": "https://github.com/1zilc/fishing-funds/issues"
   },
   "keywords": [
+    "funds",
     "electron",
     "boilerplate",
     "react",
@@ -137,7 +138,7 @@
     "hot",
     "reload"
   ],
-  "homepage": "https://github.com/electron-react-boilerplate/electron-react-boilerplate#readme",
+  "homepage": "https://github.com/1zilc",
   "jest": {
     "testURL": "http://localhost/",
     "moduleNameMapper": {
