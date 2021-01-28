@@ -39,3 +39,7 @@ export const GetStorage = (key: string, init: any) => {
 export const SetStorage = (key: string, data: any) => {
   localStorage.setItem(key, JSON.stringify(data));
 };
+
+export const encrypt = (s: string) => {
+  return s.replace(/[0-9]/g, '✱');
+};

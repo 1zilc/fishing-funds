@@ -13,7 +13,7 @@ import { ReactComponent as ArrowDownIcon } from 'assets/icons/arrow-down.svg';
 import { ReactComponent as ArrowUpIcon } from 'assets/icons/arrow-up.svg';
 
 import * as Utils from '../../utils';
-import { deleteFund, calcFund } from '../../actions/storage';
+import { deleteFund, calcFund } from '../../actions/fund';
 
 import styles from './index.scss';
 

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import InputNumber from 'rc-input-number';
-import { addFund } from '../../actions/storage';
+import { addFund } from '../../actions/fund';
 import styles from './index.scss';
 
 export interface AddContentProps {

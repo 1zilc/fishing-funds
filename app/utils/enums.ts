@@ -3,3 +3,8 @@ export enum ToolBarDwawerType {
   AddFund,
   Setting
 }
+
+export enum EyeStatus {
+  Close,
+  Open
+}

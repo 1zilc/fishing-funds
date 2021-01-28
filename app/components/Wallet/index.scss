@@ -14,9 +14,11 @@
   position: fixed;
   width: 100%;
   background-color: #fff;
-  height: 40px;
+  height: 60px;
+  box-sizing: border-box;
+  align-items: center;
 
-  svg {
+  &>svg {
     height: 40px;
     width: 40px;
     transition: height .2s, width .2s;
@@ -33,10 +35,16 @@
   justify-content: space-around;
   flex-direction: column;
 
-  .last {
-    font-size: 12px;
-    font-weight: 500;
-    color: #888;
+  .timeBar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .last {
+      font-size: 12px;
+      font-weight: 500;
+      color: #888;
+    }
   }
 
   .moneyBar {
@@ -58,6 +66,7 @@
     div {
       display: flex;
       align-items: center;
+      word-wrap: break-word;
     }
 
     svg {
@@ -67,8 +76,18 @@
   }
 }
 
-.minMode {
+.eye {
   height: 20px;
+  width: 20px;
+
+  svg {
+    height: 20px;
+    width: 20px;
+  }
+}
+
+.minMode {
+  height: 40px;
   box-shadow: 0 20px 20px rgba(0, 0, 0, .1);
 
   svg {
@@ -78,11 +97,16 @@
 
   .info {
 
-
-    .last {
+    .timeBar {
       height: 0;
       overflow: hidden;
+
+      .last {
+        height: 0;
+        overflow: hidden;
+      }
     }
+
 
     .moneyBar {
       font-size: 12px;

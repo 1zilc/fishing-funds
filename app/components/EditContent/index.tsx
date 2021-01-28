@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useLocalStorageState } from 'ahooks';
 import InputNumber from 'rc-input-number';
-import { updateFund } from '../../actions/storage';
+import { updateFund } from '../../actions/fund';
 import styles from './index.scss';
 
 export interface AddContentProps {
