@@ -1,6 +1,6 @@
 {
   "name": "fishing-funds",
-  "productName": "fishing-funds",
+  "productName": "Fishing Funds",
   "version": "1.0.0",
   "description": "显示基金涨跌状态栏小应用",
   "main": "./main.prod.js",

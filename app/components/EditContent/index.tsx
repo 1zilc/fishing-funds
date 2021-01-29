@@ -1,17 +1,18 @@
 import React, { useState } from 'react';
 import { useLocalStorageState } from 'ahooks';
 import InputNumber from 'rc-input-number';
-import { updateFund } from '../../actions/fund';
+import { updateFund, getFundConfig } from '../../actions/fund';
 import styles from './index.scss';
 
 export interface AddContentProps {
   onEnter: () => void;
   onClose: () => void;
-  fund: Fund.SettingItem;
+  fund: Fund.SettingItem & { name: string };
 }
 
 const EditContent: React.FC<AddContentProps> = props => {
   const { fund } = props;
+  const { codeMap } = getFundConfig();
   const [num, setNum] = useState<number>(fund.cyfe);
 
   const onSave = async () => {
@@ -34,6 +35,14 @@ const EditContent: React.FC<AddContentProps> = props => {
         </button>
       </div>
       <div className={styles.body}>
+        <section>
+          <label>基金名称：</label>
+          <span>{fund.name}</span>
+        </section>
+        <section>
+          <label>基金代码：</label>
+          <span>{fund.code}</span>
+        </section>
         <section>
           <label>持有份额：</label>
           <InputNumber

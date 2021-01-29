@@ -173,7 +173,7 @@ const FundRow: React.FC<RowProps> = props => {
             closeEditDrawer();
           }}
           onClose={closeEditDrawer}
-          fund={{ cyfe: Number(cyfe), code: fund.fundcode }}
+          fund={{ cyfe: Number(cyfe), code: fund.fundcode, name: fund.name }}
         />
       </Drawer>
     </div>

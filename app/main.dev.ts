@@ -9,7 +9,7 @@
  * `./app/main.prod.js` using webpack. This gives us some performance wins.
  */
 import path from 'path';
-import { app, BrowserWindow, Tray } from 'electron';
+import { app, BrowserWindow, nativeImage } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import { menubar } from 'menubar';
@@ -42,7 +42,6 @@ const installExtensions = async () => {
   return Promise.all(
     extensions.map(name => installer.default(installer[name], forceDownload))
   ).catch(console.log);
-  ``;
 };
 const createMenubar = async () => {
   if (
@@ -51,14 +50,14 @@ const createMenubar = async () => {
   ) {
     await installExtensions();
   }
-  const nativeImage = require('electron').nativeImage;
+  // const image = nativeImage.createFromPath('resources/menu/iconTemplate.png');
   const mb = menubar({
     index: `file://${__dirname}/app.html`,
-    icon: nativeImage.createFromPath('resources/icon.png').resize({
-      height: 20,
-      width: 20
-    }),
-    tooltip: 'fishing-funds',
+    icon: 'resources/menu/iconTemplate.png',
+    // icon: 'resources/icon.png',
+    // icon: image,
+    // tray: appIcon,
+    tooltip: 'Fishing Funds',
     browserWindow: {
       transparent: false,
       alwaysOnTop: false,
@@ -66,9 +65,15 @@ const createMenubar = async () => {
       height: 500,
       minHeight: 400,
       minWidth: 300,
-      webPreferences: {
-        nodeIntegration: true
-      }
+      webPreferences:
+        process.env.NODE_ENV === 'development' ||
+        process.env.E2E_BUILD === 'true'
+          ? {
+              nodeIntegration: true
+            }
+          : {
+              preload: path.join(__dirname, 'dist/renderer.prod.js')
+            }
     }
   });
   mb.on('after-create-window', () => {
