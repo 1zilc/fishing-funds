@@ -2,7 +2,7 @@
 > 显示基金涨跌状态栏小应用,数据源来自天天基金
 ### 软件截图
 <figure class="half">
-<img src="https://github.com/1zilc/fishing-funds/blob/master/screenshots/1.png" width="350px"  /><img src="https://github.com/1zilc/fishing-funds/blob/master/screenshots/2.png" width="350px"  />
+<img src="https://github.com/1zilc/fishing-funds/blob/master/screenshots/1.png"  /><img src="https://github.com/1zilc/fishing-funds/blob/master/screenshots/2.png"   />
 </figure>
 
 
