@@ -21,13 +21,13 @@
 
 
   .close {
-    color: $text-color-dark;
-    background-color: $cancel-color;
+    color: var(--reverse-text-color);
+    background-color: var(--cancel-color);
   }
 
   .save {
-    color: $text-color-light;
-    background-color: $primary-color;
+    color: var(--main-text-color);
+    background-color: var(--primary-color);
   }
 }
 
@@ -48,7 +48,7 @@
   input {
     width: 100%;
     outline: none;
-    border: 1px solid $border-color;
+    border: 1px solid var(--border-color);
     height: 20px;
   }
 

@@ -28,6 +28,7 @@ export const updateFund = async (fund: Fund.SettingItem) => {
       item.cyfe = fund.cyfe;
     }
   });
+  Utils.SetStorage(CONST_STORAGE.FUND_SETTING, fundConfig);
 };
 
 export const deleteFund = async (fund: Fund.ResponseItem) => {
@@ -91,7 +92,7 @@ export const calcFund: (
   gszz: number; // 估算总值
 } = (fund: Fund.ResponseItem) => {
   const { codeMap } = getFundConfig();
-  const cyfe = codeMap[fund.fundcode].cyfe || 0;
+  const cyfe = codeMap[fund.fundcode]?.cyfe || 0;
   const bjz = NP.minus(fund.gsz, fund.dwjz);
   const jrsygz = NP.times(cyfe, bjz);
   const gszz = NP.times(fund.gsz, cyfe);

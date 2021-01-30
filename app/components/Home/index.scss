@@ -10,5 +10,14 @@
   flex-direction: column;
   box-sizing: border-box;
   height: 100%;
+
   // padding: 10px 0;
+}
+
+.empty {
+  position: absolute;
+  text-align: center;
+  font-size: 12px;
+  width: 100%;
+  top: 50%;
 }

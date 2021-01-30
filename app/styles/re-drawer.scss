@@ -1,7 +1,10 @@
 @import '~rc-drawer/assets/index.css';
+
 .drawer-content-wrapper {
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
+  color: var(--reverse-text-color);
+  background-color: var(--background-color);
 }
 
 .drawer-content::-webkit-scrollbar {

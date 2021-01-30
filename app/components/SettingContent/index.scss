@@ -18,25 +18,25 @@
   justify-content: space-between;
   position: sticky;
   width: 100%;
-  background-color: rgba(255, 255, 255, .3);
+  background-color: var(--blur-color);
   backdrop-filter: saturate(180%) blur(20px);
   top: 0;
   padding: 10px;
   box-sizing: border-box;
   z-index: 2;
-  border-bottom: 1px solid $border-color;
+  border-bottom: 1px solid var(--border-color);
   box-shadow: 0 20px 20px rgba(0, 0, 0, .1);
   margin-bottom: 10px;
 
 
   .close {
-    color: $text-color-dark;
-    background-color: $cancel-color;
+    color: var(--reverse-text-color);
+    background-color: var(--cancel-color);
   }
 
   .add {
-    color: $text-color-light;
-    background-color: $primary-color;
+    color: #eee;
+    background-color: var(--primary-color);
   }
 }
 
@@ -58,7 +58,7 @@
   input {
     width: 100%;
     outline: none;
-    border: 1px solid $border-color;
+    border: 1px solid var(--border-color);
     height: 20px;
   }
 }
@@ -102,6 +102,7 @@
     width: 20px;
     height: 20px;
     margin-right: 5px;
+    fill: var(--svg-icon-color);
   }
 
   &::after {
@@ -109,7 +110,7 @@
     display: block;
     flex: 1;
     margin-left: 10px;
-    border-top: 1px solid $border-color;
+    border-top: 1px solid var(--border-color);
   }
 }
 
@@ -142,11 +143,11 @@
 }
 
 .alipay {
-  background-color: $alipay-color;
+  background-color: var(--alipay-color);
 }
 
 .wechat {
-  background-color: $wechat-color;
+  background-color: var(--wechat-color);
 }
 
 .link {
@@ -163,16 +164,17 @@
   padding: 15px 0;
 
   button {
-    color: $text-color-dark;
-    border: 1px solid $border-color;
+    color: var(--reverse-text-color);
+    background-color: var(--cancel-color);
+    border: 1px solid var(--border-color);
   }
 }
 
 .version {
-  color: #888;
+  color: var(--inner-text-color);
   font-size: 10px;
   text-align: center;
   padding: 10px 0;
-  background-color: $cancel-color;
-  border-top: 1px solid $border-color;
+  background-color: var(--inner-color);
+  border-top: 1px solid var(--border-color);
 }

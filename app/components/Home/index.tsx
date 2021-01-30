@@ -71,9 +71,17 @@ const Home: React.FC<HomeProps> = ({ updateUpdateTime }) => {
       <div className={styles.container}>
         {funds.map((fund, index) => {
           return (
-            <FundRow key={index} fund={fund} index={index} onFresh={fresh} />
+            <FundRow
+              key={fund.fundcode}
+              fund={fund}
+              index={index}
+              onFresh={fresh}
+            />
           );
         })}
+        {funds.length === 0 && (
+          <div className={styles.empty}>暂无基金数据~</div>
+        )}
       </div>
       <Toolbar onFresh={fresh} />
     </div>

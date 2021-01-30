@@ -15,7 +15,6 @@ export const updateUpdateTime = (updateTime: string) => {
 
 export const changeEyeStatus = (status: EyeStatus) => {
   Utils.SetStorage(CONST_STORAGE.EYE_STATUS, status);
-  console.log(status);
   return {
     type: CHANGE_EYE_STATUS,
     payload: status

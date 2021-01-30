@@ -5169,7 +5169,7 @@ ejs@~2.5.6:
   resolved "https://registry.npm.taobao.org/ejs/download/ejs-2.5.9.tgz?cache=0&sync_timestamp=1597678431282&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fejs%2Fdownload%2Fejs-2.5.9.tgz#7ba254582a560d267437109a68354112475b0ce5"
   integrity sha1-e6JUWCpWDSZ0NxCaaDVBEkdbDOU=
 
-electron-builder@^22.3.6:
+electron-builder@^22.0.0:
   version "22.9.1"
   resolved "https://registry.npm.taobao.org/electron-builder/download/electron-builder-22.9.1.tgz#a2962db6f2757bc01d02489f38fafe0809f68f60"
   integrity sha1-opYttvJ1e8AdAkifOPr+CAn2j2A=
@@ -5307,10 +5307,10 @@ electron-updater@^4.2.0:
     lodash.isequal "^4.5.0"
     semver "^7.3.2"
 
-electron@^9.0.0:
-  version "9.4.2"
-  resolved "https://registry.npm.taobao.org/electron/download/electron-9.4.2.tgz#0c76dfc3d317108adac66844b868a9e2e57d48f5"
-  integrity sha1-DHbfw9MXEIraxmhEuGip4uV9SPU=
+electron@^7.0.0:
+  version "7.3.3"
+  resolved "https://registry.npm.taobao.org/electron/download/electron-7.3.3.tgz#f61502a3d42d85adfecd8e37f98da449b591f8af"
+  integrity sha1-9hUCo9Qtha3+zY43+Y2kSbWR+K8=
   dependencies:
     "@electron/get" "^1.0.1"
     "@types/node" "^12.0.12"
@@ -5341,12 +5341,12 @@ emittery@^0.4.1:
 
 emoji-regex@^7.0.1, emoji-regex@^7.0.2:
   version "7.0.3"
-  resolved "https://registry.npm.taobao.org/emoji-regex/download/emoji-regex-7.0.3.tgz?cache=0&sync_timestamp=1603212288390&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Femoji-regex%2Fdownload%2Femoji-regex-7.0.3.tgz#933a04052860c85e83c122479c4748a8e4c72156"
+  resolved "https://registry.npm.taobao.org/emoji-regex/download/emoji-regex-7.0.3.tgz?cache=0&sync_timestamp=1611911479256&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Femoji-regex%2Fdownload%2Femoji-regex-7.0.3.tgz#933a04052860c85e83c122479c4748a8e4c72156"
   integrity sha1-kzoEBShgyF6DwSJHnEdIqOTHIVY=
 
 emoji-regex@^8.0.0:
   version "8.0.0"
-  resolved "https://registry.npm.taobao.org/emoji-regex/download/emoji-regex-8.0.0.tgz?cache=0&sync_timestamp=1603212288390&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Femoji-regex%2Fdownload%2Femoji-regex-8.0.0.tgz#e818fd69ce5ccfcb404594f842963bf53164cc37"
+  resolved "https://registry.npm.taobao.org/emoji-regex/download/emoji-regex-8.0.0.tgz?cache=0&sync_timestamp=1611911479256&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Femoji-regex%2Fdownload%2Femoji-regex-8.0.0.tgz#e818fd69ce5ccfcb404594f842963bf53164cc37"
   integrity sha1-6Bj9ac5cz8tARZT4QpY79TFkzDc=
 
 emojis-list@^3.0.0:
@@ -9306,10 +9306,10 @@ memory-fs@^0.5.0:
     errno "^0.1.3"
     readable-stream "^2.0.1"
 
-menubar@^9.0.0:
-  version "9.0.2"
-  resolved "https://registry.npm.taobao.org/menubar/download/menubar-9.0.2.tgz#d0850105c59ede14ee6150561a0147fd4be6f74f"
-  integrity sha1-0IUBBcWe3hTuYVBWGgFH/Uvm908=
+menubar@^7.0.0:
+  version "7.2.0"
+  resolved "https://registry.npm.taobao.org/menubar/download/menubar-7.2.0.tgz#53f6411780bbc51ccbd31582b9ca011946ae7f03"
+  integrity sha1-U/ZBF4C7xRzL0xWCucoBGUaufwM=
   dependencies:
     electron-positioner "^4.1.0"
 

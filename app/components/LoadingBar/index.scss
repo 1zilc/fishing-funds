@@ -7,8 +7,8 @@
   font-size: 10px;
   line-height: 30px;
   text-align: center;
-  color: #888;
-  background-color: $cancel-color;
+  color: var(--secondary-main-text-color);
+  background-color: var(--cancel-color);
   overflow: hidden;
 }
 

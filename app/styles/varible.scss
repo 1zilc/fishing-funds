@@ -1,12 +1,39 @@
-$primary-color: #40a9ff;
-$cancel-color: #efefef;
-$increase-color: #f5222d;
-$reduce-color: #52c41a;
+@media (prefers-color-scheme: light) {
+  body {
+    --background-color: #fff;
+    --inner-color: #eee;
+    --inner-text-color: #888;
+    --primary-color: #40a9ff;
+    --cancel-color: #efefef;
+    --increase-color: #f5222d;
+    --reduce-color: #52c41a;
+    --main-text-color: #333;
+    --secondary-main-text-color: #888;
+    --reverse-text-color: #333;
+    --border-color: #eee;
+    --alipay-color: #156dff;
+    --wechat-color: #1fa131;
+    --svg-icon-color: #333;
+    --blur-color: rgba(255, 255, 255, .3);
+  }
+}
 
-$text-color-light: #eee;
-$text-color-dark: #333;
-
-$border-color:#eee;
-
-$alipay-color:#156dff;
-$wechat-color:#1fa131
+@media (prefers-color-scheme: dark) {
+  body {
+    --background-color: #1e1e1e;
+    --inner-color: #333;
+    --inner-text-color: #888;
+    --primary-color: #40a9ff;
+    --cancel-color: #101010;
+    --increase-color: #f5222d;
+    --reduce-color: #52c41a;
+    --main-text-color: #eee;
+    --secondary-main-text-color: #888;
+    --reverse-text-color: #ccc;
+    --border-color: #111;
+    --alipay-color: #156dff;
+    --wechat-color: #1fa131;
+    --svg-icon-color: #ccc;
+    --blur-color: rgba(33, 33, 33, .3);
+  }
+}

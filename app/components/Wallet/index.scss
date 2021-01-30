@@ -7,18 +7,19 @@
 .content {
   padding: 10px;
   display: flex;
-  border-bottom: 1px solid $border-color;
+  border-bottom: 1px solid var(--border-color);
   top: 0;
   z-index: 2;
   transition: height .2s;
   position: fixed;
   width: 100%;
-  background-color: rgba(255, 255, 255, .3);
+  background-color: var(--blur-color);
   backdrop-filter: saturate(180%) blur(20px);
   height: 60px;
   box-sizing: border-box;
   align-items: center;
   transform: rotate(0deg);
+  backface-visibility: hidden;
 
 
   &>svg {
@@ -46,13 +47,13 @@
     .last {
       font-size: 12px;
       font-weight: 500;
-      color: #888;
+      color: var(--secondary-main-text-color);
     }
   }
 
   .moneyBar {
     font-size: 10px;
-    color: #000;
+    color: var(--main-text-color);
     display: flex;
     // justify-content: space-around;
     width: 100%;
@@ -62,7 +63,7 @@
 
     i {
       height: 10px;
-      border-right: 1px solid $border-color;
+      border-right: 1px solid var(--border-color);
       margin: 0 10px;
     }
 
@@ -70,11 +71,17 @@
       display: flex;
       align-items: center;
       word-wrap: break-word;
+      flex-wrap: wrap;
+
+      span {
+        white-space: nowrap;
+      }
     }
 
     svg {
       height: 14px;
       width: 14px;
+      fill: var(--svg-icon-color)
     }
   }
 }
@@ -87,6 +94,7 @@
   &>svg {
     height: 20px;
     width: 20px;
+    fill: var(--svg-icon-color)
   }
 }
 
@@ -97,6 +105,7 @@
   svg {
     height: 20px;
     width: 20px;
+
   }
 
   .info {

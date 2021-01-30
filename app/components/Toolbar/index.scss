@@ -1,5 +1,5 @@
 .bar {
-  background-color: #f5f5f5;
+  background-color: var(--inner-color);
   height: 40px;
   width: 100%;
   z-index: 2;
@@ -10,7 +10,8 @@
   align-items: center;
   justify-content: space-around;
 
-  svg{
+  svg {
     cursor: pointer;
+    fill: var(--svg-icon-color)
   }
 }

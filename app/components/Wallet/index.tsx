@@ -45,12 +45,14 @@ const Wallet: React.FC<WalletProps> = ({ funds, wallet, toggleEyeStatus }) => {
           <div className={styles.moneyBar}>
             <div>
               <ConsumptionIcon />
-              持有金额：{display_zje}
+              <span>持有金额：</span>
+              <span>{display_zje}</span>
             </div>
             <i></i>
             <div>
               <ConsumptionIcon />
-              收益估值：{display_sygz}
+              <span>收益估值：</span>
+              <span>{display_sygz}</span>
             </div>
           </div>
         </div>

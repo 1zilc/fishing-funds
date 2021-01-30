@@ -54,7 +54,7 @@ const arrowSize = {
 const FundRow: React.FC<RowProps> = props => {
   const { fund, toolbar } = props;
   const { deleteStatus } = toolbar;
-  const [collapse, { toggle }] = useBoolean(true);
+  const [collapse, { toggle }] = useBoolean(false);
 
   const [
     showEditDrawer,
@@ -64,6 +64,7 @@ const FundRow: React.FC<RowProps> = props => {
       toggle: ToggleEditDrawer
     }
   ] = useBoolean(false);
+
   const { cyfe, bjz, jrsygz, gszz } = calcFund(fund);
 
   const remove = async () => {

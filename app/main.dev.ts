@@ -9,7 +9,7 @@
  * `./app/main.prod.js` using webpack. This gives us some performance wins.
  */
 import path from 'path';
-import { app, BrowserWindow, nativeImage } from 'electron';
+import { app, shell, nativeImage } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import { menubar } from 'menubar';
@@ -50,10 +50,10 @@ const createMenubar = async () => {
   ) {
     await installExtensions();
   }
-  // const image = nativeImage.createFromPath('resources/menu/iconTemplate.png');
+  const image = nativeImage.createFromPath('resources/menu/iconTemplate.png');
   const mb = menubar({
     index: `file://${__dirname}/app.html`,
-    icon: 'resources/menu/iconTemplate.png',
+    icon: path.join(__dirname, '../resources/menu/iconTemplate.png'),
     // icon: 'resources/icon.png',
     // icon: image,
     // tray: appIcon,
@@ -65,19 +65,18 @@ const createMenubar = async () => {
       height: 500,
       minHeight: 400,
       minWidth: 300,
-      webPreferences:
-        process.env.NODE_ENV === 'development' ||
-        process.env.E2E_BUILD === 'true'
-          ? {
-              nodeIntegration: true
-            }
-          : {
-              preload: path.join(__dirname, 'dist/renderer.prod.js')
-            }
+      webPreferences: {
+        nodeIntegration: true
+      }
     }
   });
   mb.on('after-create-window', () => {
     mb.window.webContents.openDevTools({ mode: 'undocked' });
+  });
+  // Open urls in the user's browser
+  mb.on('new-window', (event, url) => {
+    event.preventDefault();
+    shell.openExternal(url);
   });
   // eslint-disable-next-line
   new AppUpdater();
@@ -95,4 +94,8 @@ app.on('window-all-closed', () => {
   }
 });
 
-app.on('ready', createMenubar);
+// app.on('ready', createMenubar);
+app
+  .whenReady()
+  .then(createMenubar)
+  .catch(console.log);

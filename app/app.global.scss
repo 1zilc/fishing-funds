@@ -1,17 +1,20 @@
 /*
  * @NOTE: Prepend a `~` to css file paths that are in your node_modules
  *        See https://github.com/webpack-contrib/sass-loader#imports
+ @import '~@fortawesome/fontawesome-free/css/all.css';
  */
-@import '~@fortawesome/fontawesome-free/css/all.css';
-@import './styles/collapse.css';
-@import './styles/re-drawer.css';
-@import './styles/button.css';
+
+@import './styles/collapse.scss';
+@import './styles/re-drawer.scss';
+@import './styles/button.scss';
 
 body {
   position: relative;
-  color: #333;
   margin: 0;
+  color: var(--reverse-text-color);
+  background-color: var(--background-color);
 }
+
 body::-webkit-scrollbar {
   width: 0;
 }

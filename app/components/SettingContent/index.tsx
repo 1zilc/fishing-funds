@@ -102,7 +102,7 @@ const SettingContent: React.FC<SettingContentProps> = props => {
             <span>支付宝支持一下～</span>
           </div>
           <div className={styles.pay}>
-            <Coins num={20} />
+            {/* <Coins num={20} /> */}
             <Tilt
               options={{ max: 25 }}
               className={classnames(styles.qrcode, styles.alipay)}
@@ -117,7 +117,7 @@ const SettingContent: React.FC<SettingContentProps> = props => {
             <span>微信支持一下～</span>
           </div>
           <div className={styles.pay}>
-            <Coins num={20} />
+            {/* <Coins num={20} /> */}
             <Tilt
               options={{ max: 25 }}
               className={classnames(styles.qrcode, styles.wechat)}

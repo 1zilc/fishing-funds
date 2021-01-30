@@ -1,7 +1,11 @@
 # Fishing Funds
 > 显示基金涨跌状态栏小应用,数据源来自天天基金
-### 使用截图
-<img src="https://github.com/1zilc/fishing-funds/blob/master/screenshots/index.png" width="350px"  />
+### 软件截图
+<figure class="half">
+<img src="https://github.com/1zilc/fishing-funds/blob/master/screenshots/1.png" width="350px"  />
+<img src="https://github.com/1zilc/fishing-funds/blob/master/screenshots/2.png" width="350px"  />
+</figure>
+
 
 ### 项目介绍
 * 本项目基于[electron-react-boilerplate-menubar](https://github.com/3on/electron-react-boilerplate-menubar)开发

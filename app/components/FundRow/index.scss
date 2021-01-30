@@ -6,12 +6,12 @@
   transition: all 0.2s;
   padding: 8px 8px;
   box-sizing: border-box;
-  border-bottom: 1px solid $border-color;
+  border-bottom: 1px solid var(--border-color);
   z-index: 2;
   cursor: pointer;
 
   &:hover {
-    background-color: $primary-color;
+    background-color: var(--primary-color);
     color: #fff;
     border-radius: 2px;
   }
@@ -45,11 +45,11 @@
 }
 
 .up {
-  background-color: $increase-color;
+  background-color: var(--increase-color);
 }
 
 .down {
-  background-color: $reduce-color;
+  background-color: var(--reduce-color);
 }
 
 
@@ -75,6 +75,7 @@
 
   svg {
     cursor: pointer;
+    fill: var(--svg-icon-color)
   }
 }
 
@@ -83,8 +84,8 @@
   padding: 5px 15px;
   flex-wrap: wrap;
   font-size: 10px;
-  color: #888;
-  background-color: $cancel-color;
+  color: var(--inner-text-color);
+  background-color: var(--inner-color);
   word-wrap: break-word;
 
   section {
@@ -102,4 +103,5 @@
   cursor: pointer;
   height: 12px;
   width: 12px;
+  fill: var(--svg-icon-color)
 }
