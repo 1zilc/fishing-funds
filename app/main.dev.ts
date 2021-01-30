@@ -9,7 +9,7 @@
  * `./app/main.prod.js` using webpack. This gives us some performance wins.
  */
 import path from 'path';
-import { app, Tray, Menu } from 'electron';
+import { app, Tray, Menu, globalShortcut } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import { menubar } from 'menubar';
@@ -89,17 +89,17 @@ const createMenubar = async () => {
     } else {
       // TODO:https://electron.guide/final-polish/renderer/#:~:text=Prevent%20BrowserWindow%20refreshes,menu%20to%20disable%20this%20behaviour.
       // 效果不怎么好 :(
-      const win = mb.window!;
-      win.on('focus', event => {
-        electronLocalshortcut.register(
-          win,
-          ['CommandOrControl+R', 'CommandOrControl+Shift+R', 'F5'],
-          () => {}
-        );
-      });
-      win.on('blur', event => {
-        electronLocalshortcut.unregisterAll(win);
-      });
+      // const win = mb.window!;
+      // win.on('focus', event => {
+      //   electronLocalshortcut.register(
+      //     win,
+      //     ['CommandOrControl+R', 'CommandOrControl+Shift+R', 'F5'],
+      //     () => {}
+      //   );
+      // });
+      // win.on('blur', event => {
+      //   electronLocalshortcut.unregisterAll(win);
+      // });
     }
   });
   //To avoid a flash when opening your menubar app, you can disable backgrounding the app using the following:
@@ -121,6 +121,26 @@ app.on('window-all-closed', () => {
   // after all windows have been closed
   if (process.platform !== 'darwin') {
     app.quit();
+  }
+});
+app.on('browser-window-focus', function() {
+  if (app.isPackaged) {
+    globalShortcut.register('CommandOrControl+Shift+R', () => {
+      console.log('CommandOrControl+Shift+R is pressed: Shortcut Disabled');
+    });
+    globalShortcut.register('CommandOrControl+R', () => {
+      console.log('CommandOrControl+R is pressed: Shortcut Disabled');
+    });
+    globalShortcut.register('F5', () => {
+      console.log('F5 is pressed: Shortcut Disabled');
+    });
+  }
+});
+app.on('browser-window-blur', function() {
+  if (app.isPackaged) {
+    globalShortcut.unregister('CommandOrControl+R');
+    globalShortcut.unregister('F5');
+    globalShortcut.unregister('CommandOrControl+Shift+R');
   }
 });
 
