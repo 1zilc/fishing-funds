@@ -1,7 +1,6 @@
-
-<center>
-  <img src="https://github.com/1zilc/fishing-funds/blob/master/resources/icon.png" width="64px">
-</center>
+<p align="center">
+<img src="https://github.com/1zilc/fishing-funds/blob/master/resources/icon.png" width="64px">
+</p>
 
 # Fishing Funds
 > 显示基金涨跌状态栏小应用,数据源来自天天基金
@@ -28,10 +27,16 @@
  ```
 
 ## 更新日志
+### 2021.01.30
+1. 发布v1.0.1版本
+2. 添加暗黑模式。
+3. 添加基金验证，修复基金添加异常。
+4. 修复windows图标问题
+5. 屏蔽快捷键
+
 ### 2021.01.28
-1. 发布v1版本
-2. 支持基金自选添加、删除、份额修改，收益估计等基础功能
-3. 添加钱夹，自动计算总估值，当日收益
+1. 支持基金自选添加、删除、份额修改，收益估计等基础功能
+2. 添加钱夹，自动计算总估值，当日收益
 
 ## 支持一下～
 #### 支付宝
