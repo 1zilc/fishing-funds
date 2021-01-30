@@ -146,7 +146,7 @@ const SettingContent: React.FC<SettingContentProps> = props => {
       <div className={styles.exit}>
         <button onClick={() => app.quit()}>退出程序</button>
       </div>
-      <div className={styles.version}>version 1.0.0</div>
+      <div className={styles.version}>version 1.0.1</div>
     </div>
   );
 };
