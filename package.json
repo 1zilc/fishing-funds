@@ -98,7 +98,10 @@
       "owner": "electron-react-boilerplate",
       "repo": "electron-react-boilerplate",
       "private": false
-    }
+    },
+    "extraResources": [
+      "./resources/**"
+    ]
   },
   "repository": {
     "type": "git",
@@ -184,6 +187,8 @@
     "@babel/preset-react": "^7.10.1",
     "@babel/preset-typescript": "^7.10.1",
     "@babel/register": "^7.10.1",
+    "@types/classnames": "^2.2.11",
+    "@types/electron-localshortcut": "^3.1.0",
     "@types/enzyme": "^3.10.5",
     "@types/enzyme-adapter-react-16": "^1.0.6",
     "@types/history": "^4.7.5",
@@ -203,7 +208,6 @@
     "@types/tapable": "^1.0.5",
     "@types/vfile-message": "^2.0.0",
     "@types/webpack": "^4.41.3",
-    "@types/classnames": "^2.2.11",
     "@typescript-eslint/eslint-plugin": "^2.17.0",
     "@typescript-eslint/parser": "^2.17.0",
     "babel-core": "7.0.0-bridge.0",
@@ -286,6 +290,8 @@
     "core-js": "^3.6.5",
     "devtron": "^1.4.0",
     "electron-debug": "^3.0.1",
+    "electron-disable-file-drop": "^1.0.2",
+    "electron-localshortcut": "^3.2.1",
     "electron-log": "^4.0.6",
     "electron-updater": "^4.2.0",
     "history": "^4.10.1",

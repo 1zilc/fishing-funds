@@ -9,10 +9,11 @@
  * `./app/main.prod.js` using webpack. This gives us some performance wins.
  */
 import path from 'path';
-import { app, shell, nativeImage } from 'electron';
+import { app, Tray } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import { menubar } from 'menubar';
+import electronLocalshortcut from 'electron-localshortcut';
 
 export default class AppUpdater {
   constructor() {
@@ -50,13 +51,21 @@ const createMenubar = async () => {
   ) {
     await installExtensions();
   }
-  const image = nativeImage.createFromPath('resources/menu/iconTemplate.png');
+
+  const EXTRA_RESOURCES_PATH = app.isPackaged
+    ? path.join(process.resourcesPath, 'resources')
+    : path.join(__dirname, '../resources'); // Your relative path may be different!
+
+  const getAssetPath = (resourceFilename: string): string => {
+    return path.join(EXTRA_RESOURCES_PATH, resourceFilename);
+  };
+
   const mb = menubar({
     index: `file://${__dirname}/app.html`,
-    icon: path.join(__dirname, '../resources/menu/iconTemplate.png'),
+    // icon: path.join(__dirname, '../resources/menu/iconTemplate.png'),
     // icon: 'resources/icon.png',
     // icon: image,
-    // tray: appIcon,
+    tray: new Tray(getAssetPath('menu/iconTemplate.png')),
     tooltip: 'Fishing Funds',
     browserWindow: {
       transparent: false,
@@ -66,18 +75,28 @@ const createMenubar = async () => {
       minHeight: 400,
       minWidth: 300,
       webPreferences: {
-        nodeIntegration: true
+        nodeIntegration: true,
+        devTools: !app.isPackaged
       }
     }
   });
   mb.on('after-create-window', () => {
-    mb.window.webContents.openDevTools({ mode: 'undocked' });
+    if (!app.isPackaged) {
+      mb.window!.webContents.openDevTools({ mode: 'undocked' });
+    } else {
+    }
+    mb.window!.on('focus', () => {
+      electronLocalshortcut.register(
+        mb.window!,
+        ['CommandOrControl+R', 'CommandOrControl+Shift+R', 'F5', 'F12'],
+        () => false
+      );
+    });
+    mb.window!.on('blur', () => {
+      electronLocalshortcut.unregisterAll(mb.window!);
+    });
   });
-  // Open urls in the user's browser
-  mb.on('new-window', (event, url) => {
-    event.preventDefault();
-    shell.openExternal(url);
-  });
+
   // eslint-disable-next-line
   new AppUpdater();
 };

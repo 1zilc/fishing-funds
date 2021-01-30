@@ -62,21 +62,25 @@ export const getFundConfig = () => {
 
 export const getFund: (
   code: string
-) => Promise<Fund.ResponseItem> = async code => {
+) => Promise<Fund.ResponseItem | null> = async code => {
   return new Promise((resolve, reject) => {
     request.get(
       `http://fundgz.1234567.com.cn/js/${code}.js`,
-      (error, response, body) => {
+      (error, response, body: string) => {
         if (!error) {
           try {
             setTimeout(() => {
-              resolve(eval(body));
+              if (body.startsWith('jsonpgz')) {
+                resolve(eval(body));
+              } else {
+                resolve(null);
+              }
             }, 1000);
           } catch {
-            reject({});
+            reject(null);
           }
         } else {
-          reject({});
+          reject(null);
         }
       }
     );

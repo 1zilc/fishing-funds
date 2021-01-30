@@ -5215,6 +5215,11 @@ electron-devtools-installer@^2.2.4:
     rimraf "^2.5.2"
     semver "^5.3.0"
 
+electron-disable-file-drop@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.npm.taobao.org/electron-disable-file-drop/download/electron-disable-file-drop-1.0.2.tgz#2fd6f1e1c0a0158be1115c92cb41d211b0a0c5a2"
+  integrity sha1-L9bx4cCgFYvhEVySy0HSEbCgxaI=
+
 electron-download@^4.1.1:
   version "4.1.1"
   resolved "https://registry.npm.taobao.org/electron-download/download/electron-download-4.1.1.tgz#02e69556705cc456e520f9e035556ed5a015ebe8"
@@ -5240,7 +5245,7 @@ electron-is-dev@^1.1.0:
   resolved "https://registry.npm.taobao.org/electron-is-dev/download/electron-is-dev-1.2.0.tgz#2e5cea0a1b3ccf1c86f577cee77363ef55deb05e"
   integrity sha1-LlzqChs8zxyG9XfO53Nj71XesF4=
 
-electron-localshortcut@^3.1.0:
+electron-localshortcut@^3.1.0, electron-localshortcut@^3.2.1:
   version "3.2.1"
   resolved "https://registry.npm.taobao.org/electron-localshortcut/download/electron-localshortcut-3.2.1.tgz#cfc83a3eff5e28faf98ddcc87f80a2ce4f623cd3"
   integrity sha1-z8g6Pv9eKPr5jdzIf4Cizk9iPNM=

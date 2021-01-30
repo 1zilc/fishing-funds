@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import InputNumber from 'rc-input-number';
-import { addFund } from '../../actions/fund';
+import { addFund, getFund } from '../../actions/fund';
 import styles from './index.scss';
 
 export interface AddContentProps {
@@ -12,18 +12,26 @@ export interface AddContentProps {
 const AddContent: React.FC<AddContentProps> = props => {
   const [code, setCode] = useState<string>('');
   const [num, setNum] = useState<number>(0);
+  const [none, setNone] = useState<boolean>(false);
 
   const onAdd = async () => {
-    await addFund({
-      code,
-      cyfe: num
-    });
-    props.onEnter();
+    const fund = await getFund(code);
+    if (fund) {
+      setNone(false);
+      await addFund({
+        code,
+        cyfe: num
+      });
+      props.onEnter();
+    } else {
+      setNone(true);
+    }
   };
 
   useEffect(() => {
     setCode('');
     setNum(0);
+    setNone(false);
   }, [props.show]);
 
   return (
@@ -57,6 +65,9 @@ const AddContent: React.FC<AddContentProps> = props => {
             value={num}
             onChange={setNum}
           ></InputNumber>
+        </section>
+        <section>
+          {none && <span className={styles.none}>没有找到该基金信息～</span>}
         </section>
       </div>
     </div>

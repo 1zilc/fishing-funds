@@ -42,7 +42,7 @@ const Home: React.FC<HomeProps> = ({ updateUpdateTime }) => {
       throttleInterval: 1000 * 2, // 3秒请求一次
       onSuccess: result => {
         const now = new Date().toLocaleString();
-        setFunds(result);
+        setFunds(result.filter<any>(_ => !!_));
         updateUpdateTime(now);
       }
     }

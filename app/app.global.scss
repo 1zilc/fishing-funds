@@ -13,6 +13,8 @@ body {
   margin: 0;
   color: var(--reverse-text-color);
   background-color: var(--background-color);
+  cursor: default;
+  user-select: none;
 }
 
 body::-webkit-scrollbar {
