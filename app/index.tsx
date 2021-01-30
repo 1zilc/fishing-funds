@@ -7,7 +7,6 @@ import './app.global.scss';
 import 'electron-disable-file-drop';
 
 const store = configureStore();
-
 const AppContainer = process.env.PLAIN_HMR ? Fragment : ReactHotAppContainer;
 
 document.addEventListener('DOMContentLoaded', () =>

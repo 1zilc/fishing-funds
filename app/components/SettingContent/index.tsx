@@ -85,6 +85,7 @@ const SettingContent: React.FC<SettingContentProps> = props => {
             <section>
               <label>刷新间隔(min)：</label>
               <InputNumber
+                disabled={!autoFresh}
                 value={freshDelay}
                 onChange={setFreshDelay}
                 className={styles.input}

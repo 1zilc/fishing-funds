@@ -9,11 +9,11 @@
  * `./app/main.prod.js` using webpack. This gives us some performance wins.
  */
 import path from 'path';
-import { app, Tray } from 'electron';
+import { app, Tray, Menu } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import { menubar } from 'menubar';
-import electronLocalshortcut from 'electron-localshortcut';
+const electronLocalshortcut = require('electron-localshortcut');
 
 export default class AppUpdater {
   constructor() {
@@ -67,6 +67,7 @@ const createMenubar = async () => {
     // icon: image,
     tray: new Tray(getAssetPath('menu/iconTemplate.png')),
     tooltip: 'Fishing Funds',
+    preloadWindow: true,
     browserWindow: {
       transparent: false,
       alwaysOnTop: false,
@@ -80,22 +81,32 @@ const createMenubar = async () => {
       }
     }
   });
+
+  // open devtools
   mb.on('after-create-window', () => {
     if (!app.isPackaged) {
       mb.window!.webContents.openDevTools({ mode: 'undocked' });
     } else {
+      // TODO:https://electron.guide/final-polish/renderer/#:~:text=Prevent%20BrowserWindow%20refreshes,menu%20to%20disable%20this%20behaviour.
+      // 效果不怎么好 :(
+      const win = mb.window!;
+      win.on('focus', event => {
+        electronLocalshortcut.register(
+          win,
+          ['CommandOrControl+R', 'CommandOrControl+Shift+R', 'F5'],
+          () => {}
+        );
+      });
+      win.on('blur', event => {
+        electronLocalshortcut.unregisterAll(win);
+      });
     }
-    mb.window!.on('focus', () => {
-      electronLocalshortcut.register(
-        mb.window!,
-        ['CommandOrControl+R', 'CommandOrControl+Shift+R', 'F5', 'F12'],
-        () => false
-      );
-    });
-    mb.window!.on('blur', () => {
-      electronLocalshortcut.unregisterAll(mb.window!);
-    });
   });
+  //To avoid a flash when opening your menubar app, you can disable backgrounding the app using the following:
+  mb.app.commandLine.appendSwitch(
+    'disable-backgrounding-occluded-windows',
+    'true'
+  );
 
   // eslint-disable-next-line
   new AppUpdater();
@@ -113,7 +124,6 @@ app.on('window-all-closed', () => {
   }
 });
 
-// app.on('ready', createMenubar);
 app
   .whenReady()
   .then(createMenubar)
