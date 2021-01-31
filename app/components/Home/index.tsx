@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { bindActionCreators, Dispatch } from 'redux';
 import { connect } from 'react-redux';
-import got from 'got';
 import { useInterval, useRequest } from 'ahooks';
 
 import FundRow from '../FundRow';
@@ -30,24 +29,17 @@ export interface HomeProps {
 
 const Home: React.FC<HomeProps> = ({ updateUpdateTime }) => {
   const { freshDelaySetting, autoFreshSetting } = getSystemSetting();
-  const { fundConfig } = getFundConfig();
-  const [funds, setFunds] = useState<Fund.ResponseItem[]>([]);
-  const { run, loading } = useRequest(
-    async () => Promise.all(fundConfig.map(({ code }) => getFund(code))),
-    {
-      manual: true,
-      // loadingDelay: 1000,
-      throttleInterval: 1000 * 2, // 3秒请求一次
-      onSuccess: result => {
-        const now = new Date().toLocaleString();
-        console.log(result);
-        setFunds(result.filter<any>(_ => !!_));
-        updateUpdateTime(now);
-      }
+  const [funds, setFunds] = useState<(Fund.ResponseItem | null)[]>([]);
+  const { run, loading } = useRequest(getFund, {
+    manual: true,
+    // loadingDelay: 1000,
+    throttleInterval: 1000 * 2, // 3秒请求一次
+    onSuccess: result => {
+      const now = new Date().toLocaleString();
+      setFunds(result.filter(_ => _));
+      updateUpdateTime(now);
     }
-  );
-
-  console.log(fundConfig);
+  });
 
   const fresh = async () => {
     window.scrollTo({

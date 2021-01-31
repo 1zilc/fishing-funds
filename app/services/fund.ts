@@ -4,15 +4,12 @@ import NP from 'number-precision';
 import cheerio from 'cheerio';
 import * as Utils from '../utils';
 
-const delayTime = 1000;
-
 // 天天基金
 export const FromEastmoney: (
   code: string
 ) => Promise<Fund.ResponseItem | null> = async code => {
   try {
     const { body } = await got(`http://fundgz.1234567.com.cn/js/${code}.js`);
-    await Utils.Sleep(delayTime);
     return body.startsWith('jsonpgz') ? eval(body) : null;
   } catch (error) {
     return null;
@@ -55,7 +52,6 @@ export const FromDayFund: (
     ] = body.split('|');
     // 2021-01-29|1.8040|2.2490|-0.0440|-2.3800%|-1.8652%|-0.0345|1.8135|1.8480|2021-01-29|15:35:00
     const gzDate = gzrq.slice(5);
-    await Utils.Sleep(delayTime);
     return {
       name,
       fundcode: code,
@@ -88,7 +84,6 @@ export const FromTencent: (
     if (status === -1) {
       return null;
     }
-
     const [time, ssgsz] = list.pop();
     const { body } = await got(`https://gu.qq.com/jj${code}`);
     const $ = cheerio.load(body);

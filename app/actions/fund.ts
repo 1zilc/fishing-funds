@@ -1,16 +1,47 @@
 /* eslint-disable no-eval */
 import NP from 'number-precision';
 import * as Services from '../services';
-
+import * as Enums from '../utils/enums';
 import * as Utils from '../utils';
+import * as Adapter from '../utils/adpters';
+import { getFundApiTypeSetting } from './setting';
 import CONST_STORAGE from '../constants/storage.json';
 
-export const UPDATE_UPTATETIME = 'UPDATE_UPTATETIME';
+export const getFundConfig = () => {
+  const fundConfig: Fund.SettingItem[] = Utils.GetStorage(
+    CONST_STORAGE.FUND_SETTING,
+    []
+  );
 
-export const getFund: (
-  code: string
-) => Promise<Fund.ResponseItem | null> = async code => {
-  return Services.Fund.FromDayFund(code);
+  const codeMap = fundConfig.reduce((r, c) => {
+    r[c.code] = c;
+    return r;
+  }, {} as { [index: string]: Fund.SettingItem });
+
+  return { fundConfig, codeMap };
+};
+
+export const getFund: () => Promise<
+  (Fund.ResponseItem | null)[]
+> = async () => {
+  const { fundConfig } = getFundConfig();
+  const fundApiType = getFundApiTypeSetting();
+
+  switch (fundApiType) {
+    case Enums.FundApiType.Dayfund:
+      return Adapter.ChokeAdapter(
+        fundConfig.map(({ code }) => () => Services.Fund.FromDayFund(code))
+      );
+    case Enums.FundApiType.Tencent:
+      return Adapter.ChokeAdapter(
+        fundConfig.map(({ code }) => () => Services.Fund.FromTencent(code))
+      );
+    case Enums.FundApiType.Eastmoney:
+    default:
+      return Adapter.ConCurrencyAdapter(
+        fundConfig.map(({ code }) => () => Services.Fund.FromEastmoney(code))
+      );
+  }
 };
 
 export const addFund = async (fund: Fund.SettingItem) => {
@@ -51,20 +82,6 @@ export const deleteFund = async (fund: Fund.ResponseItem) => {
       Utils.SetStorage(CONST_STORAGE.FUND_SETTING, cloneFundSetting);
     }
   });
-};
-
-export const getFundConfig = () => {
-  const fundConfig: Fund.SettingItem[] = Utils.GetStorage(
-    CONST_STORAGE.FUND_SETTING,
-    []
-  );
-
-  const codeMap = fundConfig.reduce((r, c) => {
-    r[c.code] = c;
-    return r;
-  }, {} as { [index: string]: Fund.SettingItem });
-
-  return { fundConfig, codeMap };
 };
 
 export const calcFund: (

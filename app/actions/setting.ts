@@ -1,6 +1,7 @@
 import NP from 'number-precision';
 import request from 'request';
 import * as Utils from '../utils';
+import * as Enums from '../utils/enums';
 import CONST_STORAGE from '../constants/storage.json';
 
 const { remote } = require('electron');
@@ -23,4 +24,17 @@ export const setSystemSetting: (setting: System.Setting) => void = setting => {
     ...systemSetting,
     ...setting
   });
+};
+
+export const getFundApiTypeSetting: () => Enums.FundApiType = () => {
+  return Utils.GetStorage(
+    CONST_STORAGE.FUND_API_TYPE,
+    Enums.FundApiType.Eastmoney
+  );
+};
+
+export const setFundApiTypeSetting: (
+  fundApiType: Enums.FundApiType
+) => void = fundApiType => {
+  Utils.SetStorage(CONST_STORAGE.FUND_API_TYPE, fundApiType);
 };

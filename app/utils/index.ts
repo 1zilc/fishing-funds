@@ -55,13 +55,3 @@ export const Sleep: <T>(time: number, F?: T) => Promise<T | undefined> = async (
     }, time);
   });
 };
-
-export const RunPromiseByQueue = async promises => {
-  // eslint-disable-next-line no-restricted-syntax
-  const result = [];
-  for (const value of promises) {
-    // eslint-disable-next-line no-await-in-loop
-    result.push(await value());
-  }
-  return result;
-};
