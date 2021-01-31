@@ -1,10 +1,17 @@
-import { GetState, Dispatch } from '../reducers/types';
+/* eslint-disable no-eval */
 import NP from 'number-precision';
-import request from 'request';
+import * as Services from '../services';
+
 import * as Utils from '../utils';
 import CONST_STORAGE from '../constants/storage.json';
 
 export const UPDATE_UPTATETIME = 'UPDATE_UPTATETIME';
+
+export const getFund: (
+  code: string
+) => Promise<Fund.ResponseItem | null> = async code => {
+  return Services.Fund.FromDayFund(code);
+};
 
 export const addFund = async (fund: Fund.SettingItem) => {
   const fundConfig: Fund.SettingItem[] = Utils.GetStorage(
@@ -58,33 +65,6 @@ export const getFundConfig = () => {
   }, {} as { [index: string]: Fund.SettingItem });
 
   return { fundConfig, codeMap };
-};
-
-export const getFund: (
-  code: string
-) => Promise<Fund.ResponseItem | null> = async code => {
-  return new Promise((resolve, reject) => {
-    request.get(
-      `http://fundgz.1234567.com.cn/js/${code}.js`,
-      (error, response, body: string) => {
-        if (!error) {
-          try {
-            setTimeout(() => {
-              if (body.startsWith('jsonpgz')) {
-                resolve(eval(body));
-              } else {
-                resolve(null);
-              }
-            }, 1000);
-          } catch {
-            reject(null);
-          }
-        } else {
-          reject(null);
-        }
-      }
-    );
-  });
 };
 
 export const calcFund: (

@@ -25,10 +25,10 @@ const Wallet: React.FC<WalletProps> = ({ funds, wallet, toggleEyeStatus }) => {
   const { zje, sygz } = calcFunds(funds);
   const eyeOpen = wallet.eyeStatus === Enums.EyeStatus.Open;
 
-  const display_zje = eyeOpen ? zje.toFixed(2) : Utils.encrypt(zje.toFixed(2));
+  const display_zje = eyeOpen ? zje.toFixed(2) : Utils.Encrypt(zje.toFixed(2));
   const display_sygz = eyeOpen
     ? sygz.toFixed(2)
-    : Utils.encrypt(sygz.toFixed(2));
+    : Utils.Encrypt(sygz.toFixed(2));
 
   return (
     <div className={styles.layout}>

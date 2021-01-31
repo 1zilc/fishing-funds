@@ -1,13 +1,13 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { bindActionCreators, Dispatch } from 'redux';
 import { connect } from 'react-redux';
-import { useRequest } from 'ahooks';
-import { useInterval } from 'ahooks';
+import got from 'got';
+import { useInterval, useRequest } from 'ahooks';
 
-import FundRow from '../../components/FundRow';
-import Toolbar from '../../components/Toolbar';
-import Wallet from '../../components/Wallet';
-import LoadingBar from '../../components/LoadingBar';
+import FundRow from '../FundRow';
+import Toolbar from '../Toolbar';
+import Wallet from '../Wallet';
+import LoadingBar from '../LoadingBar';
 
 import {
   toggleToolbarDeleteStatus,
@@ -18,11 +18,9 @@ import { getFund, getFundConfig } from '../../actions/fund';
 import { getSystemSetting } from '../../actions/setting';
 import { StoreState } from '../../reducers/types';
 import { ToolbarState } from '../../reducers/toolbar';
-import * as Utils from '../../utils';
 import '../../utils/jsonpgz';
 
 import styles from './index.scss';
-import CONST_STORAGE from '../../constants/storage.json';
 
 export interface HomeProps {
   toolbar: ToolbarState;
@@ -42,15 +40,14 @@ const Home: React.FC<HomeProps> = ({ updateUpdateTime }) => {
       throttleInterval: 1000 * 2, // 3秒请求一次
       onSuccess: result => {
         const now = new Date().toLocaleString();
+        console.log(result);
         setFunds(result.filter<any>(_ => !!_));
         updateUpdateTime(now);
       }
     }
   );
 
-  useInterval(() => {
-    autoFreshSetting && fresh();
-  }, freshDelaySetting * 1000 * 60);
+  console.log(fundConfig);
 
   const fresh = async () => {
     window.scrollTo({
@@ -59,6 +56,12 @@ const Home: React.FC<HomeProps> = ({ updateUpdateTime }) => {
     });
     run();
   };
+
+  useInterval(() => {
+    if (autoFreshSetting) {
+      fresh();
+    }
+  }, freshDelaySetting * 1000 * 60);
 
   useEffect(() => {
     fresh();

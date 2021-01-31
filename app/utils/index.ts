@@ -1,4 +1,5 @@
 import NP from 'number-precision';
+
 export const Yang = num => {
   if (num < 0) {
     return num;
@@ -40,6 +41,27 @@ export const SetStorage = (key: string, data: any) => {
   localStorage.setItem(key, JSON.stringify(data));
 };
 
-export const encrypt = (s: string) => {
+export const Encrypt = (s: string) => {
   return s.replace(/[0-9]/g, '✱');
+};
+
+export const Sleep: <T>(time: number, F?: T) => Promise<T | undefined> = async (
+  time,
+  F
+) => {
+  return new Promise(resolve => {
+    setTimeout(() => {
+      resolve(F);
+    }, time);
+  });
+};
+
+export const RunPromiseByQueue = async promises => {
+  // eslint-disable-next-line no-restricted-syntax
+  const result = [];
+  for (const value of promises) {
+    // eslint-disable-next-line no-await-in-loop
+    result.push(await value());
+  }
+  return result;
 };

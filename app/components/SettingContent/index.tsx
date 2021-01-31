@@ -8,6 +8,7 @@ import alipayQRcodeImage from 'assets/qrcode/alipay.png';
 import { ReactComponent as QRcodeIcon } from 'assets/icons/qr-code.svg';
 import { ReactComponent as SettingIcon } from 'assets/icons/setting.svg';
 import { ReactComponent as LinkIcon } from 'assets/icons/link.svg';
+import { ReactComponent as LineCharIcon } from 'assets/icons/line-chart.svg';
 import { getSystemSetting, setSystemSetting } from '../../actions/setting';
 import Coins from '../Coins';
 
@@ -62,6 +63,26 @@ const SettingContent: React.FC<SettingContentProps> = props => {
         </button>
       </div>
       <div className={styles.body}>
+        <div>
+          <div className={styles.title}>
+            <LineCharIcon />
+            <span>数据来源</span>
+          </div>
+          <div className={styles.setting}>
+            <section>
+              <label>天天基金：</label>
+              <Checkbox />
+            </section>
+            <section>
+              <label>腾讯证券：</label>
+              <Checkbox />
+            </section>
+            <section>
+              <label>基金速查网：</label>
+              <Checkbox />
+            </section>
+          </div>
+        </div>
         <div>
           <div className={styles.title}>
             <SettingIcon />

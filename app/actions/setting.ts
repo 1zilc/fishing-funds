@@ -4,6 +4,7 @@ import * as Utils from '../utils';
 import CONST_STORAGE from '../constants/storage.json';
 
 const { remote } = require('electron');
+
 const { app } = remote;
 
 export const getSystemSetting: () => System.Setting = () => {

@@ -4,14 +4,15 @@ import { Collapse } from 'react-collapse';
 import classnames from 'classnames';
 import { connect } from 'react-redux';
 import Drawer from 'rc-drawer';
-import EditContent from '../EditContent';
-import { StoreState } from '../../reducers/types';
-import { ToolbarState } from '../../reducers/toolbar';
+
 import { ReactComponent as EditIcon } from 'assets/icons/edit.svg';
 import { ReactComponent as RemoveIcon } from 'assets/icons/remove.svg';
 import { ReactComponent as ArrowDownIcon } from 'assets/icons/arrow-down.svg';
 import { ReactComponent as ArrowUpIcon } from 'assets/icons/arrow-up.svg';
 
+import EditContent from '../EditContent';
+import { StoreState } from '../../reducers/types';
+import { ToolbarState } from '../../reducers/toolbar';
 import * as Utils from '../../utils';
 import { deleteFund, calcFund } from '../../actions/fund';
 
