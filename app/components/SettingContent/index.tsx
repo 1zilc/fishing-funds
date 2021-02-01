@@ -1,14 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import classnames from 'classnames';
-import Tilt from 'react-tilt';
 import InputNumber from 'rc-input-number';
 import { Checkbox, Radio } from 'antd';
-import wechatQRcodeImage from 'assets/qrcode/wechat.png';
-import alipayQRcodeImage from 'assets/qrcode/alipay.png';
-import { ReactComponent as QRcodeIcon } from 'assets/icons/qr-code.svg';
 import { ReactComponent as SettingIcon } from 'assets/icons/setting.svg';
 import { ReactComponent as LinkIcon } from 'assets/icons/link.svg';
 import { ReactComponent as LineCharIcon } from 'assets/icons/line-chart.svg';
+
+import Logo from '../Logo';
+
 import {
   getSystemSetting,
   setSystemSetting,
@@ -17,6 +16,7 @@ import {
 } from '../../actions/setting';
 import * as Enums from '../../utils/enums';
 import styles from './index.scss';
+
 export interface SettingContentProps {
   show?: boolean;
   onEnter: () => void;
@@ -58,7 +58,7 @@ const SettingContent: React.FC<SettingContentProps> = props => {
     setAutoFresh(autoFreshSetting);
     setFreshDelay(freshDelaySetting);
   }, [props.show]);
-
+  console.log(process.versions);
   return (
     <div className={classnames(styles.content)}>
       <div className={styles.header}>
@@ -71,6 +71,10 @@ const SettingContent: React.FC<SettingContentProps> = props => {
         </button>
       </div>
       <div className={styles.body}>
+        <div className={styles.logo}>
+          <Logo />
+          <div className={styles.appName}>Fishing Funds</div>
+        </div>
         <div>
           <div className={styles.title}>
             <LineCharIcon />
@@ -129,36 +133,6 @@ const SettingContent: React.FC<SettingContentProps> = props => {
                 max={60}
               />
             </section>
-          </div>
-        </div>
-        <div>
-          <div className={styles.title}>
-            <QRcodeIcon />
-            <span>支付宝支持一下～</span>
-          </div>
-          <div className={styles.pay}>
-            {/* <Coins num={20} /> */}
-            <Tilt
-              options={{ max: 25 }}
-              className={classnames(styles.qrcode, styles.alipay)}
-            >
-              <img src={alipayQRcodeImage} />
-            </Tilt>
-          </div>
-        </div>
-        <div>
-          <div className={styles.title}>
-            <QRcodeIcon />
-            <span>微信支持一下～</span>
-          </div>
-          <div className={styles.pay}>
-            {/* <Coins num={20} /> */}
-            <Tilt
-              options={{ max: 25 }}
-              className={classnames(styles.qrcode, styles.wechat)}
-            >
-              <img src={wechatQRcodeImage} />
-            </Tilt>
           </div>
         </div>
         <div>

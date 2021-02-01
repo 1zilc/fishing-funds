@@ -50,12 +50,12 @@ export const FromDayFund: (
       gzrq,
       gztime
     ] = body.split('|');
+
     // 2021-01-29|1.8040|2.2490|-0.0440|-2.3800%|-1.8652%|-0.0345|1.8135|1.8480|2021-01-29|15:35:00
-    const gzDate = gzrq.slice(5);
     return {
       name,
       fundcode: code,
-      gztime: `${gzDate} ${gztime}`,
+      gztime: `${gzrq} ${gztime}`,
       gszzl: Number(gsbjl.replace(/%/g, '')).toFixed(2),
       jzrq,
       dwjz,
@@ -80,7 +80,7 @@ export const FromTencent: (
       },
       responseType: 'json'
     });
-    const { yesterdayDwjz, code: status, data: list } = data;
+    const { yesterdayDwjz, code: status, data: list, date: gzrq } = data;
     if (status === -1) {
       return null;
     }
@@ -91,7 +91,6 @@ export const FromTencent: (
     const name = $('.title .col_1').text();
     const jzrq = $('#main3').text();
     const gsz = $('#main5').text() || ssgsz;
-    const gzDate = jzrq.slice(5);
     const gzTime = `${time.slice(0, 2)}:${time.slice(2)}`;
     const gszzl = NP.times(NP.divide(NP.minus(gsz, dwjz), dwjz), 100).toFixed(
       2
@@ -100,7 +99,7 @@ export const FromTencent: (
       name,
       dwjz,
       fundcode: code,
-      gztime: `${gzDate} ${gzTime}`,
+      gztime: `${gzrq} ${gzTime}`,
       jzrq,
       gsz,
       gszzl

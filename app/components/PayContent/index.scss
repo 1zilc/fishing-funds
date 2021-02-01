@@ -27,6 +27,7 @@
     color: var(--main-text-color);
   }
 
+
   .close {
     color: var(--reverse-text-color);
     background-color: var(--cancel-color);
@@ -59,25 +60,6 @@
     border: 1px solid var(--border-color);
     height: 20px;
   }
-}
-
-.logo {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding-bottom: 15px;
-  flex-direction: column;
-
-  .appName {
-    margin-top: 10px;
-    text-align: center;
-    font-size: 12px;
-    color: var(--main-text-color);
-    font-weight: 500;
-  }
-
-
 }
 
 .setting {
@@ -138,31 +120,38 @@
   }
 }
 
-.link {
-  font-size: 12px;
-  text-align: center;
-  padding: 15px;
-}
-
-.exit {
+.pay {
   display: flex;
-  width: 100%;
+  // flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding-bottom: 20px;
+  position: relative;
+}
 
-  button {
-    color: var(--reverse-text-color);
-    background-color: transparent;
-    border: 1px solid var(--border-color);
+.qrcode {
+  width: 50%;
+  position: relative;
+  padding: 30px;
+  box-sizing: border-box;
+  margin: 20px 0;
+  transform-style: preserve-3d;
+  box-shadow: 0 0 20px rgba(0, 0, 0, .3);
+  border-radius: 10px;
+
+  img {
+    display: block;
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    transform: translateZ(20px);
+    box-shadow: 0 0 10px rgba(0, 0, 0, .2);
   }
 }
 
-.version {
-  color: var(--inner-text-color);
-  font-size: 10px;
-  text-align: center;
-  padding: 10px 0;
-  background-color: var(--inner-color);
-  border-top: 1px solid var(--border-color);
+.alipay {
+  background-color: var(--alipay-color);
+}
+
+.wechat {
+  background-color: var(--wechat-color);
 }

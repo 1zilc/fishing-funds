@@ -1,1 +1,5 @@
-@import '~antd/dist/antd.css'
+@import '~antd/dist/antd.css';
+
+.ant-radio-wrapper {
+  color: var(--main-text-color);
+}

@@ -9,11 +9,12 @@
  * `./app/main.prod.js` using webpack. This gives us some performance wins.
  */
 import path from 'path';
-import { app, Tray, Menu, globalShortcut } from 'electron';
+import { app, Tray, globalShortcut } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import { menubar } from 'menubar';
 
+let myWindow: any = null;
 export default class AppUpdater {
   constructor() {
     log.transports.file.level = 'info';
@@ -43,6 +44,7 @@ const installExtensions = async () => {
     extensions.map(name => installer.default(installer[name], forceDownload))
   ).catch(console.log);
 };
+
 const createMenubar = async () => {
   if (
     process.env.NODE_ENV === 'development' ||
@@ -83,6 +85,7 @@ const createMenubar = async () => {
 
   // open devtools
   mb.on('after-create-window', () => {
+    myWindow = mb.window;
     if (!app.isPackaged) {
       mb.window!.webContents.openDevTools({ mode: 'undocked' });
     }
@@ -93,7 +96,7 @@ const createMenubar = async () => {
     'true'
   );
   // eslint-disable-next-line
-  new AppUpdater();
+  // new AppUpdater();
 };
 
 /**
@@ -130,7 +133,23 @@ app.on('browser-window-blur', function() {
   }
 });
 
-app
-  .whenReady()
-  .then(createMenubar)
-  .catch(console.log);
+/** Check if single instance, if not, simply quit new instance */
+let isSingleInstance = app.requestSingleInstanceLock();
+if (!isSingleInstance) {
+  app.quit();
+} else {
+  app
+    .whenReady()
+    .then(createMenubar)
+    .catch(console.log);
+}
+
+// Behaviour on second instance for parent process- Pretty much optional
+app.on('second-instance', (event, argv, cwd) => {
+  if (myWindow) {
+    if (myWindow.isMinimized()) {
+      myWindow.restore();
+    }
+    myWindow.focus();
+  }
+});
