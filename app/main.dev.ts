@@ -140,18 +140,16 @@ let isSingleInstance = app.requestSingleInstanceLock();
 if (!isSingleInstance) {
   app.quit();
 } else {
+  // Behaviour on second instance for parent process- Pretty much optional
+  app.on('second-instance', (event, argv, cwd) => {
+    // Someone tried to run a second instance, we should focus our window.
+    if (myWindow) {
+      if (myWindow.isMinimized()) myWindow.restore();
+      myWindow.focus();
+    }
+  });
   app
     .whenReady()
     .then(createMenubar)
     .catch(console.log);
 }
-
-// Behaviour on second instance for parent process- Pretty much optional
-app.on('second-instance', (event, argv, cwd) => {
-  if (myWindow) {
-    if (myWindow.isMinimized()) {
-      myWindow.restore();
-    }
-    myWindow.focus();
-  }
-});

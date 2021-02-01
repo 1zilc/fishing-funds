@@ -278,12 +278,12 @@
     "webpack-cli": "^3.3.10",
     "webpack-dev-server": "^3.10.1",
     "webpack-merge": "^4.2.2",
+    "@svgr/webpack": "^5.5.0",
     "yarn": "^1.21.1"
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.13.0",
     "@hot-loader/react-dom": "^16.13.0",
-    "@svgr/webpack": "^5.5.0",
     "ahooks": "^2.9.4",
     "antd": "^4.11.2",
     "cheerio": "^1.0.0-rc.5",

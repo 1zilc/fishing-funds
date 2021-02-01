@@ -11790,7 +11790,7 @@ rc-cascader@~1.4.0:
     rc-util "^5.0.1"
     warning "^4.0.1"
 
-rc-checkbox@^2.3.2, rc-checkbox@~2.3.0:
+rc-checkbox@~2.3.0:
   version "2.3.2"
   resolved "https://registry.npm.taobao.org/rc-checkbox/download/rc-checkbox-2.3.2.tgz?cache=0&sync_timestamp=1607402984495&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Frc-checkbox%2Fdownload%2Frc-checkbox-2.3.2.tgz#f91b3678c7edb2baa8121c9483c664fa6f0aefc1"
   integrity sha1-+Rs2eMftsrqoEhyUg8Zk+m8K78E=
@@ -12574,7 +12574,7 @@ request-promise-native@^1.0.7:
     stealthy-require "^1.1.1"
     tough-cookie "^2.3.3"
 
-request@^2.45.0, request@^2.83.0, request@^2.87.0, request@^2.88.0, request@^2.88.2:
+request@^2.45.0, request@^2.83.0, request@^2.87.0, request@^2.88.0:
   version "2.88.2"
   resolved "https://registry.npm.taobao.org/request/download/request-2.88.2.tgz#d73c918731cb5a87da047e207234146f664d12b3"
   integrity sha1-1zyRhzHLWofaBH4gcjQUb2ZNErM=
