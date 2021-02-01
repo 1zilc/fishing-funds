@@ -68,7 +68,9 @@ const createMenubar = async () => {
     // icon: image,
     tray: new Tray(getAssetPath('menu/iconTemplate.png')),
     tooltip: 'Fishing Funds',
-    preloadWindow: true,
+    preloadWindow: false,
+    showOnAllWorkspaces: false,
+    showDockIcon: false,
     browserWindow: {
       transparent: false,
       alwaysOnTop: false,
@@ -88,6 +90,7 @@ const createMenubar = async () => {
   // open devtools
   mb.on('after-create-window', () => {
     myWindow = mb.window;
+    // app.dock.hide();
     if (!app.isPackaged) {
       mb.window!.webContents.openDevTools({ mode: 'undocked' });
     }
@@ -148,6 +151,7 @@ if (!isSingleInstance) {
       myWindow.focus();
     }
   });
+
   app
     .whenReady()
     .then(createMenubar)
