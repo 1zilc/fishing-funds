@@ -5,6 +5,7 @@
   border-radius: 10px;
   box-sizing: border-box;
   min-height: 100vh;
+  position: relative;
 }
 
 .header {
@@ -66,17 +67,24 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  padding-bottom: 15px;
+  padding: 15px;
   flex-direction: column;
+  margin-bottom: 15px;
+  background: linear-gradient(217deg, rgba(255, 0, 0, 1), rgba(255, 0, 0, 0) 70.71%),
+    linear-gradient(127deg, rgba(0, 255, 0, 0.7), rgba(0, 255, 0, 0) 70.71%),
+    linear-gradient(336deg, rgba(255, 0, 0, 1), rgba(0, 0, 255, 0) 70.71%);
+  border-radius: 5px;
+  background-size: 200% 200%;
+  overflow: hidden;
+
 
   .appName {
     margin-top: 10px;
     text-align: center;
     font-size: 12px;
-    color: var(--main-text-color);
+    color: #fff;
     font-weight: 500;
   }
-
 
 }
 
@@ -158,11 +166,21 @@
   }
 }
 
-.version {
-  color: var(--inner-text-color);
-  font-size: 10px;
-  text-align: center;
-  padding: 10px 0;
-  background-color: var(--inner-color);
-  border-top: 1px solid var(--border-color);
+.colorful {
+  animation: colorful 9s infinite
+}
+
+@keyframes colorful {
+
+  0% {
+    background-position: 10% 0%
+  }
+
+  50% {
+    background-position: 91% 100%
+  }
+
+  100% {
+    background-position: 10% 0%
+  }
 }

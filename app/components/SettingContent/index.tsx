@@ -58,7 +58,7 @@ const SettingContent: React.FC<SettingContentProps> = props => {
     setAutoFresh(autoFreshSetting);
     setFreshDelay(freshDelaySetting);
   }, [props.show]);
-  console.log(process.versions);
+
   return (
     <div className={classnames(styles.content)}>
       <div className={styles.header}>
@@ -71,9 +71,9 @@ const SettingContent: React.FC<SettingContentProps> = props => {
         </button>
       </div>
       <div className={styles.body}>
-        <div className={styles.logo}>
+        <div className={classnames(styles.logo, styles.colorful)}>
           <Logo />
-          <div className={styles.appName}>Fishing Funds</div>
+          <div className={styles.appName}>Fishing Funds v1.0.1</div>
         </div>
         <div>
           <div className={styles.title}>
@@ -156,7 +156,6 @@ const SettingContent: React.FC<SettingContentProps> = props => {
           退出程序
         </button>
       </div>
-      <div className={styles.version}>version 1.0.1</div>
     </div>
   );
 };

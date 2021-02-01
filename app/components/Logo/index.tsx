@@ -5,7 +5,7 @@ import styles from './index.scss';
 const Logo = () => {
   return (
     <div className={styles.content}>
-      <img src={LogoImage}></img>
+      <img src={LogoImage} draggable={false}></img>
     </div>
   );
 };

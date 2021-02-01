@@ -129,7 +129,7 @@ const FundRow: React.FC<RowProps> = props => {
             <span>¥ {Utils.Yang(jrsygz.toFixed(2))}</span>
           </section>
           <section>
-            <span>截止日期：</span>
+            <span>净值日期：</span>
             <span>{fund.jzrq}</span>
           </section>
           <section>
