@@ -57,6 +57,7 @@ const SettingContent: React.FC<SettingContentProps> = props => {
     setAutoStart(autoStartSetting);
     setAutoFresh(autoFreshSetting);
     setFreshDelay(freshDelaySetting);
+    setFundApiType(fundApiTypeSetting);
   }, [props.show]);
 
   return (

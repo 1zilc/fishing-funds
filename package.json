@@ -301,7 +301,6 @@
     "menubar": "^9.0.0",
     "mousetrap": "^1.6.5",
     "number-precision": "^1.5.0",
-    "rc-checkbox": "^2.3.2",
     "rc-drawer": "^4.2.2",
     "rc-input-number": "^6.2.0",
     "react": "^16.12.0",
@@ -314,7 +313,6 @@
     "react-tilt": "^0.1.4",
     "redux": "^4.0.5",
     "redux-thunk": "^2.3.0",
-    "request": "^2.88.2",
     "source-map-support": "^0.5.16"
   },
   "devEngines": {
