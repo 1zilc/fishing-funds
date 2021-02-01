@@ -73,7 +73,7 @@ const SettingContent: React.FC<SettingContentProps> = props => {
       <div className={styles.body}>
         <div className={classnames(styles.logo, styles.colorful)}>
           <Logo />
-          <div className={styles.appName}>Fishing Funds v1.0.1</div>
+          <div className={styles.appName}>Fishing Funds v1.1.0</div>
         </div>
         <div>
           <div className={styles.title}>
