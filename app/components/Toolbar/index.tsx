@@ -4,12 +4,15 @@ import { bindActionCreators, Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import Drawer from 'rc-drawer';
 import { useBoolean } from 'ahooks';
-import AddContent from '../AddContent';
-import SettingContent from '../SettingContent';
+
 import { ReactComponent as AddIcon } from 'assets/icons/add.svg';
 import { ReactComponent as SettingIcon } from 'assets/icons/setting.svg';
 import { ReactComponent as DeleteIcon } from 'assets/icons/delete.svg';
 import { ReactComponent as RefreshIcon } from 'assets/icons/refresh.svg';
+
+import AddContent from '../AddContent';
+import SettingContent from '../SettingContent';
+
 import {
   toggleToolbarDeleteStatus,
   changeToolbarDeleteStatus

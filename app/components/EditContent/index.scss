@@ -2,22 +2,24 @@
 
 .content {
   border-radius: 10px;
-  height: 100vh;
-  overflow: hidden;
-  padding: 15px;
   box-sizing: border-box;
-
-  h3 {
-    font-size: 14px;
-    margin: 0;
-  }
+  min-height: 100vh;
 }
 
 .header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-
+  position: sticky;
+  width: 100%;
+  background-color: var(--blur-color);
+  backdrop-filter: saturate(180%) blur(20px);
+  top: 0;
+  padding: 10px;
+  box-sizing: border-box;
+  z-index: 2;
+  border-bottom: 1px solid var(--border-color);
+  // box-shadow: 0 20px 20px rgba(0, 0, 0, .1);
 
 
   .close {
@@ -32,7 +34,7 @@
 }
 
 .body {
-  padding: 10px 0;
+  padding: 10px 15px;
 
   section {
     padding: 5px 0;
@@ -43,17 +45,10 @@
     width: 100px;
     margin-bottom: 5px;
     display: block;
-  }
-
-  input {
-    width: 100%;
-    outline: none;
-    border: 1px solid var(--border-color);
-    height: 20px;
+    font-weight: 600;
   }
 
   span {
-    font-size: 14px;
-    font-weight: 600;
+    font-size: 11px;
   }
 }

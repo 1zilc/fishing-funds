@@ -3,10 +3,11 @@
  *        See https://github.com/webpack-contrib/sass-loader#imports
  @import '~@fortawesome/fontawesome-free/css/all.css';
  */
-
+@import './styles/antd.scss';
 @import './styles/collapse.scss';
 @import './styles/re-drawer.scss';
 @import './styles/button.scss';
+
 
 body {
   position: relative;
@@ -15,6 +16,7 @@ body {
   background-color: var(--background-color);
   cursor: default;
   user-select: none;
+  width: 100% !important;
 }
 
 body::-webkit-scrollbar {
@@ -27,6 +29,12 @@ h2 {
   font-weight: bold;
   letter-spacing: -0.025em;
   color: #fff;
+}
+
+h3 {
+  font-size: 14px;
+  margin: 0;
+  line-height: 24px;
 }
 
 p {

@@ -13,7 +13,6 @@ import { app, Tray, Menu, globalShortcut } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import { menubar } from 'menubar';
-const electronLocalshortcut = require('electron-localshortcut');
 
 export default class AppUpdater {
   constructor() {
@@ -71,8 +70,8 @@ const createMenubar = async () => {
     browserWindow: {
       transparent: false,
       alwaysOnTop: false,
-      width: 350,
-      height: 500,
+      width: 330,
+      height: 480,
       minHeight: 400,
       minWidth: 300,
       webPreferences: {
@@ -86,28 +85,13 @@ const createMenubar = async () => {
   mb.on('after-create-window', () => {
     if (!app.isPackaged) {
       mb.window!.webContents.openDevTools({ mode: 'undocked' });
-    } else {
-      // TODO:https://electron.guide/final-polish/renderer/#:~:text=Prevent%20BrowserWindow%20refreshes,menu%20to%20disable%20this%20behaviour.
-      // 效果不怎么好 :(
-      // const win = mb.window!;
-      // win.on('focus', event => {
-      //   electronLocalshortcut.register(
-      //     win,
-      //     ['CommandOrControl+R', 'CommandOrControl+Shift+R', 'F5'],
-      //     () => {}
-      //   );
-      // });
-      // win.on('blur', event => {
-      //   electronLocalshortcut.unregisterAll(win);
-      // });
     }
   });
-  //To avoid a flash when opening your menubar app, you can disable backgrounding the app using the following:
+  // To avoid a flash when opening your menubar app, you can disable backgrounding the app using the following:
   mb.app.commandLine.appendSwitch(
     'disable-backgrounding-occluded-windows',
     'true'
   );
-
   // eslint-disable-next-line
   new AppUpdater();
 };
@@ -123,6 +107,7 @@ app.on('window-all-closed', () => {
     app.quit();
   }
 });
+
 app.on('browser-window-focus', function() {
   if (app.isPackaged) {
     globalShortcut.register('CommandOrControl+Shift+R', () => {
@@ -136,6 +121,7 @@ app.on('browser-window-focus', function() {
     });
   }
 });
+
 app.on('browser-window-blur', function() {
   if (app.isPackaged) {
     globalShortcut.unregister('CommandOrControl+R');

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import InputNumber from 'rc-input-number';
+// import InputNumber from 'rc-input-number';
+import { Input, InputNumber } from 'antd';
 import { addFund, getFund } from '../../actions/fund';
 import styles from './index.scss';
 
@@ -48,12 +49,13 @@ const AddContent: React.FC<AddContentProps> = props => {
       <div className={styles.body}>
         <section>
           <label>基金代码：</label>
-          <input
+          <Input
             type="text"
             placeholder="请输入基金代码"
             value={code}
             onChange={e => setCode(e.target.value)}
-          ></input>
+            size="small"
+          ></Input>
         </section>
         <section>
           <label>持有份额：</label>
@@ -64,6 +66,10 @@ const AddContent: React.FC<AddContentProps> = props => {
             precision={2}
             value={num}
             onChange={setNum}
+            size="small"
+            style={{
+              width: '100%'
+            }}
           ></InputNumber>
         </section>
         <section>

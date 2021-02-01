@@ -13,7 +13,7 @@ import {
   changeToolbarDeleteStatus
 } from '../../actions/toolbar';
 import { updateUpdateTime } from '../../actions/wallet';
-import { getFund, getFundConfig } from '../../actions/fund';
+import { getFunds, getFundConfig } from '../../actions/fund';
 import { getSystemSetting } from '../../actions/setting';
 import { StoreState } from '../../reducers/types';
 import { ToolbarState } from '../../reducers/toolbar';
@@ -29,14 +29,14 @@ export interface HomeProps {
 
 const Home: React.FC<HomeProps> = ({ updateUpdateTime }) => {
   const { freshDelaySetting, autoFreshSetting } = getSystemSetting();
-  const [funds, setFunds] = useState<(Fund.ResponseItem | null)[]>([]);
-  const { run, loading } = useRequest(getFund, {
+  const [funds, setFunds] = useState<Fund.ResponseItem[]>([]);
+  const { run, loading } = useRequest(getFunds, {
     manual: true,
     // loadingDelay: 1000,
-    throttleInterval: 1000 * 2, // 3秒请求一次
+    throttleInterval: 1000 * 2, // 2秒请求一次
     onSuccess: result => {
       const now = new Date().toLocaleString();
-      setFunds(result.filter(_ => _));
+      setFunds(result.filter(_ => !!_) as Fund.ResponseItem[]);
       updateUpdateTime(now);
     }
   });

@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { useLocalStorageState } from 'ahooks';
-import InputNumber from 'rc-input-number';
+import { InputNumber } from 'antd';
 import { updateFund, getFundConfig } from '../../actions/fund';
 import styles from './index.scss';
 
@@ -52,6 +51,10 @@ const EditContent: React.FC<AddContentProps> = props => {
             precision={2}
             value={num}
             onChange={setNum}
+            size="small"
+            style={{
+              width: '100%'
+            }}
           ></InputNumber>
         </section>
       </div>

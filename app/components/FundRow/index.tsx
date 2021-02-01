@@ -24,28 +24,6 @@ export interface RowProps {
   toolbar: ToolbarState;
   onFresh: () => Promise<void>;
 }
-export const codes = [
-  {
-    code: '003834',
-    cyfe: 1279.65
-  },
-  {
-    code: '161725',
-    cyfe: 3482.86
-  },
-  {
-    code: '260108',
-    cyfe: 2341.88
-  },
-  {
-    code: '003984',
-    cyfe: 1122.73
-  },
-  {
-    code: '320007',
-    cyfe: 0
-  }
-];
 
 const arrowSize = {
   width: 12,
@@ -98,11 +76,11 @@ const FundRow: React.FC<RowProps> = props => {
                 alignItems: 'center'
               }}
             >
-              <span className={styles.fundName}>{fund.name} </span>
+              <span className={styles.fundName}>{fund.name}</span>
             </div>
             <div className={styles.rowBar}>
               <div>
-                <span className={styles.code}> ({fund.fundcode}) </span>
+                <span className={styles.code}>{fund.fundcode}</span>
                 <span>{fund.gztime.slice(5)}</span>
               </div>
             </div>

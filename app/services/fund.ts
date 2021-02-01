@@ -56,7 +56,7 @@ export const FromDayFund: (
       name,
       fundcode: code,
       gztime: `${gzDate} ${gztime}`,
-      gszzl: gsbjl.replace(/%/g, ''),
+      gszzl: Number(gsbjl.replace(/%/g, '')).toFixed(2),
       jzrq,
       dwjz,
       gsz

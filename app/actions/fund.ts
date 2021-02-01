@@ -21,26 +21,38 @@ export const getFundConfig = () => {
   return { fundConfig, codeMap };
 };
 
-export const getFund: () => Promise<
+export const getFunds: () => Promise<
   (Fund.ResponseItem | null)[]
 > = async () => {
   const { fundConfig } = getFundConfig();
   const fundApiType = getFundApiTypeSetting();
+  const collectors = fundConfig.map(({ code }) => () => getFund(code));
 
   switch (fundApiType) {
     case Enums.FundApiType.Dayfund:
-      return Adapter.ChokeAdapter(
-        fundConfig.map(({ code }) => () => Services.Fund.FromDayFund(code))
-      );
+      return Adapter.ChokeAdapter(collectors);
     case Enums.FundApiType.Tencent:
-      return Adapter.ChokeAdapter(
-        fundConfig.map(({ code }) => () => Services.Fund.FromTencent(code))
-      );
+      await Utils.Sleep(1000);
+      return Adapter.ConCurrencyAdapter(collectors);
     case Enums.FundApiType.Eastmoney:
     default:
-      return Adapter.ConCurrencyAdapter(
-        fundConfig.map(({ code }) => () => Services.Fund.FromEastmoney(code))
-      );
+      await Utils.Sleep(1000);
+      return Adapter.ConCurrencyAdapter(collectors);
+  }
+};
+
+export const getFund: (
+  code: string
+) => Promise<Fund.ResponseItem | null> = async code => {
+  const fundApiType = getFundApiTypeSetting();
+  switch (fundApiType) {
+    case Enums.FundApiType.Dayfund:
+      return Services.Fund.FromDayFund(code);
+    case Enums.FundApiType.Tencent:
+      return Services.Fund.FromTencent(code);
+    case Enums.FundApiType.Eastmoney:
+    default:
+      return Services.Fund.FromEastmoney(code);
   }
 };
 
