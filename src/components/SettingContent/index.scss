@@ -157,13 +157,28 @@
   width: 100%;
   justify-content: center;
   align-items: center;
-  padding-bottom: 20px;
+  padding-bottom: 56px;
 
   button {
     color: var(--reverse-text-color);
     background-color: transparent;
     border: 1px solid var(--border-color);
   }
+}
+
+.version {
+  text-align: center;
+  height: 36px;
+  line-height: 36px;
+  background-color: var(--inner-color);
+  color: var(--inner-text-color);
+  font-size: 10px;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  box-sizing: border-box;
+  border-top: 1px solid var(--border-color);
+
 }
 
 .colorful {

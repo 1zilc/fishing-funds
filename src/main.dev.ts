@@ -141,7 +141,7 @@ app.on('browser-window-blur', function () {
 });
 
 /** Check if single instance, if not, simply quit new instance */
-let isSingleInstance = app.requestSingleInstanceLock();
+const isSingleInstance = app.requestSingleInstanceLock();
 if (!isSingleInstance) {
   app.quit();
 } else {

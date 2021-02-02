@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import classnames from 'classnames';
-import InputNumber from 'rc-input-number';
+import {InputNumber} from 'antd';
 import { Checkbox, Radio } from 'antd';
 import { ReactComponent as SettingIcon } from '../../assets/icons/setting.svg';
 import { ReactComponent as LinkIcon } from '../../assets/icons/link.svg';
@@ -16,6 +16,8 @@ import {
 } from '../../actions/setting';
 import * as Enums from '../../utils/enums';
 import styles from './index.scss';
+
+const {version} = require('../../package.json');
 
 export interface SettingContentProps {
   show?: boolean;
@@ -74,7 +76,7 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
       <div className={styles.body}>
         <div className={classnames(styles.logo, styles.colorful)}>
           <Logo />
-          <div className={styles.appName}>Fishing Funds v1.1.0</div>
+          <div className={styles.appName}>Fishing Funds v{version}</div>
         </div>
         <div>
           <div className={styles.title}>
@@ -122,16 +124,20 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
               />
             </section>
             <section>
-              <label>刷新间隔(min)：</label>
+              <label>刷新间隔：</label>
               <InputNumber
                 disabled={!autoFresh}
                 value={freshDelay}
                 onChange={setFreshDelay}
                 className={styles.input}
-                placeholder="1~60"
+                placeholder="1~60分"
                 precision={0}
                 min={1}
                 max={60}
+                size="small"
+                style={{
+                  width: '100%'
+                }}
               />
             </section>
           </div>
@@ -156,6 +162,9 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
         <button type="button" onClick={() => app.quit()}>
           退出程序
         </button>
+      </div>
+      <div className={styles.version}>
+        <div>Based on Electron v{process.versions.electron}</div>
       </div>
     </div>
   );

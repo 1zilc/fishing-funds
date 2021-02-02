@@ -24,7 +24,6 @@ const Wallet: React.FC<WalletProps> = ({ funds, wallet, toggleEyeStatus }) => {
   const position = useScroll(document, (val) => val.top <= 400);
   const { zje, sygz } = calcFunds(funds);
   const eyeOpen = wallet.eyeStatus === Enums.EyeStatus.Open;
-
   const display_zje = eyeOpen ? zje.toFixed(2) : Utils.Encrypt(zje.toFixed(2));
   const display_sygz = eyeOpen
     ? sygz.toFixed(2)
@@ -48,7 +47,7 @@ const Wallet: React.FC<WalletProps> = ({ funds, wallet, toggleEyeStatus }) => {
               <span>持有金额：</span>
               <span>{display_zje}</span>
             </div>
-            <i></i>
+            <i  ></i>
             <div>
               <ConsumptionIcon />
               <span>收益估值：</span>
