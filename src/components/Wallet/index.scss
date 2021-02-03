@@ -1,7 +1,9 @@
 @import '../../styles/varible.scss';
 
 .layout {
-  height: 60px
+  height: 60px;
+  margin-bottom: 32px;
+  z-index: 2;
 }
 
 .content {
@@ -11,18 +13,19 @@
   top: 0;
   z-index: 2;
   transition: height .2s;
-  position: fixed;
+  position: absolute;
   width: 100%;
   background-color: var(--blur-color);
   backdrop-filter: saturate(180%) blur(20px);
-  height: 60px;
+  height: 100%;
   box-sizing: border-box;
   align-items: center;
   transform: rotate(0deg);
   backface-visibility: hidden;
+  z-index: 2;
 
 
-  &>svg {
+  .walletIcon {
     height: 40px;
     width: 40px;
     transition: height .2s, width .2s;
@@ -99,13 +102,12 @@
 }
 
 .minMode {
-  height: 45px;
+  height: 40px !important;
   box-shadow: 0 20px 20px rgba(0, 0, 0, .1);
 
-  svg {
+  .walletIcon {
     height: 20px;
     width: 20px;
-
   }
 
   .info {

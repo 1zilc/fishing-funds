@@ -7,8 +7,8 @@ import * as Adapter from '../utils/adpters';
 import { getFundApiTypeSetting } from './setting';
 import CONST_STORAGE from '../constants/storage.json';
 
-export interface CodeMap extends Fund.SettingItem {
-  originSort: number;
+export interface CodeMap {
+  [index: string]: Fund.SettingItem & { originSort: number };
 }
 export const getFundConfig: () => {
   fundConfig: Fund.SettingItem[];
@@ -20,9 +20,9 @@ export const getFundConfig: () => {
   );
 
   const codeMap = fundConfig.reduce((r, c, i) => {
-    r[c.code] = { ...c, originSort: i } as CodeMap;
+    r[c.code] = { ...c, originSort: i };
     return r;
-  }, {} as any);
+  }, {} as CodeMap);
 
   return { fundConfig, codeMap };
 };

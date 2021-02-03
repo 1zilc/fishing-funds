@@ -7,7 +7,6 @@ import FundRow from '../FundRow';
 import Toolbar from '../Toolbar';
 import Wallet from '../Wallet/index';
 import LoadingBar from '../LoadingBar';
-import SortBar from '../SortBar';
 
 import {
   toggleToolbarDeleteStatus,
@@ -61,8 +60,8 @@ const Home: React.FC<HomeProps> = ({ updateUpdateTime }) => {
   const sort = (responseFunds?: Fund.ResponseItem[]) => {
     const { type, order } = getSortMode();
     const { codeMap } = getFundConfig();
-    const sortFunds: Fund.ResponseItem[] = JSON.parse(
-      JSON.stringify(responseFunds || funds)
+    const sortFunds: Fund.ResponseItem[] = Utils.DeepCopy(
+      responseFunds || funds
     );
 
     sortFunds.sort((a, b) => {
@@ -102,7 +101,6 @@ const Home: React.FC<HomeProps> = ({ updateUpdateTime }) => {
   return (
     <div className={styles.layout}>
       <Wallet funds={funds} />
-      <SortBar onSort={sort} />
       <LoadingBar show={loading} />
       <div className={styles.container}>
         {funds.map((fund, index) => (

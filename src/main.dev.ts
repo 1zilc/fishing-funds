@@ -20,6 +20,45 @@ export default class AppUpdater {
     log.transports.file.level = 'info';
     autoUpdater.logger = log;
     autoUpdater.checkForUpdatesAndNotify();
+    //更新错误事件
+    autoUpdater.on('error', function (error) {
+      // sendUpdateMessage(returnData.error);
+      log.info('returnData.error, error');
+    });
+
+    //检查事件
+    autoUpdater.on('checking-for-update', function () {
+      // sendUpdateMessage(returnData.checking);
+      log.info('returnData.checking');
+    });
+
+    //发现新版本
+    autoUpdater.on('update-available', function () {
+      // sendUpdateMessage(returnData.updateAva);
+      log.info('returnData.updateAva');
+    });
+
+    //当前版本为最新版本
+    autoUpdater.on('update-not-available', function () {
+      setTimeout(function () {
+        // sendUpdateMessage(returnData.updateNotAva);
+        log.info('returnData.updateNotAva');
+      }, 1000);
+    });
+
+    //更新下载进度事件
+    autoUpdater.on('download-progress', function (progressObj) {
+      // win.webContents.send('downloadProgress', progressObj);
+      log.info('正在下载', progressObj);
+    });
+
+    //下载完毕
+    // autoUpdater.on('update-downloaded', function (event, releaseNotes, releaseName, releaseDate, updateUrl, quitAndUpdate) {
+    autoUpdater.on('update-downloaded', function () {
+      //退出并进行安装（这里可以做成让用户确认后再调用）
+      autoUpdater.quitAndInstall();
+      log.info('下载完毕');
+    });
   }
 }
 
@@ -94,7 +133,7 @@ const createMenubar = async () => {
     myWindow = mb.window;
     // app.dock.hide();
     if (!app.isPackaged) {
-    mb.window!.webContents.openDevTools({ mode: 'undocked' });
+      mb.window!.webContents.openDevTools({ mode: 'undocked' });
     }
   });
   // To avoid a flash when opening your menubar app, you can disable backgrounding the app using the following:
@@ -103,7 +142,7 @@ const createMenubar = async () => {
     'true'
   );
   // eslint-disable-next-line
-  // new AppUpdater();
+  new AppUpdater();
 };
 
 /**

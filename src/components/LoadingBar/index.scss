@@ -23,14 +23,17 @@
 
 @keyframes jump {
   0% {
-    transform: translateY(0);
+    color: var(--main-text-color);
+    opacity: 1;
   }
 
   50% {
-    transform: translateY(-3px);
+    color: var(--secondary-main-text-color);
+    opacity: .3;
   }
 
   100% {
-    transform: translateY(0);
+    color: var(--main-text-color);
+    opacity: 1;
   }
 }

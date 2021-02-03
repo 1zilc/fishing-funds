@@ -9,6 +9,7 @@ import { ReactComponent as EyeIcon } from '../../assets/icons/eye.svg';
 import { ReactComponent as EyeCloseIcon } from '../../assets/icons/eye-close.svg';
 import { StoreState } from '../../reducers/types';
 import { toggleEyeStatus } from '../../actions/wallet';
+import SortBar from '../SortBar';
 import * as Enums from '../../utils/enums';
 import * as Utils from '../../utils';
 import { calcFunds } from '../../actions/fund';
@@ -30,38 +31,42 @@ const Wallet: React.FC<WalletProps> = ({ funds, wallet, toggleEyeStatus }) => {
     : Utils.Encrypt(Utils.Yang(sygz.toFixed(2)));
 
   return (
-    <div className={styles.layout}>
+    <div className={classnames(styles.layout)}>
       <div
-        className={classnames(styles.content, {
+        style={{ position: 'fixed', width: '100%', height: 60 }}
+        className={classnames({
           [styles.minMode]: position.top > 40,
         })}
       >
-        <WalletIcon />
-        <div className={styles.info}>
-          <div className={styles.timeBar}>
-            <div className={styles.last}>刷新时间：{wallet.updateTime}</div>
+        <div className={classnames(styles.content)}>
+          <WalletIcon className={styles.walletIcon} />
+          <div className={styles.info}>
+            <div className={styles.timeBar}>
+              <div className={styles.last}>刷新时间：{wallet.updateTime}</div>
+            </div>
+            <div className={styles.moneyBar}>
+              <div>
+                <ConsumptionIcon />
+                <span>持有金额：</span>
+                <span>{display_zje}</span>
+              </div>
+              <i></i>
+              <div>
+                <ConsumptionIcon />
+                <span>收益估值：</span>
+                <span>{display_sygz}</span>
+              </div>
+            </div>
           </div>
-          <div className={styles.moneyBar}>
-            <div>
-              <ConsumptionIcon />
-              <span>持有金额：</span>
-              <span>{display_zje}</span>
-            </div>
-            <i></i>
-            <div>
-              <ConsumptionIcon />
-              <span>收益估值：</span>
-              <span>{display_sygz}</span>
-            </div>
+          <div className={styles.eye}>
+            {wallet.eyeStatus === Enums.EyeStatus.Open ? (
+              <EyeIcon onClick={toggleEyeStatus} />
+            ) : (
+              <EyeCloseIcon onClick={toggleEyeStatus} />
+            )}
           </div>
         </div>
-        <div className={styles.eye}>
-          {wallet.eyeStatus === Enums.EyeStatus.Open ? (
-            <EyeIcon onClick={toggleEyeStatus} />
-          ) : (
-            <EyeCloseIcon onClick={toggleEyeStatus} />
-          )}
-        </div>
+        <SortBar onSort={() => {}} />
       </div>
     </div>
   );

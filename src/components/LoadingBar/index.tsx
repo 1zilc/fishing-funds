@@ -10,7 +10,7 @@ const LoadingBar: React.FC<LoadingBarProps> = ({ show }) => {
   return (
     <div
       className={classnames(styles.content, {
-        [styles.disable]: !show
+        [styles.disable]: !show,
       })}
     >
       {text.map((_, index) => (

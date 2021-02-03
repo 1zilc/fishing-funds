@@ -9,10 +9,11 @@
     "rebuild": "electron-rebuild --parallel --types prod,dev,optional --module-dir src",
     "lint": "cross-env NODE_ENV=development eslint . --cache --ext .js,.jsx,.ts,.tsx",
     "package": "rm -rf src/dist && yarn build && electron-builder build --publish never",
-    "package-all": "rm -rf src/dist && yarn build && electron-builder build -mwl",
     "package-mac": "rm -rf src/dist && yarn build && electron-builder build --mac",
     "package-linux": "rm -rf src/dist && yarn build && electron-builder build --linux",
     "package-win": "rm -rf src/dist && yarn build && electron-builder build --win --x64",
+    "package-all": "rm -rf src/dist && yarn build && electron-builder build -mwl",
+    "release-all": "rm -rf src/dist && yarn build && electron-builder build -mwl -p always",
     "postinstall": "node -r @babel/register .erb/scripts/CheckNativeDep.js && electron-builder install-app-deps && yarn cross-env NODE_ENV=development webpack --config ./.erb/configs/webpack.config.renderer.dev.dll.babel.js && opencollective-postinstall && yarn-deduplicate yarn.lock",
     "start": "node -r @babel/register ./.erb/scripts/CheckPortInUse.js && cross-env yarn start:renderer",
     "start:main": "cross-env NODE_ENV=development electron -r ./.erb/scripts/BabelRegister ./src/main.dev.ts",
@@ -35,7 +36,8 @@
   },
   "build": {
     "productName": "Fishing Funds",
-    "appId": "org.erb.Fishing Funds",
+    "appId": "com.electron.Fishing Funds",
+    "copyright": "Copyright © 2021 1zilc",
     "files": [
       "dist/",
       "node_modules/",
@@ -90,13 +92,13 @@
     ],
     "publish": {
       "provider": "github",
-      "owner": "electron-react-boilerplate",
-      "repo": "electron-react-boilerplate"
+      "owner": "1zillc",
+      "repo": "https://github.com/1zilc/fishing-funds"
     }
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/electron-react-boilerplate/electron-react-boilerplate.git"
+    "url": "git+https://github.com/1zilc/fishing-funds.git"
   },
   "author": {
     "name": "1zilc",

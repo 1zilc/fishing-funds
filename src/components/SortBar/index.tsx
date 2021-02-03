@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { useScroll, useTimeout, useDebounceFn } from 'ahooks';
 import classsames from 'classnames';
 import { Dropdown, Menu } from 'antd';
 import { ReactComponent as SortArrowUpIcon } from '../../assets/icons/sort-arrow-up.svg';
@@ -19,9 +20,18 @@ export interface SortBarProps {
 const SortBar: React.FC<SortBarProps> = ({ onSort }) => {
   const { type, order } = getSortMode();
   const { sortModeOptions, sortModeOptionsMap } = getSortConfig();
+  const [visible, setVisible] = useState(true);
+  const { run: debounceSetVisible } = useDebounceFn(() => setVisible(true), {
+    wait: 200,
+  });
+  useScroll(document, (val) => {
+    setVisible(false);
+    debounceSetVisible();
+    return true;
+  });
 
   return (
-    <div className={styles.content}>
+    <div className={classsames(styles.content, { [styles.visible]: visible })}>
       <div className={styles.bar}>
         <div className={styles.name}>基金名称</div>
         <div className={styles.mode}>

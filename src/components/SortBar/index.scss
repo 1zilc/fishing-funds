@@ -1,9 +1,21 @@
 .content {
-  padding: 0 8px 0 25px;
+  padding: 0 4px 0 25px;
   border-bottom: 1px solid var(--border-color);
-  // position: sticky;
-  // top: 60px;
   background-color: var(--background-color);
+  transition: transform .1s;
+  position: absolute;
+  width: 100%;
+  bottom: -32px;
+  z-index: 0;
+  transform: translateY(-32px);
+  box-sizing: border-box;
+  // box-shadow: 0 5px 5px rgba(0, 0, 0, .1);
+  // background-color: var(--blur-color);
+  // backdrop-filter: saturate(180%) blur(20px);
+}
+
+.visible {
+  transform: translateY(0);
 }
 
 .bar {
@@ -11,6 +23,7 @@
   align-items: center;
   color: var(--main-text-color);
   font-size: 12px;
+  height: 100%;
 }
 
 .name {}
