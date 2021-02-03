@@ -42,7 +42,6 @@ export const getFunds: () => Promise<
       return Adapter.ConCurrencyAdapter(collectors);
     case Enums.FundApiType.Eastmoney:
     default:
-      // 默认请求天天基金
       await Utils.Sleep(1000);
       return Adapter.ConCurrencyAdapter(collectors);
   }
@@ -63,6 +62,7 @@ export const getFund: (
       return Services.Fund.FromHowbuy(code);
     case Enums.FundApiType.Eastmoney:
     default:
+      // 默认请求天天基金
       return Services.Fund.FromEastmoney(code);
   }
 };
