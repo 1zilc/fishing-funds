@@ -12,7 +12,7 @@ import {
   getSystemSetting,
   setSystemSetting,
   getFundApiTypeSetting,
-  setFundApiTypeSetting
+  setFundApiTypeSetting,
 } from '../../actions/setting';
 import * as Enums from '../../utils/enums';
 import styles from './index.scss';
@@ -28,11 +28,11 @@ export interface SettingContentProps {
 const { remote, shell } = require('electron');
 const { app } = remote;
 
-const SettingContent: React.FC<SettingContentProps> = props => {
+const SettingContent: React.FC<SettingContentProps> = (props) => {
   const {
     autoStartSetting,
     autoFreshSetting,
-    freshDelaySetting
+    freshDelaySetting,
   } = getSystemSetting();
 
   const fundApiTypeSetting = getFundApiTypeSetting();
@@ -47,10 +47,10 @@ const SettingContent: React.FC<SettingContentProps> = props => {
     setSystemSetting({
       autoStartSetting: autoStart,
       autoFreshSetting: autoFresh,
-      freshDelaySetting: freshDelay || 1
+      freshDelaySetting: freshDelay || 1,
     });
     app.setLoginItemSettings({
-      openAtLogin: autoStart
+      openAtLogin: autoStart,
     });
     props.onEnter();
   };
@@ -86,7 +86,7 @@ const SettingContent: React.FC<SettingContentProps> = props => {
           <div className={styles.setting}>
             <Radio.Group
               value={fundapiType}
-              onChange={e => setFundApiType(e.target.value)}
+              onChange={(e) => setFundApiType(e.target.value)}
             >
               <Radio
                 className={styles.radio}
@@ -104,7 +104,7 @@ const SettingContent: React.FC<SettingContentProps> = props => {
                 新浪基金
               </Radio>
               <Radio className={styles.radio} value={Enums.FundApiType.Howbuy}>
-                好买基
+                好买基金
               </Radio>
             </Radio.Group>
           </div>
@@ -119,14 +119,14 @@ const SettingContent: React.FC<SettingContentProps> = props => {
               <label>开机自启：</label>
               <Checkbox
                 checked={autoStart}
-                onChange={e => setAutoStart(e.target.checked)}
+                onChange={(e) => setAutoStart(e.target.checked)}
               />
             </section>
             <section>
               <label>自动刷新：</label>
               <Checkbox
                 checked={autoFresh}
-                onChange={e => setAutoFresh(e.target.checked)}
+                onChange={(e) => setAutoFresh(e.target.checked)}
               />
             </section>
             <section>
@@ -142,7 +142,7 @@ const SettingContent: React.FC<SettingContentProps> = props => {
                 max={60}
                 size="small"
                 style={{
-                  width: '100%'
+                  width: '100%',
                 }}
               />
             </section>
@@ -155,7 +155,7 @@ const SettingContent: React.FC<SettingContentProps> = props => {
           </div>
           <div className={styles.link}>
             <a
-              onClick={e => {
+              onClick={(e) => {
                 shell.openExternal(e.target.innerHTML);
               }}
             >

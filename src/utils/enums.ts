@@ -1,12 +1,12 @@
 export enum ToolBarDwawerType {
   None,
   AddFund,
-  Setting
+  Setting,
 }
 
 export enum EyeStatus {
   Close,
-  Open
+  Open,
 }
 
 export enum FundApiType {
@@ -14,5 +14,5 @@ export enum FundApiType {
   Dayfund, // 基金速查网
   Tencent, // 腾讯证券
   Sina, // 新浪基金
-  Howbuy // 好买基
+  Howbuy, // 好买基金
 }

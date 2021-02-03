@@ -8,6 +8,7 @@
 ![GitHub all releases](https://img.shields.io/github/downloads/1zilc/fishing-funds/total)
 ![GitHub top language](https://img.shields.io/github/languages/top/1zilc/fishing-funds?color=red)
 ![GitHub commit activity](https://img.shields.io/github/commit-activity/m/1zilc/fishing-funds)
+![GitHub package.json dependency version (dev dep on branch)](https://img.shields.io/github/package-json/dependency-version/1zilc/fishing-funds/dev/electron/v2)
 ![GitHub package.json dependency version (prod)](https://img.shields.io/github/package-json/dependency-version/1zilc/fishing-funds/menubar)
 ![GitHub](https://img.shields.io/github/license/1zilc/fishing-funds)
 
@@ -36,8 +37,10 @@
 > 如果有好的数据源，欢迎[issues](https://github.com/1zilc/fishing-funds/issues)补充
 
 * [天天基金](https://fund.eastmoney.com/) ★★★★★ (推荐)
-* [腾讯证券](https://stockapp.finance.qq.com/mstats/) ★★★☆☆
+* [腾讯证券](https://stockapp.finance.qq.com/mstats/) ★★★★☆
 * [基金速查网](https://www.dayfund.cn/) ★★★☆☆
+* [新浪基金](https://finance.sina.com.cn/fund/) ★★★☆☆
+* [好买基金](https://www.howbuy.com/fund/) ★★★★☆
 
 ## 下载使用
 
@@ -48,28 +51,6 @@
 ```bash
 yarn package-win
 ```
-
-## 更新日志
-### 2021.02.01
-
-1. 发布 v1.1.0 版本
-2. 添加多个基金源切换功能
-3. 修复一直检查更新问题
-4. 修复应用多开问题
-5. 升级至Electron ^9.0.0
-6. 升级至Menubar ^9.0.0
-### 2021.01.30
-
-1. 发布 v1.0.1 版本
-2. 添加暗黑模式。
-3. 添加基金验证，修复基金添加异常。
-4. 修复 windows 图标问题
-5. 屏蔽快捷键
-
-### 2021.01.28
-
-1. 支持基金自选添加、删除、份额修改，收益估计等基础功能
-2. 添加钱夹，自动计算总估值，当日收益
 
 ## 支持一下～
 

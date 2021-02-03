@@ -144,7 +144,7 @@ export const FromSina: (
   }
 };
 
-// 好买基
+// 好买基金
 export const FromHowbuy: (
   code: string
 ) => Promise<Fund.ResponseItem | null> = async (code) => {
