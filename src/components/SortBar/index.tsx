@@ -27,6 +27,7 @@ const SortBar: React.FC<SortBarProps> = ({ onSort }) => {
         <div className={styles.mode}>
           <Dropdown
             placement="bottomRight"
+            // trigger={['click']}
             overlay={
               <Menu>
                 {sortModeOptions.map(({ key, value }) => (

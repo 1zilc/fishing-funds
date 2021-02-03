@@ -3,3 +3,17 @@
 .ant-radio-wrapper {
   color: var(--main-text-color);
 }
+
+.ant-dropdown-menu {
+  background-color: var(--background-color);
+
+}
+
+.ant-dropdown-menu-item {
+  color: var(--main-text-color);
+  font-size: 12px;
+
+  &:hover {
+    background-color: var(--inner-color);
+  }
+}
