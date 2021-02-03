@@ -7,16 +7,22 @@ import * as Adapter from '../utils/adpters';
 import { getFundApiTypeSetting } from './setting';
 import CONST_STORAGE from '../constants/storage.json';
 
-export const getFundConfig = () => {
+export interface CodeMap extends Fund.SettingItem {
+  originSort: number;
+}
+export const getFundConfig: () => {
+  fundConfig: Fund.SettingItem[];
+  codeMap: CodeMap;
+} = () => {
   const fundConfig: Fund.SettingItem[] = Utils.GetStorage(
     CONST_STORAGE.FUND_SETTING,
     []
   );
 
-  const codeMap = fundConfig.reduce((r, c) => {
-    r[c.code] = c;
+  const codeMap = fundConfig.reduce((r, c, i) => {
+    r[c.code] = { ...c, originSort: i } as CodeMap;
     return r;
-  }, {} as { [index: string]: Fund.SettingItem });
+  }, {} as any);
 
   return { fundConfig, codeMap };
 };
@@ -109,7 +115,7 @@ export const deleteFund = async (fund: Fund.ResponseItem) => {
 
 export const calcFund: (
   fund: Fund.ResponseItem
-) => {
+) => Fund.ResponseItem & {
   cyfe: number; // 持有份额
   bjz: number; // 比较值
   jrsygz: number; // 今日收益估值
@@ -121,6 +127,7 @@ export const calcFund: (
   const jrsygz = NP.times(cyfe, bjz);
   const gszz = NP.times(fund.gsz, cyfe);
   return {
+    ...fund,
     cyfe,
     bjz,
     jrsygz,

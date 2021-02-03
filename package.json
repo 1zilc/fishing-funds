@@ -9,6 +9,10 @@
     "rebuild": "electron-rebuild --parallel --types prod,dev,optional --module-dir src",
     "lint": "cross-env NODE_ENV=development eslint . --cache --ext .js,.jsx,.ts,.tsx",
     "package": "rm -rf src/dist && yarn build && electron-builder build --publish never",
+    "package-all": "rm -rf src/dist && yarn build && electron-builder build -mwl",
+    "package-mac": "rm -rf src/dist && yarn build && electron-builder build --mac",
+    "package-linux": "rm -rf src/dist && yarn build && electron-builder build --linux",
+    "package-win": "rm -rf src/dist && yarn build && electron-builder build --win --x64",
     "postinstall": "node -r @babel/register .erb/scripts/CheckNativeDep.js && electron-builder install-app-deps && yarn cross-env NODE_ENV=development webpack --config ./.erb/configs/webpack.config.renderer.dev.dll.babel.js && opencollective-postinstall && yarn-deduplicate yarn.lock",
     "start": "node -r @babel/register ./.erb/scripts/CheckPortInUse.js && cross-env yarn start:renderer",
     "start:main": "cross-env NODE_ENV=development electron -r ./.erb/scripts/BabelRegister ./src/main.dev.ts",
@@ -30,8 +34,8 @@
     ]
   },
   "build": {
-    "productName": "ElectronReact",
-    "appId": "org.erb.ElectronReact",
+    "productName": "Fishing Funds",
+    "appId": "org.erb.Fishing Funds",
     "files": [
       "dist/",
       "node_modules/",
@@ -180,6 +184,7 @@
     "@types/jest": "^26.0.15",
     "@types/node": "14.14.10",
     "@types/react": "^16.9.44",
+    "@types/react-collapse": "^5.0.0",
     "@types/react-dom": "^16.9.9",
     "@types/react-redux": "^7.1.16",
     "@types/react-router-dom": "^5.1.6",

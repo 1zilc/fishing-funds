@@ -37,7 +37,7 @@ const PayContent: React.FC<SettingContentProps> = (props) => {
           </div>
           <div className={styles.pay}>
             <Tilt
-              options={{ max: 10 }}
+              options={{ max: 20 }}
               className={classnames(styles.qrcode, styles.alipay)}
             >
               <img src={alipayQRcodeImage} />
@@ -51,7 +51,7 @@ const PayContent: React.FC<SettingContentProps> = (props) => {
           </div>
           <div className={styles.pay}>
             <Tilt
-              options={{ max: 10 }}
+              options={{ max: 20 }}
               className={classnames(styles.qrcode, styles.wechat)}
             >
               <img src={wechatQRcodeImage} />

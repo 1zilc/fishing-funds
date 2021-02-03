@@ -1,6 +1,6 @@
 import NP from 'number-precision';
 
-export const Yang = num => {
+export const Yang = (num) => {
   if (num < 0) {
     return num;
   } else {
@@ -16,7 +16,7 @@ export const CalcWithPrefix = (a: any, b: any) => {
   }
 };
 
-export const DeepCopy = data => {
+export const DeepCopy = (data) => {
   let dataTmp = undefined;
 
   if (data === null || !(typeof data === 'object')) {
@@ -25,7 +25,7 @@ export const DeepCopy = data => {
     dataTmp = data.constructor.name === 'Array' ? [] : {};
 
     for (let key in data) {
-      dataTmp[key] = deepCopy(data[key]);
+      dataTmp[key] = DeepCopy(data[key]);
     }
   }
 
@@ -49,7 +49,7 @@ export const Sleep: <T>(time: number, F?: T) => Promise<T | undefined> = async (
   time,
   F
 ) => {
-  return new Promise(resolve => {
+  return new Promise((resolve) => {
     setTimeout(() => {
       resolve(F);
     }, time);

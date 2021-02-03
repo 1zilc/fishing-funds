@@ -101,7 +101,10 @@ const ToolBar: React.FC<ToolBarProps> = ({
       >
         <SettingContent
           show={showSettingDrawer}
-          onEnter={closeSettingDrawer}
+          onEnter={() => {
+            onFresh();
+            closeSettingDrawer();
+          }}
           onClose={closeSettingDrawer}
         />
       </Drawer>

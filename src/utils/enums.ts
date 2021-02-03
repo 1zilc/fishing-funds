@@ -16,3 +16,15 @@ export enum FundApiType {
   Sina, // 新浪基金
   Howbuy, // 好买基金
 }
+
+export enum SortType {
+  Default, // 默认
+  Growth, // 涨幅
+  Block, // 份额
+  Money, // 收益
+  Estimate, // 估值
+}
+export enum SortOrderType {
+  Desc,
+  Asc,
+}
