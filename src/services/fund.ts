@@ -1,5 +1,6 @@
 /* eslint-disable no-eval */
 import got from 'got';
+import iconv from 'iconv-lite';
 import NP from 'number-precision';
 import cheerio from 'cheerio';
 import * as Utils from '../utils';
@@ -7,7 +8,7 @@ import * as Utils from '../utils';
 // 天天基金
 export const FromEastmoney: (
   code: string
-) => Promise<Fund.ResponseItem | null> = async code => {
+) => Promise<Fund.ResponseItem | null> = async (code) => {
   try {
     const { body } = await got(`http://fundgz.1234567.com.cn/js/${code}.js`);
     return body.startsWith('jsonpgz') ? eval(body) : null;
@@ -19,13 +20,13 @@ export const FromEastmoney: (
 // 基金速查网
 export const FromDayFund: (
   code: string
-) => Promise<Fund.ResponseItem | null> = async code => {
+) => Promise<Fund.ResponseItem | null> = async (code) => {
   try {
     const { body } = await got('https://www.dayfund.cn/ajs/ajaxdata.shtml', {
       searchParams: {
         showtype: 'getfundvalue',
-        fundcode: code
-      }
+        fundcode: code,
+      },
     });
     if (body === '||||%|%|||||') {
       return null;
@@ -34,21 +35,19 @@ export const FromDayFund: (
       `https://www.dayfund.cn/fundinfo/${code}.html`
     );
     const $ = cheerio.load(html);
-    const [name] = $('meta[name=keywords]')
-      .attr('content')
-      ?.split(',') || [''];
+    const [name] = $('meta[name=keywords]').attr('content')?.split(',') || [''];
     const [
       jzrq,
-      dwjz,
+      zxjz, // 最新净值
       ljjz,
       sjbjz,
       sjzzl,
       gsbjl,
       gsbjz,
-      gszzl,
       gsz,
+      dwjz,
       gzrq,
-      gztime
+      gztime,
     ] = body.split('|');
 
     // 2021-01-29|1.8040|2.2490|-0.0440|-2.3800%|-1.8652%|-0.0345|1.8135|1.8480|2021-01-29|15:35:00
@@ -59,7 +58,7 @@ export const FromDayFund: (
       gszzl: Number(gsbjl.replace(/%/g, '')).toFixed(2),
       jzrq,
       dwjz,
-      gsz
+      gsz,
     };
   } catch (error) {
     return null;
@@ -69,16 +68,16 @@ export const FromDayFund: (
 // 腾讯证券
 export const FromTencent: (
   code: string
-) => Promise<Fund.ResponseItem | null> = async code => {
+) => Promise<Fund.ResponseItem | null> = async (code) => {
   try {
     const {
-      body: { data }
+      body: { data },
     } = await got('https://web.ifzq.gtimg.cn/fund/newfund/fundSsgz/getSsgz', {
       searchParams: {
         app: 'web',
-        symbol: `jj${code}`
+        symbol: `jj${code}`,
       },
-      responseType: 'json'
+      responseType: 'json',
     });
     const { yesterdayDwjz, code: status, data: list, date: gzrq } = data;
     if (status === -1) {
@@ -102,7 +101,92 @@ export const FromTencent: (
       gztime: `${gzrq} ${gzTime}`,
       jzrq,
       gsz,
-      gszzl
+      gszzl,
+    };
+  } catch (error) {
+    return null;
+  }
+};
+
+// 新浪基金
+export const FromSina: (
+  code: string
+) => Promise<Fund.ResponseItem | null> = async (code) => {
+  try {
+    const { rawBody } = await got(`https://hq.sinajs.cn/list=fu_${code}`, {
+      headers: {
+        'Content-Type': 'application/javascript; charset=utf-8',
+      },
+    });
+    const utf8String = iconv.decode(rawBody, 'GB18030');
+    const [_, contnet] = utf8String.split('=');
+    const data = contnet.replace(/(")|(;)|(\s)/g, '');
+    if (!data) {
+      return null;
+    }
+    const { body: html } = await got(
+      `https://finance.sina.com.cn/fund/quotes/${code}/bc.shtml`
+    );
+    const $ = cheerio.load(html);
+    const jzrq = $('#fund_info_blk2 > .fund_data_date').text().slice(5);
+    const [name, time, gsz, dwjz, zjz, unknow1, gszzl, gzrq] = data.split(',');
+    return {
+      name,
+      dwjz,
+      fundcode: code,
+      gztime: `${gzrq} ${time}`,
+      jzrq,
+      gsz,
+      gszzl: Number(gszzl).toFixed(2),
+    };
+  } catch (error) {
+    return null;
+  }
+};
+
+// 好买基
+export const FromHowbuy: (
+  code: string
+) => Promise<Fund.ResponseItem | null> = async (code) => {
+  try {
+    const { body } = await got.post(
+      `https://www.howbuy.com/fund/ajax/gmfund/valuation/valuationnav.htm`,
+      {
+        searchParams: {
+          jjdm: code,
+        },
+      }
+    );
+    if (!body) {
+      return null;
+    }
+    let $ = cheerio.load(body);
+    const gsz = $('span').eq(0).text();
+    const gszzl = $('span').eq(2).text().replace(/%/g, '');
+    const gztime = `${new Date().getFullYear()}-${$('span')
+      .eq(3)
+      .text()
+      .replace(/(\[)|(\])/g, '')
+      .trim()}`;
+
+    const { body: html } = await got.post(
+      `https://www.howbuy.com/fund/${code}/`
+    );
+    $ = cheerio.load(html);
+    const name = $('.gmfund_title .lt h1')
+      .text()
+      .replace(/(\()|(\))|(\d)/g, '');
+    const dwjz = $('.dRate > div').text().trim();
+    const jzrq =
+      /\d{2}-\d{2}/.exec($('.dRate').next().text())?.[0] || '无法获取';
+    return {
+      name,
+      dwjz,
+      fundcode: code,
+      gztime,
+      jzrq,
+      gsz,
+      gszzl: Number(gszzl).toFixed(2),
     };
   } catch (error) {
     return null;

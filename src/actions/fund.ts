@@ -34,8 +34,15 @@ export const getFunds: () => Promise<
     case Enums.FundApiType.Tencent:
       await Utils.Sleep(1000);
       return Adapter.ConCurrencyAdapter(collectors);
+    case Enums.FundApiType.Sina:
+      await Utils.Sleep(1000);
+      return Adapter.ConCurrencyAdapter(collectors);
+    case Enums.FundApiType.Howbuy:
+      await Utils.Sleep(1000);
+      return Adapter.ConCurrencyAdapter(collectors);
     case Enums.FundApiType.Eastmoney:
     default:
+      // 默认请求天天基金
       await Utils.Sleep(1000);
       return Adapter.ConCurrencyAdapter(collectors);
   }
@@ -43,13 +50,17 @@ export const getFunds: () => Promise<
 
 export const getFund: (
   code: string
-) => Promise<Fund.ResponseItem | null> = async code => {
+) => Promise<Fund.ResponseItem | null> = async (code) => {
   const fundApiType = getFundApiTypeSetting();
   switch (fundApiType) {
     case Enums.FundApiType.Dayfund:
       return Services.Fund.FromDayFund(code);
     case Enums.FundApiType.Tencent:
       return Services.Fund.FromTencent(code);
+    case Enums.FundApiType.Sina:
+      return Services.Fund.FromSina(code);
+    case Enums.FundApiType.Howbuy:
+      return Services.Fund.FromHowbuy(code);
     case Enums.FundApiType.Eastmoney:
     default:
       return Services.Fund.FromEastmoney(code);
@@ -62,7 +73,7 @@ export const addFund = async (fund: Fund.SettingItem) => {
     []
   );
   const notExist =
-    fundConfig.filter(item => fund.code === item.code).length === 0;
+    fundConfig.filter((item) => fund.code === item.code).length === 0;
   if (notExist) {
     Utils.SetStorage(CONST_STORAGE.FUND_SETTING, [...fundConfig, fund]);
   }
@@ -73,7 +84,7 @@ export const updateFund = async (fund: Fund.SettingItem) => {
     CONST_STORAGE.FUND_SETTING,
     []
   );
-  fundConfig.forEach(item => {
+  fundConfig.forEach((item) => {
     if (fund.code === item.code) {
       item.cyfe = fund.cyfe;
     }
@@ -113,7 +124,7 @@ export const calcFund: (
     cyfe,
     bjz,
     jrsygz,
-    gszz
+    gszz,
   };
 };
 
@@ -123,7 +134,7 @@ export const calcFunds: (
   zje: number; // 当前总金额
   gszje: number; // 估算总金额
   sygz: number; // 估算总收益
-} = funds => {
+} = (funds) => {
   const { codeMap } = getFundConfig();
   const [zje, gszje, sygz] = funds.reduce(
     ([a, b, c], fund) => {
