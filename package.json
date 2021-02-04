@@ -94,7 +94,7 @@
     "publish": {
       "provider": "github",
       "owner": "1zilc",
-      "repo": "https://github.com/1zilc/fishing-funds"
+      "repo": "fishing-funds"
     }
   },
   "repository": {
