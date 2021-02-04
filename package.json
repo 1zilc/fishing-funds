@@ -1,49 +1,34 @@
 {
   "name": "fishing-funds",
   "productName": "Fishing Funds",
-  "version": "1.1.0",
+  "version": "2.0.0",
   "description": "显示基金涨跌状态栏小应用,数据源来自天天基金等",
   "scripts": {
-    "build": "concurrently \"yarn build-main\" \"yarn build-renderer\"",
-    "build-dll": "cross-env NODE_ENV=development webpack --config ./configs/webpack.config.renderer.dev.dll.babel.js --colors",
-    "build-e2e": "cross-env E2E_BUILD=true yarn build",
-    "build-main": "cross-env NODE_ENV=production webpack --config ./configs/webpack.config.main.prod.babel.js --colors",
-    "build-renderer": "cross-env NODE_ENV=production webpack --config ./configs/webpack.config.renderer.prod.babel.js --colors",
-    "dev": "cross-env START_HOT=1 node -r @babel/register ./internals/scripts/CheckPortInUse.js && cross-env START_HOT=1 yarn start-renderer-dev",
-    "electron-rebuild": "electron-rebuild --parallel --force --types prod,dev,optional --module-dir app",
+    "build": "concurrently \"yarn build:main\" \"yarn build:renderer\"",
+    "build:main": "cross-env NODE_ENV=production webpack --config ./.erb/configs/webpack.config.main.prod.babel.js",
+    "build:renderer": "cross-env NODE_ENV=production webpack --config ./.erb/configs/webpack.config.renderer.prod.babel.js",
+    "rebuild": "electron-rebuild --parallel --types prod,dev,optional --module-dir src",
     "lint": "cross-env NODE_ENV=development eslint . --cache --ext .js,.jsx,.ts,.tsx",
-    "lint-fix": "yarn --silent lint --fix; exit 0",
-    "lint-styles": "stylelint --ignore-path .eslintignore '**/*.*(css|scss)' --syntax scss",
-    "lint-styles-fix": "yarn --silent lint-styles --fix; exit 0",
-    "package": "yarn build && electron-builder build --publish never",
-    "package-all": "yarn build && electron-builder build -mwl",
-    "package-ci": "yarn postinstall && yarn build && electron-builder --publish always",
-    "package-mac": "yarn build && electron-builder build --mac",
-    "package-linux": "yarn build && electron-builder build --linux",
-    "package-win": "yarn build && electron-builder build --win --x64",
-    "postinstall": "node -r @babel/register internals/scripts/CheckNativeDep.js && electron-builder install-app-deps && yarn build-dll && opencollective-postinstall",
-    "postlint-fix": "prettier --ignore-path .eslintignore --single-quote --write '**/*.{js,jsx,json,html,css,less,scss,yml}'",
-    "postlint-styles-fix": "prettier --ignore-path .eslintignore --single-quote --write '**/*.{css,scss}'",
-    "preinstall": "node ./internals/scripts/CheckYarn.js",
-    "prestart": "yarn build",
-    "start": "cross-env NODE_ENV=production electron ./app/main.prod.js",
-    "start-main-dev": "cross-env START_HOT=1 NODE_ENV=development electron -r ./internals/scripts/BabelRegister ./app/main.dev.ts",
-    "start-renderer-dev": "cross-env NODE_ENV=development webpack-dev-server --config configs/webpack.config.renderer.dev.babel.js",
-    "test": "cross-env NODE_ENV=test BABEL_DISABLE_CACHE=1 jest",
-    "test-all": "yarn lint && yarn tsc && yarn build && yarn test && yarn build-e2e && yarn test-e2e",
-    "test-e2e": "node -r @babel/register ./internals/scripts/CheckBuildsExist.js && cross-env NODE_ENV=test testcafe electron:./app ./test/e2e/HomePage.e2e.ts",
-    "test-e2e-live": "node -r @babel/register ./internals/scripts/CheckBuildsExist.js && cross-env NODE_ENV=test testcafe --live electron:./app ./test/e2e/HomePage.e2e.ts",
-    "test-watch": "yarn test --watch"
+    "package": "rm -rf src/dist && yarn build && electron-builder build --publish never",
+    "package-mac": "rm -rf src/dist && yarn build && electron-builder build --mac -p always",
+    "package-linux": "rm -rf src/dist && yarn build && electron-builder build --linux",
+    "package-win": "rm -rf src/dist && yarn build && electron-builder build --win --x64",
+    "package-all": "rm -rf src/dist && yarn build && electron-builder build -mwl",
+    "release-all": "rm -rf src/dist && yarn build && electron-builder build -mwl --publish always",
+    "postinstall": "node -r @babel/register .erb/scripts/CheckNativeDep.js && electron-builder install-app-deps && yarn cross-env NODE_ENV=development webpack --config ./.erb/configs/webpack.config.renderer.dev.dll.babel.js && opencollective-postinstall && yarn-deduplicate yarn.lock",
+    "start": "node -r @babel/register ./.erb/scripts/CheckPortInUse.js && cross-env yarn start:renderer",
+    "start:main": "cross-env NODE_ENV=development electron -r ./.erb/scripts/BabelRegister ./src/main.dev.ts",
+    "start:renderer": "cross-env NODE_ENV=development webpack serve --config ./.erb/configs/webpack.config.renderer.dev.babel.js",
+    "test": "jest"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
       "cross-env NODE_ENV=development eslint --cache"
     ],
-    "{*.json,.{babelrc,eslintrc,prettierrc,stylelintrc}}": [
+    "{*.json,.{babelrc,eslintrc,prettierrc}}": [
       "prettier --ignore-path .eslintignore --parser json --write"
     ],
     "*.{css,scss}": [
-      "stylelint --ignore-path .eslintignore --syntax scss --fix",
       "prettier --ignore-path .eslintignore --single-quote --write"
     ],
     "*.{html,md,yml}": [
@@ -52,15 +37,27 @@
   },
   "build": {
     "productName": "Fishing Funds",
-    "appId": "org.develar.ElectronReact",
+    "appId": "com.electron.1zilc.fishing-funds",
+    "copyright": "Copyright © 2021 1zilc",
     "files": [
       "dist/",
       "node_modules/",
-      "app.html",
+      "index.html",
       "main.prod.js",
       "main.prod.js.map",
       "package.json"
     ],
+    "afterSign": ".erb/scripts/Notarize.js",
+    "mac": {
+      "target": [
+        "dmg"
+      ],
+      "type": "distribution",
+      "hardenedRuntime": true,
+      "entitlements": "assets/entitlements.mac.plist",
+      "entitlementsInherit": "assets/entitlements.mac.plist",
+      "gatekeeperAssess": false
+    },
     "dmg": {
       "contents": [
         {
@@ -77,51 +74,43 @@
     },
     "win": {
       "target": [
-        "nsis",
-        "msi"
+        "nsis"
       ]
     },
     "linux": {
       "target": [
-        "deb",
-        "rpm",
         "AppImage"
       ],
       "category": "Development"
     },
     "directories": {
-      "buildResources": "resources",
+      "app": "src",
+      "buildResources": "assets",
       "output": "release"
     },
+    "extraResources": [
+      "./assets/**"
+    ],
     "publish": {
       "provider": "github",
-      "owner": "electron-react-boilerplate",
-      "repo": "electron-react-boilerplate",
-      "private": false
-    },
-    "extraResources": [
-      "./resources/**"
-    ]
+      "owner": "1zilc",
+      "repo": "fishing-funds"
+    }
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/electron-react-boilerplate/electron-react-boilerplate.git"
+    "url": "git+https://github.com/1zilc/fishing-funds.git"
   },
   "author": {
     "name": "1zilc",
     "email": "dywzzjx@163.com",
-    "url": "https://github.com/1zilc"
+    "url": "https://www.1zilc.top"
   },
   "contributors": [
     {
-      "name": "Vikram Rangaraj",
-      "email": "vikr01@icloud.com",
-      "url": "https://github.com/vikr01"
-    },
-    {
-      "name": "Amila Welihinda",
-      "email": "amilajack@gmail.com",
-      "url": "https://github.com/amilajack"
+      "name": "1zilc",
+      "email": "dywzzjx@163.com",
+      "url": "https://www.1zilc.top"
     }
   ],
   "license": "(ISC OR GPL-3.0)",
@@ -133,7 +122,6 @@
     "electron",
     "boilerplate",
     "react",
-    "redux",
     "typescript",
     "ts",
     "sass",
@@ -145,7 +133,7 @@
   "jest": {
     "testURL": "http://localhost/",
     "moduleNameMapper": {
-      "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/internals/mocks/fileMock.js",
+      "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/.erb/mocks/fileMock.js",
       "\\.(css|less|sass|scss)$": "identity-obj-proxy"
     },
     "moduleFileExtensions": [
@@ -157,183 +145,161 @@
     ],
     "moduleDirectories": [
       "node_modules",
-      "app/node_modules"
+      "src/node_modules"
     ],
     "setupFiles": [
-      "./internals/scripts/CheckBuildsExist.js"
+      "./.erb/scripts/CheckBuildsExist.js"
     ]
   },
   "devDependencies": {
-    "@babel/core": "^7.10.2",
-    "@babel/plugin-proposal-class-properties": "^7.10.1",
-    "@babel/plugin-proposal-decorators": "^7.10.1",
-    "@babel/plugin-proposal-do-expressions": "^7.10.1",
-    "@babel/plugin-proposal-export-default-from": "^7.10.1",
-    "@babel/plugin-proposal-export-namespace-from": "^7.10.1",
-    "@babel/plugin-proposal-function-bind": "^7.10.1",
-    "@babel/plugin-proposal-function-sent": "^7.10.1",
-    "@babel/plugin-proposal-json-strings": "^7.10.1",
-    "@babel/plugin-proposal-logical-assignment-operators": "^7.10.1",
-    "@babel/plugin-proposal-nullish-coalescing-operator": "^7.10.1",
-    "@babel/plugin-proposal-numeric-separator": "^7.10.1",
-    "@babel/plugin-proposal-optional-chaining": "^7.10.1",
-    "@babel/plugin-proposal-pipeline-operator": "^7.10.1",
-    "@babel/plugin-proposal-throw-expressions": "^7.10.1",
+    "@babel/core": "^7.12.9",
+    "@babel/plugin-proposal-class-properties": "^7.12.1",
+    "@babel/plugin-proposal-decorators": "^7.12.1",
+    "@babel/plugin-proposal-do-expressions": "^7.12.1",
+    "@babel/plugin-proposal-export-default-from": "^7.12.1",
+    "@babel/plugin-proposal-export-namespace-from": "^7.12.1",
+    "@babel/plugin-proposal-function-bind": "^7.12.1",
+    "@babel/plugin-proposal-function-sent": "^7.12.1",
+    "@babel/plugin-proposal-json-strings": "^7.12.1",
+    "@babel/plugin-proposal-logical-assignment-operators": "^7.12.1",
+    "@babel/plugin-proposal-nullish-coalescing-operator": "^7.12.1",
+    "@babel/plugin-proposal-optional-chaining": "^7.12.7",
+    "@babel/plugin-proposal-pipeline-operator": "^7.12.1",
+    "@babel/plugin-proposal-throw-expressions": "^7.12.1",
     "@babel/plugin-syntax-dynamic-import": "^7.8.3",
-    "@babel/plugin-syntax-import-meta": "^7.10.1",
-    "@babel/plugin-transform-react-constant-elements": "^7.10.1",
-    "@babel/plugin-transform-react-inline-elements": "^7.10.1",
-    "@babel/preset-env": "^7.10.2",
-    "@babel/preset-react": "^7.10.1",
-    "@babel/preset-typescript": "^7.10.1",
-    "@babel/register": "^7.10.1",
+    "@babel/plugin-syntax-import-meta": "^7.10.4",
+    "@babel/plugin-transform-react-constant-elements": "^7.12.1",
+    "@babel/plugin-transform-react-inline-elements": "^7.12.1",
+    "@babel/plugin-transform-runtime": "^7.12.1",
+    "@babel/preset-env": "^7.12.7",
+    "@babel/preset-react": "^7.12.7",
+    "@babel/preset-typescript": "^7.12.7",
+    "@babel/register": "^7.12.1",
+    "@pmmmwh/react-refresh-webpack-plugin": "^0.4.3",
+    "@svgr/webpack": "^5.5.0",
+    "@teamsupercell/typings-for-css-modules-loader": "^2.4.0",
+    "@testing-library/jest-dom": "^5.11.6",
+    "@testing-library/react": "^11.2.2",
     "@types/classnames": "^2.2.11",
-    "@types/electron-localshortcut": "^3.1.0",
     "@types/enzyme": "^3.10.5",
     "@types/enzyme-adapter-react-16": "^1.0.6",
-    "@types/history": "^4.7.5",
-    "@types/jest": "^24.9.1",
-    "@types/mousetrap": "^1.6.5",
-    "@types/node": "^12",
-    "@types/react": "^16.9.17",
+    "@types/history": "4.7.6",
+    "@types/jest": "^26.0.15",
+    "@types/node": "14.14.10",
+    "@types/react": "^16.9.44",
     "@types/react-collapse": "^5.0.0",
-    "@types/react-dom": "^16.9.7",
-    "@types/react-redux": "^7.1.6",
-    "@types/react-router": "^5.1.7",
-    "@types/react-router-dom": "^5.1.5",
-    "@types/react-test-renderer": "^16.9.2",
-    "@types/redux-logger": "^3.0.7",
-    "@types/request": "^2.48.5",
-    "@types/sinon": "^7.5.2",
-    "@types/superagent": "^4.1.10",
-    "@types/tapable": "^1.0.5",
-    "@types/vfile-message": "^2.0.0",
-    "@types/webpack": "^4.41.3",
-    "@typescript-eslint/eslint-plugin": "^2.17.0",
-    "@typescript-eslint/parser": "^2.17.0",
-    "babel-core": "7.0.0-bridge.0",
+    "@types/react-dom": "^16.9.9",
+    "@types/react-redux": "^7.1.16",
+    "@types/react-router-dom": "^5.1.6",
+    "@types/react-test-renderer": "^16.9.3",
+    "@types/webpack-env": "^1.15.2",
+    "@typescript-eslint/eslint-plugin": "^4.8.1",
+    "@typescript-eslint/parser": "^4.8.1",
     "babel-eslint": "^10.1.0",
-    "babel-jest": "^25.1.0",
-    "babel-loader": "^8.1.0",
+    "babel-jest": "^26.1.0",
+    "babel-loader": "^8.2.2",
     "babel-plugin-dev-expression": "^0.2.2",
     "babel-plugin-transform-react-remove-prop-types": "^0.4.24",
     "browserslist-config-erb": "^0.0.1",
-    "chalk": "^3.0.0",
-    "concurrently": "^5.2.0",
-    "cross-env": "^7.0.0",
-    "cross-spawn": "^7.0.1",
-    "css-loader": "^3.4.2",
+    "chalk": "^4.1.0",
+    "concurrently": "^5.3.0",
+    "core-js": "^3.6.5",
+    "cross-env": "^7.0.2",
+    "css-loader": "^5.0.1",
+    "css-minimizer-webpack-plugin": "^1.1.5",
     "detect-port": "^1.3.0",
-    "electron": "^9.0.0",
-    "electron-builder": "^22.0.0",
-    "electron-devtools-installer": "^2.2.4",
-    "electron-rebuild": "^1.10.0",
+    "electron": "^11.0.1",
+    "electron-builder": "^22.3.6",
+    "electron-devtools-installer": "^3.1.1",
+    "electron-notarize": "^1.0.0",
+    "electron-rebuild": "^2.3.2",
     "enzyme": "^3.11.0",
-    "enzyme-adapter-react-16": "^1.15.2",
-    "enzyme-to-json": "^3.4.4",
-    "eslint": "^6.8.0",
-    "eslint-config-airbnb-typescript": "^6.3.1",
-    "eslint-config-erb": "^0.3.0",
-    "eslint-config-prettier": "^6.9.0",
-    "eslint-import-resolver-webpack": "^0.12.1",
-    "eslint-plugin-compat": "^3.5.1",
-    "eslint-plugin-import": "^2.20.0",
-    "eslint-plugin-jest": "^23.6.0",
-    "eslint-plugin-jsx-a11y": "6.2.3",
-    "eslint-plugin-prettier": "^3.1.2",
+    "enzyme-adapter-react-16": "^1.15.3",
+    "enzyme-to-json": "^3.5.0",
+    "eslint": "^7.5.0",
+    "eslint-config-airbnb": "^18.2.0",
+    "eslint-config-airbnb-typescript": "^12.0.0",
+    "eslint-config-erb": "^2.0.0",
+    "eslint-config-prettier": "^6.11.0",
+    "eslint-import-resolver-webpack": "^0.13.0",
+    "eslint-plugin-compat": "^3.8.0",
+    "eslint-plugin-import": "^2.22.0",
+    "eslint-plugin-jest": "^24.1.3",
+    "eslint-plugin-jsx-a11y": "6.4.1",
+    "eslint-plugin-prettier": "^3.1.4",
     "eslint-plugin-promise": "^4.2.1",
-    "eslint-plugin-react": "^7.18.0",
-    "eslint-plugin-react-hooks": "^2.3.0",
-    "eslint-plugin-testcafe": "^0.2.1",
-    "fbjs-scripts": "^1.2.0",
-    "file-loader": "^5.0.2",
-    "husky": "^4.2.0",
+    "eslint-plugin-react": "^7.20.6",
+    "eslint-plugin-react-hooks": "^4.0.8",
+    "file-loader": "^6.0.0",
+    "husky": "^4.2.5",
     "identity-obj-proxy": "^3.0.0",
-    "jest": "^25.1.0",
-    "lint-staged": "^10.0.2",
-    "mini-css-extract-plugin": "^0.9.0",
-    "node-sass": "^4.13.1",
-    "opencollective-postinstall": "^2.0.2",
-    "optimize-css-assets-webpack-plugin": "^5.0.3",
-    "prettier": "^1.19.1",
-    "react-test-renderer": "^16.12.0",
-    "redux-logger": "^3.0.6",
+    "jest": "^26.1.0",
+    "lint-staged": "^10.2.11",
+    "mini-css-extract-plugin": "^1.3.1",
+    "node-sass": "^5.0.0",
+    "opencollective-postinstall": "^2.0.3",
+    "prettier": "^2.0.5",
+    "react-refresh": "^0.9.0",
+    "react-test-renderer": "^17.0.1",
     "rimraf": "^3.0.0",
-    "sass-loader": "^8.0.2",
-    "sinon": "^8.1.1",
-    "spectron": "^10.0.0",
-    "style-loader": "^1.1.3",
-    "stylelint": "^13.0.0",
-    "stylelint-config-prettier": "^8.0.1",
-    "stylelint-config-standard": "^19.0.0",
-    "terser-webpack-plugin": "^2.3.2",
-    "testcafe": "^1.8.0",
-    "testcafe-browser-provider-electron": "^0.0.14",
-    "testcafe-react-selectors": "^4.0.0",
-    "typed-css-modules-webpack-plugin": "^0.1.2",
-    "typescript": "^3.7.5",
-    "url-loader": "^3.0.0",
-    "webpack": "^4.41.5",
-    "webpack-bundle-analyzer": "^3.6.0",
-    "webpack-cli": "^3.3.10",
-    "webpack-dev-server": "^3.10.1",
-    "webpack-merge": "^4.2.2",
-    "@svgr/webpack": "^5.5.0",
-    "yarn": "^1.21.1"
+    "sass-loader": "^10.1.0",
+    "style-loader": "^2.0.0",
+    "terser-webpack-plugin": "^5.0.3",
+    "typescript": "^4.0.5",
+    "url-loader": "^4.1.0",
+    "webpack": "^5.5.1",
+    "webpack-bundle-analyzer": "^4.1.0",
+    "webpack-cli": "^4.2.0",
+    "webpack-dev-server": "^3.11.0",
+    "webpack-merge": "^5.4.0",
+    "yarn-deduplicate": "^3.1.0"
   },
   "dependencies": {
-    "@fortawesome/fontawesome-free": "^5.13.0",
-    "@hot-loader/react-dom": "^16.13.0",
-    "ahooks": "^2.9.4",
+    "ahooks": "^2.9.6",
     "antd": "^4.11.2",
     "cheerio": "^1.0.0-rc.5",
     "classnames": "^2.2.6",
     "connected-react-router": "^6.8.0",
-    "core-js": "^3.6.5",
-    "devtron": "^1.4.0",
-    "electron-debug": "^3.0.1",
+    "electron-debug": "^3.1.0",
     "electron-disable-file-drop": "^1.0.2",
     "electron-localshortcut": "^3.2.1",
-    "electron-log": "^4.0.6",
-    "electron-updater": "^4.2.0",
+    "electron-log": "^4.2.4",
+    "electron-updater": "^4.3.4",
     "got": "^11.8.1",
-    "history": "^4.10.1",
-    "menubar": "^9.0.0",
-    "mousetrap": "^1.6.5",
+    "history": "^5.0.0",
+    "iconv-lite": "^0.6.2",
+    "menubar": "^9.0.2",
     "number-precision": "^1.5.0",
     "rc-drawer": "^4.2.2",
     "rc-input-number": "^6.2.0",
-    "react": "^16.12.0",
+    "react": "^17.0.1",
     "react-collapse": "^5.1.0",
-    "react-dom": "^16.12.0",
-    "react-hot-loader": "^4.12.19",
-    "react-redux": "^7.1.3",
-    "react-router": "^5.1.2",
-    "react-router-dom": "^5.1.2",
+    "react-dom": "^17.0.1",
+    "react-redux": "^7.2.2",
+    "react-router-dom": "^5.2.0",
     "react-tilt": "^0.1.4",
     "redux": "^4.0.5",
+    "redux-logger": "^3.0.6",
     "redux-thunk": "^2.3.0",
-    "source-map-support": "^0.5.16"
+    "regenerator-runtime": "^0.13.5",
+    "source-map-support": "^0.5.19"
   },
   "devEngines": {
-    "node": ">=7.x",
-    "npm": ">=4.x",
-    "yarn": ">=0.21.3"
+    "node": ">=10.x",
+    "npm": ">=6.x",
+    "yarn": ">=1.21.3"
   },
   "collective": {
     "url": "https://opencollective.com/electron-react-boilerplate-594"
   },
-  "browserslist": [
-    "extends browserslist-config-erb"
-  ],
+  "browserslist": [],
   "prettier": {
     "overrides": [
       {
         "files": [
           ".prettierrc",
           ".babelrc",
-          ".eslintrc",
-          ".stylelintrc"
+          ".eslintrc"
         ],
         "options": {
           "parser": "json"
@@ -342,21 +308,17 @@
     ],
     "singleQuote": true
   },
-  "stylelint": {
-    "extends": [
-      "stylelint-config-standard",
-      "stylelint-config-prettier"
-    ]
-  },
   "renovate": {
     "extends": [
       "bliss"
+    ],
+    "baseBranches": [
+      "next"
     ]
   },
   "husky": {
     "hooks": {
       "pre-commit": "lint-staged"
     }
-  },
-  "__npminstall_done": false
+  }
 }

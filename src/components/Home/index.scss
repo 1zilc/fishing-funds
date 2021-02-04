@@ -1,0 +1,24 @@
+.layout {
+  position: relative;
+  min-height: 100vh;
+  padding-bottom: 40px;
+  box-sizing: border-box;
+  background-color: var(--inner-color);
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  height: 100%;
+
+  // padding: 10px 0;
+}
+
+.empty {
+  position: absolute;
+  text-align: center;
+  font-size: 12px;
+  width: 100%;
+  top: 50%;
+}

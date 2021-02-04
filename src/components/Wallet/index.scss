@@ -1,0 +1,127 @@
+@import '../../styles/varible.scss';
+
+
+
+.content {
+  padding: 10px;
+  display: flex;
+  border-bottom: 1px solid var(--border-color);
+  top: 0;
+  z-index: 2;
+  transition: height .2s;
+  position: absolute;
+  width: 100%;
+  background-color: var(--blur-color);
+  backdrop-filter: saturate(180%) blur(20px);
+  height: 100%;
+  box-sizing: border-box;
+  align-items: center;
+  transform: rotate(0deg);
+  backface-visibility: hidden;
+  z-index: 2;
+
+  .walletIcon {
+    height: 40px;
+    width: 40px;
+    transition: height .2s, width .2s;
+  }
+
+  .info {
+    flex: 1;
+    box-sizing: border-box;
+    padding: 0 10px;
+    display: flex;
+    justify-content: space-around;
+    flex-direction: column;
+
+    .timeBar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      .last {
+        font-size: 12px;
+        font-weight: 500;
+        color: var(--secondary-main-text-color);
+      }
+    }
+
+    .moneyBar {
+      font-size: 10px;
+      color: var(--main-text-color);
+      display: flex;
+      // justify-content: space-around;
+      width: 100%;
+      align-items: center;
+      transition: all .2s;
+
+
+      i {
+        height: 10px;
+        border-right: 1px solid var(--border-color);
+        margin: 0 10px;
+      }
+
+      div {
+        display: flex;
+        align-items: center;
+        word-wrap: break-word;
+        flex-wrap: wrap;
+
+        span {
+          white-space: nowrap;
+        }
+      }
+
+      svg {
+        height: 14px;
+        width: 14px;
+        fill: var(--svg-icon-color)
+      }
+    }
+  }
+
+  .eye {
+    height: 20px;
+    width: 20px;
+    cursor: pointer;
+
+    &>svg {
+      height: 20px;
+      width: 20px;
+      fill: var(--svg-icon-color)
+    }
+  }
+}
+
+
+
+.miniMode {
+
+  .walletIcon {
+    height: 20px;
+    width: 20px;
+  }
+
+  .info {
+
+    .timeBar {
+      height: 0;
+      overflow: hidden;
+
+      .last {
+        height: 0;
+        overflow: hidden;
+      }
+    }
+
+
+    .moneyBar {
+      font-size: 12px;
+      font-weight: 600;
+
+      i {}
+    }
+  }
+
+}

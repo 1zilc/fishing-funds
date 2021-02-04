@@ -1,0 +1,40 @@
+@import '../../styles//varible.scss';
+
+
+.content {
+  height: 30px;
+  transition: height .2s;
+  font-size: 10px;
+  line-height: 30px;
+  text-align: center;
+  color: var(--secondary-main-text-color);
+  background-color: var(--cancel-color);
+  overflow: hidden;
+  z-index: 1;
+}
+
+.disable {
+  height: 0;
+}
+
+.jump {
+  animation: jump .5s infinite;
+  display: inline-block;
+}
+
+@keyframes jump {
+  0% {
+    color: var(--main-text-color);
+    // opacity: 1;
+  }
+
+  50% {
+    color: var(--background-color);
+    // opacity: .3;
+  }
+
+  100% {
+    color: var(--main-text-color);
+    // opacity: 1;
+  }
+}

@@ -1,0 +1,157 @@
+@import '../../styles//varible.scss';
+
+
+.content {
+  border-radius: 10px;
+  box-sizing: border-box;
+  min-height: 100vh;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  width: 100%;
+  background-color: var(--blur-color);
+  backdrop-filter: saturate(180%) blur(20px);
+  top: 0;
+  padding: 10px;
+  box-sizing: border-box;
+  z-index: 2;
+  border-bottom: 1px solid var(--border-color);
+  // box-shadow: 0 20px 20px rgba(0, 0, 0, .1);
+  margin-bottom: 5px;
+
+  h3 {
+    color: var(--main-text-color);
+  }
+
+
+  .close {
+    color: var(--reverse-text-color);
+    background-color: var(--cancel-color);
+  }
+
+  .add {
+    color: #eee;
+    background-color: var(--primary-color);
+  }
+}
+
+.body {
+  padding: 10px 15px;
+  // margin-top: 20px;
+
+  section {
+    padding: 5px 0;
+  }
+
+  &>label {
+    font-size: 12px;
+    width: 100px;
+    margin-bottom: 5px;
+    display: block;
+  }
+
+  input {
+    width: 100%;
+    outline: none;
+    border: 1px solid var(--border-color);
+    height: 20px;
+  }
+}
+
+.setting {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  padding: 15px 0;
+
+  &>section {
+    width: 50%;
+    display: flex;
+    font-size: 11px;
+    align-items: center;
+    box-sizing: border-box;
+    padding: 5px 0 5px 25px;
+
+
+    label {
+      // height: 20px;
+      line-height: 20px;
+      margin: 0;
+    }
+
+    .input {
+      max-width: 100px;
+      flex: 1;
+    }
+
+  }
+
+  .radio {
+    font-size: 11px;
+    display: block;
+    line-height: 20px;
+    padding: 5px 0 5px 25px;
+  }
+}
+
+.title {
+  font-size: 12px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+
+  svg {
+    width: 20px;
+    height: 20px;
+    margin-right: 5px;
+    fill: var(--svg-icon-color);
+  }
+
+  &::after {
+    content: '';
+    display: block;
+    flex: 1;
+    margin-left: 10px;
+    border-top: 1px solid var(--border-color);
+  }
+}
+
+.pay {
+  display: flex;
+  // flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.qrcode {
+  width: 50%;
+  position: relative;
+  padding: 30px;
+  box-sizing: border-box;
+  margin: 20px 0;
+  transform-style: preserve-3d;
+  box-shadow: 0 0 20px rgba(0, 0, 0, .3);
+  border-radius: 10px;
+
+  img {
+    display: block;
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    transform: translateZ(30px);
+    box-shadow: 0 0 10px rgba(0, 0, 0, .2);
+  }
+}
+
+.alipay {
+  background-color: var(--alipay-color);
+}
+
+.wechat {
+  background-color: var(--wechat-color);
+}
