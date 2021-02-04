@@ -26,7 +26,6 @@ import '../../utils/jsonpgz';
 import * as Enums from '../../utils/enums';
 import * as Utils from '../../utils';
 import styles from './index.scss';
-import { time } from 'console';
 
 export interface HomeProps {
   toolbar: ToolbarState;
