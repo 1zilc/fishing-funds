@@ -36,20 +36,20 @@ export const getFunds: () => Promise<
 
   switch (fundApiType) {
     case Enums.FundApiType.Dayfund:
-      return Adapter.ChokeAdapter(collectors);
+      return Adapter.ChokeAllAdapter<Fund.ResponseItem>(collectors);
     case Enums.FundApiType.Tencent:
       await Utils.Sleep(1000);
-      return Adapter.ConCurrencyAdapter(collectors);
+      return Adapter.ConCurrencyAllAdapter<Fund.ResponseItem>(collectors);
     case Enums.FundApiType.Sina:
       await Utils.Sleep(1000);
-      return Adapter.ConCurrencyAdapter(collectors);
+      return Adapter.ConCurrencyAllAdapter<Fund.ResponseItem>(collectors);
     case Enums.FundApiType.Howbuy:
       await Utils.Sleep(1000);
-      return Adapter.ConCurrencyAdapter(collectors);
+      return Adapter.ConCurrencyAllAdapter<Fund.ResponseItem>(collectors);
     case Enums.FundApiType.Eastmoney:
     default:
       await Utils.Sleep(1000);
-      return Adapter.ConCurrencyAdapter(collectors);
+      return Adapter.ConCurrencyAllAdapter<Fund.ResponseItem>(collectors);
   }
 };
 

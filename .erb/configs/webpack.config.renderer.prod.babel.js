@@ -30,11 +30,7 @@ export default merge(baseConfig, {
 
   target: 'electron-renderer',
 
-  entry: [
-    'core-js',
-    'regenerator-runtime/runtime',
-    path.join(__dirname, '../../src/index.tsx'),
-  ],
+  entry: path.join(__dirname, '../../src/index.tsx'),
 
   output: {
     path: path.join(__dirname, '../../src/dist'),
