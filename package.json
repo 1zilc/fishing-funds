@@ -1,6 +1,7 @@
 {
   "name": "fishing-funds",
   "productName": "Fishing Funds",
+  "version": "2.0.0",
   "description": "显示基金涨跌状态栏小应用,数据源来自天天基金等",
   "scripts": {
     "build": "concurrently \"yarn build:main\" \"yarn build:renderer\"",
@@ -9,11 +10,11 @@
     "rebuild": "electron-rebuild --parallel --types prod,dev,optional --module-dir src",
     "lint": "cross-env NODE_ENV=development eslint . --cache --ext .js,.jsx,.ts,.tsx",
     "package": "rm -rf src/dist && yarn build && electron-builder build --publish never",
-    "package-mac": "rm -rf src/dist && yarn build && electron-builder build --mac",
+    "package-mac": "rm -rf src/dist && yarn build && electron-builder build --mac -p always",
     "package-linux": "rm -rf src/dist && yarn build && electron-builder build --linux",
     "package-win": "rm -rf src/dist && yarn build && electron-builder build --win --x64",
     "package-all": "rm -rf src/dist && yarn build && electron-builder build -mwl",
-    "release-all": "rm -rf src/dist && yarn build && electron-builder build -mwl -p always",
+    "release-all": "rm -rf src/dist && yarn build && electron-builder build -mwl --publish always",
     "postinstall": "node -r @babel/register .erb/scripts/CheckNativeDep.js && electron-builder install-app-deps && yarn cross-env NODE_ENV=development webpack --config ./.erb/configs/webpack.config.renderer.dev.dll.babel.js && opencollective-postinstall && yarn-deduplicate yarn.lock",
     "start": "node -r @babel/register ./.erb/scripts/CheckPortInUse.js && cross-env yarn start:renderer",
     "start:main": "cross-env NODE_ENV=development electron -r ./.erb/scripts/BabelRegister ./src/main.dev.ts",
@@ -36,7 +37,7 @@
   },
   "build": {
     "productName": "Fishing Funds",
-    "appId": "com.electron.Fishing Funds",
+    "appId": "com.electron.1zilc.fishing-funds",
     "copyright": "Copyright © 2021 1zilc",
     "files": [
       "dist/",
