@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { useBoolean } from 'ahooks';
 import { Collapse } from 'react-collapse';
 import classnames from 'classnames';
@@ -13,8 +13,9 @@ import { ReactComponent as ArrowUpIcon } from '../../assets/icons/arrow-up.svg';
 import EditContent from '../EditContent';
 import { StoreState } from '../../reducers/types';
 import { ToolbarState } from '../../reducers/toolbar';
-import * as Utils from '../../utils';
 import { deleteFund, calcFund } from '../../actions/fund';
+import { HomeContext } from '../Home';
+import * as Utils from '../../utils';
 
 import styles from './index.scss';
 
@@ -22,7 +23,6 @@ export interface RowProps {
   fund: Fund.ResponseItem;
   index: number;
   toolbar: ToolbarState;
-  onFresh: () => Promise<void>;
 }
 
 const arrowSize = {
@@ -33,6 +33,7 @@ const arrowSize = {
 const FundRow: React.FC<RowProps> = (props) => {
   const { fund, toolbar } = props;
   const { deleteStatus } = toolbar;
+  const { freshFunds } = useContext(HomeContext);
   const [collapse, { toggle }] = useBoolean(false);
 
   const [
@@ -48,7 +49,7 @@ const FundRow: React.FC<RowProps> = (props) => {
 
   const remove = async () => {
     await deleteFund(fund);
-    props.onFresh();
+    freshFunds();
   };
 
   return (
@@ -149,7 +150,7 @@ const FundRow: React.FC<RowProps> = (props) => {
       >
         <EditContent
           onEnter={() => {
-            props.onFresh();
+            freshFunds();
             closeEditDrawer();
           }}
           onClose={closeEditDrawer}

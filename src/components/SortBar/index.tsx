@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useScroll, useTimeout, useDebounceFn } from 'ahooks';
+import React, { useState, useContext } from 'react';
+import { useScroll, useDebounceFn } from 'ahooks';
 import classsames from 'classnames';
 import { Dropdown, Menu } from 'antd';
 import { ReactComponent as SortArrowUpIcon } from '../../assets/icons/sort-arrow-up.svg';
@@ -10,21 +10,22 @@ import {
   getSortConfig,
   troggleSortOrder,
 } from '../../actions/sort';
+import { HomeContext } from '../Home';
 import * as Enums from '../../utils/enums';
 import styles from './index.scss';
 
-export interface SortBarProps {
-  onSort: () => void;
-}
+export interface SortBarProps {}
 
-const SortBar: React.FC<SortBarProps> = ({ onSort }) => {
+const SortBar: React.FC<SortBarProps> = () => {
+  const { sortFunds } = useContext(HomeContext);
   const { type, order } = getSortMode();
   const { sortModeOptions, sortModeOptionsMap } = getSortConfig();
   const [visible, setVisible] = useState(true);
   const { run: debounceSetVisible } = useDebounceFn(() => setVisible(true), {
     wait: 200,
   });
-  useScroll(document, (val) => {
+
+  useScroll(document, () => {
     setVisible(false);
     debounceSetVisible();
     return true;
@@ -47,7 +48,7 @@ const SortBar: React.FC<SortBarProps> = ({ onSort }) => {
                       setSortMode({
                         type: key,
                       });
-                      onSort();
+                      sortFunds();
                     }}
                   >
                     {value}
@@ -68,7 +69,7 @@ const SortBar: React.FC<SortBarProps> = ({ onSort }) => {
           className={styles.sort}
           onClick={() => {
             troggleSortOrder();
-            onSort();
+            sortFunds();
           }}
         >
           <SortArrowUpIcon

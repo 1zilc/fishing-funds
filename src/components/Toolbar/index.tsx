@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import classnames from 'classnames';
 import { bindActionCreators, Dispatch } from 'redux';
 import { connect } from 'react-redux';
@@ -20,20 +20,18 @@ import {
 } from '../../actions/toolbar';
 import { StoreState } from '../../reducers/types';
 import { ToolbarState } from '../../reducers/toolbar';
+import { HomeContext } from '../Home';
 import * as Enums from '../../utils/enums';
 import styles from './index.scss';
 
 export interface ToolBarProps {
-  onFresh: () => Promise<void>;
   toggleToolbarDeleteStatus: () => void;
 }
 
 const iconSize = { height: 18, width: 18 };
 
-const ToolBar: React.FC<ToolBarProps> = ({
-  onFresh,
-  toggleToolbarDeleteStatus,
-}) => {
+const ToolBar: React.FC<ToolBarProps> = ({ toggleToolbarDeleteStatus }) => {
+  const { freshFunds } = useContext(HomeContext);
   const [
     showAddDrawer,
     {
@@ -67,7 +65,7 @@ const ToolBar: React.FC<ToolBarProps> = ({
           style={{ ...iconSize }}
           onClick={toggleToolbarDeleteStatus}
         />
-        <RefreshIcon style={{ ...iconSize }} onClick={onFresh} />
+        <RefreshIcon style={{ ...iconSize }} onClick={freshFunds} />
         <QRcodeIcon style={{ ...iconSize }} onClick={openPayDrawer} />
         <SettingIcon style={{ ...iconSize }} onClick={openSettingDrawer} />
       </div>
@@ -83,7 +81,7 @@ const ToolBar: React.FC<ToolBarProps> = ({
         <AddContent
           show={showAddDrawer}
           onEnter={() => {
-            onFresh();
+            freshFunds();
             closeAddDrawer();
           }}
           onClose={closeAddDrawer}
@@ -102,7 +100,7 @@ const ToolBar: React.FC<ToolBarProps> = ({
         <SettingContent
           show={showSettingDrawer}
           onEnter={() => {
-            onFresh();
+            freshFunds();
             closeSettingDrawer();
           }}
           onClose={closeSettingDrawer}

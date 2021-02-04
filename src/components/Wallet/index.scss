@@ -1,10 +1,6 @@
 @import '../../styles/varible.scss';
 
-.layout {
-  height: 60px;
-  margin-bottom: 32px;
-  z-index: 2;
-}
+
 
 .content {
   padding: 10px;
@@ -24,86 +20,83 @@
   backface-visibility: hidden;
   z-index: 2;
 
-
   .walletIcon {
     height: 40px;
     width: 40px;
     transition: height .2s, width .2s;
   }
-}
 
-
-
-.info {
-  flex: 1;
-  box-sizing: border-box;
-  padding: 0 10px;
-  display: flex;
-  justify-content: space-around;
-  flex-direction: column;
-
-  .timeBar {
+  .info {
+    flex: 1;
+    box-sizing: border-box;
+    padding: 0 10px;
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    justify-content: space-around;
+    flex-direction: column;
 
-    .last {
-      font-size: 12px;
-      font-weight: 500;
-      color: var(--secondary-main-text-color);
-    }
-  }
-
-  .moneyBar {
-    font-size: 10px;
-    color: var(--main-text-color);
-    display: flex;
-    // justify-content: space-around;
-    width: 100%;
-    align-items: center;
-    transition: all .2s;
-
-
-    i {
-      height: 10px;
-      border-right: 1px solid var(--border-color);
-      margin: 0 10px;
-    }
-
-    div {
+    .timeBar {
       display: flex;
+      justify-content: space-between;
       align-items: center;
-      word-wrap: break-word;
-      flex-wrap: wrap;
 
-      span {
-        white-space: nowrap;
+      .last {
+        font-size: 12px;
+        font-weight: 500;
+        color: var(--secondary-main-text-color);
       }
     }
 
-    svg {
-      height: 14px;
-      width: 14px;
+    .moneyBar {
+      font-size: 10px;
+      color: var(--main-text-color);
+      display: flex;
+      // justify-content: space-around;
+      width: 100%;
+      align-items: center;
+      transition: all .2s;
+
+
+      i {
+        height: 10px;
+        border-right: 1px solid var(--border-color);
+        margin: 0 10px;
+      }
+
+      div {
+        display: flex;
+        align-items: center;
+        word-wrap: break-word;
+        flex-wrap: wrap;
+
+        span {
+          white-space: nowrap;
+        }
+      }
+
+      svg {
+        height: 14px;
+        width: 14px;
+        fill: var(--svg-icon-color)
+      }
+    }
+  }
+
+  .eye {
+    height: 20px;
+    width: 20px;
+    cursor: pointer;
+
+    &>svg {
+      height: 20px;
+      width: 20px;
       fill: var(--svg-icon-color)
     }
   }
 }
 
-.eye {
-  height: 20px;
-  width: 20px;
-  cursor: pointer;
 
-  &>svg {
-    height: 20px;
-    width: 20px;
-    fill: var(--svg-icon-color)
-  }
-}
 
-.minMode {
-  height: 40px !important;
-  box-shadow: 0 20px 20px rgba(0, 0, 0, .1);
+.miniMode {
 
   .walletIcon {
     height: 20px;

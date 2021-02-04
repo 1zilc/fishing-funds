@@ -10,6 +10,7 @@
   color: var(--secondary-main-text-color);
   background-color: var(--cancel-color);
   overflow: hidden;
+  z-index: 1;
 }
 
 .disable {
@@ -17,23 +18,23 @@
 }
 
 .jump {
-  animation: jump 1s infinite;
+  animation: jump .5s infinite;
   display: inline-block;
 }
 
 @keyframes jump {
   0% {
     color: var(--main-text-color);
-    opacity: 1;
+    // opacity: 1;
   }
 
   50% {
-    color: var(--secondary-main-text-color);
-    opacity: .3;
+    color: var(--background-color);
+    // opacity: .3;
   }
 
   100% {
     color: var(--main-text-color);
-    opacity: 1;
+    // opacity: 1;
   }
 }

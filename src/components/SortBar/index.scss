@@ -26,7 +26,9 @@
   height: 100%;
 }
 
-.name {}
+.name {
+  position: relative;
+}
 
 .mode {
   flex: 1;

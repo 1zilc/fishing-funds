@@ -17,7 +17,7 @@ const LoadingBar: React.FC<LoadingBarProps> = ({ show }) => {
         <span
           key={index}
           className={styles.jump}
-          style={{ animationDelay: `${index * 0.1}s` }}
+          style={{ animationDelay: `${index * 0.05}s` }}
         >
           {_}
         </span>

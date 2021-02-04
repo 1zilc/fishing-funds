@@ -36,7 +36,6 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
   } = getSystemSetting();
 
   const fundApiTypeSetting = getFundApiTypeSetting();
-
   const [autoStart, setAutoStart] = useState(autoStartSetting);
   const [autoFresh, setAutoFresh] = useState(autoFreshSetting);
   const [freshDelay, setFreshDelay] = useState(freshDelaySetting);

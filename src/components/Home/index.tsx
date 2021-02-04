@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, createContext } from 'react';
 import { bindActionCreators, Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import { useInterval, useRequest } from 'ahooks';
@@ -7,6 +7,8 @@ import FundRow from '../FundRow';
 import Toolbar from '../Toolbar';
 import Wallet from '../Wallet/index';
 import LoadingBar from '../LoadingBar';
+import Header from '../Header';
+import SortBar from '../SortBar';
 
 import {
   toggleToolbarDeleteStatus,
@@ -15,12 +17,7 @@ import {
 import { updateUpdateTime } from '../../actions/wallet';
 import { getFunds, getFundConfig } from '../../actions/fund';
 import { getSystemSetting } from '../../actions/setting';
-import {
-  getSortMode,
-  setSortMode,
-  getSortConfig,
-  troggleSortOrder,
-} from '../../actions/sort';
+import { getSortMode } from '../../actions/sort';
 import { StoreState } from '../../reducers/types';
 import { ToolbarState } from '../../reducers/toolbar';
 import { calcFund } from '../../actions/fund';
@@ -34,30 +31,43 @@ export interface HomeProps {
   toggleToolbarDeleteStatus: () => void;
   updateUpdateTime: (time: string) => void;
 }
+export interface HomeContextType {
+  funds: Fund.ResponseItem[];
+  setFunds: (funds: Fund.ResponseItem[]) => void;
+  freshFunds: () => Promise<void>;
+  sortFunds: (esponseFunds?: Fund.ResponseItem[]) => void;
+}
+
+export const HomeContext = createContext<HomeContextType>({
+  funds: [],
+  setFunds: () => {},
+  freshFunds: async () => {},
+  sortFunds: () => {},
+});
 
 const Home: React.FC<HomeProps> = ({ updateUpdateTime }) => {
   const { freshDelaySetting, autoFreshSetting } = getSystemSetting();
   const [funds, setFunds] = useState<Fund.ResponseItem[]>([]);
-  const { run, loading } = useRequest(getFunds, {
+  const { run: runGetFunds, loading } = useRequest(getFunds, {
     manual: true,
     // loadingDelay: 1000,
     throttleInterval: 1000 * 2, // 2秒请求一次
     onSuccess: (result) => {
       const now = new Date().toLocaleString();
-      sort(result.filter((_) => !!_) as Fund.ResponseItem[]);
+      sortFunds(result.filter((_) => !!_) as Fund.ResponseItem[]);
       updateUpdateTime(now);
     },
   });
 
-  const fresh = async () => {
+  const freshFunds = async () => {
     window.scrollTo({
       behavior: 'smooth',
       top: 0,
     });
-    run();
+    runGetFunds();
   };
 
-  const sort = (responseFunds?: Fund.ResponseItem[]) => {
+  const sortFunds = (responseFunds?: Fund.ResponseItem[]) => {
     const { type, order } = getSortMode();
     const { codeMap } = getFundConfig();
     const sortFunds: Fund.ResponseItem[] = Utils.DeepCopy(
@@ -90,33 +100,31 @@ const Home: React.FC<HomeProps> = ({ updateUpdateTime }) => {
 
   useInterval(() => {
     if (autoFreshSetting) {
-      fresh();
+      freshFunds();
     }
   }, freshDelaySetting * 1000 * 60);
 
   useEffect(() => {
-    fresh();
+    freshFunds();
   }, []);
 
   return (
-    <div className={styles.layout}>
-      <Wallet funds={funds} />
-      <LoadingBar show={loading} />
-      <div className={styles.container}>
-        {funds.map((fund, index) => (
-          <FundRow
-            key={fund.fundcode}
-            fund={fund}
-            index={index}
-            onFresh={fresh}
-          />
-        ))}
-        {funds.length === 0 && (
-          <div className={styles.empty}>暂无基金数据~</div>
-        )}
+    <HomeContext.Provider value={{ freshFunds, sortFunds, funds, setFunds }}>
+      <div className={styles.layout}>
+        <Header>
+          <Wallet />
+          <SortBar />
+        </Header>
+        <LoadingBar show={loading} />
+        <div className={styles.container}>
+          {funds.map((fund, index) => (
+            <FundRow key={fund.fundcode} fund={fund} index={index} />
+          ))}
+          {!funds.length && <div className={styles.empty}>暂无基金数据~</div>}
+        </div>
+        <Toolbar />
       </div>
-      <Toolbar onFresh={fresh} />
-    </div>
+    </HomeContext.Provider>
   );
 };
 
