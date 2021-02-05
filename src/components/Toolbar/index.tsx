@@ -6,14 +6,16 @@ import Drawer from 'rc-drawer';
 import { useBoolean } from 'ahooks';
 
 import { ReactComponent as AddIcon } from '../../assets/icons/add.svg';
+import { ReactComponent as EditIcon } from '../../assets/icons/edit.svg';
 import { ReactComponent as DeleteIcon } from '../../assets/icons/delete.svg';
 import { ReactComponent as RefreshIcon } from '../../assets/icons/refresh.svg';
 import { ReactComponent as QRcodeIcon } from '../../assets/icons/qr-code.svg';
 import { ReactComponent as SettingIcon } from '../../assets/icons/setting.svg';
 import { TabsState } from '../../reducers/tabs';
-import AddContent from '../AddContent';
+import AddFundContent from '../AddFundContent';
 import SettingContent from '../SettingContent';
 import PayContent from '../PayContent';
+import EditZindexContent from '../EditZindexContent';
 import {
   toggleToolbarDeleteStatus,
   changeToolbarDeleteStatus,
@@ -36,11 +38,19 @@ const ToolBar: React.FC<ToolBarProps> = ({
 }) => {
   const { freshFunds, freshZindexs } = useContext(HomeContext);
   const [
-    showAddDrawer,
+    showAddFundDrawer,
     {
-      setTrue: openAddDrawer,
-      setFalse: closeAddDrawer,
-      toggle: ToggleAddDrawer,
+      setTrue: openAddFundDrawer,
+      setFalse: closeAddFundDrawer,
+      toggle: ToggleAddFundDrawer,
+    },
+  ] = useBoolean(false);
+  const [
+    showEditZindexDrawer,
+    {
+      setTrue: openEditZindexDrawer,
+      setFalse: closeEditZindexDrawer,
+      toggle: ToggleEditZindexDrawer,
     },
   ] = useBoolean(false);
   const [
@@ -64,7 +74,10 @@ const ToolBar: React.FC<ToolBarProps> = ({
     <>
       <div className={styles.bar}>
         {tabs.activeKey === Enums.TabKeyType.Funds && (
-          <AddIcon style={{ ...iconSize }} onClick={openAddDrawer} />
+          <AddIcon style={{ ...iconSize }} onClick={openAddFundDrawer} />
+        )}
+        {tabs.activeKey === Enums.TabKeyType.Zindex && (
+          <EditIcon style={{ ...iconSize }} onClick={openEditZindexDrawer} />
         )}
         {tabs.activeKey === Enums.TabKeyType.Funds && (
           <DeleteIcon
@@ -81,22 +94,42 @@ const ToolBar: React.FC<ToolBarProps> = ({
         <QRcodeIcon style={{ ...iconSize }} onClick={openPayDrawer} />
         <SettingIcon style={{ ...iconSize }} onClick={openSettingDrawer} />
       </div>
+
       <Drawer
-        open={showAddDrawer}
+        open={showAddFundDrawer}
         showMask
         maskClosable
         level={null}
         handler={false}
-        onClose={closeAddDrawer}
+        onClose={closeAddFundDrawer}
         placement="bottom"
       >
-        <AddContent
-          show={showAddDrawer}
+        <AddFundContent
+          show={showAddFundDrawer}
           onEnter={() => {
             freshFunds();
-            closeAddDrawer();
+            closeAddFundDrawer();
           }}
-          onClose={closeAddDrawer}
+          onClose={closeAddFundDrawer}
+        />
+      </Drawer>
+      <Drawer
+        open={showEditZindexDrawer}
+        showMask
+        maskClosable
+        level={null}
+        handler={false}
+        onClose={closeEditZindexDrawer}
+        placement="bottom"
+        height="100vh"
+      >
+        <EditZindexContent
+          show={showEditZindexDrawer}
+          onEnter={() => {
+            freshZindexs();
+            closeEditZindexDrawer();
+          }}
+          onClose={closeEditZindexDrawer}
         />
       </Drawer>
       <Drawer
@@ -105,7 +138,7 @@ const ToolBar: React.FC<ToolBarProps> = ({
         maskClosable
         level={null}
         handler={false}
-        onClose={closeAddDrawer}
+        onClose={closeAddFundDrawer}
         placement="bottom"
         height="100vh"
       >

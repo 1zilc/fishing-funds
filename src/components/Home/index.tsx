@@ -152,7 +152,6 @@ const Home: React.FC<HomeProps> = ({ updateUpdateTime, tabs }) => {
         case Enums.ZindexSortType.Zsz:
           return a.zsz > b.zsz ? 1 * t : -1 * t;
         case Enums.ZindexSortType.Custom:
-          console.log(codeMap, a.zindexCode, codeMap[a.zindexCode]);
         default:
           return codeMap[a.zindexCode]?.originSort >
             codeMap[b.zindexCode]?.originSort
@@ -200,7 +199,7 @@ const Home: React.FC<HomeProps> = ({ updateUpdateTime, tabs }) => {
           activeKey={String(tabs.activeKey)}
           animated={{ tabPane: true }}
         >
-          <Tabs.TabPane tab="Tab 1" key={Enums.TabKeyType.Funds} forceRender>
+          <Tabs.TabPane key={Enums.TabKeyType.Funds} forceRender>
             <LoadingBar show={fundsLoading} />
             <div className={styles.container}>
               {funds.map((fund, index) => (
@@ -211,7 +210,7 @@ const Home: React.FC<HomeProps> = ({ updateUpdateTime, tabs }) => {
               )}
             </div>
           </Tabs.TabPane>
-          <Tabs.TabPane tab="Tab 2" key={Enums.TabKeyType.Zindex} forceRender>
+          <Tabs.TabPane key={Enums.TabKeyType.Zindex} forceRender>
             <LoadingBar show={zindexsLoading} />
             <div className={styles.container}>
               {zindexs.map((zindex, index) => (

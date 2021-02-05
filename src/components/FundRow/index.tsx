@@ -10,7 +10,7 @@ import { ReactComponent as RemoveIcon } from '../../assets/icons/remove.svg';
 import { ReactComponent as ArrowDownIcon } from '../../assets/icons/arrow-down.svg';
 import { ReactComponent as ArrowUpIcon } from '../../assets/icons/arrow-up.svg';
 
-import EditContent from '../EditContent';
+import EditFundContent from '../EditFundContent';
 import { StoreState } from '../../reducers/types';
 import { ToolbarState } from '../../reducers/toolbar';
 import { deleteFund, calcFund } from '../../actions/fund';
@@ -148,7 +148,7 @@ const FundRow: React.FC<RowProps> = (props) => {
         onClose={closeEditDrawer}
         placement="bottom"
       >
-        <EditContent
+        <EditFundContent
           onEnter={() => {
             freshFunds();
             closeEditDrawer();

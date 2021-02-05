@@ -3,13 +3,13 @@ import { InputNumber } from 'antd';
 import { updateFund, getFundConfig } from '../../actions/fund';
 import styles from './index.scss';
 
-export interface AddContentProps {
+export interface AddFundContentProps {
   onEnter: () => void;
   onClose: () => void;
   fund: Fund.SettingItem & { name: string };
 }
 
-const EditContent: React.FC<AddContentProps> = props => {
+const EditFundContent: React.FC<AddFundContentProps> = (props) => {
   const { fund } = props;
   const { codeMap } = getFundConfig();
   const [num, setNum] = useState<number>(fund.cyfe);
@@ -17,7 +17,7 @@ const EditContent: React.FC<AddContentProps> = props => {
   const onSave = async () => {
     await updateFund({
       code: fund.code,
-      cyfe: num
+      cyfe: num,
     });
     props.onEnter();
   };
@@ -53,7 +53,7 @@ const EditContent: React.FC<AddContentProps> = props => {
             onChange={setNum}
             size="small"
             style={{
-              width: '100%'
+              width: '100%',
             }}
           ></InputNumber>
         </section>
@@ -62,4 +62,4 @@ const EditContent: React.FC<AddContentProps> = props => {
   );
 };
 
-export default EditContent;
+export default EditFundContent;

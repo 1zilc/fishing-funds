@@ -2,6 +2,7 @@ declare namespace Zindex {
   export interface SettingItem {
     code: string;
     name?: string;
+    show?: boolean;
   }
 
   export interface ResponseItem {

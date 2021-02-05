@@ -13,13 +13,13 @@ export const getZindexConfig: () => {
   const zindexConfig: Zindex.SettingItem[] = Utils.GetStorage(
     CONST_STORAGE.ZINDEX_SETTING,
     [
-      { code: '1.000001' },
-      { code: '0.399001' },
-      { code: '0.399006' },
-      { code: '1.000300' },
-      { code: '0.399005' },
-      { code: '1.000016' },
-      { code: '1.000905' },
+      { code: '1.000001', name: '上证指数', show: true },
+      { code: '0.399001', name: '深证指数', show: true },
+      { code: '0.399006', name: '创业板指', show: true },
+      { code: '1.000300', name: '沪深300', show: true },
+      { code: '0.399005', name: '中小板指', show: true },
+      { code: '1.000016', name: '上证50', show: true },
+      { code: '1.000905', name: '中证500', show: true },
     ]
   );
   const codeMap = zindexConfig.reduce((r, c, i) => {

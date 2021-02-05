@@ -3,13 +3,13 @@ import { Input, InputNumber } from 'antd';
 import { addFund, getFund } from '../../actions/fund';
 import styles from './index.scss';
 
-export interface AddContentProps {
+export interface AddFundContentProps {
   show?: boolean;
   onEnter: () => void;
   onClose: () => void;
 }
 
-const AddContent: React.FC<AddContentProps> = (props) => {
+const AddFundContent: React.FC<AddFundContentProps> = (props) => {
   const [code, setCode] = useState<string>('');
   const [num, setNum] = useState<number>(0);
   const [none, setNone] = useState<boolean>(false);
@@ -79,4 +79,4 @@ const AddContent: React.FC<AddContentProps> = (props) => {
   );
 };
 
-export default AddContent;
+export default AddFundContent;
