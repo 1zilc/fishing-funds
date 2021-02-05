@@ -34,7 +34,7 @@ export const FromEastmoney: (
       name: data.data.f58,
       zindexCode: data.data.f57,
       zsz: NP.divide(data.data.f43, 100),
-      zde: NP.divide(data.data.f169, 100),
+      zdd: NP.divide(data.data.f169, 100),
       zdf: NP.divide(data.data.f170, 100),
     };
   } catch (err) {

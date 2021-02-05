@@ -79,11 +79,11 @@ const ZindexRow: React.FC<RowProps> = (props) => {
             <div className={styles.zd}>
               <div
                 className={classnames(
-                  styles.zde,
-                  zindex.zde < 0 ? styles.down : styles.up
+                  styles.zdd,
+                  zindex.zdd < 0 ? styles.down : styles.up
                 )}
               >
-                {Utils.Yang(zindex.zde)}
+                {Utils.Yang(zindex.zdd)}
               </div>
               <div
                 className={classnames(

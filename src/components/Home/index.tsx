@@ -27,6 +27,7 @@ import { StoreState } from '../../reducers/types';
 import { TabsState } from '../../reducers/tabs';
 import { ToolbarState } from '../../reducers/toolbar';
 import { calcFund } from '../../actions/fund';
+import { getZindexConfig } from '../../actions/zindex';
 import { getCurrentHours } from '../../actions/time';
 import '../../utils/jsonpgz';
 import * as Enums from '../../utils/enums';
@@ -43,8 +44,9 @@ export interface HomeContextType {
   funds: Fund.ResponseItem[];
   setFunds: (funds: Fund.ResponseItem[]) => void;
   freshFunds: () => Promise<void>;
-  sortFunds: (esponseFunds?: Fund.ResponseItem[]) => void;
+  sortFunds: (responseFunds?: Fund.ResponseItem[]) => void;
   freshZindexs: () => Promise<void>;
+  sortZindex: (esponseZindex?: Zindex.ResponseItem[]) => void;
 }
 
 export const HomeContext = createContext<HomeContextType>({
@@ -53,6 +55,7 @@ export const HomeContext = createContext<HomeContextType>({
   freshFunds: async () => {},
   sortFunds: () => {},
   freshZindexs: async () => {},
+  sortZindex: () => {},
 });
 
 const Home: React.FC<HomeProps> = ({ updateUpdateTime, tabs }) => {
@@ -63,7 +66,6 @@ const Home: React.FC<HomeProps> = ({ updateUpdateTime, tabs }) => {
   const { run: runGetFunds, loading: fundsLoading } = useRequest(getFunds, {
     manual: true,
     // loadingDelay: 1000,
-
     throttleInterval: 1000 * 2, // 2秒请求一次
     onSuccess: (result) => {
       const now = new Date().toLocaleString();
@@ -79,7 +81,7 @@ const Home: React.FC<HomeProps> = ({ updateUpdateTime, tabs }) => {
       pollingInterval: 1000 * 60,
       pollingWhenHidden: false,
       onSuccess: (result) => {
-        setZindexs(result.filter((_) => !!_) as Zindex.ResponseItem[]);
+        sortZindex(result.filter((_) => !!_) as Zindex.ResponseItem[]);
       },
     }
   );
@@ -101,26 +103,27 @@ const Home: React.FC<HomeProps> = ({ updateUpdateTime, tabs }) => {
   };
 
   const sortFunds = (responseFunds?: Fund.ResponseItem[]) => {
-    const { type, order } = getSortMode();
+    const {
+      fundSortMode: { type: fundSortType, order: fundSortorder },
+    } = getSortMode();
     const { codeMap } = getFundConfig();
     const sortFunds: Fund.ResponseItem[] = Utils.DeepCopy(
       responseFunds || funds
     );
-
     sortFunds.sort((a, b) => {
       const _a = calcFund(a);
       const _b = calcFund(b);
-      const t = order === Enums.SortOrderType.Asc ? 1 : -1;
-      switch (type) {
-        case Enums.SortType.Growth:
+      const t = fundSortorder === Enums.SortOrderType.Asc ? 1 : -1;
+      switch (fundSortType) {
+        case Enums.FundSortType.Growth:
           return Number(_a.gszzl) > Number(_b.gszzl) ? 1 * t : -1 * t;
-        case Enums.SortType.Block:
+        case Enums.FundSortType.Block:
           return Number(_a.cyfe) > Number(_b.cyfe) ? 1 * t : -1 * t;
-        case Enums.SortType.Money:
+        case Enums.FundSortType.Money:
           return Number(_a.jrsygz) > Number(_b.jrsygz) ? 1 * t : -1 * t;
-        case Enums.SortType.Estimate:
+        case Enums.FundSortType.Estimate:
           return Number(_a.gszz) > Number(_b.gszz) ? 1 * t : -1 * t;
-        case Enums.SortType.Default:
+        case Enums.FundSortType.Default:
         default:
           return codeMap[a.fundcode]?.originSort >
             codeMap[b.fundcode]?.originSort
@@ -129,6 +132,35 @@ const Home: React.FC<HomeProps> = ({ updateUpdateTime, tabs }) => {
       }
     });
     setFunds(sortFunds);
+  };
+
+  const sortZindex = (responseZindexs?: Zindex.ResponseItem[]) => {
+    const {
+      zindexSortMode: { type: zindexSortType, order: zindexSortorder },
+    } = getSortMode();
+    const { codeMap } = getZindexConfig();
+    const sortZindex: Zindex.ResponseItem[] = Utils.DeepCopy(
+      responseZindexs || zindexs
+    );
+    sortZindex.sort((a, b) => {
+      const t = zindexSortorder === Enums.SortOrderType.Asc ? 1 : -1;
+      switch (zindexSortType) {
+        case Enums.ZindexSortType.Zdd:
+          return a.zdd > b.zdd ? 1 * t : -1 * t;
+        case Enums.ZindexSortType.Zdf:
+          return a.zdf > b.zdf ? 1 * t : -1 * t;
+        case Enums.ZindexSortType.Zsz:
+          return a.zsz > b.zsz ? 1 * t : -1 * t;
+        case Enums.ZindexSortType.Custom:
+          console.log(codeMap, a.zindexCode, codeMap[a.zindexCode]);
+        default:
+          return codeMap[a.zindexCode]?.originSort >
+            codeMap[b.zindexCode]?.originSort
+            ? -1 * t
+            : 1 * t;
+      }
+    });
+    setZindexs(sortZindex);
   };
 
   useInterval(async () => {
@@ -148,7 +180,14 @@ const Home: React.FC<HomeProps> = ({ updateUpdateTime, tabs }) => {
 
   return (
     <HomeContext.Provider
-      value={{ freshFunds, sortFunds, funds, setFunds, freshZindexs }}
+      value={{
+        freshFunds,
+        sortFunds,
+        funds,
+        setFunds,
+        freshZindexs,
+        sortZindex,
+      }}
     >
       <div className={styles.layout}>
         <Header>
