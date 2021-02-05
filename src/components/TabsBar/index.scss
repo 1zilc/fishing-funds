@@ -1,0 +1,51 @@
+.layout {
+  background-color: var(--blur-color);
+  backdrop-filter: saturate(180%) blur(20px);
+  height: 40px;
+  width: 100%;
+}
+
+.content {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  border-top: 1px solid var(--border-color);
+  box-sizing: border-box;
+  height: 100%;
+}
+
+.tab {
+  flex: 1;
+  text-align: center;
+  cursor: pointer;
+  height: 100%;
+  line-height: 40px;
+  font-size: 12px;
+  opacity: .3;
+  transition: all .1s;
+
+  &:last-child {
+    border-right: none
+  }
+
+  &:hover {
+    opacity: .5;
+  }
+}
+
+.active {
+  font-size: 14px;
+  font-weight: 600;
+  opacity: 1 !important;
+}
+
+i {
+  height: 16px;
+  width: 1px;
+  background-color: var(--border-color);
+  display: block;
+
+  &:last-of-type {
+    display: none
+  }
+}

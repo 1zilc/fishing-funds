@@ -16,6 +16,7 @@ export const FromEastmoney: (
       lt: 1;
       full: 1;
       data: {
+        f43: string;
         f57: string;
         f58: string;
         f169: number;
@@ -26,14 +27,18 @@ export const FromEastmoney: (
         fields: 'f57,f58,f169,f170,f43',
         secid: code, // 1.000001
       },
+      responseType: 'json',
     });
+
     return {
       name: data.data.f58,
       zindexCode: data.data.f57,
+      zsz: NP.divide(data.data.f43, 100),
       zde: NP.divide(data.data.f169, 100),
       zdf: NP.divide(data.data.f170, 100),
     };
-  } catch {
+  } catch (err) {
+    console.log(err);
     return null;
   }
 };

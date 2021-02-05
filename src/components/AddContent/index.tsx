@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-// import InputNumber from 'rc-input-number';
 import { Input, InputNumber } from 'antd';
 import { addFund, getFund } from '../../actions/fund';
 import styles from './index.scss';
@@ -10,7 +9,7 @@ export interface AddContentProps {
   onClose: () => void;
 }
 
-const AddContent: React.FC<AddContentProps> = props => {
+const AddContent: React.FC<AddContentProps> = (props) => {
   const [code, setCode] = useState<string>('');
   const [num, setNum] = useState<number>(0);
   const [none, setNone] = useState<boolean>(false);
@@ -21,7 +20,7 @@ const AddContent: React.FC<AddContentProps> = props => {
       setNone(false);
       await addFund({
         code,
-        cyfe: num
+        cyfe: num,
       });
       props.onEnter();
     } else {
@@ -53,7 +52,7 @@ const AddContent: React.FC<AddContentProps> = props => {
             type="text"
             placeholder="请输入基金代码"
             value={code}
-            onChange={e => setCode(e.target.value)}
+            onChange={(e) => setCode(e.target.value)}
             size="small"
           ></Input>
         </section>
@@ -68,7 +67,7 @@ const AddContent: React.FC<AddContentProps> = props => {
             onChange={setNum}
             size="small"
             style={{
-              width: '100%'
+              width: '100%',
             }}
           ></InputNumber>
         </section>

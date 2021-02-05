@@ -28,3 +28,7 @@ export enum SortOrderType {
   Desc,
   Asc,
 }
+export enum TabKeyType {
+  Funds,
+  Zindex,
+}

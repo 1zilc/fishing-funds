@@ -26,7 +26,7 @@
 }
 
 
-.fundName {
+.zindexName {
   font-weight: 600;
   font-size: 14px;
   margin-bottom: 2px;
@@ -44,38 +44,38 @@
 }
 
 .value {
-  font-size: 12px;
   display: block;
   float: right;
-  color: #eee;
-  padding: 2px 10px;
-  border-radius: 2px;
-  min-width: 64px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 90px;
+  text-align: center;
 }
 
+.zsz {
+  font-size: 20px;
+  line-height: 24px;
+}
+
+.zd {
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
+
+  .zde,
+  .zdf {
+    font-size: 10px;
+  }
+}
+
+
 .up {
-  background-color: var(--increase-color);
+  color: var(--increase-color);
 }
 
 .down {
-  background-color: var(--reduce-color);
-}
-
-
-
-
-
-
-.remove {
-  overflow: hidden;
-  transition: width 0.2s;
-  display: inline-block;
-  text-align: right;
-  height: 16px;
-
-  svg {
-    cursor: pointer;
-  }
+  color: var(--reduce-color);
 }
 
 .arrow {
@@ -86,31 +86,4 @@
     cursor: pointer;
     fill: var(--svg-icon-color)
   }
-}
-
-.collapseContent {
-  display: flex;
-  padding: 5px 15px;
-  flex-wrap: wrap;
-  font-size: 10px;
-  color: var(--inner-text-color);
-  background-color: var(--inner-color);
-  word-wrap: break-word;
-
-  section {
-    width: 50%;
-    padding: 5px;
-    box-sizing: border-box;
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
-  }
-}
-
-.editor {
-  margin-left: 5px;
-  cursor: pointer;
-  height: 12px;
-  width: 12px;
-  fill: var(--svg-icon-color)
 }

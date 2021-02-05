@@ -73,7 +73,7 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
         </button>
       </div>
       <div className={styles.body}>
-        <div className={classnames(styles.logo, styles.colorful)}>
+        <div className={classnames(styles.logo)}>
           <Logo />
           <div className={styles.appName}>Fishing Funds v{version}</div>
         </div>
@@ -153,11 +153,7 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
             <span>联系作者</span>
           </div>
           <div className={styles.link}>
-            <a
-              onClick={(e) => {
-                shell.openExternal(e.target.innerHTML);
-              }}
-            >
+            <a onClick={(e) => shell.openExternal(e.target.innerHTML)}>
               https://github.com/1zilc/fishing-funds
             </a>
           </div>
