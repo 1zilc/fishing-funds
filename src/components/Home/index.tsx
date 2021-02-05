@@ -21,6 +21,7 @@ import { getSortMode } from '../../actions/sort';
 import { StoreState } from '../../reducers/types';
 import { ToolbarState } from '../../reducers/toolbar';
 import { calcFund } from '../../actions/fund';
+import { getCurrentHours } from '../../actions/time';
 import '../../utils/jsonpgz';
 import * as Enums from '../../utils/enums';
 import * as Utils from '../../utils';
@@ -98,9 +99,14 @@ const Home: React.FC<HomeProps> = ({ updateUpdateTime }) => {
     setFunds(sortFunds);
   };
 
-  useInterval(() => {
+  useInterval(async () => {
     if (autoFreshSetting) {
-      freshFunds();
+      const timestamp = await getCurrentHours();
+      console.log(timestamp);
+      const hours = new Date(Number(timestamp)).getHours();
+      if (hours >= 9 && hours <= 15) {
+        freshFunds();
+      }
     }
   }, freshDelaySetting * 1000 * 60);
 

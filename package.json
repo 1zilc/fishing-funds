@@ -13,7 +13,7 @@
     "package-mac": "rm -rf src/dist && yarn build && electron-builder build --mac -p always",
     "package-linux": "rm -rf src/dist && yarn build && electron-builder build --linux",
     "package-win": "rm -rf src/dist && yarn build && electron-builder build --win --x64",
-    "package-all": "rm -rf src/dist && yarn build && electron-builder build -mwl",
+    "package-all": "rm -rf src/dist && yarn build && electron-builder build -mwl --publish never",
     "release-all": "rm -rf src/dist && yarn build && electron-builder build -mwl --publish always",
     "postinstall": "node -r @babel/register .erb/scripts/CheckNativeDep.js && electron-builder install-app-deps && yarn cross-env NODE_ENV=development webpack --config ./.erb/configs/webpack.config.renderer.dev.dll.babel.js && opencollective-postinstall && yarn-deduplicate yarn.lock",
     "start": "node -r @babel/register ./.erb/scripts/CheckPortInUse.js && cross-env yarn start:renderer",
@@ -76,6 +76,10 @@
       "target": [
         "nsis"
       ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
     },
     "linux": {
       "target": [
