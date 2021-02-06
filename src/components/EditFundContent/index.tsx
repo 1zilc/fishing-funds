@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { InputNumber } from 'antd';
-import { updateFund, getFundConfig } from '../../actions/fund';
+import { updateFund } from '../../actions/fund';
 import styles from './index.scss';
 
 export interface AddFundContentProps {

@@ -20,7 +20,7 @@ export const getFundConfig: () => {
   );
 
   const codeMap = fundConfig.reduce((r, c, i) => {
-    r[c.code.slice(2)] = { ...c, originSort: i };
+    r[c.code] = { ...c, originSort: i };
     return r;
   }, {} as CodeMap);
 

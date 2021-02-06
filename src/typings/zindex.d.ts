@@ -11,5 +11,11 @@ declare namespace Zindex {
     zsz: number; // 指数值 3500.68
     zdd: number; // 涨跌点 -15.65
     zdf: number; // 涨跌幅 -0.44
+    zg: number; // 最高
+    zd: number; // 最低
+    jk: number; // 今开
+    zs: number; // 昨收
+    hs: number; // 换手
+    zf: number; // 振幅
   }
 }

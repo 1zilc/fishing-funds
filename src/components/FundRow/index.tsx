@@ -89,7 +89,7 @@ const FundRow: React.FC<RowProps> = (props) => {
           <div
             className={classnames(
               styles.value,
-              Number(fund.gszzl) < 0 ? styles.down : styles.up
+              Number(fund.gszzl) < 0 ? 'down-bg' : 'up-bg'
             )}
           >
             {Utils.Yang(fund.gszzl)} %
@@ -127,7 +127,13 @@ const FundRow: React.FC<RowProps> = (props) => {
           </section>
           <section>
             <span>今日收益估值：</span>
-            <span>¥ {Utils.Yang(jrsygz.toFixed(2))}</span>
+            <span
+              className={classnames(
+                Number(jrsygz) < 0 ? 'down-text' : 'up-text'
+              )}
+            >
+              ¥ {Utils.Yang(jrsygz.toFixed(2))}
+            </span>
           </section>
           <section>
             <span>净值日期：</span>

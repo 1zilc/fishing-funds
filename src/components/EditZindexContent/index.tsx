@@ -34,7 +34,13 @@ const EditZindexContent: React.FC<AddFundContentProps> = (props) => {
     setSelections(isSelectAll ? [] : zindexConfig.map(({ code }) => code));
   };
 
-  useEffect(() => {}, [props.show]);
+  useEffect(() => {
+    if (props.show) {
+      const { zindexConfig, selectZindexs } = getZindexConfig();
+      setSelections(selectZindexs);
+      setSortZindexConfig(zindexConfig.map((_) => ({ ..._, id: _.code })));
+    }
+  }, [props.show]);
 
   return (
     <div className={styles.content}>

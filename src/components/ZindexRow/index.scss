@@ -87,3 +87,22 @@
     fill: var(--svg-icon-color)
   }
 }
+
+.collapseContent {
+  display: flex;
+  padding: 5px 15px;
+  flex-wrap: wrap;
+  font-size: 10px;
+  color: var(--inner-text-color);
+  background-color: var(--inner-color);
+  word-wrap: break-word;
+
+  section {
+    width: 50%;
+    padding: 5px;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+}

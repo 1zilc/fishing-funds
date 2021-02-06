@@ -1,20 +1,13 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { useBoolean } from 'ahooks';
 import { Collapse } from 'react-collapse';
 import classnames from 'classnames';
 import { connect } from 'react-redux';
-import Drawer from 'rc-drawer';
-
-import { ReactComponent as EditIcon } from '../../assets/icons/edit.svg';
-import { ReactComponent as RemoveIcon } from '../../assets/icons/remove.svg';
 import { ReactComponent as ArrowDownIcon } from '../../assets/icons/arrow-down.svg';
 import { ReactComponent as ArrowUpIcon } from '../../assets/icons/arrow-up.svg';
 
-import EditFundContent from '../EditFundContent';
 import { StoreState } from '../../reducers/types';
-import { ToolbarState } from '../../reducers/toolbar';
-import { deleteFund, calcFund } from '../../actions/fund';
-import { HomeContext } from '../Home';
+
 import * as Utils from '../../utils';
 
 import styles from './index.scss';
@@ -97,6 +90,52 @@ const ZindexRow: React.FC<RowProps> = (props) => {
           </div>
         </div>
       </div>
+      <Collapse isOpened={collapse}>
+        <div className={styles.collapseContent}>
+          <section>
+            <span>今开：</span>
+            <span
+              className={classnames(
+                zindex.jk < zindex.zs ? 'down-text' : 'up-text'
+              )}
+            >
+              {zindex.jk}
+            </span>
+          </section>
+          <section>
+            <span>昨收：</span>
+            <span>{zindex.zs}</span>
+          </section>
+          <section>
+            <span>最高：</span>
+            <span
+              className={classnames(
+                zindex.zg < zindex.zs ? 'down-text' : 'up-text'
+              )}
+            >
+              {zindex.zg}
+            </span>
+          </section>
+          <section>
+            <span>最低：</span>
+            <span
+              className={classnames(
+                zindex.zd < zindex.zs ? 'down-text' : 'up-text'
+              )}
+            >
+              {zindex.zd}
+            </span>
+          </section>
+          <section>
+            <span>换手：</span>
+            <span>{zindex.hs} %</span>
+          </section>
+          <section>
+            <span>振幅：</span>
+            <span>{zindex.zf} %</span>
+          </section>
+        </div>
+      </Collapse>
     </div>
   );
 };
