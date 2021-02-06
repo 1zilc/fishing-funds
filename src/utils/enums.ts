@@ -17,14 +17,24 @@ export enum FundApiType {
   Howbuy, // 好买基金
 }
 
-export enum SortType {
+export enum FundSortType {
   Default, // 默认
   Growth, // 涨幅
   Block, // 份额
   Money, // 收益
   Estimate, // 估值
 }
+export enum ZindexSortType {
+  Custom, // 自定义
+  Zdd, // 涨跌点
+  Zdf, // 涨跌幅
+  Zsz, // 指数值
+}
 export enum SortOrderType {
   Desc,
   Asc,
+}
+export enum TabKeyType {
+  Funds,
+  Zindex,
 }

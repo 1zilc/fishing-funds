@@ -26,7 +26,7 @@
 }
 
 
-.fundName {
+.zindexName {
   font-weight: 600;
   font-size: 14px;
   margin-bottom: 2px;
@@ -44,25 +44,38 @@
 }
 
 .value {
-  font-size: 12px;
   display: block;
   float: right;
-  color: #eee;
-  padding: 2px 10px;
-  border-radius: 2px;
-  min-width: 64px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 90px;
+  text-align: center;
 }
 
-.remove {
-  overflow: hidden;
-  transition: width 0.2s;
-  display: inline-block;
-  text-align: right;
-  height: 16px;
+.zsz {
+  font-size: 20px;
+  line-height: 24px;
+}
 
-  svg {
-    cursor: pointer;
+.zd {
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
+
+  .zdd,
+  .zdf {
+    font-size: 10px;
   }
+}
+
+
+.up {
+  color: var(--increase-color);
+}
+
+.down {
+  color: var(--reduce-color);
 }
 
 .arrow {
@@ -92,12 +105,4 @@
     align-items: center;
     flex-wrap: wrap;
   }
-}
-
-.editor {
-  margin-left: 5px;
-  cursor: pointer;
-  height: 12px;
-  width: 12px;
-  fill: var(--svg-icon-color)
 }

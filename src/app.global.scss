@@ -7,12 +7,12 @@
 @import './styles/collapse.scss';
 @import './styles/re-drawer.scss';
 @import './styles/button.scss';
-
+@import './styles/color.scss';
 
 body {
   position: relative;
   margin: 0;
-  color: var(--reverse-text-color);
+  color: var(--main-text-color);
   background-color: var(--background-color);
   cursor: default;
   user-select: none;

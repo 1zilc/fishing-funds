@@ -1,9 +1,9 @@
 .layout {
   position: relative;
   min-height: 100vh;
-  padding-bottom: 40px;
   box-sizing: border-box;
   background-color: var(--inner-color);
+
 }
 
 .container {
@@ -11,8 +11,6 @@
   flex-direction: column;
   box-sizing: border-box;
   height: 100%;
-
-  // padding: 10px 0;
 }
 
 .empty {
@@ -21,4 +19,5 @@
   font-size: 12px;
   width: 100%;
   top: 50%;
+  color: var(--main-text-color);
 }

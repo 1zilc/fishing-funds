@@ -26,7 +26,7 @@
 ## 项目介绍
 
 - 本项目基于[electron-react-boilerplate-menubar](https://github.com/3on/electron-react-boilerplate-menubar)开发
-- 采用天天基金等数据源接口，实时显示当前基金涨跌情况，计算显示收益等数据
+- 采用天天基金等数据源接口，实时显示当前基金涨跌情况，计算显示收益，大盘实时数据等
 - 软件中所有的数据仅供参考,一切收益或是亏损按当天实际为准
 - 本项目是个人自用状态栏小插件，完全开源免费，喜欢的小伙伴 star 一下，如果觉得好用也可在软件中打赏支持:)
 - 在使用中遇到 bug 欢迎[issues](https://github.com/1zilc/fishing-funds/issues)

@@ -10,7 +10,7 @@ import { ReactComponent as RemoveIcon } from '../../assets/icons/remove.svg';
 import { ReactComponent as ArrowDownIcon } from '../../assets/icons/arrow-down.svg';
 import { ReactComponent as ArrowUpIcon } from '../../assets/icons/arrow-up.svg';
 
-import EditContent from '../EditContent';
+import EditFundContent from '../EditFundContent';
 import { StoreState } from '../../reducers/types';
 import { ToolbarState } from '../../reducers/toolbar';
 import { deleteFund, calcFund } from '../../actions/fund';
@@ -89,7 +89,7 @@ const FundRow: React.FC<RowProps> = (props) => {
           <div
             className={classnames(
               styles.value,
-              Number(fund.gszzl) < 0 ? styles.down : styles.up
+              Number(fund.gszzl) < 0 ? 'down-bg' : 'up-bg'
             )}
           >
             {Utils.Yang(fund.gszzl)} %
@@ -127,7 +127,13 @@ const FundRow: React.FC<RowProps> = (props) => {
           </section>
           <section>
             <span>今日收益估值：</span>
-            <span>¥ {Utils.Yang(jrsygz.toFixed(2))}</span>
+            <span
+              className={classnames(
+                Number(jrsygz) < 0 ? 'down-text' : 'up-text'
+              )}
+            >
+              ¥ {Utils.Yang(jrsygz.toFixed(2))}
+            </span>
           </section>
           <section>
             <span>净值日期：</span>
@@ -148,7 +154,7 @@ const FundRow: React.FC<RowProps> = (props) => {
         onClose={closeEditDrawer}
         placement="bottom"
       >
-        <EditContent
+        <EditFundContent
           onEnter={() => {
             freshFunds();
             closeEditDrawer();

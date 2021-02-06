@@ -6,38 +6,51 @@ import Drawer from 'rc-drawer';
 import { useBoolean } from 'ahooks';
 
 import { ReactComponent as AddIcon } from '../../assets/icons/add.svg';
+import { ReactComponent as MenuAddIcon } from '../../assets/icons/menu-add.svg';
 import { ReactComponent as DeleteIcon } from '../../assets/icons/delete.svg';
 import { ReactComponent as RefreshIcon } from '../../assets/icons/refresh.svg';
 import { ReactComponent as QRcodeIcon } from '../../assets/icons/qr-code.svg';
 import { ReactComponent as SettingIcon } from '../../assets/icons/setting.svg';
-
-import AddContent from '../AddContent';
+import { TabsState } from '../../reducers/tabs';
+import AddFundContent from '../AddFundContent';
 import SettingContent from '../SettingContent';
 import PayContent from '../PayContent';
+import EditZindexContent from '../EditZindexContent';
 import {
   toggleToolbarDeleteStatus,
   changeToolbarDeleteStatus,
 } from '../../actions/toolbar';
 import { StoreState } from '../../reducers/types';
-import { ToolbarState } from '../../reducers/toolbar';
 import { HomeContext } from '../Home';
 import * as Enums from '../../utils/enums';
 import styles from './index.scss';
 
 export interface ToolBarProps {
+  tabs: TabsState;
   toggleToolbarDeleteStatus: () => void;
 }
 
 const iconSize = { height: 18, width: 18 };
 
-const ToolBar: React.FC<ToolBarProps> = ({ toggleToolbarDeleteStatus }) => {
-  const { freshFunds } = useContext(HomeContext);
+const ToolBar: React.FC<ToolBarProps> = ({
+  tabs,
+  toggleToolbarDeleteStatus,
+}) => {
+  const { freshFunds, freshZindexs } = useContext(HomeContext);
   const [
-    showAddDrawer,
+    showAddFundDrawer,
     {
-      setTrue: openAddDrawer,
-      setFalse: closeAddDrawer,
-      toggle: ToggleAddDrawer,
+      setTrue: openAddFundDrawer,
+      setFalse: closeAddFundDrawer,
+      toggle: ToggleAddFundDrawer,
+    },
+  ] = useBoolean(false);
+  const [
+    showEditZindexDrawer,
+    {
+      setTrue: openEditZindexDrawer,
+      setFalse: closeEditZindexDrawer,
+      toggle: ToggleEditZindexDrawer,
     },
   ] = useBoolean(false);
   const [
@@ -60,31 +73,63 @@ const ToolBar: React.FC<ToolBarProps> = ({ toggleToolbarDeleteStatus }) => {
   return (
     <>
       <div className={styles.bar}>
-        <AddIcon style={{ ...iconSize }} onClick={openAddDrawer} />
-        <DeleteIcon
-          style={{ ...iconSize }}
-          onClick={toggleToolbarDeleteStatus}
-        />
-        <RefreshIcon style={{ ...iconSize }} onClick={freshFunds} />
+        {tabs.activeKey === Enums.TabKeyType.Funds && (
+          <AddIcon style={{ ...iconSize }} onClick={openAddFundDrawer} />
+        )}
+        {tabs.activeKey === Enums.TabKeyType.Zindex && (
+          <MenuAddIcon style={{ ...iconSize }} onClick={openEditZindexDrawer} />
+        )}
+        {tabs.activeKey === Enums.TabKeyType.Funds && (
+          <DeleteIcon
+            style={{ ...iconSize }}
+            onClick={toggleToolbarDeleteStatus}
+          />
+        )}
+        {tabs.activeKey === Enums.TabKeyType.Funds && (
+          <RefreshIcon style={{ ...iconSize }} onClick={freshFunds} />
+        )}
+        {tabs.activeKey === Enums.TabKeyType.Zindex && (
+          <RefreshIcon style={{ ...iconSize }} onClick={freshZindexs} />
+        )}
         <QRcodeIcon style={{ ...iconSize }} onClick={openPayDrawer} />
         <SettingIcon style={{ ...iconSize }} onClick={openSettingDrawer} />
       </div>
+
       <Drawer
-        open={showAddDrawer}
+        open={showAddFundDrawer}
         showMask
         maskClosable
         level={null}
         handler={false}
-        onClose={closeAddDrawer}
+        onClose={closeAddFundDrawer}
         placement="bottom"
       >
-        <AddContent
-          show={showAddDrawer}
+        <AddFundContent
+          show={showAddFundDrawer}
           onEnter={() => {
             freshFunds();
-            closeAddDrawer();
+            closeAddFundDrawer();
           }}
-          onClose={closeAddDrawer}
+          onClose={closeAddFundDrawer}
+        />
+      </Drawer>
+      <Drawer
+        open={showEditZindexDrawer}
+        showMask
+        maskClosable
+        level={null}
+        handler={false}
+        onClose={closeEditZindexDrawer}
+        placement="bottom"
+        height="100vh"
+      >
+        <EditZindexContent
+          show={showEditZindexDrawer}
+          onEnter={() => {
+            freshZindexs();
+            closeEditZindexDrawer();
+          }}
+          onClose={closeEditZindexDrawer}
         />
       </Drawer>
       <Drawer
@@ -93,7 +138,7 @@ const ToolBar: React.FC<ToolBarProps> = ({ toggleToolbarDeleteStatus }) => {
         maskClosable
         level={null}
         handler={false}
-        onClose={closeAddDrawer}
+        onClose={closeAddFundDrawer}
         placement="bottom"
         height="100vh"
       >
@@ -129,6 +174,7 @@ const ToolBar: React.FC<ToolBarProps> = ({ toggleToolbarDeleteStatus }) => {
 const connector = connect(
   (state: StoreState) => ({
     toolbar: state.toolbar,
+    tabs: state.tabs,
   }),
   (dispatch: Dispatch) =>
     bindActionCreators(

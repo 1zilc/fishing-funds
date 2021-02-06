@@ -9,7 +9,7 @@
  * `./app/main.prod.js` using webpack. This gives us some performance wins.
  */
 import path from 'path';
-import { app, Tray, globalShortcut } from 'electron';
+import { app, Tray, globalShortcut, shell } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import { menubar } from 'menubar';
@@ -115,7 +115,7 @@ const createMenubar = async () => {
       transparent: false,
       alwaysOnTop: false,
       width: 300,
-      height: 400,
+      height: 480,
       minHeight: 400,
       minWidth: 300,
       maxHeight: 800,
@@ -141,6 +141,7 @@ const createMenubar = async () => {
     'disable-backgrounding-occluded-windows',
     'true'
   );
+
   // eslint-disable-next-line
   new AppUpdater();
 };
