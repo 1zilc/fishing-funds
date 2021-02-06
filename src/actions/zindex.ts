@@ -8,6 +8,7 @@ export interface CodeMap {
 
 export const getZindexConfig: () => {
   zindexConfig: Zindex.SettingItem[];
+  selectZindexs: string[];
   codeMap: CodeMap;
 } = () => {
   const zindexConfig: Zindex.SettingItem[] = Utils.GetStorage(
@@ -27,14 +28,20 @@ export const getZindexConfig: () => {
     return r;
   }, {} as CodeMap);
 
-  return { zindexConfig, codeMap };
+  const selectZindexs = zindexConfig
+    .filter(({ show }) => show)
+    .map(({ code }) => code);
+
+  return { zindexConfig, codeMap, selectZindexs };
 };
 
 export const getZindexs: () => Promise<
   (Zindex.ResponseItem | null)[]
 > = async () => {
   const { zindexConfig } = getZindexConfig();
-  const collectors = zindexConfig.map(({ code }) => () => getZindex(code));
+  const collectors = zindexConfig
+    .filter(({ show }) => show)
+    .map(({ code }) => () => getZindex(code));
   await Utils.Sleep(1000);
   return Adapter.ConCurrencyAllAdapter<Zindex.ResponseItem>(collectors);
 };
@@ -43,4 +50,10 @@ export const getZindex: (
   code: string
 ) => Promise<Zindex.ResponseItem | null> = async (code) => {
   return Services.Zindex.FromEastmoney(code);
+};
+
+export const saveZindexConfig: (zindexConfig: Zindex.SettingItem[]) => void = (
+  zindexConfig
+) => {
+  Utils.SetStorage(CONST_STORAGE.ZINDEX_SETTING, zindexConfig);
 };

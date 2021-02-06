@@ -220,7 +220,7 @@ const Home: React.FC<HomeProps> = ({ updateUpdateTime, tabs }) => {
                   index={index}
                 />
               ))}
-              {!funds.length && (
+              {!zindexs.length && (
                 <div className={styles.empty}>暂无指数数据~</div>
               )}
             </div>

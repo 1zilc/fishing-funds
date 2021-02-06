@@ -6,7 +6,7 @@ import Drawer from 'rc-drawer';
 import { useBoolean } from 'ahooks';
 
 import { ReactComponent as AddIcon } from '../../assets/icons/add.svg';
-import { ReactComponent as EditIcon } from '../../assets/icons/edit.svg';
+import { ReactComponent as MenuAddIcon } from '../../assets/icons/menu-add.svg';
 import { ReactComponent as DeleteIcon } from '../../assets/icons/delete.svg';
 import { ReactComponent as RefreshIcon } from '../../assets/icons/refresh.svg';
 import { ReactComponent as QRcodeIcon } from '../../assets/icons/qr-code.svg';
@@ -77,7 +77,7 @@ const ToolBar: React.FC<ToolBarProps> = ({
           <AddIcon style={{ ...iconSize }} onClick={openAddFundDrawer} />
         )}
         {tabs.activeKey === Enums.TabKeyType.Zindex && (
-          <EditIcon style={{ ...iconSize }} onClick={openEditZindexDrawer} />
+          <MenuAddIcon style={{ ...iconSize }} onClick={openEditZindexDrawer} />
         )}
         {tabs.activeKey === Enums.TabKeyType.Funds && (
           <DeleteIcon

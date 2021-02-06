@@ -11,7 +11,6 @@ export interface AddFundContentProps {
 
 const EditFundContent: React.FC<AddFundContentProps> = (props) => {
   const { fund } = props;
-  const { codeMap } = getFundConfig();
   const [num, setNum] = useState<number>(fund.cyfe);
 
   const onSave = async () => {
