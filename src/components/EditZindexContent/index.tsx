@@ -68,6 +68,7 @@ const EditZindexContent: React.FC<AddFundContentProps> = (props) => {
             delay={2}
             list={sortZindexConfig}
             setList={setSortZindexConfig}
+            dragClass={styles.dragItem}
             swap
           >
             {sortZindexConfig.map((zindex) => {

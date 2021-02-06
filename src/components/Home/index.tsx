@@ -3,6 +3,7 @@ import { Tabs } from 'antd';
 import { bindActionCreators, Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import { useInterval, useRequest } from 'ahooks';
+import dayjs from 'dayjs';
 
 import FundRow from '../FundRow';
 import ZindexRow from '../ZindexRow';
@@ -29,7 +30,7 @@ import { ToolbarState } from '../../reducers/toolbar';
 import { calcFund } from '../../actions/fund';
 import { getZindexConfig } from '../../actions/zindex';
 import { getCurrentHours } from '../../actions/time';
-import '../../utils/jsonpgz';
+
 import * as Enums from '../../utils/enums';
 import * as Utils from '../../utils';
 import styles from './index.scss';
@@ -78,8 +79,8 @@ const Home: React.FC<HomeProps> = ({ updateUpdateTime, tabs }) => {
     getZindexs,
     {
       manual: true,
-      pollingInterval: 1000 * 60,
-      pollingWhenHidden: false,
+      // pollingInterval: 1000 * 60,
+      // pollingWhenHidden: false,
       onSuccess: (result) => {
         sortZindex(result.filter((_) => !!_) as Zindex.ResponseItem[]);
       },
@@ -165,12 +166,24 @@ const Home: React.FC<HomeProps> = ({ updateUpdateTime, tabs }) => {
   useInterval(async () => {
     if (autoFreshSetting) {
       const timestamp = await getCurrentHours();
-      const hours = new Date(Number(timestamp)).getHours();
-      if (hours >= 9 && hours <= 15) {
+      const now = dayjs(timestamp!);
+      const hours = now.get('hour');
+      const day = now.get('day');
+      if (hours >= 9 && hours <= 15 && day >= 1 && day <= 5) {
         freshFunds();
       }
     }
   }, freshDelaySetting * 1000 * 60);
+
+  useInterval(async () => {
+    const timestamp = await getCurrentHours();
+    const now = dayjs(timestamp!);
+    const hours = now.get('hour');
+    const day = now.get('day');
+    if (hours >= 9 && hours <= 15 && day >= 1 && day <= 5) {
+      freshZindexs();
+    }
+  }, 1000 * 60);
 
   useEffect(() => {
     freshFunds();

@@ -57,4 +57,11 @@
     background-color: var(--inner-color);
   }
 
+  svg:hover {
+    cursor: pointer;
+  }
+}
+
+.dragItem {
+  background-color: var(--inner-color) !important;
 }
