@@ -12,6 +12,17 @@
   border-top: 1px solid var(--border-color);
   box-sizing: border-box;
   height: 100%;
+
+  i {
+    height: 16px;
+    width: 1px;
+    background-color: var(--border-color);
+    display: block;
+
+    &:last-of-type {
+      display: none;
+    }
+  }
 }
 
 .tab {
@@ -21,15 +32,15 @@
   height: 100%;
   line-height: 40px;
   font-size: 12px;
-  opacity: .5;
-  transition: all .1s;
+  opacity: 0.5;
+  transition: all 0.1s;
 
   &:last-child {
-    border-right: none
+    border-right: none;
   }
 
   &:hover {
-    opacity: .8;
+    opacity: 0.8;
   }
 }
 
@@ -37,15 +48,4 @@
   font-size: 14px;
   font-weight: 600;
   opacity: 1 !important;
-}
-
-i {
-  height: 16px;
-  width: 1px;
-  background-color: var(--border-color);
-  display: block;
-
-  &:last-of-type {
-    display: none
-  }
 }
