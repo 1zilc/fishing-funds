@@ -17,9 +17,10 @@ import { menubar } from 'menubar';
 let myWindow: any = null;
 export default class AppUpdater {
   constructor() {
-    log.transports.file.level = 'info';
+    log.transports.file.level = 'debug';
     autoUpdater.logger = log;
-    autoUpdater.checkForUpdatesAndNotify();
+    autoUpdater.currentVersion = '2.0.0';
+    autoUpdater.checkForUpdates();
     //更新错误事件
     autoUpdater.on('error', function (error) {
       // sendUpdateMessage(returnData.error);
@@ -121,6 +122,7 @@ const createMenubar = async () => {
       maxHeight: 800,
       maxWidth: 600,
       webPreferences: {
+        contextIsolation: false,
         enableRemoteModule: true,
         nodeIntegration: true,
         devTools: !app.isPackaged,

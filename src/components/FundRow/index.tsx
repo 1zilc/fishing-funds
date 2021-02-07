@@ -31,7 +31,7 @@ const arrowSize = {
 };
 
 const FundRow: React.FC<RowProps> = (props) => {
-  const { fund, toolbar } = props;
+  const { fund, toolbar, index } = props;
   const { deleteStatus } = toolbar;
   const { freshFunds } = useContext(HomeContext);
   const [collapse, { toggle }] = useBoolean(false);

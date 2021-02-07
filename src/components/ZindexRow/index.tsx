@@ -3,6 +3,8 @@ import { useBoolean } from 'ahooks';
 import { Collapse } from 'react-collapse';
 import classnames from 'classnames';
 import { connect } from 'react-redux';
+import { ReactComponent as ArrowDownLineIcon } from '../../assets/icons/arrow-down-line.svg';
+import { ReactComponent as ArrowUpLineIcon } from '../../assets/icons/arrow-up-line.svg';
 import { ReactComponent as ArrowDownIcon } from '../../assets/icons/arrow-down.svg';
 import { ReactComponent as ArrowUpIcon } from '../../assets/icons/arrow-up.svg';
 
@@ -68,6 +70,15 @@ const ZindexRow: React.FC<RowProps> = (props) => {
               )}
             >
               {zindex.zsz}
+              {zindex.zdf < 0 ? (
+                <ArrowDownLineIcon
+                  className={zindex.zdf < 0 ? 'down-svg' : 'up-svg'}
+                />
+              ) : (
+                <ArrowUpLineIcon
+                  className={zindex.zdf < 0 ? 'down-svg' : 'up-svg'}
+                />
+              )}
             </div>
             <div className={styles.zd}>
               <div

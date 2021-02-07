@@ -166,7 +166,7 @@ const Home: React.FC<HomeProps> = ({ updateUpdateTime, tabs }) => {
   useInterval(async () => {
     if (autoFreshSetting) {
       const timestamp = await getCurrentHours();
-      const now = dayjs(timestamp!);
+      const now = dayjs(Number(timestamp!));
       const hours = now.get('hour');
       const day = now.get('day');
       if (hours >= 9 && hours <= 15 && day >= 1 && day <= 5) {
@@ -177,13 +177,13 @@ const Home: React.FC<HomeProps> = ({ updateUpdateTime, tabs }) => {
 
   useInterval(async () => {
     const timestamp = await getCurrentHours();
-    const now = dayjs(timestamp!);
+    const now = dayjs(Number(timestamp!));
     const hours = now.get('hour');
     const day = now.get('day');
     if (hours >= 9 && hours <= 15 && day >= 1 && day <= 5) {
       freshZindexs();
     }
-  }, 1000 * 60);
+  }, 1000 * 3);
 
   useEffect(() => {
     freshFunds();

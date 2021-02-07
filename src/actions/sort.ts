@@ -14,6 +14,7 @@ export interface ZindexSortMode {
   type: Enums.ZindexSortType;
   order: Enums.SortOrderType;
 }
+
 export const fundSortModeOptions: Option.EnumsOption<Enums.FundSortType>[] = [
   { key: Enums.FundSortType.Default, value: '默认' },
   { key: Enums.FundSortType.Growth, value: '今日涨幅' },
@@ -96,6 +97,7 @@ export const troggleFundSortOrder = () => {
         : Enums.SortOrderType.Asc,
   });
 };
+
 export const troggleZindexSortOrder = () => {
   const { zindexSortMode } = getSortMode();
   const { order } = zindexSortMode;
