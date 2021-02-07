@@ -49,7 +49,8 @@
     "afterSign": ".erb/scripts/Notarize.js",
     "mac": {
       "target": [
-        "dmg"
+        "dmg",
+        "zip"
       ],
       "type": "distribution",
       "hardenedRuntime": true,
@@ -84,7 +85,7 @@
       "target": [
         "AppImage"
       ],
-      "category": "Development"
+      "category": "Financial"
     },
     "directories": {
       "app": "src",

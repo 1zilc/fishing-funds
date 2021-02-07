@@ -17,10 +17,10 @@ import { menubar } from 'menubar';
 let myWindow: any = null;
 export default class AppUpdater {
   constructor() {
-    log.transports.file.level = 'debug';
+    log.transports.file.level = 'info';
     autoUpdater.logger = log;
-    autoUpdater.currentVersion = '2.0.0';
-    autoUpdater.checkForUpdates();
+    // autoUpdater.checkForUpdates();
+    autoUpdater.checkForUpdatesAndNotify();
     //更新错误事件
     autoUpdater.on('error', function (error) {
       // sendUpdateMessage(returnData.error);
@@ -57,7 +57,7 @@ export default class AppUpdater {
     // autoUpdater.on('update-downloaded', function (event, releaseNotes, releaseName, releaseDate, updateUrl, quitAndUpdate) {
     autoUpdater.on('update-downloaded', function () {
       //退出并进行安装（这里可以做成让用户确认后再调用）
-      autoUpdater.quitAndInstall();
+      // autoUpdater.quitAndInstall(); 自动下载安装
       log.info('下载完毕');
     });
   }
