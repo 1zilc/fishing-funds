@@ -9,59 +9,25 @@
  * `./app/main.prod.js` using webpack. This gives us some performance wins.
  */
 import path from 'path';
-import { app, Tray, globalShortcut, shell } from 'electron';
-import { autoUpdater } from 'electron-updater';
-import log from 'electron-log';
+import { app, globalShortcut, nativeImage } from 'electron';
+import AppUpdater from './autoUpdater';
 import { menubar } from 'menubar';
 
 let myWindow: any = null;
-export default class AppUpdater {
-  constructor() {
-    log.transports.file.level = 'info';
-    autoUpdater.logger = log;
-    // autoUpdater.checkForUpdates();
-    autoUpdater.checkForUpdatesAndNotify();
-    //更新错误事件
-    autoUpdater.on('error', function (error) {
-      // sendUpdateMessage(returnData.error);
-      log.info('returnData.error, error');
-    });
 
-    //检查事件
-    autoUpdater.on('checking-for-update', function () {
-      // sendUpdateMessage(returnData.checking);
-      log.info('returnData.checking');
-    });
+const EXTRA_RESOURCES_PATH = app.isPackaged
+  ? path.join(process.resourcesPath, 'assets')
+  : path.join(__dirname, '../assets');
 
-    //发现新版本
-    autoUpdater.on('update-available', function () {
-      // sendUpdateMessage(returnData.updateAva);
-      log.info('returnData.updateAva');
-    });
+const getAssetPath = (resourceFilename: string): string => {
+  return path.join(EXTRA_RESOURCES_PATH, resourceFilename);
+};
 
-    //当前版本为最新版本
-    autoUpdater.on('update-not-available', function () {
-      setTimeout(function () {
-        // sendUpdateMessage(returnData.updateNotAva);
-        log.info('returnData.updateNotAva');
-      }, 1000);
-    });
+const nativeMenuIcon = nativeImage.createFromPath(
+  getAssetPath('menu/iconTemplate.png')
+);
 
-    //更新下载进度事件
-    autoUpdater.on('download-progress', function (progressObj) {
-      // win.webContents.send('downloadProgress', progressObj);
-      log.info('正在下载', progressObj);
-    });
-
-    //下载完毕
-    // autoUpdater.on('update-downloaded', function (event, releaseNotes, releaseName, releaseDate, updateUrl, quitAndUpdate) {
-    autoUpdater.on('update-downloaded', function () {
-      //退出并进行安装（这里可以做成让用户确认后再调用）
-      // autoUpdater.quitAndInstall(); 自动下载安装
-      log.info('下载完毕');
-    });
-  }
-}
+const nativeIcon = nativeImage.createFromPath(getAssetPath('icon.png'));
 
 if (process.env.NODE_ENV === 'production') {
   const sourceMapSupport = require('source-map-support');
@@ -93,20 +59,12 @@ const createMenubar = async () => {
     await installExtensions();
   }
 
-  const EXTRA_RESOURCES_PATH = app.isPackaged
-    ? path.join(process.resourcesPath, 'assets')
-    : path.join(__dirname, '../assets'); // Your relative path may be different!
-
-  const getAssetPath = (resourceFilename: string): string => {
-    return path.join(EXTRA_RESOURCES_PATH, resourceFilename);
-  };
-
   const mb = menubar({
     index: `file://${__dirname}/index.html`,
     // icon: path.join(__dirname, '../resources/menu/iconTemplate.png'),
     // icon: 'resources/icon.png',
-    // icon: image,
-    tray: new Tray(getAssetPath('menu/iconTemplate.png')),
+    icon: nativeMenuIcon,
+    // tray: new Tray(getAssetPath('menu/iconTemplate.png')),
     tooltip: 'Fishing Funds',
     preloadWindow: true,
     showOnAllWorkspaces: false,
@@ -145,7 +103,8 @@ const createMenubar = async () => {
   );
 
   // eslint-disable-next-line
-  new AppUpdater();
+  // TODO: 暂时关闭自动更新，需要apple签名
+  // new AppUpdater(nativeIcon);
 };
 
 /**
