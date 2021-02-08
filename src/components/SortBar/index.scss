@@ -1,5 +1,5 @@
 .content {
-  padding: 0 4px 0 25px;
+  padding: 0 4px 0 8px;
   border-bottom: 1px solid var(--border-color);
   background-color: var(--background-color);
   transition: transform .1s;
@@ -19,19 +19,38 @@
 }
 
 .bar {
+
   display: flex;
   align-items: center;
   color: var(--main-text-color);
   font-size: 12px;
   height: 100%;
+  align-items: center;
+}
+
+.arrow {
+  margin-right: 5px;
+  cursor: pointer;
+
+  svg {
+    height: 12px;
+    width: 12px;
+    fill: var(--main-text-color)
+  }
 }
 
 .name {
   position: relative;
+  cursor: pointer;
+  flex: 1;
+  transition: opacity .2s;
+
+  &:hover {
+    opacity: .8;
+  }
 }
 
 .mode {
-  flex: 1;
   text-align: right;
   padding-right: 10px;
 }

@@ -12,4 +12,8 @@ declare namespace Fund {
     dwjz: string; // 当前净值 '1.1111'
     gsz: string; // 估算值 '1.2222'
   }
+
+  export interface ExtraRow {
+    collapse?: boolean;
+  }
 }

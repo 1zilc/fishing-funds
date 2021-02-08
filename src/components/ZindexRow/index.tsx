@@ -1,21 +1,22 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { useBoolean } from 'ahooks';
 import { Collapse } from 'react-collapse';
 import classnames from 'classnames';
 import { connect } from 'react-redux';
+
 import { ReactComponent as ArrowDownLineIcon } from '../../assets/icons/arrow-down-line.svg';
 import { ReactComponent as ArrowUpLineIcon } from '../../assets/icons/arrow-up-line.svg';
 import { ReactComponent as ArrowDownIcon } from '../../assets/icons/arrow-down.svg';
 import { ReactComponent as ArrowUpIcon } from '../../assets/icons/arrow-up.svg';
 
 import { StoreState } from '../../reducers/types';
-
+import { HomeContext } from '../Home';
 import * as Utils from '../../utils';
 
 import styles from './index.scss';
 
 export interface RowProps {
-  zindex: Zindex.ResponseItem;
+  zindex: Zindex.ResponseItem & Zindex.ExtraRow;
   index: number;
 }
 
@@ -26,8 +27,19 @@ const arrowSize = {
 
 const ZindexRow: React.FC<RowProps> = (props) => {
   const { zindex } = props;
-  const [collapse, { toggle }] = useBoolean(false);
+  const { setZindexs } = useContext(HomeContext);
 
+  const onToggleCollapse = () => {
+    setZindexs((zindexs) => {
+      const cloneZindexs = Utils.DeepCopy(zindexs);
+      cloneZindexs.forEach((_) => {
+        if (_.zindexCode === zindex.zindexCode) {
+          _.collapse = !zindex.collapse;
+        }
+      });
+      return cloneZindexs;
+    });
+  };
   return (
     <div>
       <div className={styles.row}>
@@ -37,10 +49,10 @@ const ZindexRow: React.FC<RowProps> = (props) => {
             alignItems: 'center',
             justifyContent: 'space-between',
           }}
-          onClick={() => toggle()}
+          onClick={onToggleCollapse}
         >
           <div className={styles.arrow}>
-            {collapse ? (
+            {zindex.collapse ? (
               <ArrowUpIcon style={{ ...arrowSize }} />
             ) : (
               <ArrowDownIcon style={{ ...arrowSize }} />
@@ -101,7 +113,7 @@ const ZindexRow: React.FC<RowProps> = (props) => {
           </div>
         </div>
       </div>
-      <Collapse isOpened={collapse}>
+      <Collapse isOpened={!!zindex.collapse}>
         <div className={styles.collapseContent}>
           <section>
             <span>今开：</span>
