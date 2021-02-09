@@ -218,8 +218,6 @@ const Home: React.FC<HomeProps> = ({ updateUpdateTime, tabs }) => {
     }
   }, 1000 * 10);
 
-  console.log(funds);
-
   useEffect(() => {
     runGetFunds();
     runGetZindexs();
