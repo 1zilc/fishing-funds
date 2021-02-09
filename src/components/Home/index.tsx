@@ -81,13 +81,28 @@ const Home: React.FC<HomeProps> = ({ updateUpdateTime, tabs }) => {
       }, {}),
     [funds]
   );
+  const zindexsCodeToMap = useMemo(
+    () =>
+      zindexs.reduce((map, zindex) => {
+        map[zindex.zindexCode] = zindex;
+        return map;
+      }, {}),
+    [zindexs]
+  );
 
   const { run: runGetFunds, loading: fundsLoading } = useRequest(getFunds, {
     manual: true,
     throttleInterval: 1000 * 2, // 2秒请求一次
     onSuccess: (result) => {
       const now = new Date().toLocaleString();
-      sortFunds(result.filter((_) => !!_) as Fund.ResponseItem[]);
+      sortFunds(
+        result
+          .filter((_) => !!_)
+          .map((_) => ({
+            ..._,
+            collapse: fundsCodeToMap[_?.fundcode]?.collapse,
+          })) as (Fund.ResponseItem & Fund.ExtraRow)[]
+      );
       updateUpdateTime(now);
     },
   });
@@ -97,7 +112,14 @@ const Home: React.FC<HomeProps> = ({ updateUpdateTime, tabs }) => {
     {
       manual: true,
       onSuccess: (result) => {
-        sortZindexs(result.filter((_) => !!_) as Zindex.ResponseItem[]);
+        sortZindexs(
+          result
+            .filter((_) => !!_)
+            .map((_) => ({
+              ..._,
+              collapse: zindexsCodeToMap[_?.zindexCode]?.collapse,
+            })) as (Zindex.ResponseItem & Zindex.ExtraRow)[]
+        );
       },
     }
   );
