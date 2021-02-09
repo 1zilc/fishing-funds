@@ -18,4 +18,8 @@ declare namespace Zindex {
     hs: number; // 换手
     zf: number; // 振幅
   }
+
+  export interface ExtraRow {
+    collapse?: boolean;
+  }
 }

@@ -129,6 +129,5 @@ export const getRemoteZindexConfig = async () => {
   );
   const a3 = eval(b3);
   const result = [...a1, ...a2, ...a3];
-  console.log(JSON.stringify(result));
   return result;
 };

@@ -1,9 +1,8 @@
-import React, { useEffect, useState, createContext } from 'react';
+import React, { useEffect, useState, createContext, useMemo } from 'react';
 import { Tabs } from 'antd';
 import { bindActionCreators, Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import { useInterval, useRequest } from 'ahooks';
-import dayjs from 'dayjs';
 
 import FundRow from '../FundRow';
 import ZindexRow from '../ZindexRow';
@@ -41,13 +40,21 @@ export interface HomeProps {
   toggleToolbarDeleteStatus: () => void;
   updateUpdateTime: (time: string) => void;
 }
+
 export interface HomeContextType {
-  funds: Fund.ResponseItem[];
-  setFunds: (funds: Fund.ResponseItem[]) => void;
+  funds: (Fund.ResponseItem & Fund.ExtraRow)[];
+  setFunds: React.Dispatch<
+    React.SetStateAction<(Fund.ResponseItem & Fund.ExtraRow)[]>
+  >;
   freshFunds: () => Promise<void>;
   sortFunds: (responseFunds?: Fund.ResponseItem[]) => void;
+
+  zindexs: (Zindex.ResponseItem & Zindex.ExtraRow)[];
+  setZindexs: React.Dispatch<
+    React.SetStateAction<(Zindex.ResponseItem & Zindex.ExtraRow)[]>
+  >;
   freshZindexs: () => Promise<void>;
-  sortZindex: (esponseZindex?: Zindex.ResponseItem[]) => void;
+  sortZindexs: (esponseZindex?: Zindex.ResponseItem[]) => void;
 }
 
 export const HomeContext = createContext<HomeContextType>({
@@ -55,22 +62,47 @@ export const HomeContext = createContext<HomeContextType>({
   setFunds: () => {},
   freshFunds: async () => {},
   sortFunds: () => {},
+
+  zindexs: [],
+  setZindexs: () => {},
   freshZindexs: async () => {},
-  sortZindex: () => {},
+  sortZindexs: () => {},
 });
 
 const Home: React.FC<HomeProps> = ({ updateUpdateTime, tabs }) => {
   const { freshDelaySetting, autoFreshSetting } = getSystemSetting();
-  const [funds, setFunds] = useState<Fund.ResponseItem[]>([]);
+  const [funds, setFunds] = useState<(Fund.ResponseItem & Fund.ExtraRow)[]>([]);
   const [zindexs, setZindexs] = useState<Zindex.ResponseItem[]>([]);
+  const fundsCodeToMap = useMemo(
+    () =>
+      funds.reduce((map, fund) => {
+        map[fund.fundcode] = fund;
+        return map;
+      }, {}),
+    [funds]
+  );
+  const zindexsCodeToMap = useMemo(
+    () =>
+      zindexs.reduce((map, zindex) => {
+        map[zindex.zindexCode] = zindex;
+        return map;
+      }, {}),
+    [zindexs]
+  );
 
   const { run: runGetFunds, loading: fundsLoading } = useRequest(getFunds, {
     manual: true,
-    // loadingDelay: 1000,
     throttleInterval: 1000 * 2, // 2秒请求一次
     onSuccess: (result) => {
       const now = new Date().toLocaleString();
-      sortFunds(result.filter((_) => !!_) as Fund.ResponseItem[]);
+      sortFunds(
+        result
+          .filter((_) => !!_)
+          .map((_) => ({
+            ..._,
+            collapse: fundsCodeToMap[_?.fundcode]?.collapse,
+          })) as (Fund.ResponseItem & Fund.ExtraRow)[]
+      );
       updateUpdateTime(now);
     },
   });
@@ -79,10 +111,15 @@ const Home: React.FC<HomeProps> = ({ updateUpdateTime, tabs }) => {
     getZindexs,
     {
       manual: true,
-      // pollingInterval: 1000 * 60,
-      // pollingWhenHidden: false,
       onSuccess: (result) => {
-        sortZindex(result.filter((_) => !!_) as Zindex.ResponseItem[]);
+        sortZindexs(
+          result
+            .filter((_) => !!_)
+            .map((_) => ({
+              ..._,
+              collapse: zindexsCodeToMap[_?.zindexCode]?.collapse,
+            })) as (Zindex.ResponseItem & Zindex.ExtraRow)[]
+        );
       },
     }
   );
@@ -108,10 +145,10 @@ const Home: React.FC<HomeProps> = ({ updateUpdateTime, tabs }) => {
       fundSortMode: { type: fundSortType, order: fundSortorder },
     } = getSortMode();
     const { codeMap } = getFundConfig();
-    const sortFunds: Fund.ResponseItem[] = Utils.DeepCopy(
+    const sortList: Fund.ResponseItem[] = Utils.DeepCopy(
       responseFunds || funds
     );
-    sortFunds.sort((a, b) => {
+    sortList.sort((a, b) => {
       const _a = calcFund(a);
       const _b = calcFund(b);
       const t = fundSortorder === Enums.SortOrderType.Asc ? 1 : -1;
@@ -132,18 +169,18 @@ const Home: React.FC<HomeProps> = ({ updateUpdateTime, tabs }) => {
             : 1 * t;
       }
     });
-    setFunds(sortFunds);
+    setFunds(sortList);
   };
 
-  const sortZindex = (responseZindexs?: Zindex.ResponseItem[]) => {
+  const sortZindexs = (responseZindexs?: Zindex.ResponseItem[]) => {
     const {
       zindexSortMode: { type: zindexSortType, order: zindexSortorder },
     } = getSortMode();
     const { codeMap } = getZindexConfig();
-    const sortZindex: Zindex.ResponseItem[] = Utils.DeepCopy(
+    const sortList: Zindex.ResponseItem[] = Utils.DeepCopy(
       responseZindexs || zindexs
     );
-    sortZindex.sort((a, b) => {
+    sortList.sort((a, b) => {
       const t = zindexSortorder === Enums.SortOrderType.Asc ? 1 : -1;
       switch (zindexSortType) {
         case Enums.ZindexSortType.Zdd:
@@ -160,45 +197,43 @@ const Home: React.FC<HomeProps> = ({ updateUpdateTime, tabs }) => {
             : 1 * t;
       }
     });
-    setZindexs(sortZindex);
+    setZindexs(sortList);
   };
 
   useInterval(async () => {
     if (autoFreshSetting) {
       const timestamp = await getCurrentHours();
-      const now = dayjs(timestamp!);
-      const hours = now.get('hour');
-      const day = now.get('day');
-      if (hours >= 9 && hours <= 15 && day >= 1 && day <= 5) {
-        freshFunds();
+      const isWorkDayTime = Utils.JudgeWorkDayTime(Number(timestamp));
+      if (isWorkDayTime) {
+        runGetFunds();
       }
     }
   }, freshDelaySetting * 1000 * 60);
 
   useInterval(async () => {
     const timestamp = await getCurrentHours();
-    const now = dayjs(timestamp!);
-    const hours = now.get('hour');
-    const day = now.get('day');
-    if (hours >= 9 && hours <= 15 && day >= 1 && day <= 5) {
-      freshZindexs();
+    const isWorkDayTime = Utils.JudgeWorkDayTime(Number(timestamp));
+    if (isWorkDayTime) {
+      runGetZindexs();
     }
-  }, 1000 * 60);
+  }, 1000 * 10);
 
   useEffect(() => {
-    freshFunds();
+    runGetFunds();
     runGetZindexs();
   }, []);
 
   return (
     <HomeContext.Provider
       value={{
-        freshFunds,
-        sortFunds,
         funds,
         setFunds,
+        freshFunds,
+        sortFunds,
+        zindexs,
+        setZindexs,
         freshZindexs,
-        sortZindex,
+        sortZindexs,
       }}
     >
       <div className={styles.layout}>

@@ -20,7 +20,7 @@ import * as Utils from '../../utils';
 import styles from './index.scss';
 
 export interface RowProps {
-  fund: Fund.ResponseItem;
+  fund: Fund.ResponseItem & Fund.ExtraRow;
   index: number;
   toolbar: ToolbarState;
 }
@@ -31,10 +31,9 @@ const arrowSize = {
 };
 
 const FundRow: React.FC<RowProps> = (props) => {
-  const { fund, toolbar } = props;
+  const { fund, toolbar, index } = props;
   const { deleteStatus } = toolbar;
-  const { freshFunds } = useContext(HomeContext);
-  const [collapse, { toggle }] = useBoolean(false);
+  const { freshFunds, setFunds } = useContext(HomeContext);
 
   const [
     showEditDrawer,
@@ -44,6 +43,18 @@ const FundRow: React.FC<RowProps> = (props) => {
       toggle: ToggleEditDrawer,
     },
   ] = useBoolean(false);
+
+  const onToggleCollapse = () => {
+    setFunds((funds) => {
+      const cloneFunds = Utils.DeepCopy(funds);
+      cloneFunds.forEach((_) => {
+        if (_.fundcode === fund.fundcode) {
+          _.collapse = !fund.collapse;
+        }
+      });
+      return cloneFunds;
+    });
+  };
 
   const { cyfe, bjz, jrsygz, gszz } = calcFund(fund);
 
@@ -61,10 +72,10 @@ const FundRow: React.FC<RowProps> = (props) => {
             alignItems: 'center',
             justifyContent: 'space-between',
           }}
-          onClick={() => toggle()}
+          onClick={onToggleCollapse}
         >
           <div className={styles.arrow}>
-            {collapse ? (
+            {fund.collapse ? (
               <ArrowUpIcon style={{ ...arrowSize }} />
             ) : (
               <ArrowDownIcon style={{ ...arrowSize }} />
@@ -107,7 +118,7 @@ const FundRow: React.FC<RowProps> = (props) => {
           </div>
         </div>
       </div>
-      <Collapse isOpened={collapse}>
+      <Collapse isOpened={!!fund.collapse}>
         <div className={styles.collapseContent}>
           <section>
             <span>当前净值：</span>

@@ -1,12 +1,14 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useMemo } from 'react';
 import { useScroll, useDebounceFn } from 'ahooks';
-import { bindActionCreators, Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import classsames from 'classnames';
 import { Dropdown, Menu } from 'antd';
-import { StoreState } from '../../reducers/types';
+
 import { ReactComponent as SortArrowUpIcon } from '../../assets/icons/sort-arrow-up.svg';
 import { ReactComponent as SortArrowDownIcon } from '../../assets/icons/sort-arrow-down.svg';
+import { ReactComponent as ArrowDownIcon } from '../../assets/icons/arrow-down.svg';
+import { ReactComponent as ArrowUpIcon } from '../../assets/icons/arrow-up.svg';
+
 import {
   getSortMode,
   setFundSortMode,
@@ -15,9 +17,11 @@ import {
   setZindexSortMode,
   troggleZindexSortOrder,
 } from '../../actions/sort';
+import { StoreState } from '../../reducers/types';
 import { TabsState } from '../../reducers/tabs';
 import { HomeContext } from '../Home';
 import * as Enums from '../../utils/enums';
+import * as Utils from '../../utils';
 import styles from './index.scss';
 
 export interface SortBarProps {
@@ -25,7 +29,14 @@ export interface SortBarProps {
 }
 
 const SortBar: React.FC<SortBarProps> = ({ tabs }) => {
-  const { sortFunds, sortZindex } = useContext(HomeContext);
+  const {
+    sortFunds,
+    sortZindexs,
+    zindexs,
+    funds,
+    setFunds,
+    setZindexs,
+  } = useContext(HomeContext);
   const {
     fundSortMode: { type: fundSortType, order: fundSortorder },
     zindexSortMode: { type: zindexSortType, order: zindexSortorder },
@@ -40,6 +51,33 @@ const SortBar: React.FC<SortBarProps> = ({ tabs }) => {
   const { run: debounceSetVisible } = useDebounceFn(() => setVisible(true), {
     wait: 200,
   });
+  const [expandAllFunds, expandSomeFunds] = useMemo(() => {
+    return [funds.every((_) => _.collapse), funds.some((_) => _.collapse)];
+  }, [funds]);
+
+  const [expandAllZindexs, expandSomwZindexs] = useMemo(() => {
+    return [zindexs.every((_) => _.collapse), zindexs.some((_) => _.collapse)];
+  }, [zindexs]);
+
+  const troggleExpandAllFundsRow = () => {
+    setFunds((funds) => {
+      const cloneFunds = Utils.DeepCopy(funds);
+      cloneFunds.forEach((_) => {
+        _.collapse = !expandAllFunds;
+      });
+      return cloneFunds;
+    });
+  };
+
+  const troggleExpandAllZindexsRow = () => {
+    setZindexs((zindexs) => {
+      const cloneZindexs = Utils.DeepCopy(zindexs);
+      cloneZindexs.forEach((_) => {
+        _.collapse = !expandAllZindexs;
+      });
+      return cloneZindexs;
+    });
+  };
 
   useScroll(document, () => {
     setVisible(false);
@@ -52,7 +90,12 @@ const SortBar: React.FC<SortBarProps> = ({ tabs }) => {
       case Enums.TabKeyType.Funds:
         return (
           <div className={styles.bar}>
-            <div className={styles.name}>基金名称</div>
+            <div className={styles.arrow} onClick={troggleExpandAllFundsRow}>
+              {expandAllFunds ? <ArrowUpIcon /> : <ArrowDownIcon />}
+            </div>
+            <div className={styles.name} onClick={troggleExpandAllFundsRow}>
+              基金名称
+            </div>
             <div className={styles.mode}>
               <Dropdown
                 placement="bottomRight"
@@ -102,7 +145,12 @@ const SortBar: React.FC<SortBarProps> = ({ tabs }) => {
       case Enums.TabKeyType.Zindex:
         return (
           <div className={styles.bar}>
-            <div className={styles.name}>指数名称</div>
+            <div className={styles.arrow} onClick={troggleExpandAllZindexsRow}>
+              {expandAllZindexs ? <ArrowUpIcon /> : <ArrowDownIcon />}
+            </div>
+            <div className={styles.name} onClick={troggleExpandAllZindexsRow}>
+              指数名称
+            </div>
             <div className={styles.mode}>
               <Dropdown
                 placement="bottomRight"
@@ -115,7 +163,7 @@ const SortBar: React.FC<SortBarProps> = ({ tabs }) => {
                           setZindexSortMode({
                             type: key,
                           });
-                          sortZindex();
+                          sortZindexs();
                         }}
                       >
                         {value}
@@ -131,7 +179,7 @@ const SortBar: React.FC<SortBarProps> = ({ tabs }) => {
               className={styles.sort}
               onClick={() => {
                 troggleZindexSortOrder();
-                sortZindex();
+                sortZindexs();
               }}
             >
               <SortArrowUpIcon

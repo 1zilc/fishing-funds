@@ -51,7 +51,6 @@ export const FromEastmoney: (
       zf: NP.divide(data.data.f171, 100),
     };
   } catch (err) {
-    console.log(err);
     return null;
   }
 };
