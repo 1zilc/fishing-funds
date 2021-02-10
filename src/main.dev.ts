@@ -74,7 +74,7 @@ const createMenubar = async () => {
       transparent: false,
       alwaysOnTop: false,
       width: 300,
-      height: 480,
+      height: 500,
       minHeight: 400,
       minWidth: 300,
       maxHeight: 800,

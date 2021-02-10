@@ -3,8 +3,8 @@
 .row {
   /* display: flex; */
   width: 100%;
-  transition: all 0.2s;
   padding: 8px 8px;
+  transition: all .2s;
   box-sizing: border-box;
   border-bottom: 1px solid var(--border-color);
   background-color: var(--background-color);
@@ -13,9 +13,9 @@
   cursor: pointer;
 
   &:hover {
-    background-color: var(--primary-color);
     color: #fff;
     border-radius: 2px;
+    background-color: var(--primary-color);
 
     .arrow {
       svg {
@@ -72,15 +72,6 @@
   .zdf {
     font-size: 10px;
   }
-}
-
-
-.up {
-  color: var(--increase-color);
-}
-
-.down {
-  color: var(--reduce-color);
 }
 
 .arrow {

@@ -10,6 +10,7 @@ import { ReactComponent as ArrowDownIcon } from '../../assets/icons/arrow-down.s
 import { ReactComponent as ArrowUpIcon } from '../../assets/icons/arrow-up.svg';
 
 import { StoreState } from '../../reducers/types';
+import { getSystemSetting } from '../../actions/setting';
 import { HomeContext } from '../Home';
 import * as Utils from '../../utils';
 
@@ -27,6 +28,7 @@ const arrowSize = {
 
 const ZindexRow: React.FC<RowProps> = (props) => {
   const { zindex } = props;
+  const { conciseSetting } = getSystemSetting();
   const { setZindexs } = useContext(HomeContext);
 
   const onToggleCollapse = () => {
@@ -67,18 +69,20 @@ const ZindexRow: React.FC<RowProps> = (props) => {
             >
               <span className={styles.zindexName}>{zindex.name}</span>
             </div>
-            <div className={styles.rowBar}>
-              <div>
-                <span className={styles.code}>{zindex.zindexCode}</span>
-                {/* <span>{zindex.gztime.slice(5)}</span> */}
+            {!conciseSetting && (
+              <div className={styles.rowBar}>
+                <div>
+                  <span className={styles.code}>{zindex.zindexCode}</span>
+                  {/* <span>{zindex.gztime.slice(5)}</span> */}
+                </div>
               </div>
-            </div>
+            )}
           </div>
           <div className={classnames(styles.value)}>
             <div
               className={classnames(
                 styles.zsz,
-                zindex.zdf < 0 ? styles.down : styles.up
+                zindex.zdf < 0 ? 'down-text' : 'up-text'
               )}
             >
               {zindex.zsz}
@@ -92,29 +96,51 @@ const ZindexRow: React.FC<RowProps> = (props) => {
                 />
               )}
             </div>
-            <div className={styles.zd}>
-              <div
-                className={classnames(
-                  styles.zdd,
-                  zindex.zdd < 0 ? styles.down : styles.up
-                )}
-              >
-                {Utils.Yang(zindex.zdd)}
+            {!conciseSetting && (
+              <div className={styles.zd}>
+                <div
+                  className={classnames(
+                    styles.zdd,
+                    zindex.zdd < 0 ? 'down-text' : 'up-text'
+                  )}
+                >
+                  {Utils.Yang(zindex.zdd)}
+                </div>
+                <div
+                  className={classnames(
+                    styles.zdf,
+                    zindex.zdf < 0 ? 'down-text' : 'up-text'
+                  )}
+                >
+                  {Utils.Yang(zindex.zdf)} %
+                </div>
               </div>
-              <div
-                className={classnames(
-                  styles.zdf,
-                  zindex.zdf < 0 ? styles.down : styles.up
-                )}
-              >
-                {Utils.Yang(zindex.zdf)} %
-              </div>
-            </div>
+            )}
           </div>
         </div>
       </div>
       <Collapse isOpened={!!zindex.collapse}>
         <div className={styles.collapseContent}>
+          {conciseSetting && (
+            <section>
+              <span>涨跌点：</span>
+              <span
+                className={classnames(zindex.zdd < 0 ? 'down-text' : 'up-text')}
+              >
+                {zindex.zdd}
+              </span>
+            </section>
+          )}
+          {conciseSetting && (
+            <section>
+              <span>涨跌幅：</span>
+              <span
+                className={classnames(zindex.zdf < 0 ? 'down-text' : 'up-text')}
+              >
+                {zindex.zdf}
+              </span>
+            </section>
+          )}
           <section>
             <span>今开：</span>
             <span
@@ -157,6 +183,12 @@ const ZindexRow: React.FC<RowProps> = (props) => {
             <span>振幅：</span>
             <span>{zindex.zf} %</span>
           </section>
+          {conciseSetting && (
+            <section>
+              <span>指数代码：</span>
+              <span>{zindex.zindexCode}</span>
+            </section>
+          )}
         </div>
       </Collapse>
     </div>

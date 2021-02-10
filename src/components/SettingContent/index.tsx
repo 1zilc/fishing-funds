@@ -5,6 +5,7 @@ import { Checkbox, Radio } from 'antd';
 import { ReactComponent as SettingIcon } from '../../assets/icons/setting.svg';
 import { ReactComponent as LinkIcon } from '../../assets/icons/link.svg';
 import { ReactComponent as LineCharIcon } from '../../assets/icons/line-chart.svg';
+import { ReactComponent as TShirtIcon } from '../../assets/icons/t-shirt.svg';
 
 import Logo from '../Logo';
 
@@ -30,12 +31,16 @@ const { app } = remote;
 
 const SettingContent: React.FC<SettingContentProps> = (props) => {
   const {
+    conciseSetting,
     autoStartSetting,
     autoFreshSetting,
     freshDelaySetting,
   } = getSystemSetting();
 
   const fundApiTypeSetting = getFundApiTypeSetting();
+  // 外观设置
+  const [concise, setConcise] = useState(conciseSetting);
+  // 通用设置
   const [autoStart, setAutoStart] = useState(autoStartSetting);
   const [autoFresh, setAutoFresh] = useState(autoFreshSetting);
   const [freshDelay, setFreshDelay] = useState(freshDelaySetting);
@@ -44,6 +49,7 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
   const onSave = () => {
     setFundApiTypeSetting(fundapiType);
     setSystemSetting({
+      conciseSetting: concise,
       autoStartSetting: autoStart,
       autoFreshSetting: autoFresh,
       freshDelaySetting: freshDelay || 1,
@@ -55,6 +61,7 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
   };
 
   useEffect(() => {
+    setConcise(conciseSetting);
     setAutoStart(autoStartSetting);
     setAutoFresh(autoFreshSetting);
     setFreshDelay(freshDelaySetting);
@@ -106,6 +113,22 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
                 好买基金
               </Radio>
             </Radio.Group>
+          </div>
+        </div>
+
+        <div>
+          <div className={styles.title}>
+            <TShirtIcon />
+            <span>外观设置</span>
+          </div>
+          <div className={styles.setting}>
+            <section>
+              <label>简洁模式：</label>
+              <Checkbox
+                checked={concise}
+                onChange={(e) => setConcise(e.target.checked)}
+              />
+            </section>
           </div>
         </div>
         <div>

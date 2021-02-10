@@ -1,5 +1,6 @@
 import React, { Fragment } from 'react';
 import { render } from 'react-dom';
+import dayjs from 'dayjs';
 import { Provider } from 'react-redux';
 import App from './App';
 import { configureStore } from './store/configureStore';

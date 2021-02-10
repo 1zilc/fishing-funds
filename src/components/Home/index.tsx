@@ -33,6 +33,7 @@ import { getCurrentHours } from '../../actions/time';
 import * as Enums from '../../utils/enums';
 import * as Utils from '../../utils';
 import styles from './index.scss';
+import dayjs from 'dayjs';
 
 export interface HomeProps {
   tabs: TabsState;
@@ -73,6 +74,7 @@ const Home: React.FC<HomeProps> = ({ updateUpdateTime, tabs }) => {
   const { freshDelaySetting, autoFreshSetting } = getSystemSetting();
   const [funds, setFunds] = useState<(Fund.ResponseItem & Fund.ExtraRow)[]>([]);
   const [zindexs, setZindexs] = useState<Zindex.ResponseItem[]>([]);
+
   const fundsCodeToMap = useMemo(
     () =>
       funds.reduce((map, fund) => {
@@ -94,7 +96,7 @@ const Home: React.FC<HomeProps> = ({ updateUpdateTime, tabs }) => {
     manual: true,
     throttleInterval: 1000 * 2, // 2秒请求一次
     onSuccess: (result) => {
-      const now = new Date().toLocaleString();
+      const now = dayjs().format('YYYY/MM/DD HH:mm:ss');
       sortFunds(
         result
           .filter((_) => !!_)

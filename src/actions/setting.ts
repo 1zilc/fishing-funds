@@ -9,6 +9,7 @@ const app = remote.app;
 export const getSystemSetting: () => System.Setting = () => {
   const { openAtLogin: autoStartSetting } = app.getLoginItemSettings();
   const systemSetting = Utils.GetStorage(CONST_STORAGE.SYSTEM_SETTING, {
+    conciseSetting: false,
     autoStartSetting,
     autoFreshSetting: true,
     freshDelaySetting: 1,

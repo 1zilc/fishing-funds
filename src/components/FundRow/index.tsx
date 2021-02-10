@@ -14,6 +14,7 @@ import EditFundContent from '../EditFundContent';
 import { StoreState } from '../../reducers/types';
 import { ToolbarState } from '../../reducers/toolbar';
 import { deleteFund, calcFund } from '../../actions/fund';
+import { getSystemSetting } from '../../actions/setting';
 import { HomeContext } from '../Home';
 import * as Utils from '../../utils';
 
@@ -33,6 +34,7 @@ const arrowSize = {
 const FundRow: React.FC<RowProps> = (props) => {
   const { fund, toolbar, index } = props;
   const { deleteStatus } = toolbar;
+  const { conciseSetting } = getSystemSetting();
   const { freshFunds, setFunds } = useContext(HomeContext);
 
   const [
@@ -90,12 +92,14 @@ const FundRow: React.FC<RowProps> = (props) => {
             >
               <span className={styles.fundName}>{fund.name}</span>
             </div>
-            <div className={styles.rowBar}>
-              <div>
-                <span className={styles.code}>{fund.fundcode}</span>
-                <span>{fund.gztime.slice(5)}</span>
+            {!conciseSetting && (
+              <div className={styles.rowBar}>
+                <div>
+                  <span className={styles.code}>{fund.fundcode}</span>
+                  <span>{fund.gztime.slice(5)}</span>
+                </div>
               </div>
-            </div>
+            )}
           </div>
           <div
             className={classnames(
@@ -120,6 +124,18 @@ const FundRow: React.FC<RowProps> = (props) => {
       </div>
       <Collapse isOpened={!!fund.collapse}>
         <div className={styles.collapseContent}>
+          {conciseSetting && (
+            <section>
+              <span>基金代码：</span>
+              <span>{fund.fundcode}</span>
+            </section>
+          )}
+          {conciseSetting && (
+            <section>
+              <span>估值时间：</span>
+              <span>{fund.gztime.slice(5)}</span>
+            </section>
+          )}
           <section>
             <span>当前净值：</span>
             <span>{fund.dwjz}</span>
