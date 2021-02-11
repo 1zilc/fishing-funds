@@ -1,9 +1,9 @@
 import NP from 'number-precision';
 import dayjs from 'dayjs';
 
-export const Yang = (num) => {
-  if (num < 0) {
-    return num;
+export const Yang = (num: string | number): string => {
+  if (Number(num) < 0) {
+    return String(num);
   } else {
     return `+${num}`;
   }

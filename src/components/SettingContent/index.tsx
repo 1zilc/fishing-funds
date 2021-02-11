@@ -1,24 +1,27 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import classnames from 'classnames';
-import { InputNumber } from 'antd';
-import { Checkbox, Radio } from 'antd';
-import { ReactComponent as SettingIcon } from '../../assets/icons/setting.svg';
-import { ReactComponent as LinkIcon } from '../../assets/icons/link.svg';
-import { ReactComponent as LineCharIcon } from '../../assets/icons/line-chart.svg';
-import { ReactComponent as TShirtIcon } from '../../assets/icons/t-shirt.svg';
+import { useSelector } from 'react-redux';
+import { InputNumber, Checkbox, Radio, Badge } from 'antd';
 
-import Logo from '../Logo';
+import { ReactComponent as SettingIcon } from '@/assets/icons/setting.svg';
+import { ReactComponent as LinkIcon } from '@/assets/icons/link.svg';
+import { ReactComponent as LineCharIcon } from '@/assets/icons/line-chart.svg';
+import { ReactComponent as TShirtIcon } from '@/assets/icons/t-shirt.svg';
+
+import Logo from '@/components/Logo';
 
 import {
   getSystemSetting,
   setSystemSetting,
   getFundApiTypeSetting,
   setFundApiTypeSetting,
-} from '../../actions/setting';
-import * as Enums from '../../utils/enums';
+} from '@/actions/setting';
+import { StoreState } from '@/reducers/types';
+
+import * as Enums from '@/utils/enums';
 import styles from './index.scss';
 
-const { version } = require('../../package.json');
+const { version } = require('@/package.json');
 
 export interface SettingContentProps {
   show?: boolean;
@@ -36,7 +39,13 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
     autoFreshSetting,
     freshDelaySetting,
   } = getSystemSetting();
+  const contentRef = useRef<HTMLDivElement>(null);
+  const updateInfo = useSelector(
+    (state: StoreState) => state.updater.updateInfo
+  );
+  const isUpdateAvaliable = !!updateInfo.version;
 
+  // 数据来源
   const fundApiTypeSetting = getFundApiTypeSetting();
   // 外观设置
   const [concise, setConcise] = useState(conciseSetting);
@@ -69,7 +78,7 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
   }, [props.show]);
 
   return (
-    <div className={classnames(styles.content)}>
+    <div className={classnames(styles.content)} ref={contentRef}>
       <div className={styles.header}>
         <button className={styles.close} onClick={props.onClose} type="button">
           关闭
@@ -80,9 +89,27 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
         </button>
       </div>
       <div className={styles.body}>
-        <div className={classnames(styles.logo)}>
+        <div
+          className={classnames(styles.logo, {
+            clickable: isUpdateAvaliable,
+          })}
+          onClick={() =>
+            isUpdateAvaliable &&
+            shell.openExternal(
+              'https://github.com/1zilc/fishing-funds/releases'
+            )
+          }
+        >
           <Logo />
-          <div className={styles.appName}>Fishing Funds v{version}</div>
+          {
+            <Badge
+              count={isUpdateAvaliable ? `v${updateInfo.version} 可更新` : 0}
+              style={{ fontSize: 8 }}
+              size="small"
+            >
+              <div className={styles.appName}>Fishing Funds v{version}</div>
+            </Badge>
+          }
         </div>
         <div>
           <div className={styles.title}>

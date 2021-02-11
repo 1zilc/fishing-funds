@@ -1,42 +1,46 @@
 import React, { useState, useContext } from 'react';
 import classnames from 'classnames';
-import { bindActionCreators, Dispatch } from 'redux';
-import { connect } from 'react-redux';
+import { Badge } from 'antd';
+
+import { useSelector, useDispatch } from 'react-redux';
 import Drawer from 'rc-drawer';
 import { useBoolean } from 'ahooks';
 
-import { ReactComponent as AddIcon } from '../../assets/icons/add.svg';
-import { ReactComponent as MenuAddIcon } from '../../assets/icons/menu-add.svg';
-import { ReactComponent as DeleteIcon } from '../../assets/icons/delete.svg';
-import { ReactComponent as RefreshIcon } from '../../assets/icons/refresh.svg';
-import { ReactComponent as QRcodeIcon } from '../../assets/icons/qr-code.svg';
-import { ReactComponent as SettingIcon } from '../../assets/icons/setting.svg';
-import { TabsState } from '../../reducers/tabs';
-import AddFundContent from '../AddFundContent';
-import SettingContent from '../SettingContent';
-import PayContent from '../PayContent';
-import EditZindexContent from '../EditZindexContent';
-import {
-  toggleToolbarDeleteStatus,
-  changeToolbarDeleteStatus,
-} from '../../actions/toolbar';
-import { StoreState } from '../../reducers/types';
-import { HomeContext } from '../Home';
-import * as Enums from '../../utils/enums';
+import { ReactComponent as AddIcon } from '@/assets/icons/add.svg';
+import { ReactComponent as MenuAddIcon } from '@/assets/icons/menu-add.svg';
+import { ReactComponent as DeleteIcon } from '@/assets/icons/delete.svg';
+import { ReactComponent as RefreshIcon } from '@/assets/icons/refresh.svg';
+import { ReactComponent as QRcodeIcon } from '@/assets/icons/qr-code.svg';
+import { ReactComponent as SettingIcon } from '@/assets/icons/setting.svg';
+
+import AddFundContent from '@/components/AddFundContent';
+import SettingContent from '@/components/SettingContent';
+import PayContent from '@/components/PayContent';
+import { HomeContext } from '@/components/Home';
+import EditZindexContent from '@/components/EditZindexContent';
+
+import { toggleToolbarDeleteStatus } from '@/actions/toolbar';
+
+import { StoreState } from '@/reducers/types';
+
+import * as Enums from '@/utils/enums';
 import styles from './index.scss';
 
-export interface ToolBarProps {
-  tabs: TabsState;
-  toggleToolbarDeleteStatus: () => void;
-}
+export interface ToolBarProps {}
 
 const iconSize = { height: 18, width: 18 };
 
-const ToolBar: React.FC<ToolBarProps> = ({
-  tabs,
-  toggleToolbarDeleteStatus,
-}) => {
+const ToolBar: React.FC<ToolBarProps> = () => {
+  const dispatch = useDispatch();
   const { freshFunds, freshZindexs } = useContext(HomeContext);
+
+  const updateInfo = useSelector(
+    (state: StoreState) => state.updater.updateInfo
+  );
+  const tabsActiveKey = useSelector(
+    (state: StoreState) => state.tabs.activeKey
+  );
+
   const [
     showAddFundDrawer,
     {
@@ -73,26 +77,28 @@ const ToolBar: React.FC<ToolBarProps> = ({
   return (
     <>
       <div className={styles.bar}>
-        {tabs.activeKey === Enums.TabKeyType.Funds && (
+        {tabsActiveKey === Enums.TabKeyType.Funds && (
           <AddIcon style={{ ...iconSize }} onClick={openAddFundDrawer} />
         )}
-        {tabs.activeKey === Enums.TabKeyType.Zindex && (
+        {tabsActiveKey === Enums.TabKeyType.Zindex && (
           <MenuAddIcon style={{ ...iconSize }} onClick={openEditZindexDrawer} />
         )}
-        {tabs.activeKey === Enums.TabKeyType.Funds && (
+        {tabsActiveKey === Enums.TabKeyType.Funds && (
           <DeleteIcon
             style={{ ...iconSize }}
-            onClick={toggleToolbarDeleteStatus}
+            onClick={() => dispatch(toggleToolbarDeleteStatus())}
           />
         )}
-        {tabs.activeKey === Enums.TabKeyType.Funds && (
+        {tabsActiveKey === Enums.TabKeyType.Funds && (
           <RefreshIcon style={{ ...iconSize }} onClick={freshFunds} />
         )}
-        {tabs.activeKey === Enums.TabKeyType.Zindex && (
+        {tabsActiveKey === Enums.TabKeyType.Zindex && (
           <RefreshIcon style={{ ...iconSize }} onClick={freshZindexs} />
         )}
         <QRcodeIcon style={{ ...iconSize }} onClick={openPayDrawer} />
-        <SettingIcon style={{ ...iconSize }} onClick={openSettingDrawer} />
+        <Badge dot={!!updateInfo.version}>
+          <SettingIcon style={{ ...iconSize }} onClick={openSettingDrawer} />
+        </Badge>
       </div>
 
       <Drawer
@@ -171,16 +177,4 @@ const ToolBar: React.FC<ToolBarProps> = ({
   );
 };
 
-const connector = connect(
-  (state: StoreState) => ({
-    toolbar: state.toolbar,
-    tabs: state.tabs,
-  }),
-  (dispatch: Dispatch) =>
-    bindActionCreators(
-      { toggleToolbarDeleteStatus, changeToolbarDeleteStatus },
-      dispatch
-    )
-);
-
-export default connector(ToolBar);
+export default ToolBar;

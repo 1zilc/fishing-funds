@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { InputNumber } from 'antd';
-import { updateFund } from '../../actions/fund';
+import { updateFund } from '@/actions/fund';
 import styles from './index.scss';
 
 export interface AddFundContentProps {
@@ -11,7 +11,7 @@ export interface AddFundContentProps {
 
 const EditFundContent: React.FC<AddFundContentProps> = (props) => {
   const { fund } = props;
-  const [num, setNum] = useState<number>(fund.cyfe);
+  const [num, setNum] = useState<any>(fund.cyfe);
 
   const onSave = async () => {
     await updateFund({

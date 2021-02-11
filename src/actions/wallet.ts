@@ -1,7 +1,7 @@
-import { GetState, Dispatch } from '../reducers/types';
-import { EyeStatus } from '../utils/enums';
-import CONST_STORAGE from '../constants/storage.json';
-import * as Utils from '../utils';
+import { GetState, Dispatch } from '@/reducers/types';
+import { EyeStatus } from '@/utils/enums';
+import CONST_STORAGE from '@/constants/storage.json';
+import * as Utils from '@/utils';
 
 export const UPDATE_UPTATETIME = 'UPDATE_UPTATETIME';
 export const CHANGE_EYE_STATUS = 'CHANGE_EYE_STATUS';
@@ -9,7 +9,7 @@ export const CHANGE_EYE_STATUS = 'CHANGE_EYE_STATUS';
 export const updateUpdateTime = (updateTime: string) => {
   return {
     type: UPDATE_UPTATETIME,
-    payload: updateTime
+    payload: updateTime,
   };
 };
 
@@ -17,7 +17,7 @@ export const changeEyeStatus = (status: EyeStatus) => {
   Utils.SetStorage(CONST_STORAGE.EYE_STATUS, status);
   return {
     type: CHANGE_EYE_STATUS,
-    payload: status
+    payload: status,
   };
 };
 

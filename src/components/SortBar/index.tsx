@@ -1,13 +1,13 @@
 import React, { useState, useContext, useMemo } from 'react';
 import { useScroll, useDebounceFn } from 'ahooks';
-import { connect } from 'react-redux';
+import { useSelector } from 'react-redux';
 import classsames from 'classnames';
 import { Dropdown, Menu } from 'antd';
 
-import { ReactComponent as SortArrowUpIcon } from '../../assets/icons/sort-arrow-up.svg';
-import { ReactComponent as SortArrowDownIcon } from '../../assets/icons/sort-arrow-down.svg';
-import { ReactComponent as ArrowDownIcon } from '../../assets/icons/arrow-down.svg';
-import { ReactComponent as ArrowUpIcon } from '../../assets/icons/arrow-up.svg';
+import { ReactComponent as SortArrowUpIcon } from '@/assets/icons/sort-arrow-up.svg';
+import { ReactComponent as SortArrowDownIcon } from '@/assets/icons/sort-arrow-down.svg';
+import { ReactComponent as ArrowDownIcon } from '@/assets/icons/arrow-down.svg';
+import { ReactComponent as ArrowUpIcon } from '@/assets/icons/arrow-up.svg';
 
 import {
   getSortMode,
@@ -16,19 +16,17 @@ import {
   troggleFundSortOrder,
   setZindexSortMode,
   troggleZindexSortOrder,
-} from '../../actions/sort';
-import { StoreState } from '../../reducers/types';
-import { TabsState } from '../../reducers/tabs';
-import { HomeContext } from '../Home';
-import * as Enums from '../../utils/enums';
-import * as Utils from '../../utils';
+} from '@/actions/sort';
+import { StoreState } from '@/reducers/types';
+import { TabsState } from '@/reducers/tabs';
+import { HomeContext } from '@/components/Home';
+import * as Enums from '@/utils/enums';
+import * as Utils from '@/utils';
 import styles from './index.scss';
 
-export interface SortBarProps {
-  tabs: TabsState;
-}
+export interface SortBarProps {}
 
-const SortBar: React.FC<SortBarProps> = ({ tabs }) => {
+const SortBar: React.FC<SortBarProps> = () => {
   const {
     sortFunds,
     sortZindexs,
@@ -37,6 +35,7 @@ const SortBar: React.FC<SortBarProps> = ({ tabs }) => {
     setFunds,
     setZindexs,
   } = useContext(HomeContext);
+
   const {
     fundSortMode: { type: fundSortType, order: fundSortorder },
     zindexSortMode: { type: zindexSortType, order: zindexSortorder },
@@ -51,6 +50,9 @@ const SortBar: React.FC<SortBarProps> = ({ tabs }) => {
   const { run: debounceSetVisible } = useDebounceFn(() => setVisible(true), {
     wait: 200,
   });
+  const tabsActiveKey = useSelector(
+    (state: StoreState) => state.tabs.activeKey
+  );
   const [expandAllFunds, expandSomeFunds] = useMemo(() => {
     return [funds.every((_) => _.collapse), funds.some((_) => _.collapse)];
   }, [funds]);
@@ -86,7 +88,7 @@ const SortBar: React.FC<SortBarProps> = ({ tabs }) => {
   });
 
   const renderMenu = () => {
-    switch (tabs.activeKey) {
+    switch (tabsActiveKey) {
       case Enums.TabKeyType.Funds:
         return (
           <div className={styles.bar}>
@@ -207,6 +209,4 @@ const SortBar: React.FC<SortBarProps> = ({ tabs }) => {
   );
 };
 
-export default connect((state: StoreState) => ({
-  tabs: state.tabs,
-}))(SortBar);
+export default SortBar;

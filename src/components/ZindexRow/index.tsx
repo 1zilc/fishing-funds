@@ -1,18 +1,17 @@
 import React, { useContext } from 'react';
-import { useBoolean } from 'ahooks';
 import { Collapse } from 'react-collapse';
 import classnames from 'classnames';
 import { connect } from 'react-redux';
 
-import { ReactComponent as ArrowDownLineIcon } from '../../assets/icons/arrow-down-line.svg';
-import { ReactComponent as ArrowUpLineIcon } from '../../assets/icons/arrow-up-line.svg';
-import { ReactComponent as ArrowDownIcon } from '../../assets/icons/arrow-down.svg';
-import { ReactComponent as ArrowUpIcon } from '../../assets/icons/arrow-up.svg';
+import { ReactComponent as ArrowDownLineIcon } from '@/assets/icons/arrow-down-line.svg';
+import { ReactComponent as ArrowUpLineIcon } from '@/assets/icons/arrow-up-line.svg';
+import { ReactComponent as ArrowDownIcon } from '@/assets/icons/arrow-down.svg';
+import { ReactComponent as ArrowUpIcon } from '@/assets/icons/arrow-up.svg';
 
-import { StoreState } from '../../reducers/types';
-import { getSystemSetting } from '../../actions/setting';
-import { HomeContext } from '../Home';
-import * as Utils from '../../utils';
+import { StoreState } from '@/reducers/types';
+import { getSystemSetting } from '@/actions/setting';
+import { HomeContext } from '@/components/Home';
+import * as Utils from '@/utils';
 
 import styles from './index.scss';
 
@@ -127,7 +126,7 @@ const ZindexRow: React.FC<RowProps> = (props) => {
               <span
                 className={classnames(zindex.zdd < 0 ? 'down-text' : 'up-text')}
               >
-                {zindex.zdd}
+                {Utils.Yang(zindex.zdd)}
               </span>
             </section>
           )}
@@ -137,7 +136,7 @@ const ZindexRow: React.FC<RowProps> = (props) => {
               <span
                 className={classnames(zindex.zdf < 0 ? 'down-text' : 'up-text')}
               >
-                {zindex.zdf}
+                {Utils.Yang(zindex.zdf)} %
               </span>
             </section>
           )}
@@ -195,6 +194,4 @@ const ZindexRow: React.FC<RowProps> = (props) => {
   );
 };
 
-export default connect((state: StoreState) => ({
-  toolbar: state.toolbar,
-}))(ZindexRow);
+export default ZindexRow;

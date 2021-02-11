@@ -1,11 +1,10 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import { render } from 'react-dom';
-import dayjs from 'dayjs';
 import { Provider } from 'react-redux';
-import App from './App';
+import App from '@/App';
 import { configureStore } from './store/configureStore';
 import 'electron-disable-file-drop';
-import './utils/window';
+import '@/utils/window';
 
 const store = configureStore();
 render(

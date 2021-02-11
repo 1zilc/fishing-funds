@@ -1,18 +1,15 @@
-import { GetState, Dispatch } from '../reducers/types';
-
 export const CHANGE_DELETE_STATUS = 'CHANGE_DELETE_STATUS';
+export const TOGGLE_DELETE_STATUS = 'TOGGLE_DELETE_STATUS';
 
-export function toggleToolbarDeleteStatus() {
-  return (dispatch: Dispatch, getState: GetState) => {
-    const { toolbar } = getState();
-    const { deleteStatus } = toolbar;
-    dispatch(changeToolbarDeleteStatus(!deleteStatus));
+export const toggleToolbarDeleteStatus = () => {
+  return {
+    type: TOGGLE_DELETE_STATUS,
   };
-}
+};
 
-export function changeToolbarDeleteStatus(status: boolean) {
+export const changeToolbarDeleteStatus = (status: boolean) => {
   return {
     type: CHANGE_DELETE_STATUS,
-    payload: status
+    payload: status,
   };
-}
+};

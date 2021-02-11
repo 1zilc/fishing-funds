@@ -2,21 +2,21 @@ import React, { useContext } from 'react';
 import { useBoolean } from 'ahooks';
 import { Collapse } from 'react-collapse';
 import classnames from 'classnames';
-import { connect } from 'react-redux';
+import { useSelector } from 'react-redux';
 import Drawer from 'rc-drawer';
 
-import { ReactComponent as EditIcon } from '../../assets/icons/edit.svg';
-import { ReactComponent as RemoveIcon } from '../../assets/icons/remove.svg';
-import { ReactComponent as ArrowDownIcon } from '../../assets/icons/arrow-down.svg';
-import { ReactComponent as ArrowUpIcon } from '../../assets/icons/arrow-up.svg';
+import { ReactComponent as EditIcon } from '@/assets/icons/edit.svg';
+import { ReactComponent as RemoveIcon } from '@/assets/icons/remove.svg';
+import { ReactComponent as ArrowDownIcon } from '@/assets/icons/arrow-down.svg';
+import { ReactComponent as ArrowUpIcon } from '@/assets/icons/arrow-up.svg';
 
-import EditFundContent from '../EditFundContent';
-import { StoreState } from '../../reducers/types';
-import { ToolbarState } from '../../reducers/toolbar';
-import { deleteFund, calcFund } from '../../actions/fund';
-import { getSystemSetting } from '../../actions/setting';
+import EditFundContent from '@/components/EditFundContent';
+import { StoreState } from '@/reducers/types';
+import { ToolbarState } from '@/reducers/toolbar';
+import { deleteFund, calcFund } from '@/actions/fund';
+import { getSystemSetting } from '@/actions/setting';
 import { HomeContext } from '../Home';
-import * as Utils from '../../utils';
+import * as Utils from '@/utils';
 
 import styles from './index.scss';
 
@@ -32,10 +32,12 @@ const arrowSize = {
 };
 
 const FundRow: React.FC<RowProps> = (props) => {
-  const { fund, toolbar, index } = props;
-  const { deleteStatus } = toolbar;
+  const { fund, index } = props;
   const { conciseSetting } = getSystemSetting();
   const { freshFunds, setFunds } = useContext(HomeContext);
+  const toolbarDeleteStatus = useSelector(
+    (state: StoreState) => state.toolbar.deleteStatus
+  );
 
   const [
     showEditDrawer,
@@ -111,7 +113,7 @@ const FundRow: React.FC<RowProps> = (props) => {
           </div>
           <div
             className={styles.remove}
-            style={{ width: deleteStatus ? 20 : 0 }}
+            style={{ width: toolbarDeleteStatus ? 20 : 0 }}
           >
             <RemoveIcon
               onClick={(e) => {
@@ -194,6 +196,4 @@ const FundRow: React.FC<RowProps> = (props) => {
   );
 };
 
-export default connect((state: StoreState) => ({
-  toolbar: state.toolbar,
-}))(FundRow);
+export default FundRow;

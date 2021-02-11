@@ -1,10 +1,12 @@
 import React from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
-import CONST_ROUTES from './constants/routes.json';
-import HomePage from './containers/HomePage';
-import './app.global.scss';
+import CONST_ROUTES from '@/constants/routes.json';
+import HomePage from '@/containers/HomePage';
+import Updater from '@/hoc/updater';
 
-export default function App() {
+import '@/app.global.scss';
+
+const App: React.FC<{}> = () => {
   return (
     <Router>
       <Switch>
@@ -12,4 +14,6 @@ export default function App() {
       </Switch>
     </Router>
   );
-}
+};
+
+export default Updater(App);

@@ -1,46 +1,34 @@
 import React, { useEffect, useState, createContext, useMemo } from 'react';
 import { Tabs } from 'antd';
-import { bindActionCreators, Dispatch } from 'redux';
-import { connect } from 'react-redux';
-import { useInterval, useRequest } from 'ahooks';
+import { useDispatch, useSelector } from 'react-redux';
+import { useRequest } from 'ahooks';
 
-import FundRow from '../FundRow';
-import ZindexRow from '../ZindexRow';
-import Toolbar from '../Toolbar';
-import Wallet from '../Wallet/index';
-import LoadingBar from '../LoadingBar';
-import Header from '../Header';
-import Footer from '../Footer';
-import SortBar from '../SortBar';
-import TabsBar from '../TabsBar';
+import FundRow from '@/components/FundRow';
+import ZindexRow from '@/components/ZindexRow';
+import Toolbar from '@/components/Toolbar';
+import Wallet from '@/components/Wallet/index';
+import LoadingBar from '@/components/LoadingBar';
+import Header from '@/components/Header';
+import Footer from '@/components/Footer';
+import SortBar from '@/components/SortBar';
+import TabsBar from '@/components/TabsBar';
 
-import {
-  toggleToolbarDeleteStatus,
-  changeToolbarDeleteStatus,
-} from '../../actions/toolbar';
-import { updateUpdateTime } from '../../actions/wallet';
-import { getFunds, getFundConfig } from '../../actions/fund';
-import { getZindexs } from '../../actions/zindex';
-import { getSystemSetting } from '../../actions/setting';
-import { getSortMode } from '../../actions/sort';
-import { StoreState } from '../../reducers/types';
-import { TabsState } from '../../reducers/tabs';
-import { ToolbarState } from '../../reducers/toolbar';
-import { calcFund } from '../../actions/fund';
-import { getZindexConfig } from '../../actions/zindex';
-import { getCurrentHours } from '../../actions/time';
+import { updateUpdateTime } from '@/actions/wallet';
+import { getFunds, getFundConfig } from '@/actions/fund';
+import { getZindexs } from '@/actions/zindex';
+import { getSystemSetting } from '@/actions/setting';
+import { getSortMode } from '@/actions/sort';
+import { StoreState } from '@/reducers/types';
+import { calcFund } from '@/actions/fund';
+import { getZindexConfig } from '@/actions/zindex';
+import { useWorkDayTimeToDo } from '@/utils/hooks';
 
-import * as Enums from '../../utils/enums';
-import * as Utils from '../../utils';
+import * as Enums from '@/utils/enums';
+import * as Utils from '@/utils';
 import styles from './index.scss';
 import dayjs from 'dayjs';
 
-export interface HomeProps {
-  tabs: TabsState;
-  toolbar: ToolbarState;
-  toggleToolbarDeleteStatus: () => void;
-  updateUpdateTime: (time: string) => void;
-}
+export interface HomeProps {}
 
 export interface HomeContextType {
   funds: (Fund.ResponseItem & Fund.ExtraRow)[];
@@ -70,11 +58,14 @@ export const HomeContext = createContext<HomeContextType>({
   sortZindexs: () => {},
 });
 
-const Home: React.FC<HomeProps> = ({ updateUpdateTime, tabs }) => {
-  const { freshDelaySetting, autoFreshSetting } = getSystemSetting();
+const Home: React.FC<HomeProps> = () => {
+  const dispathch = useDispatch();
+  const { freshDelaySetting } = getSystemSetting();
   const [funds, setFunds] = useState<(Fund.ResponseItem & Fund.ExtraRow)[]>([]);
   const [zindexs, setZindexs] = useState<Zindex.ResponseItem[]>([]);
-
+  const tabsActiveKey = useSelector(
+    (state: StoreState) => state.tabs.activeKey
+  );
   const fundsCodeToMap = useMemo(
     () =>
       funds.reduce((map, fund) => {
@@ -105,7 +96,7 @@ const Home: React.FC<HomeProps> = ({ updateUpdateTime, tabs }) => {
             collapse: fundsCodeToMap[_?.fundcode]?.collapse,
           })) as (Fund.ResponseItem & Fund.ExtraRow)[]
       );
-      updateUpdateTime(now);
+      dispathch(updateUpdateTime(now));
     },
   });
 
@@ -202,23 +193,11 @@ const Home: React.FC<HomeProps> = ({ updateUpdateTime, tabs }) => {
     setZindexs(sortList);
   };
 
-  useInterval(async () => {
-    if (autoFreshSetting) {
-      const timestamp = await getCurrentHours();
-      const isWorkDayTime = Utils.JudgeWorkDayTime(Number(timestamp));
-      if (isWorkDayTime) {
-        runGetFunds();
-      }
-    }
-  }, freshDelaySetting * 1000 * 60);
+  // 间隔时间刷新基金
+  useWorkDayTimeToDo(runGetFunds, freshDelaySetting * 1000 * 60);
 
-  useInterval(async () => {
-    const timestamp = await getCurrentHours();
-    const isWorkDayTime = Utils.JudgeWorkDayTime(Number(timestamp));
-    if (isWorkDayTime) {
-      runGetZindexs();
-    }
-  }, 1000 * 10);
+  // 间隔时间刷新指数
+  useWorkDayTimeToDo(runGetZindexs, 1000 * 10);
 
   useEffect(() => {
     runGetFunds();
@@ -244,9 +223,9 @@ const Home: React.FC<HomeProps> = ({ updateUpdateTime, tabs }) => {
           <SortBar />
         </Header>
         <Tabs
-          defaultActiveKey={String(tabs.activeKey)}
+          defaultActiveKey={String(tabsActiveKey)}
           renderTabBar={() => <></>}
-          activeKey={String(tabs.activeKey)}
+          activeKey={String(tabsActiveKey)}
           animated={{ tabPane: true }}
         >
           <Tabs.TabPane key={Enums.TabKeyType.Funds} forceRender>
@@ -285,18 +264,4 @@ const Home: React.FC<HomeProps> = ({ updateUpdateTime, tabs }) => {
   );
 };
 
-export default connect(
-  (state: StoreState) => ({
-    toolbar: state.toolbar,
-    tabs: state.tabs,
-  }),
-  (dispatch: Dispatch) =>
-    bindActionCreators(
-      {
-        toggleToolbarDeleteStatus,
-        changeToolbarDeleteStatus,
-        updateUpdateTime,
-      },
-      dispatch
-    )
-)(Home);
+export default Home;

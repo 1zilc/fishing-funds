@@ -1,11 +1,5 @@
-import {
-  Dispatch as ReduxDispatch,
-  Store as ReduxStore,
-  Action,
-  AnyAction
-} from 'redux';
-
-import { CHANGE_DELETE_STATUS } from '../actions/toolbar';
+import { AnyAction } from 'redux';
+import { CHANGE_DELETE_STATUS, TOGGLE_DELETE_STATUS } from '../actions/toolbar';
 
 export interface ToolbarState {
   deleteStatus: boolean;
@@ -13,7 +7,7 @@ export interface ToolbarState {
 
 export default function toolbar(
   state = {
-    deleteStatus: false
+    deleteStatus: false,
   },
   action: AnyAction
 ) {
@@ -21,7 +15,13 @@ export default function toolbar(
     case CHANGE_DELETE_STATUS:
       return {
         ...state,
-        deleteStatus: action.payload
+        deleteStatus: action.payload,
+      };
+    case TOGGLE_DELETE_STATUS:
+      console.log(state.deleteStatus);
+      return {
+        ...state,
+        deleteStatus: !state.deleteStatus,
       };
     default:
       return state;
