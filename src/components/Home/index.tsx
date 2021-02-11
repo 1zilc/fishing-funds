@@ -60,7 +60,7 @@ export const HomeContext = createContext<HomeContextType>({
 
 const Home: React.FC<HomeProps> = () => {
   const dispathch = useDispatch();
-  const { freshDelaySetting } = getSystemSetting();
+  const { freshDelaySetting, autoFreshSetting } = getSystemSetting();
   const [funds, setFunds] = useState<(Fund.ResponseItem & Fund.ExtraRow)[]>([]);
   const [zindexs, setZindexs] = useState<Zindex.ResponseItem[]>([]);
   const tabsActiveKey = useSelector(
@@ -194,7 +194,10 @@ const Home: React.FC<HomeProps> = () => {
   };
 
   // 间隔时间刷新基金
-  useWorkDayTimeToDo(runGetFunds, freshDelaySetting * 1000 * 60);
+  useWorkDayTimeToDo(
+    () => autoFreshSetting && runGetFunds(),
+    freshDelaySetting * 1000 * 60
+  );
 
   // 间隔时间刷新指数
   useWorkDayTimeToDo(runGetZindexs, 1000 * 10);
