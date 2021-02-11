@@ -1,4 +1,3 @@
-import NP from 'number-precision';
 import * as Utils from '../utils';
 import * as Enums from '../utils/enums';
 import CONST_STORAGE from '../constants/storage.json';
