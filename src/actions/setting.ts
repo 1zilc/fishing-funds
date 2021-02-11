@@ -13,6 +13,7 @@ export const getSystemSetting: () => System.Setting = () => {
     autoStartSetting,
     autoFreshSetting: true,
     freshDelaySetting: 1,
+    autoCheckUpdateSetting: true,
   });
   return systemSetting;
 };

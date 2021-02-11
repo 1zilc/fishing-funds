@@ -60,4 +60,9 @@ a:hover {
 
 .clickable {
   cursor: pointer;
+  transition: opacity .2s;
+
+  &:hover {
+    opacity: .8;
+  }
 }

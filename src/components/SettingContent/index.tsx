@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import classnames from 'classnames';
 import { useSelector } from 'react-redux';
-import { InputNumber, Checkbox, Radio, Badge } from 'antd';
+import { InputNumber, Checkbox, Radio, Badge, Switch } from 'antd';
 
 import { ReactComponent as SettingIcon } from '@/assets/icons/setting.svg';
 import { ReactComponent as LinkIcon } from '@/assets/icons/link.svg';
@@ -38,6 +38,7 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
     autoStartSetting,
     autoFreshSetting,
     freshDelaySetting,
+    autoCheckUpdateSetting,
   } = getSystemSetting();
   const contentRef = useRef<HTMLDivElement>(null);
   const updateInfo = useSelector(
@@ -54,6 +55,9 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
   const [autoFresh, setAutoFresh] = useState(autoFreshSetting);
   const [freshDelay, setFreshDelay] = useState(freshDelaySetting);
   const [fundapiType, setFundApiType] = useState(fundApiTypeSetting);
+  const [autoCheckUpdate, setAutoCheckUpdate] = useState(
+    autoCheckUpdateSetting
+  );
 
   const onSave = () => {
     setFundApiTypeSetting(fundapiType);
@@ -62,6 +66,7 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
       autoStartSetting: autoStart,
       autoFreshSetting: autoFresh,
       freshDelaySetting: freshDelay || 1,
+      autoCheckUpdateSetting: autoCheckUpdate,
     });
     app.setLoginItemSettings({
       openAtLogin: autoStart,
@@ -75,6 +80,7 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
     setAutoFresh(autoFreshSetting);
     setFreshDelay(freshDelaySetting);
     setFundApiType(fundApiTypeSetting);
+    setAutoCheckUpdate(autoCheckUpdateSetting);
   }, [props.show]);
 
   return (
@@ -101,15 +107,13 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
           }
         >
           <Logo />
-          {
-            <Badge
-              count={isUpdateAvaliable ? `v${updateInfo.version} 可更新` : 0}
-              style={{ fontSize: 8 }}
-              size="small"
-            >
-              <div className={styles.appName}>Fishing Funds v{version}</div>
-            </Badge>
-          }
+          <Badge
+            count={isUpdateAvaliable ? `v${updateInfo.version} 可更新` : 0}
+            style={{ fontSize: 8 }}
+            size="small"
+          >
+            <div className={styles.appName}>Fishing Funds v{version}</div>
+          </Badge>
         </div>
         <div>
           <div className={styles.title}>
@@ -151,10 +155,7 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
           <div className={styles.setting}>
             <section>
               <label>简洁模式：</label>
-              <Checkbox
-                checked={concise}
-                onChange={(e) => setConcise(e.target.checked)}
-              />
+              <Switch size="small" checked={concise} onChange={setConcise} />
             </section>
           </div>
         </div>
@@ -166,16 +167,18 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
           <div className={styles.setting}>
             <section>
               <label>开机自启：</label>
-              <Checkbox
+              <Switch
+                size="small"
                 checked={autoStart}
-                onChange={(e) => setAutoStart(e.target.checked)}
+                onChange={setAutoStart}
               />
             </section>
             <section>
               <label>自动刷新：</label>
-              <Checkbox
+              <Switch
+                size="small"
                 checked={autoFresh}
-                onChange={(e) => setAutoFresh(e.target.checked)}
+                onChange={setAutoFresh}
               />
             </section>
             <section>
@@ -193,6 +196,14 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
                 style={{
                   width: '100%',
                 }}
+              />
+            </section>
+            <section>
+              <label>检查更新：</label>
+              <Switch
+                size="small"
+                checked={autoCheckUpdate}
+                onChange={setAutoCheckUpdate}
               />
             </section>
           </div>

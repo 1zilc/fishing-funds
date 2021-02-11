@@ -4,5 +4,6 @@ declare namespace System {
     autoStartSetting: boolean;
     autoFreshSetting: boolean;
     freshDelaySetting: number;
+    autoCheckUpdateSetting: boolean;
   }
 }
