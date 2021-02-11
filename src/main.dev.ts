@@ -9,7 +9,7 @@
  * `./app/main.prod.js` using webpack. This gives us some performance wins.
  */
 import path from 'path';
-import { app, globalShortcut, nativeImage } from 'electron';
+import { app, globalShortcut, ipcMain, nativeImage } from 'electron';
 import AppUpdater from './autoUpdater';
 import { menubar } from 'menubar';
 
@@ -74,7 +74,7 @@ const createMenubar = async () => {
       transparent: false,
       alwaysOnTop: false,
       width: 300,
-      height: 480,
+      height: 500,
       minHeight: 400,
       minWidth: 300,
       maxHeight: 800,
@@ -104,7 +104,11 @@ const createMenubar = async () => {
 
   // eslint-disable-next-line
   // TODO: 暂时关闭自动更新，需要apple签名
-  // new AppUpdater(nativeIcon);
+
+  ipcMain.on('check-update', (e) => {
+    new AppUpdater({ icon: nativeIcon, win: mb.window });
+  });
+  // new AppUpdater({ icon: nativeIcon, win: mb.window });
 };
 
 /**

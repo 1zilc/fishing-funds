@@ -1,29 +1,28 @@
 import React, { useContext } from 'react';
 import classnames from 'classnames';
-import { bindActionCreators, Dispatch } from 'redux';
-import { connect } from 'react-redux';
-import { ReactComponent as ConsumptionIcon } from '../../assets/icons/consumption.svg';
-import { ReactComponent as WalletIcon } from '../../assets/icons/wallet.svg';
-import { ReactComponent as EyeIcon } from '../../assets/icons/eye.svg';
-import { ReactComponent as EyeCloseIcon } from '../../assets/icons/eye-close.svg';
-import { StoreState } from '../../reducers/types';
-import { toggleEyeStatus } from '../../actions/wallet';
-import * as Enums from '../../utils/enums';
-import * as Utils from '../../utils';
-import { calcFunds } from '../../actions/fund';
-import { WalletState } from '../../reducers/wallet';
-import { HomeContext } from '../Home';
-import { HeaderContext } from '../Header';
+import { useDispatch, useSelector } from 'react-redux';
+import { ReactComponent as ConsumptionIcon } from '@/assets/icons/consumption.svg';
+import { ReactComponent as WalletIcon } from '@/assets/icons/wallet.svg';
+import { ReactComponent as EyeIcon } from '@/assets/icons/eye.svg';
+import { ReactComponent as EyeCloseIcon } from '@/assets/icons/eye-close.svg';
+
+import { HomeContext } from '@/components/Home';
+import { HeaderContext } from '@/components/Header';
+
+import { StoreState } from '@/reducers/types';
+import { toggleEyeStatus } from '@/actions/wallet';
+import { calcFunds } from '@/actions/fund';
+import * as Enums from '@/utils/enums';
+import * as Utils from '@/utils';
 import styles from './index.scss';
 
-export interface WalletProps {
-  wallet: WalletState;
-  toggleEyeStatus: () => void;
-}
+export interface WalletProps {}
 
-const Wallet: React.FC<WalletProps> = ({ wallet, toggleEyeStatus }) => {
+const Wallet: React.FC<WalletProps> = () => {
+  const dispatch = useDispatch();
   const { funds } = useContext(HomeContext);
   const { miniMode } = useContext(HeaderContext);
+  const wallet = useSelector((state: StoreState) => state.wallet);
   const { zje, sygz } = calcFunds(funds);
   const eyeOpen = wallet.eyeStatus === Enums.EyeStatus.Open;
   const display_zje = eyeOpen ? zje.toFixed(2) : Utils.Encrypt(zje.toFixed(2));
@@ -54,26 +53,15 @@ const Wallet: React.FC<WalletProps> = ({ wallet, toggleEyeStatus }) => {
           </div>
         </div>
       </div>
-      <div className={styles.eye}>
+      <div className={styles.eye} onClick={() => dispatch(toggleEyeStatus())}>
         {wallet.eyeStatus === Enums.EyeStatus.Open ? (
-          <EyeIcon onClick={toggleEyeStatus} />
+          <EyeIcon />
         ) : (
-          <EyeCloseIcon onClick={toggleEyeStatus} />
+          <EyeCloseIcon />
         )}
       </div>
     </div>
   );
 };
 
-export default connect(
-  (state: StoreState) => ({
-    wallet: state.wallet,
-  }),
-  (dispatch: Dispatch) =>
-    bindActionCreators(
-      {
-        toggleEyeStatus,
-      },
-      dispatch
-    )
-)(Wallet);
+export default Wallet;

@@ -4,6 +4,7 @@ import { History } from 'history';
 import toolbar from './toolbar';
 import wallet from './wallet';
 import tabs from './tabs';
+import updater from './updater';
 
 export default function createRootReducer(history: History) {
   return combineReducers({
@@ -11,5 +12,6 @@ export default function createRootReducer(history: History) {
     toolbar,
     wallet,
     tabs,
+    updater,
   });
 }

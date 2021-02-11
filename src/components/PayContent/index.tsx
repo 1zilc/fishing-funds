@@ -1,11 +1,11 @@
 import React from 'react';
 import classnames from 'classnames';
 import Tilt from 'react-tilt';
-import wechatQRcodeImage from '../../assets/qrcode/wechat.png';
-import alipayQRcodeImage from '../../assets/qrcode/alipay.png';
+import wechatQRcodeImage from '@/assets/qrcode/wechat.png';
+import alipayQRcodeImage from '@/assets/qrcode/alipay.png';
 
-import { ReactComponent as WechatPayIcon } from '../../assets/icons/wechat-pay.svg';
-import { ReactComponent as AliPayIcon } from '../../assets/icons/alipay.svg';
+import { ReactComponent as WechatPayIcon } from '@/assets/icons/wechat-pay.svg';
+import { ReactComponent as AliPayIcon } from '@/assets/icons/alipay.svg';
 
 import styles from './index.scss';
 export interface SettingContentProps {
@@ -13,9 +13,6 @@ export interface SettingContentProps {
   onEnter: () => void;
   onClose: () => void;
 }
-
-const { remote, shell } = require('electron');
-const { app } = remote;
 
 const PayContent: React.FC<SettingContentProps> = (props) => {
   return (

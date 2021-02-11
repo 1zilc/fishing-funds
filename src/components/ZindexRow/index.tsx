@@ -1,17 +1,17 @@
 import React, { useContext } from 'react';
-import { useBoolean } from 'ahooks';
 import { Collapse } from 'react-collapse';
 import classnames from 'classnames';
 import { connect } from 'react-redux';
 
-import { ReactComponent as ArrowDownLineIcon } from '../../assets/icons/arrow-down-line.svg';
-import { ReactComponent as ArrowUpLineIcon } from '../../assets/icons/arrow-up-line.svg';
-import { ReactComponent as ArrowDownIcon } from '../../assets/icons/arrow-down.svg';
-import { ReactComponent as ArrowUpIcon } from '../../assets/icons/arrow-up.svg';
+import { ReactComponent as ArrowDownLineIcon } from '@/assets/icons/arrow-down-line.svg';
+import { ReactComponent as ArrowUpLineIcon } from '@/assets/icons/arrow-up-line.svg';
+import { ReactComponent as ArrowDownIcon } from '@/assets/icons/arrow-down.svg';
+import { ReactComponent as ArrowUpIcon } from '@/assets/icons/arrow-up.svg';
 
-import { StoreState } from '../../reducers/types';
-import { HomeContext } from '../Home';
-import * as Utils from '../../utils';
+import { StoreState } from '@/reducers/types';
+import { getSystemSetting } from '@/actions/setting';
+import { HomeContext } from '@/components/Home';
+import * as Utils from '@/utils';
 
 import styles from './index.scss';
 
@@ -27,6 +27,7 @@ const arrowSize = {
 
 const ZindexRow: React.FC<RowProps> = (props) => {
   const { zindex } = props;
+  const { conciseSetting } = getSystemSetting();
   const { setZindexs } = useContext(HomeContext);
 
   const onToggleCollapse = () => {
@@ -67,18 +68,20 @@ const ZindexRow: React.FC<RowProps> = (props) => {
             >
               <span className={styles.zindexName}>{zindex.name}</span>
             </div>
-            <div className={styles.rowBar}>
-              <div>
-                <span className={styles.code}>{zindex.zindexCode}</span>
-                {/* <span>{zindex.gztime.slice(5)}</span> */}
+            {!conciseSetting && (
+              <div className={styles.rowBar}>
+                <div>
+                  <span className={styles.code}>{zindex.zindexCode}</span>
+                  {/* <span>{zindex.gztime.slice(5)}</span> */}
+                </div>
               </div>
-            </div>
+            )}
           </div>
           <div className={classnames(styles.value)}>
             <div
               className={classnames(
                 styles.zsz,
-                zindex.zdf < 0 ? styles.down : styles.up
+                zindex.zdf < 0 ? 'down-text' : 'up-text'
               )}
             >
               {zindex.zsz}
@@ -92,29 +95,51 @@ const ZindexRow: React.FC<RowProps> = (props) => {
                 />
               )}
             </div>
-            <div className={styles.zd}>
-              <div
-                className={classnames(
-                  styles.zdd,
-                  zindex.zdd < 0 ? styles.down : styles.up
-                )}
-              >
-                {Utils.Yang(zindex.zdd)}
+            {!conciseSetting && (
+              <div className={styles.zd}>
+                <div
+                  className={classnames(
+                    styles.zdd,
+                    zindex.zdd < 0 ? 'down-text' : 'up-text'
+                  )}
+                >
+                  {Utils.Yang(zindex.zdd)}
+                </div>
+                <div
+                  className={classnames(
+                    styles.zdf,
+                    zindex.zdf < 0 ? 'down-text' : 'up-text'
+                  )}
+                >
+                  {Utils.Yang(zindex.zdf)} %
+                </div>
               </div>
-              <div
-                className={classnames(
-                  styles.zdf,
-                  zindex.zdf < 0 ? styles.down : styles.up
-                )}
-              >
-                {Utils.Yang(zindex.zdf)} %
-              </div>
-            </div>
+            )}
           </div>
         </div>
       </div>
       <Collapse isOpened={!!zindex.collapse}>
         <div className={styles.collapseContent}>
+          {conciseSetting && (
+            <section>
+              <span>涨跌点：</span>
+              <span
+                className={classnames(zindex.zdd < 0 ? 'down-text' : 'up-text')}
+              >
+                {Utils.Yang(zindex.zdd)}
+              </span>
+            </section>
+          )}
+          {conciseSetting && (
+            <section>
+              <span>涨跌幅：</span>
+              <span
+                className={classnames(zindex.zdf < 0 ? 'down-text' : 'up-text')}
+              >
+                {Utils.Yang(zindex.zdf)} %
+              </span>
+            </section>
+          )}
           <section>
             <span>今开：</span>
             <span
@@ -157,12 +182,16 @@ const ZindexRow: React.FC<RowProps> = (props) => {
             <span>振幅：</span>
             <span>{zindex.zf} %</span>
           </section>
+          {conciseSetting && (
+            <section>
+              <span>指数代码：</span>
+              <span>{zindex.zindexCode}</span>
+            </section>
+          )}
         </div>
       </Collapse>
     </div>
   );
 };
 
-export default connect((state: StoreState) => ({
-  toolbar: state.toolbar,
-}))(ZindexRow);
+export default ZindexRow;

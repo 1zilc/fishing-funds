@@ -1,23 +1,27 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import classnames from 'classnames';
-import { InputNumber } from 'antd';
-import { Checkbox, Radio } from 'antd';
-import { ReactComponent as SettingIcon } from '../../assets/icons/setting.svg';
-import { ReactComponent as LinkIcon } from '../../assets/icons/link.svg';
-import { ReactComponent as LineCharIcon } from '../../assets/icons/line-chart.svg';
+import { useSelector } from 'react-redux';
+import { InputNumber, Checkbox, Radio, Badge, Switch } from 'antd';
 
-import Logo from '../Logo';
+import { ReactComponent as SettingIcon } from '@/assets/icons/setting.svg';
+import { ReactComponent as LinkIcon } from '@/assets/icons/link.svg';
+import { ReactComponent as LineCharIcon } from '@/assets/icons/line-chart.svg';
+import { ReactComponent as TShirtIcon } from '@/assets/icons/t-shirt.svg';
+
+import Logo from '@/components/Logo';
 
 import {
   getSystemSetting,
   setSystemSetting,
   getFundApiTypeSetting,
   setFundApiTypeSetting,
-} from '../../actions/setting';
-import * as Enums from '../../utils/enums';
+} from '@/actions/setting';
+import { StoreState } from '@/reducers/types';
+
+import * as Enums from '@/utils/enums';
 import styles from './index.scss';
 
-const { version } = require('../../package.json');
+const { version } = require('@/package.json');
 
 export interface SettingContentProps {
   show?: boolean;
@@ -30,23 +34,39 @@ const { app } = remote;
 
 const SettingContent: React.FC<SettingContentProps> = (props) => {
   const {
+    conciseSetting,
     autoStartSetting,
     autoFreshSetting,
     freshDelaySetting,
+    autoCheckUpdateSetting,
   } = getSystemSetting();
+  const contentRef = useRef<HTMLDivElement>(null);
+  const updateInfo = useSelector(
+    (state: StoreState) => state.updater.updateInfo
+  );
+  const isUpdateAvaliable = !!updateInfo.version;
 
+  // 数据来源
   const fundApiTypeSetting = getFundApiTypeSetting();
+  // 外观设置
+  const [concise, setConcise] = useState(conciseSetting);
+  // 通用设置
   const [autoStart, setAutoStart] = useState(autoStartSetting);
   const [autoFresh, setAutoFresh] = useState(autoFreshSetting);
   const [freshDelay, setFreshDelay] = useState(freshDelaySetting);
   const [fundapiType, setFundApiType] = useState(fundApiTypeSetting);
+  const [autoCheckUpdate, setAutoCheckUpdate] = useState(
+    autoCheckUpdateSetting
+  );
 
   const onSave = () => {
     setFundApiTypeSetting(fundapiType);
     setSystemSetting({
+      conciseSetting: concise,
       autoStartSetting: autoStart,
       autoFreshSetting: autoFresh,
       freshDelaySetting: freshDelay || 1,
+      autoCheckUpdateSetting: autoCheckUpdate,
     });
     app.setLoginItemSettings({
       openAtLogin: autoStart,
@@ -55,14 +75,16 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
   };
 
   useEffect(() => {
+    setConcise(conciseSetting);
     setAutoStart(autoStartSetting);
     setAutoFresh(autoFreshSetting);
     setFreshDelay(freshDelaySetting);
     setFundApiType(fundApiTypeSetting);
+    setAutoCheckUpdate(autoCheckUpdateSetting);
   }, [props.show]);
 
   return (
-    <div className={classnames(styles.content)}>
+    <div className={classnames(styles.content)} ref={contentRef}>
       <div className={styles.header}>
         <button className={styles.close} onClick={props.onClose} type="button">
           关闭
@@ -73,9 +95,25 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
         </button>
       </div>
       <div className={styles.body}>
-        <div className={classnames(styles.logo)}>
+        <div
+          className={classnames(styles.logo, {
+            clickable: isUpdateAvaliable,
+          })}
+          onClick={() =>
+            isUpdateAvaliable &&
+            shell.openExternal(
+              'https://github.com/1zilc/fishing-funds/releases'
+            )
+          }
+        >
           <Logo />
-          <div className={styles.appName}>Fishing Funds v{version}</div>
+          <Badge
+            count={isUpdateAvaliable ? `v${updateInfo.version} 可更新` : 0}
+            style={{ fontSize: 8 }}
+            size="small"
+          >
+            <div className={styles.appName}>Fishing Funds v{version}</div>
+          </Badge>
         </div>
         <div>
           <div className={styles.title}>
@@ -108,6 +146,19 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
             </Radio.Group>
           </div>
         </div>
+
+        <div>
+          <div className={styles.title}>
+            <TShirtIcon />
+            <span>外观设置</span>
+          </div>
+          <div className={styles.setting}>
+            <section>
+              <label>简洁模式：</label>
+              <Switch size="small" checked={concise} onChange={setConcise} />
+            </section>
+          </div>
+        </div>
         <div>
           <div className={styles.title}>
             <SettingIcon />
@@ -116,16 +167,18 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
           <div className={styles.setting}>
             <section>
               <label>开机自启：</label>
-              <Checkbox
+              <Switch
+                size="small"
                 checked={autoStart}
-                onChange={(e) => setAutoStart(e.target.checked)}
+                onChange={setAutoStart}
               />
             </section>
             <section>
               <label>自动刷新：</label>
-              <Checkbox
+              <Switch
+                size="small"
                 checked={autoFresh}
-                onChange={(e) => setAutoFresh(e.target.checked)}
+                onChange={setAutoFresh}
               />
             </section>
             <section>
@@ -143,6 +196,14 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
                 style={{
                   width: '100%',
                 }}
+              />
+            </section>
+            <section>
+              <label>检查更新：</label>
+              <Switch
+                size="small"
+                checked={autoCheckUpdate}
+                onChange={setAutoCheckUpdate}
               />
             </section>
           </div>

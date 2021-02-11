@@ -1,14 +1,20 @@
-import { dialog, nativeImage, NativeImage } from 'electron';
+import {
+  dialog,
+  nativeImage,
+  NativeImage,
+  ipcMain,
+  BrowserWindow,
+} from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 
 export default class AppUpdater {
-  constructor(icon: NativeImage) {
+  constructor(conf: { icon?: NativeImage; win?: BrowserWindow }) {
     autoUpdater.autoDownload = false;
     log.transports.file.level = 'info';
     autoUpdater.logger = log;
-    autoUpdater.checkForUpdatesAndNotify();
-    // autoUpdater.checkForUpdates();
+    // autoUpdater.checkForUpdatesAndNotify();
+    autoUpdater.checkForUpdates();
     // autoUpdater.currentVersion = '2.0.0';
 
     autoUpdater.on('error', (error) => {
@@ -26,14 +32,14 @@ export default class AppUpdater {
 
     //当前版本为最新版本
     autoUpdater.on('update-not-available', () => {
-      setTimeout(() => {
-        dialog.showMessageBox({
-          icon,
-          type: 'info',
-          title: `无可用更新`,
-          message: `当前为最新版本！`,
-        });
-      }, 1000);
+      // setTimeout(() => {
+      //   dialog.showMessageBox({
+      //     icon,
+      //     type: 'info',
+      //     title: `无可用更新`,
+      //     message: `当前为最新版本！`,
+      //   });
+      // }, 1000);
     });
 
     //更新下载进度事件
@@ -43,37 +49,38 @@ export default class AppUpdater {
     });
 
     //发现新版本
-    autoUpdater.on('update-available', ({ version, releaseNote }) => {
-      dialog
-        .showMessageBox({
-          icon,
-          type: 'info',
-          title: `发现新版本 v${version}`,
-          message: `找到更新 v${version}，您现在要更新吗？`,
-          detail: releaseNote,
-          buttons: ['确定', '取消'],
-        })
-        .then(({ response }) => {
-          if (response === 0) {
-            console.info('开始下载更新');
-            autoUpdater.downloadUpdate();
-          } else {
-            console.info('取消更新');
-          }
-        });
+    autoUpdater.on('update-available', (data) => {
+      conf.win?.webContents.send('update-available', data);
+      // dialog
+      //   .showMessageBox({
+      //     icon,
+      //     type: 'info',
+      //     title: `发现新版本 v${version}`,
+      //     message: `找到更新 v${version}，您现在要更新吗？`,
+      //     detail: releaseNote,
+      //     buttons: ['确定', '取消'],
+      //   })
+      //   .then(({ response }) => {
+      //     if (response === 0) {
+      //       console.info('开始下载更新');
+      //       autoUpdater.downloadUpdate();
+      //     } else {
+      //       console.info('取消更新');
+      //     }
+      //   });
     });
 
     // 下载完毕
     autoUpdater.on('update-downloaded', () => {
-      dialog
-        .showMessageBox({
-          title: '安装更新',
-          message: '已下载更新，应用程序将退出以进行更新...',
-          buttons: ['确定'],
-        })
-        .then(() => {
-          setImmediate(() => autoUpdater.quitAndInstall());
-        });
+      // dialog
+      //   .showMessageBox({
+      //     title: '安装更新',
+      //     message: '已下载更新，应用程序将退出以进行更新...',
+      //     buttons: ['确定'],
+      //   })
+      //   .then(() => {
+      //     setImmediate(() => autoUpdater.quitAndInstall());
+      //   });
     });
   }
 }
