@@ -1,4 +1,4 @@
-import * as Enums from '../utils/enums';
+import * as Enums from '@/utils/enums';
 
 export const SET_TAB_ACTIVE_KEY = 'SET_TAB_ACTIVE_KEY';
 

@@ -22,7 +22,7 @@ import EditZindexContent from '@/components/EditZindexContent';
 import { toggleToolbarDeleteStatus } from '@/actions/toolbar';
 
 import { StoreState } from '@/reducers/types';
-
+import { useScrollToTop } from '@/utils/hooks';
 import * as Enums from '@/utils/enums';
 import styles from './index.scss';
 
@@ -32,7 +32,7 @@ const iconSize = { height: 18, width: 18 };
 
 const ToolBar: React.FC<ToolBarProps> = () => {
   const dispatch = useDispatch();
-  const { freshFunds, freshZindexs } = useContext(HomeContext);
+  const { runGetFunds, runGetZindexs } = useContext(HomeContext);
 
   const updateInfo = useSelector(
     (state: StoreState) => state.updater.updateInfo
@@ -40,6 +40,8 @@ const ToolBar: React.FC<ToolBarProps> = () => {
   const tabsActiveKey = useSelector(
     (state: StoreState) => state.tabs.activeKey
   );
+  const freshFunds = useScrollToTop({ after: runGetFunds });
+  const freshZindexs = useScrollToTop({ after: runGetZindexs });
 
   const [
     showAddFundDrawer,

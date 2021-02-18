@@ -3,6 +3,13 @@ import * as Adapter from '../utils/adpters';
 import * as Services from '../services';
 import * as Utils from '../utils';
 import CONST_STORAGE from '../constants/storage.json';
+
+export const SET_ZINDEXS = 'SET_ZINDEXS';
+export const TOGGLE_ZINDEX_COLLAPSE = 'TOGGLE_ZINDEX_COLLAPSE';
+export const TOGGLE_ZINDEXS_COLLAPSE = 'TOGGLE_ZINDEXS_COLLAPSE';
+export const SORT_ZINDEXS = 'SORT_ZINDEXS';
+export const SORT_ZINDEXS_WITH_COLLAPSE_CHACHED =
+  'SORT_ZINDEXS_WITH_COLLAPSE_CHACHED';
 export interface CodeMap {
   [index: string]: Zindex.SettingItem & { originSort: number };
 }

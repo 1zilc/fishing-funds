@@ -1,6 +1,6 @@
-import React, { useState, useContext, useMemo } from 'react';
+import React, { useState, useMemo } from 'react';
 import { useScroll, useDebounceFn } from 'ahooks';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import classsames from 'classnames';
 import { Dropdown, Menu } from 'antd';
 
@@ -8,7 +8,6 @@ import { ReactComponent as SortArrowUpIcon } from '@/assets/icons/sort-arrow-up.
 import { ReactComponent as SortArrowDownIcon } from '@/assets/icons/sort-arrow-down.svg';
 import { ReactComponent as ArrowDownIcon } from '@/assets/icons/arrow-down.svg';
 import { ReactComponent as ArrowUpIcon } from '@/assets/icons/arrow-up.svg';
-
 import {
   getSortMode,
   setFundSortMode,
@@ -18,8 +17,8 @@ import {
   troggleZindexSortOrder,
 } from '@/actions/sort';
 import { StoreState } from '@/reducers/types';
-import { TabsState } from '@/reducers/tabs';
-import { HomeContext } from '@/components/Home';
+import { SORT_FUNDS, TOGGLE_FUNDS_COLLAPSE } from '@/actions/fund';
+import { SORT_ZINDEXS, TOGGLE_ZINDEXS_COLLAPSE } from '@/actions/zindex';
 import * as Enums from '@/utils/enums';
 import * as Utils from '@/utils';
 import styles from './index.scss';
@@ -27,14 +26,7 @@ import styles from './index.scss';
 export interface SortBarProps {}
 
 const SortBar: React.FC<SortBarProps> = () => {
-  const {
-    sortFunds,
-    sortZindexs,
-    zindexs,
-    funds,
-    setFunds,
-    setZindexs,
-  } = useContext(HomeContext);
+  const dispatch = useDispatch();
 
   const {
     fundSortMode: { type: fundSortType, order: fundSortorder },
@@ -53,6 +45,9 @@ const SortBar: React.FC<SortBarProps> = () => {
   const tabsActiveKey = useSelector(
     (state: StoreState) => state.tabs.activeKey
   );
+  const funds = useSelector((state: StoreState) => state.fund.funds);
+  const zindexs = useSelector((state: StoreState) => state.zindex.zindexs);
+
   const [expandAllFunds, expandSomeFunds] = useMemo(() => {
     return [funds.every((_) => _.collapse), funds.some((_) => _.collapse)];
   }, [funds]);
@@ -61,23 +56,15 @@ const SortBar: React.FC<SortBarProps> = () => {
     return [zindexs.every((_) => _.collapse), zindexs.some((_) => _.collapse)];
   }, [zindexs]);
 
-  const troggleExpandAllFundsRow = () => {
-    setFunds((funds) => {
-      const cloneFunds = Utils.DeepCopy(funds);
-      cloneFunds.forEach((_) => {
-        _.collapse = !expandAllFunds;
-      });
-      return cloneFunds;
+  const toggleFundsCollapse = () => {
+    dispatch({
+      type: TOGGLE_FUNDS_COLLAPSE,
     });
   };
 
-  const troggleExpandAllZindexsRow = () => {
-    setZindexs((zindexs) => {
-      const cloneZindexs = Utils.DeepCopy(zindexs);
-      cloneZindexs.forEach((_) => {
-        _.collapse = !expandAllZindexs;
-      });
-      return cloneZindexs;
+  const toggleZindexsCollapse = () => {
+    dispatch({
+      type: TOGGLE_ZINDEXS_COLLAPSE,
     });
   };
 
@@ -92,10 +79,10 @@ const SortBar: React.FC<SortBarProps> = () => {
       case Enums.TabKeyType.Funds:
         return (
           <div className={styles.bar}>
-            <div className={styles.arrow} onClick={troggleExpandAllFundsRow}>
+            <div className={styles.arrow} onClick={toggleFundsCollapse}>
               {expandAllFunds ? <ArrowUpIcon /> : <ArrowDownIcon />}
             </div>
-            <div className={styles.name} onClick={troggleExpandAllFundsRow}>
+            <div className={styles.name} onClick={toggleFundsCollapse}>
               基金名称
             </div>
             <div className={styles.mode}>
@@ -110,7 +97,7 @@ const SortBar: React.FC<SortBarProps> = () => {
                           setFundSortMode({
                             type: key,
                           });
-                          sortFunds();
+                          dispatch({ type: SORT_FUNDS });
                         }}
                       >
                         {value}
@@ -126,7 +113,7 @@ const SortBar: React.FC<SortBarProps> = () => {
               className={styles.sort}
               onClick={() => {
                 troggleFundSortOrder();
-                sortFunds();
+                dispatch({ type: SORT_FUNDS });
               }}
             >
               <SortArrowUpIcon
@@ -147,10 +134,10 @@ const SortBar: React.FC<SortBarProps> = () => {
       case Enums.TabKeyType.Zindex:
         return (
           <div className={styles.bar}>
-            <div className={styles.arrow} onClick={troggleExpandAllZindexsRow}>
+            <div className={styles.arrow} onClick={toggleZindexsCollapse}>
               {expandAllZindexs ? <ArrowUpIcon /> : <ArrowDownIcon />}
             </div>
-            <div className={styles.name} onClick={troggleExpandAllZindexsRow}>
+            <div className={styles.name} onClick={toggleZindexsCollapse}>
               指数名称
             </div>
             <div className={styles.mode}>
@@ -165,7 +152,7 @@ const SortBar: React.FC<SortBarProps> = () => {
                           setZindexSortMode({
                             type: key,
                           });
-                          sortZindexs();
+                          dispatch({ type: SORT_ZINDEXS });
                         }}
                       >
                         {value}
@@ -181,7 +168,7 @@ const SortBar: React.FC<SortBarProps> = () => {
               className={styles.sort}
               onClick={() => {
                 troggleZindexSortOrder();
-                sortZindexs();
+                dispatch({ type: SORT_ZINDEXS });
               }}
             >
               <SortArrowUpIcon

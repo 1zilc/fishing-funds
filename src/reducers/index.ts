@@ -5,6 +5,8 @@ import toolbar from './toolbar';
 import wallet from './wallet';
 import tabs from './tabs';
 import updater from './updater';
+import fund from './fund';
+import zindex from './zindex';
 
 export default function createRootReducer(history: History) {
   return combineReducers({
@@ -13,5 +15,7 @@ export default function createRootReducer(history: History) {
     wallet,
     tabs,
     updater,
+    fund,
+    zindex,
   });
 }

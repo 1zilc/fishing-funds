@@ -1,15 +1,22 @@
 /* eslint-disable no-eval */
 import NP from 'number-precision';
-import * as Services from '../services';
-import * as Enums from '../utils/enums';
-import * as Utils from '../utils';
-import * as Adapter from '../utils/adpters';
+import * as Services from '@/services';
+import * as Enums from '@/utils/enums';
+import * as Utils from '@/utils';
+import * as Adapter from '@/utils/adpters';
 import { getFundApiTypeSetting } from './setting';
-import CONST_STORAGE from '../constants/storage.json';
+import CONST_STORAGE from '@/constants/storage.json';
 
+export const SET_FUNDS = 'SET_FUNDS';
+export const TOGGLE_FUND_COLLAPSE = 'TOGGLE_FUND_COLLAPSE';
+export const TOGGLE_FUNDS_COLLAPSE = 'TOGGLE_FUNDS_COLLAPSE';
+export const SORT_FUNDS = 'SORT_FUNDS';
+export const SORT_FUNDS_WITH_COLLAPSE_CHACHED =
+  'SORT_FUNDS_WITH_COLLAPSE_CHACHED';
 export interface CodeMap {
   [index: string]: Fund.SettingItem & { originSort: number };
 }
+
 export const getFundConfig: () => {
   fundConfig: Fund.SettingItem[];
   codeMap: CodeMap;

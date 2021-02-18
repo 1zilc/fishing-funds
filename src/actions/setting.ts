@@ -1,6 +1,6 @@
-import * as Utils from '../utils';
-import * as Enums from '../utils/enums';
-import CONST_STORAGE from '../constants/storage.json';
+import * as Utils from '@/utils';
+import * as Enums from '@/utils/enums';
+import CONST_STORAGE from '@/constants/storage.json';
 
 const remote = require('electron').remote;
 const app = remote.app;

@@ -1,10 +1,6 @@
-import NP from 'number-precision';
-import * as Services from '../services';
-import * as Enums from '../utils/enums';
-import * as Utils from '../utils';
-import * as Adapter from '../utils/adpters';
-import { getFundApiTypeSetting } from './setting';
-import CONST_STORAGE from '../constants/storage.json';
+import * as Enums from '@/utils/enums';
+import * as Utils from '@/utils';
+import CONST_STORAGE from '@/constants/storage.json';
 
 export interface FundSortMode {
   type: Enums.FundSortType;

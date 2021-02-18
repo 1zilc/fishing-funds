@@ -16,4 +16,8 @@ declare namespace Fund {
   export interface ExtraRow {
     collapse?: boolean;
   }
+
+  export interface OriginRow {
+    originSort?: number;
+  }
 }
