@@ -206,8 +206,10 @@ const FundRow: React.FC<RowProps> = (props) => {
         handler={false}
         onClose={closeDetailDrawer}
         placement="bottom"
+        height="100vh"
       >
         <DetailFundContent
+          show={showDetailDrawer}
           onEnter={closeDetailDrawer}
           onClose={closeDetailDrawer}
           fund={fund}

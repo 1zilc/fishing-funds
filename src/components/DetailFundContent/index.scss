@@ -37,7 +37,12 @@
 }
 
 .body {
-  padding: 10px 15px;
+
+  // padding: 10px 15px;
+  h3 {
+    margin: 15px;
+    color: var(--main-text-color);
+  }
 
   section {
     padding: 5px 0;
@@ -51,7 +56,31 @@
   }
 }
 
-.none {
+.introduce {}
+
+
+.estimate {
+  padding: 0 15px;
+
+  img {
+    border-radius: 5px;
+    width: 100%;
+    display: block;
+    height: auto;
+    object-fit: cover;
+  }
+}
+
+.warehouse {}
+
+.tooltip {
+  display: flex;
   font-size: 12px;
-  color: #d65746;
+  flex-direction: column;
+
+  .tooltipName {
+    font-weight: 600;
+  }
+
+  .tooltipStockCode {}
 }

@@ -187,9 +187,61 @@ export async function FromHowbuy(code: string) {
 
 export async function GetEstimatedFromEastmoney(code: string) {
   try {
-    const { body } = await got(`http://j4.dfcfw.com/charts/pic6/${code}.png`);
-    return body;
+    const { rawBody } = await got(
+      `http://j4.dfcfw.com/charts/pic6/${code}.png`
+    );
+    const base64Str = rawBody.toString('base64');
+
+    return `data:image/png;base64,${base64Str}`;
   } catch {
     return null;
+  }
+}
+
+export async function GetWareHouseFromEastmoney(code: string) {
+  try {
+    const { body: html } = await got(
+      'http://fundf10.eastmoney.com/FundArchivesDatas.aspx',
+      {
+        searchParams: {
+          code,
+          type: 'jjcc',
+          topline: 10,
+        },
+      }
+    );
+    const $ = cheerio.load(html);
+    const secids = $('#gpdmList').text();
+    const tors = $('table:first').find('.xglj+.tor').text().split('%');
+
+    const {
+      body: { data },
+    } = await got('https://push2.eastmoney.com/api/qt/ulist.np/get', {
+      searchParams: {
+        fields: 'f2,f3,f12,f14,f9',
+        fltt: 2,
+        secids,
+      },
+      responseType: 'json',
+      retry: 0,
+    });
+    const diff: {
+      f2: string; // 最新价
+      f3: number; // 涨跌幅
+      f14: string; // 名称
+      f12: string; // 股票代码
+    }[] = data.diff;
+    const result = diff.map((item, index) => {
+      return {
+        zxz: item.f2,
+        name: item.f14,
+        stockCode: item.f12,
+        zdf: item.f3,
+        ccb: tors[index], // 持仓比
+      };
+    });
+    return result;
+  } catch {
+    return [];
   }
 }
