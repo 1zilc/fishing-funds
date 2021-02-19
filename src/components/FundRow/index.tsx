@@ -10,6 +10,8 @@ import { ReactComponent as RemoveIcon } from '@/assets/icons/remove.svg';
 import { ReactComponent as ArrowDownIcon } from '@/assets/icons/arrow-down.svg';
 import { ReactComponent as ArrowUpIcon } from '@/assets/icons/arrow-up.svg';
 import EditFundContent from '@/components/EditFundContent';
+import DetailFundContent from '@/components/DetailFundContent';
+
 import { StoreState } from '@/reducers/types';
 import { TOGGLE_FUND_COLLAPSE, deleteFund, calcFund } from '@/actions/fund';
 import { getSystemSetting } from '@/actions/setting';
@@ -44,6 +46,15 @@ const FundRow: React.FC<RowProps> = (props) => {
       setTrue: openEditDrawer,
       setFalse: closeEditDrawer,
       toggle: ToggleEditDrawer,
+    },
+  ] = useBoolean(false);
+
+  const [
+    showDetailDrawer,
+    {
+      setTrue: openDetailDrawer,
+      setFalse: closeDetailDrawer,
+      toggle: ToggleDetailDrawer,
     },
   ] = useBoolean(false);
 
@@ -164,6 +175,9 @@ const FundRow: React.FC<RowProps> = (props) => {
             <span>今日估算总值：</span>
             <span>¥ {gszz.toFixed(2)}</span>
           </section>
+          <div className={styles.view}>
+            <a onClick={openDetailDrawer}>{'查看详情 >'}</a>
+          </div>
         </div>
       </Collapse>
       <Drawer
@@ -182,6 +196,21 @@ const FundRow: React.FC<RowProps> = (props) => {
           }}
           onClose={closeEditDrawer}
           fund={{ cyfe: Number(cyfe), code: fund.fundcode, name: fund.name }}
+        />
+      </Drawer>
+      <Drawer
+        open={showDetailDrawer}
+        showMask
+        maskClosable
+        level={null}
+        handler={false}
+        onClose={closeDetailDrawer}
+        placement="bottom"
+      >
+        <DetailFundContent
+          onEnter={closeDetailDrawer}
+          onClose={closeDetailDrawer}
+          fund={fund}
         />
       </Drawer>
     </div>

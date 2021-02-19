@@ -17,10 +17,7 @@ export interface CodeMap {
   [index: string]: Fund.SettingItem & { originSort: number };
 }
 
-export const getFundConfig: () => {
-  fundConfig: Fund.SettingItem[];
-  codeMap: CodeMap;
-} = () => {
+export function getFundConfig() {
   const fundConfig: Fund.SettingItem[] = Utils.GetStorage(
     CONST_STORAGE.FUND_SETTING,
     []
@@ -32,11 +29,9 @@ export const getFundConfig: () => {
   }, {} as CodeMap);
 
   return { fundConfig, codeMap };
-};
+}
 
-export const getFunds: () => Promise<
-  (Fund.ResponseItem | null)[]
-> = async () => {
+export async function getFunds() {
   const { fundConfig } = getFundConfig();
   const fundApiType = getFundApiTypeSetting();
   const collectors = fundConfig.map(({ code }) => () => getFund(code));
@@ -58,11 +53,9 @@ export const getFunds: () => Promise<
       await Utils.Sleep(1000);
       return Adapter.ConCurrencyAllAdapter<Fund.ResponseItem>(collectors);
   }
-};
+}
 
-export const getFund: (
-  code: string
-) => Promise<Fund.ResponseItem | null> = async (code) => {
+export async function getFund(code: string) {
   const fundApiType = getFundApiTypeSetting();
   switch (fundApiType) {
     case Enums.FundApiType.Dayfund:
@@ -78,9 +71,9 @@ export const getFund: (
       // 默认请求天天基金
       return Services.Fund.FromEastmoney(code);
   }
-};
+}
 
-export const addFund = async (fund: Fund.SettingItem) => {
+export async function addFund(fund: Fund.SettingItem) {
   const fundConfig: Fund.SettingItem[] = Utils.GetStorage(
     CONST_STORAGE.FUND_SETTING,
     []
@@ -90,9 +83,9 @@ export const addFund = async (fund: Fund.SettingItem) => {
   if (notExist) {
     Utils.SetStorage(CONST_STORAGE.FUND_SETTING, [...fundConfig, fund]);
   }
-};
+}
 
-export const updateFund = async (fund: Fund.SettingItem) => {
+export async function updateFund(fund: Fund.SettingItem) {
   const fundConfig: Fund.SettingItem[] = Utils.GetStorage(
     CONST_STORAGE.FUND_SETTING,
     []
@@ -103,9 +96,9 @@ export const updateFund = async (fund: Fund.SettingItem) => {
     }
   });
   Utils.SetStorage(CONST_STORAGE.FUND_SETTING, fundConfig);
-};
+}
 
-export const deleteFund = async (fund: Fund.ResponseItem) => {
+export async function deleteFund(fund: Fund.ResponseItem) {
   const fundConfig: Fund.SettingItem[] = Utils.GetStorage(
     CONST_STORAGE.FUND_SETTING,
     []
@@ -118,21 +111,18 @@ export const deleteFund = async (fund: Fund.ResponseItem) => {
       Utils.SetStorage(CONST_STORAGE.FUND_SETTING, cloneFundSetting);
     }
   });
-};
+}
 
-export const calcFund: (
-  fund: Fund.ResponseItem
-) => Fund.ResponseItem & {
-  cyfe: number; // 持有份额
-  bjz: number; // 比较值
-  jrsygz: number; // 今日收益估值
-  gszz: number; // 估算总值
-} = (fund: Fund.ResponseItem) => {
+export function calcFund(fund: Fund.ResponseItem) {
   const { codeMap } = getFundConfig();
   const cyfe = codeMap[fund.fundcode]?.cyfe || 0;
   const bjz = NP.minus(fund.gsz, fund.dwjz);
   const jrsygz = NP.times(cyfe, bjz);
   const gszz = NP.times(fund.gsz, cyfe);
+  // cyfe: number; // 持有份额
+  // bjz: number; // 比较值
+  // jrsygz: number; // 今日收益估值
+  // gszz: number; // 估算总值
   return {
     ...fund,
     cyfe,
@@ -140,15 +130,9 @@ export const calcFund: (
     jrsygz,
     gszz,
   };
-};
+}
 
-export const calcFunds: (
-  funds: Fund.ResponseItem[]
-) => {
-  zje: number; // 当前总金额
-  gszje: number; // 估算总金额
-  sygz: number; // 估算总收益
-} = (funds) => {
+export function calcFunds(funds: Fund.ResponseItem[]) {
   const { codeMap } = getFundConfig();
   const [zje, gszje, sygz] = funds.reduce(
     ([a, b, c], fund) => {
@@ -161,5 +145,8 @@ export const calcFunds: (
     },
     [0, 0, 0]
   );
+  // zje: number; // 当前总金额
+  // gszje: number; // 估算总金额
+  // sygz: number; // 估算总收益
   return { zje, gszje, sygz };
-};
+}

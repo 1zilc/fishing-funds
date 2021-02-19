@@ -1,14 +1,12 @@
 import React from 'react';
 import { Collapse } from 'react-collapse';
 import classnames from 'classnames';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
 import { ReactComponent as ArrowDownLineIcon } from '@/assets/icons/arrow-down-line.svg';
 import { ReactComponent as ArrowUpLineIcon } from '@/assets/icons/arrow-up-line.svg';
 import { ReactComponent as ArrowDownIcon } from '@/assets/icons/arrow-down.svg';
 import { ReactComponent as ArrowUpIcon } from '@/assets/icons/arrow-up.svg';
-
-import { StoreState } from '@/reducers/types';
 import { getSystemSetting } from '@/actions/setting';
 import { TOGGLE_ZINDEX_COLLAPSE } from '@/actions/zindex';
 

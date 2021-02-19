@@ -3,9 +3,7 @@ import got from 'got';
 /**
  * 淘宝接口拿当前时间
  */
-export const GetCurrentDateTimeFromTaobao: () => Promise<
-  string | null
-> = async () => {
+export async function GetCurrentDateTimeFromTaobao() {
   try {
     const res = await got<{
       api: string; //'mtop.common.getTimestamp'
@@ -21,14 +19,12 @@ export const GetCurrentDateTimeFromTaobao: () => Promise<
   } catch {
     return null;
   }
-};
+}
 
 /**
  * 苏宁接口拿当前时间
  */
-export const GetCurrentDateTimeFromSuning: () => Promise<
-  string | null
-> = async () => {
+export async function GetCurrentDateTimeFromSuning() {
   try {
     const res = await got<{
       api: 'time';
@@ -42,14 +38,12 @@ export const GetCurrentDateTimeFromSuning: () => Promise<
   } catch {
     return null;
   }
-};
+}
 
 /**
  * 京东接口拿当前时间
  */
-export const GetCurrentDateTimeFromJd: () => Promise<
-  string | null
-> = async () => {
+export async function GetCurrentDateTimeFromJd() {
   try {
     const res = await got<{
       serverTime: string; //1592663800521
@@ -60,4 +54,4 @@ export const GetCurrentDateTimeFromJd: () => Promise<
   } catch {
     return null;
   }
-};
+}

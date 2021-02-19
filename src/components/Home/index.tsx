@@ -2,6 +2,7 @@ import React, { createContext } from 'react';
 import { Tabs } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { useRequest } from 'ahooks';
+import dayjs from 'dayjs';
 
 import FundList from '@/components/Home/FundList';
 import ZindexList from '@/components/Home/ZindexList';
@@ -21,7 +22,6 @@ import { SORT_ZINDEXS_WITH_COLLAPSE_CHACHED } from '@/actions/zindex';
 import { StoreState } from '@/reducers/types';
 import * as Enums from '@/utils/enums';
 import styles from './index.scss';
-import dayjs from 'dayjs';
 
 export interface HomeProps {}
 

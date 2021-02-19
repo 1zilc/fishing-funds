@@ -6,21 +6,19 @@ import cheerio from 'cheerio';
 import * as Utils from '../utils';
 
 // 天天基金
-export const FromEastmoney: (
-  code: string
-) => Promise<Fund.ResponseItem | null> = async (code) => {
+export async function FromEastmoney(code: string) {
   try {
     const { body } = await got(`http://fundgz.1234567.com.cn/js/${code}.js`);
-    return body.startsWith('jsonpgz') ? eval(body) : null;
+    return body.startsWith('jsonpgz')
+      ? (eval(body) as Promise<Fund.ResponseItem | null>)
+      : null;
   } catch (error) {
     return null;
   }
-};
+}
 
 // 基金速查网
-export const FromDayFund: (
-  code: string
-) => Promise<Fund.ResponseItem | null> = async (code) => {
+export async function FromDayFund(code: string) {
   try {
     const { body } = await got('https://www.dayfund.cn/ajs/ajaxdata.shtml', {
       searchParams: {
@@ -63,12 +61,10 @@ export const FromDayFund: (
   } catch (error) {
     return null;
   }
-};
+}
 
 // 腾讯证券
-export const FromTencent: (
-  code: string
-) => Promise<Fund.ResponseItem | null> = async (code) => {
+export async function FromTencent(code: string) {
   try {
     const {
       body: { data },
@@ -106,12 +102,10 @@ export const FromTencent: (
   } catch (error) {
     return null;
   }
-};
+}
 
 // 新浪基金
-export const FromSina: (
-  code: string
-) => Promise<Fund.ResponseItem | null> = async (code) => {
+export async function FromSina(code: string) {
   try {
     const { rawBody } = await got(`https://hq.sinajs.cn/list=fu_${code}`, {
       headers: {
@@ -142,12 +136,10 @@ export const FromSina: (
   } catch (error) {
     return null;
   }
-};
+}
 
 // 好买基金
-export const FromHowbuy: (
-  code: string
-) => Promise<Fund.ResponseItem | null> = async (code) => {
+export async function FromHowbuy(code: string) {
   try {
     const { body } = await got.post(
       `https://www.howbuy.com/fund/ajax/gmfund/valuation/valuationnav.htm`,
@@ -191,4 +183,13 @@ export const FromHowbuy: (
   } catch (error) {
     return null;
   }
-};
+}
+
+export async function GetEstimatedFromEastmoney(code: string) {
+  try {
+    const { body } = await got(`http://j4.dfcfw.com/charts/pic6/${code}.png`);
+    return body;
+  } catch {
+    return null;
+  }
+}
