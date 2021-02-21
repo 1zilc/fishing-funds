@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { useRequest, useSize } from 'ahooks';
+import React, { useState } from 'react';
+import { useRequest } from 'ahooks';
 
 import PictureImage from '@/assets/img/picture.svg';
 import * as Services from '@/services';

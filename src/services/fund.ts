@@ -203,7 +203,7 @@ export async function GetEstimatedFromEastmoney(code: string) {
   }
 }
 
-export async function GetWareHouseFromEastmoney(code: string) {
+export async function GetStockWareHouseFromEastmoney(code: string) {
   try {
     const { body: html } = await got(
       'http://fundf10.eastmoney.com/FundArchivesDatas.aspx',
@@ -237,7 +237,7 @@ export async function GetWareHouseFromEastmoney(code: string) {
       f14: string; // 名称
       f12: string; // 股票代码
     }[] = data.diff;
-    const result = diff.map((item, index) => {
+    const result: Fund.WareHouse[] = diff.map((item, index) => {
       return {
         zxz: item.f2,
         name: item.f14,
@@ -261,4 +261,31 @@ export async function GetFundDetailFromEastmoney(code: string) {
   );
   const response: Fund.PingzhongData = Utils.parsepingzhongdata(body);
   return response;
+}
+
+export async function GetFundPerformanceFromEastmoney(
+  code: string,
+  type: string //'m' | 'q' | 'hy' | 'y' | 'try' | 'se'
+) {
+  try {
+    const {
+      body: { Data },
+    } = await got(`http://api.fund.eastmoney.com/pinzhong/LJSYLZS`, {
+      searchParams: {
+        fundCode: code,
+        indexcode: '000300',
+        type,
+      },
+      headers: {
+        Referer: 'http://fund.eastmoney.com/',
+      },
+      retry: 0,
+      responseType: 'json',
+    });
+
+    const result: any[] = Data;
+    return result;
+  } catch (error) {
+    return [];
+  }
 }

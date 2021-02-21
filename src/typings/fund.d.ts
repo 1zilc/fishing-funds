@@ -41,4 +41,12 @@ declare namespace Fund {
     /*近一月收益率*/
     syl_1y?: string;
   }
+
+  export interface WareHouse {
+    zxz: string;
+    name: string;
+    stockCode: string;
+    zdf: number;
+    ccb: string;
+  }
 }
