@@ -203,28 +203,27 @@ export async function GetEstimatedFromEastmoney(code: string) {
   }
 }
 
-export async function GetStockWareHouseFromEastmoney(code: string) {
+export async function GetStockWareHouseFromEastmoney(
+  code: string,
+  stockCodes: string[]
+) {
   try {
-    const { body: html } = await got(
-      'http://fundf10.eastmoney.com/FundArchivesDatas.aspx',
-      {
-        searchParams: {
-          code,
-          type: 'jjcc',
-          topline: 10,
-        },
-        retry: 0,
-      }
-    );
+    const { body: html } = await got(`http://fund.eastmoney.com/${code}.html`, {
+      retry: 0,
+    });
     const $ = cheerio.load(html);
-    const secids = $('#gpdmList').text();
-    const tors = $('table:first').find('.xglj+.tor').text().split('%');
+    const secids = (stockCodes || []).join(',') || '';
+    const tors = $('#quotationItem_DataTable')
+      .find('#position_shares')
+      .find('tr > td:nth-child(2)')
+      .text()
+      .split('%');
 
     const {
       body: { data },
     } = await got('https://push2.eastmoney.com/api/qt/ulist.np/get', {
       searchParams: {
-        fields: 'f2,f3,f12,f14,f9',
+        fields: 'f2,f3,f12,f14',
         fltt: 2,
         secids,
       },
@@ -241,7 +240,55 @@ export async function GetStockWareHouseFromEastmoney(code: string) {
       return {
         zxz: item.f2,
         name: item.f14,
-        stockCode: item.f12,
+        code: item.f12,
+        zdf: item.f3,
+        ccb: tors[index], // 持仓比
+      };
+    });
+    return result;
+  } catch {
+    return [];
+  }
+}
+
+export async function GetSecuritiesWareHouseFromEastmoney(
+  code: string,
+  securitiesCodes: string
+) {
+  try {
+    const { body: html } = await got(`http://fund.eastmoney.com/${code}.html`, {
+      retry: 0,
+    });
+    const $ = cheerio.load(html);
+    const secids = securitiesCodes || '';
+    const tors = $('#quotationItem_DataTable')
+      .find('#position_bonds')
+      .find('tr > td:nth-child(2)')
+      .text()
+      .split('%');
+
+    const {
+      body: { data },
+    } = await got('https://push2.eastmoney.com/api/qt/ulist.np/get', {
+      searchParams: {
+        fields: 'f2,f3,f12,f14',
+        fltt: 2,
+        secids,
+      },
+      responseType: 'json',
+      retry: 0,
+    });
+    const diff: {
+      f2: string; // 最新价
+      f3: number; // 涨跌幅
+      f14: string; // 名称
+      f12: string; // 债券代码
+    }[] = data.diff;
+    const result: Fund.WareHouse[] = diff.map((item, index) => {
+      return {
+        zxz: item.f2,
+        name: item.f14,
+        code: item.f12,
         zdf: item.f3,
         ccb: tors[index], // 持仓比
       };
@@ -253,14 +300,18 @@ export async function GetStockWareHouseFromEastmoney(code: string) {
 }
 
 export async function GetFundDetailFromEastmoney(code: string) {
-  const { body } = await got(
-    `http://fund.eastmoney.com/pingzhongdata/${code}.js`,
-    {
-      retry: 0,
-    }
-  );
-  const response: Fund.PingzhongData = Utils.parsepingzhongdata(body);
-  return response;
+  try {
+    const { body } = await got(
+      `http://fund.eastmoney.com/pingzhongdata/${code}.js`,
+      {
+        retry: 0,
+      }
+    );
+    const response: Fund.PingzhongData = Utils.parsepingzhongdata(body);
+    return response;
+  } catch {
+    return {};
+  }
 }
 
 export async function GetFundPerformanceFromEastmoney(

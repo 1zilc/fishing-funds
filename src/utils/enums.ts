@@ -46,7 +46,7 @@ export enum TrendType {
 // 持仓类型
 export enum WareHouseType {
   Stock, // 股票
-  Securities, // 证券
+  Securities, // 债券
 }
 // 走势类型
 export enum PerformanceType {

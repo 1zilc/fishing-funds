@@ -91,10 +91,16 @@ const DetailFundContent: React.FC<DetailFundContentProps> = (props) => {
             tabBarGutter={15}
           >
             <Tabs.TabPane tab="股票持仓" key={Enums.WareHouseType.Stock}>
-              <StockWareHouse code={fund.fundcode} />
+              <StockWareHouse
+                code={fund.fundcode}
+                stockCodes={pingzhongdata.stockCodesNew!}
+              />
             </Tabs.TabPane>
-            <Tabs.TabPane tab="证券持仓" key={Enums.WareHouseType.Securities}>
-              {/* <Estimate code={fund.fundcode} /> */}
+            <Tabs.TabPane tab="债券持仓" key={Enums.WareHouseType.Securities}>
+              <SecuritiesWareHouse
+                code={fund.fundcode}
+                securitiesCodes={pingzhongdata.zqCodesNew!}
+              />
             </Tabs.TabPane>
           </Tabs>
         </div>

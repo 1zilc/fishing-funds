@@ -10,6 +10,7 @@ import styles from './index.scss';
 
 export interface StockWareHouseProps {
   code: string;
+  stockCodes: string[];
 }
 interface TooltipProps {
   item: Fund.WareHouse;
@@ -20,7 +21,7 @@ const Tooltip: React.FC<TooltipProps> = (props) => {
   return (
     <div className={styles.tooltip}>
       <div className={styles.tooltipName}>股票名称：{item.name}</div>
-      <div>股票代码：{item.stockCode}</div>
+      <div>股票代码：{item.code}</div>
       <div>持仓占比：{item.ccb}%</div>
       <div className={item.zdf < 0 ? 'down-text' : 'up-text'}>
         涨跌幅：{item.zdf}%
@@ -29,7 +30,10 @@ const Tooltip: React.FC<TooltipProps> = (props) => {
   );
 };
 
-const StockWareHouse: React.FC<StockWareHouseProps> = ({ code }) => {
+const StockWareHouse: React.FC<StockWareHouseProps> = ({
+  code,
+  stockCodes,
+}) => {
   const warehouseRef = useRef<HTMLDivElement>(null);
   const [
     warehoseChartInstance,
@@ -120,8 +124,10 @@ const StockWareHouse: React.FC<StockWareHouseProps> = ({ code }) => {
   }, []);
 
   useEffect(() => {
-    runGetStockWareHouseFromEastmoney(code);
-  }, [darkMode, warehoseChartInstance]);
+    if (warehoseChartInstance) {
+      runGetStockWareHouseFromEastmoney(code, stockCodes);
+    }
+  }, [darkMode, warehoseChartInstance, stockCodes]);
 
   useEffect(() => {
     warehoseChartInstance?.resize({

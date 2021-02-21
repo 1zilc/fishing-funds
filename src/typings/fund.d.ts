@@ -45,7 +45,7 @@ declare namespace Fund {
   export interface WareHouse {
     zxz: string;
     name: string;
-    stockCode: string;
+    code: string;
     zdf: number;
     ccb: string;
   }
