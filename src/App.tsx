@@ -7,6 +7,7 @@ import '@/app.global.scss';
 
 const App: React.FC<{}> = () => {
   useUpdater();
+
   return (
     <Router>
       <Switch>

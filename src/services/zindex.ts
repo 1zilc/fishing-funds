@@ -33,6 +33,7 @@ export async function FromEastmoney(code: string) {
         _: new Date().getTime(),
       },
       responseType: 'json',
+      retry: 0,
     });
 
     return {

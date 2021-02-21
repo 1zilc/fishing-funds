@@ -1,15 +1,16 @@
 import React, { useState } from 'react';
 import { InputNumber } from 'antd';
+import CustomDrawerContent from '@/components/CustomDrawer/Content';
 import { updateFund } from '@/actions/fund';
 import styles from './index.scss';
 
-export interface AddFundContentProps {
+export interface EditFundContentProps {
   onEnter: () => void;
   onClose: () => void;
   fund: Fund.SettingItem & { name: string };
 }
 
-const EditFundContent: React.FC<AddFundContentProps> = (props) => {
+const EditFundContent: React.FC<EditFundContentProps> = (props) => {
   const { fund } = props;
   const [num, setNum] = useState<any>(fund.cyfe);
 
@@ -22,17 +23,13 @@ const EditFundContent: React.FC<AddFundContentProps> = (props) => {
   };
 
   return (
-    <div className={styles.content}>
-      <div className={styles.header}>
-        <button className={styles.close} onClick={props.onClose}>
-          关闭
-        </button>
-        <h3>修改份额</h3>
-        <button className={styles.save} onClick={onSave}>
-          保存
-        </button>
-      </div>
-      <div className={styles.body}>
+    <CustomDrawerContent
+      title="修改份额"
+      enterText="保存"
+      onClose={props.onClose}
+      onEnter={onSave}
+    >
+      <div className={styles.content}>
         <section>
           <label>基金名称：</label>
           <span>{fund.name}</span>
@@ -57,7 +54,7 @@ const EditFundContent: React.FC<AddFundContentProps> = (props) => {
           ></InputNumber>
         </section>
       </div>
-    </div>
+    </CustomDrawerContent>
   );
 };
 

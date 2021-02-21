@@ -2,11 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { Checkbox } from 'antd';
 import { ReactSortable } from 'react-sortablejs';
 
+import CustomDrawerContent from '@/components/CustomDrawer/Content';
 import { getZindexConfig, saveZindexConfig } from '@/actions/zindex';
 import { ReactComponent as MenuIcon } from '@/assets/icons/menu.svg';
+
 import styles from './index.scss';
 export interface AddFundContentProps {
-  show?: boolean;
   onEnter: () => void;
   onClose: () => void;
 }
@@ -35,26 +36,16 @@ const EditZindexContent: React.FC<AddFundContentProps> = (props) => {
     setSelections(isSelectAll ? [] : zindexConfig.map(({ code }) => code));
   };
 
-  useEffect(() => {
-    if (props.show) {
-      const { zindexConfig, selectZindexs } = getZindexConfig();
-      setSelections(selectZindexs);
-      setSortZindexConfig(zindexConfig.map((_) => ({ ..._, id: _.code })));
-    }
-  }, [props.show]);
+  useEffect(() => {}, []);
 
   return (
-    <div className={styles.content}>
-      <div className={styles.header}>
-        <button className={styles.close} onClick={props.onClose}>
-          关闭
-        </button>
-        <h3>指数自选</h3>
-        <button className={styles.save} onClick={onSave}>
-          保存
-        </button>
-      </div>
-      <div className={styles.body}>
+    <CustomDrawerContent
+      title="指数自选"
+      enterText="保存"
+      onClose={props.onClose}
+      onEnter={onSave}
+    >
+      <div className={styles.content}>
         <div className={styles.row}>
           <Checkbox
             checked={isSelectAll}
@@ -89,7 +80,7 @@ const EditZindexContent: React.FC<AddFundContentProps> = (props) => {
           </ReactSortable>
         </Checkbox.Group>
       </div>
-    </div>
+    </CustomDrawerContent>
   );
 };
 

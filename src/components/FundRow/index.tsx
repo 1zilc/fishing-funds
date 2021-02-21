@@ -3,8 +3,8 @@ import { useBoolean } from 'ahooks';
 import { Collapse } from 'react-collapse';
 import classnames from 'classnames';
 import { useSelector, useDispatch } from 'react-redux';
-import Drawer from 'rc-drawer';
 
+import CustomDrawer from '@/components/CustomDrawer';
 import { ReactComponent as EditIcon } from '@/assets/icons/edit.svg';
 import { ReactComponent as RemoveIcon } from '@/assets/icons/remove.svg';
 import { ReactComponent as ArrowDownIcon } from '@/assets/icons/arrow-down.svg';
@@ -180,41 +180,23 @@ const FundRow: React.FC<RowProps> = (props) => {
           </div>
         </div>
       </Collapse>
-      <Drawer
-        open={showEditDrawer}
-        showMask
-        maskClosable
-        level={null}
-        handler={false}
-        onClose={closeEditDrawer}
-        placement="bottom"
-      >
+      <CustomDrawer show={showEditDrawer}>
         <EditFundContent
+          onClose={closeEditDrawer}
           onEnter={() => {
             freshFunds();
             closeEditDrawer();
           }}
-          onClose={closeEditDrawer}
           fund={{ cyfe: Number(cyfe), code: fund.fundcode, name: fund.name }}
         />
-      </Drawer>
-      <Drawer
-        open={showDetailDrawer}
-        showMask
-        maskClosable
-        level={null}
-        handler={false}
-        onClose={closeDetailDrawer}
-        placement="bottom"
-        height="100vh"
-      >
+      </CustomDrawer>
+      <CustomDrawer show={showDetailDrawer}>
         <DetailFundContent
-          show={showDetailDrawer}
           onEnter={closeDetailDrawer}
           onClose={closeDetailDrawer}
           fund={fund}
         />
-      </Drawer>
+      </CustomDrawer>
     </div>
   );
 };

@@ -1,20 +1,24 @@
 import React, { useEffect, useRef, useState } from 'react';
+import classnames from 'classnames';
 import { renderToString } from 'react-dom/server';
-import { remote } from 'electron';
+import { useRequest, useSize } from 'ahooks';
 import * as echarts from 'echarts';
 
+import CustomDrawerContent from '@/components/CustomDrawer/Content';
 import PictureImage from '@/assets/img/picture.svg';
+import Estimate from '@/components/DetailFundContent/Estimate';
+import { useNativeThemeColor } from '@/utils/hooks';
 import * as Services from '@/services';
-
+import * as Utils from '@/utils';
 import styles from './index.scss';
-import { useRequest, useSize } from 'ahooks';
 
 export interface DetailFundContentProps {
-  show?: boolean;
   onEnter: () => void;
   onClose: () => void;
   fund: Fund.ResponseItem;
 }
+
+const varibles = ['--increase-color', '--reduce-color', '--main-text-color'];
 
 const Tooltip = (props) => {
   const { item } = props;
@@ -35,16 +39,28 @@ const DetailFundContent: React.FC<DetailFundContentProps> = (props) => {
   const warehouseRef = useRef<HTMLDivElement>(null);
   const [estimate, setEstimate] = useState(PictureImage);
   const [warehose, setWarehouse] = useState<any>([]);
+  const [pingzhongdata, setPingzhongdata] = useState<Fund.PingzhongData>({});
   const [
     warehoseChartInstance,
     setWarehoseChartInstance,
   ] = useState<echarts.ECharts | null>(null);
   const { width: warehouseRefWidth } = useSize(warehouseRef);
+  const { colors: varibleColors, darkMode } = useNativeThemeColor(varibles);
+
+  const { run: runGetFundDetailFromEastmoney } = useRequest(
+    Services.Fund.GetFundDetailFromEastmoney,
+    {
+      manual: true,
+      onSuccess: (result) => {
+        console.log(result);
+        setPingzhongdata(result);
+      },
+    }
+  );
   const { run: runGetEstimatedFromEastmoney } = useRequest(
     Services.Fund.GetEstimatedFromEastmoney,
     {
       manual: true,
-      // ready: props.show,
       onSuccess: setEstimate,
     }
   );
@@ -62,7 +78,10 @@ const DetailFundContent: React.FC<DetailFundContentProps> = (props) => {
                   value: item.ccb,
                   name: item.name,
                   itemStyle: {
-                    color: item.zdf >= 0 ? '#a61d24' : '#3c8618',
+                    color:
+                      item.zdf >= 0
+                        ? varibleColors['--increase-color']
+                        : varibleColors['--reduce-color'],
                   },
                   item,
                 };
@@ -83,7 +102,7 @@ const DetailFundContent: React.FC<DetailFundContentProps> = (props) => {
         left: 'center',
         top: 0,
         textStyle: {
-          color: '#888',
+          color: varibleColors['--main-text-color'],
           fontSize: 14,
         },
       },
@@ -101,18 +120,18 @@ const DetailFundContent: React.FC<DetailFundContentProps> = (props) => {
           data: [],
           roseType: 'radius',
           label: {
-            color: '#888',
+            color: varibleColors['--main-text-color'],
           },
           labelLine: {
             lineStyle: {
-              color: '#888',
+              color: varibleColors['--main-text-color'],
             },
             smooth: 0.2,
             length: 10,
             length2: 20,
           },
           itemStyle: {
-            color: '#c23531',
+            color: varibleColors['--main-text-color'],
             borderRadius: 10,
             borderColor: 'rgba(255,255,255,0.3)',
             borderWidth: 1,
@@ -121,23 +140,18 @@ const DetailFundContent: React.FC<DetailFundContentProps> = (props) => {
           },
           animationType: 'scale',
           animationEasing: 'elasticOut',
-          animationDelay: function (idx) {
-            return Math.random() * 200;
-          },
+          animationDelay: () => Math.random() * 200,
         },
       ],
     });
     setWarehoseChartInstance(warehoseChartInstance);
   };
-  useEffect(() => {
-    if (props.show) {
-      runGetEstimatedFromEastmoney(fund.fundcode);
-      runGetWareHouseFromEastmoney(fund.fundcode);
-    }
-  }, [props.show]);
 
   useEffect(() => {
     initWarehoseChart();
+    runGetFundDetailFromEastmoney(fund.fundcode);
+    runGetEstimatedFromEastmoney(fund.fundcode);
+    runGetWareHouseFromEastmoney(fund.fundcode);
   }, []);
 
   useEffect(() => {
@@ -147,29 +161,53 @@ const DetailFundContent: React.FC<DetailFundContentProps> = (props) => {
   }, [warehouseRefWidth]);
 
   return (
-    <div className={styles.content}>
-      <div className={styles.header}>
-        <button className={styles.close} onClick={props.onClose}>
-          关闭
-        </button>
-        <h3>基金详情</h3>
-        <button className={styles.add} onClick={props.onEnter}>
-          刷新
-        </button>
-      </div>
-      <div className={styles.body}>
+    <CustomDrawerContent
+      title="基金详情"
+      enterText="刷新"
+      onClose={props.onClose}
+      onEnter={props.onEnter}
+    >
+      <div className={styles.content}>
         <h3>{fund.name}</h3>
+        <div>{fund.fundcode}</div>
+        <div className={styles.detail}>
+          <div className={styles.detailItem}>
+            <div
+              className={classnames(
+                styles.syl_1n,
+                Number(pingzhongdata.syl_1n) >= 0 ? 'up-text' : 'down-text'
+              )}
+            >
+              {Utils.Yang(pingzhongdata.syl_1n)}%
+            </div>
+            <div className={styles.detailItemLabel}>近一年涨跌幅</div>
+          </div>
+          <div className={styles.detailItem}>
+            <div
+              className={classnames(
+                Number(fund.gszzl) >= 0 ? 'up-text' : 'down-text'
+              )}
+            >
+              {Utils.Yang(fund.gszzl)}%
+            </div>
+            <div className={styles.detailItemLabel}>日涨跌幅</div>
+          </div>
+          <div className={styles.detailItem}>
+            <div>{fund.dwjz}</div>
+            <div className={styles.detailItemLabel}>
+              净值 {fund.jzrq.slice(5)}
+            </div>
+          </div>
+        </div>
         <div className={styles.introduce}></div>
         <h3>估值走势</h3>
-        <div className={styles.estimate}>
-          <img src={estimate} />
-        </div>
+        <Estimate code={fund.fundcode} />
         <h3>持仓详情</h3>
         <div className={styles.warehouse}>
           <div ref={warehouseRef} style={{ height: 300, width: '100%' }}></div>
         </div>
       </div>
-    </div>
+    </CustomDrawerContent>
   );
 };
 export default DetailFundContent;

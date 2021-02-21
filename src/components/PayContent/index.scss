@@ -1,45 +1,4 @@
-@import '../../styles//varible.scss';
-
-
 .content {
-  border-radius: 10px;
-  box-sizing: border-box;
-  min-height: 100vh;
-}
-
-.header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  position: sticky;
-  width: 100%;
-  background-color: var(--blur-color);
-  backdrop-filter: saturate(180%) blur(20px);
-  top: 0;
-  padding: 10px;
-  box-sizing: border-box;
-  z-index: 2;
-  border-bottom: 1px solid var(--border-color);
-  // box-shadow: 0 20px 20px rgba(0, 0, 0, .1);
-  margin-bottom: 5px;
-
-  h3 {
-    color: var(--main-text-color);
-  }
-
-
-  .close {
-    color: var(--reverse-text-color);
-    background-color: var(--cancel-color);
-  }
-
-  .add {
-    color: #eee;
-    background-color: var(--primary-color);
-  }
-}
-
-.body {
   padding: 10px 15px;
   // margin-top: 20px;
 

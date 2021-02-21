@@ -1,12 +1,15 @@
-import { useCallback, useLayoutEffect } from 'react';
+import { useCallback, useLayoutEffect, useMemo, useState } from 'react';
 import { useInterval } from 'ahooks';
-import { ipcRenderer } from 'electron';
+import { ipcRenderer, remote } from 'electron';
 
 import { getSystemSetting } from '@/actions/setting';
 import { useDispatch } from 'react-redux';
 import { getCurrentHours } from '@/actions/time';
 import { updateAvaliable } from '@/actions/updater';
+
 import * as Utils from '@/utils';
+
+const { nativeTheme } = remote;
 
 export function useWorkDayTimeToDo(todo: () => void, delay: number): void {
   useInterval(async () => {
@@ -61,4 +64,25 @@ export function useUpdater() {
       ipcRenderer.removeAllListeners('update-available');
     };
   }, []);
+}
+
+export function useNativeTheme() {
+  const [darkMode, setDarkMode] = useState(nativeTheme.shouldUseDarkColors);
+  useLayoutEffect(() => {
+    ipcRenderer.on('nativeTheme-updated', (e, data) => {
+      setDarkMode(data.darkMode);
+    });
+    return () => {
+      ipcRenderer.removeAllListeners('nativeTheme-updated');
+    };
+  }, []);
+  return { darkMode };
+}
+
+export function useNativeThemeColor(varibles: string[]) {
+  const { darkMode } = useNativeTheme();
+  const memoColors = useMemo(() => Utils.getVariblesColor(varibles), [
+    darkMode,
+  ]);
+  return { darkMode, colors: memoColors };
 }

@@ -8,7 +8,9 @@ import * as Utils from '../utils';
 // 天天基金
 export async function FromEastmoney(code: string) {
   try {
-    const { body } = await got(`http://fundgz.1234567.com.cn/js/${code}.js`);
+    const { body } = await got(`http://fundgz.1234567.com.cn/js/${code}.js`, {
+      retry: 0,
+    });
     return body.startsWith('jsonpgz')
       ? (eval(body) as Promise<Fund.ResponseItem | null>)
       : null;
@@ -188,7 +190,10 @@ export async function FromHowbuy(code: string) {
 export async function GetEstimatedFromEastmoney(code: string) {
   try {
     const { rawBody } = await got(
-      `http://j4.dfcfw.com/charts/pic6/${code}.png`
+      `http://j4.dfcfw.com/charts/pic6/${code}.png`,
+      {
+        retry: 0,
+      }
     );
     const base64Str = rawBody.toString('base64');
 
@@ -208,6 +213,7 @@ export async function GetWareHouseFromEastmoney(code: string) {
           type: 'jjcc',
           topline: 10,
         },
+        retry: 0,
       }
     );
     const $ = cheerio.load(html);
@@ -244,4 +250,15 @@ export async function GetWareHouseFromEastmoney(code: string) {
   } catch {
     return [];
   }
+}
+
+export async function GetFundDetailFromEastmoney(code: string) {
+  const { body } = await got(
+    `http://fund.eastmoney.com/pingzhongdata/${code}.js`,
+    {
+      retry: 0,
+    }
+  );
+  const response: Fund.PingzhongData = Utils.parsepingzhongdata(body);
+  return response;
 }

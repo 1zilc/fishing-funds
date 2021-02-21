@@ -8,6 +8,7 @@
 @import './styles/re-drawer.scss';
 @import './styles/button.scss';
 @import './styles/color.scss';
+@import './styles/varible.scss';
 
 body {
   position: relative;
@@ -65,4 +66,12 @@ a:hover {
   &:hover {
     opacity: .8;
   }
+}
+
+.img {
+  border-radius: 5px;
+  width: 100%;
+  display: block;
+  height: auto;
+  object-fit: cover;
 }
