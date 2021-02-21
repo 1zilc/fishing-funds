@@ -1,0 +1,47 @@
+.content {
+
+  padding: 10px 15px;
+
+  h3 {
+    color: var(--main-text-color);
+  }
+
+  section {
+    padding: 5px 0;
+  }
+
+  label {
+    font-size: 12px;
+    margin-bottom: 5px;
+    display: block;
+    font-weight: 600;
+  }
+}
+
+.introduce {}
+
+.detail {
+  display: flex;
+  align-items: flex-end;
+  margin-bottom: 10px;
+  justify-content: space-between;
+}
+
+.detailItem {
+  // flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.detailItemLabel {
+  color: var(--inner-text-color);
+}
+
+.syl_1n {
+  font-size: 20px;
+  font-size: 600;
+}
+
+
+
+.warehouse {}

@@ -23,6 +23,12 @@
 
 </figure>
 
+<figure class="half">
+
+<img src="https://github.com/1zilc/fishing-funds/blob/master/screenshots/3.png" width="350px"  /><img src="https://github.com/1zilc/fishing-funds/blob/master/screenshots/4.png" width="350px"  />
+
+</figure>
+
 ## 项目介绍
 
 - 本项目基于[electron-react-boilerplate-menubar](https://github.com/3on/electron-react-boilerplate-menubar)开发

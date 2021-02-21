@@ -6,22 +6,22 @@ import * as Utils from '@/utils';
 export const UPDATE_UPTATETIME = 'UPDATE_UPTATETIME';
 export const CHANGE_EYE_STATUS = 'CHANGE_EYE_STATUS';
 
-export const updateUpdateTime = (updateTime: string) => {
+export function updateUpdateTime(updateTime: string) {
   return {
     type: UPDATE_UPTATETIME,
     payload: updateTime,
   };
-};
+}
 
-export const changeEyeStatus = (status: EyeStatus) => {
+export function changeEyeStatus(status: EyeStatus) {
   Utils.SetStorage(CONST_STORAGE.EYE_STATUS, status);
   return {
     type: CHANGE_EYE_STATUS,
     payload: status,
   };
-};
+}
 
-export const toggleEyeStatus = () => {
+export function toggleEyeStatus() {
   return (dispatch: Dispatch, getState: GetState) => {
     const { wallet } = getState();
     const { eyeStatus } = wallet;
@@ -35,4 +35,4 @@ export const toggleEyeStatus = () => {
       default:
     }
   };
-};
+}

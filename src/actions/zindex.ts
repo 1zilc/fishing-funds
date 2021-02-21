@@ -3,6 +3,13 @@ import * as Adapter from '../utils/adpters';
 import * as Services from '../services';
 import * as Utils from '../utils';
 import CONST_STORAGE from '../constants/storage.json';
+
+export const SET_ZINDEXS = 'SET_ZINDEXS';
+export const TOGGLE_ZINDEX_COLLAPSE = 'TOGGLE_ZINDEX_COLLAPSE';
+export const TOGGLE_ZINDEXS_COLLAPSE = 'TOGGLE_ZINDEXS_COLLAPSE';
+export const SORT_ZINDEXS = 'SORT_ZINDEXS';
+export const SORT_ZINDEXS_WITH_COLLAPSE_CHACHED =
+  'SORT_ZINDEXS_WITH_COLLAPSE_CHACHED';
 export interface CodeMap {
   [index: string]: Zindex.SettingItem & { originSort: number };
 }
@@ -47,11 +54,7 @@ export const defaultZindexConfig = [
   { name: '300 医药', code: '0.399913', show: false },
 ];
 
-export const getZindexConfig: () => {
-  zindexConfig: Zindex.SettingItem[];
-  selectZindexs: string[];
-  codeMap: CodeMap;
-} = () => {
+export function getZindexConfig() {
   const zindexConfig: Zindex.SettingItem[] = Utils.GetStorage(
     CONST_STORAGE.ZINDEX_SETTING,
     defaultZindexConfig
@@ -66,32 +69,26 @@ export const getZindexConfig: () => {
     .map(({ code }) => code);
 
   return { zindexConfig, codeMap, selectZindexs };
-};
+}
 
-export const getZindexs: () => Promise<
-  (Zindex.ResponseItem | null)[]
-> = async () => {
+export async function getZindexs() {
   const { zindexConfig } = getZindexConfig();
   const collectors = zindexConfig
     .filter(({ show }) => show)
     .map(({ code }) => () => getZindex(code));
   await Utils.Sleep(1000);
   return Adapter.ConCurrencyAllAdapter<Zindex.ResponseItem>(collectors);
-};
+}
 
-export const getZindex: (
-  code: string
-) => Promise<Zindex.ResponseItem | null> = async (code) => {
+export async function getZindex(code: string) {
   return Services.Zindex.FromEastmoney(code);
-};
+}
 
-export const saveZindexConfig: (zindexConfig: Zindex.SettingItem[]) => void = (
-  zindexConfig
-) => {
+export async function saveZindexConfig(zindexConfig: Zindex.SettingItem[]) {
   Utils.SetStorage(CONST_STORAGE.ZINDEX_SETTING, zindexConfig);
-};
+}
 
-export const getRemoteZindexConfig = async () => {
+export async function getRemoteZindexConfig() {
   const cb = 'parsezindex';
   const now = new Date().getTime();
   const fields = '12,13,14';
@@ -130,4 +127,4 @@ export const getRemoteZindexConfig = async () => {
   const a3 = eval(b3);
   const result = [...a1, ...a2, ...a3];
   return result;
-};
+}

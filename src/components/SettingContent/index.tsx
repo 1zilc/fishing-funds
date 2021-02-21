@@ -1,8 +1,9 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState } from 'react';
 import classnames from 'classnames';
 import { useSelector } from 'react-redux';
-import { InputNumber, Checkbox, Radio, Badge, Switch } from 'antd';
+import { InputNumber, Radio, Badge, Switch } from 'antd';
 
+import CustomDrawerContent from '@/components/CustomDrawer/Content';
 import { ReactComponent as SettingIcon } from '@/assets/icons/setting.svg';
 import { ReactComponent as LinkIcon } from '@/assets/icons/link.svg';
 import { ReactComponent as LineCharIcon } from '@/assets/icons/line-chart.svg';
@@ -24,7 +25,6 @@ import styles from './index.scss';
 const { version } = require('@/package.json');
 
 export interface SettingContentProps {
-  show?: boolean;
   onEnter: () => void;
   onClose: () => void;
 }
@@ -40,7 +40,6 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
     freshDelaySetting,
     autoCheckUpdateSetting,
   } = getSystemSetting();
-  const contentRef = useRef<HTMLDivElement>(null);
   const updateInfo = useSelector(
     (state: StoreState) => state.updater.updateInfo
   );
@@ -74,27 +73,14 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
     props.onEnter();
   };
 
-  useEffect(() => {
-    setConcise(conciseSetting);
-    setAutoStart(autoStartSetting);
-    setAutoFresh(autoFreshSetting);
-    setFreshDelay(freshDelaySetting);
-    setFundApiType(fundApiTypeSetting);
-    setAutoCheckUpdate(autoCheckUpdateSetting);
-  }, [props.show]);
-
   return (
-    <div className={classnames(styles.content)} ref={contentRef}>
-      <div className={styles.header}>
-        <button className={styles.close} onClick={props.onClose} type="button">
-          关闭
-        </button>
-        <h3>设置</h3>
-        <button className={styles.add} onClick={onSave} type="button">
-          保存
-        </button>
-      </div>
-      <div className={styles.body}>
+    <CustomDrawerContent
+      title="设置"
+      enterText="保存"
+      onClose={props.onClose}
+      onEnter={onSave}
+    >
+      <div className={styles.content}>
         <div
           className={classnames(styles.logo, {
             clickable: isUpdateAvaliable,
@@ -228,7 +214,7 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
       <div className={styles.version}>
         <div>Based on Electron v{process.versions.electron}</div>
       </div>
-    </div>
+    </CustomDrawerContent>
   );
 };
 

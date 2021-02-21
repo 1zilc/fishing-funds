@@ -1,23 +1,21 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { Collapse } from 'react-collapse';
 import classnames from 'classnames';
-import { connect } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
 import { ReactComponent as ArrowDownLineIcon } from '@/assets/icons/arrow-down-line.svg';
 import { ReactComponent as ArrowUpLineIcon } from '@/assets/icons/arrow-up-line.svg';
 import { ReactComponent as ArrowDownIcon } from '@/assets/icons/arrow-down.svg';
 import { ReactComponent as ArrowUpIcon } from '@/assets/icons/arrow-up.svg';
-
-import { StoreState } from '@/reducers/types';
 import { getSystemSetting } from '@/actions/setting';
-import { HomeContext } from '@/components/Home';
+import { TOGGLE_ZINDEX_COLLAPSE } from '@/actions/zindex';
+
 import * as Utils from '@/utils';
 
 import styles from './index.scss';
 
 export interface RowProps {
   zindex: Zindex.ResponseItem & Zindex.ExtraRow;
-  index: number;
 }
 
 const arrowSize = {
@@ -27,20 +25,9 @@ const arrowSize = {
 
 const ZindexRow: React.FC<RowProps> = (props) => {
   const { zindex } = props;
+  const dispatch = useDispatch();
   const { conciseSetting } = getSystemSetting();
-  const { setZindexs } = useContext(HomeContext);
 
-  const onToggleCollapse = () => {
-    setZindexs((zindexs) => {
-      const cloneZindexs = Utils.DeepCopy(zindexs);
-      cloneZindexs.forEach((_) => {
-        if (_.zindexCode === zindex.zindexCode) {
-          _.collapse = !zindex.collapse;
-        }
-      });
-      return cloneZindexs;
-    });
-  };
   return (
     <div>
       <div className={styles.row}>
@@ -50,7 +37,12 @@ const ZindexRow: React.FC<RowProps> = (props) => {
             alignItems: 'center',
             justifyContent: 'space-between',
           }}
-          onClick={onToggleCollapse}
+          onClick={() => {
+            dispatch({
+              type: TOGGLE_ZINDEX_COLLAPSE,
+              payload: zindex,
+            });
+          }}
         >
           <div className={styles.arrow}>
             {zindex.collapse ? (

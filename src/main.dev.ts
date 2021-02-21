@@ -9,7 +9,13 @@
  * `./app/main.prod.js` using webpack. This gives us some performance wins.
  */
 import path from 'path';
-import { app, globalShortcut, ipcMain, nativeImage } from 'electron';
+import {
+  app,
+  globalShortcut,
+  ipcMain,
+  nativeImage,
+  nativeTheme,
+} from 'electron';
 import AppUpdater from './autoUpdater';
 import { menubar } from 'menubar';
 
@@ -95,6 +101,14 @@ const createMenubar = async () => {
     if (!app.isPackaged) {
       mb.window!.webContents.openDevTools({ mode: 'undocked' });
     }
+
+    // 监听主题颜色变化
+    nativeTheme.on('updated', () => {
+      console.log(6666);
+      mb.window?.webContents.send('nativeTheme-updated', {
+        darkMode: nativeTheme.shouldUseDarkColors,
+      });
+    });
   });
   // To avoid a flash when opening your menubar app, you can disable backgrounding the app using the following:
   mb.app.commandLine.appendSwitch(

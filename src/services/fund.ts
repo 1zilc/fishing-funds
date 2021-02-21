@@ -6,21 +6,21 @@ import cheerio from 'cheerio';
 import * as Utils from '../utils';
 
 // 天天基金
-export const FromEastmoney: (
-  code: string
-) => Promise<Fund.ResponseItem | null> = async (code) => {
+export async function FromEastmoney(code: string) {
   try {
-    const { body } = await got(`http://fundgz.1234567.com.cn/js/${code}.js`);
-    return body.startsWith('jsonpgz') ? eval(body) : null;
+    const { body } = await got(`http://fundgz.1234567.com.cn/js/${code}.js`, {
+      retry: 0,
+    });
+    return body.startsWith('jsonpgz')
+      ? (eval(body) as Promise<Fund.ResponseItem | null>)
+      : null;
   } catch (error) {
     return null;
   }
-};
+}
 
 // 基金速查网
-export const FromDayFund: (
-  code: string
-) => Promise<Fund.ResponseItem | null> = async (code) => {
+export async function FromDayFund(code: string) {
   try {
     const { body } = await got('https://www.dayfund.cn/ajs/ajaxdata.shtml', {
       searchParams: {
@@ -63,12 +63,10 @@ export const FromDayFund: (
   } catch (error) {
     return null;
   }
-};
+}
 
 // 腾讯证券
-export const FromTencent: (
-  code: string
-) => Promise<Fund.ResponseItem | null> = async (code) => {
+export async function FromTencent(code: string) {
   try {
     const {
       body: { data },
@@ -106,12 +104,10 @@ export const FromTencent: (
   } catch (error) {
     return null;
   }
-};
+}
 
 // 新浪基金
-export const FromSina: (
-  code: string
-) => Promise<Fund.ResponseItem | null> = async (code) => {
+export async function FromSina(code: string) {
   try {
     const { rawBody } = await got(`https://hq.sinajs.cn/list=fu_${code}`, {
       headers: {
@@ -142,12 +138,10 @@ export const FromSina: (
   } catch (error) {
     return null;
   }
-};
+}
 
 // 好买基金
-export const FromHowbuy: (
-  code: string
-) => Promise<Fund.ResponseItem | null> = async (code) => {
+export async function FromHowbuy(code: string) {
   try {
     const { body } = await got.post(
       `https://www.howbuy.com/fund/ajax/gmfund/valuation/valuationnav.htm`,
@@ -191,4 +185,158 @@ export const FromHowbuy: (
   } catch (error) {
     return null;
   }
-};
+}
+
+export async function GetEstimatedFromEastmoney(code: string) {
+  try {
+    const { rawBody } = await got(
+      `http://j4.dfcfw.com/charts/pic6/${code}.png`,
+      {
+        retry: 0,
+      }
+    );
+    const base64Str = rawBody.toString('base64');
+
+    return `data:image/png;base64,${base64Str}`;
+  } catch {
+    return null;
+  }
+}
+
+export async function GetStockWareHouseFromEastmoney(
+  code: string,
+  stockCodes: string[]
+) {
+  try {
+    const { body: html } = await got(`http://fund.eastmoney.com/${code}.html`, {
+      retry: 0,
+    });
+    const $ = cheerio.load(html);
+    const secids = (stockCodes || []).join(',') || '';
+    const tors = $('#quotationItem_DataTable')
+      .find('#position_shares')
+      .find('tr > td:nth-child(2)')
+      .text()
+      .split('%');
+
+    const {
+      body: { data },
+    } = await got('https://push2.eastmoney.com/api/qt/ulist.np/get', {
+      searchParams: {
+        fields: 'f2,f3,f12,f14',
+        fltt: 2,
+        secids,
+      },
+      responseType: 'json',
+      retry: 0,
+    });
+    const diff: {
+      f2: string; // 最新价
+      f3: number; // 涨跌幅
+      f14: string; // 名称
+      f12: string; // 股票代码
+    }[] = data.diff;
+    const result: Fund.WareHouse[] = diff.map((item, index) => {
+      return {
+        zxz: item.f2,
+        name: item.f14,
+        code: item.f12,
+        zdf: item.f3,
+        ccb: tors[index], // 持仓比
+      };
+    });
+    return result;
+  } catch {
+    return [];
+  }
+}
+
+export async function GetSecuritiesWareHouseFromEastmoney(
+  code: string,
+  securitiesCodes: string
+) {
+  try {
+    const { body: html } = await got(`http://fund.eastmoney.com/${code}.html`, {
+      retry: 0,
+    });
+    const $ = cheerio.load(html);
+    const secids = securitiesCodes || '';
+    const tors = $('#quotationItem_DataTable')
+      .find('#position_bonds')
+      .find('tr > td:nth-child(2)')
+      .text()
+      .split('%');
+
+    const {
+      body: { data },
+    } = await got('https://push2.eastmoney.com/api/qt/ulist.np/get', {
+      searchParams: {
+        fields: 'f2,f3,f12,f14',
+        fltt: 2,
+        secids,
+      },
+      responseType: 'json',
+      retry: 0,
+    });
+    const diff: {
+      f2: string; // 最新价
+      f3: number; // 涨跌幅
+      f14: string; // 名称
+      f12: string; // 债券代码
+    }[] = data.diff;
+    const result: Fund.WareHouse[] = diff.map((item, index) => {
+      return {
+        zxz: item.f2,
+        name: item.f14,
+        code: item.f12,
+        zdf: item.f3,
+        ccb: tors[index], // 持仓比
+      };
+    });
+    return result;
+  } catch {
+    return [];
+  }
+}
+
+export async function GetFundDetailFromEastmoney(code: string) {
+  try {
+    const { body } = await got(
+      `http://fund.eastmoney.com/pingzhongdata/${code}.js`,
+      {
+        retry: 0,
+      }
+    );
+    const response: Fund.PingzhongData = Utils.parsepingzhongdata(body);
+    return response;
+  } catch {
+    return {};
+  }
+}
+
+export async function GetFundPerformanceFromEastmoney(
+  code: string,
+  type: string //'m' | 'q' | 'hy' | 'y' | 'try' | 'se'
+) {
+  try {
+    const {
+      body: { Data },
+    } = await got(`http://api.fund.eastmoney.com/pinzhong/LJSYLZS`, {
+      searchParams: {
+        fundCode: code,
+        indexcode: '000300',
+        type,
+      },
+      headers: {
+        Referer: 'http://fund.eastmoney.com/',
+      },
+      retry: 0,
+      responseType: 'json',
+    });
+
+    const result: any[] = Data;
+    return result;
+  } catch (error) {
+    return [];
+  }
+}

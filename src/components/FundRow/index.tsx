@@ -2,28 +2,27 @@ import React, { useContext } from 'react';
 import { useBoolean } from 'ahooks';
 import { Collapse } from 'react-collapse';
 import classnames from 'classnames';
-import { useSelector } from 'react-redux';
-import Drawer from 'rc-drawer';
+import { useSelector, useDispatch } from 'react-redux';
 
+import CustomDrawer from '@/components/CustomDrawer';
 import { ReactComponent as EditIcon } from '@/assets/icons/edit.svg';
 import { ReactComponent as RemoveIcon } from '@/assets/icons/remove.svg';
 import { ReactComponent as ArrowDownIcon } from '@/assets/icons/arrow-down.svg';
 import { ReactComponent as ArrowUpIcon } from '@/assets/icons/arrow-up.svg';
-
 import EditFundContent from '@/components/EditFundContent';
+import DetailFundContent from '@/components/DetailFundContent';
+
 import { StoreState } from '@/reducers/types';
-import { ToolbarState } from '@/reducers/toolbar';
-import { deleteFund, calcFund } from '@/actions/fund';
+import { TOGGLE_FUND_COLLAPSE, deleteFund, calcFund } from '@/actions/fund';
 import { getSystemSetting } from '@/actions/setting';
 import { HomeContext } from '../Home';
 import * as Utils from '@/utils';
 
 import styles from './index.scss';
+import { useScrollToTop } from '@/utils/hooks';
 
 export interface RowProps {
   fund: Fund.ResponseItem & Fund.ExtraRow;
-  index: number;
-  toolbar: ToolbarState;
 }
 
 const arrowSize = {
@@ -32,12 +31,14 @@ const arrowSize = {
 };
 
 const FundRow: React.FC<RowProps> = (props) => {
-  const { fund, index } = props;
+  const { fund } = props;
+  const dispatch = useDispatch();
   const { conciseSetting } = getSystemSetting();
-  const { freshFunds, setFunds } = useContext(HomeContext);
+  const { runGetFunds } = useContext(HomeContext);
   const toolbarDeleteStatus = useSelector(
     (state: StoreState) => state.toolbar.deleteStatus
   );
+  const freshFunds = useScrollToTop({ after: runGetFunds });
 
   const [
     showEditDrawer,
@@ -48,17 +49,14 @@ const FundRow: React.FC<RowProps> = (props) => {
     },
   ] = useBoolean(false);
 
-  const onToggleCollapse = () => {
-    setFunds((funds) => {
-      const cloneFunds = Utils.DeepCopy(funds);
-      cloneFunds.forEach((_) => {
-        if (_.fundcode === fund.fundcode) {
-          _.collapse = !fund.collapse;
-        }
-      });
-      return cloneFunds;
-    });
-  };
+  const [
+    showDetailDrawer,
+    {
+      setTrue: openDetailDrawer,
+      setFalse: closeDetailDrawer,
+      toggle: ToggleDetailDrawer,
+    },
+  ] = useBoolean(false);
 
   const { cyfe, bjz, jrsygz, gszz } = calcFund(fund);
 
@@ -76,7 +74,12 @@ const FundRow: React.FC<RowProps> = (props) => {
             alignItems: 'center',
             justifyContent: 'space-between',
           }}
-          onClick={onToggleCollapse}
+          onClick={() =>
+            dispatch({
+              type: TOGGLE_FUND_COLLAPSE,
+              payload: fund,
+            })
+          }
         >
           <div className={styles.arrow}>
             {fund.collapse ? (
@@ -172,26 +175,28 @@ const FundRow: React.FC<RowProps> = (props) => {
             <span>今日估算总值：</span>
             <span>¥ {gszz.toFixed(2)}</span>
           </section>
+          <div className={styles.view}>
+            <a onClick={openDetailDrawer}>{'查看详情 >'}</a>
+          </div>
         </div>
       </Collapse>
-      <Drawer
-        open={showEditDrawer}
-        showMask
-        maskClosable
-        level={null}
-        handler={false}
-        onClose={closeEditDrawer}
-        placement="bottom"
-      >
+      <CustomDrawer show={showEditDrawer}>
         <EditFundContent
+          onClose={closeEditDrawer}
           onEnter={() => {
             freshFunds();
             closeEditDrawer();
           }}
-          onClose={closeEditDrawer}
           fund={{ cyfe: Number(cyfe), code: fund.fundcode, name: fund.name }}
         />
-      </Drawer>
+      </CustomDrawer>
+      <CustomDrawer show={showDetailDrawer}>
+        <DetailFundContent
+          onEnter={closeDetailDrawer}
+          onClose={closeDetailDrawer}
+          fund={fund}
+        />
+      </CustomDrawer>
     </div>
   );
 };

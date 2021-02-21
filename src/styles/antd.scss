@@ -2,14 +2,14 @@
 @import '~antd/dist/antd.compact.css';
 
 
-
-.ant-radio-wrapper {
+.ant-tabs,
+.ant-radio-wrapper,
+.ant-checkbox-wrapper {
   color: var(--main-text-color);
 }
 
 .ant-dropdown-menu {
   background-color: var(--background-color);
-
 }
 
 .ant-dropdown-menu-item {
@@ -21,6 +21,7 @@
   }
 }
 
-.ant-checkbox-wrapper {
-  color: var(--main-text-color);
+
+.ant-tabs-nav::before {
+  border: none !important;
 }

@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Input, InputNumber } from 'antd';
+import CustomDrawerContent from '@/components/CustomDrawer/Content';
 import { addFund, getFund } from '@/actions/fund';
 import styles from './index.scss';
 
 export interface AddFundContentProps {
-  show?: boolean;
   onEnter: () => void;
   onClose: () => void;
 }
@@ -28,24 +28,14 @@ const AddFundContent: React.FC<AddFundContentProps> = (props) => {
     }
   };
 
-  useEffect(() => {
-    setCode('');
-    setNum(0);
-    setNone(false);
-  }, [props.show]);
-
   return (
-    <div className={styles.content}>
-      <div className={styles.header}>
-        <button className={styles.close} onClick={props.onClose}>
-          关闭
-        </button>
-        <h3>添加基金</h3>
-        <button className={styles.add} onClick={onAdd}>
-          添加
-        </button>
-      </div>
-      <div className={styles.body}>
+    <CustomDrawerContent
+      title="添加基金"
+      enterText="添加"
+      onEnter={onAdd}
+      onClose={props.onClose}
+    >
+      <div className={styles.content}>
         <section>
           <label>基金代码：</label>
           <Input
@@ -75,7 +65,7 @@ const AddFundContent: React.FC<AddFundContentProps> = (props) => {
           {none && <span className={styles.none}>没有找到该基金信息～</span>}
         </section>
       </div>
-    </div>
+    </CustomDrawerContent>
   );
 };
 

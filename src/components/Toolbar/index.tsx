@@ -13,6 +13,7 @@ import { ReactComponent as RefreshIcon } from '@/assets/icons/refresh.svg';
 import { ReactComponent as QRcodeIcon } from '@/assets/icons/qr-code.svg';
 import { ReactComponent as SettingIcon } from '@/assets/icons/setting.svg';
 
+import CustomDrawer from '@/components/CustomDrawer';
 import AddFundContent from '@/components/AddFundContent';
 import SettingContent from '@/components/SettingContent';
 import PayContent from '@/components/PayContent';
@@ -22,7 +23,7 @@ import EditZindexContent from '@/components/EditZindexContent';
 import { toggleToolbarDeleteStatus } from '@/actions/toolbar';
 
 import { StoreState } from '@/reducers/types';
-
+import { useScrollToTop } from '@/utils/hooks';
 import * as Enums from '@/utils/enums';
 import styles from './index.scss';
 
@@ -32,7 +33,7 @@ const iconSize = { height: 18, width: 18 };
 
 const ToolBar: React.FC<ToolBarProps> = () => {
   const dispatch = useDispatch();
-  const { freshFunds, freshZindexs } = useContext(HomeContext);
+  const { runGetFunds, runGetZindexs } = useContext(HomeContext);
 
   const updateInfo = useSelector(
     (state: StoreState) => state.updater.updateInfo
@@ -40,6 +41,8 @@ const ToolBar: React.FC<ToolBarProps> = () => {
   const tabsActiveKey = useSelector(
     (state: StoreState) => state.tabs.activeKey
   );
+  const freshFunds = useScrollToTop({ after: runGetFunds });
+  const freshZindexs = useScrollToTop({ after: runGetZindexs });
 
   const [
     showAddFundDrawer,
@@ -100,79 +103,36 @@ const ToolBar: React.FC<ToolBarProps> = () => {
           <SettingIcon style={{ ...iconSize }} onClick={openSettingDrawer} />
         </Badge>
       </div>
-
-      <Drawer
-        open={showAddFundDrawer}
-        showMask
-        maskClosable
-        level={null}
-        handler={false}
-        onClose={closeAddFundDrawer}
-        placement="bottom"
-      >
+      <CustomDrawer show={showAddFundDrawer}>
         <AddFundContent
-          show={showAddFundDrawer}
+          onClose={closeAddFundDrawer}
           onEnter={() => {
             freshFunds();
             closeAddFundDrawer();
           }}
-          onClose={closeAddFundDrawer}
         />
-      </Drawer>
-      <Drawer
-        open={showEditZindexDrawer}
-        showMask
-        maskClosable
-        level={null}
-        handler={false}
-        onClose={closeEditZindexDrawer}
-        placement="bottom"
-        height="100vh"
-      >
+      </CustomDrawer>
+      <CustomDrawer show={showEditZindexDrawer}>
         <EditZindexContent
-          show={showEditZindexDrawer}
+          onClose={closeEditZindexDrawer}
           onEnter={() => {
             freshZindexs();
             closeEditZindexDrawer();
           }}
-          onClose={closeEditZindexDrawer}
         />
-      </Drawer>
-      <Drawer
-        open={showSettingDrawer}
-        showMask
-        maskClosable
-        level={null}
-        handler={false}
-        onClose={closeAddFundDrawer}
-        placement="bottom"
-        height="100vh"
-      >
+      </CustomDrawer>
+      <CustomDrawer show={showSettingDrawer}>
         <SettingContent
-          show={showSettingDrawer}
+          onClose={closeSettingDrawer}
           onEnter={() => {
             freshFunds();
             closeSettingDrawer();
           }}
-          onClose={closeSettingDrawer}
         />
-      </Drawer>
-      <Drawer
-        open={showPayDrawer}
-        showMask
-        maskClosable
-        level={null}
-        handler={false}
-        onClose={closePayDrawer}
-        placement="bottom"
-        height="100vh"
-      >
-        <PayContent
-          show={showPayDrawer}
-          onEnter={closePayDrawer}
-          onClose={closePayDrawer}
-        />
-      </Drawer>
+      </CustomDrawer>
+      <CustomDrawer show={showPayDrawer}>
+        <PayContent onEnter={closePayDrawer} onClose={closePayDrawer} />
+      </CustomDrawer>
     </>
   );
 };

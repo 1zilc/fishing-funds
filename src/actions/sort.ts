@@ -1,10 +1,6 @@
-import NP from 'number-precision';
-import * as Services from '../services';
-import * as Enums from '../utils/enums';
-import * as Utils from '../utils';
-import * as Adapter from '../utils/adpters';
-import { getFundApiTypeSetting } from './setting';
-import CONST_STORAGE from '../constants/storage.json';
+import * as Enums from '@/utils/enums';
+import * as Utils from '@/utils';
+import CONST_STORAGE from '@/constants/storage.json';
 
 export interface FundSortMode {
   type: Enums.FundSortType;
@@ -30,7 +26,7 @@ export const zindexSortModeOptions: Option.EnumsOption<Enums.ZindexSortType>[] =
   { key: Enums.ZindexSortType.Zsz, value: '指数值' },
 ];
 
-export const getSortConfig = () => {
+export function getSortConfig() {
   const fundSortModeOptionsMap = fundSortModeOptions.reduce((r, c) => {
     r[c.key] = c;
     return r;
@@ -47,46 +43,49 @@ export const getSortConfig = () => {
     fundSortModeOptionsMap,
     zindexSortModeOptionsMap,
   };
-};
+}
 
-export const getSortMode: () => {
-  fundSortMode: FundSortMode;
-  zindexSortMode: ZindexSortMode;
-} = () => {
-  const fundSortMode = Utils.GetStorage(CONST_STORAGE.FUND_SORT_MODE, {
-    type: Enums.FundSortType.Default,
-    order: Enums.SortOrderType.Desc,
-  });
-  const zindexSortMode = Utils.GetStorage(CONST_STORAGE.ZINDEX_SORT_MODE, {
-    type: Enums.ZindexSortType.Custom,
-    order: Enums.SortOrderType.Desc,
-  });
+export function getSortMode() {
+  const fundSortMode: FundSortMode = Utils.GetStorage(
+    CONST_STORAGE.FUND_SORT_MODE,
+    {
+      type: Enums.FundSortType.Default,
+      order: Enums.SortOrderType.Desc,
+    }
+  );
+  const zindexSortMode: ZindexSortMode = Utils.GetStorage(
+    CONST_STORAGE.ZINDEX_SORT_MODE,
+    {
+      type: Enums.ZindexSortType.Custom,
+      order: Enums.SortOrderType.Desc,
+    }
+  );
   return { fundSortMode, zindexSortMode };
-};
+}
 
-export const setFundSortMode: (fundSortMode: {
+export function setFundSortMode(fundSortMode: {
   type?: Enums.FundSortType;
   order?: Enums.SortOrderType;
-}) => void = (fundSortMode) => {
+}) {
   const { fundSortMode: _ } = getSortMode();
   Utils.SetStorage(CONST_STORAGE.FUND_SORT_MODE, {
     ..._,
     ...fundSortMode,
   });
-};
+}
 
-export const setZindexSortMode: (zindexSortMode: {
+export function setZindexSortMode(zindexSortMode: {
   type?: Enums.ZindexSortType;
   order?: Enums.SortOrderType;
-}) => void = (zindexSortMode) => {
+}) {
   const { zindexSortMode: _ } = getSortMode();
   Utils.SetStorage(CONST_STORAGE.ZINDEX_SORT_MODE, {
     ..._,
     ...zindexSortMode,
   });
-};
+}
 
-export const troggleFundSortOrder = () => {
+export function troggleFundSortOrder() {
   const { fundSortMode } = getSortMode();
   const { order } = fundSortMode;
   Utils.SetStorage(CONST_STORAGE.FUND_SORT_MODE, {
@@ -96,9 +95,9 @@ export const troggleFundSortOrder = () => {
         ? Enums.SortOrderType.Desc
         : Enums.SortOrderType.Asc,
   });
-};
+}
 
-export const troggleZindexSortOrder = () => {
+export function troggleZindexSortOrder() {
   const { zindexSortMode } = getSortMode();
   const { order } = zindexSortMode;
   Utils.SetStorage(CONST_STORAGE.ZINDEX_SORT_MODE, {
@@ -108,4 +107,4 @@ export const troggleZindexSortOrder = () => {
         ? Enums.SortOrderType.Desc
         : Enums.SortOrderType.Asc,
   });
-};
+}

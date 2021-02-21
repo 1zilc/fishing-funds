@@ -5,9 +5,7 @@ import NP from 'number-precision';
  * @param code 指数代码: 000001
  * 从天天基金获取指数行情
  */
-export const FromEastmoney: (
-  code: string
-) => Promise<Zindex.ResponseItem | null> = async (code) => {
+export async function FromEastmoney(code: string) {
   try {
     const { body: data } = await got<{
       rc: 0;
@@ -35,6 +33,7 @@ export const FromEastmoney: (
         _: new Date().getTime(),
       },
       responseType: 'json',
+      retry: 0,
     });
 
     return {
@@ -53,4 +52,4 @@ export const FromEastmoney: (
   } catch (err) {
     return null;
   }
-};
+}
