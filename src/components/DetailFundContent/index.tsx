@@ -26,9 +26,7 @@ const DetailFundContent: React.FC<DetailFundContentProps> = (props) => {
 
   useRequest(Services.Fund.GetFundDetailFromEastmoney, {
     defaultParams: [fund.fundcode],
-    onSuccess: (result) => {
-      setPingzhongdata(result);
-    },
+    onSuccess: setPingzhongdata,
   });
 
   return (
