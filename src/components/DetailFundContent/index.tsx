@@ -65,7 +65,7 @@ const DetailFundContent: React.FC<DetailFundContentProps> = (props) => {
                 Number(fund?.gszzl) >= 0 ? 'up-text' : 'down-text'
               )}
             >
-              {Utils.Yang(fund.gszzl)}%
+              {Utils.Yang(fund?.gszzl)}%
             </div>
             <div className={styles.detailItemLabel}>日涨跌幅</div>
           </div>
