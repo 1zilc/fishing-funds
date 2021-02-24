@@ -8,7 +8,7 @@ import Performance from '@/components/DetailFundContent/Performance';
 import StockWareHouse from '@/components/DetailFundContent/StockWareHouse';
 import SecuritiesWareHouse from '@/components/DetailFundContent/SecuritiesWareHouse';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
-
+import { getFund } from '@/actions/fund';
 import * as Services from '@/services';
 import * as Utils from '@/utils';
 import * as Enums from '@/utils/enums';
@@ -17,15 +17,23 @@ import styles from './index.scss';
 export interface DetailFundContentProps {
   onEnter: () => void;
   onClose: () => void;
-  fund: Fund.ResponseItem;
+  code: string;
 }
 
 const DetailFundContent: React.FC<DetailFundContentProps> = (props) => {
-  const { fund } = props;
+  const { code } = props;
+  const [fund, setFund] = useState<Fund.ResponseItem>({});
   const [pingzhongdata, setPingzhongdata] = useState<Fund.PingzhongData>({});
 
+  useRequest(getFund, {
+    throwOnError: true,
+    defaultParams: [code],
+    onSuccess: setFund,
+  });
+
   useRequest(Services.Fund.GetFundDetailFromEastmoney, {
-    defaultParams: [fund.fundcode],
+    throwOnError: true,
+    defaultParams: [code],
     onSuccess: setPingzhongdata,
   });
 
@@ -37,8 +45,8 @@ const DetailFundContent: React.FC<DetailFundContentProps> = (props) => {
       onEnter={props.onEnter}
     >
       <div className={styles.content}>
-        <h3>{fund.name}</h3>
-        <div>{fund.fundcode}</div>
+        <h3>{fund?.name}</h3>
+        <div>{fund?.fundcode}</div>
         <div className={styles.detail}>
           <div className={styles.detailItem}>
             <div
@@ -54,7 +62,7 @@ const DetailFundContent: React.FC<DetailFundContentProps> = (props) => {
           <div className={styles.detailItem}>
             <div
               className={classnames(
-                Number(fund.gszzl) >= 0 ? 'up-text' : 'down-text'
+                Number(fund?.gszzl) >= 0 ? 'up-text' : 'down-text'
               )}
             >
               {Utils.Yang(fund.gszzl)}%
@@ -62,9 +70,9 @@ const DetailFundContent: React.FC<DetailFundContentProps> = (props) => {
             <div className={styles.detailItemLabel}>日涨跌幅</div>
           </div>
           <div className={styles.detailItem}>
-            <div>{fund.dwjz}</div>
+            <div>{fund?.dwjz}</div>
             <div className={styles.detailItemLabel}>
-              净值 {fund.jzrq.slice(5)}
+              净值 {fund?.jzrq?.slice(5)}
             </div>
           </div>
         </div>
@@ -75,10 +83,10 @@ const DetailFundContent: React.FC<DetailFundContentProps> = (props) => {
             tabBarGutter={15}
           >
             <Tabs.TabPane tab="业绩走势" key={Enums.TrendType.Performance}>
-              <Performance code={fund.fundcode} />
+              <Performance code={code} />
             </Tabs.TabPane>
             <Tabs.TabPane tab="净值估算" key={Enums.TrendType.Estimate}>
-              <Estimate code={fund.fundcode} />
+              <Estimate code={code} />
             </Tabs.TabPane>
           </Tabs>
         </div>
@@ -90,13 +98,13 @@ const DetailFundContent: React.FC<DetailFundContentProps> = (props) => {
           >
             <Tabs.TabPane tab="股票持仓" key={Enums.WareHouseType.Stock}>
               <StockWareHouse
-                code={fund.fundcode}
+                code={code}
                 stockCodes={pingzhongdata.stockCodesNew!}
               />
             </Tabs.TabPane>
             <Tabs.TabPane tab="债券持仓" key={Enums.WareHouseType.Securities}>
               <SecuritiesWareHouse
-                code={fund.fundcode}
+                code={code}
                 securitiesCodes={pingzhongdata.zqCodesNew!}
               />
             </Tabs.TabPane>

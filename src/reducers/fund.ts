@@ -5,6 +5,7 @@ import {
   TOGGLE_FUND_COLLAPSE,
   TOGGLE_FUNDS_COLLAPSE,
   SORT_FUNDS_WITH_COLLAPSE_CHACHED,
+  SET_REMOTE_FUNDS,
   getFundConfig,
   calcFund,
 } from '@/actions/fund';
@@ -14,12 +15,19 @@ import * as Utils from '@/utils';
 
 export interface FundState {
   funds: (Fund.ResponseItem & Fund.ExtraRow)[];
+  remoteFunds: Fund.RemoteFund[];
+}
+function setRemoteFunds(state: FundState, remoteFunds: Fund.RemoteFund[]) {
+  return {
+    ...state,
+    remoteFunds,
+  };
 }
 
-const sortFunds = (
+function sortFunds(
   state: FundState,
   responseFunds?: Fund.ResponseItem[]
-): FundState => {
+): FundState {
   const { funds } = state;
   const {
     fundSortMode: { type: fundSortType, order: fundSortorder },
@@ -52,12 +60,12 @@ const sortFunds = (
     ...state,
     funds: sortList,
   };
-};
+}
 
-const sortFundsWithCollapseChached = (
+function sortFundsWithCollapseChached(
   state: FundState,
   responseFunds: Fund.ResponseItem[]
-): FundState => {
+): FundState {
   const { funds } = state;
   const fundsCodeToMap = funds.reduce((map, fund) => {
     map[fund.fundcode] = fund;
@@ -72,15 +80,16 @@ const sortFundsWithCollapseChached = (
     }));
 
   return sortFunds(state, fundsWithCollapseChached);
-};
+}
 
-const toggleFundCollapse = (
+function toggleFundCollapse(
   state: FundState,
   fund: Fund.ResponseItem & Fund.ExtraRow
-): FundState => {
+): FundState {
   const { funds } = state;
-
-  const cloneFunds = Utils.DeepCopy(funds);
+  const cloneFunds: (Fund.ResponseItem & Fund.ExtraRow)[] = Utils.DeepCopy(
+    funds
+  );
   cloneFunds.forEach((_) => {
     if (_.fundcode === fund.fundcode) {
       _.collapse = !fund.collapse;
@@ -90,11 +99,13 @@ const toggleFundCollapse = (
     ...state,
     funds: cloneFunds,
   };
-};
+}
 
-const toggleFundsCollapse = (state: FundState): FundState => {
+function toggleFundsCollapse(state: FundState): FundState {
   const { funds } = state;
-  const cloneFunds = Utils.DeepCopy(funds);
+  const cloneFunds: (Fund.ResponseItem & Fund.ExtraRow)[] = Utils.DeepCopy(
+    funds
+  );
   const expandAllFunds = funds.every((_) => _.collapse);
   cloneFunds.forEach((_) => {
     _.collapse = !expandAllFunds;
@@ -103,15 +114,18 @@ const toggleFundsCollapse = (state: FundState): FundState => {
     ...state,
     funds: cloneFunds,
   };
-};
+}
 
 export default function fund(
   state = {
     funds: [],
+    remoteFunds: [],
   },
   action: AnyAction
 ) {
   switch (action.type) {
+    case SET_REMOTE_FUNDS:
+      return setRemoteFunds(state, action.payload);
     case SORT_FUNDS:
       return sortFunds(state, action.payload);
     case SORT_FUNDS_WITH_COLLAPSE_CHACHED:

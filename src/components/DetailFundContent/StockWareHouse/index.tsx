@@ -53,6 +53,7 @@ const StockWareHouse: React.FC<StockWareHouseProps> = ({
     Services.Fund.GetStockWareHouseFromEastmoney,
     {
       manual: true,
+      throwOnError: true,
       onSuccess: (result) => {
         warehoseChartInstance?.setOption({
           backgroundColor: 'transparent',

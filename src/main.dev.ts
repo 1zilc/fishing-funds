@@ -15,6 +15,8 @@ import {
   ipcMain,
   nativeImage,
   nativeTheme,
+  Tray,
+  Menu,
 } from 'electron';
 import AppUpdater from './autoUpdater';
 import { menubar } from 'menubar';
@@ -28,6 +30,8 @@ const EXTRA_RESOURCES_PATH = app.isPackaged
 const getAssetPath = (resourceFilename: string): string => {
   return path.join(EXTRA_RESOURCES_PATH, resourceFilename);
 };
+
+const contextMenu = Menu.buildFromTemplate([{ role: 'quit', label: '退出' }]);
 
 const nativeMenuIcon = nativeImage.createFromPath(
   getAssetPath('menu/iconTemplate.png')
@@ -64,13 +68,14 @@ const createMenubar = async () => {
   ) {
     await installExtensions();
   }
+  const tray = new Tray(nativeMenuIcon);
 
   const mb = menubar({
     index: `file://${__dirname}/index.html`,
     // icon: path.join(__dirname, '../resources/menu/iconTemplate.png'),
     // icon: 'resources/icon.png',
-    icon: nativeMenuIcon,
-    // tray: new Tray(getAssetPath('menu/iconTemplate.png')),
+    // icon: nativeMenuIcon,
+    tray,
     tooltip: 'Fishing Funds',
     preloadWindow: true,
     showOnAllWorkspaces: false,
@@ -110,6 +115,13 @@ const createMenubar = async () => {
       });
     });
   });
+  // add contextMenu
+  mb.on('ready', () => {
+    tray.on('right-click', () => {
+      mb.tray.popUpContextMenu(contextMenu);
+    });
+  });
+
   // To avoid a flash when opening your menubar app, you can disable backgrounding the app using the following:
   mb.app.commandLine.appendSwitch(
     'disable-backgrounding-occluded-windows',

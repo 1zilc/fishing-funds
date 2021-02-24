@@ -4,13 +4,13 @@ declare namespace Fund {
     cyfe: number;
   }
   export interface ResponseItem {
-    name: string; // 名称 '诺安混合'
-    fundcode: string; // 代码 '320007'
-    gztime: string; // 估值时间 '2021-01-01 15:00'
-    gszzl: string; // 估算增长率 '-1.234'
-    jzrq: string; // 净值日期 '2021-01-01'
-    dwjz: string; // 当前净值 '1.1111'
-    gsz: string; // 估算值 '1.2222'
+    name?: string; // 名称 '诺安混合'
+    fundcode?: string; // 代码 '320007'
+    gztime?: string; // 估值时间 '2021-01-01 15:00'
+    gszzl?: string; // 估算增长率 '-1.234'
+    jzrq?: string; // 净值日期 '2021-01-01'
+    dwjz?: string; // 当前净值 '1.1111'
+    gsz?: string; // 估算值 '1.2222'
   }
 
   export interface ExtraRow {
@@ -48,5 +48,14 @@ declare namespace Fund {
     code: string;
     zdf: number;
     ccb: string;
+  }
+
+  // "000001","HXCZHH","华夏成长混合","混合型","HUAXIACHENGZHANGHUNHE"
+  export interface RemoteFund extends Array<string> {
+    0: string; // code
+    1: string; // pinyin
+    2: string; // name
+    3: string; // type
+    4: string; // quanpin
   }
 }
