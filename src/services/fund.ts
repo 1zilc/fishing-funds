@@ -187,6 +187,7 @@ export async function FromHowbuy(code: string) {
   }
 }
 
+// 从天天基金获取估值图片
 export async function GetEstimatedFromEastmoney(code: string) {
   try {
     const { rawBody } = await got(
@@ -203,6 +204,7 @@ export async function GetEstimatedFromEastmoney(code: string) {
   }
 }
 
+// 从天天基金获取股票持仓
 export async function GetStockWareHouseFromEastmoney(
   code: string,
   stockCodes: string[]
@@ -251,6 +253,7 @@ export async function GetStockWareHouseFromEastmoney(
   }
 }
 
+// 从天天基金获取债券持仓
 export async function GetSecuritiesWareHouseFromEastmoney(
   code: string,
   securitiesCodes: string
@@ -299,6 +302,7 @@ export async function GetSecuritiesWareHouseFromEastmoney(
   }
 }
 
+// 从天天基金获取基金详情
 export async function GetFundDetailFromEastmoney(code: string) {
   try {
     const { body } = await got(
@@ -314,6 +318,7 @@ export async function GetFundDetailFromEastmoney(code: string) {
   }
 }
 
+// 从天天基金获取近期表现
 export async function GetFundPerformanceFromEastmoney(
   code: string,
   type: string //'m' | 'q' | 'hy' | 'y' | 'try' | 'se'
@@ -337,6 +342,21 @@ export async function GetFundPerformanceFromEastmoney(
     const result: any[] = Data;
     return result;
   } catch (error) {
+    return [];
+  }
+}
+
+// 从天天基金获取所有基金信息
+export async function GetRemoteFundsFromEastmoney() {
+  try {
+    const { body } = await got(
+      'http://fund.eastmoney.com/js/fundcode_search.js',
+      {
+        retry: 0,
+      }
+    );
+    return Utils.parseRemoteFunds(body);
+  } catch {
     return [];
   }
 }

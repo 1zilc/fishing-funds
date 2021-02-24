@@ -7,6 +7,7 @@ import * as Adapter from '@/utils/adpters';
 import { getFundApiTypeSetting } from './setting';
 import CONST_STORAGE from '@/constants/storage.json';
 
+export const SET_REMOTE_FUNDS = 'SET_REMOTE_FUNDS';
 export const SET_FUNDS = 'SET_FUNDS';
 export const TOGGLE_FUND_COLLAPSE = 'TOGGLE_FUND_COLLAPSE';
 export const TOGGLE_FUNDS_COLLAPSE = 'TOGGLE_FUNDS_COLLAPSE';

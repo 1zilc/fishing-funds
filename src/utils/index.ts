@@ -107,3 +107,14 @@ export function parsepingzhongdata(code: string) {
     return {};
   }
 }
+
+export function parseRemoteFunds(code: string) {
+  try {
+    return eval(`(() => {
+      ${code}
+      return r;
+    })()`);
+  } catch {
+    return [];
+  }
+}

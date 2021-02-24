@@ -17,10 +17,14 @@ import TabsBar from '@/components/TabsBar';
 import { updateUpdateTime } from '@/actions/wallet';
 import { getFunds } from '@/actions/fund';
 import { getZindexs } from '@/actions/zindex';
-import { SORT_FUNDS_WITH_COLLAPSE_CHACHED } from '@/actions/fund';
+import {
+  SORT_FUNDS_WITH_COLLAPSE_CHACHED,
+  SET_REMOTE_FUNDS,
+} from '@/actions/fund';
 import { SORT_ZINDEXS_WITH_COLLAPSE_CHACHED } from '@/actions/zindex';
 import { StoreState } from '@/reducers/types';
 import * as Enums from '@/utils/enums';
+import * as Services from '@/services';
 import styles from './index.scss';
 
 export interface HomeProps {}
@@ -41,9 +45,21 @@ const Home: React.FC<HomeProps> = () => {
     (state: StoreState) => state.tabs.activeKey
   );
 
+  useRequest(Services.Fund.GetRemoteFundsFromEastmoney, {
+    // pollingInterval: 1000 * 60 * 60 * 24,
+    throwOnError: true,
+    onSuccess: (result) => {
+      dispatch({
+        type: SET_REMOTE_FUNDS,
+        payload: result,
+      });
+    },
+  });
+
   const { run: runGetFunds, loading: fundsLoading } = useRequest(getFunds, {
     manual: true,
-    throttleInterval: 1000 * 2, // 2秒请求一次
+    throwOnError: true,
+    throttleInterval: 1000 * 3, // 3秒内请求一次
     onSuccess: (result) => {
       const now = dayjs().format('YYYY/MM/DD HH:mm:ss');
       dispatch(updateUpdateTime(now));
@@ -58,6 +74,7 @@ const Home: React.FC<HomeProps> = () => {
     getZindexs,
     {
       manual: true,
+      throwOnError: true,
       onSuccess: (result) => {
         dispatch({
           type: SORT_ZINDEXS_WITH_COLLAPSE_CHACHED,

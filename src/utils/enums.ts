@@ -57,3 +57,9 @@ export enum PerformanceType {
   ThreeYear,
   Max,
 }
+
+// 检索类型
+export enum SearchType {
+  Code,
+  Name,
+}

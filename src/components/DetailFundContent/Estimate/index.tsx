@@ -12,6 +12,7 @@ export interface EstimateProps {
 const Estimate: React.FC<EstimateProps> = ({ code }) => {
   const [estimate, setEstimate] = useState(PictureImage);
   useRequest(Services.Fund.GetEstimatedFromEastmoney, {
+    throwOnError: true,
     defaultParams: [code],
     onSuccess: setEstimate,
   });

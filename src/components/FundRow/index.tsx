@@ -4,13 +4,13 @@ import { Collapse } from 'react-collapse';
 import classnames from 'classnames';
 import { useSelector, useDispatch } from 'react-redux';
 
-import CustomDrawer from '@/components/CustomDrawer';
 import { ReactComponent as EditIcon } from '@/assets/icons/edit.svg';
 import { ReactComponent as RemoveIcon } from '@/assets/icons/remove.svg';
 import { ReactComponent as ArrowDownIcon } from '@/assets/icons/arrow-down.svg';
 import { ReactComponent as ArrowUpIcon } from '@/assets/icons/arrow-up.svg';
 import EditFundContent from '@/components/EditFundContent';
 import DetailFundContent from '@/components/DetailFundContent';
+import CustomDrawer from '@/components/CustomDrawer';
 
 import { StoreState } from '@/reducers/types';
 import { TOGGLE_FUND_COLLAPSE, deleteFund, calcFund } from '@/actions/fund';
@@ -101,7 +101,7 @@ const FundRow: React.FC<RowProps> = (props) => {
               <div className={styles.rowBar}>
                 <div>
                   <span className={styles.code}>{fund.fundcode}</span>
-                  <span>{fund.gztime.slice(5)}</span>
+                  <span>{fund.gztime?.slice(5)}</span>
                 </div>
               </div>
             )}
@@ -138,7 +138,7 @@ const FundRow: React.FC<RowProps> = (props) => {
           {conciseSetting && (
             <section>
               <span>估值时间：</span>
-              <span>{fund.gztime.slice(5)}</span>
+              <span>{fund.gztime?.slice(5)}</span>
             </section>
           )}
           <section>
@@ -187,14 +187,14 @@ const FundRow: React.FC<RowProps> = (props) => {
             freshFunds();
             closeEditDrawer();
           }}
-          fund={{ cyfe: Number(cyfe), code: fund.fundcode, name: fund.name }}
+          fund={{ cyfe: Number(cyfe), code: fund.fundcode!, name: fund.name! }}
         />
       </CustomDrawer>
       <CustomDrawer show={showDetailDrawer}>
         <DetailFundContent
           onEnter={closeDetailDrawer}
           onClose={closeDetailDrawer}
-          fund={fund}
+          code={fund.fundcode!}
         />
       </CustomDrawer>
     </div>
