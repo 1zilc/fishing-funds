@@ -7,6 +7,9 @@ import Estimate from '@/components/DetailFundContent/Estimate';
 import Performance from '@/components/DetailFundContent/Performance';
 import StockWareHouse from '@/components/DetailFundContent/StockWareHouse';
 import SecuritiesWareHouse from '@/components/DetailFundContent/SecuritiesWareHouse';
+import SimilarRank from '@/components/DetailFundContent/SimilarRank';
+import SimilarProportion from '@/components/DetailFundContent/SimilarProportion';
+
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
 import { getFund } from '@/actions/fund';
 import * as Services from '@/services';
@@ -106,6 +109,27 @@ const DetailFundContent: React.FC<DetailFundContentProps> = (props) => {
               <SecuritiesWareHouse
                 code={code}
                 securitiesCodes={pingzhongdata.zqCodesNew!}
+              />
+            </Tabs.TabPane>
+          </Tabs>
+        </div>
+        <div>
+          <Tabs
+            defaultActiveKey={String(Enums.SimilarCompareType.Rank)}
+            animated={{ tabPane: true }}
+            tabBarGutter={15}
+          >
+            <Tabs.TabPane tab="同类排名" key={Enums.SimilarCompareType.Rank}>
+              <SimilarRank
+                rateInSimilarType={pingzhongdata.Data_rateInSimilarType}
+              />
+            </Tabs.TabPane>
+            <Tabs.TabPane
+              tab="百分比排名"
+              key={Enums.SimilarCompareType.Proportion}
+            >
+              <SimilarProportion
+                rateInSimilarPersent={pingzhongdata.Data_rateInSimilarPersent}
               />
             </Tabs.TabPane>
           </Tabs>

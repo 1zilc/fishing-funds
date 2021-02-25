@@ -76,3 +76,9 @@ export enum SearchType {
   Code,
   Name,
 }
+
+// 同类比较类型
+export enum SimilarCompareType {
+  Rank,
+  Proportion,
+}

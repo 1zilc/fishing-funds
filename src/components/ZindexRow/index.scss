@@ -1,10 +1,7 @@
-
-
 .row {
   /* display: flex; */
   width: 100%;
   padding: 8px 8px;
-  transition: all .2s;
   box-sizing: border-box;
   border-bottom: 1px solid var(--border-color);
   background-color: var(--background-color);
@@ -49,7 +46,7 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  width: 110px;
+  width: 150px;
   text-align: center;
 }
 
@@ -65,12 +62,16 @@
 
 .zd {
   display: flex;
-  justify-content: space-around;
+  justify-content: flex-end;
   width: 100%;
 
   .zdd,
   .zdf {
     font-size: 10px;
+  }
+
+  .zdf {
+    margin-left: 10px;
   }
 }
 

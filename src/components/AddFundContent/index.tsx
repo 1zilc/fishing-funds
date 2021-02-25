@@ -157,7 +157,7 @@ const AddFundContent: React.FC<AddFundContentProps> = (props) => {
           >
             <div>
               <div className={styles.name}>
-                {name}
+                <span className={styles.nameText}>{name}</span>
                 <span className={styles.tag}>{type}</span>
               </div>
               <div className={styles.code}>{code}</div>

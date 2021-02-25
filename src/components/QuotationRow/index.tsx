@@ -2,6 +2,7 @@ import React from 'react';
 import { Collapse } from 'react-collapse';
 import classnames from 'classnames';
 import { useDispatch } from 'react-redux';
+import NP from 'number-precision';
 
 import { ReactComponent as ArrowDownLineIcon } from '@/assets/icons/arrow-down-line.svg';
 import { ReactComponent as ArrowUpLineIcon } from '@/assets/icons/arrow-up-line.svg';
@@ -58,32 +59,45 @@ const QuotationRow: React.FC<RowProps> = (props) => {
                 alignItems: 'center',
               }}
             >
-              <span className={styles.zindexName}>{quotation.name}</span>
+              <span className={styles.quotationName}>{quotation.name}</span>
             </div>
             {!conciseSetting && (
               <div className={styles.rowBar}>
                 <div>
-                  {/* <span className={styles.code}>{quotation.zindexCode}</span> */}
-                  {/* <span>{zindex.gztime.slice(5)}</span> */}
+                  <span className={styles.code}>{quotation.lzgpName}</span>
+                  <span
+                    className={classnames(
+                      quotation.lzgpZdf < 0 ? 'down-text' : 'up-text'
+                    )}
+                  >
+                    {quotation.lzgpZdf < 0 ? '领跌' : '领涨'}
+                  </span>
+                  <span
+                    className={classnames(
+                      quotation.lzgpZdf < 0 ? 'down-text' : 'up-text'
+                    )}
+                  >
+                    {Utils.Yang(quotation.lzgpZdf)} %
+                  </span>
                 </div>
               </div>
             )}
           </div>
-          {/* <div className={classnames(styles.value)}>
+          <div className={classnames(styles.value)}>
             <div
               className={classnames(
-                styles.zsz,
-                zindex.zdf < 0 ? 'down-text' : 'up-text'
+                styles.zxj,
+                quotation.zdf < 0 ? 'down-text' : 'up-text'
               )}
             >
-              {zindex.zsz}
-              {zindex.zdf < 0 ? (
+              {quotation.zxj}
+              {quotation.zdf < 0 ? (
                 <ArrowDownLineIcon
-                  className={zindex.zdf < 0 ? 'down-svg' : 'up-svg'}
+                  className={quotation.zdf < 0 ? 'down-svg' : 'up-svg'}
                 />
               ) : (
                 <ArrowUpLineIcon
-                  className={zindex.zdf < 0 ? 'down-svg' : 'up-svg'}
+                  className={quotation.zdf < 0 ? 'down-svg' : 'up-svg'}
                 />
               )}
             </div>
@@ -92,26 +106,97 @@ const QuotationRow: React.FC<RowProps> = (props) => {
                 <div
                   className={classnames(
                     styles.zdd,
-                    zindex.zdd < 0 ? 'down-text' : 'up-text'
+                    quotation.zdf < 0 ? 'down-text' : 'up-text'
                   )}
                 >
-                  {Utils.Yang(zindex.zdd)}
+                  {Utils.Yang(quotation.zde)}
                 </div>
                 <div
                   className={classnames(
                     styles.zdf,
-                    zindex.zdf < 0 ? 'down-text' : 'up-text'
+                    quotation.zdf < 0 ? 'down-text' : 'up-text'
                   )}
                 >
-                  {Utils.Yang(zindex.zdf)} %
+                  {Utils.Yang(quotation.zdf)} %
                 </div>
               </div>
             )}
-          </div>*/}
+          </div>
         </div>
       </div>
       <Collapse isOpened={!!quotation.collapse}>
-        <div className={styles.collapseContent}></div>
+        <div className={styles.collapseContent}>
+          {conciseSetting && (
+            <section>
+              <span>涨跌额：</span>
+              <span
+                className={classnames(
+                  quotation.zdf < 0 ? 'down-text' : 'up-text'
+                )}
+              >
+                {Utils.Yang(quotation.zde)}
+              </span>
+            </section>
+          )}
+          {conciseSetting && (
+            <section>
+              <span>涨跌幅：</span>
+              <span
+                className={classnames(
+                  quotation.zdf < 0 ? 'down-text' : 'up-text'
+                )}
+              >
+                {Utils.Yang(quotation.zdf)} %
+              </span>
+            </section>
+          )}
+          <section>
+            <span>总市值：</span>
+            <span>
+              {NP.divide(quotation.zsz, Math.pow(10, 8)).toFixed(2)}亿
+            </span>
+          </section>
+          <section>
+            <span>换手率：</span>
+            <span>{quotation.hs} %</span>
+          </section>
+          <section>
+            <span>上涨家数：</span>
+            <span className={'up-text'}>{quotation.szjs}</span>
+          </section>
+          <section>
+            <span>下跌家数：</span>
+            <span className={'down-text'}>{quotation.xdjs}</span>
+          </section>
+          {conciseSetting && (
+            <section>
+              <span>
+                {quotation.lzgpName}({quotation.lzgpCode})：
+              </span>
+              <span
+                className={classnames(
+                  quotation.lzgpZdf < 0 ? 'down-text' : 'up-text'
+                )}
+              >
+                {quotation.lzgpZdf} %
+              </span>
+            </section>
+          )}
+          {conciseSetting && (
+            <section>
+              <span>
+                {quotation.ldgpName}({quotation.ldgpCode})：
+              </span>
+              <span
+                className={classnames(
+                  quotation.ldgpZdf < 0 ? 'down-text' : 'up-text'
+                )}
+              >
+                {quotation.ldgpZdf} %
+              </span>
+            </section>
+          )}
+        </div>
       </Collapse>
     </div>
   );

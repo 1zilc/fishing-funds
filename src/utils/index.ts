@@ -93,6 +93,8 @@ export function parsepingzhongdata(code: string) {
         Data_grandTotal,
         /*同类排名走势*/
         Data_rateInSimilarType,
+        /*同类排名百分比*/
+        Data_rateInSimilarPersent,
         /*近一年收益率*/
         syl_1n,
         /*近6月收益率*/
