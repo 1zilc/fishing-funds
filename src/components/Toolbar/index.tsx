@@ -1,9 +1,6 @@
-import React, { useState, useContext } from 'react';
-import classnames from 'classnames';
+import React, { useContext } from 'react';
 import { Badge } from 'antd';
-
 import { useSelector, useDispatch } from 'react-redux';
-import Drawer from 'rc-drawer';
 import { useBoolean } from 'ahooks';
 
 import { ReactComponent as AddIcon } from '@/assets/icons/add.svg';
@@ -12,16 +9,13 @@ import { ReactComponent as DeleteIcon } from '@/assets/icons/delete.svg';
 import { ReactComponent as RefreshIcon } from '@/assets/icons/refresh.svg';
 import { ReactComponent as QRcodeIcon } from '@/assets/icons/qr-code.svg';
 import { ReactComponent as SettingIcon } from '@/assets/icons/setting.svg';
-
 import CustomDrawer from '@/components/CustomDrawer';
 import AddFundContent from '@/components/AddFundContent';
 import SettingContent from '@/components/SettingContent';
 import PayContent from '@/components/PayContent';
 import { HomeContext } from '@/components/Home';
 import EditZindexContent from '@/components/EditZindexContent';
-
 import { toggleToolbarDeleteStatus } from '@/actions/toolbar';
-
 import { StoreState } from '@/reducers/types';
 import { useScrollToTop } from '@/utils/hooks';
 import * as Enums from '@/utils/enums';
@@ -33,7 +27,9 @@ const iconSize = { height: 18, width: 18 };
 
 const ToolBar: React.FC<ToolBarProps> = () => {
   const dispatch = useDispatch();
-  const { runGetFunds, runGetZindexs } = useContext(HomeContext);
+  const { runGetFunds, runGetZindexs, runGetQuotations } = useContext(
+    HomeContext
+  );
 
   const updateInfo = useSelector(
     (state: StoreState) => state.updater.updateInfo
@@ -43,6 +39,7 @@ const ToolBar: React.FC<ToolBarProps> = () => {
   );
   const freshFunds = useScrollToTop({ after: runGetFunds });
   const freshZindexs = useScrollToTop({ after: runGetZindexs });
+  const freshQuotations = useScrollToTop({ after: runGetQuotations });
 
   const [
     showAddFundDrawer,
@@ -99,6 +96,9 @@ const ToolBar: React.FC<ToolBarProps> = () => {
           <RefreshIcon style={{ ...iconSize }} onClick={freshZindexs} />
         )}
         <QRcodeIcon style={{ ...iconSize }} onClick={openPayDrawer} />
+        {tabsActiveKey === Enums.TabKeyType.Quotation && (
+          <RefreshIcon style={{ ...iconSize }} onClick={freshQuotations} />
+        )}
         <Badge dot={!!updateInfo.version}>
           <SettingIcon style={{ ...iconSize }} onClick={openSettingDrawer} />
         </Badge>

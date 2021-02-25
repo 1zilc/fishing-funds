@@ -10,6 +10,7 @@ import { TabsState } from './tabs';
 import { UpdaderState } from './updater';
 import { FundState } from './fund';
 import { ZindexState } from './zindex';
+import { QuotationState } from './quotation';
 export interface StoreState {
   toolbar: ToolbarState;
   wallet: WalletState;
@@ -17,6 +18,7 @@ export interface StoreState {
   updater: UpdaderState;
   fund: FundState;
   zindex: ZindexState;
+  quotation: QuotationState;
 }
 
 export type GetState = () => StoreState;

@@ -35,16 +35,23 @@
   color: var(--reverse-text-color);
   background-color: var(--cancel-color);
   cursor: not-allowed;
+  white-space: nowrap;
 }
 
 .select {
   color: #eee;
   background-color: var(--primary-color);
+  white-space: nowrap;
 }
 
 .name {
   font-size: 12px;
   font-weight: 600;
+  padding-right: 10px;
+
+  .nameText {
+    margin-right: 10px;
+  }
 }
 
 .tag {
@@ -53,7 +60,8 @@
   color: var(--main-text-color);
   border: 1px solid var(--main-text-color);
   font-size: 10px;
-  margin-left: 10px;
+
+  white-space: nowrap;
 }
 
 .code {

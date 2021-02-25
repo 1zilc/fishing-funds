@@ -10,10 +10,9 @@
   cursor: pointer;
 
   &:hover {
-    background-color: var(--primary-color);
     color: #fff;
-    opacity: 1;
     border-radius: 2px;
+    background-color: var(--primary-color);
 
     .arrow {
       svg {
@@ -24,7 +23,7 @@
 }
 
 
-.fundName {
+.quotationName {
   font-weight: 600;
   font-size: 14px;
   margin-bottom: 2px;
@@ -42,24 +41,39 @@
 }
 
 .value {
-  font-size: 12px;
   display: block;
   float: right;
-  color: #eee;
-  padding: 2px 10px;
-  border-radius: 2px;
-  min-width: 64px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 150px;
+  text-align: center;
 }
 
-.remove {
-  overflow: hidden;
-  transition: width 0.2s;
-  display: inline-block;
-  text-align: right;
-  height: 16px;
+.zxj {
+  font-size: 20px;
+  line-height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
 
-  svg {
-    cursor: pointer;
+  svg {}
+}
+
+.zd {
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+
+
+
+  .zdd,
+  .zdf {
+    font-size: 10px;
+  }
+
+  .zdf {
+    margin-left: 10px;
   }
 }
 
@@ -90,19 +104,4 @@
     align-items: center;
     flex-wrap: wrap;
   }
-}
-
-.editor {
-  margin-left: 5px;
-  cursor: pointer;
-  height: 12px;
-  width: 12px;
-  fill: var(--svg-icon-color)
-}
-
-.view {
-  padding: 5px;
-  text-align: center;
-  width: 100%;
-  box-sizing: border-box;
 }

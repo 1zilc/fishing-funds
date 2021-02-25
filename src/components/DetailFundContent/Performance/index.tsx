@@ -71,11 +71,17 @@ const Performance: React.FC<PerformanceProps> = ({ code }) => {
               formatter: `{value}%`,
             },
           },
+          dataZoom: [
+            {
+              type: 'inside',
+            },
+          ],
           series:
             result?.map((_) => ({
               ..._,
               type: 'line',
-              symbolSize: 0,
+              showSymbol: false,
+              symbol: 'none',
               lineStyle: {
                 width: 1,
               },

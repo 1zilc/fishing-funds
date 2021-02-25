@@ -45,8 +45,8 @@ const StockWareHouse: React.FC<StockWareHouseProps> = ({
   );
 
   const initWarehoseChart = () => {
-    const warehoseChartInstance = echarts.init(warehouseRef.current!);
-    setWarehoseChartInstance(warehoseChartInstance);
+    const instance = echarts.init(warehouseRef.current!);
+    setWarehoseChartInstance(instance);
   };
 
   const { run: runGetStockWareHouseFromEastmoney } = useRequest(
@@ -63,8 +63,15 @@ const StockWareHouse: React.FC<StockWareHouseProps> = ({
             top: 0,
             textStyle: {
               color: varibleColors['--main-text-color'],
-              fontSize: 14,
+              fontSize: 12,
             },
+          },
+          grid: {
+            top: '3%',
+            left: '3%',
+            right: '4%',
+            bottom: '3%',
+            containLabel: true,
           },
           tooltip: {
             trigger: 'item',

@@ -6,6 +6,7 @@ import dayjs from 'dayjs';
 
 import FundList from '@/components/Home/FundList';
 import ZindexList from '@/components/Home/ZindexList';
+import QuotationList from '@/components/Home/QuotationList';
 import Toolbar from '@/components/Toolbar';
 import Wallet from '@/components/Wallet/index';
 import LoadingBar from '@/components/LoadingBar';
@@ -13,15 +14,20 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import SortBar from '@/components/SortBar';
 import TabsBar from '@/components/TabsBar';
-
 import { updateUpdateTime } from '@/actions/wallet';
-import { getFunds } from '@/actions/fund';
-import { getZindexs } from '@/actions/zindex';
 import {
+  getFunds,
   SORT_FUNDS_WITH_COLLAPSE_CHACHED,
   SET_REMOTE_FUNDS,
 } from '@/actions/fund';
-import { SORT_ZINDEXS_WITH_COLLAPSE_CHACHED } from '@/actions/zindex';
+import {
+  getZindexs,
+  SORT_ZINDEXS_WITH_COLLAPSE_CHACHED,
+} from '@/actions/zindex';
+import {
+  getQuotations,
+  SORT_QUOTATIONS_WITH_COLLAPSE_CHACHED,
+} from '@/actions/quotation';
 import { StoreState } from '@/reducers/types';
 import * as Enums from '@/utils/enums';
 import * as Services from '@/services';
@@ -32,11 +38,13 @@ export interface HomeProps {}
 export interface HomeContextType {
   runGetFunds: () => void;
   runGetZindexs: () => void;
+  runGetQuotations: () => void;
 }
 
 export const HomeContext = createContext<HomeContextType>({
   runGetFunds: () => {},
   runGetZindexs: () => {},
+  runGetQuotations: () => {},
 });
 
 const Home: React.FC<HomeProps> = () => {
@@ -46,7 +54,7 @@ const Home: React.FC<HomeProps> = () => {
   );
 
   useRequest(Services.Fund.GetRemoteFundsFromEastmoney, {
-    // pollingInterval: 1000 * 60 * 60 * 24,
+    pollingInterval: 1000 * 60 * 60 * 24,
     throwOnError: true,
     onSuccess: (result) => {
       dispatch({
@@ -75,9 +83,25 @@ const Home: React.FC<HomeProps> = () => {
     {
       manual: true,
       throwOnError: true,
+      throttleInterval: 1000 * 3, // 3秒内请求一次
       onSuccess: (result) => {
         dispatch({
           type: SORT_ZINDEXS_WITH_COLLAPSE_CHACHED,
+          payload: result,
+        });
+      },
+    }
+  );
+
+  const { run: runGetQuotations, loading: quotationsLoading } = useRequest(
+    getQuotations,
+    {
+      manual: true,
+      throwOnError: true,
+      throttleInterval: 1000 * 3, // 3秒内请求一次
+      onSuccess: (result) => {
+        dispatch({
+          type: SORT_QUOTATIONS_WITH_COLLAPSE_CHACHED,
           payload: result,
         });
       },
@@ -89,6 +113,7 @@ const Home: React.FC<HomeProps> = () => {
       value={{
         runGetFunds,
         runGetZindexs,
+        runGetQuotations,
       }}
     >
       <div className={styles.layout}>
@@ -109,6 +134,10 @@ const Home: React.FC<HomeProps> = () => {
           <Tabs.TabPane key={Enums.TabKeyType.Zindex} forceRender>
             <LoadingBar show={zindexsLoading} />
             <ZindexList />
+          </Tabs.TabPane>
+          <Tabs.TabPane key={Enums.TabKeyType.Quotation} forceRender>
+            <LoadingBar show={quotationsLoading} />
+            <QuotationList />
           </Tabs.TabPane>
         </Tabs>
         <Footer>

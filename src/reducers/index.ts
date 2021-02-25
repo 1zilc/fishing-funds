@@ -7,6 +7,7 @@ import tabs from './tabs';
 import updater from './updater';
 import fund from './fund';
 import zindex from './zindex';
+import quotation from './quotation';
 
 export default function createRootReducer(history: History) {
   return combineReducers({
@@ -17,5 +18,6 @@ export default function createRootReducer(history: History) {
     updater,
     fund,
     zindex,
+    quotation,
   });
 }

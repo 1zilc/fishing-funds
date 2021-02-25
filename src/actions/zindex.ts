@@ -1,8 +1,8 @@
 import got from 'got';
-import * as Adapter from '../utils/adpters';
-import * as Services from '../services';
-import * as Utils from '../utils';
-import CONST_STORAGE from '../constants/storage.json';
+import * as Adapter from '@/utils/adpters';
+import * as Services from '@/services';
+import * as Utils from '@/utils';
+import CONST_STORAGE from '@/constants/storage.json';
 
 export const SET_ZINDEXS = 'SET_ZINDEXS';
 export const TOGGLE_ZINDEX_COLLAPSE = 'TOGGLE_ZINDEX_COLLAPSE';

@@ -13,18 +13,22 @@ export interface Tab {
   key: Enums.TabKeyType;
   name: string;
 }
+const tabs = [
+  {
+    key: Enums.TabKeyType.Funds,
+    name: '基金自选',
+  },
+  {
+    key: Enums.TabKeyType.Zindex,
+    name: '指数行情',
+  },
+  {
+    key: Enums.TabKeyType.Quotation,
+    name: '板块行情',
+  },
+];
 const TabsBar: React.FC<TabsBarProps> = ({ onChange }) => {
   const dispatch = useDispatch();
-  const { current: memoTabs } = useRef<Tab[]>([
-    {
-      key: Enums.TabKeyType.Funds,
-      name: '基金自选',
-    },
-    {
-      key: Enums.TabKeyType.Zindex,
-      name: '指数行情',
-    },
-  ]);
 
   const tabsActiveKey = useSelector(
     (state: StoreState) => state.tabs.activeKey
@@ -33,7 +37,7 @@ const TabsBar: React.FC<TabsBarProps> = ({ onChange }) => {
   return (
     <div className={styles.layout}>
       <div className={styles.content}>
-        {memoTabs.map((tab) => (
+        {tabs.map((tab) => (
           <React.Fragment key={tab.key}>
             <div
               className={classnemes(styles.tab, {

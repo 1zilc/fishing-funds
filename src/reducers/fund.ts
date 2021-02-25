@@ -50,7 +50,8 @@ function sortFunds(
         return Number(_a.gszz) > Number(_b.gszz) ? 1 * t : -1 * t;
       case Enums.FundSortType.Default:
       default:
-        return codeMap[a.fundcode]?.originSort > codeMap[b.fundcode]?.originSort
+        return codeMap[a.fundcode!]?.originSort >
+          codeMap[b.fundcode!]?.originSort
           ? -1 * t
           : 1 * t;
     }
@@ -68,7 +69,7 @@ function sortFundsWithCollapseChached(
 ): FundState {
   const { funds } = state;
   const fundsCodeToMap = funds.reduce((map, fund) => {
-    map[fund.fundcode] = fund;
+    map[fund.fundcode!] = fund;
     return map;
   }, {} as any);
 
@@ -76,7 +77,7 @@ function sortFundsWithCollapseChached(
     .filter((_) => !!_)
     .map((_) => ({
       ..._,
-      collapse: fundsCodeToMap[_?.fundcode]?.collapse,
+      collapse: fundsCodeToMap[_!.fundcode!]?.collapse,
     }));
 
   return sortFunds(state, fundsWithCollapseChached);
