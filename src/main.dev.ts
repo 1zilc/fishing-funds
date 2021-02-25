@@ -20,6 +20,7 @@ import {
 } from 'electron';
 import AppUpdater from './autoUpdater';
 import { menubar } from 'menubar';
+import windowStateKeeper from 'electron-window-state';
 
 let myWindow: any = null;
 
@@ -60,7 +61,6 @@ const installExtensions = async () => {
     extensions.map((name) => installer.default(installer[name], forceDownload))
   ).catch(console.log);
 };
-
 const createMenubar = async () => {
   if (
     process.env.NODE_ENV === 'development' ||
@@ -69,7 +69,10 @@ const createMenubar = async () => {
     await installExtensions();
   }
   const tray = new Tray(nativeMenuIcon);
-
+  const mainWindowState = windowStateKeeper({
+    defaultWidth: 300,
+    defaultHeight: 520,
+  });
   const mb = menubar({
     index: `file://${__dirname}/index.html`,
     // icon: path.join(__dirname, '../resources/menu/iconTemplate.png'),
@@ -84,8 +87,8 @@ const createMenubar = async () => {
     browserWindow: {
       transparent: false,
       alwaysOnTop: false,
-      width: 300,
-      height: 500,
+      width: mainWindowState.width,
+      height: mainWindowState.height,
       minHeight: 400,
       minWidth: 300,
       maxHeight: 800,
@@ -106,14 +109,14 @@ const createMenubar = async () => {
     if (!app.isPackaged) {
       mb.window!.webContents.openDevTools({ mode: 'undocked' });
     }
-
     // 监听主题颜色变化
     nativeTheme.on('updated', () => {
-      console.log(6666);
       mb.window?.webContents.send('nativeTheme-updated', {
         darkMode: nativeTheme.shouldUseDarkColors,
       });
     });
+    // store electron window size state
+    mainWindowState.manage(mb.window!);
   });
   // add contextMenu
   mb.on('ready', () => {
@@ -134,6 +137,7 @@ const createMenubar = async () => {
   ipcMain.on('check-update', (e) => {
     new AppUpdater({ icon: nativeIcon, win: mb.window });
   });
+
   // new AppUpdater({ icon: nativeIcon, win: mb.window });
 };
 

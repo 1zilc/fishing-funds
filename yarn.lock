@@ -4789,6 +4789,14 @@ electron-updater@^4.3.4:
     lodash.isequal "^4.5.0"
     semver "^7.3.2"
 
+electron-window-state@^5.0.3:
+  version "5.0.3"
+  resolved "https://registry.npm.taobao.org/electron-window-state/download/electron-window-state-5.0.3.tgz#4f36d09e3f953d87aff103bf010f460056050aa8"
+  integrity sha1-TzbQnj+VPYev8QO/AQ9GAFYFCqg=
+  dependencies:
+    jsonfile "^4.0.0"
+    mkdirp "^0.5.1"
+
 electron@^11.0.1:
   version "11.2.1"
   resolved "https://registry.npm.taobao.org/electron/download/electron-11.2.1.tgz?cache=0&sync_timestamp=1612199822212&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Felectron%2Fdownload%2Felectron-11.2.1.tgz#8641dd1a62911a1144e0c73c34fd9f37ccc65c2b"
