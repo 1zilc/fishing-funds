@@ -19,7 +19,7 @@
 
 <figure class="half">
 
-<img src="https://github.com/1zilc/fishing-funds/blob/master/screenshots/1.png" width="33%"  /><img src="https://github.com/1zilc/fishing-funds/blob/master/screenshots/2.png" width="33%"  /><img src="https://github.com/1zilc/fishing-funds/blob/master/screenshots/1.png" width="33%"  />
+<img src="https://github.com/1zilc/fishing-funds/blob/master/screenshots/1.png" width="33%"  /><img src="https://github.com/1zilc/fishing-funds/blob/master/screenshots/2.png" width="33%"  /><img src="https://github.com/1zilc/fishing-funds/blob/master/screenshots/3.png" width="33%"  />
 
 </figure>
 
