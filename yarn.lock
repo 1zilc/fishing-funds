@@ -4711,7 +4711,7 @@ electron-is-dev@^1.1.0:
   resolved "https://registry.npm.taobao.org/electron-is-dev/download/electron-is-dev-1.2.0.tgz#2e5cea0a1b3ccf1c86f577cee77363ef55deb05e"
   integrity sha1-LlzqChs8zxyG9XfO53Nj71XesF4=
 
-electron-localshortcut@^3.1.0, electron-localshortcut@^3.2.1:
+electron-localshortcut@^3.1.0:
   version "3.2.1"
   resolved "https://registry.npm.taobao.org/electron-localshortcut/download/electron-localshortcut-3.2.1.tgz#cfc83a3eff5e28faf98ddcc87f80a2ce4f623cd3"
   integrity sha1-z8g6Pv9eKPr5jdzIf4Cizk9iPNM=

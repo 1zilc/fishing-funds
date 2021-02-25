@@ -12,7 +12,7 @@ const ZindexList = () => {
   const { runGetZindexs } = useContext(HomeContext);
 
   // 间隔时间刷新指数
-  useWorkDayTimeToDo(runGetZindexs, 1000 * 10);
+  useWorkDayTimeToDo(runGetZindexs, 1000 * 20);
 
   useEffect(() => {
     runGetZindexs();

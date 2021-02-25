@@ -24,19 +24,32 @@ export enum FundSortType {
   Money, // 收益
   Estimate, // 估值
 }
+
 export enum ZindexSortType {
   Custom, // 自定义
   Zdd, // 涨跌点
   Zdf, // 涨跌幅
   Zsz, // 指数值
 }
+
+export enum QuotationSortType {
+  Zdf, // 涨跌幅
+  Zde, // 涨跌额
+  Zsz, // 总市值
+  Zxj, // 最新价
+  Szjs, // 上涨家数
+  Xdjs, // 下跌家数
+}
+
 export enum SortOrderType {
   Desc,
   Asc,
 }
+
 export enum TabKeyType {
   Funds,
   Zindex,
+  Quotation,
 }
 // 走势类型
 export enum TrendType {

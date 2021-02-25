@@ -10,6 +10,10 @@ export interface ZindexSortMode {
   type: Enums.ZindexSortType;
   order: Enums.SortOrderType;
 }
+export interface QuotationSortType {
+  type: Enums.QuotationSortType;
+  order: Enums.SortOrderType;
+}
 
 export const fundSortModeOptions: Option.EnumsOption<Enums.FundSortType>[] = [
   { key: Enums.FundSortType.Default, value: '默认' },
@@ -26,6 +30,15 @@ export const zindexSortModeOptions: Option.EnumsOption<Enums.ZindexSortType>[] =
   { key: Enums.ZindexSortType.Zsz, value: '指数值' },
 ];
 
+export const quotationSortModeOptions: Option.EnumsOption<Enums.QuotationSortType>[] = [
+  { key: Enums.QuotationSortType.Zdf, value: '涨跌幅' },
+  { key: Enums.QuotationSortType.Zde, value: '涨跌额' },
+  { key: Enums.QuotationSortType.Zsz, value: '总市值' },
+  { key: Enums.QuotationSortType.Zxj, value: '最新价' },
+  { key: Enums.QuotationSortType.Szjs, value: '上涨家数' },
+  { key: Enums.QuotationSortType.Xdjs, value: '下跌家数' },
+];
+
 export function getSortConfig() {
   const fundSortModeOptionsMap = fundSortModeOptions.reduce((r, c) => {
     r[c.key] = c;
@@ -37,11 +50,21 @@ export function getSortConfig() {
     return r;
   }, {} as any);
 
+  const quotationSortModeOptionsMap = quotationSortModeOptions.reduce(
+    (r, c) => {
+      r[c.key] = c;
+      return r;
+    },
+    {} as any
+  );
+
   return {
     fundSortModeOptions,
     zindexSortModeOptions,
+    quotationSortModeOptions,
     fundSortModeOptionsMap,
     zindexSortModeOptionsMap,
+    quotationSortModeOptionsMap,
   };
 }
 
@@ -60,7 +83,14 @@ export function getSortMode() {
       order: Enums.SortOrderType.Desc,
     }
   );
-  return { fundSortMode, zindexSortMode };
+  const quotationSortMode: QuotationSortType = Utils.GetStorage(
+    CONST_STORAGE.QUOTATION_SORT_MODE,
+    {
+      type: Enums.ZindexSortType.Zdf,
+      order: Enums.SortOrderType.Desc,
+    }
+  );
+  return { fundSortMode, zindexSortMode, quotationSortMode };
 }
 
 export function setFundSortMode(fundSortMode: {
@@ -85,6 +115,17 @@ export function setZindexSortMode(zindexSortMode: {
   });
 }
 
+export function setQuotationSortMode(quotationSortMode: {
+  type?: Enums.QuotationSortType;
+  order?: Enums.SortOrderType;
+}) {
+  const { zindexSortMode: _ } = getSortMode();
+  Utils.SetStorage(CONST_STORAGE.QUOTATION_SORT_MODE, {
+    ..._,
+    ...quotationSortMode,
+  });
+}
+
 export function troggleFundSortOrder() {
   const { fundSortMode } = getSortMode();
   const { order } = fundSortMode;
@@ -102,6 +143,18 @@ export function troggleZindexSortOrder() {
   const { order } = zindexSortMode;
   Utils.SetStorage(CONST_STORAGE.ZINDEX_SORT_MODE, {
     ...zindexSortMode,
+    order:
+      order === Enums.SortOrderType.Asc
+        ? Enums.SortOrderType.Desc
+        : Enums.SortOrderType.Asc,
+  });
+}
+
+export function troggleQuotationSortOrder() {
+  const { quotationSortMode } = getSortMode();
+  const { order } = quotationSortMode;
+  Utils.SetStorage(CONST_STORAGE.QUOTATION_SORT_MODE, {
+    ...quotationSortMode,
     order:
       order === Enums.SortOrderType.Asc
         ? Enums.SortOrderType.Desc
