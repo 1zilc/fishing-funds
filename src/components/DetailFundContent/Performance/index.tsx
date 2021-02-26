@@ -50,25 +50,28 @@ const Performance: React.FC<PerformanceProps> = ({ code }) => {
             data: result?.map(({ name }) => name) || [],
             textStyle: {
               color: varibleColors['--main-text-color'],
+              fontSize: 10,
             },
           },
           grid: {
-            left: '3%',
-            right: '4%',
-            bottom: '3%',
+            left: 0,
+            right: 5,
+            bottom: 0,
             containLabel: true,
           },
           xAxis: {
             type: 'time',
             boundaryGap: false,
-            nameTextStyle: {
-              color: varibleColors['--main-text-color'],
+            nameTextStyle: {},
+            axisLabel: {
+              fontSize: 10,
             },
           },
           yAxis: {
             type: 'value',
             axisLabel: {
               formatter: `{value}%`,
+              fontSize: 10,
             },
           },
           dataZoom: [

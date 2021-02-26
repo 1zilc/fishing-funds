@@ -49,19 +49,22 @@ const SimilarProportion: React.FC<SimilarProportionProps> = ({
       },
       grid: {
         top: 32,
-        left: '3%',
-        right: '4%',
-        bottom: '3%',
+        left: 0,
+        right: 5,
+        bottom: 0,
         containLabel: true,
       },
       xAxis: {
         type: 'time',
-        nameTextStyle: {
-          color: varibleColors['--main-text-color'],
+        axisLabel: {
+          fontSize: 10,
         },
       },
       yAxis: {
         type: 'value',
+        axisLabel: {
+          fontSize: 10,
+        },
       },
       series: [
         {

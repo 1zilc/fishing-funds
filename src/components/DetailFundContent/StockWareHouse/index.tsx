@@ -68,9 +68,9 @@ const StockWareHouse: React.FC<StockWareHouseProps> = ({
           },
           grid: {
             top: '3%',
-            left: '3%',
-            right: '4%',
-            bottom: '3%',
+            left: 0,
+            right: 5,
+            bottom: 0,
             containLabel: true,
           },
           tooltip: {
@@ -82,7 +82,7 @@ const StockWareHouse: React.FC<StockWareHouseProps> = ({
             {
               name: '持仓占比',
               type: 'pie',
-              radius: '60%',
+              radius: '64%',
               center: ['50%', '50%'],
               data: result.map((item) => {
                 return {

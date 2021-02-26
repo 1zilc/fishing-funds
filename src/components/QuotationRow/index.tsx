@@ -63,23 +63,43 @@ const QuotationRow: React.FC<RowProps> = (props) => {
             </div>
             {!conciseSetting && (
               <div className={styles.rowBar}>
-                <div>
-                  <span className={styles.code}>{quotation.lzgpName}</span>
-                  <span
-                    className={classnames(
-                      quotation.lzgpZdf < 0 ? 'down-text' : 'up-text'
-                    )}
-                  >
-                    {quotation.lzgpZdf < 0 ? '领跌' : '领涨'}
-                  </span>
-                  <span
-                    className={classnames(
-                      quotation.lzgpZdf < 0 ? 'down-text' : 'up-text'
-                    )}
-                  >
-                    {Utils.Yang(quotation.lzgpZdf)} %
-                  </span>
-                </div>
+                {quotation.zdf < 0 ? (
+                  <>
+                    <span className={styles.code}>{quotation.lzgpName}</span>
+                    <span
+                      className={classnames(
+                        quotation.ldgpZdf < 0 ? 'down-text' : 'up-text'
+                      )}
+                    >
+                      领跌
+                    </span>
+                    <span
+                      className={classnames(
+                        quotation.ldgpZdf < 0 ? 'down-text' : 'up-text'
+                      )}
+                    >
+                      {Utils.Yang(quotation.ldgpZdf)} %
+                    </span>
+                  </>
+                ) : (
+                  <>
+                    <span className={styles.code}>{quotation.lzgpName}</span>
+                    <span
+                      className={classnames(
+                        quotation.lzgpZdf < 0 ? 'down-text' : 'up-text'
+                      )}
+                    >
+                      领涨
+                    </span>
+                    <span
+                      className={classnames(
+                        quotation.lzgpZdf < 0 ? 'down-text' : 'up-text'
+                      )}
+                    >
+                      {Utils.Yang(quotation.lzgpZdf)} %
+                    </span>
+                  </>
+                )}
               </div>
             )}
           </div>
@@ -178,7 +198,7 @@ const QuotationRow: React.FC<RowProps> = (props) => {
                   quotation.lzgpZdf < 0 ? 'down-text' : 'up-text'
                 )}
               >
-                {quotation.lzgpZdf} %
+                {Utils.Yang(quotation.lzgpZdf)} %
               </span>
             </section>
           )}
@@ -192,7 +212,7 @@ const QuotationRow: React.FC<RowProps> = (props) => {
                   quotation.ldgpZdf < 0 ? 'down-text' : 'up-text'
                 )}
               >
-                {quotation.ldgpZdf} %
+                {Utils.Yang(quotation.ldgpZdf)} %
               </span>
             </section>
           )}
