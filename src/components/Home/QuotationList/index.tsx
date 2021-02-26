@@ -15,7 +15,7 @@ const QuotationList = () => {
 
   // 间隔时间刷新板块
   useWorkDayTimeToDo(runGetQuotations, 1000 * 30);
-
+  console.log(quotations);
   useEffect(() => {
     runGetQuotations();
   }, []);

@@ -35,11 +35,13 @@ const { app } = remote;
 const SettingContent: React.FC<SettingContentProps> = (props) => {
   const {
     conciseSetting,
+    lowKeySetting,
     autoStartSetting,
     autoFreshSetting,
     freshDelaySetting,
     autoCheckUpdateSetting,
   } = getSystemSetting();
+
   const updateInfo = useSelector(
     (state: StoreState) => state.updater.updateInfo
   );
@@ -49,6 +51,7 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
   const fundApiTypeSetting = getFundApiTypeSetting();
   // 外观设置
   const [concise, setConcise] = useState(conciseSetting);
+  const [lowKey, setLowKey] = useState(lowKeySetting);
   // 通用设置
   const [autoStart, setAutoStart] = useState(autoStartSetting);
   const [autoFresh, setAutoFresh] = useState(autoFreshSetting);
@@ -62,6 +65,7 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
     setFundApiTypeSetting(fundapiType);
     setSystemSetting({
       conciseSetting: concise,
+      lowKeySetting: lowKey,
       autoStartSetting: autoStart,
       autoFreshSetting: autoFresh,
       freshDelaySetting: freshDelay || 1,
@@ -142,6 +146,10 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
             <section>
               <label>简洁模式：</label>
               <Switch size="small" checked={concise} onChange={setConcise} />
+            </section>
+            <section>
+              <label>低调模式：</label>
+              <Switch size="small" checked={lowKey} onChange={setLowKey} />
             </section>
           </div>
         </div>

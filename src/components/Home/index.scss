@@ -13,11 +13,9 @@
   height: 100%;
 }
 
-.empty {
-  position: absolute;
-  text-align: center;
-  font-size: 12px;
-  width: 100%;
-  top: 50%;
-  color: var(--main-text-color);
+
+.lowKey {
+  filter: grayscale(99%);
+  --increase-color: #111;
+  --reduce-color: #111;
 }

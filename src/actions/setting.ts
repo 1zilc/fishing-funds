@@ -11,6 +11,7 @@ export function getSystemSetting() {
     CONST_STORAGE.SYSTEM_SETTING,
     {
       conciseSetting: false,
+      lowKeySetting: false,
       autoStartSetting,
       autoFreshSetting: true,
       freshDelaySetting: 1,

@@ -10,13 +10,12 @@
   cursor: pointer;
 
   &:hover {
-    color: #fff;
     border-radius: 2px;
-    background-color: var(--primary-color);
+    background-color: var(--hover-color);
 
     .arrow {
       svg {
-        fill: #fff;
+        fill: var(--main-text-color);
       }
     }
   }

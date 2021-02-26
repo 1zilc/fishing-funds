@@ -86,3 +86,5 @@ export function useNativeThemeColor(varibles: string[]) {
   ]);
   return { darkMode, colors: memoColors };
 }
+
+export function useEchartResize() {}

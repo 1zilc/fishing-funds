@@ -1,4 +1,5 @@
 import React, { createContext } from 'react';
+import classnames from 'classnames';
 import { Tabs } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { useRequest } from 'ahooks';
@@ -28,9 +29,11 @@ import {
   getQuotations,
   SORT_QUOTATIONS_WITH_COLLAPSE_CHACHED,
 } from '@/actions/quotation';
+import { getSystemSetting } from '@/actions/setting';
 import { StoreState } from '@/reducers/types';
 import * as Enums from '@/utils/enums';
 import * as Services from '@/services';
+
 import styles from './index.scss';
 
 export interface HomeProps {}
@@ -49,6 +52,7 @@ export const HomeContext = createContext<HomeContextType>({
 
 const Home: React.FC<HomeProps> = () => {
   const dispatch = useDispatch();
+  const { lowKeySetting } = getSystemSetting();
   const tabsActiveKey = useSelector(
     (state: StoreState) => state.tabs.activeKey
   );
@@ -116,7 +120,8 @@ const Home: React.FC<HomeProps> = () => {
         runGetQuotations,
       }}
     >
-      <div className={styles.layout}>
+      <div className={classnames(styles.layout)}>
+        {lowKeySetting && <style>{`html { filter: grayscale(95%) }`}</style>}
         <Header>
           <Wallet />
           <SortBar />
