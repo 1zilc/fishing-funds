@@ -8,10 +8,11 @@ import styles from './index.scss';
 export interface EstimateProps {
   code: string;
 }
-
+const pollingInterval = 1000 * 60 * 5;
 const Estimate: React.FC<EstimateProps> = ({ code }) => {
   const [estimate, setEstimate] = useState(PictureImage);
   useRequest(Services.Fund.GetEstimatedFromEastmoney, {
+    pollingInterval,
     throwOnError: true,
     defaultParams: [code],
     onSuccess: setEstimate,

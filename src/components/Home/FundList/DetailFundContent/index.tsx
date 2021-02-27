@@ -3,12 +3,12 @@ import classnames from 'classnames';
 import { useRequest } from 'ahooks';
 import { Tabs } from 'antd';
 
-import Estimate from '@/components/DetailFundContent/Estimate';
-import Performance from '@/components/DetailFundContent/Performance';
-import StockWareHouse from '@/components/DetailFundContent/StockWareHouse';
-import SecuritiesWareHouse from '@/components/DetailFundContent/SecuritiesWareHouse';
-import SimilarRank from '@/components/DetailFundContent/SimilarRank';
-import SimilarProportion from '@/components/DetailFundContent/SimilarProportion';
+import Estimate from '@/components/Home/FundList/DetailFundContent/Estimate';
+import Performance from '@/components/Home/FundList/DetailFundContent/Performance';
+import StockWareHouse from '@/components/Home/FundList/DetailFundContent/StockWareHouse';
+import SecuritiesWareHouse from '@/components/Home/FundList/DetailFundContent/SecuritiesWareHouse';
+import SimilarRank from '@/components/Home/FundList/DetailFundContent/SimilarRank';
+import SimilarProportion from '@/components/Home/FundList/DetailFundContent/SimilarProportion';
 
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
 import { getFund } from '@/actions/fund';

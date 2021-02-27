@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import { useDebounceFn, useBoolean } from 'ahooks';
 import { Input, InputNumber } from 'antd';
 
-import DetailFundContent from '@/components/DetailFundContent';
+import DetailFundContent from '@/components/Home/FundList/DetailFundContent';
 import CustomDrawer from '@/components/CustomDrawer';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
 import { addFund, getFund, getFundConfig } from '@/actions/fund';

@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 
-import QuotationRow from '@/components/QuotationRow';
+import QuotationRow from '@/components/Home/QuotationList/QuotationRow';
 import Empty from '@/components/Empty';
 import LoadingBar from '@/components/LoadingBar';
 import { loadQuotations } from '@/actions/quotation';
@@ -21,7 +21,7 @@ const QuotationList = () => {
 
   // 间隔时间刷新板块
   useWorkDayTimeToDo(runLoadQuotations, 1000 * 30);
-  console.log(quotations);
+
   useEffect(() => {
     runLoadQuotations();
   }, []);

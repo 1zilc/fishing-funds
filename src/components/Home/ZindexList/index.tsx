@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 
-import ZindexRow from '@/components/ZindexRow';
+import ZindexRow from '@/components/Home/ZindexList/ZindexRow';
 import Empty from '@/components/Empty';
 import LoadingBar from '@/components/LoadingBar';
 import { loadZindexs } from '@/actions/zindex';

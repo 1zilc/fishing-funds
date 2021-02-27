@@ -82,3 +82,9 @@ export enum SimilarCompareType {
   Rank,
   Proportion,
 }
+
+// 历史类型
+export enum HistoryType {
+  Performance,
+  Value,
+}
