@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 
-import FundRow from '@/components/FundRow';
+import FundRow from '@/components/Home/FundList/FundRow';
 import Empty from '@/components/Empty';
 import LoadingBar from '@/components/LoadingBar';
 import { loadFunds } from '@/actions/fund';
@@ -9,7 +9,6 @@ import { getSystemSetting } from '@/actions/setting';
 import { StoreState } from '@/reducers/types';
 import { useWorkDayTimeToDo } from '@/utils/hooks';
 import { useActions } from '@/utils/hooks';
-
 import styles from './index.scss';
 
 const FundList: React.FC<{}> = () => {

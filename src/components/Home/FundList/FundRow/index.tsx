@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { useBoolean } from 'ahooks';
 import { Collapse } from 'react-collapse';
 import classnames from 'classnames';
@@ -11,15 +11,17 @@ import { ReactComponent as ArrowUpIcon } from '@/assets/icons/arrow-up.svg';
 import EditFundContent from '@/components/EditFundContent';
 import DetailFundContent from '@/components/DetailFundContent';
 import CustomDrawer from '@/components/CustomDrawer';
-
 import { StoreState } from '@/reducers/types';
-import { TOGGLE_FUND_COLLAPSE, deleteFund, calcFund } from '@/actions/fund';
+import {
+  TOGGLE_FUND_COLLAPSE,
+  deleteFund,
+  calcFund,
+  loadFunds,
+} from '@/actions/fund';
 import { getSystemSetting } from '@/actions/setting';
-import { HomeContext } from '../Home';
 import * as Utils from '@/utils';
-
+import { useScrollToTop, useActions } from '@/utils/hooks';
 import styles from './index.scss';
-import { useScrollToTop } from '@/utils/hooks';
 
 export interface RowProps {
   fund: Fund.ResponseItem & Fund.ExtraRow;
@@ -34,11 +36,11 @@ const FundRow: React.FC<RowProps> = (props) => {
   const { fund } = props;
   const dispatch = useDispatch();
   const { conciseSetting } = getSystemSetting();
-  const { runGetFunds } = useContext(HomeContext);
   const toolbarDeleteStatus = useSelector(
     (state: StoreState) => state.toolbar.deleteStatus
   );
-  const freshFunds = useScrollToTop({ after: runGetFunds });
+  const runLoadFunds = useActions(loadFunds);
+  const freshFunds = useScrollToTop({ after: runLoadFunds });
 
   const [
     showEditDrawer,

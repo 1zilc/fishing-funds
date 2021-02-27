@@ -19,6 +19,7 @@ import { toggleToolbarDeleteStatus } from '@/actions/toolbar';
 import { loadFunds } from '@/actions/fund';
 import { loadZindexs } from '@/actions/zindex';
 import { loadQuotations } from '@/actions/quotation';
+import { getSystemSetting } from '@/actions/setting';
 import { useScrollToTop, useActions } from '@/utils/hooks';
 import * as Enums from '@/utils/enums';
 import styles from './index.scss';
@@ -30,6 +31,7 @@ const throttleDelay = 1000 * 3;
 
 const ToolBar: React.FC<ToolBarProps> = () => {
   const dispatch = useDispatch();
+  const { lowKeySetting } = getSystemSetting();
   const updateInfo = useSelector(
     (state: StoreState) => state.updater.updateInfo
   );
@@ -85,6 +87,7 @@ const ToolBar: React.FC<ToolBarProps> = () => {
 
   return (
     <>
+      {lowKeySetting && <style>{`html { filter: grayscale(95%) }`}</style>}
       <div className={styles.bar}>
         {tabsActiveKey === Enums.TabKeyType.Funds && (
           <AddIcon style={{ ...iconSize }} onClick={openAddFundDrawer} />
