@@ -2,6 +2,7 @@ import React, { useContext, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 
 import ZindexRow from '@/components/ZindexRow';
+import Empty from '@/components/Empty';
 import { HomeContext } from '@/components/Home';
 import { StoreState } from '@/reducers/types';
 import { useWorkDayTimeToDo } from '@/utils/hooks';
@@ -20,10 +21,13 @@ const ZindexList = () => {
 
   return (
     <div className={styles.container}>
-      {zindexs.map((zindex) => (
-        <ZindexRow key={zindex.zindexCode} zindex={zindex} />
-      ))}
-      {!zindexs.length && <div className={styles.empty}>暂无指数数据~</div>}
+      {zindexs.length ? (
+        zindexs.map((zindex) => (
+          <ZindexRow key={zindex.zindexCode} zindex={zindex} />
+        ))
+      ) : (
+        <Empty text="暂无指数数据~" />
+      )}
     </div>
   );
 };

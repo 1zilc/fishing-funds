@@ -2,6 +2,7 @@ import React, { useContext, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 
 import QuotationRow from '@/components/QuotationRow';
+import Empty from '@/components/Empty';
 import { HomeContext } from '@/components/Home';
 import { StoreState } from '@/reducers/types';
 import { useWorkDayTimeToDo } from '@/utils/hooks';
@@ -22,10 +23,13 @@ const QuotationList = () => {
 
   return (
     <div className={styles.container}>
-      {quotations.map((quotation) => (
-        <QuotationRow key={quotation.name} quotation={quotation} />
-      ))}
-      {!quotations.length && <div className={styles.empty}>暂无板块数据~</div>}
+      {quotations.length ? (
+        quotations.map((quotation) => (
+          <QuotationRow key={quotation.name} quotation={quotation} />
+        ))
+      ) : (
+        <Empty text="暂无板块数据~" />
+      )}
     </div>
   );
 };

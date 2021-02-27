@@ -58,7 +58,7 @@ const SecuritiesWareHouse: React.FC<SecuritiesWareHouseProps> = ({
         warehoseChartInstance?.setOption({
           backgroundColor: 'transparent',
           title: {
-            text: '持仓前10债券',
+            text: `持仓前${result.length}债券`,
             left: 'center',
             top: 0,
             textStyle: {

@@ -6,13 +6,6 @@
   overflow: hidden;
 }
 
-.container {
-  display: flex;
-  flex-direction: column;
-  box-sizing: border-box;
-  height: 100%;
-}
-
 
 .lowKey {
   filter: grayscale(99%);

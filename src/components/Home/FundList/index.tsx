@@ -2,6 +2,7 @@ import React, { useContext, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 
 import FundRow from '@/components/FundRow';
+import Empty from '@/components/Empty';
 import { HomeContext } from '@/components/Home';
 import { getSystemSetting } from '@/actions/setting';
 import { StoreState } from '@/reducers/types';
@@ -26,10 +27,11 @@ const FundList = () => {
 
   return (
     <div className={styles.container}>
-      {funds.map((fund) => (
-        <FundRow key={fund.fundcode} fund={fund} />
-      ))}
-      {!funds.length && <div className={styles.empty}>暂无基金数据~</div>}
+      {funds.length ? (
+        funds.map((fund) => <FundRow key={fund.fundcode} fund={fund} />)
+      ) : (
+        <Empty text="暂无基金数据~" />
+      )}
     </div>
   );
 };

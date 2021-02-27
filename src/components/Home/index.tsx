@@ -130,7 +130,7 @@ const Home: React.FC<HomeProps> = () => {
           defaultActiveKey={String(tabsActiveKey)}
           renderTabBar={() => <></>}
           activeKey={String(tabsActiveKey)}
-          animated={{ tabPane: true }}
+          animated={{ tabPane: true, inkBar: false }}
         >
           <Tabs.TabPane key={Enums.TabKeyType.Funds} forceRender>
             <LoadingBar show={fundsLoading} />
