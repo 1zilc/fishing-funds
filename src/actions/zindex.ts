@@ -1,10 +1,14 @@
 import got from 'got';
+import { batch } from 'react-redux';
+
+import { Dispatch, GetState } from '@/reducers/types';
 import * as Adapter from '@/utils/adpters';
 import * as Services from '@/services';
 import * as Utils from '@/utils';
-import CONST_STORAGE from '@/constants/storage.json';
+import * as CONST from '@/constants';
 
 export const SET_ZINDEXS = 'SET_ZINDEXS';
+export const SET_ZINDEXS_LOADING = 'SET_ZINDEXS_LOADING';
 export const TOGGLE_ZINDEX_COLLAPSE = 'TOGGLE_ZINDEX_COLLAPSE';
 export const TOGGLE_ZINDEXS_COLLAPSE = 'TOGGLE_ZINDEXS_COLLAPSE';
 export const SORT_ZINDEXS = 'SORT_ZINDEXS';
@@ -56,7 +60,7 @@ export const defaultZindexConfig = [
 
 export function getZindexConfig() {
   const zindexConfig: Zindex.SettingItem[] = Utils.GetStorage(
-    CONST_STORAGE.ZINDEX_SETTING,
+    CONST.STORAGE.ZINDEX_SETTING,
     defaultZindexConfig
   );
   const codeMap = zindexConfig.reduce((r, c, i) => {
@@ -85,7 +89,25 @@ export async function getZindex(code: string) {
 }
 
 export async function saveZindexConfig(zindexConfig: Zindex.SettingItem[]) {
-  Utils.SetStorage(CONST_STORAGE.ZINDEX_SETTING, zindexConfig);
+  Utils.SetStorage(CONST.STORAGE.ZINDEX_SETTING, zindexConfig);
+}
+
+export function loadZindexs() {
+  return async (dispatch: Dispatch, getState: GetState) => {
+    try {
+      dispatch({ type: SET_ZINDEXS_LOADING, payload: true });
+      const zindexs = await getZindexs();
+      batch(() => {
+        dispatch({
+          type: SORT_ZINDEXS_WITH_COLLAPSE_CHACHED,
+          payload: zindexs,
+        });
+        dispatch({ type: SET_ZINDEXS_LOADING, payload: false });
+      });
+    } finally {
+      dispatch({ type: SET_ZINDEXS_LOADING, payload: false });
+    }
+  };
 }
 
 export async function getRemoteZindexConfig() {

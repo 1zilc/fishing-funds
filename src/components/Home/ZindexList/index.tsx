@@ -3,24 +3,30 @@ import { useSelector } from 'react-redux';
 
 import ZindexRow from '@/components/ZindexRow';
 import Empty from '@/components/Empty';
-import { HomeContext } from '@/components/Home';
+import LoadingBar from '@/components/LoadingBar';
+import { loadZindexs } from '@/actions/zindex';
 import { StoreState } from '@/reducers/types';
 import { useWorkDayTimeToDo } from '@/utils/hooks';
+import { useActions } from '@/utils/hooks';
 import styles from './index.scss';
 
 const ZindexList = () => {
   const zindexs = useSelector((state: StoreState) => state.zindex.zindexs);
-  const { runGetZindexs } = useContext(HomeContext);
+  const zindexsLoading = useSelector(
+    (state: StoreState) => state.zindex.zindexsLoading
+  );
+  const runLoadZindexs = useActions(loadZindexs);
 
   // 间隔时间刷新指数
-  useWorkDayTimeToDo(runGetZindexs, 1000 * 20);
+  useWorkDayTimeToDo(runLoadZindexs, 1000 * 20);
 
   useEffect(() => {
-    runGetZindexs();
+    runLoadZindexs();
   }, []);
 
   return (
     <div className={styles.container}>
+      <LoadingBar show={zindexsLoading} />
       {zindexs.length ? (
         zindexs.map((zindex) => (
           <ZindexRow key={zindex.zindexCode} zindex={zindex} />

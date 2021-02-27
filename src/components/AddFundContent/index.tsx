@@ -101,7 +101,7 @@ const AddFundContent: React.FC<AddFundContentProps> = (props) => {
             placeholder="请输入基金代码"
             value={code}
             onChange={(e) => {
-              const code = e.target.value;
+              const code = e.target.value.trim();
               setCode(code);
               onSearch(Enums.SearchType.Code, code);
             }}
@@ -115,7 +115,7 @@ const AddFundContent: React.FC<AddFundContentProps> = (props) => {
             placeholder="仅用于名称检索（非必填）"
             value={name}
             onChange={(e) => {
-              const name = e.target.value;
+              const name = e.target.value.trim();
               setName(name);
               onSearch(Enums.SearchType.Name, name);
             }}

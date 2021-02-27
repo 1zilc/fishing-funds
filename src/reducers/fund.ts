@@ -6,6 +6,8 @@ import {
   TOGGLE_FUNDS_COLLAPSE,
   SORT_FUNDS_WITH_COLLAPSE_CHACHED,
   SET_REMOTE_FUNDS,
+  SET_FUNDS_LOADING,
+  SET_REMOTE_FUNDS_LOADING,
   getFundConfig,
   calcFund,
 } from '@/actions/fund';
@@ -15,8 +17,11 @@ import * as Utils from '@/utils';
 
 export interface FundState {
   funds: (Fund.ResponseItem & Fund.ExtraRow)[];
+  fundsLoading: boolean;
   remoteFunds: Fund.RemoteFund[];
+  remoteFundsLoading: boolean;
 }
+
 function setRemoteFunds(state: FundState, remoteFunds: Fund.RemoteFund[]) {
   return {
     ...state,
@@ -63,10 +68,24 @@ function sortFunds(
   };
 }
 
+function setFundsLoading(state: FundState, loading: boolean): FundState {
+  return {
+    ...state,
+    fundsLoading: loading,
+  };
+}
+
+function setremoteFundsLoading(state: FundState, loading: boolean): FundState {
+  return {
+    ...state,
+    remoteFundsLoading: loading,
+  };
+}
+
 function sortFundsWithCollapseChached(
   state: FundState,
   responseFunds: Fund.ResponseItem[]
-): FundState {
+) {
   const { funds } = state;
   const fundsCodeToMap = funds.reduce((map, fund) => {
     map[fund.fundcode!] = fund;
@@ -86,7 +105,7 @@ function sortFundsWithCollapseChached(
 function toggleFundCollapse(
   state: FundState,
   fund: Fund.ResponseItem & Fund.ExtraRow
-): FundState {
+) {
   const { funds } = state;
   const cloneFunds: (Fund.ResponseItem & Fund.ExtraRow)[] = Utils.DeepCopy(
     funds
@@ -102,7 +121,7 @@ function toggleFundCollapse(
   };
 }
 
-function toggleFundsCollapse(state: FundState): FundState {
+function toggleFundsCollapse(state: FundState) {
   const { funds } = state;
   const cloneFunds: (Fund.ResponseItem & Fund.ExtraRow)[] = Utils.DeepCopy(
     funds
@@ -118,17 +137,23 @@ function toggleFundsCollapse(state: FundState): FundState {
 }
 
 export default function fund(
-  state = {
+  state: FundState = {
     funds: [],
+    fundsLoading: false,
     remoteFunds: [],
+    remoteFundsLoading: false,
   },
   action: AnyAction
-) {
+): FundState {
   switch (action.type) {
     case SET_REMOTE_FUNDS:
       return setRemoteFunds(state, action.payload);
     case SORT_FUNDS:
       return sortFunds(state, action.payload);
+    case SET_FUNDS_LOADING:
+      return setFundsLoading(state, action.payload);
+    case SET_REMOTE_FUNDS_LOADING:
+      return setremoteFundsLoading(state, action.payload);
     case SORT_FUNDS_WITH_COLLAPSE_CHACHED:
       return sortFundsWithCollapseChached(state, action.payload);
     case TOGGLE_FUND_COLLAPSE:

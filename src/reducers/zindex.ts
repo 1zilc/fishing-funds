@@ -2,6 +2,7 @@ import { AnyAction } from 'redux';
 
 import {
   SORT_ZINDEXS,
+  SET_ZINDEXS_LOADING,
   TOGGLE_ZINDEX_COLLAPSE,
   TOGGLE_ZINDEXS_COLLAPSE,
   SORT_ZINDEXS_WITH_COLLAPSE_CHACHED,
@@ -13,6 +14,7 @@ import * as Utils from '@/utils';
 
 export interface ZindexState {
   zindexs: (Zindex.ResponseItem & Zindex.ExtraRow)[];
+  zindexsLoading: boolean;
 }
 
 const sortZindexs = (
@@ -50,6 +52,13 @@ const sortZindexs = (
   };
 };
 
+function setZindexsLoading(state: ZindexState, loading: boolean) {
+  return {
+    ...state,
+    zindexsLoading: loading,
+  };
+}
+
 const sortZindexsWithCollapseChached = (
   state: ZindexState,
   responseZindexs: Zindex.ResponseItem[]
@@ -75,8 +84,8 @@ const toggleZindexCollapse = (
   zindex: Zindex.ResponseItem & Zindex.ExtraRow
 ): ZindexState => {
   const { zindexs } = state;
-
-  const cloneZindexs = Utils.DeepCopy(zindexs);
+  const cloneZindexs: (Zindex.ResponseItem &
+    Zindex.ExtraRow)[] = Utils.DeepCopy(zindexs);
   cloneZindexs.forEach((_) => {
     if (_.zindexCode === zindex.zindexCode) {
       _.collapse = !zindex.collapse;
@@ -90,7 +99,8 @@ const toggleZindexCollapse = (
 
 const toggleZindexsCollapse = (state: ZindexState): ZindexState => {
   const { zindexs } = state;
-  const cloneZindexs = Utils.DeepCopy(zindexs);
+  const cloneZindexs: (Zindex.ResponseItem &
+    Zindex.ExtraRow)[] = Utils.DeepCopy(zindexs);
   const expandAllZindexs = zindexs.every((_) => _.collapse);
   cloneZindexs.forEach((_) => {
     _.collapse = !expandAllZindexs;
@@ -102,14 +112,17 @@ const toggleZindexsCollapse = (state: ZindexState): ZindexState => {
 };
 
 export default function zindex(
-  state = {
+  state: ZindexState = {
     zindexs: [],
+    zindexsLoading: false,
   },
   action: AnyAction
-) {
+): ZindexState {
   switch (action.type) {
     case SORT_ZINDEXS:
       return sortZindexs(state, action.payload);
+    case SET_ZINDEXS_LOADING:
+      return setZindexsLoading(state, action.payload);
     case SORT_ZINDEXS_WITH_COLLAPSE_CHACHED:
       return sortZindexsWithCollapseChached(state, action.payload);
     case TOGGLE_ZINDEX_COLLAPSE:

@@ -11,7 +11,7 @@ const router = routerMiddleware(history);
 const enhancer = applyMiddleware(thunk, router);
 
 function configureStore(initialState?: StoreState): Store {
-  return createStore(rootReducer, initialState, enhancer);
+  return createStore(rootReducer, enhancer);
 }
 
 export default { configureStore, history };

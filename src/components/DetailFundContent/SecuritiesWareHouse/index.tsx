@@ -4,7 +4,7 @@ import { useRequest, useSize } from 'ahooks';
 import * as echarts from 'echarts';
 
 import { useNativeThemeColor } from '@/utils/hooks';
-import CONST_VARIBLES from '@/constants/varibles.json';
+import * as CONST from '@/constants';
 import * as Services from '@/services';
 import styles from './index.scss';
 
@@ -41,7 +41,7 @@ const SecuritiesWareHouse: React.FC<SecuritiesWareHouseProps> = ({
   ] = useState<echarts.ECharts | null>(null);
   const { width: warehouseRefWidth } = useSize(warehouseRef);
   const { colors: varibleColors, darkMode } = useNativeThemeColor(
-    CONST_VARIBLES
+    CONST.VARIBLES
   );
 
   const initWarehoseChart = () => {
@@ -112,7 +112,7 @@ const SecuritiesWareHouse: React.FC<SecuritiesWareHouseProps> = ({
               itemStyle: {
                 color: varibleColors['--main-text-color'],
                 borderRadius: 10,
-                borderColor: 'rgba(255,255,255,0.3)',
+                borderColor: varibleColors['--background-color'],
                 borderWidth: 1,
                 // shadowBlur: 200,
                 // shadowColor: 'rgba(0, 0, 0, 0.5)',

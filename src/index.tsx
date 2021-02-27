@@ -7,6 +7,8 @@ import 'electron-disable-file-drop';
 import '@/utils/window';
 
 const store = configureStore();
+
+console.log(store);
 render(
   <Provider store={store}>
     <App />

@@ -3,7 +3,7 @@ import { useSize } from 'ahooks';
 import * as echarts from 'echarts';
 
 import { useNativeThemeColor } from '@/utils/hooks';
-import CONST_VARIBLES from '@/constants/varibles.json';
+import * as CONST from '@/constants';
 
 import styles from './index.scss';
 
@@ -21,7 +21,7 @@ const SimilarRank: React.FC<SimilarRankProps> = ({
   ] = useState<echarts.ECharts | null>(null);
   const { width: similarRefWidth } = useSize(similarRef);
   const { colors: varibleColors, darkMode } = useNativeThemeColor(
-    CONST_VARIBLES
+    CONST.VARIBLES
   );
 
   const initSimilarRankChart = () => {

@@ -3,26 +3,32 @@ import { useSelector } from 'react-redux';
 
 import QuotationRow from '@/components/QuotationRow';
 import Empty from '@/components/Empty';
-import { HomeContext } from '@/components/Home';
+import LoadingBar from '@/components/LoadingBar';
+import { loadQuotations } from '@/actions/quotation';
 import { StoreState } from '@/reducers/types';
 import { useWorkDayTimeToDo } from '@/utils/hooks';
+import { useActions } from '@/utils/hooks';
 import styles from './index.scss';
 
 const QuotationList = () => {
   const quotations = useSelector(
     (state: StoreState) => state.quotation.quotations
   );
-  const { runGetQuotations } = useContext(HomeContext);
+  const quotationsLoading = useSelector(
+    (state: StoreState) => state.quotation.quotationsLoading
+  );
+  const runLoadQuotations = useActions(loadQuotations);
 
   // 间隔时间刷新板块
-  useWorkDayTimeToDo(runGetQuotations, 1000 * 30);
+  useWorkDayTimeToDo(runLoadQuotations, 1000 * 30);
   console.log(quotations);
   useEffect(() => {
-    runGetQuotations();
+    runLoadQuotations();
   }, []);
 
   return (
     <div className={styles.container}>
+      <LoadingBar show={quotationsLoading} />
       {quotations.length ? (
         quotations.map((quotation) => (
           <QuotationRow key={quotation.name} quotation={quotation} />

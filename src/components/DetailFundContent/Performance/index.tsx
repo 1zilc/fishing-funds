@@ -4,7 +4,7 @@ import { useRequest, useSize } from 'ahooks';
 import * as echarts from 'echarts';
 
 import { useNativeThemeColor } from '@/utils/hooks';
-import CONST_VARIBLES from '@/constants/varibles.json';
+import * as CONST from '@/constants';
 import * as Services from '@/services';
 import * as Enums from '@/utils/enums';
 import styles from './index.scss';
@@ -31,7 +31,7 @@ const Performance: React.FC<PerformanceProps> = ({ code }) => {
   );
   const { width: performanceRefWidth } = useSize(performanceRef);
   const { colors: varibleColors, darkMode } = useNativeThemeColor(
-    CONST_VARIBLES
+    CONST.VARIBLES
   );
   const { run: runGetFundPerformanceFromEastmoney } = useRequest(
     Services.Fund.GetFundPerformanceFromEastmoney,
