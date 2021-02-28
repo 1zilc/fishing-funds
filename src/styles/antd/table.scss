@@ -1,0 +1,284 @@
+@import './variables';
+
+$prefix: $antPrefix + -table;
+
+%boredStyles {
+  &.#{$prefix}-bordered {
+    table thead > tr:not(:last-child) > th {
+      border-color: $borderColor;
+    }
+    thead > tr > th,
+    tbody > tr > td,
+    tfoot > tr > th,
+    tfoot > tr > td {
+      border-color: $borderColor;
+    }
+    .#{$prefix}-container {
+      border-color: $borderColor;
+    }
+    .#{$prefix}-expanded-row-fixed::after {
+      border-color: $borderColor;
+    }
+  }
+}
+
+.#{$prefix} {
+  background: transparent;
+  .row-danger,
+  .row-warning,
+  .row-success {
+    & > td {
+      position: relative;
+      &:first-of-type::before {
+        position: absolute;
+        content: '';
+        height: 100%;
+        width: 3px;
+        left: 0;
+        top: 0;
+      }
+    }
+  }
+
+  .row-warning {
+    & > td {
+      background: rgba(239, 133, 0, 0.15) !important;
+      /* color: #faad14 !important; */
+      &:first-of-type::before {
+        background-color: #faad14;
+      }
+    }
+  }
+
+  .row-danger {
+    & > td {
+      background: $errorA08 !important;
+      /* color: #ff4d4f !important; */
+      &:first-of-type::before {
+        background-color: $errorColor;
+      }
+    }
+  }
+
+  .row-success {
+    & > td {
+      background: rgba(76, 183, 91, 0.08) !important;
+      /* color: #52c41a !important; */
+      &:first-of-type::before {
+        background-color: #52c41a;
+      }
+    }
+  }
+
+  .title-center {
+    span {
+      justify-content: center;
+    }
+  }
+
+  .text,
+  .title {
+    &-center {
+      text-align: center;
+    }
+    &-left {
+      text-align: left;
+    }
+    &-right {
+      text-align: right;
+    }
+  }
+
+  .check-in-field-title {
+    text-align: center;
+    .ant-table-header-column {
+      width: 10vw;
+      white-space: normal;
+    }
+  }
+
+  .tree-expand-placeholder {
+    .#{$prefix}-row-expand-icon {
+      margin-right: 0px;
+      margin-left: 8px;
+    }
+  }
+
+  .no-padding {
+    padding: 0px;
+  }
+
+  .title-avatar-indent {
+    .#{$prefix}-header-column {
+      > div {
+        text-indent: 63px;
+      }
+    }
+  }
+
+  .title-large-icon-indent {
+    .#{$prefix}-header-column {
+      > div {
+        text-indent: 12px;
+      }
+    }
+  }
+
+  .no-wrap {
+    white-space: nowrap;
+  }
+
+  .#{$prefix}-thead > tr > th {
+    padding: 16px;
+  }
+  .small-head-padding & {
+    .#{$prefix}-thead > tr > th {
+      padding: 6px;
+    }
+  }
+
+  .#{$prefix}-thead > tr > th,
+  .#{$prefix}-tbody > tr > td {
+    white-space: nowrap;
+  }
+
+  .#{$prefix}-row-level-1 {
+    .#{$prefix}-row-expand-icon {
+      display: none;
+    }
+    td {
+      border-bottom-color: transparent;
+    }
+  }
+
+  .row--nested-table {
+    padding: 0px 50px 0px 0px;
+    margin: -3px -16px -6px;
+    table {
+      background-color: transparent;
+      thead {
+        background-color: transparent;
+        > tr > th {
+          background-color: transparent;
+        }
+      }
+      tbody {
+        background-color: transparent;
+        > tr > td {
+          border: none;
+        }
+        .#{$prefix}-row:hover > td {
+          background: transparent;
+        }
+      }
+    }
+  }
+  .#{$prefix} {
+    &-thead > tr > th {
+      position: relative;
+      color: $textColor;
+      background: $contrastBackground;
+      border-color: $contrastBackground;
+      .#{$prefix}-filter-column,
+      .#{$prefix}-sort-column {
+        .#{$prefix}-filter-trigger-container .#{$antPrefix}-dropdown-trigger {
+          background: $contrastBackground;
+          &:hover {
+            color: $primaryColor;
+            background: $contrastBackground;
+          }
+        }
+      }
+      &.#{$prefix}-column-has-sorters:hover {
+        background: $contrastBackground;
+      }
+    }
+    &-tbody {
+      & > tr:not(.#{$prefix}-expanded-row) > td {
+        background: $componentBackground;
+      }
+      & > tr.#{$prefix}-expanded-row .#{$prefix}-tbody tr td {
+        background: $contrastBackground;
+      }
+      & > tr {
+        & > td {
+          border-color: $contrastBackground;
+          color: $textColor;
+        }
+        &.#{$prefix}-row-hover,
+        &:hover {
+          &:not(.#{$prefix}-expanded-row):not(.#{$prefix}-row-selected) {
+            & > td {
+              background: $contrastBackground;
+            }
+          }
+        }
+      }
+    }
+    &-placeholder {
+      background: $componentBackground;
+      border: 1px solid $contrastBackground;
+      .#{$antPrefix}-empty {
+        color: $disabledColor;
+        &-image {
+          svg g g[fill-rule='nonzero'] {
+            stroke: $borderColor !important;
+            path {
+              &:first-child {
+                fill: $componentBackground !important;
+              }
+              &:last-child {
+                fill: $contrastBackground !important;
+              }
+            }
+          }
+          svg ellipse {
+            fill: $contrastBackground !important;
+          }
+        }
+      }
+    }
+    &-header {
+      background: transparent;
+    }
+  }
+  .#{$prefix}-row.hide-expand-icon .#{$prefix}-row-expand-icon {
+    cursor: default;
+  }
+
+  .#{$prefix}-row:not(.hide-expand-icon) .#{$prefix}-row-expand-icon {
+    background-color: $bodyBackground;
+    border-color: $bodyBackground;
+  }
+
+  tr.#{$prefix}-expanded-row,
+  tr.#{$prefix}-expanded-row:hover {
+    background: $contrastBackground;
+    .row--nested-table table thead > tr > th {
+      border-color: $borderColor;
+    }
+  }
+
+  tr.#{$prefix}-row-selected {
+    td {
+      background: $bodyBackground;
+    }
+    &:hover {
+      td {
+        background: $contrastBackground;
+      }
+    }
+  }
+
+  &-filter-dropdown {
+    background: $bodyBackground;
+    .#{$antPrefix}-input {
+      background: $contrastBackground;
+    }
+    &-btns {
+      border-color: $primaryColor;
+    }
+  }
+
+  @extend %boredStyles;
+}

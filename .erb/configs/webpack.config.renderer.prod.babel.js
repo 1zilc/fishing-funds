@@ -67,7 +67,7 @@ export default merge(baseConfig, {
           {
             loader: 'css-loader',
             options: {
-              sourceMap: true,
+              sourceMap: false,
             },
           },
         ],
@@ -85,7 +85,7 @@ export default merge(baseConfig, {
               modules: {
                 localIdentName: '[name]__[local]__[hash:base64:5]',
               },
-              sourceMap: true,
+              sourceMap: false,
             },
           },
         ],
@@ -100,14 +100,14 @@ export default merge(baseConfig, {
           {
             loader: 'css-loader',
             options: {
-              sourceMap: true,
+              sourceMap: false,
               importLoaders: 1,
             },
           },
           {
             loader: 'sass-loader',
             options: {
-              sourceMap: true,
+              sourceMap: false,
             },
           },
         ],
@@ -126,13 +126,13 @@ export default merge(baseConfig, {
                 localIdentName: '[name]__[local]__[hash:base64:5]',
               },
               importLoaders: 1,
-              sourceMap: true,
+              sourceMap: false,
             },
           },
           {
             loader: 'sass-loader',
             options: {
-              sourceMap: true,
+              sourceMap: false,
             },
           },
         ],

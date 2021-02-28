@@ -1,0 +1,8 @@
+@import './variables';
+
+$prefix: $antPrefix + -tree;
+
+.#{$prefix} {
+  background: $componentBackground;
+  color: $textColor;
+}

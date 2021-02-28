@@ -1,0 +1,23 @@
+@import './variables';
+
+$prefix: $antPrefix + -collapse;
+
+.#{$prefix} {
+  color: $textColor !important;
+  line-height: 35px;
+  &-borderless {
+    background-color: $componentBackground !important;
+    & > .#{$prefix}-item > .#{$prefix}-content {
+      background: transparent !important;
+    }
+  }
+
+  & > .#{$prefix}-item > .#{$prefix}-header {
+    color: $textColor !important;
+  }
+
+  &-content {
+    color: $textColor !important;
+    background: $contrastBackground !important;
+  }
+}

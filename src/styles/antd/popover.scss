@@ -1,0 +1,83 @@
+@import './variables';
+
+$prefix: $antPrefix + -popover;
+
+.#{$prefix} {
+  color: $textColor;
+
+  &.no-padding {
+    .#{$prefix}-inner-content {
+      padding: 0 !important;
+    }
+    .#{$prefix}-inner {
+      overflow: hidden !important;
+    }
+  }
+  &.title-bottom {
+    .#{$prefix}-inner {
+      > div {
+        display: flex;
+        flex-direction: column;
+        flex-flow: column-reverse;
+      }
+    }
+    .#{$prefix}-title {
+      border-top: 1px solid $componentBackground;
+      border-bottom: none;
+    }
+  }
+
+  &-inner {
+    border: 1px solid $contrastBackground;
+    background-color: $componentBackground;
+    &-content {
+      color: $textColor;
+      .#{$antPrefix}-btn-default {
+        background: transparent;
+        color: $textColor;
+        border-color: $textColor;
+      }
+    }
+  }
+  &-message {
+    color: $textColor;
+  }
+  &-title {
+    color: $textColor;
+    border-color: $contrastBackground;
+  }
+  &-placement {
+    &-top,
+    &-topLeft,
+    &-topRight {
+      & > .#{$prefix}-content > .#{$prefix}-arrow {
+        border-right-color: $componentBackground;
+        border-bottom-color: $componentBackground;
+      }
+    }
+    &-bottom,
+    &-bottomLeft,
+    &-bottomRight {
+      & > .#{$prefix}-content > .#{$prefix}-arrow {
+        border-left-color: $componentBackground;
+        border-top-color: $componentBackground;
+      }
+    }
+    &-Left,
+    &-LeftTop,
+    &-LeftBottom {
+      & > .#{$prefix}-content > .#{$prefix}-arrow {
+        border-right-color: $componentBackground;
+        border-top-color: $componentBackground;
+      }
+    }
+    &-right,
+    &-rightTop,
+    &-rightBottom {
+      & > .#{$prefix}-content > .#{$prefix}-arrow {
+        border-left-color: $componentBackground;
+        border-bottom-color: $componentBackground;
+      }
+    }
+  }
+}

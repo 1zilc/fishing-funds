@@ -1,0 +1,19 @@
+@import './variables';
+
+$prefix: $antPrefix + -divider;
+
+.#{$prefix} {
+  &-horizontal {
+    &.#{$prefix} {
+      &-with-text-center,
+      &-with-text-left,
+      &-with-text-right {
+        color: $borderColor;
+        &::before,
+        &::after {
+          border-color: $borderColor;
+        }
+      }
+    }
+  }
+}

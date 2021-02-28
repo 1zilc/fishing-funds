@@ -50,6 +50,7 @@ const HistoryPerformance: React.FC<HistoryPerformanceProps> = (props) => {
     <div className={styles.content}>
       <Table
         size="small"
+        rowKey="timeName"
         columns={columns}
         dataSource={data}
         pagination={false}

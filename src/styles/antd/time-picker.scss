@@ -1,0 +1,92 @@
+@import './variables';
+
+$prefix: $antPrefix + -time-picker;
+
+.#{$prefix} {
+  &-input {
+    background-color: $bodyBackground;
+    border-color: $borderColor;
+    color: $textColor;
+    &:hover {
+      border-color: $primaryColor;
+    }
+  }
+  &-clear {
+    background-color: transparent;
+  }
+  &:hover {
+    .#{$prefix}-icon i {
+      color: $primaryColor;
+    }
+    .#{$prefix}-input:not([value='']) ~ .#{$prefix}-icon i {
+      color: transparent;
+    }
+  }
+  &-icon,
+  &-clear {
+    .#{$prefix}-clock-icon {
+      color: $borderColor;
+      &:hover {
+        color: $primaryColor;
+      }
+    }
+    &:hover {
+      color: $primaryColor;
+    }
+  }
+  &-panel {
+    color: $textColor;
+    &-inner {
+      background-color: $componentBackground;
+      border: 1px solid $contrastBackground;
+    }
+    &-input-wrap {
+      border-color: $borderColor;
+    }
+    &-input {
+      background: transparent;
+    }
+  }
+  &-panel-combobox {
+    .#{$prefix}-panel {
+      &-select {
+        border-color: $borderColor;
+        &-option-selected {
+          background: $itemActiveBackground;
+          color: $textColor;
+        }
+        li {
+          &:not(.#{$prefix}-panel-select-option-disabled):hover {
+            background: $itemHoverBackground;
+          }
+          &.#{$prefix}-panel-select-option-disabled {
+            color: $itemActiveColor;
+            background: $itemActiveBackground;
+            &:hover {
+              color: $itemActiveColor;
+              background: $itemHoverBackground;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+.has-error {
+  .#{$prefix} {
+    &-input {
+      border-color: $errorColor;
+      &:hover {
+        border-color: $error100;
+      }
+    }
+    &-icon i {
+      color: $errorColor;
+    }
+    &:hover {
+      .#{$prefix}-icon i {
+        color: $error100;
+      }
+    }
+  }
+}

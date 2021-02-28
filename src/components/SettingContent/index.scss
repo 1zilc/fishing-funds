@@ -17,7 +17,7 @@
     width: 100%;
     outline: none;
     border: 1px solid var(--border-color);
-    height: 20px;
+    // height: 20px;
   }
 }
 
@@ -80,9 +80,16 @@
 
   .radio {
     font-size: 11px;
-    display: block;
+    display: flex;
+    width: 100%;
+    align-items: center;
     line-height: 20px;
     padding: 5px 0 5px 25px;
+
+    span {
+      display: inline-block;
+      top: 0;
+    }
   }
 }
 

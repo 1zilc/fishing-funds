@@ -1,0 +1,83 @@
+@import './variables';
+
+$prefix: $antPrefix + -dropdown;
+$btnPrefix: $antPrefix + -btn;
+
+%dropdownTrigger {
+  color: $textColor;
+  border-color: $borderColor;
+  background: $componentBackground;
+  line-height: inherit;
+  &:hover,
+  &:focus,
+  &:focus-within {
+    background: $componentBackground;
+    border-color: $primaryColor;
+    color: $primaryColor;
+  }
+  & > span + span {
+    margin-left: 10px;
+  }
+
+  &.#{$prefix}-open {
+    .#{$prefix}-arrow {
+      transform: rotate(180deg);
+    }
+  }
+
+  &.#{$btnPrefix} {
+    &-primary:not([disabled]) {
+      border-color: $primaryColor;
+    }
+    // &-danger:not([disabled]) {
+    //   border-color: ${(props) => props.theme.palette.error[0]};
+    //  &:hover {
+    //     border-color: ${(props) => props.theme.palette.error[1]};
+    //   }
+    //   .#{$prefix}-arrow {
+    //     color: ${(props) => props.theme.palette.error[0]};
+    //   }
+    // }
+    &[disabled] {
+      color: $disabledColor;
+      background: $componentBackground;
+      border-color: $borderColor;
+      &:hover {
+        background: $componentBackground;
+        border-color: $borderColor;
+      }
+    }
+  }
+}
+
+.#{$prefix} {
+  color: $textColor;
+  &-menu {
+    background-color: $componentBackground;
+    border: 1px solid $contrastBackground;
+    &-item {
+      color: $textColor;
+      &:not(.no-hover):hover {
+        background-color: $itemHoverBackground;
+      }
+      &.no-hover:hover {
+        background-color: transparent;
+      }
+      &.no-padding {
+        padding: 0;
+      }
+    }
+    &-item-selected,
+    &-submenu-title-selected,
+    &-item-selected > a,
+    &-submenu-title-selected > a {
+      background-color: $itemHoverBackground;
+    }
+  }
+  &-trigger {
+    @extend %dropdownTrigger;
+  }
+  &-arrow {
+    transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+  }
+}

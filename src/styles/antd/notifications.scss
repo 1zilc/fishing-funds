@@ -1,0 +1,22 @@
+@import './variables';
+
+$notificationPrefix: $antPrefix + -notification;
+$messagePrefix: $antPrefix + -message;
+
+.#{$notificationPrefix} {
+  color: $textColor;
+  &-notice {
+    background-color: $componentBackground;
+    border: 1px solid $contrastBackground;
+    &-message {
+      color: $textColor;
+    }
+  }
+}
+.#{$messagePrefix} {
+  color: $textColor;
+  &-notice-content {
+    background-color: $componentBackground;
+    border: 1px solid $contrastBackground;
+  }
+}

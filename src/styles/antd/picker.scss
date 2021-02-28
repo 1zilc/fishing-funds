@@ -1,0 +1,202 @@
+@import './variables';
+
+$prefix: $antPrefix + -picker;
+
+$panelRanges: '.#{$prefix}-month-panel, .#{$prefix}-quarter, .#{$prefix}-year-panel, .#{$prefix}-decade-panel, .#{$prefix}-century-panel';
+$disabledClass: '.#{$prefix}-disabled';
+$selectedClass: '&.#{$prefix}-cell-selected, &.#{$prefix}-cell-range-start, &.#{$prefix}-cell-range-end';
+$cellRange: '&.#{$prefix}-cell-range-start:not(.#{$prefix}-cell-range-start-single), &.#{$prefix}-cell-range-end:not(.#{$prefix}-cell-range-end-single)';
+$cellRangeHover: '&.#{$prefix}-cell-range-hover-start, &.#{$prefix}-cell-range-hover-end';
+$cellRangeHoverUnSelect: '&.#{$prefix}-cell-range-hover-start:not(.ant-picker-cell-in-range):not(.ant-picker-cell-range-start):not(.ant-picker-cell-range-end)::after, &.#{$prefix}-cell-range-hover-end:not(.ant-picker-cell-in-range):not(.ant-picker-cell-range-start):not(.ant-picker-cell-range-end)::after, &.#{$prefix}-cell-range-hover-start.ant-picker-cell-range-start-single::after,&.#{$prefix}-cell-range-hover-end.ant-picker-cell-range-end-single::after, &.#{$prefix}-cell-range-hover:not(.ant-picker-cell-in-range)::after';
+
+%disabled {
+  cursor: not-allowed;
+  color: $disabledColor;
+  background-color: $bodyBackground;
+  border-color: $borderColor;
+  .#{$prefix}-suffix {
+    color: $disabledColor;
+  }
+  .#{$prefix}-separator {
+    &::before,
+    &::after {
+      border-color: inherit;
+    }
+  }
+  .#{$prefix}-input {
+    background: inherit;
+    & > input {
+      color: inherit;
+    }
+  }
+}
+
+%pickerCalendar {
+  color: $textColor;
+  .#{$prefix}-panel {
+    border-color: $borderColor;
+    &-container {
+      background: $pickerDropdown;
+      .#{$prefix}-header {
+        color: $textColorA015;
+        border-color: $borderColor;
+        .#{$prefix}-header-view {
+          button:hover {
+            color: $primaryColor;
+          }
+        }
+
+        > button {
+          color: $textColorA075;
+          &:hover {
+            color: $textColor;
+          }
+        }
+      }
+    }
+    .#{$prefix}-footer {
+      border-top-color: $borderColor;
+      .#{$prefix}-today-btn {
+        color: $primaryColor;
+      }
+    }
+  }
+  .#{$prefix}-cell {
+    &:hover {
+      &:not(.#{$prefix}-cell-in-view),
+      &:not(.#{$prefix}-cell-selected):not(.#{$prefix}-cell-range-start):not(.#{$prefix}-cell-range-end):not(.#{$prefix}-cell-range-hover-start):not(.#{$prefix}-cell-range-hover-end) {
+        .#{$prefix}-cell-inner {
+          background: $primaryColorA07;
+        }
+      }
+    }
+
+    color: $textColorA075;
+    &-in-view {
+      color: $textColor;
+      #{$selectedClass} {
+        .#{$prefix}-cell-inner {
+          background: $primaryColor;
+        }
+      }
+
+      #{$cellRange},
+      &.#{$prefix}-cell-in-range {
+        &::before {
+          background: $primaryContrast;
+        }
+      }
+      #{$cellRangeHover} {
+        &.#{$prefix}-cell-in-range {
+          .#{$prefix}-cell-inner::after {
+            background: $primaryColorA07;
+          }
+        }
+      }
+      #{$cellRangeHoverUnSelect} {
+        border-color: $primaryColor;
+      }
+      &.#{$prefix}-cell-today {
+        .#{$prefix}-cell-inner::before {
+          border-color: $primaryColor;
+        }
+      }
+    }
+  }
+  .#{$prefix}-content th {
+    color: $textColor;
+  }
+  .#{$prefix}-cell-disabled::before {
+    background: $disabledColorA06;
+  }
+  #{$panelRanges} {
+    .#{$prefix}-cell-disabled .#{$prefix}-cell-inner {
+      background: transparent;
+    }
+  }
+
+  .#{$prefix}-ranges .#{$prefix}-preset > .#{$antPrefix}-tag-blue {
+    color: $primaryColor;
+    border-color: $primaryColor;
+    background: $itemHoverBackground;
+  }
+
+  .#{$prefix}-week-panel-row:hover td {
+    background: $primaryColorA07;
+  }
+  .#{$prefix}-week-panel-row-selected {
+    &,
+    &:hover {
+      td {
+        background: $primaryColor;
+      }
+    }
+  }
+  .#{$prefix}-range-arrow::after {
+    border-color: $pickerDropdown;
+  }
+}
+
+%dateTimePicker {
+  &-datetime-panel .#{$prefix}-time-panel {
+    border-color: $borderColor;
+  }
+
+  &-time-panel-column:not(:first-child) {
+    border-left-color: $borderColor;
+  }
+
+  &-time-panel-column > li.#{$prefix}-time-panel-cell-selected .#{$prefix}-time-panel-cell-inner {
+    background: $primaryColorA07;
+  }
+
+  &-time-panel-column > li.#{$prefix}-time-panel-cell .#{$prefix}-time-panel-cell-inner {
+    color: $textColor;
+    &:hover {
+      background: $primaryColorA07;
+    }
+  }
+}
+
+.#{$prefix} {
+  &-range .#{$prefix}-active-bar {
+    background: $primaryColor;
+  }
+  &:not(#{$disabledClass}) {
+    color: $textColor;
+    background-color: $componentBackground;
+    border-color: $borderColor;
+    .#{$prefix}-input {
+      background: inherit;
+      & > input {
+        color: inherit;
+        &:disabled {
+          color: $disabledColor;
+        }
+      }
+    }
+    .#{$prefix}-suffix {
+      color: $textColor;
+    }
+    .#{$prefix}-clear {
+      color: inherit;
+      background: inherit;
+      &:hover {
+        color: $primaryColor;
+      }
+    }
+  }
+  &:hover,
+  &-focused {
+    &:not(#{$disabledClass}) {
+      border-color: $primaryColor;
+    }
+  }
+  &.#{$prefix}-disabled {
+    @extend %disabled;
+  }
+  &-dropdown {
+    @extend %pickerCalendar;
+  }
+  @extend %dateTimePicker !optional;
+}

@@ -1,0 +1,15 @@
+@import './variables';
+
+$prefix: $antPrefix + -card;
+
+.#{$prefix} {
+  background: $componentBackground;
+  color: $textColor;
+  &-meta-title,
+  &-meta-description {
+    color: $textColor;
+  }
+  &-bordered {
+    border-color: $borderColor;
+  }
+}

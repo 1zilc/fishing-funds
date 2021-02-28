@@ -1,0 +1,55 @@
+@import './variables';
+
+$prefix: $antPrefix + -modal;
+$drawerPrefix: $antPrefix + -drawer;
+$modalTypes: '&-confirm, &-info, &-success, &-error, &-warning';
+
+.#{$prefix},
+.#{$drawerPrefix} {
+  color: $textColor;
+
+  &-wrap.no-padding,
+  &.no-padding {
+    .#{$prefix} {
+      &-body {
+        padding: 0 !important;
+      }
+      &-content {
+        overflow: hidden;
+      }
+    }
+  }
+
+  &-content {
+    background-color: $componentBackground;
+  }
+  &-close {
+    color: $textColorSecondary;
+    &:hover {
+      color: $textColor;
+    }
+  }
+  &-title {
+    color: $textColor;
+  }
+  &-header,
+  &-footer {
+    color: $textColor;
+    background: transparent;
+    border-color: $borderColor;
+  }
+
+  #{$modalTypes} {
+    &-body .#{$prefix} {
+      #{$modalTypes} {
+        &-title,
+        &-content {
+          color: $textColor;
+        }
+      }
+    }
+  }
+  &-confirm-info .#{$prefix}-confirm-body > .anticon {
+    color: $primaryColor;
+  }
+}

@@ -1,0 +1,16 @@
+@import './variables';
+
+$prefix: $antPrefix + -list;
+
+.#{$prefix} {
+  color: $textColor;
+  &-item-meta {
+    &-title,
+    &-description {
+      color: $textColor;
+    }
+  }
+  &-item {
+    border-color: $borderColor !important;
+  }
+}

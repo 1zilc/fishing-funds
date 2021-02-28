@@ -49,7 +49,11 @@ const FundHistoryValueContent: React.FC<HistoryValueProps> = (props) => {
           size="small"
           columns={columns}
           dataSource={displayData}
-          pagination={false}
+          pagination={{
+            defaultPageSize: 20,
+            hideOnSinglePage: true,
+            position: ['bottomCenter'],
+          }}
         />
       </div>
     </CustomDrawerContent>
