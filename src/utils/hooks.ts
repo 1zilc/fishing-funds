@@ -1,24 +1,32 @@
 import { useCallback, useLayoutEffect, useMemo, useState } from 'react';
 import { useInterval } from 'ahooks';
 import { ipcRenderer, remote } from 'electron';
+import { bindActionCreators } from 'redux';
+import { useDispatch } from 'react-redux';
 
 import { getSystemSetting } from '@/actions/setting';
-import { useDispatch } from 'react-redux';
 import { getCurrentHours } from '@/actions/time';
 import { updateAvaliable } from '@/actions/updater';
-
 import * as Utils from '@/utils';
 
 const { nativeTheme } = remote;
 
-export function useWorkDayTimeToDo(todo: () => void, delay: number): void {
-  useInterval(async () => {
-    const timestamp = await getCurrentHours();
-    const isWorkDayTime = Utils.JudgeWorkDayTime(Number(timestamp));
-    if (isWorkDayTime) {
-      todo();
-    }
-  }, delay);
+export function useWorkDayTimeToDo(
+  todo: () => void,
+  delay: number,
+  config?: { immediate: boolean }
+): void {
+  useInterval(
+    async () => {
+      const timestamp = await getCurrentHours();
+      const isWorkDayTime = Utils.JudgeWorkDayTime(Number(timestamp));
+      if (isWorkDayTime) {
+        todo();
+      }
+    },
+    delay,
+    config
+  );
 }
 
 export function useScrollToTop(
@@ -69,11 +77,11 @@ export function useUpdater() {
 export function useNativeTheme() {
   const [darkMode, setDarkMode] = useState(nativeTheme.shouldUseDarkColors);
   useLayoutEffect(() => {
-    ipcRenderer.on('nativeTheme-updated', (e, data) => {
+    const listener = ipcRenderer.on('nativeTheme-updated', (e, data) => {
       setDarkMode(data.darkMode);
     });
     return () => {
-      ipcRenderer.removeAllListeners('nativeTheme-updated');
+      listener.removeAllListeners('nativeTheme-updated');
     };
   }, []);
   return { darkMode };
@@ -85,4 +93,19 @@ export function useNativeThemeColor(varibles: string[]) {
     darkMode,
   ]);
   return { darkMode, colors: memoColors };
+}
+
+export function useEchartResize() {}
+
+export function useActions(actions: any, deps?: any[]) {
+  const dispatch = useDispatch();
+  return useMemo(
+    () => {
+      if (Array.isArray(actions)) {
+        return actions.map((a) => bindActionCreators(a, dispatch));
+      }
+      return bindActionCreators(actions, dispatch);
+    },
+    deps ? [dispatch, ...deps] : [dispatch]
+  );
 }

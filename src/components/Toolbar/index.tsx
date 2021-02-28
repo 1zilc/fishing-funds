@@ -1,7 +1,7 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { Badge } from 'antd';
 import { useSelector, useDispatch } from 'react-redux';
-import { useBoolean } from 'ahooks';
+import { useBoolean, useThrottleFn } from 'ahooks';
 
 import { ReactComponent as AddIcon } from '@/assets/icons/add.svg';
 import { ReactComponent as MenuAddIcon } from '@/assets/icons/menu-add.svg';
@@ -10,36 +10,47 @@ import { ReactComponent as RefreshIcon } from '@/assets/icons/refresh.svg';
 import { ReactComponent as QRcodeIcon } from '@/assets/icons/qr-code.svg';
 import { ReactComponent as SettingIcon } from '@/assets/icons/setting.svg';
 import CustomDrawer from '@/components/CustomDrawer';
-import AddFundContent from '@/components/AddFundContent';
+import AddFundContent from '@/components/Home/FundList/AddFundContent';
 import SettingContent from '@/components/SettingContent';
 import PayContent from '@/components/PayContent';
-import { HomeContext } from '@/components/Home';
-import EditZindexContent from '@/components/EditZindexContent';
-import { toggleToolbarDeleteStatus } from '@/actions/toolbar';
+import EditZindexContent from '@/components/Home/ZindexList/EditZindexContent';
 import { StoreState } from '@/reducers/types';
-import { useScrollToTop } from '@/utils/hooks';
+import { toggleToolbarDeleteStatus } from '@/actions/toolbar';
+import { loadFunds } from '@/actions/fund';
+import { loadZindexs } from '@/actions/zindex';
+import { loadQuotations } from '@/actions/quotation';
+import { getSystemSetting } from '@/actions/setting';
+import { useScrollToTop, useActions } from '@/utils/hooks';
 import * as Enums from '@/utils/enums';
 import styles from './index.scss';
 
 export interface ToolBarProps {}
 
 const iconSize = { height: 18, width: 18 };
-
+const throttleDelay = 1000 * 3;
+const lowKeyStyleCodes = ` html { filter: grayscale(100%); }`;
 const ToolBar: React.FC<ToolBarProps> = () => {
   const dispatch = useDispatch();
-  const { runGetFunds, runGetZindexs, runGetQuotations } = useContext(
-    HomeContext
-  );
-
+  const { lowKeySetting } = getSystemSetting();
   const updateInfo = useSelector(
     (state: StoreState) => state.updater.updateInfo
   );
   const tabsActiveKey = useSelector(
     (state: StoreState) => state.tabs.activeKey
   );
-  const freshFunds = useScrollToTop({ after: runGetFunds });
-  const freshZindexs = useScrollToTop({ after: runGetZindexs });
-  const freshQuotations = useScrollToTop({ after: runGetQuotations });
+  const { run: runLoadFunds } = useThrottleFn(useActions(loadFunds), {
+    wait: throttleDelay,
+  });
+  const { run: runLoadZindexs } = useThrottleFn(useActions(loadZindexs), {
+    wait: throttleDelay,
+  });
+  const { run: runLoadQuotations } = useThrottleFn(useActions(loadQuotations), {
+    wait: throttleDelay,
+  });
+
+  const freshFunds = useScrollToTop({ after: runLoadFunds });
+  const freshZindexs = useScrollToTop({ after: runLoadZindexs });
+  const freshQuotations = useScrollToTop({ after: runLoadQuotations });
 
   const [
     showAddFundDrawer,
@@ -74,8 +85,16 @@ const ToolBar: React.FC<ToolBarProps> = () => {
     },
   ] = useBoolean(false);
 
+  // TODO: 低调模式实现方式不太优雅，后期需改进
+  if (lowKeySetting) {
+    document.body.classList.add('lowKey');
+  } else {
+    document.body.classList.remove('lowKey');
+  }
+
   return (
     <>
+      {lowKeySetting && <style>{lowKeyStyleCodes}</style>}
       <div className={styles.bar}>
         {tabsActiveKey === Enums.TabKeyType.Funds && (
           <AddIcon style={{ ...iconSize }} onClick={openAddFundDrawer} />

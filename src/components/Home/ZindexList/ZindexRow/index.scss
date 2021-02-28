@@ -1,0 +1,103 @@
+.row {
+  /* display: flex; */
+  width: 100%;
+  padding: 8px 8px;
+  box-sizing: border-box;
+  border-bottom: 1px solid var(--border-color);
+  background-color: var(--background-color);
+  color: var(--main-text-color);
+  z-index: 2;
+  cursor: pointer;
+
+  &:hover {
+    background-color: var(--hover-color);
+
+    .arrow {
+      svg {
+        fill: var(--main-text-color);
+      }
+    }
+  }
+}
+
+
+.zindexName {
+  font-weight: 600;
+  font-size: 14px;
+  margin-bottom: 2px;
+}
+
+.code {
+  font-size: 10px;
+  margin-right: 5px;
+}
+
+.rowBar {
+  font-size: 10px;
+  display: flex;
+  align-items: center;
+}
+
+.value {
+  display: block;
+  float: right;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 150px;
+  text-align: center;
+}
+
+.zsz {
+  font-size: 20px;
+  line-height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+
+  svg {}
+}
+
+.zd {
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+
+  .zdd,
+  .zdf {
+    font-size: 10px;
+  }
+
+  .zdf {
+    margin-left: 10px;
+  }
+}
+
+.arrow {
+  /* border: 1px solid #333; */
+  margin-right: 5px;
+
+  svg {
+    cursor: pointer;
+    fill: var(--svg-icon-color)
+  }
+}
+
+.collapseContent {
+  display: flex;
+  padding: 5px 15px;
+  flex-wrap: wrap;
+  font-size: 10px;
+  color: var(--inner-text-color);
+  background-color: var(--inner-color);
+  word-wrap: break-word;
+
+  section {
+    width: 50%;
+    padding: 5px;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+}

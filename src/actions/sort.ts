@@ -1,6 +1,6 @@
 import * as Enums from '@/utils/enums';
 import * as Utils from '@/utils';
-import CONST_STORAGE from '@/constants/storage.json';
+import * as CONST from '@/constants';
 
 export interface FundSortMode {
   type: Enums.FundSortType;
@@ -70,21 +70,21 @@ export function getSortConfig() {
 
 export function getSortMode() {
   const fundSortMode: FundSortMode = Utils.GetStorage(
-    CONST_STORAGE.FUND_SORT_MODE,
+    CONST.STORAGE.FUND_SORT_MODE,
     {
       type: Enums.FundSortType.Default,
       order: Enums.SortOrderType.Desc,
     }
   );
   const zindexSortMode: ZindexSortMode = Utils.GetStorage(
-    CONST_STORAGE.ZINDEX_SORT_MODE,
+    CONST.STORAGE.ZINDEX_SORT_MODE,
     {
       type: Enums.ZindexSortType.Custom,
       order: Enums.SortOrderType.Desc,
     }
   );
   const quotationSortMode: QuotationSortType = Utils.GetStorage(
-    CONST_STORAGE.QUOTATION_SORT_MODE,
+    CONST.STORAGE.QUOTATION_SORT_MODE,
     {
       type: Enums.ZindexSortType.Zdf,
       order: Enums.SortOrderType.Desc,
@@ -98,7 +98,7 @@ export function setFundSortMode(fundSortMode: {
   order?: Enums.SortOrderType;
 }) {
   const { fundSortMode: _ } = getSortMode();
-  Utils.SetStorage(CONST_STORAGE.FUND_SORT_MODE, {
+  Utils.SetStorage(CONST.STORAGE.FUND_SORT_MODE, {
     ..._,
     ...fundSortMode,
   });
@@ -109,7 +109,7 @@ export function setZindexSortMode(zindexSortMode: {
   order?: Enums.SortOrderType;
 }) {
   const { zindexSortMode: _ } = getSortMode();
-  Utils.SetStorage(CONST_STORAGE.ZINDEX_SORT_MODE, {
+  Utils.SetStorage(CONST.STORAGE.ZINDEX_SORT_MODE, {
     ..._,
     ...zindexSortMode,
   });
@@ -120,7 +120,7 @@ export function setQuotationSortMode(quotationSortMode: {
   order?: Enums.SortOrderType;
 }) {
   const { zindexSortMode: _ } = getSortMode();
-  Utils.SetStorage(CONST_STORAGE.QUOTATION_SORT_MODE, {
+  Utils.SetStorage(CONST.STORAGE.QUOTATION_SORT_MODE, {
     ..._,
     ...quotationSortMode,
   });
@@ -129,7 +129,7 @@ export function setQuotationSortMode(quotationSortMode: {
 export function troggleFundSortOrder() {
   const { fundSortMode } = getSortMode();
   const { order } = fundSortMode;
-  Utils.SetStorage(CONST_STORAGE.FUND_SORT_MODE, {
+  Utils.SetStorage(CONST.STORAGE.FUND_SORT_MODE, {
     ...fundSortMode,
     order:
       order === Enums.SortOrderType.Asc
@@ -141,7 +141,7 @@ export function troggleFundSortOrder() {
 export function troggleZindexSortOrder() {
   const { zindexSortMode } = getSortMode();
   const { order } = zindexSortMode;
-  Utils.SetStorage(CONST_STORAGE.ZINDEX_SORT_MODE, {
+  Utils.SetStorage(CONST.STORAGE.ZINDEX_SORT_MODE, {
     ...zindexSortMode,
     order:
       order === Enums.SortOrderType.Asc
@@ -153,7 +153,7 @@ export function troggleZindexSortOrder() {
 export function troggleQuotationSortOrder() {
   const { quotationSortMode } = getSortMode();
   const { order } = quotationSortMode;
-  Utils.SetStorage(CONST_STORAGE.QUOTATION_SORT_MODE, {
+  Utils.SetStorage(CONST.STORAGE.QUOTATION_SORT_MODE, {
     ...quotationSortMode,
     order:
       order === Enums.SortOrderType.Asc

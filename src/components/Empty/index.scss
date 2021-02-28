@@ -1,0 +1,19 @@
+.content {
+  height: 100%;
+}
+
+.text {
+  position: absolute;
+  text-align: center;
+  font-size: 12px;
+  color: var(--main-text-color);
+  top: 40%;
+  transform: translateY(-50%);
+  width: 100%;
+}
+
+.img {
+  bottom: 80px;
+  position: absolute;
+  width: 100%;
+}

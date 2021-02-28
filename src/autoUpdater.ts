@@ -1,10 +1,4 @@
-import {
-  dialog,
-  nativeImage,
-  NativeImage,
-  ipcMain,
-  BrowserWindow,
-} from 'electron';
+import { NativeImage, BrowserWindow } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 
@@ -14,14 +8,18 @@ export default class AppUpdater {
     log.transports.file.level = 'info';
     autoUpdater.logger = log;
     // autoUpdater.checkForUpdatesAndNotify();
-    autoUpdater.checkForUpdates();
+    try {
+      autoUpdater.checkForUpdates();
+    } catch {
+      console.log('检查更新失败');
+    }
     // autoUpdater.currentVersion = '2.0.0';
 
     autoUpdater.on('error', (error) => {
-      dialog.showErrorBox(
-        'Error: ',
-        error == null ? 'unknown' : (error.stack || error).toString()
-      );
+      // dialog.showErrorBox(
+      //   'Error: ',
+      //   error == null ? 'unknown' : (error.stack || error).toString()
+      // );
     });
 
     //检查事件

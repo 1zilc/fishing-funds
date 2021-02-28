@@ -3,7 +3,7 @@ import classnames from 'classnames';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { ReactComponent as ConsumptionIcon } from '@/assets/icons/consumption.svg';
-import { ReactComponent as WalletIcon } from '@/assets/icons/wallet.svg';
+import { ReactComponent as WalletIcon } from '@/assets/icons/wallet/1.svg';
 import { ReactComponent as EyeIcon } from '@/assets/icons/eye.svg';
 import { ReactComponent as EyeCloseIcon } from '@/assets/icons/eye-close.svg';
 import { HeaderContext } from '@/components/Header';

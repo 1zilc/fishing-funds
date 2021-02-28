@@ -1,0 +1,29 @@
+.content {
+  display: block;
+}
+
+.performanceSelections {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.performanceSelection {
+  font-size: 10px;
+  padding: 1px 6px;
+  border-radius: 3px;
+  cursor: pointer;
+  color: var(--cancel-text-color);
+  background-color: var(--cancel-color);
+  transition: all .2s;
+
+  &:hover {
+    opacity: .8;
+  }
+}
+
+.active {
+  color: var(--primary-text-color);
+  background-color: var(--primary-color);
+}

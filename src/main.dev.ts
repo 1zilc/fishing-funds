@@ -83,8 +83,8 @@ const createMenubar = async () => {
     preloadWindow: false,
     showOnAllWorkspaces: false,
     showDockIcon: false,
-
     browserWindow: {
+      backgroundColor: '#fff',
       transparent: false,
       alwaysOnTop: false,
       width: mainWindowState.width,

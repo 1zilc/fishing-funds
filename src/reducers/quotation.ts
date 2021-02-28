@@ -2,6 +2,7 @@ import { AnyAction } from 'redux';
 
 import {
   SORT_QUOTATIONS,
+  SET_QUOTATIONS_LOADING,
   TOGGLE_QUOTATION_COLLAPSE,
   TOGGLE_QUOTATIONS_COLLAPSE,
   SORT_QUOTATIONS_WITH_COLLAPSE_CHACHED,
@@ -12,6 +13,7 @@ import * as Utils from '@/utils';
 
 export interface QuotationState {
   quotations: (Quotation.ResponseItem & Quotation.ExtraRow)[];
+  quotationsLoading: boolean;
 }
 
 function sortQuotations(
@@ -48,6 +50,13 @@ function sortQuotations(
   return {
     ...state,
     quotations: sortList,
+  };
+}
+
+function sortQuotationsLoading(state: QuotationState, loading: boolean) {
+  return {
+    ...state,
+    quotationsLoading: loading,
   };
 }
 
@@ -106,13 +115,15 @@ function toggleQuotationsCollapse(state: QuotationState): QuotationState {
 export default function quotation(
   state = {
     quotations: [],
-    remoteQuotations: [],
+    quotationsLoading: false,
   },
   action: AnyAction
 ) {
   switch (action.type) {
     case SORT_QUOTATIONS:
       return sortQuotations(state, action.payload);
+    case SET_QUOTATIONS_LOADING:
+      return sortQuotationsLoading(state, action.payload);
     case SORT_QUOTATIONS_WITH_COLLAPSE_CHACHED:
       return sortQuotationsWithCollapseChached(state, action.payload);
     case TOGGLE_QUOTATION_COLLAPSE:
