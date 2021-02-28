@@ -28,7 +28,7 @@ export interface ToolBarProps {}
 
 const iconSize = { height: 18, width: 18 };
 const throttleDelay = 1000 * 3;
-
+const lowKeyStyleCodes = ` html { filter: grayscale(100%); }`;
 const ToolBar: React.FC<ToolBarProps> = () => {
   const dispatch = useDispatch();
   const { lowKeySetting } = getSystemSetting();
@@ -85,9 +85,16 @@ const ToolBar: React.FC<ToolBarProps> = () => {
     },
   ] = useBoolean(false);
 
+  // TODO: 低调模式实现方式不太优雅，后期需改进
+  if (lowKeySetting) {
+    document.body.classList.add('lowKey');
+  } else {
+    document.body.classList.remove('lowKey');
+  }
+
   return (
     <>
-      {lowKeySetting && <style>{`html { filter: grayscale(95%) }`}</style>}
+      {lowKeySetting && <style>{lowKeyStyleCodes}</style>}
       <div className={styles.bar}>
         {tabsActiveKey === Enums.TabKeyType.Funds && (
           <AddIcon style={{ ...iconSize }} onClick={openAddFundDrawer} />

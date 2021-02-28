@@ -23,7 +23,7 @@ const Tooltip: React.FC<TooltipProps> = (props) => {
       <div className={styles.tooltipName}>债券名称：{item.name}</div>
       <div>债券代码：{item.code}</div>
       <div>持仓占比：{item.ccb}%</div>
-      <div className={item.zdf < 0 ? 'down-text' : 'up-text'}>
+      <div className={item.zdf < 0 ? 'text-down' : 'text-up'}>
         涨跌幅：{item.zdf}%
       </div>
     </div>

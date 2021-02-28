@@ -45,6 +45,7 @@ const Performance: React.FC<PerformanceProps> = ({ code }) => {
           },
           tooltip: {
             trigger: 'axis',
+            position: 'inside',
           },
           legend: {
             data: result?.map(({ name }) => name) || [],
@@ -62,7 +63,6 @@ const Performance: React.FC<PerformanceProps> = ({ code }) => {
           xAxis: {
             type: 'time',
             boundaryGap: false,
-            nameTextStyle: {},
             axisLabel: {
               fontSize: 10,
             },

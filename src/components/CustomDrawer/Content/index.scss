@@ -25,12 +25,12 @@
   }
 
   .close {
-    color: var(--reverse-text-color);
+    color: var(--cancel-text-color);
     background-color: var(--cancel-color);
   }
 
   .add {
-    color: #eee;
+    color: var(--primary-text-color);
     background-color: var(--primary-color);
   }
 }

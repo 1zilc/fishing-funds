@@ -14,7 +14,7 @@
   padding: 1px 6px;
   border-radius: 3px;
   cursor: pointer;
-  color: var(--reverse-text-color);
+  color: var(--cancel-text-color);
   background-color: var(--cancel-color);
   transition: all .2s;
 
@@ -24,6 +24,6 @@
 }
 
 .active {
-  color: #eee;
+  color: var(--primary-text-color);
   background-color: var(--primary-color);
 }

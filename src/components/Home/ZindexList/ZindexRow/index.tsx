@@ -73,17 +73,17 @@ const ZindexRow: React.FC<RowProps> = (props) => {
             <div
               className={classnames(
                 styles.zsz,
-                zindex.zdf < 0 ? 'down-text' : 'up-text'
+                zindex.zdf < 0 ? 'text-down' : 'text-up'
               )}
             >
               {zindex.zsz}
               {zindex.zdf < 0 ? (
                 <ArrowDownLineIcon
-                  className={zindex.zdf < 0 ? 'down-svg' : 'up-svg'}
+                  className={zindex.zdf < 0 ? 'svg-down' : 'svg-up'}
                 />
               ) : (
                 <ArrowUpLineIcon
-                  className={zindex.zdf < 0 ? 'down-svg' : 'up-svg'}
+                  className={zindex.zdf < 0 ? 'svg-down' : 'svg-up'}
                 />
               )}
             </div>
@@ -92,7 +92,7 @@ const ZindexRow: React.FC<RowProps> = (props) => {
                 <div
                   className={classnames(
                     styles.zdd,
-                    zindex.zdd < 0 ? 'down-text' : 'up-text'
+                    zindex.zdd < 0 ? 'text-down' : 'text-up'
                   )}
                 >
                   {Utils.Yang(zindex.zdd)}
@@ -100,7 +100,7 @@ const ZindexRow: React.FC<RowProps> = (props) => {
                 <div
                   className={classnames(
                     styles.zdf,
-                    zindex.zdf < 0 ? 'down-text' : 'up-text'
+                    zindex.zdf < 0 ? 'text-down' : 'text-up'
                   )}
                 >
                   {Utils.Yang(zindex.zdf)} %
@@ -116,7 +116,7 @@ const ZindexRow: React.FC<RowProps> = (props) => {
             <section>
               <span>涨跌点：</span>
               <span
-                className={classnames(zindex.zdd < 0 ? 'down-text' : 'up-text')}
+                className={classnames(zindex.zdd < 0 ? 'text-down' : 'text-up')}
               >
                 {Utils.Yang(zindex.zdd)}
               </span>
@@ -126,7 +126,7 @@ const ZindexRow: React.FC<RowProps> = (props) => {
             <section>
               <span>涨跌幅：</span>
               <span
-                className={classnames(zindex.zdf < 0 ? 'down-text' : 'up-text')}
+                className={classnames(zindex.zdf < 0 ? 'text-down' : 'text-up')}
               >
                 {Utils.Yang(zindex.zdf)} %
               </span>
@@ -136,7 +136,7 @@ const ZindexRow: React.FC<RowProps> = (props) => {
             <span>今开：</span>
             <span
               className={classnames(
-                zindex.jk < zindex.zs ? 'down-text' : 'up-text'
+                zindex.jk < zindex.zs ? 'text-down' : 'text-up'
               )}
             >
               {zindex.jk}
@@ -150,7 +150,7 @@ const ZindexRow: React.FC<RowProps> = (props) => {
             <span>最高：</span>
             <span
               className={classnames(
-                zindex.zg < zindex.zs ? 'down-text' : 'up-text'
+                zindex.zg < zindex.zs ? 'text-down' : 'text-up'
               )}
             >
               {zindex.zg}
@@ -160,7 +160,7 @@ const ZindexRow: React.FC<RowProps> = (props) => {
             <span>最低：</span>
             <span
               className={classnames(
-                zindex.zd < zindex.zs ? 'down-text' : 'up-text'
+                zindex.zd < zindex.zs ? 'text-down' : 'text-up'
               )}
             >
               {zindex.zd}

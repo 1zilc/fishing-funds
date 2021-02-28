@@ -68,14 +68,14 @@ const QuotationRow: React.FC<RowProps> = (props) => {
                     <span className={styles.code}>{quotation.lzgpName}</span>
                     <span
                       className={classnames(
-                        quotation.ldgpZdf < 0 ? 'down-text' : 'up-text'
+                        quotation.ldgpZdf < 0 ? 'text-down' : 'text-up'
                       )}
                     >
                       领跌
                     </span>
                     <span
                       className={classnames(
-                        quotation.ldgpZdf < 0 ? 'down-text' : 'up-text'
+                        quotation.ldgpZdf < 0 ? 'text-down' : 'text-up'
                       )}
                     >
                       {Utils.Yang(quotation.ldgpZdf)} %
@@ -86,14 +86,14 @@ const QuotationRow: React.FC<RowProps> = (props) => {
                     <span className={styles.code}>{quotation.lzgpName}</span>
                     <span
                       className={classnames(
-                        quotation.lzgpZdf < 0 ? 'down-text' : 'up-text'
+                        quotation.lzgpZdf < 0 ? 'text-down' : 'text-up'
                       )}
                     >
                       领涨
                     </span>
                     <span
                       className={classnames(
-                        quotation.lzgpZdf < 0 ? 'down-text' : 'up-text'
+                        quotation.lzgpZdf < 0 ? 'text-down' : 'text-up'
                       )}
                     >
                       {Utils.Yang(quotation.lzgpZdf)} %
@@ -107,17 +107,17 @@ const QuotationRow: React.FC<RowProps> = (props) => {
             <div
               className={classnames(
                 styles.zxj,
-                quotation.zdf < 0 ? 'down-text' : 'up-text'
+                quotation.zdf < 0 ? 'text-down' : 'text-up'
               )}
             >
               {quotation.zxj}
               {quotation.zdf < 0 ? (
                 <ArrowDownLineIcon
-                  className={quotation.zdf < 0 ? 'down-svg' : 'up-svg'}
+                  className={quotation.zdf < 0 ? 'svg-down' : 'svg-up'}
                 />
               ) : (
                 <ArrowUpLineIcon
-                  className={quotation.zdf < 0 ? 'down-svg' : 'up-svg'}
+                  className={quotation.zdf < 0 ? 'svg-down' : 'svg-up'}
                 />
               )}
             </div>
@@ -126,7 +126,7 @@ const QuotationRow: React.FC<RowProps> = (props) => {
                 <div
                   className={classnames(
                     styles.zdd,
-                    quotation.zdf < 0 ? 'down-text' : 'up-text'
+                    quotation.zdf < 0 ? 'text-down' : 'text-up'
                   )}
                 >
                   {Utils.Yang(quotation.zde)}
@@ -134,7 +134,7 @@ const QuotationRow: React.FC<RowProps> = (props) => {
                 <div
                   className={classnames(
                     styles.zdf,
-                    quotation.zdf < 0 ? 'down-text' : 'up-text'
+                    quotation.zdf < 0 ? 'text-down' : 'text-up'
                   )}
                 >
                   {Utils.Yang(quotation.zdf)} %
@@ -151,7 +151,7 @@ const QuotationRow: React.FC<RowProps> = (props) => {
               <span>涨跌额：</span>
               <span
                 className={classnames(
-                  quotation.zdf < 0 ? 'down-text' : 'up-text'
+                  quotation.zdf < 0 ? 'text-down' : 'text-up'
                 )}
               >
                 {Utils.Yang(quotation.zde)}
@@ -163,7 +163,7 @@ const QuotationRow: React.FC<RowProps> = (props) => {
               <span>涨跌幅：</span>
               <span
                 className={classnames(
-                  quotation.zdf < 0 ? 'down-text' : 'up-text'
+                  quotation.zdf < 0 ? 'text-down' : 'text-up'
                 )}
               >
                 {Utils.Yang(quotation.zdf)} %
@@ -182,11 +182,11 @@ const QuotationRow: React.FC<RowProps> = (props) => {
           </section>
           <section>
             <span>上涨家数：</span>
-            <span className={'up-text'}>{quotation.szjs}</span>
+            <span className={'text-up'}>{quotation.szjs}</span>
           </section>
           <section>
             <span>下跌家数：</span>
-            <span className={'down-text'}>{quotation.xdjs}</span>
+            <span className={'text-down'}>{quotation.xdjs}</span>
           </section>
           {conciseSetting && (
             <section>
@@ -195,7 +195,7 @@ const QuotationRow: React.FC<RowProps> = (props) => {
               </span>
               <span
                 className={classnames(
-                  quotation.lzgpZdf < 0 ? 'down-text' : 'up-text'
+                  quotation.lzgpZdf < 0 ? 'text-down' : 'text-up'
                 )}
               >
                 {Utils.Yang(quotation.lzgpZdf)} %
@@ -209,7 +209,7 @@ const QuotationRow: React.FC<RowProps> = (props) => {
               </span>
               <span
                 className={classnames(
-                  quotation.ldgpZdf < 0 ? 'down-text' : 'up-text'
+                  quotation.ldgpZdf < 0 ? 'text-down' : 'text-up'
                 )}
               >
                 {Utils.Yang(quotation.ldgpZdf)} %

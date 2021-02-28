@@ -5,11 +5,12 @@ import { Tabs } from 'antd';
 
 import Estimate from '@/components/Home/FundList/DetailFundContent/Estimate';
 import Performance from '@/components/Home/FundList/DetailFundContent/Performance';
+import HistoryPerformance from '@/components/Home/FundList/DetailFundContent/HistoryPerformance';
+import HistoryValue from '@/components/Home/FundList/DetailFundContent/HistoryValue';
 import StockWareHouse from '@/components/Home/FundList/DetailFundContent/StockWareHouse';
 import SecuritiesWareHouse from '@/components/Home/FundList/DetailFundContent/SecuritiesWareHouse';
 import SimilarRank from '@/components/Home/FundList/DetailFundContent/SimilarRank';
 import SimilarProportion from '@/components/Home/FundList/DetailFundContent/SimilarProportion';
-
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
 import { getFund } from '@/actions/fund';
 import * as Services from '@/services';
@@ -55,7 +56,7 @@ const DetailFundContent: React.FC<DetailFundContentProps> = (props) => {
             <div
               className={classnames(
                 styles.syl_1n,
-                Number(pingzhongdata.syl_1n) >= 0 ? 'up-text' : 'down-text'
+                Number(pingzhongdata.syl_1n) >= 0 ? 'text-up' : 'text-down'
               )}
             >
               {Utils.Yang(pingzhongdata.syl_1n)}%
@@ -65,7 +66,7 @@ const DetailFundContent: React.FC<DetailFundContentProps> = (props) => {
           <div className={styles.detailItem}>
             <div
               className={classnames(
-                Number(fund?.gszzl) >= 0 ? 'up-text' : 'down-text'
+                Number(fund?.gszzl) >= 0 ? 'text-up' : 'text-down'
               )}
             >
               {Utils.Yang(fund?.gszzl)}%
@@ -85,10 +86,28 @@ const DetailFundContent: React.FC<DetailFundContentProps> = (props) => {
             animated={{ tabPane: true }}
             tabBarGutter={15}
           >
-            <Tabs.TabPane tab="业绩走势" key={Enums.TrendType.Performance}>
+            <Tabs.TabPane tab="历史业绩" key={Enums.TrendType.Performance}>
+              <HistoryPerformance
+                syl_6y={pingzhongdata.syl_6y}
+                syl_3y={pingzhongdata.syl_3y}
+                syl_1y={pingzhongdata.syl_1y}
+              />
+            </Tabs.TabPane>
+            <Tabs.TabPane tab="历史净值" key={Enums.TrendType.Estimate}>
+              <HistoryValue data={pingzhongdata.Data_netWorthTrend} />
+            </Tabs.TabPane>
+          </Tabs>
+        </div>
+        <div>
+          <Tabs
+            defaultActiveKey={String(Enums.HistoryType.Performance)}
+            animated={{ tabPane: true }}
+            tabBarGutter={15}
+          >
+            <Tabs.TabPane tab="业绩走势" key={Enums.HistoryType.Performance}>
               <Performance code={code} />
             </Tabs.TabPane>
-            <Tabs.TabPane tab="净值估算" key={Enums.TrendType.Estimate}>
+            <Tabs.TabPane tab="净值估算" key={Enums.HistoryType.Value}>
               <Estimate code={code} />
             </Tabs.TabPane>
           </Tabs>
