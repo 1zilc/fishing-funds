@@ -97,6 +97,8 @@ export function parsepingzhongdata(code: string) {
         Data_rateInSimilarPersent,
         /*同类型基金涨幅榜*/
         swithSameType,
+        /*现任基金经理*/
+        Data_currentFundManager,
         /*近一年收益率*/
         syl_1n,
         /*近6月收益率*/

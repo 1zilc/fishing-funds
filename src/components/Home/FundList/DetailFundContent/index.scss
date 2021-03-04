@@ -4,6 +4,7 @@
 
   h3 {
     color: var(--main-text-color);
+    font-size: 16px;
   }
 
   section {
@@ -20,7 +21,8 @@
 }
 
 .container {
-  padding: 0 15px;
+  padding: 5px 15px;
+
 }
 
 .introduce {}
@@ -36,6 +38,7 @@
   // flex: 1;
   display: flex;
   flex-direction: column;
+
 }
 
 .detailItemLabel {
@@ -45,6 +48,12 @@
 .syl_1n {
   font-size: 20px;
   font-size: 600;
+}
+
+.manager {
+  float: right;
+  // margin-left: 20px;
+  font-size: 11px;
 }
 
 

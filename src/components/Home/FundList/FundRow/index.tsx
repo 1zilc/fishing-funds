@@ -95,7 +95,7 @@ const FundRow: React.FC<RowProps> = ({ fund, readOnly }) => {
               )}
             </div>
           )}
-          <div style={{ flex: 1 }}>
+          <div style={{ flex: 1, marginLeft: 5 }}>
             <div
               style={{
                 display: 'flex',

@@ -36,6 +36,8 @@ declare namespace Fund {
     Data_rateInSimilarPersent?: any[];
     /*同类型基金涨幅榜*/
     swithSameType?: string[][];
+    /*现任基金经理*/
+    Data_currentFundManager: Fund.Manager[];
     /*近一年收益率*/
     syl_1n?: string;
     /*近6月收益率*/
@@ -61,5 +63,52 @@ declare namespace Fund {
     2: string; // name
     3: string; // type
     4: string; // quanpin
+  }
+
+  export interface Manager {
+    id: '30655271';
+    pic: 'https://pdf.dfcfw.com/pdf/H8_PNG30655271_1.jpg';
+    name: '蔡嵩松';
+    star: 1;
+    workTime: '2年又13天';
+    fundSize: '409.92亿(2只基金)';
+    power: {
+      avr: '8.54';
+      categories: ['经验值', '收益率', '抗风险', '稳定性', '择时能力'];
+      dsc: [
+        '反映基金经理从业年限和管理基金的经验',
+        '根据基金经理投资的阶段收益评分，反映<br>基金经理投资的盈利能力',
+        '反映基金经理投资的回撤控制能力',
+        '反映基金经理投资收益的波动',
+        '反映基金经理根据对市场的判断，通过<br>调整仓位及配置而跑赢业绩的基准能力'
+      ];
+      data: [33.2, 2.1, 0.2, 0.3, 21.5];
+      jzrq: '2021-03-02';
+    };
+    profit: {
+      categories: ['任期收益', '同类平均', '沪深300'];
+      series: [
+        {
+          data: [
+            {
+              name: null;
+              color: '#7cb5ec';
+              y: 149.5132;
+            },
+            {
+              name: null;
+              color: '#414c7b';
+              y: 82.88;
+            },
+            {
+              name: null;
+              color: '#f7a35c';
+              y: 57.95;
+            }
+          ];
+        }
+      ];
+      jzrq: '2021-03-02';
+    };
   }
 }

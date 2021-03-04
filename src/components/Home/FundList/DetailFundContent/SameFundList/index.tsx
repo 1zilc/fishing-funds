@@ -53,7 +53,7 @@ const SameFundList: React.FC<SameFundListProps> = ({ swithSameType }) => {
           <FundRow key={fund.fundcode} fund={fund} readOnly />
         ))
       ) : (
-        <Empty text="暂无基金数据~" />
+        <Empty />
       )}
     </div>
   );

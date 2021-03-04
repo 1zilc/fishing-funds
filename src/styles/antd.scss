@@ -7,3 +7,9 @@
 .ant-dropdown-trigger {
   color: var(--primary-color);
 }
+
+.ant-rate-star-zero {
+  svg {
+    fill: var(--inner-text-color)
+  }
+}
