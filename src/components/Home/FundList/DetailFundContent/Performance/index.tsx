@@ -1,10 +1,9 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useContext } from 'react';
 import classnames from 'classnames';
 import { useRequest, useSize } from 'ahooks';
 import * as echarts from 'echarts';
 
-import { useNativeThemeColor } from '@/utils/hooks';
-import * as CONST from '@/constants';
+import { HomeContext } from '@/components/Home';
 import * as Services from '@/services';
 import * as Enums from '@/utils/enums';
 import styles from './index.scss';
@@ -30,9 +29,7 @@ const Performance: React.FC<PerformanceProps> = ({ code }) => {
     performanceTypeList[2]
   );
   const { width: performanceRefWidth } = useSize(performanceRef);
-  const { colors: varibleColors, darkMode } = useNativeThemeColor(
-    CONST.VARIBLES
-  );
+  const { varibleColors, darkMode } = useContext(HomeContext);
   const { run: runGetFundPerformanceFromEastmoney } = useRequest(
     Services.Fund.GetFundPerformanceFromEastmoney,
     {

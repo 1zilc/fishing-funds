@@ -25,6 +25,7 @@ import styles from './index.scss';
 
 export interface RowProps {
   fund: Fund.ResponseItem & Fund.ExtraRow;
+  readOnly?: boolean;
 }
 
 const arrowSize = {
@@ -32,8 +33,7 @@ const arrowSize = {
   height: 12,
 };
 
-const FundRow: React.FC<RowProps> = (props) => {
-  const { fund } = props;
+const FundRow: React.FC<RowProps> = ({ fund, readOnly }) => {
   const dispatch = useDispatch();
   const { conciseSetting } = getSystemSetting();
   const toolbarDeleteStatus = useSelector(
@@ -62,6 +62,14 @@ const FundRow: React.FC<RowProps> = (props) => {
 
   const { cyfe, bjz, jrsygz, gszz } = calcFund(fund);
 
+  const onRowClick = () =>
+    readOnly
+      ? openDetailDrawer()
+      : dispatch({
+          type: TOGGLE_FUND_COLLAPSE,
+          payload: fund,
+        });
+
   const remove = async () => {
     await deleteFund(fund);
     freshFunds();
@@ -76,20 +84,17 @@ const FundRow: React.FC<RowProps> = (props) => {
             alignItems: 'center',
             justifyContent: 'space-between',
           }}
-          onClick={() =>
-            dispatch({
-              type: TOGGLE_FUND_COLLAPSE,
-              payload: fund,
-            })
-          }
+          onClick={onRowClick}
         >
-          <div className={styles.arrow}>
-            {fund.collapse ? (
-              <ArrowUpIcon style={{ ...arrowSize }} />
-            ) : (
-              <ArrowDownIcon style={{ ...arrowSize }} />
-            )}
-          </div>
+          {!readOnly && (
+            <div className={styles.arrow}>
+              {fund.collapse ? (
+                <ArrowUpIcon style={{ ...arrowSize }} />
+              ) : (
+                <ArrowDownIcon style={{ ...arrowSize }} />
+              )}
+            </div>
+          )}
           <div style={{ flex: 1 }}>
             <div
               style={{
@@ -116,17 +121,19 @@ const FundRow: React.FC<RowProps> = (props) => {
           >
             {Utils.Yang(fund.gszzl)} %
           </div>
-          <div
-            className={styles.remove}
-            style={{ width: toolbarDeleteStatus ? 20 : 0 }}
-          >
-            <RemoveIcon
-              onClick={(e) => {
-                remove();
-                e.stopPropagation();
-              }}
-            />
-          </div>
+          {!readOnly && (
+            <div
+              className={styles.remove}
+              style={{ width: toolbarDeleteStatus ? 20 : 0 }}
+            >
+              <RemoveIcon
+                onClick={(e) => {
+                  remove();
+                  e.stopPropagation();
+                }}
+              />
+            </div>
+          )}
         </div>
       </div>
       <Collapse isOpened={!!fund.collapse}>

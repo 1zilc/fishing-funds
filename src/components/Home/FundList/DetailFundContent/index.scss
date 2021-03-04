@@ -1,6 +1,6 @@
 .content {
 
-  padding: 10px 15px;
+  padding: 10px 0;
 
   h3 {
     color: var(--main-text-color);
@@ -16,9 +16,15 @@
     display: block;
     font-weight: 600;
   }
+
+}
+
+.container {
+  padding: 0 15px;
 }
 
 .introduce {}
+
 
 .detail {
   display: flex;

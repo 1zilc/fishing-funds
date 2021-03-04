@@ -39,10 +39,12 @@ export function getFundConfig() {
   return { fundConfig, codeMap };
 }
 
-export async function getFunds() {
+export async function getFunds(config?: Fund.SettingItem[]) {
   const { fundConfig } = getFundConfig();
   const fundApiType = getFundApiTypeSetting();
-  const collectors = fundConfig.map(({ code }) => () => getFund(code));
+  const collectors = (config || fundConfig).map(({ code }) => () =>
+    getFund(code)
+  );
   switch (fundApiType) {
     case Enums.FundApiType.Dayfund:
       return Adapter.ChokeAllAdapter<Fund.ResponseItem>(collectors);

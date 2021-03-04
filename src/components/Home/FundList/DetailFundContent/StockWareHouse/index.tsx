@@ -1,10 +1,10 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useContext } from 'react';
 import { renderToString } from 'react-dom/server';
 import { useRequest, useSize } from 'ahooks';
 import * as echarts from 'echarts';
 
-import { useNativeThemeColor } from '@/utils/hooks';
-import * as CONST from '@/constants';
+import { HomeContext } from '@/components/Home';
+
 import * as Services from '@/services';
 import styles from './index.scss';
 
@@ -40,9 +40,7 @@ const StockWareHouse: React.FC<StockWareHouseProps> = ({
     setWarehoseChartInstance,
   ] = useState<echarts.ECharts | null>(null);
   const { width: warehouseRefWidth } = useSize(warehouseRef);
-  const { colors: varibleColors, darkMode } = useNativeThemeColor(
-    CONST.VARIBLES
-  );
+  const { varibleColors, darkMode } = useContext(HomeContext);
 
   const initWarehoseChart = () => {
     const instance = echarts.init(warehouseRef.current!);

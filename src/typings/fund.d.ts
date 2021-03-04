@@ -34,6 +34,8 @@ declare namespace Fund {
     Data_rateInSimilarType?: any[];
     /*同类排名百分比*/
     Data_rateInSimilarPersent?: any[];
+    /*同类型基金涨幅榜*/
+    swithSameType?: string[][];
     /*近一年收益率*/
     syl_1n?: string;
     /*近6月收益率*/

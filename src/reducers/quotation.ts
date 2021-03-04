@@ -32,18 +32,18 @@ function sortQuotations(
     const t = quotationSortorder === Enums.SortOrderType.Asc ? 1 : -1;
     switch (quotationSortType) {
       case Enums.QuotationSortType.Zde:
-        return Number(a.zde) > Number(b.zde) ? 1 * t : -1 * t;
+        return (Number(a.zde) - Number(b.zde)) * t;
       case Enums.QuotationSortType.Zsz:
-        return Number(a.zsz) > Number(b.zsz) ? 1 * t : -1 * t;
+        return (Number(a.zsz) - Number(b.zsz)) * t;
       case Enums.QuotationSortType.Zxj:
-        return Number(a.zxj) > Number(b.zxj) ? 1 * t : -1 * t;
+        return (Number(a.zxj) - Number(b.zxj)) * t;
       case Enums.QuotationSortType.Szjs:
-        return Number(a.szjs) > Number(b.szjs) ? 1 * t : -1 * t;
+        return (Number(a.szjs) - Number(b.szjs)) * t;
       case Enums.QuotationSortType.Xdjs:
-        return Number(a.xdjs) > Number(b.xdjs) ? 1 * t : -1 * t;
+        return (Number(a.xdjs) - Number(b.xdjs)) * t;
       case Enums.QuotationSortType.Zdf:
       default:
-        return Number(a.zdf) > Number(b.zdf) ? 1 * t : -1 * t;
+        return (Number(a.zdf) - Number(b.zdf)) * t;
     }
   });
 
