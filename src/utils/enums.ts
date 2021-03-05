@@ -88,3 +88,9 @@ export enum HistoryType {
   Performance,
   Value,
 }
+
+// 经理能力类型
+export enum ManagerPowerType {
+  Appraise,
+  Profit,
+}

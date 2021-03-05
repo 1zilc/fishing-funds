@@ -37,7 +37,7 @@ declare namespace Fund {
     /*同类型基金涨幅榜*/
     swithSameType?: string[][];
     /*现任基金经理*/
-    Data_currentFundManager: Fund.Manager[];
+    Data_currentFundManager: Fund.Manager.Info[];
     /*近一年收益率*/
     syl_1n?: string;
     /*近6月收益率*/
@@ -65,14 +65,18 @@ declare namespace Fund {
     4: string; // quanpin
   }
 
-  export interface Manager {
-    id: '30655271';
-    pic: 'https://pdf.dfcfw.com/pdf/H8_PNG30655271_1.jpg';
-    name: '蔡嵩松';
-    star: 1;
-    workTime: '2年又13天';
-    fundSize: '409.92亿(2只基金)';
-    power: {
+  export namespace Manager {
+    export interface Info {
+      id: '30655271';
+      pic: 'https://pdf.dfcfw.com/pdf/H8_PNG30655271_1.jpg';
+      name: '蔡嵩松';
+      star: 1;
+      workTime: '2年又13天';
+      fundSize: '409.92亿(2只基金)';
+      power: Fund.Manager.Power;
+      profit: Fund.Manager.Profit;
+    }
+    export interface Power {
       avr: '8.54';
       categories: ['经验值', '收益率', '抗风险', '稳定性', '择时能力'];
       dsc: [
@@ -84,8 +88,8 @@ declare namespace Fund {
       ];
       data: [33.2, 2.1, 0.2, 0.3, 21.5];
       jzrq: '2021-03-02';
-    };
-    profit: {
+    }
+    export interface Profit {
       categories: ['任期收益', '同类平均', '沪深300'];
       series: [
         {
@@ -109,6 +113,6 @@ declare namespace Fund {
         }
       ];
       jzrq: '2021-03-02';
-    };
+    }
   }
 }
