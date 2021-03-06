@@ -1,0 +1,10 @@
+@import './variables';
+
+$prefix: $antPrefix + -spin;
+
+.#{$prefix} {
+  color: $primaryColor;
+  &-dot-item {
+    background-color: $primaryColor;
+  }
+}

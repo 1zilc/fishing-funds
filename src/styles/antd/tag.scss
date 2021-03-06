@@ -1,0 +1,13 @@
+@import './variables';
+
+$prefix: $antPrefix + -tag;
+
+.#{$prefix} {
+  background: transparent;
+  border-color: $borderColorA06;
+  &,
+  a,
+  a:hover {
+    color: $textColorSecondary;
+  }
+}

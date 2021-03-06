@@ -135,7 +135,9 @@ const createMenubar = async () => {
   // TODO: 暂时关闭自动更新，需要apple签名
 
   ipcMain.on('check-update', (e) => {
-    new AppUpdater({ icon: nativeIcon, win: mb.window });
+    if (app.isPackaged) {
+      new AppUpdater({ icon: nativeIcon, win: mb.window });
+    }
   });
 
   // new AppUpdater({ icon: nativeIcon, win: mb.window });

@@ -1,74 +1,15 @@
-@import '~antd/dist/antd.dark.css';
 @import '~antd/dist/antd.compact.css';
-
-
-.ant-tabs,
-.ant-radio-wrapper,
-.ant-checkbox-wrapper {
-  color: var(--main-text-color);
-}
-
-.ant-dropdown-menu {
-  background-color: var(--background-color);
-}
-
-.ant-dropdown-menu-item {
-  color: var(--main-text-color);
-  font-size: 12px;
-
-  &:hover {
-    background-color: var(--inner-color);
-  }
-}
-
 
 .ant-tabs-nav::before {
   border: none !important;
 }
 
-.ant-radio-checked .ant-radio-inner {
-  border-color: var(--primary-color);
-
-  &::after {
-    background-color: var(--primary-color);
-    border: 1px solid var(--primary-color);
-  }
-}
-
-.ant-checkbox-indeterminate .ant-checkbox-inner {
-  &::after {
-    background-color: var(--primary-color);
-  }
-}
-
-.ant-switch-checked {
-  background-color: var(--primary-color);
-}
-
-.ant-checkbox-checked .ant-checkbox-inner {
-  border-color: var(--primary-color);
-  background-color: var(--primary-color);
-}
-
-a {
+.ant-dropdown-trigger {
   color: var(--primary-color);
 }
 
-.ant-table {
-  background-color: var(--background-color);
-  color: var(--main-text-color);
-}
-
-.ant-table-tbody>tr>td {
-  border-bottom: 1px solid var(--border-color)
-}
-
-.ant-table-tbody>tr.ant-table-row:hover>td {
-  background-color: var(--hover-color);
-}
-
-.ant-table-small .ant-table-thead tr>th {
-  background-color: var(--inner-color);
-  color: var(--main-text-color);
-  border-bottom: 1px solid var(--border-color)
+.ant-rate-star-zero {
+  svg {
+    fill: var(--inner-text-color)
+  }
 }

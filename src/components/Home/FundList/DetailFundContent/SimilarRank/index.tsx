@@ -1,10 +1,8 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useContext } from 'react';
 import { useSize } from 'ahooks';
 import * as echarts from 'echarts';
 
-import { useNativeThemeColor } from '@/utils/hooks';
-import * as CONST from '@/constants';
-
+import { HomeContext } from '@/components/Home';
 import styles from './index.scss';
 
 interface SimilarRankProps {
@@ -20,9 +18,7 @@ const SimilarRank: React.FC<SimilarRankProps> = ({
     setSimilarRankChartInstance,
   ] = useState<echarts.ECharts | null>(null);
   const { width: similarRefWidth } = useSize(similarRef);
-  const { colors: varibleColors, darkMode } = useNativeThemeColor(
-    CONST.VARIBLES
-  );
+  const { varibleColors, darkMode } = useContext(HomeContext);
 
   const initSimilarRankChart = () => {
     const instance = echarts.init(similarRef.current!);

@@ -1,0 +1,23 @@
+@import './variables';
+
+$prefix: $antPrefix + -progress;
+
+.#{$prefix} {
+  &-text {
+    filter: drop-shadow(2px 4px 2px rgba(36, 34, 37, 0.23));
+  }
+  &.#{$prefix}-status-success {
+    .#{$prefix}-inner:not(.#{$prefix}-circle-gradient) .#{$prefix}-circle-path {
+      stroke: $primaryColor;
+    }
+    &,
+    &.#{$prefix}-circle {
+      .#{$prefix}-text {
+        color: $primaryColor;
+      }
+    }
+  }
+  .#{$prefix}-inner:not(.#{$prefix}-circle-gradient) .#{$prefix}-circle-path {
+    stroke: $primaryColorA04;
+  }
+}

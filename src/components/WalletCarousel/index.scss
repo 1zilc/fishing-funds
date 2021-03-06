@@ -1,0 +1,32 @@
+.content {
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.wallet {
+  width: 20%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+
+  box-sizing: border-box;
+  cursor: pointer;
+  border: 1px dashed var(--border-color);
+
+  svg {
+    transition: transform .3s;
+  }
+
+  &:hover {
+    svg {
+      transform: scale(1.2);
+    }
+  }
+
+}
+
+.selected {
+  background-color: var(--inner-color);
+}

@@ -30,13 +30,13 @@
       --hover-color: #efefef;
       --tag-text-color: #eee;
     }
-
   }
 
 
 }
 
 @media (prefers-color-scheme: dark) {
+
   body {
     --background-color: #1e1e1e;
     --inner-color: #333;
@@ -68,7 +68,19 @@
       --main-text-color: #eee;
       --tag-text-color: #111;
     }
+
+    // antd
+
   }
+}
 
-
+body {
+  // antd
+  --primaryColor: var(--primary-color);
+  --componentBackground: var(--background-color);
+  --contrastBackground: var(--border-color);
+  --borderColor: var(--border-color);
+  --primaryHover: var(--hover-color);
+  --itemHoverBackground: var(--hover-color);
+  --textColor: var(--main-text-color)
 }

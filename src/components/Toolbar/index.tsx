@@ -3,14 +3,13 @@ import { Badge } from 'antd';
 import { useSelector, useDispatch } from 'react-redux';
 import { useBoolean, useThrottleFn } from 'ahooks';
 
-import { ReactComponent as AddIcon } from '@/assets/icons/add.svg';
 import { ReactComponent as MenuAddIcon } from '@/assets/icons/menu-add.svg';
 import { ReactComponent as DeleteIcon } from '@/assets/icons/delete.svg';
 import { ReactComponent as RefreshIcon } from '@/assets/icons/refresh.svg';
 import { ReactComponent as QRcodeIcon } from '@/assets/icons/qr-code.svg';
 import { ReactComponent as SettingIcon } from '@/assets/icons/setting.svg';
 import CustomDrawer from '@/components/CustomDrawer';
-import AddFundContent from '@/components/Home/FundList/AddFundContent';
+import ManageFundContent from '@/components/Home/FundList/ManageFundContent';
 import SettingContent from '@/components/SettingContent';
 import PayContent from '@/components/PayContent';
 import EditZindexContent from '@/components/Home/ZindexList/EditZindexContent';
@@ -53,11 +52,11 @@ const ToolBar: React.FC<ToolBarProps> = () => {
   const freshQuotations = useScrollToTop({ after: runLoadQuotations });
 
   const [
-    showAddFundDrawer,
+    showManageFundDrawer,
     {
-      setTrue: openAddFundDrawer,
-      setFalse: closeAddFundDrawer,
-      toggle: ToggleAddFundDrawer,
+      setTrue: openManageFundDrawer,
+      setFalse: closeManageFundDrawer,
+      toggle: ToggleManageFundDrawer,
     },
   ] = useBoolean(false);
   const [
@@ -97,17 +96,17 @@ const ToolBar: React.FC<ToolBarProps> = () => {
       {lowKeySetting && <style>{lowKeyStyleCodes}</style>}
       <div className={styles.bar}>
         {tabsActiveKey === Enums.TabKeyType.Funds && (
-          <AddIcon style={{ ...iconSize }} onClick={openAddFundDrawer} />
+          <MenuAddIcon style={{ ...iconSize }} onClick={openManageFundDrawer} />
         )}
         {tabsActiveKey === Enums.TabKeyType.Zindex && (
           <MenuAddIcon style={{ ...iconSize }} onClick={openEditZindexDrawer} />
         )}
-        {tabsActiveKey === Enums.TabKeyType.Funds && (
+        {/* {tabsActiveKey === Enums.TabKeyType.Funds && (
           <DeleteIcon
             style={{ ...iconSize }}
             onClick={() => dispatch(toggleToolbarDeleteStatus())}
           />
-        )}
+        )} */}
         {tabsActiveKey === Enums.TabKeyType.Funds && (
           <RefreshIcon style={{ ...iconSize }} onClick={freshFunds} />
         )}
@@ -122,12 +121,12 @@ const ToolBar: React.FC<ToolBarProps> = () => {
           <SettingIcon style={{ ...iconSize }} onClick={openSettingDrawer} />
         </Badge>
       </div>
-      <CustomDrawer show={showAddFundDrawer}>
-        <AddFundContent
-          onClose={closeAddFundDrawer}
+      <CustomDrawer show={showManageFundDrawer}>
+        <ManageFundContent
+          onClose={closeManageFundDrawer}
           onEnter={() => {
             freshFunds();
-            closeAddFundDrawer();
+            closeManageFundDrawer();
           }}
         />
       </CustomDrawer>

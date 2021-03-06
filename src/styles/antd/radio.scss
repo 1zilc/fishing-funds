@@ -1,0 +1,41 @@
+@import './variables';
+
+$prefix: $antPrefix + -radio;
+
+.#{$prefix} {
+  &-wrapper,
+  & {
+    color: $textColor;
+  }
+  &-wrapper:hover .#{$prefix}-inner,
+  &:hover .#{$prefix}-inner,
+  &-input:focus + .#{$prefix}-inner {
+    border-color: $primaryColor;
+  }
+  &-inner {
+    background-color: $bodyBackground;
+    border-color: $bodyBackground;
+  }
+  &-checked {
+    &:after {
+      border-color: $primaryColor;
+    }
+    .#{$prefix}-inner {
+      border-color: $primaryColor;
+      background-color: $bodyBackground;
+      &::after {
+        background-color: $primaryColor;
+      }
+    }
+  }
+  &-indeterminate .#{$prefix}-inner {
+    background-color: $bodyBackground;
+    border-color: $borderColor;
+    &::after {
+      background-color: $primaryColor;
+    }
+  }
+  &-disabled .#{$prefix}-inner {
+    background-color: $bodyBackground;
+  }
+}

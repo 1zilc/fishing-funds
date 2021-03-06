@@ -1,0 +1,57 @@
+@import './variables';
+
+$prefix: $antPrefix + -pagination;
+$disabledClasses: '.#{$prefix}-disabled a, .#{$prefix}-disabled:hover a, .#{$prefix}-disabled:focus a, .#{$prefix}-disabled .#{$prefix}-item-link, .#{$prefix}-disabled:hover .#{$prefix}-item-link, .#{$prefix}-disabled:focus .#{$prefix}-item-link';
+
+.#{$prefix} {
+  color: $textColor;
+  &-prev,
+  &-next,
+  &-jump-prev,
+  &-jump-next,
+  &-item {
+    .#{$prefix}-item-link {
+      background-color: transparent;
+    }
+    &:not(.#{$prefix}-disabled) {
+      color: $textColor;
+      background-color: transparent;
+      border-color: $borderColor;
+      &:hover {
+        border-color: $primaryColor;
+        a {
+          border-color: $primaryColor;
+        }
+      }
+      .#{$prefix}-item-link,
+      a {
+        border-color: $borderColor;
+        color: $textColor;
+      }
+    }
+    &-container,
+    .#{$prefix}-item-container {
+      .#{$prefix}-item-ellipsis {
+        color: $disabledColor;
+        a {
+          color: $disabledColor;
+        }
+      }
+      .#{$prefix}-item-link-icon {
+        color: $primaryColor;
+      }
+    }
+  }
+  &-item {
+    &-active {
+      border-color: $primaryColor;
+      a {
+        color: $primaryColor;
+      }
+    }
+  }
+}
+#{$disabledClasses} {
+  color: $disabledColor;
+  border-color: $borderColor;
+}

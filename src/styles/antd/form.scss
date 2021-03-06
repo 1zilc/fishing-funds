@@ -1,0 +1,17 @@
+@import './variables';
+
+$prefix: $antPrefix + -form;
+
+.#{$prefix} {
+  &-item-label > label {
+    color: $disabledColor;
+  }
+  &-item-control:not(.has-error) {
+    .#{$prefix}-explain {
+      color: $disabledColor;
+    }
+  }
+  &-item {
+    margin-bottom: 10px;
+  }
+}

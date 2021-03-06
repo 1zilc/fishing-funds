@@ -18,7 +18,7 @@ export enum FundApiType {
 }
 
 export enum FundSortType {
-  Default, // 默认
+  Custom, // 默认
   Growth, // 涨幅
   Block, // 份额
   Money, // 收益
@@ -87,4 +87,10 @@ export enum SimilarCompareType {
 export enum HistoryType {
   Performance,
   Value,
+}
+
+// 经理能力类型
+export enum ManagerPowerType {
+  Appraise,
+  Profit,
 }

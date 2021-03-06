@@ -1,0 +1,23 @@
+@import './variables';
+
+$prefix: $antPrefix + -descriptions;
+
+.#{$prefix} {
+  &-bordered {
+    .#{$prefix} {
+      &-view,
+      &-row,
+      &-item-label,
+      &-item-content {
+        border-color: $contrastBackground;
+      }
+      &-item-label {
+        background: $contrastBackground;
+      }
+    }
+  }
+  &-item-label,
+  &-item-content {
+    color: $textColor;
+  }
+}

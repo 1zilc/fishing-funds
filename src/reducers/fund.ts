@@ -46,19 +46,20 @@ function sortFunds(
     const t = fundSortorder === Enums.SortOrderType.Asc ? 1 : -1;
     switch (fundSortType) {
       case Enums.FundSortType.Growth:
-        return Number(_a.gszzl) > Number(_b.gszzl) ? 1 * t : -1 * t;
+        return (Number(_a.gszzl) - Number(_b.gszzl)) * t;
       case Enums.FundSortType.Block:
-        return Number(_a.cyfe) > Number(_b.cyfe) ? 1 * t : -1 * t;
+        return (Number(_a.cyfe) - Number(_b.cyfe)) * t;
       case Enums.FundSortType.Money:
-        return Number(_a.jrsygz) > Number(_b.jrsygz) ? 1 * t : -1 * t;
+        return (Number(_a.jrsygz) - Number(_b.jrsygz)) * t;
       case Enums.FundSortType.Estimate:
-        return Number(_a.gszz) > Number(_b.gszz) ? 1 * t : -1 * t;
-      case Enums.FundSortType.Default:
+        return (Number(_a.gszz) - Number(_b.gszz)) * t;
+      case Enums.FundSortType.Custom:
       default:
-        return codeMap[a.fundcode!]?.originSort >
-          codeMap[b.fundcode!]?.originSort
-          ? -1 * t
-          : 1 * t;
+        return (
+          (codeMap[b.fundcode!]?.originSort -
+            codeMap[a.fundcode!]?.originSort) *
+          t
+        );
     }
   });
 

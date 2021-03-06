@@ -5,6 +5,7 @@ import * as Utils from '@/utils';
 
 export const UPDATE_UPTATETIME = 'UPDATE_UPTATETIME';
 export const CHANGE_EYE_STATUS = 'CHANGE_EYE_STATUS';
+export const CHANGE_WALLET_INDEX = 'CHANGE_WALLET_INDEX';
 
 export function updateUpdateTime(updateTime: string) {
   return {
@@ -18,6 +19,14 @@ export function changeEyeStatus(status: EyeStatus) {
   return {
     type: CHANGE_EYE_STATUS,
     payload: status,
+  };
+}
+
+export function changeWalletIndex(index: number) {
+  Utils.SetStorage(CONST.STORAGE.WALLET_INDEX, index);
+  return {
+    type: CHANGE_WALLET_INDEX,
+    payload: index,
   };
 }
 

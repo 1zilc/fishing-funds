@@ -1,0 +1,9 @@
+@import './variables';
+
+$prefix: $antPrefix + -switch;
+
+.#{$prefix} {
+  &-checked {
+    background-color: $primaryColor;
+  }
+}

@@ -1,0 +1,13 @@
+@import './variables';
+
+$prefix: $antPrefix + -layout;
+
+.#{$prefix} {
+  background: $bodyBackground;
+  &-header,
+  &-sider,
+  &-sider-children,
+  &-sider-trigger {
+    background: $componentBackground;
+  }
+}

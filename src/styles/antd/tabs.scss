@@ -1,0 +1,28 @@
+@import './variables';
+
+$prefix: $antPrefix + -tabs;
+
+.#{$prefix} {
+  color: $tabsGray;
+  &-bar {
+    border-bottom-color: $bodyBackground;
+  }
+  &-content {
+    color: $textColor;
+  }
+
+  &-nav .#{$prefix}-tab {
+    &-active,
+    &:hover {
+      color: $primaryColor;
+    }
+    &-disabled,
+    &-disabled:hover {
+      color: $disabledColor;
+    }
+  }
+
+  &-ink-bar {
+    background-color: $primaryColor;
+  }
+}

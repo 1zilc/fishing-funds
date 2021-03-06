@@ -7,6 +7,7 @@
   background-color: var(--background-color);
   color: var(--main-text-color);
   z-index: 2;
+  transition: background .3s;
   cursor: pointer;
 
   &:hover {
@@ -62,7 +63,6 @@
 
 .arrow {
   /* border: 1px solid #333; */
-  margin-right: 5px;
 
   svg {
     cursor: pointer;

@@ -18,7 +18,6 @@ export default function toolbar(
         deleteStatus: action.payload,
       };
     case TOGGLE_DELETE_STATUS:
-      console.log(state.deleteStatus);
       return {
         ...state,
         deleteStatus: !state.deleteStatus,

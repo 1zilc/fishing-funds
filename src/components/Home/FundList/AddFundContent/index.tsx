@@ -41,9 +41,10 @@ const AddFundContent: React.FC<AddFundContentProps> = (props) => {
     const fund = await getFund(code);
     if (fund) {
       setNone(false);
-      await addFund({
+      addFund({
         code,
         cyfe: num,
+        name: fund.name || '未知',
       });
       props.onEnter();
     } else {

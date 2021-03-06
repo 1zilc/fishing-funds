@@ -3,6 +3,7 @@ import classnames from 'classnames';
 import { useSelector } from 'react-redux';
 import { InputNumber, Radio, Badge, Switch } from 'antd';
 
+import WalletCarousel from '@/components/WalletCarousel';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
 import { ReactComponent as SettingIcon } from '@/assets/icons/setting.svg';
 import { ReactComponent as LinkIcon } from '@/assets/icons/link.svg';
@@ -143,6 +144,7 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
             <span>外观设置</span>
           </div>
           <div className={styles.setting}>
+            <WalletCarousel />
             <section>
               <label>简洁模式：</label>
               <Switch size="small" checked={concise} onChange={setConcise} />

@@ -33,17 +33,18 @@ const sortZindexs = (
     const t = zindexSortorder === Enums.SortOrderType.Asc ? 1 : -1;
     switch (zindexSortType) {
       case Enums.ZindexSortType.Zdd:
-        return a.zdd > b.zdd ? 1 * t : -1 * t;
+        return (a.zdd - b.zdd) * t;
       case Enums.ZindexSortType.Zdf:
-        return a.zdf > b.zdf ? 1 * t : -1 * t;
+        return (a.zdf - b.zdf) * t;
       case Enums.ZindexSortType.Zsz:
-        return a.zsz > b.zsz ? 1 * t : -1 * t;
+        return (a.zsz - b.zsz) * t;
       case Enums.ZindexSortType.Custom:
       default:
-        return codeMap[a.zindexCode]?.originSort >
-          codeMap[b.zindexCode]?.originSort
-          ? -1 * t
-          : 1 * t;
+        return (
+          (codeMap[b.zindexCode]?.originSort -
+            codeMap[a.zindexCode]?.originSort) *
+          t
+        );
     }
   });
   return {

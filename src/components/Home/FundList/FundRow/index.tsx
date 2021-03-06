@@ -2,19 +2,18 @@ import React from 'react';
 import { useBoolean } from 'ahooks';
 import { Collapse } from 'react-collapse';
 import classnames from 'classnames';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
 import { ReactComponent as EditIcon } from '@/assets/icons/edit.svg';
-import { ReactComponent as RemoveIcon } from '@/assets/icons/remove.svg';
 import { ReactComponent as ArrowDownIcon } from '@/assets/icons/arrow-down.svg';
 import { ReactComponent as ArrowUpIcon } from '@/assets/icons/arrow-up.svg';
 import EditFundContent from '@/components/Home/FundList/EditFundContent';
 import DetailFundContent from '@/components/Home/FundList/DetailFundContent';
 import CustomDrawer from '@/components/CustomDrawer';
-import { StoreState } from '@/reducers/types';
+
 import {
   TOGGLE_FUND_COLLAPSE,
-  deleteFund,
+  updateFund,
   calcFund,
   loadFunds,
 } from '@/actions/fund';
@@ -25,6 +24,7 @@ import styles from './index.scss';
 
 export interface RowProps {
   fund: Fund.ResponseItem & Fund.ExtraRow;
+  readOnly?: boolean;
 }
 
 const arrowSize = {
@@ -32,13 +32,9 @@ const arrowSize = {
   height: 12,
 };
 
-const FundRow: React.FC<RowProps> = (props) => {
-  const { fund } = props;
+const FundRow: React.FC<RowProps> = ({ fund, readOnly }) => {
   const dispatch = useDispatch();
   const { conciseSetting } = getSystemSetting();
-  const toolbarDeleteStatus = useSelector(
-    (state: StoreState) => state.toolbar.deleteStatus
-  );
   const runLoadFunds = useActions(loadFunds);
   const freshFunds = useScrollToTop({ after: runLoadFunds });
 
@@ -62,9 +58,17 @@ const FundRow: React.FC<RowProps> = (props) => {
 
   const { cyfe, bjz, jrsygz, gszz } = calcFund(fund);
 
-  const remove = async () => {
-    await deleteFund(fund);
+  const onRowClick = () =>
+    readOnly
+      ? openDetailDrawer()
+      : dispatch({
+          type: TOGGLE_FUND_COLLAPSE,
+          payload: fund,
+        });
+
+  const onFundEdit = () => {
     freshFunds();
+    closeEditDrawer();
   };
 
   return (
@@ -76,21 +80,18 @@ const FundRow: React.FC<RowProps> = (props) => {
             alignItems: 'center',
             justifyContent: 'space-between',
           }}
-          onClick={() =>
-            dispatch({
-              type: TOGGLE_FUND_COLLAPSE,
-              payload: fund,
-            })
-          }
+          onClick={onRowClick}
         >
-          <div className={styles.arrow}>
-            {fund.collapse ? (
-              <ArrowUpIcon style={{ ...arrowSize }} />
-            ) : (
-              <ArrowDownIcon style={{ ...arrowSize }} />
-            )}
-          </div>
-          <div style={{ flex: 1 }}>
+          {!readOnly && (
+            <div className={styles.arrow}>
+              {fund.collapse ? (
+                <ArrowUpIcon style={{ ...arrowSize }} />
+              ) : (
+                <ArrowDownIcon style={{ ...arrowSize }} />
+              )}
+            </div>
+          )}
+          <div style={{ flex: 1, marginLeft: 5 }}>
             <div
               style={{
                 display: 'flex',
@@ -115,17 +116,6 @@ const FundRow: React.FC<RowProps> = (props) => {
             )}
           >
             {Utils.Yang(fund.gszzl)} %
-          </div>
-          <div
-            className={styles.remove}
-            style={{ width: toolbarDeleteStatus ? 20 : 0 }}
-          >
-            <RemoveIcon
-              onClick={(e) => {
-                remove();
-                e.stopPropagation();
-              }}
-            />
           </div>
         </div>
       </div>
@@ -185,10 +175,7 @@ const FundRow: React.FC<RowProps> = (props) => {
       <CustomDrawer show={showEditDrawer}>
         <EditFundContent
           onClose={closeEditDrawer}
-          onEnter={() => {
-            freshFunds();
-            closeEditDrawer();
-          }}
+          onEnter={onFundEdit}
           fund={{ cyfe: Number(cyfe), code: fund.fundcode!, name: fund.name! }}
         />
       </CustomDrawer>

@@ -1,21 +1,27 @@
 import React, { useState } from 'react';
 import { InputNumber } from 'antd';
+
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
 import { updateFund } from '@/actions/fund';
 import styles from './index.scss';
 
+export interface EditFundType {
+  name: string;
+  code: string;
+  cyfe: number;
+}
 export interface EditFundContentProps {
   onEnter: () => void;
   onClose: () => void;
-  fund: Fund.SettingItem & { name: string };
+  fund: EditFundType;
 }
 
 const EditFundContent: React.FC<EditFundContentProps> = (props) => {
   const { fund } = props;
   const [num, setNum] = useState<any>(fund.cyfe);
 
-  const onSave = async () => {
-    await updateFund({
+  const onSave = () => {
+    updateFund({
       code: fund.code,
       cyfe: num,
     });

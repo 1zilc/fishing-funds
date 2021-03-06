@@ -16,9 +16,7 @@
   height: 100%;
   box-sizing: border-box;
   align-items: center;
-  transform: rotate(0deg);
-  backface-visibility: hidden;
-  z-index: 2;
+  z-index: 3;
 
   .walletIcon {
     height: 40px;

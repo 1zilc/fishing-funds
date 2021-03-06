@@ -1,0 +1,65 @@
+@import './variables';
+
+$prefix: $antPrefix + -steps;
+
+.#{$prefix} {
+  color: $textColor;
+  .#{$prefix}-item-title {
+    color: $textColor;
+    &::after {
+      background: $contrastBackground;
+    }
+  }
+
+  &-item-process > .#{$prefix}-item-container {
+    & > .#{$prefix}-item-content {
+      .#{$prefix}-item-title {
+        color: $textColor;
+        &::after {
+          background-color: $contrastBackground;
+        }
+      }
+      .#{$prefix}-item-subtitle {
+        color: $textColor;
+      }
+    }
+    & > .#{$prefix}-item-tail::after {
+      background-color: $contrastBackground;
+    }
+  }
+
+  &-item-wait {
+    .#{$prefix}-item-icon {
+      background-color: $contrastBackground;
+      border-color: $disabledColor;
+      & > .#{$prefix}-icon {
+        color: $disabledColor;
+      }
+    }
+    & > .#{$prefix}-item-container > .#{$prefix}-item-content {
+      & > .#{$prefix}-item-title {
+        color: $disabledColor;
+        &::after {
+          background-color: $contrastBackground;
+        }
+      }
+      .#{$prefix}-item-subtitle {
+        color: $textColor;
+      }
+    }
+    & > .#{$prefix}-item-container .#{$prefix}-item-tail::after {
+      background-color: $contrastBackground;
+    }
+  }
+  &-item-finish {
+    .#{$prefix}-item-icon {
+      background-color: $contrastBackground;
+    }
+    & > .#{$prefix}-item-container > .#{$prefix}-item-content {
+      & > .#{$prefix}-item-title,
+      .#{$prefix}-item-subtitle {
+        color: $primaryColor;
+      }
+    }
+  }
+}

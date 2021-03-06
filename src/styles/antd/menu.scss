@@ -1,0 +1,84 @@
+@import './variables';
+
+$prefix: $antPrefix + -menu;
+$darkClass: $prefix + -dark;
+
+$activeArrowClass: '.#{$prefix}-item:hover > .#{$prefix}-submenu-title > .#{$prefix}-submenu-arrow, .#{$prefix}-item-active > .#{$prefix}-submenu-title > .#{$prefix}-submenu-arrow, .#{$prefix}-submenu-active > .#{$prefix}-submenu-title > .#{$prefix}-submenu-arrow, .#{$prefix}-submenu-open > .#{$prefix}-submenu-title > .#{$prefix}-submenu-arrow, .#{$prefix}-submenu-selected > .#{$prefix}-submenu-title > .#{$prefix}-submenu-arrow, .#{$prefix}-submenu-title:hover > .#{$prefix}-submenu-title > .#{$prefix}-submenu-arrow, .#{$prefix}-item:hover > .#{$prefix}-submenu-title:hover > .#{$prefix}-submenu-arrow, .#{$prefix}-item-active > .#{$prefix}-submenu-title:hover > .#{$prefix}-submenu-arrow, .#{$prefix}-submenu-active > .#{$prefix}-submenu-title:hover > .#{$prefix}-submenu-arrow, .#{$prefix}-submenu-open > .#{$prefix}-submenu-title:hover > .#{$prefix}-submenu-arrow, .#{$prefix}-submenu-selected > .#{$prefix}-submenu-title:hover > .#{$prefix}-submenu-arrow, .#{$prefix}-submenu-title:hover > .#{$prefix}-submenu-title:hover > .#{$prefix}-submenu-arrow';
+$activeLinkClass: '.#{$prefix}-item:hover,.#{$prefix}-item-active,.#{$prefix}-submenu-active,.#{$prefix}-submenu-open,.#{$prefix}-submenu-selected,.#{$prefix}-submenu-title:hover';
+$menuBorderRight: '.#{$prefix}-vertical .#{$prefix}-item::after, .#{$prefix}-vertical-left .#{$prefix}-item::after, .#{$prefix}-vertical-right .#{$prefix}-item::after, .#{$prefix}-inline .#{$prefix}-item::after';
+
+@mixin selectedItemStyle($prefixClass) {
+  &.#{$prefixClass}:not(.#{$prefix}-horizontal) .#{$prefix}-item-selected {
+    background-color: $itemHoverBackground;
+  }
+  &.#{$prefixClass} .#{$prefix}-item-selected {
+    & > a,
+    & > a:hover {
+      color: $primaryColor;
+    }
+  }
+}
+
+%baseMenu {
+  #{$activeArrowClass} {
+    &::before,
+    &::after {
+      background: $primaryColor;
+    }
+  }
+
+  #{$activeLinkClass} {
+    & > a {
+      color: $primaryColor;
+    }
+  }
+}
+
+%lightMenu {
+  @extend %baseMenu;
+  .#{$prefix}-item:hover,
+  .#{$prefix}-item-active,
+  .#{$prefix}:not(.#{$prefix}-inline) .#{$prefix}-submenu-open,
+  .#{$prefix}-submenu-active,
+  .#{$prefix}-submenu-title:hover {
+    color: $primaryColor;
+  }
+  .#{$prefix}-item:active,
+  .#{$prefix}-submenu-title:active {
+    background-color: transparent;
+  }
+}
+
+.#{$prefix} {
+  @extend %lightMenu;
+  @include selectedItemStyle($prefix);
+}
+
+#{$menuBorderRight} {
+  border-color: $primaryColor;
+}
+
+.#{$prefix}-item-selected {
+  color: $primaryColor;
+}
+
+.#{$darkClass} {
+  @extend %baseMenu;
+  &.#{$prefix} {
+    background: $componentBackground;
+  }
+  .#{$prefix}-inline.#{$prefix}-sub,
+  &.#{$prefix}-sub {
+    background: transparent;
+  }
+  .#{$prefix}-item:hover,
+  .#{$prefix}-item-active,
+  .#{$prefix}-submenu-active,
+  .#{$prefix}-submenu-open,
+  .#{$prefix}-submenu-selected,
+  .#{$prefix}-submenu-title:hover {
+    color: $primaryColor;
+  }
+
+  @include selectedItemStyle($darkClass);
+}
