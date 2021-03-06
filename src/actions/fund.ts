@@ -22,7 +22,7 @@ export const SORT_FUNDS = 'SORT_FUNDS';
 export const SORT_FUNDS_WITH_COLLAPSE_CHACHED =
   'SORT_FUNDS_WITH_COLLAPSE_CHACHED';
 export interface CodeMap {
-  [index: string]: Fund.SettingItem & { originSort: number };
+  [index: string]: Fund.SettingItem & Fund.OriginRow;
 }
 
 export function getFundConfig() {
@@ -37,6 +37,10 @@ export function getFundConfig() {
   }, {} as CodeMap);
 
   return { fundConfig, codeMap };
+}
+
+export function setFundConfig(config: Fund.SettingItem[]) {
+  Utils.SetStorage(CONST.STORAGE.FUND_SETTING, config);
 }
 
 export async function getFunds(config?: Fund.SettingItem[]) {
@@ -82,7 +86,7 @@ export async function getFund(code: string) {
   }
 }
 
-export async function addFund(fund: Fund.SettingItem) {
+export function addFund(fund: Fund.SettingItem) {
   const fundConfig: Fund.SettingItem[] = Utils.GetStorage(
     CONST.STORAGE.FUND_SETTING,
     []
@@ -94,7 +98,7 @@ export async function addFund(fund: Fund.SettingItem) {
   }
 }
 
-export async function updateFund(fund: Fund.SettingItem) {
+export function updateFund(fund: { code: string; cyfe: number }) {
   const fundConfig: Fund.SettingItem[] = Utils.GetStorage(
     CONST.STORAGE.FUND_SETTING,
     []
@@ -107,14 +111,14 @@ export async function updateFund(fund: Fund.SettingItem) {
   Utils.SetStorage(CONST.STORAGE.FUND_SETTING, fundConfig);
 }
 
-export async function deleteFund(fund: Fund.ResponseItem) {
+export function deleteFund(code: string) {
   const fundConfig: Fund.SettingItem[] = Utils.GetStorage(
     CONST.STORAGE.FUND_SETTING,
     []
   );
 
   fundConfig.forEach((item, index) => {
-    if (fund.fundcode === item.code) {
+    if (code === item.code) {
       const cloneFundSetting = JSON.parse(JSON.stringify(fundConfig));
       cloneFundSetting.splice(index, 1);
       Utils.SetStorage(CONST.STORAGE.FUND_SETTING, cloneFundSetting);

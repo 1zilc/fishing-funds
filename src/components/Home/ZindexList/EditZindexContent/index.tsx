@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Checkbox } from 'antd';
 import { ReactSortable } from 'react-sortablejs';
 
+import { ReactComponent as MenuIcon } from '@/assets/icons/menu.svg';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
 import { getZindexConfig, saveZindexConfig } from '@/actions/zindex';
-import { ReactComponent as MenuIcon } from '@/assets/icons/menu.svg';
 
 import styles from './index.scss';
 export interface AddFundContentProps {
@@ -36,14 +36,12 @@ const EditZindexContent: React.FC<AddFundContentProps> = (props) => {
     setSelections(isSelectAll ? [] : zindexConfig.map(({ code }) => code));
   };
 
-  useEffect(() => {}, []);
-
   return (
     <CustomDrawerContent
       title="指数自选"
       enterText="保存"
-      onClose={props.onClose}
       onEnter={onSave}
+      onClose={props.onClose}
     >
       <div className={styles.content}>
         <div className={styles.row}>

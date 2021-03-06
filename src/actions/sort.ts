@@ -16,7 +16,7 @@ export interface QuotationSortType {
 }
 
 export const fundSortModeOptions: Option.EnumsOption<Enums.FundSortType>[] = [
-  { key: Enums.FundSortType.Default, value: '默认' },
+  { key: Enums.FundSortType.Custom, value: '自定义' },
   { key: Enums.FundSortType.Growth, value: '今日涨幅' },
   { key: Enums.FundSortType.Block, value: '持有份额' },
   { key: Enums.FundSortType.Money, value: '今日收益' },
@@ -72,7 +72,7 @@ export function getSortMode() {
   const fundSortMode: FundSortMode = Utils.GetStorage(
     CONST.STORAGE.FUND_SORT_MODE,
     {
-      type: Enums.FundSortType.Default,
+      type: Enums.FundSortType.Custom,
       order: Enums.SortOrderType.Desc,
     }
   );

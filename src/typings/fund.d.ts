@@ -1,5 +1,6 @@
 declare namespace Fund {
   export interface SettingItem {
+    name: string;
     code: string;
     cyfe: number;
   }
@@ -16,11 +17,9 @@ declare namespace Fund {
   export interface ExtraRow {
     collapse?: boolean;
   }
-
   export interface OriginRow {
-    originSort?: number;
+    originSort: number;
   }
-
   export interface PingzhongData {
     /*基金持仓股票代码(新市场号)*/
     stockCodesNew?: string[];

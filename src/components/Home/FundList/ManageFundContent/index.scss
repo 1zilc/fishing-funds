@@ -1,0 +1,101 @@
+.content {
+  position: relative;
+  padding-bottom: 80px
+}
+
+.row {
+  padding: 10px;
+  border-bottom: 1px solid var(--border-color);
+  background-color: var(--background-color);
+  border-radius: 5px;
+  box-sizing: border-box;
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+  transition: background .3s;
+
+  &:hover {
+    background-color: var(--inner-color);
+  }
+
+  .menu {
+    justify-self: flex-end;
+    fill: var(--svg-icon-color);
+
+    &:hover {
+      cursor: pointer;
+    }
+  }
+
+  .remove {
+    &:hover {
+      cursor: pointer;
+    }
+  }
+}
+
+.inner {
+  display: flex;
+  justify-content: flex-start;
+  flex: 1;
+  flex-direction: column;
+  margin: 0 10px;
+}
+
+
+
+.name {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.code {
+  font-size: 12px;
+
+}
+
+
+.dragItem {
+  background-color: var(--inner-color) !important;
+}
+
+.editor {
+  margin-left: 10px;
+  cursor: pointer;
+  height: 12px;
+  width: 12px;
+  fill: var(--svg-icon-color)
+}
+
+.cyfe {
+  display: flex;
+  align-items: center;
+}
+
+.add {
+  height: 36px;
+  width: 36px;
+  border-radius: 50%;
+  background-color: var(--primary-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 20px;
+  cursor: pointer;
+  transition: opacity .3s;
+  box-shadow: 0 20px 20px rgba(0, 0, 0, .1);
+
+  &:hover {
+    opacity: .8;
+  }
+
+  svg {
+    fill: var(--primary-text-color);
+    height: 34px;
+    width: 24px;
+  }
+}

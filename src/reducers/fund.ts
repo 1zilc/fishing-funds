@@ -53,7 +53,7 @@ function sortFunds(
         return (Number(_a.jrsygz) - Number(_b.jrsygz)) * t;
       case Enums.FundSortType.Estimate:
         return (Number(_a.gszz) - Number(_b.gszz)) * t;
-      case Enums.FundSortType.Default:
+      case Enums.FundSortType.Custom:
       default:
         return (
           (codeMap[b.fundcode!]?.originSort -
