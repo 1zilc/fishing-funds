@@ -1,9 +1,8 @@
-import React, { useContext } from 'react';
+import React, { useContext, useMemo } from 'react';
 import classnames from 'classnames';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { ReactComponent as ConsumptionIcon } from '@/assets/icons/consumption.svg';
-import { ReactComponent as WalletIcon } from '@/assets/icons/wallet/1.svg';
 import { ReactComponent as EyeIcon } from '@/assets/icons/eye.svg';
 import { ReactComponent as EyeCloseIcon } from '@/assets/icons/eye-close.svg';
 import { HeaderContext } from '@/components/Header';
@@ -21,7 +20,15 @@ const Wallet: React.FC<WalletProps> = () => {
   const { miniMode } = useContext(HeaderContext);
   const funds = useSelector((state: StoreState) => state.fund.funds);
   const wallet = useSelector((state: StoreState) => state.wallet);
-
+  const walletIndex = useSelector(
+    (state: StoreState) => state.wallet.walletIndex
+  );
+  const WalletIcon = useMemo(() => {
+    const {
+      ReactComponent,
+    } = require(`@/assets/icons/wallet/${walletIndex}.svg`);
+    return ReactComponent;
+  }, [walletIndex]);
   const { zje, sygz } = calcFunds(funds);
   const eyeOpen = wallet.eyeStatus === Enums.EyeStatus.Open;
   const display_zje = eyeOpen ? zje.toFixed(2) : Utils.Encrypt(zje.toFixed(2));
