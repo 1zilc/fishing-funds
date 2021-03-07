@@ -46,12 +46,12 @@
 
 
 .name {
-  font-size: 14px;
+  font-size: calc(14rem / var(--base-font-size));;
   font-weight: 600;
 }
 
 .code {
-  font-size: 12px;
+  font-size: 1rem;
 
 }
 

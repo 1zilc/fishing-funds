@@ -16,6 +16,7 @@ export function getSystemSetting() {
       autoFreshSetting: true,
       freshDelaySetting: 1,
       autoCheckUpdateSetting: true,
+      baseFontSizeSetting: 12,
     }
   );
   return systemSetting;

@@ -1,6 +1,6 @@
 button {
   padding: 5px 12px;
-  font-size: 10px;
+  font-size: calc(10rem / var(--base-font-size));
   border-radius: 5px;
   border: none;
   outline: none;

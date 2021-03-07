@@ -169,7 +169,7 @@ export function loadFunds() {
     try {
       dispatch({ type: SET_FUNDS_LOADING, payload: true });
       const funds = await getFunds();
-      const now = dayjs().format('YYYY/MM/DD HH:mm:ss');
+      const now = dayjs().format('MM-DD HH:mm:ss');
       batch(() => {
         dispatch({ type: SORT_FUNDS_WITH_COLLAPSE_CHACHED, payload: funds });
         dispatch({ type: SET_FUNDS_LOADING, payload: false });

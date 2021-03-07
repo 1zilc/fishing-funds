@@ -165,7 +165,7 @@ $ghostClass: '.#{$prefix}-background-ghost';
     @extend %defaultButton;
   }
   &-lg {
-    font-size: 12px;
+    font-size: 1rem;
   }
   &-sm {
     line-height: 100%;

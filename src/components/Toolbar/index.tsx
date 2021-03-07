@@ -30,7 +30,7 @@ const throttleDelay = 1000 * 3;
 const lowKeyStyleCodes = ` html { filter: grayscale(100%); }`;
 const ToolBar: React.FC<ToolBarProps> = () => {
   const dispatch = useDispatch();
-  const { lowKeySetting } = getSystemSetting();
+  const { lowKeySetting, baseFontSizeSetting } = getSystemSetting();
   const updateInfo = useSelector(
     (state: StoreState) => state.updater.updateInfo
   );
@@ -94,6 +94,7 @@ const ToolBar: React.FC<ToolBarProps> = () => {
   return (
     <>
       {lowKeySetting && <style>{lowKeyStyleCodes}</style>}
+      <style>{` html { font-size: ${baseFontSizeSetting}px }`}</style>
       <div className={styles.bar}>
         {tabsActiveKey === Enums.TabKeyType.Funds && (
           <MenuAddIcon style={{ ...iconSize }} onClick={openManageFundDrawer} />
@@ -144,6 +145,8 @@ const ToolBar: React.FC<ToolBarProps> = () => {
           onClose={closeSettingDrawer}
           onEnter={() => {
             freshFunds();
+            freshZindexs();
+            freshQuotations();
             closeSettingDrawer();
           }}
         />

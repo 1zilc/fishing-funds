@@ -24,23 +24,23 @@
 
 .fundName {
   font-weight: 600;
-  font-size: 14px;
+  font-size: calc(14rem / var(--base-font-size));;
   margin-bottom: 2px;
 }
 
 .code {
-  font-size: 10px;
+  font-size: calc(10rem / var(--base-font-size));
   margin-right: 5px;
 }
 
 .rowBar {
-  font-size: 10px;
+  font-size: calc(10rem / var(--base-font-size));
   display: flex;
   align-items: center;
 }
 
 .value {
-  font-size: 12px;
+  font-size: 1rem;
   display: block;
   float: right;
   color: var(--tag-text-color);
@@ -74,7 +74,7 @@
   display: flex;
   padding: 5px 15px;
   flex-wrap: wrap;
-  font-size: 10px;
+  font-size: calc(10rem / var(--base-font-size));
   color: var(--inner-text-color);
   background-color: var(--inner-color);
   word-wrap: break-word;

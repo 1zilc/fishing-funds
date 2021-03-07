@@ -5,9 +5,11 @@ import {
   CHANGE_EYE_STATUS,
   CHANGE_WALLET_INDEX,
 } from '@/actions/wallet';
+
 import { EyeStatus } from '@/utils/enums';
 import * as CONST from '@/constants';
 import * as Utils from '@/utils';
+
 export interface WalletState {
   updateTime: string;
   eyeStatus: EyeStatus;
@@ -20,20 +22,22 @@ export default function wallet(
     eyeStatus: Utils.GetStorage(CONST.STORAGE.EYE_STATUS, EyeStatus.Open),
     walletIndex: Utils.GetStorage(CONST.STORAGE.WALLET_INDEX, 0),
   },
+
   action: AnyAction
 ): WalletState {
-  console.log(action);
   switch (action.type) {
     case UPDATE_UPTATETIME:
       return {
         ...state,
         updateTime: action.payload,
       };
+
     case CHANGE_EYE_STATUS:
       return {
         ...state,
         eyeStatus: action.payload,
       };
+
     case CHANGE_WALLET_INDEX:
       return {
         ...state,
