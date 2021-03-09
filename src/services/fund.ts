@@ -15,6 +15,7 @@ export async function FromEastmoney(code: string) {
       ? (eval(body) as Promise<Fund.ResponseItem | null>)
       : null;
   } catch (error) {
+    console.log(error);
     return null;
   }
 }
@@ -61,6 +62,7 @@ export async function FromDayFund(code: string) {
       gsz,
     };
   } catch (error) {
+    console.log(error);
     return null;
   }
 }
@@ -102,6 +104,7 @@ export async function FromTencent(code: string) {
       gszzl,
     };
   } catch (error) {
+    console.log(error);
     return null;
   }
 }
@@ -136,6 +139,7 @@ export async function FromSina(code: string) {
       gszzl: Number(gszzl).toFixed(2),
     };
   } catch (error) {
+    console.log(error);
     return null;
   }
 }
@@ -183,6 +187,7 @@ export async function FromHowbuy(code: string) {
       gszzl: Number(gszzl).toFixed(2),
     };
   } catch (error) {
+    console.log(error);
     return null;
   }
 }
@@ -199,7 +204,8 @@ export async function GetEstimatedFromEastmoney(code: string) {
     const base64Str = rawBody.toString('base64');
 
     return `data:image/png;base64,${base64Str}`;
-  } catch {
+  } catch (error) {
+    console.log(error);
     return null;
   }
 }
@@ -248,7 +254,8 @@ export async function GetStockWareHouseFromEastmoney(
       };
     });
     return result;
-  } catch {
+  } catch (error) {
+    console.log(error);
     return [];
   }
 }
@@ -297,7 +304,8 @@ export async function GetSecuritiesWareHouseFromEastmoney(
       };
     });
     return result;
-  } catch {
+  } catch (error) {
+    console.log(error);
     return [];
   }
 }
@@ -313,7 +321,8 @@ export async function GetFundDetailFromEastmoney(code: string) {
     );
     const response: Fund.PingzhongData = Utils.parsepingzhongdata(body);
     return response;
-  } catch {
+  } catch (error) {
+    console.log(error);
     return {};
   }
 }
@@ -342,6 +351,7 @@ export async function GetFundPerformanceFromEastmoney(
     const result: any[] = Data;
     return result;
   } catch (error) {
+    console.log(error);
     return [];
   }
 }
@@ -356,7 +366,31 @@ export async function GetRemoteFundsFromEastmoney() {
       }
     );
     return Utils.parseRemoteFunds(body);
-  } catch {
+  } catch (error) {
+    console.log(error);
     return [];
+  }
+}
+
+// 从天天基金查询最新净值信息
+export async function GetFixFromEastMoney(code: string) {
+  try {
+    const { body: html } = await got(`http://fund.eastmoney.com/${code}.html`);
+    const $ = cheerio.load(html);
+    const fixZzl = $('.fix_zzl').text();
+    const fixDate = $('.fix_date').text();
+    const fixDwjz = $('.fix_dwjz').text();
+
+    const result: Fund.FixData = {
+      code,
+      fixZzl,
+      fixDwjz,
+      fixDate: fixDate?.replace(/[^0-9/-]/g, ''),
+    };
+
+    return result;
+  } catch (error) {
+    console.log(error);
+    return {};
   }
 }

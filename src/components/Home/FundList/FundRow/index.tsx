@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { useBoolean } from 'ahooks';
 import { Collapse } from 'react-collapse';
 import classnames from 'classnames';
@@ -11,19 +11,14 @@ import EditFundContent from '@/components/Home/FundList/EditFundContent';
 import DetailFundContent from '@/components/Home/FundList/DetailFundContent';
 import CustomDrawer from '@/components/CustomDrawer';
 
-import {
-  TOGGLE_FUND_COLLAPSE,
-  updateFund,
-  calcFund,
-  loadFunds,
-} from '@/actions/fund';
+import { TOGGLE_FUND_COLLAPSE, calcFund, loadFunds } from '@/actions/fund';
 import { getSystemSetting } from '@/actions/setting';
 import * as Utils from '@/utils';
 import { useScrollToTop, useActions } from '@/utils/hooks';
 import styles from './index.scss';
 
 export interface RowProps {
-  fund: Fund.ResponseItem & Fund.ExtraRow;
+  fund: Fund.ResponseItem & Fund.ExtraRow & Fund.FixData;
   readOnly?: boolean;
 }
 
@@ -37,7 +32,7 @@ const FundRow: React.FC<RowProps> = ({ fund, readOnly }) => {
   const { conciseSetting } = getSystemSetting();
   const runLoadFunds = useActions(loadFunds);
   const freshFunds = useScrollToTop({ after: runLoadFunds });
-
+  const isFix = fund.fixDate === fund.gztime?.slice(5, 10);
   const [
     showEditDrawer,
     {

@@ -4,10 +4,10 @@ import { useSelector } from 'react-redux';
 import FundRow from '@/components/Home/FundList/FundRow';
 import Empty from '@/components/Empty';
 import LoadingBar from '@/components/LoadingBar';
-import { loadFunds } from '@/actions/fund';
+import { loadFunds, loadFixFunds } from '@/actions/fund';
 import { getSystemSetting } from '@/actions/setting';
 import { StoreState } from '@/reducers/types';
-import { useWorkDayTimeToDo } from '@/utils/hooks';
+import { useWorkDayTimeToDo, useFixTimeToDo } from '@/utils/hooks';
 import { useActions } from '@/utils/hooks';
 import styles from './index.scss';
 
@@ -18,14 +18,24 @@ const FundList: React.FC<{}> = () => {
     (state: StoreState) => state.fund.fundsLoading
   );
   const runLoadFunds = useActions(loadFunds);
+  const runLoadFixFunds = useActions(loadFixFunds);
 
+  const load = async () => {
+    await runLoadFunds();
+    runLoadFixFunds();
+  };
   // 间隔时间刷新基金
   useWorkDayTimeToDo(
     () => autoFreshSetting && runLoadFunds(),
     freshDelaySetting * 1000 * 60
   );
 
-  useEffect(runLoadFunds, []);
+  // 每3分钟自动检查最新净值
+  useFixTimeToDo(runLoadFixFunds, 1000 * 60 * 3);
+
+  useEffect(() => {
+    load();
+  }, []);
 
   return (
     <div className={styles.container}>

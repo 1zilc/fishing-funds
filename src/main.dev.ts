@@ -80,7 +80,7 @@ const createMenubar = async () => {
     // icon: nativeMenuIcon,
     tray,
     tooltip: 'Fishing Funds',
-    preloadWindow: false,
+    preloadWindow: true,
     showOnAllWorkspaces: false,
     showDockIcon: false,
     browserWindow: {

@@ -67,7 +67,8 @@ export async function GetQuotationsFromEastmoney() {
     }));
 
     return result;
-  } catch (err) {
+  } catch (error) {
+    console.log(error);
     return [];
   }
 }

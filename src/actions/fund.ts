@@ -16,11 +16,12 @@ export const SET_REMOTE_FUNDS = 'SET_REMOTE_FUNDS';
 export const SET_REMOTE_FUNDS_LOADING = 'SET_REMOTE_FUNDS_LOADING';
 export const SET_FUNDS = 'SET_FUNDS';
 export const SET_FUNDS_LOADING = 'SET_FUNDS_LOADING';
+export const SET_FIX_FUND = 'SET_FIX_FUND';
 export const TOGGLE_FUND_COLLAPSE = 'TOGGLE_FUND_COLLAPSE';
 export const TOGGLE_FUNDS_COLLAPSE = 'TOGGLE_FUNDS_COLLAPSE';
 export const SORT_FUNDS = 'SORT_FUNDS';
-export const SORT_FUNDS_WITH_COLLAPSE_CHACHED =
-  'SORT_FUNDS_WITH_COLLAPSE_CHACHED';
+export const SORT_FUNDS_WITH_CHACHED = 'SORT_FUNDS_WITH_CHACHED';
+
 export interface CodeMap {
   [index: string]: Fund.SettingItem & Fund.OriginRow;
 }
@@ -167,16 +168,38 @@ export function calcFunds(funds: Fund.ResponseItem[]) {
 export function loadFunds() {
   return async (dispatch: Dispatch, getState: GetState) => {
     try {
+      console.log(getState());
       dispatch({ type: SET_FUNDS_LOADING, payload: true });
       const funds = await getFunds();
       const now = dayjs().format('MM-DD HH:mm:ss');
       batch(() => {
-        dispatch({ type: SORT_FUNDS_WITH_COLLAPSE_CHACHED, payload: funds });
+        dispatch({ type: SORT_FUNDS_WITH_CHACHED, payload: funds });
         dispatch({ type: SET_FUNDS_LOADING, payload: false });
         dispatch(updateUpdateTime(now));
       });
     } finally {
       dispatch({ type: SET_FUNDS_LOADING, payload: false });
+    }
+  };
+}
+
+export function loadFixFunds() {
+  return async (dispatch: Dispatch, getState: GetState) => {
+    try {
+      const { fund } = getState();
+      const { funds } = fund;
+      const collectors = funds
+        .filter(
+          ({ fixDate, gztime }) => !fixDate || fixDate !== gztime?.slice(5, 10)
+        )
+        .map(({ fundcode }) => () =>
+          Services.Fund.GetFixFromEastMoney(fundcode!)
+        );
+      const fixFunds =
+        (await Adapter.ConCurrencyAllAdapter<Fund.FixData>(collectors)) || [];
+
+      dispatch({ type: SET_FIX_FUND, payload: fixFunds });
+    } finally {
     }
   };
 }

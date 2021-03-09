@@ -14,7 +14,6 @@ import SettingContent from '@/components/SettingContent';
 import PayContent from '@/components/PayContent';
 import EditZindexContent from '@/components/Home/ZindexList/EditZindexContent';
 import { StoreState } from '@/reducers/types';
-import { toggleToolbarDeleteStatus } from '@/actions/toolbar';
 import { loadFunds } from '@/actions/fund';
 import { loadZindexs } from '@/actions/zindex';
 import { loadQuotations } from '@/actions/quotation';
@@ -29,7 +28,6 @@ const iconSize = { height: 18, width: 18 };
 const throttleDelay = 1000 * 3;
 const lowKeyStyleCodes = ` html { filter: grayscale(100%); }`;
 const ToolBar: React.FC<ToolBarProps> = () => {
-  const dispatch = useDispatch();
   const { lowKeySetting, baseFontSizeSetting } = getSystemSetting();
   const updateInfo = useSelector(
     (state: StoreState) => state.updater.updateInfo
