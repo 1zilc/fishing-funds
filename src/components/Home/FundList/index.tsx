@@ -9,6 +9,7 @@ import { getSystemSetting } from '@/actions/setting';
 import { StoreState } from '@/reducers/types';
 import { useWorkDayTimeToDo, useFixTimeToDo } from '@/utils/hooks';
 import { useActions } from '@/utils/hooks';
+import * as Adapter from '@/utils/adpters';
 import styles from './index.scss';
 
 const FundList: React.FC<{}> = () => {
@@ -20,10 +21,6 @@ const FundList: React.FC<{}> = () => {
   const runLoadFunds = useActions(loadFunds);
   const runLoadFixFunds = useActions(loadFixFunds);
 
-  const load = async () => {
-    await runLoadFunds();
-    runLoadFixFunds();
-  };
   // 间隔时间刷新基金
   useWorkDayTimeToDo(
     () => autoFreshSetting && runLoadFunds(),
@@ -34,7 +31,7 @@ const FundList: React.FC<{}> = () => {
   useFixTimeToDo(runLoadFixFunds, 1000 * 60 * 3);
 
   useEffect(() => {
-    load();
+    Adapter.ChokeAllAdapter([runLoadFunds, runLoadFixFunds]);
   }, []);
 
   return (

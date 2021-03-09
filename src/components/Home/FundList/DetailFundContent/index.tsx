@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useBoolean } from 'ahooks';
 import classnames from 'classnames';
 import { useRequest } from 'ahooks';
@@ -16,8 +16,6 @@ import SimilarProportion from '@/components/Home/FundList/DetailFundContent/Simi
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
 import SameFundList from '@/components/Home/FundList/DetailFundContent/SameFundList';
 import FundManagerContent from '@/components/Home/FundList/FundManagerContent';
-
-import { getFund } from '@/actions/fund';
 import * as Services from '@/services';
 import * as Utils from '@/utils';
 import * as Enums from '@/utils/enums';
@@ -31,7 +29,7 @@ export interface DetailFundContentProps {
 
 const DetailFundContent: React.FC<DetailFundContentProps> = (props) => {
   const { code } = props;
-  const [fund, setFund] = useState<Fund.ResponseItem>({});
+  const [fund, setFund] = useState<Fund.FixData>({});
   const [pingzhongdata, setPingzhongdata] = useState<Fund.PingzhongData>({});
 
   const [
@@ -43,7 +41,7 @@ const DetailFundContent: React.FC<DetailFundContentProps> = (props) => {
     },
   ] = useBoolean(false);
 
-  useRequest(getFund, {
+  useRequest(Services.Fund.GetFixFromEastMoney, {
     throwOnError: true,
     defaultParams: [code],
     onSuccess: setFund,
@@ -64,9 +62,9 @@ const DetailFundContent: React.FC<DetailFundContentProps> = (props) => {
     >
       <div className={styles.content}>
         <div className={styles.container}>
-          <h3>{fund?.name}</h3>
+          <h3>{fund?.fixName}</h3>
           <div>
-            {fund?.fundcode}
+            {fund?.code}
             <span className={styles.manager}>
               基金经理：
               <a onClick={openManagerDrawer}>
@@ -89,18 +87,16 @@ const DetailFundContent: React.FC<DetailFundContentProps> = (props) => {
             <div className={styles.detailItem}>
               <div
                 className={classnames(
-                  Number(fund?.gszzl) >= 0 ? 'text-up' : 'text-down'
+                  Number(fund?.fixZzl) >= 0 ? 'text-up' : 'text-down'
                 )}
               >
-                {Utils.Yang(fund?.gszzl)}%
+                {Utils.Yang(fund?.fixZzl)}%
               </div>
               <div className={styles.detailItemLabel}>日涨跌幅</div>
             </div>
             <div className={styles.detailItem}>
-              <div>{fund?.dwjz}</div>
-              <div className={styles.detailItemLabel}>
-                净值 {fund?.jzrq?.slice(5)}
-              </div>
+              <div>{fund?.fixDwjz}</div>
+              <div className={styles.detailItemLabel}>净值 {fund?.fixDate}</div>
             </div>
           </div>
         </div>

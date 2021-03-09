@@ -380,11 +380,13 @@ export async function GetFixFromEastMoney(code: string) {
     const fixZzl = $('.fix_zzl').text();
     const fixDate = $('.fix_date').text();
     const fixDwjz = $('.fix_dwjz').text();
+    const fixName = $('.fix_fname').text();
 
     const result: Fund.FixData = {
       code,
-      fixZzl,
       fixDwjz,
+      fixName,
+      fixZzl: fixZzl?.replace(/[^0-9/./-]/g, ''),
       fixDate: fixDate?.replace(/[^0-9/-]/g, ''),
     };
 

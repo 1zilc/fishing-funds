@@ -127,12 +127,16 @@ export function deleteFund(code: string) {
   });
 }
 
-export function calcFund(fund: Fund.ResponseItem) {
+export function calcFund(fund: Fund.ResponseItem & Fund.FixData) {
   const { codeMap } = getFundConfig();
+  const isFix = fund.fixDate && fund.fixDate === fund.gztime?.slice(5, 10);
   const cyfe = codeMap[fund.fundcode!]?.cyfe || 0;
-  const bjz = NP.minus(fund.gsz!, fund.dwjz!);
+  const gsz = isFix ? fund.fixDwjz! : fund.gsz!;
+  const dwjz = isFix ? fund.fixDwjz! : fund.dwjz!;
+  const bjz = NP.minus(gsz!, fund.dwjz!);
   const jrsygz = NP.times(cyfe, bjz);
-  const gszz = NP.times(fund.gsz!, cyfe);
+  const gszz = NP.times(gsz!, cyfe);
+
   // cyfe: number; // 持有份额
   // bjz: number; // 比较值
   // jrsygz: number; // 今日收益估值
@@ -143,6 +147,11 @@ export function calcFund(fund: Fund.ResponseItem) {
     bjz,
     jrsygz,
     gszz,
+    isFix,
+    gsz,
+    dwjz,
+    gszzl: isFix ? fund.fixZzl : fund.gszzl,
+    jzrq: isFix ? fund.fixDate : fund.jzrq,
   };
 }
 

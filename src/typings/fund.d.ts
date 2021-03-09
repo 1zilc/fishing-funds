@@ -16,6 +16,7 @@ declare namespace Fund {
 
   export interface FixData {
     code?: string;
+    fixName?: string;
     fixZzl?: string;
     fixDate?: string;
     fixDwjz?: string;
