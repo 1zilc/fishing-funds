@@ -94,7 +94,12 @@ const FundRow: React.FC<RowProps> = ({ fund, readOnly }) => {
                 alignItems: 'center',
               }}
             >
-              <span className={styles.fundName}>{fund.name}</span>
+              <span className={styles.fundName}>
+                {fund.name}
+                {conciseSetting && isFix && (
+                  <span className={styles.warn}>收益更新</span>
+                )}
+              </span>
             </div>
             {!conciseSetting && (
               <div className={styles.rowBar}>

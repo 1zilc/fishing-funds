@@ -9,7 +9,15 @@
   width: 100%;
 
   svg {
+
     cursor: pointer;
-    fill: var(--svg-icon-color)
+    fill: var(--svg-icon-color);
+    transition: all .2s;
+
+    &:hover {
+      border-radius: 5px;
+      fill: var(--primary-text-color);
+      transform: scale(1.25);
+    }
   }
 }

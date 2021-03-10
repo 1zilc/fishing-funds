@@ -159,10 +159,11 @@ export function calcFunds(funds: Fund.ResponseItem[]) {
   const { codeMap } = getFundConfig();
   const [zje, gszje, sygz] = funds.reduce(
     ([a, b, c], fund) => {
+      const calcFundResult = calcFund(fund);
       const cyfe = codeMap[fund.fundcode!]?.cyfe || 0; // 持有份额
-      const bjz = NP.minus(fund.gsz!, fund.dwjz!); // 比较值（估算值 - 持有净值）
+      const bjz = calcFundResult.bjz; // 比较值（估算值 - 持有净值）
       const jrsygz = NP.times(cyfe, bjz); // 今日收益估值（持有份额 * 比较值）
-      const gszz = NP.times(fund.gsz!, cyfe); // 估算总值 (持有份额 * 估算值)
+      const gszz = NP.times(calcFundResult.gsz!, cyfe); // 估算总值 (持有份额 * 估算值)
       const dwje = NP.times(fund.dwjz!, cyfe); // 当前金额 (持有份额 * 当前净值)
       return [a + dwje, b + gszz, c + jrsygz];
     },

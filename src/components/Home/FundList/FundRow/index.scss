@@ -51,12 +51,12 @@
 
 .warn {
   background-color: var(--warn-color);
-  color: #fff;
+  color: var(--tag-text-color);
   font-size: calc(10rem / var(--base-font-size));
   border-radius: 2px;
   padding: 2px 5px;
   margin-left: 5px;
-
+  white-space: nowrap;
 }
 
 .remove {
