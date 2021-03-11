@@ -61,6 +61,7 @@ const SimilarProportion: React.FC<SimilarProportionProps> = ({
       yAxis: {
         type: 'value',
         axisLabel: {
+          formatter: `{value}%`,
           fontSize: 10,
         },
       },
