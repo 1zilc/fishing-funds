@@ -164,7 +164,7 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
                 min={11}
                 max={14}
                 style={{ flex: 1 }}
-                defaultValue={baseFontSizeSetting}
+                defaultValue={baseFontSize}
                 onChange={setBaseFontSize}
               />
             </section>
