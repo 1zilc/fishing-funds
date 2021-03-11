@@ -42,7 +42,9 @@ const SecuritiesWareHouse: React.FC<SecuritiesWareHouseProps> = ({
   const { varibleColors, darkMode } = useContext(HomeContext);
 
   const initWarehoseChart = () => {
-    const instance = echarts.init(warehouseRef.current!);
+    const instance = echarts.init(warehouseRef.current!, undefined, {
+      renderer: 'svg',
+    });
     setWarehoseChartInstance(instance);
   };
 

@@ -94,7 +94,7 @@ const ToolBar: React.FC<ToolBarProps> = () => {
     <>
       {lowKeySetting && <style>{lowKeyStyleCodes}</style>}
       <style>{` html { font-size: ${
-        baseFontSizeSetting || varibleColors['--base-font-size'] || 12
+        baseFontSizeSetting || varibleColors['--base-font-size']
       }px }`}</style>
       <div className={styles.bar}>
         {tabsActiveKey === Enums.TabKeyType.Funds && (

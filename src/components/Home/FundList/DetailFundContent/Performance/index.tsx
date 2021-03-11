@@ -91,7 +91,13 @@ const Performance: React.FC<PerformanceProps> = ({ code }) => {
     }
   );
   const initPerformanceChart = () => {
-    const performanceChartInstance = echarts.init(performanceRef.current!);
+    const performanceChartInstance = echarts.init(
+      performanceRef.current!,
+      undefined,
+      {
+        renderer: 'svg',
+      }
+    );
     setPerformanceChartInstance(performanceChartInstance);
   };
 

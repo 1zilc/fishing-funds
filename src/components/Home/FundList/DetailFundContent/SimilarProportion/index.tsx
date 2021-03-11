@@ -21,7 +21,9 @@ const SimilarProportion: React.FC<SimilarProportionProps> = ({
   const { varibleColors, darkMode } = useContext(HomeContext);
 
   const initSimilarProportionChart = () => {
-    const instance = echarts.init(similarRef.current!);
+    const instance = echarts.init(similarRef.current!, undefined, {
+      renderer: 'svg',
+    });
     setSimilarProportionChartInstance(instance);
   };
 
