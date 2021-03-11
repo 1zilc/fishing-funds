@@ -4,10 +4,11 @@ import {
   SORT_FUNDS,
   TOGGLE_FUND_COLLAPSE,
   TOGGLE_FUNDS_COLLAPSE,
-  SORT_FUNDS_WITH_COLLAPSE_CHACHED,
+  SORT_FUNDS_WITH_CHACHED,
   SET_REMOTE_FUNDS,
   SET_FUNDS_LOADING,
   SET_REMOTE_FUNDS_LOADING,
+  SET_FIX_FUND,
   getFundConfig,
   calcFund,
 } from '@/actions/fund';
@@ -16,7 +17,7 @@ import * as Enums from '@/utils/enums';
 import * as Utils from '@/utils';
 
 export interface FundState {
-  funds: (Fund.ResponseItem & Fund.ExtraRow)[];
+  funds: (Fund.ResponseItem & Fund.ExtraRow & Fund.FixData)[];
   fundsLoading: boolean;
   remoteFunds: Fund.RemoteFund[];
   remoteFundsLoading: boolean;
@@ -38,7 +39,7 @@ function sortFunds(
     fundSortMode: { type: fundSortType, order: fundSortorder },
   } = getSortMode();
   const { codeMap } = getFundConfig();
-  const sortList: Fund.ResponseItem[] = Utils.DeepCopy(responseFunds || funds);
+  const sortList = Utils.DeepCopy(responseFunds || funds);
 
   sortList.sort((a, b) => {
     const _a = calcFund(a);
@@ -83,7 +84,7 @@ function setremoteFundsLoading(state: FundState, loading: boolean): FundState {
   };
 }
 
-function sortFundsWithCollapseChached(
+function sortFundsWithChached(
   state: FundState,
   responseFunds: Fund.ResponseItem[]
 ) {
@@ -93,14 +94,14 @@ function sortFundsWithCollapseChached(
     return map;
   }, {} as any);
 
-  const fundsWithCollapseChached = responseFunds
+  const fundsWithChached = responseFunds
     .filter((_) => !!_)
     .map((_) => ({
+      ...(fundsCodeToMap[_!.fundcode!] || {}),
       ..._,
-      collapse: fundsCodeToMap[_!.fundcode!]?.collapse,
     }));
 
-  return sortFunds(state, fundsWithCollapseChached);
+  return sortFunds(state, fundsWithChached);
 }
 
 function toggleFundCollapse(
@@ -108,9 +109,7 @@ function toggleFundCollapse(
   fund: Fund.ResponseItem & Fund.ExtraRow
 ) {
   const { funds } = state;
-  const cloneFunds: (Fund.ResponseItem & Fund.ExtraRow)[] = Utils.DeepCopy(
-    funds
-  );
+  const cloneFunds = Utils.DeepCopy(funds);
   cloneFunds.forEach((_) => {
     if (_.fundcode === fund.fundcode) {
       _.collapse = !fund.collapse;
@@ -124,12 +123,31 @@ function toggleFundCollapse(
 
 function toggleFundsCollapse(state: FundState) {
   const { funds } = state;
-  const cloneFunds: (Fund.ResponseItem & Fund.ExtraRow)[] = Utils.DeepCopy(
-    funds
-  );
+  const cloneFunds = Utils.DeepCopy(funds);
   const expandAllFunds = funds.every((_) => _.collapse);
   cloneFunds.forEach((_) => {
     _.collapse = !expandAllFunds;
+  });
+  return {
+    ...state,
+    funds: cloneFunds,
+  };
+}
+
+function setFixfunds(state: FundState, fixFunds: Fund.FixData[]) {
+  const { funds } = state;
+  const cloneFunds = Utils.DeepCopy(funds);
+  const fixFundMap = fixFunds.reduce((map, fund) => {
+    map[fund.code!] = fund;
+    return map;
+  }, {} as { [index: string]: Fund.FixData });
+  cloneFunds.forEach((fund) => {
+    const fixFund = fixFundMap[fund.fundcode!];
+    if (fixFund) {
+      fund.fixZzl = fixFund.fixZzl;
+      fund.fixDate = fixFund.fixDate;
+      fund.fixDwjz = fixFund.fixDwjz;
+    }
   });
   return {
     ...state,
@@ -155,12 +173,14 @@ export default function fund(
       return setFundsLoading(state, action.payload);
     case SET_REMOTE_FUNDS_LOADING:
       return setremoteFundsLoading(state, action.payload);
-    case SORT_FUNDS_WITH_COLLAPSE_CHACHED:
-      return sortFundsWithCollapseChached(state, action.payload);
+    case SORT_FUNDS_WITH_CHACHED:
+      return sortFundsWithChached(state, action.payload);
     case TOGGLE_FUND_COLLAPSE:
       return toggleFundCollapse(state, action.payload);
     case TOGGLE_FUNDS_COLLAPSE:
       return toggleFundsCollapse(state);
+    case SET_FIX_FUND:
+      return setFixfunds(state, action.payload);
     default:
       return state;
   }

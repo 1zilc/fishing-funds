@@ -20,7 +20,7 @@ export function CalcWithPrefix(a: any, b: any) {
   }
 }
 
-export function DeepCopy(data: any) {
+export function DeepCopy<T>(data: T): T {
   let dataTmp: any = undefined;
   if (data === null || !(typeof data === 'object')) {
     dataTmp = data;
@@ -65,6 +65,17 @@ export function JudgeWorkDayTime(timestamp: number) {
   const isMorningWorkTime = minites >= 9 * 60 + 30 && minites <= 11 * 60 + 30;
   const isAfternoonWorkTime = minites >= 13 * 60 && minites <= 15 * 60;
   return isWorkDay && (isMorningWorkTime || isAfternoonWorkTime);
+}
+
+export function JudgeFixTime(timestamp: number) {
+  const now = dayjs(timestamp);
+  const hour = now.get('hour');
+  const day = now.get('day');
+  const minute = now.get('minute');
+  const minites = hour * 60 + minute;
+  const isWorkDay = day >= 1 && day <= 5;
+  const isFixTime = minites >= 15 * 60;
+  return isWorkDay && isFixTime;
 }
 
 //TODO: 类型推断有问题

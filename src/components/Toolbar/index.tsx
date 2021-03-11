@@ -1,10 +1,9 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Badge } from 'antd';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useBoolean, useThrottleFn } from 'ahooks';
 
 import { ReactComponent as MenuAddIcon } from '@/assets/icons/menu-add.svg';
-import { ReactComponent as DeleteIcon } from '@/assets/icons/delete.svg';
 import { ReactComponent as RefreshIcon } from '@/assets/icons/refresh.svg';
 import { ReactComponent as QRcodeIcon } from '@/assets/icons/qr-code.svg';
 import { ReactComponent as SettingIcon } from '@/assets/icons/setting.svg';
@@ -13,8 +12,8 @@ import ManageFundContent from '@/components/Home/FundList/ManageFundContent';
 import SettingContent from '@/components/SettingContent';
 import PayContent from '@/components/PayContent';
 import EditZindexContent from '@/components/Home/ZindexList/EditZindexContent';
+import { HomeContext } from '@/components/Home';
 import { StoreState } from '@/reducers/types';
-import { toggleToolbarDeleteStatus } from '@/actions/toolbar';
 import { loadFunds } from '@/actions/fund';
 import { loadZindexs } from '@/actions/zindex';
 import { loadQuotations } from '@/actions/quotation';
@@ -29,8 +28,8 @@ const iconSize = { height: 18, width: 18 };
 const throttleDelay = 1000 * 3;
 const lowKeyStyleCodes = ` html { filter: grayscale(100%); }`;
 const ToolBar: React.FC<ToolBarProps> = () => {
-  const dispatch = useDispatch();
-  const { lowKeySetting } = getSystemSetting();
+  const { lowKeySetting, baseFontSizeSetting } = getSystemSetting();
+  const { varibleColors } = useContext(HomeContext);
   const updateInfo = useSelector(
     (state: StoreState) => state.updater.updateInfo
   );
@@ -94,6 +93,9 @@ const ToolBar: React.FC<ToolBarProps> = () => {
   return (
     <>
       {lowKeySetting && <style>{lowKeyStyleCodes}</style>}
+      <style>{` html { font-size: ${
+        baseFontSizeSetting || varibleColors['--base-font-size']
+      }px }`}</style>
       <div className={styles.bar}>
         {tabsActiveKey === Enums.TabKeyType.Funds && (
           <MenuAddIcon style={{ ...iconSize }} onClick={openManageFundDrawer} />
@@ -144,6 +146,8 @@ const ToolBar: React.FC<ToolBarProps> = () => {
           onClose={closeSettingDrawer}
           onEnter={() => {
             freshFunds();
+            freshZindexs();
+            freshQuotations();
             closeSettingDrawer();
           }}
         />

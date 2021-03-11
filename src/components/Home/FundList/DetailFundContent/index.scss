@@ -4,7 +4,7 @@
 
   h3 {
     color: var(--main-text-color);
-    font-size: 16px;
+    font-size: calc(16rem / var(--base-font-size));;
   }
 
   section {
@@ -12,7 +12,7 @@
   }
 
   label {
-    font-size: 12px;
+    font-size: 1rem;
     margin-bottom: 5px;
     display: block;
     font-weight: 600;
@@ -46,14 +46,14 @@
 }
 
 .syl_1n {
-  font-size: 20px;
+  font-size: calc(20rem / var(--base-font-size));
   font-size: 600;
 }
 
 .manager {
   float: right;
   // margin-left: 20px;
-  font-size: 11px;
+  font-size: calc(10rem / var(--base-font-size));
 }
 
 

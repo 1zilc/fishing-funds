@@ -1,17 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import classnames from 'classnames';
 import { useSelector } from 'react-redux';
-import { InputNumber, Radio, Badge, Switch } from 'antd';
+import { InputNumber, Radio, Badge, Switch, Slider } from 'antd';
 
+import Logo from '@/components/Logo';
 import WalletCarousel from '@/components/WalletCarousel';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
+import { HomeContext } from '@/components/Home';
 import { ReactComponent as SettingIcon } from '@/assets/icons/setting.svg';
 import { ReactComponent as LinkIcon } from '@/assets/icons/link.svg';
 import { ReactComponent as LineCharIcon } from '@/assets/icons/line-chart.svg';
 import { ReactComponent as TShirtIcon } from '@/assets/icons/t-shirt.svg';
-
-import Logo from '@/components/Logo';
-
 import {
   getSystemSetting,
   setSystemSetting,
@@ -19,7 +18,6 @@ import {
   setFundApiTypeSetting,
 } from '@/actions/setting';
 import { StoreState } from '@/reducers/types';
-
 import * as Enums from '@/utils/enums';
 import styles from './index.scss';
 
@@ -41,7 +39,9 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
     autoFreshSetting,
     freshDelaySetting,
     autoCheckUpdateSetting,
+    baseFontSizeSetting,
   } = getSystemSetting();
+  const { varibleColors } = useContext(HomeContext);
 
   const updateInfo = useSelector(
     (state: StoreState) => state.updater.updateInfo
@@ -53,6 +53,9 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
   // 外观设置
   const [concise, setConcise] = useState(conciseSetting);
   const [lowKey, setLowKey] = useState(lowKeySetting);
+  const [baseFontSize, setBaseFontSize] = useState(
+    baseFontSizeSetting || varibleColors['--base-font-size']
+  );
   // 通用设置
   const [autoStart, setAutoStart] = useState(autoStartSetting);
   const [autoFresh, setAutoFresh] = useState(autoFreshSetting);
@@ -71,6 +74,7 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
       autoFreshSetting: autoFresh,
       freshDelaySetting: freshDelay || 1,
       autoCheckUpdateSetting: autoCheckUpdate,
+      baseFontSizeSetting: baseFontSize,
     });
     app.setLoginItemSettings({
       openAtLogin: autoStart,
@@ -85,6 +89,7 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
       onClose={props.onClose}
       onEnter={onSave}
     >
+      <style>{` html { font-size: ${baseFontSize}px }`}</style>
       <div className={styles.content}>
         <div
           className={classnames(styles.logo, {
@@ -153,6 +158,16 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
               <label>低调模式：</label>
               <Switch size="small" checked={lowKey} onChange={setLowKey} />
             </section>
+            <section>
+              <label>字体大小：</label>
+              <Slider
+                min={11}
+                max={14}
+                style={{ flex: 1 }}
+                defaultValue={baseFontSize}
+                onChange={setBaseFontSize}
+              />
+            </section>
           </div>
         </div>
         <div>
@@ -183,15 +198,12 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
                 disabled={!autoFresh}
                 value={freshDelay}
                 onChange={setFreshDelay}
-                className={styles.input}
                 placeholder="1~60分"
                 precision={0}
                 min={1}
                 max={60}
                 size="small"
-                style={{
-                  width: '100%',
-                }}
+                style={{ flex: 1 }}
               />
             </section>
             <section>

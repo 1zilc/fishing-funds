@@ -16,7 +16,8 @@ export async function GetCurrentDateTimeFromTaobao() {
       responseType: 'json',
     });
     return res?.body?.data?.t;
-  } catch {
+  } catch (error) {
+    console.log(error);
     return null;
   }
 }
@@ -35,7 +36,8 @@ export async function GetCurrentDateTimeFromSuning() {
       responseType: 'json',
     });
     return res?.body?.currentTime;
-  } catch {
+  } catch (error) {
+    console.log(error);
     return null;
   }
 }

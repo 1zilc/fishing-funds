@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { useBoolean } from 'ahooks';
 import { Collapse } from 'react-collapse';
 import classnames from 'classnames';
@@ -11,19 +11,14 @@ import EditFundContent from '@/components/Home/FundList/EditFundContent';
 import DetailFundContent from '@/components/Home/FundList/DetailFundContent';
 import CustomDrawer from '@/components/CustomDrawer';
 
-import {
-  TOGGLE_FUND_COLLAPSE,
-  updateFund,
-  calcFund,
-  loadFunds,
-} from '@/actions/fund';
+import { TOGGLE_FUND_COLLAPSE, calcFund, loadFunds } from '@/actions/fund';
 import { getSystemSetting } from '@/actions/setting';
 import * as Utils from '@/utils';
 import { useScrollToTop, useActions } from '@/utils/hooks';
 import styles from './index.scss';
 
 export interface RowProps {
-  fund: Fund.ResponseItem & Fund.ExtraRow;
+  fund: Fund.ResponseItem & Fund.ExtraRow & Fund.FixData;
   readOnly?: boolean;
 }
 
@@ -56,7 +51,8 @@ const FundRow: React.FC<RowProps> = ({ fund, readOnly }) => {
     },
   ] = useBoolean(false);
 
-  const { cyfe, bjz, jrsygz, gszz } = calcFund(fund);
+  const calcFundResult = calcFund(fund);
+  const { isFix } = calcFundResult;
 
   const onRowClick = () =>
     readOnly
@@ -98,13 +94,23 @@ const FundRow: React.FC<RowProps> = ({ fund, readOnly }) => {
                 alignItems: 'center',
               }}
             >
-              <span className={styles.fundName}>{fund.name}</span>
+              <span className={styles.fundName}>
+                {fund.name}
+                {conciseSetting && isFix && (
+                  <span className={styles.warn}>收益更新</span>
+                )}
+              </span>
             </div>
             {!conciseSetting && (
               <div className={styles.rowBar}>
                 <div>
                   <span className={styles.code}>{fund.fundcode}</span>
-                  <span>{fund.gztime?.slice(5)}</span>
+                  <span>
+                    {isFix
+                      ? calcFundResult.fixDate
+                      : calcFundResult.gztime?.slice(5)}
+                  </span>
+                  {isFix && <span className={styles.warn}>收益更新</span>}
                 </div>
               </div>
             )}
@@ -112,60 +118,57 @@ const FundRow: React.FC<RowProps> = ({ fund, readOnly }) => {
           <div
             className={classnames(
               styles.value,
-              Number(fund.gszzl) < 0 ? 'bg-down' : 'bg-up'
+              Number(calcFundResult.gszzl) < 0 ? 'bg-down' : 'bg-up'
             )}
           >
-            {Utils.Yang(fund.gszzl)} %
+            {Utils.Yang(calcFundResult.gszzl)} %
           </div>
         </div>
       </div>
       <Collapse isOpened={!!fund.collapse}>
         <div className={styles.collapseContent}>
-          {conciseSetting && (
-            <section>
-              <span>基金代码：</span>
-              <span>{fund.fundcode}</span>
-            </section>
-          )}
-          {conciseSetting && (
-            <section>
-              <span>估值时间：</span>
-              <span>{fund.gztime?.slice(5)}</span>
-            </section>
-          )}
           <section>
-            <span>当前净值：</span>
-            <span>{fund.dwjz}</span>
+            <span>净值：</span>
+            <span>{calcFundResult.dwjz}</span>
+            {isFix && (
+              <span style={{ flex: 1, textAlign: 'center' }}>
+                ({Utils.Yang(calcFundResult.bjz)})
+              </span>
+            )}
           </section>
           <section>
             <span>估算值：</span>
-            <span>{fund.gsz}</span>
-            <span style={{ flex: 1, textAlign: 'right' }}>
-              ({Utils.Yang(bjz)})
+            <span className={classnames({ [styles.unuseText]: isFix })}>
+              {fund.gsz}
             </span>
+            {!isFix && (
+              <span style={{ flex: 1, textAlign: 'center' }}>
+                ({Utils.Yang(calcFundResult.bjz)})
+              </span>
+            )}
           </section>
           <section>
             <span>持有份额：</span>
-            <span>{cyfe}</span>
+            <span>{calcFundResult.cyfe}</span>
             <EditIcon className={styles.editor} onClick={openEditDrawer} />
           </section>
           <section>
-            <span>今日收益估值：</span>
+            <span>{isFix ? '今日收益：' : '今日收益估值：'}</span>
             <span
               className={classnames(
-                Number(jrsygz) < 0 ? 'text-down' : 'text-up'
+                Number(calcFundResult.jrsygz) < 0 ? 'text-down' : 'text-up'
               )}
             >
-              ¥ {Utils.Yang(jrsygz.toFixed(2))}
+              ¥ {Utils.Yang(calcFundResult.jrsygz.toFixed(2))}
             </span>
           </section>
           <section>
             <span>净值日期：</span>
-            <span>{fund.jzrq}</span>
+            <span>{calcFundResult.jzrq}</span>
           </section>
           <section>
-            <span>今日估算总值：</span>
-            <span>¥ {gszz.toFixed(2)}</span>
+            <span>{isFix ? '今日总值：' : '今日估算总值：'}</span>
+            <span>¥ {calcFundResult.gszz.toFixed(2)}</span>
           </section>
           <div className={styles.view}>
             <a onClick={openDetailDrawer}>{'查看详情 >'}</a>
@@ -176,7 +179,11 @@ const FundRow: React.FC<RowProps> = ({ fund, readOnly }) => {
         <EditFundContent
           onClose={closeEditDrawer}
           onEnter={onFundEdit}
-          fund={{ cyfe: Number(cyfe), code: fund.fundcode!, name: fund.name! }}
+          fund={{
+            cyfe: Number(calcFundResult.cyfe),
+            code: fund.fundcode!,
+            name: fund.name!,
+          }}
         />
       </CustomDrawer>
       <CustomDrawer show={showDetailDrawer}>

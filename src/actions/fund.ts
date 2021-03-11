@@ -16,11 +16,12 @@ export const SET_REMOTE_FUNDS = 'SET_REMOTE_FUNDS';
 export const SET_REMOTE_FUNDS_LOADING = 'SET_REMOTE_FUNDS_LOADING';
 export const SET_FUNDS = 'SET_FUNDS';
 export const SET_FUNDS_LOADING = 'SET_FUNDS_LOADING';
+export const SET_FIX_FUND = 'SET_FIX_FUND';
 export const TOGGLE_FUND_COLLAPSE = 'TOGGLE_FUND_COLLAPSE';
 export const TOGGLE_FUNDS_COLLAPSE = 'TOGGLE_FUNDS_COLLAPSE';
 export const SORT_FUNDS = 'SORT_FUNDS';
-export const SORT_FUNDS_WITH_COLLAPSE_CHACHED =
-  'SORT_FUNDS_WITH_COLLAPSE_CHACHED';
+export const SORT_FUNDS_WITH_CHACHED = 'SORT_FUNDS_WITH_CHACHED';
+
 export interface CodeMap {
   [index: string]: Fund.SettingItem & Fund.OriginRow;
 }
@@ -126,12 +127,16 @@ export function deleteFund(code: string) {
   });
 }
 
-export function calcFund(fund: Fund.ResponseItem) {
+export function calcFund(fund: Fund.ResponseItem & Fund.FixData) {
   const { codeMap } = getFundConfig();
+  const isFix = fund.fixDate && fund.fixDate === fund.gztime?.slice(5, 10);
   const cyfe = codeMap[fund.fundcode!]?.cyfe || 0;
-  const bjz = NP.minus(fund.gsz!, fund.dwjz!);
+  const gsz = isFix ? fund.fixDwjz! : fund.gsz!;
+  const dwjz = isFix ? fund.fixDwjz! : fund.dwjz!;
+  const bjz = NP.minus(gsz!, fund.dwjz!);
   const jrsygz = NP.times(cyfe, bjz);
-  const gszz = NP.times(fund.gsz!, cyfe);
+  const gszz = NP.times(gsz!, cyfe);
+
   // cyfe: number; // 持有份额
   // bjz: number; // 比较值
   // jrsygz: number; // 今日收益估值
@@ -142,6 +147,11 @@ export function calcFund(fund: Fund.ResponseItem) {
     bjz,
     jrsygz,
     gszz,
+    isFix,
+    gsz,
+    dwjz,
+    gszzl: isFix ? fund.fixZzl : fund.gszzl,
+    jzrq: isFix ? fund.fixDate : fund.jzrq,
   };
 }
 
@@ -149,10 +159,11 @@ export function calcFunds(funds: Fund.ResponseItem[]) {
   const { codeMap } = getFundConfig();
   const [zje, gszje, sygz] = funds.reduce(
     ([a, b, c], fund) => {
+      const calcFundResult = calcFund(fund);
       const cyfe = codeMap[fund.fundcode!]?.cyfe || 0; // 持有份额
-      const bjz = NP.minus(fund.gsz!, fund.dwjz!); // 比较值（估算值 - 持有净值）
+      const bjz = calcFundResult.bjz; // 比较值（估算值 - 持有净值）
       const jrsygz = NP.times(cyfe, bjz); // 今日收益估值（持有份额 * 比较值）
-      const gszz = NP.times(fund.gsz!, cyfe); // 估算总值 (持有份额 * 估算值)
+      const gszz = NP.times(calcFundResult.gsz!, cyfe); // 估算总值 (持有份额 * 估算值)
       const dwje = NP.times(fund.dwjz!, cyfe); // 当前金额 (持有份额 * 当前净值)
       return [a + dwje, b + gszz, c + jrsygz];
     },
@@ -167,16 +178,38 @@ export function calcFunds(funds: Fund.ResponseItem[]) {
 export function loadFunds() {
   return async (dispatch: Dispatch, getState: GetState) => {
     try {
+      console.log(getState());
       dispatch({ type: SET_FUNDS_LOADING, payload: true });
       const funds = await getFunds();
-      const now = dayjs().format('YYYY/MM/DD HH:mm:ss');
+      const now = dayjs().format('MM-DD HH:mm:ss');
       batch(() => {
-        dispatch({ type: SORT_FUNDS_WITH_COLLAPSE_CHACHED, payload: funds });
+        dispatch({ type: SORT_FUNDS_WITH_CHACHED, payload: funds });
         dispatch({ type: SET_FUNDS_LOADING, payload: false });
         dispatch(updateUpdateTime(now));
       });
     } finally {
       dispatch({ type: SET_FUNDS_LOADING, payload: false });
+    }
+  };
+}
+
+export function loadFixFunds() {
+  return async (dispatch: Dispatch, getState: GetState) => {
+    try {
+      const { fund } = getState();
+      const { funds } = fund;
+      const collectors = funds
+        .filter(
+          ({ fixDate, gztime }) => !fixDate || fixDate !== gztime?.slice(5, 10)
+        )
+        .map(({ fundcode }) => () =>
+          Services.Fund.GetFixFromEastMoney(fundcode!)
+        );
+      const fixFunds =
+        (await Adapter.ConCurrencyAllAdapter<Fund.FixData>(collectors)) || [];
+
+      dispatch({ type: SET_FIX_FUND, payload: fixFunds });
+    } finally {
     }
   };
 }

@@ -9,6 +9,7 @@
     --cancel-text-color: #454545;
     --increase-color: #f5222d;
     --reduce-color: #52c41a;
+    --warn-color: #faad14;
     --main-text-color: #333;
     --secondary-main-text-color: #888;
     --reverse-text-color: #454545;
@@ -16,27 +17,25 @@
     --alipay-color: #156dff;
     --wechat-color: #1fa131;
     --svg-icon-color: #333;
-    --blur-color: rgba(255, 255, 255, .7);
+    --blur-color: rgba(255, 255, 255, 0.7);
     --hover-color: #e6f7ff;
-    --tag-text-color: #eee;
+    --tag-text-color: #fff;
 
     &.lowKey {
       --inner-color: #eee;
       --primary-color: #000;
       --increase-color: #111;
       --reduce-color: #333;
+      --warn-color: #222;
       --main-text-color: #333;
       --border-color: #dfdfdf;
       --hover-color: #efefef;
       --tag-text-color: #eee;
     }
   }
-
-
 }
 
 @media (prefers-color-scheme: dark) {
-
   body {
     --background-color: #1e1e1e;
     --inner-color: #333;
@@ -47,6 +46,7 @@
     --cancel-text-color: #ccc;
     --increase-color: #d32029;
     --reduce-color: #49aa19;
+    --warn-color: #d89614;
     --main-text-color: #eee;
     --secondary-main-text-color: #888;
     --reverse-text-color: #ccc;
@@ -54,7 +54,7 @@
     --alipay-color: #156dff;
     --wechat-color: #1fa131;
     --svg-icon-color: #ccc;
-    --blur-color: rgba(33, 33, 33, .3);
+    --blur-color: rgba(33, 33, 33, 0.3);
     --hover-color: #111d2c;
     --tag-text-color: #eee;
 
@@ -65,12 +65,12 @@
       --cancel-text-color: #dfdfdf;
       --increase-color: #eee;
       --reduce-color: #ccc;
+      --warn-color: #ddd;
       --main-text-color: #eee;
       --tag-text-color: #111;
     }
 
     // antd
-
   }
 }
 
@@ -82,5 +82,9 @@ body {
   --borderColor: var(--border-color);
   --primaryHover: var(--hover-color);
   --itemHoverBackground: var(--hover-color);
-  --textColor: var(--main-text-color)
+  --textColor: var(--main-text-color);
+}
+
+body {
+  --base-font-size: 12;
 }

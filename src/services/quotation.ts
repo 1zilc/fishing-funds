@@ -1,5 +1,5 @@
 import got from 'got';
-import NP from 'number-precision';
+
 /**
  *
  * @param code 指数代码: 000001
@@ -42,8 +42,7 @@ export async function GetQuotationsFromEastmoney() {
         po: 1,
         pn: 1,
         pz: 100,
-        fields:
-          'f1,f2,f3,f4,f5,f6,f7,f8,f9,f10,f12,f13,f14,f15,f16,f17,f18,f20,f21,f23,f24,f25,f26,f22,f33,f11,f62,f128,f136,f115,f152,f124,f107,f104,f105,f140,f141,f207,f208,f209,f222',
+        fields: 'f2,f3,f4,f8,f14,f20,f128,f136,f104,f105,f140,f207,f208,f222',
         _: new Date().getTime(),
       },
       responseType: 'json',
@@ -67,7 +66,8 @@ export async function GetQuotationsFromEastmoney() {
     }));
 
     return result;
-  } catch (err) {
+  } catch (error) {
+    console.log(error);
     return [];
   }
 }

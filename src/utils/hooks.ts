@@ -29,6 +29,24 @@ export function useWorkDayTimeToDo(
   );
 }
 
+export function useFixTimeToDo(
+  todo: () => void,
+  delay: number,
+  config?: { immediate: boolean }
+): void {
+  useInterval(
+    async () => {
+      const timestamp = await getCurrentHours();
+      const isFixTime = Utils.JudgeFixTime(Number(timestamp));
+      if (isFixTime) {
+        todo();
+      }
+    },
+    delay,
+    config
+  );
+}
+
 export function useScrollToTop(
   config: {
     before?: () => void;

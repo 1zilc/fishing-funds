@@ -14,6 +14,14 @@ declare namespace Fund {
     gsz?: string; // 估算值 '1.2222'
   }
 
+  export interface FixData {
+    code?: string;
+    fixName?: string;
+    fixZzl?: string;
+    fixDate?: string;
+    fixDwjz?: string;
+  }
+
   export interface ExtraRow {
     collapse?: boolean;
   }

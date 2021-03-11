@@ -19,8 +19,8 @@
   z-index: 3;
 
   .walletIcon {
-    height: 40px;
-    width: 40px;
+    height: calc(40rem / var(--base-font-size));
+    width: calc(40rem / var(--base-font-size));
     transition: height .2s, width .2s;
   }
 
@@ -38,14 +38,14 @@
       align-items: center;
 
       .last {
-        font-size: 12px;
+        font-size: 1rem;
         font-weight: 500;
         color: var(--secondary-main-text-color);
       }
     }
 
     .moneyBar {
-      font-size: 10px;
+      font-size: calc(10rem / var(--base-font-size));
       color: var(--main-text-color);
       display: flex;
       // justify-content: space-around;
@@ -55,7 +55,7 @@
 
 
       i {
-        height: 10px;
+        height: calc(10rem / var(--base-font-size));
         border-right: 1px solid var(--border-color);
         margin: 0 10px;
       }
@@ -72,21 +72,21 @@
       }
 
       svg {
-        height: 14px;
-        width: 14px;
+        height: calc(14rem / var(--base-font-size));
+        width: calc(14rem / var(--base-font-size));
         fill: var(--svg-icon-color)
       }
     }
   }
 
   .eye {
-    height: 20px;
-    width: 20px;
+    height: calc(20rem / var(--base-font-size));
+    width: calc(20rem / var(--base-font-size));
     cursor: pointer;
 
     &>svg {
-      height: 20px;
-      width: 20px;
+      height: calc(20rem / var(--base-font-size));
+      width: calc(20rem / var(--base-font-size));
       fill: var(--svg-icon-color)
     }
   }
@@ -97,8 +97,8 @@
 .miniMode {
 
   .walletIcon {
-    height: 20px;
-    width: 20px;
+    height: calc(20rem / var(--base-font-size));
+    width: calc(20rem / var(--base-font-size));
   }
 
   .info {
@@ -115,7 +115,7 @@
 
 
     .moneyBar {
-      font-size: 12px;
+      font-size: 1rem;
       font-weight: 600;
 
       i {}

@@ -7,7 +7,7 @@
   }
 
   &>label {
-    font-size: 12px;
+    font-size: 1rem;
     width: 100px;
     margin-bottom: 5px;
     display: block;
@@ -30,7 +30,7 @@
   &>section {
     width: 50%;
     display: flex;
-    font-size: 11px;
+    font-size: calc(11rem / var(--base-font-size));
     align-items: center;
     box-sizing: border-box;
     padding: 5px 0 5px 25px;
@@ -50,7 +50,7 @@
   }
 
   .radio {
-    font-size: 11px;
+    font-size: calc(11rem / var(--base-font-size));
     display: block;
     line-height: 20px;
     padding: 5px 0 5px 25px;
@@ -58,7 +58,7 @@
 }
 
 .title {
-  font-size: 12px;
+  font-size: 1rem;
   font-weight: 600;
   display: flex;
   align-items: center;

@@ -10,7 +10,7 @@
 }
 
 .performanceSelection {
-  font-size: 10px;
+  font-size: calc(10rem / var(--base-font-size));
   padding: 1px 6px;
   border-radius: 3px;
   cursor: pointer;

@@ -24,29 +24,39 @@
 
 .fundName {
   font-weight: 600;
-  font-size: 14px;
+  font-size: calc(14rem / var(--base-font-size));
   margin-bottom: 2px;
 }
 
 .code {
-  font-size: 10px;
+  font-size: calc(10rem / var(--base-font-size));
   margin-right: 5px;
 }
 
 .rowBar {
-  font-size: 10px;
+  font-size: calc(10rem / var(--base-font-size));
   display: flex;
   align-items: center;
 }
 
 .value {
-  font-size: 12px;
+  font-size: 1rem;
   display: block;
   float: right;
   color: var(--tag-text-color);
   padding: 2px 10px;
   border-radius: 2px;
   min-width: 64px;
+}
+
+.warn {
+  background-color: var(--warn-color);
+  color: var(--tag-text-color);
+  font-size: calc(10rem / var(--base-font-size));
+  border-radius: 2px;
+  padding: 2px 5px;
+  margin-left: 5px;
+  white-space: nowrap;
 }
 
 .remove {
@@ -74,7 +84,7 @@
   display: flex;
   padding: 5px 15px;
   flex-wrap: wrap;
-  font-size: 10px;
+  font-size: calc(10rem / var(--base-font-size));
   color: var(--inner-text-color);
   background-color: var(--inner-color);
   word-wrap: break-word;
@@ -102,4 +112,8 @@
   text-align: center;
   width: 100%;
   box-sizing: border-box;
+}
+
+.unuseText {
+  text-decoration: line-through;
 }

@@ -21,7 +21,9 @@ const SimilarRank: React.FC<SimilarRankProps> = ({
   const { varibleColors, darkMode } = useContext(HomeContext);
 
   const initSimilarRankChart = () => {
-    const instance = echarts.init(similarRef.current!);
+    const instance = echarts.init(similarRef.current!, undefined, {
+      renderer: 'svg',
+    });
     setSimilarRankChartInstance(instance);
   };
 

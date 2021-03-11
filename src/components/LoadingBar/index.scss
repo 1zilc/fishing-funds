@@ -1,7 +1,7 @@
 .content {
   height: 30px;
   transition: height .2s;
-  font-size: 10px;
+  font-size: calc(10rem / var(--base-font-size));
   line-height: 30px;
   text-align: center;
   color: var(--secondary-main-text-color);

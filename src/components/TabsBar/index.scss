@@ -31,7 +31,7 @@
   cursor: pointer;
   height: 100%;
   line-height: 40px;
-  font-size: 12px;
+  font-size: 1rem;
   opacity: 0.5;
   transition: all 0.1s;
 
@@ -45,7 +45,7 @@
 }
 
 .active {
-  font-size: 14px;
+  font-size: calc(14rem / var(--base-font-size));;
   font-weight: 600;
   opacity: 1 !important;
 }

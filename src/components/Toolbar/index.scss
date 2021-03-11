@@ -10,6 +10,13 @@
 
   svg {
     cursor: pointer;
-    fill: var(--svg-icon-color)
+    fill: var(--svg-icon-color);
+    transition: all 0.2s;
+
+    &:hover {
+      border-radius: 5px;
+      fill: var(--main-text-color);
+      transform: scale(1.25);
+    }
   }
 }
