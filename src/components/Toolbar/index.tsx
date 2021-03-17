@@ -26,7 +26,7 @@ export interface ToolBarProps {}
 
 const iconSize = { height: 18, width: 18 };
 const throttleDelay = 1000 * 3;
-const lowKeyStyleCodes = ` html { filter: grayscale(100%); }`;
+
 const ToolBar: React.FC<ToolBarProps> = () => {
   const { lowKeySetting, baseFontSizeSetting } = getSystemSetting();
   const { varibleColors } = useContext(HomeContext);
@@ -92,7 +92,7 @@ const ToolBar: React.FC<ToolBarProps> = () => {
 
   return (
     <>
-      {lowKeySetting && <style>{lowKeyStyleCodes}</style>}
+      {lowKeySetting && <style>{` html { filter: grayscale(100%); }`}</style>}
       <style>{` html { font-size: ${
         baseFontSizeSetting || varibleColors['--base-font-size']
       }px }`}</style>

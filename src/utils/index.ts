@@ -74,8 +74,8 @@ export function JudgeFixTime(timestamp: number) {
   const minute = now.get('minute');
   const minites = hour * 60 + minute;
   const isWorkDay = day >= 1 && day <= 5;
-  const isFixTime = minites >= 15 * 60;
-  return isWorkDay && isFixTime;
+  const isFixTime = minites <= 9 * 60 + 30 || minites >= 15 * 60;
+  return (isWorkDay && isFixTime) || !isWorkDay;
 }
 
 //TODO: 类型推断有问题

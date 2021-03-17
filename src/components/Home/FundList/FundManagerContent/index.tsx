@@ -1,12 +1,13 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import classnames from 'classnames';
 import { Rate, Tabs } from 'antd';
-import { useScroll } from 'ahooks';
+import { useScroll, useRequest } from 'ahooks';
 
 import Appraise from '@/components/Home/FundList/FundManagerContent/Appraise';
 import Profit from '@/components/Home/FundList/FundManagerContent/Profit';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
 import * as Utils from '@/utils';
+import * as Services from '@/services';
 import * as Enums from '@/utils/enums';
 import styles from './index.scss';
 
@@ -21,6 +22,13 @@ const FundManagerContent: React.FC<FundManagerContentProps> = (props) => {
   const ref = useRef(null);
   const position = useScroll(ref, (val) => val.top <= 400);
   const miniMode = position.top > 40;
+  const [managerdetail, setManagerdetail] = useState({});
+
+  useRequest(Services.Fund.GetFundManagerDetailFromEastMoney, {
+    throwOnError: true,
+    defaultParams: [manager.id],
+    onSuccess: setManagerdetail,
+  });
 
   return (
     <CustomDrawerContent

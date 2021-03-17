@@ -16,14 +16,15 @@ const Profit: React.FC<ProfitProps> = ({ profit }) => {
     setProfitChartInstance,
   ] = useState<echarts.ECharts | null>(null);
   const { width: profitRefWidth } = useSize(profitRef);
-  const { varibleColors, darkMode } = useContext(HomeContext);
+  const { darkMode } = useContext(HomeContext);
 
   const initProfitChart = () => {
-    const instance = echarts.init(profitRef.current!);
+    const instance = echarts.init(profitRef.current!, undefined, {
+      renderer: 'svg',
+    });
     setProfitChartInstance(instance);
   };
   const renderProfitChart = () => {
-    console.log(profit?.series?.[0]?.data.map(({ y }) => y));
     ProfitChartInstance?.setOption({
       xAxis: {
         type: 'category',

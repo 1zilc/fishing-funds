@@ -396,3 +396,22 @@ export async function GetFixFromEastMoney(code: string) {
     return {};
   }
 }
+
+// 从天天基金查询基金经理详情信息
+export async function GetFundManagerDetailFromEastMoney(code: string) {
+  try {
+    const { body: html } = await got(
+      `http://fund.eastmoney.com/manager/${code}.html`
+    );
+    const $ = cheerio.load(html);
+    const fixZzl = $('.jlinfo').text();
+    const fixDate = $('.fix_date').text();
+    const fixDwjz = $('.fix_dwjz').text();
+    const fixName = $('.fix_fname').text();
+
+    console.log(fixZzl);
+  } catch (error) {
+    console.log(error);
+    return {};
+  }
+}
