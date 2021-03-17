@@ -46,7 +46,8 @@
 
 
 .name {
-  font-size: calc(14rem / var(--base-font-size));;
+  font-size: calc(14rem / var(--base-font-size));
+  ;
   font-weight: 600;
 }
 
@@ -87,7 +88,7 @@
   bottom: 20px;
   cursor: pointer;
   transition: opacity .3s;
-  box-shadow: 0 20px 20px rgba(0, 0, 0, .1);
+  box-shadow: 0 2px 10px var(--primary-color);
 
   &:hover {
     opacity: .8;
