@@ -404,12 +404,11 @@ export async function GetFundManagerDetailFromEastMoney(code: string) {
       `http://fund.eastmoney.com/manager/${code}.html`
     );
     const $ = cheerio.load(html);
-    const fixZzl = $('.jlinfo').text();
-    const fixDate = $('.fix_date').text();
-    const fixDwjz = $('.fix_dwjz').text();
-    const fixName = $('.fix_fname').text();
+    const description = $('meta[name="description"]').attr('content');
 
-    console.log(fixZzl);
+    return {
+      description,
+    };
   } catch (error) {
     console.log(error);
     return {};
