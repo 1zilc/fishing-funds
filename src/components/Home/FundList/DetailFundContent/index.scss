@@ -34,6 +34,7 @@
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
+  width: 100%;
 }
 
 .detailItem {
@@ -52,12 +53,9 @@
   font-size: 600;
 }
 
-.manager {
-  float: right;
-  // margin-left: 20px;
-  font-size: calc(10rem / var(--base-font-size));
+.subTitleRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: calc(11rem / var(--base-font-size));
 }
-
-
-
-.warehouse {}

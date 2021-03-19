@@ -1,12 +1,13 @@
 .content {
   display: block;
+  z-index: 2;
 }
 
 .performanceSelections {
   display: flex;
   justify-content: space-around;
   align-items: center;
-  margin-top: 10px;
+  margin: 20px 5px 10px;
 }
 
 .performanceSelection {
@@ -17,6 +18,7 @@
   color: var(--cancel-text-color);
   background-color: var(--cancel-color);
   transition: all .2s;
+  position: relative;
 
   &:hover {
     opacity: .8;

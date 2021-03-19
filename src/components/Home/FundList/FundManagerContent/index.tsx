@@ -6,6 +6,7 @@ import { useScroll, useRequest } from 'ahooks';
 import Appraise from '@/components/Home/FundList/FundManagerContent/Appraise';
 import Profit from '@/components/Home/FundList/FundManagerContent/Profit';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
+import ManageHistoryFundList from '@/components/Home/FundList/FundManagerContent/ManageHistoryFundList';
 import * as Utils from '@/utils';
 import * as Services from '@/services';
 import * as Enums from '@/utils/enums';
@@ -17,17 +18,25 @@ export interface FundManagerContentProps {
   manager: Fund.Manager.Info;
 }
 
+export interface ManagerDetail {
+  manageHistoryFunds: Fund.Manager.ManageHistoryFund[];
+  description: string;
+}
+
 const FundManagerContent: React.FC<FundManagerContentProps> = (props) => {
   const { manager } = props;
   const ref = useRef(null);
   const position = useScroll(ref, (val) => val.top <= 400);
   const miniMode = position.top > 40;
-  const [managerdetail, setManagerdetail] = useState({});
+  const [managerDetail, setManagerDetail] = useState<ManagerDetail>({
+    manageHistoryFunds: [],
+    description: '',
+  });
 
   useRequest(Services.Fund.GetFundManagerDetailFromEastMoney, {
     throwOnError: true,
     defaultParams: [manager.id],
-    onSuccess: setManagerdetail,
+    onSuccess: setManagerDetail,
   });
 
   return (
@@ -62,20 +71,32 @@ const FundManagerContent: React.FC<FundManagerContentProps> = (props) => {
             <div>现任基金资产规模：</div>
             <div>{manager.fundSize}</div>
           </div>
-
-          <Tabs
-            defaultActiveKey={String(Enums.ManagerPowerType.Appraise)}
-            animated={{ tabPane: true }}
-            tabBarGutter={15}
-          >
-            <Tabs.TabPane tab="能力评估" key={Enums.ManagerPowerType.Appraise}>
-              <Appraise power={manager.power} />
-            </Tabs.TabPane>
-            <Tabs.TabPane tab="收益统计" key={Enums.ManagerPowerType.Profit}>
-              <Profit profit={manager.profit} />
-            </Tabs.TabPane>
-          </Tabs>
         </div>
+        <Tabs
+          defaultActiveKey={String(Enums.ManagerPowerType.Appraise)}
+          animated={{ tabPane: true }}
+          tabBarGutter={15}
+          tabBarStyle={{ marginLeft: 15 }}
+        >
+          <Tabs.TabPane tab="能力评估" key={Enums.ManagerPowerType.Appraise}>
+            <Appraise power={manager.power} />
+          </Tabs.TabPane>
+          <Tabs.TabPane tab="收益统计" key={Enums.ManagerPowerType.Profit}>
+            <Profit profit={manager.profit} />
+          </Tabs.TabPane>
+        </Tabs>
+        <Tabs
+          defaultActiveKey={String(0)}
+          animated={{ tabPane: true }}
+          tabBarGutter={15}
+          tabBarStyle={{ marginLeft: 15 }}
+        >
+          <Tabs.TabPane tab={`${manager.name || ''}管理过的基金`} key={0}>
+            <ManageHistoryFundList
+              manageHistoryFunds={managerDetail.manageHistoryFunds}
+            />
+          </Tabs.TabPane>
+        </Tabs>
       </div>
     </CustomDrawerContent>
   );

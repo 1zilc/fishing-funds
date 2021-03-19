@@ -121,5 +121,13 @@ declare namespace Fund {
       ];
       jzrq: '2021-03-02';
     }
+    export interface ManageHistoryFund {
+      code: string; // 基金代码
+      name: string; // 基金名称
+      type: string; // 基金类型
+      date: string; // 任职时期
+      days: string; // 担任天数
+      rzhb: string; // 任职回报率
+    }
   }
 }

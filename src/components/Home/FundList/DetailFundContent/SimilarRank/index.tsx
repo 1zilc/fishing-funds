@@ -73,6 +73,9 @@ const SimilarRank: React.FC<SimilarRankProps> = ({
       dataZoom: [
         {
           type: 'inside',
+          start: 90,
+          end: 100,
+          minValueSpan: 3600 * 24 * 1000 * 7,
         },
       ],
     });

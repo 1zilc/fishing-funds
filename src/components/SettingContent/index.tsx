@@ -163,9 +163,10 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
               <Slider
                 min={11}
                 max={14}
-                style={{ flex: 1 }}
+                style={{ flex: 0.5 }}
                 defaultValue={baseFontSize}
                 onChange={setBaseFontSize}
+                step={0.1}
               />
             </section>
           </div>
@@ -203,11 +204,11 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
                 min={1}
                 max={60}
                 size="small"
-                style={{ flex: 1 }}
+                style={{ flex: 0.5 }}
               />
             </section>
             <section>
-              <label>检查更新：</label>
+              <label>自动检查更新：</label>
               <Switch
                 size="small"
                 checked={autoCheckUpdate}

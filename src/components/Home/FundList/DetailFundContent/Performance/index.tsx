@@ -74,6 +74,7 @@ const Performance: React.FC<PerformanceProps> = ({ code }) => {
           dataZoom: [
             {
               type: 'inside',
+              minValueSpan: 3600 * 24 * 1000 * 7,
             },
           ],
           series:
