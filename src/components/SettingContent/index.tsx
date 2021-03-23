@@ -2,7 +2,6 @@ import React, { useState, useContext } from 'react';
 import classnames from 'classnames';
 import { useSelector } from 'react-redux';
 import { InputNumber, Radio, Badge, Switch, Slider } from 'antd';
-
 import Logo from '@/components/Logo';
 import WalletCarousel from '@/components/WalletCarousel';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
@@ -97,9 +96,7 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
           })}
           onClick={() =>
             isUpdateAvaliable &&
-            shell.openExternal(
-              'https://github.com/1zilc/fishing-funds/releases'
-            )
+            shell.openExternal('https://ff.1zilc.top/#download')
           }
         >
           <Logo />

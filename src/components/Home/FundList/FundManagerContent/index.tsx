@@ -64,12 +64,16 @@ const FundManagerContent: React.FC<FundManagerContentProps> = (props) => {
             <Rate disabled className={styles.star} value={manager.star} />
           </div>
           <div className={styles.item}>
-            <div>累计任职时间：</div>
-            <div>{manager.workTime}</div>
+            <label>经理简介：</label>
+            <div>{managerDetail.description}</div>
           </div>
           <div className={styles.item}>
-            <div>现任基金资产规模：</div>
-            <div>{manager.fundSize}</div>
+            <label>累计任职时间：</label>
+            <span>{manager.workTime}</span>
+          </div>
+          <div className={styles.item}>
+            <label>现任基金资产规模：</label>
+            <span>{manager.fundSize}</span>
           </div>
         </div>
         <Tabs

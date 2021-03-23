@@ -85,5 +85,9 @@
 }
 
 .item {
-  display: flex;
+  display: block;
+
+  label {
+    font-weight: 600;
+  }
 }

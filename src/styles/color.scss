@@ -11,19 +11,18 @@
 }
 
 .bg-up {
-  background-image: linear-gradient(to right, var(--background-color), var(--increase-bg-color));
+  transition: all .3s;
 
   &:hover {
-    background-image: linear-gradient(to right, transparent, var(--increase-bg-color));
+    background-image: linear-gradient(to right, var(--background-color), var(--increase-bg-color)) !important;
   }
 }
 
 .bg-down {
-  background-image: linear-gradient(to right, var(--background-color), var(--reduce-bg-color));
   transition: all .3s;
 
   &:hover {
-    background-image: linear-gradient(to right, transparent, var(--reduce-bg-color));
+    background-image: linear-gradient(to right, var(--background-color), var(--reduce-bg-color)) !important;
   }
 }
 
