@@ -20,7 +20,9 @@ const ManageHistoryFundList: React.FC<ManageHistoryFundListProps> = ({
     manual: true,
     throwOnError: true,
     defaultParams: [],
-    onSuccess: setManageHistoryFundList,
+    onSuccess: (res) => {
+      setManageHistoryFundList(res.filter((_) => !!_));
+    },
   });
 
   useEffect(() => {
