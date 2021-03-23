@@ -2,7 +2,6 @@ import React, { useState, useContext } from 'react';
 import classnames from 'classnames';
 import { useSelector } from 'react-redux';
 import { InputNumber, Radio, Badge, Switch, Slider } from 'antd';
-
 import Logo from '@/components/Logo';
 import WalletCarousel from '@/components/WalletCarousel';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
@@ -97,9 +96,7 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
           })}
           onClick={() =>
             isUpdateAvaliable &&
-            shell.openExternal(
-              'https://github.com/1zilc/fishing-funds/releases'
-            )
+            shell.openExternal('https://ff.1zilc.top/#download')
           }
         >
           <Logo />
@@ -163,9 +160,10 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
               <Slider
                 min={11}
                 max={14}
-                style={{ flex: 1 }}
+                style={{ flex: 0.5 }}
                 defaultValue={baseFontSize}
                 onChange={setBaseFontSize}
+                step={0.1}
               />
             </section>
           </div>
@@ -203,11 +201,11 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
                 min={1}
                 max={60}
                 size="small"
-                style={{ flex: 1 }}
+                style={{ flex: 0.5 }}
               />
             </section>
             <section>
-              <label>检查更新：</label>
+              <label>自动检查更新：</label>
               <Switch
                 size="small"
                 checked={autoCheckUpdate}

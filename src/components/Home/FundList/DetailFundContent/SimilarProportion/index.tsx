@@ -78,6 +78,9 @@ const SimilarProportion: React.FC<SimilarProportionProps> = ({
       dataZoom: [
         {
           type: 'inside',
+          start: 90,
+          end: 100,
+          minValueSpan: 3600 * 24 * 1000 * 7,
         },
       ],
     });

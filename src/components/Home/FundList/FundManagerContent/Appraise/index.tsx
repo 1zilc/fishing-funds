@@ -15,10 +15,12 @@ const Appraise: React.FC<AppraiseProps> = ({ power }) => {
     setAppraiseChartInstance,
   ] = useState<echarts.ECharts | null>(null);
   const { width: appraiseRefWidth } = useSize(appraiseRef);
-  const { varibleColors, darkMode } = useContext(HomeContext);
+  const { darkMode } = useContext(HomeContext);
 
   const initAppraiseChart = () => {
-    const instance = echarts.init(appraiseRef.current!);
+    const instance = echarts.init(appraiseRef.current!, undefined, {
+      renderer: 'svg',
+    });
     setAppraiseChartInstance(instance);
   };
   const renderAppraiseChart = () => {
@@ -78,14 +80,7 @@ const Appraise: React.FC<AppraiseProps> = ({ power }) => {
         {
           name: '能力评估',
           type: 'radar',
-          lineStyle: [
-            {
-              normal: {
-                width: 1,
-                opacity: 0.8,
-              },
-            },
-          ],
+          lineStyle: { width: 1, opacity: 0.8 },
           data: [[...power?.data, 1]],
           symbol: 'none',
           itemStyle: {

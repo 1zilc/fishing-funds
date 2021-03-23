@@ -30,7 +30,9 @@ const ZindexRow: React.FC<RowProps> = (props) => {
 
   return (
     <div>
-      <div className={styles.row}>
+      <div
+        className={classnames(styles.row, zindex.zdf < 0 ? 'bg-down' : 'bg-up')}
+      >
         <div
           style={{
             display: 'flex',

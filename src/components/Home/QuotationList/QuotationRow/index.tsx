@@ -31,7 +31,12 @@ const QuotationRow: React.FC<RowProps> = (props) => {
 
   return (
     <div>
-      <div className={styles.row}>
+      <div
+        className={classnames(
+          styles.row,
+          quotation.zdf < 0 ? 'bg-down' : 'bg-up'
+        )}
+      >
         <div
           style={{
             display: 'flex',

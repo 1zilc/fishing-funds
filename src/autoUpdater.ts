@@ -9,6 +9,7 @@ export default class AppUpdater {
     autoUpdater.logger = log;
     // autoUpdater.checkForUpdatesAndNotify();
     try {
+      autoUpdater.setFeedURL('https://ff-releases.1zilc.top');
       autoUpdater.checkForUpdates();
     } catch {
       console.log('检查更新失败');

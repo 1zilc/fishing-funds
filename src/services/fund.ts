@@ -396,3 +396,49 @@ export async function GetFixFromEastMoney(code: string) {
     return {};
   }
 }
+
+// 从天天基金查询基金经理详情信息
+export async function GetFundManagerDetailFromEastMoney(code: string) {
+  try {
+    const { body: html } = await got(
+      `http://fund.eastmoney.com/manager/${code}.html`
+    );
+    const $ = cheerio.load(html);
+    const description = $('meta[name="description"]').attr('content');
+    const table = $('.content_in').find('.ftrs')[0];
+
+    const manageHistoryFunds: Fund.Manager.ManageHistoryFund[] = $(table)
+      .find('tbody tr')
+      .toArray()
+      .map((tr) => {
+        // 0: "002560"
+        // 1: "诺安和鑫灵活配置混合"
+        // 2: "估值图基金吧档案"
+        // 3: "混合型"
+        // 4: "82.17"
+        // 5: "2019-03-14 ~ 至今"
+        // 6: "2年又6天"
+        // 7: "80.80%"
+        const [code, name, _1, type, _2, date, days, rzhb] = $(tr)
+          .find('td')
+          .toArray()
+          .map((td) => $(td).text());
+        return {
+          code,
+          name,
+          type,
+          date,
+          days,
+          rzhb,
+        };
+      });
+
+    return {
+      manageHistoryFunds,
+      description,
+    };
+  } catch (error) {
+    console.log(error);
+    return {};
+  }
+}

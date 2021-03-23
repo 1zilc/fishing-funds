@@ -12,5 +12,6 @@
   "--alipay-color",
   "--wechat-color",
   "--svg-icon-color",
-  "--blur-color"
+  "--blur-color",
+  "--base-font-size"
 ]

@@ -63,9 +63,9 @@ const DetailFundContent: React.FC<DetailFundContentProps> = (props) => {
       <div className={styles.content}>
         <div className={styles.container}>
           <h3>{fund?.fixName}</h3>
-          <div>
-            {fund?.code}
-            <span className={styles.manager}>
+          <div className={styles.subTitleRow}>
+            <span>{fund?.code}</span>
+            <span>
               基金经理：
               <a onClick={openManagerDrawer}>
                 {pingzhongdata.Data_currentFundManager?.[0]?.name}

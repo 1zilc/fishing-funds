@@ -3,7 +3,7 @@
   // margin-top: 20px;
 
   section {
-    padding: 5px 0;
+    padding: 0 0;
   }
 
   &>label {
@@ -57,12 +57,13 @@
 
 
   &>section {
-    width: 50%;
+    width: 100%;
     display: flex;
     font-size: calc(11rem / var(--base-font-size));
     align-items: center;
     box-sizing: border-box;
-    padding: 5px 0 5px 25px;
+    justify-content: space-between;
+    padding: 5px 25px;
 
 
     label {
@@ -83,7 +84,7 @@
     width: 100%;
     align-items: center;
     line-height: 20px;
-    padding: 5px 0 5px 25px;
+    padding: 5px 25px;
 
     span {
       display: inline-block;

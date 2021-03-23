@@ -36,7 +36,8 @@ const SameFundList: React.FC<SameFundListProps> = ({ swithSameType }) => {
         const [code, name, value] = sameFund.split('_');
         if (hash.indexOf(code) < 0) {
           funds.push({
-            code: code,
+            code,
+            name,
             cyfe: 0,
           });
           hash.push(code);
