@@ -10,12 +10,7 @@ import { ReactComponent as SettingIcon } from '@/assets/icons/setting.svg';
 import { ReactComponent as LinkIcon } from '@/assets/icons/link.svg';
 import { ReactComponent as LineCharIcon } from '@/assets/icons/line-chart.svg';
 import { ReactComponent as TShirtIcon } from '@/assets/icons/t-shirt.svg';
-import {
-  getSystemSetting,
-  setSystemSetting,
-  getFundApiTypeSetting,
-  setFundApiTypeSetting,
-} from '@/actions/setting';
+import { getSystemSetting, setSystemSetting } from '@/actions/setting';
 import { StoreState } from '@/reducers/types';
 import * as Enums from '@/utils/enums';
 import styles from './index.scss';
@@ -32,6 +27,7 @@ const { app } = remote;
 
 const SettingContent: React.FC<SettingContentProps> = (props) => {
   const {
+    fundApiTypeSetting,
     conciseSetting,
     lowKeySetting,
     autoStartSetting,
@@ -48,7 +44,7 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
   const isUpdateAvaliable = !!updateInfo.version;
 
   // 数据来源
-  const fundApiTypeSetting = getFundApiTypeSetting();
+  const [fundapiType, setFundApiType] = useState(fundApiTypeSetting);
   // 外观设置
   const [concise, setConcise] = useState(conciseSetting);
   const [lowKey, setLowKey] = useState(lowKeySetting);
@@ -59,14 +55,14 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
   const [autoStart, setAutoStart] = useState(autoStartSetting);
   const [autoFresh, setAutoFresh] = useState(autoFreshSetting);
   const [freshDelay, setFreshDelay] = useState(freshDelaySetting);
-  const [fundapiType, setFundApiType] = useState(fundApiTypeSetting);
+
   const [autoCheckUpdate, setAutoCheckUpdate] = useState(
     autoCheckUpdateSetting
   );
 
   const onSave = () => {
-    setFundApiTypeSetting(fundapiType);
     setSystemSetting({
+      fundApiTypeSetting: fundapiType,
       conciseSetting: concise,
       lowKeySetting: lowKey,
       autoStartSetting: autoStart,

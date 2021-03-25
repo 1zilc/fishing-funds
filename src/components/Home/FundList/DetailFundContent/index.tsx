@@ -30,7 +30,9 @@ export interface DetailFundContentProps {
 const DetailFundContent: React.FC<DetailFundContentProps> = (props) => {
   const { code } = props;
   const [fund, setFund] = useState<Fund.FixData>({});
-  const [pingzhongdata, setPingzhongdata] = useState<Fund.PingzhongData>({});
+  const [pingzhongdata, setPingzhongdata] = useState<
+    Fund.PingzhongData | Record<string, any>
+  >({});
 
   const [
     showManagerDrawer,

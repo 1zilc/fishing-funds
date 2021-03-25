@@ -21,7 +21,7 @@ const ManageHistoryFundList: React.FC<ManageHistoryFundListProps> = ({
     throwOnError: true,
     defaultParams: [],
     onSuccess: (res) => {
-      setManageHistoryFundList(res.filter((_) => !!_));
+      setManageHistoryFundList(res.filter((_) => !!_) as Fund.ResponseItem[]);
     },
   });
 

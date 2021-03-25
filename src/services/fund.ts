@@ -94,6 +94,7 @@ export async function FromTencent(code: string) {
     const gszzl = NP.times(NP.divide(NP.minus(gsz, dwjz), dwjz), 100).toFixed(
       2
     );
+
     return {
       name,
       dwjz,

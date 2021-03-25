@@ -1,5 +1,6 @@
 declare namespace System {
   export interface Setting {
+    fundApiTypeSetting: number;
     conciseSetting: boolean; // 简洁模式
     lowKeySetting: boolean; // 低调模式
     autoStartSetting: boolean; // 自动启动
