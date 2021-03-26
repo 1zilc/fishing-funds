@@ -1,5 +1,8 @@
 import NP from 'number-precision';
 import dayjs from 'dayjs';
+import { remote } from 'electron';
+import * as Enums from '@/utils/enums';
+const { nativeTheme } = remote;
 
 export function Yang(num: string | number | undefined) {
   if (num === undefined) {
@@ -133,5 +136,19 @@ export function parseRemoteFunds(code: string) {
     })()`);
   } catch {
     return [];
+  }
+}
+
+export function updateSystemTheme(setting: Enums.SystemThemeType) {
+  switch (setting) {
+    case Enums.SystemThemeType.Light:
+      nativeTheme.themeSource = 'light';
+      break;
+    case Enums.SystemThemeType.Dark:
+      nativeTheme.themeSource = 'dark';
+      break;
+    case Enums.SystemThemeType.Auto:
+    default:
+      nativeTheme.themeSource = 'system';
   }
 }

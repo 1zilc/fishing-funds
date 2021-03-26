@@ -94,3 +94,9 @@ export enum ManagerPowerType {
   Appraise,
   Profit,
 }
+
+export enum SystemThemeType {
+  Auto,
+  Light,
+  Dark,
+}

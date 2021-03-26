@@ -15,7 +15,6 @@ import { getCurrentHours } from '@/actions/time';
 import { updateAvaliable } from '@/actions/updater';
 import { getFundConfig, getFunds, updateFund } from '@/actions/fund';
 import * as Utils from '@/utils';
-
 const { nativeTheme } = remote;
 
 export function useWorkDayTimeToDo(
@@ -102,9 +101,11 @@ export function useUpdater() {
 export function useNativeTheme() {
   const [darkMode, setDarkMode] = useState(nativeTheme.shouldUseDarkColors);
   useLayoutEffect(() => {
+    const { systemThemeSetting } = getSystemSetting();
     const listener = ipcRenderer.on('nativeTheme-updated', (e, data) => {
       setDarkMode(data.darkMode);
     });
+    Utils.updateSystemTheme(systemThemeSetting);
     return () => {
       listener.removeAllListeners('nativeTheme-updated');
     };
@@ -149,7 +150,6 @@ export function useSyncFixFundSetting() {
             name: responseFund?.name,
           });
         });
-      console.log(getFundConfig());
     } catch (error) {
       console.log(error);
     }

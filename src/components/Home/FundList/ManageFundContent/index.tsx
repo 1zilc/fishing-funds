@@ -31,9 +31,7 @@ export interface ManageFundContentProps {
   onEnter: () => void;
   onClose: () => void;
 }
-export interface FundSortItem {
-  id: string;
-}
+
 const defaultEdifFund = {
   name: '',
   cyfe: 0,
@@ -42,12 +40,12 @@ const defaultEdifFund = {
 const { dialog } = remote;
 const ManageFundContent: React.FC<ManageFundContentProps> = (props) => {
   const [sortFundConfig, setSortFundConfig] = useState<
-    (Fund.SettingItem & FundSortItem)[]
+    (Fund.SettingItem & Fund.SortRow)[]
   >([]);
   const [editFund, setEditFund] = useState<EditFundType>(defaultEdifFund);
   const runLoadFunds = useActions(loadFunds);
   const freshFunds = useScrollToTop({ after: runLoadFunds });
-  const { done: updateFundSeetingDone } = useSyncFixFundSetting();
+  const { done: syncFundSettingDone } = useSyncFixFundSetting();
 
   const [
     showAddFundDrawer,
@@ -99,7 +97,7 @@ const ManageFundContent: React.FC<ManageFundContentProps> = (props) => {
     }
   };
 
-  useEffect(updateSortFundConfig, [updateFundSeetingDone]);
+  useEffect(updateSortFundConfig, [syncFundSettingDone]);
 
   return (
     <CustomDrawerContent
@@ -112,54 +110,58 @@ const ManageFundContent: React.FC<ManageFundContentProps> = (props) => {
       onClose={props.onClose}
     >
       <div className={styles.content}>
-        {updateFundSeetingDone ? (
-          <ReactSortable
-            animation={200}
-            delay={2}
-            list={sortFundConfig}
-            setList={onSortFundConfig}
-            dragClass={styles.dragItem}
-            swap
-          >
-            {sortFundConfig.map((fund) => {
-              return (
-                <div key={fund.code} className={styles.row}>
-                  <RemoveIcon
-                    className={styles.remove}
-                    onClick={(e) => {
-                      onRemoveFund(fund);
-                      e.stopPropagation();
-                    }}
-                  />
-                  <div className={styles.inner}>
-                    <div className={styles.name}>
-                      {fund.name}
-                      <span className={styles.code}>（{fund.code}）</span>
+        {sortFundConfig.length ? (
+          syncFundSettingDone ? (
+            <ReactSortable
+              animation={200}
+              delay={2}
+              list={sortFundConfig}
+              setList={onSortFundConfig}
+              dragClass={styles.dragItem}
+              swap
+            >
+              {sortFundConfig.map((fund) => {
+                return (
+                  <div key={fund.code} className={styles.row}>
+                    <RemoveIcon
+                      className={styles.remove}
+                      onClick={(e) => {
+                        onRemoveFund(fund);
+                        e.stopPropagation();
+                      }}
+                    />
+                    <div className={styles.inner}>
+                      <div className={styles.name}>
+                        {fund.name}
+                        <span className={styles.code}>（{fund.code}）</span>
+                      </div>
+                      <div>
+                        <span className={styles.cyfe}>
+                          持有份额：{fund.cyfe.toFixed(2)}
+                          <EditIcon
+                            className={styles.editor}
+                            onClick={() => {
+                              setEditFund({
+                                name: fund.name,
+                                cyfe: fund.cyfe,
+                                code: fund.code,
+                              });
+                              openEditDrawer();
+                            }}
+                          />
+                        </span>
+                      </div>
                     </div>
-                    <div>
-                      <span className={styles.cyfe}>
-                        持有份额：{fund.cyfe.toFixed(2)}
-                        <EditIcon
-                          className={styles.editor}
-                          onClick={() => {
-                            setEditFund({
-                              name: fund.name,
-                              cyfe: fund.cyfe,
-                              code: fund.code,
-                            });
-                            openEditDrawer();
-                          }}
-                        />
-                      </span>
-                    </div>
+                    <MenuIcon className={styles.menu} />
                   </div>
-                  <MenuIcon className={styles.menu} />
-                </div>
-              );
-            })}
-          </ReactSortable>
+                );
+              })}
+            </ReactSortable>
+          ) : (
+            <Empty text="正在同步基金设置..." />
+          )
         ) : (
-          <Empty text="正在同步基金设置..." />
+          <Empty text="暂未自选基金..." />
         )}
       </div>
       <div

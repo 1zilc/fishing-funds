@@ -1,18 +1,22 @@
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import classnames from 'classnames';
 import { useSelector } from 'react-redux';
 import { InputNumber, Radio, Badge, Switch, Slider } from 'antd';
 import Logo from '@/components/Logo';
 import WalletCarousel from '@/components/WalletCarousel';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
-import { HomeContext } from '@/components/Home';
 import { ReactComponent as SettingIcon } from '@/assets/icons/setting.svg';
 import { ReactComponent as LinkIcon } from '@/assets/icons/link.svg';
 import { ReactComponent as LineCharIcon } from '@/assets/icons/line-chart.svg';
 import { ReactComponent as TShirtIcon } from '@/assets/icons/t-shirt.svg';
-import { getSystemSetting, setSystemSetting } from '@/actions/setting';
+import {
+  getSystemSetting,
+  setSystemSetting,
+  defalutSystemSetting,
+} from '@/actions/setting';
 import { StoreState } from '@/reducers/types';
 import * as Enums from '@/utils/enums';
+import * as Utils from '@/utils';
 import styles from './index.scss';
 
 const { version } = require('@/package.json');
@@ -30,13 +34,13 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
     fundApiTypeSetting,
     conciseSetting,
     lowKeySetting,
+    baseFontSizeSetting,
+    systemThemeSetting,
     autoStartSetting,
     autoFreshSetting,
     freshDelaySetting,
     autoCheckUpdateSetting,
-    baseFontSizeSetting,
   } = getSystemSetting();
-  const { varibleColors } = useContext(HomeContext);
 
   const updateInfo = useSelector(
     (state: StoreState) => state.updater.updateInfo
@@ -48,9 +52,8 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
   // 外观设置
   const [concise, setConcise] = useState(conciseSetting);
   const [lowKey, setLowKey] = useState(lowKeySetting);
-  const [baseFontSize, setBaseFontSize] = useState(
-    baseFontSizeSetting || varibleColors['--base-font-size']
-  );
+  const [baseFontSize, setBaseFontSize] = useState(baseFontSizeSetting);
+  const [systemTheme, setSystemTheme] = useState(systemThemeSetting);
   // 通用设置
   const [autoStart, setAutoStart] = useState(autoStartSetting);
   const [autoFresh, setAutoFresh] = useState(autoFreshSetting);
@@ -64,15 +67,17 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
       fundApiTypeSetting: fundapiType,
       conciseSetting: concise,
       lowKeySetting: lowKey,
+      baseFontSizeSetting: baseFontSize,
+      systemThemeSetting: systemTheme,
       autoStartSetting: autoStart,
       autoFreshSetting: autoFresh,
-      freshDelaySetting: freshDelay || 1,
+      freshDelaySetting: freshDelay || defalutSystemSetting.freshDelaySetting,
       autoCheckUpdateSetting: autoCheckUpdate,
-      baseFontSizeSetting: baseFontSize,
     });
     app.setLoginItemSettings({
       openAtLogin: autoStart,
     });
+    Utils.updateSystemTheme(systemTheme);
     props.onEnter();
   };
 
@@ -159,6 +164,21 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
                 defaultValue={baseFontSize}
                 onChange={setBaseFontSize}
                 step={0.1}
+              />
+            </section>
+            <section>
+              <label>系统主题：</label>
+              <Radio.Group
+                optionType="button"
+                size="small"
+                buttonStyle="solid"
+                options={[
+                  { label: '亮', value: Enums.SystemThemeType.Light },
+                  { label: '暗', value: Enums.SystemThemeType.Dark },
+                  { label: '自动', value: Enums.SystemThemeType.Auto },
+                ]}
+                onChange={(e) => setSystemTheme(e.target.value)}
+                value={systemTheme}
               />
             </section>
           </div>
