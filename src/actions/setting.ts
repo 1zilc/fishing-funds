@@ -11,6 +11,7 @@ export const defalutSystemSetting: System.Setting = {
   systemThemeSetting: Enums.SystemThemeType.Auto,
 
   autoStartSetting: false,
+  adjustmentNotificationSetting: false,
   autoFreshSetting: true,
   freshDelaySetting: 1,
   autoCheckUpdateSetting: true,

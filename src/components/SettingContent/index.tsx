@@ -37,6 +37,7 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
     baseFontSizeSetting,
     systemThemeSetting,
     autoStartSetting,
+    adjustmentNotificationSetting,
     autoFreshSetting,
     freshDelaySetting,
     autoCheckUpdateSetting,
@@ -56,6 +57,9 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
   const [systemTheme, setSystemTheme] = useState(systemThemeSetting);
   // 通用设置
   const [autoStart, setAutoStart] = useState(autoStartSetting);
+  const [adjustmentNotification, setAdjustmentNotification] = useState(
+    adjustmentNotificationSetting
+  );
   const [autoFresh, setAutoFresh] = useState(autoFreshSetting);
   const [freshDelay, setFreshDelay] = useState(freshDelaySetting);
   const [autoCheckUpdate, setAutoCheckUpdate] = useState(
@@ -70,6 +74,7 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
       baseFontSizeSetting: baseFontSize,
       systemThemeSetting: systemTheme,
       autoStartSetting: autoStart,
+      adjustmentNotificationSetting: adjustmentNotification,
       autoFreshSetting: autoFresh,
       freshDelaySetting: freshDelay || defalutSystemSetting.freshDelaySetting,
       autoCheckUpdateSetting: autoCheckUpdate,
@@ -77,7 +82,7 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
     app.setLoginItemSettings({
       openAtLogin: autoStart,
     });
-    Utils.updateSystemTheme(systemTheme);
+    Utils.UpdateSystemTheme(systemTheme);
     props.onEnter();
   };
 
@@ -195,6 +200,14 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
                 size="small"
                 checked={autoStart}
                 onChange={setAutoStart}
+              />
+            </section>
+            <section>
+              <label>调仓提醒：</label>
+              <Switch
+                size="small"
+                checked={adjustmentNotification}
+                onChange={setAdjustmentNotification}
               />
             </section>
             <section>

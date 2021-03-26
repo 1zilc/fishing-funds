@@ -1,6 +1,7 @@
 import NP from 'number-precision';
 import dayjs from 'dayjs';
 import { remote } from 'electron';
+
 import * as Enums from '@/utils/enums';
 const { nativeTheme } = remote;
 
@@ -81,6 +82,18 @@ export function JudgeFixTime(timestamp: number) {
   return (isWorkDay && isFixTime) || !isWorkDay;
 }
 
+export function JudgeAdjustmentNotificationTime(timestamp: number) {
+  const now = dayjs(timestamp);
+  const hour = now.get('hour');
+  const day = now.get('day');
+  const minute = now.get('minute');
+  const isWorkDay = day >= 1 && day <= 5;
+  return {
+    isAdjustmentNotificationTime: isWorkDay && hour === 14 && minute >= 30,
+    now,
+  };
+}
+
 //TODO: 类型推断有问题
 export function getVariblesColor(varibles: string[]) {
   return varibles.reduce<{ [index: string]: string }>((colorMap, varible) => {
@@ -128,7 +141,7 @@ export function parsepingzhongdata(code: string) {
   }
 }
 
-export function parseRemoteFunds(code: string) {
+export function ParseRemoteFunds(code: string) {
   try {
     return eval(`(() => {
       ${code}
@@ -139,7 +152,7 @@ export function parseRemoteFunds(code: string) {
   }
 }
 
-export function updateSystemTheme(setting: Enums.SystemThemeType) {
+export function UpdateSystemTheme(setting: Enums.SystemThemeType) {
   switch (setting) {
     case Enums.SystemThemeType.Light:
       nativeTheme.themeSource = 'light';

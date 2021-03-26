@@ -366,7 +366,7 @@ export async function GetRemoteFundsFromEastmoney() {
         retry: 0,
       }
     );
-    return Utils.parseRemoteFunds(body);
+    return Utils.ParseRemoteFunds(body);
   } catch (error) {
     console.log(error);
     return [];
