@@ -83,6 +83,7 @@ const createMenubar = async () => {
     preloadWindow: true,
     showOnAllWorkspaces: false,
     showDockIcon: false,
+
     browserWindow: {
       backgroundColor: '#fff',
       transparent: false,
@@ -98,6 +99,7 @@ const createMenubar = async () => {
         enableRemoteModule: true,
         nodeIntegration: true,
         devTools: !app.isPackaged,
+        webviewTag: true,
       },
     },
   });

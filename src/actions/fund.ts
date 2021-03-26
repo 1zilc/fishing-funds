@@ -99,14 +99,23 @@ export function addFund(fund: Fund.SettingItem) {
   }
 }
 
-export function updateFund(fund: { code: string; cyfe: number }) {
+export function updateFund(fund: {
+  code: string;
+  cyfe?: number;
+  name?: string;
+}) {
   const fundConfig: Fund.SettingItem[] = Utils.GetStorage(
     CONST.STORAGE.FUND_SETTING,
     []
   );
   fundConfig.forEach((item) => {
     if (fund.code === item.code) {
-      item.cyfe = fund.cyfe;
+      if (fund.cyfe !== undefined) {
+        item.cyfe = fund.cyfe;
+      }
+      if (fund.name !== undefined) {
+        item.name = fund.name;
+      }
     }
   });
   Utils.SetStorage(CONST.STORAGE.FUND_SETTING, fundConfig);
@@ -178,7 +187,6 @@ export function calcFunds(funds: Fund.ResponseItem[]) {
 export function loadFunds() {
   return async (dispatch: Dispatch, getState: GetState) => {
     try {
-      console.log(getState());
       dispatch({ type: SET_FUNDS_LOADING, payload: true });
       const funds = await getFunds();
       const now = dayjs().format('MM-DD HH:mm:ss');

@@ -55,7 +55,6 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
   const [autoStart, setAutoStart] = useState(autoStartSetting);
   const [autoFresh, setAutoFresh] = useState(autoFreshSetting);
   const [freshDelay, setFreshDelay] = useState(freshDelaySetting);
-
   const [autoCheckUpdate, setAutoCheckUpdate] = useState(
     autoCheckUpdateSetting
   );

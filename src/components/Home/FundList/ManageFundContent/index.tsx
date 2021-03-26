@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useBoolean } from 'ahooks';
 import { ReactSortable } from 'react-sortablejs';
 import { remote } from 'electron';
@@ -8,6 +8,7 @@ import { ReactComponent as MenuIcon } from '@/assets/icons/menu.svg';
 import { ReactComponent as RemoveIcon } from '@/assets/icons/remove.svg';
 import { ReactComponent as EditIcon } from '@/assets/icons/edit.svg';
 import CustomDrawer from '@/components/CustomDrawer';
+import Empty from '@/components/Empty';
 import AddFundContent from '@/components/Home/FundList/AddFundContent';
 import EditFundContent, {
   EditFundType,
@@ -19,12 +20,19 @@ import {
   deleteFund,
   setFundConfig,
 } from '@/actions/fund';
-import { useActions, useScrollToTop } from '@/utils/hooks';
+import {
+  useActions,
+  useScrollToTop,
+  useSyncFixFundSetting,
+} from '@/utils/hooks';
 import styles from './index.scss';
 
 export interface ManageFundContentProps {
   onEnter: () => void;
   onClose: () => void;
+}
+export interface FundSortItem {
+  id: string;
 }
 const defaultEdifFund = {
   name: '',
@@ -33,13 +41,14 @@ const defaultEdifFund = {
 };
 const { dialog } = remote;
 const ManageFundContent: React.FC<ManageFundContentProps> = (props) => {
-  const { fundConfig } = getFundConfig();
-  const [sortFundConfig, setSortFundConfig] = useState(
-    fundConfig.map((_) => ({ ..._, id: _.code }))
-  );
+  const [sortFundConfig, setSortFundConfig] = useState<
+    (Fund.SettingItem & FundSortItem)[]
+  >([]);
   const [editFund, setEditFund] = useState<EditFundType>(defaultEdifFund);
   const runLoadFunds = useActions(loadFunds);
   const freshFunds = useScrollToTop({ after: runLoadFunds });
+  const { done: updateFundSeetingDone } = useSyncFixFundSetting();
+
   const [
     showAddFundDrawer,
     {
@@ -64,11 +73,15 @@ const ManageFundContent: React.FC<ManageFundContentProps> = (props) => {
   };
 
   const onSortFundConfig = (sortList: EditFundType[]) => {
-    const fundConfig = sortList.map((item) => ({
-      name: item.name,
-      cyfe: item.cyfe,
-      code: item.code,
-    }));
+    const { codeMap } = getFundConfig();
+    const fundConfig = sortList.map((item) => {
+      const fund = codeMap[item.code];
+      return {
+        name: fund.name,
+        cyfe: fund.cyfe,
+        code: fund.code,
+      };
+    });
     setFundConfig(fundConfig);
     updateSortFundConfig();
   };
@@ -86,6 +99,8 @@ const ManageFundContent: React.FC<ManageFundContentProps> = (props) => {
     }
   };
 
+  useEffect(updateSortFundConfig, [updateFundSeetingDone]);
+
   return (
     <CustomDrawerContent
       title="管理基金"
@@ -97,51 +112,55 @@ const ManageFundContent: React.FC<ManageFundContentProps> = (props) => {
       onClose={props.onClose}
     >
       <div className={styles.content}>
-        <ReactSortable
-          animation={200}
-          delay={2}
-          list={sortFundConfig}
-          setList={onSortFundConfig}
-          dragClass={styles.dragItem}
-          swap
-        >
-          {sortFundConfig.map((fund) => {
-            return (
-              <div key={fund.code} className={styles.row}>
-                <RemoveIcon
-                  className={styles.remove}
-                  onClick={(e) => {
-                    onRemoveFund(fund);
-                    e.stopPropagation();
-                  }}
-                />
-                <div className={styles.inner}>
-                  <div className={styles.name}>
-                    {fund.name}
-                    <span className={styles.code}>（{fund.code}）</span>
+        {updateFundSeetingDone ? (
+          <ReactSortable
+            animation={200}
+            delay={2}
+            list={sortFundConfig}
+            setList={onSortFundConfig}
+            dragClass={styles.dragItem}
+            swap
+          >
+            {sortFundConfig.map((fund) => {
+              return (
+                <div key={fund.code} className={styles.row}>
+                  <RemoveIcon
+                    className={styles.remove}
+                    onClick={(e) => {
+                      onRemoveFund(fund);
+                      e.stopPropagation();
+                    }}
+                  />
+                  <div className={styles.inner}>
+                    <div className={styles.name}>
+                      {fund.name}
+                      <span className={styles.code}>（{fund.code}）</span>
+                    </div>
+                    <div>
+                      <span className={styles.cyfe}>
+                        持有份额：{fund.cyfe.toFixed(2)}
+                        <EditIcon
+                          className={styles.editor}
+                          onClick={() => {
+                            setEditFund({
+                              name: fund.name,
+                              cyfe: fund.cyfe,
+                              code: fund.code,
+                            });
+                            openEditDrawer();
+                          }}
+                        />
+                      </span>
+                    </div>
                   </div>
-                  <div>
-                    <span className={styles.cyfe}>
-                      持有份额：{fund.cyfe.toFixed(2)}
-                      <EditIcon
-                        className={styles.editor}
-                        onClick={() => {
-                          setEditFund({
-                            name: fund.name,
-                            cyfe: fund.cyfe,
-                            code: fund.code,
-                          });
-                          openEditDrawer();
-                        }}
-                      />
-                    </span>
-                  </div>
+                  <MenuIcon className={styles.menu} />
                 </div>
-                <MenuIcon className={styles.menu} />
-              </div>
-            );
-          })}
-        </ReactSortable>
+              );
+            })}
+          </ReactSortable>
+        ) : (
+          <Empty text="正在同步基金设置..." />
+        )}
       </div>
       <div
         className={styles.add}
