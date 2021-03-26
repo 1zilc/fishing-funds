@@ -8,7 +8,7 @@ import styles from './index.scss';
 export interface CoinsProps {
   num: number;
 }
-const wallets = new Array(22).fill('').map((_, index) => {
+const wallets = new Array(25).fill('').map((_, index) => {
   const { ReactComponent } = require(`@/assets/icons/wallet/${index}.svg`);
   return ReactComponent;
 });
