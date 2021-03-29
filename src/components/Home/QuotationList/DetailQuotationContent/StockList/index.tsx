@@ -17,6 +17,7 @@ const StockList: React.FC<HistoryValueProps> = ({ code }) => {
     Services.Quotation.GetStocksFromEasymoney,
     {
       throwOnError: true,
+      pollingInterval: 1000 * 60,
       defaultParams: [code],
       onSuccess: setStockList,
     }
@@ -25,19 +26,19 @@ const StockList: React.FC<HistoryValueProps> = ({ code }) => {
   const columns = [
     {
       title: '代码',
-      dataIndex: 'f12',
+      dataIndex: 'code',
     },
     {
       title: '名称',
-      dataIndex: 'f14',
+      dataIndex: 'name',
     },
     {
       title: '最新价',
-      dataIndex: 'f2',
+      dataIndex: 'zxj',
     },
     {
       title: '涨跌幅',
-      dataIndex: 'f3',
+      dataIndex: 'zdf',
       align: 'right',
       render: (text: number) => (
         <div className={text < 0 ? 'text-down' : 'text-up'}>
@@ -51,7 +52,7 @@ const StockList: React.FC<HistoryValueProps> = ({ code }) => {
     <div className={styles.content}>
       <Table
         loading={listLoading}
-        rowKey="x"
+        rowKey="code"
         size="small"
         columns={columns}
         dataSource={stockList}

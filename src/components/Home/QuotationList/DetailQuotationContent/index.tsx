@@ -5,6 +5,7 @@ import { Tabs } from 'antd';
 
 import RealTimeFundFlow from '@/components/Home/QuotationList/DetailQuotationContent/RealTimeFundFlow';
 import StockList from '@/components/Home/QuotationList/DetailQuotationContent/StockList';
+import RealTimeTransaction from '@/components/Home/QuotationList/DetailQuotationContent/RealTimeTransaction';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
 
 import * as Services from '@/services';
@@ -79,6 +80,17 @@ const DetailQuotationContent: React.FC<DetailQuotationContentProps> = (
           >
             <Tabs.TabPane tab="实时资金流向" key={0}>
               <RealTimeFundFlow code={code} />
+            </Tabs.TabPane>
+          </Tabs>
+        </div>
+        <div className={styles.container}>
+          <Tabs
+            defaultActiveKey={String(0)}
+            animated={{ tabPane: true }}
+            tabBarGutter={15}
+          >
+            <Tabs.TabPane tab="实时成交分布" key={0}>
+              <RealTimeTransaction code={code} />
             </Tabs.TabPane>
           </Tabs>
         </div>

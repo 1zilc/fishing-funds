@@ -10,7 +10,6 @@ import styles from './index.scss';
 
 export interface StockWareHouseProps {
   code: string;
-  stockCodes: string[];
 }
 interface TooltipProps {
   item: Fund.WareHouse;
@@ -30,10 +29,7 @@ const Tooltip: React.FC<TooltipProps> = (props) => {
   );
 };
 
-const RealTimeTransaction: React.FC<StockWareHouseProps> = ({
-  code,
-  stockCodes,
-}) => {
+const RealTimeTransaction: React.FC<StockWareHouseProps> = ({ code }) => {
   const chartRef = useRef<HTMLDivElement>(null);
   const [chartInstance, setChartInstance] = useState<echarts.ECharts | null>(
     null
@@ -48,16 +44,17 @@ const RealTimeTransaction: React.FC<StockWareHouseProps> = ({
     setChartInstance(instance);
   };
 
-  const { run: runGetStockWareHouseFromEastmoney } = useRequest(
-    Services.Fund.GetStockWareHouseFromEastmoney,
+  const { run: runGetTransactionFromEasymoney } = useRequest(
+    Services.Quotation.GetTransactionFromEasymoney,
     {
       manual: true,
       throwOnError: true,
+      pollingInterval: 1000 * 60,
       onSuccess: (result) => {
         chartInstance?.setOption({
           backgroundColor: 'transparent',
           title: {
-            text: `持仓前${result.length}股票`,
+            text: `分布情况`,
             left: 'center',
             top: 0,
             textStyle: {
@@ -74,47 +71,73 @@ const RealTimeTransaction: React.FC<StockWareHouseProps> = ({
           },
           tooltip: {
             trigger: 'item',
-            formatter: (params: any) =>
-              renderToString(<Tooltip item={params.data.item} />),
           },
           series: [
             {
-              name: '持仓占比',
+              name: '交易金额(亿元)',
               type: 'pie',
               radius: '64%',
               center: ['50%', '50%'],
-              data: result.map((item) => {
-                return {
-                  value: item.ccb,
-                  name: item.name,
+              data: [
+                {
+                  name: '超大单流入',
+                  value: result.cddlr,
                   itemStyle: {
-                    color:
-                      item.zdf >= 0
-                        ? varibleColors['--increase-color']
-                        : varibleColors['--reduce-color'],
+                    color: darkMode ? '#431418' : '#820014',
                   },
-                  item,
-                };
-              }),
-              roseType: 'radius',
+                },
+                {
+                  name: '大单流入',
+                  value: result.ddlr,
+                  itemStyle: {
+                    color: darkMode ? '#791a1f' : '#cf1322',
+                  },
+                },
+                {
+                  name: '中单流入',
+                  value: result.zdlr,
+                  itemStyle: {
+                    color: darkMode ? '#d32029' : '#ff4d4f',
+                  },
+                },
+                {
+                  name: '小单流入',
+                  value: result.xdlr,
+                  itemStyle: {
+                    color: darkMode ? '#f37370' : '#ffa39e',
+                  },
+                },
+                {
+                  name: '小单流出',
+                  value: result.xdlc,
+                  itemStyle: {
+                    color: darkMode ? '#8fd460' : '#b7eb8f',
+                  },
+                },
+                {
+                  name: '中单流出',
+                  value: result.zdlc,
+                  itemStyle: {
+                    color: darkMode ? '#49aa19' : '#73d13d',
+                  },
+                },
+                {
+                  name: '大单流出',
+                  value: result.ddlc,
+                  itemStyle: {
+                    color: darkMode ? '#306317' : '#389e0d',
+                  },
+                },
+                {
+                  name: '超大单流出',
+                  value: result.cddlc,
+                  itemStyle: {
+                    color: darkMode ? '#1d3712' : '#135200',
+                  },
+                },
+              ],
               label: {
                 color: varibleColors['--main-text-color'],
-              },
-              labelLine: {
-                lineStyle: {
-                  color: varibleColors['--main-text-color'],
-                },
-                smooth: 0.2,
-                length: 10,
-                length2: 20,
-              },
-              itemStyle: {
-                color: varibleColors['--main-text-color'],
-                borderRadius: 10,
-                borderColor: varibleColors['--background-color'],
-                borderWidth: 1,
-                // shadowBlur: 200,
-                // shadowColor: 'rgba(0, 0, 0, 0.5)',
               },
               animationType: 'scale',
               animationEasing: 'elasticOut',
@@ -132,9 +155,9 @@ const RealTimeTransaction: React.FC<StockWareHouseProps> = ({
 
   useEffect(() => {
     if (chartInstance) {
-      runGetStockWareHouseFromEastmoney(code, stockCodes);
+      runGetTransactionFromEasymoney(code);
     }
-  }, [darkMode, chartInstance, stockCodes]);
+  }, [darkMode, chartInstance]);
 
   useEffect(() => {
     chartInstance?.resize({
