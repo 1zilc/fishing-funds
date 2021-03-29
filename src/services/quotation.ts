@@ -168,3 +168,35 @@ export async function GetFundFlowFromEasymoney(code: string) {
     return [];
   }
 }
+
+/**
+ *
+ * @param code 板块代码: BK0428
+ * 从天天基金获取板块个股资金流
+ */
+export async function GetStocksFromEasymoney(code: string) {
+  try {
+    const {
+      body: { data },
+    } = await got('http://push2.eastmoney.com/api/qt/clist/get', {
+      searchParams: {
+        fid: 'f62',
+        po: 1,
+        pz: 1000,
+        pn: 1,
+        np: 1,
+        invt: 2,
+        fltt: 2,
+        fields:
+          'f12,f14,f2,f3,f62,f184,f66,f69,f72,f75,f78,f81,f84,f87,f204,f205,f124',
+        fs: `b:${code}`,
+      },
+      responseType: 'json',
+      retry: 0,
+    });
+    return data?.diff || [];
+  } catch (error) {
+    console.log(error);
+    return [];
+  }
+}

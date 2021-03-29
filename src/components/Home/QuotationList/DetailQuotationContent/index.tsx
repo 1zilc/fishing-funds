@@ -3,16 +3,9 @@ import classnames from 'classnames';
 import { useRequest } from 'ahooks';
 import { Tabs } from 'antd';
 
-import Estimate from '@/components/Home/FundList/DetailFundContent/Estimate';
-import Performance from '@/components/Home/FundList/DetailFundContent/Performance';
 import RealTimeFundFlow from '@/components/Home/QuotationList/DetailQuotationContent/RealTimeFundFlow';
-import HistoryValue from '@/components/Home/FundList/DetailFundContent/HistoryValue';
-import StockWareHouse from '@/components/Home/FundList/DetailFundContent/StockWareHouse';
-import SecuritiesWareHouse from '@/components/Home/FundList/DetailFundContent/SecuritiesWareHouse';
-import SimilarRank from '@/components/Home/FundList/DetailFundContent/SimilarRank';
-import SimilarProportion from '@/components/Home/FundList/DetailFundContent/SimilarProportion';
+import StockList from '@/components/Home/QuotationList/DetailQuotationContent/StockList';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
-import SameFundList from '@/components/Home/FundList/DetailFundContent/SameFundList';
 
 import * as Services from '@/services';
 import * as Utils from '@/utils';
@@ -32,21 +25,12 @@ const DetailQuotationContent: React.FC<DetailQuotationContentProps> = (
   const [quotation, setQuotation] = useState<
     Quotation.DetailData | Record<string, any>
   >({});
-  const [pingzhongdata, setPingzhongdata] = useState<
-    Fund.PingzhongData | Record<string, any>
-  >({});
 
   useRequest(Services.Quotation.GetQuotationDetailFromEastmoney, {
     throwOnError: true,
     defaultParams: [code],
     onSuccess: setQuotation,
   });
-
-  // useRequest(Services.Fund.GetFundDetailFromEastmoney, {
-  //   throwOnError: true,
-  //   defaultParams: [code],
-  //   onSuccess: setPingzhongdata,
-  // });
 
   return (
     <CustomDrawerContent
@@ -95,6 +79,17 @@ const DetailQuotationContent: React.FC<DetailQuotationContentProps> = (
           >
             <Tabs.TabPane tab="实时资金流向" key={0}>
               <RealTimeFundFlow code={code} />
+            </Tabs.TabPane>
+          </Tabs>
+        </div>
+        <div className={styles.container}>
+          <Tabs
+            defaultActiveKey={String(0)}
+            animated={{ tabPane: true }}
+            tabBarGutter={15}
+          >
+            <Tabs.TabPane tab={`${quotation.name}个股`} key={0}>
+              <StockList code={code} />
             </Tabs.TabPane>
           </Tabs>
         </div>
