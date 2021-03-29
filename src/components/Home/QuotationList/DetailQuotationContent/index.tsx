@@ -1,0 +1,105 @@
+import React, { useState } from 'react';
+import classnames from 'classnames';
+import { useRequest } from 'ahooks';
+import { Tabs } from 'antd';
+
+import Estimate from '@/components/Home/FundList/DetailFundContent/Estimate';
+import Performance from '@/components/Home/FundList/DetailFundContent/Performance';
+import RealTimeFundFlow from '@/components/Home/QuotationList/DetailQuotationContent/RealTimeFundFlow';
+import HistoryValue from '@/components/Home/FundList/DetailFundContent/HistoryValue';
+import StockWareHouse from '@/components/Home/FundList/DetailFundContent/StockWareHouse';
+import SecuritiesWareHouse from '@/components/Home/FundList/DetailFundContent/SecuritiesWareHouse';
+import SimilarRank from '@/components/Home/FundList/DetailFundContent/SimilarRank';
+import SimilarProportion from '@/components/Home/FundList/DetailFundContent/SimilarProportion';
+import CustomDrawerContent from '@/components/CustomDrawer/Content';
+import SameFundList from '@/components/Home/FundList/DetailFundContent/SameFundList';
+
+import * as Services from '@/services';
+import * as Utils from '@/utils';
+import * as Enums from '@/utils/enums';
+import styles from './index.scss';
+
+export interface DetailQuotationContentProps {
+  onEnter: () => void;
+  onClose: () => void;
+  code: string;
+}
+
+const DetailQuotationContent: React.FC<DetailQuotationContentProps> = (
+  props
+) => {
+  const { code } = props;
+  const [quotation, setQuotation] = useState<
+    Quotation.DetailData | Record<string, any>
+  >({});
+  const [pingzhongdata, setPingzhongdata] = useState<
+    Fund.PingzhongData | Record<string, any>
+  >({});
+
+  useRequest(Services.Quotation.GetQuotationDetailFromEastmoney, {
+    throwOnError: true,
+    defaultParams: [code],
+    onSuccess: setQuotation,
+  });
+
+  // useRequest(Services.Fund.GetFundDetailFromEastmoney, {
+  //   throwOnError: true,
+  //   defaultParams: [code],
+  //   onSuccess: setPingzhongdata,
+  // });
+
+  return (
+    <CustomDrawerContent
+      title="板块详情"
+      enterText="确定"
+      onClose={props.onClose}
+      onEnter={props.onEnter}
+    >
+      <div className={styles.content}>
+        <div className={styles.container}>
+          <h3>{quotation?.name}</h3>
+          <div className={styles.subTitleRow}>
+            <span>{quotation?.code}</span>
+          </div>
+          <div className={styles.detail}>
+            <div className={styles.detailItem}>
+              <div
+                className={classnames(
+                  styles.zdf,
+                  Number(quotation.zdf) < 0 ? 'text-down' : 'text-up'
+                )}
+              >
+                {Utils.Yang(quotation.zdf)}%
+              </div>
+              <div className={styles.detailItemLabel}>涨跌幅</div>
+            </div>
+            <div className={styles.detailItem}>
+              <div className={classnames('text-up', 'text-center')}>
+                {quotation.szjs}
+              </div>
+              <div className={styles.detailItemLabel}>上涨家数</div>
+            </div>
+            <div className={styles.detailItem}>
+              <div className={classnames('text-down', 'text-center')}>
+                {quotation?.xdjs}
+              </div>
+              <div className={styles.detailItemLabel}>下跌家数</div>
+            </div>
+          </div>
+        </div>
+        <div className={styles.container}>
+          <Tabs
+            defaultActiveKey={String(0)}
+            animated={{ tabPane: true }}
+            tabBarGutter={15}
+          >
+            <Tabs.TabPane tab="实时资金流向" key={0}>
+              <RealTimeFundFlow code={code} />
+            </Tabs.TabPane>
+          </Tabs>
+        </div>
+      </div>
+    </CustomDrawerContent>
+  );
+};
+export default DetailQuotationContent;

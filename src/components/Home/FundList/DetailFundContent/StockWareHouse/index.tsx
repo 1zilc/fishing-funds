@@ -34,19 +34,18 @@ const StockWareHouse: React.FC<StockWareHouseProps> = ({
   code,
   stockCodes,
 }) => {
-  const warehouseRef = useRef<HTMLDivElement>(null);
-  const [
-    warehoseChartInstance,
-    setWarehoseChartInstance,
-  ] = useState<echarts.ECharts | null>(null);
-  const { width: warehouseRefWidth } = useSize(warehouseRef);
+  const chartRef = useRef<HTMLDivElement>(null);
+  const [chartInstance, setChartInstance] = useState<echarts.ECharts | null>(
+    null
+  );
+  const { width: chartRefWidth } = useSize(chartRef);
   const { varibleColors, darkMode } = useContext(HomeContext);
 
-  const initWarehoseChart = () => {
-    const instance = echarts.init(warehouseRef.current!, undefined, {
+  const initChart = () => {
+    const instance = echarts.init(chartRef.current!, undefined, {
       renderer: 'svg',
     });
-    setWarehoseChartInstance(instance);
+    setChartInstance(instance);
   };
 
   const { run: runGetStockWareHouseFromEastmoney } = useRequest(
@@ -55,7 +54,7 @@ const StockWareHouse: React.FC<StockWareHouseProps> = ({
       manual: true,
       throwOnError: true,
       onSuccess: (result) => {
-        warehoseChartInstance?.setOption({
+        chartInstance?.setOption({
           backgroundColor: 'transparent',
           title: {
             text: `持仓前${result.length}股票`,
@@ -128,24 +127,24 @@ const StockWareHouse: React.FC<StockWareHouseProps> = ({
   );
 
   useEffect(() => {
-    initWarehoseChart();
+    initChart();
   }, []);
 
   useEffect(() => {
-    if (warehoseChartInstance) {
+    if (chartInstance) {
       runGetStockWareHouseFromEastmoney(code, stockCodes);
     }
-  }, [darkMode, warehoseChartInstance, stockCodes]);
+  }, [darkMode, chartInstance, stockCodes]);
 
   useEffect(() => {
-    warehoseChartInstance?.resize({
-      height: warehouseRefWidth,
+    chartInstance?.resize({
+      height: chartRefWidth,
     });
-  }, [warehouseRefWidth]);
+  }, [chartRefWidth]);
 
   return (
     <div className={styles.content}>
-      <div ref={warehouseRef} style={{ width: '100%' }}></div>
+      <div ref={chartRef} style={{ width: '100%' }}></div>
     </div>
   );
 };

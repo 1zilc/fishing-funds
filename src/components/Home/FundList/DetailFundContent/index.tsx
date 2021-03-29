@@ -29,7 +29,7 @@ export interface DetailFundContentProps {
 
 const DetailFundContent: React.FC<DetailFundContentProps> = (props) => {
   const { code } = props;
-  const [fund, setFund] = useState<Fund.FixData>({});
+  const [fund, setFund] = useState<Fund.FixData | Record<string, any>>({});
   const [pingzhongdata, setPingzhongdata] = useState<
     Fund.PingzhongData | Record<string, any>
   >({});
@@ -79,7 +79,7 @@ const DetailFundContent: React.FC<DetailFundContentProps> = (props) => {
               <div
                 className={classnames(
                   styles.syl_1n,
-                  Number(pingzhongdata.syl_1n) >= 0 ? 'text-up' : 'text-down'
+                  Number(pingzhongdata.syl_1n) < 0 ? 'text-down' : 'text-up'
                 )}
               >
                 {Utils.Yang(pingzhongdata.syl_1n)}%
@@ -89,7 +89,7 @@ const DetailFundContent: React.FC<DetailFundContentProps> = (props) => {
             <div className={styles.detailItem}>
               <div
                 className={classnames(
-                  Number(fund?.fixZzl) >= 0 ? 'text-up' : 'text-down'
+                  Number(fund?.fixZzl) < 0 ? 'text-down' : 'text-up'
                 )}
               >
                 {Utils.Yang(fund?.fixZzl)}%

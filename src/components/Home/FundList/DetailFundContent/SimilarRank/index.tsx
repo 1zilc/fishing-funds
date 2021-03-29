@@ -12,23 +12,22 @@ interface SimilarRankProps {
 const SimilarRank: React.FC<SimilarRankProps> = ({
   rateInSimilarType = [],
 }) => {
-  const similarRef = useRef<HTMLDivElement>(null);
-  const [
-    similarRankChartInstance,
-    setSimilarRankChartInstance,
-  ] = useState<echarts.ECharts | null>(null);
-  const { width: similarRefWidth } = useSize(similarRef);
+  const chartRef = useRef<HTMLDivElement>(null);
+  const [chartInstance, setChartInstance] = useState<echarts.ECharts | null>(
+    null
+  );
+  const { width: chartRefWidth } = useSize(chartRef);
   const { varibleColors, darkMode } = useContext(HomeContext);
 
-  const initSimilarRankChart = () => {
-    const instance = echarts.init(similarRef.current!, undefined, {
+  const initChart = () => {
+    const instance = echarts.init(chartRef.current!, undefined, {
       renderer: 'svg',
     });
-    setSimilarRankChartInstance(instance);
+    setChartInstance(instance);
   };
 
-  const renderSimilarRankChart = () => {
-    similarRankChartInstance?.setOption({
+  const renderChart = () => {
+    chartInstance?.setOption({
       title: {
         text: '同类中排名',
         left: 'center',
@@ -82,24 +81,24 @@ const SimilarRank: React.FC<SimilarRankProps> = ({
   };
 
   useEffect(() => {
-    initSimilarRankChart();
+    initChart();
   }, []);
 
   useEffect(() => {
-    if (similarRankChartInstance) {
-      renderSimilarRankChart();
+    if (chartInstance) {
+      renderChart();
     }
-  }, [darkMode, similarRankChartInstance, rateInSimilarType]);
+  }, [darkMode, chartInstance, rateInSimilarType]);
 
   useEffect(() => {
-    similarRankChartInstance?.resize({
-      height: similarRefWidth! * 0.64,
+    chartInstance?.resize({
+      height: chartRefWidth! * 0.64,
     });
-  }, [similarRefWidth]);
+  }, [chartRefWidth]);
 
   return (
     <div className={styles.content}>
-      <div ref={similarRef} style={{ width: '100%' }}></div>
+      <div ref={chartRef} style={{ width: '100%' }}></div>
     </div>
   );
 };

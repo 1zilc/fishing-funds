@@ -12,23 +12,22 @@ interface SimilarProportionProps {
 const SimilarProportion: React.FC<SimilarProportionProps> = ({
   rateInSimilarPersent = [],
 }) => {
-  const similarRef = useRef<HTMLDivElement>(null);
-  const [
-    similarProportionChartInstance,
-    setSimilarProportionChartInstance,
-  ] = useState<echarts.ECharts | null>(null);
-  const { width: similarRefWidth } = useSize(similarRef);
+  const chartRef = useRef<HTMLDivElement>(null);
+  const [chartInstance, setChartInstance] = useState<echarts.ECharts | null>(
+    null
+  );
+  const { width: chartRefWidth } = useSize(chartRef);
   const { varibleColors, darkMode } = useContext(HomeContext);
 
-  const initSimilarProportionChart = () => {
-    const instance = echarts.init(similarRef.current!, undefined, {
+  const initChart = () => {
+    const instance = echarts.init(chartRef.current!, undefined, {
       renderer: 'svg',
     });
-    setSimilarProportionChartInstance(instance);
+    setChartInstance(instance);
   };
 
-  const renderSimilarProportionChart = () => {
-    similarProportionChartInstance?.setOption({
+  const renderChart = () => {
+    chartInstance?.setOption({
       title: {
         text: '优于同类百分比',
         left: 'center',
@@ -87,24 +86,24 @@ const SimilarProportion: React.FC<SimilarProportionProps> = ({
   };
 
   useEffect(() => {
-    initSimilarProportionChart();
+    initChart();
   }, []);
 
   useEffect(() => {
-    if (similarProportionChartInstance) {
-      renderSimilarProportionChart();
+    if (chartInstance) {
+      renderChart();
     }
-  }, [darkMode, similarProportionChartInstance, rateInSimilarPersent]);
+  }, [darkMode, chartInstance, rateInSimilarPersent]);
 
   useEffect(() => {
-    similarProportionChartInstance?.resize({
-      height: similarRefWidth! * 0.64,
+    chartInstance?.resize({
+      height: chartRefWidth! * 0.64,
     });
-  }, [similarRefWidth]);
+  }, [chartRefWidth]);
 
   return (
     <div className={styles.content}>
-      <div ref={similarRef} style={{ width: '100%' }}></div>
+      <div ref={chartRef} style={{ width: '100%' }}></div>
     </div>
   );
 };

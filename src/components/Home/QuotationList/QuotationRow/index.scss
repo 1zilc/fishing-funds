@@ -7,7 +7,7 @@
   background-color: var(--background-color);
   color: var(--main-text-color);
   z-index: 2;
-  transition: background .3s;
+  transition: background 0.3s;
   cursor: pointer;
 
   &:hover {
@@ -21,11 +21,9 @@
   }
 }
 
-
 .quotationName {
   font-weight: 600;
   font-size: calc(14rem / var(--base-font-size));
-  ;
   margin-bottom: 2px;
 }
 
@@ -57,15 +55,14 @@
   align-items: center;
   justify-content: flex-end;
 
-  svg {}
+  svg {
+  }
 }
 
 .zd {
   display: flex;
   justify-content: flex-end;
   width: 100%;
-
-
 
   .zdd,
   .zdf {
@@ -83,7 +80,7 @@
 
   svg {
     cursor: pointer;
-    fill: var(--svg-icon-color)
+    fill: var(--svg-icon-color);
   }
 }
 
@@ -104,4 +101,10 @@
     align-items: center;
     flex-wrap: wrap;
   }
+}
+.view {
+  padding: 5px;
+  text-align: center;
+  width: 100%;
+  box-sizing: border-box;
 }

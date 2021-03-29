@@ -1,4 +1,5 @@
 import React from 'react';
+import { useBoolean } from 'ahooks';
 import { Collapse } from 'react-collapse';
 import classnames from 'classnames';
 import { useDispatch } from 'react-redux';
@@ -8,6 +9,8 @@ import { ReactComponent as ArrowDownLineIcon } from '@/assets/icons/arrow-down-l
 import { ReactComponent as ArrowUpLineIcon } from '@/assets/icons/arrow-up-line.svg';
 import { ReactComponent as ArrowDownIcon } from '@/assets/icons/arrow-down.svg';
 import { ReactComponent as ArrowUpIcon } from '@/assets/icons/arrow-up.svg';
+import CustomDrawer from '@/components/CustomDrawer';
+import DetailQuotationContent from '@/components/Home/QuotationList/DetailQuotationContent';
 import { getSystemSetting } from '@/actions/setting';
 import { TOGGLE_QUOTATION_COLLAPSE } from '@/actions/quotation';
 
@@ -24,10 +27,18 @@ const arrowSize = {
   height: 12,
 };
 
-const QuotationRow: React.FC<RowProps> = (props) => {
-  const { quotation } = props;
+const QuotationRow: React.FC<RowProps> = ({ quotation }) => {
   const dispatch = useDispatch();
   const { conciseSetting } = getSystemSetting();
+
+  const [
+    showDetailDrawer,
+    {
+      setTrue: openDetailDrawer,
+      setFalse: closeDetailDrawer,
+      toggle: ToggleDetailDrawer,
+    },
+  ] = useBoolean(false);
 
   return (
     <div>
@@ -193,36 +204,42 @@ const QuotationRow: React.FC<RowProps> = (props) => {
             <span>下跌家数：</span>
             <span className={'text-down'}>{quotation.xdjs}</span>
           </section>
-          {conciseSetting && (
-            <section>
-              <span>
-                {quotation.lzgpName}({quotation.lzgpCode})：
-              </span>
-              <span
-                className={classnames(
-                  quotation.lzgpZdf < 0 ? 'text-down' : 'text-up'
-                )}
-              >
-                {Utils.Yang(quotation.lzgpZdf)} %
-              </span>
-            </section>
-          )}
-          {conciseSetting && (
-            <section>
-              <span>
-                {quotation.ldgpName}({quotation.ldgpCode})：
-              </span>
-              <span
-                className={classnames(
-                  quotation.ldgpZdf < 0 ? 'text-down' : 'text-up'
-                )}
-              >
-                {Utils.Yang(quotation.ldgpZdf)} %
-              </span>
-            </section>
-          )}
+          <section>
+            <span>
+              {quotation.lzgpName}({quotation.lzgpCode})：
+            </span>
+            <span
+              className={classnames(
+                quotation.lzgpZdf < 0 ? 'text-down' : 'text-up'
+              )}
+            >
+              {Utils.Yang(quotation.lzgpZdf)} %
+            </span>
+          </section>
+          <section>
+            <span>
+              {quotation.ldgpName}({quotation.ldgpCode})：
+            </span>
+            <span
+              className={classnames(
+                quotation.ldgpZdf < 0 ? 'text-down' : 'text-up'
+              )}
+            >
+              {Utils.Yang(quotation.ldgpZdf)} %
+            </span>
+          </section>
+          <div className={styles.view}>
+            <a onClick={openDetailDrawer}>{'查看详情 >'}</a>
+          </div>
         </div>
       </Collapse>
+      <CustomDrawer show={showDetailDrawer}>
+        <DetailQuotationContent
+          onEnter={closeDetailDrawer}
+          onClose={closeDetailDrawer}
+          code={quotation.code!}
+        />
+      </CustomDrawer>
     </div>
   );
 };

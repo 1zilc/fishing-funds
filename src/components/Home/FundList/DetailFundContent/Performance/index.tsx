@@ -20,15 +20,14 @@ const performanceTypeList = [
   { name: '最大', type: Enums.PerformanceType.Max, code: 'se' },
 ];
 const Performance: React.FC<PerformanceProps> = ({ code }) => {
-  const performanceRef = useRef<HTMLDivElement>(null);
-  const [
-    performanceChartInstance,
-    setPerformanceChartInstance,
-  ] = useState<echarts.ECharts | null>(null);
+  const chartRef = useRef<HTMLDivElement>(null);
+  const [chartInstance, setChartInstance] = useState<echarts.ECharts | null>(
+    null
+  );
   const [performanceType, setPerformanceType] = useState(
     performanceTypeList[2]
   );
-  const { width: performanceRefWidth } = useSize(performanceRef);
+  const { width: chartRefWidth } = useSize(chartRef);
   const { varibleColors, darkMode } = useContext(HomeContext);
   const { run: runGetFundPerformanceFromEastmoney } = useRequest(
     Services.Fund.GetFundPerformanceFromEastmoney,
@@ -36,7 +35,18 @@ const Performance: React.FC<PerformanceProps> = ({ code }) => {
       manual: true,
       throwOnError: true,
       onSuccess: (result) => {
-        performanceChartInstance?.setOption({
+        console.log(
+          result?.map((_) => ({
+            ..._,
+            type: 'line',
+            showSymbol: false,
+            symbol: 'none',
+            lineStyle: {
+              width: 1,
+            },
+          })) || []
+        );
+        chartInstance?.setOption({
           title: {
             text: '',
           },
@@ -91,32 +101,29 @@ const Performance: React.FC<PerformanceProps> = ({ code }) => {
       },
     }
   );
-  const initPerformanceChart = () => {
-    const performanceChartInstance = echarts.init(
-      performanceRef.current!,
-      undefined,
-      {
-        renderer: 'svg',
-      }
-    );
-    setPerformanceChartInstance(performanceChartInstance);
+
+  const initChart = () => {
+    const chartInstance = echarts.init(chartRef.current!, undefined, {
+      renderer: 'svg',
+    });
+    setChartInstance(chartInstance);
   };
 
-  useEffect(initPerformanceChart, []);
+  useEffect(initChart, []);
 
   useEffect(() => {
     runGetFundPerformanceFromEastmoney(code, performanceType.code);
-  }, [darkMode, performanceChartInstance, performanceType.code]);
+  }, [darkMode, chartInstance, performanceType.code]);
 
   useEffect(() => {
-    performanceChartInstance?.resize({
-      height: (performanceRefWidth! * 250) / 400,
+    chartInstance?.resize({
+      height: (chartRefWidth! * 250) / 400,
     });
-  }, [performanceRefWidth]);
+  }, [chartRefWidth]);
 
   return (
     <div className={styles.content}>
-      <div ref={performanceRef} style={{ width: '100%' }}></div>
+      <div ref={chartRef} style={{ width: '100%' }}></div>
       <div className={styles.performanceSelections}>
         {performanceTypeList.map((item) => (
           <div

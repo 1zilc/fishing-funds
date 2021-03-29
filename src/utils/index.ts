@@ -165,3 +165,32 @@ export function UpdateSystemTheme(setting: Enums.SystemThemeType) {
       nativeTheme.themeSource = 'system';
   }
 }
+
+export function unitConvert(num: number) {
+  function strNumSize(tempNum: number) {
+    const stringNum = tempNum.toString();
+    const index = stringNum.indexOf('.');
+    let newNum = stringNum;
+    if (index != -1) {
+      newNum = stringNum.substring(0, index);
+    }
+    return newNum.length;
+  }
+  const moneyUnits = ['元', '万元', '亿元', '万亿'];
+  const dividend = 10000;
+  let curentNum = num;
+  //转换数字
+  let curentUnit = moneyUnits[0];
+  //转换单位
+  for (let i = 0; i < 4; i++) {
+    curentUnit = moneyUnits[i];
+    if (strNumSize(curentNum) < 5) {
+      break;
+    }
+    curentNum = curentNum / dividend;
+  }
+  return {
+    num: curentNum.toFixed(2),
+    unit: curentUnit,
+  };
+}

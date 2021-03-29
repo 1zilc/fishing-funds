@@ -113,6 +113,12 @@
   font-size: 1rem;
   text-align: center;
   padding: 15px;
+  i {
+    margin: 0 10px;
+    // width: 1px;
+    height: 100%;
+    border-left: 1px solid var(--border-color);
+  }
 }
 
 .exit {

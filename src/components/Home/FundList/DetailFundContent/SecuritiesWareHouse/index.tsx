@@ -33,19 +33,18 @@ const SecuritiesWareHouse: React.FC<SecuritiesWareHouseProps> = ({
   code,
   securitiesCodes,
 }) => {
-  const warehouseRef = useRef<HTMLDivElement>(null);
-  const [
-    warehoseChartInstance,
-    setWarehoseChartInstance,
-  ] = useState<echarts.ECharts | null>(null);
-  const { width: warehouseRefWidth } = useSize(warehouseRef);
+  const chartRef = useRef<HTMLDivElement>(null);
+  const [chartInstance, setChartInstance] = useState<echarts.ECharts | null>(
+    null
+  );
+  const { width: chartRefWidth } = useSize(chartRef);
   const { varibleColors, darkMode } = useContext(HomeContext);
 
-  const initWarehoseChart = () => {
-    const instance = echarts.init(warehouseRef.current!, undefined, {
+  const initChart = () => {
+    const instance = echarts.init(chartRef.current!, undefined, {
       renderer: 'svg',
     });
-    setWarehoseChartInstance(instance);
+    setChartInstance(instance);
   };
 
   const { run: runGetSecuritiesWareHouseFromEastmoney } = useRequest(
@@ -54,7 +53,7 @@ const SecuritiesWareHouse: React.FC<SecuritiesWareHouseProps> = ({
       manual: true,
       throwOnError: true,
       onSuccess: (result) => {
-        warehoseChartInstance?.setOption({
+        chartInstance?.setOption({
           backgroundColor: 'transparent',
           title: {
             text: `持仓前${result.length}债券`,
@@ -127,24 +126,24 @@ const SecuritiesWareHouse: React.FC<SecuritiesWareHouseProps> = ({
   );
 
   useEffect(() => {
-    initWarehoseChart();
+    initChart();
   }, []);
 
   useEffect(() => {
-    if (warehoseChartInstance) {
+    if (chartInstance) {
       runGetSecuritiesWareHouseFromEastmoney(code, securitiesCodes);
     }
-  }, [darkMode, warehoseChartInstance, securitiesCodes]);
+  }, [darkMode, chartInstance, securitiesCodes]);
 
   useEffect(() => {
-    warehoseChartInstance?.resize({
-      height: warehouseRefWidth,
+    chartInstance?.resize({
+      height: chartRefWidth,
     });
-  }, [warehouseRefWidth]);
+  }, [chartRefWidth]);
 
   return (
     <div className={styles.content}>
-      <div ref={warehouseRef} style={{ width: '100%' }}></div>
+      <div ref={chartRef} style={{ width: '100%' }}></div>
     </div>
   );
 };

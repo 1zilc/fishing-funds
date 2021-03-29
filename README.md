@@ -53,7 +53,7 @@
 
 ## 下载使用
 
-[最新版下载地址](https://ff.1zilc.top)
+[官网下载](https://ff.1zilc.top)
 
 > 注意 ⚠️：由于 Catalina 之后不支持 32 位程序，暂无 Windows32 位安装包，可自行下载源码打包
 

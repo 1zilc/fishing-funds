@@ -245,15 +245,28 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
         <div>
           <div className={styles.title}>
             <LinkIcon />
-            <span>联系作者</span>
+            <span>关于 Fishing Funds</span>
           </div>
           <div className={styles.link}>
-            <a onClick={(e) => shell.openExternal(e.target.innerHTML)}>
-              https://github.com/1zilc/fishing-funds
+            <a
+              onClick={(e) =>
+                shell.openExternal('https://github.com/1zilc/fishing-funds')
+              }
+            >
+              联系作者
+            </a>
+            <i></i>
+            <a onClick={(e) => shell.openExternal('https://ff.1zilc.top')}>
+              官方网站
+            </a>
+            <i></i>
+            <a onClick={(e) => shell.openExternal('https://ff.1zilc.top/blog')}>
+              更新日志
             </a>
           </div>
         </div>
       </div>
+
       <div className={styles.exit}>
         <button type="button" onClick={() => app.quit()}>
           退出程序
