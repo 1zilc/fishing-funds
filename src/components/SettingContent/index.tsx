@@ -1,11 +1,10 @@
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import classnames from 'classnames';
 import { useSelector } from 'react-redux';
 import { InputNumber, Radio, Badge, Switch, Slider } from 'antd';
 import Logo from '@/components/Logo';
 import WalletCarousel from '@/components/WalletCarousel';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
-import { HomeContext } from '@/components/Home';
 import { ReactComponent as SettingIcon } from '@/assets/icons/setting.svg';
 import { ReactComponent as LinkIcon } from '@/assets/icons/link.svg';
 import { ReactComponent as LineCharIcon } from '@/assets/icons/line-chart.svg';
@@ -13,11 +12,11 @@ import { ReactComponent as TShirtIcon } from '@/assets/icons/t-shirt.svg';
 import {
   getSystemSetting,
   setSystemSetting,
-  getFundApiTypeSetting,
-  setFundApiTypeSetting,
+  defalutSystemSetting,
 } from '@/actions/setting';
 import { StoreState } from '@/reducers/types';
 import * as Enums from '@/utils/enums';
+import * as Utils from '@/utils';
 import styles from './index.scss';
 
 const { version } = require('@/package.json');
@@ -32,15 +31,17 @@ const { app } = remote;
 
 const SettingContent: React.FC<SettingContentProps> = (props) => {
   const {
+    fundApiTypeSetting,
     conciseSetting,
     lowKeySetting,
+    baseFontSizeSetting,
+    systemThemeSetting,
     autoStartSetting,
+    adjustmentNotificationSetting,
     autoFreshSetting,
     freshDelaySetting,
     autoCheckUpdateSetting,
-    baseFontSizeSetting,
   } = getSystemSetting();
-  const { varibleColors } = useContext(HomeContext);
 
   const updateInfo = useSelector(
     (state: StoreState) => state.updater.updateInfo
@@ -48,36 +49,40 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
   const isUpdateAvaliable = !!updateInfo.version;
 
   // 数据来源
-  const fundApiTypeSetting = getFundApiTypeSetting();
+  const [fundapiType, setFundApiType] = useState(fundApiTypeSetting);
   // 外观设置
   const [concise, setConcise] = useState(conciseSetting);
   const [lowKey, setLowKey] = useState(lowKeySetting);
-  const [baseFontSize, setBaseFontSize] = useState(
-    baseFontSizeSetting || varibleColors['--base-font-size']
-  );
+  const [baseFontSize, setBaseFontSize] = useState(baseFontSizeSetting);
+  const [systemTheme, setSystemTheme] = useState(systemThemeSetting);
   // 通用设置
   const [autoStart, setAutoStart] = useState(autoStartSetting);
+  const [adjustmentNotification, setAdjustmentNotification] = useState(
+    adjustmentNotificationSetting
+  );
   const [autoFresh, setAutoFresh] = useState(autoFreshSetting);
   const [freshDelay, setFreshDelay] = useState(freshDelaySetting);
-  const [fundapiType, setFundApiType] = useState(fundApiTypeSetting);
   const [autoCheckUpdate, setAutoCheckUpdate] = useState(
     autoCheckUpdateSetting
   );
 
   const onSave = () => {
-    setFundApiTypeSetting(fundapiType);
     setSystemSetting({
+      fundApiTypeSetting: fundapiType,
       conciseSetting: concise,
       lowKeySetting: lowKey,
-      autoStartSetting: autoStart,
-      autoFreshSetting: autoFresh,
-      freshDelaySetting: freshDelay || 1,
-      autoCheckUpdateSetting: autoCheckUpdate,
       baseFontSizeSetting: baseFontSize,
+      systemThemeSetting: systemTheme,
+      autoStartSetting: autoStart,
+      adjustmentNotificationSetting: adjustmentNotification,
+      autoFreshSetting: autoFresh,
+      freshDelaySetting: freshDelay || defalutSystemSetting.freshDelaySetting,
+      autoCheckUpdateSetting: autoCheckUpdate,
     });
     app.setLoginItemSettings({
       openAtLogin: autoStart,
     });
+    Utils.UpdateSystemTheme(systemTheme);
     props.onEnter();
   };
 
@@ -166,6 +171,21 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
                 step={0.1}
               />
             </section>
+            <section>
+              <label>系统主题：</label>
+              <Radio.Group
+                optionType="button"
+                size="small"
+                buttonStyle="solid"
+                options={[
+                  { label: '亮', value: Enums.SystemThemeType.Light },
+                  { label: '暗', value: Enums.SystemThemeType.Dark },
+                  { label: '自动', value: Enums.SystemThemeType.Auto },
+                ]}
+                onChange={(e) => setSystemTheme(e.target.value)}
+                value={systemTheme}
+              />
+            </section>
           </div>
         </div>
         <div>
@@ -180,6 +200,14 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
                 size="small"
                 checked={autoStart}
                 onChange={setAutoStart}
+              />
+            </section>
+            <section>
+              <label>调仓提醒：</label>
+              <Switch
+                size="small"
+                checked={adjustmentNotification}
+                onChange={setAdjustmentNotification}
               />
             </section>
             <section>
@@ -217,15 +245,28 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
         <div>
           <div className={styles.title}>
             <LinkIcon />
-            <span>联系作者</span>
+            <span>关于 Fishing Funds</span>
           </div>
           <div className={styles.link}>
-            <a onClick={(e) => shell.openExternal(e.target.innerHTML)}>
-              https://github.com/1zilc/fishing-funds
+            <a
+              onClick={(e) =>
+                shell.openExternal('https://github.com/1zilc/fishing-funds')
+              }
+            >
+              联系作者
+            </a>
+            <i></i>
+            <a onClick={(e) => shell.openExternal('https://ff.1zilc.top')}>
+              官方网站
+            </a>
+            <i></i>
+            <a onClick={(e) => shell.openExternal('https://ff.1zilc.top/blog')}>
+              更新日志
             </a>
           </div>
         </div>
       </div>
+
       <div className={styles.exit}>
         <button type="button" onClick={() => app.quit()}>
           退出程序

@@ -8,33 +8,33 @@ import * as Services from '@/services';
 import * as Enums from '@/utils/enums';
 import styles from './index.scss';
 
-export interface PerformanceProps {
+export interface AfterTimeFundFlowProps {
   code: string;
 }
-const performanceTypeList = [
-  { name: '1月', type: Enums.PerformanceType.Month, code: 'm' },
-  { name: '3月', type: Enums.PerformanceType.ThreeMonth, code: 'q' },
-  { name: '6月', type: Enums.PerformanceType.HalfYear, code: 'hy' },
-  { name: '1年', type: Enums.PerformanceType.Year, code: 'y' },
-  { name: '3年', type: Enums.PerformanceType.ThreeYear, code: 'try' },
-  { name: '最大', type: Enums.PerformanceType.Max, code: 'se' },
-];
-const Performance: React.FC<PerformanceProps> = ({ code }) => {
+
+const AfterTimeFundFlow: React.FC<AfterTimeFundFlowProps> = ({ code }) => {
   const chartRef = useRef<HTMLDivElement>(null);
   const [chartInstance, setChartInstance] = useState<echarts.ECharts | null>(
     null
   );
-  const [performanceType, setPerformanceType] = useState(
-    performanceTypeList[2]
-  );
+
   const { width: chartRefWidth } = useSize(chartRef);
   const { varibleColors, darkMode } = useContext(HomeContext);
-  const { run: runGetFundPerformanceFromEastmoney } = useRequest(
-    Services.Fund.GetFundPerformanceFromEastmoney,
+  const { run: runGetAfterTimeFundFlowFromEasymoney } = useRequest(
+    Services.Quotation.GetAfterTimeFundFlowFromEasymoney,
     {
       manual: true,
       throwOnError: true,
+      pollingInterval: 1000 * 60,
       onSuccess: (result) => {
+        const seriesStyle = {
+          type: 'line',
+          showSymbol: false,
+          symbol: 'none',
+          lineStyle: {
+            width: 1,
+          },
+        };
         chartInstance?.setOption({
           title: {
             text: '',
@@ -44,7 +44,13 @@ const Performance: React.FC<PerformanceProps> = ({ code }) => {
             position: 'inside',
           },
           legend: {
-            data: result?.map(({ name }) => name) || [],
+            data: [
+              '主力净流入',
+              '超大单净流入',
+              '大单净流入',
+              '中单净流入',
+              '小单净流入',
+            ],
             textStyle: {
               color: varibleColors['--main-text-color'],
               fontSize: 10,
@@ -66,7 +72,7 @@ const Performance: React.FC<PerformanceProps> = ({ code }) => {
           yAxis: {
             type: 'value',
             axisLabel: {
-              formatter: `{value}%`,
+              formatter: `{value}亿`,
               fontSize: 10,
             },
           },
@@ -74,18 +80,40 @@ const Performance: React.FC<PerformanceProps> = ({ code }) => {
             {
               type: 'inside',
               minValueSpan: 3600 * 24 * 1000 * 7,
+              start: 90,
+              end: 100,
             },
           ],
-          series:
-            result?.map((_) => ({
-              ..._,
-              type: 'line',
-              showSymbol: false,
-              symbol: 'none',
-              lineStyle: {
-                width: 1,
-              },
-            })) || [],
+          series: [
+            {
+              name: '主力净流入',
+              data: result.map(({ datetime, zljlr }: any) => [datetime, zljlr]),
+              ...seriesStyle,
+            },
+            {
+              name: '超大单净流入',
+              data: result.map(({ datetime, cddjlr }: any) => [
+                datetime,
+                cddjlr,
+              ]),
+              ...seriesStyle,
+            },
+            {
+              name: '大单净流入',
+              data: result.map(({ datetime, ddjlr }: any) => [datetime, ddjlr]),
+              ...seriesStyle,
+            },
+            {
+              name: '中单净流入',
+              data: result.map(({ datetime, zdjlr }: any) => [datetime, zdjlr]),
+              ...seriesStyle,
+            },
+            {
+              name: '小单净流入',
+              data: result.map(({ datetime, xdjlr }: any) => [datetime, xdjlr]),
+              ...seriesStyle,
+            },
+          ],
         });
       },
     }
@@ -101,8 +129,8 @@ const Performance: React.FC<PerformanceProps> = ({ code }) => {
   useEffect(initChart, []);
 
   useEffect(() => {
-    runGetFundPerformanceFromEastmoney(code, performanceType.code);
-  }, [darkMode, chartInstance, performanceType.code]);
+    runGetAfterTimeFundFlowFromEasymoney(code);
+  }, [darkMode, chartInstance]);
 
   useEffect(() => {
     chartInstance?.resize({
@@ -113,21 +141,8 @@ const Performance: React.FC<PerformanceProps> = ({ code }) => {
   return (
     <div className={styles.content}>
       <div ref={chartRef} style={{ width: '100%' }}></div>
-      <div className={styles.performanceSelections}>
-        {performanceTypeList.map((item) => (
-          <div
-            key={item.type}
-            className={classnames(styles.performanceSelection, {
-              [styles.active]: performanceType.type === item.type,
-            })}
-            onClick={() => setPerformanceType(item)}
-          >
-            {item.name}
-          </div>
-        ))}
-      </div>
     </div>
   );
 };
 
-export default Performance;
+export default AfterTimeFundFlow;

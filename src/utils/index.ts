@@ -1,5 +1,9 @@
 import NP from 'number-precision';
 import dayjs from 'dayjs';
+import { remote } from 'electron';
+
+import * as Enums from '@/utils/enums';
+const { nativeTheme } = remote;
 
 export function Yang(num: string | number | undefined) {
   if (num === undefined) {
@@ -78,6 +82,18 @@ export function JudgeFixTime(timestamp: number) {
   return (isWorkDay && isFixTime) || !isWorkDay;
 }
 
+export function JudgeAdjustmentNotificationTime(timestamp: number) {
+  const now = dayjs(timestamp);
+  const hour = now.get('hour');
+  const day = now.get('day');
+  const minute = now.get('minute');
+  const isWorkDay = day >= 1 && day <= 5;
+  return {
+    isAdjustmentNotificationTime: isWorkDay && hour === 14 && minute >= 30,
+    now,
+  };
+}
+
 //TODO: 类型推断有问题
 export function getVariblesColor(varibles: string[]) {
   return varibles.reduce<{ [index: string]: string }>((colorMap, varible) => {
@@ -125,7 +141,7 @@ export function parsepingzhongdata(code: string) {
   }
 }
 
-export function parseRemoteFunds(code: string) {
+export function ParseRemoteFunds(code: string) {
   try {
     return eval(`(() => {
       ${code}
@@ -134,4 +150,47 @@ export function parseRemoteFunds(code: string) {
   } catch {
     return [];
   }
+}
+
+export function UpdateSystemTheme(setting: Enums.SystemThemeType) {
+  switch (setting) {
+    case Enums.SystemThemeType.Light:
+      nativeTheme.themeSource = 'light';
+      break;
+    case Enums.SystemThemeType.Dark:
+      nativeTheme.themeSource = 'dark';
+      break;
+    case Enums.SystemThemeType.Auto:
+    default:
+      nativeTheme.themeSource = 'system';
+  }
+}
+
+export function unitConvert(num: number) {
+  function strNumSize(tempNum: number) {
+    const stringNum = tempNum.toString();
+    const index = stringNum.indexOf('.');
+    let newNum = stringNum;
+    if (index != -1) {
+      newNum = stringNum.substring(0, index);
+    }
+    return newNum.length;
+  }
+  const moneyUnits = ['元', '万元', '亿元', '万亿'];
+  const dividend = 10000;
+  let curentNum = num;
+  //转换数字
+  let curentUnit = moneyUnits[0];
+  //转换单位
+  for (let i = 0; i < 4; i++) {
+    curentUnit = moneyUnits[i];
+    if (strNumSize(curentNum) < 5) {
+      break;
+    }
+    curentNum = curentNum / dividend;
+  }
+  return {
+    num: curentNum.toFixed(2),
+    unit: curentUnit,
+  };
 }

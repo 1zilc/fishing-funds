@@ -2,6 +2,7 @@ declare namespace Quotation {
   export interface SettingItem {}
 
   export interface ResponseItem {
+    code: string; // 板块代码
     name: string; // 名称 '有色金属'
     zxj: number; // 最新价
     zde: number; // 涨跌额
@@ -20,5 +21,16 @@ declare namespace Quotation {
 
   export interface ExtraRow {
     collapse?: boolean;
+  }
+
+  export interface DetailData {
+    name: string;
+    code: string;
+    szjs: number;
+    xdjs: number;
+    zdf: number;
+    zdd: number;
+    hsl: number;
+    zxj: number;
   }
 }

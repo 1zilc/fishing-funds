@@ -7,7 +7,6 @@
   &::-webkit-scrollbar {
     width: 0;
   }
-
 }
 
 .avatarContent {
@@ -24,7 +23,6 @@
   border-bottom: 1px solid var(--border-color);
 
   &::before {
-
     content: '';
     display: block;
     position: absolute;
@@ -36,8 +34,6 @@
   }
 }
 
-
-
 .avatar {
   width: 50vw;
   height: 50vw;
@@ -45,11 +41,11 @@
   overflow: hidden;
   box-sizing: border-box;
   background-color: var(--inner-color);
-  transition: all .2s;
+  transition: all 0.2s;
   z-index: 2;
 
   img {
-    transition: all .3s;
+    transition: all 0.3s;
     display: block;
     width: 100%;
     height: 100%;
@@ -63,7 +59,6 @@
 }
 
 .detailContent {
-
   padding: 15px;
   box-sizing: border-box;
 }
@@ -89,5 +84,11 @@
 
   label {
     font-weight: 600;
+  }
+  div {
+    color: var(--inner-text-color);
+  }
+  span {
+    color: var(--inner-text-color);
   }
 }

@@ -10,7 +10,7 @@
 @import './styles/button.scss';
 @import './styles/color.scss';
 @import './styles/varible.scss';
-
+@import './styles/common.scss';
 
 body {
   position: relative;
@@ -36,7 +36,6 @@ h2 {
 
 h3 {
   font-size: calc(14rem / var(--base-font-size));
-  ;
   margin: 0;
   line-height: 24px;
 }
@@ -64,10 +63,10 @@ a:hover {
 
 .clickable {
   cursor: pointer;
-  transition: opacity .2s;
+  transition: opacity 0.2s;
 
   &:hover {
-    opacity: .8;
+    opacity: 0.8;
   }
 }
 

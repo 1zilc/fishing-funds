@@ -25,5 +25,5 @@
     "yarn.lock": true,
     "*.{css,sass,scss}.d.ts": true
   },
-  "prettier.printWidth": 140
+  "prettier.printWidth": 160
 }

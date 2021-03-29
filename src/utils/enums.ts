@@ -94,3 +94,13 @@ export enum ManagerPowerType {
   Appraise,
   Profit,
 }
+
+export enum SystemThemeType {
+  Auto,
+  Light,
+  Dark,
+}
+export enum FundFlowType {
+  RealTime,
+  AfterTime,
+}

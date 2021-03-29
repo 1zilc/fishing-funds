@@ -2,24 +2,27 @@ import * as Utils from '@/utils';
 import * as Enums from '@/utils/enums';
 import * as CONST from '@/constants';
 
-const remote = require('electron').remote;
-const app = remote.app;
+export const defalutSystemSetting: System.Setting = {
+  fundApiTypeSetting: Enums.FundApiType.Eastmoney,
+
+  conciseSetting: false,
+  lowKeySetting: false,
+  baseFontSizeSetting: 12,
+  systemThemeSetting: Enums.SystemThemeType.Auto,
+
+  autoStartSetting: false,
+  adjustmentNotificationSetting: false,
+  autoFreshSetting: true,
+  freshDelaySetting: 1,
+  autoCheckUpdateSetting: true,
+};
 
 export function getSystemSetting() {
-  const { openAtLogin: autoStartSetting } = app.getLoginItemSettings();
   const systemSetting: System.Setting = Utils.GetStorage(
     CONST.STORAGE.SYSTEM_SETTING,
-    {
-      conciseSetting: false,
-      lowKeySetting: false,
-      autoStartSetting,
-      autoFreshSetting: true,
-      freshDelaySetting: 1,
-      autoCheckUpdateSetting: true,
-      baseFontSizeSetting: 12,
-    }
+    defalutSystemSetting
   );
-  return systemSetting;
+  return { ...defalutSystemSetting, ...systemSetting };
 }
 
 export function setSystemSetting(setting: System.Setting) {
@@ -28,15 +31,4 @@ export function setSystemSetting(setting: System.Setting) {
     ...systemSetting,
     ...setting,
   });
-}
-
-export function getFundApiTypeSetting() {
-  return Utils.GetStorage(
-    CONST.STORAGE.FUND_API_TYPE,
-    Enums.FundApiType.Eastmoney
-  ) as Enums.FundApiType;
-}
-
-export function setFundApiTypeSetting(fundApiType: Enums.FundApiType) {
-  Utils.SetStorage(CONST.STORAGE.FUND_API_TYPE, fundApiType);
 }

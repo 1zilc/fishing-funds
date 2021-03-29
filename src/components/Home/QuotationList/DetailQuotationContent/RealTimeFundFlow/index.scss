@@ -1,0 +1,32 @@
+.content {
+  display: block;
+  z-index: 2;
+}
+
+.performanceSelections {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  margin: 20px 5px 10px;
+}
+
+.performanceSelection {
+  font-size: calc(10rem / var(--base-font-size));
+  padding: 1px 6px;
+  border-radius: 3px;
+  cursor: pointer;
+  color: var(--cancel-text-color);
+  background-color: var(--cancel-color);
+  transition: all .2s;
+  position: relative;
+
+  &:hover {
+    opacity: .8;
+  }
+}
+
+.active {
+  color: var(--primary-text-color);
+  background-color: var(--primary-color);
+  box-shadow: 0 2px 10px var(--primary-color);
+}

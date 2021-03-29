@@ -1,6 +1,8 @@
 .content {
   position: relative;
-  padding-bottom: 80px
+  padding-bottom: 80px;
+  min-height: calc(100vh - 80px);
+  box-sizing: border-box;
 }
 
 .row {
@@ -13,7 +15,7 @@
   width: 100%;
   justify-content: space-between;
   align-items: center;
-  transition: background .3s;
+  transition: background 0.3s;
 
   &:hover {
     background-color: var(--inner-color);
@@ -43,19 +45,14 @@
   margin: 0 10px;
 }
 
-
-
 .name {
   font-size: calc(14rem / var(--base-font-size));
-  ;
   font-weight: 600;
 }
 
 .code {
   font-size: 1rem;
-
 }
-
 
 .dragItem {
   background-color: var(--inner-color) !important;
@@ -66,7 +63,7 @@
   cursor: pointer;
   height: 12px;
   width: 12px;
-  fill: var(--svg-icon-color)
+  fill: var(--svg-icon-color);
 }
 
 .cyfe {
@@ -87,11 +84,11 @@
   transform: translateX(-50%);
   bottom: 20px;
   cursor: pointer;
-  transition: opacity .3s;
+  transition: opacity 0.3s;
   box-shadow: 0 2px 10px var(--primary-color);
 
   &:hover {
-    opacity: .8;
+    opacity: 0.8;
   }
 
   svg {

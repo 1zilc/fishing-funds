@@ -94,6 +94,7 @@ export async function FromTencent(code: string) {
     const gszzl = NP.times(NP.divide(NP.minus(gsz, dwjz), dwjz), 100).toFixed(
       2
     );
+
     return {
       name,
       dwjz,
@@ -365,7 +366,7 @@ export async function GetRemoteFundsFromEastmoney() {
         retry: 0,
       }
     );
-    return Utils.parseRemoteFunds(body);
+    return Utils.ParseRemoteFunds(body);
   } catch (error) {
     console.log(error);
     return [];
@@ -432,8 +433,6 @@ export async function GetFundManagerDetailFromEastMoney(code: string) {
           rzhb,
         };
       });
-
-    console.log(manageHistoryFunds);
 
     return {
       manageHistoryFunds,

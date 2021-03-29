@@ -6,7 +6,7 @@
     padding: 0 0;
   }
 
-  &>label {
+  & > label {
     font-size: 1rem;
     width: 100px;
     margin-bottom: 5px;
@@ -37,7 +37,6 @@
   overflow: hidden;
   background-color: var(--inner-color);
 
-
   .appName {
     margin-top: 10px;
     text-align: center;
@@ -45,7 +44,6 @@
     color: var(--inner-text-color);
     font-weight: 500;
   }
-
 }
 
 .setting {
@@ -54,24 +52,20 @@
   align-items: center;
   padding: 15px 0;
 
-
-
-  &>section {
+  & > section {
     width: 100%;
     display: flex;
-    font-size: calc(11rem / var(--base-font-size));
+    font-size: 1rem;
     align-items: center;
     box-sizing: border-box;
     justify-content: space-between;
     padding: 5px 25px;
-
 
     label {
       // height: 20px;
       line-height: 20px;
       margin: 0;
     }
-
   }
 
   .fill {
@@ -79,7 +73,7 @@
   }
 
   .radio {
-    font-size: calc(11rem / var(--base-font-size));
+    font-size: 1rem;
     display: flex;
     width: 100%;
     align-items: center;
@@ -93,9 +87,8 @@
   }
 }
 
-
 .title {
-  font-size: 1rem;
+  font-size: 1.1rem;
   font-weight: 600;
   display: flex;
   align-items: center;
@@ -120,6 +113,12 @@
   font-size: 1rem;
   text-align: center;
   padding: 15px;
+  i {
+    margin: 0 10px;
+    // width: 1px;
+    height: 100%;
+    border-left: 1px solid var(--border-color);
+  }
 }
 
 .exit {
@@ -128,13 +127,12 @@
   justify-content: center;
   align-items: center;
   padding-bottom: 56px;
-  font-size: calc(10rem / var(--base-font-size));
 
   button {
     color: var(--reverse-text-color);
     background-color: transparent;
     border: 1px solid var(--border-color);
-    font-size: 1rem;
+    font-size: calc(10rem / var(--base-font-size));
   }
 }
 
@@ -150,24 +148,23 @@
   width: 100%;
   box-sizing: border-box;
   border-top: 1px solid var(--border-color);
-
+  z-index: 100;
 }
 
 .colorful {
-  animation: colorful 9s infinite
+  animation: colorful 9s infinite;
 }
 
 @keyframes colorful {
-
   0% {
-    background-position: 10% 0%
+    background-position: 10% 0%;
   }
 
   50% {
-    background-position: 91% 100%
+    background-position: 91% 100%;
   }
 
   100% {
-    background-position: 10% 0%
+    background-position: 10% 0%;
   }
 }

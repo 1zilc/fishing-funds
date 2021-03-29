@@ -4,7 +4,7 @@ import { batch } from 'react-redux';
 import dayjs from 'dayjs';
 
 import { Dispatch, GetState } from '@/reducers/types';
-import { getFundApiTypeSetting } from '@/actions/setting';
+import { getSystemSetting } from '@/actions/setting';
 import { updateUpdateTime } from '@/actions/wallet';
 import * as Services from '@/services';
 import * as Enums from '@/utils/enums';
@@ -46,11 +46,11 @@ export function setFundConfig(config: Fund.SettingItem[]) {
 
 export async function getFunds(config?: Fund.SettingItem[]) {
   const { fundConfig } = getFundConfig();
-  const fundApiType = getFundApiTypeSetting();
+  const { fundApiTypeSetting } = getSystemSetting();
   const collectors = (config || fundConfig).map(({ code }) => () =>
     getFund(code)
   );
-  switch (fundApiType) {
+  switch (fundApiTypeSetting) {
     case Enums.FundApiType.Dayfund:
       return Adapter.ChokeAllAdapter<Fund.ResponseItem>(collectors);
     case Enums.FundApiType.Tencent:
@@ -70,8 +70,8 @@ export async function getFunds(config?: Fund.SettingItem[]) {
 }
 
 export async function getFund(code: string) {
-  const fundApiType = getFundApiTypeSetting();
-  switch (fundApiType) {
+  const { fundApiTypeSetting } = getSystemSetting();
+  switch (fundApiTypeSetting) {
     case Enums.FundApiType.Dayfund:
       return Services.Fund.FromDayFund(code);
     case Enums.FundApiType.Tencent:
@@ -99,14 +99,23 @@ export function addFund(fund: Fund.SettingItem) {
   }
 }
 
-export function updateFund(fund: { code: string; cyfe: number }) {
+export function updateFund(fund: {
+  code: string;
+  cyfe?: number;
+  name?: string;
+}) {
   const fundConfig: Fund.SettingItem[] = Utils.GetStorage(
     CONST.STORAGE.FUND_SETTING,
     []
   );
   fundConfig.forEach((item) => {
     if (fund.code === item.code) {
-      item.cyfe = fund.cyfe;
+      if (fund.cyfe !== undefined) {
+        item.cyfe = fund.cyfe;
+      }
+      if (fund.name !== undefined) {
+        item.name = fund.name;
+      }
     }
   });
   Utils.SetStorage(CONST.STORAGE.FUND_SETTING, fundConfig);
@@ -178,7 +187,6 @@ export function calcFunds(funds: Fund.ResponseItem[]) {
 export function loadFunds() {
   return async (dispatch: Dispatch, getState: GetState) => {
     try {
-      console.log(getState());
       dispatch({ type: SET_FUNDS_LOADING, payload: true });
       const funds = await getFunds();
       const now = dayjs().format('MM-DD HH:mm:ss');

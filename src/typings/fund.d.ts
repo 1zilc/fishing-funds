@@ -28,6 +28,10 @@ declare namespace Fund {
   export interface OriginRow {
     originSort: number;
   }
+
+  export interface SortRow {
+    id: string;
+  }
   export interface PingzhongData {
     /*基金持仓股票代码(新市场号)*/
     stockCodesNew?: string[];
