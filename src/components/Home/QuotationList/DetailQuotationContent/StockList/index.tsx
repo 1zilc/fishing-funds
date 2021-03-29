@@ -1,17 +1,16 @@
 import React, { useState } from 'react';
 import { useRequest } from 'ahooks';
 import { Table } from 'antd';
-import dayjs from 'dayjs';
 import * as Services from '@/services';
 import * as Utils from '@/utils';
 import styles from './index.scss';
 
-export interface HistoryValueProps {
+export interface StockListProps {
   code: string;
 }
 
-const StockList: React.FC<HistoryValueProps> = ({ code }) => {
-  const [stockList, setStockList] = useState([]);
+const StockList: React.FC<StockListProps> = ({ code }) => {
+  const [stockList, setStockList] = useState<any[]>([]);
 
   const { loading: listLoading } = useRequest(
     Services.Quotation.GetStocksFromEasymoney,
@@ -19,7 +18,10 @@ const StockList: React.FC<HistoryValueProps> = ({ code }) => {
       throwOnError: true,
       pollingInterval: 1000 * 60,
       defaultParams: [code],
-      onSuccess: setStockList,
+      onSuccess: (result) => {
+        result.sort((a, b) => b.zdf - a.zdf);
+        setStockList(result);
+      },
     }
   );
 

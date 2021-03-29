@@ -134,7 +134,7 @@ export async function GetQuotationDetailFromEastmoney(code: string) {
  * @param code 板块代码: BK0428
  * 从天天基金获取板块资金流向
  */
-export async function GetFundFlowFromEasymoney(code: string) {
+export async function GetRealTimeFundFlowFromEasymoney(code: string) {
   try {
     const {
       body: { data },
@@ -236,6 +236,7 @@ export async function GetStocksFromEasymoney(code: string) {
     return [];
   }
 }
+
 /**
  *
  * @param code 板块代码: BK0428
@@ -320,5 +321,59 @@ export async function GetTransactionFromEasymoney(code: string) {
   } catch (error) {
     console.log(error);
     return {};
+  }
+}
+
+/**
+ *
+ * @param code 板块代码: BK0428
+ * 从天天基金获取板盘后资金走向
+ */
+export async function GetAfterTimeFundFlowFromEasymoney(code: string) {
+  try {
+    const {
+      body: { data },
+    } = await got<{
+      rc: 0;
+      rt: 22;
+      svr: 2887122959;
+      lt: 1;
+      full: 0;
+      data: {
+        code: 'BK0428';
+        market: 90;
+        name: '电力行业';
+        klines: [
+          '2021-01-21,-575181168.0,578836480.0,-3655168.0,-449500912.0,-125680256.0,-3.99,4.01,-0.03,-3.12,-0.87,10533.62,0.08,0.00,0.00'
+        ];
+      };
+    }>('http://push2his.eastmoney.com/api/qt/stock/fflow/daykline/get', {
+      searchParams: {
+        lmt: 0,
+        klt: 101,
+        fields1: 'f1,f2,f3,f7',
+        fields2: 'f51,f52,f53,f54,f55,f56,f57,f58,f59,f60,f61,f62,f63,f64,f65',
+        secid: `90.${code}`,
+        _: new Date().getTime(),
+      },
+      responseType: 'json',
+      retry: 0,
+    });
+    const billion = Math.pow(10, 8);
+    const result = (data?.klines || []).map((item: string) => {
+      const [datetime, zljlr, xdjlr, zdjlr, ddjlr, cddjlr] = item.split(',');
+      return {
+        datetime,
+        zljlr: NP.divide(zljlr, billion).toFixed(2),
+        xdjlr: NP.divide(xdjlr, billion).toFixed(2),
+        zdjlr: NP.divide(zdjlr, billion).toFixed(2),
+        ddjlr: NP.divide(ddjlr, billion).toFixed(2),
+        cddjlr: NP.divide(cddjlr, billion).toFixed(2),
+      };
+    });
+    return result;
+  } catch (error) {
+    console.log(error);
+    return [];
   }
 }

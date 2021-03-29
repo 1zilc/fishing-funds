@@ -35,17 +35,6 @@ const Performance: React.FC<PerformanceProps> = ({ code }) => {
       manual: true,
       throwOnError: true,
       onSuccess: (result) => {
-        console.log(
-          result?.map((_) => ({
-            ..._,
-            type: 'line',
-            showSymbol: false,
-            symbol: 'none',
-            lineStyle: {
-              width: 1,
-            },
-          })) || []
-        );
         chartInstance?.setOption({
           title: {
             text: '',

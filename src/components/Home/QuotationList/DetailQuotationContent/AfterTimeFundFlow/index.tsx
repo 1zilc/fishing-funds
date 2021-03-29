@@ -1,16 +1,18 @@
 import React, { useEffect, useRef, useState, useContext } from 'react';
+import classnames from 'classnames';
 import { useRequest, useSize } from 'ahooks';
 import * as echarts from 'echarts';
 
 import { HomeContext } from '@/components/Home';
 import * as Services from '@/services';
+import * as Enums from '@/utils/enums';
 import styles from './index.scss';
 
-export interface RealTimeFundFlowProps {
+export interface AfterTimeFundFlowProps {
   code: string;
 }
 
-const RealTimeFundFlow: React.FC<RealTimeFundFlowProps> = ({ code }) => {
+const AfterTimeFundFlow: React.FC<AfterTimeFundFlowProps> = ({ code }) => {
   const chartRef = useRef<HTMLDivElement>(null);
   const [chartInstance, setChartInstance] = useState<echarts.ECharts | null>(
     null
@@ -18,12 +20,12 @@ const RealTimeFundFlow: React.FC<RealTimeFundFlowProps> = ({ code }) => {
 
   const { width: chartRefWidth } = useSize(chartRef);
   const { varibleColors, darkMode } = useContext(HomeContext);
-  const { run: runGetRealTimeFundFlowFromEasymoney } = useRequest(
-    Services.Quotation.GetRealTimeFundFlowFromEasymoney,
+  const { run: runGetAfterTimeFundFlowFromEasymoney } = useRequest(
+    Services.Quotation.GetAfterTimeFundFlowFromEasymoney,
     {
       manual: true,
-      pollingInterval: 1000 * 60,
       throwOnError: true,
+      pollingInterval: 1000 * 60,
       onSuccess: (result) => {
         const seriesStyle = {
           type: 'line',
@@ -43,11 +45,11 @@ const RealTimeFundFlow: React.FC<RealTimeFundFlowProps> = ({ code }) => {
           },
           legend: {
             data: [
-              '今日主力净流入',
-              '今日超大单净流入',
-              '今日大单净流入',
-              '今日中单净流入',
-              '今日小单净流入',
+              '主力净流入',
+              '超大单净流入',
+              '大单净流入',
+              '中单净流入',
+              '小单净流入',
             ],
             textStyle: {
               color: varibleColors['--main-text-color'],
@@ -74,14 +76,22 @@ const RealTimeFundFlow: React.FC<RealTimeFundFlowProps> = ({ code }) => {
               fontSize: 10,
             },
           },
+          dataZoom: [
+            {
+              type: 'inside',
+              minValueSpan: 3600 * 24 * 1000 * 7,
+              start: 90,
+              end: 100,
+            },
+          ],
           series: [
             {
-              name: '今日主力净流入',
+              name: '主力净流入',
               data: result.map(({ datetime, zljlr }: any) => [datetime, zljlr]),
               ...seriesStyle,
             },
             {
-              name: '今日超大单净流入',
+              name: '超大单净流入',
               data: result.map(({ datetime, cddjlr }: any) => [
                 datetime,
                 cddjlr,
@@ -89,17 +99,17 @@ const RealTimeFundFlow: React.FC<RealTimeFundFlowProps> = ({ code }) => {
               ...seriesStyle,
             },
             {
-              name: '今日大单净流入',
+              name: '大单净流入',
               data: result.map(({ datetime, ddjlr }: any) => [datetime, ddjlr]),
               ...seriesStyle,
             },
             {
-              name: '今日中单净流入',
+              name: '中单净流入',
               data: result.map(({ datetime, zdjlr }: any) => [datetime, zdjlr]),
               ...seriesStyle,
             },
             {
-              name: '今日小单净流入',
+              name: '小单净流入',
               data: result.map(({ datetime, xdjlr }: any) => [datetime, xdjlr]),
               ...seriesStyle,
             },
@@ -108,17 +118,18 @@ const RealTimeFundFlow: React.FC<RealTimeFundFlowProps> = ({ code }) => {
       },
     }
   );
-  const initPerformanceChart = () => {
+
+  const initChart = () => {
     const chartInstance = echarts.init(chartRef.current!, undefined, {
       renderer: 'svg',
     });
     setChartInstance(chartInstance);
   };
 
-  useEffect(initPerformanceChart, []);
+  useEffect(initChart, []);
 
   useEffect(() => {
-    runGetRealTimeFundFlowFromEasymoney(code);
+    runGetAfterTimeFundFlowFromEasymoney(code);
   }, [darkMode, chartInstance]);
 
   useEffect(() => {
@@ -134,4 +145,4 @@ const RealTimeFundFlow: React.FC<RealTimeFundFlowProps> = ({ code }) => {
   );
 };
 
-export default RealTimeFundFlow;
+export default AfterTimeFundFlow;

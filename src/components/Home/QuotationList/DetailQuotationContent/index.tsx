@@ -4,6 +4,7 @@ import { useRequest } from 'ahooks';
 import { Tabs } from 'antd';
 
 import RealTimeFundFlow from '@/components/Home/QuotationList/DetailQuotationContent/RealTimeFundFlow';
+import AfterTimeFundFlow from '@/components/Home/QuotationList/DetailQuotationContent/AfterTimeFundFlow';
 import StockList from '@/components/Home/QuotationList/DetailQuotationContent/StockList';
 import RealTimeTransaction from '@/components/Home/QuotationList/DetailQuotationContent/RealTimeTransaction';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
@@ -80,6 +81,9 @@ const DetailQuotationContent: React.FC<DetailQuotationContentProps> = (
           >
             <Tabs.TabPane tab="实时资金流向" key={0}>
               <RealTimeFundFlow code={code} />
+            </Tabs.TabPane>
+            <Tabs.TabPane tab="盘后资金流向" key={2}>
+              <AfterTimeFundFlow code={code} />
             </Tabs.TabPane>
           </Tabs>
         </div>

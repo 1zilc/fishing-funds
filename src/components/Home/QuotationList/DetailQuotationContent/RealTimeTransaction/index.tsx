@@ -8,28 +8,11 @@ import { HomeContext } from '@/components/Home';
 import * as Services from '@/services';
 import styles from './index.scss';
 
-export interface StockWareHouseProps {
+export interface RealTimeTransactionProps {
   code: string;
 }
-interface TooltipProps {
-  item: Fund.WareHouse;
-}
 
-const Tooltip: React.FC<TooltipProps> = (props) => {
-  const { item } = props;
-  return (
-    <div className={styles.tooltip}>
-      <div className={styles.tooltipName}>股票名称：{item.name}</div>
-      <div>股票代码：{item.code}</div>
-      <div>持仓占比：{item.ccb}%</div>
-      <div className={item.zdf < 0 ? 'text-down' : 'text-up'}>
-        涨跌幅：{item.zdf}%
-      </div>
-    </div>
-  );
-};
-
-const RealTimeTransaction: React.FC<StockWareHouseProps> = ({ code }) => {
+const RealTimeTransaction: React.FC<RealTimeTransactionProps> = ({ code }) => {
   const chartRef = useRef<HTMLDivElement>(null);
   const [chartInstance, setChartInstance] = useState<echarts.ECharts | null>(
     null
@@ -139,9 +122,19 @@ const RealTimeTransaction: React.FC<StockWareHouseProps> = ({ code }) => {
               label: {
                 color: varibleColors['--main-text-color'],
               },
+              emphasis: {
+                label: {
+                  show: true,
+                  fontSize: 20,
+                  fontWeight: 'bold',
+                },
+              },
               animationType: 'scale',
               animationEasing: 'elasticOut',
               animationDelay: () => Math.random() * 200,
+              itemStyle: {
+                borderRadius: 10,
+              },
             },
           ],
         });
