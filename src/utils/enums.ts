@@ -100,3 +100,7 @@ export enum SystemThemeType {
   Light,
   Dark,
 }
+export enum FundFlowType {
+  RealTime,
+  AfterTime,
+}

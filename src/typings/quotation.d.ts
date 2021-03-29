@@ -31,6 +31,6 @@ declare namespace Quotation {
     zdf: number;
     zdd: number;
     hsl: number;
-    zsz: number;
+    zxj: number;
   }
 }

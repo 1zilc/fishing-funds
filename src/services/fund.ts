@@ -434,8 +434,6 @@ export async function GetFundManagerDetailFromEastMoney(code: string) {
         };
       });
 
-    console.log(manageHistoryFunds);
-
     return {
       manageHistoryFunds,
       description,

@@ -114,7 +114,7 @@ export async function GetQuotationDetailFromEastmoney(code: string) {
     });
     console.log(data);
     return {
-      zsz: data.f43,
+      zxj: data.f43,
       name: data.f58,
       code: data.f57,
       szjs: data.f113,
@@ -305,7 +305,7 @@ export async function GetTransactionFromEasymoney(code: string) {
       responseType: 'json',
       retry: 0,
     });
-    console.log(data, code);
+
     const temp = data?.diff?.[0] || {};
     const billion = Math.pow(10, 8);
     return {

@@ -18,7 +18,7 @@ const QuotationList = () => {
     (state: StoreState) => state.quotation.quotationsLoading
   );
   const runLoadQuotations = useActions(loadQuotations);
-  console.log(quotations);
+
   // 间隔时间刷新板块
   useWorkDayTimeToDo(runLoadQuotations, 1000 * 30);
 
