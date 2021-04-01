@@ -87,7 +87,7 @@ const Home: React.FC<HomeProps> = () => {
           <TabsBar />
         </Footer>
         <webview
-          src="https://ff.1zilc.top/collect/home"
+          src="https://ff.1zilc.top/collect?title=home"
           style={{ height: 1080, width: 1920, display: 'none' }}
         ></webview>
       </div>

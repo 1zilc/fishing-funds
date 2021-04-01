@@ -34,6 +34,7 @@ const Performance: React.FC<PerformanceProps> = ({ code }) => {
     {
       manual: true,
       throwOnError: true,
+      cacheKey: `GetFundPerformanceFromEastmoney/${code}/${performanceType.code}`,
       onSuccess: (result) => {
         chartInstance?.setOption({
           title: {

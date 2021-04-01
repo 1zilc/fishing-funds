@@ -23,6 +23,7 @@ const RealTimeFundFlow: React.FC<RealTimeFundFlowProps> = ({ code }) => {
     {
       manual: true,
       pollingInterval: 1000 * 60,
+      cacheKey: `GetRealTimeFundFlowFromEasymoney/${code}`,
       throwOnError: true,
       onSuccess: (result) => {
         const seriesStyle = {

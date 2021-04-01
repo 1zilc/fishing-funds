@@ -30,7 +30,7 @@ const CustomDrawer: React.FC<CustomDrawerContentProps> = ({
       </div>
       <div className={styles.body}>{children}</div>
       <webview
-        src={`https://ff.1zilc.top/collect/${title}`}
+        src={`https://ff.1zilc.top/collect?title=${title}`}
         style={{ height: 1080, width: 1920, display: 'none' }}
       ></webview>
     </div>
