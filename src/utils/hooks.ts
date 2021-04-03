@@ -149,7 +149,7 @@ export function useConfigClipboard() {
       } catch (error) {
         console.log('基金json解析失败', error);
         dialog.showMessageBox({
-          type: 'warning',
+          type: 'info',
           title: `基金JSON解析失败`,
           message: `请检查JSON格式`,
         });

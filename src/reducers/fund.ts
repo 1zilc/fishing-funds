@@ -149,10 +149,8 @@ function setFixfunds(state: FundState, fixFunds: Fund.FixData[]) {
       fund.fixDwjz = fixFund.fixDwjz;
     }
   });
-  return {
-    ...state,
-    funds: cloneFunds,
-  };
+
+  return sortFunds(state, cloneFunds);
 }
 
 export default function fund(

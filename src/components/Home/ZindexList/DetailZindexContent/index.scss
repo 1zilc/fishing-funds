@@ -1,12 +1,9 @@
 .content {
-
   padding: 10px 0;
-
 
   h3 {
     color: var(--main-text-color);
     font-size: calc(16rem / var(--base-font-size));
-    ;
   }
 
   section {
@@ -19,16 +16,14 @@
     display: block;
     font-weight: 600;
   }
-
 }
 
 .container {
   padding: 5px 15px;
-
 }
 
-.introduce {}
-
+.introduce {
+}
 
 .detail {
   display: flex;
@@ -38,21 +33,32 @@
 }
 
 .detailItem {
-  // flex: 1;
   display: flex;
   flex-direction: column;
-
 }
 
 .detailItemLabel {
   color: var(--inner-text-color);
 }
 
-.syl_1n {
+.zdf {
   font-size: calc(20rem / var(--base-font-size));
   font-size: 600;
 }
+.titleRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  span {
+    word-break: break-all;
 
+    &:nth-child(2) {
+      word-break: keep-all;
+      margin-left: 10px;
+    }
+  }
+}
 .subTitleRow {
   display: flex;
   align-items: center;

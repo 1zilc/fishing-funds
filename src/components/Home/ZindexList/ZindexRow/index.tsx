@@ -8,6 +8,9 @@ import { ReactComponent as ArrowDownLineIcon } from '@/assets/icons/arrow-down-l
 import { ReactComponent as ArrowUpLineIcon } from '@/assets/icons/arrow-up-line.svg';
 import { ReactComponent as ArrowDownIcon } from '@/assets/icons/arrow-down.svg';
 import { ReactComponent as ArrowUpIcon } from '@/assets/icons/arrow-up.svg';
+
+import DetailZindexContent from '@/components/Home/ZindexList/DetailZindexContent';
+import CustomDrawer from '@/components/CustomDrawer';
 import { getSystemSetting } from '@/actions/setting';
 import { TOGGLE_ZINDEX_COLLAPSE } from '@/actions/zindex';
 
@@ -197,6 +200,13 @@ const ZindexRow: React.FC<RowProps> = (props) => {
           </div>
         </div>
       </Collapse>
+      <CustomDrawer show={showDetailDrawer}>
+        <DetailZindexContent
+          onEnter={closeDetailDrawer}
+          onClose={closeDetailDrawer}
+          code={`${zindex.type}.${zindex.zindexCode}`}
+        />
+      </CustomDrawer>
     </div>
   );
 };

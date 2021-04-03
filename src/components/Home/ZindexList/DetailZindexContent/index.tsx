@@ -4,18 +4,9 @@ import classnames from 'classnames';
 import { useRequest } from 'ahooks';
 import { Tabs } from 'antd';
 
-import CustomDrawer from '@/components/CustomDrawer';
-import Estimate from '@/components/Home/FundList/DetailFundContent/Estimate';
-import Performance from '@/components/Home/FundList/DetailFundContent/Performance';
-import HistoryPerformance from '@/components/Home/FundList/DetailFundContent/HistoryPerformance';
-import HistoryValue from '@/components/Home/FundList/DetailFundContent/HistoryValue';
-import StockWareHouse from '@/components/Home/FundList/DetailFundContent/StockWareHouse';
-import SecuritiesWareHouse from '@/components/Home/FundList/DetailFundContent/SecuritiesWareHouse';
-import SimilarRank from '@/components/Home/FundList/DetailFundContent/SimilarRank';
-import SimilarProportion from '@/components/Home/FundList/DetailFundContent/SimilarProportion';
+import Trend from '@/components/Home/ZindexList/DetailZindexContent/Trend';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
-import SameFundList from '@/components/Home/FundList/DetailFundContent/SameFundList';
-import FundManagerContent from '@/components/Home/FundList/FundManagerContent';
+
 import * as Services from '@/services';
 import * as Utils from '@/utils';
 import * as Enums from '@/utils/enums';
@@ -29,174 +20,113 @@ export interface DetailFundContentProps {
 
 const DetailZindexContent: React.FC<DetailFundContentProps> = (props) => {
   const { code } = props;
-  const [fund, setFund] = useState<Fund.FixData | Record<string, any>>({});
-  const [pingzhongdata, setPingzhongdata] = useState<
-    Fund.PingzhongData | Record<string, any>
+  const [zindex, setZindex] = useState<
+    Zindex.ResponseItem | Record<string, any>
   >({});
 
-  const [
-    showManagerDrawer,
-    {
-      setTrue: openManagerDrawer,
-      setFalse: closeManagerDrawer,
-      toggle: ToggleManagerDrawer,
-    },
-  ] = useBoolean(false);
-
-  useRequest(Services.Fund.GetFixFromEastMoney, {
+  useRequest(Services.Zindex.FromEastmoney, {
     throwOnError: true,
+    pollingInterval: 1000 * 60,
     defaultParams: [code],
-    onSuccess: setFund,
-    cacheKey: `GetFixFromEastMoney/${code}`,
-  });
-
-  useRequest(Services.Fund.GetFundDetailFromEastmoney, {
-    throwOnError: true,
-    defaultParams: [code],
-    onSuccess: setPingzhongdata,
-    cacheKey: `GetFundDetailFromEastmoney/${code}`,
+    onSuccess: setZindex,
+    cacheKey: `FromEastmoney/${code}`,
   });
 
   return (
     <CustomDrawerContent
-      title="基金详情"
+      title="指数详情"
       enterText="确定"
       onClose={props.onClose}
       onEnter={props.onEnter}
     >
       <div className={styles.content}>
         <div className={styles.container}>
-          <h3>{fund?.fixName}</h3>
-          <div className={styles.subTitleRow}>
-            <span>{fund?.code}</span>
-            <span>
-              基金经理：
-              <a onClick={openManagerDrawer}>
-                {pingzhongdata.Data_currentFundManager?.[0]?.name}
-              </a>
+          <h3 className={styles.titleRow}>
+            <span>{zindex?.name}</span>
+            <span
+              className={classnames(
+                Number(zindex.zdd) < 0 ? 'text-down' : 'text-up'
+              )}
+            >
+              {zindex?.zsz}
             </span>
+          </h3>
+          <div className={styles.subTitleRow}>
+            <span>{zindex?.zindexCode}</span>
+            <div>
+              <span className={styles.detailItemLabel}>涨跌点：</span>
+              <span
+                className={classnames(
+                  Number(zindex.zdd) < 0 ? 'text-down' : 'text-up'
+                )}
+              >
+                {Utils.Yang(zindex?.zdd)}
+              </span>
+            </div>
           </div>
           <div className={styles.detail}>
             <div className={styles.detailItem}>
               <div
                 className={classnames(
-                  styles.syl_1n,
-                  Number(pingzhongdata.syl_1n) < 0 ? 'text-down' : 'text-up'
+                  Number(zindex.zdf) < 0 ? 'text-down' : 'text-up'
                 )}
               >
-                {Utils.Yang(pingzhongdata.syl_1n)}%
+                {Utils.Yang(zindex.zdf)}%
               </div>
-              <div className={styles.detailItemLabel}>近一年涨跌幅</div>
+              <div className={styles.detailItemLabel}>涨跌幅</div>
             </div>
+            <div className={styles.detailItem}>
+              <div className={classnames('text-center')}>{zindex.hs}%</div>
+              <div className={styles.detailItemLabel}>换手率</div>
+            </div>
+            <div className={styles.detailItem}>
+              <div className={classnames('text-center')}>{zindex.zf}%</div>
+              <div className={styles.detailItemLabel}>振幅</div>
+            </div>
+          </div>
+          <div className={styles.detail}>
             <div className={styles.detailItem}>
               <div
                 className={classnames(
-                  Number(fund?.fixZzl) < 0 ? 'text-down' : 'text-up'
+                  zindex.jk < zindex.zs ? 'text-down' : 'text-up'
                 )}
               >
-                {Utils.Yang(fund?.fixZzl)}%
+                {Utils.Yang(zindex.jk)}
               </div>
-              <div className={styles.detailItemLabel}>日涨跌幅</div>
+              <div className={styles.detailItemLabel}>今开</div>
             </div>
             <div className={styles.detailItem}>
-              <div>{fund?.fixDwjz}</div>
-              <div className={styles.detailItemLabel}>净值 {fund?.fixDate}</div>
+              <div className={classnames('text-up', 'text-center')}>
+                {zindex.zg}
+              </div>
+              <div className={styles.detailItemLabel}>最高</div>
+            </div>
+            <div className={styles.detailItem}>
+              <div className={classnames('text-down', 'text-center')}>
+                {zindex.zd}
+              </div>
+              <div className={styles.detailItemLabel}>最低</div>
+            </div>
+          </div>
+          <div className={styles.detail}>
+            <div className={styles.detailItem}>
+              <div className={classnames('text-center')}>{zindex.zs}</div>
+              <div className={styles.detailItemLabel}>昨收</div>
             </div>
           </div>
         </div>
         <div className={styles.container}>
           <Tabs
-            defaultActiveKey={String(Enums.TrendType.Performance)}
+            defaultActiveKey={String(Enums.FundFlowType.RealTime)}
             animated={{ tabPane: true }}
             tabBarGutter={15}
           >
-            <Tabs.TabPane tab="历史业绩" key={Enums.TrendType.Performance}>
-              <HistoryPerformance
-                syl_6y={pingzhongdata.syl_6y}
-                syl_3y={pingzhongdata.syl_3y}
-                syl_1y={pingzhongdata.syl_1y}
-              />
-            </Tabs.TabPane>
-            <Tabs.TabPane tab="历史净值" key={Enums.TrendType.Estimate}>
-              <HistoryValue data={pingzhongdata.Data_netWorthTrend} />
-            </Tabs.TabPane>
-          </Tabs>
-        </div>
-        <div className={styles.container}>
-          <Tabs
-            defaultActiveKey={String(Enums.HistoryType.Performance)}
-            animated={{ tabPane: true }}
-            tabBarGutter={15}
-          >
-            <Tabs.TabPane tab="业绩走势" key={Enums.HistoryType.Performance}>
-              <Performance code={code} />
-            </Tabs.TabPane>
-            <Tabs.TabPane tab="净值估算" key={Enums.HistoryType.Value}>
-              <Estimate code={code} />
-            </Tabs.TabPane>
-          </Tabs>
-        </div>
-        <div className={styles.container}>
-          <Tabs
-            defaultActiveKey={String(Enums.WareHouseType.Stock)}
-            animated={{ tabPane: true }}
-            tabBarGutter={15}
-          >
-            <Tabs.TabPane tab="股票持仓" key={Enums.WareHouseType.Stock}>
-              <StockWareHouse
-                code={code}
-                stockCodes={pingzhongdata.stockCodesNew!}
-              />
-            </Tabs.TabPane>
-            <Tabs.TabPane tab="债券持仓" key={Enums.WareHouseType.Securities}>
-              <SecuritiesWareHouse
-                code={code}
-                securitiesCodes={pingzhongdata.zqCodesNew!}
-              />
-            </Tabs.TabPane>
-          </Tabs>
-        </div>
-        <div className={styles.container}>
-          <Tabs
-            defaultActiveKey={String(Enums.SimilarCompareType.Rank)}
-            animated={{ tabPane: true }}
-            tabBarGutter={15}
-          >
-            <Tabs.TabPane tab="同类排名" key={Enums.SimilarCompareType.Rank}>
-              <SimilarRank
-                rateInSimilarType={pingzhongdata.Data_rateInSimilarType}
-              />
-            </Tabs.TabPane>
-            <Tabs.TabPane
-              tab="百分比排名"
-              key={Enums.SimilarCompareType.Proportion}
-            >
-              <SimilarProportion
-                rateInSimilarPersent={pingzhongdata.Data_rateInSimilarPersent}
-              />
-            </Tabs.TabPane>
-          </Tabs>
-        </div>
-        <div>
-          <Tabs
-            defaultActiveKey={String(0)}
-            animated={{ tabPane: true }}
-            tabBarGutter={15}
-            tabBarStyle={{ marginLeft: 15 }}
-          >
-            <Tabs.TabPane tab="同类型基金涨幅榜" key={0}>
-              <SameFundList swithSameType={pingzhongdata.swithSameType} />
+            <Tabs.TabPane tab="指数走势" key={Enums.FundFlowType.RealTime}>
+              <Trend code={code} />
             </Tabs.TabPane>
           </Tabs>
         </div>
       </div>
-      <CustomDrawer show={showManagerDrawer}>
-        <FundManagerContent
-          onEnter={closeManagerDrawer}
-          onClose={closeManagerDrawer}
-          manager={pingzhongdata.Data_currentFundManager?.[0]}
-        />
-      </CustomDrawer>
     </CustomDrawerContent>
   );
 };
