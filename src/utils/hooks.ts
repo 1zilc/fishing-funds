@@ -6,17 +6,23 @@ import {
   useEffect,
 } from 'react';
 import { useInterval, useBoolean } from 'ahooks';
-import { ipcRenderer, remote } from 'electron';
+import { ipcRenderer, remote, clipboard } from 'electron';
 import { bindActionCreators } from 'redux';
 import { useDispatch } from 'react-redux';
 
 import { getSystemSetting } from '@/actions/setting';
 import { getCurrentHours } from '@/actions/time';
 import { updateAvaliable } from '@/actions/updater';
-import { getFundConfig, getFunds, updateFund } from '@/actions/fund';
+import {
+  getFundConfig,
+  getFunds,
+  updateFund,
+  setFundConfig,
+  getCodeMap,
+} from '@/actions/fund';
 import * as Utils from '@/utils';
 import * as CONST from '@/constants';
-const { nativeTheme } = remote;
+const { nativeTheme, dialog } = remote;
 
 export function useWorkDayTimeToDo(
   todo: () => void,
@@ -99,6 +105,71 @@ export function useUpdater() {
   }, []);
 }
 
+export function useConfigClipboard() {
+  useLayoutEffect(() => {
+    ipcRenderer.on('clipboard-funds-import', async (e, data) => {
+      const limit = 1024;
+      try {
+        const text = clipboard.readText();
+        const json: any[] = JSON.parse(text);
+        if (json.length > limit) {
+          dialog.showMessageBox({
+            type: 'info',
+            title: `超过最大限制`,
+            message: `最大${limit}个`,
+          });
+          return;
+        }
+        const fundConfig = json
+          .map((fund) => ({
+            name: '',
+            cyfe: Number(fund.cyfe) || 0,
+            code: fund.code && String(fund.code),
+          }))
+          .filter(({ code }) => code);
+        const codeMap = getCodeMap(fundConfig);
+        // 去重复
+        const fundConfigSet = Object.entries(codeMap).map(
+          ([code, fund]) => fund
+        );
+        const responseFunds = await getFunds(fundConfigSet);
+        const _fundConfig = responseFunds
+          .filter((_) => !!_)
+          .map((fund) => ({
+            name: fund?.name!,
+            code: fund?.fundcode!,
+            cyfe: codeMap[fund?.fundcode!].cyfe,
+          }));
+        setFundConfig(_fundConfig);
+        dialog.showMessageBox({
+          type: 'info',
+          title: `导入完成`,
+          message: `更新：${_fundConfig.length}个，总共：${json.length}个`,
+        });
+      } catch (error) {
+        console.log('基金json解析失败', error);
+        dialog.showMessageBox({
+          type: 'warning',
+          title: `基金JSON解析失败`,
+          message: `请检查JSON格式`,
+        });
+      }
+    });
+    ipcRenderer.on('clipboard-funds-copy', (e, data) => {
+      try {
+        const { fundConfig } = getFundConfig();
+        clipboard.writeText(JSON.stringify(fundConfig));
+      } catch (error) {
+        console.log('复制基金json失败', error);
+      }
+    });
+    return () => {
+      ipcRenderer.removeAllListeners('update-available');
+      ipcRenderer.removeAllListeners('clipboard-funds-import');
+    };
+  }, []);
+}
+
 export function useNativeTheme() {
   const [darkMode, setDarkMode] = useState(nativeTheme.shouldUseDarkColors);
   useLayoutEffect(() => {
@@ -143,6 +214,7 @@ export function useSyncFixFundSetting() {
   async function FixFundSetting(fundConfig: Fund.SettingItem[]) {
     try {
       const responseFunds = await getFunds(fundConfig);
+
       responseFunds
         .filter((_) => !!_)
         .forEach((responseFund) => {
@@ -196,9 +268,12 @@ export function useAdjustmentNotification() {
         isAdjustmentNotificationTime &&
         currentDate !== lastNotificationDate
       ) {
-        new Notification('调仓提醒', {
+        const notification = new Notification('调仓提醒', {
           body: `当前时间${hour}:${minute} 注意行情走势`,
         });
+        notification.onclick = () => {
+          remote.getCurrentWindow().show();
+        };
         Utils.SetStorage(
           CONST.STORAGE.ADJUSTMENT_NOTIFICATION_DATE,
           currentDate

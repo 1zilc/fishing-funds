@@ -19,10 +19,12 @@ import {
   Menu,
 } from 'electron';
 import AppUpdater from './autoUpdater';
-import { menubar } from 'menubar';
+import { menubar, Menubar } from 'menubar';
 import windowStateKeeper from 'electron-window-state';
 
 let myWindow: any = null;
+let mb: Menubar;
+let appUpdater: AppUpdater;
 
 const EXTRA_RESOURCES_PATH = app.isPackaged
   ? path.join(process.resourcesPath, 'assets')
@@ -32,7 +34,33 @@ const getAssetPath = (resourceFilename: string): string => {
   return path.join(EXTRA_RESOURCES_PATH, resourceFilename);
 };
 
-const contextMenu = Menu.buildFromTemplate([{ role: 'quit', label: '退出' }]);
+const contextMenu = Menu.buildFromTemplate([
+  {
+    role: 'about',
+    label: '关于 Fishing Funds',
+  },
+  {
+    click: () => {
+      appUpdater.checkUpdate('mainer');
+    },
+    label: '检查更新',
+  },
+  { type: 'separator' },
+  {
+    click: () => {
+      mb.window?.webContents.send('clipboard-funds-import');
+    },
+    label: '从粘贴板导入',
+  },
+  {
+    click: () => {
+      mb.window?.webContents.send('clipboard-funds-copy');
+    },
+    label: '复制基金JSON配置',
+  },
+  { type: 'separator' },
+  { role: 'quit', label: '退出' },
+]);
 
 const nativeMenuIcon = nativeImage.createFromPath(
   getAssetPath('menu/iconTemplate.png')
@@ -73,7 +101,7 @@ const createMenubar = async () => {
     defaultWidth: 300,
     defaultHeight: 520,
   });
-  const mb = menubar({
+  mb = menubar({
     index: `file://${__dirname}/index.html`,
     // icon: path.join(__dirname, '../resources/menu/iconTemplate.png'),
     // icon: 'resources/icon.png',
@@ -133,12 +161,14 @@ const createMenubar = async () => {
     'true'
   );
 
+  // 实例化更新程序
+  appUpdater = new AppUpdater({ icon: nativeIcon, win: mb.window });
+
   // eslint-disable-next-line
   // TODO: 暂时关闭自动更新，需要apple签名
-
   ipcMain.on('check-update', (e) => {
     if (app.isPackaged) {
-      new AppUpdater({ icon: nativeIcon, win: mb.window });
+      appUpdater.checkUpdate('renderer');
     }
   });
 
