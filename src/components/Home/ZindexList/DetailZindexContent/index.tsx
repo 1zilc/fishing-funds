@@ -5,6 +5,7 @@ import { useRequest } from 'ahooks';
 import { Tabs } from 'antd';
 
 import Trend from '@/components/Home/ZindexList/DetailZindexContent/Trend';
+import K from '@/components/Home/ZindexList/DetailZindexContent/K';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
 
 import * as Services from '@/services';
@@ -117,12 +118,23 @@ const DetailZindexContent: React.FC<DetailFundContentProps> = (props) => {
         </div>
         <div className={styles.container}>
           <Tabs
-            defaultActiveKey={String(Enums.FundFlowType.RealTime)}
+            defaultActiveKey={String(0)}
             animated={{ tabPane: true }}
             tabBarGutter={15}
           >
-            <Tabs.TabPane tab="指数走势" key={Enums.FundFlowType.RealTime}>
+            <Tabs.TabPane tab="指数走势" key={0}>
               <Trend code={code} />
+            </Tabs.TabPane>
+          </Tabs>
+        </div>
+        <div className={styles.container}>
+          <Tabs
+            defaultActiveKey={String(0)}
+            animated={{ tabPane: true }}
+            tabBarGutter={15}
+          >
+            <Tabs.TabPane tab="K线" key={0}>
+              <K code={code} />
             </Tabs.TabPane>
           </Tabs>
         </div>

@@ -102,7 +102,9 @@ const Performance: React.FC<PerformanceProps> = ({ code }) => {
   useEffect(initChart, []);
 
   useEffect(() => {
-    runGetFundPerformanceFromEastmoney(code, performanceType.code);
+    if (chartInstance) {
+      runGetFundPerformanceFromEastmoney(code, performanceType.code);
+    }
   }, [darkMode, chartInstance, performanceType.code]);
 
   useEffect(() => {
@@ -114,11 +116,11 @@ const Performance: React.FC<PerformanceProps> = ({ code }) => {
   return (
     <div className={styles.content}>
       <div ref={chartRef} style={{ width: '100%' }}></div>
-      <div className={styles.performanceSelections}>
+      <div className={styles.selections}>
         {performanceTypeList.map((item) => (
           <div
             key={item.type}
-            className={classnames(styles.performanceSelection, {
+            className={classnames(styles.selection, {
               [styles.active]: performanceType.type === item.type,
             })}
             onClick={() => setPerformanceType(item)}

@@ -119,7 +119,9 @@ const RealTimeFundFlow: React.FC<RealTimeFundFlowProps> = ({ code }) => {
   useEffect(initPerformanceChart, []);
 
   useEffect(() => {
-    runGetRealTimeFundFlowFromEasymoney(code);
+    if (chartInstance) {
+      runGetRealTimeFundFlowFromEasymoney(code);
+    }
   }, [darkMode, chartInstance]);
 
   useEffect(() => {

@@ -1,3 +1,4 @@
+import dayjs from 'dayjs';
 import got from 'got';
 import NP from 'number-precision';
 /**
@@ -105,4 +106,54 @@ export async function GetTrendFromEastmoney(code: string, ndays: number) {
   }
 }
 
-export async function GetDayKFromEastmoney(code: string) {}
+export async function GetKFromEastmoney(code: string, year: number) {
+  try {
+    const { body } = await got<{
+      rc: 0;
+      rt: 17;
+      svr: 181734976;
+      lt: 1;
+      full: 0;
+      data: {
+        code: '399293';
+        market: 0;
+        name: '创业大盘';
+        decimal: 2;
+        dktotal: 477;
+        klines: [
+          '2019-04-18,3105.00,3078.87,3113.69,3077.85,13321590,21989221888.00,0.00'
+        ];
+      };
+    }>('http://push2his.eastmoney.com/api/qt/stock/kline/get', {
+      searchParams: {
+        secid: code,
+        fields1: 'f1,f2,f3,f4,f5',
+        fields2: 'f51,f52,f53,f54,f55,f56,f57,f58',
+        klt: 101,
+        fqt: 0,
+        beg: `${dayjs().get('year') - year}0101`,
+        end: `${dayjs().get('year') + 1}0101`,
+        _: new Date().getTime(),
+      },
+      responseType: 'json',
+      retry: 0,
+    });
+    console.log(body?.data?.klines.length);
+    return (body?.data?.klines || []).map((_) => {
+      const [date, kp, sp, zg, zd, cjl, cje, zf] = _.split(',');
+      return {
+        date,
+        kp: Number(kp),
+        sp: Number(sp),
+        zg: Number(zg),
+        zd: Number(zd),
+        cjl,
+        cje,
+        zf,
+      };
+    });
+  } catch (error) {
+    console.log(error);
+    return [];
+  }
+}

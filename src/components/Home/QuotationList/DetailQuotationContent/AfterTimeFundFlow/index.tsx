@@ -130,7 +130,9 @@ const AfterTimeFundFlow: React.FC<AfterTimeFundFlowProps> = ({ code }) => {
   useEffect(initChart, []);
 
   useEffect(() => {
-    runGetAfterTimeFundFlowFromEasymoney(code);
+    if (chartInstance) {
+      runGetAfterTimeFundFlowFromEasymoney(code);
+    }
   }, [darkMode, chartInstance]);
 
   useEffect(() => {

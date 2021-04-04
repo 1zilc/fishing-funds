@@ -31,7 +31,7 @@ const Trend: React.FC<PerformanceProps> = ({ code }) => {
     {
       manual: true,
       throwOnError: true,
-      cacheKey: `runGetTrendFromEastmoney/${code}/${trend.code}`,
+      cacheKey: `GetTrendFromEastmoney/${code}/${trend.code}`,
       onSuccess: (result) => {
         chartInstance?.setOption({
           title: {
@@ -49,7 +49,8 @@ const Trend: React.FC<PerformanceProps> = ({ code }) => {
             containLabel: true,
           },
           xAxis: {
-            type: 'time',
+            type: 'category',
+            data: result?.map(({ time, price }) => time) || [],
             boundaryGap: false,
             axisLabel: {
               fontSize: 10,
@@ -96,7 +97,9 @@ const Trend: React.FC<PerformanceProps> = ({ code }) => {
   useEffect(initChart, []);
 
   useEffect(() => {
-    runGetTrendFromEastmoney(code, trend.code);
+    if (chartInstance) {
+      runGetTrendFromEastmoney(code, trend.code);
+    }
   }, [darkMode, chartInstance, trend.code]);
 
   useEffect(() => {
@@ -108,11 +111,11 @@ const Trend: React.FC<PerformanceProps> = ({ code }) => {
   return (
     <div className={styles.content}>
       <div ref={chartRef} style={{ width: '100%' }}></div>
-      <div className={styles.performanceSelections}>
+      <div className={styles.selections}>
         {trendTypeList.map((item) => (
           <div
             key={item.type}
-            className={classnames(styles.performanceSelection, {
+            className={classnames(styles.selection, {
               [styles.active]: trend.type === item.type,
             })}
             onClick={() => setTrendType(item)}
