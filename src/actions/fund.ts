@@ -32,12 +32,16 @@ export function getFundConfig() {
     []
   );
 
-  const codeMap = fundConfig.reduce((r, c, i) => {
+  const codeMap = getCodeMap(fundConfig);
+
+  return { fundConfig, codeMap };
+}
+
+export function getCodeMap(config: Fund.SettingItem[]) {
+  return config.reduce((r, c, i) => {
     r[c.code] = { ...c, originSort: i };
     return r;
   }, {} as CodeMap);
-
-  return { fundConfig, codeMap };
 }
 
 export function setFundConfig(config: Fund.SettingItem[]) {

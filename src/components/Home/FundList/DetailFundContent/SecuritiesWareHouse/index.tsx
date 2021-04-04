@@ -52,6 +52,7 @@ const SecuritiesWareHouse: React.FC<SecuritiesWareHouseProps> = ({
     {
       manual: true,
       throwOnError: true,
+      cacheKey: `GetSecuritiesWareHouseFromEastmoney/${code}`,
       onSuccess: (result) => {
         chartInstance?.setOption({
           backgroundColor: 'transparent',

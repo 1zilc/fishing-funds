@@ -1,4 +1,5 @@
 import React from 'react';
+import { useBoolean } from 'ahooks';
 import { Collapse } from 'react-collapse';
 import classnames from 'classnames';
 import { useDispatch } from 'react-redux';
@@ -7,6 +8,9 @@ import { ReactComponent as ArrowDownLineIcon } from '@/assets/icons/arrow-down-l
 import { ReactComponent as ArrowUpLineIcon } from '@/assets/icons/arrow-up-line.svg';
 import { ReactComponent as ArrowDownIcon } from '@/assets/icons/arrow-down.svg';
 import { ReactComponent as ArrowUpIcon } from '@/assets/icons/arrow-up.svg';
+
+import DetailZindexContent from '@/components/Home/ZindexList/DetailZindexContent';
+import CustomDrawer from '@/components/CustomDrawer';
 import { getSystemSetting } from '@/actions/setting';
 import { TOGGLE_ZINDEX_COLLAPSE } from '@/actions/zindex';
 
@@ -27,6 +31,15 @@ const ZindexRow: React.FC<RowProps> = (props) => {
   const { zindex } = props;
   const dispatch = useDispatch();
   const { conciseSetting } = getSystemSetting();
+
+  const [
+    showDetailDrawer,
+    {
+      setTrue: openDetailDrawer,
+      setFalse: closeDetailDrawer,
+      toggle: ToggleDetailDrawer,
+    },
+  ] = useBoolean(false);
 
   return (
     <div>
@@ -182,8 +195,18 @@ const ZindexRow: React.FC<RowProps> = (props) => {
               <span>{zindex.zindexCode}</span>
             </section>
           )}
+          <div className={styles.view}>
+            <a onClick={openDetailDrawer}>{'查看详情 >'}</a>
+          </div>
         </div>
       </Collapse>
+      <CustomDrawer show={showDetailDrawer}>
+        <DetailZindexContent
+          onEnter={closeDetailDrawer}
+          onClose={closeDetailDrawer}
+          code={`${zindex.type}.${zindex.zindexCode}`}
+        />
+      </CustomDrawer>
     </div>
   );
 };

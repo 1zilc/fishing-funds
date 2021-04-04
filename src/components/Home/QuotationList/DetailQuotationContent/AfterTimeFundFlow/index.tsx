@@ -25,6 +25,7 @@ const AfterTimeFundFlow: React.FC<AfterTimeFundFlowProps> = ({ code }) => {
     {
       manual: true,
       throwOnError: true,
+      cacheKey: `GetAfterTimeFundFlowFromEasymoney/${code}`,
       pollingInterval: 1000 * 60,
       onSuccess: (result) => {
         const seriesStyle = {
@@ -129,7 +130,9 @@ const AfterTimeFundFlow: React.FC<AfterTimeFundFlowProps> = ({ code }) => {
   useEffect(initChart, []);
 
   useEffect(() => {
-    runGetAfterTimeFundFlowFromEasymoney(code);
+    if (chartInstance) {
+      runGetAfterTimeFundFlowFromEasymoney(code);
+    }
   }, [darkMode, chartInstance]);
 
   useEffect(() => {

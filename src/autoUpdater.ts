@@ -1,20 +1,14 @@
-import { NativeImage, BrowserWindow } from 'electron';
+import { NativeImage, BrowserWindow, dialog, shell } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 
 export default class AppUpdater {
+  process = '';
   constructor(conf: { icon?: NativeImage; win?: BrowserWindow }) {
     autoUpdater.autoDownload = false;
     log.transports.file.level = 'info';
     autoUpdater.logger = log;
-    // autoUpdater.checkForUpdatesAndNotify();
-    try {
-      autoUpdater.setFeedURL('https://ff-releases.1zilc.top');
-      autoUpdater.checkForUpdates();
-    } catch {
-      console.log('检查更新失败');
-    }
-    // autoUpdater.currentVersion = '2.0.0';
+    autoUpdater.setFeedURL('https://ff-releases.1zilc.top');
 
     autoUpdater.on('error', (error) => {
       // dialog.showErrorBox(
@@ -31,14 +25,18 @@ export default class AppUpdater {
 
     //当前版本为最新版本
     autoUpdater.on('update-not-available', () => {
-      // setTimeout(() => {
-      //   dialog.showMessageBox({
-      //     icon,
-      //     type: 'info',
-      //     title: `无可用更新`,
-      //     message: `当前为最新版本！`,
-      //   });
-      // }, 1000);
+      switch (this.process) {
+        case 'mainer':
+          dialog.showMessageBox({
+            icon: conf.icon,
+            type: 'info',
+            title: `无可用更新`,
+            message: `当前为最新版本！`,
+          });
+          break;
+        case 'renderer':
+          break;
+      }
     });
 
     //更新下载进度事件
@@ -49,24 +47,30 @@ export default class AppUpdater {
 
     //发现新版本
     autoUpdater.on('update-available', (data) => {
-      conf.win?.webContents.send('update-available', data);
-      // dialog
-      //   .showMessageBox({
-      //     icon,
-      //     type: 'info',
-      //     title: `发现新版本 v${version}`,
-      //     message: `找到更新 v${version}，您现在要更新吗？`,
-      //     detail: releaseNote,
-      //     buttons: ['确定', '取消'],
-      //   })
-      //   .then(({ response }) => {
-      //     if (response === 0) {
-      //       console.info('开始下载更新');
-      //       autoUpdater.downloadUpdate();
-      //     } else {
-      //       console.info('取消更新');
-      //     }
-      //   });
+      switch (this.process) {
+        case 'mainer':
+          dialog
+            .showMessageBox({
+              icon: conf.icon,
+              type: 'info',
+              title: `发现新版本 v${data.version}`,
+              message: `找到更新 v${data.version}，您现在要更新吗？`,
+              detail: data.releaseNote,
+              buttons: ['前往下载', '取消'],
+            })
+            .then(({ response }) => {
+              if (response === 0) {
+                console.info('下载更新');
+                shell.openExternal('https://ff.1zilc.top#download');
+              } else {
+                console.info('取消更新');
+              }
+            });
+          break;
+        case 'renderer':
+          conf.win?.webContents.send('update-available', data);
+          break;
+      }
     });
 
     // 下载完毕
@@ -81,5 +85,16 @@ export default class AppUpdater {
       //     setImmediate(() => autoUpdater.quitAndInstall());
       //   });
     });
+  }
+
+  public checkUpdate(process: 'mainer' | 'renderer') {
+    this.process = process;
+
+    try {
+      // autoUpdater.currentVersion = '1.2.0';
+      autoUpdater.checkForUpdates();
+    } catch {
+      console.log('检查更新失败');
+    }
   }
 }

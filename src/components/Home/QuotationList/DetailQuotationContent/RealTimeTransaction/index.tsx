@@ -32,6 +32,7 @@ const RealTimeTransaction: React.FC<RealTimeTransactionProps> = ({ code }) => {
     {
       manual: true,
       throwOnError: true,
+      cacheKey: `GetTransactionFromEasymoney/${code}`,
       pollingInterval: 1000 * 60,
       onSuccess: (result) => {
         chartInstance?.setOption({

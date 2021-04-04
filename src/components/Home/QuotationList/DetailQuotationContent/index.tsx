@@ -31,6 +31,7 @@ const DetailQuotationContent: React.FC<DetailQuotationContentProps> = (
   useRequest(Services.Quotation.GetQuotationDetailFromEastmoney, {
     throwOnError: true,
     defaultParams: [code],
+    cacheKey: `GetQuotationDetailFromEastmoney/${code}`,
     onSuccess: setQuotation,
   });
 

@@ -16,6 +16,7 @@ const Estimate: React.FC<EstimateProps> = ({ code }) => {
     throwOnError: true,
     defaultParams: [code],
     onSuccess: setEstimate,
+    cacheKey: `GetEstimatedFromEastmoney/${code}`,
   });
 
   return (

@@ -11,30 +11,27 @@ import styles from './index.scss';
 export interface PerformanceProps {
   code: string;
 }
-const performanceTypeList = [
-  { name: '1月', type: Enums.PerformanceType.Month, code: 'm' },
-  { name: '3月', type: Enums.PerformanceType.ThreeMonth, code: 'q' },
-  { name: '6月', type: Enums.PerformanceType.HalfYear, code: 'hy' },
-  { name: '1年', type: Enums.PerformanceType.Year, code: 'y' },
-  { name: '3年', type: Enums.PerformanceType.ThreeYear, code: 'try' },
-  { name: '最大', type: Enums.PerformanceType.Max, code: 'se' },
+const trendTypeList = [
+  { name: '一天', type: 1, code: 1 },
+  { name: '两天', type: 2, code: 2 },
+  { name: '三天', type: 3, code: 3 },
+  { name: '四天', type: 4, code: 4 },
+  { name: '五天', type: 5, code: 5 },
 ];
-const Performance: React.FC<PerformanceProps> = ({ code }) => {
+const Trend: React.FC<PerformanceProps> = ({ code }) => {
   const chartRef = useRef<HTMLDivElement>(null);
   const [chartInstance, setChartInstance] = useState<echarts.ECharts | null>(
     null
   );
-  const [performanceType, setPerformanceType] = useState(
-    performanceTypeList[2]
-  );
+  const [trend, setTrendType] = useState(trendTypeList[0]);
   const { width: chartRefWidth } = useSize(chartRef);
   const { varibleColors, darkMode } = useContext(HomeContext);
-  const { run: runGetFundPerformanceFromEastmoney } = useRequest(
-    Services.Fund.GetFundPerformanceFromEastmoney,
+  const { run: runGetTrendFromEastmoney } = useRequest(
+    Services.Zindex.GetTrendFromEastmoney,
     {
       manual: true,
       throwOnError: true,
-      cacheKey: `GetFundPerformanceFromEastmoney/${code}/${performanceType.code}`,
+      cacheKey: `GetTrendFromEastmoney/${code}/${trend.code}`,
       onSuccess: (result) => {
         chartInstance?.setOption({
           title: {
@@ -44,21 +41,16 @@ const Performance: React.FC<PerformanceProps> = ({ code }) => {
             trigger: 'axis',
             position: 'inside',
           },
-          legend: {
-            data: result?.map(({ name }) => name) || [],
-            textStyle: {
-              color: varibleColors['--main-text-color'],
-              fontSize: 10,
-            },
-          },
           grid: {
             left: 0,
             right: 5,
             bottom: 0,
+            top: 15,
             containLabel: true,
           },
           xAxis: {
-            type: 'time',
+            type: 'category',
+            data: result?.map(({ time, price }) => time) || [],
             boundaryGap: false,
             axisLabel: {
               fontSize: 10,
@@ -67,26 +59,29 @@ const Performance: React.FC<PerformanceProps> = ({ code }) => {
           yAxis: {
             type: 'value',
             axisLabel: {
-              formatter: `{value}%`,
+              formatter: `{value}`,
               fontSize: 10,
             },
+            scale: true,
           },
           dataZoom: [
             {
               type: 'inside',
-              minValueSpan: 3600 * 24 * 1000 * 7,
+              minValueSpan: 3600 * 24 * 1000 * 1,
             },
           ],
-          series:
-            result?.map((_) => ({
-              ..._,
+          series: [
+            {
+              data: result?.map(({ time, price }) => [time, price]) || [],
               type: 'line',
+              name: '价格',
               showSymbol: false,
               symbol: 'none',
               lineStyle: {
                 width: 1,
               },
-            })) || [],
+            },
+          ],
         });
       },
     }
@@ -103,9 +98,9 @@ const Performance: React.FC<PerformanceProps> = ({ code }) => {
 
   useEffect(() => {
     if (chartInstance) {
-      runGetFundPerformanceFromEastmoney(code, performanceType.code);
+      runGetTrendFromEastmoney(code, trend.code);
     }
-  }, [darkMode, chartInstance, performanceType.code]);
+  }, [darkMode, chartInstance, trend.code]);
 
   useEffect(() => {
     chartInstance?.resize({
@@ -117,13 +112,13 @@ const Performance: React.FC<PerformanceProps> = ({ code }) => {
     <div className={styles.content}>
       <div ref={chartRef} style={{ width: '100%' }}></div>
       <div className={styles.selections}>
-        {performanceTypeList.map((item) => (
+        {trendTypeList.map((item) => (
           <div
             key={item.type}
             className={classnames(styles.selection, {
-              [styles.active]: performanceType.type === item.type,
+              [styles.active]: trend.type === item.type,
             })}
-            onClick={() => setPerformanceType(item)}
+            onClick={() => setTrendType(item)}
           >
             {item.name}
           </div>
@@ -133,4 +128,4 @@ const Performance: React.FC<PerformanceProps> = ({ code }) => {
   );
 };
 
-export default Performance;
+export default Trend;

@@ -23,6 +23,7 @@ const RealTimeFundFlow: React.FC<RealTimeFundFlowProps> = ({ code }) => {
     {
       manual: true,
       pollingInterval: 1000 * 60,
+      cacheKey: `GetRealTimeFundFlowFromEasymoney/${code}`,
       throwOnError: true,
       onSuccess: (result) => {
         const seriesStyle = {
@@ -118,7 +119,9 @@ const RealTimeFundFlow: React.FC<RealTimeFundFlowProps> = ({ code }) => {
   useEffect(initPerformanceChart, []);
 
   useEffect(() => {
-    runGetRealTimeFundFlowFromEasymoney(code);
+    if (chartInstance) {
+      runGetRealTimeFundFlowFromEasymoney(code);
+    }
   }, [darkMode, chartInstance]);
 
   useEffect(() => {

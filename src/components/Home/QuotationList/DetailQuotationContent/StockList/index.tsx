@@ -18,6 +18,7 @@ const StockList: React.FC<StockListProps> = ({ code }) => {
       throwOnError: true,
       pollingInterval: 1000 * 60,
       defaultParams: [code],
+      cacheKey: `GetStocksFromEasymoney/${code}`,
       onSuccess: (result) => {
         result.sort((a, b) => b.zdf - a.zdf);
         setStockList(result);
