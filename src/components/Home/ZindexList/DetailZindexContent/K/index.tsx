@@ -67,6 +67,10 @@ const K: React.FC<PerformanceProps> = ({ code }) => {
           },
           legend: {
             data: ['日K', 'MA5', 'MA10', 'MA20', 'MA30'],
+            textStyle: {
+              color: varibleColors['--main-text-color'],
+              fontSize: 10,
+            },
           },
           grid: {
             left: 0,

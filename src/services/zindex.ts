@@ -138,7 +138,6 @@ export async function GetKFromEastmoney(code: string, year: number) {
       responseType: 'json',
       retry: 0,
     });
-    console.log(body?.data?.klines.length);
     return (body?.data?.klines || []).map((_) => {
       const [date, kp, sp, zg, zd, cjl, cje, zf] = _.split(',');
       return {
