@@ -57,11 +57,11 @@ const ManageFundContent: React.FC<ManageFundContentProps> = (props) => {
   ] = useBoolean(false);
 
   const [
-    showEditDrawer,
+    showEditFundDrawer,
     {
-      setTrue: openEditDrawer,
-      setFalse: closeEditDrawer,
-      toggle: toggleEditDrawer,
+      setTrue: openEditFundDrawer,
+      setFalse: closeEditFundDrawer,
+      toggle: toggleEditFundDrawer,
     },
   ] = useBoolean(false);
 
@@ -146,7 +146,7 @@ const ManageFundContent: React.FC<ManageFundContentProps> = (props) => {
                                 cyfe: fund.cyfe,
                                 code: fund.code,
                               });
-                              openEditDrawer();
+                              openEditFundDrawer();
                             }}
                           />
                         </span>
@@ -182,12 +182,12 @@ const ManageFundContent: React.FC<ManageFundContentProps> = (props) => {
           }}
         />
       </CustomDrawer>
-      <CustomDrawer show={showEditDrawer}>
+      <CustomDrawer show={showEditFundDrawer}>
         <EditFundContent
-          onClose={closeEditDrawer}
+          onClose={closeEditFundDrawer}
           onEnter={() => {
             updateSortFundConfig();
-            closeEditDrawer();
+            closeEditFundDrawer();
           }}
           fund={{
             cyfe: editFund.cyfe,

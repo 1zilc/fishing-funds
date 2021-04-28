@@ -6,20 +6,20 @@ import {
   CHANGE_WALLET_INDEX,
 } from '@/actions/wallet';
 
-import { EyeStatus } from '@/utils/enums';
+import * as Enums from '@/utils/enums';
 import * as CONST from '@/constants';
 import * as Utils from '@/utils';
 
 export interface WalletState {
   updateTime: string;
-  eyeStatus: EyeStatus;
+  eyeStatus: Enums.EyeStatus;
   walletIndex: number;
 }
 
 export default function wallet(
   state: WalletState = {
     updateTime: '还没有刷新过哦～',
-    eyeStatus: Utils.GetStorage(CONST.STORAGE.EYE_STATUS, EyeStatus.Open),
+    eyeStatus: Utils.GetStorage(CONST.STORAGE.EYE_STATUS, Enums.EyeStatus.Open),
     walletIndex: Utils.GetStorage(CONST.STORAGE.WALLET_INDEX, 0),
   },
 

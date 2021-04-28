@@ -1,5 +1,5 @@
 import { GetState, Dispatch } from '@/reducers/types';
-import { EyeStatus } from '@/utils/enums';
+import * as Enums from '@/utils/enums';
 import * as CONST from '@/constants';
 import * as Utils from '@/utils';
 
@@ -14,7 +14,7 @@ export function updateUpdateTime(updateTime: string) {
   };
 }
 
-export function changeEyeStatus(status: EyeStatus) {
+export function changeEyeStatus(status: Enums.EyeStatus) {
   Utils.SetStorage(CONST.STORAGE.EYE_STATUS, status);
   return {
     type: CHANGE_EYE_STATUS,
@@ -35,11 +35,11 @@ export function toggleEyeStatus() {
     const { wallet } = getState();
     const { eyeStatus } = wallet;
     switch (eyeStatus) {
-      case EyeStatus.Open:
-        dispatch(changeEyeStatus(EyeStatus.Close));
+      case Enums.EyeStatus.Open:
+        dispatch(changeEyeStatus(Enums.EyeStatus.Close));
         break;
-      case EyeStatus.Close:
-        dispatch(changeEyeStatus(EyeStatus.Open));
+      case Enums.EyeStatus.Close:
+        dispatch(changeEyeStatus(Enums.EyeStatus.Open));
         break;
       default:
     }
