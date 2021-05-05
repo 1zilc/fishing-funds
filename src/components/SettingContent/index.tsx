@@ -144,14 +144,12 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
             </Radio.Group>
           </div>
         </div>
-
         <div>
           <div className={styles.title}>
             <TShirtIcon />
             <span>外观设置</span>
           </div>
           <div className={styles.setting}>
-            <WalletCarousel />
             <section>
               <label>简洁模式：</label>
               <Switch size="small" checked={concise} onChange={setConcise} />

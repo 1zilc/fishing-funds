@@ -1,13 +1,7 @@
 import React from 'react';
 import classnames from 'classnames';
-import { useSelector, useDispatch } from 'react-redux';
-
-import { StoreState } from '@/reducers/types';
-import { changeWalletIndex } from '@/actions/wallet';
 import styles from './index.scss';
-export interface CoinsProps {
-  num: number;
-}
+
 const wallets = new Array(25).fill('').map((_, index) => {
   const { ReactComponent } = require(`@/assets/icons/wallet/${index}.svg`);
   return ReactComponent;
@@ -18,11 +12,13 @@ const size = {
   height: 24,
 };
 
-export const WalletCarousel = () => {
-  const dispatch = useDispatch();
-  const walletIndex = useSelector(
-    (state: StoreState) => state.wallet.walletIndex
-  );
+export interface WalletCarouselProps {
+  index: number;
+  onChange?: (index: number) => void;
+}
+
+export const WalletCarousel: React.FC<WalletCarouselProps> = (props) => {
+  const { index: walletIndex } = props;
   return (
     <div className={styles.content}>
       {wallets.map((Icon, index) => (
@@ -31,7 +27,7 @@ export const WalletCarousel = () => {
           className={classnames(styles.wallet, {
             [styles.selected]: index === walletIndex,
           })}
-          onClick={() => dispatch(changeWalletIndex(index))}
+          onClick={() => props.onChange && props.onChange(index)}
         >
           <Icon {...size} />
         </div>

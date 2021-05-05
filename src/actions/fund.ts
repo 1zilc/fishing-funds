@@ -5,7 +5,13 @@ import dayjs from 'dayjs';
 
 import { Dispatch, GetState } from '@/reducers/types';
 import { getSystemSetting } from '@/actions/setting';
-import { updateUpdateTime } from '@/actions/wallet';
+import {
+  updateUpdateTime,
+  getWalletConfig,
+  defaultWallet,
+  setWalletConfig,
+  getCurrentWallet,
+} from '@/actions/wallet';
 import * as Services from '@/services';
 import * as Enums from '@/utils/enums';
 import * as Utils from '@/utils';
@@ -26,14 +32,19 @@ export interface CodeMap {
   [index: string]: Fund.SettingItem & Fund.OriginRow;
 }
 
+// export function getFundConfig() {
+//   const fundConfig: Fund.SettingItem[] = Utils.GetStorage(
+//     CONST.STORAGE.FUND_SETTING,
+//     []
+//   );
+//   const codeMap = getCodeMap(fundConfig);
+//   return { fundConfig, codeMap };
+// }
+
 export function getFundConfig() {
-  const fundConfig: Fund.SettingItem[] = Utils.GetStorage(
-    CONST.STORAGE.FUND_SETTING,
-    []
-  );
-
+  const wallet = getCurrentWallet();
+  const fundConfig = wallet.funds;
   const codeMap = getCodeMap(fundConfig);
-
   return { fundConfig, codeMap };
 }
 
@@ -44,8 +55,20 @@ export function getCodeMap(config: Fund.SettingItem[]) {
   }, {} as CodeMap);
 }
 
+// export function setFundConfig(config: Fund.SettingItem[]) {
+//   Utils.SetStorage(CONST.STORAGE.FUND_SETTING, config);
+// }
 export function setFundConfig(config: Fund.SettingItem[]) {
-  Utils.SetStorage(CONST.STORAGE.FUND_SETTING, config);
+  const { walletConfig } = getWalletConfig();
+  const currentWalletCode = Utils.GetStorage(
+    CONST.STORAGE.CURRENT_WALLET_CODE,
+    defaultWallet.code
+  );
+  const _walletConfig = walletConfig.map((item) => ({
+    ...item,
+    funds: currentWalletCode === item.code ? config : item.funds,
+  }));
+  setWalletConfig(_walletConfig);
 }
 
 export async function getFunds(config?: Fund.SettingItem[]) {
@@ -92,14 +115,11 @@ export async function getFund(code: string) {
 }
 
 export function addFund(fund: Fund.SettingItem) {
-  const fundConfig: Fund.SettingItem[] = Utils.GetStorage(
-    CONST.STORAGE.FUND_SETTING,
-    []
-  );
+  const { fundConfig } = getFundConfig();
   const notExist =
     fundConfig.filter((item) => fund.code === item.code).length === 0;
   if (notExist) {
-    Utils.SetStorage(CONST.STORAGE.FUND_SETTING, [...fundConfig, fund]);
+    setFundConfig([...fundConfig, fund]);
   }
 }
 
@@ -108,10 +128,7 @@ export function updateFund(fund: {
   cyfe?: number;
   name?: string;
 }) {
-  const fundConfig: Fund.SettingItem[] = Utils.GetStorage(
-    CONST.STORAGE.FUND_SETTING,
-    []
-  );
+  const { fundConfig } = getFundConfig();
   fundConfig.forEach((item) => {
     if (fund.code === item.code) {
       if (fund.cyfe !== undefined) {
@@ -122,20 +139,16 @@ export function updateFund(fund: {
       }
     }
   });
-  Utils.SetStorage(CONST.STORAGE.FUND_SETTING, fundConfig);
+  setFundConfig(fundConfig);
 }
 
 export function deleteFund(code: string) {
-  const fundConfig: Fund.SettingItem[] = Utils.GetStorage(
-    CONST.STORAGE.FUND_SETTING,
-    []
-  );
-
+  const { fundConfig } = getFundConfig();
   fundConfig.forEach((item, index) => {
     if (code === item.code) {
       const cloneFundSetting = JSON.parse(JSON.stringify(fundConfig));
       cloneFundSetting.splice(index, 1);
-      Utils.SetStorage(CONST.STORAGE.FUND_SETTING, cloneFundSetting);
+      setFundConfig(cloneFundSetting);
     }
   });
 }
@@ -201,6 +214,20 @@ export function loadFunds() {
       });
     } finally {
       dispatch({ type: SET_FUNDS_LOADING, payload: false });
+    }
+  };
+}
+
+export function loadFundsWithoutLoading() {
+  return async (dispatch: Dispatch, getState: GetState) => {
+    try {
+      const funds = await getFunds();
+      const now = dayjs().format('MM-DD HH:mm:ss');
+      batch(() => {
+        dispatch({ type: SORT_FUNDS_WITH_CHACHED, payload: funds });
+        dispatch(updateUpdateTime(now));
+      });
+    } finally {
     }
   };
 }

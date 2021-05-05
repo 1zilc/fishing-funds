@@ -8,7 +8,7 @@ import {
 import { useInterval, useBoolean } from 'ahooks';
 import { ipcRenderer, remote, clipboard } from 'electron';
 import { bindActionCreators } from 'redux';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { getSystemSetting } from '@/actions/setting';
 import { getCurrentHours } from '@/actions/time';
@@ -20,8 +20,10 @@ import {
   setFundConfig,
   getCodeMap,
 } from '@/actions/fund';
+import { StoreState } from '@/reducers/types';
 import * as Utils from '@/utils';
 import * as CONST from '@/constants';
+
 const { nativeTheme, dialog } = remote;
 
 export function useWorkDayTimeToDo(
@@ -285,4 +287,14 @@ export function useAdjustmentNotification() {
       immediate: true,
     }
   );
+}
+
+export function useCurrentWallet() {
+  const wallets = useSelector((state: StoreState) => state.wallet.wallets);
+  const currentWalletCode = useSelector(
+    (state: StoreState) => state.wallet.currentWalletCode
+  );
+  const currentWallet =
+    wallets.filter(({ code }) => currentWalletCode === code)[0] || {};
+  return { currentWallet, currentWalletCode, wallets };
 }

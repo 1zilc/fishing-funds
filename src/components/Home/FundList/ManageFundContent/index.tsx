@@ -43,8 +43,6 @@ const ManageFundContent: React.FC<ManageFundContentProps> = (props) => {
     (Fund.SettingItem & Fund.SortRow)[]
   >([]);
   const [editFund, setEditFund] = useState<EditFundType>(defaultEdifFund);
-  const runLoadFunds = useActions(loadFunds);
-  const freshFunds = useScrollToTop({ after: runLoadFunds });
   const { done: syncFundSettingDone } = useSyncFixFundSetting();
 
   const [
@@ -67,6 +65,7 @@ const ManageFundContent: React.FC<ManageFundContentProps> = (props) => {
 
   const updateSortFundConfig = () => {
     const { fundConfig } = getFundConfig();
+    console.log(fundConfig);
     setSortFundConfig(fundConfig.map((_) => ({ ..._, id: _.code })));
   };
 
@@ -103,10 +102,7 @@ const ManageFundContent: React.FC<ManageFundContentProps> = (props) => {
     <CustomDrawerContent
       title="管理基金"
       enterText="确定"
-      onEnter={() => {
-        freshFunds();
-        props.onClose();
-      }}
+      onEnter={props.onEnter}
       onClose={props.onClose}
     >
       <div className={styles.content}>

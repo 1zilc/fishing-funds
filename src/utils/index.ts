@@ -38,7 +38,7 @@ export function DeepCopy<T>(data: T): T {
   return dataTmp;
 }
 
-export function GetStorage(key: string, init: any) {
+export function GetStorage<T = any>(key: string, init: T): T {
   const json = localStorage.getItem(key);
   return json ? JSON.parse(json) : init;
 }
@@ -48,7 +48,7 @@ export function SetStorage(key: string, data: any) {
 }
 
 export function Encrypt(s: string) {
-  return s.replace(/[0-9]/g, '✱');
+  return s.replace(/[+-]/g, '').replace(/[0-9]/g, '✱');
 }
 
 export async function Sleep<T>(time: number, F?: T): Promise<T | undefined> {
@@ -166,7 +166,7 @@ export function UpdateSystemTheme(setting: Enums.SystemThemeType) {
   }
 }
 
-export function unitConvert(num: number) {
+export function UnitConvert(num: number) {
   function strNumSize(tempNum: number) {
     const stringNum = tempNum.toString();
     const index = stringNum.indexOf('.');
@@ -193,4 +193,8 @@ export function unitConvert(num: number) {
     num: curentNum.toFixed(2),
     unit: curentUnit,
   };
+}
+
+export function MakeHash() {
+  return Math.random().toString(36).substr(2);
 }

@@ -1,30 +1,30 @@
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
 import { Input } from 'antd';
 
 import WalletCarousel from '@/components/WalletCarousel';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
-import { getWalletConfig, addWallet } from '@/actions/wallet';
-import * as Utils from '@/utils';
+import { getWalletConfig, updateWallet } from '@/actions/wallet';
 import styles from './index.scss';
 export interface AddFundContentProps {
   onEnter: () => void;
   onClose: () => void;
+  wallet: Wallet.SettingItem;
 }
 
-const AddWalletContent: React.FC<AddFundContentProps> = (props) => {
-  const { walletConfig } = getWalletConfig();
-  const [name, setName] = useState('');
-  const [iconIndex, setIconIndex] = useState(0);
+const EditWalletContent: React.FC<AddFundContentProps> = (props) => {
+  const { wallet } = props;
+  const [name, setName] = useState<string>(wallet.name);
+  const [iconIndex, setIconIndex] = useState<number>(wallet.iconIndex);
   const [
     fieldNameMessageTip,
     setFieldNameMessageTip,
   ] = useState<Field.MessageTip>({ show: false, text: '' });
 
-  const onAdd = async () => {
-    const repeatName = walletConfig.some((wallet) => wallet.name === name);
-    const code = Utils.MakeHash();
-
+  const onSave = async () => {
+    const { walletConfig } = getWalletConfig();
+    const repeatName = walletConfig.some(
+      (_wallet) => _wallet.name === name && wallet.code !== _wallet.code
+    );
     if (!name) {
       setFieldNameMessageTip({ show: true, text: '请输入钱包名称~' });
       return;
@@ -34,15 +34,15 @@ const AddWalletContent: React.FC<AddFundContentProps> = (props) => {
       return;
     }
     setFieldNameMessageTip({ show: false, text: '' });
-    addWallet({ name, iconIndex, code, funds: [] });
+    updateWallet({ ...props.wallet, name, iconIndex });
     props.onEnter();
   };
 
   return (
     <CustomDrawerContent
-      title="添加钱包"
-      enterText="添加"
-      onEnter={onAdd}
+      title="编辑钱包"
+      enterText="保存"
+      onEnter={onSave}
       onClose={props.onClose}
     >
       <div className={styles.content}>
@@ -76,4 +76,4 @@ const AddWalletContent: React.FC<AddFundContentProps> = (props) => {
   );
 };
 
-export default AddWalletContent;
+export default EditWalletContent;

@@ -110,6 +110,21 @@ export function loadZindexs() {
   };
 }
 
+export function loadZindexsWithoutLoading() {
+  return async (dispatch: Dispatch, getState: GetState) => {
+    try {
+      const zindexs = await getZindexs();
+      batch(() => {
+        dispatch({
+          type: SORT_ZINDEXS_WITH_COLLAPSE_CHACHED,
+          payload: zindexs,
+        });
+      });
+    } finally {
+    }
+  };
+}
+
 export async function getRemoteZindexConfig() {
   const cb = 'parsezindex';
   const now = new Date().getTime();

@@ -15,7 +15,8 @@
   position: relative;
   padding: 10px;
   cursor: pointer;
-  transition: all 0.3s;
+  box-sizing: border-box;
+  border: 1px dashed var(--background-color);
 
   &:hover {
     .icon {
@@ -73,6 +74,11 @@
     cursor: pointer;
   }
 }
+.checkbox {
+  fill: var(--primary-color);
+  z-index: 2;
+  // background-color: var(--primary-color);
+}
 
 .add {
   height: 36px;
@@ -99,5 +105,13 @@
     fill: var(--primary-text-color);
     height: 34px;
     width: 24px;
+  }
+}
+.selected {
+  box-shadow: 0 2px 10px var(--inner-color);
+  border: 1px dashed var(--primary-color);
+
+  .icon {
+    transform: scale(1.1);
   }
 }

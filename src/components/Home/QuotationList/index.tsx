@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import QuotationRow from '@/components/Home/QuotationList/QuotationRow';
 import Empty from '@/components/Empty';
 import LoadingBar from '@/components/LoadingBar';
-import { loadQuotations } from '@/actions/quotation';
+import { loadQuotationsWithoutLoading } from '@/actions/quotation';
 import { StoreState } from '@/reducers/types';
 import { useWorkDayTimeToDo } from '@/utils/hooks';
 import { useActions } from '@/utils/hooks';
@@ -17,7 +17,7 @@ const QuotationList = () => {
   const quotationsLoading = useSelector(
     (state: StoreState) => state.quotation.quotationsLoading
   );
-  const runLoadQuotations = useActions(loadQuotations);
+  const runLoadQuotations = useActions(loadQuotationsWithoutLoading);
 
   // 间隔时间刷新板块
   useWorkDayTimeToDo(runLoadQuotations, 1000 * 30);

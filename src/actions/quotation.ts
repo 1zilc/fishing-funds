@@ -33,3 +33,17 @@ export function loadQuotations() {
     }
   };
 }
+export function loadQuotationsWithoutLoading() {
+  return async (dispatch: Dispatch, getState: GetState) => {
+    try {
+      const quotations = await getQuotations();
+      batch(() => {
+        dispatch({
+          type: SORT_QUOTATIONS_WITH_COLLAPSE_CHACHED,
+          payload: quotations,
+        });
+      });
+    } finally {
+    }
+  };
+}
