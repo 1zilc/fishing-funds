@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Input } from 'antd';
+import { useDispatch } from 'react-redux';
 
 import WalletCarousel from '@/components/WalletCarousel';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
@@ -13,6 +14,7 @@ export interface AddFundContentProps {
 
 const EditWalletContent: React.FC<AddFundContentProps> = (props) => {
   const { wallet } = props;
+  const dispatch = useDispatch();
   const [name, setName] = useState<string>(wallet.name);
   const [iconIndex, setIconIndex] = useState<number>(wallet.iconIndex);
   const [
@@ -34,7 +36,7 @@ const EditWalletContent: React.FC<AddFundContentProps> = (props) => {
       return;
     }
     setFieldNameMessageTip({ show: false, text: '' });
-    updateWallet({ ...props.wallet, name, iconIndex });
+    dispatch(updateWallet({ ...props.wallet, name, iconIndex }));
     props.onEnter();
   };
 

@@ -2,7 +2,7 @@ import React from 'react';
 import classnames from 'classnames';
 import styles from './index.scss';
 
-const wallets = new Array(25).fill('').map((_, index) => {
+const wallets = new Array(40).fill('').map((_, index) => {
   const { ReactComponent } = require(`@/assets/icons/wallet/${index}.svg`);
   return ReactComponent;
 });

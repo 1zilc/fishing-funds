@@ -7,9 +7,14 @@ import { ReactComponent as EyeIcon } from '@/assets/icons/eye.svg';
 import { ReactComponent as EyeCloseIcon } from '@/assets/icons/eye-close.svg';
 import { HeaderContext } from '@/components/Header';
 import { StoreState } from '@/reducers/types';
-import { toggleEyeStatus } from '@/actions/wallet';
+import { toggleEyeStatus, loadWalletsFunds } from '@/actions/wallet';
+import { getSystemSetting } from '@/actions/setting';
 import { calcFunds } from '@/actions/fund';
-import { useCurrentWallet } from '@/utils/hooks';
+import {
+  useCurrentWallet,
+  useActions,
+  useWorkDayTimeToDo,
+} from '@/utils/hooks';
 import * as Enums from '@/utils/enums';
 import * as Utils from '@/utils';
 import styles from './index.scss';
@@ -18,13 +23,11 @@ export interface WalletProps {}
 
 const Wallet: React.FC<WalletProps> = () => {
   const dispatch = useDispatch();
+  const { freshDelaySetting, autoFreshSetting } = getSystemSetting();
   const { miniMode } = useContext(HeaderContext);
-  const funds = useSelector((state: StoreState) => state.fund.funds);
   const eyeStatus = useSelector((state: StoreState) => state.wallet.eyeStatus);
-  const updateTime = useSelector(
-    (state: StoreState) => state.wallet.updateTime
-  );
-  const { currentWallet } = useCurrentWallet();
+  const { currentWallet, currentWalletState } = useCurrentWallet();
+  const runLoadWalletsFunds = useActions(loadWalletsFunds);
 
   const WalletIcon = useMemo(() => {
     const { ReactComponent } = require(`@/assets/icons/wallet/${
@@ -33,12 +36,19 @@ const Wallet: React.FC<WalletProps> = () => {
     return ReactComponent;
   }, [currentWallet]);
 
+  const { funds, updateTime } = currentWalletState;
   const { zje, sygz } = calcFunds(funds);
   const eyeOpen = eyeStatus === Enums.EyeStatus.Open;
   const display_zje = eyeOpen ? zje.toFixed(2) : Utils.Encrypt(zje.toFixed(2));
   const display_sygz = eyeOpen
     ? Utils.Yang(sygz.toFixed(2))
     : Utils.Encrypt(Utils.Yang(sygz.toFixed(2)));
+
+  // 间隔时间刷新钱包
+  useWorkDayTimeToDo(
+    () => autoFreshSetting && runLoadWalletsFunds(),
+    freshDelaySetting * 1000 * 60
+  );
 
   return (
     <div
@@ -47,7 +57,9 @@ const Wallet: React.FC<WalletProps> = () => {
       <WalletIcon className={styles.walletIcon} />
       <div className={styles.info}>
         <div className={styles.timeBar}>
-          <div className={styles.last}>刷新时间：{updateTime}</div>
+          <div className={styles.last}>
+            刷新时间：{updateTime || '还没有刷新过哦～'}
+          </div>
         </div>
         <div className={styles.moneyBar}>
           <div>

@@ -13,6 +13,7 @@ export interface AddFundContentProps {
 }
 
 const AddWalletContent: React.FC<AddFundContentProps> = (props) => {
+  const dispatch = useDispatch();
   const { walletConfig } = getWalletConfig();
   const [name, setName] = useState('');
   const [iconIndex, setIconIndex] = useState(0);
@@ -34,7 +35,7 @@ const AddWalletContent: React.FC<AddFundContentProps> = (props) => {
       return;
     }
     setFieldNameMessageTip({ show: false, text: '' });
-    addWallet({ name, iconIndex, code, funds: [] });
+    dispatch(addWallet({ name, iconIndex, code, funds: [] }));
     props.onEnter();
   };
 

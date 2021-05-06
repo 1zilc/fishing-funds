@@ -4,6 +4,8 @@ import {
   UPDATE_UPTATETIME,
   CHANGE_EYE_STATUS,
   CHANGE_CURRENT_WALLET_CODE,
+  SYNC_WALLETS,
+  SYNC_WALLETS_MAP,
   defaultWallet,
 } from '@/actions/wallet';
 
@@ -17,6 +19,20 @@ export interface WalletState {
   walletIndex: number;
   wallets: Wallet.SettingItem[];
   currentWalletCode: string;
+  walletsMap: Record<string, Wallet.StateItem>;
+}
+function syncWalletsMap(
+  state: WalletState,
+  payload: { code: string; item: Wallet.StateItem }
+) {
+  const { code, item } = payload;
+  const { walletsMap } = state;
+  const cloneWalletsMap = Utils.DeepCopy(walletsMap);
+  cloneWalletsMap[code] = item;
+  return {
+    ...state,
+    walletsMap: cloneWalletsMap,
+  };
 }
 
 export default function wallet(
@@ -29,6 +45,7 @@ export default function wallet(
       defaultWallet.code
     ),
     wallets: Utils.GetStorage(CONST.STORAGE.WALLET_SETTING, [defaultWallet]),
+    walletsMap: {},
   },
 
   action: AnyAction
@@ -49,6 +66,13 @@ export default function wallet(
         ...state,
         currentWalletCode: action.payload,
       };
+    case SYNC_WALLETS:
+      return {
+        ...state,
+        wallets: action.payload,
+      };
+    case SYNC_WALLETS_MAP:
+      return syncWalletsMap(state, action.payload);
     default:
       return state;
   }

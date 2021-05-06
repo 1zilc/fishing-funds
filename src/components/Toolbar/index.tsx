@@ -145,6 +145,7 @@ const ToolBar: React.FC<ToolBarProps> = () => {
         <ManageWalletContent
           onClose={closeManageWalletDrawer}
           onEnter={() => {
+            freshFunds();
             closeManageWalletDrawer();
           }}
         />

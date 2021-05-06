@@ -1,15 +1,21 @@
 import { GetState, Dispatch } from '@/reducers/types';
+import { batch } from 'react-redux';
+import { getFunds } from '@/actions/fund';
+import dayjs from 'dayjs';
 import * as Enums from '@/utils/enums';
 import * as CONST from '@/constants';
 import * as Utils from '@/utils';
+import * as Adapter from '@/utils/adpters';
 
 export const UPDATE_UPTATETIME = 'UPDATE_UPTATETIME';
 export const CHANGE_EYE_STATUS = 'CHANGE_EYE_STATUS';
 export const CHANGE_CURRENT_WALLET_CODE = 'CHANGE_CURRENT_WALLET_CODE';
-
+export const SYNC_WALLETS = 'SYNC_WALLETS';
+export const SYNC_WALLETS_MAP = 'SYNC_WALLETS_MAP';
 export interface NameMap {
   [index: string]: Wallet.SettingItem & Wallet.OriginRow;
 }
+
 export const defaultWallet: Wallet.SettingItem = {
   name: '默认钱包',
   iconIndex: 0,
@@ -70,6 +76,7 @@ export function getCurrentWallet(code?: string) {
 
 export function setWalletConfig(config: Wallet.SettingItem[]) {
   Utils.SetStorage(CONST.STORAGE.WALLET_SETTING, config);
+  return asyncWalles();
 }
 
 export function getCodeMap(config: Wallet.SettingItem[]) {
@@ -82,6 +89,7 @@ export function getCodeMap(config: Wallet.SettingItem[]) {
 export function addWallet(wallet: Wallet.SettingItem) {
   const { walletConfig } = getWalletConfig();
   Utils.SetStorage(CONST.STORAGE.WALLET_SETTING, [...walletConfig, wallet]);
+  return asyncWalles();
 }
 
 export function updateWallet(wallet: Wallet.SettingItem) {
@@ -93,14 +101,7 @@ export function updateWallet(wallet: Wallet.SettingItem) {
     }
   });
   Utils.SetStorage(CONST.STORAGE.WALLET_SETTING, walletConfig);
-}
-
-export function selectWallet(code: string) {
-  Utils.SetStorage(CONST.STORAGE.CURRENT_WALLET_CODE, code);
-  return {
-    type: CHANGE_CURRENT_WALLET_CODE,
-    payload: code,
-  };
+  return asyncWalles();
 }
 
 export function deleteWallet(code: string) {
@@ -112,4 +113,52 @@ export function deleteWallet(code: string) {
       Utils.SetStorage(CONST.STORAGE.WALLET_SETTING, cloneWalletSetting);
     }
   });
+  return asyncWalles();
+}
+
+export function selectWallet(code: string) {
+  Utils.SetStorage(CONST.STORAGE.CURRENT_WALLET_CODE, code);
+  return {
+    type: CHANGE_CURRENT_WALLET_CODE,
+    payload: code,
+  };
+}
+
+export function asyncWalles() {
+  const { walletConfig } = getWalletConfig();
+  return {
+    type: SYNC_WALLETS,
+    payload: walletConfig,
+  };
+}
+
+export function loadWalletsFunds() {
+  return async (dispatch: Dispatch, getState: GetState) => {
+    try {
+      const { walletConfig } = getWalletConfig();
+      const walletCollects = walletConfig.map(({ funds, code }) => () =>
+        getFunds(funds).then((funds) => {
+          const now = dayjs().format('MM-DD HH:mm:ss');
+
+          dispatch({
+            type: SYNC_WALLETS_MAP,
+            payload: {
+              code,
+              item: {
+                funds,
+                updateTime: now,
+              },
+            },
+          });
+          return funds;
+        })
+      );
+
+      await Adapter.ChokeAllAdapter<(Fund.ResponseItem | null)[]>(
+        walletCollects,
+        3000
+      );
+    } finally {
+    }
+  };
 }

@@ -294,7 +294,18 @@ export function useCurrentWallet() {
   const currentWalletCode = useSelector(
     (state: StoreState) => state.wallet.currentWalletCode
   );
+  const walletsMap = useSelector(
+    (state: StoreState) => state.wallet.walletsMap
+  );
   const currentWallet =
     wallets.filter(({ code }) => currentWalletCode === code)[0] || {};
-  return { currentWallet, currentWalletCode, wallets };
+  const currentWalletState = walletsMap[currentWalletCode] || {};
+
+  return {
+    currentWallet,
+    currentWalletCode,
+    wallets,
+    walletsMap,
+    currentWalletState,
+  };
 }

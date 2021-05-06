@@ -6,6 +6,7 @@ import dayjs from 'dayjs';
 import { Dispatch, GetState } from '@/reducers/types';
 import { getSystemSetting } from '@/actions/setting';
 import {
+  SYNC_WALLETS_MAP,
   updateUpdateTime,
   getWalletConfig,
   defaultWallet,
@@ -41,8 +42,8 @@ export interface CodeMap {
 //   return { fundConfig, codeMap };
 // }
 
-export function getFundConfig() {
-  const wallet = getCurrentWallet();
+export function getFundConfig(code?: string) {
+  const wallet = getCurrentWallet(code);
   const fundConfig = wallet.funds;
   const codeMap = getCodeMap(fundConfig);
   return { fundConfig, codeMap };
@@ -153,8 +154,11 @@ export function deleteFund(code: string) {
   });
 }
 
-export function calcFund(fund: Fund.ResponseItem & Fund.FixData) {
-  const { codeMap } = getFundConfig();
+export function calcFund(
+  fund: Fund.ResponseItem & Fund.FixData,
+  code?: string
+) {
+  const { codeMap } = getFundConfig(code);
   const isFix = fund.fixDate && fund.fixDate === fund.gztime?.slice(5, 10);
   const cyfe = codeMap[fund.fundcode!]?.cyfe || 0;
   const gsz = isFix ? fund.fixDwjz! : fund.gsz!;
@@ -181,8 +185,8 @@ export function calcFund(fund: Fund.ResponseItem & Fund.FixData) {
   };
 }
 
-export function calcFunds(funds: Fund.ResponseItem[]) {
-  const { codeMap } = getFundConfig();
+export function calcFunds(funds: Fund.ResponseItem[] = [], code?: string) {
+  const { codeMap } = getFundConfig(code);
   const [zje, gszje, sygz] = funds.reduce(
     ([a, b, c], fund) => {
       const calcFundResult = calcFund(fund);
@@ -206,11 +210,22 @@ export function loadFunds() {
     try {
       dispatch({ type: SET_FUNDS_LOADING, payload: true });
       const funds = await getFunds();
+      const { code } = getCurrentWallet();
       const now = dayjs().format('MM-DD HH:mm:ss');
       batch(() => {
         dispatch({ type: SORT_FUNDS_WITH_CHACHED, payload: funds });
         dispatch({ type: SET_FUNDS_LOADING, payload: false });
         dispatch(updateUpdateTime(now));
+        dispatch({
+          type: SYNC_WALLETS_MAP,
+          payload: {
+            code,
+            item: {
+              funds,
+              updateTime: now,
+            },
+          },
+        });
       });
     } finally {
       dispatch({ type: SET_FUNDS_LOADING, payload: false });
@@ -222,10 +237,21 @@ export function loadFundsWithoutLoading() {
   return async (dispatch: Dispatch, getState: GetState) => {
     try {
       const funds = await getFunds();
+      const { code } = getCurrentWallet();
       const now = dayjs().format('MM-DD HH:mm:ss');
       batch(() => {
         dispatch({ type: SORT_FUNDS_WITH_CHACHED, payload: funds });
         dispatch(updateUpdateTime(now));
+        dispatch({
+          type: SYNC_WALLETS_MAP,
+          payload: {
+            code,
+            item: {
+              funds,
+              updateTime: now,
+            },
+          },
+        });
       });
     } finally {
     }

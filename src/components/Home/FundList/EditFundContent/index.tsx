@@ -19,7 +19,6 @@ export interface EditFundContentProps {
 const EditFundContent: React.FC<EditFundContentProps> = (props) => {
   const { fund } = props;
   const [num, setNum] = useState<any>(fund.cyfe);
-
   const onSave = () => {
     updateFund({
       code: fund.code,
@@ -48,7 +47,7 @@ const EditFundContent: React.FC<EditFundContentProps> = (props) => {
           <label>持有份额：</label>
           <InputNumber
             placeholder="可精确2位小数"
-            defaultValue={0}
+            // defaultValue={0}
             min={0}
             precision={2}
             value={num}

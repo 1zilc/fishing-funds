@@ -8,6 +8,7 @@ import { ReactComponent as MenuIcon } from '@/assets/icons/menu.svg';
 import { ReactComponent as RemoveIcon } from '@/assets/icons/remove.svg';
 import { ReactComponent as EditIcon } from '@/assets/icons/edit.svg';
 import CustomDrawer from '@/components/CustomDrawer';
+import WalletRow from '@/components/Wallet/WalletRow';
 import Empty from '@/components/Empty';
 import AddFundContent from '@/components/Home/FundList/AddFundContent';
 import EditFundContent, {
@@ -20,6 +21,7 @@ import {
   deleteFund,
   setFundConfig,
 } from '@/actions/fund';
+import { getCurrentWallet, getWalletConfig } from '@/actions/wallet';
 import {
   useActions,
   useScrollToTop,
@@ -39,6 +41,7 @@ const defaultEdifFund = {
 };
 const { dialog } = remote;
 const ManageFundContent: React.FC<ManageFundContentProps> = (props) => {
+  const wallet = getCurrentWallet();
   const [sortFundConfig, setSortFundConfig] = useState<
     (Fund.SettingItem & Fund.SortRow)[]
   >([]);
@@ -65,7 +68,6 @@ const ManageFundContent: React.FC<ManageFundContentProps> = (props) => {
 
   const updateSortFundConfig = () => {
     const { fundConfig } = getFundConfig();
-    console.log(fundConfig);
     setSortFundConfig(fundConfig.map((_) => ({ ..._, id: _.code })));
   };
 
@@ -106,6 +108,9 @@ const ManageFundContent: React.FC<ManageFundContentProps> = (props) => {
       onClose={props.onClose}
     >
       <div className={styles.content}>
+        <div className={styles.wallet}>
+          <WalletRow wallet={wallet} readonly />
+        </div>
         {sortFundConfig.length ? (
           syncFundSettingDone ? (
             <ReactSortable
