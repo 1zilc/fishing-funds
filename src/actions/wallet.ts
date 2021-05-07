@@ -8,7 +8,6 @@ import * as CONST from '@/constants';
 import * as Utils from '@/utils';
 import * as Adapter from '@/utils/adpters';
 import * as Services from '@/services';
-export const UPDATE_UPTATETIME = 'UPDATE_UPTATETIME';
 export const CHANGE_EYE_STATUS = 'CHANGE_EYE_STATUS';
 export const CHANGE_CURRENT_WALLET_CODE = 'CHANGE_CURRENT_WALLET_CODE';
 export const SYNC_WALLETS = 'SYNC_WALLETS';
@@ -24,13 +23,6 @@ export const defaultWallet: Wallet.SettingItem = {
   code: '-1',
   funds: [],
 };
-
-export function updateUpdateTime(updateTime: string) {
-  return {
-    type: UPDATE_UPTATETIME,
-    payload: updateTime,
-  };
-}
 
 export function changeEyeStatus(status: Enums.EyeStatus) {
   Utils.SetStorage(CONST.STORAGE.EYE_STATUS, status);

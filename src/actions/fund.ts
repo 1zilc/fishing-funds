@@ -8,7 +8,6 @@ import { getSystemSetting } from '@/actions/setting';
 import {
   SYNC_WALLETS_MAP,
   SYNC_FIX_WALLETS_MAP,
-  updateUpdateTime,
   getWalletConfig,
   defaultWallet,
   setWalletConfig,
@@ -34,15 +33,6 @@ export interface CodeMap {
   [index: string]: Fund.SettingItem & Fund.OriginRow;
 }
 
-// export function getFundConfig() {
-//   const fundConfig: Fund.SettingItem[] = Utils.GetStorage(
-//     CONST.STORAGE.FUND_SETTING,
-//     []
-//   );
-//   const codeMap = getCodeMap(fundConfig);
-//   return { fundConfig, codeMap };
-// }
-
 export function getFundConfig(code?: string) {
   const wallet = getCurrentWallet(code);
   const fundConfig = wallet.funds;
@@ -56,10 +46,6 @@ export function getCodeMap(config: Fund.SettingItem[]) {
     return r;
   }, {} as CodeMap);
 }
-
-// export function setFundConfig(config: Fund.SettingItem[]) {
-//   Utils.SetStorage(CONST.STORAGE.FUND_SETTING, config);
-// }
 export function setFundConfig(config: Fund.SettingItem[]) {
   const { walletConfig } = getWalletConfig();
   const currentWalletCode = Utils.GetStorage(
@@ -216,7 +202,7 @@ export function loadFunds() {
       batch(() => {
         dispatch({ type: SORT_FUNDS_WITH_CHACHED, payload: funds });
         dispatch({ type: SET_FUNDS_LOADING, payload: false });
-        dispatch(updateUpdateTime(now));
+
         dispatch({
           type: SYNC_WALLETS_MAP,
           payload: {
@@ -242,7 +228,6 @@ export function loadFundsWithoutLoading() {
       const now = dayjs().format('MM-DD HH:mm:ss');
       batch(() => {
         dispatch({ type: SORT_FUNDS_WITH_CHACHED, payload: funds });
-        dispatch(updateUpdateTime(now));
         dispatch({
           type: SYNC_WALLETS_MAP,
           payload: {
@@ -279,7 +264,6 @@ export function loadFixFunds() {
 
       batch(() => {
         dispatch({ type: SET_FIX_FUND, payload: fixFunds });
-        dispatch(updateUpdateTime(now));
         dispatch({
           type: SYNC_FIX_WALLETS_MAP,
           payload: {

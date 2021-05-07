@@ -2,7 +2,9 @@ import NP from 'number-precision';
 import dayjs from 'dayjs';
 import { remote } from 'electron';
 
+import { defaultWallet } from '@/actions/wallet';
 import * as Enums from '@/utils/enums';
+import * as CONST from '@/constants';
 const { nativeTheme } = remote;
 
 export function Yang(num: string | number | undefined) {
@@ -38,13 +40,17 @@ export function DeepCopy<T>(data: T): T {
   return dataTmp;
 }
 
-export function GetStorage<T = any>(key: string, init: T): T {
+export function GetStorage<T = any>(key: string, init?: T): T {
   const json = localStorage.getItem(key);
-  return json ? JSON.parse(json) : init;
+  return json ? JSON.parse(json) : init || json;
 }
 
 export function SetStorage(key: string, data: any) {
   localStorage.setItem(key, JSON.stringify(data));
+}
+
+export function ClearStorage(key: string) {
+  localStorage.removeItem(key);
 }
 
 export function Encrypt(s: string) {
@@ -197,4 +203,26 @@ export function UnitConvert(num: number) {
 
 export function MakeHash() {
   return Math.random().toString(36).substr(2);
+}
+
+export function ClearExpiredStorage() {
+  // 数据源请求类型 2.7.0已废除
+  const fundApiType = GetStorage(CONST.STORAGE.FUND_API_TYPE);
+  if (fundApiType !== null) {
+    ClearStorage(CONST.STORAGE.FUND_API_TYPE);
+  }
+  // 钱包icon索引 2.8.0已废除
+  // 基金配置 2.8.0已废除
+  const fundSetting = GetStorage(CONST.STORAGE.FUND_SETTING);
+  const walletIndex = GetStorage(CONST.STORAGE.WALLET_INDEX);
+  if (fundSetting !== null) {
+    const walletSetting: Wallet.SettingItem = {
+      ...defaultWallet,
+      funds: fundSetting || [],
+      iconIndex: walletIndex || 0,
+    };
+    SetStorage(CONST.STORAGE.WALLET_SETTING, [walletSetting]);
+    ClearStorage(CONST.STORAGE.FUND_SETTING);
+    ClearStorage(CONST.STORAGE.WALLET_INDEX);
+  }
 }
