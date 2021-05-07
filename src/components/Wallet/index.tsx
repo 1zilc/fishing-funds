@@ -1,13 +1,14 @@
 import React, { useContext, useMemo, useEffect } from 'react';
 import classnames from 'classnames';
 import { useDispatch, useSelector } from 'react-redux';
-
+import { Dropdown, Menu } from 'antd';
 import { ReactComponent as ConsumptionIcon } from '@/assets/icons/consumption.svg';
 import { ReactComponent as EyeIcon } from '@/assets/icons/eye.svg';
 import { ReactComponent as EyeCloseIcon } from '@/assets/icons/eye-close.svg';
 import { HeaderContext } from '@/components/Header';
 import { StoreState } from '@/reducers/types';
 import {
+  selectWallet,
   toggleEyeStatus,
   loadWalletsFunds,
   loadFixWalletsFunds,
@@ -19,10 +20,12 @@ import {
   useActions,
   useWorkDayTimeToDo,
   useFixTimeToDo,
+  useFreshFunds,
 } from '@/utils/hooks';
 import * as Enums from '@/utils/enums';
 import * as Utils from '@/utils';
 import * as Adapter from '@/utils/adpters';
+import * as CONST from '@/constants';
 
 import styles from './index.scss';
 
@@ -33,10 +36,11 @@ const Wallet: React.FC<WalletProps> = () => {
   const { freshDelaySetting, autoFreshSetting } = getSystemSetting();
   const { miniMode } = useContext(HeaderContext);
   const eyeStatus = useSelector((state: StoreState) => state.wallet.eyeStatus);
+  const wallets = useSelector((state: StoreState) => state.wallet.wallets);
   const { currentWallet, currentWalletState } = useCurrentWallet();
   const runLoadWalletsFunds = useActions(loadWalletsFunds);
   const runLoadFixWalletsFunds = useActions(loadFixWalletsFunds);
-
+  const freshFunds = useFreshFunds(CONST.DEFAULT.FRESH_BUTTON_THROTTLE_DELAY);
   const WalletIcon = useMemo(() => {
     const { ReactComponent } = require(`@/assets/icons/wallet/${
       currentWallet.iconIndex || 0
@@ -51,6 +55,12 @@ const Wallet: React.FC<WalletProps> = () => {
   const display_sygz = eyeOpen
     ? Utils.Yang(sygz.toFixed(2))
     : Utils.Encrypt(Utils.Yang(sygz.toFixed(2)));
+
+  const onSelectWallet = async (wallet: Wallet.SettingItem) => {
+    const { code } = wallet;
+    dispatch(selectWallet(code));
+    freshFunds();
+  };
 
   // 间隔时间刷新钱包
   useWorkDayTimeToDo(
@@ -72,7 +82,23 @@ const Wallet: React.FC<WalletProps> = () => {
     <div
       className={classnames(styles.content, { [styles.miniMode]: miniMode })}
     >
-      <WalletIcon className={styles.walletIcon} />
+      <Dropdown
+        placement="bottomRight"
+        overlay={
+          <Menu>
+            {wallets.map((wallet) => (
+              <Menu.Item
+                key={wallet.code}
+                onClick={() => onSelectWallet(wallet)}
+              >
+                {wallet.name}
+              </Menu.Item>
+            ))}
+          </Menu>
+        }
+      >
+        <WalletIcon className={styles.walletIcon} />
+      </Dropdown>
       <div className={styles.info}>
         <div className={styles.timeBar}>
           <div className={styles.last}>

@@ -5,10 +5,11 @@ import {
   useState,
   useEffect,
 } from 'react';
-import { useInterval, useBoolean } from 'ahooks';
+import { useInterval, useBoolean, useThrottleFn } from 'ahooks';
 import { ipcRenderer, remote, clipboard } from 'electron';
 import { bindActionCreators } from 'redux';
 import { useDispatch, useSelector } from 'react-redux';
+import dayjs from 'dayjs';
 
 import { getSystemSetting } from '@/actions/setting';
 import { getCurrentHours } from '@/actions/time';
@@ -19,6 +20,8 @@ import {
   updateFund,
   setFundConfig,
   getCodeMap,
+  loadFunds,
+  loadFixFunds,
 } from '@/actions/fund';
 import { StoreState } from '@/reducers/types';
 import * as Utils from '@/utils';
@@ -308,4 +311,20 @@ export function useCurrentWallet() {
     walletsMap,
     currentWalletState,
   };
+}
+
+export function useFreshFunds(throttleDelay: number) {
+  const { run: runLoadFunds } = useThrottleFn(useActions(loadFunds), {
+    wait: throttleDelay,
+  });
+  const { run: runLoadFixFunds } = useThrottleFn(useActions(loadFixFunds), {
+    wait: throttleDelay,
+  });
+  const freshFunds = useScrollToTop({
+    after: async () => {
+      await runLoadFunds();
+      Utils.JudgeFixTime(dayjs().valueOf()) && (await runLoadFixFunds());
+    },
+  });
+  return freshFunds;
 }

@@ -83,17 +83,17 @@ export async function getFunds(config?: Fund.SettingItem[]) {
     case Enums.FundApiType.Dayfund:
       return Adapter.ChokeAllAdapter<Fund.ResponseItem>(collectors);
     case Enums.FundApiType.Tencent:
-      await Utils.Sleep(1000);
+      await Utils.Sleep(CONST.DEFAULT.LOAD_FUNDS_SLEEP_DELAY);
       return Adapter.ConCurrencyAllAdapter<Fund.ResponseItem>(collectors);
     case Enums.FundApiType.Sina:
-      await Utils.Sleep(1000);
+      await Utils.Sleep(CONST.DEFAULT.LOAD_FUNDS_SLEEP_DELAY);
       return Adapter.ConCurrencyAllAdapter<Fund.ResponseItem>(collectors);
     case Enums.FundApiType.Howbuy:
-      await Utils.Sleep(1000);
+      await Utils.Sleep(CONST.DEFAULT.LOAD_FUNDS_SLEEP_DELAY);
       return Adapter.ConCurrencyAllAdapter<Fund.ResponseItem>(collectors);
     case Enums.FundApiType.Eastmoney:
     default:
-      await Utils.Sleep(1000);
+      await Utils.Sleep(CONST.DEFAULT.LOAD_FUNDS_SLEEP_DELAY);
       return Adapter.ConCurrencyAllAdapter<Fund.ResponseItem>(collectors);
   }
 }

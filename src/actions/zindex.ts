@@ -80,7 +80,7 @@ export async function getZindexs() {
   const collectors = zindexConfig
     .filter(({ show }) => show)
     .map(({ code }) => () => getZindex(code));
-  await Utils.Sleep(1000);
+  await Utils.Sleep(CONST.DEFAULT.LOAD_ZINDEXS_SLEEP_DELAY);
   return Adapter.ConCurrencyAllAdapter<Zindex.ResponseItem>(collectors);
 }
 

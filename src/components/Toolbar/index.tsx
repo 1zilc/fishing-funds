@@ -16,18 +16,17 @@ import PayContent from '@/components/PayContent';
 import EditZindexContent from '@/components/Home/ZindexList/EditZindexContent';
 import { HomeContext } from '@/components/Home';
 import { StoreState } from '@/reducers/types';
-import { loadFunds, loadFixFunds } from '@/actions/fund';
 import { loadZindexs } from '@/actions/zindex';
 import { loadQuotations } from '@/actions/quotation';
 import { getSystemSetting } from '@/actions/setting';
-import { useScrollToTop, useActions } from '@/utils/hooks';
+import { useScrollToTop, useActions, useFreshFunds } from '@/utils/hooks';
 import * as Enums from '@/utils/enums';
+import * as CONST from '@/constants';
 import styles from './index.scss';
 
 export interface ToolBarProps {}
 
 const iconSize = { height: 18, width: 18 };
-const throttleDelay = 1000 * 3;
 
 const ToolBar: React.FC<ToolBarProps> = () => {
   const { lowKeySetting, baseFontSizeSetting } = getSystemSetting();
@@ -39,26 +38,14 @@ const ToolBar: React.FC<ToolBarProps> = () => {
     (state: StoreState) => state.tabs.activeKey
   );
 
-  const { run: runLoadFunds } = useThrottleFn(useActions(loadFunds), {
-    wait: throttleDelay,
-  });
-  const { run: runLoadFixFunds } = useThrottleFn(useActions(loadFixFunds), {
-    wait: throttleDelay,
-  });
   const { run: runLoadZindexs } = useThrottleFn(useActions(loadZindexs), {
-    wait: throttleDelay,
+    wait: CONST.DEFAULT.FRESH_BUTTON_THROTTLE_DELAY,
   });
   const { run: runLoadQuotations } = useThrottleFn(useActions(loadQuotations), {
-    wait: throttleDelay,
+    wait: CONST.DEFAULT.FRESH_BUTTON_THROTTLE_DELAY,
   });
 
-  const freshFunds = useScrollToTop({
-    after: async () => {
-      await runLoadFunds();
-      await runLoadFixFunds();
-    },
-  });
-
+  const freshFunds = useFreshFunds(CONST.DEFAULT.FRESH_BUTTON_THROTTLE_DELAY);
   const freshZindexs = useScrollToTop({ after: runLoadZindexs });
   const freshQuotations = useScrollToTop({ after: runLoadQuotations });
 

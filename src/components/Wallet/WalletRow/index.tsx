@@ -13,6 +13,7 @@ import { deleteWallet, getWalletConfig } from '@/actions/wallet';
 import { calcFunds } from '@/actions/fund';
 import { StoreState } from '@/reducers/types';
 import * as Utils from '@/utils';
+import * as Enums from '@/utils/enums';
 import styles from './index.scss';
 
 export interface WalletRowProps {
@@ -37,6 +38,7 @@ const WalletRow: React.FC<WalletRowProps> = (props) => {
   const walletsMap = useSelector(
     (state: StoreState) => state.wallet.walletsMap
   );
+  const eyeStatus = useSelector((state: StoreState) => state.wallet.eyeStatus);
 
   const [
     showEditWalletDrawer,
@@ -76,8 +78,11 @@ const WalletRow: React.FC<WalletRowProps> = (props) => {
   const { funds, updateTime } = walletState;
 
   const { zje, sygz } = calcFunds(funds, wallet.code);
-  const display_zje = zje.toFixed(2);
-  const display_sygz = Utils.Yang(sygz.toFixed(2));
+  const eyeOpen = eyeStatus === Enums.EyeStatus.Open;
+  const display_zje = eyeOpen ? zje.toFixed(2) : Utils.Encrypt(zje.toFixed(2));
+  const display_sygz = eyeOpen
+    ? Utils.Yang(sygz.toFixed(2))
+    : Utils.Encrypt(Utils.Yang(sygz.toFixed(2)));
 
   return (
     <>

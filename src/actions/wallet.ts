@@ -157,7 +157,7 @@ export function loadWalletsFunds() {
 
       await Adapter.ChokeAllAdapter<(Fund.ResponseItem | null)[]>(
         collects,
-        3000
+        CONST.DEFAULT.LOAD_WALLET_DELAY
       );
     } catch (e) {
       console.log('刷新钱包基金出错', e);
@@ -199,7 +199,10 @@ export function loadFixWalletsFunds() {
             }
           );
       });
-      await Adapter.ChokeAllAdapter<(Fund.FixData | null)[]>(fixCollects, 3000);
+      await Adapter.ChokeAllAdapter<(Fund.FixData | null)[]>(
+        fixCollects,
+        CONST.DEFAULT.LOAD_WALLET_DELAY
+      );
     } catch (e) {
       console.log('刷新钱包基金fix出错', e);
     } finally {

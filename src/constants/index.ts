@@ -1,3 +1,6 @@
-export const STORAGE = require('./storage.json');
-export const ROUTES = require('./routes.json');
-export const VARIBLES = require('./varibles.json');
+import STORAGE from './storage';
+import ROUTES from './routes';
+import VARIBLES from './varibles';
+import DEFAULT from './default';
+
+export { STORAGE, ROUTES, VARIBLES, DEFAULT };

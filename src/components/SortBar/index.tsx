@@ -26,9 +26,7 @@ import {
   TOGGLE_QUOTATIONS_COLLAPSE,
 } from '@/actions/quotation';
 import * as Enums from '@/utils/enums';
-import * as Utils from '@/utils';
 import styles from './index.scss';
-import quotation from '@/reducers/quotation';
 
 export interface SortBarProps {}
 
@@ -117,9 +115,7 @@ const SortBar: React.FC<SortBarProps> = () => {
                       <Menu.Item
                         key={key}
                         onClick={() => {
-                          setFundSortMode({
-                            type: key,
-                          });
+                          setFundSortMode({ type: key });
                           dispatch({ type: SORT_FUNDS });
                         }}
                       >
