@@ -92,7 +92,7 @@ const ManageWalletContent: React.FC<ManageWalletContentProps> = (props) => {
             ))}
           </ReactSortable>
         ) : (
-          <Empty text="暂无钱包..." />
+          <Empty text="暂无钱包~" />
         )}
       </div>
       <div

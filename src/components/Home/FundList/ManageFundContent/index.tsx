@@ -159,10 +159,10 @@ const ManageFundContent: React.FC<ManageFundContentProps> = (props) => {
               })}
             </ReactSortable>
           ) : (
-            <Empty text="正在同步基金设置..." />
+            <Empty text="正在同步基金设置~" />
           )
         ) : (
-          <Empty text="暂未自选基金..." />
+          <Empty text="暂未自选基金~" />
         )}
       </div>
       <div

@@ -37,6 +37,9 @@ const Wallet: React.FC<WalletProps> = () => {
   const { miniMode } = useContext(HeaderContext);
   const eyeStatus = useSelector((state: StoreState) => state.wallet.eyeStatus);
   const wallets = useSelector((state: StoreState) => state.wallet.wallets);
+  const currentWalletCode = useSelector(
+    (state: StoreState) => state.wallet.currentWalletCode
+  );
   const { currentWallet, currentWalletState } = useCurrentWallet();
   const runLoadWalletsFunds = useActions(loadWalletsFunds);
   const runLoadFixWalletsFunds = useActions(loadFixWalletsFunds);
@@ -85,7 +88,7 @@ const Wallet: React.FC<WalletProps> = () => {
       <Dropdown
         placement="bottomRight"
         overlay={
-          <Menu>
+          <Menu selectedKeys={[currentWalletCode]}>
             {wallets.map((wallet) => (
               <Menu.Item
                 key={wallet.code}
