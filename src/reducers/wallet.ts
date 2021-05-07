@@ -6,6 +6,7 @@ import {
   CHANGE_CURRENT_WALLET_CODE,
   SYNC_WALLETS,
   SYNC_WALLETS_MAP,
+  SYNC_FIX_WALLETS_MAP,
   defaultWallet,
 } from '@/actions/wallet';
 
@@ -28,7 +29,55 @@ function syncWalletsMap(
   const { code, item } = payload;
   const { walletsMap } = state;
   const cloneWalletsMap = Utils.DeepCopy(walletsMap);
+  const fundsCodeToMap = (cloneWalletsMap[code]?.funds || []).reduce(
+    (map, fund) => {
+      map[fund.fundcode!] = fund;
+      return map;
+    },
+    {} as any
+  );
+
+  item.funds = (item.funds || [])
+    .filter((_) => !!_)
+    .map((_) => ({
+      ...(fundsCodeToMap[_!.fundcode!] || {}),
+      ..._,
+    }));
+
   cloneWalletsMap[code] = item;
+  return {
+    ...state,
+    walletsMap: cloneWalletsMap,
+  };
+}
+
+function syncFixWalletsMap(
+  state: WalletState,
+  payload: { code: string; item: Wallet.StateItem }
+) {
+  const { code, item } = payload;
+  const { funds: fixFunds } = item;
+  const { walletsMap } = state;
+  const cloneWalletsMap = Utils.DeepCopy(walletsMap);
+  const funds = cloneWalletsMap[code]?.funds || [];
+
+  const fixFundMap = fixFunds
+    .filter((_) => !!_)
+    .reduce((map, fund) => {
+      map[fund.code!] = fund;
+      return map;
+    }, {} as { [index: string]: Fund.FixData });
+
+  funds.forEach((fund) => {
+    const fixFund = fixFundMap[fund.fundcode!];
+    if (fixFund) {
+      fund.fixZzl = fixFund.fixZzl;
+      fund.fixDate = fixFund.fixDate;
+      fund.fixDwjz = fixFund.fixDwjz;
+    }
+  });
+  cloneWalletsMap[code].funds = funds;
+
   return {
     ...state,
     walletsMap: cloneWalletsMap,
@@ -73,6 +122,8 @@ export default function wallet(
       };
     case SYNC_WALLETS_MAP:
       return syncWalletsMap(state, action.payload);
+    case SYNC_FIX_WALLETS_MAP:
+      return syncFixWalletsMap(state, action.payload);
     default:
       return state;
   }

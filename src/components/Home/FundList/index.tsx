@@ -27,8 +27,11 @@ const FundList: React.FC<{}> = () => {
     freshDelaySetting * 1000 * 60
   );
 
-  // 每3分钟自动检查最新净值
-  useFixTimeToDo(runLoadFixFunds, 1000 * 60 * 3);
+  // 间隔时间检查最新净值
+  useFixTimeToDo(
+    () => autoFreshSetting && runLoadFixFunds(),
+    freshDelaySetting * 1000 * 60
+  );
 
   useEffect(() => {
     Adapter.ChokeAllAdapter([runLoadFunds, runLoadFixFunds]);

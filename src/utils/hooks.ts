@@ -64,8 +64,8 @@ export function useFixTimeToDo(
 
 export function useScrollToTop(
   config: {
-    before?: () => void;
-    after?: () => void;
+    before?: () => void | Promise<void>;
+    after?: () => void | Promise<void>;
     option?: {
       behavior?: ScrollBehavior;
       left?: number;

@@ -16,7 +16,7 @@ import PayContent from '@/components/PayContent';
 import EditZindexContent from '@/components/Home/ZindexList/EditZindexContent';
 import { HomeContext } from '@/components/Home';
 import { StoreState } from '@/reducers/types';
-import { loadFunds } from '@/actions/fund';
+import { loadFunds, loadFixFunds } from '@/actions/fund';
 import { loadZindexs } from '@/actions/zindex';
 import { loadQuotations } from '@/actions/quotation';
 import { getSystemSetting } from '@/actions/setting';
@@ -38,7 +38,11 @@ const ToolBar: React.FC<ToolBarProps> = () => {
   const tabsActiveKey = useSelector(
     (state: StoreState) => state.tabs.activeKey
   );
+
   const { run: runLoadFunds } = useThrottleFn(useActions(loadFunds), {
+    wait: throttleDelay,
+  });
+  const { run: runLoadFixFunds } = useThrottleFn(useActions(loadFixFunds), {
     wait: throttleDelay,
   });
   const { run: runLoadZindexs } = useThrottleFn(useActions(loadZindexs), {
@@ -48,7 +52,13 @@ const ToolBar: React.FC<ToolBarProps> = () => {
     wait: throttleDelay,
   });
 
-  const freshFunds = useScrollToTop({ after: runLoadFunds });
+  const freshFunds = useScrollToTop({
+    after: async () => {
+      await runLoadFunds();
+      await runLoadFixFunds();
+    },
+  });
+
   const freshZindexs = useScrollToTop({ after: runLoadZindexs });
   const freshQuotations = useScrollToTop({ after: runLoadQuotations });
 

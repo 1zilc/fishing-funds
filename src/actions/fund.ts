@@ -7,6 +7,7 @@ import { Dispatch, GetState } from '@/reducers/types';
 import { getSystemSetting } from '@/actions/setting';
 import {
   SYNC_WALLETS_MAP,
+  SYNC_FIX_WALLETS_MAP,
   updateUpdateTime,
   getWalletConfig,
   defaultWallet,
@@ -262,6 +263,7 @@ export function loadFixFunds() {
   return async (dispatch: Dispatch, getState: GetState) => {
     try {
       const { fund } = getState();
+      const { code } = getCurrentWallet();
       const { funds } = fund;
       const collectors = funds
         .filter(
@@ -273,7 +275,22 @@ export function loadFixFunds() {
       const fixFunds =
         (await Adapter.ConCurrencyAllAdapter<Fund.FixData>(collectors)) || [];
 
-      dispatch({ type: SET_FIX_FUND, payload: fixFunds });
+      const now = dayjs().format('MM-DD HH:mm:ss');
+
+      batch(() => {
+        dispatch({ type: SET_FIX_FUND, payload: fixFunds });
+        dispatch(updateUpdateTime(now));
+        dispatch({
+          type: SYNC_FIX_WALLETS_MAP,
+          payload: {
+            code,
+            item: {
+              funds: fixFunds,
+              updateTime: now,
+            },
+          },
+        });
+      });
     } finally {
     }
   };
