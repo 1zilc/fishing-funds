@@ -2,6 +2,7 @@ import { batch } from 'react-redux';
 
 import * as Services from '@/services';
 import * as Utils from '@/utils';
+import * as CONST from '@/constants';
 import { Dispatch, GetState } from '@/reducers/types';
 
 export const SORT_QUOTATIONS = 'SORT_QUOTATIONS';
@@ -12,7 +13,7 @@ export const SORT_QUOTATIONS_WITH_COLLAPSE_CHACHED =
   'SORT_QUOTATIONS_WITH_COLLAPSE_CHACHED';
 
 export async function getQuotations() {
-  await Utils.Sleep(1000);
+  await Utils.Sleep(CONST.DEFAULT.LOAD_QUOTATION_SLEEP_DELAY);
   return Services.Quotation.GetQuotationsFromEastmoney();
 }
 
@@ -30,6 +31,20 @@ export function loadQuotations() {
       });
     } finally {
       dispatch({ type: SET_QUOTATIONS_LOADING, payload: false });
+    }
+  };
+}
+export function loadQuotationsWithoutLoading() {
+  return async (dispatch: Dispatch, getState: GetState) => {
+    try {
+      const quotations = await getQuotations();
+      batch(() => {
+        dispatch({
+          type: SORT_QUOTATIONS_WITH_COLLAPSE_CHACHED,
+          payload: quotations,
+        });
+      });
+    } finally {
     }
   };
 }

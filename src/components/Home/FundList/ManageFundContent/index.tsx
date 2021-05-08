@@ -8,6 +8,7 @@ import { ReactComponent as MenuIcon } from '@/assets/icons/menu.svg';
 import { ReactComponent as RemoveIcon } from '@/assets/icons/remove.svg';
 import { ReactComponent as EditIcon } from '@/assets/icons/edit.svg';
 import CustomDrawer from '@/components/CustomDrawer';
+import WalletRow from '@/components/Wallet/WalletRow';
 import Empty from '@/components/Empty';
 import AddFundContent from '@/components/Home/FundList/AddFundContent';
 import EditFundContent, {
@@ -20,6 +21,7 @@ import {
   deleteFund,
   setFundConfig,
 } from '@/actions/fund';
+import { getCurrentWallet, getWalletConfig } from '@/actions/wallet';
 import {
   useActions,
   useScrollToTop,
@@ -39,12 +41,11 @@ const defaultEdifFund = {
 };
 const { dialog } = remote;
 const ManageFundContent: React.FC<ManageFundContentProps> = (props) => {
+  const wallet = getCurrentWallet();
   const [sortFundConfig, setSortFundConfig] = useState<
     (Fund.SettingItem & Fund.SortRow)[]
   >([]);
   const [editFund, setEditFund] = useState<EditFundType>(defaultEdifFund);
-  const runLoadFunds = useActions(loadFunds);
-  const freshFunds = useScrollToTop({ after: runLoadFunds });
   const { done: syncFundSettingDone } = useSyncFixFundSetting();
 
   const [
@@ -57,11 +58,11 @@ const ManageFundContent: React.FC<ManageFundContentProps> = (props) => {
   ] = useBoolean(false);
 
   const [
-    showEditDrawer,
+    showEditFundDrawer,
     {
-      setTrue: openEditDrawer,
-      setFalse: closeEditDrawer,
-      toggle: toggleEditDrawer,
+      setTrue: openEditFundDrawer,
+      setFalse: closeEditFundDrawer,
+      toggle: toggleEditFundDrawer,
     },
   ] = useBoolean(false);
 
@@ -103,13 +104,13 @@ const ManageFundContent: React.FC<ManageFundContentProps> = (props) => {
     <CustomDrawerContent
       title="管理基金"
       enterText="确定"
-      onEnter={() => {
-        freshFunds();
-        props.onClose();
-      }}
+      onEnter={props.onEnter}
       onClose={props.onClose}
     >
       <div className={styles.content}>
+        <div className={styles.wallet}>
+          <WalletRow wallet={wallet} readonly />
+        </div>
         {sortFundConfig.length ? (
           syncFundSettingDone ? (
             <ReactSortable
@@ -146,7 +147,7 @@ const ManageFundContent: React.FC<ManageFundContentProps> = (props) => {
                                 cyfe: fund.cyfe,
                                 code: fund.code,
                               });
-                              openEditDrawer();
+                              openEditFundDrawer();
                             }}
                           />
                         </span>
@@ -158,10 +159,10 @@ const ManageFundContent: React.FC<ManageFundContentProps> = (props) => {
               })}
             </ReactSortable>
           ) : (
-            <Empty text="正在同步基金设置..." />
+            <Empty text="正在同步基金设置~" />
           )
         ) : (
-          <Empty text="暂未自选基金..." />
+          <Empty text="暂未自选基金~" />
         )}
       </div>
       <div
@@ -182,12 +183,12 @@ const ManageFundContent: React.FC<ManageFundContentProps> = (props) => {
           }}
         />
       </CustomDrawer>
-      <CustomDrawer show={showEditDrawer}>
+      <CustomDrawer show={showEditFundDrawer}>
         <EditFundContent
-          onClose={closeEditDrawer}
+          onClose={closeEditFundDrawer}
           onEnter={() => {
             updateSortFundConfig();
-            closeEditDrawer();
+            closeEditFundDrawer();
           }}
           fund={{
             cyfe: editFund.cyfe,

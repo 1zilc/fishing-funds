@@ -26,9 +26,7 @@ import {
   TOGGLE_QUOTATIONS_COLLAPSE,
 } from '@/actions/quotation';
 import * as Enums from '@/utils/enums';
-import * as Utils from '@/utils';
 import styles from './index.scss';
-import quotation from '@/reducers/quotation';
 
 export interface SortBarProps {}
 
@@ -48,6 +46,7 @@ const SortBar: React.FC<SortBarProps> = () => {
     quotationSortModeOptions,
     quotationSortModeOptionsMap,
   } = getSortConfig();
+
   const [visible, setVisible] = useState(true);
   const { run: debounceSetVisible } = useDebounceFn(() => setVisible(true), {
     wait: 200,
@@ -112,14 +111,16 @@ const SortBar: React.FC<SortBarProps> = () => {
               <Dropdown
                 placement="bottomRight"
                 overlay={
-                  <Menu>
+                  <Menu
+                    selectedKeys={[
+                      String(fundSortModeOptionsMap[fundSortType].key),
+                    ]}
+                  >
                     {fundSortModeOptions.map(({ key, value }) => (
                       <Menu.Item
-                        key={key}
+                        key={String(key)}
                         onClick={() => {
-                          setFundSortMode({
-                            type: key,
-                          });
+                          setFundSortMode({ type: key });
                           dispatch({ type: SORT_FUNDS });
                         }}
                       >
@@ -167,10 +168,14 @@ const SortBar: React.FC<SortBarProps> = () => {
               <Dropdown
                 placement="bottomRight"
                 overlay={
-                  <Menu>
+                  <Menu
+                    selectedKeys={[
+                      String(zindexSortModeOptionsMap[zindexSortType].key),
+                    ]}
+                  >
                     {zindexSortModeOptions.map(({ key, value }) => (
                       <Menu.Item
-                        key={key}
+                        key={String(key)}
                         onClick={() => {
                           setZindexSortMode({
                             type: key,
@@ -222,10 +227,16 @@ const SortBar: React.FC<SortBarProps> = () => {
               <Dropdown
                 placement="bottomRight"
                 overlay={
-                  <Menu>
+                  <Menu
+                    selectedKeys={[
+                      String(
+                        quotationSortModeOptionsMap[quotationSortType].key
+                      ),
+                    ]}
+                  >
                     {quotationSortModeOptions.map(({ key, value }) => (
                       <Menu.Item
-                        key={key}
+                        key={String(key)}
                         onClick={() => {
                           setQuotationSortMode({
                             type: key,

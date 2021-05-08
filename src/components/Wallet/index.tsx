@@ -1,49 +1,112 @@
-import React, { useContext, useMemo } from 'react';
+import React, { useContext, useMemo, useEffect } from 'react';
 import classnames from 'classnames';
 import { useDispatch, useSelector } from 'react-redux';
-
+import { Dropdown, Menu } from 'antd';
 import { ReactComponent as ConsumptionIcon } from '@/assets/icons/consumption.svg';
 import { ReactComponent as EyeIcon } from '@/assets/icons/eye.svg';
 import { ReactComponent as EyeCloseIcon } from '@/assets/icons/eye-close.svg';
 import { HeaderContext } from '@/components/Header';
 import { StoreState } from '@/reducers/types';
-import { toggleEyeStatus } from '@/actions/wallet';
+import {
+  selectWallet,
+  toggleEyeStatus,
+  loadWalletsFunds,
+  loadFixWalletsFunds,
+} from '@/actions/wallet';
+import { getSystemSetting } from '@/actions/setting';
 import { calcFunds } from '@/actions/fund';
+import {
+  useCurrentWallet,
+  useActions,
+  useWorkDayTimeToDo,
+  useFixTimeToDo,
+  useFreshFunds,
+} from '@/utils/hooks';
 import * as Enums from '@/utils/enums';
 import * as Utils from '@/utils';
+import * as Adapter from '@/utils/adpters';
+import * as CONST from '@/constants';
+
 import styles from './index.scss';
 
 export interface WalletProps {}
 
 const Wallet: React.FC<WalletProps> = () => {
   const dispatch = useDispatch();
+  const { freshDelaySetting, autoFreshSetting } = getSystemSetting();
   const { miniMode } = useContext(HeaderContext);
-  const funds = useSelector((state: StoreState) => state.fund.funds);
-  const wallet = useSelector((state: StoreState) => state.wallet);
-  const walletIndex = useSelector(
-    (state: StoreState) => state.wallet.walletIndex
+  const eyeStatus = useSelector((state: StoreState) => state.wallet.eyeStatus);
+  const wallets = useSelector((state: StoreState) => state.wallet.wallets);
+  const currentWalletCode = useSelector(
+    (state: StoreState) => state.wallet.currentWalletCode
   );
+  const { currentWallet, currentWalletState } = useCurrentWallet();
+  const runLoadWalletsFunds = useActions(loadWalletsFunds);
+  const runLoadFixWalletsFunds = useActions(loadFixWalletsFunds);
+  const freshFunds = useFreshFunds(CONST.DEFAULT.FRESH_BUTTON_THROTTLE_DELAY);
   const WalletIcon = useMemo(() => {
-    const {
-      ReactComponent,
-    } = require(`@/assets/icons/wallet/${walletIndex}.svg`);
+    const { ReactComponent } = require(`@/assets/icons/wallet/${
+      currentWallet.iconIndex || 0
+    }.svg`);
     return ReactComponent;
-  }, [walletIndex]);
+  }, [currentWallet]);
+
+  const { funds, updateTime } = currentWalletState;
   const { zje, sygz } = calcFunds(funds);
-  const eyeOpen = wallet.eyeStatus === Enums.EyeStatus.Open;
+  const eyeOpen = eyeStatus === Enums.EyeStatus.Open;
   const display_zje = eyeOpen ? zje.toFixed(2) : Utils.Encrypt(zje.toFixed(2));
   const display_sygz = eyeOpen
     ? Utils.Yang(sygz.toFixed(2))
     : Utils.Encrypt(Utils.Yang(sygz.toFixed(2)));
 
+  const onSelectWallet = async (wallet: Wallet.SettingItem) => {
+    const { code } = wallet;
+    dispatch(selectWallet(code));
+    freshFunds();
+  };
+
+  // 间隔时间刷新钱包
+  useWorkDayTimeToDo(
+    () => autoFreshSetting && runLoadWalletsFunds(),
+    freshDelaySetting * 1000 * 60
+  );
+
+  // 间隔时间检查钱包最新净值
+  useFixTimeToDo(
+    () => autoFreshSetting && runLoadFixWalletsFunds(),
+    freshDelaySetting * 1000 * 60
+  );
+
+  useEffect(() => {
+    Adapter.ChokeAllAdapter([runLoadWalletsFunds, runLoadFixWalletsFunds]);
+  }, []);
+
   return (
     <div
       className={classnames(styles.content, { [styles.miniMode]: miniMode })}
     >
-      <WalletIcon className={styles.walletIcon} />
+      <Dropdown
+        placement="bottomRight"
+        overlay={
+          <Menu selectedKeys={[currentWalletCode]}>
+            {wallets.map((wallet) => (
+              <Menu.Item
+                key={wallet.code}
+                onClick={() => onSelectWallet(wallet)}
+              >
+                {wallet.name}
+              </Menu.Item>
+            ))}
+          </Menu>
+        }
+      >
+        <WalletIcon className={styles.walletIcon} />
+      </Dropdown>
       <div className={styles.info}>
         <div className={styles.timeBar}>
-          <div className={styles.last}>刷新时间：{wallet.updateTime}</div>
+          <div className={styles.last}>
+            刷新时间：{updateTime || '还没有刷新过哦～'}
+          </div>
         </div>
         <div className={styles.moneyBar}>
           <div>
@@ -60,11 +123,7 @@ const Wallet: React.FC<WalletProps> = () => {
         </div>
       </div>
       <div className={styles.eye} onClick={() => dispatch(toggleEyeStatus())}>
-        {wallet.eyeStatus === Enums.EyeStatus.Open ? (
-          <EyeIcon />
-        ) : (
-          <EyeCloseIcon />
-        )}
+        {eyeStatus === Enums.EyeStatus.Open ? <EyeIcon /> : <EyeCloseIcon />}
       </div>
     </div>
   );

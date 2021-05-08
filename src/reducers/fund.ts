@@ -137,10 +137,13 @@ function toggleFundsCollapse(state: FundState) {
 function setFixfunds(state: FundState, fixFunds: Fund.FixData[]) {
   const { funds } = state;
   const cloneFunds = Utils.DeepCopy(funds);
-  const fixFundMap = fixFunds.reduce((map, fund) => {
-    map[fund.code!] = fund;
-    return map;
-  }, {} as { [index: string]: Fund.FixData });
+  const fixFundMap = fixFunds
+    .filter((_) => !!_)
+    .reduce((map, fund) => {
+      map[fund.code!] = fund;
+      return map;
+    }, {} as { [index: string]: Fund.FixData });
+
   cloneFunds.forEach((fund) => {
     const fixFund = fixFundMap[fund.fundcode!];
     if (fixFund) {

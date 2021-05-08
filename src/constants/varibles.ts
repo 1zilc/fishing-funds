@@ -1,0 +1,17 @@
+export default [
+  '--background-color',
+  '--inner-color',
+  '--primary-color',
+  '--increase-color',
+  '--cancel-color',
+  '--reduce-color',
+  '--main-text-color',
+  '--secondary-main-text-color',
+  '--reverse-text-color',
+  '--border-color',
+  '--alipay-color',
+  '--wechat-color',
+  '--svg-icon-color',
+  '--blur-color',
+  '--base-font-size',
+];

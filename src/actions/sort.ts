@@ -43,19 +43,22 @@ export function getSortConfig() {
   const fundSortModeOptionsMap = fundSortModeOptions.reduce((r, c) => {
     r[c.key] = c;
     return r;
-  }, {} as any);
+  }, {} as Record<Enums.FundSortType, Option.EnumsOption<Enums.FundSortType>>);
 
   const zindexSortModeOptionsMap = zindexSortModeOptions.reduce((r, c) => {
     r[c.key] = c;
     return r;
-  }, {} as any);
+  }, {} as Record<Enums.ZindexSortType, Option.EnumsOption<Enums.ZindexSortType>>);
 
   const quotationSortModeOptionsMap = quotationSortModeOptions.reduce(
     (r, c) => {
       r[c.key] = c;
       return r;
     },
-    {} as any
+    {} as Record<
+      Enums.QuotationSortType,
+      Option.EnumsOption<Enums.QuotationSortType>
+    >
   );
 
   return {
@@ -86,7 +89,7 @@ export function getSortMode() {
   const quotationSortMode: QuotationSortType = Utils.GetStorage(
     CONST.STORAGE.QUOTATION_SORT_MODE,
     {
-      type: Enums.ZindexSortType.Zdf,
+      type: Enums.QuotationSortType.Zdf,
       order: Enums.SortOrderType.Desc,
     }
   );

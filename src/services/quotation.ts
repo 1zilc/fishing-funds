@@ -112,7 +112,6 @@ export async function GetQuotationDetailFromEastmoney(code: string) {
       responseType: 'json',
       retry: 0,
     });
-    console.log(data);
     return {
       zxj: data.f43,
       name: data.f58,

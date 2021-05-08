@@ -10,10 +10,13 @@
 
 .ant-rate-star-zero {
   svg {
-    fill: var(--inner-text-color)
+    fill: var(--inner-text-color);
   }
 }
 
 .ant-slider {
+  margin: 0;
+}
+.ant-tabs-tab + .ant-tabs-tab {
   margin: 0;
 }

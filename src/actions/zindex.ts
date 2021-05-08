@@ -19,6 +19,7 @@ export interface CodeMap {
 }
 
 export const defaultZindexConfig = [
+  // 沪深指数
   { name: '上证指数', code: '1.000001', show: true },
   { name: '深证成指', code: '0.399001', show: true },
   { name: '沪深300', code: '1.000300', show: true },
@@ -56,6 +57,54 @@ export const defaultZindexConfig = [
   { name: '深成地产', code: '0.971001', show: false },
   { name: '深成地产R', code: '0.471001', show: false },
   { name: '300 医药', code: '0.399913', show: false },
+  // 美洲股市
+  { name: '道琼斯', code: '100.DJIA', show: true },
+  { name: '标普500', code: '100.SPX', show: true },
+  { name: '纳斯达克', code: '100.NDX', show: true },
+  { name: '加拿大S&P/TSX', code: '100.TSX', show: false },
+  { name: '巴西BOVESPA', code: '100.BVSP', show: false },
+  { name: '墨西哥BOLSA', code: '100.MXX', show: false },
+  // 亚洲股市
+  { name: '台湾加权', code: '100.TWII', show: false },
+  { name: '富时新加坡海峡时报', code: '100.STI', show: false },
+  { name: '泰国SET', code: '100.SET', show: false },
+  { name: '斯里兰卡科伦坡', code: '100.CSEALL', show: false },
+  { name: '韩国KOSPI', code: '100.KS11', show: false },
+  { name: '富时马来西亚KLCI', code: '100.KLSE', show: false },
+  { name: '印度孟买SENSEX', code: '100.SENSEX', show: false },
+  { name: '巴基斯坦卡拉奇', code: '100.KSE100', show: false },
+  { name: '韩国KOSPI200', code: '100.KOSPI200', show: false },
+  { name: '红筹指数', code: '124.HSCCI', show: false },
+  { name: '日经225', code: '100.N225', show: false },
+  { name: '恒生指数', code: '100.HSI', show: false },
+  { name: '菲律宾马尼拉', code: '100.PSI', show: false },
+  { name: '国企指数', code: '100.HSCEI', show: false },
+  { name: '印尼雅加达综合', code: '100.JKSE', show: false },
+  { name: '越南胡志明', code: '100.VNINDEX', show: false },
+  // 欧洲股市
+  { name: '波兰WIG', code: '100.WIG', show: false },
+  { name: '俄罗斯RTS', code: '100.RTS', show: false },
+  { name: 'OMX哥本哈根20', code: '100.OMXC20', show: false },
+  { name: '挪威OSEBX', code: '100.OSEBX', show: false },
+  { name: '德国DAX30', code: '100.GDAXI', show: false },
+  { name: '芬兰赫尔辛基', code: '100.HEX', show: false },
+  { name: '英国富时250', code: '100.MCX', show: false },
+  { name: '布拉格指数', code: '100.PX', show: false },
+  { name: '葡萄牙PSI20', code: '100.PSI20', show: false },
+  { name: '欧洲斯托克50', code: '100.SX5E', show: false },
+  { name: '西班牙IBEX35', code: '100.IBEX', show: false },
+  { name: '荷兰AEX', code: '100.AEX', show: false },
+  { name: '富时AIM全股', code: '100.AXX', show: false },
+  { name: '英国富时100', code: '100.FTSE', show: false },
+  { name: '比利时BFX', code: '100.BFX', show: false },
+  { name: '奥地利ATX', code: '100.ATX', show: false },
+  { name: '瑞典OMXSPI', code: '100.OMXSPI', show: false },
+  { name: '瑞士SMI', code: '100.SSMI', show: false },
+  { name: '富时意大利MIB', code: '100.MIB', show: false },
+  { name: '法国CAC40', code: '100.FCHI', show: false },
+  { name: '爱尔兰综合', code: '100.ISEQ', show: false },
+  { name: '冰岛ICEX', code: '100.ICEX', show: false },
+  { name: '希腊雅典ASE', code: '100.ASE', show: false },
 ];
 
 export function getZindexConfig() {
@@ -63,8 +112,20 @@ export function getZindexConfig() {
     CONST.STORAGE.ZINDEX_SETTING,
     defaultZindexConfig
   );
+  const _codeMap = zindexConfig.reduce((r, c, i) => {
+    r[c.code] = { ...c, originSort: i };
+    return r;
+  }, {} as CodeMap);
+
+  defaultZindexConfig.forEach((config) => {
+    if (!_codeMap[config.code]) {
+      zindexConfig.push(config);
+    }
+  });
+
   const codeMap = zindexConfig.reduce((r, c, i) => {
-    r[c.code.slice(2)] = { ...c, originSort: i };
+    const code = c.code.split('.')?.[1];
+    r[code] = { ...c, originSort: i };
     return r;
   }, {} as CodeMap);
 
@@ -80,7 +141,7 @@ export async function getZindexs() {
   const collectors = zindexConfig
     .filter(({ show }) => show)
     .map(({ code }) => () => getZindex(code));
-  await Utils.Sleep(1000);
+  await Utils.Sleep(CONST.DEFAULT.LOAD_ZINDEXS_SLEEP_DELAY);
   return Adapter.ConCurrencyAllAdapter<Zindex.ResponseItem>(collectors);
 }
 
@@ -106,6 +167,21 @@ export function loadZindexs() {
       });
     } finally {
       dispatch({ type: SET_ZINDEXS_LOADING, payload: false });
+    }
+  };
+}
+
+export function loadZindexsWithoutLoading() {
+  return async (dispatch: Dispatch, getState: GetState) => {
+    try {
+      const zindexs = await getZindexs();
+      batch(() => {
+        dispatch({
+          type: SORT_ZINDEXS_WITH_COLLAPSE_CHACHED,
+          payload: zindexs,
+        });
+      });
+    } finally {
     }
   };
 }

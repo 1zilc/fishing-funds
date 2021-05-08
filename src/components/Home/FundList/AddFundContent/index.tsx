@@ -138,13 +138,13 @@ const AddFundContent: React.FC<AddFundContentProps> = (props) => {
             }}
           ></InputNumber>
         </section>
-        <section>
-          {none && (
+        {none && (
+          <section>
             <span className={styles.none}>
               添加基金失败，未找到或数据出错～
             </span>
-          )}
-        </section>
+          </section>
+        )}
       </div>
       {(name || code) &&
         fundList.map(([code, pinyin, name, type, quanpin]) => (

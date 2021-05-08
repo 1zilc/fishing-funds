@@ -1,14 +1,12 @@
 @import '../../styles/varible.scss';
 
-
-
 .content {
   padding: 10px;
   display: flex;
   border-bottom: 1px solid var(--border-color);
   top: 0;
   z-index: 2;
-  transition: height .2s;
+  transition: height 0.2s;
   position: absolute;
   width: 100%;
   background-color: var(--blur-color);
@@ -19,9 +17,11 @@
   z-index: 3;
 
   .walletIcon {
+    cursor: pointer;
     height: calc(40rem / var(--base-font-size));
     width: calc(40rem / var(--base-font-size));
-    transition: height .2s, width .2s;
+    transition: height 0.2s, width 0.2s;
+    background-color: transparent !important;
   }
 
   .info {
@@ -51,8 +51,7 @@
       // justify-content: space-around;
       width: 100%;
       align-items: center;
-      transition: all .2s;
-
+      transition: all 0.2s;
 
       i {
         height: calc(10rem / var(--base-font-size));
@@ -74,7 +73,7 @@
       svg {
         height: calc(14rem / var(--base-font-size));
         width: calc(14rem / var(--base-font-size));
-        fill: var(--svg-icon-color)
+        fill: var(--svg-icon-color);
       }
     }
   }
@@ -84,25 +83,21 @@
     width: calc(20rem / var(--base-font-size));
     cursor: pointer;
 
-    &>svg {
+    & > svg {
       height: calc(20rem / var(--base-font-size));
       width: calc(20rem / var(--base-font-size));
-      fill: var(--svg-icon-color)
+      fill: var(--svg-icon-color);
     }
   }
 }
 
-
-
 .miniMode {
-
   .walletIcon {
     height: calc(20rem / var(--base-font-size));
     width: calc(20rem / var(--base-font-size));
   }
 
   .info {
-
     .timeBar {
       height: 0;
       overflow: hidden;
@@ -113,13 +108,12 @@
       }
     }
 
-
     .moneyBar {
       font-size: 1rem;
       font-weight: 600;
 
-      i {}
+      i {
+      }
     }
   }
-
 }

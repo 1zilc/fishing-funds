@@ -21,6 +21,10 @@
     background-color: var(--inner-color);
   }
 
+  &:first-child {
+    border-top: 1px solid var(--border-color);
+  }
+
   .menu {
     justify-self: flex-end;
     fill: var(--svg-icon-color);
@@ -36,7 +40,9 @@
     }
   }
 }
-
+.wallet {
+  padding: 10px 10px 0 10px;
+}
 .inner {
   display: flex;
   justify-content: flex-start;

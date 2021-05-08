@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import FundRow from '@/components/Home/FundList/FundRow';
 import Empty from '@/components/Empty';
 import LoadingBar from '@/components/LoadingBar';
-import { loadFunds, loadFixFunds } from '@/actions/fund';
+import { loadFundsWithoutLoading, loadFixFunds } from '@/actions/fund';
 import { getSystemSetting } from '@/actions/setting';
 import { StoreState } from '@/reducers/types';
 import { useWorkDayTimeToDo, useFixTimeToDo } from '@/utils/hooks';
@@ -18,7 +18,7 @@ const FundList: React.FC<{}> = () => {
   const fundsLoading = useSelector(
     (state: StoreState) => state.fund.fundsLoading
   );
-  const runLoadFunds = useActions(loadFunds);
+  const runLoadFunds = useActions(loadFundsWithoutLoading);
   const runLoadFixFunds = useActions(loadFixFunds);
 
   // 间隔时间刷新基金
@@ -27,8 +27,11 @@ const FundList: React.FC<{}> = () => {
     freshDelaySetting * 1000 * 60
   );
 
-  // 每3分钟自动检查最新净值
-  useFixTimeToDo(runLoadFixFunds, 1000 * 60 * 3);
+  // 间隔时间检查最新净值
+  useFixTimeToDo(
+    () => autoFreshSetting && runLoadFixFunds(),
+    freshDelaySetting * 1000 * 60
+  );
 
   useEffect(() => {
     Adapter.ChokeAllAdapter([runLoadFunds, runLoadFixFunds]);

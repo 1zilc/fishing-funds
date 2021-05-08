@@ -7,25 +7,26 @@ import { ReactComponent as MenuAddIcon } from '@/assets/icons/menu-add.svg';
 import { ReactComponent as RefreshIcon } from '@/assets/icons/refresh.svg';
 import { ReactComponent as QRcodeIcon } from '@/assets/icons/qr-code.svg';
 import { ReactComponent as SettingIcon } from '@/assets/icons/setting.svg';
+import { ReactComponent as WalletIcon } from '@/assets/icons/wallet.svg';
 import CustomDrawer from '@/components/CustomDrawer';
 import ManageFundContent from '@/components/Home/FundList/ManageFundContent';
+import ManageWalletContent from '@/components/Wallet/ManageWalletContent';
 import SettingContent from '@/components/SettingContent';
 import PayContent from '@/components/PayContent';
-import EditZindexContent from '@/components/Home/ZindexList/EditZindexContent';
+import ManageZindexContent from '@/components/Home/ZindexList/ManageZindexContent';
 import { HomeContext } from '@/components/Home';
 import { StoreState } from '@/reducers/types';
-import { loadFunds } from '@/actions/fund';
 import { loadZindexs } from '@/actions/zindex';
 import { loadQuotations } from '@/actions/quotation';
 import { getSystemSetting } from '@/actions/setting';
-import { useScrollToTop, useActions } from '@/utils/hooks';
+import { useScrollToTop, useActions, useFreshFunds } from '@/utils/hooks';
 import * as Enums from '@/utils/enums';
+import * as CONST from '@/constants';
 import styles from './index.scss';
 
 export interface ToolBarProps {}
 
 const iconSize = { height: 18, width: 18 };
-const throttleDelay = 1000 * 3;
 
 const ToolBar: React.FC<ToolBarProps> = () => {
   const { lowKeySetting, baseFontSizeSetting } = getSystemSetting();
@@ -36,17 +37,15 @@ const ToolBar: React.FC<ToolBarProps> = () => {
   const tabsActiveKey = useSelector(
     (state: StoreState) => state.tabs.activeKey
   );
-  const { run: runLoadFunds } = useThrottleFn(useActions(loadFunds), {
-    wait: throttleDelay,
-  });
+
   const { run: runLoadZindexs } = useThrottleFn(useActions(loadZindexs), {
-    wait: throttleDelay,
+    wait: CONST.DEFAULT.FRESH_BUTTON_THROTTLE_DELAY,
   });
   const { run: runLoadQuotations } = useThrottleFn(useActions(loadQuotations), {
-    wait: throttleDelay,
+    wait: CONST.DEFAULT.FRESH_BUTTON_THROTTLE_DELAY,
   });
 
-  const freshFunds = useScrollToTop({ after: runLoadFunds });
+  const freshFunds = useFreshFunds(CONST.DEFAULT.FRESH_BUTTON_THROTTLE_DELAY);
   const freshZindexs = useScrollToTop({ after: runLoadZindexs });
   const freshQuotations = useScrollToTop({ after: runLoadQuotations });
 
@@ -58,6 +57,15 @@ const ToolBar: React.FC<ToolBarProps> = () => {
       toggle: ToggleManageFundDrawer,
     },
   ] = useBoolean(false);
+  const [
+    showManageWalletDrawer,
+    {
+      setTrue: openManageWalletDrawer,
+      setFalse: closeManageWalletDrawer,
+      toggle: ToggleManageWalletDrawer,
+    },
+  ] = useBoolean(false);
+
   const [
     showEditZindexDrawer,
     {
@@ -101,12 +109,12 @@ const ToolBar: React.FC<ToolBarProps> = () => {
         {tabsActiveKey === Enums.TabKeyType.Zindex && (
           <MenuAddIcon style={{ ...iconSize }} onClick={openEditZindexDrawer} />
         )}
-        {/* {tabsActiveKey === Enums.TabKeyType.Funds && (
-          <DeleteIcon
+        {tabsActiveKey === Enums.TabKeyType.Funds && (
+          <WalletIcon
             style={{ ...iconSize }}
-            onClick={() => dispatch(toggleToolbarDeleteStatus())}
+            onClick={openManageWalletDrawer}
           />
-        )} */}
+        )}
         {tabsActiveKey === Enums.TabKeyType.Funds && (
           <RefreshIcon style={{ ...iconSize }} onClick={freshFunds} />
         )}
@@ -130,8 +138,17 @@ const ToolBar: React.FC<ToolBarProps> = () => {
           }}
         />
       </CustomDrawer>
+      <CustomDrawer show={showManageWalletDrawer}>
+        <ManageWalletContent
+          onClose={closeManageWalletDrawer}
+          onEnter={() => {
+            freshFunds();
+            closeManageWalletDrawer();
+          }}
+        />
+      </CustomDrawer>
       <CustomDrawer show={showEditZindexDrawer}>
-        <EditZindexContent
+        <ManageZindexContent
           onClose={closeEditZindexDrawer}
           onEnter={() => {
             freshZindexs();

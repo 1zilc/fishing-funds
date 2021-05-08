@@ -5,7 +5,14 @@ import dayjs from 'dayjs';
 
 import { Dispatch, GetState } from '@/reducers/types';
 import { getSystemSetting } from '@/actions/setting';
-import { updateUpdateTime } from '@/actions/wallet';
+import {
+  SYNC_WALLETS_MAP,
+  SYNC_FIX_WALLETS_MAP,
+  getWalletConfig,
+  defaultWallet,
+  setWalletConfig,
+  getCurrentWallet,
+} from '@/actions/wallet';
 import * as Services from '@/services';
 import * as Enums from '@/utils/enums';
 import * as Utils from '@/utils';
@@ -26,14 +33,10 @@ export interface CodeMap {
   [index: string]: Fund.SettingItem & Fund.OriginRow;
 }
 
-export function getFundConfig() {
-  const fundConfig: Fund.SettingItem[] = Utils.GetStorage(
-    CONST.STORAGE.FUND_SETTING,
-    []
-  );
-
+export function getFundConfig(code?: string) {
+  const wallet = getCurrentWallet(code);
+  const fundConfig = wallet.funds;
   const codeMap = getCodeMap(fundConfig);
-
   return { fundConfig, codeMap };
 }
 
@@ -43,9 +46,17 @@ export function getCodeMap(config: Fund.SettingItem[]) {
     return r;
   }, {} as CodeMap);
 }
-
 export function setFundConfig(config: Fund.SettingItem[]) {
-  Utils.SetStorage(CONST.STORAGE.FUND_SETTING, config);
+  const { walletConfig } = getWalletConfig();
+  const currentWalletCode = Utils.GetStorage(
+    CONST.STORAGE.CURRENT_WALLET_CODE,
+    defaultWallet.code
+  );
+  const _walletConfig = walletConfig.map((item) => ({
+    ...item,
+    funds: currentWalletCode === item.code ? config : item.funds,
+  }));
+  setWalletConfig(_walletConfig);
 }
 
 export async function getFunds(config?: Fund.SettingItem[]) {
@@ -58,17 +69,17 @@ export async function getFunds(config?: Fund.SettingItem[]) {
     case Enums.FundApiType.Dayfund:
       return Adapter.ChokeAllAdapter<Fund.ResponseItem>(collectors);
     case Enums.FundApiType.Tencent:
-      await Utils.Sleep(1000);
+      await Utils.Sleep(CONST.DEFAULT.LOAD_FUNDS_SLEEP_DELAY);
       return Adapter.ConCurrencyAllAdapter<Fund.ResponseItem>(collectors);
     case Enums.FundApiType.Sina:
-      await Utils.Sleep(1000);
+      await Utils.Sleep(CONST.DEFAULT.LOAD_FUNDS_SLEEP_DELAY);
       return Adapter.ConCurrencyAllAdapter<Fund.ResponseItem>(collectors);
     case Enums.FundApiType.Howbuy:
-      await Utils.Sleep(1000);
+      await Utils.Sleep(CONST.DEFAULT.LOAD_FUNDS_SLEEP_DELAY);
       return Adapter.ConCurrencyAllAdapter<Fund.ResponseItem>(collectors);
     case Enums.FundApiType.Eastmoney:
     default:
-      await Utils.Sleep(1000);
+      await Utils.Sleep(CONST.DEFAULT.LOAD_FUNDS_SLEEP_DELAY);
       return Adapter.ConCurrencyAllAdapter<Fund.ResponseItem>(collectors);
   }
 }
@@ -92,14 +103,11 @@ export async function getFund(code: string) {
 }
 
 export function addFund(fund: Fund.SettingItem) {
-  const fundConfig: Fund.SettingItem[] = Utils.GetStorage(
-    CONST.STORAGE.FUND_SETTING,
-    []
-  );
+  const { fundConfig } = getFundConfig();
   const notExist =
     fundConfig.filter((item) => fund.code === item.code).length === 0;
   if (notExist) {
-    Utils.SetStorage(CONST.STORAGE.FUND_SETTING, [...fundConfig, fund]);
+    setFundConfig([...fundConfig, fund]);
   }
 }
 
@@ -108,10 +116,7 @@ export function updateFund(fund: {
   cyfe?: number;
   name?: string;
 }) {
-  const fundConfig: Fund.SettingItem[] = Utils.GetStorage(
-    CONST.STORAGE.FUND_SETTING,
-    []
-  );
+  const { fundConfig } = getFundConfig();
   fundConfig.forEach((item) => {
     if (fund.code === item.code) {
       if (fund.cyfe !== undefined) {
@@ -122,26 +127,25 @@ export function updateFund(fund: {
       }
     }
   });
-  Utils.SetStorage(CONST.STORAGE.FUND_SETTING, fundConfig);
+  setFundConfig(fundConfig);
 }
 
 export function deleteFund(code: string) {
-  const fundConfig: Fund.SettingItem[] = Utils.GetStorage(
-    CONST.STORAGE.FUND_SETTING,
-    []
-  );
-
+  const { fundConfig } = getFundConfig();
   fundConfig.forEach((item, index) => {
     if (code === item.code) {
       const cloneFundSetting = JSON.parse(JSON.stringify(fundConfig));
       cloneFundSetting.splice(index, 1);
-      Utils.SetStorage(CONST.STORAGE.FUND_SETTING, cloneFundSetting);
+      setFundConfig(cloneFundSetting);
     }
   });
 }
 
-export function calcFund(fund: Fund.ResponseItem & Fund.FixData) {
-  const { codeMap } = getFundConfig();
+export function calcFund(
+  fund: Fund.ResponseItem & Fund.FixData,
+  code?: string
+) {
+  const { codeMap } = getFundConfig(code);
   const isFix = fund.fixDate && fund.fixDate === fund.gztime?.slice(5, 10);
   const cyfe = codeMap[fund.fundcode!]?.cyfe || 0;
   const gsz = isFix ? fund.fixDwjz! : fund.gsz!;
@@ -168,8 +172,8 @@ export function calcFund(fund: Fund.ResponseItem & Fund.FixData) {
   };
 }
 
-export function calcFunds(funds: Fund.ResponseItem[]) {
-  const { codeMap } = getFundConfig();
+export function calcFunds(funds: Fund.ResponseItem[] = [], code?: string) {
+  const { codeMap } = getFundConfig(code);
   const [zje, gszje, sygz] = funds.reduce(
     ([a, b, c], fund) => {
       const calcFundResult = calcFund(fund);
@@ -193,14 +197,49 @@ export function loadFunds() {
     try {
       dispatch({ type: SET_FUNDS_LOADING, payload: true });
       const funds = await getFunds();
+      const { code } = getCurrentWallet();
       const now = dayjs().format('MM-DD HH:mm:ss');
       batch(() => {
         dispatch({ type: SORT_FUNDS_WITH_CHACHED, payload: funds });
         dispatch({ type: SET_FUNDS_LOADING, payload: false });
-        dispatch(updateUpdateTime(now));
+
+        dispatch({
+          type: SYNC_WALLETS_MAP,
+          payload: {
+            code,
+            item: {
+              funds,
+              updateTime: now,
+            },
+          },
+        });
       });
     } finally {
       dispatch({ type: SET_FUNDS_LOADING, payload: false });
+    }
+  };
+}
+
+export function loadFundsWithoutLoading() {
+  return async (dispatch: Dispatch, getState: GetState) => {
+    try {
+      const funds = await getFunds();
+      const { code } = getCurrentWallet();
+      const now = dayjs().format('MM-DD HH:mm:ss');
+      batch(() => {
+        dispatch({ type: SORT_FUNDS_WITH_CHACHED, payload: funds });
+        dispatch({
+          type: SYNC_WALLETS_MAP,
+          payload: {
+            code,
+            item: {
+              funds,
+              updateTime: now,
+            },
+          },
+        });
+      });
+    } finally {
     }
   };
 }
@@ -209,6 +248,7 @@ export function loadFixFunds() {
   return async (dispatch: Dispatch, getState: GetState) => {
     try {
       const { fund } = getState();
+      const { code } = getCurrentWallet();
       const { funds } = fund;
       const collectors = funds
         .filter(
@@ -220,7 +260,21 @@ export function loadFixFunds() {
       const fixFunds =
         (await Adapter.ConCurrencyAllAdapter<Fund.FixData>(collectors)) || [];
 
-      dispatch({ type: SET_FIX_FUND, payload: fixFunds });
+      const now = dayjs().format('MM-DD HH:mm:ss');
+
+      batch(() => {
+        dispatch({ type: SET_FIX_FUND, payload: fixFunds });
+        dispatch({
+          type: SYNC_FIX_WALLETS_MAP,
+          payload: {
+            code,
+            item: {
+              funds: fixFunds,
+              updateTime: now,
+            },
+          },
+        });
+      });
     } finally {
     }
   };

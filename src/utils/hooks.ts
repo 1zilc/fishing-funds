@@ -5,10 +5,11 @@ import {
   useState,
   useEffect,
 } from 'react';
-import { useInterval, useBoolean } from 'ahooks';
+import { useInterval, useBoolean, useThrottleFn } from 'ahooks';
 import { ipcRenderer, remote, clipboard } from 'electron';
 import { bindActionCreators } from 'redux';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import dayjs from 'dayjs';
 
 import { getSystemSetting } from '@/actions/setting';
 import { getCurrentHours } from '@/actions/time';
@@ -19,9 +20,13 @@ import {
   updateFund,
   setFundConfig,
   getCodeMap,
+  loadFunds,
+  loadFixFunds,
 } from '@/actions/fund';
+import { StoreState } from '@/reducers/types';
 import * as Utils from '@/utils';
 import * as CONST from '@/constants';
+
 const { nativeTheme, dialog } = remote;
 
 export function useWorkDayTimeToDo(
@@ -62,8 +67,8 @@ export function useFixTimeToDo(
 
 export function useScrollToTop(
   config: {
-    before?: () => void;
-    after?: () => void;
+    before?: () => void | Promise<void>;
+    after?: () => void | Promise<void>;
     option?: {
       behavior?: ScrollBehavior;
       left?: number;
@@ -285,4 +290,41 @@ export function useAdjustmentNotification() {
       immediate: true,
     }
   );
+}
+
+export function useCurrentWallet() {
+  const wallets = useSelector((state: StoreState) => state.wallet.wallets);
+  const currentWalletCode = useSelector(
+    (state: StoreState) => state.wallet.currentWalletCode
+  );
+  const walletsMap = useSelector(
+    (state: StoreState) => state.wallet.walletsMap
+  );
+  const currentWallet =
+    wallets.filter(({ code }) => currentWalletCode === code)[0] || {};
+  const currentWalletState = walletsMap[currentWalletCode] || {};
+
+  return {
+    currentWallet,
+    currentWalletCode,
+    wallets,
+    walletsMap,
+    currentWalletState,
+  };
+}
+
+export function useFreshFunds(throttleDelay: number) {
+  const { run: runLoadFunds } = useThrottleFn(useActions(loadFunds), {
+    wait: throttleDelay,
+  });
+  const { run: runLoadFixFunds } = useThrottleFn(useActions(loadFixFunds), {
+    wait: throttleDelay,
+  });
+  const freshFunds = useScrollToTop({
+    after: async () => {
+      await runLoadFunds();
+      Utils.JudgeFixTime(dayjs().valueOf()) && (await runLoadFixFunds());
+    },
+  });
+  return freshFunds;
 }
