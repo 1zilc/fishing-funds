@@ -7,12 +7,12 @@ import CustomDrawerContent from '@/components/CustomDrawer/Content';
 import { getZindexConfig, saveZindexConfig } from '@/actions/zindex';
 
 import styles from './index.scss';
-export interface AddFundContentProps {
+export interface ManageZindexContentProps {
   onEnter: () => void;
   onClose: () => void;
 }
 
-const EditZindexContent: React.FC<AddFundContentProps> = (props) => {
+const ManageZindexContent: React.FC<ManageZindexContentProps> = (props) => {
   const { zindexConfig, selectZindexs } = getZindexConfig();
   const [sortZindexConfig, setSortZindexConfig] = useState(
     zindexConfig.map((_) => ({ ..._, id: _.code }))
@@ -82,4 +82,4 @@ const EditZindexContent: React.FC<AddFundContentProps> = (props) => {
   );
 };
 
-export default EditZindexContent;
+export default ManageZindexContent;

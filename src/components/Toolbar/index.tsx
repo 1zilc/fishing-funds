@@ -13,7 +13,7 @@ import ManageFundContent from '@/components/Home/FundList/ManageFundContent';
 import ManageWalletContent from '@/components/Wallet/ManageWalletContent';
 import SettingContent from '@/components/SettingContent';
 import PayContent from '@/components/PayContent';
-import EditZindexContent from '@/components/Home/ZindexList/EditZindexContent';
+import ManageZindexContent from '@/components/Home/ZindexList/ManageZindexContent';
 import { HomeContext } from '@/components/Home';
 import { StoreState } from '@/reducers/types';
 import { loadZindexs } from '@/actions/zindex';
@@ -148,7 +148,7 @@ const ToolBar: React.FC<ToolBarProps> = () => {
         />
       </CustomDrawer>
       <CustomDrawer show={showEditZindexDrawer}>
-        <EditZindexContent
+        <ManageZindexContent
           onClose={closeEditZindexDrawer}
           onEnter={() => {
             freshZindexs();

@@ -21,6 +21,7 @@
     height: calc(40rem / var(--base-font-size));
     width: calc(40rem / var(--base-font-size));
     transition: height 0.2s, width 0.2s;
+    background-color: transparent !important;
   }
 
   .info {
