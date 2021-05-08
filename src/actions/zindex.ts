@@ -112,16 +112,22 @@ export function getZindexConfig() {
     CONST.STORAGE.ZINDEX_SETTING,
     defaultZindexConfig
   );
-  const codeMap = zindexConfig.reduce((r, c, i) => {
+  const _codeMap = zindexConfig.reduce((r, c, i) => {
     r[c.code] = { ...c, originSort: i };
     return r;
   }, {} as CodeMap);
 
   defaultZindexConfig.forEach((config) => {
-    if (!codeMap[config.code]) {
+    if (!_codeMap[config.code]) {
       zindexConfig.push(config);
     }
   });
+
+  const codeMap = zindexConfig.reduce((r, c, i) => {
+    const code = c.code.split('.')?.[1];
+    r[code] = { ...c, originSort: i };
+    return r;
+  }, {} as CodeMap);
 
   const selectZindexs = zindexConfig
     .filter(({ show }) => show)

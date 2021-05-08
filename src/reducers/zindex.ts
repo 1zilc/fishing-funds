@@ -47,6 +47,7 @@ const sortZindexs = (
         );
     }
   });
+
   return {
     ...state,
     zindexs: sortList,
