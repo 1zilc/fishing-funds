@@ -37,6 +37,8 @@ declare namespace Fund {
     stockCodesNew?: string[];
     /*基金持仓债券代码（新市场号）*/
     zqCodesNew?: string;
+    /*股票仓位测算图*/
+    Data_fundSharesPositions?: [number, number][];
     /*单位净值走势 equityReturn-净值回报 unitMoney-每份派送金*/
     Data_netWorthTrend?: any[];
     /*累计收益率走势*/
@@ -49,6 +51,11 @@ declare namespace Fund {
     swithSameType?: string[][];
     /*现任基金经理*/
     Data_currentFundManager: Fund.Manager.Info[];
+    /*规模变动 mom-较上期环比*/
+    Data_fluctuationScale: {
+      categories: string[];
+      series: { y: number; mom: string }[];
+    };
     /*近一年收益率*/
     syl_1n?: string;
     /*近6月收益率*/

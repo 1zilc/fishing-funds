@@ -120,6 +120,8 @@ export function parsepingzhongdata(code: string) {
         stockCodesNew,
         /*基金持仓债券代码（新市场号）*/
         zqCodesNew,
+        /*股票仓位测算图*/
+        Data_fundSharesPositions,
         /*单位净值走势 equityReturn-净值回报 unitMoney-每份派送金*/
         Data_netWorthTrend,
         /*累计收益率走势*/
@@ -132,6 +134,8 @@ export function parsepingzhongdata(code: string) {
         swithSameType,
         /*现任基金经理*/
         Data_currentFundManager,
+        /*规模变动 mom-较上期环比*/
+        Data_fluctuationScale,
         /*近一年收益率*/
         syl_1n,
         /*近6月收益率*/

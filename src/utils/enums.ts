@@ -60,6 +60,13 @@ export enum TrendType {
 export enum WareHouseType {
   Stock, // 股票
   Securities, // 债券
+  StockEstimate, // 股票仓位测算
+}
+// 配置类型
+export enum ConfigType {
+  Scale, // 规模变动呢
+  Hold, // 持有人结构
+  Assets, // 资产配置
 }
 // 走势类型
 export enum PerformanceType {

@@ -115,14 +115,25 @@ const FundRow: React.FC<RowProps> = ({ fund, readOnly }) => {
               </div>
             )}
           </div>
-          <div
-            className={classnames(
-              styles.value,
-              Number(calcFundResult.gszzl) < 0 ? 'block-down' : 'block-up'
-            )}
-          >
-            {Utils.Yang(calcFundResult.gszzl)} %
-          </div>
+          {conciseSetting ? (
+            <div
+              className={classnames(
+                styles.conciseValue,
+                Number(calcFundResult.gszzl) < 0 ? 'text-down' : 'text-up'
+              )}
+            >
+              {Utils.Yang(calcFundResult.gszzl)} %
+            </div>
+          ) : (
+            <div
+              className={classnames(
+                styles.value,
+                Number(calcFundResult.gszzl) < 0 ? 'block-down' : 'block-up'
+              )}
+            >
+              {Utils.Yang(calcFundResult.gszzl)} %
+            </div>
+          )}
         </div>
       </div>
       <Collapse style={{ zIndex: 1 }} isOpened={!!fund.collapse}>

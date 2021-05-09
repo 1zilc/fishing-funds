@@ -105,6 +105,14 @@ export const defaultZindexConfig = [
   { name: '爱尔兰综合', code: '100.ISEQ', show: false },
   { name: '冰岛ICEX', code: '100.ICEX', show: false },
   { name: '希腊雅典ASE', code: '100.ASE', show: false },
+  // 澳洲股市
+  { name: '澳大利亚标普200', code: '100.AS51', show: false },
+  { name: '澳大利亚普通股', code: '100.AORD', show: false },
+  { name: '新西兰50', code: '100.NZ50', show: false },
+  // 其他指数
+  { name: '路透CRB商品指数', code: '100.CRB', show: false },
+  { name: '美元指数', code: '100.UDI', show: false },
+  { name: '波罗的海BDI指数', code: '100.BDI', show: false },
 ];
 
 export function getZindexConfig() {
@@ -142,7 +150,7 @@ export async function getZindexs() {
     .filter(({ show }) => show)
     .map(({ code }) => () => getZindex(code));
   await Utils.Sleep(CONST.DEFAULT.LOAD_ZINDEXS_SLEEP_DELAY);
-  return Adapter.ConCurrencyAllAdapter<Zindex.ResponseItem>(collectors);
+  return Adapter.ChokeAllAdapter<Zindex.ResponseItem>(collectors);
 }
 
 export async function getZindex(code: string) {

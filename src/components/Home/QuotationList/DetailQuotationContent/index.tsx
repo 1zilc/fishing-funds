@@ -79,16 +79,12 @@ const DetailQuotationContent: React.FC<DetailQuotationContentProps> = (
               </div>
               <div className={styles.detailItemLabel}>涨跌幅</div>
             </div>
-            <div className={styles.detailItem}>
-              <div className={classnames('text-up', 'text-center')}>
-                {quotation.szjs}
-              </div>
+            <div className={classnames(styles.detailItem, 'text-center')}>
+              <div className={classnames('text-up')}>{quotation.szjs}</div>
               <div className={styles.detailItemLabel}>上涨家数</div>
             </div>
-            <div className={styles.detailItem}>
-              <div className={classnames('text-down', 'text-center')}>
-                {quotation?.xdjs}
-              </div>
+            <div className={classnames(styles.detailItem, 'text-center')}>
+              <div className={classnames('text-down')}>{quotation?.xdjs}</div>
               <div className={styles.detailItemLabel}>下跌家数</div>
             </div>
           </div>
@@ -99,10 +95,16 @@ const DetailQuotationContent: React.FC<DetailQuotationContentProps> = (
             animated={{ tabPane: true }}
             tabBarGutter={15}
           >
-            <Tabs.TabPane tab="实时资金流向" key={Enums.FundFlowType.RealTime}>
+            <Tabs.TabPane
+              tab="实时资金流向"
+              key={String(Enums.FundFlowType.RealTime)}
+            >
               <RealTimeFundFlow code={code} />
             </Tabs.TabPane>
-            <Tabs.TabPane tab="盘后资金流向" key={Enums.FundFlowType.AfterTime}>
+            <Tabs.TabPane
+              tab="盘后资金流向"
+              key={String(Enums.FundFlowType.AfterTime)}
+            >
               <AfterTimeFundFlow code={code} />
             </Tabs.TabPane>
           </Tabs>
@@ -113,7 +115,7 @@ const DetailQuotationContent: React.FC<DetailQuotationContentProps> = (
             animated={{ tabPane: true }}
             tabBarGutter={15}
           >
-            <Tabs.TabPane tab="实时成交分布" key={0}>
+            <Tabs.TabPane tab="实时成交分布" key={String(0)}>
               <RealTimeTransaction code={code} />
             </Tabs.TabPane>
           </Tabs>
@@ -124,7 +126,7 @@ const DetailQuotationContent: React.FC<DetailQuotationContentProps> = (
             animated={{ tabPane: true }}
             tabBarGutter={15}
           >
-            <Tabs.TabPane tab={`${quotation.name}个股`} key={0}>
+            <Tabs.TabPane tab={`${quotation.name}个股`} key={String(0)}>
               <StockList code={code} />
             </Tabs.TabPane>
           </Tabs>

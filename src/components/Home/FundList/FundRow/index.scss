@@ -58,6 +58,10 @@
   margin-left: 5px;
   white-space: nowrap;
 }
+.conciseValue {
+  font-size: calc(20rem / var(--base-font-size));
+  line-height: 24px;
+}
 
 .remove {
   overflow: hidden;
