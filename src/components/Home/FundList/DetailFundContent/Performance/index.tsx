@@ -78,13 +78,24 @@ const Performance: React.FC<PerformanceProps> = ({ code }) => {
             },
           ],
           series:
-            result?.map((_) => ({
+            result?.map((_, i) => ({
               ..._,
               type: 'line',
               showSymbol: false,
               symbol: 'none',
               lineStyle: {
                 width: 1,
+              },
+              markPoint: i === 0 && {
+                symbol: 'pin',
+                symbolSize: 30,
+                label: {
+                  formatter: '{c}%',
+                },
+                data: [
+                  { type: 'max', label: { fontSize: 10 } },
+                  { type: 'min', label: { fontSize: 10 } },
+                ],
               },
             })) || [],
         });

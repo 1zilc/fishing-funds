@@ -1,23 +1,16 @@
 import React, { useEffect, useRef, useState, useContext } from 'react';
+import dayjs from 'dayjs';
 import { useSize } from 'ahooks';
 import * as echarts from 'echarts';
 
 import { HomeContext } from '@/components/Home';
 import styles from './index.scss';
 
-interface AssetsProps {
-  Data_assetAllocation: {
-    categories: string[];
-    series: {
-      name: string;
-      type: string;
-      data: number[];
-      yAxis: number;
-    }[];
-  };
+interface HistoryBarProps {
+  data?: { x: number; y: number; equityReturn: number; unitMoney: 0 }[];
 }
 
-const Assets: React.FC<AssetsProps> = ({ Data_assetAllocation = {} }) => {
+const HistoryBar: React.FC<HistoryBarProps> = ({ data = [] }) => {
   const chartRef = useRef<HTMLDivElement>(null);
   const [chartInstance, setChartInstance] = useState<echarts.ECharts | null>(
     null
@@ -34,56 +27,61 @@ const Assets: React.FC<AssetsProps> = ({ Data_assetAllocation = {} }) => {
 
   const renderChart = () => {
     chartInstance?.setOption({
+      title: {
+        show: false,
+      },
       tooltip: {
         trigger: 'axis',
         axisPointer: {
-          type: 'shadow',
-        },
-      },
-      legend: {
-        data: Data_assetAllocation?.series?.map((item) => item.name) || [],
-        textStyle: {
-          color: varibleColors['--main-text-color'],
-          fontSize: 10,
+          type: 'shadow', // 默认为直线，可选为：'line' | 'shadow'
         },
       },
       grid: {
+        top: '3%',
         left: 0,
         right: 0,
-        bottom: 0,
+        bottom: 10,
         containLabel: true,
       },
-      xAxis: [
+      xAxis: {
+        type: 'category',
+        axisLabel: {
+          fontSize: 10,
+        },
+        data: data.map(({ x }) => dayjs(x).format('YYYY-MM-DD')) || [],
+      },
+      yAxis: {
+        type: 'value',
+        axisLabel: {
+          formatter: `{value}%`,
+          fontSize: 10,
+        },
+      },
+      series: [
         {
-          type: 'category',
-          data: Data_assetAllocation?.categories || [],
+          type: 'bar',
+          data:
+            data.map(({ equityReturn }) => {
+              return {
+                value: equityReturn,
+                itemStyle: {
+                  color:
+                    equityReturn >= 0
+                      ? varibleColors['--increase-color']
+                      : varibleColors['--reduce-color'],
+                },
+              };
+            }) || [],
         },
       ],
-      yAxis: [
+      dataZoom: [
         {
-          position: 'left',
-          type: 'value',
-          max: 100,
-          axisLabel: {
-            formatter: '{value}%',
-          },
-        },
-        {
-          position: 'right',
-          type: 'value',
-          axisLabel: {
-            formatter: '{value}亿',
-          },
+          type: 'inside',
+          start: 95,
+          end: 100,
+          minValueSpan: 7,
         },
       ],
-      series:
-        Data_assetAllocation?.series?.map((item) => ({
-          name: item.name,
-          type: item.type || 'bar',
-          barGap: 2,
-          yAxisIndex: item.type ? 1 : 0,
-          data: item.data,
-        })) || [],
     });
   };
 
@@ -95,7 +93,7 @@ const Assets: React.FC<AssetsProps> = ({ Data_assetAllocation = {} }) => {
     if (chartInstance) {
       renderChart();
     }
-  }, [darkMode, chartInstance, Data_assetAllocation]);
+  }, [darkMode, chartInstance, data]);
 
   useEffect(() => {
     chartInstance?.resize({
@@ -110,4 +108,4 @@ const Assets: React.FC<AssetsProps> = ({ Data_assetAllocation = {} }) => {
   );
 };
 
-export default Assets;
+export default HistoryBar;

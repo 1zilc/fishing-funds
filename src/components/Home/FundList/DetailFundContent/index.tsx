@@ -119,9 +119,11 @@ const DetailFundContent: React.FC<DetailFundContentProps> = (props) => {
               key={String(Enums.TrendType.Performance)}
             >
               <HistoryPerformance
+                syl_1n={pingzhongdata.syl_1n}
                 syl_6y={pingzhongdata.syl_6y}
                 syl_3y={pingzhongdata.syl_3y}
                 syl_1y={pingzhongdata.syl_1y}
+                data={pingzhongdata.Data_netWorthTrend}
               />
             </Tabs.TabPane>
             <Tabs.TabPane tab="历史净值" key={String(Enums.TrendType.Estimate)}>

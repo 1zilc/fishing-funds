@@ -3,6 +3,7 @@ import { Table } from 'antd';
 import dayjs from 'dayjs';
 
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
+import HistoryBar from '@/components/Home/FundList/FundHistoryValueContent/HistoryBar';
 import * as Utils from '@/utils';
 import styles from './index.scss';
 
@@ -44,6 +45,7 @@ const FundHistoryValueContent: React.FC<HistoryValueProps> = (props) => {
       onClose={props.onClose}
     >
       <div className={styles.content}>
+        <HistoryBar data={data} />
         <Table
           rowKey="x"
           size="small"

@@ -84,19 +84,20 @@ const StockWareHouse: React.FC<StockWareHouseProps> = ({
               type: 'pie',
               radius: '64%',
               center: ['50%', '50%'],
-              data: result.map((item) => {
-                return {
-                  value: item.ccb,
-                  name: item.name,
-                  itemStyle: {
-                    color:
-                      item.zdf >= 0
-                        ? varibleColors['--increase-color']
-                        : varibleColors['--reduce-color'],
-                  },
-                  item,
-                };
-              }),
+              data:
+                result?.map((item) => {
+                  return {
+                    value: item.ccb,
+                    name: item.name,
+                    itemStyle: {
+                      color:
+                        item.zdf >= 0
+                          ? varibleColors['--increase-color']
+                          : varibleColors['--reduce-color'],
+                    },
+                    item,
+                  };
+                }) || [],
               roseType: 'radius',
               label: {
                 color: varibleColors['--main-text-color'],

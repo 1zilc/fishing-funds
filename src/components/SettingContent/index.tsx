@@ -221,12 +221,11 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
                 disabled={!autoFresh}
                 value={freshDelay}
                 onChange={setFreshDelay}
-                placeholder="1~60分"
+                placeholder="1~60分钟"
                 precision={0}
                 min={1}
                 max={60}
                 size="small"
-                style={{ flex: 0.5 }}
               />
             </section>
             <section>
