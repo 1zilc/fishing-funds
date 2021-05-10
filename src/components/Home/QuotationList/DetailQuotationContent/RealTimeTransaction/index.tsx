@@ -58,7 +58,7 @@ const RealTimeTransaction: React.FC<RealTimeTransactionProps> = ({ code }) => {
           },
           series: [
             {
-              name: '交易金额(亿元)',
+              name: '交易金额(亿)',
               type: 'pie',
               radius: '64%',
               center: ['50%', '50%'],

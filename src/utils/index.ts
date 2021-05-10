@@ -136,6 +136,10 @@ export function parsepingzhongdata(code: string) {
         Data_currentFundManager,
         /*规模变动 mom-较上期环比*/
         Data_fluctuationScale,
+        /*持有人结构*/
+        Data_holderStructure,
+        /*资产配置*/
+        Data_assetAllocation,
         /*近一年收益率*/
         syl_1n,
         /*近6月收益率*/
@@ -186,7 +190,7 @@ export function UnitConvert(num: number) {
     }
     return newNum.length;
   }
-  const moneyUnits = ['元', '万元', '亿元', '万亿'];
+  const moneyUnits = ['元', '万', '亿', '万亿'];
   const dividend = 10000;
   let curentNum = num;
   //转换数字

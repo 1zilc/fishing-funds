@@ -56,6 +56,21 @@ declare namespace Fund {
       categories: string[];
       series: { y: number; mom: string }[];
     };
+    /*持有人结构*/
+    Data_holderStructure: {
+      categories: string[];
+      series: { name: string; data: string[] }[];
+    };
+    /*资产配置*/
+    Data_assetAllocation: {
+      categories: string[];
+      series: {
+        name: string;
+        type: string;
+        data: number[];
+        yAxis: number;
+      }[];
+    };
     /*近一年收益率*/
     syl_1n?: string;
     /*近6月收益率*/

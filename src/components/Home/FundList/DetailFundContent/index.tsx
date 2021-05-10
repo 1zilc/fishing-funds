@@ -13,6 +13,8 @@ import StockWareHouse from '@/components/Home/FundList/DetailFundContent/StockWa
 import SecuritiesWareHouse from '@/components/Home/FundList/DetailFundContent/SecuritiesWareHouse';
 import StockWareHouseEstimate from '@/components/Home/FundList/DetailFundContent/StockWareHouseEstimate';
 import Scale from '@/components/Home/FundList/DetailFundContent/Scale';
+import Hold from '@/components/Home/FundList/DetailFundContent/Hold';
+import Assets from '@/components/Home/FundList/DetailFundContent/Assets';
 import SimilarRank from '@/components/Home/FundList/DetailFundContent/SimilarRank';
 import SimilarProportion from '@/components/Home/FundList/DetailFundContent/SimilarProportion';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
@@ -180,18 +182,22 @@ const DetailFundContent: React.FC<DetailFundContentProps> = (props) => {
         </div>
         <div className={styles.container}>
           <Tabs
-            defaultActiveKey={String(Enums.ConfigType.Scale)}
+            defaultActiveKey={String(Enums.ConfigType.Assets)}
             animated={{ tabPane: true }}
             tabBarGutter={15}
           >
-            <Tabs.TabPane tab="规模变动" key={String(Enums.ConfigType.Scale)}>
-              <Scale rateInSimilarType={pingzhongdata.Data_rateInSimilarType} />
+            <Tabs.TabPane tab="资产配置" key={String(Enums.ConfigType.Assets)}>
+              <Assets
+                Data_assetAllocation={pingzhongdata.Data_assetAllocation}
+              />
             </Tabs.TabPane>
             <Tabs.TabPane tab="持有人结构" key={String(Enums.ConfigType.Hold)}>
-              <Scale rateInSimilarType={pingzhongdata.Data_rateInSimilarType} />
+              <Hold Data_holderStructure={pingzhongdata.Data_holderStructure} />
             </Tabs.TabPane>
-            <Tabs.TabPane tab="资产配置" key={String(Enums.ConfigType.Assets)}>
-              <Scale rateInSimilarType={pingzhongdata.Data_rateInSimilarType} />
+            <Tabs.TabPane tab="规模变动" key={String(Enums.ConfigType.Scale)}>
+              <Scale
+                Data_fluctuationScale={pingzhongdata.Data_fluctuationScale}
+              />
             </Tabs.TabPane>
           </Tabs>
         </div>
