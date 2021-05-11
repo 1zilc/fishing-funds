@@ -11,6 +11,7 @@ import {
   SET_FIX_FUND,
   getFundConfig,
   calcFund,
+  mergeFixFunds,
 } from '@/actions/fund';
 import { getSortMode } from '@/actions/sort';
 import * as Enums from '@/utils/enums';
@@ -136,23 +137,7 @@ function toggleFundsCollapse(state: FundState) {
 
 function setFixfunds(state: FundState, fixFunds: Fund.FixData[]) {
   const { funds } = state;
-  const cloneFunds = Utils.DeepCopy(funds);
-  const fixFundMap = fixFunds
-    .filter((_) => !!_)
-    .reduce((map, fund) => {
-      map[fund.code!] = fund;
-      return map;
-    }, {} as { [index: string]: Fund.FixData });
-
-  cloneFunds.forEach((fund) => {
-    const fixFund = fixFundMap[fund.fundcode!];
-    if (fixFund) {
-      fund.fixZzl = fixFund.fixZzl;
-      fund.fixDate = fixFund.fixDate;
-      fund.fixDwjz = fixFund.fixDwjz;
-    }
-  });
-
+  const cloneFunds = mergeFixFunds(funds, fixFunds);
   return sortFunds(state, cloneFunds);
 }
 

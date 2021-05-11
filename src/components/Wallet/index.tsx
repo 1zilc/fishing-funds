@@ -105,7 +105,7 @@ const Wallet: React.FC<WalletProps> = () => {
       <div className={styles.info}>
         <div className={styles.timeBar}>
           <div className={styles.last}>
-            刷新时间：{updateTime || '还没有刷新过哦～'}
+            刷新时间：{updateTime || '还没有刷新过哦~'}
           </div>
         </div>
         <div className={styles.moneyBar}>

@@ -48,6 +48,7 @@ const Profit: React.FC<ProfitProps> = ({ profit }) => {
       },
       tooltip: {
         trigger: 'item',
+        confine: true,
       },
       series: [
         {

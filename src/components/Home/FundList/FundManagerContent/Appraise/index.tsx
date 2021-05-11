@@ -38,6 +38,7 @@ const Appraise: React.FC<AppraiseProps> = ({ power }) => {
       },
       tooltip: {
         trigger: 'item',
+        confine: true,
       },
       radar: {
         indicator:

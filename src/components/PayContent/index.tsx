@@ -26,7 +26,7 @@ const PayContent: React.FC<PayContentProps> = (props) => {
         <div>
           <div className={styles.title}>
             <AliPayIcon />
-            <span>支付宝支持一下～</span>
+            <span>支付宝支持一下~</span>
           </div>
           <div className={styles.pay}>
             <Tilt
@@ -40,7 +40,7 @@ const PayContent: React.FC<PayContentProps> = (props) => {
         <div>
           <div className={styles.title}>
             <WechatPayIcon />
-            <span>微信支持一下～</span>
+            <span>微信支持一下~</span>
           </div>
           <div className={styles.pay}>
             <Tilt
