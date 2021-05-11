@@ -88,6 +88,7 @@ export enum SearchType {
 export enum SimilarCompareType {
   Rank,
   Proportion,
+  Evaluation,
 }
 
 // 历史类型
