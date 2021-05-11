@@ -140,6 +140,8 @@ export function parsepingzhongdata(code: string) {
         Data_holderStructure,
         /*资产配置*/
         Data_assetAllocation,
+        /*业绩评价 */
+        Data_performanceEvaluation,
         /*近一年收益率*/
         syl_1n,
         /*近6月收益率*/

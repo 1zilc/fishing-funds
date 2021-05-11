@@ -71,6 +71,12 @@ declare namespace Fund {
         yAxis: number;
       }[];
     };
+    /*业绩评价 */
+    Data_performanceEvaluation: {
+      categories: string[];
+      dsc: string[];
+      data: number[];
+    };
     /*近一年收益率*/
     syl_1n?: string;
     /*近6月收益率*/

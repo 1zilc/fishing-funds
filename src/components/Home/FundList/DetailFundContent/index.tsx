@@ -17,6 +17,7 @@ import Hold from '@/components/Home/FundList/DetailFundContent/Hold';
 import Assets from '@/components/Home/FundList/DetailFundContent/Assets';
 import SimilarRank from '@/components/Home/FundList/DetailFundContent/SimilarRank';
 import SimilarProportion from '@/components/Home/FundList/DetailFundContent/SimilarProportion';
+import PerformanceEvaluation from '@/components/Home/FundList/DetailFundContent/PerformanceEvaluation';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
 import SameFundList from '@/components/Home/FundList/DetailFundContent/SameFundList';
 import FundManagerContent from '@/components/Home/FundList/FundManagerContent';
@@ -223,6 +224,16 @@ const DetailFundContent: React.FC<DetailFundContentProps> = (props) => {
             >
               <SimilarProportion
                 rateInSimilarPersent={pingzhongdata.Data_rateInSimilarPersent}
+              />
+            </Tabs.TabPane>
+            <Tabs.TabPane
+              tab="业绩评价"
+              key={String(Enums.SimilarCompareType.Evaluation)}
+            >
+              <PerformanceEvaluation
+                Data_performanceEvaluation={
+                  pingzhongdata.Data_performanceEvaluation
+                }
               />
             </Tabs.TabPane>
           </Tabs>

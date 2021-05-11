@@ -5,10 +5,16 @@ import * as echarts from 'echarts';
 import { HomeContext } from '@/components/Home';
 import styles from './index.scss';
 
-export interface AppraiseProps {
-  power: Fund.Manager.Power;
+export interface PerformanceEvaluationProps {
+  Data_performanceEvaluation: {
+    categories: string[];
+    dsc: string[];
+    data: number[];
+  };
 }
-const Appraise: React.FC<AppraiseProps> = ({ power }) => {
+const PerformanceEvaluation: React.FC<PerformanceEvaluationProps> = ({
+  Data_performanceEvaluation = { categories: [], dsc: [], data: [] },
+}) => {
   const chartRef = useRef<HTMLDivElement>(null);
   const [chartInstance, setChartInstance] = useState<echarts.ECharts | null>(
     null
@@ -41,7 +47,7 @@ const Appraise: React.FC<AppraiseProps> = ({ power }) => {
       },
       radar: {
         indicator:
-          power?.categories?.map((name) => ({
+          Data_performanceEvaluation.categories?.map((name) => ({
             name,
             max: 100,
           })) || [],
@@ -80,7 +86,7 @@ const Appraise: React.FC<AppraiseProps> = ({ power }) => {
           name: '能力评估',
           type: 'radar',
           lineStyle: { width: 1, opacity: 0.8 },
-          data: [[...power?.data, 1]],
+          data: [[...Data_performanceEvaluation.data, 1]],
           symbol: 'none',
           itemStyle: {
             color: '#F9713C',
@@ -101,7 +107,7 @@ const Appraise: React.FC<AppraiseProps> = ({ power }) => {
     if (chartInstance) {
       renderChart();
     }
-  }, [darkMode, chartInstance, power]);
+  }, [darkMode, chartInstance, Data_performanceEvaluation]);
 
   useEffect(() => {
     chartInstance?.resize({
@@ -116,4 +122,4 @@ const Appraise: React.FC<AppraiseProps> = ({ power }) => {
   );
 };
 
-export default Appraise;
+export default PerformanceEvaluation;

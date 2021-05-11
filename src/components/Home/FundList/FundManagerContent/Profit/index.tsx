@@ -11,21 +11,20 @@ export interface ProfitProps {
 
 const Profit: React.FC<ProfitProps> = ({ profit }) => {
   const profitRef = useRef<HTMLDivElement>(null);
-  const [
-    ProfitChartInstance,
-    setProfitChartInstance,
-  ] = useState<echarts.ECharts | null>(null);
-  const { width: profitRefWidth } = useSize(profitRef);
+  const [chartInstance, setChartInstance] = useState<echarts.ECharts | null>(
+    null
+  );
+  const { width: chartRefWidth } = useSize(profitRef);
   const { darkMode } = useContext(HomeContext);
 
-  const initProfitChart = () => {
+  const initChart = () => {
     const instance = echarts.init(profitRef.current!, undefined, {
       renderer: 'svg',
     });
-    setProfitChartInstance(instance);
+    setChartInstance(instance);
   };
-  const renderProfitChart = () => {
-    ProfitChartInstance?.setOption({
+  const renderChart = () => {
+    chartInstance?.setOption({
       xAxis: {
         type: 'category',
         data: profit?.categories || [],
@@ -69,20 +68,20 @@ const Profit: React.FC<ProfitProps> = ({ profit }) => {
   };
 
   useEffect(() => {
-    initProfitChart();
+    initChart();
   }, []);
 
   useEffect(() => {
-    if (ProfitChartInstance) {
-      renderProfitChart();
+    if (chartInstance) {
+      renderChart();
     }
-  }, [darkMode, ProfitChartInstance, profit]);
+  }, [darkMode, chartInstance, profit]);
 
   useEffect(() => {
-    ProfitChartInstance?.resize({
-      height: profitRefWidth,
+    chartInstance?.resize({
+      height: chartRefWidth,
     });
-  }, [profitRefWidth]);
+  }, [chartRefWidth]);
 
   return (
     <div className={styles.content}>
