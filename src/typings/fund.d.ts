@@ -116,17 +116,11 @@ declare namespace Fund {
       profit: Fund.Manager.Profit;
     }
     export interface Power {
-      avr: '8.54';
-      categories: ['经验值', '收益率', '抗风险', '稳定性', '择时能力'];
-      dsc: [
-        '反映基金经理从业年限和管理基金的经验',
-        '根据基金经理投资的阶段收益评分，反映<br>基金经理投资的盈利能力',
-        '反映基金经理投资的回撤控制能力',
-        '反映基金经理投资收益的波动',
-        '反映基金经理根据对市场的判断，通过<br>调整仓位及配置而跑赢业绩的基准能力'
-      ];
-      data: [33.2, 2.1, 0.2, 0.3, 21.5];
-      jzrq: '2021-03-02';
+      avr: string;
+      categories: string[];
+      dsc: string[];
+      data: number[];
+      jzrq: string;
     }
     export interface Profit {
       categories: ['任期收益', '同类平均', '沪深300'];

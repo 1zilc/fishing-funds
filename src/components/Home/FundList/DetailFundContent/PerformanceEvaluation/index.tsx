@@ -1,8 +1,7 @@
-import React, { useEffect, useRef, useState, useContext } from 'react';
-import { useSize } from 'ahooks';
-import * as echarts from 'echarts';
+import React, { useContext } from 'react';
 
 import { HomeContext } from '@/components/Home';
+import { useResizeEchart, useRenderEcharts } from '@/utils/hooks';
 import styles from './index.scss';
 
 export interface PerformanceEvaluationProps {
@@ -13,107 +12,88 @@ export interface PerformanceEvaluationProps {
   };
 }
 const PerformanceEvaluation: React.FC<PerformanceEvaluationProps> = ({
-  Data_performanceEvaluation = { categories: [], dsc: [], data: [] },
+  Data_performanceEvaluation = {
+    categories: [],
+    dsc: [],
+    data: [],
+  },
 }) => {
-  const chartRef = useRef<HTMLDivElement>(null);
-  const [chartInstance, setChartInstance] = useState<echarts.ECharts | null>(
-    null
-  );
-  const { width: chartRefWidth } = useSize(chartRef);
+  const { ref: chartRef, chartInstance } = useResizeEchart();
   const { darkMode } = useContext(HomeContext);
 
-  const initChart = () => {
-    const instance = echarts.init(chartRef.current!, undefined, {
-      renderer: 'svg',
-    });
-    setChartInstance(instance);
-  };
-  const renderChart = () => {
-    chartInstance?.setOption({
-      // backgroundColor: '#161627',
-      title: {
-        text: '',
-        left: 'center',
-      },
-      grid: {
-        top: '3%',
-        left: 30,
-        right: 30,
-        bottom: 0,
-        containLabel: true,
-      },
-      tooltip: {
-        trigger: 'item',
-      },
-      radar: {
-        indicator:
-          Data_performanceEvaluation.categories?.map((name) => ({
-            name,
-            max: 100,
-          })) || [],
-        shape: 'circle',
-        splitNumber: 5,
-        center: ['50%', '50%'],
-        radius: '55%',
-        name: {
-          textStyle: {
-            color: 'rgb(228, 167, 82)',
+  useRenderEcharts(
+    () => {
+      chartInstance?.setOption({
+        title: {
+          text: '',
+          left: 'center',
+        },
+        grid: {
+          top: '3%',
+          left: 30,
+          right: 30,
+          bottom: 0,
+          containLabel: true,
+        },
+        tooltip: {
+          trigger: 'item',
+        },
+        radar: {
+          indicator:
+            Data_performanceEvaluation.categories.map((name) => ({
+              name,
+              max: 100,
+            })) || [],
+          shape: 'circle',
+          splitNumber: 5,
+          center: ['50%', '50%'],
+          radius: '55%',
+          name: {
+            textStyle: {
+              color: 'rgb(228, 167, 82)',
+            },
+          },
+          splitLine: {
+            lineStyle: {
+              color: [
+                'rgba(238, 197, 102, 0.3)',
+                'rgba(238, 197, 102, 0.5)',
+                'rgba(238, 197, 102, 0.7)',
+                'rgba(238, 197, 102, 0.8)',
+                'rgba(238, 197, 102, 0.9)',
+                'rgba(238, 197, 102, 1)',
+              ].reverse(),
+            },
+          },
+          splitArea: {
+            show: false,
+          },
+          axisLine: {
+            lineStyle: {
+              color: 'rgba(238, 197, 102, 0.5)',
+            },
           },
         },
-        splitLine: {
-          lineStyle: {
-            color: [
-              'rgba(238, 197, 102, 0.3)',
-              'rgba(238, 197, 102, 0.5)',
-              'rgba(238, 197, 102, 0.7)',
-              'rgba(238, 197, 102, 0.8)',
-              'rgba(238, 197, 102, 0.9)',
-              'rgba(238, 197, 102, 1)',
-            ].reverse(),
+        series: [
+          {
+            name: '能力评估',
+            type: 'radar',
+            lineStyle: { width: 1, opacity: 0.8 },
+            data: [Data_performanceEvaluation.data],
+            symbol: 'none',
+            itemStyle: {
+              color: '#F9713C',
+            },
+            areaStyle: {
+              opacity: 0.5,
+            },
           },
-        },
-        splitArea: {
-          show: false,
-        },
-        axisLine: {
-          lineStyle: {
-            color: 'rgba(238, 197, 102, 0.5)',
-          },
-        },
-      },
-      series: [
-        {
-          name: '能力评估',
-          type: 'radar',
-          lineStyle: { width: 1, opacity: 0.8 },
-          data: [[...Data_performanceEvaluation.data, 1]],
-          symbol: 'none',
-          itemStyle: {
-            color: '#F9713C',
-          },
-          areaStyle: {
-            opacity: 0.5,
-          },
-        },
-      ],
-    });
-  };
-
-  useEffect(() => {
-    initChart();
-  }, []);
-
-  useEffect(() => {
-    if (chartInstance) {
-      renderChart();
-    }
-  }, [darkMode, chartInstance, Data_performanceEvaluation]);
-
-  useEffect(() => {
-    chartInstance?.resize({
-      height: chartRefWidth,
-    });
-  }, [chartRefWidth]);
+        ],
+      });
+    },
+    chartInstance,
+    [darkMode, Data_performanceEvaluation]
+  );
 
   return (
     <div className={styles.content}>

@@ -1,10 +1,10 @@
-import React, { useEffect, useRef, useState, useContext } from 'react';
+import React, { useContext } from 'react';
 import { renderToString } from 'react-dom/server';
-import { useRequest, useSize } from 'ahooks';
-import * as echarts from 'echarts';
+import { useRequest } from 'ahooks';
 
 import { HomeContext } from '@/components/Home';
-
+import { useResizeEchart, useRenderEcharts } from '@/utils/hooks';
+import * as CONST from '@/constants';
 import * as Services from '@/services';
 import styles from './index.scss';
 
@@ -34,19 +34,10 @@ const StockWareHouse: React.FC<StockWareHouseProps> = ({
   code,
   stockCodes,
 }) => {
-  const chartRef = useRef<HTMLDivElement>(null);
-  const [chartInstance, setChartInstance] = useState<echarts.ECharts | null>(
-    null
+  const { ref: chartRef, chartInstance } = useResizeEchart(
+    CONST.DEFAULT.ECHARTS_SCALE
   );
-  const { width: chartRefWidth } = useSize(chartRef);
   const { varibleColors, darkMode } = useContext(HomeContext);
-
-  const initChart = () => {
-    const instance = echarts.init(chartRef.current!, undefined, {
-      renderer: 'svg',
-    });
-    setChartInstance(instance);
-  };
 
   const { run: runGetStockWareHouseFromEastmoney } = useRequest(
     Services.Fund.GetStockWareHouseFromEastmoney,
@@ -128,21 +119,13 @@ const StockWareHouse: React.FC<StockWareHouseProps> = ({
     }
   );
 
-  useEffect(() => {
-    initChart();
-  }, []);
-
-  useEffect(() => {
-    if (chartInstance) {
+  useRenderEcharts(
+    () => {
       runGetStockWareHouseFromEastmoney(code, stockCodes);
-    }
-  }, [darkMode, chartInstance, stockCodes]);
-
-  useEffect(() => {
-    chartInstance?.resize({
-      height: chartRefWidth,
-    });
-  }, [chartRefWidth]);
+    },
+    chartInstance,
+    [darkMode, stockCodes]
+  );
 
   return (
     <div className={styles.content}>

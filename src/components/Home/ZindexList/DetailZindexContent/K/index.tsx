@@ -1,17 +1,18 @@
-import React, { useEffect, useRef, useState, useContext } from 'react';
+import React, { useState, useContext } from 'react';
 import classnames from 'classnames';
-import { useRequest, useSize } from 'ahooks';
-import * as echarts from 'echarts';
+import { useRequest } from 'ahooks';
 import NP from 'number-precision';
 
 import { HomeContext } from '@/components/Home';
+import { useResizeEchart, useRenderEcharts } from '@/utils/hooks';
+import * as CONST from '@/constants';
 import * as Services from '@/services';
-import * as Enums from '@/utils/enums';
 import styles from './index.scss';
 
 export interface PerformanceProps {
   code: string;
 }
+
 const yearTypeList = [
   { name: '一年', type: 1, code: 1 },
   { name: '三年', type: 2, code: 3 },
@@ -36,14 +37,11 @@ function calculateMA(dayCount: any, values: any[]) {
   return result;
 }
 
-const K: React.FC<PerformanceProps> = ({ code }) => {
-  const chartRef = useRef<HTMLDivElement>(null);
-  const [year, setYearType] = useState(yearTypeList[0]);
-  const [chartInstance, setChartInstance] = useState<echarts.ECharts | null>(
-    null
+const K: React.FC<PerformanceProps> = ({ code = '' }) => {
+  const { ref: chartRef, chartInstance } = useResizeEchart(
+    CONST.DEFAULT.ECHARTS_SCALE
   );
-
-  const { width: chartRefWidth } = useSize(chartRef);
+  const [year, setYearType] = useState(yearTypeList[0]);
   const { varibleColors, darkMode } = useContext(HomeContext);
   const { run: runGetKFromEastmoney } = useRequest(
     Services.Zindex.GetKFromEastmoney,
@@ -163,26 +161,13 @@ const K: React.FC<PerformanceProps> = ({ code }) => {
     }
   );
 
-  const initChart = () => {
-    const chartInstance = echarts.init(chartRef.current!, undefined, {
-      renderer: 'svg',
-    });
-    setChartInstance(chartInstance);
-  };
-
-  useEffect(initChart, []);
-
-  useEffect(() => {
-    if (chartInstance) {
+  useRenderEcharts(
+    () => {
       runGetKFromEastmoney(code, year.code);
-    }
-  }, [darkMode, chartInstance, year.code]);
-
-  useEffect(() => {
-    chartInstance?.resize({
-      height: (chartRefWidth! * 300) / 400,
-    });
-  }, [chartRefWidth]);
+    },
+    chartInstance,
+    [darkMode, code, year.code]
+  );
 
   return (
     <div className={styles.content}>

@@ -1,11 +1,8 @@
-import React, { useEffect, useRef, useState, useContext } from 'react';
-import { renderToString } from 'react-dom/server';
-import { useRequest, useSize } from 'ahooks';
-import * as echarts from 'echarts';
+import React, { useContext } from 'react';
 
 import { HomeContext } from '@/components/Home';
-
-import * as Services from '@/services';
+import { useResizeEchart, useRenderEcharts } from '@/utils/hooks';
+import * as CONST from '@/constants';
 import styles from './index.scss';
 
 export interface StockWareHouseEstimateProps {
@@ -15,82 +12,61 @@ export interface StockWareHouseEstimateProps {
 const StockWareHouseEstimate: React.FC<StockWareHouseEstimateProps> = ({
   fundSharesPositions,
 }) => {
-  const chartRef = useRef<HTMLDivElement>(null);
-  const [chartInstance, setChartInstance] = useState<echarts.ECharts | null>(
-    null
+  const { ref: chartRef, chartInstance } = useResizeEchart(
+    CONST.DEFAULT.ECHARTS_SCALE
   );
-  const { width: chartRefWidth } = useSize(chartRef);
-  const { varibleColors, darkMode } = useContext(HomeContext);
+  const { darkMode } = useContext(HomeContext);
 
-  const initChart = () => {
-    const instance = echarts.init(chartRef.current!, undefined, {
-      renderer: 'svg',
-    });
-    setChartInstance(instance);
-  };
-
-  const renderChart = () => {
-    chartInstance?.setOption({
-      title: {
-        show: false,
-      },
-      tooltip: {
-        trigger: 'axis',
-        axisPointer: {
-          // 坐标轴指示器，坐标轴触发有效
-          type: 'shadow', // 默认为直线，可选为：'line' | 'shadow'
+  useRenderEcharts(
+    () => {
+      chartInstance?.setOption({
+        title: {
+          show: false,
         },
-        confine: true,
-      },
-      grid: {
-        top: '3%',
-        left: 0,
-        right: 5,
-        bottom: 0,
-        containLabel: true,
-      },
-      xAxis: {
-        type: 'time',
-        axisLabel: {
-          fontSize: 10,
+        tooltip: {
+          trigger: 'axis',
+          axisPointer: {
+            // 坐标轴指示器，坐标轴触发有效
+            type: 'shadow', // 默认为直线，可选为：'line' | 'shadow'
+          },
+          confine: true,
         },
-      },
-      yAxis: {
-        type: 'value',
-        axisLabel: {
-          formatter: `{value}%`,
-          fontSize: 10,
+        grid: {
+          top: '3%',
+          left: 0,
+          right: 5,
+          bottom: 0,
+          containLabel: true,
         },
-        scale: true,
-      },
-      series: [
-        {
-          data: fundSharesPositions,
-          type: 'line',
-          showSymbol: false,
-          lineStyle: {
-            width: 1,
+        xAxis: {
+          type: 'time',
+          axisLabel: {
+            fontSize: 10,
           },
         },
-      ],
-    });
-  };
-
-  useEffect(() => {
-    initChart();
-  }, []);
-
-  useEffect(() => {
-    if (chartInstance) {
-      renderChart();
-    }
-  }, [darkMode, chartInstance, fundSharesPositions]);
-
-  useEffect(() => {
-    chartInstance?.resize({
-      height: chartRefWidth! * 0.64,
-    });
-  }, [chartRefWidth]);
+        yAxis: {
+          type: 'value',
+          axisLabel: {
+            formatter: `{value}%`,
+            fontSize: 10,
+          },
+          scale: true,
+        },
+        series: [
+          {
+            data: fundSharesPositions,
+            type: 'line',
+            showSymbol: false,
+            lineStyle: {
+              width: 1,
+            },
+          },
+        ],
+      });
+    },
+    chartInstance,
+    [darkMode, fundSharesPositions]
+  );
 
   return (
     <div className={styles.content}>

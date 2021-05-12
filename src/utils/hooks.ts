@@ -4,12 +4,14 @@ import {
   useMemo,
   useState,
   useEffect,
+  useRef,
 } from 'react';
-import { useInterval, useBoolean, useThrottleFn } from 'ahooks';
+import { useInterval, useBoolean, useThrottleFn, useSize } from 'ahooks';
 import { ipcRenderer, remote, clipboard } from 'electron';
 import { bindActionCreators } from 'redux';
 import { useDispatch, useSelector } from 'react-redux';
 import dayjs from 'dayjs';
+import * as echarts from 'echarts';
 
 import { getSystemSetting } from '@/actions/setting';
 import { getCurrentHours } from '@/actions/time';
@@ -198,7 +200,36 @@ export function useNativeThemeColor(varibles: string[]) {
   return { darkMode, colors: memoColors };
 }
 
-export function useEchartResize() {}
+export function useResizeEchart(scale: number = 1) {
+  const chartRef = useRef<HTMLDivElement>(null);
+  const [chartInstance, setChartInstance] = useState<echarts.ECharts | null>(
+    null
+  );
+  const { width: chartRefWidth } = useSize(chartRef);
+  useEffect(() => {
+    const instance = echarts.init(chartRef.current!, undefined, {
+      renderer: 'svg',
+    });
+    setChartInstance(instance);
+  }, []);
+
+  useEffect(() => {
+    chartInstance?.resize({ height: chartRefWidth! * scale });
+  }, [chartRefWidth]);
+  return { ref: chartRef, chartRefWidth, chartInstance, setChartInstance };
+}
+
+export function useRenderEcharts(
+  callback: () => void,
+  instance: echarts.ECharts | null,
+  dep: any[] = []
+) {
+  useEffect(() => {
+    if (instance) {
+      callback();
+    }
+  }, [instance, ...dep]);
+}
 
 export function useActions(actions: any, deps?: any[]) {
   const dispatch = useDispatch();

@@ -73,7 +73,7 @@ const HistoryPerformance: React.FC<HistoryPerformanceProps> = (props) => {
         columns={columns}
         dataSource={data}
         pagination={false}
-      />{' '}
+      />
       <div className={styles.more}>
         <a onClick={openFundHistoryValueDrawer}>{'详细数据 >'}</a>
       </div>

@@ -1,9 +1,9 @@
-import React, { useEffect, useRef, useState, useContext } from 'react';
+import React, { useContext } from 'react';
 import { renderToString } from 'react-dom/server';
-import { useSize } from 'ahooks';
-import * as echarts from 'echarts';
 
 import { HomeContext } from '@/components/Home';
+import { useResizeEchart, useRenderEcharts } from '@/utils/hooks';
+import * as CONST from '@/constants';
 import styles from './index.scss';
 
 interface ScaleProps {
@@ -28,103 +28,85 @@ const Tooltip: React.FC<TooltipProps> = (props) => {
   );
 };
 
-const Scale: React.FC<ScaleProps> = ({ Data_fluctuationScale = {} }) => {
-  const chartRef = useRef<HTMLDivElement>(null);
-  const [chartInstance, setChartInstance] = useState<echarts.ECharts | null>(
-    null
+const Scale: React.FC<ScaleProps> = ({
+  Data_fluctuationScale = {
+    categories: [],
+    series: [],
+  },
+}) => {
+  const { ref: chartRef, chartInstance } = useResizeEchart(
+    CONST.DEFAULT.ECHARTS_SCALE
   );
-  const { width: chartRefWidth } = useSize(chartRef);
   const { varibleColors, darkMode } = useContext(HomeContext);
 
-  const initChart = () => {
-    const instance = echarts.init(chartRef.current!, undefined, {
-      renderer: 'svg',
-    });
-    setChartInstance(instance);
-  };
-
-  const renderChart = () => {
-    chartInstance?.setOption({
-      title: {
-        text: '净资产',
-        left: 'center',
-        top: 0,
-        textStyle: {
-          color: varibleColors['--main-text-color'],
-          fontSize: 12,
+  useRenderEcharts(
+    () => {
+      chartInstance?.setOption({
+        title: {
+          text: '净资产',
+          left: 'center',
+          top: 0,
+          textStyle: {
+            color: varibleColors['--main-text-color'],
+            fontSize: 12,
+          },
         },
-      },
-      tooltip: {
-        trigger: 'axis',
-        axisPointer: {
-          // 坐标轴指示器，坐标轴触发有效
-          type: 'shadow', // 默认为直线，可选为：'line' | 'shadow'
+        tooltip: {
+          trigger: 'axis',
+          axisPointer: {
+            // 坐标轴指示器，坐标轴触发有效
+            type: 'shadow', // 默认为直线，可选为：'line' | 'shadow'
+          },
+          formatter: (params: any) => {
+            const [{ data, name }] = params;
+            return renderToString(
+              <Tooltip time={name} value={data?.value} rate={data?.item?.mom} />
+            );
+          },
         },
-        formatter: (params: any) => {
-          const [{ data, name }] = params;
-          return renderToString(
-            <Tooltip time={name} value={data?.value} rate={data?.item?.mom} />
-          );
+        grid: {
+          top: 32,
+          left: 0,
+          right: 5,
+          bottom: 0,
+          containLabel: true,
         },
-      },
-      grid: {
-        top: 32,
-        left: 0,
-        right: 5,
-        bottom: 0,
-        containLabel: true,
-      },
-      xAxis: {
-        type: 'category',
-        axisLabel: {
-          fontSize: 10,
+        xAxis: {
+          type: 'category',
+          axisLabel: {
+            fontSize: 10,
+          },
+          data: Data_fluctuationScale.categories,
         },
-        data: Data_fluctuationScale.categories || [],
-      },
-      yAxis: {
-        type: 'value',
-        axisLabel: {
-          fontSize: 10,
-          formatter: `{value}亿`,
+        yAxis: {
+          type: 'value',
+          axisLabel: {
+            fontSize: 10,
+            formatter: `{value}亿`,
+          },
         },
-      },
-      series: [
-        {
-          data:
-            Data_fluctuationScale.series?.map((item) => ({
+        series: [
+          {
+            data: Data_fluctuationScale.series.map((item) => ({
               value: item.y,
               item,
-            })) || [],
-
-          type: 'bar',
-        },
-      ],
-      dataZoom: [
-        {
-          type: 'inside',
-          start: 90,
-          end: 100,
-          minValueSpan: 3600 * 24 * 1000 * 7,
-        },
-      ],
-    });
-  };
-
-  useEffect(() => {
-    initChart();
-  }, []);
-
-  useEffect(() => {
-    if (chartInstance) {
-      renderChart();
-    }
-  }, [darkMode, chartInstance, Data_fluctuationScale]);
-
-  useEffect(() => {
-    chartInstance?.resize({
-      height: chartRefWidth! * 0.64,
-    });
-  }, [chartRefWidth]);
+            })),
+            type: 'bar',
+          },
+        ],
+        dataZoom: [
+          {
+            type: 'inside',
+            start: 90,
+            end: 100,
+            minValueSpan: 3600 * 24 * 1000 * 7,
+          },
+        ],
+      });
+    },
+    chartInstance,
+    [darkMode, Data_fluctuationScale]
+  );
 
   return (
     <div className={styles.content}>
