@@ -2,6 +2,7 @@ import React, { useContext } from 'react';
 
 import { HomeContext } from '@/components/Home';
 import { useResizeEchart, useRenderEcharts } from '@/utils/hooks';
+import * as CONST from '@/constants';
 import styles from './index.scss';
 
 export interface PerformanceEvaluationProps {
@@ -18,7 +19,9 @@ const PerformanceEvaluation: React.FC<PerformanceEvaluationProps> = ({
     data: [],
   },
 }) => {
-  const { ref: chartRef, chartInstance } = useResizeEchart();
+  const { ref: chartRef, chartInstance } = useResizeEchart(
+    CONST.DEFAULT.ECHARTS_SCALE
+  );
   const { darkMode } = useContext(HomeContext);
 
   useRenderEcharts(
@@ -29,10 +32,6 @@ const PerformanceEvaluation: React.FC<PerformanceEvaluationProps> = ({
           left: 'center',
         },
         grid: {
-          top: '3%',
-          left: 30,
-          right: 30,
-          bottom: 0,
           containLabel: true,
         },
         tooltip: {
@@ -47,7 +46,7 @@ const PerformanceEvaluation: React.FC<PerformanceEvaluationProps> = ({
           shape: 'circle',
           splitNumber: 5,
           center: ['50%', '50%'],
-          radius: '55%',
+          radius: '64%',
           name: {
             textStyle: {
               color: 'rgb(228, 167, 82)',

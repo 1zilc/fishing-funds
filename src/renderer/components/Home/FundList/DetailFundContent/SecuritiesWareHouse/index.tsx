@@ -4,6 +4,7 @@ import { useRequest } from 'ahooks';
 
 import { HomeContext } from '@/components/Home';
 import { useResizeEchart, useRenderEcharts } from '@/utils/hooks';
+import * as CONST from '@/constants';
 import * as Services from '@/services';
 import styles from './index.scss';
 
@@ -33,7 +34,9 @@ const SecuritiesWareHouse: React.FC<SecuritiesWareHouseProps> = ({
   code,
   securitiesCodes,
 }) => {
-  const { ref: chartRef, chartInstance } = useResizeEchart();
+  const { ref: chartRef, chartInstance } = useResizeEchart(
+    CONST.DEFAULT.ECHARTS_SCALE
+  );
 
   const { varibleColors, darkMode } = useContext(HomeContext);
 
@@ -56,7 +59,6 @@ const SecuritiesWareHouse: React.FC<SecuritiesWareHouseProps> = ({
             },
           },
           grid: {
-            top: '3%',
             left: 0,
             right: 5,
             bottom: 0,
@@ -72,7 +74,7 @@ const SecuritiesWareHouse: React.FC<SecuritiesWareHouseProps> = ({
               name: '持仓占比',
               type: 'pie',
               radius: '64%',
-              center: ['50%', '50%'],
+              center: ['50%', '64%'],
               data: result.map((item) => {
                 return {
                   value: item.ccb,

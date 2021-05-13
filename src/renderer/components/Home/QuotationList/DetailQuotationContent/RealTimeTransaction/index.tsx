@@ -40,10 +40,6 @@ const RealTimeTransaction: React.FC<RealTimeTransactionProps> = ({
             },
           },
           grid: {
-            top: '3%',
-            left: 0,
-            right: 5,
-            bottom: 0,
             containLabel: true,
           },
           tooltip: {
@@ -54,7 +50,7 @@ const RealTimeTransaction: React.FC<RealTimeTransactionProps> = ({
               name: '交易金额(亿)',
               type: 'pie',
               radius: '64%',
-              center: ['50%', '50%'],
+              center: ['50%', '64%'],
               data: [
                 {
                   name: '超大单流入',
