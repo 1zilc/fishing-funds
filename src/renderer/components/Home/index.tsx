@@ -13,6 +13,7 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import SortBar from '@/components/SortBar';
 import TabsBar from '@/components/TabsBar';
+import Collect from '@/components/Collect';
 import { SET_REMOTE_FUNDS } from '@/actions/fund';
 import { StoreState } from '@/reducers/types';
 import { useNativeThemeColor } from '@/utils/hooks';
@@ -86,10 +87,7 @@ const Home: React.FC<HomeProps> = () => {
           <Toolbar />
           <TabsBar />
         </Footer>
-        <webview
-          src="https://ff.1zilc.top/collect?title=home"
-          style={{ height: 1080, width: 1920, display: 'none' }}
-        ></webview>
+        <Collect title="home" />
       </div>
     </HomeContext.Provider>
   );

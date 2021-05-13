@@ -1,5 +1,6 @@
 import React from 'react';
 
+import Collect from '@/components/Collect';
 import styles from './index.scss';
 
 export interface CustomDrawerContentProps {
@@ -9,6 +10,7 @@ export interface CustomDrawerContentProps {
   closeText?: string;
   enterText?: string;
 }
+
 const CustomDrawer: React.FC<CustomDrawerContentProps> = ({
   onEnter,
   onClose,
@@ -29,10 +31,7 @@ const CustomDrawer: React.FC<CustomDrawerContentProps> = ({
         </button>
       </div>
       <div className={styles.body}>{children}</div>
-      <webview
-        src={`https://ff.1zilc.top/collect?title=${title}`}
-        style={{ height: 1080, width: 1920, display: 'none' }}
-      ></webview>
+      <Collect title={title} />
     </div>
   );
 };

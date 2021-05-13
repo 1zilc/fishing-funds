@@ -112,7 +112,7 @@ const createMenubar = async () => {
     // icon: nativeMenuIcon,
     tray,
     tooltip: 'Fishing Funds',
-    preloadWindow: true,
+    preloadWindow: false,
     showOnAllWorkspaces: false,
     showDockIcon: false,
 
@@ -189,6 +189,9 @@ const createMenubar = async () => {
   });
   ipcMain.handle('set-login-item-settings', (event, config) => {
     app.setLoginItemSettings(config);
+  });
+  ipcMain.handle('app-quit', (event, config) => {
+    app.quit();
   });
 
   // new AppUpdater({ icon: nativeIcon, win: mb.window });

@@ -4,21 +4,9 @@
 
 import webpack from 'webpack';
 import webpackPaths from './webpack.paths.js';
-// import { dependencies as externals } from '../../build/app/package.json';
+import { dependencies as externals } from '../../build/app/package.json';
 export default {
-  externals: [
-    'dns',
-    'os',
-    'net',
-    'http2',
-    'stream',
-    'tls',
-    'https',
-    'http',
-    'fs',
-    'zlib',
-    'path',
-  ],
+  externals: [...Object.keys(externals || {})],
   module: {
     rules: [
       {
