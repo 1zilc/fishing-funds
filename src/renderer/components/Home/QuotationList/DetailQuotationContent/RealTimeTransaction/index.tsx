@@ -31,13 +31,7 @@ const RealTimeTransaction: React.FC<RealTimeTransactionProps> = ({
         chartInstance?.setOption({
           backgroundColor: 'transparent',
           title: {
-            text: `分布情况`,
-            left: 'center',
-            top: 0,
-            textStyle: {
-              color: varibleColors['--main-text-color'],
-              fontSize: 12,
-            },
+            show: false,
           },
           grid: {
             containLabel: true,
@@ -50,7 +44,7 @@ const RealTimeTransaction: React.FC<RealTimeTransactionProps> = ({
               name: '交易金额(亿)',
               type: 'pie',
               radius: '64%',
-              center: ['50%', '64%'],
+              center: ['50%', '50%'],
               data: [
                 {
                   name: '超大单流入',

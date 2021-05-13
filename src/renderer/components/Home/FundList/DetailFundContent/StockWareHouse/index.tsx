@@ -49,13 +49,7 @@ const StockWareHouse: React.FC<StockWareHouseProps> = ({
         chartInstance?.setOption({
           backgroundColor: 'transparent',
           title: {
-            text: `持仓前${result.length}股票`,
-            left: 'center',
-            top: 0,
-            textStyle: {
-              color: varibleColors['--main-text-color'],
-              fontSize: 12,
-            },
+            show: false,
           },
           grid: {
             left: 0,
@@ -73,7 +67,7 @@ const StockWareHouse: React.FC<StockWareHouseProps> = ({
               name: '持仓占比',
               type: 'pie',
               radius: '64%',
-              center: ['50%', '64%'],
+              center: ['50%', '50%'],
               data:
                 result?.map((item) => {
                   return {
