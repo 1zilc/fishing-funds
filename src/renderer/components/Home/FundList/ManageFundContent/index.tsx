@@ -39,6 +39,8 @@ const defaultEdifFund = {
   code: '',
 };
 
+const { dialog } = window.contextModules.electron;
+
 const ManageFundContent: React.FC<ManageFundContentProps> = (props) => {
   const wallet = getCurrentWallet();
   const [sortFundConfig, setSortFundConfig] = useState<
@@ -85,13 +87,12 @@ const ManageFundContent: React.FC<ManageFundContentProps> = (props) => {
   };
 
   const onRemoveFund = async (fund: Fund.SettingItem) => {
-    // const { response } = await dialog.showMessageBox({
-    //   title: '删除基金',
-    //   type: 'info',
-    //   message: `确认删除 ${fund.name || ''} ${fund.code}`,
-    //   buttons: ['确定', '取消'],
-    // });
-    const response = 0;
+    const { response } = await dialog.showMessageBox({
+      title: '删除基金',
+      type: 'info',
+      message: `确认删除 ${fund.name || ''} ${fund.code}`,
+      buttons: ['确定', '取消'],
+    });
     if (response === 0) {
       deleteFund(fund.code);
       updateSortFundConfig();

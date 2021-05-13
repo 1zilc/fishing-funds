@@ -36,8 +36,8 @@ contextBridge.exposeInMainWorld('contextModules', {
       },
     },
     dialog: {
-      showMessageBox: (config) =>
-        ipcRenderer.invoke('show-message-box', config),
+      showMessageBox: async (config) =>
+        await ipcRenderer.invoke('show-message-box', config),
     },
     invoke: {
       showCurrentWindow: () => ipcRenderer.invoke('show-current-window'),
