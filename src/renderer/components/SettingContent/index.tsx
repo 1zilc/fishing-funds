@@ -19,9 +19,7 @@ import * as Enums from '@/utils/enums';
 import * as Utils from '@/utils';
 import styles from './index.scss';
 
-// const { version } = require('@/package.json');
-const version = '2.9.0';
-
+export const ffVersion = '3.0.0';
 export interface SettingContentProps {
   onEnter: () => void;
   onClose: () => void;
@@ -111,7 +109,7 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
             style={{ fontSize: 8 }}
             size="small"
           >
-            <div className={styles.appName}>Fishing Funds v{version}</div>
+            <div className={styles.appName}>Fishing Funds v{ffVersion}</div>
           </Badge>
         </div>
         <div>
