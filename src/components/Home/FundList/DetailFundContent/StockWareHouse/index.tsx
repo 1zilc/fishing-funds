@@ -1,10 +1,9 @@
-import React, { useEffect, useRef, useState, useContext } from 'react';
+import React, { useContext } from 'react';
 import { renderToString } from 'react-dom/server';
-import { useRequest, useSize } from 'ahooks';
-import * as echarts from 'echarts';
+import { useRequest } from 'ahooks';
 
 import { HomeContext } from '@/components/Home';
-
+import { useResizeEchart, useRenderEcharts } from '@/utils/hooks';
 import * as Services from '@/services';
 import styles from './index.scss';
 
@@ -34,19 +33,8 @@ const StockWareHouse: React.FC<StockWareHouseProps> = ({
   code,
   stockCodes,
 }) => {
-  const chartRef = useRef<HTMLDivElement>(null);
-  const [chartInstance, setChartInstance] = useState<echarts.ECharts | null>(
-    null
-  );
-  const { width: chartRefWidth } = useSize(chartRef);
+  const { ref: chartRef, chartInstance } = useResizeEchart();
   const { varibleColors, darkMode } = useContext(HomeContext);
-
-  const initChart = () => {
-    const instance = echarts.init(chartRef.current!, undefined, {
-      renderer: 'svg',
-    });
-    setChartInstance(instance);
-  };
 
   const { run: runGetStockWareHouseFromEastmoney } = useRequest(
     Services.Fund.GetStockWareHouseFromEastmoney,
@@ -84,19 +72,20 @@ const StockWareHouse: React.FC<StockWareHouseProps> = ({
               type: 'pie',
               radius: '64%',
               center: ['50%', '50%'],
-              data: result.map((item) => {
-                return {
-                  value: item.ccb,
-                  name: item.name,
-                  itemStyle: {
-                    color:
-                      item.zdf >= 0
-                        ? varibleColors['--increase-color']
-                        : varibleColors['--reduce-color'],
-                  },
-                  item,
-                };
-              }),
+              data:
+                result?.map((item) => {
+                  return {
+                    value: item.ccb,
+                    name: item.name,
+                    itemStyle: {
+                      color:
+                        item.zdf >= 0
+                          ? varibleColors['--increase-color']
+                          : varibleColors['--reduce-color'],
+                    },
+                    item,
+                  };
+                }) || [],
               roseType: 'radius',
               label: {
                 color: varibleColors['--main-text-color'],
@@ -127,21 +116,13 @@ const StockWareHouse: React.FC<StockWareHouseProps> = ({
     }
   );
 
-  useEffect(() => {
-    initChart();
-  }, []);
-
-  useEffect(() => {
-    if (chartInstance) {
+  useRenderEcharts(
+    () => {
       runGetStockWareHouseFromEastmoney(code, stockCodes);
-    }
-  }, [darkMode, chartInstance, stockCodes]);
-
-  useEffect(() => {
-    chartInstance?.resize({
-      height: chartRefWidth,
-    });
-  }, [chartRefWidth]);
+    },
+    chartInstance,
+    [darkMode, stockCodes]
+  );
 
   return (
     <div className={styles.content}>

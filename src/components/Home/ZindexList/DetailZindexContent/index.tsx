@@ -66,7 +66,7 @@ const DetailZindexContent: React.FC<DetailFundContentProps> = (props) => {
             </div>
           </div>
           <div className={styles.detail}>
-            <div className={styles.detailItem}>
+            <div className={classnames(styles.detailItem, 'text-left')}>
               <div
                 className={classnames(
                   Number(zindex.zdf) < 0 ? 'text-down' : 'text-up'
@@ -76,17 +76,17 @@ const DetailZindexContent: React.FC<DetailFundContentProps> = (props) => {
               </div>
               <div className={styles.detailItemLabel}>涨跌幅</div>
             </div>
-            <div className={styles.detailItem}>
-              <div className={classnames('text-center')}>{zindex.hs}%</div>
+            <div className={classnames(styles.detailItem, 'text-center')}>
+              <div>{zindex.hs}%</div>
               <div className={styles.detailItemLabel}>换手率</div>
             </div>
-            <div className={styles.detailItem}>
-              <div className={classnames('text-center')}>{zindex.zf}%</div>
+            <div className={classnames(styles.detailItem, 'text-right')}>
+              <div>{zindex.zf}%</div>
               <div className={styles.detailItemLabel}>振幅</div>
             </div>
           </div>
           <div className={styles.detail}>
-            <div className={styles.detailItem}>
+            <div className={classnames(styles.detailItem, 'text-left')}>
               <div
                 className={classnames(
                   zindex.jk < zindex.zs ? 'text-down' : 'text-up'
@@ -96,22 +96,18 @@ const DetailZindexContent: React.FC<DetailFundContentProps> = (props) => {
               </div>
               <div className={styles.detailItemLabel}>今开</div>
             </div>
-            <div className={styles.detailItem}>
-              <div className={classnames('text-up', 'text-center')}>
-                {zindex.zg}
-              </div>
+            <div className={classnames(styles.detailItem, 'text-center')}>
+              <div className={classnames('text-up')}>{zindex.zg}</div>
               <div className={styles.detailItemLabel}>最高</div>
             </div>
-            <div className={styles.detailItem}>
-              <div className={classnames('text-down', 'text-center')}>
-                {zindex.zd}
-              </div>
+            <div className={classnames(styles.detailItem, 'text-right')}>
+              <div className={classnames('text-down')}>{zindex.zd}</div>
               <div className={styles.detailItemLabel}>最低</div>
             </div>
           </div>
           <div className={styles.detail}>
             <div className={styles.detailItem}>
-              <div className={classnames('text-center')}>{zindex.zs}</div>
+              <div className={''}>{zindex.zs}</div>
               <div className={styles.detailItemLabel}>昨收</div>
             </div>
           </div>
@@ -122,7 +118,7 @@ const DetailZindexContent: React.FC<DetailFundContentProps> = (props) => {
             animated={{ tabPane: true }}
             tabBarGutter={15}
           >
-            <Tabs.TabPane tab="指数走势" key={0}>
+            <Tabs.TabPane tab="指数走势" key={String(0)}>
               <Trend code={code} />
             </Tabs.TabPane>
           </Tabs>
@@ -133,7 +129,7 @@ const DetailZindexContent: React.FC<DetailFundContentProps> = (props) => {
             animated={{ tabPane: true }}
             tabBarGutter={15}
           >
-            <Tabs.TabPane tab="K线" key={0}>
+            <Tabs.TabPane tab="K线" key={String(0)}>
               <K code={code} />
             </Tabs.TabPane>
           </Tabs>

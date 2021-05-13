@@ -1,24 +1,20 @@
-import React, { useEffect, useRef, useState, useContext } from 'react';
-import classnames from 'classnames';
-import { useRequest, useSize } from 'ahooks';
-import * as echarts from 'echarts';
+import React, { useContext } from 'react';
+import { useRequest } from 'ahooks';
 
 import { HomeContext } from '@/components/Home';
+import { useResizeEchart, useRenderEcharts } from '@/utils/hooks';
+import * as CONST from '@/constants';
 import * as Services from '@/services';
-import * as Enums from '@/utils/enums';
 import styles from './index.scss';
 
 export interface AfterTimeFundFlowProps {
   code: string;
 }
 
-const AfterTimeFundFlow: React.FC<AfterTimeFundFlowProps> = ({ code }) => {
-  const chartRef = useRef<HTMLDivElement>(null);
-  const [chartInstance, setChartInstance] = useState<echarts.ECharts | null>(
-    null
+const AfterTimeFundFlow: React.FC<AfterTimeFundFlowProps> = ({ code = '' }) => {
+  const { ref: chartRef, chartInstance } = useResizeEchart(
+    CONST.DEFAULT.ECHARTS_SCALE
   );
-
-  const { width: chartRefWidth } = useSize(chartRef);
   const { varibleColors, darkMode } = useContext(HomeContext);
   const { run: runGetAfterTimeFundFlowFromEasymoney } = useRequest(
     Services.Quotation.GetAfterTimeFundFlowFromEasymoney,
@@ -120,26 +116,13 @@ const AfterTimeFundFlow: React.FC<AfterTimeFundFlowProps> = ({ code }) => {
     }
   );
 
-  const initChart = () => {
-    const chartInstance = echarts.init(chartRef.current!, undefined, {
-      renderer: 'svg',
-    });
-    setChartInstance(chartInstance);
-  };
-
-  useEffect(initChart, []);
-
-  useEffect(() => {
-    if (chartInstance) {
+  useRenderEcharts(
+    () => {
       runGetAfterTimeFundFlowFromEasymoney(code);
-    }
-  }, [darkMode, chartInstance]);
-
-  useEffect(() => {
-    chartInstance?.resize({
-      height: (chartRefWidth! * 250) / 400,
-    });
-  }, [chartRefWidth]);
+    },
+    chartInstance,
+    [darkMode, code]
+  );
 
   return (
     <div className={styles.content}>

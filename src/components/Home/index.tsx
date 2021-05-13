@@ -72,13 +72,13 @@ const Home: React.FC<HomeProps> = () => {
           activeKey={String(tabsActiveKey)}
           animated={{ tabPane: true, inkBar: false }}
         >
-          <Tabs.TabPane key={Enums.TabKeyType.Funds} forceRender>
+          <Tabs.TabPane key={String(Enums.TabKeyType.Funds)} forceRender>
             <FundList />
           </Tabs.TabPane>
-          <Tabs.TabPane key={Enums.TabKeyType.Zindex} forceRender>
+          <Tabs.TabPane key={String(Enums.TabKeyType.Zindex)} forceRender>
             <ZindexList />
           </Tabs.TabPane>
-          <Tabs.TabPane key={Enums.TabKeyType.Quotation} forceRender>
+          <Tabs.TabPane key={String(Enums.TabKeyType.Quotation)} forceRender>
             <QuotationList />
           </Tabs.TabPane>
         </Tabs>

@@ -10,7 +10,7 @@ export const defalutSystemSetting: System.Setting = {
   baseFontSizeSetting: 12,
   systemThemeSetting: Enums.SystemThemeType.Auto,
 
-  autoStartSetting: false,
+  autoStartSetting: true,
   adjustmentNotificationSetting: false,
   autoFreshSetting: true,
   freshDelaySetting: 1,

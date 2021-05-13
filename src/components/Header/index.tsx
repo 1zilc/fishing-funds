@@ -12,7 +12,7 @@ export const HeaderContext = createContext<HeaderContextType>({
 });
 
 const Header: React.FC<PropsWithChildren<{}>> = ({ children }) => {
-  const position = useScroll(document, (val) => val.top <= 400);
+  const position = useScroll(document, (val) => val.top <= 520);
   const miniMode = position.top > 40;
 
   return (

@@ -1,10 +1,10 @@
-import React, { useEffect, useRef, useState, useContext } from 'react';
-import { renderToString } from 'react-dom/server';
-import { useRequest, useSize } from 'ahooks';
-import * as echarts from 'echarts';
+import React, { useContext } from 'react';
+import {} from 'react-dom/server';
+import { useRequest } from 'ahooks';
 
 import { HomeContext } from '@/components/Home';
-
+import { useResizeEchart, useRenderEcharts } from '@/utils/hooks';
+import * as CONST from '@/constants';
 import * as Services from '@/services';
 import styles from './index.scss';
 
@@ -12,20 +12,13 @@ export interface RealTimeTransactionProps {
   code: string;
 }
 
-const RealTimeTransaction: React.FC<RealTimeTransactionProps> = ({ code }) => {
-  const chartRef = useRef<HTMLDivElement>(null);
-  const [chartInstance, setChartInstance] = useState<echarts.ECharts | null>(
-    null
+const RealTimeTransaction: React.FC<RealTimeTransactionProps> = ({
+  code = '',
+}) => {
+  const { ref: chartRef, chartInstance } = useResizeEchart(
+    CONST.DEFAULT.ECHARTS_SCALE
   );
-  const { width: chartRefWidth } = useSize(chartRef);
   const { varibleColors, darkMode } = useContext(HomeContext);
-
-  const initChart = () => {
-    const instance = echarts.init(chartRef.current!, undefined, {
-      renderer: 'svg',
-    });
-    setChartInstance(instance);
-  };
 
   const { run: runGetTransactionFromEasymoney } = useRequest(
     Services.Quotation.GetTransactionFromEasymoney,
@@ -58,7 +51,7 @@ const RealTimeTransaction: React.FC<RealTimeTransactionProps> = ({ code }) => {
           },
           series: [
             {
-              name: '交易金额(亿元)',
+              name: '交易金额(亿)',
               type: 'pie',
               radius: '64%',
               center: ['50%', '50%'],
@@ -143,21 +136,13 @@ const RealTimeTransaction: React.FC<RealTimeTransactionProps> = ({ code }) => {
     }
   );
 
-  useEffect(() => {
-    initChart();
-  }, []);
-
-  useEffect(() => {
-    if (chartInstance) {
+  useRenderEcharts(
+    () => {
       runGetTransactionFromEasymoney(code);
-    }
-  }, [darkMode, chartInstance]);
-
-  useEffect(() => {
-    chartInstance?.resize({
-      height: chartRefWidth,
-    });
-  }, [chartRefWidth]);
+    },
+    chartInstance,
+    [darkMode, code]
+  );
 
   return (
     <div className={styles.content}>

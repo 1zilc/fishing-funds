@@ -120,6 +120,8 @@ export function parsepingzhongdata(code: string) {
         stockCodesNew,
         /*基金持仓债券代码（新市场号）*/
         zqCodesNew,
+        /*股票仓位测算图*/
+        Data_fundSharesPositions,
         /*单位净值走势 equityReturn-净值回报 unitMoney-每份派送金*/
         Data_netWorthTrend,
         /*累计收益率走势*/
@@ -132,6 +134,14 @@ export function parsepingzhongdata(code: string) {
         swithSameType,
         /*现任基金经理*/
         Data_currentFundManager,
+        /*规模变动 mom-较上期环比*/
+        Data_fluctuationScale,
+        /*持有人结构*/
+        Data_holderStructure,
+        /*资产配置*/
+        Data_assetAllocation,
+        /*业绩评价 */
+        Data_performanceEvaluation,
         /*近一年收益率*/
         syl_1n,
         /*近6月收益率*/
@@ -182,7 +192,7 @@ export function UnitConvert(num: number) {
     }
     return newNum.length;
   }
-  const moneyUnits = ['元', '万元', '亿元', '万亿'];
+  const moneyUnits = ['元', '万', '亿', '万亿'];
   const dividend = 10000;
   let curentNum = num;
   //转换数字

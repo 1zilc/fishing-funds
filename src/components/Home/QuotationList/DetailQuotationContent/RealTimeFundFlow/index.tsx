@@ -1,8 +1,9 @@
-import React, { useEffect, useRef, useState, useContext } from 'react';
-import { useRequest, useSize } from 'ahooks';
-import * as echarts from 'echarts';
+import React, { useContext } from 'react';
+import { useRequest } from 'ahooks';
 
 import { HomeContext } from '@/components/Home';
+import { useResizeEchart, useRenderEcharts } from '@/utils/hooks';
+import * as CONST from '@/constants';
 import * as Services from '@/services';
 import styles from './index.scss';
 
@@ -10,13 +11,10 @@ export interface RealTimeFundFlowProps {
   code: string;
 }
 
-const RealTimeFundFlow: React.FC<RealTimeFundFlowProps> = ({ code }) => {
-  const chartRef = useRef<HTMLDivElement>(null);
-  const [chartInstance, setChartInstance] = useState<echarts.ECharts | null>(
-    null
+const RealTimeFundFlow: React.FC<RealTimeFundFlowProps> = ({ code = '' }) => {
+  const { ref: chartRef, chartInstance } = useResizeEchart(
+    CONST.DEFAULT.ECHARTS_SCALE
   );
-
-  const { width: chartRefWidth } = useSize(chartRef);
   const { varibleColors, darkMode } = useContext(HomeContext);
   const { run: runGetRealTimeFundFlowFromEasymoney } = useRequest(
     Services.Quotation.GetRealTimeFundFlowFromEasymoney,
@@ -109,26 +107,14 @@ const RealTimeFundFlow: React.FC<RealTimeFundFlowProps> = ({ code }) => {
       },
     }
   );
-  const initPerformanceChart = () => {
-    const chartInstance = echarts.init(chartRef.current!, undefined, {
-      renderer: 'svg',
-    });
-    setChartInstance(chartInstance);
-  };
 
-  useEffect(initPerformanceChart, []);
-
-  useEffect(() => {
-    if (chartInstance) {
+  useRenderEcharts(
+    () => {
       runGetRealTimeFundFlowFromEasymoney(code);
-    }
-  }, [darkMode, chartInstance]);
-
-  useEffect(() => {
-    chartInstance?.resize({
-      height: (chartRefWidth! * 250) / 400,
-    });
-  }, [chartRefWidth]);
+    },
+    chartInstance,
+    [darkMode, code]
+  );
 
   return (
     <div className={styles.content}>

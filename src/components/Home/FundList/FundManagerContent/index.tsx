@@ -83,10 +83,16 @@ const FundManagerContent: React.FC<FundManagerContentProps> = (props) => {
           tabBarGutter={15}
           tabBarStyle={{ marginLeft: 15 }}
         >
-          <Tabs.TabPane tab="能力评估" key={Enums.ManagerPowerType.Appraise}>
+          <Tabs.TabPane
+            tab="能力评估"
+            key={String(Enums.ManagerPowerType.Appraise)}
+          >
             <Appraise power={manager.power} />
           </Tabs.TabPane>
-          <Tabs.TabPane tab="收益统计" key={Enums.ManagerPowerType.Profit}>
+          <Tabs.TabPane
+            tab="收益统计"
+            key={String(Enums.ManagerPowerType.Profit)}
+          >
             <Profit profit={manager.profit} />
           </Tabs.TabPane>
         </Tabs>

@@ -55,7 +55,7 @@ const WalletRow: React.FC<WalletRowProps> = (props) => {
       dialog.showMessageBox({
         title: '删除失败',
         type: 'error',
-        message: `只剩最后一个钱包了～`,
+        message: `只剩最后一个钱包了~`,
         buttons: ['确定'],
       });
       return;
@@ -73,7 +73,7 @@ const WalletRow: React.FC<WalletRowProps> = (props) => {
 
   const walletState: Wallet.StateItem = walletsMap[wallet.code] || {
     funds: [],
-    updateTime: '还没有刷新过哦～',
+    updateTime: '还没有刷新过哦~',
   };
   const { funds, updateTime } = walletState;
 

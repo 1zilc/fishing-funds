@@ -1,12 +1,9 @@
 .content {
-
   padding: 10px 0;
-
 
   h3 {
     color: var(--main-text-color);
     font-size: calc(16rem / var(--base-font-size));
-    ;
   }
 
   section {
@@ -19,16 +16,14 @@
     display: block;
     font-weight: 600;
   }
-
 }
 
 .container {
   padding: 5px 15px;
-
 }
 
-.introduce {}
-
+.introduce {
+}
 
 .detail {
   display: flex;
@@ -41,7 +36,6 @@
   // flex: 1;
   display: flex;
   flex-direction: column;
-
 }
 
 .detailItemLabel {

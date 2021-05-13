@@ -6,7 +6,7 @@ export interface LoadingBarProps {
   show: boolean;
 }
 const LoadingBar: React.FC<LoadingBarProps> = ({ show }) => {
-  const text = '刷新数据中～'.split('');
+  const text = '刷新数据中~'.split('');
   return (
     <div
       className={classnames(styles.content, {

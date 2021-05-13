@@ -35,6 +35,7 @@
 .detailItem {
   display: flex;
   flex-direction: column;
+  width: calc(100% / 3);
 }
 
 .detailItemLabel {

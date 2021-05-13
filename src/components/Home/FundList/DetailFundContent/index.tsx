@@ -11,8 +11,13 @@ import HistoryPerformance from '@/components/Home/FundList/DetailFundContent/His
 import HistoryValue from '@/components/Home/FundList/DetailFundContent/HistoryValue';
 import StockWareHouse from '@/components/Home/FundList/DetailFundContent/StockWareHouse';
 import SecuritiesWareHouse from '@/components/Home/FundList/DetailFundContent/SecuritiesWareHouse';
+import StockWareHouseEstimate from '@/components/Home/FundList/DetailFundContent/StockWareHouseEstimate';
+import Scale from '@/components/Home/FundList/DetailFundContent/Scale';
+import Hold from '@/components/Home/FundList/DetailFundContent/Hold';
+import Assets from '@/components/Home/FundList/DetailFundContent/Assets';
 import SimilarRank from '@/components/Home/FundList/DetailFundContent/SimilarRank';
 import SimilarProportion from '@/components/Home/FundList/DetailFundContent/SimilarProportion';
+import PerformanceEvaluation from '@/components/Home/FundList/DetailFundContent/PerformanceEvaluation';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
 import SameFundList from '@/components/Home/FundList/DetailFundContent/SameFundList';
 import FundManagerContent from '@/components/Home/FundList/FundManagerContent';
@@ -88,7 +93,7 @@ const DetailFundContent: React.FC<DetailFundContentProps> = (props) => {
               </div>
               <div className={styles.detailItemLabel}>近一年涨跌幅</div>
             </div>
-            <div className={styles.detailItem}>
+            <div className={classnames(styles.detailItem, 'text-center')}>
               <div
                 className={classnames(
                   Number(fund?.fixZzl) < 0 ? 'text-down' : 'text-up'
@@ -98,7 +103,7 @@ const DetailFundContent: React.FC<DetailFundContentProps> = (props) => {
               </div>
               <div className={styles.detailItemLabel}>日涨跌幅</div>
             </div>
-            <div className={styles.detailItem}>
+            <div className={classnames(styles.detailItem, 'text-center')}>
               <div>{fund?.fixDwjz}</div>
               <div className={styles.detailItemLabel}>净值 {fund?.fixDate}</div>
             </div>
@@ -110,14 +115,19 @@ const DetailFundContent: React.FC<DetailFundContentProps> = (props) => {
             animated={{ tabPane: true }}
             tabBarGutter={15}
           >
-            <Tabs.TabPane tab="历史业绩" key={Enums.TrendType.Performance}>
+            <Tabs.TabPane
+              tab="历史业绩"
+              key={String(Enums.TrendType.Performance)}
+            >
               <HistoryPerformance
+                syl_1n={pingzhongdata.syl_1n}
                 syl_6y={pingzhongdata.syl_6y}
                 syl_3y={pingzhongdata.syl_3y}
                 syl_1y={pingzhongdata.syl_1y}
+                data={pingzhongdata.Data_netWorthTrend}
               />
             </Tabs.TabPane>
-            <Tabs.TabPane tab="历史净值" key={Enums.TrendType.Estimate}>
+            <Tabs.TabPane tab="历史净值" key={String(Enums.TrendType.Estimate)}>
               <HistoryValue data={pingzhongdata.Data_netWorthTrend} />
             </Tabs.TabPane>
           </Tabs>
@@ -128,10 +138,13 @@ const DetailFundContent: React.FC<DetailFundContentProps> = (props) => {
             animated={{ tabPane: true }}
             tabBarGutter={15}
           >
-            <Tabs.TabPane tab="业绩走势" key={Enums.HistoryType.Performance}>
+            <Tabs.TabPane
+              tab="业绩走势"
+              key={String(Enums.HistoryType.Performance)}
+            >
               <Performance code={code} />
             </Tabs.TabPane>
-            <Tabs.TabPane tab="净值估算" key={Enums.HistoryType.Value}>
+            <Tabs.TabPane tab="净值估算" key={String(Enums.HistoryType.Value)}>
               <Estimate code={code} />
             </Tabs.TabPane>
           </Tabs>
@@ -142,16 +155,51 @@ const DetailFundContent: React.FC<DetailFundContentProps> = (props) => {
             animated={{ tabPane: true }}
             tabBarGutter={15}
           >
-            <Tabs.TabPane tab="股票持仓" key={Enums.WareHouseType.Stock}>
+            <Tabs.TabPane
+              tab="股票持仓"
+              key={String(Enums.WareHouseType.Stock)}
+            >
               <StockWareHouse
                 code={code}
                 stockCodes={pingzhongdata.stockCodesNew!}
               />
             </Tabs.TabPane>
-            <Tabs.TabPane tab="债券持仓" key={Enums.WareHouseType.Securities}>
+            <Tabs.TabPane
+              tab="债券持仓"
+              key={String(Enums.WareHouseType.Securities)}
+            >
               <SecuritiesWareHouse
                 code={code}
                 securitiesCodes={pingzhongdata.zqCodesNew!}
+              />
+            </Tabs.TabPane>
+            <Tabs.TabPane
+              tab="股票仓位测算"
+              key={String(Enums.WareHouseType.StockEstimate)}
+            >
+              <StockWareHouseEstimate
+                fundSharesPositions={pingzhongdata.Data_fundSharesPositions!}
+              />
+            </Tabs.TabPane>
+          </Tabs>
+        </div>
+        <div className={styles.container}>
+          <Tabs
+            defaultActiveKey={String(Enums.ConfigType.Assets)}
+            animated={{ tabPane: true }}
+            tabBarGutter={15}
+          >
+            <Tabs.TabPane tab="资产配置" key={String(Enums.ConfigType.Assets)}>
+              <Assets
+                Data_assetAllocation={pingzhongdata.Data_assetAllocation}
+              />
+            </Tabs.TabPane>
+            <Tabs.TabPane tab="持有人结构" key={String(Enums.ConfigType.Hold)}>
+              <Hold Data_holderStructure={pingzhongdata.Data_holderStructure} />
+            </Tabs.TabPane>
+            <Tabs.TabPane tab="规模变动" key={String(Enums.ConfigType.Scale)}>
+              <Scale
+                Data_fluctuationScale={pingzhongdata.Data_fluctuationScale}
               />
             </Tabs.TabPane>
           </Tabs>
@@ -162,17 +210,30 @@ const DetailFundContent: React.FC<DetailFundContentProps> = (props) => {
             animated={{ tabPane: true }}
             tabBarGutter={15}
           >
-            <Tabs.TabPane tab="同类排名" key={Enums.SimilarCompareType.Rank}>
+            <Tabs.TabPane
+              tab="同类排名"
+              key={String(Enums.SimilarCompareType.Rank)}
+            >
               <SimilarRank
                 rateInSimilarType={pingzhongdata.Data_rateInSimilarType}
               />
             </Tabs.TabPane>
             <Tabs.TabPane
               tab="百分比排名"
-              key={Enums.SimilarCompareType.Proportion}
+              key={String(Enums.SimilarCompareType.Proportion)}
             >
               <SimilarProportion
                 rateInSimilarPersent={pingzhongdata.Data_rateInSimilarPersent}
+              />
+            </Tabs.TabPane>
+            <Tabs.TabPane
+              tab="业绩评价"
+              key={String(Enums.SimilarCompareType.Evaluation)}
+            >
+              <PerformanceEvaluation
+                Data_performanceEvaluation={
+                  pingzhongdata.Data_performanceEvaluation
+                }
               />
             </Tabs.TabPane>
           </Tabs>
@@ -184,7 +245,7 @@ const DetailFundContent: React.FC<DetailFundContentProps> = (props) => {
             tabBarGutter={15}
             tabBarStyle={{ marginLeft: 15 }}
           >
-            <Tabs.TabPane tab="同类型基金涨幅榜" key={0}>
+            <Tabs.TabPane tab="同类型基金涨幅榜" key={String(0)}>
               <SameFundList swithSameType={pingzhongdata.swithSameType} />
             </Tabs.TabPane>
           </Tabs>

@@ -140,9 +140,7 @@ const AddFundContent: React.FC<AddFundContentProps> = (props) => {
         </section>
         {none && (
           <section>
-            <span className={styles.none}>
-              添加基金失败，未找到或数据出错～
-            </span>
+            <span className={styles.none}>添加基金失败，未找到或数据出错~</span>
           </section>
         )}
       </div>

@@ -46,6 +46,7 @@ export function getCodeMap(config: Fund.SettingItem[]) {
     return r;
   }, {} as CodeMap);
 }
+
 export function setFundConfig(config: Fund.SettingItem[]) {
   const { walletConfig } = getWalletConfig();
   const currentWalletCode = Utils.GetStorage(
@@ -244,22 +245,22 @@ export function loadFundsWithoutLoading() {
   };
 }
 
+export async function getFixFunds(funds: (Fund.ResponseItem & Fund.FixData)[]) {
+  const collectors = funds
+    .filter(
+      ({ fixDate, gztime }) => !fixDate || fixDate !== gztime?.slice(5, 10)
+    )
+    .map(({ fundcode }) => () => Services.Fund.GetFixFromEastMoney(fundcode!));
+  return Adapter.ChokeAllAdapter<Fund.FixData>(collectors);
+}
+
 export function loadFixFunds() {
   return async (dispatch: Dispatch, getState: GetState) => {
     try {
       const { fund } = getState();
       const { code } = getCurrentWallet();
       const { funds } = fund;
-      const collectors = funds
-        .filter(
-          ({ fixDate, gztime }) => !fixDate || fixDate !== gztime?.slice(5, 10)
-        )
-        .map(({ fundcode }) => () =>
-          Services.Fund.GetFixFromEastMoney(fundcode!)
-        );
-      const fixFunds =
-        (await Adapter.ConCurrencyAllAdapter<Fund.FixData>(collectors)) || [];
-
+      const fixFunds = await getFixFunds(funds);
       const now = dayjs().format('MM-DD HH:mm:ss');
 
       batch(() => {
@@ -278,4 +279,27 @@ export function loadFixFunds() {
     } finally {
     }
   };
+}
+
+export function mergeFixFunds(
+  funds: (Fund.ResponseItem & Fund.FixData)[],
+  fixFunds: Fund.FixData[]
+) {
+  const cloneFunds = Utils.DeepCopy(funds);
+  const fixFundMap = fixFunds
+    .filter((_) => !!_)
+    .reduce((map, fund) => {
+      map[fund.code!] = fund;
+      return map;
+    }, {} as { [index: string]: Fund.FixData });
+
+  cloneFunds.forEach((fund) => {
+    const fixFund = fixFundMap[fund.fundcode!];
+    if (fixFund) {
+      fund.fixZzl = fixFund.fixZzl;
+      fund.fixDate = fixFund.fixDate;
+      fund.fixDwjz = fixFund.fixDwjz;
+    }
+  });
+  return cloneFunds;
 }

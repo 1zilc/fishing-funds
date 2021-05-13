@@ -1,17 +1,16 @@
 import React, { useContext } from 'react';
+import dayjs from 'dayjs';
 
 import { HomeContext } from '@/components/Home';
 import { useResizeEchart, useRenderEcharts } from '@/utils/hooks';
 import * as CONST from '@/constants';
 import styles from './index.scss';
 
-interface SimilarRankProps {
-  rateInSimilarType?: { x: number; y: number; sc: string }[];
+interface HistoryBarProps {
+  data?: { x: number; y: number; equityReturn: number; unitMoney: 0 }[];
 }
 
-const SimilarRank: React.FC<SimilarRankProps> = ({
-  rateInSimilarType = [],
-}) => {
+const HistoryBar: React.FC<HistoryBarProps> = ({ data = [] }) => {
   const { ref: chartRef, chartInstance } = useResizeEchart(
     CONST.DEFAULT.ECHARTS_SCALE
   );
@@ -21,58 +20,63 @@ const SimilarRank: React.FC<SimilarRankProps> = ({
     () => {
       chartInstance?.setOption({
         title: {
-          text: '同类中排名',
-          left: 'center',
-          top: 0,
-          textStyle: {
-            color: varibleColors['--main-text-color'],
-            fontSize: 12,
-          },
+          show: false,
         },
         tooltip: {
           trigger: 'axis',
           axisPointer: {
-            // 坐标轴指示器，坐标轴触发有效
             type: 'shadow', // 默认为直线，可选为：'line' | 'shadow'
           },
         },
         grid: {
-          top: 32,
+          top: '3%',
           left: 0,
-          right: 5,
-          bottom: 0,
+          right: 0,
+          bottom: 10,
           containLabel: true,
         },
         xAxis: {
-          type: 'time',
+          type: 'category',
           axisLabel: {
             fontSize: 10,
           },
+          data: data.map(({ x }) => dayjs(x).format('YYYY-MM-DD')) || [],
         },
         yAxis: {
           type: 'value',
           axisLabel: {
+            formatter: `{value}%`,
             fontSize: 10,
           },
         },
         series: [
           {
-            data: rateInSimilarType?.map(({ x, y, sc }) => [x, y]),
             type: 'bar',
+            data: data.map(({ equityReturn }) => {
+              return {
+                value: equityReturn,
+                itemStyle: {
+                  color:
+                    equityReturn >= 0
+                      ? varibleColors['--increase-color']
+                      : varibleColors['--reduce-color'],
+                },
+              };
+            }),
           },
         ],
         dataZoom: [
           {
             type: 'inside',
-            start: 90,
+            start: 95,
             end: 100,
-            minValueSpan: 3600 * 24 * 1000 * 7,
+            minValueSpan: 7,
           },
         ],
       });
     },
     chartInstance,
-    [darkMode, rateInSimilarType]
+    [darkMode, data]
   );
 
   return (
@@ -82,4 +86,4 @@ const SimilarRank: React.FC<SimilarRankProps> = ({
   );
 };
 
-export default SimilarRank;
+export default HistoryBar;

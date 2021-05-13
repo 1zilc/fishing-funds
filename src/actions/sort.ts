@@ -122,7 +122,7 @@ export function setQuotationSortMode(quotationSortMode: {
   type?: Enums.QuotationSortType;
   order?: Enums.SortOrderType;
 }) {
-  const { zindexSortMode: _ } = getSortMode();
+  const { quotationSortMode: _ } = getSortMode();
   Utils.SetStorage(CONST.STORAGE.QUOTATION_SORT_MODE, {
     ..._,
     ...quotationSortMode,

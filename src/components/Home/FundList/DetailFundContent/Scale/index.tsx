@@ -1,16 +1,38 @@
 import React, { useContext } from 'react';
+import { renderToString } from 'react-dom/server';
 
 import { HomeContext } from '@/components/Home';
 import { useResizeEchart, useRenderEcharts } from '@/utils/hooks';
 import * as CONST from '@/constants';
 import styles from './index.scss';
 
-interface SimilarRankProps {
-  rateInSimilarType?: { x: number; y: number; sc: string }[];
+interface ScaleProps {
+  Data_fluctuationScale: {
+    categories: string[];
+    series: { y: number; mom: string }[];
+  };
+}
+interface TooltipProps {
+  time: string;
+  value: number;
+  rate: number;
 }
 
-const SimilarRank: React.FC<SimilarRankProps> = ({
-  rateInSimilarType = [],
+const Tooltip: React.FC<TooltipProps> = (props) => {
+  return (
+    <div className={styles.tooltip}>
+      <div className={styles.tooltipName}>{props.time}</div>
+      <div>净资产规模：{props.value}亿</div>
+      <div>较上期环比：{props.rate}%</div>
+    </div>
+  );
+};
+
+const Scale: React.FC<ScaleProps> = ({
+  Data_fluctuationScale = {
+    categories: [],
+    series: [],
+  },
 }) => {
   const { ref: chartRef, chartInstance } = useResizeEchart(
     CONST.DEFAULT.ECHARTS_SCALE
@@ -21,7 +43,7 @@ const SimilarRank: React.FC<SimilarRankProps> = ({
     () => {
       chartInstance?.setOption({
         title: {
-          text: '同类中排名',
+          text: '净资产',
           left: 'center',
           top: 0,
           textStyle: {
@@ -35,6 +57,12 @@ const SimilarRank: React.FC<SimilarRankProps> = ({
             // 坐标轴指示器，坐标轴触发有效
             type: 'shadow', // 默认为直线，可选为：'line' | 'shadow'
           },
+          formatter: (params: any) => {
+            const [{ data, name }] = params;
+            return renderToString(
+              <Tooltip time={name} value={data?.value} rate={data?.item?.mom} />
+            );
+          },
         },
         grid: {
           top: 32,
@@ -44,20 +72,25 @@ const SimilarRank: React.FC<SimilarRankProps> = ({
           containLabel: true,
         },
         xAxis: {
-          type: 'time',
+          type: 'category',
           axisLabel: {
             fontSize: 10,
           },
+          data: Data_fluctuationScale.categories,
         },
         yAxis: {
           type: 'value',
           axisLabel: {
             fontSize: 10,
+            formatter: `{value}亿`,
           },
         },
         series: [
           {
-            data: rateInSimilarType?.map(({ x, y, sc }) => [x, y]),
+            data: Data_fluctuationScale.series.map((item) => ({
+              value: item.y,
+              item,
+            })),
             type: 'bar',
           },
         ],
@@ -72,7 +105,7 @@ const SimilarRank: React.FC<SimilarRankProps> = ({
       });
     },
     chartInstance,
-    [darkMode, rateInSimilarType]
+    [darkMode, Data_fluctuationScale]
   );
 
   return (
@@ -82,4 +115,4 @@ const SimilarRank: React.FC<SimilarRankProps> = ({
   );
 };
 
-export default SimilarRank;
+export default Scale;

@@ -97,7 +97,7 @@ const FundRow: React.FC<RowProps> = ({ fund, readOnly }) => {
               <span className={styles.fundName}>
                 {fund.name}
                 {conciseSetting && isFix && (
-                  <span className={styles.warn}>收益更新</span>
+                  <span className={styles.warn}>净值更新</span>
                 )}
               </span>
             </div>
@@ -110,19 +110,30 @@ const FundRow: React.FC<RowProps> = ({ fund, readOnly }) => {
                       ? calcFundResult.fixDate
                       : calcFundResult.gztime?.slice(5)}
                   </span>
-                  {isFix && <span className={styles.warn}>收益更新</span>}
+                  {isFix && <span className={styles.warn}>净值更新</span>}
                 </div>
               </div>
             )}
           </div>
-          <div
-            className={classnames(
-              styles.value,
-              Number(calcFundResult.gszzl) < 0 ? 'block-down' : 'block-up'
-            )}
-          >
-            {Utils.Yang(calcFundResult.gszzl)} %
-          </div>
+          {conciseSetting ? (
+            <div
+              className={classnames(
+                styles.conciseValue,
+                Number(calcFundResult.gszzl) < 0 ? 'text-down' : 'text-up'
+              )}
+            >
+              {Utils.Yang(calcFundResult.gszzl)} %
+            </div>
+          ) : (
+            <div
+              className={classnames(
+                styles.value,
+                Number(calcFundResult.gszzl) < 0 ? 'block-down' : 'block-up'
+              )}
+            >
+              {Utils.Yang(calcFundResult.gszzl)} %
+            </div>
+          )}
         </div>
       </div>
       <Collapse style={{ zIndex: 1 }} isOpened={!!fund.collapse}>

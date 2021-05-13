@@ -1,11 +1,13 @@
-import React, { useEffect, useRef, useState, useContext } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import classnames from 'classnames';
-import { useRequest, useSize } from 'ahooks';
-import * as echarts from 'echarts';
+import { useRequest } from 'ahooks';
 
 import { HomeContext } from '@/components/Home';
+import { useResizeEchart, useRenderEcharts } from '@/utils/hooks';
+import * as CONST from '@/constants';
 import * as Services from '@/services';
 import * as Enums from '@/utils/enums';
+
 import styles from './index.scss';
 
 export interface PerformanceProps {
@@ -20,14 +22,12 @@ const performanceTypeList = [
   { name: '最大', type: Enums.PerformanceType.Max, code: 'se' },
 ];
 const Performance: React.FC<PerformanceProps> = ({ code }) => {
-  const chartRef = useRef<HTMLDivElement>(null);
-  const [chartInstance, setChartInstance] = useState<echarts.ECharts | null>(
-    null
+  const { ref: chartRef, chartInstance } = useResizeEchart(
+    CONST.DEFAULT.ECHARTS_SCALE
   );
   const [performanceType, setPerformanceType] = useState(
     performanceTypeList[2]
   );
-  const { width: chartRefWidth } = useSize(chartRef);
   const { varibleColors, darkMode } = useContext(HomeContext);
   const { run: runGetFundPerformanceFromEastmoney } = useRequest(
     Services.Fund.GetFundPerformanceFromEastmoney,
@@ -78,7 +78,7 @@ const Performance: React.FC<PerformanceProps> = ({ code }) => {
             },
           ],
           series:
-            result?.map((_) => ({
+            result?.map((_, i) => ({
               ..._,
               type: 'line',
               showSymbol: false,
@@ -86,32 +86,30 @@ const Performance: React.FC<PerformanceProps> = ({ code }) => {
               lineStyle: {
                 width: 1,
               },
+              markPoint: i === 0 && {
+                symbol: 'pin',
+                symbolSize: 30,
+                label: {
+                  formatter: '{c}%',
+                },
+                data: [
+                  { type: 'max', label: { fontSize: 10 } },
+                  { type: 'min', label: { fontSize: 10 } },
+                ],
+              },
             })) || [],
         });
       },
     }
   );
 
-  const initChart = () => {
-    const chartInstance = echarts.init(chartRef.current!, undefined, {
-      renderer: 'svg',
-    });
-    setChartInstance(chartInstance);
-  };
-
-  useEffect(initChart, []);
-
-  useEffect(() => {
-    if (chartInstance) {
+  useRenderEcharts(
+    () => {
       runGetFundPerformanceFromEastmoney(code, performanceType.code);
-    }
-  }, [darkMode, chartInstance, performanceType.code]);
-
-  useEffect(() => {
-    chartInstance?.resize({
-      height: (chartRefWidth! * 250) / 400,
-    });
-  }, [chartRefWidth]);
+    },
+    chartInstance,
+    [darkMode, performanceType.code]
+  );
 
   return (
     <div className={styles.content}>

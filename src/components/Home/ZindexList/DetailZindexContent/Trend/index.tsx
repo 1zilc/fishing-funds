@@ -1,11 +1,11 @@
-import React, { useEffect, useRef, useState, useContext } from 'react';
+import React, { useState, useContext } from 'react';
 import classnames from 'classnames';
-import { useRequest, useSize } from 'ahooks';
-import * as echarts from 'echarts';
+import { useRequest } from 'ahooks';
 
 import { HomeContext } from '@/components/Home';
+import { useResizeEchart, useRenderEcharts } from '@/utils/hooks';
+import * as CONST from '@/constants';
 import * as Services from '@/services';
-import * as Enums from '@/utils/enums';
 import styles from './index.scss';
 
 export interface PerformanceProps {
@@ -19,13 +19,11 @@ const trendTypeList = [
   { name: '五天', type: 5, code: 5 },
 ];
 const Trend: React.FC<PerformanceProps> = ({ code }) => {
-  const chartRef = useRef<HTMLDivElement>(null);
-  const [chartInstance, setChartInstance] = useState<echarts.ECharts | null>(
-    null
+  const { ref: chartRef, chartInstance } = useResizeEchart(
+    CONST.DEFAULT.ECHARTS_SCALE
   );
   const [trend, setTrendType] = useState(trendTypeList[0]);
-  const { width: chartRefWidth } = useSize(chartRef);
-  const { varibleColors, darkMode } = useContext(HomeContext);
+  const { darkMode } = useContext(HomeContext);
   const { run: runGetTrendFromEastmoney } = useRequest(
     Services.Zindex.GetTrendFromEastmoney,
     {
@@ -87,26 +85,13 @@ const Trend: React.FC<PerformanceProps> = ({ code }) => {
     }
   );
 
-  const initChart = () => {
-    const chartInstance = echarts.init(chartRef.current!, undefined, {
-      renderer: 'svg',
-    });
-    setChartInstance(chartInstance);
-  };
-
-  useEffect(initChart, []);
-
-  useEffect(() => {
-    if (chartInstance) {
+  useRenderEcharts(
+    () => {
       runGetTrendFromEastmoney(code, trend.code);
-    }
-  }, [darkMode, chartInstance, trend.code]);
-
-  useEffect(() => {
-    chartInstance?.resize({
-      height: (chartRefWidth! * 250) / 400,
-    });
-  }, [chartRefWidth]);
+    },
+    chartInstance,
+    [darkMode, code, trend.code]
+  );
 
   return (
     <div className={styles.content}>
