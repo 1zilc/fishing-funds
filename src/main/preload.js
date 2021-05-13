@@ -31,7 +31,9 @@ contextBridge.exposeInMainWorld('contextModules', {
           'update-available',
         ];
         if (validChannels.includes(channel)) {
-          ipcRenderer.on(channel, (event, ...args) => func(...args));
+          return ipcRenderer.on(channel, (event, ...args) =>
+            func(event, ...args)
+          );
         }
       },
     },

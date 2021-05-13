@@ -97,19 +97,19 @@ export function useUpdater() {
   // 一个小时检查一次版本
   useInterval(
     () => autoCheckUpdateSetting && ipcRenderer.send('check-update'),
-    1000 * 60 * 60 * 1,
+    1000 * 60 * 60,
     {
       immediate: true,
     }
   );
   useLayoutEffect(() => {
-    ipcRenderer.on('update-available', (e, data) =>
-      dispatch(updateAvaliable(data))
-    );
+    ipcRenderer.on('update-available', (e, data) => {
+      autoCheckUpdateSetting && dispatch(updateAvaliable(data));
+    });
     return () => {
       ipcRenderer.removeAllListeners('update-available');
     };
-  }, []);
+  }, [autoCheckUpdateSetting]);
 }
 
 export function useConfigClipboard() {
@@ -182,12 +182,12 @@ export function useNativeTheme() {
   const [darkMode, setDarkMode] = useState(shouldUseDarkColors);
   useLayoutEffect(() => {
     const { systemThemeSetting } = getSystemSetting();
-    const listener = ipcRenderer.on('nativeTheme-updated', (e, data) => {
+    ipcRenderer.on('nativeTheme-updated', (e, data) => {
       setDarkMode(!!data?.darkMode);
     });
     Utils.UpdateSystemTheme(systemThemeSetting);
     return () => {
-      listener.removeAllListeners('nativeTheme-updated');
+      ipcRenderer.removeAllListeners('nativeTheme-updated');
     };
   }, []);
   return { darkMode };

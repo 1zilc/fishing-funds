@@ -138,6 +138,10 @@ const createMenubar = async () => {
   // open devtools
   mb.on('after-create-window', () => {
     myWindow = mb.window;
+    // 实例化更新程序
+    appUpdater = new AppUpdater({ icon: nativeIcon, win: mb.window });
+    appUpdater.checkUpdate('renderer');
+
     // app.dock.hide();
     if (!app.isPackaged) {
       mb.window!.webContents.openDevTools({ mode: 'undocked' });
@@ -147,6 +151,12 @@ const createMenubar = async () => {
       mb.window?.webContents.send('nativeTheme-updated', {
         darkMode: nativeTheme.shouldUseDarkColors,
       });
+    });
+    // TODO: 暂时关闭自动更新，需要apple签名
+    ipcMain.on('check-update', (e) => {
+      if (app.isPackaged) {
+        appUpdater.checkUpdate('renderer');
+      }
     });
     // store electron window size state
     mainWindowState.manage(mb.window!);
@@ -163,17 +173,6 @@ const createMenubar = async () => {
     'disable-backgrounding-occluded-windows',
     'true'
   );
-
-  // 实例化更新程序
-  appUpdater = new AppUpdater({ icon: nativeIcon, win: mb.window });
-
-  // eslint-disable-next-line
-  // TODO: 暂时关闭自动更新，需要apple签名
-  ipcMain.on('check-update', (e) => {
-    if (app.isPackaged) {
-      appUpdater.checkUpdate('renderer');
-    }
-  });
 
   ipcMain.handle('show-message-box', async (event, config) => {
     return await dialog.showMessageBox(config);
