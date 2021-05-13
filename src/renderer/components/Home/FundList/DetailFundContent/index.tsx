@@ -38,7 +38,7 @@ const DetailFundContent: React.FC<DetailFundContentProps> = (props) => {
   const [pingzhongdata, setPingzhongdata] = useState<
     Fund.PingzhongData | Record<string, any>
   >({});
-  console.log(pingzhongdata);
+
   const [
     showManagerDrawer,
     {

@@ -198,15 +198,15 @@ export async function FromHowbuy(code: string) {
 // 从天天基金获取估值图片
 export async function GetEstimatedFromEastmoney(code: string) {
   try {
-    const { rawBody } = await got(
+    const { rawBody }: any = await got(
       `http://j4.dfcfw.com/charts/pic6/${code}.png`,
       {
         retry: 0,
       }
     );
-    const base64Str = rawBody.toString('base64');
-
-    return `data:image/png;base64,${base64Str}`;
+    // const base64Str = rawBody.toString('base64');
+    const b64encoded = btoa(String.fromCharCode.apply(null, rawBody));
+    return `data:image/png;base64,${b64encoded}`;
   } catch (error) {
     console.log(error);
     return null;
@@ -241,7 +241,6 @@ export async function GetStockWareHouseFromEastmoney(
       responseType: 'json',
       retry: 0,
     });
-    console.log(data, secids);
     const diff: {
       f2: string; // 最新价
       f3: number; // 涨跌幅

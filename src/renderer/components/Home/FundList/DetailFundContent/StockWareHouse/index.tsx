@@ -43,7 +43,6 @@ const StockWareHouse: React.FC<StockWareHouseProps> = ({
       throwOnError: true,
       cacheKey: `GetStockWareHouseFromEastmoney/${code}`,
       onSuccess: (result) => {
-        console.log(result);
         chartInstance?.setOption({
           backgroundColor: 'transparent',
           title: {
@@ -119,7 +118,6 @@ const StockWareHouse: React.FC<StockWareHouseProps> = ({
 
   useRenderEcharts(
     () => {
-      console.log(code, stockCodes);
       runGetStockWareHouseFromEastmoney(code, stockCodes);
     },
     chartInstance,
