@@ -97,10 +97,7 @@ export function useUpdater() {
   // 一个小时检查一次版本
   useInterval(
     () => autoCheckUpdateSetting && ipcRenderer.send('check-update'),
-    1000 * 60 * 60,
-    {
-      immediate: true,
-    }
+    1000 * 60 * 60
   );
   useLayoutEffect(() => {
     ipcRenderer.on('update-available', (e, data) => {
