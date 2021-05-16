@@ -15,6 +15,7 @@ export enum FundApiType {
   Tencent, // 腾讯证券
   Sina, // 新浪基金
   Howbuy, // 好买基金
+  Etf, // 易天富
 }
 
 export enum FundSortType {

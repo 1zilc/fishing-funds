@@ -45,7 +45,6 @@ export async function GetQuotationsFromEastmoney() {
         _: new Date().getTime(),
       },
       responseType: 'json',
-      retry: 0,
     });
     const result: Quotation.ResponseItem[] = data.data.diff.map((i) => ({
       code: i.f12, // 板块代码
@@ -111,7 +110,6 @@ export async function GetQuotationDetailFromEastmoney(code: string) {
           'f57,f58,f107,f43,f169,f170,f171,f47,f48,f60,f46,f44,f45,f168,f113,f114,f444,f445,f446,f447',
       },
       responseType: 'json',
-      retry: 0,
     });
     return {
       zxj: data.f43,
@@ -148,7 +146,6 @@ export async function GetRealTimeFundFlowFromEasymoney(code: string) {
         _: new Date().getTime(),
       },
       responseType: 'json',
-      retry: 0,
     });
     const billion = Math.pow(10, 8);
     const result = (data?.klines || []).map((item: string) => {
@@ -223,7 +220,6 @@ export async function GetStocksFromEasymoney(code: string) {
         fs: `b:${code}`,
       },
       responseType: 'json',
-      retry: 0,
     });
     return (data?.diff || []).map((item) => ({
       code: item.f12,
@@ -303,7 +299,6 @@ export async function GetTransactionFromEasymoney(code: string) {
         _: new Date().getTime(),
       },
       responseType: 'json',
-      retry: 0,
     });
 
     const temp = data?.diff?.[0] || {};
@@ -357,7 +352,6 @@ export async function GetAfterTimeFundFlowFromEasymoney(code: string) {
         _: new Date().getTime(),
       },
       responseType: 'json',
-      retry: 0,
     });
     const billion = Math.pow(10, 8);
     const result = (data?.klines || []).map((item: string) => {

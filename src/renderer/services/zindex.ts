@@ -36,7 +36,6 @@ export async function FromEastmoney(code: string) {
         _: new Date().getTime(),
       },
       responseType: 'json',
-      retry: 0,
     });
 
     return {
@@ -91,7 +90,6 @@ export async function GetTrendFromEastmoney(code: string, ndays: number) {
         _: new Date().getTime(),
       },
       responseType: 'json',
-      retry: 0,
     });
     return (body?.data?.trends || []).map((_) => {
       const [time, price, cjl] = _.split(',');
@@ -137,7 +135,6 @@ export async function GetKFromEastmoney(code: string, year: number) {
         _: new Date().getTime(),
       },
       responseType: 'json',
-      retry: 0,
     });
     return (body?.data?.klines || []).map((_) => {
       const [date, kp, sp, zg, zd, cjl, cje, zf] = _.split(',');

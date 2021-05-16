@@ -9,9 +9,10 @@ const got = window.contextModules.got;
 // 天天基金
 export async function FromEastmoney(code: string) {
   try {
-    const { body } = await got(`http://fundgz.1234567.com.cn/js/${code}.js`, {
-      retry: 0,
-    });
+    const { body } = await got(
+      `http://fundgz.1234567.com.cn/js/${code}.js`,
+      {}
+    );
     return body.startsWith('jsonpgz')
       ? (eval(body) as Promise<Fund.ResponseItem | null>)
       : null;
@@ -195,14 +196,104 @@ export async function FromHowbuy(code: string) {
   }
 }
 
+// 好买基金
+export async function FromEtf(code: string) {
+  try {
+    const {
+      body: { data },
+    } = await got<{
+      code: 200;
+      successcode: 1;
+      data: {
+        gzrq: '2021-05-14';
+        result: {
+          fundcode: string;
+          gztime: string; //'09:30';
+          gzprice: number; //'1.0468';
+          gzzf: string; // '0.56';
+          hushen300xj: number; // '5009.46';
+          shenzhengxj: number; //'13967.33';
+          shangzhengxj: number; //'3436.76';
+          hushen300zf: number; //'0.33';
+          shenzhengzf: number; // '0.36';
+          shangzhengzf: number; // '0.21';
+        }[];
+      };
+      msg: '查询成功';
+    }>(`http://api.etf88.com/fundcode/getfundguzhizhangfuzoushi`, {
+      searchParams: {
+        fundcode: code,
+      },
+      responseType: 'json',
+    });
+    if (!data) {
+      return null;
+    }
+    const { body: html } = await got(`http://www.etf88.com/jj/${code}/`, {});
+    const $ = cheerio.load(html);
+    const name = $('h1[class="name"]').text();
+    const firstDate = $('.table')
+      .eq(1)
+      .find('tbody tr')
+      .eq(0)
+      .find('td')
+      .eq(0)
+      .text();
+
+    const firstJz = $('.table')
+      .eq(1)
+      .find('tbody tr')
+      .eq(0)
+      .find('td')
+      .eq(1)
+      .text();
+
+    const secondDate = $('.table')
+      .eq(1)
+      .find('tbody tr')
+      .eq(1)
+      .find('td')
+      .eq(0)
+      .text();
+
+    const secondJz = $('.table')
+      .eq(1)
+      .find('tbody tr')
+      .eq(1)
+      .find('td')
+      .eq(1)
+      .text();
+    const dwjz = data.gzrq === firstDate ? secondJz : firstJz;
+
+    const jzrq = $('.fund-d-title')
+      .eq(0)
+      .text()
+      .replace(/(?![0-9/-])./g, '');
+
+    const result = data.result || [];
+    const temp: any = result.pop() || {};
+
+    return {
+      name, // 名称 '诺安混合'
+      fundcode: temp.fundcode, // 代码 '320007'
+      gztime: `${data.gzrq} ${temp.gztime}`, // 估值时间 '2021-01-01 15:00'
+      gszzl: temp.gzzf, // 估算增长率 '-1.234'
+      jzrq, // 净值日期 '2021-01-01'
+      dwjz, // 当前净值 '1.1111'
+      gsz: temp.gzprice, // 估算值 '1.2222'
+    };
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+}
+
 // 从天天基金获取估值图片
 export async function GetEstimatedFromEastmoney(code: string) {
   try {
     const { rawBody }: any = await got(
       `http://j4.dfcfw.com/charts/pic6/${code}.png`,
-      {
-        retry: 0,
-      }
+      {}
     );
     // const base64Str = rawBody.toString('base64');
     const b64encoded = btoa(String.fromCharCode.apply(null, rawBody));
@@ -219,9 +310,10 @@ export async function GetStockWareHouseFromEastmoney(
   stockCodes: string[]
 ) {
   try {
-    const { body: html } = await got(`http://fund.eastmoney.com/${code}.html`, {
-      retry: 0,
-    });
+    const { body: html } = await got(
+      `http://fund.eastmoney.com/${code}.html`,
+      {}
+    );
     const $ = cheerio.load(html);
     const secids = (stockCodes || []).join(',') || '';
     const tors = $('#quotationItem_DataTable')
@@ -239,7 +331,6 @@ export async function GetStockWareHouseFromEastmoney(
         secids,
       },
       responseType: 'json',
-      retry: 0,
     });
     const diff: {
       f2: string; // 最新价
@@ -270,9 +361,10 @@ export async function GetSecuritiesWareHouseFromEastmoney(
   securitiesCodes: string
 ) {
   try {
-    const { body: html } = await got(`http://fund.eastmoney.com/${code}.html`, {
-      retry: 0,
-    });
+    const { body: html } = await got(
+      `http://fund.eastmoney.com/${code}.html`,
+      {}
+    );
     const $ = cheerio.load(html);
     const secids = securitiesCodes || '';
     const tors = $('#quotationItem_DataTable')
@@ -290,7 +382,6 @@ export async function GetSecuritiesWareHouseFromEastmoney(
         secids,
       },
       responseType: 'json',
-      retry: 0,
     });
     const diff: {
       f2: string; // 最新价
@@ -319,9 +410,7 @@ export async function GetFundDetailFromEastmoney(code: string) {
   try {
     const { body } = await got(
       `http://fund.eastmoney.com/pingzhongdata/${code}.js`,
-      {
-        retry: 0,
-      }
+      {}
     );
     const response: Fund.PingzhongData = Utils.parsepingzhongdata(body);
     return response;
@@ -348,7 +437,7 @@ export async function GetFundPerformanceFromEastmoney(
       headers: {
         Referer: 'http://fund.eastmoney.com/',
       },
-      retry: 0,
+
       responseType: 'json',
     });
 
@@ -365,9 +454,7 @@ export async function GetRemoteFundsFromEastmoney() {
   try {
     const { body } = await got(
       'http://fund.eastmoney.com/js/fundcode_search.js',
-      {
-        retry: 0,
-      }
+      {}
     );
     return Utils.ParseRemoteFunds(body);
   } catch (error) {

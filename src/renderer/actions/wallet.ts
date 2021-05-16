@@ -130,23 +130,24 @@ export function loadWalletsFunds() {
   return async (dispatch: Dispatch, getState: GetState) => {
     try {
       const { walletConfig } = getWalletConfig();
-      const collects = walletConfig.map(({ funds, code }) => () =>
-        getFunds(funds).then((funds) => {
-          const now = dayjs().format('MM-DD HH:mm:ss');
-          dispatch({
-            type: SYNC_WALLETS_MAP,
-            payload: {
-              code,
-              item: {
-                funds,
-                updateTime: now,
-              },
-            },
-          });
-          return funds;
-        })
+      const collects = walletConfig.map(
+        ({ funds, code }) =>
+          () =>
+            getFunds(funds).then((funds) => {
+              const now = dayjs().format('MM-DD HH:mm:ss');
+              dispatch({
+                type: SYNC_WALLETS_MAP,
+                payload: {
+                  code,
+                  item: {
+                    funds,
+                    updateTime: now,
+                  },
+                },
+              });
+              return funds;
+            })
       );
-
       await Adapter.ChokeAllAdapter<(Fund.ResponseItem | null)[]>(
         collects,
         CONST.DEFAULT.LOAD_WALLET_DELAY
@@ -170,8 +171,10 @@ export function loadFixWalletsFunds() {
             ({ fixDate, gztime }) =>
               !fixDate || fixDate !== gztime?.slice(5, 10)
           )
-          .map(({ fundcode }) => () =>
-            Services.Fund.GetFixFromEastMoney(fundcode!)
+          .map(
+            ({ fundcode }) =>
+              () =>
+                Services.Fund.GetFixFromEastMoney(fundcode!)
           );
         return () =>
           Adapter.ConCurrencyAllAdapter<Fund.FixData>(collectors).then(

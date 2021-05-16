@@ -140,6 +140,9 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
               <Radio className={styles.radio} value={Enums.FundApiType.Howbuy}>
                 好买基金
               </Radio>
+              <Radio className={styles.radio} value={Enums.FundApiType.Etf}>
+                易天富
+              </Radio>
             </Radio.Group>
           </div>
         </div>
