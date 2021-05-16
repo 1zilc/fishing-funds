@@ -1,0 +1,27 @@
+{
+  "name": "fishing-funds",
+  "productName": "Fishing Funds",
+  "version": "3.0.0",
+  "description": "显示基金涨跌状态栏小应用,数据源来自天天基金等",
+  "main": "./dist/main/main.prod.js",
+  "author": {
+    "name": "1zilc",
+    "email": "dywzzjx@163.com",
+    "url": "https://github.com/1zilc"
+  },
+  "scripts": {
+    "electron-rebuild": "node -r ../../.erb/scripts/babel-register.js ../../.erb/scripts/electron-rebuild.js",
+    "postinstall": "yarn electron-rebuild"
+  },
+  "license": "(ISC OR GPL-3.0)",
+  "dependencies": {},
+  "bugs": {
+    "url": "https://github.com/1zilc/fishing-funds/issues/new/choose",
+    "email": "dywzzjx@163.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/1zilc"
+  },
+  "homepage": "https://ff.1zilc.top"
+}

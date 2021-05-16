@@ -22,15 +22,8 @@
     "resolveJsonModule": true,
     "allowJs": true,
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/renderer/*"]
     }
   },
-  "exclude": [
-    "test",
-    "release",
-    "src/main.prod.js",
-    "src/renderer.prod.js",
-    "src/dist",
-    ".erb/dll"
-  ]
+  "exclude": ["test", "build/release", "build/app/dist", ".erb/dll"]
 }
