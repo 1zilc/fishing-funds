@@ -13,7 +13,6 @@ export const SORT_QUOTATIONS_WITH_COLLAPSE_CHACHED =
   'SORT_QUOTATIONS_WITH_COLLAPSE_CHACHED';
 
 export async function getQuotations() {
-  await Utils.Sleep(CONST.DEFAULT.LOAD_QUOTATION_SLEEP_DELAY);
   return Services.Quotation.GetQuotationsFromEastmoney();
 }
 

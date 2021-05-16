@@ -154,7 +154,6 @@ export async function getZindexs() {
         () =>
           getZindex(code)
     );
-  await Utils.Sleep(CONST.DEFAULT.LOAD_ZINDEXS_SLEEP_DELAY);
   return Adapter.ChokeGroupAdapter<Zindex.ResponseItem>(collectors, 5, 500);
 }
 
