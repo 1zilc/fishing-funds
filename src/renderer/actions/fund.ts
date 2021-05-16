@@ -63,25 +63,23 @@ export function setFundConfig(config: Fund.SettingItem[]) {
 export async function getFunds(config?: Fund.SettingItem[]) {
   const { fundConfig } = getFundConfig();
   const { fundApiTypeSetting } = getSystemSetting();
-  const collectors = (config || fundConfig).map(({ code }) => () =>
-    getFund(code)
+  const collectors = (config || fundConfig).map(
+    ({ code }) =>
+      () =>
+        getFund(code)
   );
   switch (fundApiTypeSetting) {
     case Enums.FundApiType.Dayfund:
-      return Adapter.ChokeAllAdapter<Fund.ResponseItem>(collectors);
+      return Adapter.ChokeGroupAdapter<Fund.ResponseItem>(collectors, 1, 100);
     case Enums.FundApiType.Tencent:
-      await Utils.Sleep(CONST.DEFAULT.LOAD_FUNDS_SLEEP_DELAY);
-      return Adapter.ConCurrencyAllAdapter<Fund.ResponseItem>(collectors);
+      return Adapter.ChokeGroupAdapter<Fund.ResponseItem>(collectors, 3, 300);
     case Enums.FundApiType.Sina:
-      await Utils.Sleep(CONST.DEFAULT.LOAD_FUNDS_SLEEP_DELAY);
-      return Adapter.ConCurrencyAllAdapter<Fund.ResponseItem>(collectors);
+      return Adapter.ChokeGroupAdapter<Fund.ResponseItem>(collectors, 3, 300);
     case Enums.FundApiType.Howbuy:
-      await Utils.Sleep(CONST.DEFAULT.LOAD_FUNDS_SLEEP_DELAY);
-      return Adapter.ConCurrencyAllAdapter<Fund.ResponseItem>(collectors);
+      return Adapter.ChokeGroupAdapter<Fund.ResponseItem>(collectors, 3, 300);
     case Enums.FundApiType.Eastmoney:
     default:
-      await Utils.Sleep(CONST.DEFAULT.LOAD_FUNDS_SLEEP_DELAY);
-      return Adapter.ConCurrencyAllAdapter<Fund.ResponseItem>(collectors);
+      return Adapter.ChokeGroupAdapter<Fund.ResponseItem>(collectors, 5, 500);
   }
 }
 
@@ -203,7 +201,6 @@ export function loadFunds() {
       batch(() => {
         dispatch({ type: SORT_FUNDS_WITH_CHACHED, payload: funds });
         dispatch({ type: SET_FUNDS_LOADING, payload: false });
-
         dispatch({
           type: SYNC_WALLETS_MAP,
           payload: {
@@ -250,8 +247,12 @@ export async function getFixFunds(funds: (Fund.ResponseItem & Fund.FixData)[]) {
     .filter(
       ({ fixDate, gztime }) => !fixDate || fixDate !== gztime?.slice(5, 10)
     )
-    .map(({ fundcode }) => () => Services.Fund.GetFixFromEastMoney(fundcode!));
-  return Adapter.ChokeAllAdapter<Fund.FixData>(collectors);
+    .map(
+      ({ fundcode }) =>
+        () =>
+          Services.Fund.GetFixFromEastMoney(fundcode!)
+    );
+  return Adapter.ChokeGroupAdapter<Fund.FixData>(collectors, 5, 500);
 }
 
 export function loadFixFunds() {

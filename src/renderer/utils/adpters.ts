@@ -85,3 +85,31 @@ export const ChokePreemptiveAdapter: <T>(
     }, Promise.resolve());
   });
 };
+
+/** *
+ * @param requests Collector[]
+ * @param delay 延迟时间
+ * 串行任务组，每个小任务为并发
+ */
+export const ChokeGroupAdapter: <T>(
+  collectors: Collector<T>[],
+  slice?: number,
+  delay?: number
+) => Promise<(T | null)[]> = async <T>(
+  collectors: Collector<T>[],
+  slice = 1,
+  delay = 0
+) => {
+  const collectorGroups: Collector<T>[][] = [];
+  collectors.forEach((collector, index: number) => {
+    const groupIndex = Math.floor(index / slice);
+    const group = collectorGroups[groupIndex] || [];
+    group.push(collector);
+    collectorGroups[groupIndex] = group;
+  });
+
+  const taskcollectors = collectorGroups.map(
+    (collectorGroup) => async () => await ConCurrencyAllAdapter(collectorGroup)
+  );
+  return (await ChokeAllAdapter(taskcollectors, delay)).flat();
+};

@@ -23,14 +23,14 @@ const Trend: React.FC<PerformanceProps> = ({ code }) => {
     CONST.DEFAULT.ECHARTS_SCALE
   );
   const [trend, setTrendType] = useState(trendTypeList[0]);
-  const { darkMode } = useContext(HomeContext);
+  const { darkMode, varibleColors } = useContext(HomeContext);
   const { run: runGetTrendFromEastmoney } = useRequest(
     Services.Zindex.GetTrendFromEastmoney,
     {
       manual: true,
       throwOnError: true,
       cacheKey: `GetTrendFromEastmoney/${code}/${trend.code}`,
-      onSuccess: (result) => {
+      onSuccess: (result = []) => {
         chartInstance?.setOption({
           title: {
             text: '',
@@ -70,13 +70,17 @@ const Trend: React.FC<PerformanceProps> = ({ code }) => {
           ],
           series: [
             {
-              data: result?.map(({ time, price }) => [time, price]) || [],
+              data: result.map(({ time, price }) => [time, price]),
               type: 'line',
               name: '价格',
               showSymbol: false,
               symbol: 'none',
               lineStyle: {
                 width: 1,
+                color:
+                  result[result.length - 1]?.price < result[0]?.price
+                    ? varibleColors['--reduce-color']
+                    : varibleColors['--increase-color'],
               },
             },
           ],
