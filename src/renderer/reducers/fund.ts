@@ -90,6 +90,7 @@ function sortFundsWithChached(
   responseFunds: Fund.ResponseItem[]
 ) {
   const { funds } = state;
+  const { fundConfig } = getFundConfig();
   const fundsCodeToMap = funds.reduce((map, fund) => {
     map[fund.fundcode!] = fund;
     return map;
@@ -98,9 +99,22 @@ function sortFundsWithChached(
   const fundsWithChached = responseFunds
     .filter((_) => !!_)
     .map((_) => ({
-      ...(fundsCodeToMap[_!.fundcode!] || {}),
+      ...(fundsCodeToMap[_.fundcode!] || {}),
       ..._,
     }));
+
+  const fundsWithChachedCodeToMap = fundsWithChached.reduce((map, fund) => {
+    map[fund.fundcode!] = fund;
+    return map;
+  }, {} as any);
+
+  fundConfig.forEach((fund) => {
+    const responseFund = fundsWithChachedCodeToMap[fund.code];
+    const stateFund = fundsCodeToMap[fund.code];
+    if (!responseFund && stateFund) {
+      fundsWithChached.push(stateFund);
+    }
+  });
 
   return sortFunds(state, fundsWithChached);
 }

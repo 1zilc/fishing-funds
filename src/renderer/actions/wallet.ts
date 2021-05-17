@@ -2,7 +2,7 @@ import { GetState, Dispatch } from '@/reducers/types';
 import { batch } from 'react-redux';
 import dayjs from 'dayjs';
 
-import { getFunds } from '@/actions/fund';
+import { SORT_FUNDS_WITH_CHACHED, getFunds } from '@/actions/fund';
 import * as Enums from '@/utils/enums';
 import * as CONST from '@/constants';
 import * as Utils from '@/utils';
@@ -13,7 +13,7 @@ export const CHANGE_CURRENT_WALLET_CODE = 'CHANGE_CURRENT_WALLET_CODE';
 export const SYNC_WALLETS = 'SYNC_WALLETS';
 export const SYNC_WALLETS_MAP = 'SYNC_WALLETS_MAP';
 export const SYNC_FIX_WALLETS_MAP = 'SYNC_FIX_WALLETS_MAP';
-export interface NameMap {
+export interface CodeMap {
   [index: string]: Wallet.SettingItem & Wallet.OriginRow;
 }
 
@@ -74,7 +74,7 @@ export function setWalletConfig(config: Wallet.SettingItem[]) {
 }
 
 export function getCodeMap(config: Wallet.SettingItem[]) {
-  return config.reduce<NameMap>((r, c, i) => {
+  return config.reduce<CodeMap>((r, c, i) => {
     r[c.code] = { ...c, originSort: i };
     return r;
   }, {});
@@ -130,20 +130,26 @@ export function loadWalletsFunds() {
   return async (dispatch: Dispatch, getState: GetState) => {
     try {
       const { walletConfig } = getWalletConfig();
+      const { code: currentWalletCode } = getCurrentWallet();
       const collects = walletConfig.map(
         ({ funds, code }) =>
           () =>
             getFunds(funds).then((funds) => {
-              const now = dayjs().format('MM-DD HH:mm:ss');
-              dispatch({
-                type: SYNC_WALLETS_MAP,
-                payload: {
-                  code,
-                  item: {
-                    funds,
-                    updateTime: now,
+              batch(() => {
+                const now = dayjs().format('MM-DD HH:mm:ss');
+                if (currentWalletCode === code) {
+                  dispatch({ type: SORT_FUNDS_WITH_CHACHED, payload: funds });
+                }
+                dispatch({
+                  type: SYNC_WALLETS_MAP,
+                  payload: {
+                    code,
+                    item: {
+                      funds,
+                      updateTime: now,
+                    },
                   },
-                },
+                });
               });
               return funds;
             })

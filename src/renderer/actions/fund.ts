@@ -75,16 +75,16 @@ export async function getFunds(config?: Fund.SettingItem[]) {
     case Enums.FundApiType.Dayfund:
       return Adapter.ChokeGroupAdapter<Fund.ResponseItem>(collectors, 1, 100);
     case Enums.FundApiType.Tencent:
-      return Adapter.ChokeGroupAdapter<Fund.ResponseItem>(collectors, 3, 500);
+      return Adapter.ChokeGroupAdapter<Fund.ResponseItem>(collectors, 3, 300);
     case Enums.FundApiType.Sina:
-      return Adapter.ChokeGroupAdapter<Fund.ResponseItem>(collectors, 3, 500);
+      return Adapter.ChokeGroupAdapter<Fund.ResponseItem>(collectors, 3, 300);
     case Enums.FundApiType.Howbuy:
-      return Adapter.ChokeGroupAdapter<Fund.ResponseItem>(collectors, 3, 500);
+      return Adapter.ChokeGroupAdapter<Fund.ResponseItem>(collectors, 3, 300);
     case Enums.FundApiType.Etf:
-      return Adapter.ChokeGroupAdapter<Fund.ResponseItem>(collectors, 3, 500);
+      return Adapter.ChokeGroupAdapter<Fund.ResponseItem>(collectors, 3, 300);
     case Enums.FundApiType.Eastmoney:
     default:
-      return Adapter.ChokeGroupAdapter<Fund.ResponseItem>(collectors, 5, 900);
+      return Adapter.ChokeGroupAdapter<Fund.ResponseItem>(collectors, 5, 500);
   }
 }
 
