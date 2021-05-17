@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { Badge } from 'antd';
 import { useSelector } from 'react-redux';
 import { useBoolean, useThrottleFn } from 'ahooks';
@@ -14,11 +14,9 @@ import ManageWalletContent from '@/components/Wallet/ManageWalletContent';
 import SettingContent from '@/components/SettingContent';
 import PayContent from '@/components/PayContent';
 import ManageZindexContent from '@/components/Home/ZindexList/ManageZindexContent';
-import { HomeContext } from '@/components/Home';
 import { StoreState } from '@/reducers/types';
 import { loadZindexs } from '@/actions/zindex';
 import { loadQuotations } from '@/actions/quotation';
-import { getSystemSetting } from '@/actions/setting';
 import { useScrollToTop, useActions, useFreshFunds } from '@/utils/hooks';
 import * as Enums from '@/utils/enums';
 import * as CONST from '@/constants';
@@ -29,8 +27,10 @@ export interface ToolBarProps {}
 const iconSize = { height: 18, width: 18 };
 
 const ToolBar: React.FC<ToolBarProps> = () => {
-  const { lowKeySetting, baseFontSizeSetting } = getSystemSetting();
-  const { varibleColors } = useContext(HomeContext);
+  const { lowKeySetting, baseFontSizeSetting } = useSelector(
+    (state: StoreState) => state.setting.systemSetting
+  );
+
   const updateInfo = useSelector(
     (state: StoreState) => state.updater.updateInfo
   );

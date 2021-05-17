@@ -2,7 +2,7 @@ import React from 'react';
 import { useBoolean } from 'ahooks';
 import { Collapse } from 'react-collapse';
 import classnames from 'classnames';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import NP from 'number-precision';
 
 import { ReactComponent as ArrowDownLineIcon } from '@/assets/icons/arrow-down-line.svg';
@@ -11,7 +11,7 @@ import { ReactComponent as ArrowDownIcon } from '@/assets/icons/arrow-down.svg';
 import { ReactComponent as ArrowUpIcon } from '@/assets/icons/arrow-up.svg';
 import CustomDrawer from '@/components/CustomDrawer';
 import DetailQuotationContent from '@/components/Home/QuotationList/DetailQuotationContent';
-import { getSystemSetting } from '@/actions/setting';
+import { StoreState } from '@/reducers/types';
 import { TOGGLE_QUOTATION_COLLAPSE } from '@/actions/quotation';
 
 import * as Utils from '@/utils';
@@ -29,7 +29,9 @@ const arrowSize = {
 
 const QuotationRow: React.FC<RowProps> = ({ quotation }) => {
   const dispatch = useDispatch();
-  const { conciseSetting } = getSystemSetting();
+  const { conciseSetting } = useSelector(
+    (state: StoreState) => state.setting.systemSetting
+  );
 
   const [
     showDetailDrawer,

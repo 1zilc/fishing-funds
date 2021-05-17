@@ -2,7 +2,7 @@ import React, { useCallback } from 'react';
 import { useBoolean } from 'ahooks';
 import { Collapse } from 'react-collapse';
 import classnames from 'classnames';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { ReactComponent as EditIcon } from '@/assets/icons/edit.svg';
 import { ReactComponent as ArrowDownIcon } from '@/assets/icons/arrow-down.svg';
@@ -12,9 +12,9 @@ import DetailFundContent from '@/components/Home/FundList/DetailFundContent';
 import CustomDrawer from '@/components/CustomDrawer';
 
 import { TOGGLE_FUND_COLLAPSE, calcFund, loadFunds } from '@/actions/fund';
-import { getSystemSetting } from '@/actions/setting';
-import * as Utils from '@/utils';
+import { StoreState } from '@/reducers/types';
 import { useScrollToTop, useActions } from '@/utils/hooks';
+import * as Utils from '@/utils';
 import styles from './index.scss';
 
 export interface RowProps {
@@ -29,7 +29,9 @@ const arrowSize = {
 
 const FundRow: React.FC<RowProps> = ({ fund, readOnly }) => {
   const dispatch = useDispatch();
-  const { conciseSetting } = getSystemSetting();
+  const { conciseSetting } = useSelector(
+    (state: StoreState) => state.setting.systemSetting
+  );
   const runLoadFunds = useActions(loadFunds);
   const freshFunds = useScrollToTop({ after: runLoadFunds });
 

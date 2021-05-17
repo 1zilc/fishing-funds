@@ -1,9 +1,9 @@
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import classnames from 'classnames';
 import { useRequest } from 'ahooks';
 import NP from 'number-precision';
 
-import { HomeContext } from '@/components/Home';
+import { useHomeContext } from '@/components/Home';
 import { useResizeEchart, useRenderEcharts } from '@/utils/hooks';
 import * as CONST from '@/constants';
 import * as Services from '@/services';
@@ -42,7 +42,7 @@ const K: React.FC<PerformanceProps> = ({ code = '' }) => {
     CONST.DEFAULT.ECHARTS_SCALE
   );
   const [year, setYearType] = useState(yearTypeList[0]);
-  const { varibleColors, darkMode } = useContext(HomeContext);
+  const { varibleColors, darkMode } = useHomeContext();
   const { run: runGetKFromEastmoney } = useRequest(
     Services.Zindex.GetKFromEastmoney,
     {

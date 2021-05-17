@@ -1,13 +1,10 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useSelector } from 'react-redux';
 
 import ZindexRow from '@/components/Home/ZindexList/ZindexRow';
 import Empty from '@/components/Empty';
 import LoadingBar from '@/components/LoadingBar';
-import { loadZindexsWithoutLoading } from '@/actions/zindex';
 import { StoreState } from '@/reducers/types';
-import { useWorkDayTimeToDo } from '@/utils/hooks';
-import { useActions } from '@/utils/hooks';
 import styles from './index.scss';
 
 const ZindexList = () => {
@@ -15,14 +12,6 @@ const ZindexList = () => {
   const zindexsLoading = useSelector(
     (state: StoreState) => state.zindex.zindexsLoading
   );
-  const runLoadZindexs = useActions(loadZindexsWithoutLoading);
-
-  // 间隔时间刷新指数
-  useWorkDayTimeToDo(runLoadZindexs, 1000 * 20);
-
-  useEffect(() => {
-    runLoadZindexs();
-  }, []);
 
   return (
     <div className={styles.container}>

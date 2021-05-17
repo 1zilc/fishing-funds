@@ -15,6 +15,9 @@ import * as echarts from 'echarts';
 import { getSystemSetting } from '@/actions/setting';
 import { getCurrentHours } from '@/actions/time';
 import { updateAvaliable } from '@/actions/updater';
+import { loadWalletsFunds, loadFixWalletsFunds } from '@/actions/wallet';
+import { loadQuotationsWithoutLoading } from '@/actions/quotation';
+import { loadZindexsWithoutLoading } from '@/actions/zindex';
 import {
   getFundConfig,
   getFunds,
@@ -23,10 +26,12 @@ import {
   getCodeMap,
   loadFunds,
   loadFixFunds,
+  loadFundsWithoutLoading,
 } from '@/actions/fund';
 import { StoreState } from '@/reducers/types';
 import * as Utils from '@/utils';
 import * as CONST from '@/constants';
+import * as Adapter from '@/utils/adpters';
 
 const { invoke, dialog, ipcRenderer, clipboard } =
   window.contextModules.electron;
@@ -79,27 +84,30 @@ export function useScrollToTop(
   },
   dep: any[] = []
 ) {
-  return useCallback(() => {
+  return useCallback(async () => {
     const { before, after, option } = config;
-    before && before();
+    before && (await before());
     window.scrollTo({
       behavior: 'smooth',
       top: 0,
       ...option,
     });
-    after && after();
+    after && (await after());
   }, dep);
 }
 
 export function useUpdater() {
   const dispatch = useDispatch();
-  const { autoCheckUpdateSetting } = getSystemSetting();
+  const { autoCheckUpdateSetting } = useSelector(
+    (state: StoreState) => state.setting.systemSetting
+  );
   // 一个小时检查一次版本
   useInterval(
     () => autoCheckUpdateSetting && ipcRenderer.send('check-update'),
     1000 * 60 * 60
   );
-  useLayoutEffect(() => {
+
+  useEffect(() => {
     ipcRenderer.on('update-available', (e, data) => {
       autoCheckUpdateSetting && dispatch(updateAvaliable(data));
     });
@@ -177,6 +185,7 @@ export function useConfigClipboard() {
 export function useNativeTheme() {
   const shouldUseDarkColors = invoke.getShouldUseDarkColors();
   const [darkMode, setDarkMode] = useState(shouldUseDarkColors);
+
   useLayoutEffect(() => {
     const { systemThemeSetting } = getSystemSetting();
     ipcRenderer.on('nativeTheme-updated', (e, data) => {
@@ -278,9 +287,9 @@ export function useSyncFixFundSetting() {
 }
 
 export function useAdjustmentNotification() {
-  const { adjustmentNotificationSetting } = getSystemSetting();
   useInterval(
     async () => {
+      const { adjustmentNotificationSetting } = getSystemSetting();
       if (!adjustmentNotificationSetting) {
         return;
       }
@@ -355,3 +364,48 @@ export function useFreshFunds(throttleDelay: number) {
   });
   return freshFunds;
 }
+
+export function useBootStrap() {
+  const { freshDelaySetting, autoFreshSetting } = useSelector(
+    (state: StoreState) => state.setting.systemSetting
+  );
+  const runLoadWalletsFunds = useActions(loadWalletsFunds);
+  const runLoadFixWalletsFunds = useActions(loadFixWalletsFunds);
+  const runLoadFunds = useActions(loadFundsWithoutLoading);
+  const runLoadFixFunds = useActions(loadFixFunds);
+  const runLoadQuotations = useActions(loadQuotationsWithoutLoading);
+  const runLoadZindexs = useActions(loadZindexsWithoutLoading);
+
+  // 间隔时间刷新基金,指数，板块，钱包
+  useWorkDayTimeToDo(() => {
+    if (autoFreshSetting) {
+      Adapter.ChokeAllAdapter([
+        runLoadFunds,
+        runLoadZindexs,
+        runLoadQuotations,
+        runLoadWalletsFunds,
+      ]);
+    }
+  }, freshDelaySetting * 1000 * 60);
+
+  // 间隔时间检查最新净值
+  useFixTimeToDo(() => {
+    if (autoFreshSetting) {
+      Adapter.ChokeAllAdapter([runLoadFixFunds, runLoadFixWalletsFunds]);
+    }
+  }, freshDelaySetting * 1000 * 60);
+
+  // 第一次刷新所有数据
+  useEffect(() => {
+    Adapter.ChokeAllAdapter([
+      runLoadFunds,
+      runLoadFixFunds,
+      runLoadZindexs,
+      runLoadQuotations,
+      runLoadWalletsFunds,
+      runLoadFixWalletsFunds,
+    ]);
+  }, []);
+}
+
+export function useSystemSetting() {}

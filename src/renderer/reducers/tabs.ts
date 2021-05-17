@@ -8,11 +8,11 @@ export interface TabsState {
 }
 
 export default function tabs(
-  state = {
+  state: TabsState = {
     activeKey: Enums.TabKeyType.Funds,
   },
   action: AnyAction
-) {
+): TabsState {
   switch (action.type) {
     case SET_TAB_ACTIVE_KEY:
       return {

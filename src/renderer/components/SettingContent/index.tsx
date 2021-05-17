@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import classnames from 'classnames';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 
 import { InputNumber, Radio, Badge, Switch, Slider } from 'antd';
 import Logo from '@/components/Logo';
@@ -9,17 +9,13 @@ import { ReactComponent as SettingIcon } from '@/assets/icons/setting.svg';
 import { ReactComponent as LinkIcon } from '@/assets/icons/link.svg';
 import { ReactComponent as LineCharIcon } from '@/assets/icons/line-chart.svg';
 import { ReactComponent as TShirtIcon } from '@/assets/icons/t-shirt.svg';
-import {
-  getSystemSetting,
-  setSystemSetting,
-  defalutSystemSetting,
-} from '@/actions/setting';
+import { setSystemSetting, defalutSystemSetting } from '@/actions/setting';
+
 import { StoreState } from '@/reducers/types';
 import * as Enums from '@/utils/enums';
-import * as Utils from '@/utils';
 import styles from './index.scss';
 
-export const ffVersion = '3.0.0';
+export const ffVersion = '3.0.1';
 export interface SettingContentProps {
   onEnter: () => void;
   onClose: () => void;
@@ -29,6 +25,7 @@ const { shell, app } = window.contextModules.electron;
 const { electron } = window.contextModules.process;
 
 const SettingContent: React.FC<SettingContentProps> = (props) => {
+  const dispatch = useDispatch();
   const {
     fundApiTypeSetting,
     conciseSetting,
@@ -40,7 +37,7 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
     autoFreshSetting,
     freshDelaySetting,
     autoCheckUpdateSetting,
-  } = getSystemSetting();
+  } = useSelector((state: StoreState) => state.setting.systemSetting);
 
   const updateInfo = useSelector(
     (state: StoreState) => state.updater.updateInfo
@@ -66,22 +63,20 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
   );
 
   const onSave = () => {
-    setSystemSetting({
-      fundApiTypeSetting: fundapiType,
-      conciseSetting: concise,
-      lowKeySetting: lowKey,
-      baseFontSizeSetting: baseFontSize,
-      systemThemeSetting: systemTheme,
-      autoStartSetting: autoStart,
-      adjustmentNotificationSetting: adjustmentNotification,
-      autoFreshSetting: autoFresh,
-      freshDelaySetting: freshDelay || defalutSystemSetting.freshDelaySetting,
-      autoCheckUpdateSetting: autoCheckUpdate,
-    });
-    app.setLoginItemSettings({
-      openAtLogin: autoStart,
-    });
-    Utils.UpdateSystemTheme(systemTheme);
+    dispatch(
+      setSystemSetting({
+        fundApiTypeSetting: fundapiType,
+        conciseSetting: concise,
+        lowKeySetting: lowKey,
+        baseFontSizeSetting: baseFontSize,
+        systemThemeSetting: systemTheme,
+        autoStartSetting: autoStart,
+        adjustmentNotificationSetting: adjustmentNotification,
+        autoFreshSetting: autoFresh,
+        freshDelaySetting: freshDelay || defalutSystemSetting.freshDelaySetting,
+        autoCheckUpdateSetting: autoCheckUpdate,
+      })
+    );
     props.onEnter();
   };
 

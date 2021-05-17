@@ -1,48 +1,31 @@
-import React, { useContext, useMemo, useEffect } from 'react';
+import React, { useMemo } from 'react';
 import classnames from 'classnames';
 import { useDispatch, useSelector } from 'react-redux';
 import { Dropdown, Menu } from 'antd';
 import { ReactComponent as ConsumptionIcon } from '@/assets/icons/consumption.svg';
 import { ReactComponent as EyeIcon } from '@/assets/icons/eye.svg';
 import { ReactComponent as EyeCloseIcon } from '@/assets/icons/eye-close.svg';
-import { HeaderContext } from '@/components/Header';
+import { useHeaderContext } from '@/components/Header';
 import { StoreState } from '@/reducers/types';
-import {
-  selectWallet,
-  toggleEyeStatus,
-  loadWalletsFunds,
-  loadFixWalletsFunds,
-} from '@/actions/wallet';
-import { getSystemSetting } from '@/actions/setting';
+import { selectWallet, toggleEyeStatus } from '@/actions/wallet';
 import { calcFunds } from '@/actions/fund';
-import {
-  useCurrentWallet,
-  useActions,
-  useWorkDayTimeToDo,
-  useFixTimeToDo,
-  useFreshFunds,
-} from '@/utils/hooks';
+import { useCurrentWallet, useFreshFunds } from '@/utils/hooks';
 import * as Enums from '@/utils/enums';
 import * as Utils from '@/utils';
-import * as Adapter from '@/utils/adpters';
 import * as CONST from '@/constants';
-
 import styles from './index.scss';
 
 export interface WalletProps {}
 
 const Wallet: React.FC<WalletProps> = () => {
   const dispatch = useDispatch();
-  const { freshDelaySetting, autoFreshSetting } = getSystemSetting();
-  const { miniMode } = useContext(HeaderContext);
+  const { miniMode } = useHeaderContext();
   const eyeStatus = useSelector((state: StoreState) => state.wallet.eyeStatus);
   const wallets = useSelector((state: StoreState) => state.wallet.wallets);
   const currentWalletCode = useSelector(
     (state: StoreState) => state.wallet.currentWalletCode
   );
   const { currentWallet, currentWalletState } = useCurrentWallet();
-  const runLoadWalletsFunds = useActions(loadWalletsFunds);
-  const runLoadFixWalletsFunds = useActions(loadFixWalletsFunds);
   const freshFunds = useFreshFunds(CONST.DEFAULT.FRESH_BUTTON_THROTTLE_DELAY);
   const WalletIcon = useMemo(() => {
     const { ReactComponent } = require(`@/assets/icons/wallet/${
@@ -64,22 +47,6 @@ const Wallet: React.FC<WalletProps> = () => {
     dispatch(selectWallet(code));
     freshFunds();
   };
-
-  // 间隔时间刷新钱包
-  useWorkDayTimeToDo(
-    () => autoFreshSetting && runLoadWalletsFunds(),
-    freshDelaySetting * 1000 * 60
-  );
-
-  // 间隔时间检查钱包最新净值
-  useFixTimeToDo(
-    () => autoFreshSetting && runLoadFixWalletsFunds(),
-    freshDelaySetting * 1000 * 60
-  );
-
-  useEffect(() => {
-    Adapter.ChokeAllAdapter([runLoadWalletsFunds, runLoadFixWalletsFunds]);
-  }, []);
 
   return (
     <div

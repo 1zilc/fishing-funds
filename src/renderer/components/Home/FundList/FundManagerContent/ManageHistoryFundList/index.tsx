@@ -1,20 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import { useRequest } from 'ahooks';
+import { useSelector } from 'react-redux';
 
 import Empty from '@/components/Empty';
 import FundRow from '@/components/Home/FundList/FundRow';
-import { getSystemSetting } from '@/actions/setting';
+import { StoreState } from '@/reducers/types';
 import { getFunds, getFixFunds, mergeFixFunds, calcFund } from '@/actions/fund';
 import { useFixTimeToDo } from '@/utils/hooks';
 import styles from './index.scss';
-
 export interface ManageHistoryFundListProps {
   manageHistoryFunds?: Fund.Manager.ManageHistoryFund[];
 }
 const ManageHistoryFundList: React.FC<ManageHistoryFundListProps> = ({
   manageHistoryFunds = [],
 }) => {
-  const { freshDelaySetting, autoFreshSetting } = getSystemSetting();
+  const { autoFreshSetting, freshDelaySetting } = useSelector(
+    (state: StoreState) => state.setting.systemSetting
+  );
   const [manageHistoryFundList, setManageHistoryFundList] = useState<
     (Fund.ResponseItem & Fund.ExtraRow)[]
   >([]);

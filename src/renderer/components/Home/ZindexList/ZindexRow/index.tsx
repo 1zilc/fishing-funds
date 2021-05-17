@@ -2,7 +2,7 @@ import React from 'react';
 import { useBoolean } from 'ahooks';
 import { Collapse } from 'react-collapse';
 import classnames from 'classnames';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { ReactComponent as ArrowDownLineIcon } from '@/assets/icons/arrow-down-line.svg';
 import { ReactComponent as ArrowUpLineIcon } from '@/assets/icons/arrow-up-line.svg';
@@ -11,7 +11,7 @@ import { ReactComponent as ArrowUpIcon } from '@/assets/icons/arrow-up.svg';
 
 import DetailZindexContent from '@/components/Home/ZindexList/DetailZindexContent';
 import CustomDrawer from '@/components/CustomDrawer';
-import { getSystemSetting } from '@/actions/setting';
+import { StoreState } from '@/reducers/types';
 import { TOGGLE_ZINDEX_COLLAPSE } from '@/actions/zindex';
 
 import * as Utils from '@/utils';
@@ -30,7 +30,9 @@ const arrowSize = {
 const ZindexRow: React.FC<RowProps> = (props) => {
   const { zindex } = props;
   const dispatch = useDispatch();
-  const { conciseSetting } = getSystemSetting();
+  const { conciseSetting } = useSelector(
+    (state: StoreState) => state.setting.systemSetting
+  );
 
   const [
     showDetailDrawer,

@@ -1,13 +1,10 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useSelector } from 'react-redux';
 
 import QuotationRow from '@/components/Home/QuotationList/QuotationRow';
 import Empty from '@/components/Empty';
 import LoadingBar from '@/components/LoadingBar';
-import { loadQuotationsWithoutLoading } from '@/actions/quotation';
 import { StoreState } from '@/reducers/types';
-import { useWorkDayTimeToDo } from '@/utils/hooks';
-import { useActions } from '@/utils/hooks';
 import styles from './index.scss';
 
 const QuotationList = () => {
@@ -17,14 +14,6 @@ const QuotationList = () => {
   const quotationsLoading = useSelector(
     (state: StoreState) => state.quotation.quotationsLoading
   );
-  const runLoadQuotations = useActions(loadQuotationsWithoutLoading);
-
-  // 间隔时间刷新板块
-  useWorkDayTimeToDo(runLoadQuotations, 1000 * 30);
-
-  useEffect(() => {
-    runLoadQuotations();
-  }, []);
 
   return (
     <div className={styles.container}>

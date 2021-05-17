@@ -1,4 +1,4 @@
-import React, { PropsWithChildren, createContext } from 'react';
+import React, { PropsWithChildren, createContext, useContext } from 'react';
 import { useScroll } from 'ahooks';
 import classnames from 'classnames';
 import styles from './index.scss';
@@ -10,6 +10,11 @@ export interface HeaderContextType {
 export const HeaderContext = createContext<HeaderContextType>({
   miniMode: false,
 });
+
+export function useHeaderContext() {
+  const context = useContext(HeaderContext);
+  return context;
+}
 
 const Header: React.FC<PropsWithChildren<{}>> = ({ children }) => {
   const position = useScroll(document, (val) => val.top <= 520);

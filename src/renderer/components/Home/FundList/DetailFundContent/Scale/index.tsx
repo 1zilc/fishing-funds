@@ -1,7 +1,7 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { renderToString } from 'react-dom/server';
 
-import { HomeContext } from '@/components/Home';
+import { useHomeContext } from '@/components/Home';
 import { useResizeEchart, useRenderEcharts } from '@/utils/hooks';
 import * as CONST from '@/constants';
 import styles from './index.scss';
@@ -37,7 +37,7 @@ const Scale: React.FC<ScaleProps> = ({
   const { ref: chartRef, chartInstance } = useResizeEchart(
     CONST.DEFAULT.ECHARTS_SCALE
   );
-  const { varibleColors, darkMode } = useContext(HomeContext);
+  const { varibleColors, darkMode } = useHomeContext();
 
   useRenderEcharts(
     () => {

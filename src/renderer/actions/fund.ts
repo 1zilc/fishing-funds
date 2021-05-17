@@ -66,22 +66,25 @@ export async function getFunds(config?: Fund.SettingItem[]) {
   const collectors = (config || fundConfig).map(
     ({ code }) =>
       () =>
-        getFund(code)
+        getFund(code).then((res) => {
+          console.log(res);
+          return res;
+        })
   );
   switch (fundApiTypeSetting) {
     case Enums.FundApiType.Dayfund:
       return Adapter.ChokeGroupAdapter<Fund.ResponseItem>(collectors, 1, 100);
     case Enums.FundApiType.Tencent:
-      return Adapter.ChokeGroupAdapter<Fund.ResponseItem>(collectors, 3, 300);
+      return Adapter.ChokeGroupAdapter<Fund.ResponseItem>(collectors, 3, 500);
     case Enums.FundApiType.Sina:
-      return Adapter.ChokeGroupAdapter<Fund.ResponseItem>(collectors, 3, 300);
+      return Adapter.ChokeGroupAdapter<Fund.ResponseItem>(collectors, 3, 500);
     case Enums.FundApiType.Howbuy:
-      return Adapter.ChokeGroupAdapter<Fund.ResponseItem>(collectors, 3, 300);
+      return Adapter.ChokeGroupAdapter<Fund.ResponseItem>(collectors, 3, 500);
     case Enums.FundApiType.Etf:
-      return Adapter.ChokeGroupAdapter<Fund.ResponseItem>(collectors, 3, 300);
+      return Adapter.ChokeGroupAdapter<Fund.ResponseItem>(collectors, 3, 500);
     case Enums.FundApiType.Eastmoney:
     default:
-      return Adapter.ChokeGroupAdapter<Fund.ResponseItem>(collectors, 5, 500);
+      return Adapter.ChokeGroupAdapter<Fund.ResponseItem>(collectors, 5, 900);
   }
 }
 
@@ -256,7 +259,7 @@ export async function getFixFunds(funds: (Fund.ResponseItem & Fund.FixData)[]) {
         () =>
           Services.Fund.GetFixFromEastMoney(fundcode!)
     );
-  return Adapter.ChokeGroupAdapter<Fund.FixData>(collectors, 5, 500);
+  return Adapter.ChokeGroupAdapter<Fund.FixData>(collectors, 3, 500);
 }
 
 export function loadFixFunds() {

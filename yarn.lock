@@ -1931,6 +1931,13 @@
   resolved "https://registry.npm.taobao.org/@types/q/download/@types/q-1.5.4.tgz#15925414e0ad2cd765bfef58842f7e26a7accb24"
   integrity sha1-FZJUFOCtLNdlv+9YhC9+JqesyyQ=
 
+"@types/react-collapse@^5.0.0":
+  version "5.0.0"
+  resolved "https://registry.nlark.com/@types/react-collapse/download/@types/react-collapse-5.0.0.tgz#ffe6173db457b4b147319e1bd522b5b9d3d68fac"
+  integrity sha1-/+YXPbRXtLFHMZ4b1SK1udPWj6w=
+  dependencies:
+    "@types/react" "*"
+
 "@types/react-dom@^17.0.3":
   version "17.0.4"
   resolved "https://registry.nlark.com/@types/react-dom/download/@types/react-dom-17.0.4.tgz?cache=0&sync_timestamp=1620687174195&other_urls=https%3A%2F%2Fregistry.nlark.com%2F%40types%2Freact-dom%2Fdownload%2F%40types%2Freact-dom-17.0.4.tgz#d65159a847aca2a0fc87a7544a2f8fece8754d04"
