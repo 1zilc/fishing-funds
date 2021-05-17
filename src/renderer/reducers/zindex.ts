@@ -66,6 +66,7 @@ const sortZindexsWithCollapseChached = (
   responseZindexs: Zindex.ResponseItem[]
 ): ZindexState => {
   const { zindexs } = state;
+  const { zindexConfig } = getZindexConfig();
   const zindexsCodeToMap = zindexs.reduce((map, zindex) => {
     map[zindex.zindexCode] = zindex;
     return map;
@@ -74,9 +75,25 @@ const sortZindexsWithCollapseChached = (
   const zindexsWithCollapseChached = responseZindexs
     .filter((_) => !!_)
     .map((_) => ({
+      ...(zindexsCodeToMap[_.zindexCode] || {}),
       ..._,
-      collapse: zindexsCodeToMap[_?.zindexCode]?.collapse,
     }));
+
+  const fundsWithChachedCodeToMap = zindexsWithCollapseChached.reduce(
+    (map, fund) => {
+      map[fund.zindexCode!] = fund;
+      return map;
+    },
+    {} as any
+  );
+
+  zindexConfig.forEach((zindex) => {
+    const responseZindex = fundsWithChachedCodeToMap[zindex.code];
+    const stateZindex = zindexsCodeToMap[zindex.code];
+    if (!responseZindex && stateZindex) {
+      zindexsWithCollapseChached.push(stateZindex);
+    }
+  });
 
   return sortZindexs(state, zindexsWithCollapseChached);
 };
@@ -86,8 +103,8 @@ const toggleZindexCollapse = (
   zindex: Zindex.ResponseItem & Zindex.ExtraRow
 ): ZindexState => {
   const { zindexs } = state;
-  const cloneZindexs: (Zindex.ResponseItem &
-    Zindex.ExtraRow)[] = Utils.DeepCopy(zindexs);
+  const cloneZindexs: (Zindex.ResponseItem & Zindex.ExtraRow)[] =
+    Utils.DeepCopy(zindexs);
   cloneZindexs.forEach((_) => {
     if (_.zindexCode === zindex.zindexCode) {
       _.collapse = !zindex.collapse;
@@ -101,8 +118,8 @@ const toggleZindexCollapse = (
 
 const toggleZindexsCollapse = (state: ZindexState): ZindexState => {
   const { zindexs } = state;
-  const cloneZindexs: (Zindex.ResponseItem &
-    Zindex.ExtraRow)[] = Utils.DeepCopy(zindexs);
+  const cloneZindexs: (Zindex.ResponseItem & Zindex.ExtraRow)[] =
+    Utils.DeepCopy(zindexs);
   const expandAllZindexs = zindexs.every((_) => _.collapse);
   cloneZindexs.forEach((_) => {
     _.collapse = !expandAllZindexs;
