@@ -1,8 +1,7 @@
 import { GetState, Dispatch } from '@/reducers/types';
-import { batch } from 'react-redux';
 import dayjs from 'dayjs';
 
-import { SORT_FUNDS_WITH_CHACHED, getFunds } from '@/actions/fund';
+import { getFunds } from '@/actions/fund';
 import * as Enums from '@/utils/enums';
 import * as CONST from '@/constants';
 import * as Utils from '@/utils';
@@ -131,15 +130,13 @@ export function loadWalletsFunds() {
     try {
       const { walletConfig } = getWalletConfig();
       const { code: currentWalletCode } = getCurrentWallet();
-      const collects = walletConfig.map(
-        ({ funds, code }) =>
-          () =>
-            getFunds(funds).then((funds) => {
-              batch(() => {
+      const collects = walletConfig
+        .filter(({ code }) => code !== currentWalletCode)
+        .map(
+          ({ funds, code }) =>
+            () =>
+              getFunds(funds).then((funds) => {
                 const now = dayjs().format('MM-DD HH:mm:ss');
-                if (currentWalletCode === code) {
-                  dispatch({ type: SORT_FUNDS_WITH_CHACHED, payload: funds });
-                }
                 dispatch({
                   type: SYNC_WALLETS_MAP,
                   payload: {
@@ -150,10 +147,9 @@ export function loadWalletsFunds() {
                     },
                   },
                 });
-              });
-              return funds;
-            })
-      );
+                return funds;
+              })
+        );
       await Adapter.ChokeAllAdapter<(Fund.ResponseItem | null)[]>(
         collects,
         CONST.DEFAULT.LOAD_WALLET_DELAY

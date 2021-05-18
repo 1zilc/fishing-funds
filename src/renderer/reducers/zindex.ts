@@ -79,16 +79,16 @@ const sortZindexsWithCollapseChached = (
       ..._,
     }));
 
-  const fundsWithChachedCodeToMap = zindexsWithCollapseChached.reduce(
-    (map, fund) => {
-      map[fund.zindexCode!] = fund;
+  const zindexWithChachedCodeToMap = zindexsWithCollapseChached.reduce(
+    (map, zindex) => {
+      map[zindex.zindexCode!] = zindex;
       return map;
     },
     {} as any
   );
 
   zindexConfig.forEach((zindex) => {
-    const responseZindex = fundsWithChachedCodeToMap[zindex.code];
+    const responseZindex = zindexWithChachedCodeToMap[zindex.code];
     const stateZindex = zindexsCodeToMap[zindex.code];
     if (!responseZindex && stateZindex) {
       zindexsWithCollapseChached.push(stateZindex);

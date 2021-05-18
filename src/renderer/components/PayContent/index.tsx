@@ -5,6 +5,7 @@ import Tilt from 'react-tilt';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
 import wechatQRcodeImage from '@/assets/qrcode/wechat.png';
 import alipayQRcodeImage from '@/assets/qrcode/alipay.png';
+import { ReactComponent as CoinIcon } from '@/assets/icons/coin.svg';
 import { ReactComponent as WechatPayIcon } from '@/assets/icons/wechat-pay.svg';
 import { ReactComponent as AliPayIcon } from '@/assets/icons/alipay.svg';
 
@@ -14,6 +15,10 @@ export interface PayContentProps {
   onClose: () => void;
 }
 
+const iconSize = {
+  height: 48,
+  width: 48,
+};
 const PayContent: React.FC<PayContentProps> = (props) => {
   return (
     <CustomDrawerContent
@@ -23,6 +28,14 @@ const PayContent: React.FC<PayContentProps> = (props) => {
       onEnter={props.onEnter}
     >
       <div className={styles.content}>
+        <div className={classnames(styles.coin)}>
+          <CoinIcon {...iconSize} />
+          <div className={styles.describe}>
+            ❤️ Fishing Funds
+            是一款个人开发小软件，开源后深受大家的喜爱，接受了大量宝贵的改进建议，有些功能连作者自己都很少用到，但还是感谢大家的反馈，作者利用空闲时间开发不易，您的支持可以给本项目的开发和完善提供巨大的动力，感谢对本软件的喜爱和认可
+            :)
+          </div>
+        </div>
         <div>
           <div className={styles.title}>
             <AliPayIcon />
