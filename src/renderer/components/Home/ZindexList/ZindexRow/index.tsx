@@ -30,7 +30,7 @@ const ZindexRow: React.FC<RowProps> = (props) => {
   );
 
   const onDetailClick = () => {
-    props.onDetail && props.onDetail(zindex.zindexCode!);
+    props.onDetail && props.onDetail(`${zindex.type}.${zindex.zindexCode}`);
   };
 
   return (
