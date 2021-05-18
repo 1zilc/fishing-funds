@@ -273,7 +273,6 @@
     "iconv-lite": "^0.6.2",
     "menubar": "^9.0.2",
     "number-precision": "^1.5.0",
-    "rc-drawer": "^4.2.2",
     "react": "^17.0.2",
     "react-collapse": "^5.1.0",
     "react-dom": "^17.0.2",

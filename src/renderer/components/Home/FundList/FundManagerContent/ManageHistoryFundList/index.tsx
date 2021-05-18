@@ -4,9 +4,11 @@ import { useSelector } from 'react-redux';
 
 import Empty from '@/components/Empty';
 import FundRow from '@/components/Home/FundList/FundRow';
+import DetailFundContent from '@/components/Home/FundList/DetailFundContent';
+import CustomDrawer from '@/components/CustomDrawer';
 import { StoreState } from '@/reducers/types';
 import { getFunds, getFixFunds, mergeFixFunds, calcFund } from '@/actions/fund';
-import { useFixTimeToDo } from '@/utils/hooks';
+import { useFixTimeToDo, useDrawer } from '@/utils/hooks';
 import styles from './index.scss';
 export interface ManageHistoryFundListProps {
   manageHistoryFunds?: Fund.Manager.ManageHistoryFund[];
@@ -20,6 +22,13 @@ const ManageHistoryFundList: React.FC<ManageHistoryFundListProps> = ({
   const [manageHistoryFundList, setManageHistoryFundList] = useState<
     (Fund.ResponseItem & Fund.ExtraRow)[]
   >([]);
+
+  const {
+    data: detailFundCode,
+    show: showDetailDrawer,
+    set: setDetailDrawer,
+    close: closeDetailDrawer,
+  } = useDrawer('');
 
   const { run: runGetFunds } = useRequest(getFunds, {
     manual: true,
@@ -68,11 +77,23 @@ const ManageHistoryFundList: React.FC<ManageHistoryFundListProps> = ({
     <div className={styles.content}>
       {manageHistoryFundList.length ? (
         manageHistoryFundList.map((fund) => (
-          <FundRow key={fund.fundcode} fund={fund} readOnly />
+          <FundRow
+            key={fund.fundcode}
+            readOnly
+            fund={fund}
+            onDetail={setDetailDrawer}
+          />
         ))
       ) : (
         <Empty />
       )}
+      <CustomDrawer show={showDetailDrawer}>
+        <DetailFundContent
+          onEnter={closeDetailDrawer}
+          onClose={closeDetailDrawer}
+          code={detailFundCode}
+        />
+      </CustomDrawer>
     </div>
   );
 };

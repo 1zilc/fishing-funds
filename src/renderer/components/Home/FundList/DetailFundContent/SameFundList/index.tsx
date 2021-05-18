@@ -4,8 +4,10 @@ import { useSelector } from 'react-redux';
 
 import Empty from '@/components/Empty';
 import FundRow from '@/components/Home/FundList/FundRow';
+import DetailFundContent from '@/components/Home/FundList/DetailFundContent';
+import CustomDrawer from '@/components/CustomDrawer';
 import { getFunds, getFixFunds, mergeFixFunds, calcFund } from '@/actions/fund';
-import { useFixTimeToDo } from '@/utils/hooks';
+import { useFixTimeToDo, useDrawer } from '@/utils/hooks';
 import { StoreState } from '@/reducers/types';
 import styles from './index.scss';
 
@@ -19,6 +21,13 @@ const SameFundList: React.FC<SameFundListProps> = ({ swithSameType = [] }) => {
   const [sameFunds, setSameFunds] = useState<
     (Fund.ResponseItem & Fund.ExtraRow)[]
   >([]);
+
+  const {
+    data: detailFundCode,
+    show: showDetailDrawer,
+    set: setDetailDrawer,
+    close: closeDetailDrawer,
+  } = useDrawer('');
 
   const { run: runGetFunds } = useRequest(getFunds, {
     manual: true,
@@ -73,11 +82,23 @@ const SameFundList: React.FC<SameFundListProps> = ({ swithSameType = [] }) => {
     <div className={styles.content}>
       {sameFunds.length ? (
         sameFunds.map((fund) => (
-          <FundRow key={fund.fundcode} fund={fund} readOnly />
+          <FundRow
+            key={fund.fundcode}
+            readOnly
+            fund={fund}
+            onDetail={setDetailDrawer}
+          />
         ))
       ) : (
         <Empty />
       )}
+      <CustomDrawer show={showDetailDrawer}>
+        <DetailFundContent
+          onEnter={closeDetailDrawer}
+          onClose={closeDetailDrawer}
+          code={detailFundCode}
+        />
+      </CustomDrawer>
     </div>
   );
 };

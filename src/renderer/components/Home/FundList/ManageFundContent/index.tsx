@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { useBoolean } from 'ahooks';
 import { ReactSortable } from 'react-sortablejs';
 
 import { ReactComponent as AddIcon } from '@/assets/icons/add.svg';
@@ -10,34 +9,17 @@ import CustomDrawer from '@/components/CustomDrawer';
 import WalletRow from '@/components/Wallet/WalletRow';
 import Empty from '@/components/Empty';
 import AddFundContent from '@/components/Home/FundList/AddFundContent';
-import EditFundContent, {
-  EditFundType,
-} from '@/components/Home/FundList/EditFundContent';
+import EditFundContent from '@/components/Home/FundList/EditFundContent';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
-import {
-  getFundConfig,
-  loadFunds,
-  deleteFund,
-  setFundConfig,
-} from '@/actions/fund';
-import { getCurrentWallet, getWalletConfig } from '@/actions/wallet';
-import {
-  useActions,
-  useScrollToTop,
-  useSyncFixFundSetting,
-} from '@/utils/hooks';
+import { getFundConfig, deleteFund, setFundConfig } from '@/actions/fund';
+import { getCurrentWallet } from '@/actions/wallet';
+import { useSyncFixFundSetting, useDrawer } from '@/utils/hooks';
 import styles from './index.scss';
 
 export interface ManageFundContentProps {
   onEnter: () => void;
   onClose: () => void;
 }
-
-const defaultEdifFund = {
-  name: '',
-  cyfe: 0,
-  code: '',
-};
 
 const { dialog } = window.contextModules.electron;
 
@@ -46,33 +28,27 @@ const ManageFundContent: React.FC<ManageFundContentProps> = (props) => {
   const [sortFundConfig, setSortFundConfig] = useState<
     (Fund.SettingItem & Fund.SortRow)[]
   >([]);
-  const [editFund, setEditFund] = useState<EditFundType>(defaultEdifFund);
+  const {
+    show: showAddDrawer,
+    set: setAddDrawer,
+    close: closeAddDrawer,
+  } = useDrawer(null);
+
+  const {
+    data: editFundData,
+    show: showEditDrawer,
+    set: setEditDrawer,
+    close: closeEditDrawer,
+  } = useDrawer({ cyfe: 0, code: '', name: '' });
+
   const { done: syncFundSettingDone } = useSyncFixFundSetting();
-
-  const [
-    showAddFundDrawer,
-    {
-      setTrue: openAddFundDrawer,
-      setFalse: closeAddFundDrawer,
-      toggle: ToggleAddFundDrawer,
-    },
-  ] = useBoolean(false);
-
-  const [
-    showEditFundDrawer,
-    {
-      setTrue: openEditFundDrawer,
-      setFalse: closeEditFundDrawer,
-      toggle: toggleEditFundDrawer,
-    },
-  ] = useBoolean(false);
 
   const updateSortFundConfig = () => {
     const { fundConfig } = getFundConfig();
     setSortFundConfig(fundConfig.map((_) => ({ ..._, id: _.code })));
   };
 
-  const onSortFundConfig = (sortList: EditFundType[]) => {
+  const onSortFundConfig = (sortList: Fund.SettingItem[]) => {
     const { codeMap } = getFundConfig();
     const fundConfig = sortList.map((item) => {
       const fund = codeMap[item.code];
@@ -143,12 +119,11 @@ const ManageFundContent: React.FC<ManageFundContentProps> = (props) => {
                           <EditIcon
                             className={styles.editor}
                             onClick={() => {
-                              setEditFund({
+                              setEditDrawer({
                                 name: fund.name,
                                 cyfe: fund.cyfe,
                                 code: fund.code,
                               });
-                              openEditFundDrawer();
                             }}
                           />
                         </span>
@@ -169,33 +144,29 @@ const ManageFundContent: React.FC<ManageFundContentProps> = (props) => {
       <div
         className={styles.add}
         onClick={(e) => {
-          openAddFundDrawer();
+          setAddDrawer(null);
           e.stopPropagation();
         }}
       >
         <AddIcon />
       </div>
-      <CustomDrawer show={showAddFundDrawer}>
+      <CustomDrawer show={showAddDrawer}>
         <AddFundContent
-          onClose={closeAddFundDrawer}
+          onClose={closeAddDrawer}
           onEnter={() => {
             updateSortFundConfig();
-            closeAddFundDrawer();
+            closeAddDrawer();
           }}
         />
       </CustomDrawer>
-      <CustomDrawer show={showEditFundDrawer}>
+      <CustomDrawer show={showEditDrawer}>
         <EditFundContent
-          onClose={closeEditFundDrawer}
+          onClose={closeEditDrawer}
           onEnter={() => {
             updateSortFundConfig();
-            closeEditFundDrawer();
+            closeEditDrawer();
           }}
-          fund={{
-            cyfe: editFund.cyfe,
-            code: editFund.code,
-            name: editFund.name,
-          }}
+          fund={editFundData}
         />
       </CustomDrawer>
     </CustomDrawerContent>

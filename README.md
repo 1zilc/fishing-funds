@@ -74,11 +74,11 @@ yarn package-win
 
 #### 支付宝
 
-<img src="https://github.com/1zilc/fishing-funds/blob/master/src/assets/qrcode/alipay.png" width="200px"  height="200px"/>
+<img src="https://github.com/1zilc/fishing-funds/blob/master/src/renderer/assets/qrcode/alipay.png" width="200px"  height="200px"/>
 
 #### 微信
 
-<img src="https://github.com/1zilc/fishing-funds/blob/master/src/assets/qrcode/wechat.png" width="200px"  height="200px"/>
+<img src="https://github.com/1zilc/fishing-funds/blob/master/src/renderer/assets/qrcode/wechat.png" width="200px"  height="200px"/>
 
 ## 感谢
 

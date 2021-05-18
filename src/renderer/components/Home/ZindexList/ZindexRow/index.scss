@@ -7,12 +7,15 @@
   background-color: var(--background-color);
   color: var(--main-text-color);
   z-index: 2;
-  transition: background 0.3s;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  transition: background 0.3s;
 
   &:hover {
-    // background-color: var(--hover-color);
-
+    background-color: var(--hover-color);
     .arrow {
       svg {
         fill: var(--main-text-color);

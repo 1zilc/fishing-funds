@@ -408,4 +408,19 @@ export function useBootStrap() {
   }, []);
 }
 
-export function useSystemSetting() {}
+export function useDrawer<T>(initialData: T) {
+  const [drawer, setDrawer] = useState({
+    data: initialData,
+    show: false,
+  });
+  return {
+    data: drawer.data,
+    show: drawer.show,
+    set: (data: T) => {
+      setDrawer({ show: true, data });
+    },
+    close: () => {
+      setDrawer({ show: false, data: initialData });
+    },
+  };
+}
