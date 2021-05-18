@@ -6,8 +6,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { ReactComponent as RemoveIcon } from '@/assets/icons/remove.svg';
 import { ReactComponent as CheckboxIcon } from '@/assets/icons/checkbox.svg';
 import { ReactComponent as EditIcon } from '@/assets/icons/edit.svg';
-import CustomDrawer from '@/components/CustomDrawer';
-import EditWalletContent from '@/components/Wallet/EditWalletContent';
 import { deleteWallet, getWalletConfig } from '@/actions/wallet';
 import { calcFunds } from '@/actions/fund';
 import { StoreState } from '@/reducers/types';
@@ -39,16 +37,9 @@ const WalletRow: React.FC<WalletRowProps> = (props) => {
   );
   const eyeStatus = useSelector((state: StoreState) => state.wallet.eyeStatus);
 
-  const [
-    showEditWalletDrawer,
-    {
-      setTrue: openEditWalletDrawer,
-      setFalse: closeEditWalletDrawer,
-      toggle: toggleEditWalletDrawer,
-    },
-  ] = useBoolean(false);
 
-  const onRemove = async (wallet: Wallet.SettingItem) => {
+
+  const onRemoveClick = async (wallet: Wallet.SettingItem) => {
     const { walletConfig } = getWalletConfig();
     if (walletConfig.length === 1) {
       dialog.showMessageBox({
@@ -68,6 +59,11 @@ const WalletRow: React.FC<WalletRowProps> = (props) => {
     if (response === 0) {
       dispatch(deleteWallet(wallet.code));
     }
+  };
+
+  const onEditClick = () => {
+    props.onEdit &&
+      props.onEdit(wallet);
   };
 
   const walletState: Wallet.StateItem = walletsMap[wallet.code] || {
@@ -109,7 +105,7 @@ const WalletRow: React.FC<WalletRowProps> = (props) => {
           draggable={false}
           onClick={(e) => {
             if (!readonly) {
-              openEditWalletDrawer();
+              onEditClick();
               e.stopPropagation();
             }
           }}
@@ -122,7 +118,7 @@ const WalletRow: React.FC<WalletRowProps> = (props) => {
               <EditIcon
                 className={styles.editor}
                 onClick={(e) => {
-                  openEditWalletDrawer();
+                  onEditClick();
                   e.stopPropagation();
                 }}
               />
@@ -136,19 +132,13 @@ const WalletRow: React.FC<WalletRowProps> = (props) => {
           <RemoveIcon
             className={styles.remove}
             onClick={(e) => {
-              onRemove(wallet);
+              onRemoveClick(wallet);
               e.stopPropagation();
             }}
           />
         )}
       </div>
-      <CustomDrawer show={showEditWalletDrawer}>
-        <EditWalletContent
-          onClose={closeEditWalletDrawer}
-          onEnter={closeEditWalletDrawer}
-          wallet={wallet}
-        />
-      </CustomDrawer>
+
     </>
   );
 };

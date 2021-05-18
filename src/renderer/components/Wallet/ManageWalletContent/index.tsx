@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { useBoolean } from 'ahooks';
 import { useSelector, useDispatch } from 'react-redux';
 import { ReactSortable } from 'react-sortablejs';
 
@@ -9,13 +8,14 @@ import CustomDrawer from '@/components/CustomDrawer';
 import AddWalletContent from '@/components/Wallet/AddWalletContent';
 import WalletRow from '@/components/Wallet/WalletRow';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
+import EditWalletContent from '@/components/Wallet/EditWalletContent';
 import { StoreState } from '@/reducers/types';
+import { useDrawer } from '@/utils/hooks';
 import {
   getWalletConfig,
   setWalletConfig,
   selectWallet,
 } from '@/actions/wallet';
-
 import styles from './index.scss';
 
 export interface ManageWalletContentProps {
@@ -35,14 +35,23 @@ const ManageWalletContent: React.FC<ManageWalletContentProps> = (props) => {
 
   const [selectedCode, setSelectedCode] = useState(currentWalletCode);
 
-  const [
-    showAddWalletDrawer,
-    {
-      setTrue: openAddWalletDrawer,
-      setFalse: closeAddWalletDrawer,
-      toggle: ToggleAddWalletDrawer,
-    },
-  ] = useBoolean(false);
+  const {
+    show: showAddDrawer,
+    set: setAddDrawer,
+    close: closeAddDrawer,
+  } = useDrawer(null);
+
+  const {
+    data: editWalletData,
+    show: showEditDrawer,
+    set: setEditDrawer,
+    close: closeEditDrawer,
+  } = useDrawer<Wallet.SettingItem>({
+    name: '',
+    iconIndex: 0,
+    code: '',
+    funds: [],
+  });
 
   const onSelectWallet = async (wallet: Wallet.SettingItem) => {
     const { code } = wallet;
@@ -88,6 +97,7 @@ const ManageWalletContent: React.FC<ManageWalletContentProps> = (props) => {
                 onClick={(wallet) => setSelectedCode(wallet.code)}
                 onDoubleClick={onSelectWallet}
                 selected={selectedCode === wallet.code}
+                onEdit={setEditDrawer}
               />
             ))}
           </ReactSortable>
@@ -98,16 +108,20 @@ const ManageWalletContent: React.FC<ManageWalletContentProps> = (props) => {
       <div
         className={styles.add}
         onClick={(e) => {
-          openAddWalletDrawer();
+          setAddDrawer(null);
           e.stopPropagation();
         }}
       >
         <AddIcon />
       </div>
-      <CustomDrawer show={showAddWalletDrawer}>
-        <AddWalletContent
-          onClose={closeAddWalletDrawer}
-          onEnter={closeAddWalletDrawer}
+      <CustomDrawer show={showAddDrawer}>
+        <AddWalletContent onClose={closeAddDrawer} onEnter={closeAddDrawer} />
+      </CustomDrawer>
+      <CustomDrawer show={showEditDrawer}>
+        <EditWalletContent
+          onClose={closeEditDrawer}
+          onEnter={closeEditDrawer}
+          wallet={editWalletData}
         />
       </CustomDrawer>
     </CustomDrawerContent>
