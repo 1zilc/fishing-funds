@@ -41,14 +41,14 @@ export async function FromDayFund(code: string) {
     const [name] = $('meta[name=keywords]').attr('content')?.split(',') || [''];
     const [
       jzrq,
-      zxjz, // 最新净值
+      dwjz, // 单位净值
       ljjz,
       sjbjz,
       sjzzl,
       gsbjl,
       gsbjz,
       gsz,
-      dwjz,
+      xxjz, // 未知净值
       gzrq,
       gztime,
     ] = body.split('|');
