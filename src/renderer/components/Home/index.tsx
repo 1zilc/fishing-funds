@@ -16,7 +16,7 @@ import TabsBar from '@/components/TabsBar';
 import Collect from '@/components/Collect';
 import { SET_REMOTE_FUNDS } from '@/actions/fund';
 import { StoreState } from '@/reducers/types';
-import { useNativeThemeColor, useBootStrap } from '@/utils/hooks';
+import { useNativeThemeColor } from '@/utils/hooks';
 import * as Enums from '@/utils/enums';
 import * as Services from '@/services';
 import * as CONST from '@/constants';
@@ -60,15 +60,8 @@ const Home: React.FC<HomeProps> = () => {
     CONST.VARIBLES
   );
 
-  useBootStrap();
-
   return (
-    <HomeContext.Provider
-      value={{
-        darkMode,
-        varibleColors,
-      }}
-    >
+    <HomeContext.Provider value={{ darkMode, varibleColors }}>
       <div className={classnames(styles.layout)}>
         <Header>
           <Wallet />

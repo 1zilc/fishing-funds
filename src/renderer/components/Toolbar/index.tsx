@@ -91,16 +91,9 @@ const ToolBar: React.FC<ToolBarProps> = () => {
     },
   ] = useBoolean(false);
 
-  // TODO: 低调模式实现方式不太优雅，后期需改进
-  if (lowKeySetting) {
-    document.body.classList.add('lowKey');
-  } else {
-    document.body.classList.remove('lowKey');
-  }
-
   return (
     <>
-      {lowKeySetting && <style>{` html { filter: grayscale(100%); }`}</style>}
+      <style>{` html { filter: ${lowKeySetting && 'grayscale(100%)'} }`}</style>
       <style>{` html { font-size: ${baseFontSizeSetting}px }`}</style>
       <div className={styles.bar}>
         {tabsActiveKey === Enums.TabKeyType.Funds && (

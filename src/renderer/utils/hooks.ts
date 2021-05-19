@@ -201,11 +201,16 @@ export function useNativeTheme() {
 
 export function useNativeThemeColor(varibles: string[]) {
   const { darkMode } = useNativeTheme();
-  const memoColors = useMemo(
-    () => Utils.getVariblesColor(varibles),
-    [darkMode]
+  const lowKeySetting = useSelector(
+    (state: StoreState) => state.setting.systemSetting.lowKeySetting
   );
-  return { darkMode, colors: memoColors };
+  const [colors, setColors] = useState({});
+
+  useEffect(() => {
+    setColors(Utils.getVariblesColor(varibles));
+  }, [darkMode, lowKeySetting]);
+
+  return { darkMode, colors };
 }
 
 export function useResizeEchart(scale: number = 1) {
@@ -423,4 +428,20 @@ export function useDrawer<T>(initialData: T) {
       setDrawer({ show: false, data: initialData });
     },
   };
+}
+
+export function useLowKey() {
+  const lowKeySetting = useSelector(
+    (state: StoreState) => state.setting.systemSetting.lowKeySetting
+  );
+
+  useLayoutEffect(() => {
+    if (lowKeySetting) {
+      document.body.classList.add('lowKey');
+    } else {
+      document.body.classList.remove('lowKey');
+    }
+  }, [lowKeySetting]);
+
+  return lowKeySetting;
 }

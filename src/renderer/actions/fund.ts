@@ -66,10 +66,7 @@ export async function getFunds(config?: Fund.SettingItem[]) {
   const collectors = (config || fundConfig).map(
     ({ code }) =>
       () =>
-        getFund(code).then((res) => {
-          console.log(res);
-          return res;
-        })
+        getFund(code)
   );
   switch (fundApiTypeSetting) {
     case Enums.FundApiType.Dayfund:
