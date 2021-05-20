@@ -23,7 +23,7 @@ const Tooltip: React.FC<TooltipProps> = (props) => {
     <div className={styles.tooltip}>
       <div className={styles.tooltipName}>{props.time}</div>
       <div>净资产规模：{props.value}亿</div>
-      <div>较上期环比：{props.rate}%</div>
+      <div>较上期环比：{props.rate}</div>
     </div>
   );
 };
