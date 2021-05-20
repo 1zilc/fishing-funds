@@ -216,7 +216,7 @@ export function loadFunds() {
           },
         });
       });
-    } finally {
+    } catch {
       dispatch({ type: SET_FUNDS_LOADING, payload: false });
     }
   };

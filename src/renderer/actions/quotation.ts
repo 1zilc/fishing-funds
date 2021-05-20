@@ -28,7 +28,7 @@ export function loadQuotations() {
         });
         dispatch({ type: SET_QUOTATIONS_LOADING, payload: false });
       });
-    } finally {
+    } catch {
       dispatch({ type: SET_QUOTATIONS_LOADING, payload: false });
     }
   };

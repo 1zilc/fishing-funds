@@ -18,5 +18,3 @@ render(
   </Provider>,
   document.getElementById('root')
 );
-
-// render(<div>123123</div>, document.getElementById('root'));
