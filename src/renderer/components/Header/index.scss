@@ -1,16 +1,16 @@
 .layout {
   height: calc(60rem / var(--base-font-size));
   margin-bottom: 32px;
-  z-index: 3;
 }
 
 .content {
   position: fixed;
   width: 100%;
   height: calc(60rem / var(--base-font-size));
+  z-index: 3;
 }
 
 .miniMode {
   height: calc(40rem / var(--base-font-size)) !important;
-  box-shadow: 0 20px 20px rgba(0, 0, 0, .1)
+  box-shadow: 0 20px 20px rgba(0, 0, 0, 0.1);
 }
