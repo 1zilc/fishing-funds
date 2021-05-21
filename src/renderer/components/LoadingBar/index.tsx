@@ -14,7 +14,7 @@ const LoadingBar: React.FC<LoadingBarProps> = ({ show }) => {
         [styles.disable]: !show,
       })}
     >
-      <Spin size="small" />
+      <Spin size="small" spinning={show} />
     </div>
   );
 };
