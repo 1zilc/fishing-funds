@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useRequest } from 'ahooks';
 
 import PictureImage from '@/assets/img/picture.svg';
+import PictureFailedImage from '@/assets/img/picture-failed.svg';
 import * as Services from '@/services';
 import * as CONST from '@/constants';
 import styles from './index.scss';
@@ -18,9 +19,10 @@ const Estimate: React.FC<EstimateProps> = ({ code }) => {
     onSuccess: setEstimate,
     cacheKey: `GetEstimatedFromEastmoney/${code}`,
   });
+
   return (
     <div className={styles.estimate}>
-      <img src={estimate} />
+      <img src={estimate || PictureFailedImage} />
     </div>
   );
 };

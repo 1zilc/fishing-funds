@@ -2,6 +2,8 @@ import * as Utils from '@/utils';
 import * as Enums from '@/utils/enums';
 import * as CONST from '@/constants';
 
+export const SYNC_SETTING = 'SYNC_SETTING';
+
 export const defalutSystemSetting: System.Setting = {
   fundApiTypeSetting: Enums.FundApiType.Eastmoney,
 
@@ -17,6 +19,8 @@ export const defalutSystemSetting: System.Setting = {
   autoCheckUpdateSetting: true,
 };
 
+const { app } = window.contextModules.electron;
+
 export function getSystemSetting() {
   const systemSetting: System.Setting = Utils.GetStorage(
     CONST.STORAGE.SYSTEM_SETTING,
@@ -31,4 +35,17 @@ export function setSystemSetting(setting: System.Setting) {
     ...systemSetting,
     ...setting,
   });
+  app.setLoginItemSettings({
+    openAtLogin: setting.autoStartSetting,
+  });
+  Utils.UpdateSystemTheme(setting.systemThemeSetting);
+  return asyncSetting();
+}
+
+export function asyncSetting() {
+  const systemSetting = getSystemSetting();
+  return {
+    type: SYNC_SETTING,
+    payload: systemSetting,
+  };
 }

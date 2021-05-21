@@ -1,7 +1,7 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { renderToString } from 'react-dom/server';
 
-import { HomeContext } from '@/components/Home';
+import { useHomeContext } from '@/components/Home';
 import { useResizeEchart, useRenderEcharts } from '@/utils/hooks';
 import * as CONST from '@/constants';
 import styles from './index.scss';
@@ -23,7 +23,7 @@ const Tooltip: React.FC<TooltipProps> = (props) => {
     <div className={styles.tooltip}>
       <div className={styles.tooltipName}>{props.time}</div>
       <div>净资产规模：{props.value}亿</div>
-      <div>较上期环比：{props.rate}%</div>
+      <div>较上期环比：{props.rate}</div>
     </div>
   );
 };
@@ -37,7 +37,7 @@ const Scale: React.FC<ScaleProps> = ({
   const { ref: chartRef, chartInstance } = useResizeEchart(
     CONST.DEFAULT.ECHARTS_SCALE
   );
-  const { varibleColors, darkMode } = useContext(HomeContext);
+  const { varibleColors, darkMode } = useHomeContext();
 
   useRenderEcharts(
     () => {

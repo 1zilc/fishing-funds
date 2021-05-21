@@ -1,8 +1,8 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useState } from 'react';
 import classnames from 'classnames';
 import { useRequest } from 'ahooks';
 
-import { HomeContext } from '@/components/Home';
+import { useHomeContext } from '@/components/Home';
 import { useResizeEchart, useRenderEcharts } from '@/utils/hooks';
 import * as CONST from '@/constants';
 import * as Services from '@/services';
@@ -28,7 +28,7 @@ const Performance: React.FC<PerformanceProps> = ({ code }) => {
   const [performanceType, setPerformanceType] = useState(
     performanceTypeList[2]
   );
-  const { varibleColors, darkMode } = useContext(HomeContext);
+  const { varibleColors, darkMode } = useHomeContext();
   const { run: runGetFundPerformanceFromEastmoney } = useRequest(
     Services.Fund.GetFundPerformanceFromEastmoney,
     {

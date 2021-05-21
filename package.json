@@ -113,7 +113,7 @@
       "url": "https://www.1zilc.top"
     }
   ],
-  "license": "(ISC OR GPL-3.0)",
+  "license": " GPL-3.0",
   "bugs": {
     "url": "https://github.com/1zilc/fishing-funds/issues"
   },
@@ -186,6 +186,7 @@
     "@types/jest": "^26.0.23",
     "@types/node": "15.0.2",
     "@types/react": "^17.0.5",
+    "@types/react-collapse": "^5.0.0",
     "@types/react-dom": "^17.0.3",
     "@types/react-router": "^5.1.14",
     "@types/react-router-dom": "^5.1.6",
@@ -272,7 +273,6 @@
     "iconv-lite": "^0.6.2",
     "menubar": "^9.0.2",
     "number-precision": "^1.5.0",
-    "rc-drawer": "^4.2.2",
     "react": "^17.0.2",
     "react-collapse": "^5.1.0",
     "react-dom": "^17.0.2",

@@ -58,7 +58,7 @@
 
 [Github 下载](https://github.com/1zilc/fishing-funds/releases)
 
-> 注意 ⚠️：由于 Catalina 之后不支持 32 位程序，暂无 Windows32 位安装包，可自行下载源码打包
+> 注意 ⚠️：由于 Catalina 之后不支持 32 位程序，暂无 Windows32 位安装包
 
 ```bash
 yarn package-win
@@ -74,19 +74,19 @@ yarn package-win
 
 #### 支付宝
 
-<img src="https://github.com/1zilc/fishing-funds/blob/master/src/assets/qrcode/alipay.png" width="200px"  height="200px"/>
+<img src="https://github.com/1zilc/fishing-funds/blob/master/src/renderer/assets/qrcode/alipay.png" width="200px"  height="200px"/>
 
 #### 微信
 
-<img src="https://github.com/1zilc/fishing-funds/blob/master/src/assets/qrcode/wechat.png" width="200px"  height="200px"/>
+<img src="https://github.com/1zilc/fishing-funds/blob/master/src/renderer/assets/qrcode/wechat.png" width="200px"  height="200px"/>
 
 ## 感谢
 
 [Jr Prévost](https://github.com/3on)  
 [Electron React Boilerplate](https://github.com/electron-react-boilerplate/electron-react-boilerplate)  
 [menubar](https://github.com/maxogden/menubar)  
-[ahooks](https://github.com/alibaba/hooks)
-
+[ahooks](https://github.com/alibaba/hooks)  
+[echarts](https://github.com/apache/echarts)  
 ## 许可证
 
 GPLv3

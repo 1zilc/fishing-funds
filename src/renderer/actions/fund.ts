@@ -189,10 +189,12 @@ export function calcFunds(funds: Fund.ResponseItem[] = [], code?: string) {
     },
     [0, 0, 0]
   );
+  const gssyl = zje ? NP.times(NP.divide(sygz, zje), 100) : 0;
   // zje: number; // 当前总金额
   // gszje: number; // 估算总金额
   // sygz: number; // 估算总收益
-  return { zje, gszje, sygz };
+  // gssyl: number; // 估算总收益率
+  return { zje, gszje, sygz, gssyl };
 }
 
 export function loadFunds() {
@@ -216,7 +218,7 @@ export function loadFunds() {
           },
         });
       });
-    } finally {
+    } catch {
       dispatch({ type: SET_FUNDS_LOADING, payload: false });
     }
   };
@@ -256,7 +258,7 @@ export async function getFixFunds(funds: (Fund.ResponseItem & Fund.FixData)[]) {
         () =>
           Services.Fund.GetFixFromEastMoney(fundcode!)
     );
-  return Adapter.ChokeGroupAdapter<Fund.FixData>(collectors, 5, 500);
+  return Adapter.ChokeGroupAdapter<Fund.FixData>(collectors, 3, 500);
 }
 
 export function loadFixFunds() {

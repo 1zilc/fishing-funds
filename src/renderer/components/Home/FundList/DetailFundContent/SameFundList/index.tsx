@@ -1,21 +1,33 @@
 import React, { useState, useEffect } from 'react';
 import { useRequest } from 'ahooks';
+import { useSelector } from 'react-redux';
 
 import Empty from '@/components/Empty';
 import FundRow from '@/components/Home/FundList/FundRow';
+import DetailFundContent from '@/components/Home/FundList/DetailFundContent';
+import CustomDrawer from '@/components/CustomDrawer';
 import { getFunds, getFixFunds, mergeFixFunds, calcFund } from '@/actions/fund';
-import { getSystemSetting } from '@/actions/setting';
-import { useFixTimeToDo } from '@/utils/hooks';
+import { useFixTimeToDo, useDrawer } from '@/utils/hooks';
+import { StoreState } from '@/reducers/types';
 import styles from './index.scss';
 
 export interface SameFundListProps {
   swithSameType: string[][];
 }
 const SameFundList: React.FC<SameFundListProps> = ({ swithSameType = [] }) => {
-  const { freshDelaySetting, autoFreshSetting } = getSystemSetting();
+  const { autoFreshSetting, freshDelaySetting } = useSelector(
+    (state: StoreState) => state.setting.systemSetting
+  );
   const [sameFunds, setSameFunds] = useState<
     (Fund.ResponseItem & Fund.ExtraRow)[]
   >([]);
+
+  const {
+    data: detailFundCode,
+    show: showDetailDrawer,
+    set: setDetailDrawer,
+    close: closeDetailDrawer,
+  } = useDrawer('');
 
   const { run: runGetFunds } = useRequest(getFunds, {
     manual: true,
@@ -70,11 +82,23 @@ const SameFundList: React.FC<SameFundListProps> = ({ swithSameType = [] }) => {
     <div className={styles.content}>
       {sameFunds.length ? (
         sameFunds.map((fund) => (
-          <FundRow key={fund.fundcode} fund={fund} readOnly />
+          <FundRow
+            key={fund.fundcode}
+            readOnly
+            fund={fund}
+            onDetail={setDetailDrawer}
+          />
         ))
       ) : (
-        <Empty />
+        <Empty text="暂无同类型基金数据~" />
       )}
+      <CustomDrawer show={showDetailDrawer}>
+        <DetailFundContent
+          onEnter={closeDetailDrawer}
+          onClose={closeDetailDrawer}
+          code={detailFundCode}
+        />
+      </CustomDrawer>
     </div>
   );
 };

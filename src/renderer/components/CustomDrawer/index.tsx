@@ -1,8 +1,7 @@
 import React, { PropsWithChildren, useState } from 'react';
-import Drawer from 'rc-drawer';
-import { IDrawerProps } from 'rc-drawer/lib/IDrawerPropTypes.d';
+import { Drawer } from 'antd';
 
-export interface CustomDrawerProps extends IDrawerProps {
+export interface CustomDrawerProps {
   show: boolean;
 }
 const CustomDrawer: React.FC<PropsWithChildren<CustomDrawerProps>> = ({
@@ -11,18 +10,18 @@ const CustomDrawer: React.FC<PropsWithChildren<CustomDrawerProps>> = ({
   ...config
 }) => {
   const [drawerOpened, setDrawerOpened] = useState(show);
-
   return (
     <Drawer
-      open={show}
-      showMask
+      visible={show}
       maskClosable
-      level={null}
+      closable={false}
       handler={false}
       placement="bottom"
       height="100vh"
-      {...config}
       afterVisibleChange={setDrawerOpened}
+      bodyStyle={{ padding: 0 }}
+      push={false}
+      {...config}
     >
       {(show || drawerOpened) && children}
     </Drawer>

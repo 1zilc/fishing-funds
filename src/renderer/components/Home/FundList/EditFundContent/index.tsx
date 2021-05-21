@@ -5,15 +5,10 @@ import CustomDrawerContent from '@/components/CustomDrawer/Content';
 import { updateFund } from '@/actions/fund';
 import styles from './index.scss';
 
-export interface EditFundType {
-  name: string;
-  code: string;
-  cyfe: number;
-}
 export interface EditFundContentProps {
   onEnter: () => void;
   onClose: () => void;
-  fund: EditFundType;
+  fund: Fund.SettingItem;
 }
 
 const EditFundContent: React.FC<EditFundContentProps> = (props) => {

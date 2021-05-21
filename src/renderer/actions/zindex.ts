@@ -177,7 +177,7 @@ export function loadZindexs() {
         });
         dispatch({ type: SET_ZINDEXS_LOADING, payload: false });
       });
-    } finally {
+    } catch {
       dispatch({ type: SET_ZINDEXS_LOADING, payload: false });
     }
   };

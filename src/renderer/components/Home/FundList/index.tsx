@@ -1,50 +1,71 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useSelector } from 'react-redux';
 
 import FundRow from '@/components/Home/FundList/FundRow';
 import Empty from '@/components/Empty';
 import LoadingBar from '@/components/LoadingBar';
-import { loadFundsWithoutLoading, loadFixFunds } from '@/actions/fund';
-import { getSystemSetting } from '@/actions/setting';
+import EditFundContent from '@/components/Home/FundList/EditFundContent';
+import DetailFundContent from '@/components/Home/FundList/DetailFundContent';
+import CustomDrawer from '@/components/CustomDrawer';
 import { StoreState } from '@/reducers/types';
-import { useWorkDayTimeToDo, useFixTimeToDo } from '@/utils/hooks';
-import { useActions } from '@/utils/hooks';
-import * as Adapter from '@/utils/adpters';
+import { useDrawer, useFreshFunds } from '@/utils/hooks';
 import styles from './index.scss';
 
 const FundList: React.FC<{}> = () => {
-  const { freshDelaySetting, autoFreshSetting } = getSystemSetting();
   const funds = useSelector((state: StoreState) => state.fund.funds);
   const fundsLoading = useSelector(
     (state: StoreState) => state.fund.fundsLoading
   );
-  const runLoadFunds = useActions(loadFundsWithoutLoading);
-  const runLoadFixFunds = useActions(loadFixFunds);
+  const {
+    data: editFundData,
+    show: showEditDrawer,
+    set: setEditDrawer,
+    close: closeEditDrawer,
+  } = useDrawer({ cyfe: 0, code: '', name: '' });
 
-  // 间隔时间刷新基金
-  useWorkDayTimeToDo(
-    () => autoFreshSetting && runLoadFunds(),
-    freshDelaySetting * 1000 * 60
-  );
+  const {
+    data: detailFundCode,
+    show: showDetailDrawer,
+    set: setDetailDrawer,
+    close: closeDetailDrawer,
+  } = useDrawer('');
 
-  // 间隔时间检查最新净值
-  useFixTimeToDo(
-    () => autoFreshSetting && runLoadFixFunds(),
-    freshDelaySetting * 1000 * 60
-  );
+  const freshFunds = useFreshFunds(0);
 
-  useEffect(() => {
-    Adapter.ChokeAllAdapter([runLoadFunds, runLoadFixFunds]);
-  }, []);
+  const enterEditDrawer = () => {
+    freshFunds();
+    closeEditDrawer();
+  };
 
   return (
     <div className={styles.container}>
       <LoadingBar show={fundsLoading} />
       {funds.length ? (
-        funds.map((fund) => <FundRow key={fund.fundcode} fund={fund} />)
+        funds.map((fund) => (
+          <FundRow
+            key={fund.fundcode}
+            fund={fund}
+            onEdit={setEditDrawer}
+            onDetail={setDetailDrawer}
+          />
+        ))
       ) : (
         <Empty text="暂无基金数据~" />
       )}
+      <CustomDrawer show={showEditDrawer}>
+        <EditFundContent
+          onClose={closeEditDrawer}
+          onEnter={enterEditDrawer}
+          fund={editFundData}
+        />
+      </CustomDrawer>
+      <CustomDrawer show={showDetailDrawer}>
+        <DetailFundContent
+          onEnter={closeDetailDrawer}
+          onClose={closeDetailDrawer}
+          code={detailFundCode}
+        />
+      </CustomDrawer>
     </div>
   );
 };

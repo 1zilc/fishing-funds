@@ -1,8 +1,8 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { renderToString } from 'react-dom/server';
 import { useRequest } from 'ahooks';
 
-import { HomeContext } from '@/components/Home';
+import { useHomeContext } from '@/components/Home';
 import { useResizeEchart, useRenderEcharts } from '@/utils/hooks';
 import * as CONST from '@/constants';
 import * as Services from '@/services';
@@ -38,7 +38,7 @@ const SecuritiesWareHouse: React.FC<SecuritiesWareHouseProps> = ({
     CONST.DEFAULT.ECHARTS_SCALE
   );
 
-  const { varibleColors, darkMode } = useContext(HomeContext);
+  const { varibleColors, darkMode } = useHomeContext();
 
   const { run: runGetSecuritiesWareHouseFromEastmoney } = useRequest(
     Services.Fund.GetSecuritiesWareHouseFromEastmoney,

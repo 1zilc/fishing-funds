@@ -1,13 +1,13 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useSelector } from 'react-redux';
 
 import ZindexRow from '@/components/Home/ZindexList/ZindexRow';
 import Empty from '@/components/Empty';
 import LoadingBar from '@/components/LoadingBar';
-import { loadZindexsWithoutLoading } from '@/actions/zindex';
+import DetailZindexContent from '@/components/Home/ZindexList/DetailZindexContent';
+import CustomDrawer from '@/components/CustomDrawer';
 import { StoreState } from '@/reducers/types';
-import { useWorkDayTimeToDo } from '@/utils/hooks';
-import { useActions } from '@/utils/hooks';
+import { useDrawer } from '@/utils/hooks';
 import styles from './index.scss';
 
 const ZindexList = () => {
@@ -15,25 +15,35 @@ const ZindexList = () => {
   const zindexsLoading = useSelector(
     (state: StoreState) => state.zindex.zindexsLoading
   );
-  const runLoadZindexs = useActions(loadZindexsWithoutLoading);
 
-  // 间隔时间刷新指数
-  useWorkDayTimeToDo(runLoadZindexs, 1000 * 20);
-
-  useEffect(() => {
-    runLoadZindexs();
-  }, []);
+  const {
+    data: detailZindexCode,
+    show: showDetailDrawer,
+    set: setDetailDrawer,
+    close: closeDetailDrawer,
+  } = useDrawer('');
 
   return (
     <div className={styles.container}>
       <LoadingBar show={zindexsLoading} />
       {zindexs.length ? (
         zindexs.map((zindex) => (
-          <ZindexRow key={zindex.zindexCode} zindex={zindex} />
+          <ZindexRow
+            key={zindex.zindexCode}
+            zindex={zindex}
+            onDetail={setDetailDrawer}
+          />
         ))
       ) : (
         <Empty text="暂无指数数据~" />
       )}
+      <CustomDrawer show={showDetailDrawer}>
+        <DetailZindexContent
+          onEnter={closeDetailDrawer}
+          onClose={closeDetailDrawer}
+          code={detailZindexCode}
+        />
+      </CustomDrawer>
     </div>
   );
 };

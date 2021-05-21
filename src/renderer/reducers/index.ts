@@ -8,6 +8,7 @@ import updater from './updater';
 import fund from './fund';
 import zindex from './zindex';
 import quotation from './quotation';
+import setting from './setting';
 
 export default function createRootReducer(history: History) {
   return combineReducers({
@@ -19,5 +20,6 @@ export default function createRootReducer(history: History) {
     fund,
     zindex,
     quotation,
+    setting,
   });
 }

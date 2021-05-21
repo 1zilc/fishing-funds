@@ -1,8 +1,8 @@
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import classnames from 'classnames';
 import { useRequest } from 'ahooks';
 
-import { HomeContext } from '@/components/Home';
+import { useHomeContext } from '@/components/Home';
 import { useResizeEchart, useRenderEcharts } from '@/utils/hooks';
 import * as CONST from '@/constants';
 import * as Services from '@/services';
@@ -23,7 +23,7 @@ const Trend: React.FC<PerformanceProps> = ({ code }) => {
     CONST.DEFAULT.ECHARTS_SCALE
   );
   const [trend, setTrendType] = useState(trendTypeList[0]);
-  const { darkMode, varibleColors } = useContext(HomeContext);
+  const { darkMode, varibleColors } = useHomeContext();
   const { run: runGetTrendFromEastmoney } = useRequest(
     Services.Zindex.GetTrendFromEastmoney,
     {

@@ -1,4 +1,4 @@
-import React, { createContext, useEffect } from 'react';
+import React, { createContext, useContext } from 'react';
 import classnames from 'classnames';
 import { Tabs } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
@@ -14,7 +14,7 @@ import Footer from '@/components/Footer';
 import SortBar from '@/components/SortBar';
 import TabsBar from '@/components/TabsBar';
 import Collect from '@/components/Collect';
-import { SET_REMOTE_FUNDS, getFunds } from '@/actions/fund';
+import { SET_REMOTE_FUNDS } from '@/actions/fund';
 import { StoreState } from '@/reducers/types';
 import { useNativeThemeColor } from '@/utils/hooks';
 import * as Enums from '@/utils/enums';
@@ -33,6 +33,11 @@ export const HomeContext = createContext<{
   varibleColors: {},
   darkMode: false,
 });
+
+export function useHomeContext() {
+  const context = useContext(HomeContext);
+  return context;
+}
 
 const Home: React.FC<HomeProps> = () => {
   const dispatch = useDispatch();
@@ -56,12 +61,7 @@ const Home: React.FC<HomeProps> = () => {
   );
 
   return (
-    <HomeContext.Provider
-      value={{
-        darkMode,
-        varibleColors,
-      }}
-    >
+    <HomeContext.Provider value={{ darkMode, varibleColors }}>
       <div className={classnames(styles.layout)}>
         <Header>
           <Wallet />

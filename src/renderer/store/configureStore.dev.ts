@@ -1,6 +1,6 @@
 import { createStore, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
-import { createHashHistory } from 'history';
+import { createMemoryHistory } from 'history';
 import { routerMiddleware, routerActions } from 'connected-react-router';
 import { createLogger } from 'redux-logger';
 import createRootReducer from '../reducers';
@@ -19,7 +19,7 @@ declare global {
   }
 }
 
-const history = createHashHistory();
+const history = createMemoryHistory();
 
 const rootReducer = createRootReducer(history);
 
@@ -37,10 +37,10 @@ const configureStore = (initialState?: StoreState) => {
     collapsed: true,
   });
 
-  // // Skip redux logs in console during the tests
-  // if (process.env.NODE_ENV !== 'test') {
-  //   middleware.push(logger);
-  // }
+  // Skip redux logs in console during the tests
+  if (process.env.NODE_ENV !== 'test') {
+    middleware.push(logger);
+  }
 
   // Router Middleware
   const router = routerMiddleware(history);
@@ -65,7 +65,7 @@ const configureStore = (initialState?: StoreState) => {
   const enhancer = composeEnhancers(...enhancers);
 
   // Create Store
-  const store = createStore(rootReducer, applyMiddleware(thunk));
+  const store = createStore(rootReducer, enhancer);
 
   if (module.hot) {
     module.hot.accept(

@@ -1,25 +1,20 @@
 import React from 'react';
-import { useBoolean } from 'ahooks';
 import { Collapse } from 'react-collapse';
 import classnames from 'classnames';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { ReactComponent as ArrowDownLineIcon } from '@/assets/icons/arrow-down-line.svg';
 import { ReactComponent as ArrowUpLineIcon } from '@/assets/icons/arrow-up-line.svg';
 import { ReactComponent as ArrowDownIcon } from '@/assets/icons/arrow-down.svg';
 import { ReactComponent as ArrowUpIcon } from '@/assets/icons/arrow-up.svg';
-
-import DetailZindexContent from '@/components/Home/ZindexList/DetailZindexContent';
-import CustomDrawer from '@/components/CustomDrawer';
-import { getSystemSetting } from '@/actions/setting';
+import { StoreState } from '@/reducers/types';
 import { TOGGLE_ZINDEX_COLLAPSE } from '@/actions/zindex';
-
 import * as Utils from '@/utils';
-
 import styles from './index.scss';
 
 export interface RowProps {
   zindex: Zindex.ResponseItem & Zindex.ExtraRow;
+  onDetail?: (code: string) => void;
 }
 
 const arrowSize = {
@@ -30,99 +25,88 @@ const arrowSize = {
 const ZindexRow: React.FC<RowProps> = (props) => {
   const { zindex } = props;
   const dispatch = useDispatch();
-  const { conciseSetting } = getSystemSetting();
+  const { conciseSetting } = useSelector(
+    (state: StoreState) => state.setting.systemSetting
+  );
 
-  const [
-    showDetailDrawer,
-    {
-      setTrue: openDetailDrawer,
-      setFalse: closeDetailDrawer,
-      toggle: ToggleDetailDrawer,
-    },
-  ] = useBoolean(false);
+  const onDetailClick = () => {
+    props.onDetail && props.onDetail(`${zindex.type}.${zindex.zindexCode}`);
+  };
 
   return (
     <div>
       <div
-        className={classnames(styles.row, zindex.zdf < 0 ? 'bg-down' : 'bg-up')}
+        className={styles.row}
+        onClick={() => {
+          dispatch({
+            type: TOGGLE_ZINDEX_COLLAPSE,
+            payload: zindex,
+          });
+        }}
       >
-        <div
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-          }}
-          onClick={() => {
-            dispatch({
-              type: TOGGLE_ZINDEX_COLLAPSE,
-              payload: zindex,
-            });
-          }}
-        >
-          <div className={styles.arrow}>
-            {zindex.collapse ? (
-              <ArrowUpIcon style={{ ...arrowSize }} />
+        <div className={styles.arrow}>
+          {zindex.collapse ? (
+            <ArrowUpIcon style={{ ...arrowSize }} />
+          ) : (
+            <ArrowDownIcon style={{ ...arrowSize }} />
+          )}
+        </div>
+        <div style={{ flex: 1 }}>
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+            }}
+          >
+            <span className={styles.zindexName}>{zindex.name}</span>
+          </div>
+          {!conciseSetting && (
+            <div className={styles.rowBar}>
+              <div>
+                <span className={styles.code}>{zindex.zindexCode}</span>
+                {/* <span>{zindex.gztime.slice(5)}</span> */}
+              </div>
+            </div>
+          )}
+        </div>
+        <div className={classnames(styles.value)}>
+          <div
+            className={classnames(
+              styles.zsz,
+              zindex.zdf < 0 ? 'text-down' : 'text-up'
+            )}
+          >
+            {zindex.zsz}
+            {zindex.zdf < 0 ? (
+              <ArrowDownLineIcon
+                className={zindex.zdf < 0 ? 'svg-down' : 'svg-up'}
+              />
             ) : (
-              <ArrowDownIcon style={{ ...arrowSize }} />
+              <ArrowUpLineIcon
+                className={zindex.zdf < 0 ? 'svg-down' : 'svg-up'}
+              />
             )}
           </div>
-          <div style={{ flex: 1 }}>
-            <div
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-              }}
-            >
-              <span className={styles.zindexName}>{zindex.name}</span>
-            </div>
-            {!conciseSetting && (
-              <div className={styles.rowBar}>
-                <div>
-                  <span className={styles.code}>{zindex.zindexCode}</span>
-                  {/* <span>{zindex.gztime.slice(5)}</span> */}
-                </div>
+          {!conciseSetting && (
+            <div className={styles.zd}>
+              <div
+                className={classnames(
+                  styles.zdd,
+                  zindex.zdd < 0 ? 'text-down' : 'text-up'
+                )}
+              >
+                {Utils.Yang(zindex.zdd)}
               </div>
-            )}
-          </div>
-          <div className={classnames(styles.value)}>
-            <div
-              className={classnames(
-                styles.zsz,
-                zindex.zdf < 0 ? 'text-down' : 'text-up'
-              )}
-            >
-              {zindex.zsz}
-              {zindex.zdf < 0 ? (
-                <ArrowDownLineIcon
-                  className={zindex.zdf < 0 ? 'svg-down' : 'svg-up'}
-                />
-              ) : (
-                <ArrowUpLineIcon
-                  className={zindex.zdf < 0 ? 'svg-down' : 'svg-up'}
-                />
-              )}
-            </div>
-            {!conciseSetting && (
-              <div className={styles.zd}>
-                <div
-                  className={classnames(
-                    styles.zdd,
-                    zindex.zdd < 0 ? 'text-down' : 'text-up'
-                  )}
-                >
-                  {Utils.Yang(zindex.zdd)}
-                </div>
-                <div
-                  className={classnames(
-                    styles.zdf,
-                    zindex.zdf < 0 ? 'text-down' : 'text-up'
-                  )}
-                >
-                  {Utils.Yang(zindex.zdf)} %
-                </div>
+              <div
+                className={classnames(
+                  styles.zdf,
+                  zindex.zdf < 0 ? 'text-down' : 'text-up'
+                )}
+              >
+                {Utils.Yang(zindex.zdf)} %
               </div>
-            )}
-          </div>
+            </div>
+          )}
         </div>
       </div>
       <Collapse isOpened={!!zindex.collapse}>
@@ -196,17 +180,10 @@ const ZindexRow: React.FC<RowProps> = (props) => {
             </section>
           )}
           <div className={styles.view}>
-            <a onClick={openDetailDrawer}>{'查看详情 >'}</a>
+            <a onClick={onDetailClick}>{'查看详情 >'}</a>
           </div>
         </div>
       </Collapse>
-      <CustomDrawer show={showDetailDrawer}>
-        <DetailZindexContent
-          onEnter={closeDetailDrawer}
-          onClose={closeDetailDrawer}
-          code={`${zindex.type}.${zindex.zindexCode}`}
-        />
-      </CustomDrawer>
     </div>
   );
 };

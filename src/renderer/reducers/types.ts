@@ -11,6 +11,8 @@ import { UpdaderState } from './updater';
 import { FundState } from './fund';
 import { ZindexState } from './zindex';
 import { QuotationState } from './quotation';
+import { SettingState } from './setting';
+
 export interface StoreState {
   toolbar: ToolbarState;
   wallet: WalletState;
@@ -19,6 +21,7 @@ export interface StoreState {
   fund: FundState;
   zindex: ZindexState;
   quotation: QuotationState;
+  setting: SettingState;
 }
 
 export type GetState = () => StoreState;

@@ -73,8 +73,8 @@ function sortQuotationsWithCollapseChached(
   const quotationsWithCollapseChached = responseQuotations
     .filter((_) => !!_)
     .map((_) => ({
+      ...(quotationsCodeToMap[_.name] || {}),
       ..._,
-      collapse: quotationsCodeToMap[_!.name!]?.collapse,
     }));
 
   return sortQuotations(state, quotationsWithCollapseChached);
@@ -85,8 +85,8 @@ function toggleQuotationCollapse(
   quotation: Quotation.ResponseItem & Quotation.ExtraRow
 ): QuotationState {
   const { quotations } = state;
-  const cloneQuotations: (Quotation.ResponseItem &
-    Quotation.ExtraRow)[] = Utils.DeepCopy(quotations);
+  const cloneQuotations: (Quotation.ResponseItem & Quotation.ExtraRow)[] =
+    Utils.DeepCopy(quotations);
   cloneQuotations.forEach((_) => {
     if (_.name === quotation.name) {
       _.collapse = !quotation.collapse;
@@ -100,8 +100,8 @@ function toggleQuotationCollapse(
 
 function toggleQuotationsCollapse(state: QuotationState): QuotationState {
   const { quotations } = state;
-  const cloneQuotations: (Quotation.ResponseItem &
-    Quotation.ExtraRow)[] = Utils.DeepCopy(quotations);
+  const cloneQuotations: (Quotation.ResponseItem & Quotation.ExtraRow)[] =
+    Utils.DeepCopy(quotations);
   const expandAllQuotations = quotations.every((_) => _.collapse);
   cloneQuotations.forEach((_) => {
     _.collapse = !expandAllQuotations;

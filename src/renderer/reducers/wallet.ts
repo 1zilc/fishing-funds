@@ -7,6 +7,7 @@ import {
   SYNC_WALLETS_MAP,
   SYNC_FIX_WALLETS_MAP,
   defaultWallet,
+  getWalletConfig,
 } from '@/actions/wallet';
 
 import * as Enums from '@/utils/enums';
@@ -26,6 +27,8 @@ function syncWalletsMap(
   const { code, item } = payload;
   const { walletsMap } = state;
   const cloneWalletsMap = Utils.DeepCopy(walletsMap);
+  const { codeMap } = getWalletConfig();
+  const walletConfig = codeMap[code];
   const fundsCodeToMap = (cloneWalletsMap[code]?.funds || []).reduce(
     (map, fund) => {
       map[fund.fundcode!] = fund;
@@ -41,7 +44,21 @@ function syncWalletsMap(
       ..._,
     }));
 
+  const itemFundsCodeToMap = item.funds.reduce((map, fund) => {
+    map[fund.fundcode!] = fund;
+    return map;
+  }, {} as any);
+
+  walletConfig.funds.forEach((fund) => {
+    const responseFund = itemFundsCodeToMap[fund.code];
+    const stateFund = fundsCodeToMap[fund.code];
+    if (!responseFund && stateFund) {
+      item.funds.push(stateFund);
+    }
+  });
+
   cloneWalletsMap[code] = item;
+
   return {
     ...state,
     walletsMap: cloneWalletsMap,

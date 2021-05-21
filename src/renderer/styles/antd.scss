@@ -20,3 +20,7 @@
 .ant-tabs-tab + .ant-tabs-tab {
   margin: 0;
 }
+
+.ant-drawer-body::-webkit-scrollbar {
+  width: 0;
+}

@@ -1,8 +1,8 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import {} from 'react-dom/server';
 import { useRequest } from 'ahooks';
 
-import { HomeContext } from '@/components/Home';
+import { useHomeContext } from '@/components/Home';
 import { useResizeEchart, useRenderEcharts } from '@/utils/hooks';
 import * as CONST from '@/constants';
 import * as Services from '@/services';
@@ -18,7 +18,7 @@ const RealTimeTransaction: React.FC<RealTimeTransactionProps> = ({
   const { ref: chartRef, chartInstance } = useResizeEchart(
     CONST.DEFAULT.ECHARTS_SCALE
   );
-  const { varibleColors, darkMode } = useContext(HomeContext);
+  const { varibleColors, darkMode } = useHomeContext();
 
   const { run: runGetTransactionFromEasymoney } = useRequest(
     Services.Quotation.GetTransactionFromEasymoney,
