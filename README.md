@@ -58,7 +58,7 @@
 
 [Github 下载](https://github.com/1zilc/fishing-funds/releases)
 
-> 注意 ⚠️：由于 Catalina 之后不支持 32 位程序，暂无 Windows32 位安装包
+> 注意 ⚠️：由于 Catalina 之后不支持 32 位程序，暂无 Windows32 位安装包，可自行下载源码打包
 
 ```bash
 yarn package-win
