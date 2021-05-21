@@ -85,8 +85,8 @@ yarn package-win
 [Jr Prévost](https://github.com/3on)  
 [Electron React Boilerplate](https://github.com/electron-react-boilerplate/electron-react-boilerplate)  
 [menubar](https://github.com/maxogden/menubar)  
-[ahooks](https://github.com/alibaba/hooks)
-[echarts](https://github.com/apache/echarts)
+[ahooks](https://github.com/alibaba/hooks)  
+[echarts](https://github.com/apache/echarts)  
 ## 许可证
 
 GPLv3
