@@ -85,7 +85,7 @@ const ManageHistoryFundList: React.FC<ManageHistoryFundListProps> = ({
           />
         ))
       ) : (
-        <Empty />
+        <Empty text="暂无历史基金数据~" />
       )}
       <CustomDrawer show={showDetailDrawer}>
         <DetailFundContent

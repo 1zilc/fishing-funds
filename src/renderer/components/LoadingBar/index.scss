@@ -1,6 +1,6 @@
 .content {
   height: 30px;
-  transition: height .2s;
+  transition: height 0.2s;
   font-size: calc(10rem / var(--base-font-size));
   line-height: 30px;
   text-align: center;
@@ -12,26 +12,4 @@
 
 .disable {
   height: 0;
-}
-
-.jump {
-  animation: jump .5s infinite;
-  display: inline-block;
-}
-
-@keyframes jump {
-  0% {
-    color: var(--main-text-color);
-    // opacity: 1;
-  }
-
-  50% {
-    color: var(--background-color);
-    // opacity: .3;
-  }
-
-  100% {
-    color: var(--main-text-color);
-    // opacity: 1;
-  }
 }

@@ -90,7 +90,7 @@ const SameFundList: React.FC<SameFundListProps> = ({ swithSameType = [] }) => {
           />
         ))
       ) : (
-        <Empty />
+        <Empty text="暂无同类型基金数据~" />
       )}
       <CustomDrawer show={showDetailDrawer}>
         <DetailFundContent
