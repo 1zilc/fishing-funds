@@ -1,5 +1,5 @@
+def yarn_home = "/var/jenkins_home/tools/jenkins.plugins.nodejs.tools.NodeJSInstallation/nodejs/lib/node_modules/yarn";
 pipeline {
-    def yarn_home = "/var/jenkins_home/tools/jenkins.plugins.nodejs.tools.NodeJSInstallation/nodejs/lib/node_modules/yarn";
     stages {
         stage('pull code') {
             steps {
