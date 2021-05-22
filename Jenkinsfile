@@ -18,7 +18,7 @@ pipeline {
         stage('package and publish') {
             agent {
                 docker {
-                    image 'electronuserland/builder:lastest'
+                    image ' electronuserland/builder:wine-chrome-05.21'
                 }
             }
             steps {
