@@ -1,5 +1,4 @@
 pipeline {
-    agent any
     stages {
         stage('pull code') {
             steps {
@@ -14,12 +13,10 @@ pipeline {
         }
         stage('package and publish') {
             agent {
-                    docker {
-                        label "ffelectronuserland/builder"
-                        image 'electronuserland/builder:lastest'
-                        args ''
-                    }
-                   }
+                docker {
+                    image 'electronuserland/builder:lastest'
+                }
+            }
             steps {
                 sh 'export GH_TOKEN="8afc0563941b2480f54227a4c0cbbab93f16e122"'
                 sh 'electron-builder build -mwl -p always'
