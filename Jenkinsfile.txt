@@ -1,0 +1,68 @@
+def project = 'wisdom'
+def  appName = 'wisdom-djy-open'
+
+pipeline {
+  agent {
+    kubernetes {
+      label 'sample-upstream-app'
+      defaultContainer 'jnlp'
+      yaml """
+apiVersion: v1
+kind: Pod
+metadata:
+labels:
+  component: ci
+spec:
+  # Use service account that can deploy to all namespaces
+  securityContext:
+    fsGroup: 1000
+  serviceAccountName: jenkins2
+  nodeSelector:
+    ops: jenkins-slave
+  containers:
+  - name: java
+    image: docker.boostor.slimhand.com/boostor/jenkins-slave-maven:main
+    volumeMounts:
+    - mountPath: "/home/jenkins/.m2"
+      name: m2
+    - name: dockersock
+      mountPath: /var/run/docker.sock
+    command:
+    - cat
+    tty: true
+  - name: kubectl
+    image: lwolf/helm-kubectl-docker
+    command:
+    - cat
+    tty: true
+  volumes:
+    - name: m2
+      persistentVolumeClaim:
+        claimName: jenkins-m2
+    - name: dockersock
+      hostPath:
+        path: /var/run/docker.sock
+"""
+}
+  }
+  stages {
+     stage('Build') {
+        steps {
+             container('java') {
+                  sh """
+                    cat Jenkinsfile-prod && mvn package docker:build docker:push -Ddocker.tags=wisdom-test-${env.BUILD_NUMBER}
+                  """
+              }
+        }
+     }
+      stage('Deploy Production') {
+        steps{
+           container('kubectl') {
+            sh("sed -i.bak 's#imageTag#wisdom-test-${env.BUILD_NUMBER}#' ./k8s/test/*.yaml")
+            sh("sed -i.bak 's#AppName#${appName}#' ./k8s/test/*.yaml")
+            sh("kubectl --namespace=wisdom apply -f k8s/test/")
+           }
+        }
+      }
+  }
+}
