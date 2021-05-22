@@ -6,10 +6,10 @@ pipeline {
             }
         }
         stage('build project') {
+            agent {
+                docker { image 'node:latest' }
+            }
             steps {
-                nodejs('nodejs') {
-                    npm install yarn
-                }
                 yarn 'yarn install'
                 yarn 'yarn build'
             }
