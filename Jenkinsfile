@@ -14,16 +14,9 @@ pipeline {
                 sh 'yarn install'
                 sh 'yarn build'
             }
-        }
-        stage('package and publish') {
-            agent {
-                docker {
-                    image 'electronuserland/builder:wine'
-                }
-            }
             steps {
                 sh 'export GH_TOKEN="8afc0563941b2480f54227a4c0cbbab93f16e122"'
-                sh '/project/.cache/electron-builder build -mwl -p always'
+                sh 'electron-builder build -mwl -p always'
             }
         }
     }
