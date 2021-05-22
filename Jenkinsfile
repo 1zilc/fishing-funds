@@ -11,8 +11,8 @@ pipeline {
                 docker { image 'node:latest' }
             }
             steps {
-                yarn 'yarn install'
-                yarn 'yarn build'
+                sh 'yarn install'
+                sh 'yarn build'
             }
         }
         stage('package and publish') {
