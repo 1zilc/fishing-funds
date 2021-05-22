@@ -1,4 +1,3 @@
-def yarn_home
 pipeline {
     stages {
         stage('pull code') {
@@ -8,11 +7,11 @@ pipeline {
         }
         stage('build project') {
             steps {
-                script{
-                    yarn_home= "/var/jenkins_home/tools/jenkins.plugins.nodejs.tools.NodeJSInstallation/nodejs/lib/node_modules/yarn";
-                    yarn 'yarn install'
-                    yarn 'yarn build'
+                nodejs('nodejs') {
+                    npm install yarn
                 }
+                yarn 'yarn install'
+                yarn 'yarn build'
             }
         }
         stage('package and publish') {
