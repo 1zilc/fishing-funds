@@ -33,7 +33,7 @@ import * as Utils from '@/utils';
 import * as CONST from '@/constants';
 import * as Adapter from '@/utils/adpters';
 
-const { invoke, dialog, ipcRenderer, clipboard } =
+const { invoke, dialog, ipcRenderer, clipboard, app } =
   window.contextModules.electron;
 
 export function useWorkDayTimeToDo(
@@ -430,11 +430,24 @@ export function useDrawer<T>(initialData: T) {
   };
 }
 
-export function useLowKey() {
+export function useMappingLocalToSystemSetting() {
+  const systemThemeSetting = useSelector(
+    (state: StoreState) => state.setting.systemSetting.systemThemeSetting
+  );
+  const autoStartSetting = useSelector(
+    (state: StoreState) => state.setting.systemSetting.autoStartSetting
+  );
   const lowKeySetting = useSelector(
     (state: StoreState) => state.setting.systemSetting.lowKeySetting
   );
-
+  useLayoutEffect(() => {
+    Utils.UpdateSystemTheme(systemThemeSetting);
+  }, [systemThemeSetting]);
+  useLayoutEffect(() => {
+    app.setLoginItemSettings({
+      openAtLogin: autoStartSetting,
+    });
+  }, [autoStartSetting]);
   useLayoutEffect(() => {
     if (lowKeySetting) {
       document.body.classList.add('lowKey');
@@ -442,6 +455,4 @@ export function useLowKey() {
       document.body.classList.remove('lowKey');
     }
   }, [lowKeySetting]);
-
-  return lowKeySetting;
 }

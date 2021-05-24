@@ -35,10 +35,6 @@ export function setSystemSetting(setting: System.Setting) {
     ...systemSetting,
     ...setting,
   });
-  app.setLoginItemSettings({
-    openAtLogin: setting.autoStartSetting,
-  });
-  Utils.UpdateSystemTheme(setting.systemThemeSetting);
   return asyncSetting();
 }
 
