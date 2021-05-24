@@ -8,7 +8,7 @@ import {
   useAdjustmentNotification,
   useConfigClipboard,
   useBootStrap,
-  useLowKey,
+  useMappingLocalToSystemSetting,
 } from '@/utils/hooks';
 import '@/app.global.scss';
 
@@ -16,7 +16,7 @@ const App: React.FC<{}> = () => {
   useUpdater();
   useAdjustmentNotification();
   useConfigClipboard();
-  useLowKey();
+  useMappingLocalToSystemSetting();
   useBootStrap();
 
   return (
