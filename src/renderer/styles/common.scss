@@ -25,3 +25,15 @@
   padding: var(--base-padding);
   padding-bottom: 15px;
 }
+.hoverable {
+  transition: background-color 0.3s, box-shadow 0.3s, border 0.3s;
+  &:hover {
+    box-shadow: 0 2px 10px var(--hover-color);
+    background-color: var(--hover-color);
+  }
+}
+.selected {
+  transition: background 0.3s, box-shadow 0.3s, border 0.3s;
+  box-shadow: 0 2px 10px var(--selected-color) !important;
+  background-color: var(--selected-color) !important;
+}

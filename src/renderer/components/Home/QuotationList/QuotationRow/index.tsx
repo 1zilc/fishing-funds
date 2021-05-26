@@ -36,9 +36,9 @@ const QuotationRow: React.FC<RowProps> = (props) => {
   };
 
   return (
-    <div>
+    <>
       <div
-        className={styles.row}
+        className={classnames(styles.row, 'hoverable')}
         onClick={() => {
           dispatch({
             type: TOGGLE_QUOTATION_COLLAPSE,
@@ -217,7 +217,7 @@ const QuotationRow: React.FC<RowProps> = (props) => {
           </div>
         </div>
       </Collapse>
-    </div>
+    </>
   );
 };
 

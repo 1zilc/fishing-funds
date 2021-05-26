@@ -15,12 +15,13 @@
     --main-text-color: #333;
     --secondary-main-text-color: #888;
     --reverse-text-color: #454545;
-    --border-color: #f2f3f4;
+    --border-color: #f3f4f5;
     --alipay-color: #156dff;
     --wechat-color: #1fa131;
     --svg-icon-color: #333;
     --blur-color: rgba(255, 255, 255, 0.5);
     --hover-color: #e6f7ff;
+    --selected-color: #bae7ff;
     --tag-text-color: #fff;
 
     &.lowKey {
@@ -60,6 +61,7 @@
     --svg-icon-color: #ccc;
     --blur-color: rgba(33, 33, 33, 0.3);
     --hover-color: #111d2c;
+    --selected-color: #112a45;
     --tag-text-color: #eee;
 
     &.lowKey {

@@ -24,9 +24,14 @@ export const WalletSelection: React.FC<WalletSelectionProps> = (props) => {
       {wallets.map((Icon, index) => (
         <div
           key={index}
-          className={classnames(styles.wallet, {
-            [styles.selected]: index === walletIndex,
-          })}
+          className={classnames(
+            styles.wallet,
+            {
+              [styles.selected]: index === walletIndex,
+              selected: index === walletIndex,
+            },
+            'hoverable'
+          )}
           onClick={() => props.onChange && props.onChange(index)}
         >
           <Icon {...size} />
