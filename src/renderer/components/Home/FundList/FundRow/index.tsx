@@ -57,8 +57,8 @@ const FundRow: React.FC<RowProps> = (props) => {
   };
 
   return (
-    <div>
-      <div className={styles.row} onClick={onRowClick}>
+    <>
+      <div className={classnames(styles.row, 'hoverable')} onClick={onRowClick}>
         {!readOnly && (
           <div className={styles.arrow}>
             {fund.collapse ? (
@@ -166,7 +166,7 @@ const FundRow: React.FC<RowProps> = (props) => {
           </div>
         </div>
       </Collapse>
-    </div>
+    </>
   );
 };
 

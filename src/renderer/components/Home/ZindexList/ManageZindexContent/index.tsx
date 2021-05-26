@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Checkbox } from 'antd';
+import classnames from 'classnames';
 import { ReactSortable } from 'react-sortablejs';
 
 import PureCard from '@/components/Card/PureCard';
@@ -55,7 +56,10 @@ const ManageZindexContent: React.FC<ManageZindexContentProps> = (props) => {
           >
             {sortZindexConfig.map((zindex) => {
               return (
-                <PureCard key={zindex.code} className={styles.row}>
+                <PureCard
+                  key={zindex.code}
+                  className={classnames(styles.row, 'hoverable')}
+                >
                   <Checkbox value={zindex.code}>{zindex.name}</Checkbox>
                   <MenuIcon />
                 </PureCard>

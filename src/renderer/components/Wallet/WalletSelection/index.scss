@@ -10,9 +10,9 @@
   align-items: center;
   justify-content: center;
   padding: 10px;
-
   box-sizing: border-box;
   cursor: pointer;
+  border-radius: var(--base-radius);
 
   svg {
     transition: transform 0.3s;
@@ -26,5 +26,7 @@
 }
 
 .selected {
-  background-color: var(--inner-color);
+  svg {
+    transform: scale(1.2);
+  }
 }

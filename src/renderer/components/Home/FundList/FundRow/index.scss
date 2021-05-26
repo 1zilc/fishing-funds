@@ -12,10 +12,9 @@
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  transition: background 0.3s;
 
   &:hover {
-    background-color: var(--hover-color);
+    border-bottom: 1px solid var(--hover-color);
 
     .arrow {
       svg {

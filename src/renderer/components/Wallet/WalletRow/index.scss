@@ -25,12 +25,9 @@
   color: var(--main-text-color);
 }
 .editor {
-  cursor: pointer;
   height: 12px;
   width: 12px;
-  fill: var(--svg-icon-color);
-  display: flex;
-  align-items: center;
+  cursor: pointer;
 }
 .remove {
   z-index: 2;
@@ -42,10 +39,6 @@
   fill: var(--primary-color);
   z-index: 2;
 }
-.selected {
-  box-shadow: 0 2px 10px var(--inner-color);
-  background-color: var(--hover-color);
-}
 
 .readonly {
   cursor: default;
@@ -54,4 +47,17 @@
   &:hover {
     transform: none;
   }
+}
+.extra {
+  height: 12px;
+  width: 12px;
+  fill: var(--svg-icon-color);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+.time {
+  font-size: calc(10rem / var(--base-font-size));
+  color: var(--secondary-main-text-color);
 }

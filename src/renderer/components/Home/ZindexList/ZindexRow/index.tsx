@@ -34,9 +34,9 @@ const ZindexRow: React.FC<RowProps> = (props) => {
   };
 
   return (
-    <div>
+    <>
       <div
-        className={styles.row}
+        className={classnames(styles.row, 'hoverable')}
         onClick={() => {
           dispatch({
             type: TOGGLE_ZINDEX_COLLAPSE,
@@ -184,7 +184,7 @@ const ZindexRow: React.FC<RowProps> = (props) => {
           </div>
         </div>
       </Collapse>
-    </div>
+    </>
   );
 };
 

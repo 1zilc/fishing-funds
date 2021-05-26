@@ -98,19 +98,24 @@ const WalletRow: React.FC<WalletRowProps> = (props) => {
       }
       title={wallet.name}
       extra={
-        <div className={styles.editor}>
-          {!readonly && (
+        <div className={styles.extra}>
+          {readonly ? (
+            <i></i>
+          ) : (
             <EditIcon
+              className={styles.editor}
               onClick={(e) => {
                 onEditClick();
                 e.stopPropagation();
               }}
             />
           )}
+          <div className={styles.time}>{updateTime}</div>
         </div>
       }
       className={classnames({
-        [styles.selected]: selected,
+        selected: selected,
+        hoverable: !readonly,
       })}
       onClick={() => !readonly && props.onClick && props.onClick(wallet)}
       onDoubleClick={() =>
@@ -125,13 +130,35 @@ const WalletRow: React.FC<WalletRowProps> = (props) => {
         )}
       >
         <div className={styles.rowInfo}>
-          <div>更新时间：{updateTime}</div>
-          <div>收益估值：{display_sygz}</div>
-          <div>
-            收益率估值：{display_gssyl}
-            {eyeOpen ? '%' : ''}
+          {/* <div>更新时间：{}</div> */}
+          <div style={{ textAlign: 'center' }}>
+            <div>持有金额</div>
+            <div
+              style={{
+                fontSize: 20,
+                fontWeight: 500,
+                lineHeight: '24px',
+                marginBottom: 10,
+              }}
+            >
+              {eyeOpen ? '￥' : ''}
+              {display_zje}
+            </div>
           </div>
-          <div>持有金额：{display_zje}</div>
+          <div
+            style={{
+              display: 'flex',
+              width: '100%',
+              justifyContent: 'space-around',
+              textAlign: 'center',
+            }}
+          >
+            <div>收益：{display_sygz}</div>
+            <div>
+              收益率： {display_gssyl}
+              {eyeOpen ? '%' : ''}
+            </div>
+          </div>
         </div>
         {!readonly && selected && <CheckboxIcon className={styles.checkbox} />}
         {!readonly && !selected && (

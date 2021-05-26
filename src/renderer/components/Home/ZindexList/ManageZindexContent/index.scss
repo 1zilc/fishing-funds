@@ -10,11 +10,6 @@
   width: 100%;
   justify-content: space-between;
   align-items: center;
-  transition: background 0.3s;
-
-  &:hover {
-    background-color: var(--hover-color);
-  }
 
   svg {
     fill: var(--svg-icon-color);
