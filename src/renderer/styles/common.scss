@@ -21,3 +21,7 @@
 .text-right {
   text-align: right;
 }
+.card-body {
+  padding: var(--base-padding);
+  padding-bottom: 15px;
+}

@@ -2,6 +2,7 @@ import React from 'react';
 import classnames from 'classnames';
 import { useDispatch, useSelector } from 'react-redux';
 
+import StandCard from '@/components/Card/StandCard';
 import { ReactComponent as RemoveIcon } from '@/assets/icons/remove.svg';
 import { ReactComponent as CheckboxIcon } from '@/assets/icons/checkbox.svg';
 import { ReactComponent as EditIcon } from '@/assets/icons/edit.svg';
@@ -79,42 +80,27 @@ const WalletRow: React.FC<WalletRowProps> = (props) => {
     : Utils.Encrypt(gssyl.toFixed(2));
 
   return (
-    <div
-      className={classnames(styles.row, {
-        [styles.selected]: selected,
-        [styles.readonly]: readonly,
-      })}
-      onClick={() => !readonly && props.onClick && props.onClick(wallet)}
-      onDoubleClick={() =>
-        !readonly && props.onDoubleClick && props.onDoubleClick(wallet)
+    <StandCard
+      icon={
+        <img
+          className={classnames(styles.icon, {
+            [styles.readonly]: readonly,
+          })}
+          src={WalletIcons[wallet.iconIndex]}
+          draggable={false}
+          onClick={(e) => {
+            if (!readonly) {
+              onEditClick();
+              e.stopPropagation();
+            }
+          }}
+        />
       }
-    >
-      <img
-        className={styles.rowBg}
-        src={WalletIcons[wallet.iconIndex]}
-        draggable={false}
-      />
-      <div className={styles.cover}></div>
-      <img
-        className={classnames(styles.icon, {
-          [styles.readonly]: readonly,
-        })}
-        src={WalletIcons[wallet.iconIndex]}
-        draggable={false}
-        onClick={(e) => {
-          if (!readonly) {
-            onEditClick();
-            e.stopPropagation();
-          }
-        }}
-      />
-      <div className={styles.rowInfo}>
-        <div className={styles.time}>更新时间：{updateTime}</div>
-        <div className={styles.name}>
-          {wallet.name}
+      title={wallet.name}
+      extra={
+        <div className={styles.editor}>
           {!readonly && (
             <EditIcon
-              className={styles.editor}
               onClick={(e) => {
                 onEditClick();
                 e.stopPropagation();
@@ -122,24 +108,43 @@ const WalletRow: React.FC<WalletRowProps> = (props) => {
             />
           )}
         </div>
-        <div>收益估值：{display_sygz}</div>
-        <div>
-          收益率估值：{display_gssyl}
-          {eyeOpen ? '%' : ''}
+      }
+      className={classnames({
+        [styles.selected]: selected,
+      })}
+      onClick={() => !readonly && props.onClick && props.onClick(wallet)}
+      onDoubleClick={() =>
+        !readonly && props.onDoubleClick && props.onDoubleClick(wallet)
+      }
+    >
+      <div
+        className={classnames(
+          styles.row,
+          { [styles.readonly]: readonly },
+          'card-body'
+        )}
+      >
+        <div className={styles.rowInfo}>
+          <div>更新时间：{updateTime}</div>
+          <div>收益估值：{display_sygz}</div>
+          <div>
+            收益率估值：{display_gssyl}
+            {eyeOpen ? '%' : ''}
+          </div>
+          <div>持有金额：{display_zje}</div>
         </div>
-        <div>持有金额：{display_zje}</div>
+        {!readonly && selected && <CheckboxIcon className={styles.checkbox} />}
+        {!readonly && !selected && (
+          <RemoveIcon
+            className={styles.remove}
+            onClick={(e) => {
+              onRemoveClick(wallet);
+              e.stopPropagation();
+            }}
+          />
+        )}
       </div>
-      {!readonly && selected && <CheckboxIcon className={styles.checkbox} />}
-      {!readonly && !selected && (
-        <RemoveIcon
-          className={styles.remove}
-          onClick={(e) => {
-            onRemoveClick(wallet);
-            e.stopPropagation();
-          }}
-        />
-      )}
-    </div>
+    </StandCard>
   );
 };
 

@@ -1,5 +1,5 @@
 .content {
-  padding: 10px;
+  padding: var(--base-padding);
   // margin-top: 20px;
 
   section {
@@ -26,12 +26,8 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 15px;
   flex-direction: column;
-  margin-bottom: 10px;
-  border-radius: 10px;
-  overflow: hidden;
-  background-color: var(--inner-color);
+  margin-bottom: 10px !important;
 
   .appName {
     margin-top: 10px;
@@ -55,7 +51,7 @@
     align-items: center;
     box-sizing: border-box;
     justify-content: space-between;
-    padding: 5px 25px;
+    padding: 5px 28px;
 
     label {
       // height: 20px;
@@ -74,10 +70,9 @@
     width: 100%;
     align-items: center;
     line-height: 20px;
-    padding: 5px 25px;
+    padding: 5px 28px;
 
     span {
-      // display: inline-block;
       top: 0;
     }
   }

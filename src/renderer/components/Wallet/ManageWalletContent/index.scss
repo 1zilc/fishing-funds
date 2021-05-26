@@ -1,9 +1,9 @@
 .content {
   position: relative;
-
   min-height: calc(100vh - 80px);
   box-sizing: border-box;
-  padding: 10px 10px 80px;
+  padding: var(--base-padding);
+  padding-bottom: 80px;
 }
 .row {
   // height: 70px;
@@ -98,7 +98,7 @@
   z-index: 2;
 
   &:hover {
-    opacity: 0.8;
+    filter: brightness(105%);
   }
 
   svg {

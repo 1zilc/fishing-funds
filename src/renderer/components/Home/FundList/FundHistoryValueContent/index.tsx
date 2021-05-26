@@ -2,6 +2,7 @@ import React from 'react';
 import { Table } from 'antd';
 import dayjs from 'dayjs';
 
+import ChartCard from '@/components/Card/ChartCard';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
 import HistoryBar from '@/components/Home/FundList/FundHistoryValueContent/HistoryBar';
 import * as Utils from '@/utils';
@@ -45,18 +46,22 @@ const FundHistoryValueContent: React.FC<HistoryValueProps> = (props) => {
       onClose={props.onClose}
     >
       <div className={styles.content}>
-        <HistoryBar data={data} />
-        <Table
-          rowKey="x"
-          size="small"
-          columns={columns}
-          dataSource={displayData}
-          pagination={{
-            defaultPageSize: 20,
-            hideOnSinglePage: true,
-            position: ['bottomCenter'],
-          }}
-        />
+        <ChartCard>
+          <HistoryBar data={data} />
+        </ChartCard>
+        <ChartCard auto>
+          <Table
+            rowKey="x"
+            size="small"
+            columns={columns}
+            dataSource={displayData}
+            pagination={{
+              defaultPageSize: 20,
+              hideOnSinglePage: true,
+              position: ['bottomCenter'],
+            }}
+          />
+        </ChartCard>
       </div>
     </CustomDrawerContent>
   );

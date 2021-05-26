@@ -1,5 +1,5 @@
 .content {
-  padding: 10px 0;
+  padding: var(--base-padding) 0;
 
   h3 {
     color: var(--main-text-color);
@@ -19,7 +19,7 @@
 }
 
 .container {
-  padding: 5px 15px;
+  padding: 0 var(--base-padding);
 }
 
 .introduce {

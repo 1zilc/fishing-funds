@@ -1,16 +1,15 @@
 import React, { useState } from 'react';
-import { useBoolean } from 'ahooks';
 import classnames from 'classnames';
 import { useRequest } from 'ahooks';
 import { Tabs } from 'antd';
 
+import ChartCard from '@/components/Card/ChartCard';
 import Trend from '@/components/Home/ZindexList/DetailZindexContent/Trend';
 import K from '@/components/Home/ZindexList/DetailZindexContent/K';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
-
 import * as Services from '@/services';
 import * as Utils from '@/utils';
-import * as Enums from '@/utils/enums';
+
 import styles from './index.scss';
 
 export interface DetailFundContentProps {
@@ -119,7 +118,9 @@ const DetailZindexContent: React.FC<DetailFundContentProps> = (props) => {
             tabBarGutter={15}
           >
             <Tabs.TabPane tab="指数走势" key={String(0)}>
-              <Trend code={code} />
+              <ChartCard>
+                <Trend code={code} />
+              </ChartCard>
             </Tabs.TabPane>
           </Tabs>
         </div>
@@ -130,7 +131,9 @@ const DetailZindexContent: React.FC<DetailFundContentProps> = (props) => {
             tabBarGutter={15}
           >
             <Tabs.TabPane tab="K线" key={String(0)}>
-              <K code={code} />
+              <ChartCard>
+                <K code={code} />
+              </ChartCard>
             </Tabs.TabPane>
           </Tabs>
         </div>

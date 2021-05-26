@@ -12,12 +12,12 @@ const size = {
   height: 24,
 };
 
-export interface WalletCarouselProps {
+export interface WalletSelectionProps {
   index: number;
   onChange?: (index: number) => void;
 }
 
-export const WalletCarousel: React.FC<WalletCarouselProps> = (props) => {
+export const WalletSelection: React.FC<WalletSelectionProps> = (props) => {
   const { index: walletIndex } = props;
   return (
     <div className={styles.content}>
@@ -35,4 +35,4 @@ export const WalletCarousel: React.FC<WalletCarouselProps> = (props) => {
     </div>
   );
 };
-export default WalletCarousel;
+export default WalletSelection;

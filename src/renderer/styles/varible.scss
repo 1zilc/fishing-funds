@@ -1,7 +1,7 @@
 @media (prefers-color-scheme: light) {
   body {
     --background-color: #fff;
-    --inner-color: #efefef;
+    --inner-color: #f8f9fa;
     --inner-text-color: #888;
     --primary-color: #1890ff;
     --primary-text-color: #eee;
@@ -15,7 +15,7 @@
     --main-text-color: #333;
     --secondary-main-text-color: #888;
     --reverse-text-color: #454545;
-    --border-color: #eee;
+    --border-color: #f2f3f4;
     --alipay-color: #156dff;
     --wechat-color: #1fa131;
     --svg-icon-color: #333;
@@ -54,7 +54,7 @@
     --main-text-color: #eee;
     --secondary-main-text-color: #888;
     --reverse-text-color: #ccc;
-    --border-color: #111;
+    --border-color: #181818;
     --alipay-color: #156dff;
     --wechat-color: #1fa131;
     --svg-icon-color: #ccc;
@@ -91,4 +91,6 @@ body {
 
 body {
   --base-font-size: 12;
+  --base-padding: 10px;
+  --base-radius: 10px;
 }

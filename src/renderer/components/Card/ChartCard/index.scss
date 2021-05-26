@@ -1,0 +1,15 @@
+.content {
+  border-radius: var(--base-radius);
+  background-color: var(--background-color);
+  min-height: 64vw;
+  padding: var(--base-padding);
+  box-sizing: border-box;
+  margin-bottom: var(--base-padding);
+
+  &:last-of-type {
+    margin-bottom: 0;
+  }
+}
+.autoSize {
+  min-height: auto;
+}

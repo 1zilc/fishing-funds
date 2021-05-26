@@ -32,6 +32,9 @@ const PerformanceEvaluation: React.FC<PerformanceEvaluationProps> = ({
           left: 'center',
         },
         grid: {
+          left: 0,
+          right: 0,
+          bottom: 0,
           containLabel: true,
         },
         tooltip: {
