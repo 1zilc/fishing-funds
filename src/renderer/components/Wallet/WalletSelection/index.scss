@@ -13,10 +13,9 @@
 
   box-sizing: border-box;
   cursor: pointer;
-  border: 1px dashed var(--border-color);
 
   svg {
-    transition: transform .3s;
+    transition: transform 0.3s;
   }
 
   &:hover {
@@ -24,7 +23,6 @@
       transform: scale(1.2);
     }
   }
-
 }
 
 .selected {

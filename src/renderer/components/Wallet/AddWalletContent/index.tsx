@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Input } from 'antd';
 
-import WalletCarousel from '@/components/WalletCarousel';
+import WalletSelection from '@/components/Wallet/WalletSelection';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
 import { getWalletConfig, addWallet } from '@/actions/wallet';
 import * as Utils from '@/utils';
@@ -17,10 +17,8 @@ const AddWalletContent: React.FC<AddFundContentProps> = (props) => {
   const { walletConfig } = getWalletConfig();
   const [name, setName] = useState('');
   const [iconIndex, setIconIndex] = useState(0);
-  const [
-    fieldNameMessageTip,
-    setFieldNameMessageTip,
-  ] = useState<Field.MessageTip>({ show: false, text: '' });
+  const [fieldNameMessageTip, setFieldNameMessageTip] =
+    useState<Field.MessageTip>({ show: false, text: '' });
 
   const onAdd = async () => {
     const repeatName = walletConfig.some((wallet) => wallet.name === name);
@@ -70,7 +68,7 @@ const AddWalletContent: React.FC<AddFundContentProps> = (props) => {
         )}
         <section>
           <label>钱包外观：</label>
-          <WalletCarousel index={iconIndex} onChange={setIconIndex} />
+          <WalletSelection index={iconIndex} onChange={setIconIndex} />
         </section>
       </div>
     </CustomDrawerContent>

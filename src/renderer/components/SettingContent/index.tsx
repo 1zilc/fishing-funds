@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import classnames from 'classnames';
 import { useSelector, useDispatch } from 'react-redux';
-
 import { InputNumber, Radio, Badge, Switch, Slider } from 'antd';
+
+import PureCard from '@/components/Card/PureCard';
+import StandCard from '@/components/Card/StandCard';
 import Logo from '@/components/Logo';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
 import { ReactComponent as SettingIcon } from '@/assets/icons/setting.svg';
@@ -89,10 +91,14 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
     >
       <style>{` html { font-size: ${baseFontSize}px }`}</style>
       <div className={styles.content}>
-        <div
-          className={classnames(styles.logo, {
-            clickable: isUpdateAvaliable,
-          })}
+        <PureCard
+          className={classnames(
+            styles.logo,
+            {
+              clickable: isUpdateAvaliable,
+            },
+            'card-body'
+          )}
           onClick={() =>
             isUpdateAvaliable &&
             shell.openExternal('https://ff.1zilc.top/#download')
@@ -106,13 +112,9 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
           >
             <div className={styles.appName}>Fishing Funds v{ffVersion}</div>
           </Badge>
-        </div>
-        <div>
-          <div className={styles.title}>
-            <LineCharIcon />
-            <span>数据来源</span>
-          </div>
-          <div className={styles.setting}>
+        </PureCard>
+        <StandCard icon={<LineCharIcon />} title="数据来源">
+          <div className={classnames(styles.setting, 'card-body')}>
             <Radio.Group
               value={fundapiType}
               onChange={(e) => setFundApiType(e.target.value)}
@@ -140,13 +142,9 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
               </Radio>
             </Radio.Group>
           </div>
-        </div>
-        <div>
-          <div className={styles.title}>
-            <TShirtIcon />
-            <span>外观设置</span>
-          </div>
-          <div className={styles.setting}>
+        </StandCard>
+        <StandCard icon={<TShirtIcon />} title="外观设置">
+          <div className={classnames(styles.setting, 'card-body')}>
             <section>
               <label>简洁模式：</label>
               <Switch size="small" checked={concise} onChange={setConcise} />
@@ -182,13 +180,9 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
               />
             </section>
           </div>
-        </div>
-        <div>
-          <div className={styles.title}>
-            <SettingIcon />
-            <span>通用设置</span>
-          </div>
-          <div className={styles.setting}>
+        </StandCard>
+        <StandCard icon={<SettingIcon />} title="通用设置">
+          <div className={classnames(styles.setting, 'card-body')}>
             <section>
               <label>开机自启：</label>
               <Switch
@@ -235,13 +229,9 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
               />
             </section>
           </div>
-        </div>
-        <div>
-          <div className={styles.title}>
-            <LinkIcon />
-            <span>关于 Fishing Funds</span>
-          </div>
-          <div className={styles.link}>
+        </StandCard>
+        <StandCard icon={<LinkIcon />} title="关于 Fishing Funds">
+          <div className={classnames(styles.link, 'card-body')}>
             <a
               onClick={(e) =>
                 shell.openExternal('https://github.com/1zilc/fishing-funds')
@@ -258,9 +248,8 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
               更新日志
             </a>
           </div>
-        </div>
+        </StandCard>
       </div>
-
       <div className={styles.exit}>
         <button type="button" onClick={() => app.quit()}>
           退出程序

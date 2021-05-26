@@ -1,32 +1,11 @@
 .row {
-  // height: 70px;
-  overflow: hidden;
   display: flex;
   align-items: center;
-  border-radius: 10px;
-  margin-bottom: 10px;
   position: relative;
-  padding: 10px;
   cursor: pointer;
   box-sizing: border-box;
-  border: 1px dashed var(--background-color);
-  transition: border 0.2s;
 }
-.rowBg {
-  position: absolute;
-  filter: blur(40px);
-  width: 100%;
-  top: 50%;
-  left: 0;
-  transform: translateY(-50%);
-}
-.cover {
-  position: absolute;
-  left: 0;
-  height: 100%;
-  width: 100%;
-  background-color: var(--blur-color);
-}
+
 .icon {
   transition: all 0.2s;
   height: calc(40rem / var(--base-font-size));
@@ -44,21 +23,14 @@
   flex: 1;
   z-index: 2;
   color: var(--main-text-color);
-  .time {
-    font-size: calc(10rem / var(--base-font-size));
-    font-weight: 400;
-  }
-  .name {
-    font-weight: 600;
-    font-size: calc(14rem / var(--base-font-size));
-  }
-  .editor {
-    margin-left: 10px;
-    cursor: pointer;
-    height: 12px;
-    width: 12px;
-    fill: var(--svg-icon-color);
-  }
+}
+.editor {
+  cursor: pointer;
+  height: 12px;
+  width: 12px;
+  fill: var(--svg-icon-color);
+  display: flex;
+  align-items: center;
 }
 .remove {
   z-index: 2;
@@ -69,11 +41,10 @@
 .checkbox {
   fill: var(--primary-color);
   z-index: 2;
-  // background-color: var(--primary-color);
 }
 .selected {
   box-shadow: 0 2px 10px var(--inner-color);
-  border: 1px dashed var(--primary-color);
+  background-color: var(--hover-color);
 }
 
 .readonly {

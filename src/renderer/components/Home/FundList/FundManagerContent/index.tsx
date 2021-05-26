@@ -3,11 +3,11 @@ import classnames from 'classnames';
 import { Rate, Tabs } from 'antd';
 import { useScroll, useRequest } from 'ahooks';
 
+import ChartCard from '@/components/Card/ChartCard';
 import Appraise from '@/components/Home/FundList/FundManagerContent/Appraise';
 import Profit from '@/components/Home/FundList/FundManagerContent/Profit';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
 import ManageHistoryFundList from '@/components/Home/FundList/FundManagerContent/ManageHistoryFundList';
-import * as Utils from '@/utils';
 import * as Services from '@/services';
 import * as Enums from '@/utils/enums';
 import styles from './index.scss';
@@ -77,25 +77,30 @@ const FundManagerContent: React.FC<FundManagerContentProps> = (props) => {
             <span>{manager.fundSize}</span>
           </div>
         </div>
-        <Tabs
-          defaultActiveKey={String(Enums.ManagerPowerType.Appraise)}
-          animated={{ tabPane: true }}
-          tabBarGutter={15}
-          tabBarStyle={{ marginLeft: 15 }}
-        >
-          <Tabs.TabPane
-            tab="能力评估"
-            key={String(Enums.ManagerPowerType.Appraise)}
+        <div className={styles.container}>
+          <Tabs
+            defaultActiveKey={String(Enums.ManagerPowerType.Appraise)}
+            animated={{ tabPane: true }}
+            tabBarGutter={15}
           >
-            <Appraise power={manager.power} />
-          </Tabs.TabPane>
-          <Tabs.TabPane
-            tab="收益统计"
-            key={String(Enums.ManagerPowerType.Profit)}
-          >
-            <Profit profit={manager.profit} />
-          </Tabs.TabPane>
-        </Tabs>
+            <Tabs.TabPane
+              tab="能力评估"
+              key={String(Enums.ManagerPowerType.Appraise)}
+            >
+              <ChartCard>
+                <Appraise power={manager.power} />
+              </ChartCard>
+            </Tabs.TabPane>
+            <Tabs.TabPane
+              tab="收益统计"
+              key={String(Enums.ManagerPowerType.Profit)}
+            >
+              <ChartCard>
+                <Profit profit={manager.profit} />
+              </ChartCard>
+            </Tabs.TabPane>
+          </Tabs>
+        </div>
         <Tabs
           defaultActiveKey={String(0)}
           animated={{ tabPane: true }}

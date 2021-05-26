@@ -2,7 +2,6 @@
   color: var(--main-text-color);
   overflow-y: scroll;
   height: calc(100vh - 48px);
-  background-color: var(--background-color);
 
   &::-webkit-scrollbar {
     width: 0;
@@ -59,7 +58,7 @@
 }
 
 .detailContent {
-  padding: 15px;
+  padding: var(--base-padding);
   box-sizing: border-box;
 }
 
@@ -91,4 +90,7 @@
   span {
     color: var(--inner-text-color);
   }
+}
+.container {
+  padding: 0 var(--base-padding);
 }

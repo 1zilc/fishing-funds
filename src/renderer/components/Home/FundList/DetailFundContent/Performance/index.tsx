@@ -53,7 +53,7 @@ const Performance: React.FC<PerformanceProps> = ({ code }) => {
           },
           grid: {
             left: 0,
-            right: 5,
+            right: 0,
             bottom: 0,
             containLabel: true,
           },

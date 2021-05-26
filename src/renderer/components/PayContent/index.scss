@@ -1,121 +1,23 @@
 .content {
-  padding: 10px 10px;
-  // margin-top: 20px;
-
-  section {
-    padding: 5px 0;
-  }
-
-  & > label {
-    font-size: 1rem;
-    width: 100px;
-    margin-bottom: 5px;
-    display: block;
-  }
-
-  input {
-    width: 100%;
-    outline: none;
-    border: 1px solid var(--border-color);
-    height: 20px;
-  }
+  padding: var(--base-padding);
 }
 
-.setting {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  padding: 15px 0;
-
-  & > section {
-    width: 50%;
-    display: flex;
-    font-size: calc(11rem / var(--base-font-size));
-    align-items: center;
-    box-sizing: border-box;
-    padding: 5px 0 5px 25px;
-
-    label {
-      // height: 20px;
-      line-height: 20px;
-      margin: 0;
-    }
-
-    .input {
-      max-width: 100px;
-      flex: 1;
-    }
-  }
-
-  .radio {
-    font-size: calc(11rem / var(--base-font-size));
-    display: block;
-    line-height: 20px;
-    padding: 5px 0 5px 25px;
-  }
-}
-.coin {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 15px;
-  flex-direction: column;
-  margin-bottom: 10px;
-  border-radius: 10px;
-  overflow: hidden;
-  background-color: var(--inner-color);
-  .describe {
-    margin-top: 10px;
-    font-size: calc(11rem / var(--base-font-size));
-    color: var(--inner-text-color);
-    font-weight: 500;
-    text-indent: calc(11rem / var(--base-font-size) * 2);
-  }
-}
-.title {
-  font-size: 1.1rem;
-  font-weight: 600;
-  display: flex;
-  align-items: center;
-
-  svg {
-    width: 20px;
-    height: 20px;
-    margin-right: 5px;
-    fill: var(--svg-icon-color);
-  }
-
-  &::after {
-    content: '';
-    display: block;
-    flex: 1;
-    margin-left: 10px;
-    border-top: 1px solid var(--border-color);
-  }
+.describe {
+  font-size: calc(11rem / var(--base-font-size));
+  color: var(--inner-text-color);
+  font-weight: 500;
+  text-indent: calc(11rem / var(--base-font-size) * 2);
 }
 
 .pay {
   display: flex;
-  // flex-direction: column;
   justify-content: center;
   align-items: center;
   position: relative;
-}
-
-.qrcode {
-  width: 50%;
-  position: relative;
-  padding: 30px;
-  box-sizing: border-box;
-  margin: 20px 0;
-  transform-style: preserve-3d;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
-  border-radius: 10px;
 
   img {
     display: block;
-    width: 100%;
+    width: 108px;
     height: auto;
     object-fit: cover;
     transform: translateZ(30px);
@@ -124,9 +26,9 @@
 }
 
 .alipay {
-  background-color: var(--alipay-color);
+  fill: var(--alipay-color);
 }
 
 .wechat {
-  background-color: var(--wechat-color);
+  fill: var(--wechat-color);
 }

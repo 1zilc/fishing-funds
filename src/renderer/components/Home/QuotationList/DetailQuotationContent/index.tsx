@@ -3,6 +3,7 @@ import classnames from 'classnames';
 import { useRequest } from 'ahooks';
 import { Tabs } from 'antd';
 
+import ChartCard from '@/components/Card/ChartCard';
 import RealTimeFundFlow from '@/components/Home/QuotationList/DetailQuotationContent/RealTimeFundFlow';
 import AfterTimeFundFlow from '@/components/Home/QuotationList/DetailQuotationContent/AfterTimeFundFlow';
 import StockList from '@/components/Home/QuotationList/DetailQuotationContent/StockList';
@@ -99,13 +100,17 @@ const DetailQuotationContent: React.FC<DetailQuotationContentProps> = (
               tab="实时资金流向"
               key={String(Enums.FundFlowType.RealTime)}
             >
-              <RealTimeFundFlow code={code} />
+              <ChartCard>
+                <RealTimeFundFlow code={code} />
+              </ChartCard>
             </Tabs.TabPane>
             <Tabs.TabPane
               tab="盘后资金流向"
               key={String(Enums.FundFlowType.AfterTime)}
             >
-              <AfterTimeFundFlow code={code} />
+              <ChartCard>
+                <AfterTimeFundFlow code={code} />
+              </ChartCard>
             </Tabs.TabPane>
           </Tabs>
         </div>
@@ -116,7 +121,9 @@ const DetailQuotationContent: React.FC<DetailQuotationContentProps> = (
             tabBarGutter={15}
           >
             <Tabs.TabPane tab="实时成交分布" key={String(0)}>
-              <RealTimeTransaction code={code} />
+              <ChartCard>
+                <RealTimeTransaction code={code} />
+              </ChartCard>
             </Tabs.TabPane>
           </Tabs>
         </div>
@@ -127,7 +134,9 @@ const DetailQuotationContent: React.FC<DetailQuotationContentProps> = (
             tabBarGutter={15}
           >
             <Tabs.TabPane tab={`${quotation.name}个股`} key={String(0)}>
-              <StockList code={code} />
+              <ChartCard auto>
+                <StockList code={code} />
+              </ChartCard>
             </Tabs.TabPane>
           </Tabs>
         </div>
