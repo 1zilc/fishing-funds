@@ -130,7 +130,6 @@ const WalletRow: React.FC<WalletRowProps> = (props) => {
         )}
       >
         <div className={styles.rowInfo}>
-          {/* <div>更新时间：{}</div> */}
           <div style={{ textAlign: 'center' }}>
             <div>持有金额</div>
             <div
