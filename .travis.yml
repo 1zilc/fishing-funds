@@ -15,7 +15,12 @@ cache:
     - $HOME/.cache/electron-builder
 
 script:
+  - yarn global add codecov
   - yarn release-all
+
+after_success:
+  - codecov
+
 before_cache:
   - rm -rf $HOME/.cache/electron-builder/wine
 
