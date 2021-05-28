@@ -33,6 +33,7 @@ const Profit: React.FC<ProfitProps> = ({ profit }) => {
           },
         },
         grid: {
+          top: '3%',
           left: 0,
           right: 0,
           bottom: 0,
