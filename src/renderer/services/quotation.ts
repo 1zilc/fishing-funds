@@ -371,3 +371,54 @@ export async function GetAfterTimeFundFlowFromEasymoney(code: string) {
     return [];
   }
 }
+
+/**
+ *
+ * @param code 行业m:90+t:3 概念m:90+t:2 地域m:90+t:1
+ * @param type f62 f164 f174
+ * @returns
+ */
+export async function GetFundFlowFromEastmoney(code: string, type: string) {
+  try {
+    const { body: data } = await got<{
+      rc: 0;
+      rt: 6;
+      svr: 2887254391;
+      lt: 1;
+      full: 1;
+      data: {
+        total: number;
+        diff: {
+          f12: string; // "BK0428" 板块代码
+          f14: string; // name
+          f62: number; // 今天
+          f164: number; // 5天
+          f174: number; // 10天
+          [index: string]: any;
+        }[];
+      };
+    }>('http://push2.eastmoney.com/api/qt/clist/get', {
+      searchParams: {
+        fs: code,
+        fid: type,
+        np: 1,
+        po: 1,
+        pn: 1,
+        pz: 500,
+        fields: `f12,f14,${type}`,
+        _: new Date().getTime(),
+      },
+      responseType: 'json',
+    });
+    const result = data.data.diff.map((i) => ({
+      code: i.f12, // 板块代码
+      name: i.f14, // 板块名称
+      value: NP.divide(i[type], 100000000),
+    }));
+
+    return result;
+  } catch (error) {
+    console.log(error);
+    return [];
+  }
+}

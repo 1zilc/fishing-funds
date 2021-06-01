@@ -8,6 +8,3 @@ declare module '*.svg' {
   const url: string;
   export default url;
 }
-
-declare module 'react-particle-effect-button';
-declare module 'react-tilt';

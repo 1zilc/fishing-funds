@@ -26,7 +26,7 @@ export interface ManagerDetail {
 const FundManagerContent: React.FC<FundManagerContentProps> = (props) => {
   const { manager } = props;
   const ref = useRef(null);
-  const position = useScroll(ref, (val) => val.top <= 400);
+  const position = useScroll(ref);
   const miniMode = position.top > 40;
   const [managerDetail, setManagerDetail] = useState<ManagerDetail>({
     manageHistoryFunds: [],
