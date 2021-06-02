@@ -130,7 +130,7 @@ const QuotationRow: React.FC<RowProps> = (props) => {
                   quotation.zdf < 0 ? 'text-down' : 'text-up'
                 )}
               >
-                {Utils.Yang(quotation.zde)}
+                {Utils.Yang(quotation.zdd)}
               </div>
               <div
                 className={classnames(
@@ -146,39 +146,23 @@ const QuotationRow: React.FC<RowProps> = (props) => {
       </div>
       <Collapse isOpened={!!quotation.collapse}>
         <div className={styles.collapseContent}>
-          {conciseSetting && (
-            <section>
-              <span>涨跌额：</span>
-              <span
-                className={classnames(
-                  quotation.zdf < 0 ? 'text-down' : 'text-up'
-                )}
-              >
-                {Utils.Yang(quotation.zde)}
-              </span>
-            </section>
-          )}
-          {conciseSetting && (
-            <section>
-              <span>涨跌幅：</span>
-              <span
-                className={classnames(
-                  quotation.zdf < 0 ? 'text-down' : 'text-up'
-                )}
-              >
-                {Utils.Yang(quotation.zdf)} %
-              </span>
-            </section>
-          )}
           <section>
             <span>总市值：</span>
             <span>
               {NP.divide(quotation.zsz, Math.pow(10, 8)).toFixed(2)}亿
             </span>
           </section>
+
           <section>
-            <span>换手率：</span>
-            <span>{quotation.hs} %</span>
+            <span>涨跌额：</span>
+            <span
+              className={classnames(
+                quotation.zdf < 0 ? 'text-down' : 'text-up'
+              )}
+            >
+              {Utils.Yang(NP.divide(quotation.zde, Math.pow(10, 8)).toFixed(2))}
+              亿
+            </span>
           </section>
           <section>
             <span>上涨家数：</span>
@@ -212,6 +196,22 @@ const QuotationRow: React.FC<RowProps> = (props) => {
               {Utils.Yang(quotation.ldgpZdf)} %
             </span>
           </section>
+          <section>
+            <span>换手率：</span>
+            <span>{quotation.hs} %</span>
+          </section>
+          {conciseSetting && (
+            <section>
+              <span>涨跌幅：</span>
+              <span
+                className={classnames(
+                  quotation.zdf < 0 ? 'text-down' : 'text-up'
+                )}
+              >
+                {Utils.Yang(quotation.zdf)} %
+              </span>
+            </section>
+          )}
           <div className={styles.view}>
             <a onClick={onDetailClick}>{'查看详情 >'}</a>
           </div>

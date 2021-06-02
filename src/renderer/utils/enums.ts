@@ -36,6 +36,7 @@ export enum ZindexSortType {
 export enum QuotationSortType {
   Zdf, // 涨跌幅
   Zde, // 涨跌额
+  Zdd, // 涨跌点
   Zsz, // 总市值
   Zxj, // 最新价
   Szjs, // 上涨家数
@@ -112,4 +113,13 @@ export enum SystemThemeType {
 export enum FundFlowType {
   RealTime,
   AfterTime,
+}
+
+export enum ZindexType {
+  SS,
+  America,
+  Asia,
+  Europe,
+  Australia,
+  Other,
 }

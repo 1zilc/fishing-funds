@@ -6,6 +6,7 @@ declare namespace Quotation {
     name: string; // 名称 '有色金属'
     zxj: number; // 最新价
     zde: number; // 涨跌额
+    zdd: number; // 涨跌点
     zdf: number; // 涨跌幅 -0.44
     zsz: number; // 总市值
     hs: number; // 换手

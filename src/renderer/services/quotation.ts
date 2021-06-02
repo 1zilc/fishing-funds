@@ -16,7 +16,7 @@ export async function GetQuotationsFromEastmoney() {
           f14: string; // name
           f2: number; // 最新价
           f3: number; // 涨跌幅
-          f4: number; // 涨跌额
+          f4: number; // 涨跌点
           f12: string; // "BK0428" 板块代码
           f20: number; // 总市值
           f8: number; // 换手率
@@ -50,7 +50,8 @@ export async function GetQuotationsFromEastmoney() {
       code: i.f12, // 板块代码
       name: i.f14, // 板块名称
       zxj: i.f2, // 最新价
-      zde: i.f4, // 涨跌额
+      zde: NP.times(i.f20, i.f3, Math.pow(10, -2)), // 涨跌额
+      zdd: i.f4, // 涨跌点
       zdf: i.f3, // 涨跌幅 -0.44
       zsz: i.f20, // 总市值
       hs: i.f8, // 换手
@@ -413,7 +414,7 @@ export async function GetFundFlowFromEastmoney(code: string, type: string) {
     const result = data.data.diff.map((i) => ({
       code: i.f12, // 板块代码
       name: i.f14, // 板块名称
-      value: NP.divide(i[type], 100000000),
+      value: NP.divide(i[type], Math.pow(10, 8)),
     }));
 
     return result;

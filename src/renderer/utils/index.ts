@@ -236,3 +236,24 @@ export function ClearExpiredStorage() {
     ClearStorage(CONST.STORAGE.WALLET_INDEX);
   }
 }
+
+export function Group<T>(array: T[], num: number) {
+  const groupList: T[][] = [];
+  array.forEach((item) => {
+    const last = groupList.pop();
+    if (!last) {
+      groupList.push([item]);
+    } else if (last.length == 1) {
+      groupList.push([...last, item]);
+    } else if (last.length === 2) {
+      groupList.push(last, [item]);
+    }
+  });
+  return groupList;
+}
+
+export function MakeMap(list: number[]): Record<number, boolean>;
+export function MakeMap(list: string[]): Record<string, boolean>;
+export function MakeMap(list: (string | number)[]) {
+  return list.reduce((r, c) => ({ ...r, [c]: true }), {});
+}
