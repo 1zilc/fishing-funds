@@ -14,7 +14,7 @@ import Footer from '@/components/Footer';
 import SortBar from '@/components/SortBar';
 import TabsBar from '@/components/TabsBar';
 import Collect from '@/components/Collect';
-import { SET_REMOTE_FUNDS } from '@/actions/fund';
+import { SET_REMOTE_FUNDS, setRemoteFunds } from '@/actions/fund';
 import { StoreState } from '@/reducers/types';
 import { useNativeThemeColor } from '@/utils/hooks';
 import * as Enums from '@/utils/enums';
@@ -48,12 +48,7 @@ const Home: React.FC<HomeProps> = () => {
   useRequest(Services.Fund.GetRemoteFundsFromEastmoney, {
     pollingInterval: 1000 * 60 * 60 * 24,
     throwOnError: true,
-    onSuccess: (result) => {
-      dispatch({
-        type: SET_REMOTE_FUNDS,
-        payload: result,
-      });
-    },
+    onSuccess: (result) => dispatch(setRemoteFunds(result)),
   });
 
   const { colors: varibleColors, darkMode } = useNativeThemeColor(

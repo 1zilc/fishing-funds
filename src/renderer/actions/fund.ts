@@ -20,7 +20,6 @@ import * as Adapter from '@/utils/adpters';
 import * as CONST from '@/constants';
 
 export const SET_REMOTE_FUNDS = 'SET_REMOTE_FUNDS';
-export const SET_REMOTE_FUNDS_LOADING = 'SET_REMOTE_FUNDS_LOADING';
 export const SET_FUNDS = 'SET_FUNDS';
 export const SET_FUNDS_LOADING = 'SET_FUNDS_LOADING';
 export const SET_FIX_FUND = 'SET_FIX_FUND';
@@ -60,6 +59,26 @@ export function setFundConfig(config: Fund.SettingItem[]) {
   setWalletConfig(_walletConfig);
 }
 
+export function setRemoteFunds(remoteFunds: Fund.RemoteFund[]) {
+  const _ = Utils.GetStorage(CONST.STORAGE.REMOTE_FUND_MAP, {});
+  const remoteMap = remoteFunds.reduce((r, c) => {
+    r[c[0]] = c;
+    return r;
+  }, {} as any);
+  Utils.SetStorage(CONST.STORAGE.REMOTE_FUND_MAP, {
+    ..._,
+    ...remoteMap,
+  });
+  return { type: SET_REMOTE_FUNDS, payload: remoteFunds };
+}
+
+export function getRemoteFundsMap() {
+  return Utils.GetStorage(
+    CONST.STORAGE.REMOTE_FUND_MAP,
+    {} as { [index: string]: Fund.RemoteFund }
+  );
+}
+
 export async function getFunds(config?: Fund.SettingItem[]) {
   const { fundConfig } = getFundConfig();
   const { fundApiTypeSetting } = getSystemSetting();
@@ -87,6 +106,11 @@ export async function getFunds(config?: Fund.SettingItem[]) {
 
 export async function getFund(code: string) {
   const { fundApiTypeSetting } = getSystemSetting();
+  const remoteFundsMap = getRemoteFundsMap();
+  const remoteFund = remoteFundsMap[code];
+  if (remoteFund?.[3] === 'QDII') {
+    return Services.Fund.GetQDIIFundFromEastMoney(code);
+  }
   switch (fundApiTypeSetting) {
     case Enums.FundApiType.Dayfund:
       return Services.Fund.FromDayFund(code);

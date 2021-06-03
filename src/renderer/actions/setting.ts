@@ -19,8 +19,6 @@ export const defalutSystemSetting: System.Setting = {
   autoCheckUpdateSetting: true,
 };
 
-const { app } = window.contextModules.electron;
-
 export function getSystemSetting() {
   const systemSetting: System.Setting = Utils.GetStorage(
     CONST.STORAGE.SYSTEM_SETTING,

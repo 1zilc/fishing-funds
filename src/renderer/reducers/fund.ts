@@ -7,7 +7,6 @@ import {
   SORT_FUNDS_WITH_CHACHED,
   SET_REMOTE_FUNDS,
   SET_FUNDS_LOADING,
-  SET_REMOTE_FUNDS_LOADING,
   SET_FIX_FUND,
   getFundConfig,
   calcFund,
@@ -75,13 +74,6 @@ function setFundsLoading(state: FundState, loading: boolean): FundState {
   return {
     ...state,
     fundsLoading: loading,
-  };
-}
-
-function setremoteFundsLoading(state: FundState, loading: boolean): FundState {
-  return {
-    ...state,
-    remoteFundsLoading: loading,
   };
 }
 
@@ -171,8 +163,6 @@ export default function fund(
       return sortFunds(state, action.payload);
     case SET_FUNDS_LOADING:
       return setFundsLoading(state, action.payload);
-    case SET_REMOTE_FUNDS_LOADING:
-      return setremoteFundsLoading(state, action.payload);
     case SORT_FUNDS_WITH_CHACHED:
       return sortFundsWithChached(state, action.payload);
     case TOGGLE_FUND_COLLAPSE:

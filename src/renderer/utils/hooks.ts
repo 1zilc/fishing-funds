@@ -262,7 +262,6 @@ export function useSyncFixFundSetting() {
   async function FixFundSetting(fundConfig: Fund.SettingItem[]) {
     try {
       const responseFunds = await getFunds(fundConfig);
-
       responseFunds
         .filter((_) => !!_)
         .forEach((responseFund) => {

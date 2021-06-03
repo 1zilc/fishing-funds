@@ -50,6 +50,8 @@
   border-radius: 3px;
   min-width: 64px;
   margin-left: 5px;
+  text-align: center;
+  white-space: pre-wrap;
 }
 
 .warn {
@@ -64,6 +66,7 @@
 .conciseValue {
   font-size: calc(20rem / var(--base-font-size));
   line-height: 24px;
+  white-space: pre-wrap;
 }
 
 .remove {

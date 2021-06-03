@@ -8,13 +8,17 @@ import * as CONST from '@/constants';
 const { invoke } = window.contextModules.electron;
 
 export function Yang(num: string | number | undefined) {
-  if (num === undefined) {
-    return '';
-  }
-  if (Number(num) < 0) {
-    return String(num);
-  } else {
-    return `+${num}`;
+  try {
+    if (num === undefined) {
+      return '';
+    }
+    if (Number(num) < 0) {
+      return String(num);
+    } else {
+      return `+${num}`;
+    }
+  } catch (error) {
+    return num;
   }
 }
 
@@ -243,9 +247,9 @@ export function Group<T>(array: T[], num: number) {
     const last = groupList.pop();
     if (!last) {
       groupList.push([item]);
-    } else if (last.length == 1) {
+    } else if (last.length < num) {
       groupList.push([...last, item]);
-    } else if (last.length === 2) {
+    } else if (last.length === num) {
       groupList.push(last, [item]);
     }
   });
