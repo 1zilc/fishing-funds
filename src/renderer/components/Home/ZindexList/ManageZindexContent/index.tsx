@@ -121,8 +121,8 @@ const ManageZindexContent: React.FC<ManageZindexContentProps> = (props) => {
       onClose={props.onClose}
     >
       <div className={styles.content}>
-        {marketsGroup.map((markets) => (
-          <div className={styles.markets}>
+        {marketsGroup.map((markets, index) => (
+          <div key={index} className={styles.markets}>
             {markets.map((market) => (
               <Market
                 name={market.name}

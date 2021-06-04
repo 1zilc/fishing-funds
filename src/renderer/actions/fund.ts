@@ -20,6 +20,7 @@ import * as Adapter from '@/utils/adpters';
 import * as CONST from '@/constants';
 
 export const SET_REMOTE_FUNDS = 'SET_REMOTE_FUNDS';
+export const SET_REMOTE_FUNDS_LOADING = 'SET_REMOTE_FUNDS_LOADING';
 export const SET_FUNDS = 'SET_FUNDS';
 export const SET_FUNDS_LOADING = 'SET_FUNDS_LOADING';
 export const SET_FIX_FUND = 'SET_FIX_FUND';
@@ -108,9 +109,11 @@ export async function getFund(code: string) {
   const { fundApiTypeSetting } = getSystemSetting();
   const remoteFundsMap = getRemoteFundsMap();
   const remoteFund = remoteFundsMap[code];
-  if (remoteFund?.[3] === 'QDII') {
+
+  if (remoteFund?.[3].includes('QDII')) {
     return Services.Fund.GetQDIIFundFromEastMoney(code);
   }
+
   switch (fundApiTypeSetting) {
     case Enums.FundApiType.Dayfund:
       return Services.Fund.FromDayFund(code);
@@ -219,6 +222,21 @@ export function calcFunds(funds: Fund.ResponseItem[] = [], code?: string) {
   // sygz: number; // 估算总收益
   // gssyl: number; // 估算总收益率
   return { zje, gszje, sygz, gssyl };
+}
+
+export function loadRemoteFunds() {
+  return async (dispatch: Dispatch, getState: GetState) => {
+    try {
+      dispatch({ type: SET_REMOTE_FUNDS_LOADING, payload: true });
+      const remoteFunds = await Services.Fund.GetRemoteFundsFromEastmoney();
+      batch(() => {
+        dispatch(setRemoteFunds(remoteFunds));
+        dispatch({ type: SET_REMOTE_FUNDS_LOADING, payload: false });
+      });
+    } catch {
+      dispatch({ type: SET_REMOTE_FUNDS_LOADING, payload: false });
+    }
+  };
 }
 
 export function loadFunds() {

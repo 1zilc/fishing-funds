@@ -2,6 +2,7 @@ import { AnyAction } from 'redux';
 
 import {
   SORT_FUNDS,
+  SET_REMOTE_FUNDS_LOADING,
   TOGGLE_FUND_COLLAPSE,
   TOGGLE_FUNDS_COLLAPSE,
   SORT_FUNDS_WITH_CHACHED,
@@ -74,6 +75,13 @@ function setFundsLoading(state: FundState, loading: boolean): FundState {
   return {
     ...state,
     fundsLoading: loading,
+  };
+}
+
+function setRemoteFundsLoading(state: FundState, loading: boolean): FundState {
+  return {
+    ...state,
+    remoteFundsLoading: loading,
   };
 }
 
@@ -159,6 +167,8 @@ export default function fund(
   switch (action.type) {
     case SET_REMOTE_FUNDS:
       return setRemoteFunds(state, action.payload);
+    case SET_REMOTE_FUNDS_LOADING:
+      return setRemoteFundsLoading(state, action.payload);
     case SORT_FUNDS:
       return sortFunds(state, action.payload);
     case SET_FUNDS_LOADING:

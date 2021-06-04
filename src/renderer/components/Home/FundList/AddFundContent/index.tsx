@@ -6,12 +6,7 @@ import { Input, InputNumber } from 'antd';
 import DetailFundContent from '@/components/Home/FundList/DetailFundContent';
 import CustomDrawer from '@/components/CustomDrawer';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
-import {
-  addFund,
-  getFund,
-  getFundConfig,
-  getRemoteFundsMap,
-} from '@/actions/fund';
+import { addFund, getFund, getFundConfig } from '@/actions/fund';
 import { StoreState } from '@/reducers/types';
 import * as Enums from '@/utils/enums';
 import styles from './index.scss';
@@ -44,10 +39,7 @@ const AddFundContent: React.FC<AddFundContentProps> = (props) => {
 
   async function onAdd() {
     const fund = await getFund(code);
-    const remoteFundsMap = getRemoteFundsMap();
-    const remoteFund = remoteFundsMap[code];
     if (fund) {
-      // 存在估值信息
       setNone(false);
       addFund({
         code,
@@ -55,17 +47,7 @@ const AddFundContent: React.FC<AddFundContentProps> = (props) => {
         name: fund.name || '未知',
       });
       props.onEnter();
-    } else if (remoteFund) {
-      // 不存在估值信息，在远程所有数据中，可能是QDII等类型
-      setNone(false);
-      addFund({
-        code,
-        cyfe: num,
-        name: remoteFund[2] || '未知',
-      });
-      props.onEnter();
     } else {
-      // 不存在估值信息，也不在远程所有数据中
       setNone(true);
     }
   }
