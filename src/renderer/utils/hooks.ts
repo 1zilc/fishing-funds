@@ -119,6 +119,7 @@ export function useUpdater() {
 }
 
 export function useConfigClipboard() {
+  const runLoadFunds = useActions(loadFundsWithoutLoading);
   useLayoutEffect(() => {
     ipcRenderer.on('clipboard-funds-import', async (e, data) => {
       const limit = 1024;
@@ -154,11 +155,12 @@ export function useConfigClipboard() {
             cyfe: codeMap[fund?.fundcode!].cyfe,
           }));
         setFundConfig(_fundConfig);
-        dialog.showMessageBox({
+        await dialog.showMessageBox({
           type: 'info',
           title: `导入完成`,
           message: `更新：${_fundConfig.length}个，总共：${json.length}个`,
         });
+        runLoadFunds();
       } catch (error) {
         console.log('基金json解析失败', error);
         dialog.showMessageBox({
