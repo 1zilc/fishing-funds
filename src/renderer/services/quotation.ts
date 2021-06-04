@@ -16,7 +16,7 @@ export async function GetQuotationsFromEastmoney() {
           f14: string; // name
           f2: number; // 最新价
           f3: number; // 涨跌幅
-          f4: number; // 涨跌额
+          f4: number; // 涨跌点
           f12: string; // "BK0428" 板块代码
           f20: number; // 总市值
           f8: number; // 换手率
@@ -50,7 +50,8 @@ export async function GetQuotationsFromEastmoney() {
       code: i.f12, // 板块代码
       name: i.f14, // 板块名称
       zxj: i.f2, // 最新价
-      zde: i.f4, // 涨跌额
+      zde: NP.times(i.f20, i.f3, Math.pow(10, -2)), // 涨跌额
+      zdd: i.f4, // 涨跌点
       zdf: i.f3, // 涨跌幅 -0.44
       zsz: i.f20, // 总市值
       hs: i.f8, // 换手
@@ -365,6 +366,57 @@ export async function GetAfterTimeFundFlowFromEasymoney(code: string) {
         cddjlr: NP.divide(cddjlr, billion).toFixed(2),
       };
     });
+    return result;
+  } catch (error) {
+    console.log(error);
+    return [];
+  }
+}
+
+/**
+ *
+ * @param code 行业m:90+t:3 概念m:90+t:2 地域m:90+t:1
+ * @param type f62 f164 f174
+ * @returns
+ */
+export async function GetFundFlowFromEastmoney(code: string, type: string) {
+  try {
+    const { body: data } = await got<{
+      rc: 0;
+      rt: 6;
+      svr: 2887254391;
+      lt: 1;
+      full: 1;
+      data: {
+        total: number;
+        diff: {
+          f12: string; // "BK0428" 板块代码
+          f14: string; // name
+          f62: number; // 今天
+          f164: number; // 5天
+          f174: number; // 10天
+          [index: string]: any;
+        }[];
+      };
+    }>('http://push2.eastmoney.com/api/qt/clist/get', {
+      searchParams: {
+        fs: code,
+        fid: type,
+        np: 1,
+        po: 1,
+        pn: 1,
+        pz: 500,
+        fields: `f12,f14,${type}`,
+        _: new Date().getTime(),
+      },
+      responseType: 'json',
+    });
+    const result = data.data.diff.map((i) => ({
+      code: i.f12, // 板块代码
+      name: i.f14, // 板块名称
+      value: NP.divide(i[type], Math.pow(10, 8)),
+    }));
+
     return result;
   } catch (error) {
     console.log(error);

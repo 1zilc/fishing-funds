@@ -11,7 +11,7 @@ export interface AppraiseProps {
 const Appraise: React.FC<AppraiseProps> = ({
   power = {
     avr: '',
-    categories: [],
+    categories: [''],
     dsc: [],
     data: [],
     jzrq: '',
@@ -41,11 +41,10 @@ const Appraise: React.FC<AppraiseProps> = ({
           confine: true,
         },
         radar: {
-          indicator:
-            power.categories.map((name) => ({
-              name,
-              max: 100,
-            })) || [],
+          indicator: power.categories?.map((name) => ({
+            name,
+            max: 100,
+          })) || [''],
           shape: 'circle',
           splitNumber: 5,
           center: ['50%', '50%'],
@@ -81,7 +80,7 @@ const Appraise: React.FC<AppraiseProps> = ({
             name: '能力评估',
             type: 'radar',
             lineStyle: { width: 1, opacity: 0.8 },
-            data: [power.data],
+            data: [power.data || []],
             symbol: 'none',
             itemStyle: {
               color: '#F9713C',

@@ -23,21 +23,24 @@ export const fundSortModeOptions: Option.EnumsOption<Enums.FundSortType>[] = [
   { key: Enums.FundSortType.Estimate, value: '今日估值' },
 ];
 
-export const zindexSortModeOptions: Option.EnumsOption<Enums.ZindexSortType>[] = [
-  { key: Enums.ZindexSortType.Custom, value: '自定义' },
-  { key: Enums.ZindexSortType.Zdd, value: '涨跌点' },
-  { key: Enums.ZindexSortType.Zdf, value: '涨跌幅' },
-  { key: Enums.ZindexSortType.Zsz, value: '指数值' },
-];
+export const zindexSortModeOptions: Option.EnumsOption<Enums.ZindexSortType>[] =
+  [
+    { key: Enums.ZindexSortType.Custom, value: '自定义' },
+    { key: Enums.ZindexSortType.Zdd, value: '涨跌点' },
+    { key: Enums.ZindexSortType.Zdf, value: '涨跌幅' },
+    { key: Enums.ZindexSortType.Zsz, value: '指数值' },
+  ];
 
-export const quotationSortModeOptions: Option.EnumsOption<Enums.QuotationSortType>[] = [
-  { key: Enums.QuotationSortType.Zdf, value: '涨跌幅' },
-  { key: Enums.QuotationSortType.Zde, value: '涨跌额' },
-  { key: Enums.QuotationSortType.Zsz, value: '总市值' },
-  { key: Enums.QuotationSortType.Zxj, value: '最新价' },
-  { key: Enums.QuotationSortType.Szjs, value: '上涨家数' },
-  { key: Enums.QuotationSortType.Xdjs, value: '下跌家数' },
-];
+export const quotationSortModeOptions: Option.EnumsOption<Enums.QuotationSortType>[] =
+  [
+    { key: Enums.QuotationSortType.Zdf, value: '涨跌幅' },
+    { key: Enums.QuotationSortType.Zde, value: '涨跌额' },
+    { key: Enums.QuotationSortType.Zdd, value: '涨跌点' },
+    { key: Enums.QuotationSortType.Zsz, value: '总市值' },
+    { key: Enums.QuotationSortType.Zxj, value: '最新价' },
+    { key: Enums.QuotationSortType.Szjs, value: '上涨家数' },
+    { key: Enums.QuotationSortType.Xdjs, value: '下跌家数' },
+  ];
 
 export function getSortConfig() {
   const fundSortModeOptionsMap = fundSortModeOptions.reduce((r, c) => {

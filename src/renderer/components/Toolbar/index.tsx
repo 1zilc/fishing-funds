@@ -8,12 +8,14 @@ import { ReactComponent as RefreshIcon } from '@/assets/icons/refresh.svg';
 import { ReactComponent as QRcodeIcon } from '@/assets/icons/qr-code.svg';
 import { ReactComponent as SettingIcon } from '@/assets/icons/setting.svg';
 import { ReactComponent as WalletIcon } from '@/assets/icons/wallet.svg';
+import { ReactComponent as ChartBoxIcon } from '@/assets/icons/chart-box.svg';
 import CustomDrawer from '@/components/CustomDrawer';
 import ManageFundContent from '@/components/Home/FundList/ManageFundContent';
 import ManageWalletContent from '@/components/Wallet/ManageWalletContent';
 import SettingContent from '@/components/SettingContent';
 import PayContent from '@/components/PayContent';
 import ManageZindexContent from '@/components/Home/ZindexList/ManageZindexContent';
+import FundFlowContent from '@/components/Home/QuotationList/FundFlowContent';
 import { StoreState } from '@/reducers/types';
 import { loadZindexs } from '@/actions/zindex';
 import { loadQuotations } from '@/actions/quotation';
@@ -74,6 +76,7 @@ const ToolBar: React.FC<ToolBarProps> = () => {
       toggle: ToggleEditZindexDrawer,
     },
   ] = useBoolean(false);
+
   const [
     showSettingDrawer,
     {
@@ -82,12 +85,22 @@ const ToolBar: React.FC<ToolBarProps> = () => {
       toggle: ToggleSettingDrawer,
     },
   ] = useBoolean(false);
+
   const [
     showPayDrawer,
     {
       setTrue: openPayDrawer,
       setFalse: closePayDrawer,
       toggle: TogglePayDrawer,
+    },
+  ] = useBoolean(false);
+
+  const [
+    showFundFlowDrawer,
+    {
+      setTrue: openFundFlowDrawer,
+      setFalse: closeFundFlowDrawer,
+      toggle: ToggleFundFlowDrawer,
     },
   ] = useBoolean(false);
 
@@ -99,14 +112,17 @@ const ToolBar: React.FC<ToolBarProps> = () => {
         {tabsActiveKey === Enums.TabKeyType.Funds && (
           <MenuAddIcon style={{ ...iconSize }} onClick={openManageFundDrawer} />
         )}
-        {tabsActiveKey === Enums.TabKeyType.Zindex && (
-          <MenuAddIcon style={{ ...iconSize }} onClick={openEditZindexDrawer} />
-        )}
         {tabsActiveKey === Enums.TabKeyType.Funds && (
           <WalletIcon
             style={{ ...iconSize }}
             onClick={openManageWalletDrawer}
           />
+        )}
+        {tabsActiveKey === Enums.TabKeyType.Zindex && (
+          <MenuAddIcon style={{ ...iconSize }} onClick={openEditZindexDrawer} />
+        )}
+        {tabsActiveKey === Enums.TabKeyType.Quotation && (
+          <ChartBoxIcon style={{ ...iconSize }} onClick={openFundFlowDrawer} />
         )}
         {tabsActiveKey === Enums.TabKeyType.Funds && (
           <RefreshIcon style={{ ...iconSize }} onClick={freshFunds} />
@@ -114,10 +130,10 @@ const ToolBar: React.FC<ToolBarProps> = () => {
         {tabsActiveKey === Enums.TabKeyType.Zindex && (
           <RefreshIcon style={{ ...iconSize }} onClick={freshZindexs} />
         )}
-        <QRcodeIcon style={{ ...iconSize }} onClick={openPayDrawer} />
         {tabsActiveKey === Enums.TabKeyType.Quotation && (
           <RefreshIcon style={{ ...iconSize }} onClick={freshQuotations} />
         )}
+        <QRcodeIcon style={{ ...iconSize }} onClick={openPayDrawer} />
         <Badge dot={!!updateInfo.version}>
           <SettingIcon style={{ ...iconSize }} onClick={openSettingDrawer} />
         </Badge>
@@ -162,6 +178,12 @@ const ToolBar: React.FC<ToolBarProps> = () => {
       </CustomDrawer>
       <CustomDrawer show={showPayDrawer}>
         <PayContent onEnter={closePayDrawer} onClose={closePayDrawer} />
+      </CustomDrawer>
+      <CustomDrawer show={showFundFlowDrawer}>
+        <FundFlowContent
+          onClose={closeFundFlowDrawer}
+          onEnter={closeFundFlowDrawer}
+        />
       </CustomDrawer>
     </>
   );

@@ -23,3 +23,30 @@
 .dragItem {
   background-color: var(--inner-color) !important;
 }
+.markets {
+  display: flex;
+  box-sizing: border-box;
+  width: 100%;
+  flex-wrap: wrap;
+}
+.market {
+  flex: 1;
+  padding: var(--base-padding);
+  box-sizing: border-box;
+  margin-bottom: 10px !important;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  &:nth-child(odd) {
+    margin-right: 10px;
+  }
+
+  svg {
+    cursor: pointer;
+    fill: var(--svg-icon-color);
+  }
+}
+.disappear {
+  display: none;
+}

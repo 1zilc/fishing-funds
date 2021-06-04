@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import classnames from 'classnames';
 import { useRequest } from 'ahooks';
 
 import { useHomeContext } from '@/components/Home';
+import TypeSelection from '@/components/TypeSelection';
 import { useResizeEchart, useRenderEcharts } from '@/utils/hooks';
 import * as CONST from '@/constants';
 import * as Services from '@/services';
@@ -114,19 +114,11 @@ const Performance: React.FC<PerformanceProps> = ({ code }) => {
   return (
     <div className={styles.content}>
       <div ref={chartRef} style={{ width: '100%' }}></div>
-      <div className={styles.selections}>
-        {performanceTypeList.map((item) => (
-          <div
-            key={item.type}
-            className={classnames(styles.selection, {
-              [styles.active]: performanceType.type === item.type,
-            })}
-            onClick={() => setPerformanceType(item)}
-          >
-            {item.name}
-          </div>
-        ))}
-      </div>
+      <TypeSelection
+        types={performanceTypeList}
+        activeType={performanceType.type}
+        onSelected={setPerformanceType}
+      />
     </div>
   );
 };

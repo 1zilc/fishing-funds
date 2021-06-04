@@ -122,7 +122,7 @@ const createMenubar = async () => {
       height: mainWindowState.height,
       minHeight: 400,
       minWidth: 300,
-      maxHeight: 800,
+      maxHeight: 900,
       maxWidth: 600,
       webPreferences: {
         contextIsolation: true,

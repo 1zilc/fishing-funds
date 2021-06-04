@@ -1,9 +1,9 @@
 import React, { createContext, useContext } from 'react';
 import classnames from 'classnames';
 import { Tabs } from 'antd';
-import { useDispatch, useSelector } from 'react-redux';
-import { useRequest } from 'ahooks';
+import { useSelector } from 'react-redux';
 
+import LoadingScreen from '@/components/LoadingScreen';
 import FundList from '@/components/Home/FundList';
 import ZindexList from '@/components/Home/ZindexList';
 import QuotationList from '@/components/Home/QuotationList';
@@ -14,11 +14,10 @@ import Footer from '@/components/Footer';
 import SortBar from '@/components/SortBar';
 import TabsBar from '@/components/TabsBar';
 import Collect from '@/components/Collect';
-import { SET_REMOTE_FUNDS } from '@/actions/fund';
 import { StoreState } from '@/reducers/types';
 import { useNativeThemeColor } from '@/utils/hooks';
 import * as Enums from '@/utils/enums';
-import * as Services from '@/services';
+
 import * as CONST from '@/constants';
 import styles from './index.scss';
 
@@ -40,21 +39,9 @@ export function useHomeContext() {
 }
 
 const Home: React.FC<HomeProps> = () => {
-  const dispatch = useDispatch();
   const tabsActiveKey = useSelector(
     (state: StoreState) => state.tabs.activeKey
   );
-
-  useRequest(Services.Fund.GetRemoteFundsFromEastmoney, {
-    pollingInterval: 1000 * 60 * 60 * 24,
-    throwOnError: true,
-    onSuccess: (result) => {
-      dispatch({
-        type: SET_REMOTE_FUNDS,
-        payload: result,
-      });
-    },
-  });
 
   const { colors: varibleColors, darkMode } = useNativeThemeColor(
     CONST.VARIBLES
@@ -63,6 +50,7 @@ const Home: React.FC<HomeProps> = () => {
   return (
     <HomeContext.Provider value={{ darkMode, varibleColors }}>
       <div className={classnames(styles.layout)}>
+        <LoadingScreen />
         <Header>
           <Wallet />
           <SortBar />

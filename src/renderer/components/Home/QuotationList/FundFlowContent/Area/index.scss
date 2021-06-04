@@ -1,0 +1,12 @@
+.content {
+  display: block;
+}
+.tooltip {
+  display: flex;
+  font-size: 1rem;
+  flex-direction: column;
+
+  .tooltipName {
+    font-weight: 600;
+  }
+}

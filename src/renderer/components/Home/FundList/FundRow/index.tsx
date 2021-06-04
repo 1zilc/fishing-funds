@@ -100,19 +100,31 @@ const FundRow: React.FC<RowProps> = (props) => {
           <div
             className={classnames(
               styles.conciseValue,
-              Number(calcFundResult.gszzl) < 0 ? 'text-down' : 'text-up'
+              calcFundResult.gszzl === ''
+                ? 'text-none'
+                : Number(calcFundResult.gszzl) < 0
+                ? 'text-down'
+                : 'text-up'
             )}
           >
-            {Utils.Yang(calcFundResult.gszzl)} %
+            {calcFundResult.gszzl === ''
+              ? `  0.00 %`
+              : `${Utils.Yang(calcFundResult.gszzl)} %`}
           </div>
         ) : (
           <div
             className={classnames(
               styles.value,
-              Number(calcFundResult.gszzl) < 0 ? 'block-down' : 'block-up'
+              calcFundResult.gszzl === ''
+                ? 'block-none'
+                : Number(calcFundResult.gszzl) < 0
+                ? 'block-down'
+                : 'block-up'
             )}
           >
-            {Utils.Yang(calcFundResult.gszzl)} %
+            {calcFundResult.gszzl === ''
+              ? `  0.00 %`
+              : `${Utils.Yang(calcFundResult.gszzl)} %`}
           </div>
         )}
       </div>

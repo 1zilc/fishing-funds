@@ -60,6 +60,26 @@ export function setFundConfig(config: Fund.SettingItem[]) {
   setWalletConfig(_walletConfig);
 }
 
+export function setRemoteFunds(remoteFunds: Fund.RemoteFund[]) {
+  const _ = Utils.GetStorage(CONST.STORAGE.REMOTE_FUND_MAP, {});
+  const remoteMap = remoteFunds.reduce((r, c) => {
+    r[c[0]] = c;
+    return r;
+  }, {} as any);
+  Utils.SetStorage(CONST.STORAGE.REMOTE_FUND_MAP, {
+    ..._,
+    ...remoteMap,
+  });
+  return { type: SET_REMOTE_FUNDS, payload: remoteFunds };
+}
+
+export function getRemoteFundsMap() {
+  return Utils.GetStorage(
+    CONST.STORAGE.REMOTE_FUND_MAP,
+    {} as { [index: string]: Fund.RemoteFund }
+  );
+}
+
 export async function getFunds(config?: Fund.SettingItem[]) {
   const { fundConfig } = getFundConfig();
   const { fundApiTypeSetting } = getSystemSetting();
@@ -87,6 +107,13 @@ export async function getFunds(config?: Fund.SettingItem[]) {
 
 export async function getFund(code: string) {
   const { fundApiTypeSetting } = getSystemSetting();
+  const remoteFundsMap = getRemoteFundsMap();
+  const remoteFund = remoteFundsMap[code];
+
+  if (remoteFund?.[3].includes('QDII')) {
+    return Services.Fund.GetQDIIFundFromEastMoney(code);
+  }
+
   switch (fundApiTypeSetting) {
     case Enums.FundApiType.Dayfund:
       return Services.Fund.FromDayFund(code);
@@ -195,6 +222,21 @@ export function calcFunds(funds: Fund.ResponseItem[] = [], code?: string) {
   // sygz: number; // 估算总收益
   // gssyl: number; // 估算总收益率
   return { zje, gszje, sygz, gssyl };
+}
+
+export function loadRemoteFunds() {
+  return async (dispatch: Dispatch, getState: GetState) => {
+    try {
+      dispatch({ type: SET_REMOTE_FUNDS_LOADING, payload: true });
+      const remoteFunds = await Services.Fund.GetRemoteFundsFromEastmoney();
+      batch(() => {
+        dispatch(setRemoteFunds(remoteFunds));
+        dispatch({ type: SET_REMOTE_FUNDS_LOADING, payload: false });
+      });
+    } catch {
+      dispatch({ type: SET_REMOTE_FUNDS_LOADING, payload: false });
+    }
+  };
 }
 
 export function loadFunds() {

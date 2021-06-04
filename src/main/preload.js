@@ -10,7 +10,8 @@ const {
 const got = require('got');
 
 contextBridge.exposeInMainWorld('contextModules', {
-  got: async (url, config = {}) => await got(url, { ...config, retry: 0 }),
+  got: async (url, config = {}) =>
+    await got(url, { ...config, retry: 3, timeout: 6000 }),
   process: {
     production: process.env.NODE_ENV === 'production',
     electron: process.versions.electron,

@@ -33,6 +33,8 @@ function sortQuotations(
     switch (quotationSortType) {
       case Enums.QuotationSortType.Zde:
         return (Number(a.zde) - Number(b.zde)) * t;
+      case Enums.QuotationSortType.Zdd:
+        return (Number(a.zdd) - Number(b.zdd)) * t;
       case Enums.QuotationSortType.Zsz:
         return (Number(a.zsz) - Number(b.zsz)) * t;
       case Enums.QuotationSortType.Zxj:

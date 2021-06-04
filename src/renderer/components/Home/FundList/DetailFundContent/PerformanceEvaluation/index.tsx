@@ -14,7 +14,7 @@ export interface PerformanceEvaluationProps {
 }
 const PerformanceEvaluation: React.FC<PerformanceEvaluationProps> = ({
   Data_performanceEvaluation = {
-    categories: [],
+    categories: [''],
     dsc: [],
     data: [],
   },
@@ -41,11 +41,10 @@ const PerformanceEvaluation: React.FC<PerformanceEvaluationProps> = ({
           trigger: 'item',
         },
         radar: {
-          indicator:
-            Data_performanceEvaluation.categories.map((name) => ({
-              name,
-              max: 100,
-            })) || [],
+          indicator: Data_performanceEvaluation.categories?.map((name) => ({
+            name,
+            max: 100,
+          })) || [''],
           shape: 'circle',
           splitNumber: 5,
           center: ['50%', '50%'],

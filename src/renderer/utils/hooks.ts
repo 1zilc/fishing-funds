@@ -25,6 +25,7 @@ import {
   setFundConfig,
   getCodeMap,
   loadFunds,
+  loadRemoteFunds,
   loadFixFunds,
   loadFundsWithoutLoading,
 } from '@/actions/fund';
@@ -118,6 +119,7 @@ export function useUpdater() {
 }
 
 export function useConfigClipboard() {
+  const runLoadFunds = useActions(loadFundsWithoutLoading);
   useLayoutEffect(() => {
     ipcRenderer.on('clipboard-funds-import', async (e, data) => {
       const limit = 1024;
@@ -153,11 +155,12 @@ export function useConfigClipboard() {
             cyfe: codeMap[fund?.fundcode!].cyfe,
           }));
         setFundConfig(_fundConfig);
-        dialog.showMessageBox({
+        await dialog.showMessageBox({
           type: 'info',
           title: `导入完成`,
           message: `更新：${_fundConfig.length}个，总共：${json.length}个`,
         });
+        runLoadFunds();
       } catch (error) {
         console.log('基金json解析失败', error);
         dialog.showMessageBox({
@@ -262,7 +265,6 @@ export function useSyncFixFundSetting() {
   async function FixFundSetting(fundConfig: Fund.SettingItem[]) {
     try {
       const responseFunds = await getFunds(fundConfig);
-
       responseFunds
         .filter((_) => !!_)
         .forEach((responseFund) => {
@@ -374,12 +376,18 @@ export function useBootStrap() {
   const { freshDelaySetting, autoFreshSetting } = useSelector(
     (state: StoreState) => state.setting.systemSetting
   );
+  const runLoadRemoteFunds = useActions(loadRemoteFunds);
   const runLoadWalletsFunds = useActions(loadWalletsFunds);
   const runLoadFixWalletsFunds = useActions(loadFixWalletsFunds);
   const runLoadFunds = useActions(loadFundsWithoutLoading);
   const runLoadFixFunds = useActions(loadFixFunds);
   const runLoadQuotations = useActions(loadQuotationsWithoutLoading);
   const runLoadZindexs = useActions(loadZindexsWithoutLoading);
+
+  // 间隔时间刷新远程基金数据
+  useInterval(() => {
+    runLoadRemoteFunds();
+  }, 1000 * 60 * 60 * 24);
 
   // 间隔时间刷新基金,指数，板块，钱包
   useWorkDayTimeToDo(() => {
@@ -403,6 +411,7 @@ export function useBootStrap() {
   // 第一次刷新所有数据
   useEffect(() => {
     Adapter.ChokeAllAdapter([
+      runLoadRemoteFunds,
       runLoadFunds,
       runLoadFixFunds,
       runLoadZindexs,

@@ -37,7 +37,7 @@ const AddFundContent: React.FC<AddFundContentProps> = (props) => {
     },
   ] = useBoolean(false);
 
-  const onAdd = async () => {
+  async function onAdd() {
     const fund = await getFund(code);
     if (fund) {
       setNone(false);
@@ -50,7 +50,7 @@ const AddFundContent: React.FC<AddFundContentProps> = (props) => {
     } else {
       setNone(true);
     }
-  };
+  }
 
   const { run: onSearch } = useDebounceFn(
     (type: Enums.SearchType, value: string) => {

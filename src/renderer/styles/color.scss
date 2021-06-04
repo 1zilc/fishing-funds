@@ -1,28 +1,42 @@
 .block-up {
   background-color: var(--increase-color);
   box-shadow: 0 2px 5px var(--increase-color);
-  transition: all .3s;
+  transition: all 0.3s;
 }
 
 .block-down {
   background-color: var(--reduce-color);
   box-shadow: 0 2px 5px var(--reduce-color);
-  transition: all .3s;
+  transition: all 0.3s;
+}
+
+.block-none {
+  background-color: var(--reverse-text-color);
+  box-shadow: 0 2px 5px var(--reverse-text-color);
+  transition: all 0.3s;
 }
 
 .bg-up {
-  transition: all .3s;
+  transition: all 0.3s;
 
   &:hover {
-    background-image: linear-gradient(to right, var(--background-color), var(--increase-bg-color)) !important;
+    background-image: linear-gradient(
+      to right,
+      var(--background-color),
+      var(--increase-bg-color)
+    ) !important;
   }
 }
 
 .bg-down {
-  transition: all .3s;
+  transition: all 0.3s;
 
   &:hover {
-    background-image: linear-gradient(to right, var(--background-color), var(--reduce-bg-color)) !important;
+    background-image: linear-gradient(
+      to right,
+      var(--background-color),
+      var(--reduce-bg-color)
+    ) !important;
   }
 }
 
@@ -32,6 +46,10 @@
 
 .text-down {
   color: var(--reduce-color);
+}
+
+.text-none {
+  color: var(--reverse-text-color);
 }
 
 .svg-up {

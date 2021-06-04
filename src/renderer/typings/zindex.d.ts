@@ -3,6 +3,7 @@ declare namespace Zindex {
     code: string;
     name?: string;
     show?: boolean;
+    type?: number;
   }
 
   export interface ResponseItem {
