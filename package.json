@@ -46,7 +46,13 @@
     "afterSign": ".erb/scripts/notarize.js",
     "mac": {
       "target": [
-        "dmg"
+        {
+          "target": "dmg",
+          "arch": [
+            "x64",
+            "arm64"
+          ]
+        }
       ],
       "type": "distribution",
       "hardenedRuntime": true,
@@ -70,7 +76,13 @@
     },
     "win": {
       "target": [
-        "nsis"
+        {
+          "target": "nsis",
+          "arch": [
+            "x64",
+            "ia32"
+          ]
+        }
       ]
     },
     "nsis": {
