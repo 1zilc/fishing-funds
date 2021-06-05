@@ -262,7 +262,7 @@
     "yarn-deduplicate": "^3.1.0"
   },
   "dependencies": {
-    "ahooks": "^2.9.6",
+    "ahooks": "^2.10.5",
     "antd": "^4.11.2",
     "cheerio": "^1.0.0-rc.5",
     "classnames": "^2.2.6",
