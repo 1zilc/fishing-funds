@@ -39,6 +39,7 @@ const AddFundContent: React.FC<AddFundContentProps> = (props) => {
 
   async function onAdd() {
     const fund = await getFund(code);
+    console.log(fund);
     if (fund) {
       setNone(false);
       addFund({

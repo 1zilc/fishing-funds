@@ -63,6 +63,12 @@ const DetailFundContent: React.FC<DetailFundContentProps> = (props) => {
     cacheKey: `GetFundDetailFromEastmoney/${code}`,
   });
 
+  const syl_1n =
+    pingzhongdata.syl_1n ||
+    pingzhongdata.syl_6y ||
+    pingzhongdata.syl_3y ||
+    pingzhongdata.syl_1y;
+
   return (
     <CustomDrawerContent
       title="基金详情"
@@ -87,10 +93,10 @@ const DetailFundContent: React.FC<DetailFundContentProps> = (props) => {
               <div
                 className={classnames(
                   styles.syl_1n,
-                  Number(pingzhongdata.syl_1n) < 0 ? 'text-down' : 'text-up'
+                  Number(syl_1n) < 0 ? 'text-down' : 'text-up'
                 )}
               >
-                {Utils.Yang(pingzhongdata.syl_1n)}%
+                {Utils.Yang(syl_1n)}%
               </div>
               <div className={styles.detailItemLabel}>近一年涨跌幅</div>
             </div>

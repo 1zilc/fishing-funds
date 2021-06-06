@@ -17,7 +17,7 @@ import { StoreState } from '@/reducers/types';
 import * as Enums from '@/utils/enums';
 import styles from './index.scss';
 
-export const ffVersion = '3.1.0';
+export const ffVersion = '3.1.1';
 export interface SettingContentProps {
   onEnter: () => void;
   onClose: () => void;

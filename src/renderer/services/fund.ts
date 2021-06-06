@@ -13,9 +13,16 @@ export async function FromEastmoney(code: string) {
       `http://fundgz.1234567.com.cn/js/${code}.js`,
       {}
     );
-    return body.startsWith('jsonpgz')
-      ? (eval(body) as Promise<Fund.ResponseItem | null>)
-      : null;
+    if (body.startsWith('jsonpgz')) {
+      const fund: Promise<Fund.ResponseItem> = eval(body);
+      if (fund === undefined) {
+        return await GetQDIIFundFromEastMoney(code);
+      } else {
+        return fund;
+      }
+    } else {
+      return null;
+    }
   } catch (error) {
     console.log(error);
     return null;
@@ -537,7 +544,7 @@ export async function GetFundManagerDetailFromEastMoney(code: string) {
 // 查询QDII基金信息
 export async function GetQDIIFundFromEastMoney(code: string) {
   try {
-    const { gztime } = (await FromEastmoney('161725'))!; //TODO:估值时间暂时使用白酒最后一次开门时间
+    const { gztime } = (await FromEastmoney('161725'))! as Fund.ResponseItem; //TODO:估值时间暂时使用白酒最后一次开门时间
     const { fixDwjz, fixName, fixDate } = (await GetFixFromEastMoney(code))!;
     return {
       name: fixName,

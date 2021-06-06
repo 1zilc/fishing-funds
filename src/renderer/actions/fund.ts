@@ -107,12 +107,6 @@ export async function getFunds(config?: Fund.SettingItem[]) {
 
 export async function getFund(code: string) {
   const { fundApiTypeSetting } = getSystemSetting();
-  const remoteFundsMap = getRemoteFundsMap();
-  const remoteFund = remoteFundsMap[code];
-
-  if (remoteFund?.[3].includes('QDII')) {
-    return Services.Fund.GetQDIIFundFromEastMoney(code);
-  }
 
   switch (fundApiTypeSetting) {
     case Enums.FundApiType.Dayfund:
