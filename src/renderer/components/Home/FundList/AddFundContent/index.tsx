@@ -39,7 +39,6 @@ const AddFundContent: React.FC<AddFundContentProps> = (props) => {
 
   async function onAdd() {
     const fund = await getFund(code);
-    console.log(fund);
     if (fund) {
       setNone(false);
       addFund({
@@ -108,7 +107,7 @@ const AddFundContent: React.FC<AddFundContentProps> = (props) => {
               onSearch(Enums.SearchType.Code, code);
             }}
             size="small"
-          ></Input>
+          />
         </section>
         <section>
           <label>基金名称：</label>
@@ -122,7 +121,7 @@ const AddFundContent: React.FC<AddFundContentProps> = (props) => {
               onSearch(Enums.SearchType.Name, name);
             }}
             size="small"
-          ></Input>
+          />
         </section>
         <section>
           <label>持有份额：</label>
@@ -137,7 +136,7 @@ const AddFundContent: React.FC<AddFundContentProps> = (props) => {
             style={{
               width: '100%',
             }}
-          ></InputNumber>
+          />
         </section>
         {none && (
           <section>

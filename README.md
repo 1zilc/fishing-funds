@@ -80,6 +80,10 @@ yarn package-win
 
 <img src="https://github.com/1zilc/fishing-funds/blob/master/src/renderer/assets/qrcode/wechat.png" width="200px"  height="200px"/>
 
+#### QQ
+
+<img src="https://github.com/1zilc/fishing-funds/blob/master/src/renderer/assets/qrcode/qq.png" width="200px"  height="200px"/>
+
 ## 感谢
 
 [Jr Prévost](https://github.com/3on)  
@@ -87,7 +91,8 @@ yarn package-win
 [menubar](https://github.com/maxogden/menubar)  
 [ahooks](https://github.com/alibaba/hooks)  
 [echarts](https://github.com/apache/echarts)  
-[travis-ci](https://www.travis-ci.com/)  
+[travis-ci](https://www.travis-ci.com/)
+
 ## 许可证
 
 GPLv3

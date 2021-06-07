@@ -5,9 +5,11 @@ import StandCard from '@/components/Card/StandCard';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
 import wechatQRcodeImage from '@/assets/qrcode/wechat.png';
 import alipayQRcodeImage from '@/assets/qrcode/alipay.png';
+import qqQRcodeImage from '@/assets/qrcode/qq.png';
 import { ReactComponent as CoinIcon } from '@/assets/icons/coin.svg';
 import { ReactComponent as WechatPayIcon } from '@/assets/icons/wechat-pay.svg';
 import { ReactComponent as AliPayIcon } from '@/assets/icons/alipay.svg';
+import { ReactComponent as QQPayIcon } from '@/assets/icons/qq.svg';
 
 import styles from './index.scss';
 
@@ -46,6 +48,11 @@ const PayContent: React.FC<PayContentProps> = (props) => {
         >
           <div className={classnames(styles.pay, 'card-body')}>
             <img src={wechatQRcodeImage} />
+          </div>
+        </StandCard>
+        <StandCard icon={<QQPayIcon className={styles.qq} />} title="QQ">
+          <div className={classnames(styles.pay, 'card-body')}>
+            <img src={qqQRcodeImage} />
           </div>
         </StandCard>
       </div>
