@@ -11,7 +11,7 @@ const got = require('got');
 
 contextBridge.exposeInMainWorld('contextModules', {
   got: async (url, config = {}) =>
-    await got(url, { ...config, retry: 3, timeout: 6000 }),
+    got(url, { ...config, retry: 3, timeout: 6000 }),
   process: {
     production: process.env.NODE_ENV === 'production',
     electron: process.versions.electron,
@@ -35,12 +35,14 @@ contextBridge.exposeInMainWorld('contextModules', {
           return ipcRenderer.on(channel, (event, ...args) =>
             func(event, ...args)
           );
+        } else {
+          return null;
         }
       },
     },
     dialog: {
       showMessageBox: async (config) =>
-        await ipcRenderer.invoke('show-message-box', config),
+        ipcRenderer.invoke('show-message-box', config),
     },
     invoke: {
       showCurrentWindow: () => ipcRenderer.invoke('show-current-window'),

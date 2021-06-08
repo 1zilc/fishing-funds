@@ -93,7 +93,7 @@ const ManageZindexContent: React.FC<ManageZindexContentProps> = (props) => {
 
   function onMarketCheckChange(status: boolean, code: Enums.ZindexType) {
     const selectedMap = Utils.MakeMap(selections);
-    const _selections = [
+    const newSelections = [
       ...sortZindexConfig
         .filter((_) => _.type !== code && selectedMap[_.code])
         .map((_) => _.code),
@@ -101,7 +101,7 @@ const ManageZindexContent: React.FC<ManageZindexContentProps> = (props) => {
         .filter((_) => _.type === code && status)
         .map((_) => _.code),
     ];
-    setSelections(_selections);
+    setSelections(newSelections);
   }
 
   function onMarketEyeChange(status: boolean, code: Enums.ZindexType) {
@@ -125,6 +125,7 @@ const ManageZindexContent: React.FC<ManageZindexContentProps> = (props) => {
           <div key={index} className={styles.markets}>
             {markets.map((market) => (
               <Market
+                key={market.code}
                 name={market.name}
                 code={market.code}
                 onCheckChange={onMarketCheckChange}
@@ -137,7 +138,7 @@ const ManageZindexContent: React.FC<ManageZindexContentProps> = (props) => {
         ))}
         <Checkbox.Group
           style={{ width: '100%' }}
-          onChange={setSelections}
+          onChange={(e) => setSelections(e.map((i) => String(i)))}
           value={selections}
         >
           <ReactSortable

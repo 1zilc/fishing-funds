@@ -35,7 +35,7 @@ const HistoryValue: React.FC<HistoryValueProps> = ({ data = [] }) => {
     {
       title: '涨跌幅',
       dataIndex: 'equityReturn',
-      align: 'right',
+
       render: (text: number) => (
         <div className={text < 0 ? 'text-down' : 'text-up'}>
           {Utils.Yang(text)} %

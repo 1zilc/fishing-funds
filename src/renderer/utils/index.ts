@@ -18,7 +18,7 @@ export function Yang(num: string | number | undefined) {
       return `+${num}`;
     }
   } catch (error) {
-    return num;
+    return String(num);
   }
 }
 

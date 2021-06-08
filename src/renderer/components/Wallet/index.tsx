@@ -37,8 +37,8 @@ const Wallet: React.FC<WalletProps> = () => {
   const { funds, updateTime } = currentWalletState;
   const { zje, sygz } = calcFunds(funds);
   const eyeOpen = eyeStatus === Enums.EyeStatus.Open;
-  const display_zje = eyeOpen ? zje.toFixed(2) : Utils.Encrypt(zje.toFixed(2));
-  const display_sygz = eyeOpen
+  const displayZje = eyeOpen ? zje.toFixed(2) : Utils.Encrypt(zje.toFixed(2));
+  const displaySygz = eyeOpen
     ? Utils.Yang(sygz.toFixed(2))
     : Utils.Encrypt(Utils.Yang(sygz.toFixed(2)));
 
@@ -79,13 +79,13 @@ const Wallet: React.FC<WalletProps> = () => {
           <div>
             <ConsumptionIcon />
             <span>持有金额：</span>
-            <span>{display_zje}</span>
+            <span>{displayZje}</span>
           </div>
-          <i></i>
+          <i />
           <div>
             <ConsumptionIcon />
             <span>收益估值：</span>
-            <span>{display_sygz}</span>
+            <span>{displaySygz}</span>
           </div>
         </div>
       </div>

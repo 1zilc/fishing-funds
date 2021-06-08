@@ -4,6 +4,7 @@ import log from 'electron-log';
 
 export default class AppUpdater {
   process = '';
+
   constructor(conf: { icon?: NativeImage; win?: BrowserWindow }) {
     autoUpdater.autoDownload = false;
     log.transports.file.level = 'info';
@@ -16,13 +17,13 @@ export default class AppUpdater {
       // );
     });
 
-    //检查事件
+    // 检查事件
     autoUpdater.on('checking-for-update', () => {
       // sendUpdateMessage(returnData.checking);
       log.info('returnData.checking');
     });
 
-    //当前版本为最新版本
+    // 当前版本为最新版本
     autoUpdater.on('update-not-available', () => {
       switch (this.process) {
         case 'mainer':
@@ -35,16 +36,18 @@ export default class AppUpdater {
           break;
         case 'renderer':
           break;
+        default:
+          break;
       }
     });
 
-    //更新下载进度事件
+    // 更新下载进度事件
     autoUpdater.on('download-progress', function (progressObj) {
       // win.webContents.send('downloadProgress', progressObj);
       log.info('正在下载', progressObj);
     });
 
-    //发现新版本
+    // 发现新版本
     autoUpdater.on('update-available', (data) => {
       switch (this.process) {
         case 'mainer':
@@ -68,6 +71,8 @@ export default class AppUpdater {
           break;
         case 'renderer':
           conf.win?.webContents.send('update-available', data);
+          break;
+        default:
           break;
       }
     });
