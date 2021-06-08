@@ -8,6 +8,8 @@ module.exports = {
     '@typescript-eslint/no-unused-vars': 0, // 申明未使用
     '@typescript-eslint/no-var-requires': 0,
     '@typescript-eslint/no-shadow': 0,
+    '@typescript-eslint/no-use-before-define': 0,
+    '@typescript-eslint/no-empty-interface': 1,
     'import/no-named-as-default': 0,
     'import/no-cycle': 1,
     'react/destructuring-assignment': 0,
@@ -17,6 +19,9 @@ module.exports = {
     'jsx-a11y/label-has-associated-control': 0,
     'jsx-a11y/click-events-have-key-events': 0,
     'jsx-a11y/no-static-element-interactions': 0,
+    'no-console': 0,
+    'no-eval': 1,
+    'no-else-return': 0,
   },
   parserOptions: {
     ecmaVersion: 2020,

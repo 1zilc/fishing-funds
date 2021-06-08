@@ -3,9 +3,9 @@
 import iconv from 'iconv-lite';
 import NP from 'number-precision';
 import cheerio from 'cheerio';
-import * as Utils from '../utils';
+import * as Utils from '@/utils';
 
-const got = window.contextModules.got;
+const { got } = window.contextModules;
 // 天天基金
 export async function FromEastmoney(code: string) {
   try {
@@ -14,7 +14,7 @@ export async function FromEastmoney(code: string) {
       {}
     );
     if (body.startsWith('jsonpgz')) {
-      const fund: Promise<Fund.ResponseItem> = eval(body);
+      const fund: Fund.ResponseItem = eval(body);
       if (fund === undefined) {
         return await GetQDIIFundFromEastMoney(code);
       } else {
@@ -128,7 +128,7 @@ export async function FromSina(code: string) {
       },
     });
     const utf8String = iconv.decode(rawBody, 'GB18030');
-    const [_, contnet] = utf8String.split('=');
+    const [w, contnet] = utf8String.split('=');
     const data = contnet.replace(/(")|(;)|(\s)/g, '');
     if (!data) {
       return null;
@@ -215,13 +215,13 @@ export async function FromEtf(code: string) {
         gzrq: '2021-05-14';
         result: {
           fundcode: string;
-          gztime: string; //'09:30';
-          gzprice: number; //'1.0468';
+          gztime: string; // '09:30';
+          gzprice: number; // '1.0468';
           gzzf: string; // '0.56';
           hushen300xj: number; // '5009.46';
-          shenzhengxj: number; //'13967.33';
-          shangzhengxj: number; //'3436.76';
-          hushen300zf: number; //'0.33';
+          shenzhengxj: number; // '13967.33';
+          shangzhengxj: number; // '3436.76';
+          hushen300zf: number; // '0.33';
           shenzhengzf: number; // '0.36';
           shangzhengzf: number; // '0.21';
         }[];
@@ -339,12 +339,16 @@ export async function GetStockWareHouseFromEastmoney(
       },
       responseType: 'json',
     });
-    const diff: {
-      f2: string; // 最新价
-      f3: number; // 涨跌幅
-      f14: string; // 名称
-      f12: string; // 股票代码
-    }[] = data.diff;
+    const {
+      diff,
+    }: {
+      diff: {
+        f2: string; // 最新价
+        f3: number; // 涨跌幅
+        f14: string; // 名称
+        f12: string; // 股票代码
+      }[];
+    } = data;
 
     const result: Fund.WareHouse[] = diff.map((item, index) => {
       return {
@@ -390,12 +394,16 @@ export async function GetSecuritiesWareHouseFromEastmoney(
       },
       responseType: 'json',
     });
-    const diff: {
-      f2: string; // 最新价
-      f3: number; // 涨跌幅
-      f14: string; // 名称
-      f12: string; // 债券代码
-    }[] = data.diff;
+    const {
+      diff,
+    }: {
+      diff: {
+        f2: string; // 最新价
+        f3: number; // 涨跌幅
+        f14: string; // 名称
+        f12: string; // 债券代码
+      }[];
+    } = data;
     const result: Fund.WareHouse[] = diff.map((item, index) => {
       return {
         zxz: item.f2,
@@ -430,7 +438,7 @@ export async function GetFundDetailFromEastmoney(code: string) {
 // 从天天基金获取近期表现
 export async function GetFundPerformanceFromEastmoney(
   code: string,
-  type: string //'m' | 'q' | 'hy' | 'y' | 'try' | 'se'
+  type: string // 'm' | 'q' | 'hy' | 'y' | 'try' | 'se'
 ) {
   try {
     const {
@@ -517,7 +525,7 @@ export async function GetFundManagerDetailFromEastMoney(code: string) {
         // 5: "2019-03-14 ~ 至今"
         // 6: "2年又6天"
         // 7: "80.80%"
-        const [code, name, _1, type, _2, date, days, rzhb] = $(tr)
+        const [code, name, unknow1, type, unknow2, date, days, rzhb] = $(tr)
           .find('td')
           .toArray()
           .map((td) => $(td).text());
@@ -544,7 +552,7 @@ export async function GetFundManagerDetailFromEastMoney(code: string) {
 // 查询QDII基金信息
 export async function GetQDIIFundFromEastMoney(code: string) {
   try {
-    const { gztime } = (await FromEastmoney('161725'))! as Fund.ResponseItem; //TODO:估值时间暂时使用白酒最后一次开门时间
+    const { gztime } = (await FromEastmoney('161725'))! as Fund.ResponseItem; // TODO:估值时间暂时使用白酒最后一次开门时间
     const { fixDwjz, fixName, fixDate } = (await GetFixFromEastMoney(code))!;
     return {
       name: fixName,

@@ -29,8 +29,11 @@ export const TOGGLE_FUNDS_COLLAPSE = 'TOGGLE_FUNDS_COLLAPSE';
 export const SORT_FUNDS = 'SORT_FUNDS';
 export const SORT_FUNDS_WITH_CHACHED = 'SORT_FUNDS_WITH_CHACHED';
 
-export interface CodeMap {
+export interface CodeFundMap {
   [index: string]: Fund.SettingItem & Fund.OriginRow;
+}
+export interface CodeRemoteFundMap {
+  [index: string]: Fund.RemoteFund;
 }
 
 export function getFundConfig(code?: string) {
@@ -44,7 +47,7 @@ export function getCodeMap(config: Fund.SettingItem[]) {
   return config.reduce((r, c, i) => {
     r[c.code] = { ...c, originSort: i };
     return r;
-  }, {} as CodeMap);
+  }, {} as CodeFundMap);
 }
 
 export function setFundConfig(config: Fund.SettingItem[]) {
@@ -53,22 +56,22 @@ export function setFundConfig(config: Fund.SettingItem[]) {
     CONST.STORAGE.CURRENT_WALLET_CODE,
     defaultWallet.code
   );
-  const _walletConfig = walletConfig.map((item) => ({
+  const newWalletConfig = walletConfig.map((item) => ({
     ...item,
     funds: currentWalletCode === item.code ? config : item.funds,
   }));
-  setWalletConfig(_walletConfig);
+  setWalletConfig(newWalletConfig);
 }
 
 export function setRemoteFunds(remoteFunds: Fund.RemoteFund[]) {
-  const _ = Utils.GetStorage(CONST.STORAGE.REMOTE_FUND_MAP, {});
-  const remoteMap = remoteFunds.reduce((r, c) => {
+  const remoteMap = Utils.GetStorage(CONST.STORAGE.REMOTE_FUND_MAP, {});
+  const newRemoteMap = remoteFunds.reduce((r, c) => {
     r[c[0]] = c;
     return r;
-  }, {} as any);
+  }, {} as CodeRemoteFundMap);
   Utils.SetStorage(CONST.STORAGE.REMOTE_FUND_MAP, {
-    ..._,
     ...remoteMap,
+    ...newRemoteMap,
   });
   return { type: SET_REMOTE_FUNDS, payload: remoteFunds };
 }
@@ -201,10 +204,10 @@ export function calcFunds(funds: Fund.ResponseItem[] = [], code?: string) {
   const [zje, gszje, sygz] = funds.reduce(
     ([a, b, c], fund) => {
       const calcFundResult = calcFund(fund);
+      const { bjz, gsz } = calcFundResult; // 比较值（估算值 - 持有净值）
       const cyfe = codeMap[fund.fundcode!]?.cyfe || 0; // 持有份额
-      const bjz = calcFundResult.bjz; // 比较值（估算值 - 持有净值）
       const jrsygz = NP.times(cyfe, bjz); // 今日收益估值（持有份额 * 比较值）
-      const gszz = NP.times(calcFundResult.gsz!, cyfe); // 估算总值 (持有份额 * 估算值)
+      const gszz = NP.times(gsz, cyfe); // 估算总值 (持有份额 * 估算值)
       const dwje = NP.times(fund.dwjz!, cyfe); // 当前金额 (持有份额 * 当前净值)
       return [a + dwje, b + gszz, c + jrsygz];
     },
@@ -279,7 +282,8 @@ export function loadFundsWithoutLoading() {
           },
         });
       });
-    } finally {
+    } catch (error) {
+      console.log('静默加载基金失败', error);
     }
   };
 }
@@ -319,7 +323,8 @@ export function loadFixFunds() {
           },
         });
       });
-    } finally {
+    } catch (error) {
+      console.log('加载最新净值失败', error);
     }
   };
 }

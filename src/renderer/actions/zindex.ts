@@ -7,8 +7,7 @@ import * as Utils from '@/utils';
 import * as CONST from '@/constants';
 import * as Enums from '@/utils/enums';
 
-const got = window.contextModules.got;
-
+const { got } = window.contextModules;
 export const SET_ZINDEXS = 'SET_ZINDEXS';
 export const SET_ZINDEXS_LOADING = 'SET_ZINDEXS_LOADING';
 export const TOGGLE_ZINDEX_COLLAPSE = 'TOGGLE_ZINDEX_COLLAPSE';
@@ -16,7 +15,7 @@ export const TOGGLE_ZINDEXS_COLLAPSE = 'TOGGLE_ZINDEXS_COLLAPSE';
 export const SORT_ZINDEXS = 'SORT_ZINDEXS';
 export const SORT_ZINDEXS_WITH_COLLAPSE_CHACHED =
   'SORT_ZINDEXS_WITH_COLLAPSE_CHACHED';
-export interface CodeMap {
+export interface CodeZindexMap {
   [index: string]: Zindex.SettingItem & { originSort: number };
 }
 
@@ -457,25 +456,25 @@ export function getZindexConfig() {
     CONST.STORAGE.ZINDEX_SETTING,
     defaultZindexConfig
   );
-  const _codeMap = zindexConfig.reduce((r, c, i) => {
+  let codeMap = zindexConfig.reduce((r, c, i) => {
     r[c.code] = { ...c, originSort: i };
     return r;
-  }, {} as CodeMap);
+  }, {} as CodeZindexMap);
 
   const defaultCodeMap = defaultZindexConfig.reduce((r, c, i) => {
-    if (!_codeMap[c.code]) {
+    if (!codeMap[c.code]) {
       zindexConfig.push(c);
     }
     r[c.code] = { ...c, originSort: i };
     return r;
-  }, {} as CodeMap);
+  }, {} as CodeZindexMap);
 
-  const codeMap = zindexConfig.reduce((r, c, i) => {
+  codeMap = zindexConfig.reduce((r, c, i) => {
     const code = c.code.split('.')?.[1];
     c.type = c.type || defaultCodeMap[c.code].type;
     r[code] = { ...c, originSort: i };
     return r;
-  }, {} as CodeMap);
+  }, {} as CodeZindexMap);
 
   const selectZindexs = zindexConfig
     .filter(({ show }) => show)
@@ -532,7 +531,8 @@ export function loadZindexsWithoutLoading() {
           payload: zindexs,
         });
       });
-    } finally {
+    } catch (error) {
+      console.log('静默加载指数失败', error);
     }
   };
 }
