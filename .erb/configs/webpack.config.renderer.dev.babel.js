@@ -47,8 +47,8 @@ export default merge(baseConfig, {
   target: 'web',
 
   entry: [
-    // 'core-js',
-    // 'regenerator-runtime/runtime',
+    'core-js',
+    'regenerator-runtime/runtime',
     path.join(webpackPaths.srcRendererPath, 'index.tsx'),
   ],
 

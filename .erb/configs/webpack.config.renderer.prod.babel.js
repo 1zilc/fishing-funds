@@ -32,7 +32,11 @@ export default merge(baseConfig, {
 
   target: ['web', 'electron-renderer'],
 
-  entry: [path.join(webpackPaths.srcRendererPath, 'index.tsx')],
+  entry: [
+    'core-js',
+    'regenerator-runtime/runtime',
+    path.join(webpackPaths.srcRendererPath, 'index.tsx'),
+  ],
 
   output: {
     path: webpackPaths.distRendererPath,
