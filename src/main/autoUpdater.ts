@@ -10,12 +10,7 @@ export default class AppUpdater {
     log.transports.file.level = 'info';
     autoUpdater.logger = log;
     autoUpdater.setFeedURL('https://ff-releases.1zilc.top');
-    autoUpdater.on('error', (error) => {
-      // dialog.showErrorBox(
-      //   'Error: ',
-      //   error == null ? 'unknown' : (error.stack || error).toString()
-      // );
-    });
+    autoUpdater.on('error', (error) => {});
 
     // 检查事件
     autoUpdater.on('checking-for-update', () => {
@@ -67,6 +62,10 @@ export default class AppUpdater {
               } else {
                 console.info('取消更新');
               }
+              return null;
+            })
+            .catch((error) => {
+              console.log(error);
             });
           break;
         case 'renderer':

@@ -46,11 +46,7 @@ export default merge(baseConfig, {
   // target: ['web', 'electron-renderer'],
   target: 'web',
 
-  entry: [
-    // 'core-js',
-    // 'regenerator-runtime/runtime',
-    path.join(webpackPaths.srcRendererPath, 'index.tsx'),
-  ],
+  entry: [path.join(webpackPaths.srcRendererPath, 'index.tsx')],
 
   output: {
     path: webpackPaths.distRendererPath,
@@ -63,18 +59,6 @@ export default merge(baseConfig, {
 
   module: {
     rules: [
-      // {
-      //   test: /\.[jt]sx?$/,
-      //   exclude: /node_modules/,
-      //   use: [
-      //     {
-      //       loader: require.resolve('babel-loader'),
-      //       options: {
-      //         plugins: [require.resolve('react-refresh/babel')].filter(Boolean),
-      //       },
-      //     },
-      //   ],
-      // },
       {
         test: /\.global\.css$/,
         use: [
