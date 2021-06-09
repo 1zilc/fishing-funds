@@ -1,6 +1,4 @@
 import { combineReducers } from 'redux';
-import { connectRouter } from 'connected-react-router';
-import { History } from 'history';
 import toolbar from './toolbar';
 import wallet from './wallet';
 import tabs from './tabs';
@@ -10,9 +8,8 @@ import zindex from './zindex';
 import quotation from './quotation';
 import setting from './setting';
 
-export default function createRootReducer(history: History) {
+export default function createRootReducer() {
   return combineReducers({
-    router: connectRouter(history),
     toolbar,
     wallet,
     tabs,

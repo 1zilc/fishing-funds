@@ -17,8 +17,8 @@
 .ant-slider {
   margin: 0;
 }
-.ant-tabs-tab + .ant-tabs-tab {
-  margin: 0;
+.ant-tabs-tab:first-child {
+  margin-left: 0 !important;
 }
 
 .ant-drawer-body::-webkit-scrollbar {

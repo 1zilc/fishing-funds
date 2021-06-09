@@ -21,10 +21,12 @@ import {
   Menu,
   dialog,
 } from 'electron';
-import windowStateKeeper from 'electron-window-state';
+
 import { menubar, Menubar } from 'menubar';
 import AppUpdater from './autoUpdater';
 import { resolveHtmlPath } from './util';
+
+const windowStateKeeper = require('electron-window-state');
 
 let myWindow: any = null;
 let mb: Menubar;

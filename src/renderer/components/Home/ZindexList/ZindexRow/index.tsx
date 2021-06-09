@@ -14,7 +14,7 @@ import styles from './index.scss';
 
 export interface RowProps {
   zindex: Zindex.ResponseItem & Zindex.ExtraRow;
-  onDetail?: (code: string) => void;
+  onDetail: (code: string) => void;
 }
 
 const arrowSize = {
@@ -30,7 +30,7 @@ const ZindexRow: React.FC<RowProps> = (props) => {
   );
 
   const onDetailClick = () => {
-    props.onDetail && props.onDetail(`${zindex.type}.${zindex.zindexCode}`);
+    props.onDetail(`${zindex.type}.${zindex.zindexCode}`);
   };
 
   return (

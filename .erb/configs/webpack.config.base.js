@@ -18,6 +18,9 @@ export default {
         exclude: /node_modules/,
         use: {
           loader: 'ts-loader',
+          options: {
+            happyPackMode: true,
+          },
         },
       },
     ],
