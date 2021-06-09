@@ -275,6 +275,8 @@ const SortBar: React.FC<SortBarProps> = () => {
             </div>
           </div>
         );
+      default:
+        return <></>;
     }
   };
 

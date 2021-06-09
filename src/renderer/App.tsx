@@ -12,7 +12,7 @@ import {
 } from '@/utils/hooks';
 import '@/app.global.scss';
 
-const App: React.FC<{}> = () => {
+const App: React.FC<Record<string, unknown>> = () => {
   useUpdater();
   useAdjustmentNotification();
   useConfigClipboard();

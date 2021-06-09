@@ -35,18 +35,25 @@ const Wallet: React.FC<WalletProps> = () => {
   }, [currentWallet]);
 
   const { funds, updateTime } = currentWalletState;
-  const { zje, sygz } = calcFunds(funds);
-  const eyeOpen = eyeStatus === Enums.EyeStatus.Open;
-  const displayZje = eyeOpen ? zje.toFixed(2) : Utils.Encrypt(zje.toFixed(2));
-  const displaySygz = eyeOpen
-    ? Utils.Yang(sygz.toFixed(2))
-    : Utils.Encrypt(Utils.Yang(sygz.toFixed(2)));
 
-  const onSelectWallet = async (wallet: Wallet.SettingItem) => {
+  const { displayZje, displaySygz } = useMemo(() => {
+    const { zje, sygz } = calcFunds(funds);
+    const eyeOpen = eyeStatus === Enums.EyeStatus.Open;
+    const displayZje = eyeOpen ? zje.toFixed(2) : Utils.Encrypt(zje.toFixed(2));
+    const displaySygz = eyeOpen
+      ? Utils.Yang(sygz.toFixed(2))
+      : Utils.Encrypt(Utils.Yang(sygz.toFixed(2)));
+    return {
+      displayZje,
+      displaySygz,
+    };
+  }, [funds, eyeStatus]);
+
+  async function onSelectWallet(wallet: Wallet.SettingItem) {
     const { code } = wallet;
     dispatch(selectWallet(code));
     freshFunds();
-  };
+  }
 
   return (
     <div

@@ -17,7 +17,7 @@ import { StoreState } from '@/reducers/types';
 import * as Enums from '@/utils/enums';
 import styles from './index.scss';
 
-export const ffVersion = '3.1.1';
+export const ffVersion = '4.0.0';
 export interface SettingContentProps {
   onEnter: () => void;
   onClose: () => void;
@@ -239,11 +239,11 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
             >
               联系作者
             </a>
-            <i></i>
+            <i />
             <a onClick={(e) => shell.openExternal('https://ff.1zilc.top')}>
               官方网站
             </a>
-            <i></i>
+            <i />
             <a onClick={(e) => shell.openExternal('https://ff.1zilc.top/blog')}>
               更新日志
             </a>
