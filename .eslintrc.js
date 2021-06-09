@@ -10,6 +10,7 @@ module.exports = {
     '@typescript-eslint/no-shadow': 0,
     '@typescript-eslint/no-use-before-define': 0,
     '@typescript-eslint/no-empty-interface': 1,
+    '@typescript-eslint/naming-convention': 1,
     'import/no-named-as-default': 0,
     'import/no-cycle': 1,
     'import/no-dynamic-require': 0,

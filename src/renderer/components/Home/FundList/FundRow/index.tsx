@@ -44,16 +44,19 @@ const FundRow: React.FC<RowProps> = (props) => {
   };
 
   const onDetailClick = () => {
-    props.onDetail && props.onDetail(fund.fundcode!);
+    if (props.onDetail) {
+      props.onDetail(fund.fundcode!);
+    }
   };
 
   const onEditClick = () => {
-    props.onEdit &&
+    if (props.onEdit) {
       props.onEdit({
         name: fund.name!,
         code: fund.fundcode!,
         cyfe: Number(calcFundResult.cyfe),
       });
+    }
   };
 
   return (

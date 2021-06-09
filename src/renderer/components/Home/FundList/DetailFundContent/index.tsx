@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
-import { useBoolean } from 'ahooks';
+import { useBoolean, useRequest } from 'ahooks';
 import classnames from 'classnames';
-import { useRequest } from 'ahooks';
 import { Tabs } from 'antd';
 
 import ChartCard from '@/components/Card/ChartCard';
