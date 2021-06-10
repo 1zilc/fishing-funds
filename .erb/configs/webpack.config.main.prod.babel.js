@@ -8,16 +8,19 @@ import { merge } from 'webpack-merge';
 import TerserPlugin from 'terser-webpack-plugin';
 import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
 import baseConfig from './webpack.config.base';
-import webpackPaths from './webpack.paths.js';
+import webpackPaths from './webpack.paths';
 import checkNodeEnv from '../scripts/check-node-env';
 import deleteSourceMaps from '../scripts/delete-source-maps';
 
 checkNodeEnv('production');
 deleteSourceMaps();
 
-const devtoolsConfig = process.env.DEBUG_PROD === 'true' ? {
-  devtool: 'source-map'
-} : {};
+const devtoolsConfig =
+  process.env.DEBUG_PROD === 'true'
+    ? {
+        devtool: 'source-map',
+      }
+    : {};
 
 export default merge(baseConfig, {
   ...devtoolsConfig,
@@ -28,7 +31,7 @@ export default merge(baseConfig, {
 
   entry: {
     'main.prod': path.join(webpackPaths.srcMainPath, 'main.dev.ts'),
-    preload: path.join(webpackPaths.srcMainPath, 'preload.js'),
+    preload: path.join(webpackPaths.srcMainPath, 'preload.ts'),
   },
 
   output: {
@@ -41,7 +44,7 @@ export default merge(baseConfig, {
       new TerserPlugin({
         parallel: true,
       }),
-    ]
+    ],
   },
 
   plugins: [
