@@ -3,7 +3,7 @@
   "productName": "Fishing Funds",
   "description": "显示基金涨跌状态栏小应用,数据源来自天天基金等",
   "scripts": {
-    "build": "concurrently \"yarn build:preload\" \"yarn build:main\" \"yarn build:renderer\"",
+    "build": "concurrently \"yarn build:main\" \"yarn build:renderer\"",
     "build:preload": "yarn tsc ./src/main/preload.ts",
     "build:main": "cross-env NODE_ENV=production webpack --config ./.erb/configs/webpack.config.main.prod.babel.js",
     "build:renderer": "cross-env NODE_ENV=production webpack --config ./.erb/configs/webpack.config.renderer.prod.babel.js",
