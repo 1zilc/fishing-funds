@@ -5,7 +5,6 @@ import { useBoolean, useThrottleFn } from 'ahooks';
 
 import { ReactComponent as MenuAddIcon } from '@/assets/icons/menu-add.svg';
 import { ReactComponent as RefreshIcon } from '@/assets/icons/refresh.svg';
-import { ReactComponent as QRcodeIcon } from '@/assets/icons/qr-code.svg';
 import { ReactComponent as SettingIcon } from '@/assets/icons/setting.svg';
 import { ReactComponent as WalletIcon } from '@/assets/icons/wallet.svg';
 import { ReactComponent as ChartBoxIcon } from '@/assets/icons/chart-box.svg';
@@ -13,7 +12,7 @@ import CustomDrawer from '@/components/CustomDrawer';
 import ManageFundContent from '@/components/Home/FundList/ManageFundContent';
 import ManageWalletContent from '@/components/Wallet/ManageWalletContent';
 import SettingContent from '@/components/SettingContent';
-import PayContent from '@/components/PayContent';
+import FundStatisticsContent from '@/components/Home/FundList/FundStatisticsContent';
 import ManageZindexContent from '@/components/Home/ZindexList/ManageZindexContent';
 import FundFlowContent from '@/components/Home/QuotationList/FundFlowContent';
 import { StoreState } from '@/reducers/types';
@@ -87,11 +86,11 @@ const ToolBar: React.FC<ToolBarProps> = () => {
   ] = useBoolean(false);
 
   const [
-    showPayDrawer,
+    showFundsStatisticsDrawer,
     {
-      setTrue: openPayDrawer,
-      setFalse: closePayDrawer,
-      toggle: TogglePayDrawer,
+      setTrue: openFundStatisticsDrawer,
+      setFalse: closeFundStatisticsDrawer,
+      toggle: ToggleFundStatisticsDrawer,
     },
   ] = useBoolean(false);
 
@@ -133,7 +132,12 @@ const ToolBar: React.FC<ToolBarProps> = () => {
         {tabsActiveKey === Enums.TabKeyType.Quotation && (
           <RefreshIcon style={{ ...iconSize }} onClick={freshQuotations} />
         )}
-        <QRcodeIcon style={{ ...iconSize }} onClick={openPayDrawer} />
+        {tabsActiveKey === Enums.TabKeyType.Funds && (
+          <ChartBoxIcon
+            style={{ ...iconSize }}
+            onClick={openFundStatisticsDrawer}
+          />
+        )}
         <Badge dot={!!updateInfo.version}>
           <SettingIcon style={{ ...iconSize }} onClick={openSettingDrawer} />
         </Badge>
@@ -176,13 +180,16 @@ const ToolBar: React.FC<ToolBarProps> = () => {
           }}
         />
       </CustomDrawer>
-      <CustomDrawer show={showPayDrawer}>
-        <PayContent onEnter={closePayDrawer} onClose={closePayDrawer} />
-      </CustomDrawer>
       <CustomDrawer show={showFundFlowDrawer}>
         <FundFlowContent
           onClose={closeFundFlowDrawer}
           onEnter={closeFundFlowDrawer}
+        />
+      </CustomDrawer>
+      <CustomDrawer show={showFundsStatisticsDrawer}>
+        <FundStatisticsContent
+          onClose={closeFundStatisticsDrawer}
+          onEnter={closeFundStatisticsDrawer}
         />
       </CustomDrawer>
     </>

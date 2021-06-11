@@ -265,7 +265,8 @@
     "redux": "^4.0.5",
     "redux-logger": "^3.0.6",
     "redux-thunk": "^2.3.0",
-    "sortablejs": "^1.13.0"
+    "sortablejs": "^1.13.0",
+    "swiper": "^6.7.0"
   },
   "devEngines": {
     "node": ">=10.x",

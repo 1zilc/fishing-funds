@@ -7,6 +7,7 @@ import PureCard from '@/components/Card/PureCard';
 import StandCard from '@/components/Card/StandCard';
 import Logo from '@/components/Logo';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
+import PayCarousel from '@/components/PayCarousel';
 import { ReactComponent as SettingIcon } from '@/assets/icons/setting.svg';
 import { ReactComponent as LinkIcon } from '@/assets/icons/link.svg';
 import { ReactComponent as LineCharIcon } from '@/assets/icons/line-chart.svg';
@@ -113,6 +114,7 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
             <div className={styles.appName}>Fishing Funds v{ffVersion}</div>
           </Badge>
         </PureCard>
+        <PayCarousel />
         <StandCard icon={<LineCharIcon />} title="数据来源">
           <div className={classnames(styles.setting, 'card-body')}>
             <Radio.Group

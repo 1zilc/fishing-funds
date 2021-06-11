@@ -6,7 +6,7 @@ import StandCard from '@/components/Card/StandCard';
 import { ReactComponent as RemoveIcon } from '@/assets/icons/remove.svg';
 import { ReactComponent as CheckboxIcon } from '@/assets/icons/checkbox.svg';
 import { ReactComponent as EditIcon } from '@/assets/icons/edit.svg';
-import { deleteWallet, getWalletConfig } from '@/actions/wallet';
+import { deleteWallet, getWalletConfig, walletIcons } from '@/actions/wallet';
 import { calcFunds } from '@/actions/fund';
 import { StoreState } from '@/reducers/types';
 import * as Utils from '@/utils';
@@ -22,10 +22,6 @@ export interface WalletRowProps {
   onEdit?: (wallet: Wallet.SettingItem) => void;
   onDelete?: (wallet: Wallet.SettingItem) => void;
 }
-
-const WalletIcons = new Array(40)
-  .fill('')
-  .map((_, index) => require(`@/assets/icons/wallet/${index}.svg`).default);
 
 const { dialog } = window.contextModules.electron;
 
@@ -88,7 +84,7 @@ const WalletRow: React.FC<WalletRowProps> = (props) => {
           className={classnames(styles.icon, {
             [styles.readonly]: readonly,
           })}
-          src={WalletIcons[wallet.iconIndex]}
+          src={walletIcons[wallet.iconIndex]}
           draggable={false}
           onClick={(e) => {
             if (!readonly) {

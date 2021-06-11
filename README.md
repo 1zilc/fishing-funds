@@ -80,10 +80,6 @@ yarn package-win
 
 <img src="https://github.com/1zilc/fishing-funds/blob/master/src/renderer/assets/qrcode/wechat.png" width="200px"  height="200px"/>
 
-#### QQ
-
-<img src="https://github.com/1zilc/fishing-funds/blob/master/src/renderer/assets/qrcode/qq.png" width="200px"  height="200px"/>
-
 ## 感谢
 
 [Jr Prévost](https://github.com/3on)  

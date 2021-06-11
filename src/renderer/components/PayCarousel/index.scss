@@ -1,5 +1,9 @@
 .content {
-  padding: var(--base-padding);
+  margin: 0 var(--base-padding) 5px;
+  position: relative;
+  width: 100vw;
+  left: -20px;
+  box-sizing: border-box;
 }
 
 .describe {
@@ -20,8 +24,8 @@
     width: 108px;
     height: auto;
     object-fit: cover;
-    transform: translateZ(30px);
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    margin-bottom: 5px;
   }
 }
 
@@ -31,9 +35,4 @@
 
 .wechat {
   fill: var(--wechat-color);
-}
-
-.qq {
-  width: 18px;
-  height: 18px;
 }

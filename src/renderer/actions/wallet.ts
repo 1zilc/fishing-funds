@@ -24,6 +24,10 @@ export const defaultWallet: Wallet.SettingItem = {
   funds: [],
 };
 
+export const walletIcons = new Array(40)
+  .fill('')
+  .map((_, index) => require(`@/assets/icons/wallet/${index}.svg`).default);
+
 export function changeEyeStatus(status: Enums.EyeStatus) {
   Utils.SetStorage(CONST.STORAGE.EYE_STATUS, status);
   return {

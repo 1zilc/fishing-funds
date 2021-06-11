@@ -81,13 +81,6 @@
   .eye {
     height: calc(20rem / var(--base-font-size));
     width: calc(20rem / var(--base-font-size));
-    cursor: pointer;
-
-    & > svg {
-      height: calc(20rem / var(--base-font-size));
-      width: calc(20rem / var(--base-font-size));
-      fill: var(--svg-icon-color);
-    }
   }
 }
 

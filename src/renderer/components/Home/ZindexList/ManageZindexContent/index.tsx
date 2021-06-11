@@ -6,8 +6,7 @@ import { ReactSortable } from 'react-sortablejs';
 
 import PureCard from '@/components/Card/PureCard';
 import { ReactComponent as MenuIcon } from '@/assets/icons/menu.svg';
-import { ReactComponent as EyeIcon } from '@/assets/icons/eye.svg';
-import { ReactComponent as EyeCloseIcon } from '@/assets/icons/eye-close.svg';
+import Eye from '@/components/Eye';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
 import { getZindexConfig, saveZindexConfig } from '@/actions/zindex';
 import * as Enums from '@/utils/enums';
@@ -30,7 +29,7 @@ interface MarketProps {
 const Market: React.FC<MarketProps> = (props) => {
   const { name, code, selections } = props;
   const { zindexConfig } = getZindexConfig();
-  const [eyeOpen, { setFalse, setTrue }] = useBoolean(true);
+  const [eyeOpen, { toggle }] = useBoolean(true);
   const { indeterminate, checked } = useMemo(() => {
     const selectedMap = Utils.MakeMap(selections);
     const markets = zindexConfig.filter((_) => _.type === code);
@@ -55,11 +54,7 @@ const Market: React.FC<MarketProps> = (props) => {
       >
         {name}
       </Checkbox>
-      {eyeOpen ? (
-        <EyeIcon onClick={setFalse} />
-      ) : (
-        <EyeCloseIcon onClick={setTrue} />
-      )}
+      <Eye status={eyeOpen} onClick={toggle} />
     </PureCard>
   );
 };

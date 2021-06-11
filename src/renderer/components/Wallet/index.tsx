@@ -2,9 +2,9 @@ import React, { useMemo } from 'react';
 import classnames from 'classnames';
 import { useDispatch, useSelector } from 'react-redux';
 import { Dropdown, Menu } from 'antd';
+
 import { ReactComponent as ConsumptionIcon } from '@/assets/icons/consumption.svg';
-import { ReactComponent as EyeIcon } from '@/assets/icons/eye.svg';
-import { ReactComponent as EyeCloseIcon } from '@/assets/icons/eye-close.svg';
+import Eye from '@/components/Eye';
 import { useHeaderContext } from '@/components/Header';
 import { StoreState } from '@/reducers/types';
 import { selectWallet, toggleEyeStatus } from '@/actions/wallet';
@@ -96,9 +96,11 @@ const Wallet: React.FC<WalletProps> = () => {
           </div>
         </div>
       </div>
-      <div className={styles.eye} onClick={() => dispatch(toggleEyeStatus())}>
-        {eyeStatus === Enums.EyeStatus.Open ? <EyeIcon /> : <EyeCloseIcon />}
-      </div>
+      <Eye
+        classNames={styles.eye}
+        status={eyeStatus === Enums.EyeStatus.Open}
+        onClick={() => dispatch(toggleEyeStatus())}
+      />
     </div>
   );
 };
