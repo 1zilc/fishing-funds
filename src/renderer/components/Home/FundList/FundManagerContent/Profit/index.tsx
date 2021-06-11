@@ -66,7 +66,7 @@ const Profit: React.FC<ProfitProps> = ({ profit }) => {
 
   return (
     <div className={styles.content}>
-      <div ref={chartRef} style={{ width: '100%' }}></div>
+      <div ref={chartRef} style={{ width: '100%' }} />
     </div>
   );
 };

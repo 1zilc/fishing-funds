@@ -73,7 +73,7 @@ function sortQuotationsWithCollapseChached(
   }, {} as any);
 
   const quotationsWithCollapseChached = responseQuotations
-    .filter((_) => !!_)
+    .filter(Boolean)
     .map((_) => ({
       ...(quotationsCodeToMap[_.name] || {}),
       ..._,

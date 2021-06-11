@@ -32,11 +32,7 @@ export default merge(baseConfig, {
 
   target: 'web',
 
-  entry: [
-    // 'core-js',
-    // 'regenerator-runtime/runtime',
-    path.join(webpackPaths.srcRendererPath, 'index.tsx'),
-  ],
+  entry: [path.join(webpackPaths.srcRendererPath, 'index.tsx')],
 
   output: {
     path: webpackPaths.distRendererPath,
@@ -49,21 +45,6 @@ export default merge(baseConfig, {
 
   module: {
     rules: [
-      // {
-      //   // CSS/SCSS
-      //   test: /\.s?css$/,
-      //   use: [
-      //     {
-      //       loader: MiniCssExtractPlugin.loader,
-      //       options: {
-      //         // `./dist` can't be inerhited for publicPath for styles. Otherwise generated paths will be ./dist/dist
-      //         publicPath: './',
-      //       },
-      //     },
-      //     'css-loader',
-      //     'sass-loader',
-      //   ],
-      // },
       // Add SASS support  - compile all .global.scss files and pipe it to style.css
       {
         test: /\.global\.(scss|sass)$/,

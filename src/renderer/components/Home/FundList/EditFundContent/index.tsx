@@ -51,7 +51,7 @@ const EditFundContent: React.FC<EditFundContentProps> = (props) => {
             style={{
               width: '100%',
             }}
-          ></InputNumber>
+          />
         </section>
       </div>
     </CustomDrawerContent>

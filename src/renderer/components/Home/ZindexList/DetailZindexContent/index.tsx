@@ -106,7 +106,7 @@ const DetailZindexContent: React.FC<DetailFundContentProps> = (props) => {
           </div>
           <div className={styles.detail}>
             <div className={styles.detailItem}>
-              <div className={''}>{zindex.zs}</div>
+              <div className="">{zindex.zs}</div>
               <div className={styles.detailItemLabel}>昨收</div>
             </div>
           </div>

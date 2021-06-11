@@ -34,7 +34,7 @@ const SameFundList: React.FC<SameFundListProps> = ({ swithSameType = [] }) => {
     throwOnError: true,
     onSuccess: (result: Fund.ResponseItem[]) => {
       const sameFunds = result
-        .filter((_) => !!_)
+        .filter(Boolean)
         .sort((a, b) => Number(b.gszzl) - Number(a.gszzl));
       setSameFunds(sameFunds);
       runGetFixFunds(sameFunds);
@@ -46,13 +46,11 @@ const SameFundList: React.FC<SameFundListProps> = ({ swithSameType = [] }) => {
     throwOnError: true,
     onSuccess: (result: Fund.FixData[]) => {
       const fixFunds = mergeFixFunds(sameFunds, result);
-      const cloneFunds = fixFunds
-        .filter((_) => !!_)
-        .sort((a, b) => {
-          const _a = calcFund(a);
-          const _b = calcFund(b);
-          return Number(_b.gszzl) - Number(_a.gszzl);
-        });
+      const cloneFunds = fixFunds.filter(Boolean).sort((a, b) => {
+        const calcA = calcFund(a);
+        const calcB = calcFund(b);
+        return Number(calcB.gszzl) - Number(calcA.gszzl);
+      });
       setSameFunds(cloneFunds);
     },
   });

@@ -334,12 +334,10 @@ export function mergeFixFunds(
   fixFunds: Fund.FixData[]
 ) {
   const cloneFunds = Utils.DeepCopy(funds);
-  const fixFundMap = fixFunds
-    .filter((_) => !!_)
-    .reduce((map, fund) => {
-      map[fund.code!] = fund;
-      return map;
-    }, {} as { [index: string]: Fund.FixData });
+  const fixFundMap = fixFunds.filter(Boolean).reduce((map, fund) => {
+    map[fund.code!] = fund;
+    return map;
+  }, {} as { [index: string]: Fund.FixData });
 
   cloneFunds.forEach((fund) => {
     const fixFund = fixFundMap[fund.fundcode!];

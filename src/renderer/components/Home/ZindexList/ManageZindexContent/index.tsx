@@ -13,6 +13,7 @@ import { getZindexConfig, saveZindexConfig } from '@/actions/zindex';
 import * as Enums from '@/utils/enums';
 import * as Utils from '@/utils';
 import styles from './index.scss';
+
 export interface ManageZindexContentProps {
   onEnter: () => void;
   onClose: () => void;

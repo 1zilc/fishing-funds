@@ -37,12 +37,10 @@ function syncWalletsMap(
     {} as any
   );
 
-  item.funds = (item.funds || [])
-    .filter((_) => !!_)
-    .map((_) => ({
-      ...(fundsCodeToMap[_!.fundcode!] || {}),
-      ..._,
-    }));
+  item.funds = (item.funds || []).filter(Boolean).map((_) => ({
+    ...(fundsCodeToMap[_!.fundcode!] || {}),
+    ..._,
+  }));
 
   const itemFundsCodeToMap = item.funds.reduce((map, fund) => {
     map[fund.fundcode!] = fund;
@@ -75,12 +73,10 @@ function syncFixWalletsMap(
   const cloneWalletsMap = Utils.DeepCopy(walletsMap);
   const funds = cloneWalletsMap[code]?.funds || [];
 
-  const fixFundMap = fixFunds
-    .filter((_) => !!_)
-    .reduce((map, fund) => {
-      map[fund.code!] = fund;
-      return map;
-    }, {} as { [index: string]: Fund.FixData });
+  const fixFundMap = fixFunds.filter(Boolean).reduce((map, fund) => {
+    map[fund.code!] = fund;
+    return map;
+  }, {} as { [index: string]: Fund.FixData });
 
   funds.forEach((fund) => {
     const fixFund = fixFundMap[fund.fundcode!];

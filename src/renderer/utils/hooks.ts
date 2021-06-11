@@ -87,13 +87,17 @@ export function useScrollToTop(
 ) {
   return useCallback(async () => {
     const { before, after, option } = config;
-    before && (await before());
+    if (before) {
+      await before();
+    }
     window.scrollTo({
       behavior: 'smooth',
       top: 0,
       ...option,
     });
-    after && (await after());
+    if (after) {
+      await after();
+    }
   }, dep);
 }
 
@@ -110,7 +114,9 @@ export function useUpdater() {
 
   useEffect(() => {
     ipcRenderer.on('update-available', (e, data) => {
-      autoCheckUpdateSetting && dispatch(updateAvaliable(data));
+      if (autoCheckUpdateSetting) {
+        dispatch(updateAvaliable(data));
+      }
     });
     return () => {
       ipcRenderer.removeAllListeners('update-available');
@@ -147,18 +153,17 @@ export function useConfigClipboard() {
           ([code, fund]) => fund
         );
         const responseFunds = await getFunds(fundConfigSet);
-        const _fundConfig = responseFunds
-          .filter((_) => !!_)
-          .map((fund) => ({
-            name: fund?.name!,
-            code: fund?.fundcode!,
-            cyfe: codeMap[fund?.fundcode!].cyfe,
-          }));
-        setFundConfig(_fundConfig);
+        const znewFundConfig = responseFunds.filter(Boolean);
+        const newFundConfig = znewFundConfig.map((fund) => ({
+          name: fund.name!,
+          code: fund.fundcode!,
+          cyfe: codeMap[fund.fundcode!].cyfe,
+        }));
+        setFundConfig(newFundConfig);
         await dialog.showMessageBox({
           type: 'info',
           title: `导入完成`,
-          message: `更新：${_fundConfig.length}个，总共：${json.length}个`,
+          message: `更新：${newFundConfig.length}个，总共：${json.length}个`,
         });
         runLoadFunds();
       } catch (error) {
@@ -216,10 +221,11 @@ export function useNativeThemeColor(varibles: string[]) {
   return { darkMode, colors };
 }
 
-export function useResizeEchart(scale: number = 1) {
+export function useResizeEchart(scale = 1) {
   const chartRef = useRef<HTMLDivElement>(null);
-  const [chartInstance, setChartInstance] =
-    useState<echarts.ECharts | null>(null);
+  const [chartInstance, setChartInstance] = useState<echarts.ECharts | null>(
+    null
+  );
   const { width: chartRefWidth } = useSize(chartRef);
   useEffect(() => {
     const instance = echarts.init(chartRef.current!, undefined, {
@@ -265,16 +271,16 @@ export function useSyncFixFundSetting() {
   async function FixFundSetting(fundConfig: Fund.SettingItem[]) {
     try {
       const responseFunds = await getFunds(fundConfig);
-      responseFunds
-        .filter((_) => !!_)
-        .forEach((responseFund) => {
-          updateFund({
-            code: responseFund?.fundcode!,
-            name: responseFund?.name,
-          });
+      responseFunds.filter(Boolean).forEach((responseFund) => {
+        updateFund({
+          code: responseFund.fundcode!,
+          name: responseFund.name,
         });
+      });
     } catch (error) {
       console.log(error);
+    } finally {
+      setTrue();
     }
   }
 
@@ -282,9 +288,7 @@ export function useSyncFixFundSetting() {
     const { fundConfig } = getFundConfig();
     const unNamedFunds = fundConfig.filter(({ name }) => !name);
     if (unNamedFunds.length) {
-      FixFundSetting(unNamedFunds).finally(() => {
-        setTrue();
-      });
+      FixFundSetting(unNamedFunds);
     } else {
       setTrue();
     }
@@ -365,8 +369,11 @@ export function useFreshFunds(throttleDelay: number) {
   });
   const freshFunds = useScrollToTop({
     after: async () => {
+      const isFixTime = Utils.JudgeFixTime(dayjs().valueOf());
       await runLoadFunds();
-      Utils.JudgeFixTime(dayjs().valueOf()) && (await runLoadFixFunds());
+      if (isFixTime) {
+        await runLoadFixFunds();
+      }
     },
   });
   return freshFunds;

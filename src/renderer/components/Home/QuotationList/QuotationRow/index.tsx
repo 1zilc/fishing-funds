@@ -16,7 +16,7 @@ import styles from './index.scss';
 
 export interface RowProps {
   quotation: Quotation.ResponseItem & Quotation.ExtraRow;
-  onDetail?: (code: string) => void;
+  onDetail: (code: string) => void;
 }
 
 const arrowSize = {
@@ -32,7 +32,7 @@ const QuotationRow: React.FC<RowProps> = (props) => {
   );
 
   const onDetailClick = () => {
-    props.onDetail && props.onDetail(quotation.code!);
+    props.onDetail(quotation.code!);
   };
 
   return (
@@ -148,9 +148,7 @@ const QuotationRow: React.FC<RowProps> = (props) => {
         <div className={styles.collapseContent}>
           <section>
             <span>总市值：</span>
-            <span>
-              {NP.divide(quotation.zsz, Math.pow(10, 8)).toFixed(2)}亿
-            </span>
+            <span>{NP.divide(quotation.zsz, 10 ** 8).toFixed(2)}亿</span>
           </section>
 
           <section>
@@ -160,17 +158,16 @@ const QuotationRow: React.FC<RowProps> = (props) => {
                 quotation.zdf < 0 ? 'text-down' : 'text-up'
               )}
             >
-              {Utils.Yang(NP.divide(quotation.zde, Math.pow(10, 8)).toFixed(2))}
-              亿
+              {Utils.Yang(NP.divide(quotation.zde, 10 ** 8).toFixed(2))}亿
             </span>
           </section>
           <section>
             <span>上涨家数：</span>
-            <span className={'text-up'}>{quotation.szjs}</span>
+            <span className="text-up">{quotation.szjs}</span>
           </section>
           <section>
             <span>下跌家数：</span>
-            <span className={'text-down'}>{quotation.xdjs}</span>
+            <span className="text-down">{quotation.xdjs}</span>
           </section>
           <section>
             <span>

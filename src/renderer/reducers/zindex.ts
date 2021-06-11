@@ -73,7 +73,7 @@ const sortZindexsWithCollapseChached = (
   }, {} as any);
 
   const zindexsWithCollapseChached = responseZindexs
-    .filter((_) => !!_)
+    .filter(Boolean)
     .map((_) => ({
       ...(zindexsCodeToMap[_.zindexCode] || {}),
       ..._,

@@ -102,7 +102,7 @@ const Area: React.FC<IndustryProps> = () => {
 
   return (
     <div className={styles.content}>
-      <div ref={chartRef} style={{ width: '100%' }}></div>
+      <div ref={chartRef} style={{ width: '100%' }} />
       <TypeSelection
         types={areaTypeList}
         activeType={areaType.type}

@@ -99,7 +99,7 @@ const Trend: React.FC<PerformanceProps> = ({ code }) => {
 
   return (
     <div className={styles.content}>
-      <div ref={chartRef} style={{ width: '100%' }}></div>
+      <div ref={chartRef} style={{ width: '100%' }} />
       <TypeSelection
         types={trendTypeList}
         activeType={trend.type}
