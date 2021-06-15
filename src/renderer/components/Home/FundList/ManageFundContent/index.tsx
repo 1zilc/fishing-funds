@@ -87,9 +87,6 @@ const ManageFundContent: React.FC<ManageFundContentProps> = (props) => {
       onClose={props.onClose}
     >
       <div className={styles.content}>
-        <div className={styles.wallet}>
-          <WalletRow wallet={wallet} readonly />
-        </div>
         {sortFundConfig.length ? (
           syncFundSettingDone ? (
             <ReactSortable

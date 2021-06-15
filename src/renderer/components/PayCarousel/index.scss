@@ -6,13 +6,6 @@
   box-sizing: border-box;
 }
 
-.describe {
-  font-size: calc(11rem / var(--base-font-size));
-  color: var(--inner-text-color);
-  font-weight: 500;
-  text-indent: calc(11rem / var(--base-font-size) * 2);
-}
-
 .pay {
   display: flex;
   justify-content: center;

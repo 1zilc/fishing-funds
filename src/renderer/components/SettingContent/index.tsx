@@ -114,7 +114,6 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
             <div className={styles.appName}>Fishing Funds v{ffVersion}</div>
           </Badge>
         </PureCard>
-        <PayCarousel />
         <StandCard icon={<LineCharIcon />} title="数据来源">
           <div className={classnames(styles.setting, 'card-body')}>
             <Radio.Group
@@ -232,7 +231,13 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
             </section>
           </div>
         </StandCard>
+        <PayCarousel />
         <StandCard icon={<LinkIcon />} title="关于 Fishing Funds">
+          <div className={classnames(styles.describe, 'card-body')}>
+            Fishing Funds
+            是一款个人开发小软件，开源后深受大家的喜爱，接受了大量宝贵的改进建议，感谢大家的反馈，作者利用空闲时间开发不易，您的支持可以给本项目的开发和完善提供巨大的动力，感谢对本软件的喜爱和认可
+            :)
+          </div>
           <div className={classnames(styles.link, 'card-body')}>
             <a
               onClick={(e) =>

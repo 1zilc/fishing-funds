@@ -28,7 +28,11 @@ const Eye: React.FC<EyeProps> = (props) => {
           onClick={toggle}
         />
       ) : (
-        <EyeCloseIcon style={style} onClick={toggle} />
+        <EyeCloseIcon
+          className={classnames(styles.eye, classNames)}
+          style={style}
+          onClick={toggle}
+        />
       )}
     </>
   );
