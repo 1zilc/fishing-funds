@@ -50,6 +50,12 @@ const Assets: React.FC<AssetsProps> = ({ funds, codes }) => {
   const displayWinFundCount = eyeOpen
     ? winFundCount
     : Utils.Encrypt(String(winFundCount));
+  const displayCodesLength = eyeOpen
+    ? codes.length
+    : Utils.Encrypt(String(codes.length));
+  const displayFundsLength = eyeOpen
+    ? funds.length
+    : Utils.Encrypt(String(funds.length));
 
   return (
     <PureCard className={styles.content}>
@@ -67,8 +73,8 @@ const Assets: React.FC<AssetsProps> = ({ funds, codes }) => {
           {displayCyje}
         </div>
         <div className={styles.row}>
-          <div>钱包：{codes.length}个</div>
-          <div>基金：{funds.length}支</div>
+          <div>钱包：{displayCodesLength}个</div>
+          <div>基金：{displayFundsLength}支</div>
         </div>
         <div className={styles.row}>
           <div>盈利数：{displayWinWalletCount}</div>
