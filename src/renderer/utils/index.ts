@@ -260,3 +260,19 @@ export function MakeMap(list: string[]): Record<string, boolean>;
 export function MakeMap(list: (string | number)[]) {
   return list.reduce((r, c) => ({ ...r, [c]: true }), {});
 }
+
+export function GetValueColor(number?: number | string) {
+  const value = Number(number);
+  const varibleColors = getVariblesColor(CONST.VARIBLES);
+  return {
+    color:
+      value > 0
+        ? varibleColors['--increase-color']
+        : value < 0
+        ? varibleColors['--reduce-color']
+        : varibleColors['--reverse-text-color'],
+    textClass: value > 0 ? 'text-up' : value < 0 ? 'text-down' : 'text-none',
+    blockClass:
+      value > 0 ? 'block-up' : value < 0 ? 'block-down' : 'block-none',
+  };
+}

@@ -103,11 +103,7 @@ const FundRow: React.FC<RowProps> = (props) => {
           <div
             className={classnames(
               styles.conciseValue,
-              calcFundResult.gszzl === ''
-                ? 'text-none'
-                : Number(calcFundResult.gszzl) < 0
-                ? 'text-down'
-                : 'text-up'
+              Utils.GetValueColor(calcFundResult.gszzl).textClass
             )}
           >
             {calcFundResult.gszzl === ''
@@ -118,11 +114,7 @@ const FundRow: React.FC<RowProps> = (props) => {
           <div
             className={classnames(
               styles.value,
-              calcFundResult.gszzl === ''
-                ? 'block-none'
-                : Number(calcFundResult.gszzl) < 0
-                ? 'block-down'
-                : 'block-up'
+              Utils.GetValueColor(calcFundResult.gszzl).blockClass
             )}
           >
             {calcFundResult.gszzl === ''
@@ -162,7 +154,7 @@ const FundRow: React.FC<RowProps> = (props) => {
             <span>{isFix ? '今日收益：' : '估算收益：'}</span>
             <span
               className={classnames(
-                Number(calcFundResult.jrsygz) < 0 ? 'text-down' : 'text-up'
+                Utils.GetValueColor(calcFundResult.jrsygz).textClass
               )}
             >
               ¥ {Utils.Yang(calcFundResult.jrsygz.toFixed(2))}

@@ -6,6 +6,7 @@ import TypeSelection from '@/components/TypeSelection';
 import { getRemoteFundsMap, calcFund, calcWalletsFund } from '@/actions/fund';
 import * as CONST from '@/constants';
 import * as Enums from '@/utils/enums';
+import * as Utils from '@/utils';
 import styles from './index.scss';
 
 interface FundRankProps {
@@ -110,12 +111,7 @@ const FundRank: React.FC<FundRankProps> = ({ funds = [], codes = [] }) => {
                     show: true,
                   },
                   itemStyle: {
-                    color:
-                      value === 0
-                        ? varibleColors['--reverse-text-color']
-                        : value > 0
-                        ? varibleColors['--increase-color']
-                        : varibleColors['--reduce-color'],
+                    color: Utils.GetValueColor(value).color,
                   },
                 };
               }),

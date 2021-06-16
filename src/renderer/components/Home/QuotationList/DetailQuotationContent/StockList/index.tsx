@@ -44,7 +44,7 @@ const StockList: React.FC<StockListProps> = ({ code }) => {
       dataIndex: 'zdf',
 
       render: (text: number) => (
-        <div className={text < 0 ? 'text-down' : 'text-up'}>
+        <div className={Utils.GetValueColor(text).textClass}>
           {Utils.Yang(text)} %
         </div>
       ),

@@ -4,6 +4,7 @@ import { useHomeContext } from '@/components/Home';
 import { useResizeEchart, useRenderEcharts } from '@/utils/hooks';
 import { getRemoteFundsMap, calcFund } from '@/actions/fund';
 import * as CONST from '@/constants';
+import * as Utils from '@/utils';
 import styles from './index.scss';
 
 interface TypeConfigProps {
@@ -50,10 +51,7 @@ const TypeConfig: React.FC<TypeConfigProps> = ({ funds = [] }) => {
                 name: calcFundResult.name,
                 value: 1,
                 label: {
-                  color:
-                    Number(calcFundResult.gszzl) >= 0
-                      ? varibleColors['--increase-color']
-                      : varibleColors['--reduce-color'],
+                  color: Utils.GetValueColor(calcFundResult.gszzl!).color,
                 },
               };
             }),

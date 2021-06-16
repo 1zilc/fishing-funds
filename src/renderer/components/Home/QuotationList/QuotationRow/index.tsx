@@ -5,10 +5,9 @@ import classnames from 'classnames';
 import { useDispatch, useSelector } from 'react-redux';
 import NP from 'number-precision';
 
-import { ReactComponent as ArrowDownLineIcon } from '@/assets/icons/arrow-down-line.svg';
-import { ReactComponent as ArrowUpLineIcon } from '@/assets/icons/arrow-up-line.svg';
 import { ReactComponent as ArrowDownIcon } from '@/assets/icons/arrow-down.svg';
 import { ReactComponent as ArrowUpIcon } from '@/assets/icons/arrow-up.svg';
+import ArrowLine from '@/components/ArrowLine';
 import { StoreState } from '@/reducers/types';
 import { TOGGLE_QUOTATION_COLLAPSE } from '@/actions/quotation';
 import * as Utils from '@/utils';
@@ -69,14 +68,14 @@ const QuotationRow: React.FC<RowProps> = (props) => {
                   <span className={styles.code}>{quotation.lzgpName}</span>
                   <span
                     className={classnames(
-                      quotation.ldgpZdf < 0 ? 'text-down' : 'text-up'
+                      Utils.GetValueColor(quotation.ldgpZdf).textClass
                     )}
                   >
                     领跌
                   </span>
                   <span
                     className={classnames(
-                      quotation.ldgpZdf < 0 ? 'text-down' : 'text-up'
+                      Utils.GetValueColor(quotation.ldgpZdf).textClass
                     )}
                   >
                     {Utils.Yang(quotation.ldgpZdf)} %
@@ -87,14 +86,14 @@ const QuotationRow: React.FC<RowProps> = (props) => {
                   <span className={styles.code}>{quotation.lzgpName}</span>
                   <span
                     className={classnames(
-                      quotation.lzgpZdf < 0 ? 'text-down' : 'text-up'
+                      Utils.GetValueColor(quotation.lzgpZdf).textClass
                     )}
                   >
                     领涨
                   </span>
                   <span
                     className={classnames(
-                      quotation.lzgpZdf < 0 ? 'text-down' : 'text-up'
+                      Utils.GetValueColor(quotation.lzgpZdf).textClass
                     )}
                   >
                     {Utils.Yang(quotation.lzgpZdf)} %
@@ -108,26 +107,18 @@ const QuotationRow: React.FC<RowProps> = (props) => {
           <div
             className={classnames(
               styles.zxj,
-              quotation.zdf < 0 ? 'text-down' : 'text-up'
+              Utils.GetValueColor(quotation.zdf).textClass
             )}
           >
             {quotation.zxj}
-            {quotation.zdf < 0 ? (
-              <ArrowDownLineIcon
-                className={quotation.zdf < 0 ? 'svg-down' : 'svg-up'}
-              />
-            ) : (
-              <ArrowUpLineIcon
-                className={quotation.zdf < 0 ? 'svg-down' : 'svg-up'}
-              />
-            )}
+            <ArrowLine value={quotation.zdf} />
           </div>
           {!conciseSetting && (
             <div className={styles.zd}>
               <div
                 className={classnames(
                   styles.zdd,
-                  quotation.zdf < 0 ? 'text-down' : 'text-up'
+                  Utils.GetValueColor(quotation.zdf).textClass
                 )}
               >
                 {Utils.Yang(quotation.zdd)}
@@ -135,7 +126,7 @@ const QuotationRow: React.FC<RowProps> = (props) => {
               <div
                 className={classnames(
                   styles.zdf,
-                  quotation.zdf < 0 ? 'text-down' : 'text-up'
+                  Utils.GetValueColor(quotation.zdf).textClass
                 )}
               >
                 {Utils.Yang(quotation.zdf)} %
@@ -155,7 +146,7 @@ const QuotationRow: React.FC<RowProps> = (props) => {
             <span>涨跌额：</span>
             <span
               className={classnames(
-                quotation.zdf < 0 ? 'text-down' : 'text-up'
+                Utils.GetValueColor(quotation.zdf).textClass
               )}
             >
               {Utils.Yang(NP.divide(quotation.zde, 10 ** 8).toFixed(2))}亿
@@ -175,7 +166,7 @@ const QuotationRow: React.FC<RowProps> = (props) => {
             </span>
             <span
               className={classnames(
-                quotation.lzgpZdf < 0 ? 'text-down' : 'text-up'
+                Utils.GetValueColor(quotation.lzgpZdf).textClass
               )}
             >
               {Utils.Yang(quotation.lzgpZdf)} %
@@ -187,7 +178,7 @@ const QuotationRow: React.FC<RowProps> = (props) => {
             </span>
             <span
               className={classnames(
-                quotation.ldgpZdf < 0 ? 'text-down' : 'text-up'
+                Utils.GetValueColor(quotation.ldgpZdf).textClass
               )}
             >
               {Utils.Yang(quotation.ldgpZdf)} %
@@ -202,7 +193,7 @@ const QuotationRow: React.FC<RowProps> = (props) => {
               <span>涨跌幅：</span>
               <span
                 className={classnames(
-                  quotation.zdf < 0 ? 'text-down' : 'text-up'
+                  Utils.GetValueColor(quotation.zdf).textClass
                 )}
               >
                 {Utils.Yang(quotation.zdf)} %

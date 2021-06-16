@@ -92,7 +92,7 @@ const DetailFundContent: React.FC<DetailFundContentProps> = (props) => {
               <div
                 className={classnames(
                   styles.syl_1n,
-                  Number(syl_1n) < 0 ? 'text-down' : 'text-up'
+                  Utils.GetValueColor(syl_1n).textClass
                 )}
               >
                 {Utils.Yang(syl_1n)}%
@@ -102,7 +102,7 @@ const DetailFundContent: React.FC<DetailFundContentProps> = (props) => {
             <div className={classnames(styles.detailItem, 'text-center')}>
               <div
                 className={classnames(
-                  Number(fund?.fixZzl) < 0 ? 'text-down' : 'text-up'
+                  Utils.GetValueColor(fund?.fixZzl).textClass
                 )}
               >
                 {Utils.Yang(fund?.fixZzl)}%
@@ -137,7 +137,7 @@ const DetailFundContent: React.FC<DetailFundContentProps> = (props) => {
             </Tabs.TabPane>
             <Tabs.TabPane tab="历史净值" key={String(Enums.TrendType.Estimate)}>
               <ChartCard auto>
-                <HistoryValue data={pingzhongdata.Data_netWorthTrend} />{' '}
+                <HistoryValue data={pingzhongdata.Data_netWorthTrend} />
               </ChartCard>
             </Tabs.TabPane>
           </Tabs>

@@ -6,6 +6,7 @@ import { useHomeContext } from '@/components/Home';
 import { useResizeEchart, useRenderEcharts } from '@/utils/hooks';
 import * as CONST from '@/constants';
 import * as Services from '@/services';
+import * as Utils from '@/utils';
 import styles from './index.scss';
 
 export interface SecuritiesWareHouseProps {
@@ -23,7 +24,7 @@ const Tooltip: React.FC<TooltipProps> = (props) => {
       <div className={styles.tooltipName}>债券名称：{item.name}</div>
       <div>债券代码：{item.code}</div>
       <div>持仓占比：{item.ccb}%</div>
-      <div className={item.zdf < 0 ? 'text-down' : 'text-up'}>
+      <div className={Utils.GetValueColor(item.zdf).textClass}>
         涨跌幅：{item.zdf}%
       </div>
     </div>
@@ -74,10 +75,7 @@ const SecuritiesWareHouse: React.FC<SecuritiesWareHouseProps> = ({
                   value: item.ccb,
                   name: item.name,
                   itemStyle: {
-                    color:
-                      item.zdf >= 0
-                        ? varibleColors['--increase-color']
-                        : varibleColors['--reduce-color'],
+                    color: Utils.GetValueColor(item.zdf).color,
                   },
                   item,
                 };

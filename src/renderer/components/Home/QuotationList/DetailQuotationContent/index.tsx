@@ -49,7 +49,7 @@ const DetailQuotationContent: React.FC<DetailQuotationContentProps> = (
             <span>{quotation?.name}</span>
             <span
               className={classnames(
-                Number(quotation.zdd) < 0 ? 'text-down' : 'text-up'
+                Utils.GetValueColor(quotation.zdd).textClass
               )}
             >
               {quotation?.zxj}
@@ -61,7 +61,7 @@ const DetailQuotationContent: React.FC<DetailQuotationContentProps> = (
               <span className={styles.detailItemLabel}>最新价：</span>
               <span
                 className={classnames(
-                  Number(quotation.zdd) < 0 ? 'text-down' : 'text-up'
+                  Utils.GetValueColor(quotation.zdd).textClass
                 )}
               >
                 {Utils.Yang(quotation?.zdd)}
@@ -73,7 +73,7 @@ const DetailQuotationContent: React.FC<DetailQuotationContentProps> = (
               <div
                 className={classnames(
                   styles.zdf,
-                  Number(quotation.zdf) < 0 ? 'text-down' : 'text-up'
+                  Utils.GetValueColor(quotation.zdd).textClass
                 )}
               >
                 {Utils.Yang(quotation.zdf)}%
