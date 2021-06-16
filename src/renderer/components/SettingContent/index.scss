@@ -103,10 +103,9 @@
 .link {
   font-size: 1rem;
   text-align: center;
-  padding: 15px;
+
   i {
     margin: 0 10px;
-    // width: 1px;
     height: 100%;
     border-left: 1px solid var(--border-color);
   }
@@ -131,7 +130,7 @@
   color: var(--inner-text-color);
   font-weight: 500;
   text-indent: calc(11rem / var(--base-font-size) * 2);
-  padding-bottom: 0;
+  margin-bottom: var(--base-padding);
 }
 
 .version {

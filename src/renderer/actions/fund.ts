@@ -221,6 +221,21 @@ export function calcFunds(funds: Fund.ResponseItem[] = [], code?: string) {
   return { zje, gszje, sygz, gssyl };
 }
 
+export function calcWalletsFund(
+  fund: Fund.ResponseItem & Fund.FixData,
+  codes: string[]
+) {
+  return codes.reduce(
+    (r, code) => {
+      const calcFundResult = calcFund(fund, code);
+      r.cyfe += calcFundResult.cyfe;
+      r.jrsygz += calcFundResult.jrsygz;
+      return r;
+    },
+    { cyfe: 0, jrsygz: 0 }
+  );
+}
+
 export function loadRemoteFunds() {
   return async (dispatch: Dispatch, getState: GetState) => {
     try {

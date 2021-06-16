@@ -62,14 +62,14 @@ const TypeConfig: React.FC<TypeConfigProps> = ({ funds = [] }) => {
             {},
             {
               r0: '10%',
-              r: '61%',
+              r: '60%',
               itemStyle: {
                 borderWidth: 1,
               },
               label: { fontSize: 10 },
             },
             {
-              r0: '61%',
+              r0: '60%',
               r: '64%',
               label: {
                 position: 'outside',

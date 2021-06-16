@@ -7,6 +7,7 @@ import ChartCard from '@/components/Card/ChartCard';
 import PureCard from '@/components/Card/PureCard';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
 import TypeConfig from '@/components/Home/FundList/FundStatisticsContent/TypeConfig';
+import FundRank from '@/components/Home/FundList/FundStatisticsContent/FundRank';
 import { getWalletConfig, walletIcons } from '@/actions/wallet';
 import { StoreState } from '@/reducers/types';
 import styles from './index.scss';
@@ -72,7 +73,6 @@ const FundStatisticsContent: React.FC<FundStatisticsContentProps> = (props) => {
             </PureCard>
           ))}
         </div>
-
         <Tabs
           defaultActiveKey={String(0)}
           animated={{ tabPane: true }}
@@ -81,6 +81,20 @@ const FundStatisticsContent: React.FC<FundStatisticsContentProps> = (props) => {
           <Tabs.TabPane tab="持基结构" key={String(0)}>
             <ChartCard>
               <TypeConfig funds={funds} />
+            </ChartCard>
+          </Tabs.TabPane>
+        </Tabs>
+        <Tabs
+          defaultActiveKey={String(0)}
+          animated={{ tabPane: true }}
+          tabBarGutter={15}
+        >
+          <Tabs.TabPane tab="基金排行" key={String(0)}>
+            <ChartCard>
+              <FundRank
+                funds={funds}
+                codes={Object.keys(statusMap).filter((key) => statusMap[key])}
+              />
             </ChartCard>
           </Tabs.TabPane>
         </Tabs>

@@ -143,7 +143,7 @@ export function useConfigClipboard() {
         const fundConfig = json
           .map((fund) => ({
             name: '',
-            cyfe: Number(fund.cyfe) || 0,
+            cyfe: Number(fund.cyfe) < 0 ? 0 : Number(fund.cyfe) || 0,
             code: fund.code && String(fund.code),
           }))
           .filter(({ code }) => code);

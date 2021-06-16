@@ -123,3 +123,8 @@ export enum ZindexType {
   Australia,
   Other,
 }
+
+export enum FundRankType {
+  Sy,
+  Syl,
+}
