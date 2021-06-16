@@ -125,7 +125,7 @@ const FundRank: React.FC<FundRankProps> = ({ funds = [], codes = [] }) => {
 
   return (
     <div className={styles.content}>
-      <div ref={chartRef} style={{ width: '100%' }} />{' '}
+      <div ref={chartRef} style={{ width: '100%' }} />
       <TypeSelection
         types={rankTypeList}
         activeType={rankType.type}

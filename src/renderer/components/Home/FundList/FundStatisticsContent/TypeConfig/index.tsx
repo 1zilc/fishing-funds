@@ -25,7 +25,7 @@ const TypeConfig: React.FC<TypeConfigProps> = ({ funds = [] }) => {
       funds.forEach((fund) => {
         const type = remoteFundsMap[fund.fundcode!]?.[3];
         if (!typeMap[type]) {
-          typeMap[type] = [];
+          typeMap[type] = [fund];
         } else {
           typeMap[type].push(fund);
         }

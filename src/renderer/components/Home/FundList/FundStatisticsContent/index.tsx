@@ -8,6 +8,8 @@ import PureCard from '@/components/Card/PureCard';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
 import TypeConfig from '@/components/Home/FundList/FundStatisticsContent/TypeConfig';
 import FundRank from '@/components/Home/FundList/FundStatisticsContent/FundRank';
+import WalletIncome from '@/components/Home/FundList/FundStatisticsContent/WalletIncome';
+import WalletConfig from '@/components/Home/FundList/FundStatisticsContent/WalletConfig';
 import { getWalletConfig, walletIcons } from '@/actions/wallet';
 import { StoreState } from '@/reducers/types';
 import styles from './index.scss';
@@ -37,6 +39,10 @@ const FundStatisticsContent: React.FC<FundStatisticsContentProps> = (props) => {
         fundCodeMap.set(fund.fundcode!, true)
     );
   }, [statusMap, walletsMap]);
+  const codes = useMemo(
+    () => Object.keys(statusMap).filter((key) => statusMap[key]),
+    [statusMap]
+  );
 
   function changeWalletStatus(code: string, status: boolean) {
     setStatusMap({
@@ -89,12 +95,25 @@ const FundStatisticsContent: React.FC<FundStatisticsContentProps> = (props) => {
           animated={{ tabPane: true }}
           tabBarGutter={15}
         >
+          <Tabs.TabPane tab="钱包配置" key={String(0)}>
+            <ChartCard>
+              <WalletConfig funds={funds} codes={codes} />
+            </ChartCard>
+          </Tabs.TabPane>
+          <Tabs.TabPane tab="钱包收益" key={String(1)}>
+            <ChartCard>
+              <WalletIncome funds={funds} codes={codes} />
+            </ChartCard>
+          </Tabs.TabPane>
+        </Tabs>
+        <Tabs
+          defaultActiveKey={String(0)}
+          animated={{ tabPane: true }}
+          tabBarGutter={15}
+        >
           <Tabs.TabPane tab="基金排行" key={String(0)}>
             <ChartCard>
-              <FundRank
-                funds={funds}
-                codes={Object.keys(statusMap).filter((key) => statusMap[key])}
-              />
+              <FundRank funds={funds} codes={codes} />
             </ChartCard>
           </Tabs.TabPane>
         </Tabs>
