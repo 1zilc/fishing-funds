@@ -78,7 +78,7 @@ const WalletConfig: React.FC<WalletConfigProps> = ({ funds, codes }) => {
               stack: walletsName.join(','),
               data: codes.map((code) => {
                 const calcFundResult = calcFund(fund, code);
-                return calcFundResult.gszz.toFixed(2);
+                return calcFundResult.cyje.toFixed(2);
               }),
             };
           }),

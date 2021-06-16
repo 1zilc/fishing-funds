@@ -1,4 +1,3 @@
-/* eslint-disable no-eval */
 import NP from 'number-precision';
 import { batch } from 'react-redux';
 import dayjs from 'dayjs';
@@ -180,6 +179,7 @@ export function calcFund(
   const bjz = NP.minus(gsz!, fund.dwjz!);
   const jrsygz = NP.times(cyfe, bjz);
   const gszz = NP.times(gsz!, cyfe);
+  const cyje = NP.times(dwjz, cyfe);
 
   // cyfe: number; // 持有份额
   // bjz: number; // 比较值
@@ -188,6 +188,7 @@ export function calcFund(
   return {
     ...fund,
     cyfe,
+    cyje,
     bjz,
     jrsygz,
     gszz,
@@ -230,9 +231,10 @@ export function calcWalletsFund(
       const calcFundResult = calcFund(fund, code);
       r.cyfe += calcFundResult.cyfe;
       r.jrsygz += calcFundResult.jrsygz;
+      r.cyje += calcFundResult.cyje;
       return r;
     },
-    { cyfe: 0, jrsygz: 0 }
+    { cyfe: 0, jrsygz: 0, cyje: 0 }
   );
 }
 

@@ -10,6 +10,7 @@ import TypeConfig from '@/components/Home/FundList/FundStatisticsContent/TypeCon
 import FundRank from '@/components/Home/FundList/FundStatisticsContent/FundRank';
 import WalletIncome from '@/components/Home/FundList/FundStatisticsContent/WalletIncome';
 import WalletConfig from '@/components/Home/FundList/FundStatisticsContent/WalletConfig';
+import Assets from '@/components/Home/FundList/FundStatisticsContent/Assets';
 import { getWalletConfig, walletIcons } from '@/actions/wallet';
 import { StoreState } from '@/reducers/types';
 import styles from './index.scss';
@@ -67,6 +68,7 @@ const FundStatisticsContent: React.FC<FundStatisticsContentProps> = (props) => {
       onClose={props.onClose}
     >
       <div className={styles.content}>
+        <Assets funds={funds} codes={codes} />
         <div className={styles.wallets}>
           {walletConfig.map((wallet, index) => (
             <PureCard key={wallet.code} className={styles.wallet}>
