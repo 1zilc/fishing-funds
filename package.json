@@ -214,7 +214,7 @@
     "html-webpack-plugin": "^5.3.1",
     "husky": "4.x.x",
     "identity-obj-proxy": "^3.0.0",
-    "jest": "^26.1.0",
+    "jest": "^27.0.4",
     "lint-staged": "^11.0.0",
     "mini-css-extract-plugin": "^1.6.0",
     "opencollective-postinstall": "^2.0.3",
