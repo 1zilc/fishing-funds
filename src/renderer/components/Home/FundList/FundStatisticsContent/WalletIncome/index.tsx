@@ -64,17 +64,15 @@ const WalletIncome: React.FC<WalletIncomeProps> = ({
             emphasis: {
               focus: 'series',
             },
-            data: codes
-              .map((code) => {
-                const { sygz } = calcFunds(funds, code);
-                return {
-                  value: sygz.toFixed(2),
-                  itemStyle: {
-                    color: Utils.GetValueColor(sygz).color,
-                  },
-                };
-              })
-              .sort((a, b) => Number(a.value) - Number(b.value)),
+            data: codes.map((code) => {
+              const { sygz } = calcFunds(funds, code);
+              return {
+                value: sygz.toFixed(2),
+                itemStyle: {
+                  color: Utils.GetValueColor(sygz).color,
+                },
+              };
+            }),
           },
         ],
         barMaxWidth: 20,

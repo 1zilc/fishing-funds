@@ -93,12 +93,9 @@ const StockWareHouse: React.FC<StockWareHouseProps> = ({
                 length2: 20,
               },
               itemStyle: {
-                color: varibleColors['--main-text-color'],
                 borderRadius: 10,
                 borderColor: varibleColors['--background-color'],
                 borderWidth: 1,
-                // shadowBlur: 200,
-                // shadowColor: 'rgba(0, 0, 0, 0.5)',
               },
               animationType: 'scale',
               animationEasing: 'elasticOut',

@@ -30,7 +30,7 @@ export function CalcWithPrefix(a: any, b: any) {
   }
 }
 
-export function DeepCopy<T>(data: any): T {
+export function DeepCopy<T>(data: T): T {
   let dataTmp: any;
   if (data === null || !(typeof data === 'object')) {
     dataTmp = data;

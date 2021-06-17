@@ -4,22 +4,33 @@ import classnames from 'classnames';
 import { useSelector } from 'react-redux';
 
 import PureCard from '@/components/Card/PureCard';
-import { calcWalletsFund } from '@/actions/fund';
+import Score from '@/components/Home/FundList/FundStatisticsContent/AssetsStatistics/Score';
+import { calcWalletsFund, calcFunds } from '@/actions/fund';
 import { StoreState } from '@/reducers/types';
 import * as Enums from '@/utils/enums';
 import * as Utils from '@/utils';
 import styles from './index.scss';
 
-interface AssetsProps {
+interface AssetsStatisticsProps {
   funds: (Fund.ResponseItem & Fund.FixData)[];
   codes: string[];
 }
 
-const Assets: React.FC<AssetsProps> = ({ funds, codes }) => {
+const AssetsStatistics: React.FC<AssetsStatisticsProps> = ({
+  funds,
+  codes,
+}) => {
   const eyeStatus = useSelector((state: StoreState) => state.wallet.eyeStatus);
+  const walletsMap = useSelector(
+    (state: StoreState) => state.wallet.walletsMap
+  );
   const eyeOpen = eyeStatus === Enums.EyeStatus.Open;
   // 盈利钱包数
-  let winWalletCount = 0;
+  const winWalletCount = codes.reduce((result, code) => {
+    const funds = walletsMap[code]?.funds || [];
+    const { sygz } = calcFunds(funds, code);
+    return result + (sygz > 0 ? 1 : 0);
+  }, 0);
   // 盈利基金数
   const winFundCount = funds.filter(({ gszzl }) => Number(gszzl) > 0).length;
   // 总资产
@@ -28,7 +39,6 @@ const Assets: React.FC<AssetsProps> = ({ funds, codes }) => {
       const { cyje, jrsygz } = calcWalletsFund(fund, codes);
       result.cyje += cyje;
       result.jrsygz += jrsygz;
-      winWalletCount += jrsygz > 0 ? 1 : 0;
       return result;
     },
     { jrsygz: 0, cyje: 0 }
@@ -73,12 +83,18 @@ const Assets: React.FC<AssetsProps> = ({ funds, codes }) => {
           {displayCyje}
         </div>
         <div className={styles.row}>
-          <div>钱包：{displayCodesLength}个</div>
-          <div>基金：{displayFundsLength}支</div>
+          <div>
+            钱包：{displayCodesLength}
+            {eyeOpen ? '个' : ''}
+          </div>
+          <div>
+            基金：{displayFundsLength}
+            {eyeOpen ? '支' : ''}
+          </div>
         </div>
         <div className={styles.row}>
           <div>盈利数：{displayWinWalletCount}</div>
-          <div>盈利数：{displayWinFundCount}</div>
+          <div>正增幅：{displayWinFundCount}</div>
         </div>
         <div className={styles.row}>
           <div>
@@ -104,8 +120,9 @@ const Assets: React.FC<AssetsProps> = ({ funds, codes }) => {
           </div>
         </div>
       </div>
+      <Score gssyl={gssyl} />
     </PureCard>
   );
 };
 
-export default Assets;
+export default AssetsStatistics;

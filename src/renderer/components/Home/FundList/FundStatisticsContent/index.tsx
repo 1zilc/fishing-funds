@@ -10,7 +10,8 @@ import TypeConfig from '@/components/Home/FundList/FundStatisticsContent/TypeCon
 import FundRank from '@/components/Home/FundList/FundStatisticsContent/FundRank';
 import WalletIncome from '@/components/Home/FundList/FundStatisticsContent/WalletIncome';
 import WalletConfig from '@/components/Home/FundList/FundStatisticsContent/WalletConfig';
-import Assets from '@/components/Home/FundList/FundStatisticsContent/Assets';
+import AssetsStatistics from '@/components/Home/FundList/FundStatisticsContent/AssetsStatistics';
+import AssetsConfig from '@/components/Home/FundList/FundStatisticsContent/AssetsConfig';
 import { getWalletConfig, walletIcons } from '@/actions/wallet';
 import { StoreState } from '@/reducers/types';
 import styles from './index.scss';
@@ -68,7 +69,7 @@ const FundStatisticsContent: React.FC<FundStatisticsContentProps> = (props) => {
       onClose={props.onClose}
     >
       <div className={styles.content}>
-        <Assets funds={funds} codes={codes} />
+        <AssetsStatistics funds={funds} codes={codes} />
         <div className={styles.wallets}>
           {walletConfig.map((wallet, index) => (
             <PureCard key={wallet.code} className={styles.wallet}>
@@ -89,6 +90,11 @@ const FundStatisticsContent: React.FC<FundStatisticsContentProps> = (props) => {
           <Tabs.TabPane tab="持基结构" key={String(0)}>
             <ChartCard>
               <TypeConfig funds={funds} />
+            </ChartCard>
+          </Tabs.TabPane>
+          <Tabs.TabPane tab="资产结构" key={String(1)}>
+            <ChartCard>
+              <AssetsConfig funds={funds} codes={codes} />
             </ChartCard>
           </Tabs.TabPane>
         </Tabs>

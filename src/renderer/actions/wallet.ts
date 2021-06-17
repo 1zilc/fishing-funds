@@ -171,7 +171,7 @@ export function loadFixWalletsFunds() {
       const { wallet } = getState();
       const { walletsMap } = wallet;
       const fixCollects = Object.keys(walletsMap).map((code) => {
-        const funds = walletsMap[code].funds || [];
+        const funds = walletsMap[code]?.funds || [];
         const collectors = funds
           .filter(
             ({ fixDate, gztime }) =>

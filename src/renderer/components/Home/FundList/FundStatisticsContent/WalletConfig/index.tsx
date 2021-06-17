@@ -2,8 +2,7 @@ import React, { useState } from 'react';
 
 import { useHomeContext } from '@/components/Home';
 import { useResizeEchart, useRenderEcharts } from '@/utils/hooks';
-import TypeSelection from '@/components/TypeSelection';
-import { getRemoteFundsMap, calcFund, calcFunds } from '@/actions/fund';
+import { calcFund } from '@/actions/fund';
 import { getCurrentWallet } from '@/actions/wallet';
 import * as CONST from '@/constants';
 import * as Enums from '@/utils/enums';
@@ -46,6 +45,10 @@ const WalletConfig: React.FC<WalletConfigProps> = ({ funds, codes }) => {
             itemHeight: 2,
             type: 'scroll',
             pageIconSize: 10,
+            pageTextStyle: {
+              color: varibleColors['--main-text-color'],
+              fontSize: 10,
+            },
           },
           grid: {
             left: 0,
