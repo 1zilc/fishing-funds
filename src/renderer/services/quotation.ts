@@ -1,6 +1,6 @@
 import NP from 'number-precision';
 
-const got = window.contextModules.got;
+const { got } = window.contextModules;
 
 export async function GetQuotationsFromEastmoney() {
   try {
@@ -50,7 +50,7 @@ export async function GetQuotationsFromEastmoney() {
       code: i.f12, // 板块代码
       name: i.f14, // 板块名称
       zxj: i.f2, // 最新价
-      zde: NP.times(i.f20, i.f3, Math.pow(10, -2)), // 涨跌额
+      zde: NP.times(i.f20, i.f3, 10 ** -2), // 涨跌额
       zdd: i.f4, // 涨跌点
       zdf: i.f3, // 涨跌幅 -0.44
       zsz: i.f20, // 总市值
@@ -148,7 +148,7 @@ export async function GetRealTimeFundFlowFromEasymoney(code: string) {
       },
       responseType: 'json',
     });
-    const billion = Math.pow(10, 8);
+    const billion = 10 ** 8;
     const result = (data?.klines || []).map((item: string) => {
       const [datetime, zljlr, xdjlr, zdjlr, ddjlr, cddjlr] = item.split(',');
       return {
@@ -303,7 +303,7 @@ export async function GetTransactionFromEasymoney(code: string) {
     });
 
     const temp = data?.diff?.[0] || {};
-    const billion = Math.pow(10, 8);
+    const billion = 10 ** 8;
     return {
       cddlr: Number(NP.divide(temp.f64, billion).toFixed(2)),
       cddlc: Number(NP.divide(temp.f65, billion).toFixed(2)),
@@ -354,7 +354,7 @@ export async function GetAfterTimeFundFlowFromEasymoney(code: string) {
       },
       responseType: 'json',
     });
-    const billion = Math.pow(10, 8);
+    const billion = 10 ** 8;
     const result = (data?.klines || []).map((item: string) => {
       const [datetime, zljlr, xdjlr, zdjlr, ddjlr, cddjlr] = item.split(',');
       return {
@@ -414,7 +414,7 @@ export async function GetFundFlowFromEastmoney(code: string, type: string) {
     const result = data.data.diff.map((i) => ({
       code: i.f12, // 板块代码
       name: i.f14, // 板块名称
-      value: NP.divide(i[type], Math.pow(10, 8)),
+      value: NP.divide(i[type], 10 ** 8),
     }));
 
     return result;

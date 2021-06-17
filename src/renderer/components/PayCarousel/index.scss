@@ -1,12 +1,9 @@
 .content {
-  padding: var(--base-padding);
-}
-
-.describe {
-  font-size: calc(11rem / var(--base-font-size));
-  color: var(--inner-text-color);
-  font-weight: 500;
-  text-indent: calc(11rem / var(--base-font-size) * 2);
+  margin: 0 var(--base-padding) 5px;
+  position: relative;
+  width: 100vw;
+  left: -20px;
+  box-sizing: border-box;
 }
 
 .pay {
@@ -20,8 +17,8 @@
     width: 108px;
     height: auto;
     object-fit: cover;
-    transform: translateZ(30px);
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    margin-bottom: 5px;
   }
 }
 

@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
-import { useBoolean } from 'ahooks';
+import { useBoolean, useRequest } from 'ahooks';
 import classnames from 'classnames';
-import { useRequest } from 'ahooks';
 import { Tabs } from 'antd';
 
 import ChartCard from '@/components/Card/ChartCard';
@@ -63,6 +62,12 @@ const DetailFundContent: React.FC<DetailFundContentProps> = (props) => {
     cacheKey: `GetFundDetailFromEastmoney/${code}`,
   });
 
+  const syl_1n =
+    pingzhongdata.syl_1n ||
+    pingzhongdata.syl_6y ||
+    pingzhongdata.syl_3y ||
+    pingzhongdata.syl_1y;
+
   return (
     <CustomDrawerContent
       title="基金详情"
@@ -87,17 +92,17 @@ const DetailFundContent: React.FC<DetailFundContentProps> = (props) => {
               <div
                 className={classnames(
                   styles.syl_1n,
-                  Number(pingzhongdata.syl_1n) < 0 ? 'text-down' : 'text-up'
+                  Utils.GetValueColor(syl_1n).textClass
                 )}
               >
-                {Utils.Yang(pingzhongdata.syl_1n)}%
+                {Utils.Yang(syl_1n)}%
               </div>
               <div className={styles.detailItemLabel}>近一年涨跌幅</div>
             </div>
             <div className={classnames(styles.detailItem, 'text-center')}>
               <div
                 className={classnames(
-                  Number(fund?.fixZzl) < 0 ? 'text-down' : 'text-up'
+                  Utils.GetValueColor(fund?.fixZzl).textClass
                 )}
               >
                 {Utils.Yang(fund?.fixZzl)}%
@@ -132,7 +137,7 @@ const DetailFundContent: React.FC<DetailFundContentProps> = (props) => {
             </Tabs.TabPane>
             <Tabs.TabPane tab="历史净值" key={String(Enums.TrendType.Estimate)}>
               <ChartCard auto>
-                <HistoryValue data={pingzhongdata.Data_netWorthTrend} />{' '}
+                <HistoryValue data={pingzhongdata.Data_netWorthTrend} />
               </ChartCard>
             </Tabs.TabPane>
           </Tabs>

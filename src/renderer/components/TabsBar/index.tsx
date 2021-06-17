@@ -6,9 +6,7 @@ import { setTabActiveKey } from '@/actions/tabs';
 import * as Enums from '@/utils/enums';
 import styles from './index.scss';
 
-export interface TabsBarProps {
-  onChange?: (key: Enums.TabKeyType, tab: Tab) => void;
-}
+export interface TabsBarProps {}
 export interface Tab {
   key: Enums.TabKeyType;
   name: string;
@@ -27,7 +25,7 @@ const tabs = [
     name: '板块行情',
   },
 ];
-const TabsBar: React.FC<TabsBarProps> = ({ onChange }) => {
+const TabsBar: React.FC<TabsBarProps> = () => {
   const dispatch = useDispatch();
 
   const tabsActiveKey = useSelector(
@@ -43,14 +41,11 @@ const TabsBar: React.FC<TabsBarProps> = ({ onChange }) => {
               className={classnemes(styles.tab, {
                 [styles.active]: tabsActiveKey === tab.key,
               })}
-              onClick={() => {
-                dispatch(setTabActiveKey(tab.key));
-                onChange && onChange(tab.key, tab);
-              }}
+              onClick={() => dispatch(setTabActiveKey(tab.key))}
             >
               {tab.name}
             </div>
-            <i></i>
+            <i />
           </React.Fragment>
         ))}
       </div>

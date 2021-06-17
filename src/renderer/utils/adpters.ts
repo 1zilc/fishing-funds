@@ -55,8 +55,8 @@ export const ConCurrencyPreemptiveAdapter: <T>(
   delay?: number
 ) => Promise<T | null> = async (collectors, delay = 0) => {
   await Utils.Sleep(delay);
-  return new Promise(async (resolve, reject) => {
-    await collectors.forEach(async (next, index) => {
+  return new Promise((resolve, reject) => {
+    collectors.forEach(async (next, index) => {
       const res = await next();
       resolve(res);
     });
@@ -72,12 +72,12 @@ export const ChokePreemptiveAdapter: <T>(
   collectors: Collector<T>[],
   delay?: number
 ) => Promise<T | null> = async (collectors, delay = 0) => {
-  return new Promise(async (resolve, reject) => {
-    await collectors.reduce((last, next, index) => {
+  return new Promise((resolve, reject) => {
+    collectors.reduce((last, next, index) => {
       return last.then(async () => {
         try {
           const res = await next();
-          resolve(res);
+          return resolve(res);
         } catch {
           return Utils.Sleep(delay);
         }
@@ -109,7 +109,7 @@ export const ChokeGroupAdapter: <T>(
   });
 
   const taskcollectors = collectorGroups.map(
-    (collectorGroup) => async () => await ConCurrencyAllAdapter(collectorGroup)
+    (collectorGroup) => async () => ConCurrencyAllAdapter(collectorGroup)
   );
   return (await ChokeAllAdapter(taskcollectors, delay)).flat();
 };

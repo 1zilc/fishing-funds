@@ -1,4 +1,3 @@
-/* eslint-disable no-eval */
 import NP from 'number-precision';
 import { batch } from 'react-redux';
 import dayjs from 'dayjs';
@@ -29,8 +28,11 @@ export const TOGGLE_FUNDS_COLLAPSE = 'TOGGLE_FUNDS_COLLAPSE';
 export const SORT_FUNDS = 'SORT_FUNDS';
 export const SORT_FUNDS_WITH_CHACHED = 'SORT_FUNDS_WITH_CHACHED';
 
-export interface CodeMap {
+export interface CodeFundMap {
   [index: string]: Fund.SettingItem & Fund.OriginRow;
+}
+export interface CodeRemoteFundMap {
+  [index: string]: Fund.RemoteFund;
 }
 
 export function getFundConfig(code?: string) {
@@ -44,7 +46,7 @@ export function getCodeMap(config: Fund.SettingItem[]) {
   return config.reduce((r, c, i) => {
     r[c.code] = { ...c, originSort: i };
     return r;
-  }, {} as CodeMap);
+  }, {} as CodeFundMap);
 }
 
 export function setFundConfig(config: Fund.SettingItem[]) {
@@ -53,22 +55,22 @@ export function setFundConfig(config: Fund.SettingItem[]) {
     CONST.STORAGE.CURRENT_WALLET_CODE,
     defaultWallet.code
   );
-  const _walletConfig = walletConfig.map((item) => ({
+  const newWalletConfig = walletConfig.map((item) => ({
     ...item,
     funds: currentWalletCode === item.code ? config : item.funds,
   }));
-  setWalletConfig(_walletConfig);
+  setWalletConfig(newWalletConfig);
 }
 
 export function setRemoteFunds(remoteFunds: Fund.RemoteFund[]) {
-  const _ = Utils.GetStorage(CONST.STORAGE.REMOTE_FUND_MAP, {});
-  const remoteMap = remoteFunds.reduce((r, c) => {
+  const remoteMap = Utils.GetStorage(CONST.STORAGE.REMOTE_FUND_MAP, {});
+  const newRemoteMap = remoteFunds.reduce((r, c) => {
     r[c[0]] = c;
     return r;
-  }, {} as any);
+  }, {} as CodeRemoteFundMap);
   Utils.SetStorage(CONST.STORAGE.REMOTE_FUND_MAP, {
-    ..._,
     ...remoteMap,
+    ...newRemoteMap,
   });
   return { type: SET_REMOTE_FUNDS, payload: remoteFunds };
 }
@@ -107,12 +109,6 @@ export async function getFunds(config?: Fund.SettingItem[]) {
 
 export async function getFund(code: string) {
   const { fundApiTypeSetting } = getSystemSetting();
-  const remoteFundsMap = getRemoteFundsMap();
-  const remoteFund = remoteFundsMap[code];
-
-  if (remoteFund?.[3].includes('QDII')) {
-    return Services.Fund.GetQDIIFundFromEastMoney(code);
-  }
 
   switch (fundApiTypeSetting) {
     case Enums.FundApiType.Dayfund:
@@ -183,6 +179,7 @@ export function calcFund(
   const bjz = NP.minus(gsz!, fund.dwjz!);
   const jrsygz = NP.times(cyfe, bjz);
   const gszz = NP.times(gsz!, cyfe);
+  const cyje = NP.times(dwjz, cyfe);
 
   // cyfe: number; // 持有份额
   // bjz: number; // 比较值
@@ -191,6 +188,7 @@ export function calcFund(
   return {
     ...fund,
     cyfe,
+    cyje,
     bjz,
     jrsygz,
     gszz,
@@ -207,10 +205,10 @@ export function calcFunds(funds: Fund.ResponseItem[] = [], code?: string) {
   const [zje, gszje, sygz] = funds.reduce(
     ([a, b, c], fund) => {
       const calcFundResult = calcFund(fund);
+      const { bjz, gsz } = calcFundResult; // 比较值（估算值 - 持有净值）
       const cyfe = codeMap[fund.fundcode!]?.cyfe || 0; // 持有份额
-      const bjz = calcFundResult.bjz; // 比较值（估算值 - 持有净值）
       const jrsygz = NP.times(cyfe, bjz); // 今日收益估值（持有份额 * 比较值）
-      const gszz = NP.times(calcFundResult.gsz!, cyfe); // 估算总值 (持有份额 * 估算值)
+      const gszz = NP.times(gsz, cyfe); // 估算总值 (持有份额 * 估算值)
       const dwje = NP.times(fund.dwjz!, cyfe); // 当前金额 (持有份额 * 当前净值)
       return [a + dwje, b + gszz, c + jrsygz];
     },
@@ -222,6 +220,22 @@ export function calcFunds(funds: Fund.ResponseItem[] = [], code?: string) {
   // sygz: number; // 估算总收益
   // gssyl: number; // 估算总收益率
   return { zje, gszje, sygz, gssyl };
+}
+
+export function calcWalletsFund(
+  fund: Fund.ResponseItem & Fund.FixData,
+  codes: string[]
+) {
+  return codes.reduce(
+    (r, code) => {
+      const calcFundResult = calcFund(fund, code);
+      r.cyfe += calcFundResult.cyfe;
+      r.jrsygz += calcFundResult.jrsygz;
+      r.cyje += calcFundResult.cyje;
+      return r;
+    },
+    { cyfe: 0, jrsygz: 0, cyje: 0 }
+  );
 }
 
 export function loadRemoteFunds() {
@@ -285,7 +299,8 @@ export function loadFundsWithoutLoading() {
           },
         });
       });
-    } finally {
+    } catch (error) {
+      console.log('静默加载基金失败', error);
     }
   };
 }
@@ -325,7 +340,8 @@ export function loadFixFunds() {
           },
         });
       });
-    } finally {
+    } catch (error) {
+      console.log('加载最新净值失败', error);
     }
   };
 }
@@ -335,12 +351,10 @@ export function mergeFixFunds(
   fixFunds: Fund.FixData[]
 ) {
   const cloneFunds = Utils.DeepCopy(funds);
-  const fixFundMap = fixFunds
-    .filter((_) => !!_)
-    .reduce((map, fund) => {
-      map[fund.code!] = fund;
-      return map;
-    }, {} as { [index: string]: Fund.FixData });
+  const fixFundMap = fixFunds.filter(Boolean).reduce((map, fund) => {
+    map[fund.code!] = fund;
+    return map;
+  }, {} as { [index: string]: Fund.FixData });
 
   cloneFunds.forEach((fund) => {
     const fixFund = fixFundMap[fund.fundcode!];

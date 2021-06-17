@@ -44,16 +44,19 @@ const FundRow: React.FC<RowProps> = (props) => {
   };
 
   const onDetailClick = () => {
-    props.onDetail && props.onDetail(fund.fundcode!);
+    if (props.onDetail) {
+      props.onDetail(fund.fundcode!);
+    }
   };
 
   const onEditClick = () => {
-    props.onEdit &&
+    if (props.onEdit) {
       props.onEdit({
         name: fund.name!,
         code: fund.fundcode!,
         cyfe: Number(calcFundResult.cyfe),
       });
+    }
   };
 
   return (
@@ -100,11 +103,7 @@ const FundRow: React.FC<RowProps> = (props) => {
           <div
             className={classnames(
               styles.conciseValue,
-              calcFundResult.gszzl === ''
-                ? 'text-none'
-                : Number(calcFundResult.gszzl) < 0
-                ? 'text-down'
-                : 'text-up'
+              Utils.GetValueColor(calcFundResult.gszzl).textClass
             )}
           >
             {calcFundResult.gszzl === ''
@@ -115,11 +114,7 @@ const FundRow: React.FC<RowProps> = (props) => {
           <div
             className={classnames(
               styles.value,
-              calcFundResult.gszzl === ''
-                ? 'block-none'
-                : Number(calcFundResult.gszzl) < 0
-                ? 'block-down'
-                : 'block-up'
+              Utils.GetValueColor(calcFundResult.gszzl).blockClass
             )}
           >
             {calcFundResult.gszzl === ''
@@ -156,10 +151,10 @@ const FundRow: React.FC<RowProps> = (props) => {
             <EditIcon className={styles.editor} onClick={onEditClick} />
           </section>
           <section>
-            <span>{isFix ? '今日收益：' : '今日收益估值：'}</span>
+            <span>{isFix ? '今日收益：' : '估算收益：'}</span>
             <span
               className={classnames(
-                Number(calcFundResult.jrsygz) < 0 ? 'text-down' : 'text-up'
+                Utils.GetValueColor(calcFundResult.jrsygz).textClass
               )}
             >
               ¥ {Utils.Yang(calcFundResult.jrsygz.toFixed(2))}
@@ -170,7 +165,7 @@ const FundRow: React.FC<RowProps> = (props) => {
             <span>{calcFundResult.jzrq}</span>
           </section>
           <section>
-            <span>{isFix ? '今日总值：' : '今日估算总值：'}</span>
+            <span>{isFix ? '今日总值：' : '估算总值：'}</span>
             <span>¥ {calcFundResult.gszz.toFixed(2)}</span>
           </section>
           <div className={styles.view}>

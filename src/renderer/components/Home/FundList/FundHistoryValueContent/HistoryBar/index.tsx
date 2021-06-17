@@ -4,6 +4,7 @@ import dayjs from 'dayjs';
 import { useHomeContext } from '@/components/Home';
 import { useResizeEchart, useRenderEcharts } from '@/utils/hooks';
 import * as CONST from '@/constants';
+import * as Utils from '@/utils';
 import styles from './index.scss';
 
 interface HistoryBarProps {
@@ -56,10 +57,7 @@ const HistoryBar: React.FC<HistoryBarProps> = ({ data = [] }) => {
               return {
                 value: equityReturn,
                 itemStyle: {
-                  color:
-                    equityReturn >= 0
-                      ? varibleColors['--increase-color']
-                      : varibleColors['--reduce-color'],
+                  color: Utils.GetValueColor(equityReturn).color,
                 },
               };
             }),
@@ -81,7 +79,7 @@ const HistoryBar: React.FC<HistoryBarProps> = ({ data = [] }) => {
 
   return (
     <div className={styles.content}>
-      <div ref={chartRef} style={{ width: '100%' }}></div>
+      <div ref={chartRef} style={{ width: '100%' }} />
     </div>
   );
 };

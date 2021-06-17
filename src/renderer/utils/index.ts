@@ -18,7 +18,7 @@ export function Yang(num: string | number | undefined) {
       return `+${num}`;
     }
   } catch (error) {
-    return num;
+    return String(num);
   }
 }
 
@@ -31,16 +31,15 @@ export function CalcWithPrefix(a: any, b: any) {
 }
 
 export function DeepCopy<T>(data: T): T {
-  let dataTmp: any = undefined;
+  let dataTmp: any;
   if (data === null || !(typeof data === 'object')) {
     dataTmp = data;
   } else {
     dataTmp = data instanceof Array ? [] : {};
-    for (let key in data) {
+    Object.keys(data).forEach((key) => {
       dataTmp[key] = DeepCopy(data[key]);
-    }
+    });
   }
-
   return dataTmp;
 }
 
@@ -104,7 +103,7 @@ export function JudgeAdjustmentNotificationTime(timestamp: number) {
   };
 }
 
-//TODO: 类型推断有问题
+// TODO: 类型推断有问题
 export function getVariblesColor(varibles: string[]) {
   return varibles.reduce<Record<string, string>>((colorMap, varible) => {
     const color = window
@@ -191,7 +190,7 @@ export function UnitConvert(num: number) {
     const stringNum = tempNum.toString();
     const index = stringNum.indexOf('.');
     let newNum = stringNum;
-    if (index != -1) {
+    if (index !== -1) {
       newNum = stringNum.substring(0, index);
     }
     return newNum.length;
@@ -199,15 +198,15 @@ export function UnitConvert(num: number) {
   const moneyUnits = ['元', '万', '亿', '万亿'];
   const dividend = 10000;
   let curentNum = num;
-  //转换数字
+  // 转换数字
   let curentUnit = moneyUnits[0];
-  //转换单位
+  // 转换单位
   for (let i = 0; i < 4; i++) {
     curentUnit = moneyUnits[i];
     if (strNumSize(curentNum) < 5) {
       break;
     }
-    curentNum = curentNum / dividend;
+    curentNum /= dividend;
   }
   return {
     num: curentNum.toFixed(2),
@@ -260,4 +259,20 @@ export function MakeMap(list: number[]): Record<number, boolean>;
 export function MakeMap(list: string[]): Record<string, boolean>;
 export function MakeMap(list: (string | number)[]) {
   return list.reduce((r, c) => ({ ...r, [c]: true }), {});
+}
+
+export function GetValueColor(number?: number | string) {
+  const value = Number(number);
+  const varibleColors = getVariblesColor(CONST.VARIBLES);
+  return {
+    color:
+      value > 0
+        ? varibleColors['--increase-color']
+        : value < 0
+        ? varibleColors['--reduce-color']
+        : varibleColors['--reverse-text-color'],
+    textClass: value > 0 ? 'text-up' : value < 0 ? 'text-down' : 'text-none',
+    blockClass:
+      value > 0 ? 'block-up' : value < 0 ? 'block-down' : 'block-none',
+  };
 }

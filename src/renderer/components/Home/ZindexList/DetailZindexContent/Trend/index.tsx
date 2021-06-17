@@ -6,6 +6,7 @@ import TypeSelection from '@/components/TypeSelection';
 import { useResizeEchart, useRenderEcharts } from '@/utils/hooks';
 import * as CONST from '@/constants';
 import * as Services from '@/services';
+import * as Utils from '@/utils';
 import styles from './index.scss';
 
 export interface PerformanceProps {
@@ -77,10 +78,10 @@ const Trend: React.FC<PerformanceProps> = ({ code }) => {
               symbol: 'none',
               lineStyle: {
                 width: 1,
-                color:
-                  result[result.length - 1]?.price < result[0]?.price
-                    ? varibleColors['--reduce-color']
-                    : varibleColors['--increase-color'],
+                color: Utils.GetValueColor(
+                  Number(result[result.length - 1]?.price) -
+                    Number(result[0]?.price)
+                ).color,
               },
             },
           ],
@@ -99,7 +100,7 @@ const Trend: React.FC<PerformanceProps> = ({ code }) => {
 
   return (
     <div className={styles.content}>
-      <div ref={chartRef} style={{ width: '100%' }}></div>
+      <div ref={chartRef} style={{ width: '100%' }} />
       <TypeSelection
         types={trendTypeList}
         activeType={trend.type}

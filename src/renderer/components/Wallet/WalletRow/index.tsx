@@ -6,7 +6,7 @@ import StandCard from '@/components/Card/StandCard';
 import { ReactComponent as RemoveIcon } from '@/assets/icons/remove.svg';
 import { ReactComponent as CheckboxIcon } from '@/assets/icons/checkbox.svg';
 import { ReactComponent as EditIcon } from '@/assets/icons/edit.svg';
-import { deleteWallet, getWalletConfig } from '@/actions/wallet';
+import { deleteWallet, getWalletConfig, walletIcons } from '@/actions/wallet';
 import { calcFunds } from '@/actions/fund';
 import { StoreState } from '@/reducers/types';
 import * as Utils from '@/utils';
@@ -22,10 +22,6 @@ export interface WalletRowProps {
   onEdit?: (wallet: Wallet.SettingItem) => void;
   onDelete?: (wallet: Wallet.SettingItem) => void;
 }
-
-const WalletIcons = new Array(40)
-  .fill('')
-  .map((_, index) => require(`@/assets/icons/wallet/${index}.svg`).default);
 
 const { dialog } = window.contextModules.electron;
 
@@ -60,7 +56,9 @@ const WalletRow: React.FC<WalletRowProps> = (props) => {
   };
 
   const onEditClick = () => {
-    props.onEdit && props.onEdit(wallet);
+    if (props.onEdit) {
+      props.onEdit(wallet);
+    }
   };
 
   const walletState: Wallet.StateItem = walletsMap[wallet.code] || {
@@ -71,11 +69,11 @@ const WalletRow: React.FC<WalletRowProps> = (props) => {
 
   const { zje, sygz, gssyl } = calcFunds(funds, wallet.code);
   const eyeOpen = eyeStatus === Enums.EyeStatus.Open;
-  const display_zje = eyeOpen ? zje.toFixed(2) : Utils.Encrypt(zje.toFixed(2));
-  const display_sygz = eyeOpen
+  const displayZje = eyeOpen ? zje.toFixed(2) : Utils.Encrypt(zje.toFixed(2));
+  const displaySygz = eyeOpen
     ? Utils.Yang(sygz.toFixed(2))
     : Utils.Encrypt(Utils.Yang(sygz.toFixed(2)));
-  const display_gssyl = eyeOpen
+  const displayGssyl = eyeOpen
     ? gssyl.toFixed(2)
     : Utils.Encrypt(gssyl.toFixed(2));
 
@@ -86,7 +84,7 @@ const WalletRow: React.FC<WalletRowProps> = (props) => {
           className={classnames(styles.icon, {
             [styles.readonly]: readonly,
           })}
-          src={WalletIcons[wallet.iconIndex]}
+          src={walletIcons[wallet.iconIndex]}
           draggable={false}
           onClick={(e) => {
             if (!readonly) {
@@ -100,7 +98,7 @@ const WalletRow: React.FC<WalletRowProps> = (props) => {
       extra={
         <div className={styles.extra}>
           {readonly ? (
-            <i></i>
+            <i />
           ) : (
             <EditIcon
               className={styles.editor}
@@ -114,7 +112,7 @@ const WalletRow: React.FC<WalletRowProps> = (props) => {
         </div>
       }
       className={classnames({
-        selected: selected,
+        selected,
         hoverable: !readonly,
       })}
       onClick={() => !readonly && props.onClick && props.onClick(wallet)}
@@ -141,7 +139,7 @@ const WalletRow: React.FC<WalletRowProps> = (props) => {
               }}
             >
               {eyeOpen ? '￥' : ''}
-              {display_zje}
+              {displayZje}
             </div>
           </div>
           <div
@@ -152,9 +150,9 @@ const WalletRow: React.FC<WalletRowProps> = (props) => {
               textAlign: 'center',
             }}
           >
-            <div>收益：{display_sygz}</div>
+            <div>收益：{displaySygz}</div>
             <div>
-              收益率： {display_gssyl}
+              收益率： {displayGssyl}
               {eyeOpen ? '%' : ''}
             </div>
           </div>

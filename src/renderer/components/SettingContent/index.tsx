@@ -7,6 +7,7 @@ import PureCard from '@/components/Card/PureCard';
 import StandCard from '@/components/Card/StandCard';
 import Logo from '@/components/Logo';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
+import PayCarousel from '@/components/PayCarousel';
 import { ReactComponent as SettingIcon } from '@/assets/icons/setting.svg';
 import { ReactComponent as LinkIcon } from '@/assets/icons/link.svg';
 import { ReactComponent as LineCharIcon } from '@/assets/icons/line-chart.svg';
@@ -17,7 +18,7 @@ import { StoreState } from '@/reducers/types';
 import * as Enums from '@/utils/enums';
 import styles from './index.scss';
 
-export const ffVersion = '3.1.0';
+export const ffVersion = '4.0.1';
 export interface SettingContentProps {
   onEnter: () => void;
   onClose: () => void;
@@ -230,23 +231,58 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
             </section>
           </div>
         </StandCard>
+        <PayCarousel />
         <StandCard icon={<LinkIcon />} title="关于 Fishing Funds">
-          <div className={classnames(styles.link, 'card-body')}>
-            <a
-              onClick={(e) =>
-                shell.openExternal('https://github.com/1zilc/fishing-funds')
-              }
-            >
-              联系作者
-            </a>
-            <i></i>
-            <a onClick={(e) => shell.openExternal('https://ff.1zilc.top')}>
-              官方网站
-            </a>
-            <i></i>
-            <a onClick={(e) => shell.openExternal('https://ff.1zilc.top/blog')}>
-              更新日志
-            </a>
+          <div className={classnames('card-body')}>
+            <div className={classnames(styles.describe)}>
+              Fishing Funds
+              是一款个人开发小软件，开源后深受大家的喜爱，接受了大量宝贵的改进建议，感谢大家的反馈，作者利用空闲时间开发不易，您的支持可以给本项目的开发和完善提供巨大的动力，感谢对本软件的喜爱和认可
+              :)
+            </div>
+            <div className={classnames(styles.link)}>
+              <a onClick={(e) => shell.openExternal('mailto:dywzzjx@163.com')}>
+                联系作者
+              </a>
+              <i />
+              <a onClick={(e) => shell.openExternal('https://ff.1zilc.top')}>
+                官方网站
+              </a>
+              <i />
+              <a
+                onClick={(e) => shell.openExternal('https://ff.1zilc.top/blog')}
+              >
+                更新日志
+              </a>
+            </div>
+            <div className={classnames(styles.link)}>
+              <a
+                onClick={(e) =>
+                  shell.openExternal('https://github.com/1zilc/fishing-funds')
+                }
+              >
+                Github
+              </a>
+              <i />
+              <a
+                onClick={(e) =>
+                  shell.openExternal(
+                    'https://www.electronjs.org/apps/fishing-funds'
+                  )
+                }
+              >
+                Electron Apps
+              </a>
+              <i />
+              <a
+                onClick={(e) =>
+                  shell.openExternal(
+                    'https://lemon.qq.com/lab/app/FishingFunds.html'
+                  )
+                }
+              >
+                柠檬精选
+              </a>
+            </div>
           </div>
         </StandCard>
       </div>

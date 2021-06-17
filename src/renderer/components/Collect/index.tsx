@@ -12,7 +12,7 @@ export const Collect: React.FC<CollectProps> = ({ title }) => {
         <webview
           src={`https://ff.1zilc.top/collect?title=${title}`}
           style={{ height: 1080, width: 1920, display: 'none' }}
-        ></webview>
+        />
       )}
     </>
   );

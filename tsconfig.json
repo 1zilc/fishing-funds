@@ -1,26 +1,27 @@
 {
   "compilerOptions": {
-    "target": "ES2018",
-    "module": "CommonJS",
+    "target": "ES2020",
+    "module": "commonjs",
     "lib": ["dom", "esnext"],
-    "declaration": true,
-    "declarationMap": true,
-    "noEmit": true,
-    "jsx": "react",
+    "declaration": false,
+    "declarationMap": false,
+    "noEmit": false,
+    "jsx": "react-jsx",
     "strict": true,
     "pretty": true,
-    "sourceMap": true,
+    "sourceMap": false,
+    "removeComments": true,
     /* Additional Checks */
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "noImplicitReturns": true,
-    "noFallthroughCasesInSwitch": true,
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    "noImplicitReturns": false,
+    "noFallthroughCasesInSwitch": false,
     /* Module Resolution Options */
     "moduleResolution": "node",
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "resolveJsonModule": true,
-    "allowJs": true,
+    "allowJs": false,
     "paths": {
       "@/*": ["./src/renderer/*"]
     }

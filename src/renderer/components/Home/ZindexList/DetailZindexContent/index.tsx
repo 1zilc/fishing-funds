@@ -44,9 +44,7 @@ const DetailZindexContent: React.FC<DetailFundContentProps> = (props) => {
           <h3 className={styles.titleRow}>
             <span>{zindex?.name}</span>
             <span
-              className={classnames(
-                Number(zindex.zdd) < 0 ? 'text-down' : 'text-up'
-              )}
+              className={classnames(Utils.GetValueColor(zindex.zdd).textClass)}
             >
               {zindex?.zsz}
             </span>
@@ -57,7 +55,7 @@ const DetailZindexContent: React.FC<DetailFundContentProps> = (props) => {
               <span className={styles.detailItemLabel}>涨跌点：</span>
               <span
                 className={classnames(
-                  Number(zindex.zdd) < 0 ? 'text-down' : 'text-up'
+                  Utils.GetValueColor(zindex.zdd).textClass
                 )}
               >
                 {Utils.Yang(zindex?.zdd)}
@@ -68,7 +66,7 @@ const DetailZindexContent: React.FC<DetailFundContentProps> = (props) => {
             <div className={classnames(styles.detailItem, 'text-left')}>
               <div
                 className={classnames(
-                  Number(zindex.zdf) < 0 ? 'text-down' : 'text-up'
+                  Utils.GetValueColor(zindex.zdf).textClass
                 )}
               >
                 {Utils.Yang(zindex.zdf)}%
@@ -88,7 +86,7 @@ const DetailZindexContent: React.FC<DetailFundContentProps> = (props) => {
             <div className={classnames(styles.detailItem, 'text-left')}>
               <div
                 className={classnames(
-                  zindex.jk < zindex.zs ? 'text-down' : 'text-up'
+                  Utils.GetValueColor(zindex.jk - zindex.zs).textClass
                 )}
               >
                 {Utils.Yang(zindex.jk)}
@@ -106,7 +104,7 @@ const DetailZindexContent: React.FC<DetailFundContentProps> = (props) => {
           </div>
           <div className={styles.detail}>
             <div className={styles.detailItem}>
-              <div className={''}>{zindex.zs}</div>
+              <div className="">{zindex.zs}</div>
               <div className={styles.detailItemLabel}>昨收</div>
             </div>
           </div>

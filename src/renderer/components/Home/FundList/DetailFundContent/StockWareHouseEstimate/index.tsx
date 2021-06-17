@@ -70,7 +70,7 @@ const StockWareHouseEstimate: React.FC<StockWareHouseEstimateProps> = ({
 
   return (
     <div className={styles.content}>
-      <div ref={chartRef} style={{ width: '100%' }}></div>
+      <div ref={chartRef} style={{ width: '100%' }} />
     </div>
   );
 };

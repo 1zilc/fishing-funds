@@ -1,8 +1,6 @@
 import { batch } from 'react-redux';
 
 import * as Services from '@/services';
-import * as Utils from '@/utils';
-import * as CONST from '@/constants';
 import { Dispatch, GetState } from '@/reducers/types';
 
 export const SORT_QUOTATIONS = 'SORT_QUOTATIONS';
@@ -43,7 +41,8 @@ export function loadQuotationsWithoutLoading() {
           payload: quotations,
         });
       });
-    } finally {
+    } catch (error) {
+      console.log(error);
     }
   };
 }

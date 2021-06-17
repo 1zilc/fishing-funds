@@ -11,7 +11,7 @@ import CssMinimizerPlugin from 'css-minimizer-webpack-plugin';
 import { merge } from 'webpack-merge';
 import TerserPlugin from 'terser-webpack-plugin';
 import baseConfig from './webpack.config.base';
-import webpackPaths from './webpack.paths.js';
+import webpackPaths from './webpack.paths';
 import checkNodeEnv from '../scripts/check-node-env';
 import deleteSourceMaps from '../scripts/delete-source-maps';
 
@@ -30,13 +30,9 @@ export default merge(baseConfig, {
 
   mode: 'production',
 
-  target: ['web', 'electron-renderer'],
+  target: 'web',
 
-  entry: [
-    'core-js',
-    'regenerator-runtime/runtime',
-    path.join(webpackPaths.srcRendererPath, 'index.tsx'),
-  ],
+  entry: [path.join(webpackPaths.srcRendererPath, 'index.tsx')],
 
   output: {
     path: webpackPaths.distRendererPath,
@@ -49,21 +45,6 @@ export default merge(baseConfig, {
 
   module: {
     rules: [
-      // {
-      //   // CSS/SCSS
-      //   test: /\.s?css$/,
-      //   use: [
-      //     {
-      //       loader: MiniCssExtractPlugin.loader,
-      //       options: {
-      //         // `./dist` can't be inerhited for publicPath for styles. Otherwise generated paths will be ./dist/dist
-      //         publicPath: './',
-      //       },
-      //     },
-      //     'css-loader',
-      //     'sass-loader',
-      //   ],
-      // },
       // Add SASS support  - compile all .global.scss files and pipe it to style.css
       {
         test: /\.global\.(scss|sass)$/,

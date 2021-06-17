@@ -103,10 +103,9 @@
 .link {
   font-size: 1rem;
   text-align: center;
-  padding: 15px;
+
   i {
     margin: 0 10px;
-    // width: 1px;
     height: 100%;
     border-left: 1px solid var(--border-color);
   }
@@ -125,6 +124,13 @@
     border: 1px solid var(--border-color);
     font-size: calc(10rem / var(--base-font-size));
   }
+}
+.describe {
+  font-size: calc(11rem / var(--base-font-size));
+  color: var(--inner-text-color);
+  font-weight: 500;
+  text-indent: calc(11rem / var(--base-font-size) * 2);
+  margin-bottom: var(--base-padding);
 }
 
 .version {

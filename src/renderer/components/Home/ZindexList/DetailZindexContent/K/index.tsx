@@ -23,14 +23,14 @@ const yearTypeList = [
 ];
 
 function calculateMA(dayCount: any, values: any[]) {
-  var result = [];
-  for (var i = 0, len = values.length; i < len; i++) {
+  const result = [];
+  for (let i = 0, len = values.length; i < len; i++) {
     if (i < dayCount) {
       result.push('-');
       continue;
     }
-    var sum = 0;
-    for (var j = 0; j < dayCount; j++) {
+    let sum = 0;
+    for (let j = 0; j < dayCount; j++) {
       sum += values[i - j][1];
     }
     result.push(NP.divide(sum, dayCount).toFixed(2));
@@ -172,7 +172,7 @@ const K: React.FC<PerformanceProps> = ({ code = '' }) => {
 
   return (
     <div className={styles.content}>
-      <div ref={chartRef} style={{ width: '100%' }}></div>
+      <div ref={chartRef} style={{ width: '100%' }} />
       <TypeSelection
         types={yearTypeList}
         activeType={year.type}

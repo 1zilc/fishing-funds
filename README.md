@@ -87,7 +87,8 @@ yarn package-win
 [menubar](https://github.com/maxogden/menubar)  
 [ahooks](https://github.com/alibaba/hooks)  
 [echarts](https://github.com/apache/echarts)  
-[travis-ci](https://www.travis-ci.com/)  
+[travis-ci](https://www.travis-ci.com/)
+
 ## 许可证
 
 GPLv3

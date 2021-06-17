@@ -1,4 +1,4 @@
-const got = window.contextModules.got;
+const { got } = window.contextModules;
 
 /**
  * 淘宝接口拿当前时间
@@ -6,7 +6,7 @@ const got = window.contextModules.got;
 export async function GetCurrentDateTimeFromTaobao() {
   try {
     const res = await got<{
-      api: string; //'mtop.common.getTimestamp'
+      api: string; // 'mtop.common.getTimestamp'
       v: string; // '*'
       ret: string[]; // ['SUCCESS::接口调用成功']
       data: {
@@ -48,7 +48,7 @@ export async function GetCurrentDateTimeFromSuning() {
 export async function GetCurrentDateTimeFromJd() {
   try {
     const res = await got<{
-      serverTime: string; //1592663800521
+      serverTime: string; // 1592663800521
     }>('https://a.jd.com//ajax/queryServerData.html', {
       responseType: 'json',
     });

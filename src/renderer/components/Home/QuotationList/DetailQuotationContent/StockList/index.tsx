@@ -42,9 +42,9 @@ const StockList: React.FC<StockListProps> = ({ code }) => {
     {
       title: '涨跌幅',
       dataIndex: 'zdf',
-      align: 'right',
+
       render: (text: number) => (
-        <div className={text < 0 ? 'text-down' : 'text-up'}>
+        <div className={Utils.GetValueColor(text).textClass}>
           {Utils.Yang(text)} %
         </div>
       ),

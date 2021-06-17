@@ -8,8 +8,8 @@
  * When running `yarn build` or `yarn build:main`, this file is compiled to
  * `./src/main.prod.js` using webpack. This gives us some performance wins.
  */
-import 'core-js/stable';
-import 'regenerator-runtime/runtime';
+// import 'core-js/stable';
+// import 'regenerator-runtime/runtime';
 import path from 'path';
 import {
   app,
@@ -21,10 +21,12 @@ import {
   Menu,
   dialog,
 } from 'electron';
-import windowStateKeeper from 'electron-window-state';
+
 import { menubar, Menubar } from 'menubar';
 import AppUpdater from './autoUpdater';
 import { resolveHtmlPath } from './util';
+
+const windowStateKeeper = require('electron-window-state');
 
 let myWindow: any = null;
 let mb: Menubar;
@@ -74,6 +76,7 @@ const nativeIcon = nativeImage.createFromPath(getAssetPath('icon.png'));
 
 // if (process.env.NODE_ENV === 'production') {
 const sourceMapSupport = require('source-map-support');
+
 sourceMapSupport.install();
 // }
 
@@ -175,7 +178,7 @@ const createMenubar = async () => {
   );
 
   ipcMain.handle('show-message-box', async (event, config) => {
-    return await dialog.showMessageBox(config);
+    return dialog.showMessageBox(config);
   });
   ipcMain.handle('show-current-window', (event, config) => {
     mb.window?.show();

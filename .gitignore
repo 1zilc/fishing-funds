@@ -51,6 +51,7 @@ npm-debug.log.*
 
 yarn.lock
 yarn-error.log
+.yarnrc
 
-.vscode
-.github
+# src js
+/src/**/*.js

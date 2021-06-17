@@ -47,7 +47,7 @@
   float: right;
   color: var(--tag-text-color);
   padding: 2px 10px;
-  border-radius: 3px;
+  border-radius: 4px;
   min-width: 64px;
   margin-left: 5px;
   text-align: center;
@@ -67,6 +67,7 @@
   font-size: calc(20rem / var(--base-font-size));
   line-height: 24px;
   white-space: pre-wrap;
+  font-weight: 600;
 }
 
 .remove {

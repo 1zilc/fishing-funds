@@ -17,9 +17,9 @@ export default {
         test: /\.tsx?$/,
         exclude: /node_modules/,
         use: {
-          loader: 'babel-loader',
+          loader: 'ts-loader',
           options: {
-            cacheDirectory: true,
+            happyPackMode: true,
           },
         },
       },
@@ -30,7 +30,7 @@ export default {
     path: webpackPaths.srcPath,
     // https://github.com/webpack/webpack/issues/1114
     library: {
-      type: 'commonjs2',
+      type: 'umd',
     },
   },
 

@@ -2,9 +2,9 @@ import React, { useMemo } from 'react';
 import classnames from 'classnames';
 import { useDispatch, useSelector } from 'react-redux';
 import { Dropdown, Menu } from 'antd';
+
 import { ReactComponent as ConsumptionIcon } from '@/assets/icons/consumption.svg';
-import { ReactComponent as EyeIcon } from '@/assets/icons/eye.svg';
-import { ReactComponent as EyeCloseIcon } from '@/assets/icons/eye-close.svg';
+import Eye from '@/components/Eye';
 import { useHeaderContext } from '@/components/Header';
 import { StoreState } from '@/reducers/types';
 import { selectWallet, toggleEyeStatus } from '@/actions/wallet';
@@ -35,18 +35,25 @@ const Wallet: React.FC<WalletProps> = () => {
   }, [currentWallet]);
 
   const { funds, updateTime } = currentWalletState;
-  const { zje, sygz } = calcFunds(funds);
-  const eyeOpen = eyeStatus === Enums.EyeStatus.Open;
-  const display_zje = eyeOpen ? zje.toFixed(2) : Utils.Encrypt(zje.toFixed(2));
-  const display_sygz = eyeOpen
-    ? Utils.Yang(sygz.toFixed(2))
-    : Utils.Encrypt(Utils.Yang(sygz.toFixed(2)));
 
-  const onSelectWallet = async (wallet: Wallet.SettingItem) => {
+  const { displayZje, displaySygz } = useMemo(() => {
+    const { zje, sygz } = calcFunds(funds);
+    const eyeOpen = eyeStatus === Enums.EyeStatus.Open;
+    const displayZje = eyeOpen ? zje.toFixed(2) : Utils.Encrypt(zje.toFixed(2));
+    const displaySygz = eyeOpen
+      ? Utils.Yang(sygz.toFixed(2))
+      : Utils.Encrypt(Utils.Yang(sygz.toFixed(2)));
+    return {
+      displayZje,
+      displaySygz,
+    };
+  }, [funds, eyeStatus]);
+
+  async function onSelectWallet(wallet: Wallet.SettingItem) {
     const { code } = wallet;
     dispatch(selectWallet(code));
     freshFunds();
-  };
+  }
 
   return (
     <div
@@ -79,19 +86,21 @@ const Wallet: React.FC<WalletProps> = () => {
           <div>
             <ConsumptionIcon />
             <span>持有金额：</span>
-            <span>{display_zje}</span>
+            <span>{displayZje}</span>
           </div>
-          <i></i>
+          <i />
           <div>
             <ConsumptionIcon />
             <span>收益估值：</span>
-            <span>{display_sygz}</span>
+            <span>{displaySygz}</span>
           </div>
         </div>
       </div>
-      <div className={styles.eye} onClick={() => dispatch(toggleEyeStatus())}>
-        {eyeStatus === Enums.EyeStatus.Open ? <EyeIcon /> : <EyeCloseIcon />}
-      </div>
+      <Eye
+        classNames={styles.eye}
+        status={eyeStatus === Enums.EyeStatus.Open}
+        onClick={() => dispatch(toggleEyeStatus())}
+      />
     </div>
   );
 };

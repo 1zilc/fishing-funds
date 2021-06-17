@@ -6,9 +6,10 @@ import chalk from 'chalk';
 import { merge } from 'webpack-merge';
 import { spawn, execSync } from 'child_process';
 import baseConfig from './webpack.config.base';
-import webpackPaths from './webpack.paths.js';
+import webpackPaths from './webpack.paths';
 import checkNodeEnv from '../scripts/check-node-env';
 import ReactRefreshWebpackPlugin from '@pmmmwh/react-refresh-webpack-plugin';
+import ReactRefreshTypeScript from 'react-refresh-typescript';
 
 // When an ESLint server is running, we can't set the NODE_ENV so we'll check if it's
 // at the dev webpack config is not accidentally run in a production environment
@@ -46,11 +47,7 @@ export default merge(baseConfig, {
   // target: ['web', 'electron-renderer'],
   target: 'web',
 
-  entry: [
-    'core-js',
-    'regenerator-runtime/runtime',
-    path.join(webpackPaths.srcRendererPath, 'index.tsx'),
-  ],
+  entry: [path.join(webpackPaths.srcRendererPath, 'index.tsx')],
 
   output: {
     path: webpackPaths.distRendererPath,
@@ -64,16 +61,17 @@ export default merge(baseConfig, {
   module: {
     rules: [
       {
-        test: /\.[jt]sx?$/,
+        test: /\.tsx?$/,
         exclude: /node_modules/,
-        use: [
-          {
-            loader: require.resolve('babel-loader'),
-            options: {
-              plugins: [require.resolve('react-refresh/babel')].filter(Boolean),
-            },
+        use: {
+          loader: 'ts-loader',
+          options: {
+            happyPackMode: true,
+            getCustomTransformers: () => ({
+              before: [ReactRefreshTypeScript()],
+            }),
           },
-        ],
+        },
       },
       {
         test: /\.global\.css$/,

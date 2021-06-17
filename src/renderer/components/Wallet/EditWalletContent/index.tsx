@@ -6,6 +6,7 @@ import WalletSelection from '@/components/Wallet/WalletSelection';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
 import { getWalletConfig, updateWallet } from '@/actions/wallet';
 import styles from './index.scss';
+
 export interface AddFundContentProps {
   onEnter: () => void;
   onClose: () => void;
@@ -60,7 +61,7 @@ const EditWalletContent: React.FC<AddFundContentProps> = (props) => {
               setName(name);
             }}
             size="small"
-          ></Input>
+          />
         </section>
         {fieldNameMessageTip.show && (
           <section>

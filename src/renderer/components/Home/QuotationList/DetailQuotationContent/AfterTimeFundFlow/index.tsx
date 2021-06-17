@@ -126,7 +126,7 @@ const AfterTimeFundFlow: React.FC<AfterTimeFundFlowProps> = ({ code = '' }) => {
 
   return (
     <div className={styles.content}>
-      <div ref={chartRef} style={{ width: '100%' }}></div>
+      <div ref={chartRef} style={{ width: '100%' }} />
     </div>
   );
 };

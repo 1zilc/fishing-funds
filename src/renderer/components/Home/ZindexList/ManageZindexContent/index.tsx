@@ -6,13 +6,13 @@ import { ReactSortable } from 'react-sortablejs';
 
 import PureCard from '@/components/Card/PureCard';
 import { ReactComponent as MenuIcon } from '@/assets/icons/menu.svg';
-import { ReactComponent as EyeIcon } from '@/assets/icons/eye.svg';
-import { ReactComponent as EyeCloseIcon } from '@/assets/icons/eye-close.svg';
+import Eye from '@/components/Eye';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
 import { getZindexConfig, saveZindexConfig } from '@/actions/zindex';
 import * as Enums from '@/utils/enums';
 import * as Utils from '@/utils';
 import styles from './index.scss';
+
 export interface ManageZindexContentProps {
   onEnter: () => void;
   onClose: () => void;
@@ -29,7 +29,7 @@ interface MarketProps {
 const Market: React.FC<MarketProps> = (props) => {
   const { name, code, selections } = props;
   const { zindexConfig } = getZindexConfig();
-  const [eyeOpen, { setFalse, setTrue }] = useBoolean(true);
+  const [eyeOpen, { toggle }] = useBoolean(true);
   const { indeterminate, checked } = useMemo(() => {
     const selectedMap = Utils.MakeMap(selections);
     const markets = zindexConfig.filter((_) => _.type === code);
@@ -54,11 +54,7 @@ const Market: React.FC<MarketProps> = (props) => {
       >
         {name}
       </Checkbox>
-      {eyeOpen ? (
-        <EyeIcon onClick={setFalse} />
-      ) : (
-        <EyeCloseIcon onClick={setTrue} />
-      )}
+      <Eye status={eyeOpen} onClick={toggle} />
     </PureCard>
   );
 };
@@ -93,7 +89,7 @@ const ManageZindexContent: React.FC<ManageZindexContentProps> = (props) => {
 
   function onMarketCheckChange(status: boolean, code: Enums.ZindexType) {
     const selectedMap = Utils.MakeMap(selections);
-    const _selections = [
+    const newSelections = [
       ...sortZindexConfig
         .filter((_) => _.type !== code && selectedMap[_.code])
         .map((_) => _.code),
@@ -101,7 +97,7 @@ const ManageZindexContent: React.FC<ManageZindexContentProps> = (props) => {
         .filter((_) => _.type === code && status)
         .map((_) => _.code),
     ];
-    setSelections(_selections);
+    setSelections(newSelections);
   }
 
   function onMarketEyeChange(status: boolean, code: Enums.ZindexType) {
@@ -125,6 +121,7 @@ const ManageZindexContent: React.FC<ManageZindexContentProps> = (props) => {
           <div key={index} className={styles.markets}>
             {markets.map((market) => (
               <Market
+                key={market.code}
                 name={market.name}
                 code={market.code}
                 onCheckChange={onMarketCheckChange}
@@ -137,7 +134,7 @@ const ManageZindexContent: React.FC<ManageZindexContentProps> = (props) => {
         ))}
         <Checkbox.Group
           style={{ width: '100%' }}
-          onChange={setSelections}
+          onChange={(e) => setSelections(e.map((i) => String(i)))}
           value={selections}
         >
           <ReactSortable

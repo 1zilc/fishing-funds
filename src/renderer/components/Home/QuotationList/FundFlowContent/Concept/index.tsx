@@ -6,6 +6,7 @@ import TypeSelection from '@/components/TypeSelection';
 import { useResizeEchart, useRenderEcharts } from '@/utils/hooks';
 import * as CONST from '@/constants';
 import * as Services from '@/services';
+import * as Utils from '@/utils';
 import styles from './index.scss';
 
 interface IndustryProps {}
@@ -70,10 +71,7 @@ const Concept: React.FC<IndustryProps> = () => {
                 return {
                   value,
                   itemStyle: {
-                    color:
-                      value >= 0
-                        ? varibleColors['--increase-color']
-                        : varibleColors['--reduce-color'],
+                    color: Utils.GetValueColor(value).color,
                   },
                 };
               }),
@@ -102,7 +100,7 @@ const Concept: React.FC<IndustryProps> = () => {
 
   return (
     <div className={styles.content}>
-      <div ref={chartRef} style={{ width: '100%' }}></div>
+      <div ref={chartRef} style={{ width: '100%' }} />
       <TypeSelection
         types={conceptTypeList}
         activeType={conceptType.type}

@@ -43,18 +43,18 @@ function sortFunds(
   const sortList = Utils.DeepCopy(responseFunds || funds);
 
   sortList.sort((a, b) => {
-    const _a = calcFund(a);
-    const _b = calcFund(b);
+    const calcA = calcFund(a);
+    const calcB = calcFund(b);
     const t = fundSortorder === Enums.SortOrderType.Asc ? 1 : -1;
     switch (fundSortType) {
       case Enums.FundSortType.Growth:
-        return (Number(_a.gszzl) - Number(_b.gszzl)) * t;
+        return (Number(calcA.gszzl) - Number(calcB.gszzl)) * t;
       case Enums.FundSortType.Block:
-        return (Number(_a.cyfe) - Number(_b.cyfe)) * t;
+        return (Number(calcA.cyfe) - Number(calcB.cyfe)) * t;
       case Enums.FundSortType.Money:
-        return (Number(_a.jrsygz) - Number(_b.jrsygz)) * t;
+        return (Number(calcA.jrsygz) - Number(calcB.jrsygz)) * t;
       case Enums.FundSortType.Estimate:
-        return (Number(_a.gszz) - Number(_b.gszz)) * t;
+        return (Number(calcA.gszz) - Number(calcB.gszz)) * t;
       case Enums.FundSortType.Custom:
       default:
         return (
@@ -96,12 +96,10 @@ function sortFundsWithChached(
     return map;
   }, {} as any);
 
-  const fundsWithChached = responseFunds
-    .filter((_) => !!_)
-    .map((_) => ({
-      ...(fundsCodeToMap[_.fundcode!] || {}),
-      ..._,
-    }));
+  const fundsWithChached = responseFunds.filter(Boolean).map((_) => ({
+    ...(fundsCodeToMap[_.fundcode!] || {}),
+    ..._,
+  }));
 
   const fundsWithChachedCodeToMap = fundsWithChached.reduce((map, fund) => {
     map[fund.fundcode!] = fund;

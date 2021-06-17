@@ -1,18 +1,19 @@
-import { GetState, Dispatch } from '@/reducers/types';
 import dayjs from 'dayjs';
 
 import { getFunds } from '@/actions/fund';
+import { GetState, Dispatch } from '@/reducers/types';
 import * as Enums from '@/utils/enums';
 import * as CONST from '@/constants';
 import * as Utils from '@/utils';
 import * as Adapter from '@/utils/adpters';
 import * as Services from '@/services';
+
 export const CHANGE_EYE_STATUS = 'CHANGE_EYE_STATUS';
 export const CHANGE_CURRENT_WALLET_CODE = 'CHANGE_CURRENT_WALLET_CODE';
 export const SYNC_WALLETS = 'SYNC_WALLETS';
 export const SYNC_WALLETS_MAP = 'SYNC_WALLETS_MAP';
 export const SYNC_FIX_WALLETS_MAP = 'SYNC_FIX_WALLETS_MAP';
-export interface CodeMap {
+export interface CodeWalletMap {
   [index: string]: Wallet.SettingItem & Wallet.OriginRow;
 }
 
@@ -22,6 +23,10 @@ export const defaultWallet: Wallet.SettingItem = {
   code: '-1',
   funds: [],
 };
+
+export const walletIcons = new Array(40)
+  .fill('')
+  .map((_, index) => require(`@/assets/icons/wallet/${index}.svg`).default);
 
 export function changeEyeStatus(status: Enums.EyeStatus) {
   Utils.SetStorage(CONST.STORAGE.EYE_STATUS, status);
@@ -73,7 +78,7 @@ export function setWalletConfig(config: Wallet.SettingItem[]) {
 }
 
 export function getCodeMap(config: Wallet.SettingItem[]) {
-  return config.reduce<CodeMap>((r, c, i) => {
+  return config.reduce<CodeWalletMap>((r, c, i) => {
     r[c.code] = { ...c, originSort: i };
     return r;
   }, {});
@@ -154,9 +159,8 @@ export function loadWalletsFunds() {
         collects,
         CONST.DEFAULT.LOAD_WALLET_DELAY
       );
-    } catch (e) {
-      console.log('刷新钱包基金出错', e);
-    } finally {
+    } catch (error) {
+      console.log('刷新钱包基金出错', error);
     }
   };
 }
@@ -167,7 +171,7 @@ export function loadFixWalletsFunds() {
       const { wallet } = getState();
       const { walletsMap } = wallet;
       const fixCollects = Object.keys(walletsMap).map((code) => {
-        const funds = walletsMap[code].funds || [];
+        const funds = walletsMap[code]?.funds || [];
         const collectors = funds
           .filter(
             ({ fixDate, gztime }) =>
@@ -200,9 +204,8 @@ export function loadFixWalletsFunds() {
         fixCollects,
         CONST.DEFAULT.LOAD_WALLET_DELAY
       );
-    } catch (e) {
-      console.log('刷新钱包基金fix出错', e);
-    } finally {
+    } catch (error) {
+      console.log('刷新钱包基金fix出错', error);
     }
   };
 }

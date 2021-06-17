@@ -6,6 +6,7 @@ import { useHomeContext } from '@/components/Home';
 import { useResizeEchart, useRenderEcharts } from '@/utils/hooks';
 import * as CONST from '@/constants';
 import * as Services from '@/services';
+import * as Utils from '@/utils';
 import styles from './index.scss';
 
 export interface StockWareHouseProps {
@@ -23,7 +24,7 @@ const Tooltip: React.FC<TooltipProps> = (props) => {
       <div className={styles.tooltipName}>股票名称：{item.name}</div>
       <div>股票代码：{item.code}</div>
       <div>持仓占比：{item.ccb}%</div>
-      <div className={item.zdf < 0 ? 'text-down' : 'text-up'}>
+      <div className={Utils.GetValueColor(item.zdf).textClass}>
         涨跌幅：{item.zdf}%
       </div>
     </div>
@@ -74,10 +75,7 @@ const StockWareHouse: React.FC<StockWareHouseProps> = ({
                     value: item.ccb,
                     name: item.name,
                     itemStyle: {
-                      color:
-                        item.zdf >= 0
-                          ? varibleColors['--increase-color']
-                          : varibleColors['--reduce-color'],
+                      color: Utils.GetValueColor(item.zdf).color,
                     },
                     item,
                   };
@@ -95,12 +93,9 @@ const StockWareHouse: React.FC<StockWareHouseProps> = ({
                 length2: 20,
               },
               itemStyle: {
-                color: varibleColors['--main-text-color'],
                 borderRadius: 10,
                 borderColor: varibleColors['--background-color'],
                 borderWidth: 1,
-                // shadowBlur: 200,
-                // shadowColor: 'rgba(0, 0, 0, 0.5)',
               },
               animationType: 'scale',
               animationEasing: 'elasticOut',
@@ -122,7 +117,7 @@ const StockWareHouse: React.FC<StockWareHouseProps> = ({
 
   return (
     <div className={styles.content}>
-      <div ref={chartRef} style={{ width: '100%' }}></div>
+      <div ref={chartRef} style={{ width: '100%' }} />
     </div>
   );
 };

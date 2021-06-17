@@ -3,10 +3,9 @@ import { Collapse } from 'react-collapse';
 import classnames from 'classnames';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { ReactComponent as ArrowDownLineIcon } from '@/assets/icons/arrow-down-line.svg';
-import { ReactComponent as ArrowUpLineIcon } from '@/assets/icons/arrow-up-line.svg';
 import { ReactComponent as ArrowDownIcon } from '@/assets/icons/arrow-down.svg';
 import { ReactComponent as ArrowUpIcon } from '@/assets/icons/arrow-up.svg';
+import ArrowLine from '@/components/ArrowLine';
 import { StoreState } from '@/reducers/types';
 import { TOGGLE_ZINDEX_COLLAPSE } from '@/actions/zindex';
 import * as Utils from '@/utils';
@@ -14,7 +13,7 @@ import styles from './index.scss';
 
 export interface RowProps {
   zindex: Zindex.ResponseItem & Zindex.ExtraRow;
-  onDetail?: (code: string) => void;
+  onDetail: (code: string) => void;
 }
 
 const arrowSize = {
@@ -30,7 +29,7 @@ const ZindexRow: React.FC<RowProps> = (props) => {
   );
 
   const onDetailClick = () => {
-    props.onDetail && props.onDetail(`${zindex.type}.${zindex.zindexCode}`);
+    props.onDetail(`${zindex.type}.${zindex.zindexCode}`);
   };
 
   return (
@@ -73,26 +72,18 @@ const ZindexRow: React.FC<RowProps> = (props) => {
           <div
             className={classnames(
               styles.zsz,
-              zindex.zdf < 0 ? 'text-down' : 'text-up'
+              Utils.GetValueColor(zindex.zdf).textClass
             )}
           >
             {zindex.zsz}
-            {zindex.zdf < 0 ? (
-              <ArrowDownLineIcon
-                className={zindex.zdf < 0 ? 'svg-down' : 'svg-up'}
-              />
-            ) : (
-              <ArrowUpLineIcon
-                className={zindex.zdf < 0 ? 'svg-down' : 'svg-up'}
-              />
-            )}
+            <ArrowLine value={zindex.zdf} />
           </div>
           {!conciseSetting && (
             <div className={styles.zd}>
               <div
                 className={classnames(
                   styles.zdd,
-                  zindex.zdd < 0 ? 'text-down' : 'text-up'
+                  Utils.GetValueColor(zindex.zdd).textClass
                 )}
               >
                 {Utils.Yang(zindex.zdd)}
@@ -100,7 +91,7 @@ const ZindexRow: React.FC<RowProps> = (props) => {
               <div
                 className={classnames(
                   styles.zdf,
-                  zindex.zdf < 0 ? 'text-down' : 'text-up'
+                  Utils.GetValueColor(zindex.zdf).textClass
                 )}
               >
                 {Utils.Yang(zindex.zdf)} %
@@ -115,7 +106,9 @@ const ZindexRow: React.FC<RowProps> = (props) => {
             <section>
               <span>涨跌点：</span>
               <span
-                className={classnames(zindex.zdd < 0 ? 'text-down' : 'text-up')}
+                className={classnames(
+                  Utils.GetValueColor(zindex.zdd).textClass
+                )}
               >
                 {Utils.Yang(zindex.zdd)}
               </span>
@@ -125,7 +118,9 @@ const ZindexRow: React.FC<RowProps> = (props) => {
             <section>
               <span>涨跌幅：</span>
               <span
-                className={classnames(zindex.zdf < 0 ? 'text-down' : 'text-up')}
+                className={classnames(
+                  Utils.GetValueColor(zindex.zdf).textClass
+                )}
               >
                 {Utils.Yang(zindex.zdf)} %
               </span>
@@ -135,7 +130,7 @@ const ZindexRow: React.FC<RowProps> = (props) => {
             <span>今开：</span>
             <span
               className={classnames(
-                zindex.jk < zindex.zs ? 'text-down' : 'text-up'
+                Utils.GetValueColor(zindex.jk - zindex.zs).textClass
               )}
             >
               {zindex.jk}
@@ -149,7 +144,7 @@ const ZindexRow: React.FC<RowProps> = (props) => {
             <span>最高：</span>
             <span
               className={classnames(
-                zindex.zg < zindex.zs ? 'text-down' : 'text-up'
+                Utils.GetValueColor(zindex.zg - zindex.zs).textClass
               )}
             >
               {zindex.zg}
@@ -159,7 +154,7 @@ const ZindexRow: React.FC<RowProps> = (props) => {
             <span>最低：</span>
             <span
               className={classnames(
-                zindex.zd < zindex.zs ? 'text-down' : 'text-up'
+                Utils.GetValueColor(zindex.zd - zindex.zs).textClass
               )}
             >
               {zindex.zd}

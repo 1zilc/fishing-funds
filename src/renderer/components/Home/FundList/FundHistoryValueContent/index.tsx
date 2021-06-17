@@ -21,6 +21,7 @@ const FundHistoryValueContent: React.FC<HistoryValueProps> = (props) => {
     {
       title: '日期',
       dataIndex: 'x',
+
       render: (text: number) => dayjs(text).format('YYYY-MM-DD'),
     },
     {
@@ -30,9 +31,9 @@ const FundHistoryValueContent: React.FC<HistoryValueProps> = (props) => {
     {
       title: '涨跌幅',
       dataIndex: 'equityReturn',
-      align: 'right',
+
       render: (text: number) => (
-        <div className={text < 0 ? 'text-down' : 'text-up'}>
+        <div className={Utils.GetValueColor(text).textClass}>
           {Utils.Yang(text)} %
         </div>
       ),

@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
 import NP from 'number-precision';
 
-const got = window.contextModules.got;
+const { got } = window.contextModules;
 /**
  *
  * @param code 指数代码: 000001

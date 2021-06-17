@@ -1,10 +1,10 @@
 import { createStore, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
-import { createMemoryHistory } from 'history';
-import { routerMiddleware, routerActions } from 'connected-react-router';
+import { routerActions } from 'connected-react-router';
 import { createLogger } from 'redux-logger';
 import createRootReducer from '../reducers';
 import { StoreState } from '../reducers/types';
+
 declare global {
   interface Window {
     __REDUX_DEVTOOLS_EXTENSION_COMPOSE__: (
@@ -19,9 +19,7 @@ declare global {
   }
 }
 
-const history = createMemoryHistory();
-
-const rootReducer = createRootReducer(history);
+const rootReducer = createRootReducer();
 
 const configureStore = (initialState?: StoreState) => {
   // Redux Configuration
@@ -41,10 +39,6 @@ const configureStore = (initialState?: StoreState) => {
   if (process.env.NODE_ENV !== 'test') {
     middleware.push(logger);
   }
-
-  // Router Middleware
-  const router = routerMiddleware(history);
-  middleware.push(router);
 
   // Redux DevTools Configuration
   const actionCreators = {
@@ -78,4 +72,4 @@ const configureStore = (initialState?: StoreState) => {
   return store;
 };
 
-export default { configureStore, history };
+export default { configureStore };

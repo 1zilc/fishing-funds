@@ -41,11 +41,6 @@
   &:nth-child(odd) {
     margin-right: 10px;
   }
-
-  svg {
-    cursor: pointer;
-    fill: var(--svg-icon-color);
-  }
 }
 .disappear {
   display: none;
