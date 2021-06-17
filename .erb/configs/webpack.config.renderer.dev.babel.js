@@ -36,7 +36,7 @@ if (
       'The DLL files are missing. Sit back while we build them for you with "yarn build-dll"'
     )
   );
-  execSync('npm run postinstall');
+  execSync('yarn postinstall');
 }
 
 export default merge(baseConfig, {

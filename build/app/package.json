@@ -11,7 +11,7 @@
   },
   "scripts": {
     "electron-rebuild": "node -r ../../.erb/scripts/babel-register.js ../../.erb/scripts/electron-rebuild.js",
-    "postinstall": "npm run electron-rebuild"
+    "postinstall": "yarn electron-rebuild"
   },
   "license": "(ISC OR GPL-3.0)",
   "dependencies": {},

@@ -49,7 +49,6 @@ npm-debug.log.*
 *.sass.d.ts
 *.scss.d.ts
 
-yarn.lock
 yarn-error.log
 .yarnrc
 
