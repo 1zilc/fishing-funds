@@ -4,14 +4,13 @@
 
 # Fishing Funds
 
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/ee4fd509a7184f738eeb9048959b1f56)](https://app.codacy.com/gh/1zilc/fishing-funds?utm_source=github.com&utm_medium=referral&utm_content=1zilc/fishing-funds&utm_campaign=Badge_Grade_Settings)
-
 ![GitHub release (latest by date)](https://img.shields.io/github/v/release/1zilc/fishing-funds)
 ![GitHub Release Date](https://img.shields.io/github/release-date/1zilc/fishing-funds)
 ![GitHub all releases](https://img.shields.io/github/downloads/1zilc/fishing-funds/total)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/ee4fd509a7184f738eeb9048959b1f56)](https://app.codacy.com/gh/1zilc/fishing-funds?utm_source=github.com&utm_medium=referral&utm_content=1zilc/fishing-funds&utm_campaign=Badge_Grade_Settings)
 ![GitHub top language](https://img.shields.io/github/languages/top/1zilc/fishing-funds?color=red)
 ![GitHub commit activity](https://img.shields.io/github/commit-activity/m/1zilc/fishing-funds)
-![GitHub package.json dependency version (dev dep on branch)](https://img.shields.io/github/package-json/dependency-version/1zilc/fishing-funds/dev/electron/v3)
+![GitHub package.json dependency version (dev dep on branch)](https://img.shields.io/github/package-json/dependency-version/1zilc/fishing-funds/dev/electron/master)
 ![GitHub package.json dependency version (prod)](https://img.shields.io/github/package-json/dependency-version/1zilc/fishing-funds/menubar)
 ![GitHub](https://img.shields.io/github/license/1zilc/fishing-funds)
 
@@ -72,6 +71,12 @@ yarn package-win
 进入 「设置」- 「安全性与隐私」- 「通用」- 「允许从以下位置下载的App」-「仍然打开」
 ```
 
+## 收录网站
+
+- [柠檬精选](https://lemon.qq.com/lab/app/FishingFunds.html)
+- [Electron Apps](https://www.electronjs.org/apps/fishing-funds)
+- [MacWk](https://www.macwk.com/soft/fishing-funds)
+
 ## 支持一下～
 
 #### 支付宝
@@ -93,4 +98,4 @@ yarn package-win
 
 ## 许可证
 
-GPLv3
+[GPLv3](https://github.com/1zilc/fishing-funds/blob/master/LICENSE)
