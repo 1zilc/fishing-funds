@@ -4,6 +4,8 @@
 
 # Fishing Funds
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/ee4fd509a7184f738eeb9048959b1f56)](https://app.codacy.com/gh/1zilc/fishing-funds?utm_source=github.com&utm_medium=referral&utm_content=1zilc/fishing-funds&utm_campaign=Badge_Grade_Settings)
+
 ![GitHub release (latest by date)](https://img.shields.io/github/v/release/1zilc/fishing-funds)
 ![GitHub Release Date](https://img.shields.io/github/release-date/1zilc/fishing-funds)
 ![GitHub all releases](https://img.shields.io/github/downloads/1zilc/fishing-funds/total)
