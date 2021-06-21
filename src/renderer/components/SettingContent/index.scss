@@ -108,6 +108,9 @@
     margin: 0 10px;
     height: 100%;
     border-left: 1px solid var(--border-color);
+    &:last-child {
+      display: none;
+    }
   }
 }
 

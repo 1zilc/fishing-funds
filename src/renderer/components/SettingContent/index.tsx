@@ -16,9 +16,10 @@ import { setSystemSetting, defalutSystemSetting } from '@/actions/setting';
 
 import { StoreState } from '@/reducers/types';
 import * as Enums from '@/utils/enums';
+import * as Utils from '@/utils';
 import styles from './index.scss';
 
-export const ffVersion = '4.0.1';
+export const ffVersion = '4.0.2';
 export interface SettingContentProps {
   onEnter: () => void;
   onClose: () => void;
@@ -26,6 +27,40 @@ export interface SettingContentProps {
 
 const { shell, app } = window.contextModules.electron;
 const { electron } = window.contextModules.process;
+
+const linksGroup = Utils.Group(
+  [
+    {
+      url: 'mailto:dywzzjx@163.com',
+      name: '联系作者',
+    },
+    {
+      url: 'https://ff.1zilc.top',
+      name: '官方网站',
+    },
+    {
+      url: 'https://ff.1zilc.top/blog',
+      name: '更新日志',
+    },
+    {
+      url: 'https://github.com/1zilc/fishing-funds',
+      name: 'Github',
+    },
+    {
+      url: 'https://lemon.qq.com/lab/app/FishingFunds.html',
+      name: '柠檬精选',
+    },
+    {
+      url: 'https://www.electronjs.org/apps/fishing-funds',
+      name: 'Electron Apps',
+    },
+    {
+      url: 'https://www.macwk.com/soft/fishing-funds',
+      name: 'MacWk',
+    },
+  ],
+  3
+);
 
 const SettingContent: React.FC<SettingContentProps> = (props) => {
   const dispatch = useDispatch();
@@ -239,50 +274,18 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
               是一款个人开发小软件，开源后深受大家的喜爱，接受了大量宝贵的改进建议，感谢大家的反馈，作者利用空闲时间开发不易，您的支持可以给本项目的开发和完善提供巨大的动力，感谢对本软件的喜爱和认可
               :)
             </div>
-            <div className={classnames(styles.link)}>
-              <a onClick={(e) => shell.openExternal('mailto:dywzzjx@163.com')}>
-                联系作者
-              </a>
-              <i />
-              <a onClick={(e) => shell.openExternal('https://ff.1zilc.top')}>
-                官方网站
-              </a>
-              <i />
-              <a
-                onClick={(e) => shell.openExternal('https://ff.1zilc.top/blog')}
-              >
-                更新日志
-              </a>
-            </div>
-            <div className={classnames(styles.link)}>
-              <a
-                onClick={(e) =>
-                  shell.openExternal('https://github.com/1zilc/fishing-funds')
-                }
-              >
-                Github
-              </a>
-              <i />
-              <a
-                onClick={(e) =>
-                  shell.openExternal(
-                    'https://www.electronjs.org/apps/fishing-funds'
-                  )
-                }
-              >
-                Electron Apps
-              </a>
-              <i />
-              <a
-                onClick={(e) =>
-                  shell.openExternal(
-                    'https://lemon.qq.com/lab/app/FishingFunds.html'
-                  )
-                }
-              >
-                柠檬精选
-              </a>
-            </div>
+            {linksGroup.map((links, index) => (
+              <div key={index} className={styles.link}>
+                {links.map((link) => (
+                  <React.Fragment key={link.name}>
+                    <a onClick={(e) => shell.openExternal(link.url)}>
+                      {link.name}
+                    </a>
+                    <i />
+                  </React.Fragment>
+                ))}
+              </div>
+            ))}
           </div>
         </StandCard>
       </div>

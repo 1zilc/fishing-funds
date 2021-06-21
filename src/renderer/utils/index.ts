@@ -171,17 +171,17 @@ export function ParseRemoteFunds(code: string) {
   }
 }
 
-export function UpdateSystemTheme(setting: Enums.SystemThemeType) {
+export async function UpdateSystemTheme(setting: Enums.SystemThemeType) {
   switch (setting) {
     case Enums.SystemThemeType.Light:
-      invoke.setNativeThemeSource('light');
+      await invoke.setNativeThemeSource('light');
       break;
     case Enums.SystemThemeType.Dark:
-      invoke.setNativeThemeSource('dark');
+      await invoke.setNativeThemeSource('dark');
       break;
     case Enums.SystemThemeType.Auto:
     default:
-      invoke.setNativeThemeSource('system');
+      await invoke.setNativeThemeSource('system');
   }
 }
 

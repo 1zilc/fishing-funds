@@ -191,19 +191,27 @@ export function useConfigClipboard() {
 }
 
 export function useNativeTheme() {
-  const shouldUseDarkColors = invoke.getShouldUseDarkColors();
-  const [darkMode, setDarkMode] = useState(shouldUseDarkColors);
+  const [darkMode, setDarkMode] = useState(false);
+
+  async function syncSystemTheme() {
+    const { systemThemeSetting } = getSystemSetting();
+    await Utils.UpdateSystemTheme(systemThemeSetting);
+    await invoke.getShouldUseDarkColors().then(setDarkMode);
+  }
 
   useLayoutEffect(() => {
-    const { systemThemeSetting } = getSystemSetting();
     ipcRenderer.on('nativeTheme-updated', (e, data) => {
       setDarkMode(!!data?.darkMode);
     });
-    Utils.UpdateSystemTheme(systemThemeSetting);
     return () => {
       ipcRenderer.removeAllListeners('nativeTheme-updated');
     };
   }, []);
+
+  useEffect(() => {
+    syncSystemTheme();
+  }, []);
+
   return { darkMode };
 }
 

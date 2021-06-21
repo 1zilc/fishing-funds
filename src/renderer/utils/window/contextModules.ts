@@ -13,8 +13,8 @@ declare global {
         clipboard: Clipboard;
         invoke: {
           showCurrentWindow: () => void;
-          getShouldUseDarkColors: () => boolean;
-          setNativeThemeSource: (theme: string) => void;
+          getShouldUseDarkColors: () => Promise<boolean>;
+          setNativeThemeSource: (theme: string) => Promise<void>;
         };
       };
       process: {

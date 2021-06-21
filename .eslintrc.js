@@ -33,6 +33,7 @@ module.exports = {
     'no-plusplus': 1,
     'no-continue': 1,
     'global-require': 0,
+    'promise/catch-or-return': 0,
     'import/prefer-default-export': 0,
   },
   parserOptions: {

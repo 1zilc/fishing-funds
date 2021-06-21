@@ -179,7 +179,7 @@ export function calcFund(
   const bjz = NP.minus(gsz!, fund.dwjz!);
   const jrsygz = NP.times(cyfe, bjz);
   const gszz = NP.times(gsz!, cyfe);
-  const cyje = NP.times(dwjz, cyfe);
+  const cyje = NP.times(fund.dwjz!, cyfe);
 
   // cyfe: number; // 持有份额
   // bjz: number; // 比较值
