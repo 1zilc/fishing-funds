@@ -290,6 +290,7 @@ export function useSyncFixFundSetting() {
         updateFund({
           code: responseFund.fundcode!,
           name: responseFund.name,
+          cbj: null,
         });
       });
     } catch (error) {

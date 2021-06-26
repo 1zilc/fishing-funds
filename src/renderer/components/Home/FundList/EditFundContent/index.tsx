@@ -19,7 +19,7 @@ const EditFundContent: React.FC<EditFundContentProps> = (props) => {
   function onSave() {
     updateFund({
       code: fund.code,
-      cyfe: cbj ?? 0,
+      cyfe: cyfe ?? 0,
       cbj: cbj ?? undefined,
     });
     props.onEnter();
@@ -60,7 +60,10 @@ const EditFundContent: React.FC<EditFundContentProps> = (props) => {
             min={0}
             precision={4}
             value={cbj}
-            onChange={setCbj}
+            onChange={(e) => {
+              console.log(e);
+              setCbj(e);
+            }}
             size="small"
             style={{ width: '100%' }}
           />

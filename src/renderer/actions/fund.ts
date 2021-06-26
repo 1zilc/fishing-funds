@@ -141,7 +141,7 @@ export function updateFund(fund: {
   code: string;
   cyfe?: number;
   name?: string;
-  cbj?: number;
+  cbj?: number | null;
 }) {
   const { fundConfig } = getFundConfig();
   fundConfig.forEach((item) => {
@@ -149,7 +149,7 @@ export function updateFund(fund: {
       if (fund.cyfe !== undefined) {
         item.cyfe = fund.cyfe;
       }
-      if (fund.cbj !== undefined && fund.cbj !== null) {
+      if (fund.cbj !== null) {
         item.cbj = fund.cbj;
       }
       if (fund.name !== undefined) {
