@@ -146,10 +146,10 @@ export function useConfigClipboard() {
             cyfe: Number(fund.cyfe) < 0 ? 0 : Number(fund.cyfe) || 0,
             code: fund.code && String(fund.code),
             cbj:
-              fund.cyfe !== undefined
-                ? Number(fund.cyfe) < 0
+              fund.cbj !== undefined && fund.cbj !== null
+                ? Number(fund.cbj) < 0
                   ? undefined
-                  : Number(fund.cyfe)
+                  : Number(fund.cbj)
                 : undefined,
           }))
           .filter(({ code }) => code);

@@ -19,8 +19,8 @@ const EditFundContent: React.FC<EditFundContentProps> = (props) => {
   function onSave() {
     updateFund({
       code: fund.code,
-      cyfe,
-      cbj,
+      cyfe: cbj ?? 0,
+      cbj: cbj ?? undefined,
     });
     props.onEnter();
   }

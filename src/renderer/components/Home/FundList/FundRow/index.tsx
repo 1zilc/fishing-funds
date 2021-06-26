@@ -81,7 +81,7 @@ const FundRow: React.FC<RowProps> = (props) => {
             }}
           >
             <span className={styles.fundName}>{fund.name}</span>
-            {calcFundResult.cbj !== undefined && calcFundResult.cyfe && (
+            {calcFundResult.cbj !== undefined && !!calcFundResult.cyfe && (
               <span className={styles.hold}>持有</span>
             )}
             {conciseSetting && isFix && (

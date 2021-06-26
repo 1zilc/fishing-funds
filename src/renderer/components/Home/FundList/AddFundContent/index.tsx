@@ -44,9 +44,9 @@ const AddFundContent: React.FC<AddFundContentProps> = (props) => {
       setNone(false);
       addFund({
         code,
-        cyfe,
+        cyfe: cbj ?? 0,
         name: fund.name || '未知',
-        cbj,
+        cbj: cbj ?? undefined,
       });
       props.onEnter();
     } else {
