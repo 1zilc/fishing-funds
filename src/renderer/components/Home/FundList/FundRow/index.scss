@@ -12,6 +12,8 @@
   align-items: center;
   justify-content: space-between;
   width: 100%;
+  position: relative;
+  overflow: hidden;
 
   &:hover {
     border-bottom: 1px solid var(--hover-color);
@@ -28,6 +30,7 @@
   font-weight: 600;
   font-size: calc(14rem / var(--base-font-size));
   margin-bottom: 2px;
+  word-break: keep-all;
 }
 
 .code {
@@ -127,4 +130,14 @@
 
 .unuseText {
   text-decoration: line-through;
+}
+.hold {
+  border-radius: 2px;
+  font-size: 8px;
+  border: 1px solid var(--primary-color);
+  color: var(--primary-color);
+  padding: 0 4px;
+  text-align: center;
+  word-break: keep-all;
+  margin-left: 5px;
 }

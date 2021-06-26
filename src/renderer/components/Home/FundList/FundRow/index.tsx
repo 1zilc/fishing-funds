@@ -55,6 +55,7 @@ const FundRow: React.FC<RowProps> = (props) => {
         name: fund.name!,
         code: fund.fundcode!,
         cyfe: Number(calcFundResult.cyfe),
+        cbj: calcFundResult.cbj,
       });
     }
   };
@@ -76,14 +77,16 @@ const FundRow: React.FC<RowProps> = (props) => {
             style={{
               display: 'flex',
               alignItems: 'center',
+              flexWrap: 'wrap',
             }}
           >
-            <span className={styles.fundName}>
-              {fund.name}
-              {conciseSetting && isFix && (
-                <span className={styles.warn}>净值更新</span>
-              )}
-            </span>
+            <span className={styles.fundName}>{fund.name}</span>
+            {calcFundResult.cbj !== undefined && calcFundResult.cyfe && (
+              <span className={styles.hold}>持有</span>
+            )}
+            {conciseSetting && isFix && (
+              <span className={styles.warn}>净值更新</span>
+            )}
           </div>
           {!conciseSetting && (
             <div className={styles.rowBar}>
@@ -128,27 +131,38 @@ const FundRow: React.FC<RowProps> = (props) => {
           <section>
             <span>净值：</span>
             <span>{calcFundResult.dwjz}</span>
-            {isFix && (
-              <span style={{ flex: 1, textAlign: 'center' }}>
-                ({Utils.Yang(calcFundResult.bjz)})
-              </span>
-            )}
+            <span>（{calcFundResult.jzrq}）</span>
           </section>
           <section>
-            <span>估算值：</span>
-            <span className={classnames({ [styles.unuseText]: isFix })}>
-              {fund.gsz}
+            <span>成本价：</span>
+            <span>
+              {calcFundResult.cbj !== undefined ? calcFundResult.cbj : '未录入'}
             </span>
-            {!isFix && (
-              <span style={{ flex: 1, textAlign: 'center' }}>
-                ({Utils.Yang(calcFundResult.bjz)})
-              </span>
-            )}
           </section>
           <section>
             <span>持有份额：</span>
             <span>{calcFundResult.cyfe}</span>
             <EditIcon className={styles.editor} onClick={onEditClick} />
+          </section>
+          <section>
+            <span>成本金额：</span>
+            <span>
+              {calcFundResult.cbje !== undefined
+                ? `¥ ${calcFundResult.cbje.toFixed(2)}`
+                : '暂无'}
+            </span>
+          </section>
+          <section>
+            <span>持有收益率：</span>
+            <span
+              className={classnames(
+                Utils.GetValueColor(calcFundResult.cysylv).textClass
+              )}
+            >
+              {calcFundResult.cysylv !== undefined
+                ? `${Utils.Yang(calcFundResult.cysylv.toFixed(2))}%`
+                : '暂无'}
+            </span>
           </section>
           <section>
             <span>{isFix ? '今日收益：' : '估算收益：'}</span>
@@ -161,11 +175,19 @@ const FundRow: React.FC<RowProps> = (props) => {
             </span>
           </section>
           <section>
-            <span>净值日期：</span>
-            <span>{calcFundResult.jzrq}</span>
+            <span>持有收益：</span>
+            <span
+              className={classnames(
+                Utils.GetValueColor(calcFundResult.cysy).textClass
+              )}
+            >
+              {calcFundResult.cysy !== undefined
+                ? `¥ ${Utils.Yang(calcFundResult.cysy.toFixed(2))}`
+                : '暂无'}
+            </span>
           </section>
           <section>
-            <span>{isFix ? '今日总值：' : '估算总值：'}</span>
+            <span>{isFix ? '今日总额：' : '估算总值：'}</span>
             <span>¥ {calcFundResult.gszz.toFixed(2)}</span>
           </section>
           <div className={styles.view}>

@@ -13,18 +13,21 @@ export interface EditFundContentProps {
 
 const EditFundContent: React.FC<EditFundContentProps> = (props) => {
   const { fund } = props;
-  const [num, setNum] = useState<any>(fund.cyfe);
-  const onSave = () => {
+  const [cyfe, setCyfe] = useState<any>(fund.cyfe);
+  const [cbj, setCbj] = useState<any>(fund.cbj);
+
+  function onSave() {
     updateFund({
       code: fund.code,
-      cyfe: num,
+      cyfe,
+      cbj,
     });
     props.onEnter();
-  };
+  }
 
   return (
     <CustomDrawerContent
-      title="修改份额"
+      title="修改基金"
       enterText="保存"
       onClose={props.onClose}
       onEnter={onSave}
@@ -42,15 +45,24 @@ const EditFundContent: React.FC<EditFundContentProps> = (props) => {
           <label>持有份额：</label>
           <InputNumber
             placeholder="可精确2位小数"
-            // defaultValue={0}
             min={0}
             precision={2}
-            value={num}
-            onChange={setNum}
+            value={cyfe}
+            onChange={setCyfe}
             size="small"
-            style={{
-              width: '100%',
-            }}
+            style={{ width: '100%' }}
+          />
+        </section>
+        <section>
+          <label>持仓成本价：</label>
+          <InputNumber
+            placeholder="可精确4位小数"
+            min={0}
+            precision={4}
+            value={cbj}
+            onChange={setCbj}
+            size="small"
+            style={{ width: '100%' }}
           />
         </section>
       </div>

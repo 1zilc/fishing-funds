@@ -8,7 +8,6 @@ import { ReactComponent as MenuIcon } from '@/assets/icons/menu.svg';
 import { ReactComponent as RemoveIcon } from '@/assets/icons/remove.svg';
 import { ReactComponent as EditIcon } from '@/assets/icons/edit.svg';
 import CustomDrawer from '@/components/CustomDrawer';
-import WalletRow from '@/components/Wallet/WalletRow';
 import Empty from '@/components/Empty';
 import AddFundContent from '@/components/Home/FundList/AddFundContent';
 import EditFundContent from '@/components/Home/FundList/EditFundContent';
@@ -41,7 +40,12 @@ const ManageFundContent: React.FC<ManageFundContentProps> = (props) => {
     show: showEditDrawer,
     set: setEditDrawer,
     close: closeEditDrawer,
-  } = useDrawer({ cyfe: 0, code: '', name: '' });
+  } = useDrawer<Fund.SettingItem>({
+    cyfe: 0,
+    code: '',
+    name: '',
+    cbj: undefined,
+  });
 
   const { done: syncFundSettingDone } = useSyncFixFundSetting();
 
@@ -58,6 +62,7 @@ const ManageFundContent: React.FC<ManageFundContentProps> = (props) => {
         name: fund.name,
         cyfe: fund.cyfe,
         code: fund.code,
+        cbj: fund.cbj,
       };
     });
     setFundConfig(fundConfig);
@@ -125,6 +130,7 @@ const ManageFundContent: React.FC<ManageFundContentProps> = (props) => {
                                 name: fund.name,
                                 cyfe: fund.cyfe,
                                 code: fund.code,
+                                cbj: fund.cbj,
                               });
                             }}
                           />

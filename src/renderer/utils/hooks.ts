@@ -145,6 +145,12 @@ export function useConfigClipboard() {
             name: '',
             cyfe: Number(fund.cyfe) < 0 ? 0 : Number(fund.cyfe) || 0,
             code: fund.code && String(fund.code),
+            cbj:
+              fund.cyfe !== undefined
+                ? Number(fund.cyfe) < 0
+                  ? undefined
+                  : Number(fund.cyfe)
+                : undefined,
           }))
           .filter(({ code }) => code);
         const codeMap = getCodeMap(fundConfig);
@@ -158,6 +164,7 @@ export function useConfigClipboard() {
           name: fund.name!,
           code: fund.fundcode!,
           cyfe: codeMap[fund.fundcode!].cyfe,
+          cbj: codeMap[fund.fundcode!].cbj,
         }));
         setFundConfig(newFundConfig);
         await dialog.showMessageBox({
