@@ -11,9 +11,10 @@ import CustomDrawer from '@/components/CustomDrawer';
 import Empty from '@/components/Empty';
 import AddFundContent from '@/components/Home/FundList/AddFundContent';
 import EditFundContent from '@/components/Home/FundList/EditFundContent';
+import EditWalletContent from '@/components/Wallet/EditWalletContent';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
 import { getFundConfig, deleteFund, setFundConfig } from '@/actions/fund';
-import { getCurrentWallet } from '@/actions/wallet';
+import { getCurrentWallet, walletIcons } from '@/actions/wallet';
 import { useSyncFixFundSetting, useDrawer } from '@/utils/hooks';
 import styles from './index.scss';
 
@@ -45,6 +46,18 @@ const ManageFundContent: React.FC<ManageFundContentProps> = (props) => {
     code: '',
     name: '',
     cbj: undefined,
+  });
+
+  const {
+    data: editWalletData,
+    show: showEditWalletDrawer,
+    set: setEditWalletDrawer,
+    close: closeEdittWalletDrawer,
+  } = useDrawer<Wallet.SettingItem>({
+    name: '',
+    iconIndex: 0,
+    code: '',
+    funds: [],
   });
 
   const { done: syncFundSettingDone } = useSyncFixFundSetting();
@@ -91,6 +104,16 @@ const ManageFundContent: React.FC<ManageFundContentProps> = (props) => {
       onEnter={props.onEnter}
       onClose={props.onClose}
     >
+      <div className={styles.wallet}>
+        <img src={walletIcons[wallet.iconIndex]} draggable={false} />
+        <div className={styles.walletName}>
+          {wallet.name}
+          <EditIcon
+            className={styles.editWallet}
+            onClick={() => setEditWalletDrawer(wallet)}
+          />
+        </div>
+      </div>
       <div className={styles.content}>
         {sortFundConfig.length ? (
           syncFundSettingDone ? (
@@ -175,6 +198,13 @@ const ManageFundContent: React.FC<ManageFundContentProps> = (props) => {
             closeEditDrawer();
           }}
           fund={editFundData}
+        />
+      </CustomDrawer>
+      <CustomDrawer show={showEditWalletDrawer}>
+        <EditWalletContent
+          onClose={closeEdittWalletDrawer}
+          onEnter={closeEdittWalletDrawer}
+          wallet={editWalletData}
         />
       </CustomDrawer>
     </CustomDrawerContent>

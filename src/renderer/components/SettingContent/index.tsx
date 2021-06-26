@@ -12,6 +12,7 @@ import { ReactComponent as SettingIcon } from '@/assets/icons/setting.svg';
 import { ReactComponent as LinkIcon } from '@/assets/icons/link.svg';
 import { ReactComponent as LineCharIcon } from '@/assets/icons/line-chart.svg';
 import { ReactComponent as TShirtIcon } from '@/assets/icons/t-shirt.svg';
+import { ReactComponent as GlobalIcon } from '@/assets/icons/global.svg';
 import { setSystemSetting, defalutSystemSetting } from '@/actions/setting';
 
 import { StoreState } from '@/reducers/types';
@@ -19,7 +20,7 @@ import * as Enums from '@/utils/enums';
 import * as Utils from '@/utils';
 import styles from './index.scss';
 
-export const ffVersion = '4.0.2';
+export const ffVersion = '4.1.0';
 export interface SettingContentProps {
   onEnter: () => void;
   onClose: () => void;
@@ -46,6 +47,20 @@ const linksGroup = Utils.Group(
       url: 'https://github.com/1zilc/fishing-funds',
       name: 'Github',
     },
+    {
+      url: 'https://github.com/1zilc/fishing-funds/issues/new?assignees=&labels=&template=issue_template_bug.md',
+      name: 'BUG反馈',
+    },
+    {
+      url: 'https://github.com/1zilc/fishing-funds/issues/new?assignees=&labels=&template=issue_template_feature.md',
+      name: '提出建议',
+    },
+  ],
+  3
+);
+
+const recordSiteGroup = Utils.Group(
+  [
     {
       url: 'https://lemon.qq.com/lab/app/FishingFunds.html',
       name: '柠檬精选',
@@ -275,6 +290,22 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
               :)
             </div>
             {linksGroup.map((links, index) => (
+              <div key={index} className={styles.link}>
+                {links.map((link) => (
+                  <React.Fragment key={link.name}>
+                    <a onClick={(e) => shell.openExternal(link.url)}>
+                      {link.name}
+                    </a>
+                    <i />
+                  </React.Fragment>
+                ))}
+              </div>
+            ))}
+          </div>
+        </StandCard>
+        <StandCard icon={<GlobalIcon />} title="收录网站">
+          <div className={classnames('card-body')}>
+            {recordSiteGroup.map((links, index) => (
               <div key={index} className={styles.link}>
                 {links.map((link) => (
                   <React.Fragment key={link.name}>

@@ -49,12 +49,16 @@ function sortFunds(
     switch (fundSortType) {
       case Enums.FundSortType.Growth:
         return (Number(calcA.gszzl) - Number(calcB.gszzl)) * t;
-      case Enums.FundSortType.Block:
-        return (Number(calcA.cyfe) - Number(calcB.cyfe)) * t;
+      case Enums.FundSortType.Cost:
+        return (Number(calcA.cbje || 0) - Number(calcB.cbje || 0)) * t;
       case Enums.FundSortType.Money:
         return (Number(calcA.jrsygz) - Number(calcB.jrsygz)) * t;
       case Enums.FundSortType.Estimate:
         return (Number(calcA.gszz) - Number(calcB.gszz)) * t;
+      case Enums.FundSortType.Income:
+        return (Number(calcA.cysy || 0) - Number(calcB.cysy || 0)) * t;
+      case Enums.FundSortType.IncomeRate:
+        return (Number(calcA.cysyl) - Number(calcB.cysyl || 0)) * t;
       case Enums.FundSortType.Custom:
       default:
         return (

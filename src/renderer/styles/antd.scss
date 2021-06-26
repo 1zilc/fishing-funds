@@ -24,3 +24,6 @@
 .ant-drawer-body::-webkit-scrollbar {
   width: 0;
 }
+.ant-checkbox-indeterminate .ant-checkbox-inner {
+  border-color: var(--main-text-color);
+}

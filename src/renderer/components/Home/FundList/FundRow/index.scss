@@ -23,6 +23,11 @@
         fill: var(--main-text-color);
       }
     }
+
+    .conciseValue,
+    .value {
+      filter: brightness(133%);
+    }
   }
 }
 
@@ -55,6 +60,7 @@
   margin-left: 5px;
   text-align: center;
   white-space: pre-wrap;
+  transition: all 0.3s;
 }
 
 .warn {
@@ -65,12 +71,14 @@
   padding: 1px 4px;
   margin-left: 5px;
   white-space: nowrap;
+  transition: 0.3s;
 }
 .conciseValue {
   font-size: calc(20rem / var(--base-font-size));
   line-height: 24px;
   white-space: pre-wrap;
   font-weight: 600;
+  transition: all 0.3s;
 }
 
 .remove {
@@ -132,7 +140,7 @@
   text-decoration: line-through;
 }
 .hold {
-  border-radius: 2px;
+  border-radius: 3px;
   font-size: 8px;
   border: 1px solid var(--primary-color);
   color: var(--primary-color);
@@ -140,4 +148,5 @@
   text-align: center;
   word-break: keep-all;
   margin-left: 5px;
+  transition: 0.3s;
 }

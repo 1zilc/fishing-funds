@@ -14,6 +14,11 @@ interface WalletIncomeProps {
   codes: string[];
 }
 
+const incomeTypeList = [
+  { name: '今日收益', type: Enums.WalletIncomType.Jrsy, code: '' },
+  { name: '持有收益', type: Enums.WalletIncomType.Cysy, code: '' },
+];
+
 const WalletIncome: React.FC<WalletIncomeProps> = ({
   funds = [],
   codes = [],
@@ -21,6 +26,7 @@ const WalletIncome: React.FC<WalletIncomeProps> = ({
   const { ref: chartRef, chartInstance } = useResizeEchart(
     CONST.DEFAULT.ECHARTS_SCALE
   );
+  const [incomeType, setIncomeType] = useState(incomeTypeList[0]);
 
   const { darkMode } = useHomeContext();
 
@@ -65,11 +71,15 @@ const WalletIncome: React.FC<WalletIncomeProps> = ({
               focus: 'series',
             },
             data: codes.map((code) => {
-              const { sygz } = calcFunds(funds, code);
+              const { sygz, cysy } = calcFunds(funds, code);
+              const value =
+                incomeType.type === Enums.WalletIncomType.Jrsy
+                  ? sygz.toFixed(2)
+                  : cysy.toFixed(2);
               return {
-                value: sygz.toFixed(2),
+                value,
                 itemStyle: {
-                  color: Utils.GetValueColor(sygz).color,
+                  color: Utils.GetValueColor(value).color,
                 },
               };
             }),
@@ -79,12 +89,17 @@ const WalletIncome: React.FC<WalletIncomeProps> = ({
       });
     },
     chartInstance,
-    [darkMode, funds, codes]
+    [darkMode, funds, codes, incomeType]
   );
 
   return (
     <div>
       <div ref={chartRef} style={{ width: '100%' }} />
+      <TypeSelection
+        types={incomeTypeList}
+        activeType={incomeType.type}
+        onSelected={setIncomeType}
+      />
     </div>
   );
 };

@@ -135,9 +135,11 @@ const FundRow: React.FC<RowProps> = (props) => {
           </section>
           <section>
             <span>成本价：</span>
-            <span>
-              {calcFundResult.cbj !== undefined ? calcFundResult.cbj : '未录入'}
-            </span>
+            {calcFundResult.cbj !== undefined ? (
+              <span>{calcFundResult.cbj}</span>
+            ) : (
+              <a onClick={onEditClick}>录入</a>
+            )}
           </section>
           <section>
             <span>持有份额：</span>
@@ -156,11 +158,11 @@ const FundRow: React.FC<RowProps> = (props) => {
             <span>持有收益率：</span>
             <span
               className={classnames(
-                Utils.GetValueColor(calcFundResult.cysylv).textClass
+                Utils.GetValueColor(calcFundResult.cysyl).textClass
               )}
             >
-              {calcFundResult.cysylv !== undefined
-                ? `${Utils.Yang(calcFundResult.cysylv.toFixed(2))}%`
+              {calcFundResult.cysyl !== undefined
+                ? `${Utils.Yang(calcFundResult.cysyl.toFixed(2))}%`
                 : '暂无'}
             </span>
           </section>

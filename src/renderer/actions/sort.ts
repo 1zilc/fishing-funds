@@ -18,9 +18,11 @@ export interface QuotationSortType {
 export const fundSortModeOptions: Option.EnumsOption<Enums.FundSortType>[] = [
   { key: Enums.FundSortType.Custom, value: '自定义' },
   { key: Enums.FundSortType.Growth, value: '今日涨幅' },
-  { key: Enums.FundSortType.Block, value: '持有份额' },
+  { key: Enums.FundSortType.Cost, value: '持有成本' },
   { key: Enums.FundSortType.Money, value: '今日收益' },
-  { key: Enums.FundSortType.Estimate, value: '今日估值' },
+  { key: Enums.FundSortType.Estimate, value: '今日总值' },
+  { key: Enums.FundSortType.Income, value: '持有收益' },
+  { key: Enums.FundSortType.IncomeRate, value: '持有收益率' },
 ];
 
 export const zindexSortModeOptions: Option.EnumsOption<Enums.ZindexSortType>[] =
