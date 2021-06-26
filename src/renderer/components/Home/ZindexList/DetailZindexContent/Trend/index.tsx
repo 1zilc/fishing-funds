@@ -83,6 +83,27 @@ const Trend: React.FC<PerformanceProps> = ({ code }) => {
                     Number(result[0]?.price)
                 ).color,
               },
+              markPoint: {
+                symbol: 'pin',
+                symbolSize: 30,
+                data: [
+                  { type: 'max', label: { fontSize: 10 } },
+                  { type: 'min', label: { fontSize: 10 } },
+                ],
+              },
+              markLine: {
+                symbol: 'none',
+                label: {
+                  position: 'insideEndBottom',
+                  fontSize: 10,
+                },
+                data: [
+                  {
+                    name: '平均值',
+                    type: 'average',
+                  },
+                ],
+              },
             },
           ],
         });
