@@ -21,9 +21,11 @@ export enum FundApiType {
 export enum FundSortType {
   Custom, // 默认
   Growth, // 涨幅
-  Block, // 份额
+  Cost, // 成本
   Money, // 收益
   Estimate, // 估值
+  Income, // 收益
+  IncomeRate, // 收益率
 }
 
 export enum ZindexSortType {
@@ -127,4 +129,10 @@ export enum ZindexType {
 export enum FundRankType {
   Sy,
   Syl,
+  Cysy,
+  Cysyl,
+}
+export enum WalletIncomType {
+  Jrsy,
+  Cysy,
 }

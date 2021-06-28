@@ -34,16 +34,19 @@ const AssetsStatistics: React.FC<AssetsStatisticsProps> = ({
   // 盈利基金数
   const winFundCount = funds.filter(({ gszzl }) => Number(gszzl) > 0).length;
   // 总资产
-  const { cyje, jrsygz } = funds.reduce(
+  const { cyje, jrsygz, cysy, cbje } = funds.reduce(
     (result, fund) => {
-      const { cyje, jrsygz } = calcWalletsFund(fund, codes);
+      const { cyje, jrsygz, cysy, cbje } = calcWalletsFund(fund, codes);
       result.cyje += cyje;
       result.jrsygz += jrsygz;
+      result.cysy += cysy;
+      result.cbje += cbje;
       return result;
     },
-    { jrsygz: 0, cyje: 0 }
+    { jrsygz: 0, cyje: 0, cysy: 0, cbje: 0 }
   );
   const gssyl = cyje ? NP.times(NP.divide(jrsygz, cyje), 100) : 0;
+  const cysyl = cbje ? NP.times(NP.divide(cysy, cbje), 100) : 0;
 
   const displayCyje = eyeOpen
     ? cyje.toFixed(2)
@@ -66,6 +69,12 @@ const AssetsStatistics: React.FC<AssetsStatisticsProps> = ({
   const displayFundsLength = eyeOpen
     ? funds.length
     : Utils.Encrypt(String(funds.length));
+  const displayCysy = eyeOpen
+    ? Utils.Yang(cysy.toFixed(2))
+    : Utils.Encrypt(Utils.Yang(cysy.toFixed(2)));
+  const displayCysyl = eyeOpen
+    ? cysyl.toFixed(2)
+    : Utils.Encrypt(cysyl.toFixed(2));
 
   return (
     <PureCard className={styles.content}>
@@ -98,7 +107,7 @@ const AssetsStatistics: React.FC<AssetsStatisticsProps> = ({
         </div>
         <div className={styles.row}>
           <div>
-            收益：
+            收益(今)：
             <span
               className={classnames({
                 [Utils.GetValueColor(displaySygz).textClass]: eyeOpen,
@@ -108,13 +117,36 @@ const AssetsStatistics: React.FC<AssetsStatisticsProps> = ({
             </span>
           </div>
           <div>
-            收益率：
+            收益率(今)：
             <span
               className={classnames({
                 [Utils.GetValueColor(displayGssyl).textClass]: eyeOpen,
               })}
             >
               {displayGssyl}
+              {eyeOpen ? '%' : ''}
+            </span>
+          </div>
+        </div>
+        <div className={styles.row}>
+          <div>
+            持有收益：
+            <span
+              className={classnames({
+                [Utils.GetValueColor(displayCysy).textClass]: eyeOpen,
+              })}
+            >
+              {displayCysy}
+            </span>
+          </div>
+          <div>
+            持有收益率：
+            <span
+              className={classnames({
+                [Utils.GetValueColor(displayCysyl).textClass]: eyeOpen,
+              })}
+            >
+              {displayCysyl}
               {eyeOpen ? '%' : ''}
             </span>
           </div>

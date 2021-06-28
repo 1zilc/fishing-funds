@@ -67,7 +67,7 @@ const WalletRow: React.FC<WalletRowProps> = (props) => {
   };
   const { funds, updateTime } = walletState;
 
-  const { zje, sygz, gssyl } = calcFunds(funds, wallet.code);
+  const { zje, sygz, gssyl, cysy, cysyl } = calcFunds(funds, wallet.code);
   const eyeOpen = eyeStatus === Enums.EyeStatus.Open;
   const displayZje = eyeOpen ? zje.toFixed(2) : Utils.Encrypt(zje.toFixed(2));
   const displaySygz = eyeOpen
@@ -76,6 +76,12 @@ const WalletRow: React.FC<WalletRowProps> = (props) => {
   const displayGssyl = eyeOpen
     ? gssyl.toFixed(2)
     : Utils.Encrypt(gssyl.toFixed(2));
+  const displayCysy = eyeOpen
+    ? cysy.toFixed(2)
+    : Utils.Encrypt(cysy.toFixed(2));
+  const displayCysyl = eyeOpen
+    ? cysyl.toFixed(2)
+    : Utils.Encrypt(cysyl.toFixed(2));
 
   return (
     <StandCard
@@ -142,17 +148,17 @@ const WalletRow: React.FC<WalletRowProps> = (props) => {
               {displayZje}
             </div>
           </div>
-          <div
-            style={{
-              display: 'flex',
-              width: '100%',
-              justifyContent: 'space-around',
-              textAlign: 'center',
-            }}
-          >
-            <div>收益：{displaySygz}</div>
+          <div className={styles.infoRow}>
+            <div>收益(今)：{displaySygz}</div>
             <div>
-              收益率： {displayGssyl}
+              收益率(今)： {displayGssyl}
+              {eyeOpen ? '%' : ''}
+            </div>
+          </div>
+          <div className={styles.infoRow}>
+            <div>持有收益：{displayCysy}</div>
+            <div>
+              持有收益率： {displayCysyl}
               {eyeOpen ? '%' : ''}
             </div>
           </div>

@@ -8,4 +8,4 @@ const selectedConfigureStore = production
 
 export const { configureStore } = selectedConfigureStore;
 
-export const { history } = selectedConfigureStore;
+// export const { history } = selectedConfigureStore;

@@ -203,7 +203,7 @@ export async function FromHowbuy(code: string) {
   }
 }
 
-// 好买基金
+// 易天富
 export async function FromEtf(code: string) {
   try {
     const {

@@ -25,8 +25,8 @@ const Score: React.FC<ScoreProps> = ({ gssyl = 0 }) => {
             min: -5,
             max: 5,
             splitNumber: 8,
-            radius: '120%',
-            center: ['50%', '90%'],
+            radius: '150%',
+            center: ['50%', '95%'],
             axisLine: {
               lineStyle: {
                 width: 2,

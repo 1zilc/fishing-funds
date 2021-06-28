@@ -3,6 +3,7 @@ declare namespace Fund {
     name: string;
     code: string;
     cyfe: number;
+    cbj?: number;
   }
   export interface ResponseItem {
     name?: string; // 名称 '诺安混合'
@@ -33,35 +34,35 @@ declare namespace Fund {
     id: string;
   }
   export interface PingzhongData {
-    /*基金持仓股票代码(新市场号)*/
+    /* 基金持仓股票代码(新市场号) */
     stockCodesNew?: string[];
-    /*基金持仓债券代码（新市场号）*/
+    /* 基金持仓债券代码（新市场号） */
     zqCodesNew?: string;
-    /*股票仓位测算图*/
+    /* 股票仓位测算图 */
     Data_fundSharesPositions?: [number, number][];
-    /*单位净值走势 equityReturn-净值回报 unitMoney-每份派送金*/
+    /* 单位净值走势 equityReturn-净值回报 unitMoney-每份派送金 */
     Data_netWorthTrend?: any[];
-    /*累计收益率走势*/
+    /* 累计收益率走势 */
     Data_grandTotal?: any[];
-    /*同类排名走势*/
+    /* 同类排名走势 */
     Data_rateInSimilarType?: any[];
-    /*同类排名百分比*/
+    /* 同类排名百分比 */
     Data_rateInSimilarPersent?: any[];
-    /*同类型基金涨幅榜*/
+    /* 同类型基金涨幅榜 */
     swithSameType?: string[][];
-    /*现任基金经理*/
+    /* 现任基金经理 */
     Data_currentFundManager: Fund.Manager.Info[];
-    /*规模变动 mom-较上期环比*/
+    /* 规模变动 mom-较上期环比 */
     Data_fluctuationScale: {
       categories: string[];
       series: { y: number; mom: string }[];
     };
-    /*持有人结构*/
+    /* 持有人结构 */
     Data_holderStructure: {
       categories: string[];
       series: { name: string; data: string[] }[];
     };
-    /*资产配置*/
+    /* 资产配置 */
     Data_assetAllocation: {
       categories: string[];
       series: {
@@ -71,19 +72,19 @@ declare namespace Fund {
         yAxis: number;
       }[];
     };
-    /*业绩评价 */
+    /* 业绩评价 */
     Data_performanceEvaluation: {
       categories: string[];
       dsc: string[];
       data: number[];
     };
-    /*近一年收益率*/
+    /* 近一年收益率 */
     syl_1n?: string;
-    /*近6月收益率*/
+    /* 近6月收益率 */
     syl_6y?: string;
-    /*近三月收益率*/
+    /* 近三月收益率 */
     syl_3y?: string;
-    /*近一月收益率*/
+    /* 近一月收益率 */
     syl_1y?: string;
   }
 

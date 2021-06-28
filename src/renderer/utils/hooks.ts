@@ -145,6 +145,12 @@ export function useConfigClipboard() {
             name: '',
             cyfe: Number(fund.cyfe) < 0 ? 0 : Number(fund.cyfe) || 0,
             code: fund.code && String(fund.code),
+            cbj:
+              fund.cbj !== undefined && fund.cbj !== null
+                ? Number(fund.cbj) < 0
+                  ? undefined
+                  : Number(fund.cbj)
+                : undefined,
           }))
           .filter(({ code }) => code);
         const codeMap = getCodeMap(fundConfig);
@@ -158,6 +164,7 @@ export function useConfigClipboard() {
           name: fund.name!,
           code: fund.fundcode!,
           cyfe: codeMap[fund.fundcode!].cyfe,
+          cbj: codeMap[fund.fundcode!].cbj,
         }));
         setFundConfig(newFundConfig);
         await dialog.showMessageBox({
@@ -191,19 +198,27 @@ export function useConfigClipboard() {
 }
 
 export function useNativeTheme() {
-  const shouldUseDarkColors = invoke.getShouldUseDarkColors();
-  const [darkMode, setDarkMode] = useState(shouldUseDarkColors);
+  const [darkMode, setDarkMode] = useState(false);
+
+  async function syncSystemTheme() {
+    const { systemThemeSetting } = getSystemSetting();
+    await Utils.UpdateSystemTheme(systemThemeSetting);
+    await invoke.getShouldUseDarkColors().then(setDarkMode);
+  }
 
   useLayoutEffect(() => {
-    const { systemThemeSetting } = getSystemSetting();
     ipcRenderer.on('nativeTheme-updated', (e, data) => {
       setDarkMode(!!data?.darkMode);
     });
-    Utils.UpdateSystemTheme(systemThemeSetting);
     return () => {
       ipcRenderer.removeAllListeners('nativeTheme-updated');
     };
   }, []);
+
+  useEffect(() => {
+    syncSystemTheme();
+  }, []);
+
   return { darkMode };
 }
 
@@ -275,6 +290,7 @@ export function useSyncFixFundSetting() {
         updateFund({
           code: responseFund.fundcode!,
           name: responseFund.name,
+          cbj: null,
         });
       });
     } catch (error) {

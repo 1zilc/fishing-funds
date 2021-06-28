@@ -125,6 +125,8 @@ const K: React.FC<PerformanceProps> = ({ code = '' }) => {
               type: 'line',
               data: calculateMA(5, values),
               smooth: true,
+              showSymbol: false,
+              symbol: 'none',
               lineStyle: {
                 opacity: 0.5,
               },
@@ -134,6 +136,8 @@ const K: React.FC<PerformanceProps> = ({ code = '' }) => {
               type: 'line',
               data: calculateMA(10, values),
               smooth: true,
+              showSymbol: false,
+              symbol: 'none',
               lineStyle: {
                 opacity: 0.5,
               },
@@ -143,6 +147,8 @@ const K: React.FC<PerformanceProps> = ({ code = '' }) => {
               type: 'line',
               data: calculateMA(20, values),
               smooth: true,
+              showSymbol: false,
+              symbol: 'none',
               lineStyle: {
                 opacity: 0.5,
               },
@@ -152,6 +158,8 @@ const K: React.FC<PerformanceProps> = ({ code = '' }) => {
               type: 'line',
               data: calculateMA(30, values),
               smooth: true,
+              showSymbol: false,
+              symbol: 'none',
               lineStyle: {
                 opacity: 0.5,
               },

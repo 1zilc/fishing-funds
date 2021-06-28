@@ -20,7 +20,8 @@ const AddFundContent: React.FC<AddFundContentProps> = (props) => {
   const { codeMap } = getFundConfig();
   const [name, setName] = useState<string>('');
   const [code, setCode] = useState<string>('');
-  const [num, setNum] = useState<number>(0);
+  const [cyfe, setCyfe] = useState<number>(0);
+  const [cbj, setCbj] = useState<any>();
   const [none, setNone] = useState<boolean>(false);
   const [fundList, setFundlist] = useState<Fund.RemoteFund[]>([]);
   const remoteFunds = useSelector(
@@ -43,8 +44,9 @@ const AddFundContent: React.FC<AddFundContentProps> = (props) => {
       setNone(false);
       addFund({
         code,
-        cyfe: num,
+        cyfe: cyfe ?? 0,
         name: fund.name || '未知',
+        cbj: cbj ?? undefined,
       });
       props.onEnter();
     } else {
@@ -130,12 +132,22 @@ const AddFundContent: React.FC<AddFundContentProps> = (props) => {
             defaultValue={0}
             min={0}
             precision={2}
-            value={num}
-            onChange={setNum}
+            value={cyfe}
+            onChange={setCyfe}
             size="small"
-            style={{
-              width: '100%',
-            }}
+            style={{ width: '100%' }}
+          />
+        </section>
+        <section>
+          <label>持仓成本价：</label>
+          <InputNumber
+            placeholder="可精确4位小数"
+            min={0}
+            precision={2}
+            value={cbj}
+            onChange={setCbj}
+            size="small"
+            style={{ width: '100%' }}
           />
         </section>
         {none && (
