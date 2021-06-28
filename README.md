@@ -71,6 +71,39 @@ yarn package-win
 进入 「设置」- 「安全性与隐私」- 「通用」- 「允许从以下位置下载的App」-「仍然打开」
 ```
 
+## 导入导出
+
+Fishing Funds 右键菜单支持导入导出基金 JSON 配置方便备份
+
+```typescript
+// 字段说明
+interface FundSetting {
+  code: string; // 基金代码（必填）
+  name?: string; // 基金名称
+  cyfe?: number; // 持有份额
+  cbj?: number; // 持仓成本价
+}
+```
+
+例子：
+
+```json
+[
+  {
+    "code": "320007",
+    "name": "诺按成长混合",
+    "cyfe": 1000.0,
+    "cbj": 1.6988
+  },
+  {
+    "code": "161725",
+    "name": "招商中证白酒指数(LOF)",
+    "cyfe": 1000.0,
+    "cbj": 1.4896
+  }
+]
+```
+
 ## 收录网站
 
 - [柠檬精选](https://lemon.qq.com/lab/app/FishingFunds.html)
