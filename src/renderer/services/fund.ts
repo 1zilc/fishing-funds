@@ -569,3 +569,60 @@ export async function GetQDIIFundFromEastMoney(code: string) {
     return null;
   }
 }
+
+// 查询定投排行
+export async function GetAutomaticPlanFromEastMoney(type: number) {
+  try {
+    const { body: html } = await got(
+      'http://fund.eastmoney.com/api/Dtshph.ashx',
+      {
+        searchParams: {
+          c: 'dwjz',
+          t: type,
+          s: 'desc',
+          issale: 1,
+          page: 1,
+          psize: 200,
+          _: new Date().getTime(),
+        },
+      }
+    );
+    const $ = cheerio.load(html);
+    const data = $('tbody tr')
+      .toArray()
+      .map((tr) => {
+        const [
+          checkbox,
+          no,
+          code,
+          name,
+          more,
+          dwjz,
+          jzrq,
+          y1,
+          y2,
+          y3,
+          y5,
+          star,
+        ] = $(tr)
+          .find('td')
+          .toArray()
+          .map((td) => $(td).text());
+        return {
+          code,
+          name,
+          dwjz,
+          jzrq,
+          y1,
+          y2,
+          y3,
+          y5,
+          star,
+        };
+      });
+    return data;
+  } catch (error) {
+    console.log(error);
+    return [];
+  }
+}

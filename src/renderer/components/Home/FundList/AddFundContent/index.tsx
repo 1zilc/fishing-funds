@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useDebounceFn, useBoolean } from 'ahooks';
 import { Input, InputNumber } from 'antd';
@@ -8,15 +8,18 @@ import CustomDrawer from '@/components/CustomDrawer';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
 import { addFund, getFund, getFundConfig } from '@/actions/fund';
 import { StoreState } from '@/reducers/types';
+import { useDrawer } from '@/utils/hooks';
 import * as Enums from '@/utils/enums';
 import styles from './index.scss';
 
 export interface AddFundContentProps {
+  defaultCode?: string;
   onEnter: () => void;
   onClose: () => void;
 }
 
 const AddFundContent: React.FC<AddFundContentProps> = (props) => {
+  const { defaultCode } = props;
   const { codeMap } = getFundConfig();
   const [name, setName] = useState<string>('');
   const [code, setCode] = useState<string>('');
@@ -27,16 +30,12 @@ const AddFundContent: React.FC<AddFundContentProps> = (props) => {
   const remoteFunds = useSelector(
     (state: StoreState) => state.fund.remoteFunds
   );
-  const [detailCode, setDetailCode] = useState('');
-
-  const [
-    showDetailDrawer,
-    {
-      setTrue: openDetailDrawer,
-      setFalse: closeDetailDrawer,
-      toggle: ToggleDetailDrawer,
-    },
-  ] = useBoolean(false);
+  const {
+    data: detailCode,
+    show: showDetailDrawer,
+    set: setDetailDrawer,
+    close: closeDetailDrawer,
+  } = useDrawer('');
 
   async function onAdd() {
     const fund = await getFund(code);
@@ -86,6 +85,13 @@ const AddFundContent: React.FC<AddFundContentProps> = (props) => {
       }
     }
   );
+
+  useEffect(() => {
+    if (defaultCode) {
+      setCode(defaultCode);
+      onSearch(Enums.SearchType.Code, defaultCode);
+    }
+  }, [defaultCode]);
 
   return (
     <CustomDrawerContent
@@ -161,10 +167,7 @@ const AddFundContent: React.FC<AddFundContentProps> = (props) => {
           <div
             key={code}
             className={styles.fund}
-            onClick={() => {
-              setDetailCode(code);
-              openDetailDrawer();
-            }}
+            onClick={() => setDetailDrawer(code)}
           >
             <div>
               <div className={styles.name}>
