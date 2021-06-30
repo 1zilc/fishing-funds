@@ -172,7 +172,8 @@ export async function FromHowbuy(code: string) {
     let $ = cheerio.load(body);
     const gsz = $('span').eq(0).text();
     const gszzl = $('span').eq(2).text().replace(/%/g, '');
-    const gztime = `${new Date().getFullYear()}-${$('span')
+    const year = new Date().getFullYear();
+    const gztime = `${year}-${$('span')
       .eq(3)
       .text()
       .replace(/(\[)|(\])/g, '')
@@ -186,8 +187,8 @@ export async function FromHowbuy(code: string) {
       .text()
       .replace(/(\()|(\))|(\d)/g, '');
     const dwjz = $('.dRate > div').text().trim();
-    const jzrq =
-      /\d{2}-\d{2}/.exec($('.dRate').next().text())?.[0] || '无法获取';
+    const date = /\d{2}-\d{2}/.exec($('.dRate').next().text())?.[0];
+    const jzrq = date ? `${year}-${date}` : '无法获取';
     return {
       name,
       dwjz,

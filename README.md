@@ -109,6 +109,7 @@ interface FundSetting {
 - [柠檬精选](https://lemon.qq.com/lab/app/FishingFunds.html)
 - [Electron Apps](https://www.electronjs.org/apps/fishing-funds)
 - [MacWk](https://www.macwk.com/soft/fishing-funds)
+- [马克喵](https://www.macat.vip/4257.html)
 
 ## 支持一下～
 
