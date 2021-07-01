@@ -57,7 +57,7 @@ const Rank: React.FC<PropsWithChildren<RankProps>> = () => {
       render: (text: string) => <a>{text}</a>,
     },
     {
-      title: '日增长',
+      title: '1日',
       dataIndex: 'd',
       render: (text: string) => <RenderColorCol value={text} />,
       sorter: (a: any, b: any) => a.d - b.d,
