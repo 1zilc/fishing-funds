@@ -13,23 +13,24 @@ import * as Services from '@/services';
 import * as Utils from '@/utils';
 import styles from './index.scss';
 
-interface AutomaticProps {}
+interface RankProps {}
 
 const fundTypeList = [
-  { name: '全部', type: 0, code: '0' },
-  { name: '股票', type: 1, code: '1' },
-  { name: '混合', type: 2, code: '2' },
-  { name: '债券', type: 3, code: '3' },
-  { name: '指数', type: 4, code: '4' },
-  { name: 'QDII', type: 5, code: '5' },
+  { name: '全部', type: 'all', code: 'all' },
+  { name: '股票', type: 'gp', code: 'gp' },
+  { name: '混合', type: 'hh', code: 'hh' },
+  { name: '债券', type: 'zq', code: 'zq' },
+  { name: '指数', type: 'zs', code: 'zs' },
+  { name: 'QDII', type: 'qdii', code: 'qdii' },
+  // { name: 'LOF', type: 'lof', code: 'lof' },
+  // { name: 'FOF', type: 'fof', code: 'fof' },
 ];
 
 const RenderColorCol = ({ value }: { value: string }) => {
-  const text = value.substring(0, value.length - 1);
-  return <div className={Utils.GetValueColor(text).textClass}>{value}</div>;
+  return <div className={Utils.GetValueColor(value).textClass}>{value}%</div>;
 };
 
-const Automatic: React.FC<PropsWithChildren<AutomaticProps>> = () => {
+const Rank: React.FC<PropsWithChildren<RankProps>> = () => {
   const [fundType, setFundType] = useState(fundTypeList[0]);
   const [data, setData] = useState([]);
   const { codeMap } = getFundConfig();
@@ -56,34 +57,22 @@ const Automatic: React.FC<PropsWithChildren<AutomaticProps>> = () => {
       render: (text: string) => <a>{text}</a>,
     },
     {
-      title: '1年',
-      dataIndex: 'y1',
+      title: '日增长',
+      dataIndex: 'd',
       render: (text: string) => <RenderColorCol value={text} />,
-      sorter: (a: any, b: any) => {
-        const a1 = a.y1.substring(0, a.y1.length - 1);
-        const b1 = b.y1.substring(0, b.y1.length - 1);
-        return Number(a1) - Number(b1);
-      },
+      sorter: (a: any, b: any) => a.d - b.d,
     },
     {
-      title: '3年',
-      dataIndex: 'y3',
+      title: '1周',
+      dataIndex: 'w',
       render: (text: string) => <RenderColorCol value={text} />,
-      sorter: (a: any, b: any) => {
-        const a1 = a.y3.substring(0, a.y3.length - 1);
-        const b1 = b.y3.substring(0, b.y3.length - 1);
-        return Number(a1) - Number(b1);
-      },
+      sorter: (a: any, b: any) => a.w - b.w,
     },
     {
-      title: '5年',
-      dataIndex: 'y5',
+      title: '1月',
+      dataIndex: 'm',
       render: (text: string) => <RenderColorCol value={text} />,
-      sorter: (a: any, b: any) => {
-        const a1 = a.y5.substring(0, a.y5.length - 1);
-        const b1 = b.y5.substring(0, b.y5.length - 1);
-        return Number(a1) - Number(b1);
-      },
+      sorter: (a: any, b: any) => a.m - b.m,
     },
     {
       title: '操作',
@@ -104,19 +93,32 @@ const Automatic: React.FC<PropsWithChildren<AutomaticProps>> = () => {
     },
   ];
 
-  const { run: runGetAutomaticPlanFromEastMoney, loading } = useRequest(
-    Services.Fund.GetAutomaticPlanFromEastmoney,
+  const { run: runGetRankDataFromEasemoney, loading } = useRequest(
+    Services.Fund.GetRankDataFromEasemoney,
     {
       manual: true,
-      cacheKey: `GetAutomaticPlanFromEastmoney/${fundType.type}`,
+      cacheKey: `GetRankDataFromEasemoney/${fundType.type}`,
       throwOnError: true,
-      onSuccess: setData,
+      onSuccess: (result) => {
+        setData(
+          result.map((_: string) => {
+            const [code, name, jx, date, dwjz, ljjz, d, w, m] = _.split(',');
+            return {
+              code,
+              name,
+              d,
+              w,
+              m,
+            };
+          })
+        );
+      },
       refreshDeps: [fundType],
     }
   );
 
   useEffect(() => {
-    runGetAutomaticPlanFromEastMoney(fundType.type);
+    runGetRankDataFromEasemoney(fundType.type);
   }, [fundType]);
 
   return (
@@ -159,4 +161,4 @@ const Automatic: React.FC<PropsWithChildren<AutomaticProps>> = () => {
     </div>
   );
 };
-export default Automatic;
+export default Rank;

@@ -11,16 +11,18 @@ export interface TypeOption {
 interface TypeSelectionProps {
   activeType: any;
   types: TypeOption[];
+  style?: Record<string, any>;
   onSelected: (option: TypeOption) => void;
 }
 
 const TypeSelection: React.FC<TypeSelectionProps> = ({
   activeType,
   types = [],
+  style = {},
   onSelected,
 }) => {
   return (
-    <div className={styles.selections}>
+    <div className={styles.selections} style={style}>
       {types.map((item) => (
         <div
           key={item.type}

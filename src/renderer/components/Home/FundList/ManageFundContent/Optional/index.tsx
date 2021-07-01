@@ -15,11 +15,13 @@ import { getFundConfig, deleteFund, setFundConfig } from '@/actions/fund';
 import { useSyncFixFundSetting, useDrawer } from '@/utils/hooks';
 import styles from './index.scss';
 
-export interface OptionalProps {}
+export interface OptionalProps {
+  active: boolean;
+}
 
 const { dialog } = window.contextModules.electron;
 
-const Optional: React.FC<OptionalProps> = () => {
+const Optional: React.FC<OptionalProps> = ({ active }) => {
   const [sortFundConfig, setSortFundConfig] = useState<
     (Fund.SettingItem & Fund.SortRow)[]
   >([]);
@@ -76,7 +78,13 @@ const Optional: React.FC<OptionalProps> = () => {
     }
   };
 
-  useEffect(updateSortFundConfig, [syncFundSettingDone]);
+  useEffect(updateSortFundConfig, [syncFundSettingDone, active]);
+
+  useEffect(() => {
+    if (active) {
+      updateSortFundConfig();
+    }
+  }, [active]);
 
   return (
     <div className={styles.content}>

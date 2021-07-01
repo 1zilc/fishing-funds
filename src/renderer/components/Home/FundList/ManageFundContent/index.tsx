@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Tabs } from 'antd';
 
 import PureCard from '@/components/Card/PureCard';
@@ -6,6 +6,7 @@ import { ReactComponent as EditIcon } from '@/assets/icons/edit.svg';
 import CustomDrawer from '@/components/CustomDrawer';
 import Optional from '@/components/Home/FundList/ManageFundContent/Optional';
 import Automatic from '@/components/Home/FundList/ManageFundContent/Automatic';
+import Rank from '@/components/Home/FundList/ManageFundContent/Rank';
 import EditWalletContent from '@/components/Wallet/EditWalletContent';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
 import { getCurrentWallet, walletIcons } from '@/actions/wallet';
@@ -19,6 +20,7 @@ export interface ManageFundContentProps {
 
 const ManageFundContent: React.FC<ManageFundContentProps> = (props) => {
   const wallet = getCurrentWallet();
+  const [activeKey, setActiveKey] = useState(String(0));
 
   const {
     data: editWalletData,
@@ -51,15 +53,18 @@ const ManageFundContent: React.FC<ManageFundContentProps> = (props) => {
       </div>
       <div className={styles.content}>
         <Tabs
-          defaultActiveKey={String(0)}
+          activeKey={activeKey}
+          onChange={setActiveKey}
           animated={{ tabPane: true }}
           tabBarGutter={15}
         >
           <Tabs.TabPane tab="自选基金" key={String(0)}>
-            <Optional />
+            <Optional active={activeKey === String(0)} />
           </Tabs.TabPane>
-          <Tabs.TabPane tab="基金排行" key={String(1)}>
-            <Optional />
+          <Tabs.TabPane tab="近期好基" key={String(1)}>
+            <PureCard>
+              <Rank />
+            </PureCard>
           </Tabs.TabPane>
           <Tabs.TabPane tab="定投排行" key={String(2)}>
             <PureCard>

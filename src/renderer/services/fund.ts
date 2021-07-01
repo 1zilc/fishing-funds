@@ -571,7 +571,7 @@ export async function GetQDIIFundFromEastMoney(code: string) {
 }
 
 // 查询定投排行
-export async function GetAutomaticPlanFromEastMoney(type: number) {
+export async function GetAutomaticPlanFromEastmoney(type: number) {
   try {
     const { body: html } = await got(
       'http://fund.eastmoney.com/api/Dtshph.ashx',
@@ -621,6 +621,44 @@ export async function GetAutomaticPlanFromEastMoney(type: number) {
         };
       });
     return data;
+  } catch (error) {
+    console.log(error);
+    return [];
+  }
+}
+
+// 查询基金排行
+export async function GetRankDataFromEasemoney(type: string) {
+  try {
+    const now = new Date();
+    const { body } = await got(
+      'http://fund.eastmoney.com/data/rankhandler.aspx',
+      {
+        headers: {
+          Referer: 'http://fund.eastmoney.com/data/fundranking.html',
+        },
+        searchParams: {
+          op: 'ph',
+          dt: 'kf',
+          ft: type,
+          rs: '',
+          gs: 0,
+          sc: '1yzf',
+          st: 'desc',
+          qdii: '',
+          tabSubtype: ',,,,,',
+          pi: 1,
+          pn: 10000,
+          dx: 1,
+          sd: `${now.getFullYear() - 1}-${now.getMonth() + 1}-${now.getDate()}`,
+          ed: `${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()}`,
+        },
+      }
+    );
+    return eval(`(() => {
+      ${body}
+      return rankData.datas;
+    })()`);
   } catch (error) {
     console.log(error);
     return [];
