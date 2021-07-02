@@ -63,6 +63,7 @@ const Trend: React.FC<PerformanceProps> = ({ code, zs }) => {
               fontSize: 10,
             },
             scale: true,
+            min: (value: any) => Math.min(value.min, zs),
             max: (value: any) => Math.max(value.max, zs),
           },
           dataZoom: [
