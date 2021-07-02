@@ -11,7 +11,7 @@ import styles from './index.scss';
 
 export interface PerformanceProps {
   code: string;
-  jk: number;
+  zs: number;
 }
 const trendTypeList = [
   { name: '一天', type: 1, code: 1 },
@@ -20,7 +20,7 @@ const trendTypeList = [
   { name: '四天', type: 4, code: 4 },
   { name: '五天', type: 5, code: 5 },
 ];
-const Trend: React.FC<PerformanceProps> = ({ code, jk }) => {
+const Trend: React.FC<PerformanceProps> = ({ code, zs }) => {
   const { ref: chartRef, chartInstance } = useResizeEchart(
     CONST.DEFAULT.ECHARTS_SCALE
   );
@@ -100,8 +100,8 @@ const Trend: React.FC<PerformanceProps> = ({ code, jk }) => {
                 },
                 data: [
                   {
-                    name: '今开',
-                    yAxis: jk,
+                    name: '昨收',
+                    yAxis: zs,
                   },
                 ],
               },

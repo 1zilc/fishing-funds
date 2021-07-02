@@ -104,7 +104,7 @@ const DetailZindexContent: React.FC<DetailFundContentProps> = (props) => {
           </div>
           <div className={styles.detail}>
             <div className={styles.detailItem}>
-              <div className="">{zindex.zs}</div>
+              <div>{zindex.zs}</div>
               <div className={styles.detailItemLabel}>昨收</div>
             </div>
           </div>
@@ -117,7 +117,7 @@ const DetailZindexContent: React.FC<DetailFundContentProps> = (props) => {
           >
             <Tabs.TabPane tab="指数走势" key={String(0)}>
               <ChartCard>
-                <Trend code={code} jk={zindex.jk} />
+                <Trend code={code} zs={zindex.zs} />
               </ChartCard>
             </Tabs.TabPane>
           </Tabs>
