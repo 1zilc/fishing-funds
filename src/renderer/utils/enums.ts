@@ -54,6 +54,7 @@ export enum TabKeyType {
   Funds,
   Zindex,
   Quotation,
+  Stock,
 }
 // 走势类型
 export enum TrendType {

@@ -22,8 +22,8 @@ const fundTypeList = [
   { name: '债券', type: 'zq', code: 'zq' },
   { name: '指数', type: 'zs', code: 'zs' },
   { name: 'QDII', type: 'qdii', code: 'qdii' },
-  // { name: 'LOF', type: 'lof', code: 'lof' },
-  // { name: 'FOF', type: 'fof', code: 'fof' },
+  { name: 'LOF', type: 'lof', code: 'lof' },
+  { name: 'FOF', type: 'fof', code: 'fof' },
 ];
 
 const RenderColorCol = ({ value }: { value: string }) => {
@@ -128,6 +128,7 @@ const Rank: React.FC<PropsWithChildren<RankProps>> = () => {
         activeType={fundType.type}
         onSelected={setFundType}
         style={{ marginTop: 10, marginBottom: 10 }}
+        colspan={4}
       />
       <Table
         rowKey="code"

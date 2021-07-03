@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
+import { Row, Col } from 'antd';
 import classnames from 'classnames';
+
+import { useHomeContext } from '@/components/Home';
 import styles from './index.scss';
 
 export interface TypeOption {
@@ -13,6 +16,7 @@ interface TypeSelectionProps {
   types: TypeOption[];
   style?: Record<string, any>;
   onSelected: (option: TypeOption) => void;
+  colspan?: number;
 }
 
 const TypeSelection: React.FC<TypeSelectionProps> = ({
@@ -20,20 +24,26 @@ const TypeSelection: React.FC<TypeSelectionProps> = ({
   types = [],
   style = {},
   onSelected,
+  colspan = 24 / types.length,
 }) => {
+  const { varibleColors } = useHomeContext();
+  const padding = varibleColors['--base-padding'];
   return (
     <div className={styles.selections} style={style}>
-      {types.map((item) => (
-        <div
-          key={item.type}
-          className={classnames(styles.selection, {
-            [styles.active]: activeType === item.type,
-          })}
-          onClick={() => onSelected(item)}
-        >
-          {item.name}
-        </div>
-      ))}
+      <Row gutter={[padding, padding]}>
+        {types.map((item) => (
+          <Col key={item.type} span={colspan} style={{ textAlign: 'center' }}>
+            <span
+              className={classnames(styles.selection, {
+                [styles.active]: activeType === item.type,
+              })}
+              onClick={() => onSelected(item)}
+            >
+              {item.name}
+            </span>
+          </Col>
+        ))}
+      </Row>
     </div>
   );
 };

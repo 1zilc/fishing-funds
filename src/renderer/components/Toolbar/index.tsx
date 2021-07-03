@@ -123,6 +123,9 @@ const ToolBar: React.FC<ToolBarProps> = () => {
         {tabsActiveKey === Enums.TabKeyType.Quotation && (
           <ChartBoxIcon style={{ ...iconSize }} onClick={openFundFlowDrawer} />
         )}
+        {tabsActiveKey === Enums.TabKeyType.Stock && (
+          <MenuAddIcon style={{ ...iconSize }} />
+        )}
         {tabsActiveKey === Enums.TabKeyType.Funds && (
           <RefreshIcon style={{ ...iconSize }} onClick={freshFunds} />
         )}
@@ -131,6 +134,9 @@ const ToolBar: React.FC<ToolBarProps> = () => {
         )}
         {tabsActiveKey === Enums.TabKeyType.Quotation && (
           <RefreshIcon style={{ ...iconSize }} onClick={freshQuotations} />
+        )}
+        {tabsActiveKey === Enums.TabKeyType.Stock && (
+          <RefreshIcon style={{ ...iconSize }} />
         )}
         {tabsActiveKey === Enums.TabKeyType.Funds && (
           <ChartBoxIcon

@@ -1,5 +1,6 @@
 import React from 'react';
 import { render } from 'react-dom';
+import NP from 'number-precision';
 import { ConfigProvider } from 'antd';
 import zhCN from 'antd/lib/locale/zh_CN';
 import { Provider } from 'react-redux';
@@ -12,6 +13,8 @@ import '@/utils/window';
 Utils.ClearExpiredStorage();
 
 const store = configureStore();
+
+NP.enableBoundaryChecking(false);
 
 render(
   <Provider store={store}>
