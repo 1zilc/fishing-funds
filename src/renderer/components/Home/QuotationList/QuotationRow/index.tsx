@@ -16,6 +16,7 @@ import styles from './index.scss';
 export interface RowProps {
   quotation: Quotation.ResponseItem & Quotation.ExtraRow;
   onDetail: (code: string) => void;
+  onStockDetail: (secid: string) => void;
 }
 
 const arrowSize = {
@@ -161,7 +162,15 @@ const QuotationRow: React.FC<RowProps> = (props) => {
             <span className="text-down">{quotation.xdjs}</span>
           </section>
           <section>
-            <span>{quotation.lzgpName}：</span>
+            <a
+              onClick={() =>
+                props.onStockDetail(
+                  `${quotation.lzgpMarket}.${quotation.lzgpCode}`
+                )
+              }
+            >
+              {quotation.lzgpName}：
+            </a>
             <span
               className={classnames(
                 Utils.GetValueColor(quotation.lzgpZdf).textClass
@@ -171,7 +180,15 @@ const QuotationRow: React.FC<RowProps> = (props) => {
             </span>
           </section>
           <section>
-            <span>{quotation.ldgpName}：</span>
+            <a
+              onClick={() =>
+                props.onStockDetail(
+                  `${quotation.ldgpMarket}.${quotation.ldgpCode}`
+                )
+              }
+            >
+              {quotation.ldgpName}：
+            </a>
             <span
               className={classnames(
                 Utils.GetValueColor(quotation.ldgpZdf).textClass

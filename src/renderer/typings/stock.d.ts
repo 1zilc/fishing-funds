@@ -44,6 +44,9 @@ declare namespace Stock {
     zdd: number; // 涨跌点
     zdf: number; /// 涨跌幅
     zs: number; /// 昨收
+    zg: number; // 最高
+    zd: number; // 最低
+    jk: number; // 今开
     trends: TrendItem[]; // 趋势
   }
 

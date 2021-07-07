@@ -6,6 +6,7 @@ import Empty from '@/components/Empty';
 import LoadingBar from '@/components/LoadingBar';
 import CustomDrawer from '@/components/CustomDrawer';
 import DetailQuotationContent from '@/components/Home/QuotationList/DetailQuotationContent';
+import DetailStockContent from '@/components/Home/StockList/DetailStockContent';
 import { StoreState } from '@/reducers/types';
 import { useDrawer } from '@/utils/hooks';
 import styles from './index.scss';
@@ -18,10 +19,17 @@ const QuotationList = () => {
     (state: StoreState) => state.quotation.quotationsLoading
   );
   const {
-    data: detailQuodationCode,
-    show: showDetailDrawer,
-    set: setDetailDrawer,
-    close: closeDetailDrawer,
+    data: quodationCode,
+    show: showDetailQuodationDrawer,
+    set: setDetailQuodationDrawer,
+    close: closeDetailQuodationDrawer,
+  } = useDrawer('');
+
+  const {
+    data: stockSecid,
+    show: showDetailStockDrawer,
+    set: setDetailStockDrawer,
+    close: closeDetailStockDrawer,
   } = useDrawer('');
 
   return (
@@ -32,17 +40,25 @@ const QuotationList = () => {
           <QuotationRow
             key={quotation.name}
             quotation={quotation}
-            onDetail={setDetailDrawer}
+            onDetail={setDetailQuodationDrawer}
+            onStockDetail={setDetailStockDrawer}
           />
         ))
       ) : (
         <Empty text="暂无板块数据~" />
       )}
-      <CustomDrawer show={showDetailDrawer}>
+      <CustomDrawer show={showDetailQuodationDrawer}>
         <DetailQuotationContent
-          onEnter={closeDetailDrawer}
-          onClose={closeDetailDrawer}
-          code={detailQuodationCode}
+          onEnter={closeDetailQuodationDrawer}
+          onClose={closeDetailQuodationDrawer}
+          code={quodationCode}
+        />
+      </CustomDrawer>
+      <CustomDrawer show={showDetailStockDrawer}>
+        <DetailStockContent
+          onEnter={closeDetailStockDrawer}
+          onClose={closeDetailStockDrawer}
+          secid={stockSecid}
         />
       </CustomDrawer>
     </div>

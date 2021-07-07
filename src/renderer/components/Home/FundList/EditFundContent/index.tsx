@@ -60,10 +60,7 @@ const EditFundContent: React.FC<EditFundContentProps> = (props) => {
             min={0}
             precision={4}
             value={cbj}
-            onChange={(e) => {
-              console.log(e);
-              setCbj(e);
-            }}
+            onChange={(e) => setCbj(e)}
             size="small"
             style={{ width: '100%' }}
           />

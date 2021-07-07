@@ -3,7 +3,9 @@ import { renderToString } from 'react-dom/server';
 import { useRequest } from 'ahooks';
 
 import { useHomeContext } from '@/components/Home';
-import { useResizeEchart, useRenderEcharts } from '@/utils/hooks';
+import CustomDrawer from '@/components/CustomDrawer';
+import DetailStockContent from '@/components/Home/StockList/DetailStockContent';
+import { useResizeEchart, useRenderEcharts, useDrawer } from '@/utils/hooks';
 import * as CONST from '@/constants';
 import * as Services from '@/services';
 import * as Utils from '@/utils';
@@ -39,6 +41,12 @@ const StockWareHouse: React.FC<StockWareHouseProps> = ({
     CONST.DEFAULT.ECHARTS_SCALE
   );
   const { varibleColors, darkMode } = useHomeContext();
+  const {
+    data: stockSecid,
+    show: showDetailStockDrawer,
+    set: setDetailStockDrawer,
+    close: closeDetailStockDrawer,
+  } = useDrawer('');
 
   const { run: runGetStockWareHouseFromEastmoney } = useRequest(
     Services.Fund.GetStockWareHouseFromEastmoney,
@@ -110,6 +118,12 @@ const StockWareHouse: React.FC<StockWareHouseProps> = ({
   useRenderEcharts(
     () => {
       runGetStockWareHouseFromEastmoney(code, stockCodes);
+      chartInstance?.off('click');
+      chartInstance?.on('click', (params: any) => {
+        const { market, code } = params.data.item;
+        const secid = `${market}.${code}`;
+        setDetailStockDrawer(secid);
+      });
     },
     chartInstance,
     [darkMode, code, stockCodes]
@@ -118,6 +132,13 @@ const StockWareHouse: React.FC<StockWareHouseProps> = ({
   return (
     <div className={styles.content}>
       <div ref={chartRef} style={{ width: '100%' }} />
+      <CustomDrawer show={showDetailStockDrawer}>
+        <DetailStockContent
+          onEnter={closeDetailStockDrawer}
+          onClose={closeDetailStockDrawer}
+          secid={stockSecid}
+        />
+      </CustomDrawer>
     </div>
   );
 };

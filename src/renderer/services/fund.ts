@@ -334,7 +334,7 @@ export async function GetStockWareHouseFromEastmoney(
       body: { data },
     } = await got('https://push2.eastmoney.com/api/qt/ulist.np/get', {
       searchParams: {
-        fields: 'f2,f3,f12,f14',
+        fields: 'f2,f3,f12,f13,f14',
         fltt: 2,
         secids,
       },
@@ -347,6 +347,7 @@ export async function GetStockWareHouseFromEastmoney(
         f2: string; // 最新价
         f3: number; // 涨跌幅
         f14: string; // 名称
+        f13: string; // market
         f12: string; // 股票代码
       }[];
     } = data;
@@ -355,6 +356,7 @@ export async function GetStockWareHouseFromEastmoney(
       return {
         zxz: item.f2,
         name: item.f14,
+        market: item.f13,
         code: item.f12,
         zdf: item.f3,
         ccb: tors[index], // 持仓比
@@ -389,7 +391,7 @@ export async function GetSecuritiesWareHouseFromEastmoney(
       body: { data },
     } = await got('https://push2.eastmoney.com/api/qt/ulist.np/get', {
       searchParams: {
-        fields: 'f2,f3,f12,f14',
+        fields: 'f2,f3,f12,f13,f14',
         fltt: 2,
         secids,
       },
@@ -402,6 +404,7 @@ export async function GetSecuritiesWareHouseFromEastmoney(
         f2: string; // 最新价
         f3: number; // 涨跌幅
         f14: string; // 名称
+        f13: string; // market
         f12: string; // 债券代码
       }[];
     } = data;
@@ -409,6 +412,7 @@ export async function GetSecuritiesWareHouseFromEastmoney(
       return {
         zxz: item.f2,
         name: item.f14,
+        market: item.f13,
         code: item.f12,
         zdf: item.f3,
         ccb: tors[index], // 持仓比

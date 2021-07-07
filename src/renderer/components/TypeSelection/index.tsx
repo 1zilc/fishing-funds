@@ -17,6 +17,7 @@ interface TypeSelectionProps {
   style?: Record<string, any>;
   onSelected: (option: TypeOption) => void;
   colspan?: number;
+  flex?: boolean;
 }
 
 const TypeSelection: React.FC<TypeSelectionProps> = ({
@@ -24,7 +25,8 @@ const TypeSelection: React.FC<TypeSelectionProps> = ({
   types = [],
   style = {},
   onSelected,
-  colspan = 24 / types.length,
+  colspan = Math.ceil(24 / types.length),
+  flex,
 }) => {
   const { varibleColors } = useHomeContext();
   const padding = varibleColors['--base-padding'];
@@ -32,7 +34,12 @@ const TypeSelection: React.FC<TypeSelectionProps> = ({
     <div className={styles.selections} style={style}>
       <Row gutter={[padding, padding]}>
         {types.map((item) => (
-          <Col key={item.type} span={colspan} style={{ textAlign: 'center' }}>
+          <Col
+            key={item.type}
+            span={colspan}
+            flex={flex ? colspan : undefined}
+            style={{ textAlign: 'center' }}
+          >
             <span
               className={classnames(styles.selection, {
                 [styles.active]: activeType === item.type,

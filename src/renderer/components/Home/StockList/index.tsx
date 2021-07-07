@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import StockRow from '@/components/Home/StockList/StockRow';
 import Empty from '@/components/Empty';
 import LoadingBar from '@/components/LoadingBar';
-import DetailZindexContent from '@/components/Home/ZindexList/DetailZindexContent';
+import DetailStockContent from '@/components/Home/StockList/DetailStockContent';
 import CustomDrawer from '@/components/CustomDrawer';
 import { StoreState } from '@/reducers/types';
 import { useDrawer } from '@/utils/hooks';
@@ -38,10 +38,10 @@ const StockList = () => {
         <Empty text="暂无股票数据~" />
       )}
       <CustomDrawer show={showDetailDrawer}>
-        <DetailZindexContent
+        <DetailStockContent
           onEnter={closeDetailDrawer}
           onClose={closeDetailDrawer}
-          code={detailStockSecid}
+          secid={detailStockSecid}
         />
       </CustomDrawer>
     </div>

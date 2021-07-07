@@ -157,7 +157,7 @@ const ToolBar: React.FC<ToolBarProps> = () => {
           <RefreshIcon style={{ ...iconSize }} onClick={freshQuotations} />
         )}
         {tabsActiveKey === Enums.TabKeyType.Stock && (
-          <RefreshIcon style={{ ...iconSize }} />
+          <RefreshIcon style={{ ...iconSize }} onClick={freshStocks} />
         )}
         {tabsActiveKey === Enums.TabKeyType.Funds && (
           <ChartBoxIcon

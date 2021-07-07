@@ -13,9 +13,11 @@ declare namespace Quotation {
     szjs: number; // 上涨家数
     xdjs: number; // 下跌家数
     lzgpCode: string; // 领涨股票code
+    lzgpMarket: number; // 领涨股票market
     lzgpName: string; // 领涨股票
     lzgpZdf: number; // 领涨股票涨跌幅
     ldgpCode: string; // 领跌股票code
+    ldgpMarket: number; // 领跌股票market
     ldgpName: string; // 领跌股票
     ldgpZdf: number; // 领跌股票涨跌幅
   }

@@ -1,4 +1,5 @@
 import * as Utils from '@/utils';
+import NP from 'number-precision';
 
 const { got } = window.contextModules;
 
@@ -6,8 +7,9 @@ const { got } = window.contextModules;
 export async function FromEastmoney(secid: string) {
   try {
     const { trends } = await GetTrendFromEastmoney(secid);
-    const { zx, code, name, market, zs, zdd, zdf } =
+    const { zx, code, name, market, zs, zdd, zdf, zg, zd, jk } =
       await GetDetailFromEastmoney(secid);
+
     return {
       secid,
       code,
@@ -17,6 +19,9 @@ export async function FromEastmoney(secid: string) {
       zdd,
       zdf,
       zs,
+      zg,
+      zd,
+      jk,
       trends,
     };
   } catch (error) {
@@ -288,24 +293,26 @@ export async function GetDetailFromEastmoney(secid: string) {
       },
       responseType: 'json',
     });
+    const w = 10 ** 4;
+
     return {
       zg: data.f44, // 最高
       zd: data.f45, // 最低
       jk: data.f46, // 今开
-      zss: data.f47, // 总手数
+      zss: Number(NP.divide(data.f47, w).toFixed(2)), // 总手数
       zt: data.f51, // 涨停
       dt: data.f52, // 跌停
       zx: data.f43, // 最新
       cjl: data.f47, // 成交量
       lb: data.f50, // 量比
       cje: data.f48, // 成交额
-      wp: data.f49, // 外盘
+      wp: Number(NP.divide(data.f49, w).toFixed(2)), // 外盘
       code: data.f57,
       name: data.f58,
       market: data.f62,
       zs: data.f60, // 昨收
       jj: data.f71, // 均价
-      np: data.f161, // 内盘
+      np: Number(NP.divide(data.f161, w).toFixed(2)), // 内盘
       hs: data.f168, // 换手
       zdd: data.f169, // 涨跌点
       zdf: data.f170, /// 涨跌幅

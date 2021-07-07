@@ -128,6 +128,7 @@ const Trend: React.FC<PerformanceProps> = ({ code, zs = 0 }) => {
         types={trendTypeList}
         activeType={trend.type}
         onSelected={setTrendType}
+        flex
       />
     </div>
   );

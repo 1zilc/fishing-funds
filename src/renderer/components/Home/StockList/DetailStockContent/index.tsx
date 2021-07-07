@@ -75,7 +75,7 @@ const DetailStockContent: React.FC<DetailStockContentProps> = (props) => {
               <div className={styles.detailItemLabel}>换手率</div>
             </div>
             <div className={classnames(styles.detailItem, 'text-right')}>
-              <div>{stock.zss}</div>
+              <div>{stock.zss}万</div>
               <div className={styles.detailItemLabel}>总手数</div>
             </div>
           </div>
@@ -115,11 +115,11 @@ const DetailStockContent: React.FC<DetailStockContentProps> = (props) => {
           </div>
           <div className={styles.detail}>
             <div className={classnames(styles.detailItem, 'text-left')}>
-              <div>{stock.wp}</div>
+              <div>{stock.wp}万</div>
               <div className={styles.detailItemLabel}>外盘</div>
             </div>
             <div className={classnames(styles.detailItem, 'text-center')}>
-              <div>{stock.np}</div>
+              <div>{stock.np}万</div>
               <div className={styles.detailItemLabel}>内盘</div>
             </div>
             <div className={classnames(styles.detailItem, 'text-right')}>
