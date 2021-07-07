@@ -6,6 +6,7 @@ import updater from './updater';
 import fund from './fund';
 import zindex from './zindex';
 import quotation from './quotation';
+import stock from './stock';
 import setting from './setting';
 
 export default function createRootReducer() {
@@ -17,6 +18,7 @@ export default function createRootReducer() {
     fund,
     zindex,
     quotation,
+    stock,
     setting,
   });
 }

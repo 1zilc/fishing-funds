@@ -45,6 +45,13 @@ export enum QuotationSortType {
   Xdjs, // 下跌家数
 }
 
+export enum StockSortType {
+  Custom, // 自定义
+  Zdd, // 涨跌点
+  Zdf, // 涨跌幅
+  Zx, // 指数值
+}
+
 export enum SortOrderType {
   Desc,
   Asc,
@@ -54,6 +61,7 @@ export enum TabKeyType {
   Funds,
   Zindex,
   Quotation,
+  Stock,
 }
 // 走势类型
 export enum TrendType {

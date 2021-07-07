@@ -28,6 +28,5 @@
     "test/**/__snapshots__": true,
     "yarn.lock": true,
     "*.{css,sass,scss}.d.ts": true
-  },
-  "prettier.printWidth": 160
+  }
 }

@@ -24,13 +24,15 @@ export async function GetQuotationsFromEastmoney() {
           f105: number; // 下跌家数
           f128: string; // 领涨股票
           f140: string; // 领涨股票code
+          f141: number; // 领涨股票market
           f136: number; // 领涨股票zdf
           f207: string; // 领跌股票
           f208: string; // 领跌股票code
+          f209: number; // 领跌股票market
           f222: number; // 领跌股票zdf
         }[];
       };
-    }>('http://77.push2.eastmoney.com/api/qt/clist/get?=', {
+    }>('http://77.push2.eastmoney.com/api/qt/clist/get', {
       searchParams: {
         fs: 'm:90+t:2+f:!50',
         fid: 'f3',
@@ -58,9 +60,11 @@ export async function GetQuotationsFromEastmoney() {
       szjs: i.f104, // 上涨家数
       xdjs: i.f105, // 下跌家数
       lzgpCode: i.f140, // 领涨股票code
+      lzgpMarket: i.f141, // 领涨股票code
       lzgpName: i.f128, // 领涨股票
       lzgpZdf: i.f136, // 领涨股票涨跌幅
       ldgpCode: i.f208, // 领跌股票code
+      ldgpMarket: i.f209, // 领跌股票code
       ldgpName: i.f207, // 领跌股票
       ldgpZdf: i.f222, // 领跌股票涨跌幅
     }));
@@ -189,6 +193,7 @@ export async function GetStocksFromEasymoney(code: string) {
             f2: 5.23;
             f3: 8.96;
             f12: '000875';
+            f13: '0';
             f14: '吉电股份';
             f62: 56509098.0;
             f66: 72405039.0;
@@ -217,13 +222,14 @@ export async function GetStocksFromEasymoney(code: string) {
         invt: 2,
         fltt: 2,
         fields:
-          'f12,f14,f2,f3,f62,f184,f66,f69,f72,f75,f78,f81,f84,f87,f204,f205,f124',
+          'f12,f13,f14,f2,f3,f62,f184,f66,f69,f72,f75,f78,f81,f84,f87,f204,f205,f124',
         fs: `b:${code}`,
       },
       responseType: 'json',
     });
     return (data?.diff || []).map((item) => ({
       code: item.f12,
+      market: item.f13,
       name: item.f14,
       zxj: item.f2,
       zdf: item.f3,

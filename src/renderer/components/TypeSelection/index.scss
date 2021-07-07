@@ -1,8 +1,5 @@
 .selections {
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  margin: 20px 5px 10px;
+  margin: 20px 0px 10px;
 }
 
 .selection {
@@ -14,6 +11,8 @@
   background-color: var(--cancel-color);
   transition: all 0.2s;
   position: relative;
+  text-align: center;
+  display: inline-block;
 
   &:hover {
     filter: brightness(105%);

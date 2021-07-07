@@ -14,15 +14,19 @@ export interface Tab {
 const tabs = [
   {
     key: Enums.TabKeyType.Funds,
-    name: '基金自选',
+    name: '基金',
   },
   {
     key: Enums.TabKeyType.Zindex,
-    name: '指数行情',
+    name: '指数',
   },
   {
     key: Enums.TabKeyType.Quotation,
-    name: '板块行情',
+    name: '板块',
+  },
+  {
+    key: Enums.TabKeyType.Stock,
+    name: '股票',
   },
 ];
 const TabsBar: React.FC<TabsBarProps> = () => {

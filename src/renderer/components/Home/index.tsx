@@ -7,6 +7,7 @@ import LoadingScreen from '@/components/LoadingScreen';
 import FundList from '@/components/Home/FundList';
 import ZindexList from '@/components/Home/ZindexList';
 import QuotationList from '@/components/Home/QuotationList';
+import StockList from '@/components/Home/StockList';
 import Toolbar from '@/components/Toolbar';
 import Wallet from '@/components/Wallet/index';
 import Header from '@/components/Header';
@@ -69,6 +70,9 @@ const Home: React.FC<HomeProps> = () => {
           </Tabs.TabPane>
           <Tabs.TabPane key={String(Enums.TabKeyType.Quotation)} forceRender>
             <QuotationList />
+          </Tabs.TabPane>
+          <Tabs.TabPane key={String(Enums.TabKeyType.Stock)} forceRender>
+            <StockList />
           </Tabs.TabPane>
         </Tabs>
         <Footer>

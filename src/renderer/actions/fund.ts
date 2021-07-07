@@ -209,7 +209,7 @@ export function calcFund(
     gsz, // 估算值（最新）
     dwjz, // 单位净值（上一次）
     gszzl: isFix ? fund.fixZzl : fund.gszzl, // 估算收益率
-    jzrq: isFix ? fund.fixDate : fund.jzrq, // 净值日期
+    jzrq: isFix ? fund.fixDate : fund.jzrq?.slice(5), // 净值日期
   };
 }
 

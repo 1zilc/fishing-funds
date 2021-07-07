@@ -18,6 +18,7 @@ import { updateAvaliable } from '@/actions/updater';
 import { loadWalletsFunds, loadFixWalletsFunds } from '@/actions/wallet';
 import { loadQuotationsWithoutLoading } from '@/actions/quotation';
 import { loadZindexsWithoutLoading } from '@/actions/zindex';
+import { loadStocksWithoutLoading } from '@/actions/stock';
 import {
   getFundConfig,
   getFunds,
@@ -406,6 +407,7 @@ export function useBootStrap() {
   const runLoadFixFunds = useActions(loadFixFunds);
   const runLoadQuotations = useActions(loadQuotationsWithoutLoading);
   const runLoadZindexs = useActions(loadZindexsWithoutLoading);
+  const runLoadStocks = useActions(loadStocksWithoutLoading);
 
   // 间隔时间刷新远程基金数据
   useInterval(() => {
@@ -419,6 +421,7 @@ export function useBootStrap() {
         runLoadFunds,
         runLoadZindexs,
         runLoadQuotations,
+        runLoadStocks,
         runLoadWalletsFunds,
       ]);
     }
@@ -439,6 +442,7 @@ export function useBootStrap() {
       runLoadFixFunds,
       runLoadZindexs,
       runLoadQuotations,
+      runLoadStocks,
       runLoadWalletsFunds,
       runLoadFixWalletsFunds,
     ]);

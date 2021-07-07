@@ -172,7 +172,8 @@ export async function FromHowbuy(code: string) {
     let $ = cheerio.load(body);
     const gsz = $('span').eq(0).text();
     const gszzl = $('span').eq(2).text().replace(/%/g, '');
-    const gztime = `${new Date().getFullYear()}-${$('span')
+    const year = new Date().getFullYear();
+    const gztime = `${year}-${$('span')
       .eq(3)
       .text()
       .replace(/(\[)|(\])/g, '')
@@ -186,8 +187,8 @@ export async function FromHowbuy(code: string) {
       .text()
       .replace(/(\()|(\))|(\d)/g, '');
     const dwjz = $('.dRate > div').text().trim();
-    const jzrq =
-      /\d{2}-\d{2}/.exec($('.dRate').next().text())?.[0] || '无法获取';
+    const date = /\d{2}-\d{2}/.exec($('.dRate').next().text())?.[0];
+    const jzrq = date ? `${year}-${date}` : '无法获取';
     return {
       name,
       dwjz,
@@ -333,7 +334,7 @@ export async function GetStockWareHouseFromEastmoney(
       body: { data },
     } = await got('https://push2.eastmoney.com/api/qt/ulist.np/get', {
       searchParams: {
-        fields: 'f2,f3,f12,f14',
+        fields: 'f2,f3,f12,f13,f14',
         fltt: 2,
         secids,
       },
@@ -346,6 +347,7 @@ export async function GetStockWareHouseFromEastmoney(
         f2: string; // 最新价
         f3: number; // 涨跌幅
         f14: string; // 名称
+        f13: string; // market
         f12: string; // 股票代码
       }[];
     } = data;
@@ -354,6 +356,7 @@ export async function GetStockWareHouseFromEastmoney(
       return {
         zxz: item.f2,
         name: item.f14,
+        market: item.f13,
         code: item.f12,
         zdf: item.f3,
         ccb: tors[index], // 持仓比
@@ -388,7 +391,7 @@ export async function GetSecuritiesWareHouseFromEastmoney(
       body: { data },
     } = await got('https://push2.eastmoney.com/api/qt/ulist.np/get', {
       searchParams: {
-        fields: 'f2,f3,f12,f14',
+        fields: 'f2,f3,f12,f13,f14',
         fltt: 2,
         secids,
       },
@@ -401,6 +404,7 @@ export async function GetSecuritiesWareHouseFromEastmoney(
         f2: string; // 最新价
         f3: number; // 涨跌幅
         f14: string; // 名称
+        f13: string; // market
         f12: string; // 债券代码
       }[];
     } = data;
@@ -408,6 +412,7 @@ export async function GetSecuritiesWareHouseFromEastmoney(
       return {
         zxz: item.f2,
         name: item.f14,
+        market: item.f13,
         code: item.f12,
         zdf: item.f3,
         ccb: tors[index], // 持仓比
@@ -566,5 +571,100 @@ export async function GetQDIIFundFromEastMoney(code: string) {
   } catch (error) {
     console.log(error);
     return null;
+  }
+}
+
+// 查询定投排行
+export async function GetAutomaticPlanFromEastmoney(type: number) {
+  try {
+    const { body: html } = await got(
+      'http://fund.eastmoney.com/api/Dtshph.ashx',
+      {
+        searchParams: {
+          c: 'dwjz',
+          t: type,
+          s: 'desc',
+          issale: 1,
+          page: 1,
+          psize: 200,
+          _: new Date().getTime(),
+        },
+      }
+    );
+    const $ = cheerio.load(html);
+    const data = $('tbody tr')
+      .toArray()
+      .map((tr) => {
+        const [
+          checkbox,
+          no,
+          code,
+          name,
+          more,
+          dwjz,
+          jzrq,
+          y1,
+          y2,
+          y3,
+          y5,
+          star,
+        ] = $(tr)
+          .find('td')
+          .toArray()
+          .map((td) => $(td).text());
+        return {
+          code,
+          name,
+          dwjz,
+          jzrq,
+          y1,
+          y2,
+          y3,
+          y5,
+          star,
+        };
+      });
+    return data;
+  } catch (error) {
+    console.log(error);
+    return [];
+  }
+}
+
+// 查询基金排行
+export async function GetRankDataFromEasemoney(type: string) {
+  try {
+    const now = new Date();
+    const { body } = await got(
+      'http://fund.eastmoney.com/data/rankhandler.aspx',
+      {
+        headers: {
+          Referer: 'http://fund.eastmoney.com/data/fundranking.html',
+        },
+        searchParams: {
+          op: 'ph',
+          dt: 'kf',
+          ft: type,
+          rs: '',
+          gs: 0,
+          sc: '1yzf',
+          st: 'desc',
+          qdii: '',
+          tabSubtype: ',,,,,',
+          pi: 1,
+          pn: 10000,
+          dx: 1,
+          sd: `${now.getFullYear() - 1}-${now.getMonth() + 1}-${now.getDate()}`,
+          ed: `${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()}`,
+        },
+      }
+    );
+    return eval(`(() => {
+      ${body}
+      return rankData.datas;
+    })()`);
+  } catch (error) {
+    console.log(error);
+    return [];
   }
 }

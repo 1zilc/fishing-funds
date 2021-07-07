@@ -74,11 +74,10 @@ const nativeMenuIcon = nativeImage.createFromPath(
 
 const nativeIcon = nativeImage.createFromPath(getAssetPath('icon.png'));
 
-// if (process.env.NODE_ENV === 'production') {
-const sourceMapSupport = require('source-map-support');
-
-sourceMapSupport.install();
-// }
+if (process.env.NODE_ENV === 'production') {
+  const sourceMapSupport = require('source-map-support');
+  sourceMapSupport.install();
+}
 
 if (
   process.env.NODE_ENV === 'development' ||
@@ -125,7 +124,7 @@ const createMenubar = async () => {
       height: mainWindowState.height,
       minHeight: 400,
       minWidth: 300,
-      maxHeight: 900,
+      maxHeight: 1000,
       maxWidth: 600,
       webPreferences: {
         contextIsolation: true,

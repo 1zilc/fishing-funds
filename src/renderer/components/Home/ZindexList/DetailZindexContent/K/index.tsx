@@ -185,6 +185,7 @@ const K: React.FC<PerformanceProps> = ({ code = '' }) => {
         types={yearTypeList}
         activeType={year.type}
         onSelected={setYearType}
+        flex
       />
     </div>
   );

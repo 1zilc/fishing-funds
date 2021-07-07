@@ -44,10 +44,14 @@ export default merge(baseConfig, {
 
   mode: 'development',
 
-  // target: ['web', 'electron-renderer'],
-  target: 'web',
+  target: ['web', 'electron-renderer'],
+  // target: 'web',
 
-  entry: [path.join(webpackPaths.srcRendererPath, 'index.tsx')],
+  entry: [
+    'webpack-dev-server/client?http://localhost:1212/dist',
+    'webpack/hot/only-dev-server',
+    path.join(webpackPaths.srcRendererPath, 'index.tsx'),
+  ],
 
   output: {
     path: webpackPaths.distRendererPath,

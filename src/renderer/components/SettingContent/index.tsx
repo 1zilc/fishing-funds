@@ -20,7 +20,7 @@ import * as Enums from '@/utils/enums';
 import * as Utils from '@/utils';
 import styles from './index.scss';
 
-export const ffVersion = '4.1.0';
+export const ffVersion = '4.2.0';
 export interface SettingContentProps {
   onEnter: () => void;
   onClose: () => void;
@@ -72,6 +72,10 @@ const recordSiteGroup = Utils.Group(
     {
       url: 'https://www.macwk.com/soft/fishing-funds',
       name: 'MacWk',
+    },
+    {
+      url: 'https://www.macat.vip/4257.html',
+      name: '马克喵',
     },
   ],
   3

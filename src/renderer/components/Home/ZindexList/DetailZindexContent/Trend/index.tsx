@@ -11,6 +11,7 @@ import styles from './index.scss';
 
 export interface PerformanceProps {
   code: string;
+  zs: number;
 }
 const trendTypeList = [
   { name: '一天', type: 1, code: 1 },
@@ -19,7 +20,7 @@ const trendTypeList = [
   { name: '四天', type: 4, code: 4 },
   { name: '五天', type: 5, code: 5 },
 ];
-const Trend: React.FC<PerformanceProps> = ({ code }) => {
+const Trend: React.FC<PerformanceProps> = ({ code, zs = 0 }) => {
   const { ref: chartRef, chartInstance } = useResizeEchart(
     CONST.DEFAULT.ECHARTS_SCALE
   );
@@ -31,7 +32,7 @@ const Trend: React.FC<PerformanceProps> = ({ code }) => {
       manual: true,
       throwOnError: true,
       cacheKey: `GetTrendFromEastmoney/${code}/${trend.code}`,
-      onSuccess: (result = []) => {
+      onSuccess: (result) => {
         chartInstance?.setOption({
           title: {
             text: '',
@@ -44,12 +45,12 @@ const Trend: React.FC<PerformanceProps> = ({ code }) => {
             left: 0,
             right: 5,
             bottom: 0,
-            top: 15,
+            top: 25,
             containLabel: true,
           },
           xAxis: {
             type: 'category',
-            data: result?.map(({ time, price }) => time) || [],
+            data: result.map(({ time, price }) => time) || [],
             boundaryGap: false,
             axisLabel: {
               fontSize: 10,
@@ -62,6 +63,8 @@ const Trend: React.FC<PerformanceProps> = ({ code }) => {
               fontSize: 10,
             },
             scale: true,
+            min: (value: any) => Math.min(value.min, zs),
+            max: (value: any) => Math.max(value.max, zs),
           },
           dataZoom: [
             {
@@ -79,8 +82,7 @@ const Trend: React.FC<PerformanceProps> = ({ code }) => {
               lineStyle: {
                 width: 1,
                 color: Utils.GetValueColor(
-                  Number(result[result.length - 1]?.price) -
-                    Number(result[0]?.price)
+                  Number(result[result.length - 1]?.price) - zs
                 ).color,
               },
               markPoint: {
@@ -99,8 +101,8 @@ const Trend: React.FC<PerformanceProps> = ({ code }) => {
                 },
                 data: [
                   {
-                    name: '平均值',
-                    type: 'average',
+                    name: '昨收',
+                    yAxis: zs,
                   },
                 ],
               },
@@ -116,7 +118,7 @@ const Trend: React.FC<PerformanceProps> = ({ code }) => {
       runGetTrendFromEastmoney(code, trend.code);
     },
     chartInstance,
-    [darkMode, code, trend.code]
+    [darkMode, code, trend.code, zs]
   );
 
   return (
@@ -126,6 +128,7 @@ const Trend: React.FC<PerformanceProps> = ({ code }) => {
         types={trendTypeList}
         activeType={trend.type}
         onSelected={setTrendType}
+        flex
       />
     </div>
   );

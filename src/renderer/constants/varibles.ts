@@ -14,4 +14,5 @@ export default [
   '--svg-icon-color',
   '--blur-color',
   '--base-font-size',
+  '--base-padding',
 ];

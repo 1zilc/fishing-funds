@@ -1,0 +1,118 @@
+.content {
+  position: relative;
+  box-sizing: border-box;
+  padding-bottom: 80px;
+  min-height: calc(100vh - 110px);
+}
+
+.row {
+  padding: var(--base-padding);
+  box-sizing: border-box;
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+
+  .menu {
+    justify-self: flex-end;
+    fill: var(--svg-icon-color);
+
+    &:hover {
+      cursor: pointer;
+    }
+  }
+
+  .remove {
+    &:hover {
+      cursor: pointer;
+    }
+  }
+}
+
+.inner {
+  display: flex;
+  justify-content: flex-start;
+  flex: 1;
+  flex-direction: column;
+  margin: 0 10px;
+}
+
+.name {
+  font-size: calc(14rem / var(--base-font-size));
+  font-weight: 600;
+}
+
+.code {
+  font-size: 1rem;
+}
+
+.dragItem {
+  background-color: var(--inner-color) !important;
+}
+
+.editor {
+  margin-left: 10px;
+  cursor: pointer;
+  height: 12px;
+  width: 12px;
+  fill: var(--svg-icon-color);
+}
+
+.cyfe {
+  display: flex;
+  align-items: center;
+}
+
+.add {
+  height: 36px;
+  width: 36px;
+  border-radius: 50%;
+  background-color: var(--primary-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 20px;
+  cursor: pointer;
+  transition: opacity 0.3s;
+  box-shadow: 0 2px 10px var(--primary-color);
+
+  &:hover {
+    filter: brightness(105%);
+  }
+
+  svg {
+    fill: var(--primary-text-color);
+    height: 34px;
+    width: 24px;
+  }
+}
+.wallet {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: calc(var(--base-padding) * 2);
+  padding-bottom: var(--base-padding);
+  img {
+    width: 40px;
+    height: 40px;
+    margin-bottom: var(--base-padding);
+  }
+}
+.walletName {
+  font-size: calc(12rem / var(--base-font-size));
+  font-weight: 600;
+  position: relative;
+}
+.editWallet {
+  position: absolute;
+  right: -20px;
+  fill: var(--svg-icon-color);
+  cursor: pointer;
+  height: 12px;
+  width: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+}
