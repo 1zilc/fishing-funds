@@ -499,7 +499,7 @@ export async function getZindex(code: string) {
   return Services.Zindex.FromEastmoney(code);
 }
 
-export async function saveZindexConfig(zindexConfig: Zindex.SettingItem[]) {
+export async function setZindexConfig(zindexConfig: Zindex.SettingItem[]) {
   Utils.SetStorage(CONST.STORAGE.ZINDEX_SETTING, zindexConfig);
 }
 

@@ -1,16 +1,26 @@
 import React, { useState } from 'react';
 import { useRequest } from 'ahooks';
 import { Table } from 'antd';
+
+import DetailStockContent from '@/components/Home/StockList/DetailStockContent';
+import CustomDrawer from '@/components/CustomDrawer';
+import { useDrawer } from '@/utils/hooks';
 import * as Services from '@/services';
 import * as Utils from '@/utils';
 import styles from './index.scss';
 
-export interface StockListProps {
+export interface StocksProps {
   code: string;
 }
 
-const StockList: React.FC<StockListProps> = ({ code }) => {
+const Stocks: React.FC<StocksProps> = ({ code }) => {
   const [stockList, setStockList] = useState<any[]>([]);
+  const {
+    data: secid,
+    show: showDetailDrawer,
+    set: setDetailDrawer,
+    close: closeDetailDrawer,
+  } = useDrawer('');
 
   const { loading: listLoading } = useRequest(
     Services.Quotation.GetStocksFromEasymoney,
@@ -34,6 +44,7 @@ const StockList: React.FC<StockListProps> = ({ code }) => {
     {
       title: '名称',
       dataIndex: 'name',
+      render: (text: string) => <a>{text}</a>,
     },
     {
       title: '最新价',
@@ -42,7 +53,6 @@ const StockList: React.FC<StockListProps> = ({ code }) => {
     {
       title: '涨跌幅',
       dataIndex: 'zdf',
-
       render: (text: number) => (
         <div className={Utils.GetValueColor(text).textClass}>
           {Utils.Yang(text)} %
@@ -64,9 +74,19 @@ const StockList: React.FC<StockListProps> = ({ code }) => {
           hideOnSinglePage: true,
           position: ['bottomCenter'],
         }}
+        onRow={(record) => ({
+          onClick: () => setDetailDrawer(`${record.market}.${record.code}`),
+        })}
       />
+      <CustomDrawer show={showDetailDrawer}>
+        <DetailStockContent
+          onClose={closeDetailDrawer}
+          onEnter={closeDetailDrawer}
+          secid={secid}
+        />
+      </CustomDrawer>
     </div>
   );
 };
 
-export default StockList;
+export default Stocks;

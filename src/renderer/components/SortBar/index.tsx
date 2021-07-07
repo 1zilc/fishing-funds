@@ -17,6 +17,8 @@ import {
   troggleZindexSortOrder,
   setQuotationSortMode,
   troggleQuotationSortOrder,
+  setStockSortMode,
+  troggleStockSortOrder,
 } from '@/actions/sort';
 import { StoreState } from '@/reducers/types';
 import { SORT_FUNDS, TOGGLE_FUNDS_COLLAPSE } from '@/actions/fund';
@@ -25,6 +27,7 @@ import {
   SORT_QUOTATIONS,
   TOGGLE_QUOTATIONS_COLLAPSE,
 } from '@/actions/quotation';
+import { SORT_STOCKS, TOGGLE_STOCKS_COLLAPSE } from '@/actions/stock';
 import * as Enums from '@/utils/enums';
 import styles from './index.scss';
 
@@ -37,6 +40,7 @@ const SortBar: React.FC<SortBarProps> = () => {
     fundSortMode: { type: fundSortType, order: fundSortOrder },
     zindexSortMode: { type: zindexSortType, order: zindexSortOrder },
     quotationSortMode: { type: quotationSortType, order: quotationSortOrder },
+    stockSortMode: { type: stockSortType, order: stockSortOrder },
   } = getSortMode();
   const {
     fundSortModeOptions,
@@ -45,6 +49,8 @@ const SortBar: React.FC<SortBarProps> = () => {
     zindexSortModeOptionsMap,
     quotationSortModeOptions,
     quotationSortModeOptionsMap,
+    stockSortModeOptions,
+    stockSortModeOptionsMap,
   } = getSortConfig();
 
   const [visible, setVisible] = useState(true);
@@ -59,18 +65,26 @@ const SortBar: React.FC<SortBarProps> = () => {
   const quotations = useSelector(
     (state: StoreState) => state.quotation.quotations
   );
+  const stocks = useSelector((state: StoreState) => state.stock.stocks);
 
   const [expandAllFunds, expandSomeFunds] = useMemo(() => {
     return [funds.every((_) => _.collapse), funds.some((_) => _.collapse)];
   }, [funds]);
 
-  const [expandAllZindexs, expandSomwZindexs] = useMemo(() => {
+  const [expandAllZindexs, expandSomeZindexs] = useMemo(() => {
     return [zindexs.every((_) => _.collapse), zindexs.some((_) => _.collapse)];
   }, [zindexs]);
 
-  const [expandAllQuotations, expandSomwQuotations] = useMemo(() => {
-    return [zindexs.every((_) => _.collapse), zindexs.some((_) => _.collapse)];
+  const [expandAllQuotations, expandSomeQuotations] = useMemo(() => {
+    return [
+      quotations.every((_) => _.collapse),
+      quotations.some((_) => _.collapse),
+    ];
   }, [quotations]);
+
+  const [expandAllStocks, expandSomeStocks] = useMemo(() => {
+    return [stocks.every((_) => _.collapse), stocks.some((_) => _.collapse)];
+  }, [stocks]);
 
   const toggleFundsCollapse = () => {
     dispatch({
@@ -90,13 +104,19 @@ const SortBar: React.FC<SortBarProps> = () => {
     });
   };
 
+  const toggleStocksCollapse = () => {
+    dispatch({
+      type: TOGGLE_STOCKS_COLLAPSE,
+    });
+  };
+
   useScroll(document, () => {
     setVisible(false);
     debounceSetVisible();
     return true;
   });
 
-  const renderMenu = () => {
+  function renderMenu() {
     switch (tabsActiveKey) {
       case Enums.TabKeyType.Funds:
         return (
@@ -275,10 +295,69 @@ const SortBar: React.FC<SortBarProps> = () => {
             </div>
           </div>
         );
+      case Enums.TabKeyType.Stock:
+        return (
+          <div className={styles.bar}>
+            <div className={styles.arrow} onClick={toggleStocksCollapse}>
+              {expandAllStocks ? <ArrowUpIcon /> : <ArrowDownIcon />}
+            </div>
+            <div className={styles.name} onClick={toggleStocksCollapse}>
+              股票名称
+            </div>
+            <div className={styles.mode}>
+              <Dropdown
+                placement="bottomRight"
+                overlay={
+                  <Menu
+                    selectedKeys={[
+                      String(stockSortModeOptionsMap[stockSortType].key),
+                    ]}
+                  >
+                    {stockSortModeOptions.map(({ key, value }) => (
+                      <Menu.Item
+                        key={String(key)}
+                        onClick={() => {
+                          setStockSortMode({
+                            type: key,
+                          });
+                          dispatch({ type: SORT_STOCKS });
+                        }}
+                      >
+                        {value}
+                      </Menu.Item>
+                    ))}
+                  </Menu>
+                }
+              >
+                <a>{stockSortModeOptionsMap[stockSortType].value}</a>
+              </Dropdown>
+            </div>
+            <div
+              className={styles.sort}
+              onClick={() => {
+                troggleStockSortOrder();
+                dispatch({ type: SORT_STOCKS });
+              }}
+            >
+              <SortArrowUpIcon
+                className={classsames({
+                  [styles.selectOrder]:
+                    stockSortOrder === Enums.SortOrderType.Asc,
+                })}
+              />
+              <SortArrowDownIcon
+                className={classsames({
+                  [styles.selectOrder]:
+                    stockSortOrder === Enums.SortOrderType.Desc,
+                })}
+              />
+            </div>
+          </div>
+        );
       default:
         return <></>;
     }
-  };
+  }
 
   return (
     <div className={classsames(styles.content, { [styles.visible]: visible })}>

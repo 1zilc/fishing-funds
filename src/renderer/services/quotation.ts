@@ -189,6 +189,7 @@ export async function GetStocksFromEasymoney(code: string) {
             f2: 5.23;
             f3: 8.96;
             f12: '000875';
+            f13: '0';
             f14: '吉电股份';
             f62: 56509098.0;
             f66: 72405039.0;
@@ -217,13 +218,14 @@ export async function GetStocksFromEasymoney(code: string) {
         invt: 2,
         fltt: 2,
         fields:
-          'f12,f14,f2,f3,f62,f184,f66,f69,f72,f75,f78,f81,f84,f87,f204,f205,f124',
+          'f12,f13,f14,f2,f3,f62,f184,f66,f69,f72,f75,f78,f81,f84,f87,f204,f205,f124',
         fs: `b:${code}`,
       },
       responseType: 'json',
     });
     return (data?.diff || []).map((item) => ({
       code: item.f12,
+      market: item.f13,
       name: item.f14,
       zxj: item.f2,
       zdf: item.f3,

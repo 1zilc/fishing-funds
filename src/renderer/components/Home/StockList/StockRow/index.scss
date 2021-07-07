@@ -12,8 +12,6 @@
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  position: relative;
-  overflow: hidden;
 
   &:hover {
     border-bottom: 1px solid var(--hover-color);
@@ -24,14 +22,13 @@
       }
     }
 
-    .conciseValue,
     .value {
       filter: brightness(125%);
     }
   }
 }
 
-.fundName {
+.zindexName {
   font-weight: 600;
   font-size: calc(14rem / var(--base-font-size));
   margin-bottom: 2px;
@@ -49,51 +46,46 @@
 }
 
 .value {
-  font-size: 1rem;
   display: block;
   float: right;
-  color: var(--tag-text-color);
-  padding: 2px 10px;
-  border-radius: 4px;
-  min-width: 64px;
-  margin-left: 5px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 150px;
   text-align: center;
-  white-space: pre-wrap;
   transition: all 0.3s;
 }
 
-.warn {
-  border: 1px solid var(--warn-color);
-  color: var(--warn-color);
-  font-size: calc(10rem / var(--base-font-size));
-  border-radius: 3px;
-  padding: 1px 4px;
-  margin-left: 5px;
-  white-space: nowrap;
-  transition: 0.3s;
-}
-.conciseValue {
+.zx {
   font-size: calc(20rem / var(--base-font-size));
   line-height: 24px;
-  white-space: pre-wrap;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
   font-weight: 600;
-  transition: all 0.3s;
-}
-
-.remove {
-  overflow: hidden;
-  transition: width 0.2s;
-  display: inline-block;
-  text-align: right;
-  height: 16px;
 
   svg {
-    cursor: pointer;
+  }
+}
+
+.zd {
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+
+  .zdd,
+  .zdf {
+    font-size: calc(10rem / var(--base-font-size));
+  }
+
+  .zdf {
+    margin-left: 10px;
   }
 }
 
 .arrow {
   /* border: 1px solid #333; */
+  margin-right: 5px;
 
   svg {
     cursor: pointer;
@@ -119,34 +111,9 @@
     flex-wrap: wrap;
   }
 }
-
-.editor {
-  margin-left: 5px;
-  cursor: pointer;
-  height: 12px;
-  width: 12px;
-  fill: var(--svg-icon-color);
-}
-
 .view {
   padding: 5px;
   text-align: center;
   width: 100%;
   box-sizing: border-box;
-}
-
-.unuseText {
-  text-decoration: line-through;
-}
-.hold {
-  border-radius: 3px;
-  font-size: 8px;
-  border: 1px solid var(--primary-color);
-  color: var(--primary-color);
-  padding: 0 4px;
-  text-align: center;
-  word-break: keep-all;
-  margin-left: 5px;
-  transition: 0.3s;
-  margin-bottom: 2px;
 }

@@ -6,7 +6,7 @@ import { Tabs } from 'antd';
 import ChartCard from '@/components/Card/ChartCard';
 import RealTimeFundFlow from '@/components/Home/QuotationList/DetailQuotationContent/RealTimeFundFlow';
 import AfterTimeFundFlow from '@/components/Home/QuotationList/DetailQuotationContent/AfterTimeFundFlow';
-import StockList from '@/components/Home/QuotationList/DetailQuotationContent/StockList';
+import Stocks from '@/components/Home/QuotationList/DetailQuotationContent/Stocks';
 import RealTimeTransaction from '@/components/Home/QuotationList/DetailQuotationContent/RealTimeTransaction';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
 
@@ -135,7 +135,7 @@ const DetailQuotationContent: React.FC<DetailQuotationContentProps> = (
           >
             <Tabs.TabPane tab={`${quotation.name}个股`} key={String(0)}>
               <ChartCard auto>
-                <StockList code={code} />
+                <Stocks code={code} />
               </ChartCard>
             </Tabs.TabPane>
           </Tabs>

@@ -8,7 +8,7 @@ import PureCard from '@/components/Card/PureCard';
 import { ReactComponent as MenuIcon } from '@/assets/icons/menu.svg';
 import Eye from '@/components/Eye';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
-import { getZindexConfig, saveZindexConfig } from '@/actions/zindex';
+import { getZindexConfig, setZindexConfig } from '@/actions/zindex';
 import * as Enums from '@/utils/enums';
 import * as Utils from '@/utils';
 import styles from './index.scss';
@@ -83,7 +83,7 @@ const ManageZindexContent: React.FC<ManageZindexContentProps> = (props) => {
     sortZindexConfig.forEach((zindex) => {
       zindex.show = !!selectedMap[zindex.code];
     });
-    saveZindexConfig(sortZindexConfig);
+    setZindexConfig(sortZindexConfig);
     props.onEnter();
   }
 

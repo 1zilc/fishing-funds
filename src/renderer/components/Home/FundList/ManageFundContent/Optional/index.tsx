@@ -45,12 +45,12 @@ const Optional: React.FC<OptionalProps> = ({ active }) => {
 
   const { done: syncFundSettingDone } = useSyncFixFundSetting();
 
-  const updateSortFundConfig = () => {
+  function updateSortFundConfig() {
     const { fundConfig } = getFundConfig();
     setSortFundConfig(fundConfig.map((_) => ({ ..._, id: _.code })));
-  };
+  }
 
-  const onSortFundConfig = (sortList: Fund.SettingItem[]) => {
+  function onSortFundConfig(sortList: Fund.SettingItem[]) {
     const { codeMap } = getFundConfig();
     const fundConfig = sortList.map((item) => {
       const fund = codeMap[item.code];
@@ -63,9 +63,9 @@ const Optional: React.FC<OptionalProps> = ({ active }) => {
     });
     setFundConfig(fundConfig);
     updateSortFundConfig();
-  };
+  }
 
-  const onRemoveFund = async (fund: Fund.SettingItem) => {
+  async function onRemoveFund(fund: Fund.SettingItem) {
     const { response } = await dialog.showMessageBox({
       title: '删除基金',
       type: 'info',
@@ -76,7 +76,7 @@ const Optional: React.FC<OptionalProps> = ({ active }) => {
       deleteFund(fund.code);
       updateSortFundConfig();
     }
-  };
+  }
 
   useEffect(updateSortFundConfig, [syncFundSettingDone, active]);
 

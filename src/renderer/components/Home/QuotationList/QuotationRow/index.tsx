@@ -161,9 +161,7 @@ const QuotationRow: React.FC<RowProps> = (props) => {
             <span className="text-down">{quotation.xdjs}</span>
           </section>
           <section>
-            <span>
-              {quotation.lzgpName}({quotation.lzgpCode})：
-            </span>
+            <span>{quotation.lzgpName}：</span>
             <span
               className={classnames(
                 Utils.GetValueColor(quotation.lzgpZdf).textClass
@@ -173,9 +171,7 @@ const QuotationRow: React.FC<RowProps> = (props) => {
             </span>
           </section>
           <section>
-            <span>
-              {quotation.ldgpName}({quotation.ldgpCode})：
-            </span>
+            <span>{quotation.ldgpName}：</span>
             <span
               className={classnames(
                 Utils.GetValueColor(quotation.ldgpZdf).textClass

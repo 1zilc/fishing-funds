@@ -11,6 +11,7 @@ import { UpdaderState } from './updater';
 import { FundState } from './fund';
 import { ZindexState } from './zindex';
 import { QuotationState } from './quotation';
+import { StockState } from './stock';
 import { SettingState } from './setting';
 
 export interface StoreState {
@@ -21,6 +22,7 @@ export interface StoreState {
   fund: FundState;
   zindex: ZindexState;
   quotation: QuotationState;
+  stock: StockState;
   setting: SettingState;
 }
 

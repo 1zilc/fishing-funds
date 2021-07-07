@@ -11,6 +11,7 @@ import { ReactComponent as ChartBoxIcon } from '@/assets/icons/chart-box.svg';
 import CustomDrawer from '@/components/CustomDrawer';
 import ManageFundContent from '@/components/Home/FundList/ManageFundContent';
 import ManageWalletContent from '@/components/Wallet/ManageWalletContent';
+import ManageStockContent from '@/components/Home/StockList/ManageStockContent';
 import SettingContent from '@/components/SettingContent';
 import FundStatisticsContent from '@/components/Home/FundList/FundStatisticsContent';
 import ManageZindexContent from '@/components/Home/ZindexList/ManageZindexContent';
@@ -18,6 +19,7 @@ import FundFlowContent from '@/components/Home/QuotationList/FundFlowContent';
 import { StoreState } from '@/reducers/types';
 import { loadZindexs } from '@/actions/zindex';
 import { loadQuotations } from '@/actions/quotation';
+import { loadStocks } from '@/actions/stock';
 import { useScrollToTop, useActions, useFreshFunds } from '@/utils/hooks';
 import * as Enums from '@/utils/enums';
 import * as CONST from '@/constants';
@@ -45,10 +47,14 @@ const ToolBar: React.FC<ToolBarProps> = () => {
   const { run: runLoadQuotations } = useThrottleFn(useActions(loadQuotations), {
     wait: CONST.DEFAULT.FRESH_BUTTON_THROTTLE_DELAY,
   });
+  const { run: runLoadStocks } = useThrottleFn(useActions(loadStocks), {
+    wait: CONST.DEFAULT.FRESH_BUTTON_THROTTLE_DELAY,
+  });
 
   const freshFunds = useFreshFunds(CONST.DEFAULT.FRESH_BUTTON_THROTTLE_DELAY);
   const freshZindexs = useScrollToTop({ after: runLoadZindexs });
   const freshQuotations = useScrollToTop({ after: runLoadQuotations });
+  const freshStocks = useScrollToTop({ after: runLoadStocks });
 
   const [
     showManageFundDrawer,
@@ -68,11 +74,20 @@ const ToolBar: React.FC<ToolBarProps> = () => {
   ] = useBoolean(false);
 
   const [
-    showEditZindexDrawer,
+    showManageZindexDrawer,
     {
-      setTrue: openEditZindexDrawer,
-      setFalse: closeEditZindexDrawer,
-      toggle: ToggleEditZindexDrawer,
+      setTrue: openManageZindexDrawer,
+      setFalse: closeManageZindexDrawer,
+      toggle: ToggleManageZindexDrawer,
+    },
+  ] = useBoolean(false);
+
+  const [
+    showManageStockDrawer,
+    {
+      setTrue: openManageStockDrawer,
+      setFalse: closeManageStockDrawer,
+      toggle: ToggleManageStockDrawer,
     },
   ] = useBoolean(false);
 
@@ -118,13 +133,19 @@ const ToolBar: React.FC<ToolBarProps> = () => {
           />
         )}
         {tabsActiveKey === Enums.TabKeyType.Zindex && (
-          <MenuAddIcon style={{ ...iconSize }} onClick={openEditZindexDrawer} />
+          <MenuAddIcon
+            style={{ ...iconSize }}
+            onClick={openManageZindexDrawer}
+          />
         )}
         {tabsActiveKey === Enums.TabKeyType.Quotation && (
           <ChartBoxIcon style={{ ...iconSize }} onClick={openFundFlowDrawer} />
         )}
         {tabsActiveKey === Enums.TabKeyType.Stock && (
-          <MenuAddIcon style={{ ...iconSize }} />
+          <MenuAddIcon
+            style={{ ...iconSize }}
+            onClick={openManageStockDrawer}
+          />
         )}
         {tabsActiveKey === Enums.TabKeyType.Funds && (
           <RefreshIcon style={{ ...iconSize }} onClick={freshFunds} />
@@ -166,12 +187,21 @@ const ToolBar: React.FC<ToolBarProps> = () => {
           }}
         />
       </CustomDrawer>
-      <CustomDrawer show={showEditZindexDrawer}>
+      <CustomDrawer show={showManageZindexDrawer}>
         <ManageZindexContent
-          onClose={closeEditZindexDrawer}
+          onClose={closeManageZindexDrawer}
           onEnter={() => {
             freshZindexs();
-            closeEditZindexDrawer();
+            closeManageZindexDrawer();
+          }}
+        />
+      </CustomDrawer>
+      <CustomDrawer show={showManageStockDrawer}>
+        <ManageStockContent
+          onClose={closeManageStockDrawer}
+          onEnter={() => {
+            freshStocks();
+            closeManageStockDrawer();
           }}
         />
       </CustomDrawer>

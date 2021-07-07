@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { useRequest } from 'ahooks';
 
 import { useHomeContext } from '@/components/Home';
-import TypeSelection from '@/components/TypeSelection';
 import { useResizeEchart, useRenderEcharts } from '@/utils/hooks';
 import * as CONST from '@/constants';
 import * as Services from '@/services';
@@ -10,29 +9,22 @@ import * as Utils from '@/utils';
 import styles from './index.scss';
 
 export interface PerformanceProps {
-  code: string;
+  secid: string;
   zs: number;
 }
-const trendTypeList = [
-  { name: '一天', type: 1, code: 1 },
-  { name: '两天', type: 2, code: 2 },
-  { name: '三天', type: 3, code: 3 },
-  { name: '四天', type: 4, code: 4 },
-  { name: '五天', type: 5, code: 5 },
-];
-const Trend: React.FC<PerformanceProps> = ({ code, zs = 0 }) => {
+const Trend: React.FC<PerformanceProps> = ({ secid, zs = 0 }) => {
   const { ref: chartRef, chartInstance } = useResizeEchart(
     CONST.DEFAULT.ECHARTS_SCALE
   );
-  const [trend, setTrendType] = useState(trendTypeList[0]);
-  const { darkMode, varibleColors } = useHomeContext();
+
+  const { darkMode } = useHomeContext();
   const { run: runGetTrendFromEastmoney } = useRequest(
-    Services.Zindex.GetTrendFromEastmoney,
+    Services.Stock.GetTrendFromEastmoney,
     {
       manual: true,
       throwOnError: true,
-      cacheKey: `GetTrendFromEastmoney/${code}/${trend.code}`,
-      onSuccess: (result) => {
+      cacheKey: `GetTrendFromEastmoney/${secid}`,
+      onSuccess: ({ trends }) => {
         chartInstance?.setOption({
           title: {
             text: '',
@@ -50,7 +42,7 @@ const Trend: React.FC<PerformanceProps> = ({ code, zs = 0 }) => {
           },
           xAxis: {
             type: 'category',
-            data: result.map(({ time, price }) => time) || [],
+            data: trends.map(({ datetime, last }) => datetime),
             boundaryGap: false,
             axisLabel: {
               fontSize: 10,
@@ -66,23 +58,18 @@ const Trend: React.FC<PerformanceProps> = ({ code, zs = 0 }) => {
             min: (value: any) => Math.min(value.min, zs),
             max: (value: any) => Math.max(value.max, zs),
           },
-          dataZoom: [
-            {
-              type: 'inside',
-              minValueSpan: 3600 * 24 * 1000 * 1,
-            },
-          ],
           series: [
             {
-              data: result.map(({ time, price }) => [time, price]),
+              data: trends.map(({ datetime, last }) => [datetime, last]),
               type: 'line',
               name: '价格',
               showSymbol: false,
               symbol: 'none',
+              smooth: true,
               lineStyle: {
                 width: 1,
                 color: Utils.GetValueColor(
-                  Number(result[result.length - 1]?.price) - zs
+                  Number(trends[trends.length - 1]?.last) - zs
                 ).color,
               },
               markPoint: {
@@ -115,20 +102,15 @@ const Trend: React.FC<PerformanceProps> = ({ code, zs = 0 }) => {
 
   useRenderEcharts(
     () => {
-      runGetTrendFromEastmoney(code, trend.code);
+      runGetTrendFromEastmoney(secid);
     },
     chartInstance,
-    [darkMode, code, trend.code, zs]
+    [darkMode, secid, zs]
   );
 
   return (
     <div className={styles.content}>
       <div ref={chartRef} style={{ width: '100%' }} />
-      <TypeSelection
-        types={trendTypeList}
-        activeType={trend.type}
-        onSelected={setTrendType}
-      />
     </div>
   );
 };

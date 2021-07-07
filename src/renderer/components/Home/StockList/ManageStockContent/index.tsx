@@ -2,23 +2,21 @@ import React, { useState } from 'react';
 import { Tabs } from 'antd';
 
 import PureCard from '@/components/Card/PureCard';
-import Optional from '@/components/Home/FundList/ManageFundContent/Optional';
-import Automatic from '@/components/Home/FundList/ManageFundContent/Automatic';
-import Rank from '@/components/Home/FundList/ManageFundContent/Rank';
+import Optional from '@/components/Home/StockList/ManageStockContent/Optional';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
 import styles from './index.scss';
 
-export interface ManageFundContentProps {
+export interface ManageStockContentProps {
   onEnter: () => void;
   onClose: () => void;
 }
 
-const ManageFundContent: React.FC<ManageFundContentProps> = (props) => {
+const ManageStockContent: React.FC<ManageStockContentProps> = (props) => {
   const [activeKey, setActiveKey] = useState(String(0));
 
   return (
     <CustomDrawerContent
-      title="管理基金"
+      title="管理股票"
       enterText="确定"
       onEnter={props.onEnter}
       onClose={props.onClose}
@@ -30,18 +28,8 @@ const ManageFundContent: React.FC<ManageFundContentProps> = (props) => {
           animated={{ tabPane: true }}
           tabBarGutter={15}
         >
-          <Tabs.TabPane tab="自选基金" key={String(0)}>
+          <Tabs.TabPane tab="自选股票" key={String(0)}>
             <Optional active={activeKey === String(0)} />
-          </Tabs.TabPane>
-          <Tabs.TabPane tab="近期好基" key={String(1)}>
-            <PureCard>
-              <Rank />
-            </PureCard>
-          </Tabs.TabPane>
-          <Tabs.TabPane tab="定投排行" key={String(2)}>
-            <PureCard>
-              <Automatic />
-            </PureCard>
           </Tabs.TabPane>
         </Tabs>
       </div>
@@ -49,4 +37,4 @@ const ManageFundContent: React.FC<ManageFundContentProps> = (props) => {
   );
 };
 
-export default ManageFundContent;
+export default ManageStockContent;
