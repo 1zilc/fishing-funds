@@ -107,7 +107,7 @@ interface FundSetting {
 ## 讨论交流
 
 - QQ 群: [732268738](https://github.com/1zilc/fishing-funds/blob/master/screenshots/7.jpg)
-- issues: [#106]()
+- issues: [#106](https://github.com/1zilc/fishing-funds/issues/106)
 
 ## 支持作者
 
