@@ -87,7 +87,7 @@ const TrendChart: React.FC<{
       });
     },
     chartInstance,
-    [darkMode, zs]
+    [darkMode, zs, trends]
   );
   return <div ref={chartRef} style={{ width: 72 }} />;
 };
