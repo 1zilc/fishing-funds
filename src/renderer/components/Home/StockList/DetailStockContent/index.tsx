@@ -6,7 +6,6 @@ import { Tabs } from 'antd';
 import ChartCard from '@/components/Card/ChartCard';
 import Trend from '@/components/Home/StockList/DetailStockContent/Trend';
 import Estimate from '@/components/Home/StockList/DetailStockContent/Estimate';
-import K from '@/components/Home/ZindexList/DetailZindexContent/K';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
 import * as Services from '@/services';
 import * as Utils from '@/utils';

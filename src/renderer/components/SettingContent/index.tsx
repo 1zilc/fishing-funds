@@ -20,7 +20,7 @@ import * as Enums from '@/utils/enums';
 import * as Utils from '@/utils';
 import styles from './index.scss';
 
-export const ffVersion = '4.2.0';
+export const ffVersion = '4.2.1';
 export interface SettingContentProps {
   onEnter: () => void;
   onClose: () => void;

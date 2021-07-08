@@ -22,6 +22,11 @@ export interface AddStockContentProps {
 
 const { Search } = Input;
 
+const excludeTypes = [
+  // 7, // 三板
+  8, // 基金
+];
+
 const AddStockContent: React.FC<AddStockContentProps> = (props) => {
   const { defaultSecid } = props;
   const { codeMap } = getStockConfig();
@@ -31,7 +36,8 @@ const AddStockContent: React.FC<AddStockContentProps> = (props) => {
   const { run: runSearch } = useRequest(Services.Stock.SearchFromEastmoney, {
     manual: true,
     throwOnError: true,
-    onSuccess: setGroupList,
+    onSuccess: (res) =>
+      setGroupList(res.filter(({ Type }) => !excludeTypes.includes(Type))),
   });
 
   const {
