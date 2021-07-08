@@ -5,5 +5,5 @@ export default {
   LOAD_ZINDEXS_SLEEP_DELAY: 1000, // 请求指数的最低延迟
   LOAD_QUOTATION_SLEEP_DELAY: 1000, // 请求行情的最低延迟
   ECHARTS_SCALE: 0.65, // echarts 图表长宽比例
-  ESTIMATE_FUND_DELAY: 1000 * 60 * 5, // 基金估值图片刷新时间
+  ESTIMATE_FUND_DELAY: 1000 * 60 * 1, // 基金估值图片刷新时间
 };
