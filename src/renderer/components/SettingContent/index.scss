@@ -128,6 +128,7 @@
     font-size: calc(10rem / var(--base-font-size));
   }
 }
+
 .describe {
   font-size: calc(11rem / var(--base-font-size));
   color: var(--inner-text-color);
@@ -149,6 +150,27 @@
   box-sizing: border-box;
   border-top: 1px solid var(--border-color);
   z-index: 100;
+}
+
+.group {
+  display: flex;
+  align-items: center;
+  padding: 10px 28px;
+  justify-content: space-around;
+  width: 100%;
+
+  & > section {
+    display: flex;
+    font-size: 1rem;
+    align-items: center;
+    box-sizing: border-box;
+
+    label {
+      // height: 20px;
+      line-height: 20px;
+      margin: 0;
+    }
+  }
 }
 
 .colorful {
