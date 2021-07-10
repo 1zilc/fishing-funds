@@ -104,22 +104,23 @@ interface FundSetting {
 ]
 ```
 
+## 讨论交流
+
+- QQ 群: [732268738](https://github.com/1zilc/fishing-funds/blob/master/screenshots/7.jpg)
+- issues: [#106](https://github.com/1zilc/fishing-funds/issues/106)
+
+## 支持作者
+
+| 微信                                                                                                               | 支付宝                                                                                                             |
+| ------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------ |
+| <img src="https://github.com/1zilc/fishing-funds/blob/master/src/renderer/assets/qrcode/wechat.png" width="100" /> | <img src="https://github.com/1zilc/fishing-funds/blob/master/src/renderer/assets/qrcode/alipay.png" width="100" /> |
+
 ## 收录网站
 
 - [柠檬精选](https://lemon.qq.com/lab/app/FishingFunds.html)
 - [Electron Apps](https://www.electronjs.org/apps/fishing-funds)
 - [MacWk](https://www.macwk.com/soft/fishing-funds)
 - [马克喵](https://www.macat.vip/4257.html)
-
-## 支持一下～
-
-#### 支付宝
-
-<img src="https://github.com/1zilc/fishing-funds/blob/master/src/renderer/assets/qrcode/alipay.png" width="200px"  height="200px"/>
-
-#### 微信
-
-<img src="https://github.com/1zilc/fishing-funds/blob/master/src/renderer/assets/qrcode/wechat.png" width="200px"  height="200px"/>
 
 ## 感谢
 
