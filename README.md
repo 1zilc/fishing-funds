@@ -113,7 +113,7 @@ interface FundSetting {
 
 | 微信                                                                                                               | 支付宝                                                                                                             |
 | ------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------ |
-| <img src="https://github.com/1zilc/fishing-funds/blob/master/src/renderer/assets/qrcode/wechat.png" width="100" /> | <img src="https://github.com/1zilc/fishing-funds/blob/master/src/renderer/assets/qrcode/alipay.png" width="100" /> |
+| <img src="https://github.com/1zilc/fishing-funds/blob/master/src/renderer/assets/qrcode/wechat.png" width="108" /> | <img src="https://github.com/1zilc/fishing-funds/blob/master/src/renderer/assets/qrcode/alipay.png" width="108" /> |
 
 ## 收录网站
 
@@ -121,6 +121,7 @@ interface FundSetting {
 - [Electron Apps](https://www.electronjs.org/apps/fishing-funds)
 - [MacWk](https://www.macwk.com/soft/fishing-funds)
 - [马克喵](https://www.macat.vip/4257.html)
+- [Mac 毒](https://www.macdo.cn/34786.html)
 
 ## 感谢
 
