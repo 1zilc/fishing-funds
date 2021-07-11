@@ -6,6 +6,7 @@ import { Tabs } from 'antd';
 import ChartCard from '@/components/Card/ChartCard';
 import Trend from '@/components/Home/StockList/DetailStockContent/Trend';
 import Estimate from '@/components/Home/StockList/DetailStockContent/Estimate';
+import K from '@/components/Home/StockList/DetailStockContent/K';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
 import * as Services from '@/services';
 import * as Utils from '@/utils';
@@ -146,17 +147,17 @@ const DetailStockContent: React.FC<DetailStockContentProps> = (props) => {
           </Tabs>
         </div>
         <div className={styles.container}>
-          {/* <Tabs
+          <Tabs
             defaultActiveKey={String(0)}
             animated={{ tabPane: true }}
             tabBarGutter={15}
           >
             <Tabs.TabPane tab="K线" key={String(0)}>
               <ChartCard>
-                <K code={code} />
+                <K secid={secid} />
               </ChartCard>
             </Tabs.TabPane>
-          </Tabs> */}
+          </Tabs>
         </div>
       </div>
     </CustomDrawerContent>

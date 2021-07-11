@@ -65,23 +65,23 @@ function sortStocksWithChached(
   const { stocks } = state;
   const { stockConfig } = getStockConfig();
   const stocksCodeToMap = stocks.reduce((map, stock) => {
-    map[stock.secid!] = stock;
+    map[stock.secid] = stock;
     return map;
   }, {} as any);
 
   const stocksWithChached = responseStocks.filter(Boolean).map((_) => ({
-    ...(stocksCodeToMap[_.secid!] || {}),
+    ...(stocksCodeToMap[_.secid] || {}),
     ..._,
   }));
 
   const stocksWithChachedCodeToMap = stocksWithChached.reduce((map, stock) => {
-    map[stock.secid!] = stock;
+    map[stock.secid] = stock;
     return map;
   }, {} as any);
 
   stockConfig.forEach((stock) => {
-    const responseStock = stocksWithChachedCodeToMap[stock.code];
-    const stateStock = stocksCodeToMap[stock.code];
+    const responseStock = stocksWithChachedCodeToMap[stock.secid];
+    const stateStock = stocksCodeToMap[stock.secid];
     if (!responseStock && stateStock) {
       stocksWithChached.push(stateStock);
     }

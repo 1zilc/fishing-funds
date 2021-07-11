@@ -321,3 +321,54 @@ export async function GetDetailFromEastmoney(secid: string) {
     return {};
   }
 }
+
+export async function GetKFromEastmoney(secid: string, code: number) {
+  try {
+    const { body } = await got<{
+      rc: 0;
+      rt: 17;
+      svr: 182481222;
+      lt: 1;
+      full: 0;
+      data: {
+        code: '600519';
+        market: 1;
+        name: '贵州茅台';
+        decimal: 2;
+        dktotal: 4747;
+        preKPrice: 206.69;
+        klines: [
+          '2021-07-09,2059.97,1972.11,2110.00,1945.00,244227,49006317568.00,8.02,-4.11,-84.59,1.94'
+        ];
+      };
+    }>('http://68.push2his.eastmoney.com/api/qt/stock/kline/get', {
+      searchParams: {
+        secid,
+        fields1: 'f1,f2,f3,f4,f5,f6',
+        fields2: 'f51,f52,f53,f54,f55,f56,f57,f58,f59,f60,f61',
+        klt: code,
+        fqt: 0,
+        end: 20500101,
+        lmt: 120,
+        _: new Date().getTime(),
+      },
+      responseType: 'json',
+    });
+    return (body?.data?.klines || []).map((_) => {
+      const [date, kp, sp, zg, zd, cjl, cje, zf] = _.split(',');
+      return {
+        date,
+        kp: Number(kp),
+        sp: Number(sp),
+        zg: Number(zg),
+        zd: Number(zd),
+        cjl,
+        cje,
+        zf,
+      };
+    });
+  } catch (error) {
+    console.log(error);
+    return [];
+  }
+}
