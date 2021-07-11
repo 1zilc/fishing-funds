@@ -119,7 +119,7 @@ const SelfRank: React.FC<PropsWithChildren<SelfRankProps>> = () => {
           position: ['bottomCenter'],
         }}
         onRow={(record) => ({
-          onClick: () => setDetailDrawer(record.code),
+          onClick: () => setDetailDrawer(record.secid),
         })}
       />
       <CustomDrawer show={showDetailDrawer}>

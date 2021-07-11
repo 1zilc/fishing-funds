@@ -118,7 +118,7 @@ const MainRank: React.FC<PropsWithChildren<MainRankProps>> = () => {
           position: ['bottomCenter'],
         }}
         onRow={(record) => ({
-          onClick: () => setDetailDrawer(record.code),
+          onClick: () => setDetailDrawer(record.secid),
         })}
       />
       <CustomDrawer show={showDetailDrawer}>
