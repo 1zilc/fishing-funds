@@ -372,3 +372,132 @@ export async function GetKFromEastmoney(secid: string, code: number) {
     return [];
   }
 }
+
+export async function GetSelfRankFromEastmoney(code: string) {
+  try {
+    const { body } = await got<{
+      rc: 0;
+      rt: 6;
+      svr: 182482210;
+      lt: 1;
+      full: 1;
+      data: {
+        total: 4512;
+        diff: {
+          f1: 2;
+          f2: 29.7;
+          f12: '600111';
+          f13: 1;
+          f14: '北方稀土';
+          f109: 44.03;
+          f124: 1625817579;
+          f164: 3063965600.0;
+          f165: 7.33;
+          f166: 3728985920.0;
+          f167: 8.92;
+          f168: -665020320.0;
+          f169: -1.59;
+          f170: -1794846528.0;
+          f171: -4.29;
+          f172: -1269119136.0;
+          f173: -3.04;
+          f257: '-';
+          f258: '-';
+          f259: '-';
+          [index: string]: any;
+        }[];
+      };
+    }>('http://push2.eastmoney.com/api/qt/clist/get', {
+      searchParams: {
+        fields:
+          'f2,f3,f12,f13,f14,f62,f184,f225,f165,f263,f109,f175,f264,f160,f100,f124,f265,f1,f267,f164,f174',
+        fid: code,
+        po: 1,
+        pz: 200,
+        pn: 1,
+        np: 1,
+        fltt: 2,
+        invt: 2,
+        fs: 'm:0+t:6+f:!2,m:0+t:13+f:!2,m:0+t:80+f:!2,m:1+t:2+f:!2,m:1+t:23+f:!2,m:0+t:7+f:!2,m:1+t:3+f:!2',
+        _: new Date().getTime(),
+      },
+      responseType: 'json',
+    });
+    const billion = 10 ** 8;
+    return (body?.data?.diff || []).map((_) => ({
+      market: _.f13,
+      code: _.f12,
+      name: _.f14,
+      secid: `${_.f13}.${_.f12}`,
+      zllr: NP.divide(_[code], billion).toFixed(2),
+      zdf: _.f3,
+    }));
+  } catch (error) {
+    console.log(error);
+    return [];
+  }
+}
+
+export async function GetMainRankFromEastmoney(code: string) {
+  try {
+    const { body } = await got<{
+      rc: 0;
+      rt: 6;
+      svr: 182482210;
+      lt: 1;
+      full: 1;
+      data: {
+        total: 4512;
+        diff: {
+          f1: 2;
+          f2: 29.7;
+          f12: '600111';
+          f13: 1;
+          f14: '北方稀土';
+          f109: 44.03;
+          f124: 1625817579;
+          f164: 3063965600.0;
+          f165: 7.33;
+          f166: 3728985920.0;
+          f167: 8.92;
+          f168: -665020320.0;
+          f169: -1.59;
+          f170: -1794846528.0;
+          f171: -4.29;
+          f172: -1269119136.0;
+          f173: -3.04;
+          f257: '-';
+          f258: '-';
+          f259: '-';
+          [index: string]: any;
+        }[];
+      };
+    }>('http://push2.eastmoney.com/api/qt/clist/get', {
+      searchParams: {
+        fields:
+          'f2,f3,f12,f13,f14,f62,f184,f225,f165,f263,f109,f175,f264,f160,f100,f124,f265,f1',
+        fid: code,
+        po: 1,
+        pz: 200,
+        pn: 1,
+        np: 1,
+        fltt: 2,
+        invt: 2,
+        fs: 'm:0+t:6+f:!2,m:0+t:13+f:!2,m:0+t:80+f:!2,m:1+t:2+f:!2,m:1+t:23+f:!2,m:0+t:7+f:!2,m:1+t:3+f:!2',
+        _: new Date().getTime(),
+      },
+      responseType: 'json',
+    });
+    return (body?.data?.diff || []).map((_) => ({
+      market: _.f13,
+      code: _.f12,
+      name: _.f14,
+      secid: `${_.f13}.${_.f12}`,
+      zljzb: _[code],
+      zdf: _.f3,
+    }));
+  } catch (error) {
+    console.log(error);
+    return [];
+  }
+}
