@@ -429,3 +429,164 @@ export async function GetFundFlowFromEastmoney(code: string, type: string) {
     return [];
   }
 }
+
+export async function GetFlowFromEastmoney(
+  fields1: string,
+  code: 'n2s' | 's2n'
+) {
+  try {
+    const { body } = await got<{
+      rc: 0;
+      rt: 14;
+      svr: 2887257311;
+      lt: 1;
+      full: 1;
+      data: {
+        n2s: ['9:00,1985.62,2362.16,4347.78', '9:57,-,-,-'];
+        n2sDate: '07-12';
+        s2n: ['9:00,1985.62,2362.16,4347.78', '9:57,-,-,-'];
+        s2nDate: '07-12';
+      };
+    }>('http://push2.eastmoney.com/api/qt/kamt.rtmin/get', {
+      searchParams: {
+        fields1,
+        fields2: 'f51,f52,f54,f56',
+        _: new Date().getTime(),
+      },
+      responseType: 'json',
+    });
+
+    const list = body.data[code];
+
+    return list
+      .filter((_) => {
+        const [time, h, s, value] = _.split(',');
+        return h !== '-' && s !== '-' && value !== '-';
+      })
+      .map((_) => {
+        const [time, h, s, value] = _.split(',');
+        return {
+          time,
+          h: NP.divide(Number(h), 10 ** 4).toFixed(2),
+          s: NP.divide(Number(s), 10 ** 4).toFixed(2),
+          value: NP.divide(Number(value), 10 ** 4).toFixed(2),
+        };
+      });
+  } catch (error) {
+    console.log(error);
+    return [];
+  }
+}
+
+export async function GetNorthDayFromEastmoney(
+  fields1: string,
+  fields2: string
+) {
+  try {
+    const { body } = await got<{
+      rc: 0;
+      rt: 14;
+      svr: 2887257311;
+      lt: 1;
+      full: 1;
+      data: {
+        hk2sh: string[];
+        hk2sz: string[];
+        s2n: string[];
+      };
+    }>('http://push2his.eastmoney.com/api/qt/kamt.kline/get', {
+      searchParams: {
+        fields1,
+        fields2,
+        klt: 101,
+        lmt: 365,
+        _: new Date().getTime(),
+      },
+      responseType: 'json',
+    });
+
+    return {
+      hk2sh: body.data.hk2sh
+        .map((_) => _.split(','))
+        .map(([date, value]) => [
+          date,
+          NP.divide(Number(value), 10 ** 4).toFixed(2),
+        ]),
+      hk2sz: body.data.hk2sz
+        .map((_) => _.split(','))
+        .map(([date, value]) => [
+          date,
+          NP.divide(Number(value), 10 ** 4).toFixed(2),
+        ]),
+      s2n: body.data.s2n
+        .map((_) => _.split(','))
+        .map(([date, value]) => [
+          date,
+          NP.divide(Number(value), 10 ** 4).toFixed(2),
+        ]),
+    };
+  } catch (error) {
+    console.log(error);
+    return {
+      hk2sh: [],
+      hk2sz: [],
+      s2n: [],
+    };
+  }
+}
+export async function GetSouthDayFromEastmoney(
+  fields1: string,
+  fields2: string
+) {
+  try {
+    const { body } = await got<{
+      rc: 0;
+      rt: 14;
+      svr: 2887257311;
+      lt: 1;
+      full: 1;
+      data: {
+        sh2hk: string[];
+        sz2hk: string[];
+        n2s: string[];
+      };
+    }>('http://push2his.eastmoney.com/api/qt/kamt.kline/get', {
+      searchParams: {
+        fields1,
+        fields2,
+        klt: 101,
+        lmt: 365,
+        _: new Date().getTime(),
+      },
+      responseType: 'json',
+    });
+
+    return {
+      sh2hk: body.data.sh2hk
+        .map((_) => _.split(','))
+        .map(([date, value]) => [
+          date,
+          NP.divide(Number(value), 10 ** 4).toFixed(2),
+        ]),
+      sz2hk: body.data.sz2hk
+        .map((_) => _.split(','))
+        .map(([date, value]) => [
+          date,
+          NP.divide(Number(value), 10 ** 4).toFixed(2),
+        ]),
+      n2s: body.data.n2s
+        .map((_) => _.split(','))
+        .map(([date, value]) => [
+          date,
+          NP.divide(Number(value), 10 ** 4).toFixed(2),
+        ]),
+    };
+  } catch (error) {
+    console.log(error);
+    return {
+      sh2hk: [],
+      sz2hk: [],
+      n2s: [],
+    };
+  }
+}

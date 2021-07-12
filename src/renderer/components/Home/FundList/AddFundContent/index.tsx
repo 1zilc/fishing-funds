@@ -149,7 +149,7 @@ const AddFundContent: React.FC<AddFundContentProps> = (props) => {
           <InputNumber
             placeholder="可精确4位小数"
             min={0}
-            precision={2}
+            precision={4}
             value={cbj}
             onChange={setCbj}
             size="small"
