@@ -475,7 +475,7 @@ export async function GetMainRankFromEastmoney(code: string) {
     }>('http://push2.eastmoney.com/api/qt/clist/get', {
       searchParams: {
         fields:
-          'f2,f3,f12,f13,f14,f62,f184,f225,f165,f263,f109,f175,f264,f160,f100,f124,f265,f1',
+          'f2,f3,f12,f13,f14,f62,f184,f225,f165,f263,f109,f175,f176,f264,f160,f100,f124,f265,f1',
         fid: code,
         po: 1,
         pz: 200,
