@@ -7,7 +7,7 @@
   },
 
   "files.exclude": {
-    "**/src/**/*.js": false
+    "**/src/**/*.js": true
   },
 
   "javascript.validate.enable": false,

@@ -13,20 +13,20 @@ import { ReactComponent as LinkIcon } from '@/assets/icons/link.svg';
 import { ReactComponent as LineCharIcon } from '@/assets/icons/line-chart.svg';
 import { ReactComponent as TShirtIcon } from '@/assets/icons/t-shirt.svg';
 import { ReactComponent as GlobalIcon } from '@/assets/icons/global.svg';
+import { ReactComponent as GroupIcon } from '@/assets/icons/group.svg';
 import { setSystemSetting, defalutSystemSetting } from '@/actions/setting';
-
 import { StoreState } from '@/reducers/types';
 import * as Enums from '@/utils/enums';
 import * as Utils from '@/utils';
 import styles from './index.scss';
 
-export const ffVersion = '4.2.1';
+export const ffVersion = '4.3.0';
 export interface SettingContentProps {
   onEnter: () => void;
   onClose: () => void;
 }
 
-const { shell, app } = window.contextModules.electron;
+const { shell, app, clipboard, dialog } = window.contextModules.electron;
 const { electron } = window.contextModules.process;
 
 const linksGroup = Utils.Group(
@@ -77,6 +77,10 @@ const recordSiteGroup = Utils.Group(
       url: 'https://www.macat.vip/4257.html',
       name: '马克喵',
     },
+    {
+      url: 'https://www.macdo.cn/34786.html',
+      name: 'Mac毒',
+    },
   ],
   3
 );
@@ -119,7 +123,7 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
     autoCheckUpdateSetting
   );
 
-  const onSave = () => {
+  function onSave() {
     dispatch(
       setSystemSetting({
         fundApiTypeSetting: fundapiType,
@@ -135,7 +139,20 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
       })
     );
     props.onEnter();
-  };
+  }
+
+  function onNavigate(url: string) {
+    shell.openExternal(url);
+  }
+
+  function onCopyGroup(number: string) {
+    clipboard.writeText(number);
+    dialog.showMessageBox({
+      title: '复制成功',
+      type: 'info',
+      message: `已复制到粘贴板`,
+    });
+  }
 
   return (
     <CustomDrawerContent
@@ -297,14 +314,32 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
               <div key={index} className={styles.link}>
                 {links.map((link) => (
                   <React.Fragment key={link.name}>
-                    <a onClick={(e) => shell.openExternal(link.url)}>
-                      {link.name}
-                    </a>
+                    <a onClick={() => onNavigate(link.url)}>{link.name}</a>
                     <i />
                   </React.Fragment>
                 ))}
               </div>
             ))}
+          </div>
+        </StandCard>
+        <StandCard icon={<GroupIcon />} title="讨论交流">
+          <div className={classnames(styles.group, 'card-body')}>
+            <section>
+              <label>QQ群：</label>
+              <a onClick={() => onCopyGroup('732268738')}>732268738</a>
+            </section>
+            <section>
+              <label>issues：</label>
+              <a
+                onClick={() =>
+                  onNavigate(
+                    'https://github.com/1zilc/fishing-funds/issues/106'
+                  )
+                }
+              >
+                #106
+              </a>
+            </section>
           </div>
         </StandCard>
         <StandCard icon={<GlobalIcon />} title="收录网站">

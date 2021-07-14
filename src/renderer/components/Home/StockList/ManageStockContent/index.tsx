@@ -3,6 +3,8 @@ import { Tabs } from 'antd';
 
 import PureCard from '@/components/Card/PureCard';
 import Optional from '@/components/Home/StockList/ManageStockContent/Optional';
+import SelfRank from '@/components/Home/StockList/ManageStockContent/SelfRank';
+import MainRank from '@/components/Home/StockList/ManageStockContent/MainRank';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
 import styles from './index.scss';
 
@@ -30,6 +32,16 @@ const ManageStockContent: React.FC<ManageStockContentProps> = (props) => {
         >
           <Tabs.TabPane tab="自选股票" key={String(0)}>
             <Optional active={activeKey === String(0)} />
+          </Tabs.TabPane>
+          <Tabs.TabPane tab="个股资金流" key={String(1)}>
+            <PureCard>
+              <SelfRank />
+            </PureCard>
+          </Tabs.TabPane>
+          <Tabs.TabPane tab="主力排名" key={String(2)}>
+            <PureCard>
+              <MainRank />
+            </PureCard>
           </Tabs.TabPane>
         </Tabs>
       </div>

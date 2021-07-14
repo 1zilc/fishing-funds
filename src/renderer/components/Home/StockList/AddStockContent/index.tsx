@@ -15,7 +15,7 @@ import * as Services from '@/services';
 import styles from './index.scss';
 
 export interface AddStockContentProps {
-  defaultSecid?: string;
+  defaultName?: string;
   onEnter: () => void;
   onClose: () => void;
 }
@@ -28,7 +28,7 @@ const excludeTypes = [
 ];
 
 const AddStockContent: React.FC<AddStockContentProps> = (props) => {
-  const { defaultSecid } = props;
+  const { defaultName } = props;
   const { codeMap } = getStockConfig();
   const [none, setNone] = useState<boolean>(false);
   const [groupList, setGroupList] = useState<Stock.SearchResut[]>([]);
@@ -73,10 +73,10 @@ const AddStockContent: React.FC<AddStockContentProps> = (props) => {
   });
 
   useEffect(() => {
-    if (defaultSecid) {
-      runSearch(defaultSecid);
+    if (defaultName) {
+      runSearch(defaultName);
     }
-  }, [defaultSecid]);
+  }, [defaultName]);
 
   return (
     <CustomDrawerContent
@@ -89,6 +89,7 @@ const AddStockContent: React.FC<AddStockContentProps> = (props) => {
         <section>
           <label>关键字：</label>
           <Search
+            defaultValue={defaultName}
             type="text"
             placeholder="股票代码或名称关键字"
             enterButton

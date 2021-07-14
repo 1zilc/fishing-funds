@@ -652,7 +652,7 @@ export async function GetRankDataFromEasemoney(type: string) {
           qdii: '',
           tabSubtype: ',,,,,',
           pi: 1,
-          pn: 10000,
+          pn: 200,
           dx: 1,
           sd: `${now.getFullYear() - 1}-${now.getMonth() + 1}-${now.getDate()}`,
           ed: `${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()}`,
