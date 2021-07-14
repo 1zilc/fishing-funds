@@ -8,10 +8,11 @@
 ![GitHub Release Date](https://img.shields.io/github/release-date/1zilc/fishing-funds)
 ![GitHub all releases](https://img.shields.io/github/downloads/1zilc/fishing-funds/total)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/ee4fd509a7184f738eeb9048959b1f56)](https://app.codacy.com/gh/1zilc/fishing-funds?utm_source=github.com&utm_medium=referral&utm_content=1zilc/fishing-funds&utm_campaign=Badge_Grade_Settings)
+[![Build](https://github.com/1zilc/fishing-funds/actions/workflows/publish.yml/badge.svg)](https://github.com/1zilc/fishing-funds/actions/workflows/publish.yml)  
 ![GitHub top language](https://img.shields.io/github/languages/top/1zilc/fishing-funds?color=red)
-![GitHub commit activity](https://img.shields.io/github/commit-activity/m/1zilc/fishing-funds)
 ![GitHub package.json dependency version (dev dep on branch)](https://img.shields.io/github/package-json/dependency-version/1zilc/fishing-funds/dev/electron/master)
 ![GitHub package.json dependency version (prod)](https://img.shields.io/github/package-json/dependency-version/1zilc/fishing-funds/menubar)
+![GitHub commit activity](https://img.shields.io/github/commit-activity/m/1zilc/fishing-funds)  
 ![GitHub](https://img.shields.io/github/license/1zilc/fishing-funds)
 
 > 显示基金涨跌状态栏小应用,数据源来自天天基金等
@@ -34,7 +35,7 @@
 
 - 本项目参考[electron-react-boilerplate-menubar](https://github.com/3on/electron-react-boilerplate-menubar)，基于[Electron React Boilerplate](https://github.com/electron-react-boilerplate/electron-react-boilerplate)  
   和[menubar](https://github.com/maxogden/menubar)开发
-- 采用天天基金等数据源接口，实时显示当前基金涨跌情况，计算显示收益，大盘实时数据，板块行情等
+- 采用天天基金等数据源接口，实时显示当前基金涨跌情况，计算显示收益，大盘实时数据，板块行情，股票走势等
 - 软件中所有的数据仅供参考,一切收益或是亏损按当天实际为准
 - 本项目是个人自用状态栏小插件，完全开源免费，喜欢的小伙伴 star 一下，如果觉得好用也可在软件中打赏支持:)
 - 在使用中遇到 bug 欢迎[issues](https://github.com/1zilc/fishing-funds/issues)
@@ -49,9 +50,9 @@
 - [天天基金](https://fund.eastmoney.com/) ★★★★★ (推荐)
 - [腾讯证券](https://stockapp.finance.qq.com/mstats/) ★★★★☆
 - [基金速查网](https://www.dayfund.cn/) ★★★☆☆
-- [新浪基金](https://finance.sina.com.cn/fund/) ★★★☆☆
-- [好买基金](https://www.howbuy.com/fund/) ★★★★☆
-- [易天富](http://www.etf88.com/) ★★★★☆
+- [新浪基金](https://finance.sina.com.cn/fund/) ★★★★☆
+- [好买基金](https://www.howbuy.com/fund/) ★★★☆☆
+- [易天富](http://www.etf88.com/) ★★★☆☆
 
 ## 下载使用
 
