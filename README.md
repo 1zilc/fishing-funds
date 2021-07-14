@@ -8,11 +8,11 @@
 ![GitHub Release Date](https://img.shields.io/github/release-date/1zilc/fishing-funds)
 ![GitHub all releases](https://img.shields.io/github/downloads/1zilc/fishing-funds/total)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/ee4fd509a7184f738eeb9048959b1f56)](https://app.codacy.com/gh/1zilc/fishing-funds?utm_source=github.com&utm_medium=referral&utm_content=1zilc/fishing-funds&utm_campaign=Badge_Grade_Settings)
-[![Build](https://github.com/1zilc/fishing-funds/actions/workflows/publish.yml/badge.svg)](https://github.com/1zilc/fishing-funds/actions/workflows/publish.yml)  
+[![Build](https://github.com/1zilc/fishing-funds/actions/workflows/publish.yml/badge.svg)](https://github.com/1zilc/fishing-funds/actions/workflows/publish.yml)
 ![GitHub top language](https://img.shields.io/github/languages/top/1zilc/fishing-funds?color=red)
 ![GitHub package.json dependency version (dev dep on branch)](https://img.shields.io/github/package-json/dependency-version/1zilc/fishing-funds/dev/electron/master)
 ![GitHub package.json dependency version (prod)](https://img.shields.io/github/package-json/dependency-version/1zilc/fishing-funds/menubar)
-![GitHub commit activity](https://img.shields.io/github/commit-activity/m/1zilc/fishing-funds)  
+![GitHub commit activity](https://img.shields.io/github/commit-activity/m/1zilc/fishing-funds)
 ![GitHub](https://img.shields.io/github/license/1zilc/fishing-funds)
 
 > 显示基金涨跌状态栏小应用,数据源来自天天基金等
@@ -21,13 +21,13 @@
 
 <figure class="half">
 
-<img src="https://github.com/1zilc/fishing-funds/blob/master/screenshots/1.png" width="33%"  /><img src="https://github.com/1zilc/fishing-funds/blob/master/screenshots/2.png" width="33%"  /><img src="https://github.com/1zilc/fishing-funds/blob/master/screenshots/3.png" width="33%"  />
+<img src="https://github.com/1zilc/fishing-funds/blob/master/screenshots/1.png" width="25%"  /><img src="https://github.com/1zilc/fishing-funds/blob/master/screenshots/2.png" width="25%"  /><img src="https://github.com/1zilc/fishing-funds/blob/master/screenshots/3.png" width="25%"  /><img src="https://github.com/1zilc/fishing-funds/blob/master/screenshots/4.png" width="25%"  />
 
 </figure>
 
 <figure class="half">
 
-<img src="https://github.com/1zilc/fishing-funds/blob/master/screenshots/4.png" width="33%"  /><img src="https://github.com/1zilc/fishing-funds/blob/master/screenshots/5.png" width="33%"  /><img src="https://github.com/1zilc/fishing-funds/blob/master/screenshots/6.png" width="33%"  />
+<img src="https://github.com/1zilc/fishing-funds/blob/master/screenshots/5.png" width="25%"  /><img src="https://github.com/1zilc/fishing-funds/blob/master/screenshots/6.png" width="25%"  /><img src="https://github.com/1zilc/fishing-funds/blob/master/screenshots/7.png" width="25%"  /><img src="https://github.com/1zilc/fishing-funds/blob/master/screenshots/8.png" width="25%"  />
 
 </figure>
 
@@ -107,7 +107,7 @@ interface FundSetting {
 
 ## 讨论交流
 
-- QQ 群: [732268738](https://github.com/1zilc/fishing-funds/blob/master/screenshots/7.jpg)
+- QQ 群: [732268738](https://github.com/1zilc/fishing-funds/blob/master/screenshots/group1.jpg)
 - issues: [#106](https://github.com/1zilc/fishing-funds/issues/106)
 
 ## 支持作者
