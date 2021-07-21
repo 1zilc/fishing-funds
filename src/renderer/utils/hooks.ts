@@ -18,7 +18,12 @@ import { updateAvaliable } from '@/actions/updater';
 import { loadWalletsFunds, loadFixWalletsFunds } from '@/actions/wallet';
 import { loadQuotationsWithoutLoading } from '@/actions/quotation';
 import { loadZindexsWithoutLoading } from '@/actions/zindex';
-import { loadStocksWithoutLoading } from '@/actions/stock';
+import {
+  getStocks,
+  getStockConfig,
+  updateStock,
+  loadStocksWithoutLoading,
+} from '@/actions/stock';
 import {
   getFundConfig,
   getFunds,
@@ -30,6 +35,7 @@ import {
   loadFixFunds,
   loadFundsWithoutLoading,
 } from '@/actions/fund';
+
 import { StoreState } from '@/reducers/types';
 import * as Utils from '@/utils';
 import * as CONST from '@/constants';
@@ -162,10 +168,10 @@ export function useConfigClipboard() {
         const responseFunds = await getFunds(fundConfigSet);
         const znewFundConfig = responseFunds.filter(Boolean);
         const newFundConfig = znewFundConfig.map((fund) => ({
-          name: fund.name!,
-          code: fund.fundcode!,
-          cyfe: codeMap[fund.fundcode!].cyfe,
-          cbj: codeMap[fund.fundcode!].cbj,
+          name: fund!.name!,
+          code: fund!.fundcode!,
+          cyfe: codeMap[fund!.fundcode!].cyfe,
+          cbj: codeMap[fund!.fundcode!].cbj,
         }));
         setFundConfig(newFundConfig);
         await dialog.showMessageBox({
@@ -187,6 +193,11 @@ export function useConfigClipboard() {
       try {
         const { fundConfig } = getFundConfig();
         clipboard.writeText(JSON.stringify(fundConfig));
+        dialog.showMessageBox({
+          title: `复制成功`,
+          type: 'info',
+          message: `已复制${fundConfig.length}支基金配置到粘贴板`,
+        });
       } catch (error) {
         console.log('复制基金json失败', error);
       }
@@ -228,7 +239,7 @@ export function useNativeThemeColor(varibles: string[]) {
   const lowKeySetting = useSelector(
     (state: StoreState) => state.setting.systemSetting.lowKeySetting
   );
-  const [colors, setColors] = useState({});
+  const [colors, setColors] = useState<any>({});
 
   useEffect(() => {
     setColors(Utils.getVariblesColor(varibles));
@@ -289,8 +300,8 @@ export function useSyncFixFundSetting() {
       const responseFunds = await getFunds(fundConfig);
       responseFunds.filter(Boolean).forEach((responseFund) => {
         updateFund({
-          code: responseFund.fundcode!,
-          name: responseFund.name,
+          code: responseFund!.fundcode!,
+          name: responseFund!.name,
           cbj: null,
         });
       });
@@ -306,6 +317,37 @@ export function useSyncFixFundSetting() {
     const unNamedFunds = fundConfig.filter(({ name }) => !name);
     if (unNamedFunds.length) {
       FixFundSetting(unNamedFunds);
+    } else {
+      setTrue();
+    }
+  }, []);
+
+  return { done };
+}
+
+export function useSyncFixStockSetting() {
+  const [done, { setTrue }] = useBoolean(false);
+
+  async function FixStockSetting(stockConfig: Stock.SettingItem[]) {
+    try {
+      const responseStocks = await getStocks(stockConfig);
+      responseStocks.filter(Boolean).forEach((responseStock) => {
+        // updateStock({
+        //   type: responseStock!.type,
+        // });
+      });
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setTrue();
+    }
+  }
+
+  useEffect(() => {
+    const { stockConfig } = getStockConfig();
+    const unTypedStocks = stockConfig.filter(({ type }) => !type);
+    if (unTypedStocks.length) {
+      FixStockSetting(unTypedStocks);
     } else {
       setTrue();
     }

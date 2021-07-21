@@ -1,11 +1,11 @@
 import React from 'react';
-import { Collapse } from 'react-collapse';
 import classnames from 'classnames';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { ReactComponent as EditIcon } from '@/assets/icons/edit.svg';
 import { ReactComponent as ArrowDownIcon } from '@/assets/icons/arrow-down.svg';
 import { ReactComponent as ArrowUpIcon } from '@/assets/icons/arrow-up.svg';
+import Collapse from '@/components/Collapse';
 import { TOGGLE_FUND_COLLAPSE, calcFund } from '@/actions/fund';
 import { StoreState } from '@/reducers/types';
 import * as Utils from '@/utils';
@@ -81,9 +81,7 @@ const FundRow: React.FC<RowProps> = (props) => {
             }}
           >
             <span className={styles.fundName}>{fund.name}</span>
-            {calcFundResult.cbj !== undefined && !!calcFundResult.cyfe && (
-              <span className={styles.hold}>持有</span>
-            )}
+            {!!calcFundResult.cyfe && <span className={styles.hold}>持有</span>}
             {conciseSetting && isFix && (
               <span className={styles.warn}>净值更新</span>
             )}
@@ -126,7 +124,7 @@ const FundRow: React.FC<RowProps> = (props) => {
           </div>
         )}
       </div>
-      <Collapse style={{ zIndex: 1 }} isOpened={!!fund.collapse}>
+      <Collapse style={{ zIndex: 1 }} isOpened={fund.collapse}>
         <div className={styles.collapseContent}>
           <section>
             <span>净值：</span>

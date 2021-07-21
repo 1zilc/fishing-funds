@@ -40,9 +40,21 @@ export function addStock(stock: Stock.SettingItem) {
   }
 }
 
-export async function getStocks() {
+export function updateStock(stock: { secid: string; type?: number }) {
   const { stockConfig } = getStockConfig();
-  const collectors = stockConfig.map(
+  stockConfig.forEach((item) => {
+    if (stock.secid === item.secid) {
+      if (stock.type !== undefined) {
+        item.type = stock.type;
+      }
+    }
+  });
+  setStockConfig(stockConfig);
+}
+
+export async function getStocks(config?: Stock.SettingItem[]) {
+  const { stockConfig } = getStockConfig();
+  const collectors = (config || stockConfig).map(
     ({ secid }) =>
       () =>
         getStock(secid)

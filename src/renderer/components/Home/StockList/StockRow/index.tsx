@@ -1,11 +1,11 @@
 import React from 'react';
-import { Collapse } from 'react-collapse';
 import classnames from 'classnames';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { ReactComponent as ArrowDownIcon } from '@/assets/icons/arrow-down.svg';
 import { ReactComponent as ArrowUpIcon } from '@/assets/icons/arrow-up.svg';
 import { useHomeContext } from '@/components/Home';
+import Collapse from '@/components/Collapse';
 import { StoreState } from '@/reducers/types';
 import { TOGGLE_STOCK_COLLAPSE } from '@/actions/stock';
 import { useResizeEchart, useRenderEcharts } from '@/utils/hooks';

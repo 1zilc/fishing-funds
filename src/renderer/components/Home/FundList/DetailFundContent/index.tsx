@@ -116,11 +116,7 @@ const DetailFundContent: React.FC<DetailFundContentProps> = (props) => {
           </div>
         </div>
         <div className={styles.container}>
-          <Tabs
-            defaultActiveKey={String(Enums.TrendType.Performance)}
-            animated={{ tabPane: true }}
-            tabBarGutter={15}
-          >
+          <Tabs animated={{ tabPane: true }} tabBarGutter={15}>
             <Tabs.TabPane
               tab="历史业绩"
               key={String(Enums.TrendType.Performance)}
@@ -143,11 +139,7 @@ const DetailFundContent: React.FC<DetailFundContentProps> = (props) => {
           </Tabs>
         </div>
         <div className={styles.container}>
-          <Tabs
-            defaultActiveKey={String(Enums.HistoryType.Performance)}
-            animated={{ tabPane: true }}
-            tabBarGutter={15}
-          >
+          <Tabs animated={{ tabPane: true }} tabBarGutter={15}>
             <Tabs.TabPane
               tab="业绩走势"
               key={String(Enums.HistoryType.Performance)}
@@ -164,11 +156,7 @@ const DetailFundContent: React.FC<DetailFundContentProps> = (props) => {
           </Tabs>
         </div>
         <div className={styles.container}>
-          <Tabs
-            defaultActiveKey={String(Enums.WareHouseType.Stock)}
-            animated={{ tabPane: true }}
-            tabBarGutter={15}
-          >
+          <Tabs animated={{ tabPane: true }} tabBarGutter={15}>
             <Tabs.TabPane
               tab="股票持仓"
               key={String(Enums.WareHouseType.Stock)}
@@ -204,11 +192,7 @@ const DetailFundContent: React.FC<DetailFundContentProps> = (props) => {
           </Tabs>
         </div>
         <div className={styles.container}>
-          <Tabs
-            defaultActiveKey={String(Enums.ConfigType.Assets)}
-            animated={{ tabPane: true }}
-            tabBarGutter={15}
-          >
+          <Tabs animated={{ tabPane: true }} tabBarGutter={15}>
             <Tabs.TabPane tab="资产配置" key={String(Enums.ConfigType.Assets)}>
               <ChartCard>
                 <Assets
@@ -233,11 +217,7 @@ const DetailFundContent: React.FC<DetailFundContentProps> = (props) => {
           </Tabs>
         </div>
         <div className={styles.container}>
-          <Tabs
-            defaultActiveKey={String(Enums.SimilarCompareType.Rank)}
-            animated={{ tabPane: true }}
-            tabBarGutter={15}
-          >
+          <Tabs animated={{ tabPane: true }} tabBarGutter={15}>
             <Tabs.TabPane
               tab="同类排名"
               key={String(Enums.SimilarCompareType.Rank)}
@@ -274,7 +254,6 @@ const DetailFundContent: React.FC<DetailFundContentProps> = (props) => {
         </div>
         <div>
           <Tabs
-            defaultActiveKey={String(0)}
             animated={{ tabPane: true }}
             tabBarGutter={15}
             tabBarStyle={{ marginLeft: 15 }}

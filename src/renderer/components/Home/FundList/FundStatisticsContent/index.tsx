@@ -82,11 +82,7 @@ const FundStatisticsContent: React.FC<FundStatisticsContentProps> = (props) => {
             </PureCard>
           ))}
         </div>
-        <Tabs
-          defaultActiveKey={String(0)}
-          animated={{ tabPane: true }}
-          tabBarGutter={15}
-        >
+        <Tabs animated={{ tabPane: true }} tabBarGutter={15}>
           <Tabs.TabPane tab="持基结构" key={String(0)}>
             <ChartCard>
               <TypeConfig funds={funds} />
@@ -98,11 +94,7 @@ const FundStatisticsContent: React.FC<FundStatisticsContentProps> = (props) => {
             </ChartCard>
           </Tabs.TabPane>
         </Tabs>
-        <Tabs
-          defaultActiveKey={String(0)}
-          animated={{ tabPane: true }}
-          tabBarGutter={15}
-        >
+        <Tabs animated={{ tabPane: true }} tabBarGutter={15}>
           <Tabs.TabPane tab="钱包配置" key={String(0)}>
             <ChartCard>
               <WalletConfig funds={funds} codes={codes} />
@@ -114,11 +106,7 @@ const FundStatisticsContent: React.FC<FundStatisticsContentProps> = (props) => {
             </ChartCard>
           </Tabs.TabPane>
         </Tabs>
-        <Tabs
-          defaultActiveKey={String(0)}
-          animated={{ tabPane: true }}
-          tabBarGutter={15}
-        >
+        <Tabs animated={{ tabPane: true }} tabBarGutter={15}>
           <Tabs.TabPane tab="基金排行" key={String(0)}>
             <ChartCard>
               <FundRank funds={funds} codes={codes} />

@@ -43,6 +43,7 @@ const Optional: React.FC<OptionalProps> = ({ active }) => {
         secid: stock.secid,
         code: stock.code,
         market: stock.market,
+        type: stock.type,
       };
     });
     setStockConfig(stockConfig);

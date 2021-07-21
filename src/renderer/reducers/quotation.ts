@@ -6,6 +6,8 @@ import {
   TOGGLE_QUOTATION_COLLAPSE,
   TOGGLE_QUOTATIONS_COLLAPSE,
   SORT_QUOTATIONS_WITH_COLLAPSE_CHACHED,
+  SYNC_FAVORITE_QUOTATION_MAP,
+  getFavoriteQuotationMap,
 } from '@/actions/quotation';
 import { getSortMode } from '@/actions/sort';
 import * as Enums from '@/utils/enums';
@@ -14,6 +16,7 @@ import * as Utils from '@/utils';
 export interface QuotationState {
   quotations: (Quotation.ResponseItem & Quotation.ExtraRow)[];
   quotationsLoading: boolean;
+  favoriteQuotationMap: Record<string, boolean>;
 }
 
 function sortQuotations(
@@ -118,6 +121,7 @@ export default function quotation(
   state = {
     quotations: [],
     quotationsLoading: false,
+    favoriteQuotationMap: getFavoriteQuotationMap(),
   },
   action: AnyAction
 ) {
@@ -132,6 +136,11 @@ export default function quotation(
       return toggleQuotationCollapse(state, action.payload);
     case TOGGLE_QUOTATIONS_COLLAPSE:
       return toggleQuotationsCollapse(state);
+    case SYNC_FAVORITE_QUOTATION_MAP:
+      return {
+        ...state,
+        favoriteQuotationMap: action.payload,
+      };
     default:
       return state;
   }

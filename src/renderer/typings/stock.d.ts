@@ -4,6 +4,7 @@ declare namespace Stock {
     code: string;
     secid: string;
     name: string;
+    type: number;
   }
   export interface DetailItem {
     code: string;

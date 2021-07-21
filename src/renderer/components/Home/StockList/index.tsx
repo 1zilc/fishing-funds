@@ -10,7 +10,11 @@ import { StoreState } from '@/reducers/types';
 import { useDrawer } from '@/utils/hooks';
 import styles from './index.scss';
 
-const StockList = () => {
+interface StockListProps {
+  filter: (stock: Stock.ResponseItem & Stock.ExtraRow) => boolean;
+}
+
+const StockList: React.FC<StockListProps> = (props) => {
   const stocks = useSelector((state: StoreState) => state.stock.stocks);
   const stocksLoading = useSelector(
     (state: StoreState) => state.stock.stocksLoading
@@ -23,11 +27,13 @@ const StockList = () => {
     close: closeDetailDrawer,
   } = useDrawer('');
 
+  const list = stocks.filter(props.filter);
+
   return (
     <div className={styles.container}>
       <LoadingBar show={stocksLoading} />
-      {stocks.length ? (
-        stocks.map((stock) => (
+      {list.length ? (
+        list.map((stock) => (
           <StockRow
             key={stock.secid}
             stock={stock}

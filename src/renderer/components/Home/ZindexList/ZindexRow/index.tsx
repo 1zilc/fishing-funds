@@ -1,10 +1,10 @@
 import React from 'react';
-import { Collapse } from 'react-collapse';
 import classnames from 'classnames';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { ReactComponent as ArrowDownIcon } from '@/assets/icons/arrow-down.svg';
 import { ReactComponent as ArrowUpIcon } from '@/assets/icons/arrow-up.svg';
+import Collapse from '@/components/Collapse';
 import ArrowLine from '@/components/ArrowLine';
 import { StoreState } from '@/reducers/types';
 import { TOGGLE_ZINDEX_COLLAPSE } from '@/actions/zindex';
@@ -29,7 +29,7 @@ const ZindexRow: React.FC<RowProps> = (props) => {
   );
 
   const onDetailClick = () => {
-    props.onDetail(`${zindex.type}.${zindex.zindexCode}`);
+    props.onDetail(zindex.code);
   };
 
   return (
@@ -51,12 +51,7 @@ const ZindexRow: React.FC<RowProps> = (props) => {
           )}
         </div>
         <div style={{ flex: 1 }}>
-          <div
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-            }}
-          >
+          <div style={{ display: 'flex', alignItems: 'center' }}>
             <span className={styles.zindexName}>{zindex.name}</span>
           </div>
           {!conciseSetting && (
@@ -100,7 +95,7 @@ const ZindexRow: React.FC<RowProps> = (props) => {
           )}
         </div>
       </div>
-      <Collapse isOpened={!!zindex.collapse}>
+      <Collapse isOpened={zindex.collapse}>
         <div className={styles.collapseContent}>
           {conciseSetting && (
             <section>

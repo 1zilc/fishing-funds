@@ -11,7 +11,11 @@ import { StoreState } from '@/reducers/types';
 import { useDrawer } from '@/utils/hooks';
 import styles from './index.scss';
 
-const QuotationList = () => {
+interface QuotationListProps {
+  filter: (quotation: Quotation.ResponseItem & Quotation.ExtraRow) => boolean;
+}
+
+const QuotationList: React.FC<QuotationListProps> = (props) => {
   const quotations = useSelector(
     (state: StoreState) => state.quotation.quotations
   );
@@ -32,11 +36,13 @@ const QuotationList = () => {
     close: closeDetailStockDrawer,
   } = useDrawer('');
 
+  const list = quotations.filter(props.filter);
+
   return (
     <div className={styles.container}>
       <LoadingBar show={quotationsLoading} />
-      {quotations.length ? (
-        quotations.map((quotation) => (
+      {list.length ? (
+        list.map((quotation) => (
           <QuotationRow
             key={quotation.name}
             quotation={quotation}

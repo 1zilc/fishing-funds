@@ -78,6 +78,8 @@ const Optional: React.FC<OptionalProps> = ({ active }) => {
     }
   }
 
+  function onEdit() {}
+
   useEffect(updateSortFundConfig, [syncFundSettingDone, active]);
 
   useEffect(() => {
@@ -130,6 +132,25 @@ const Optional: React.FC<OptionalProps> = ({ active }) => {
                             });
                           }}
                         />
+                      </span>
+                      <span className={styles.cbj}>
+                        成本价：
+                        {fund.cbj !== undefined ? (
+                          <span>{fund.cbj}</span>
+                        ) : (
+                          <a
+                            onClick={() => {
+                              setEditDrawer({
+                                name: fund.name,
+                                cyfe: fund.cyfe,
+                                code: fund.code,
+                                cbj: fund.cbj,
+                              });
+                            }}
+                          >
+                            录入
+                          </a>
+                        )}
                       </span>
                     </div>
                   </div>

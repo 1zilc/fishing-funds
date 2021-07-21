@@ -51,6 +51,7 @@ export async function FromEastmoney(code: string) {
       zdf: NP.divide(data.data.f170, 100),
       zf: NP.divide(data.data.f171, 100),
       type: data.data.f107,
+      code: `${data.data.f107}.${data.data.f57}`,
     };
   } catch (error) {
     console.log(error);

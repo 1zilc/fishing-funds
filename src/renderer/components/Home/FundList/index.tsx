@@ -11,7 +11,11 @@ import { StoreState } from '@/reducers/types';
 import { useDrawer, useFreshFunds } from '@/utils/hooks';
 import styles from './index.scss';
 
-const FundList: React.FC<{}> = () => {
+interface FundListProps {
+  filter: (fund: Fund.ResponseItem & Fund.ExtraRow & Fund.FixData) => boolean;
+}
+
+const FundList: React.FC<FundListProps> = (props) => {
   const funds = useSelector((state: StoreState) => state.fund.funds);
   const fundsLoading = useSelector(
     (state: StoreState) => state.fund.fundsLoading
@@ -37,11 +41,13 @@ const FundList: React.FC<{}> = () => {
     closeEditDrawer();
   };
 
+  const list = funds.filter(props.filter);
+
   return (
     <div className={styles.container}>
       <LoadingBar show={fundsLoading} />
-      {funds.length ? (
-        funds.map((fund) => (
+      {list.length ? (
+        list.map((fund) => (
           <FundRow
             key={fund.fundcode}
             fund={fund}

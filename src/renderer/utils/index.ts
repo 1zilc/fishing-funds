@@ -31,16 +31,25 @@ export function CalcWithPrefix(a: any, b: any) {
 }
 
 export function DeepCopy<T>(data: T): T {
-  let dataTmp: any;
-  if (data === null || !(typeof data === 'object')) {
-    dataTmp = data;
-  } else {
-    dataTmp = data instanceof Array ? [] : {};
-    Object.keys(data).forEach((key) => {
-      dataTmp[key] = DeepCopy(data[key]);
-    });
+  try {
+    return JSON.parse(JSON.stringify(data));
+  } catch (error) {
+    try {
+      let dataTmp: any;
+      if (data === null || !(typeof data === 'object')) {
+        dataTmp = data;
+      } else {
+        dataTmp = data instanceof Array ? [] : {};
+        Object.keys(data).forEach((key) => {
+          dataTmp[key] = DeepCopy(data[key]);
+        });
+      }
+      return dataTmp;
+    } catch (error) {
+      console.log('深拷贝出错，返回原始对象');
+      return data;
+    }
   }
-  return dataTmp;
 }
 
 export function GetStorage<T = any>(key: string, init?: T): T {

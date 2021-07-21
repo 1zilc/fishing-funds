@@ -91,11 +91,7 @@ const DetailQuotationContent: React.FC<DetailQuotationContentProps> = (
           </div>
         </div>
         <div className={styles.container}>
-          <Tabs
-            defaultActiveKey={String(Enums.FundFlowType.RealTime)}
-            animated={{ tabPane: true }}
-            tabBarGutter={15}
-          >
+          <Tabs animated={{ tabPane: true }} tabBarGutter={15}>
             <Tabs.TabPane
               tab="实时资金流向"
               key={String(Enums.FundFlowType.RealTime)}
@@ -115,11 +111,7 @@ const DetailQuotationContent: React.FC<DetailQuotationContentProps> = (
           </Tabs>
         </div>
         <div className={styles.container}>
-          <Tabs
-            defaultActiveKey={String(0)}
-            animated={{ tabPane: true }}
-            tabBarGutter={15}
-          >
+          <Tabs animated={{ tabPane: true }} tabBarGutter={15}>
             <Tabs.TabPane tab="实时成交分布" key={String(0)}>
               <ChartCard>
                 <RealTimeTransaction code={code} />
@@ -128,11 +120,7 @@ const DetailQuotationContent: React.FC<DetailQuotationContentProps> = (
           </Tabs>
         </div>
         <div className={styles.container}>
-          <Tabs
-            defaultActiveKey={String(0)}
-            animated={{ tabPane: true }}
-            tabBarGutter={15}
-          >
+          <Tabs animated={{ tabPane: true }} tabBarGutter={15}>
             <Tabs.TabPane tab={`${quotation.name}个股`} key={String(0)}>
               <ChartCard auto>
                 <Stocks code={code} />

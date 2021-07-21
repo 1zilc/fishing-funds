@@ -59,17 +59,16 @@ const Market: React.FC<MarketProps> = (props) => {
   );
 };
 
-const marketsGroup = Utils.Group(
-  [
-    { name: '沪深指数', code: Enums.ZindexType.SS },
-    { name: '美洲股市', code: Enums.ZindexType.America },
-    { name: '亚洲股市', code: Enums.ZindexType.Asia },
-    { name: '欧洲股市', code: Enums.ZindexType.Europe },
-    { name: '澳洲股市', code: Enums.ZindexType.Australia },
-    { name: '其他', code: Enums.ZindexType.Other },
-  ],
-  2
-);
+export const marketsConfig = [
+  { name: '沪深指数', code: Enums.ZindexType.SS },
+  { name: '美洲股市', code: Enums.ZindexType.America },
+  { name: '亚洲股市', code: Enums.ZindexType.Asia },
+  { name: '欧洲股市', code: Enums.ZindexType.Europe },
+  { name: '澳洲股市', code: Enums.ZindexType.Australia },
+  { name: '其他', code: Enums.ZindexType.Other },
+];
+
+const marketsGroup = Utils.Group(marketsConfig, 2);
 
 const ManageZindexContent: React.FC<ManageZindexContentProps> = (props) => {
   const { zindexConfig, selectZindexs } = getZindexConfig();

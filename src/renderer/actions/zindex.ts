@@ -470,9 +470,8 @@ export function getZindexConfig() {
   }, {} as CodeZindexMap);
 
   codeMap = zindexConfig.reduce((r, c, i) => {
-    const code = c.code.split('.')?.[1];
     c.type = c.type || defaultCodeMap[c.code].type;
-    r[code] = { ...c, originSort: i };
+    r[c.code] = { ...c, originSort: i };
     return r;
   }, {} as CodeZindexMap);
 

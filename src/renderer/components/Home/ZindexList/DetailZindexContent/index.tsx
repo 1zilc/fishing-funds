@@ -110,11 +110,7 @@ const DetailZindexContent: React.FC<DetailFundContentProps> = (props) => {
           </div>
         </div>
         <div className={styles.container}>
-          <Tabs
-            defaultActiveKey={String(0)}
-            animated={{ tabPane: true }}
-            tabBarGutter={15}
-          >
+          <Tabs animated={{ tabPane: true }} tabBarGutter={15}>
             <Tabs.TabPane tab="指数走势" key={String(0)}>
               <ChartCard>
                 <Trend code={code} zs={zindex.zs} />
@@ -123,11 +119,7 @@ const DetailZindexContent: React.FC<DetailFundContentProps> = (props) => {
           </Tabs>
         </div>
         <div className={styles.container}>
-          <Tabs
-            defaultActiveKey={String(0)}
-            animated={{ tabPane: true }}
-            tabBarGutter={15}
-          >
+          <Tabs animated={{ tabPane: true }} tabBarGutter={15}>
             <Tabs.TabPane tab="K线" key={String(0)}>
               <ChartCard>
                 <K code={code} />

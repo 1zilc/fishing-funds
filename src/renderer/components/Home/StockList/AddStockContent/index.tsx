@@ -22,9 +22,16 @@ export interface AddStockContentProps {
 
 const { Search } = Input;
 
-const excludeTypes = [
-  // 7, // 三板
-  8, // 基金
+export const stockTypesConfig = [
+  { name: 'AB股', code: 1 },
+  // { name: '指数', code: 2 },
+  // { name: '板块', code: 3 },
+  { name: '港股', code: 4 },
+  { name: '美股', code: 5 },
+  { name: '英股', code: 6 },
+  { name: '三板', code: 7 },
+  // { name: '基金', code: 8 },
+  { name: '债券', code: 9 },
 ];
 
 const AddStockContent: React.FC<AddStockContentProps> = (props) => {
@@ -37,7 +44,11 @@ const AddStockContent: React.FC<AddStockContentProps> = (props) => {
     manual: true,
     throwOnError: true,
     onSuccess: (res) =>
-      setGroupList(res.filter(({ Type }) => !excludeTypes.includes(Type))),
+      setGroupList(
+        res.filter(({ Type }) =>
+          stockTypesConfig.map(({ code }) => code).includes(Type)
+        )
+      ),
   });
 
   const {
@@ -47,7 +58,7 @@ const AddStockContent: React.FC<AddStockContentProps> = (props) => {
     close: closeDetailDrawer,
   } = useDrawer('');
 
-  async function onAdd(secid: string) {
+  async function onAdd(secid: string, type: number) {
     const stock = await getStock(secid);
     if (stock) {
       setNone(false);
@@ -56,6 +67,7 @@ const AddStockContent: React.FC<AddStockContentProps> = (props) => {
         code: stock.code!,
         secid: stock.secid,
         name: stock.name!,
+        type,
       });
       props.onEnter();
     } else {
@@ -133,7 +145,7 @@ const AddStockContent: React.FC<AddStockContentProps> = (props) => {
                       <button
                         className={styles.select}
                         onClick={(e) => {
-                          onAdd(secid);
+                          onAdd(secid, Type);
                           e.stopPropagation();
                         }}
                       >

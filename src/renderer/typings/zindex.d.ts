@@ -19,6 +19,7 @@ declare namespace Zindex {
     zs: number; // 昨收
     hs: number; // 换手
     zf: number; // 振幅
+    code: string; // 1.000001
   }
 
   export interface ExtraRow {

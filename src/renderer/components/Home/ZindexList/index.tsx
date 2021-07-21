@@ -10,7 +10,11 @@ import { StoreState } from '@/reducers/types';
 import { useDrawer } from '@/utils/hooks';
 import styles from './index.scss';
 
-const ZindexList = () => {
+interface ZindexListProps {
+  filter: (zindex: Zindex.ResponseItem & Zindex.ExtraRow) => boolean;
+}
+
+const ZindexList: React.FC<ZindexListProps> = (props) => {
   const zindexs = useSelector((state: StoreState) => state.zindex.zindexs);
   const zindexsLoading = useSelector(
     (state: StoreState) => state.zindex.zindexsLoading
@@ -23,13 +27,15 @@ const ZindexList = () => {
     close: closeDetailDrawer,
   } = useDrawer('');
 
+  const list = zindexs.filter(props.filter);
+
   return (
     <div className={styles.container}>
       <LoadingBar show={zindexsLoading} />
-      {zindexs.length ? (
-        zindexs.map((zindex) => (
+      {list.length ? (
+        list.map((zindex) => (
           <ZindexRow
-            key={zindex.zindexCode}
+            key={zindex.code}
             zindex={zindex}
             onDetail={setDetailDrawer}
           />

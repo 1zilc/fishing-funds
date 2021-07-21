@@ -1,6 +1,5 @@
 import React from 'react';
 
-import { Collapse } from 'react-collapse';
 import classnames from 'classnames';
 import { useDispatch, useSelector } from 'react-redux';
 import NP from 'number-precision';
@@ -8,8 +7,12 @@ import NP from 'number-precision';
 import { ReactComponent as ArrowDownIcon } from '@/assets/icons/arrow-down.svg';
 import { ReactComponent as ArrowUpIcon } from '@/assets/icons/arrow-up.svg';
 import ArrowLine from '@/components/ArrowLine';
+import Collapse from '@/components/Collapse';
 import { StoreState } from '@/reducers/types';
-import { TOGGLE_QUOTATION_COLLAPSE } from '@/actions/quotation';
+import {
+  TOGGLE_QUOTATION_COLLAPSE,
+  syncFavoriteQuotationMap,
+} from '@/actions/quotation';
 import * as Utils from '@/utils';
 import styles from './index.scss';
 
@@ -26,14 +29,18 @@ const arrowSize = {
 
 const QuotationRow: React.FC<RowProps> = (props) => {
   const { quotation } = props;
+  const favoriteQuotationMap = useSelector(
+    (state: StoreState) => state.quotation.favoriteQuotationMap
+  );
   const dispatch = useDispatch();
   const { conciseSetting } = useSelector(
     (state: StoreState) => state.setting.systemSetting
   );
+  const favorited = favoriteQuotationMap[quotation.code];
 
-  const onDetailClick = () => {
+  function onDetailClick() {
     props.onDetail(quotation.code!);
-  };
+  }
 
   return (
     <>
@@ -61,6 +68,7 @@ const QuotationRow: React.FC<RowProps> = (props) => {
             }}
           >
             <span className={styles.quotationName}>{quotation.name}</span>
+            {favorited && <span className={styles.favorite}>关注</span>}
           </div>
           {!conciseSetting && (
             <div className={styles.rowBar}>
@@ -213,6 +221,26 @@ const QuotationRow: React.FC<RowProps> = (props) => {
               </span>
             </section>
           )}
+          <section>
+            <span>特别关注：</span>
+            {favorited ? (
+              <a
+                onClick={() =>
+                  dispatch(syncFavoriteQuotationMap(quotation.code, false))
+                }
+              >
+                已关注
+              </a>
+            ) : (
+              <a
+                onClick={() =>
+                  dispatch(syncFavoriteQuotationMap(quotation.code, true))
+                }
+              >
+                未关注
+              </a>
+            )}
+          </section>
           <div className={styles.view}>
             <a onClick={onDetailClick}>{'查看详情 >'}</a>
           </div>

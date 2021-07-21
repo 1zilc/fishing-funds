@@ -40,11 +40,7 @@ const sortZindexs = (
         return (a.zsz - b.zsz) * t;
       case Enums.ZindexSortType.Custom:
       default:
-        return (
-          (codeMap[b.zindexCode]?.originSort -
-            codeMap[a.zindexCode]?.originSort) *
-          t
-        );
+        return (codeMap[b.code]?.originSort - codeMap[a.code]?.originSort) * t;
     }
   });
 
@@ -68,20 +64,20 @@ const sortZindexsWithCollapseChached = (
   const { zindexs } = state;
   const { zindexConfig } = getZindexConfig();
   const zindexsCodeToMap = zindexs.reduce((map, zindex) => {
-    map[zindex.zindexCode] = zindex;
+    map[zindex.code] = zindex;
     return map;
   }, {} as any);
 
   const zindexsWithCollapseChached = responseZindexs
     .filter(Boolean)
     .map((_) => ({
-      ...(zindexsCodeToMap[_.zindexCode] || {}),
+      ...(zindexsCodeToMap[_.code] || {}),
       ..._,
     }));
 
   const zindexWithChachedCodeToMap = zindexsWithCollapseChached.reduce(
     (map, zindex) => {
-      map[zindex.zindexCode!] = zindex;
+      map[zindex.code] = zindex;
       return map;
     },
     {} as any
@@ -106,7 +102,7 @@ const toggleZindexCollapse = (
   const cloneZindexs: (Zindex.ResponseItem & Zindex.ExtraRow)[] =
     Utils.DeepCopy(zindexs);
   cloneZindexs.forEach((_) => {
-    if (_.zindexCode === zindex.zindexCode) {
+    if (_.code === zindex.code) {
       _.collapse = !zindex.collapse;
     }
   });

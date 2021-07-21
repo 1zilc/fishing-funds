@@ -78,11 +78,7 @@ const FundManagerContent: React.FC<FundManagerContentProps> = (props) => {
           </div>
         </div>
         <div className={styles.container}>
-          <Tabs
-            defaultActiveKey={String(Enums.ManagerPowerType.Appraise)}
-            animated={{ tabPane: true }}
-            tabBarGutter={15}
-          >
+          <Tabs animated={{ tabPane: true }} tabBarGutter={15}>
             <Tabs.TabPane
               tab="能力评估"
               key={String(Enums.ManagerPowerType.Appraise)}
@@ -102,7 +98,6 @@ const FundManagerContent: React.FC<FundManagerContentProps> = (props) => {
           </Tabs>
         </div>
         <Tabs
-          defaultActiveKey={String(0)}
           animated={{ tabPane: true }}
           tabBarGutter={15}
           tabBarStyle={{ marginLeft: 15 }}
