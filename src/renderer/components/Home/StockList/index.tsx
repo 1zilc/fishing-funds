@@ -7,7 +7,7 @@ import LoadingBar from '@/components/LoadingBar';
 import DetailStockContent from '@/components/Home/StockList/DetailStockContent';
 import CustomDrawer from '@/components/CustomDrawer';
 import { StoreState } from '@/reducers/types';
-import { useDrawer } from '@/utils/hooks';
+import { useDrawer, useSyncFixStockSetting } from '@/utils/hooks';
 import styles from './index.scss';
 
 interface StockListProps {
@@ -29,17 +29,23 @@ const StockList: React.FC<StockListProps> = (props) => {
 
   const list = stocks.filter(props.filter);
 
+  const { done: syncStockSettingDone } = useSyncFixStockSetting();
+
   return (
     <div className={styles.container}>
       <LoadingBar show={stocksLoading} />
       {list.length ? (
-        list.map((stock) => (
-          <StockRow
-            key={stock.secid}
-            stock={stock}
-            onDetail={setDetailDrawer}
-          />
-        ))
+        syncStockSettingDone ? (
+          list.map((stock) => (
+            <StockRow
+              key={stock.secid}
+              stock={stock}
+              onDetail={setDetailDrawer}
+            />
+          ))
+        ) : (
+          <Empty text="正在同步股票设置~" />
+        )
       ) : (
         <Empty text="暂无股票数据~" />
       )}

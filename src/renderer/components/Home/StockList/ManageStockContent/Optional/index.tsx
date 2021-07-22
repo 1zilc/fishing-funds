@@ -29,12 +29,12 @@ const Optional: React.FC<OptionalProps> = ({ active }) => {
     close: closeAddDrawer,
   } = useDrawer(null);
 
-  const updateSortStockConfig = () => {
+  function updateSortStockConfig() {
     const { stockConfig } = getStockConfig();
     setSortStockConfig(stockConfig.map((_) => ({ ..._, id: _.secid })));
-  };
+  }
 
-  const onSortStockConfig = (sortList: Stock.SettingItem[]) => {
+  function onSortStockConfig(sortList: Stock.SettingItem[]) {
     const { codeMap } = getStockConfig();
     const stockConfig = sortList.map((item) => {
       const stock = codeMap[item.secid];
@@ -48,7 +48,7 @@ const Optional: React.FC<OptionalProps> = ({ active }) => {
     });
     setStockConfig(stockConfig);
     updateSortStockConfig();
-  };
+  }
 
   async function onRemoveStock(stock: Stock.SettingItem) {
     const { response } = await dialog.showMessageBox({

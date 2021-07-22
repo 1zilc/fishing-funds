@@ -40,6 +40,7 @@ import { StoreState } from '@/reducers/types';
 import * as Utils from '@/utils';
 import * as CONST from '@/constants';
 import * as Adapter from '@/utils/adpters';
+import * as Services from '@/services';
 
 const { invoke, dialog, ipcRenderer, clipboard, app } =
   window.contextModules.electron;
@@ -330,12 +331,24 @@ export function useSyncFixStockSetting() {
 
   async function FixStockSetting(stockConfig: Stock.SettingItem[]) {
     try {
-      const responseStocks = await getStocks(stockConfig);
-      responseStocks.filter(Boolean).forEach((responseStock) => {
-        // updateStock({
-        //   type: responseStock!.type,
-        // });
-      });
+      const collectors = stockConfig.map(
+        ({ name, code, secid }) =>
+          () =>
+            Services.Stock.SearchFromEastmoney(name).then((searchResult) => {
+              searchResult?.forEach(({ Datas, Type }) => {
+                Datas.forEach(({ Code }) => {
+                  if (Code === code) {
+                    updateStock({
+                      secid,
+                      type: Type,
+                    });
+                  }
+                });
+              });
+              return searchResult;
+            })
+      );
+      await Adapter.ChokeAllAdapter(collectors, 100);
     } catch (error) {
       console.log(error);
     } finally {

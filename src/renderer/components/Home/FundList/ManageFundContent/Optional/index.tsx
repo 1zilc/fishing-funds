@@ -78,8 +78,6 @@ const Optional: React.FC<OptionalProps> = ({ active }) => {
     }
   }
 
-  function onEdit() {}
-
   useEffect(updateSortFundConfig, [syncFundSettingDone, active]);
 
   useEffect(() => {
