@@ -20,7 +20,6 @@ import { marketsConfig } from '@/components/Home/ZindexList/ManageZindexContent'
 import { stockTypesConfig } from '@/components/Home/StockList/AddStockContent';
 import { StoreState } from '@/reducers/types';
 import { useNativeThemeColor } from '@/utils/hooks';
-import { getFundConfig } from '@/actions/fund';
 import { getZindexConfig } from '@/actions/zindex';
 import { getStockConfig } from '@/actions/stock';
 import * as Enums from '@/utils/enums';
@@ -45,7 +44,7 @@ export function useHomeContext() {
 }
 
 const FundGroup = () => {
-  const { codeMap: fundCodeMap } = getFundConfig();
+  const { codeMap: fundCodeMap } = useSelector((state: StoreState) => state.fund.config);
   return (
     <GroupTab>
       <Tabs.TabPane tab="全部" key={String(0)}>
@@ -70,11 +69,7 @@ const ZindexGroup = () => {
       </Tabs.TabPane>
       {marketsConfig.map((market) => (
         <Tabs.TabPane tab={market.name.slice(0, 2)} key={String(market.code)}>
-          <ZindexList
-            filter={(zindex) =>
-              zindexCodeMap[zindex.code!].type === market.code
-            }
-          />
+          <ZindexList filter={(zindex) => zindexCodeMap[zindex.code!].type === market.code} />
         </Tabs.TabPane>
       ))}
     </GroupTab>
@@ -82,9 +77,7 @@ const ZindexGroup = () => {
 };
 
 const QuotationGroup = () => {
-  const favoriteQuotationMap = useSelector(
-    (state: StoreState) => state.quotation.favoriteQuotationMap
-  );
+  const favoriteQuotationMap = useSelector((state: StoreState) => state.quotation.favoriteQuotationMap);
 
   return (
     <GroupTab>
@@ -92,9 +85,7 @@ const QuotationGroup = () => {
         <QuotationList filter={() => true} />
       </Tabs.TabPane>
       <Tabs.TabPane tab="关注" key={String(1)}>
-        <QuotationList
-          filter={(quotaion) => favoriteQuotationMap[quotaion.code]}
-        />
+        <QuotationList filter={(quotaion) => favoriteQuotationMap[quotaion.code]} />
       </Tabs.TabPane>
     </GroupTab>
   );
@@ -110,9 +101,7 @@ const StockGroup = () => {
       </Tabs.TabPane>
       {stockTypesConfig.map((type) => (
         <Tabs.TabPane tab={type.name.slice(0, 2)} key={String(type.code)}>
-          <StockList
-            filter={(stock) => stockCodeMap[stock.secid].type === type.code}
-          />
+          <StockList filter={(stock) => stockCodeMap[stock.secid].type === type.code} />
         </Tabs.TabPane>
       ))}
     </GroupTab>
@@ -120,13 +109,9 @@ const StockGroup = () => {
 };
 
 const Home: React.FC<HomeProps> = () => {
-  const tabsActiveKey = useSelector(
-    (state: StoreState) => state.tabs.activeKey
-  );
+  const tabsActiveKey = useSelector((state: StoreState) => state.tabs.activeKey);
 
-  const { colors: varibleColors, darkMode } = useNativeThemeColor(
-    CONST.VARIBLES
-  );
+  const { colors: varibleColors, darkMode } = useNativeThemeColor(CONST.VARIBLES);
 
   return (
     <HomeContext.Provider value={{ darkMode, varibleColors }}>
@@ -136,11 +121,7 @@ const Home: React.FC<HomeProps> = () => {
           <Wallet />
           <SortBar />
         </Header>
-        <Tabs
-          renderTabBar={() => <></>}
-          activeKey={String(tabsActiveKey)}
-          animated={{ tabPane: true, inkBar: false }}
-        >
+        <Tabs renderTabBar={() => <></>} activeKey={String(tabsActiveKey)} animated={{ tabPane: true, inkBar: false }}>
           <Tabs.TabPane key={String(Enums.TabKeyType.Funds)}>
             <FundGroup />
           </Tabs.TabPane>

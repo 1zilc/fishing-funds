@@ -1,17 +1,17 @@
-import { AnyAction } from 'redux';
+import { SYNC_SETTING } from '@/actions/setting';
+import { Reducer } from '@/reducers/types';
+import * as Helpers from '@/helpers';
 
-import { getSystemSetting, SYNC_SETTING } from '../actions/setting';
-
-export interface SettingState {
+export type SettingState = {
   systemSetting: System.Setting;
-}
+};
 
-export default function setting(
-  state: SettingState = {
-    systemSetting: getSystemSetting(),
+const setting: Reducer<SettingState> = (
+  state = {
+    systemSetting: Helpers.Setting.GetSystemSetting(),
   },
-  action: AnyAction
-): SettingState {
+  action
+) => {
   switch (action.type) {
     case SYNC_SETTING:
       return {
@@ -21,4 +21,6 @@ export default function setting(
     default:
       return state;
   }
-}
+};
+
+export default setting;

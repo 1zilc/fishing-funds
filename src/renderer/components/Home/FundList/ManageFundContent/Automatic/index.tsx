@@ -1,5 +1,6 @@
 import React, { PropsWithChildren, useState, useEffect } from 'react';
 import { Table, Divider } from 'antd';
+import { useDispatch, useSelector } from 'react-redux';
 import { useRequest } from 'ahooks';
 import classnames from 'classnames';
 
@@ -7,8 +8,8 @@ import CustomDrawer from '@/components/CustomDrawer';
 import AddFundContent from '@/components/Home/FundList/AddFundContent';
 import DetailFundContent from '@/components/Home/FundList/DetailFundContent';
 import TypeSelection from '@/components/TypeSelection';
-import { getFundConfig } from '@/actions/fund';
 import { useDrawer } from '@/utils/hooks';
+import { StoreState } from '@/reducers/types';
 import * as Services from '@/services';
 import * as Utils from '@/utils';
 import styles from './index.scss';
@@ -32,21 +33,11 @@ const RenderColorCol = ({ value }: { value: string }) => {
 const Automatic: React.FC<PropsWithChildren<AutomaticProps>> = () => {
   const [fundType, setFundType] = useState(fundTypeList[0]);
   const [data, setData] = useState([]);
-  const { codeMap } = getFundConfig();
+  const { codeMap } = useSelector((state: StoreState) => state.fund.config);
 
-  const {
-    data: detailCode,
-    show: showDetailDrawer,
-    set: setDetailDrawer,
-    close: closeDetailDrawer,
-  } = useDrawer('');
+  const { data: detailCode, show: showDetailDrawer, set: setDetailDrawer, close: closeDetailDrawer } = useDrawer('');
 
-  const {
-    data: addCode,
-    show: showAddDrawer,
-    set: setAddDrawer,
-    close: closeAddDrawer,
-  } = useDrawer('');
+  const { data: addCode, show: showAddDrawer, set: setAddDrawer, close: closeAddDrawer } = useDrawer('');
 
   const columns = [
     {
@@ -104,16 +95,13 @@ const Automatic: React.FC<PropsWithChildren<AutomaticProps>> = () => {
     },
   ];
 
-  const { run: runGetAutomaticPlanFromEastMoney, loading } = useRequest(
-    Services.Fund.GetAutomaticPlanFromEastmoney,
-    {
-      manual: true,
-      cacheKey: `GetAutomaticPlanFromEastmoney/${fundType.type}`,
-      throwOnError: true,
-      onSuccess: setData,
-      refreshDeps: [fundType],
-    }
-  );
+  const { run: runGetAutomaticPlanFromEastMoney, loading } = useRequest(Services.Fund.GetAutomaticPlanFromEastmoney, {
+    manual: true,
+    cacheKey: `GetAutomaticPlanFromEastmoney/${fundType.type}`,
+    throwOnError: true,
+    onSuccess: setData,
+    refreshDeps: [fundType],
+  });
 
   useEffect(() => {
     runGetAutomaticPlanFromEastMoney(fundType.type);
@@ -121,12 +109,7 @@ const Automatic: React.FC<PropsWithChildren<AutomaticProps>> = () => {
 
   return (
     <div className={styles.content}>
-      <TypeSelection
-        types={fundTypeList}
-        activeType={fundType.type}
-        onSelected={setFundType}
-        style={{ marginTop: 10, marginBottom: 10 }}
-      />
+      <TypeSelection types={fundTypeList} activeType={fundType.type} onSelected={setFundType} style={{ marginTop: 10, marginBottom: 10 }} />
       <Table
         rowKey="code"
         size="small"
@@ -143,18 +126,10 @@ const Automatic: React.FC<PropsWithChildren<AutomaticProps>> = () => {
         })}
       />
       <CustomDrawer show={showDetailDrawer}>
-        <DetailFundContent
-          onEnter={closeDetailDrawer}
-          onClose={closeDetailDrawer}
-          code={detailCode}
-        />
+        <DetailFundContent onEnter={closeDetailDrawer} onClose={closeDetailDrawer} code={detailCode} />
       </CustomDrawer>
       <CustomDrawer show={showAddDrawer}>
-        <AddFundContent
-          defaultCode={addCode}
-          onClose={closeAddDrawer}
-          onEnter={closeAddDrawer}
-        />
+        <AddFundContent defaultCode={addCode} onClose={closeAddDrawer} onEnter={closeAddDrawer} />
       </CustomDrawer>
     </div>
   );

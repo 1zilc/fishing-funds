@@ -12,17 +12,13 @@ export const SET_STOCKS_LOADING = 'SET_STOCKS_LOADING';
 export const TOGGLE_STOCK_COLLAPSE = 'TOGGLE_STOCK_COLLAPSE';
 export const TOGGLE_STOCKS_COLLAPSE = 'TOGGLE_STOCKS_COLLAPSE';
 export const SORT_STOCKS = 'SORT_STOCKS';
-export const SORT_STOCKS_WITH_COLLAPSE_CHACHED =
-  'SORT_STOCKS_WITH_COLLAPSE_CHACHED';
+export const SORT_STOCKS_WITH_COLLAPSE_CHACHED = 'SORT_STOCKS_WITH_COLLAPSE_CHACHED';
 export interface CodeStockMap {
   [index: string]: Stock.SettingItem & { originSort: number };
 }
 
 export function getStockConfig() {
-  const stockConfig: Stock.SettingItem[] = Utils.GetStorage(
-    CONST.STORAGE.STOCK_SETTING,
-    []
-  );
+  const stockConfig: Stock.SettingItem[] = Utils.GetStorage(CONST.STORAGE.STOCK_SETTING, []);
   const codeMap = stockConfig.reduce((r, c, i) => {
     r[c.secid] = { ...c, originSort: i };
     return r;
@@ -33,8 +29,7 @@ export function getStockConfig() {
 
 export function addStock(stock: Stock.SettingItem) {
   const { stockConfig } = getStockConfig();
-  const notExist =
-    stockConfig.filter((item) => stock.secid === item.secid).length === 0;
+  const notExist = stockConfig.filter((item) => stock.secid === item.secid).length === 0;
   if (notExist) {
     setStockConfig([...stockConfig, stock]);
   }

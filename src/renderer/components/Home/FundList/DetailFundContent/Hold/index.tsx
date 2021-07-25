@@ -18,9 +18,7 @@ const Hold: React.FC<HoldProps> = ({
     series: [],
   },
 }) => {
-  const { ref: chartRef, chartInstance } = useResizeEchart(
-    CONST.DEFAULT.ECHARTS_SCALE
-  );
+  const { ref: chartRef, chartInstance } = useResizeEchart(CONST.DEFAULT.ECHARTS_SCALE);
 
   const { varibleColors, darkMode } = useHomeContext();
 

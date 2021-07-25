@@ -2,9 +2,8 @@ import React from 'react';
 
 import { useHomeContext } from '@/components/Home';
 import { useResizeEchart, useRenderEcharts } from '@/utils/hooks';
-import { calcFunds } from '@/actions/fund';
-import { getCurrentWallet } from '@/actions/wallet';
 import * as CONST from '@/constants';
+import * as Helpers from '@/helpers';
 
 export interface AssetsConfigProps {
   funds: (Fund.ResponseItem & Fund.FixData)[];
@@ -12,9 +11,7 @@ export interface AssetsConfigProps {
 }
 
 const AssetsConfig: React.FC<AssetsConfigProps> = ({ funds, codes }) => {
-  const { ref: chartRef, chartInstance } = useResizeEchart(
-    CONST.DEFAULT.ECHARTS_SCALE
-  );
+  const { ref: chartRef, chartInstance } = useResizeEchart(CONST.DEFAULT.ECHARTS_SCALE);
   const { varibleColors, darkMode } = useHomeContext();
 
   useRenderEcharts(
@@ -41,8 +38,8 @@ const AssetsConfig: React.FC<AssetsConfigProps> = ({ funds, codes }) => {
             radius: '64%',
             center: ['50%', '50%'],
             data: codes.map((code) => {
-              const { zje } = calcFunds(funds, code);
-              const { name } = getCurrentWallet(code);
+              const { zje } = Helpers.Fund.CalcFunds(funds, code);
+              const { name } = Helpers.Wallet.GetCurrentWallet(code);
               return {
                 value: zje.toFixed(2),
                 name,

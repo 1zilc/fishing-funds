@@ -14,7 +14,8 @@ import { ReactComponent as LineCharIcon } from '@/assets/icons/line-chart.svg';
 import { ReactComponent as TShirtIcon } from '@/assets/icons/t-shirt.svg';
 import { ReactComponent as GlobalIcon } from '@/assets/icons/global.svg';
 import { ReactComponent as GroupIcon } from '@/assets/icons/group.svg';
-import { setSystemSetting, defalutSystemSetting } from '@/actions/setting';
+import { defalutSystemSetting } from '@/helpers/setting';
+import { setSystemSettingAction } from '@/actions/setting';
 import { StoreState } from '@/reducers/types';
 import * as Enums from '@/utils/enums';
 import * as Utils from '@/utils';
@@ -100,9 +101,7 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
     autoCheckUpdateSetting,
   } = useSelector((state: StoreState) => state.setting.systemSetting);
 
-  const updateInfo = useSelector(
-    (state: StoreState) => state.updater.updateInfo
-  );
+  const updateInfo = useSelector((state: StoreState) => state.updater.updateInfo);
   const isUpdateAvaliable = !!updateInfo.version;
 
   // 数据来源
@@ -114,18 +113,14 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
   const [systemTheme, setSystemTheme] = useState(systemThemeSetting);
   // 通用设置
   const [autoStart, setAutoStart] = useState(autoStartSetting);
-  const [adjustmentNotification, setAdjustmentNotification] = useState(
-    adjustmentNotificationSetting
-  );
+  const [adjustmentNotification, setAdjustmentNotification] = useState(adjustmentNotificationSetting);
   const [autoFresh, setAutoFresh] = useState(autoFreshSetting);
   const [freshDelay, setFreshDelay] = useState(freshDelaySetting);
-  const [autoCheckUpdate, setAutoCheckUpdate] = useState(
-    autoCheckUpdateSetting
-  );
+  const [autoCheckUpdate, setAutoCheckUpdate] = useState(autoCheckUpdateSetting);
 
   function onSave() {
     dispatch(
-      setSystemSetting({
+      setSystemSettingAction({
         fundApiTypeSetting: fundapiType,
         conciseSetting: concise,
         lowKeySetting: lowKey,
@@ -155,12 +150,7 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
   }
 
   return (
-    <CustomDrawerContent
-      title="设置"
-      enterText="保存"
-      onClose={props.onClose}
-      onEnter={onSave}
-    >
+    <CustomDrawerContent title="设置" enterText="保存" onClose={props.onClose} onEnter={onSave}>
       <style>{` html { font-size: ${baseFontSize}px }`}</style>
       <div className={styles.content}>
         <PureCard
@@ -171,30 +161,17 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
             },
             'card-body'
           )}
-          onClick={() =>
-            isUpdateAvaliable &&
-            shell.openExternal('https://ff.1zilc.top/#download')
-          }
+          onClick={() => isUpdateAvaliable && shell.openExternal('https://ff.1zilc.top/#download')}
         >
           <Logo />
-          <Badge
-            count={isUpdateAvaliable ? `v${updateInfo.version} 可更新` : 0}
-            style={{ fontSize: 8 }}
-            size="small"
-          >
+          <Badge count={isUpdateAvaliable ? `v${updateInfo.version} 可更新` : 0} style={{ fontSize: 8 }} size="small">
             <div className={styles.appName}>Fishing Funds v{ffVersion}</div>
           </Badge>
         </PureCard>
         <StandCard icon={<LineCharIcon />} title="数据来源">
           <div className={classnames(styles.setting, 'card-body')}>
-            <Radio.Group
-              value={fundapiType}
-              onChange={(e) => setFundApiType(e.target.value)}
-            >
-              <Radio
-                className={styles.radio}
-                value={Enums.FundApiType.Eastmoney}
-              >
+            <Radio.Group value={fundapiType} onChange={(e) => setFundApiType(e.target.value)}>
+              <Radio className={styles.radio} value={Enums.FundApiType.Eastmoney}>
                 天天基金
               </Radio>
               <Radio className={styles.radio} value={Enums.FundApiType.Tencent}>
@@ -227,14 +204,7 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
             </section>
             <section>
               <label>字体大小：</label>
-              <Slider
-                min={11}
-                max={14}
-                style={{ flex: 0.5 }}
-                defaultValue={baseFontSize}
-                onChange={setBaseFontSize}
-                step={0.1}
-              />
+              <Slider min={11} max={14} style={{ flex: 0.5 }} defaultValue={baseFontSize} onChange={setBaseFontSize} step={0.1} />
             </section>
             <section>
               <label>系统主题：</label>
@@ -257,27 +227,15 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
           <div className={classnames(styles.setting, 'card-body')}>
             <section>
               <label>开机自启：</label>
-              <Switch
-                size="small"
-                checked={autoStart}
-                onChange={setAutoStart}
-              />
+              <Switch size="small" checked={autoStart} onChange={setAutoStart} />
             </section>
             <section>
               <label>调仓提醒：</label>
-              <Switch
-                size="small"
-                checked={adjustmentNotification}
-                onChange={setAdjustmentNotification}
-              />
+              <Switch size="small" checked={adjustmentNotification} onChange={setAdjustmentNotification} />
             </section>
             <section>
               <label>自动刷新：</label>
-              <Switch
-                size="small"
-                checked={autoFresh}
-                onChange={setAutoFresh}
-              />
+              <Switch size="small" checked={autoFresh} onChange={setAutoFresh} />
             </section>
             <section>
               <label>刷新间隔：</label>
@@ -294,11 +252,7 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
             </section>
             <section>
               <label>自动检查更新：</label>
-              <Switch
-                size="small"
-                checked={autoCheckUpdate}
-                onChange={setAutoCheckUpdate}
-              />
+              <Switch size="small" checked={autoCheckUpdate} onChange={setAutoCheckUpdate} />
             </section>
           </div>
         </StandCard>
@@ -330,15 +284,7 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
             </section>
             <section>
               <label>issues：</label>
-              <a
-                onClick={() =>
-                  onNavigate(
-                    'https://github.com/1zilc/fishing-funds/issues/106'
-                  )
-                }
-              >
-                #106
-              </a>
+              <a onClick={() => onNavigate('https://github.com/1zilc/fishing-funds/issues/106')}>#106</a>
             </section>
           </div>
         </StandCard>
@@ -348,9 +294,7 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
               <div key={index} className={styles.link}>
                 {links.map((link) => (
                   <React.Fragment key={link.name}>
-                    <a onClick={(e) => shell.openExternal(link.url)}>
-                      {link.name}
-                    </a>
+                    <a onClick={(e) => shell.openExternal(link.url)}>{link.name}</a>
                     <i />
                   </React.Fragment>
                 ))}

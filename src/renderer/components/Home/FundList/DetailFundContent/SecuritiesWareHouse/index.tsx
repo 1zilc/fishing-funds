@@ -26,94 +26,78 @@ const Tooltip: React.FC<TooltipProps> = (props) => {
       <div className={styles.tooltipName}>债券名称：{item.name}</div>
       <div>债券代码：{item.code}</div>
       <div>持仓占比：{item.ccb}%</div>
-      <div className={Utils.GetValueColor(item.zdf).textClass}>
-        涨跌幅：{item.zdf}%
-      </div>
+      <div className={Utils.GetValueColor(item.zdf).textClass}>涨跌幅：{item.zdf}%</div>
     </div>
   );
 };
 
-const SecuritiesWareHouse: React.FC<SecuritiesWareHouseProps> = ({
-  code,
-  securitiesCodes,
-}) => {
-  const { ref: chartRef, chartInstance } = useResizeEchart(
-    CONST.DEFAULT.ECHARTS_SCALE
-  );
+const SecuritiesWareHouse: React.FC<SecuritiesWareHouseProps> = ({ code, securitiesCodes }) => {
+  const { ref: chartRef, chartInstance } = useResizeEchart(CONST.DEFAULT.ECHARTS_SCALE);
 
   const { varibleColors, darkMode } = useHomeContext();
-  const {
-    data: stockSecid,
-    show: showDetailStockDrawer,
-    set: setDetailStockDrawer,
-    close: closeDetailStockDrawer,
-  } = useDrawer('');
+  const { data: stockSecid, show: showDetailStockDrawer, set: setDetailStockDrawer, close: closeDetailStockDrawer } = useDrawer('');
 
-  const { run: runGetSecuritiesWareHouseFromEastmoney } = useRequest(
-    Services.Fund.GetSecuritiesWareHouseFromEastmoney,
-    {
-      manual: true,
-      throwOnError: true,
-      cacheKey: `GetSecuritiesWareHouseFromEastmoney/${code}`,
-      onSuccess: (result) => {
-        chartInstance?.setOption({
-          backgroundColor: 'transparent',
-          title: {
-            show: false,
-          },
-          grid: {
-            left: 0,
-            right: 5,
-            bottom: 0,
-            containLabel: true,
-          },
-          tooltip: {
-            trigger: 'item',
-            formatter: (params: any) =>
-              renderToString(<Tooltip item={params.data.item} />),
-          },
-          series: [
-            {
-              name: '持仓占比',
-              type: 'pie',
-              radius: '64%',
-              center: ['50%', '50%'],
-              data: result.map((item) => {
-                return {
-                  value: item.ccb,
-                  name: item.name,
-                  itemStyle: {
-                    color: Utils.GetValueColor(item.zdf).color,
-                  },
-                  item,
-                };
-              }),
-              roseType: 'radius',
-              label: {
+  const { run: runGetSecuritiesWareHouseFromEastmoney } = useRequest(Services.Fund.GetSecuritiesWareHouseFromEastmoney, {
+    manual: true,
+    throwOnError: true,
+    cacheKey: `GetSecuritiesWareHouseFromEastmoney/${code}`,
+    onSuccess: (result) => {
+      chartInstance?.setOption({
+        backgroundColor: 'transparent',
+        title: {
+          show: false,
+        },
+        grid: {
+          left: 0,
+          right: 5,
+          bottom: 0,
+          containLabel: true,
+        },
+        tooltip: {
+          trigger: 'item',
+          formatter: (params: any) => renderToString(<Tooltip item={params.data.item} />),
+        },
+        series: [
+          {
+            name: '持仓占比',
+            type: 'pie',
+            radius: '64%',
+            center: ['50%', '50%'],
+            data: result.map((item) => {
+              return {
+                value: item.ccb,
+                name: item.name,
+                itemStyle: {
+                  color: Utils.GetValueColor(item.zdf).color,
+                },
+                item,
+              };
+            }),
+            roseType: 'radius',
+            label: {
+              color: varibleColors['--main-text-color'],
+            },
+            labelLine: {
+              lineStyle: {
                 color: varibleColors['--main-text-color'],
               },
-              labelLine: {
-                lineStyle: {
-                  color: varibleColors['--main-text-color'],
-                },
-                smooth: 0.2,
-                length: 10,
-                length2: 20,
-              },
-              itemStyle: {
-                borderRadius: 10,
-                borderColor: varibleColors['--background-color'],
-                borderWidth: 1,
-              },
-              animationType: 'scale',
-              animationEasing: 'elasticOut',
-              animationDelay: () => Math.random() * 200,
+              smooth: 0.2,
+              length: 10,
+              length2: 20,
             },
-          ],
-        });
-      },
-    }
-  );
+            itemStyle: {
+              borderRadius: 10,
+              borderColor: varibleColors['--background-color'],
+              borderWidth: 1,
+            },
+            animationType: 'scale',
+            animationEasing: 'elasticOut',
+            animationDelay: () => Math.random() * 200,
+          },
+        ],
+      });
+    },
+  });
 
   useRenderEcharts(
     () => {
@@ -133,11 +117,7 @@ const SecuritiesWareHouse: React.FC<SecuritiesWareHouseProps> = ({
     <div className={styles.content}>
       <div ref={chartRef} style={{ width: '100%' }} />
       <CustomDrawer show={showDetailStockDrawer}>
-        <DetailStockContent
-          onEnter={closeDetailStockDrawer}
-          onClose={closeDetailStockDrawer}
-          secid={stockSecid}
-        />
+        <DetailStockContent onEnter={closeDetailStockDrawer} onClose={closeDetailStockDrawer} secid={stockSecid} />
       </CustomDrawer>
     </div>
   );

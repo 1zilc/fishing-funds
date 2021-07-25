@@ -30,16 +30,9 @@ export interface ToolBarProps {}
 const iconSize = { height: 18, width: 18 };
 
 const ToolBar: React.FC<ToolBarProps> = () => {
-  const { lowKeySetting, baseFontSizeSetting } = useSelector(
-    (state: StoreState) => state.setting.systemSetting
-  );
-
-  const updateInfo = useSelector(
-    (state: StoreState) => state.updater.updateInfo
-  );
-  const tabsActiveKey = useSelector(
-    (state: StoreState) => state.tabs.activeKey
-  );
+  const { lowKeySetting, baseFontSizeSetting } = useSelector((state: StoreState) => state.setting.systemSetting);
+  const updateInfo = useSelector((state: StoreState) => state.updater.updateInfo);
+  const tabsActiveKey = useSelector((state: StoreState) => state.tabs.activeKey);
 
   const { run: runLoadZindexs } = useThrottleFn(useActions(loadZindexs), {
     wait: CONST.DEFAULT.FRESH_BUTTON_THROTTLE_DELAY,
@@ -56,115 +49,37 @@ const ToolBar: React.FC<ToolBarProps> = () => {
   const freshQuotations = useScrollToTop({ after: runLoadQuotations });
   const freshStocks = useScrollToTop({ after: runLoadStocks });
 
-  const [
-    showManageFundDrawer,
-    {
-      setTrue: openManageFundDrawer,
-      setFalse: closeManageFundDrawer,
-      toggle: ToggleManageFundDrawer,
-    },
-  ] = useBoolean(false);
-  const [
-    showManageWalletDrawer,
-    {
-      setTrue: openManageWalletDrawer,
-      setFalse: closeManageWalletDrawer,
-      toggle: ToggleManageWalletDrawer,
-    },
-  ] = useBoolean(false);
-
-  const [
-    showManageZindexDrawer,
-    {
-      setTrue: openManageZindexDrawer,
-      setFalse: closeManageZindexDrawer,
-      toggle: ToggleManageZindexDrawer,
-    },
-  ] = useBoolean(false);
-
-  const [
-    showManageStockDrawer,
-    {
-      setTrue: openManageStockDrawer,
-      setFalse: closeManageStockDrawer,
-      toggle: ToggleManageStockDrawer,
-    },
-  ] = useBoolean(false);
-
-  const [
-    showSettingDrawer,
-    {
-      setTrue: openSettingDrawer,
-      setFalse: closeSettingDrawer,
-      toggle: ToggleSettingDrawer,
-    },
-  ] = useBoolean(false);
-
+  const [showManageFundDrawer, { setTrue: openManageFundDrawer, setFalse: closeManageFundDrawer, toggle: ToggleManageFundDrawer }] =
+    useBoolean(false);
+  const [showManageWalletDrawer, { setTrue: openManageWalletDrawer, setFalse: closeManageWalletDrawer, toggle: ToggleManageWalletDrawer }] =
+    useBoolean(false);
+  const [showManageZindexDrawer, { setTrue: openManageZindexDrawer, setFalse: closeManageZindexDrawer, toggle: ToggleManageZindexDrawer }] =
+    useBoolean(false);
+  const [showManageStockDrawer, { setTrue: openManageStockDrawer, setFalse: closeManageStockDrawer, toggle: ToggleManageStockDrawer }] =
+    useBoolean(false);
+  const [showSettingDrawer, { setTrue: openSettingDrawer, setFalse: closeSettingDrawer, toggle: ToggleSettingDrawer }] = useBoolean(false);
   const [
     showFundsStatisticsDrawer,
-    {
-      setTrue: openFundStatisticsDrawer,
-      setFalse: closeFundStatisticsDrawer,
-      toggle: ToggleFundStatisticsDrawer,
-    },
+    { setTrue: openFundStatisticsDrawer, setFalse: closeFundStatisticsDrawer, toggle: ToggleFundStatisticsDrawer },
   ] = useBoolean(false);
-
-  const [
-    showFundFlowDrawer,
-    {
-      setTrue: openFundFlowDrawer,
-      setFalse: closeFundFlowDrawer,
-      toggle: ToggleFundFlowDrawer,
-    },
-  ] = useBoolean(false);
+  const [showFundFlowDrawer, { setTrue: openFundFlowDrawer, setFalse: closeFundFlowDrawer, toggle: ToggleFundFlowDrawer }] =
+    useBoolean(false);
 
   return (
     <>
       <style>{` html { filter: ${lowKeySetting && 'grayscale(100%)'} }`}</style>
       <style>{` html { font-size: ${baseFontSizeSetting}px }`}</style>
       <div className={styles.bar}>
-        {tabsActiveKey === Enums.TabKeyType.Funds && (
-          <MenuAddIcon style={{ ...iconSize }} onClick={openManageFundDrawer} />
-        )}
-        {tabsActiveKey === Enums.TabKeyType.Funds && (
-          <WalletIcon
-            style={{ ...iconSize }}
-            onClick={openManageWalletDrawer}
-          />
-        )}
-        {tabsActiveKey === Enums.TabKeyType.Zindex && (
-          <MenuAddIcon
-            style={{ ...iconSize }}
-            onClick={openManageZindexDrawer}
-          />
-        )}
-        {tabsActiveKey === Enums.TabKeyType.Quotation && (
-          <ChartBoxIcon style={{ ...iconSize }} onClick={openFundFlowDrawer} />
-        )}
-        {tabsActiveKey === Enums.TabKeyType.Stock && (
-          <MenuAddIcon
-            style={{ ...iconSize }}
-            onClick={openManageStockDrawer}
-          />
-        )}
-        {tabsActiveKey === Enums.TabKeyType.Funds && (
-          <RefreshIcon style={{ ...iconSize }} onClick={freshFunds} />
-        )}
-        {tabsActiveKey === Enums.TabKeyType.Zindex && (
-          <RefreshIcon style={{ ...iconSize }} onClick={freshZindexs} />
-        )}
-        {tabsActiveKey === Enums.TabKeyType.Quotation && (
-          <RefreshIcon style={{ ...iconSize }} onClick={freshQuotations} />
-        )}
-        {tabsActiveKey === Enums.TabKeyType.Stock && (
-          <RefreshIcon style={{ ...iconSize }} onClick={freshStocks} />
-        )}
-        {tabsActiveKey === Enums.TabKeyType.Funds && (
-          <ChartBoxIcon
-            style={{ ...iconSize }}
-            onClick={openFundStatisticsDrawer}
-          />
-        )}
+        {tabsActiveKey === Enums.TabKeyType.Funds && <MenuAddIcon style={{ ...iconSize }} onClick={openManageFundDrawer} />}
+        {tabsActiveKey === Enums.TabKeyType.Funds && <WalletIcon style={{ ...iconSize }} onClick={openManageWalletDrawer} />}
+        {tabsActiveKey === Enums.TabKeyType.Zindex && <MenuAddIcon style={{ ...iconSize }} onClick={openManageZindexDrawer} />}
+        {tabsActiveKey === Enums.TabKeyType.Quotation && <ChartBoxIcon style={{ ...iconSize }} onClick={openFundFlowDrawer} />}
+        {tabsActiveKey === Enums.TabKeyType.Stock && <MenuAddIcon style={{ ...iconSize }} onClick={openManageStockDrawer} />}
+        {tabsActiveKey === Enums.TabKeyType.Funds && <RefreshIcon style={{ ...iconSize }} onClick={freshFunds} />}
+        {tabsActiveKey === Enums.TabKeyType.Zindex && <RefreshIcon style={{ ...iconSize }} onClick={freshZindexs} />}
+        {tabsActiveKey === Enums.TabKeyType.Quotation && <RefreshIcon style={{ ...iconSize }} onClick={freshQuotations} />}
+        {tabsActiveKey === Enums.TabKeyType.Stock && <RefreshIcon style={{ ...iconSize }} onClick={freshStocks} />}
+        {tabsActiveKey === Enums.TabKeyType.Funds && <ChartBoxIcon style={{ ...iconSize }} onClick={openFundStatisticsDrawer} />}
         <Badge dot={!!updateInfo.version}>
           <SettingIcon style={{ ...iconSize }} onClick={openSettingDrawer} />
         </Badge>
@@ -217,16 +132,10 @@ const ToolBar: React.FC<ToolBarProps> = () => {
         />
       </CustomDrawer>
       <CustomDrawer show={showFundFlowDrawer}>
-        <FundFlowContent
-          onClose={closeFundFlowDrawer}
-          onEnter={closeFundFlowDrawer}
-        />
+        <FundFlowContent onClose={closeFundFlowDrawer} onEnter={closeFundFlowDrawer} />
       </CustomDrawer>
       <CustomDrawer show={showFundsStatisticsDrawer}>
-        <FundStatisticsContent
-          onClose={closeFundStatisticsDrawer}
-          onEnter={closeFundStatisticsDrawer}
-        />
+        <FundStatisticsContent onClose={closeFundStatisticsDrawer} onEnter={closeFundStatisticsDrawer} />
       </CustomDrawer>
     </>
   );

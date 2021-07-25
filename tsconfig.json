@@ -26,5 +26,6 @@
       "@/*": ["./src/renderer/*"]
     }
   },
+  "include": ["./src/**/*"],
   "exclude": ["test", "build/release", "build/app/dist", ".erb/dll"]
 }

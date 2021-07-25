@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { ReactSortable } from 'react-sortablejs';
 import classnames from 'classnames';
 
@@ -11,8 +12,9 @@ import CustomDrawer from '@/components/CustomDrawer';
 import Empty from '@/components/Empty';
 import AddFundContent from '@/components/Home/FundList/AddFundContent';
 import EditFundContent from '@/components/Home/FundList/EditFundContent';
-import { getFundConfig, deleteFund, setFundConfig } from '@/actions/fund';
+import { deleteFundAction, setFundConfigAction } from '@/actions/fund';
 import { useSyncFixFundSetting, useDrawer } from '@/utils/hooks';
+import { StoreState } from '@/reducers/types';
 import styles from './index.scss';
 
 export interface OptionalProps {
@@ -21,15 +23,12 @@ export interface OptionalProps {
 
 const { dialog } = window.contextModules.electron;
 
-const Optional: React.FC<OptionalProps> = ({ active }) => {
-  const [sortFundConfig, setSortFundConfig] = useState<
-    (Fund.SettingItem & Fund.SortRow)[]
-  >([]);
-  const {
-    show: showAddDrawer,
-    set: setAddDrawer,
-    close: closeAddDrawer,
-  } = useDrawer(null);
+const Optional: React.FC<OptionalProps> = () => {
+  const dispatch = useDispatch();
+
+  const [sortFundConfig, setSortFundConfig] = useState<(Fund.SettingItem & Fund.SortRow)[]>([]);
+  const { show: showAddDrawer, set: setAddDrawer, close: closeAddDrawer } = useDrawer(null);
+  const { fundConfig, codeMap } = useSelector((state: StoreState) => state.fund.config);
 
   const {
     data: editFundData,
@@ -46,12 +45,10 @@ const Optional: React.FC<OptionalProps> = ({ active }) => {
   const { done: syncFundSettingDone } = useSyncFixFundSetting();
 
   function updateSortFundConfig() {
-    const { fundConfig } = getFundConfig();
     setSortFundConfig(fundConfig.map((_) => ({ ..._, id: _.code })));
   }
 
   function onSortFundConfig(sortList: Fund.SettingItem[]) {
-    const { codeMap } = getFundConfig();
     const fundConfig = sortList.map((item) => {
       const fund = codeMap[item.code];
       return {
@@ -61,7 +58,7 @@ const Optional: React.FC<OptionalProps> = ({ active }) => {
         cbj: fund.cbj,
       };
     });
-    setFundConfig(fundConfig);
+    dispatch(setFundConfigAction(fundConfig));
     updateSortFundConfig();
   }
 
@@ -73,37 +70,21 @@ const Optional: React.FC<OptionalProps> = ({ active }) => {
       buttons: ['确定', '取消'],
     });
     if (response === 0) {
-      deleteFund(fund.code);
+      dispatch(deleteFundAction(fund.code));
       updateSortFundConfig();
     }
   }
 
-  useEffect(updateSortFundConfig, [syncFundSettingDone, active]);
-
-  useEffect(() => {
-    if (active) {
-      updateSortFundConfig();
-    }
-  }, [active]);
+  useEffect(updateSortFundConfig, [syncFundSettingDone, fundConfig]);
 
   return (
     <div className={styles.content}>
       {sortFundConfig.length ? (
         syncFundSettingDone ? (
-          <ReactSortable
-            animation={200}
-            delay={2}
-            list={sortFundConfig}
-            setList={onSortFundConfig}
-            dragClass={styles.dragItem}
-            swap
-          >
+          <ReactSortable animation={200} delay={2} list={sortFundConfig} setList={onSortFundConfig} dragClass={styles.dragItem} swap>
             {sortFundConfig.map((fund) => {
               return (
-                <PureCard
-                  key={fund.code}
-                  className={classnames(styles.row, 'hoverable')}
-                >
+                <PureCard key={fund.code} className={classnames(styles.row, 'hoverable')}>
                   <RemoveIcon
                     className={styles.remove}
                     onClick={(e) => {

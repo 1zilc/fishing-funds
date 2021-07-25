@@ -9,12 +9,8 @@ export interface StockWareHouseEstimateProps {
   fundSharesPositions: [number, number][];
 }
 
-const StockWareHouseEstimate: React.FC<StockWareHouseEstimateProps> = ({
-  fundSharesPositions,
-}) => {
-  const { ref: chartRef, chartInstance } = useResizeEchart(
-    CONST.DEFAULT.ECHARTS_SCALE
-  );
+const StockWareHouseEstimate: React.FC<StockWareHouseEstimateProps> = ({ fundSharesPositions }) => {
+  const { ref: chartRef, chartInstance } = useResizeEchart(CONST.DEFAULT.ECHARTS_SCALE);
   const { darkMode } = useHomeContext();
 
   useRenderEcharts(

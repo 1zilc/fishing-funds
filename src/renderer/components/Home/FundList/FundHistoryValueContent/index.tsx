@@ -32,20 +32,12 @@ const FundHistoryValueContent: React.FC<HistoryValueProps> = (props) => {
       title: '涨跌幅',
       dataIndex: 'equityReturn',
 
-      render: (text: number) => (
-        <div className={Utils.GetValueColor(text).textClass}>
-          {Utils.Yang(text)} %
-        </div>
-      ),
+      render: (text: number) => <div className={Utils.GetValueColor(text).textClass}>{Utils.Yang(text)} %</div>,
     },
   ];
 
   return (
-    <CustomDrawerContent
-      title="历史净值"
-      onEnter={props.onEnter}
-      onClose={props.onClose}
-    >
+    <CustomDrawerContent title="历史净值" onEnter={props.onEnter} onClose={props.onClose}>
       <div className={styles.content}>
         <ChartCard>
           <HistoryBar data={data} />

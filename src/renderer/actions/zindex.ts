@@ -13,8 +13,7 @@ export const SET_ZINDEXS_LOADING = 'SET_ZINDEXS_LOADING';
 export const TOGGLE_ZINDEX_COLLAPSE = 'TOGGLE_ZINDEX_COLLAPSE';
 export const TOGGLE_ZINDEXS_COLLAPSE = 'TOGGLE_ZINDEXS_COLLAPSE';
 export const SORT_ZINDEXS = 'SORT_ZINDEXS';
-export const SORT_ZINDEXS_WITH_COLLAPSE_CHACHED =
-  'SORT_ZINDEXS_WITH_COLLAPSE_CHACHED';
+export const SORT_ZINDEXS_WITH_COLLAPSE_CHACHED = 'SORT_ZINDEXS_WITH_COLLAPSE_CHACHED';
 export interface CodeZindexMap {
   [index: string]: Zindex.SettingItem & { originSort: number };
 }
@@ -452,10 +451,7 @@ export const defaultZindexConfig = [
 ];
 
 export function getZindexConfig() {
-  const zindexConfig: Zindex.SettingItem[] = Utils.GetStorage(
-    CONST.STORAGE.ZINDEX_SETTING,
-    defaultZindexConfig
-  );
+  const zindexConfig: Zindex.SettingItem[] = Utils.GetStorage(CONST.STORAGE.ZINDEX_SETTING, defaultZindexConfig);
   let codeMap = zindexConfig.reduce((r, c, i) => {
     r[c.code] = { ...c, originSort: i };
     return r;
@@ -475,9 +471,7 @@ export function getZindexConfig() {
     return r;
   }, {} as CodeZindexMap);
 
-  const selectZindexs = zindexConfig
-    .filter(({ show }) => show)
-    .map(({ code }) => code);
+  const selectZindexs = zindexConfig.filter(({ show }) => show).map(({ code }) => code);
 
   return { zindexConfig, codeMap, selectZindexs };
 }

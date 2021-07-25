@@ -1,7 +1,7 @@
 import NP from 'number-precision';
 import dayjs from 'dayjs';
 
-import { defaultWallet } from '@/actions/wallet';
+import { defaultWallet } from '@/helpers/wallet';
 import * as Enums from '@/utils/enums';
 import * as CONST from '@/constants';
 
@@ -30,7 +30,8 @@ export function CalcWithPrefix(a: any, b: any) {
   }
 }
 
-export function DeepCopy<T>(data: T): T {
+export function DeepCopy<T>(object: T): T {
+  const data: any = object;
   try {
     return JSON.parse(JSON.stringify(data));
   } catch (error) {
@@ -115,9 +116,7 @@ export function JudgeAdjustmentNotificationTime(timestamp: number) {
 // TODO: 类型推断有问题
 export function getVariblesColor(varibles: string[]) {
   return varibles.reduce<Record<string, string>>((colorMap, varible) => {
-    const color = window
-      .getComputedStyle(document.body)
-      .getPropertyValue(varible);
+    const color = window.getComputedStyle(document.body).getPropertyValue(varible);
     colorMap[varible] = color || '';
     return colorMap;
   }, {});
@@ -275,13 +274,12 @@ export function GetValueColor(number?: number | string) {
   const varibleColors = getVariblesColor(CONST.VARIBLES);
   return {
     color:
-      value > 0
-        ? varibleColors['--increase-color']
-        : value < 0
-        ? varibleColors['--reduce-color']
-        : varibleColors['--reverse-text-color'],
+      value > 0 ? varibleColors['--increase-color'] : value < 0 ? varibleColors['--reduce-color'] : varibleColors['--reverse-text-color'],
     textClass: value > 0 ? 'text-up' : value < 0 ? 'text-down' : 'text-none',
-    blockClass:
-      value > 0 ? 'block-up' : value < 0 ? 'block-down' : 'block-none',
+    blockClass: value > 0 ? 'block-up' : value < 0 ? 'block-down' : 'block-none',
   };
+}
+
+export function NotEmpty<TValue>(value: TValue | null | undefined): value is TValue {
+  return value !== null && value !== undefined;
 }

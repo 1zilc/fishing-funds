@@ -9,12 +9,8 @@ interface SimilarRankProps {
   rateInSimilarType?: { x: number; y: number; sc: string }[];
 }
 
-const SimilarRank: React.FC<SimilarRankProps> = ({
-  rateInSimilarType = [],
-}) => {
-  const { ref: chartRef, chartInstance } = useResizeEchart(
-    CONST.DEFAULT.ECHARTS_SCALE
-  );
+const SimilarRank: React.FC<SimilarRankProps> = ({ rateInSimilarType = [] }) => {
+  const { ref: chartRef, chartInstance } = useResizeEchart(CONST.DEFAULT.ECHARTS_SCALE);
   const { varibleColors, darkMode } = useHomeContext();
 
   useRenderEcharts(

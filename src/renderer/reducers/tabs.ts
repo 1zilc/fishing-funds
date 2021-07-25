@@ -1,18 +1,17 @@
-import { AnyAction } from 'redux';
-
-import { SET_TAB_ACTIVE_KEY } from '../actions/tabs';
-import * as Enums from '../utils/enums';
+import { Reducer } from '@/reducers/types';
+import { SET_TAB_ACTIVE_KEY } from '@/actions/tabs';
+import * as Enums from '@/utils/enums';
 
 export interface TabsState {
   activeKey: Enums.TabKeyType;
 }
 
-export default function tabs(
-  state: TabsState = {
+const tabs: Reducer<TabsState> = (
+  state = {
     activeKey: Enums.TabKeyType.Funds,
   },
-  action: AnyAction
-): TabsState {
+  action
+) => {
   switch (action.type) {
     case SET_TAB_ACTIVE_KEY:
       return {
@@ -22,4 +21,6 @@ export default function tabs(
     default:
       return state;
   }
-}
+};
+
+export default tabs;

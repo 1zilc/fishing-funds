@@ -34,9 +34,7 @@ const Scale: React.FC<ScaleProps> = ({
     series: [],
   },
 }) => {
-  const { ref: chartRef, chartInstance } = useResizeEchart(
-    CONST.DEFAULT.ECHARTS_SCALE
-  );
+  const { ref: chartRef, chartInstance } = useResizeEchart(CONST.DEFAULT.ECHARTS_SCALE);
   const { varibleColors, darkMode } = useHomeContext();
 
   useRenderEcharts(
@@ -59,9 +57,7 @@ const Scale: React.FC<ScaleProps> = ({
           },
           formatter: (params: any) => {
             const [{ data, name }] = params;
-            return renderToString(
-              <Tooltip time={name} value={data?.value} rate={data?.item?.mom} />
-            );
+            return renderToString(<Tooltip time={name} value={data?.value} rate={data?.item?.mom} />);
           },
         },
         grid: {

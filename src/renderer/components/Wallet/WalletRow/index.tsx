@@ -6,11 +6,12 @@ import StandCard from '@/components/Card/StandCard';
 import { ReactComponent as RemoveIcon } from '@/assets/icons/remove.svg';
 import { ReactComponent as CheckboxIcon } from '@/assets/icons/checkbox.svg';
 import { ReactComponent as EditIcon } from '@/assets/icons/edit.svg';
-import { deleteWallet, getWalletConfig, walletIcons } from '@/actions/wallet';
-import { calcFunds } from '@/actions/fund';
+import { deleteWalletAction } from '@/actions/wallet';
+import { walletIcons } from '@/helpers/wallet';
 import { StoreState } from '@/reducers/types';
 import * as Utils from '@/utils';
 import * as Enums from '@/utils/enums';
+import * as Helpers from '@/helpers';
 import styles from './index.scss';
 
 export interface WalletRowProps {
@@ -28,13 +29,11 @@ const { dialog } = window.contextModules.electron;
 const WalletRow: React.FC<WalletRowProps> = (props) => {
   const { wallet, selected, readonly } = props;
   const dispatch = useDispatch();
-  const walletsMap = useSelector(
-    (state: StoreState) => state.wallet.walletsMap
-  );
+  const wallets = useSelector((state: StoreState) => state.wallet.wallets);
+  const { walletConfig } = useSelector((state: StoreState) => state.wallet.config);
   const eyeStatus = useSelector((state: StoreState) => state.wallet.eyeStatus);
 
   const onRemoveClick = async (wallet: Wallet.SettingItem) => {
-    const { walletConfig } = getWalletConfig();
     if (walletConfig.length === 1) {
       dialog.showMessageBox({
         title: '删除失败',
@@ -51,7 +50,7 @@ const WalletRow: React.FC<WalletRowProps> = (props) => {
       buttons: ['确定', '取消'],
     });
     if (response === 0) {
-      dispatch(deleteWallet(wallet.code));
+      dispatch(deleteWalletAction(wallet.code));
     }
   };
 
@@ -61,27 +60,20 @@ const WalletRow: React.FC<WalletRowProps> = (props) => {
     }
   };
 
-  const walletState: Wallet.StateItem = walletsMap[wallet.code] || {
+  const walletState: Wallet.StateItem = wallets.find(({ code }) => code === wallet.code) || {
+    code: wallet.code,
     funds: [],
     updateTime: '还没有刷新过哦~',
   };
   const { funds, updateTime } = walletState;
 
-  const { zje, sygz, gssyl, cysy, cysyl } = calcFunds(funds, wallet.code);
+  const { zje, sygz, gssyl, cysy, cysyl } = Helpers.Fund.CalcFunds(funds, wallet.code);
   const eyeOpen = eyeStatus === Enums.EyeStatus.Open;
   const displayZje = eyeOpen ? zje.toFixed(2) : Utils.Encrypt(zje.toFixed(2));
-  const displaySygz = eyeOpen
-    ? Utils.Yang(sygz.toFixed(2))
-    : Utils.Encrypt(Utils.Yang(sygz.toFixed(2)));
-  const displayGssyl = eyeOpen
-    ? gssyl.toFixed(2)
-    : Utils.Encrypt(gssyl.toFixed(2));
-  const displayCysy = eyeOpen
-    ? cysy.toFixed(2)
-    : Utils.Encrypt(cysy.toFixed(2));
-  const displayCysyl = eyeOpen
-    ? cysyl.toFixed(2)
-    : Utils.Encrypt(cysyl.toFixed(2));
+  const displaySygz = eyeOpen ? Utils.Yang(sygz.toFixed(2)) : Utils.Encrypt(Utils.Yang(sygz.toFixed(2)));
+  const displayGssyl = eyeOpen ? gssyl.toFixed(2) : Utils.Encrypt(gssyl.toFixed(2));
+  const displayCysy = eyeOpen ? cysy.toFixed(2) : Utils.Encrypt(cysy.toFixed(2));
+  const displayCysyl = eyeOpen ? cysyl.toFixed(2) : Utils.Encrypt(cysyl.toFixed(2));
 
   return (
     <StandCard
@@ -122,17 +114,9 @@ const WalletRow: React.FC<WalletRowProps> = (props) => {
         hoverable: !readonly,
       })}
       onClick={() => !readonly && props.onClick && props.onClick(wallet)}
-      onDoubleClick={() =>
-        !readonly && props.onDoubleClick && props.onDoubleClick(wallet)
-      }
+      onDoubleClick={() => !readonly && props.onDoubleClick && props.onDoubleClick(wallet)}
     >
-      <div
-        className={classnames(
-          styles.row,
-          { [styles.readonly]: readonly },
-          'card-body'
-        )}
-      >
+      <div className={classnames(styles.row, { [styles.readonly]: readonly }, 'card-body')}>
         <div className={styles.rowInfo}>
           <div style={{ textAlign: 'center' }}>
             <div>持有金额</div>

@@ -1,5 +1,6 @@
 import React, { PropsWithChildren, useState, useEffect } from 'react';
 import { Table, Divider } from 'antd';
+import { useDispatch, useSelector } from 'react-redux';
 import { useRequest } from 'ahooks';
 import classnames from 'classnames';
 
@@ -7,7 +8,7 @@ import CustomDrawer from '@/components/CustomDrawer';
 import AddFundContent from '@/components/Home/FundList/AddFundContent';
 import DetailFundContent from '@/components/Home/FundList/DetailFundContent';
 import TypeSelection from '@/components/TypeSelection';
-import { getFundConfig } from '@/actions/fund';
+import { StoreState } from '@/reducers/types';
 import { useDrawer } from '@/utils/hooks';
 import * as Services from '@/services';
 import * as Utils from '@/utils';
@@ -33,21 +34,10 @@ const RenderColorCol = ({ value }: { value: string }) => {
 const Rank: React.FC<PropsWithChildren<RankProps>> = () => {
   const [fundType, setFundType] = useState(fundTypeList[0]);
   const [data, setData] = useState([]);
-  const { codeMap } = getFundConfig();
+  const { codeMap } = useSelector((state: StoreState) => state.fund.config);
+  const { data: detailCode, show: showDetailDrawer, set: setDetailDrawer, close: closeDetailDrawer } = useDrawer('');
 
-  const {
-    data: detailCode,
-    show: showDetailDrawer,
-    set: setDetailDrawer,
-    close: closeDetailDrawer,
-  } = useDrawer('');
-
-  const {
-    data: addCode,
-    show: showAddDrawer,
-    set: setAddDrawer,
-    close: closeAddDrawer,
-  } = useDrawer('');
+  const { data: addCode, show: showAddDrawer, set: setAddDrawer, close: closeAddDrawer } = useDrawer('');
 
   const columns = [
     {
@@ -93,29 +83,26 @@ const Rank: React.FC<PropsWithChildren<RankProps>> = () => {
     },
   ];
 
-  const { run: runGetRankDataFromEasemoney, loading } = useRequest(
-    Services.Fund.GetRankDataFromEasemoney,
-    {
-      manual: true,
-      cacheKey: `GetRankDataFromEasemoney/${fundType.type}`,
-      throwOnError: true,
-      onSuccess: (result) => {
-        setData(
-          result.map((_: string) => {
-            const [code, name, jx, date, dwjz, ljjz, d, w, m] = _.split(',');
-            return {
-              code,
-              name,
-              d,
-              w,
-              m,
-            };
-          })
-        );
-      },
-      refreshDeps: [fundType],
-    }
-  );
+  const { run: runGetRankDataFromEasemoney, loading } = useRequest(Services.Fund.GetRankDataFromEasemoney, {
+    manual: true,
+    cacheKey: `GetRankDataFromEasemoney/${fundType.type}`,
+    throwOnError: true,
+    onSuccess: (result) => {
+      setData(
+        result.map((_: string) => {
+          const [code, name, jx, date, dwjz, ljjz, d, w, m] = _.split(',');
+          return {
+            code,
+            name,
+            d,
+            w,
+            m,
+          };
+        })
+      );
+    },
+    refreshDeps: [fundType],
+  });
 
   useEffect(() => {
     runGetRankDataFromEasemoney(fundType.type);
@@ -146,18 +133,10 @@ const Rank: React.FC<PropsWithChildren<RankProps>> = () => {
         })}
       />
       <CustomDrawer show={showDetailDrawer}>
-        <DetailFundContent
-          onEnter={closeDetailDrawer}
-          onClose={closeDetailDrawer}
-          code={detailCode}
-        />
+        <DetailFundContent onEnter={closeDetailDrawer} onClose={closeDetailDrawer} code={detailCode} />
       </CustomDrawer>
       <CustomDrawer show={showAddDrawer}>
-        <AddFundContent
-          defaultCode={addCode}
-          onClose={closeAddDrawer}
-          onEnter={closeAddDrawer}
-        />
+        <AddFundContent defaultCode={addCode} onClose={closeAddDrawer} onEnter={closeAddDrawer} />
       </CustomDrawer>
     </div>
   );

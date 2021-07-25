@@ -1,8 +1,8 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import classnemes from 'classnames';
 import { useSelector, useDispatch } from 'react-redux';
 import { StoreState } from '@/reducers/types';
-import { setTabActiveKey } from '@/actions/tabs';
+import { setTabActiveKeyAction } from '@/actions/tabs';
 import * as Enums from '@/utils/enums';
 import styles from './index.scss';
 
@@ -32,9 +32,7 @@ const tabs = [
 const TabsBar: React.FC<TabsBarProps> = () => {
   const dispatch = useDispatch();
 
-  const tabsActiveKey = useSelector(
-    (state: StoreState) => state.tabs.activeKey
-  );
+  const tabsActiveKey = useSelector((state: StoreState) => state.tabs.activeKey);
 
   return (
     <div className={styles.layout}>
@@ -45,7 +43,7 @@ const TabsBar: React.FC<TabsBarProps> = () => {
               className={classnemes(styles.tab, {
                 [styles.active]: tabsActiveKey === tab.key,
               })}
-              onClick={() => dispatch(setTabActiveKey(tab.key))}
+              onClick={() => dispatch(setTabActiveKeyAction(tab.key))}
             >
               {tab.name}
             </div>

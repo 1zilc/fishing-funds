@@ -1,15 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { useDebounceFn, useBoolean } from 'ahooks';
 import { Input, InputNumber } from 'antd';
 
 import DetailFundContent from '@/components/Home/FundList/DetailFundContent';
 import CustomDrawer from '@/components/CustomDrawer';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
-import { addFund, getFund, getFundConfig } from '@/actions/fund';
+import { addFundAction } from '@/actions/fund';
 import { StoreState } from '@/reducers/types';
 import { useDrawer } from '@/utils/hooks';
 import * as Enums from '@/utils/enums';
+import * as Helpers from '@/helpers';
 import styles from './index.scss';
 
 export interface AddFundContentProps {
@@ -20,71 +21,58 @@ export interface AddFundContentProps {
 
 const AddFundContent: React.FC<AddFundContentProps> = (props) => {
   const { defaultCode } = props;
-  const { codeMap } = getFundConfig();
+  const dispatch = useDispatch();
   const [name, setName] = useState<string>('');
   const [code, setCode] = useState<string>('');
   const [cyfe, setCyfe] = useState<number>(0);
   const [cbj, setCbj] = useState<any>();
   const [none, setNone] = useState<boolean>(false);
   const [fundList, setFundlist] = useState<Fund.RemoteFund[]>([]);
-  const remoteFunds = useSelector(
-    (state: StoreState) => state.fund.remoteFunds
-  );
-  const {
-    data: detailCode,
-    show: showDetailDrawer,
-    set: setDetailDrawer,
-    close: closeDetailDrawer,
-  } = useDrawer('');
+  const remoteFunds = useSelector((state: StoreState) => state.fund.remoteFunds);
+  const { codeMap } = useSelector((state: StoreState) => state.fund.config);
+  const { data: detailCode, show: showDetailDrawer, set: setDetailDrawer, close: closeDetailDrawer } = useDrawer('');
 
   async function onAdd() {
-    const fund = await getFund(code);
+    const fund = await Helpers.Fund.GetFund(code);
     if (fund) {
       setNone(false);
-      addFund({
-        code,
-        cyfe: cyfe ?? 0,
-        name: fund.name || '未知',
-        cbj: cbj ?? undefined,
-      });
+      dispatch(addFundAction({ code, cyfe: cyfe ?? 0, name: fund.name || '未知', cbj: cbj ?? undefined }));
       props.onEnter();
     } else {
       setNone(true);
     }
   }
 
-  const { run: onSearch } = useDebounceFn(
-    (type: Enums.SearchType, value: string) => {
-      if (!value) {
-        setFundlist([]);
-        return;
-      }
-      switch (type) {
-        case Enums.SearchType.Code:
-          setFundlist(
-            remoteFunds.filter((remoteFund) => {
-              const [code, pinyin, name, type, quanpin] = remoteFund;
-              return code.indexOf(value) !== -1;
-            })
-          );
-          break;
-        case Enums.SearchType.Name:
-          setFundlist(
-            remoteFunds.filter((remoteFund) => {
-              const [code, pinyin, name, type, quanpin] = remoteFund;
-              return (
-                name.indexOf(value) !== -1 ||
-                pinyin.indexOf(value.toLocaleUpperCase()) !== -1 ||
-                quanpin.indexOf(value.toLocaleUpperCase()) !== -1
-              );
-            })
-          );
-          break;
-        default:
-          break;
-      }
+  const { run: onSearch } = useDebounceFn((type: Enums.SearchType, value: string) => {
+    if (!value) {
+      setFundlist([]);
+      return;
     }
-  );
+    switch (type) {
+      case Enums.SearchType.Code:
+        setFundlist(
+          remoteFunds.filter((remoteFund) => {
+            const [code, pinyin, name, type, quanpin] = remoteFund;
+            return code.indexOf(value) !== -1;
+          })
+        );
+        break;
+      case Enums.SearchType.Name:
+        setFundlist(
+          remoteFunds.filter((remoteFund) => {
+            const [code, pinyin, name, type, quanpin] = remoteFund;
+            return (
+              name.indexOf(value) !== -1 ||
+              pinyin.indexOf(value.toLocaleUpperCase()) !== -1 ||
+              quanpin.indexOf(value.toLocaleUpperCase()) !== -1
+            );
+          })
+        );
+        break;
+      default:
+        break;
+    }
+  });
 
   useEffect(() => {
     if (defaultCode) {
@@ -94,12 +82,7 @@ const AddFundContent: React.FC<AddFundContentProps> = (props) => {
   }, [defaultCode]);
 
   return (
-    <CustomDrawerContent
-      title="添加基金"
-      enterText="添加"
-      onEnter={onAdd}
-      onClose={props.onClose}
-    >
+    <CustomDrawerContent title="添加基金" enterText="添加" onEnter={onAdd} onClose={props.onClose}>
       <div className={styles.content}>
         <section>
           <label>
@@ -164,11 +147,7 @@ const AddFundContent: React.FC<AddFundContentProps> = (props) => {
       </div>
       {(name || code) &&
         fundList.map(([code, pinyin, name, type, quanpin]) => (
-          <div
-            key={code}
-            className={styles.fund}
-            onClick={() => setDetailDrawer(code)}
-          >
+          <div key={code} className={styles.fund} onClick={() => setDetailDrawer(code)}>
             <div>
               <div className={styles.name}>
                 <span className={styles.nameText}>{name}</span>
@@ -195,11 +174,7 @@ const AddFundContent: React.FC<AddFundContentProps> = (props) => {
           </div>
         ))}
       <CustomDrawer show={showDetailDrawer}>
-        <DetailFundContent
-          onEnter={closeDetailDrawer}
-          onClose={closeDetailDrawer}
-          code={detailCode}
-        />
+        <DetailFundContent onEnter={closeDetailDrawer} onClose={closeDetailDrawer} code={detailCode} />
       </CustomDrawer>
     </CustomDrawerContent>
   );

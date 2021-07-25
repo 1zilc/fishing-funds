@@ -1,43 +1,28 @@
+import { AnyAction } from 'redux';
+import { ThunkAction } from '@/reducers/types';
 import * as Utils from '@/utils';
-import * as Enums from '@/utils/enums';
 import * as CONST from '@/constants';
+import * as Helpers from '@/helpers';
 
 export const SYNC_SETTING = 'SYNC_SETTING';
 
-export const defalutSystemSetting: System.Setting = {
-  fundApiTypeSetting: Enums.FundApiType.Eastmoney,
+export function setSystemSettingAction(setting: System.Setting): ThunkAction {
+  return (dispatch, getState) => {
+    const {
+      setting: { systemSetting },
+    } = getState();
 
-  conciseSetting: false,
-  lowKeySetting: false,
-  baseFontSizeSetting: 12,
-  systemThemeSetting: Enums.SystemThemeType.Auto,
+    Utils.SetStorage(CONST.STORAGE.SYSTEM_SETTING, {
+      ...systemSetting,
+      ...setting,
+    });
 
-  autoStartSetting: true,
-  adjustmentNotificationSetting: false,
-  autoFreshSetting: true,
-  freshDelaySetting: 1,
-  autoCheckUpdateSetting: true,
-};
-
-export function getSystemSetting() {
-  const systemSetting: System.Setting = Utils.GetStorage(
-    CONST.STORAGE.SYSTEM_SETTING,
-    defalutSystemSetting
-  );
-  return { ...defalutSystemSetting, ...systemSetting };
+    dispatch(syncSystemSettingAction());
+  };
 }
 
-export function setSystemSetting(setting: System.Setting) {
-  const systemSetting = getSystemSetting();
-  Utils.SetStorage(CONST.STORAGE.SYSTEM_SETTING, {
-    ...systemSetting,
-    ...setting,
-  });
-  return asyncSetting();
-}
-
-export function asyncSetting() {
-  const systemSetting = getSystemSetting();
+export function syncSystemSettingAction(): AnyAction {
+  const systemSetting = Helpers.Setting.GetSystemSetting();
   return {
     type: SYNC_SETTING,
     payload: systemSetting,

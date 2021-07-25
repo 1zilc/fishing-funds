@@ -10,10 +10,6 @@
     "**/src/**/*.js": true
   },
 
-  "javascript.validate.enable": false,
-  "javascript.format.enable": false,
-  "typescript.format.enable": false,
-
   "search.exclude": {
     ".git": true,
     ".eslintcache": true,

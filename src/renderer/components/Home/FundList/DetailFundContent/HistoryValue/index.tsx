@@ -15,11 +15,7 @@ export interface HistoryValueProps {
 const HistoryValue: React.FC<HistoryValueProps> = ({ data = [] }) => {
   const [
     showFundHistoryValueDrawer,
-    {
-      setTrue: openFundHistoryValueDrawer,
-      setFalse: closeFundHistoryValueDrawer,
-      toggle: ToggleFundHistoryValueDrawer,
-    },
+    { setTrue: openFundHistoryValueDrawer, setFalse: closeFundHistoryValueDrawer, toggle: ToggleFundHistoryValueDrawer },
   ] = useBoolean(false);
   const displayData = [...data].reverse().slice(0, 5);
   const columns = [
@@ -36,32 +32,18 @@ const HistoryValue: React.FC<HistoryValueProps> = ({ data = [] }) => {
       title: '涨跌幅',
       dataIndex: 'equityReturn',
 
-      render: (text: number) => (
-        <div className={Utils.GetValueColor(text).textClass}>
-          {Utils.Yang(text)} %
-        </div>
-      ),
+      render: (text: number) => <div className={Utils.GetValueColor(text).textClass}>{Utils.Yang(text)} %</div>,
     },
   ];
 
   return (
     <div className={styles.content}>
-      <Table
-        rowKey="x"
-        size="small"
-        columns={columns}
-        dataSource={displayData}
-        pagination={false}
-      />
+      <Table rowKey="x" size="small" columns={columns} dataSource={displayData} pagination={false} />
       <div className={styles.more}>
         <a onClick={openFundHistoryValueDrawer}>{'更多数据 >'}</a>
       </div>
       <CustomDrawer show={showFundHistoryValueDrawer}>
-        <FundHistoryValueContent
-          onEnter={closeFundHistoryValueDrawer}
-          onClose={closeFundHistoryValueDrawer}
-          data={data}
-        />
+        <FundHistoryValueContent onEnter={closeFundHistoryValueDrawer} onClose={closeFundHistoryValueDrawer} data={data} />
       </CustomDrawer>
     </div>
   );

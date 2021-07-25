@@ -5,17 +5,17 @@
 import * as Utils from './index';
 
 export interface Collector<T> {
-  (): Promise<T | null>;
+  (...arg: any): Promise<T | null>;
 }
 /** *
  * @param requests Collector[]
  * @param delay 延迟时间
  * 所有请求并行发送，所有请求完成后promise结束
  */
-export const ConCurrencyAllAdapter: <T>(
-  collectors: Collector<T>[],
-  delay?: number
-) => Promise<(T | null)[]> = async (collectors, delay = 0) => {
+export const ConCurrencyAllAdapter: <T>(collectors: Collector<T>[], delay?: number) => Promise<(T | null)[]> = async (
+  collectors,
+  delay = 0
+) => {
   await Utils.Sleep(delay);
   return Promise.all(collectors.map((_) => _()));
 };
@@ -25,10 +25,7 @@ export const ConCurrencyAllAdapter: <T>(
  * @param delay 延迟时间
  * 串行发送所有请求，所有请求完成后promise结束
  */
-export const ChokeAllAdapter: <T>(
-  collectors: Collector<T>[],
-  delay?: number
-) => Promise<(T | null)[]> = async <U>(
+export const ChokeAllAdapter: <T>(collectors: Collector<T>[], delay?: number) => Promise<(T | null)[]> = async <U>(
   collectors: Collector<U>[],
   delay = 0
 ) => {
@@ -50,10 +47,10 @@ export const ChokeAllAdapter: <T>(
  * @param delay 延迟时间
  * 并行发送所有请求，有一个请求结束，则所有结束
  */
-export const ConCurrencyPreemptiveAdapter: <T>(
-  collectors: Collector<T>[],
-  delay?: number
-) => Promise<T | null> = async (collectors, delay = 0) => {
+export const ConCurrencyPreemptiveAdapter: <T>(collectors: Collector<T>[], delay?: number) => Promise<T | null> = async (
+  collectors,
+  delay = 0
+) => {
   await Utils.Sleep(delay);
   return new Promise((resolve, reject) => {
     collectors.forEach(async (next, index) => {
@@ -68,10 +65,10 @@ export const ConCurrencyPreemptiveAdapter: <T>(
  * @param delay 延迟时间
  * 串行发送所有请求，有一个请求结束，则所有结束
  */
-export const ChokePreemptiveAdapter: <T>(
-  collectors: Collector<T>[],
-  delay?: number
-) => Promise<T | null> = async (collectors, delay = 0) => {
+export const ChokePreemptiveAdapter: <T>(collectors: Collector<T>[], delay?: number) => Promise<T | null> = async (
+  collectors,
+  delay = 0
+) => {
   return new Promise((resolve, reject) => {
     collectors.reduce((last, next, index) => {
       return last.then(async () => {
@@ -91,11 +88,7 @@ export const ChokePreemptiveAdapter: <T>(
  * @param delay 延迟时间
  * 串行任务组，每个小任务为并发
  */
-export const ChokeGroupAdapter: <T>(
-  collectors: Collector<T>[],
-  slice?: number,
-  delay?: number
-) => Promise<(T | null)[]> = async <T>(
+export const ChokeGroupAdapter: <T>(collectors: Collector<T>[], slice?: number, delay?: number) => Promise<(T | null)[]> = async <T>(
   collectors: Collector<T>[],
   slice = 1,
   delay = 0
@@ -108,8 +101,6 @@ export const ChokeGroupAdapter: <T>(
     collectorGroups[groupIndex] = group;
   });
 
-  const taskcollectors = collectorGroups.map(
-    (collectorGroup) => async () => ConCurrencyAllAdapter(collectorGroup)
-  );
+  const taskcollectors = collectorGroups.map((collectorGroup) => async () => ConCurrencyAllAdapter(collectorGroup));
   return (await ChokeAllAdapter(taskcollectors, delay)).flat();
 };

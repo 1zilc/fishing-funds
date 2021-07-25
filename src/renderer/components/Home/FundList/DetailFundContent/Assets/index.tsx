@@ -18,9 +18,7 @@ interface AssetsProps {
 }
 
 const Assets: React.FC<AssetsProps> = ({ Data_assetAllocation = {} }) => {
-  const { ref: chartRef, chartInstance } = useResizeEchart(
-    CONST.DEFAULT.ECHARTS_SCALE
-  );
+  const { ref: chartRef, chartInstance } = useResizeEchart(CONST.DEFAULT.ECHARTS_SCALE);
   const { varibleColors, darkMode } = useHomeContext();
 
   useRenderEcharts(

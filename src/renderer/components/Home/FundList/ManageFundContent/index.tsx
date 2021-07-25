@@ -17,19 +17,9 @@ const ManageFundContent: React.FC<ManageFundContentProps> = (props) => {
   const [activeKey, setActiveKey] = useState(String(0));
 
   return (
-    <CustomDrawerContent
-      title="管理基金"
-      enterText="确定"
-      onEnter={props.onEnter}
-      onClose={props.onClose}
-    >
+    <CustomDrawerContent title="管理基金" enterText="确定" onEnter={props.onEnter} onClose={props.onClose}>
       <div className={styles.content}>
-        <Tabs
-          activeKey={activeKey}
-          onChange={setActiveKey}
-          animated={{ tabPane: true }}
-          tabBarGutter={15}
-        >
+        <Tabs activeKey={activeKey} onChange={setActiveKey} animated={{ tabPane: true }} tabBarGutter={15}>
           <Tabs.TabPane tab="自选基金" key={String(0)}>
             <Optional active={activeKey === String(0)} />
           </Tabs.TabPane>

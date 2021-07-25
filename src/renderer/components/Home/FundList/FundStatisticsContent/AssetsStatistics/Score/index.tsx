@@ -2,9 +2,6 @@ import React from 'react';
 
 import { useHomeContext } from '@/components/Home';
 import { useResizeEchart, useRenderEcharts } from '@/utils/hooks';
-import { calcFunds } from '@/actions/fund';
-import { getCurrentWallet } from '@/actions/wallet';
-import * as CONST from '@/constants';
 
 export interface ScoreProps {
   gssyl: number;
