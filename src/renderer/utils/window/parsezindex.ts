@@ -1,8 +1,6 @@
 declare global {
   interface Window {
-    parsezindex: (response: {
-      data: { diff: { f12: string; f13: string; f14: string }[] };
-    }) => {
+    parsezindex: (response: { data: { diff: { f12: string; f13: string; f14: string }[] } }) => {
       name: string;
       code: string;
       show: boolean;
@@ -10,7 +8,7 @@ declare global {
   }
 }
 
-window.parsezindex = function (response) {
+window.parsezindex = (response) => {
   return response.data.diff.map((i) => {
     return {
       name: i.f14,

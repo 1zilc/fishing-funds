@@ -21,13 +21,9 @@ export interface DetailQuotationContentProps {
   code: string;
 }
 
-const DetailQuotationContent: React.FC<DetailQuotationContentProps> = (
-  props
-) => {
+const DetailQuotationContent: React.FC<DetailQuotationContentProps> = (props) => {
   const { code } = props;
-  const [quotation, setQuotation] = useState<
-    Quotation.DetailData | Record<string, any>
-  >({});
+  const [quotation, setQuotation] = useState<Quotation.DetailData | Record<string, any>>({});
 
   useRequest(Services.Quotation.GetQuotationDetailFromEastmoney, {
     throwOnError: true,
@@ -37,47 +33,23 @@ const DetailQuotationContent: React.FC<DetailQuotationContentProps> = (
   });
 
   return (
-    <CustomDrawerContent
-      title="板块详情"
-      enterText="确定"
-      onClose={props.onClose}
-      onEnter={props.onEnter}
-    >
+    <CustomDrawerContent title="板块详情" enterText="确定" onClose={props.onClose} onEnter={props.onEnter}>
       <div className={styles.content}>
         <div className={styles.container}>
           <h3 className={styles.titleRow}>
             <span>{quotation?.name}</span>
-            <span
-              className={classnames(
-                Utils.GetValueColor(quotation.zdd).textClass
-              )}
-            >
-              {quotation?.zxj}
-            </span>
+            <span className={classnames(Utils.GetValueColor(quotation.zdd).textClass)}>{quotation?.zxj}</span>
           </h3>
           <div className={styles.subTitleRow}>
             <span>{quotation?.code}</span>
             <div>
               <span className={styles.detailItemLabel}>最新价：</span>
-              <span
-                className={classnames(
-                  Utils.GetValueColor(quotation.zdd).textClass
-                )}
-              >
-                {Utils.Yang(quotation?.zdd)}
-              </span>
+              <span className={classnames(Utils.GetValueColor(quotation.zdd).textClass)}>{Utils.Yang(quotation?.zdd)}</span>
             </div>
           </div>
           <div className={styles.detail}>
             <div className={styles.detailItem}>
-              <div
-                className={classnames(
-                  styles.zdf,
-                  Utils.GetValueColor(quotation.zdd).textClass
-                )}
-              >
-                {Utils.Yang(quotation.zdf)}%
-              </div>
+              <div className={classnames(styles.zdf, Utils.GetValueColor(quotation.zdd).textClass)}>{Utils.Yang(quotation.zdf)}%</div>
               <div className={styles.detailItemLabel}>涨跌幅</div>
             </div>
             <div className={classnames(styles.detailItem, 'text-center')}>
@@ -92,18 +64,12 @@ const DetailQuotationContent: React.FC<DetailQuotationContentProps> = (
         </div>
         <div className={styles.container}>
           <Tabs animated={{ tabPane: true }} tabBarGutter={15}>
-            <Tabs.TabPane
-              tab="实时资金流向"
-              key={String(Enums.FundFlowType.RealTime)}
-            >
+            <Tabs.TabPane tab="实时资金流向" key={String(Enums.FundFlowType.RealTime)}>
               <ChartCard>
                 <RealTimeFundFlow code={code} />
               </ChartCard>
             </Tabs.TabPane>
-            <Tabs.TabPane
-              tab="盘后资金流向"
-              key={String(Enums.FundFlowType.AfterTime)}
-            >
+            <Tabs.TabPane tab="盘后资金流向" key={String(Enums.FundFlowType.AfterTime)}>
               <ChartCard>
                 <AfterTimeFundFlow code={code} />
               </ChartCard>

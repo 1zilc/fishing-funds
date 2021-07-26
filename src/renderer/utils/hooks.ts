@@ -7,25 +7,16 @@ import * as echarts from 'echarts';
 
 import { updateAvaliableAction } from '@/actions/updater';
 import { loadWalletsFundsAction, loadFixWalletsFundsAction } from '@/actions/wallet';
-import { loadQuotationsWithoutLoading } from '@/actions/quotation';
-import { loadZindexsWithoutLoading } from '@/actions/zindex';
-import { getStocks, getStockConfig, updateStock, loadStocksWithoutLoading } from '@/actions/stock';
-import {
-  updateFundAction,
-  setFundConfigAction,
-  loadFundsAction,
-  loadRemoteFundsAction,
-  loadFixFundsAction,
-  loadFundsWithoutLoadingAction,
-} from '@/actions/fund';
-
+import { loadQuotationsWithoutLoadingAction } from '@/actions/quotation';
+import { loadZindexsWithoutLoadingAction } from '@/actions/zindex';
+import { loadStocksWithoutLoadingAction, updateStockAction } from '@/actions/stock';
+import { updateFundAction, setFundConfigAction, loadFundsAction, loadRemoteFundsAction, loadFixFundsAction } from '@/actions/fund';
 import { StoreState } from '@/reducers/types';
 import * as Utils from '@/utils';
 import * as CONST from '@/constants';
 import * as Adapter from '@/utils/adpters';
 import * as Services from '@/services';
 import * as Helpers from '@/helpers';
-import { store } from '@/index';
 
 const { invoke, dialog, ipcRenderer, clipboard, app } = window.contextModules.electron;
 
@@ -281,14 +272,15 @@ export function useSyncFixFundSetting() {
     } else {
       setTrue();
     }
-  }, []);
+  }, [fundConfig]);
 
   return { done };
 }
 
 export function useSyncFixStockSetting() {
+  const dispatch = useDispatch();
   const [done, { setTrue }] = useBoolean(false);
-
+  const { stockConfig } = useSelector((state: StoreState) => state.stock.config);
   async function FixStockSetting(stockConfig: Stock.SettingItem[]) {
     try {
       const collectors = stockConfig.map(
@@ -298,10 +290,12 @@ export function useSyncFixStockSetting() {
               searchResult?.forEach(({ Datas, Type }) => {
                 Datas.forEach(({ Code }) => {
                   if (Code === code) {
-                    updateStock({
-                      secid,
-                      type: Type,
-                    });
+                    dispatch(
+                      updateStockAction({
+                        secid,
+                        type: Type,
+                      })
+                    );
                   }
                 });
               });
@@ -317,14 +311,13 @@ export function useSyncFixStockSetting() {
   }
 
   useEffect(() => {
-    const { stockConfig } = getStockConfig();
     const unTypedStocks = stockConfig.filter(({ type }) => !type);
     if (unTypedStocks.length) {
       FixStockSetting(unTypedStocks);
     } else {
       setTrue();
     }
-  }, []);
+  }, [stockConfig]);
 
   return { done };
 }
@@ -372,11 +365,15 @@ export function useCurrentWallet() {
     updateTime: '',
     code: currentWalletCode,
   };
+  const currentWalletFundsCodeMap = Helpers.Fund.GetCodeMap(currentWalletConfig.funds);
+  const currentWalletFundsConfig = currentWalletConfig.funds;
 
   return {
-    currentWalletConfig,
-    currentWalletCode,
-    currentWalletState,
+    currentWalletFundsConfig, // 当前钱包基金配置
+    currentWalletFundsCodeMap, // 当前钱包基金配置 codemap
+    currentWalletConfig, // 当前钱包配置
+    currentWalletCode, // 当前钱包 code
+    currentWalletState, // 当前钱包状态
   };
 }
 
@@ -404,11 +401,9 @@ export function useBootStrap() {
   const runLoadRemoteFunds = useActions(loadRemoteFundsAction);
   const runLoadWalletsFunds = useActions(loadWalletsFundsAction);
   const runLoadFixWalletsFunds = useActions(loadFixWalletsFundsAction);
-  // const runLoadFunds = useActions(loadFundsWithoutLoadingAction);
-  // const runLoadFixFunds = useActions(loadFixFundsAction);
-  const runLoadQuotations = useActions(loadQuotationsWithoutLoading);
-  const runLoadZindexs = useActions(loadZindexsWithoutLoading);
-  const runLoadStocks = useActions(loadStocksWithoutLoading);
+  const runLoadZindexs = useActions(loadZindexsWithoutLoadingAction);
+  const runLoadQuotations = useActions(loadQuotationsWithoutLoadingAction);
+  const runLoadStocks = useActions(loadStocksWithoutLoadingAction);
 
   // 间隔时间刷新远程基金数据
   useInterval(() => {
@@ -418,7 +413,10 @@ export function useBootStrap() {
   // 间隔时间刷新基金,指数，板块，钱包
   useWorkDayTimeToDo(() => {
     if (autoFreshSetting) {
-      Adapter.ChokeAllAdapter([runLoadWalletsFunds, runLoadZindexs, runLoadQuotations, runLoadStocks]);
+      Adapter.ConCurrencyAllAdapter([
+        () => Adapter.ChokeAllAdapter([runLoadWalletsFunds]),
+        () => Adapter.ChokeAllAdapter([runLoadZindexs, runLoadQuotations, runLoadStocks]),
+      ]);
     }
   }, freshDelaySetting * 1000 * 60);
 
@@ -431,13 +429,9 @@ export function useBootStrap() {
 
   // 第一次刷新所有数据
   useEffect(() => {
-    Adapter.ChokeAllAdapter([
-      runLoadRemoteFunds,
-      runLoadWalletsFunds,
-      runLoadFixWalletsFunds,
-      runLoadZindexs,
-      runLoadQuotations,
-      runLoadStocks,
+    Adapter.ConCurrencyAllAdapter([
+      () => Adapter.ChokeAllAdapter([runLoadRemoteFunds, runLoadWalletsFunds, runLoadFixWalletsFunds]),
+      () => Adapter.ChokeAllAdapter([runLoadZindexs, runLoadQuotations, runLoadStocks]),
     ]);
   }, []);
 }

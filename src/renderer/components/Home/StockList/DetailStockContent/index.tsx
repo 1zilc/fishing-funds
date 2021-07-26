@@ -21,9 +21,7 @@ export interface DetailStockContentProps {
 
 const DetailStockContent: React.FC<DetailStockContentProps> = (props) => {
   const { secid } = props;
-  const [stock, setStock] = useState<Stock.DetailItem | Record<string, any>>(
-    {}
-  );
+  const [stock, setStock] = useState<Stock.DetailItem | Record<string, any>>({});
 
   useRequest(Services.Stock.GetDetailFromEastmoney, {
     throwOnError: true,
@@ -34,40 +32,23 @@ const DetailStockContent: React.FC<DetailStockContentProps> = (props) => {
   });
 
   return (
-    <CustomDrawerContent
-      title="股票详情"
-      enterText="确定"
-      onClose={props.onClose}
-      onEnter={props.onEnter}
-    >
+    <CustomDrawerContent title="股票详情" enterText="确定" onClose={props.onClose} onEnter={props.onEnter}>
       <div className={styles.content}>
         <div className={styles.container}>
           <h3 className={styles.titleRow}>
             <span>{stock.name}</span>
-            <span
-              className={classnames(Utils.GetValueColor(stock.zdd).textClass)}
-            >
-              {stock.zx}
-            </span>
+            <span className={classnames(Utils.GetValueColor(stock.zdd).textClass)}>{stock.zx}</span>
           </h3>
           <div className={styles.subTitleRow}>
             <span>{stock.code}</span>
             <div>
               <span className={styles.detailItemLabel}>涨跌点：</span>
-              <span
-                className={classnames(Utils.GetValueColor(stock.zdd).textClass)}
-              >
-                {Utils.Yang(stock.zdd)}
-              </span>
+              <span className={classnames(Utils.GetValueColor(stock.zdd).textClass)}>{Utils.Yang(stock.zdd)}</span>
             </div>
           </div>
           <div className={styles.detail}>
             <div className={classnames(styles.detailItem, 'text-left')}>
-              <div
-                className={classnames(Utils.GetValueColor(stock.zdf).textClass)}
-              >
-                {Utils.Yang(stock.zdf)}%
-              </div>
+              <div className={classnames(Utils.GetValueColor(stock.zdf).textClass)}>{Utils.Yang(stock.zdf)}%</div>
               <div className={styles.detailItemLabel}>涨跌幅</div>
             </div>
             <div className={classnames(styles.detailItem, 'text-center')}>
@@ -81,13 +62,7 @@ const DetailStockContent: React.FC<DetailStockContentProps> = (props) => {
           </div>
           <div className={styles.detail}>
             <div className={classnames(styles.detailItem, 'text-left')}>
-              <div
-                className={classnames(
-                  Utils.GetValueColor(stock.jk - stock.zs).textClass
-                )}
-              >
-                {Utils.Yang(stock.jk)}
-              </div>
+              <div className={classnames(Utils.GetValueColor(stock.jk - stock.zs).textClass)}>{Utils.Yang(stock.jk)}</div>
               <div className={styles.detailItemLabel}>今开</div>
             </div>
             <div className={classnames(styles.detailItem, 'text-center')}>

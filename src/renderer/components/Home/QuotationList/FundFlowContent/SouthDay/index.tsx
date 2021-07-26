@@ -21,97 +21,92 @@ const dayTypeList = [
 ];
 
 const SouthDay: React.FC<SouthDayProps> = () => {
-  const { ref: chartRef, chartInstance } = useResizeEchart(
-    CONST.DEFAULT.ECHARTS_SCALE
-  );
+  const { ref: chartRef, chartInstance } = useResizeEchart(CONST.DEFAULT.ECHARTS_SCALE);
   const [dayType, setDayType] = useState(dayTypeList[0]);
 
   const { varibleColors, darkMode } = useHomeContext();
-  const { run: runGetSouthDayFromEastmoney } = useRequest(
-    Services.Quotation.GetSouthDayFromEastmoney,
-    {
-      manual: true,
-      throwOnError: true,
-      pollingInterval: 1000 * 60,
-      cacheKey: `GetSouthDayFromEastmoney/${fields1}/${dayType.code}`,
-      onSuccess: (result) => {
-        chartInstance?.setOption({
-          title: {
-            text: '',
+  const { run: runGetSouthDayFromEastmoney } = useRequest(Services.Quotation.GetSouthDayFromEastmoney, {
+    manual: true,
+    throwOnError: true,
+    pollingInterval: 1000 * 60,
+    cacheKey: `GetSouthDayFromEastmoney/${fields1}/${dayType.code}`,
+    onSuccess: (result) => {
+      chartInstance?.setOption({
+        title: {
+          text: '',
+        },
+        tooltip: {
+          trigger: 'axis',
+          position: 'inside',
+        },
+        legend: {
+          data: ['港股通(沪)', '港股通(深)', '南向'],
+          textStyle: {
+            color: varibleColors['--main-text-color'],
+            fontSize: 10,
           },
-          tooltip: {
-            trigger: 'axis',
-            position: 'inside',
+        },
+        grid: {
+          left: 0,
+          right: 0,
+          bottom: 0,
+          top: 24,
+          containLabel: true,
+        },
+        xAxis: {
+          type: 'time',
+          boundaryGap: false,
+          axisLabel: {
+            fontSize: 10,
           },
-          legend: {
-            data: ['港股通(沪)', '港股通(深)', '南向'],
-            textStyle: {
-              color: varibleColors['--main-text-color'],
-              fontSize: 10,
+        },
+        yAxis: {
+          type: 'value',
+          axisLabel: {
+            formatter: `{value}亿`,
+            fontSize: 10,
+          },
+        },
+        dataZoom: [
+          {
+            type: 'inside',
+            start: 90,
+            end: 100,
+            minValueSpan: 3600 * 24 * 1000 * 7,
+          },
+        ],
+        series: [
+          {
+            type: 'line',
+            name: '港股通(沪)',
+            showSymbol: false,
+            symbol: 'none',
+            data: result.sh2hk,
+            lineStyle: {
+              width: 1,
             },
           },
-          grid: {
-            left: 0,
-            right: 0,
-            bottom: 0,
-            top: 24,
-            containLabel: true,
-          },
-          xAxis: {
-            type: 'time',
-            boundaryGap: false,
-            axisLabel: {
-              fontSize: 10,
+          {
+            type: 'line',
+            name: '港股通(深)',
+            showSymbol: false,
+            symbol: 'none',
+            data: result.sz2hk,
+            lineStyle: {
+              width: 1,
             },
           },
-          yAxis: {
-            type: 'value',
-            axisLabel: {
-              formatter: `{value}亿`,
-              fontSize: 10,
-            },
+          {
+            type: 'line',
+            name: '南向',
+            showSymbol: false,
+            symbol: 'none',
+            data: result.n2s,
           },
-          dataZoom: [
-            {
-              type: 'inside',
-              start: 90,
-              end: 100,
-              minValueSpan: 3600 * 24 * 1000 * 7,
-            },
-          ],
-          series: [
-            {
-              type: 'line',
-              name: '港股通(沪)',
-              showSymbol: false,
-              symbol: 'none',
-              data: result.sh2hk,
-              lineStyle: {
-                width: 1,
-              },
-            },
-            {
-              type: 'line',
-              name: '港股通(深)',
-              showSymbol: false,
-              symbol: 'none',
-              data: result.sz2hk,
-              lineStyle: {
-                width: 1,
-              },
-            },
-            {
-              type: 'line',
-              name: '南向',
-              showSymbol: false,
-              symbol: 'none',
-              data: result.n2s,
-            },
-          ],
-        });
-      },
-    }
-  );
+        ],
+      });
+    },
+  });
 
   useRenderEcharts(
     () => {
@@ -124,11 +119,7 @@ const SouthDay: React.FC<SouthDayProps> = () => {
   return (
     <div className={styles.content}>
       <div ref={chartRef} style={{ width: '100%' }} />
-      <TypeSelection
-        types={dayTypeList}
-        activeType={dayType.type}
-        onSelected={setDayType}
-      />
+      <TypeSelection types={dayTypeList} activeType={dayType.type} onSelected={setDayType} />
     </div>
   );
 };

@@ -20,9 +20,9 @@ import {
 } from '@/actions/sort';
 import { StoreState } from '@/reducers/types';
 import { toggleAllFundsCollapseAction } from '@/actions/fund';
-import { SORT_ZINDEXS, TOGGLE_ZINDEXS_COLLAPSE } from '@/actions/zindex';
-import { SORT_QUOTATIONS, TOGGLE_QUOTATIONS_COLLAPSE } from '@/actions/quotation';
-import { SORT_STOCKS, TOGGLE_STOCKS_COLLAPSE } from '@/actions/stock';
+import { toggleAllZindexsCollapseAction } from '@/actions/zindex';
+import { toggleAllQuotationsCollapse } from '@/actions/quotation';
+import { toggleAllStocksCollapseAction } from '@/actions/stock';
 import { useCurrentWallet } from '@/utils/hooks';
 import * as Enums from '@/utils/enums';
 import * as Helpers from '@/helpers';
@@ -79,17 +79,10 @@ const SortBar: React.FC<SortBarProps> = () => {
     return [stocks.every((_) => _.collapse), stocks.some((_) => _.collapse)];
   }, [stocks]);
 
-  const toggleZindexsCollapse = () => {
-    dispatch({ type: TOGGLE_ZINDEXS_COLLAPSE });
-  };
-
-  const toggleQuotationsCollapse = () => {
-    dispatch({ type: TOGGLE_QUOTATIONS_COLLAPSE });
-  };
-
-  const toggleStocksCollapse = () => {
-    dispatch({ type: TOGGLE_STOCKS_COLLAPSE });
-  };
+  const toggleFundsCollapse = () => dispatch(toggleAllFundsCollapseAction());
+  const toggleZindexsCollapse = () => dispatch(toggleAllZindexsCollapseAction());
+  const toggleQuotationsCollapse = () => dispatch(toggleAllQuotationsCollapse());
+  const toggleStocksCollapse = () => dispatch(toggleAllStocksCollapseAction());
 
   useScroll(document, () => {
     setVisible(false);
@@ -102,10 +95,10 @@ const SortBar: React.FC<SortBarProps> = () => {
       case Enums.TabKeyType.Funds:
         return (
           <div className={styles.bar}>
-            <div className={styles.arrow} onClick={() => dispatch(toggleAllFundsCollapseAction())}>
+            <div className={styles.arrow} onClick={toggleFundsCollapse}>
               {expandAllFunds ? <ArrowUpIcon /> : <ArrowDownIcon />}
             </div>
-            <div className={styles.name} onClick={() => dispatch(toggleAllFundsCollapseAction())}>
+            <div className={styles.name} onClick={toggleFundsCollapse}>
               基金名称
             </div>
             <div className={styles.mode}>
@@ -153,16 +146,7 @@ const SortBar: React.FC<SortBarProps> = () => {
                 overlay={
                   <Menu selectedKeys={[String(zindexSortModeOptionsMap[zindexSortType].key)]}>
                     {zindexSortModeOptions.map(({ key, value }) => (
-                      <Menu.Item
-                        key={String(key)}
-                        onClick={() =>
-                          dispatch(
-                            setZindexSortModeAction({
-                              type: key,
-                            })
-                          )
-                        }
-                      >
+                      <Menu.Item key={String(key)} onClick={() => dispatch(setZindexSortModeAction({ type: key }))}>
                         {value}
                       </Menu.Item>
                     ))}
@@ -172,7 +156,7 @@ const SortBar: React.FC<SortBarProps> = () => {
                 <a>{zindexSortModeOptionsMap[zindexSortType].value}</a>
               </Dropdown>
             </div>
-            <div className={styles.sort} onClick={() => troggleZindexSortOrderAction()}>
+            <div className={styles.sort} onClick={() => dispatch(troggleZindexSortOrderAction())}>
               <SortArrowUpIcon
                 className={classsames({
                   [styles.selectOrder]: zindexSortOrder === Enums.SortOrderType.Asc,
@@ -201,7 +185,7 @@ const SortBar: React.FC<SortBarProps> = () => {
                 overlay={
                   <Menu selectedKeys={[String(quotationSortModeOptionsMap[quotationSortType].key)]}>
                     {quotationSortModeOptions.map(({ key, value }) => (
-                      <Menu.Item key={String(key)} onClick={() => setQuotationSortModeAction({ type: key })}>
+                      <Menu.Item key={String(key)} onClick={() => dispatch(setQuotationSortModeAction({ type: key }))}>
                         {value}
                       </Menu.Item>
                     ))}

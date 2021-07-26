@@ -12,109 +12,95 @@ export interface AfterTimeFundFlowProps {
 }
 
 const AfterTimeFundFlow: React.FC<AfterTimeFundFlowProps> = ({ code = '' }) => {
-  const { ref: chartRef, chartInstance } = useResizeEchart(
-    CONST.DEFAULT.ECHARTS_SCALE
-  );
+  const { ref: chartRef, chartInstance } = useResizeEchart(CONST.DEFAULT.ECHARTS_SCALE);
   const { varibleColors, darkMode } = useHomeContext();
-  const { run: runGetAfterTimeFundFlowFromEasymoney } = useRequest(
-    Services.Quotation.GetAfterTimeFundFlowFromEasymoney,
-    {
-      manual: true,
-      throwOnError: true,
-      cacheKey: `GetAfterTimeFundFlowFromEasymoney/${code}`,
-      pollingInterval: 1000 * 60,
-      onSuccess: (result) => {
-        const seriesStyle = {
-          type: 'line',
-          showSymbol: false,
-          symbol: 'none',
-          lineStyle: {
-            width: 1,
+  const { run: runGetAfterTimeFundFlowFromEasymoney } = useRequest(Services.Quotation.GetAfterTimeFundFlowFromEasymoney, {
+    manual: true,
+    throwOnError: true,
+    cacheKey: `GetAfterTimeFundFlowFromEasymoney/${code}`,
+    pollingInterval: 1000 * 60,
+    onSuccess: (result) => {
+      const seriesStyle = {
+        type: 'line',
+        showSymbol: false,
+        symbol: 'none',
+        lineStyle: {
+          width: 1,
+        },
+      };
+      chartInstance?.setOption({
+        title: {
+          text: '',
+        },
+        tooltip: {
+          trigger: 'axis',
+          position: 'inside',
+        },
+        legend: {
+          data: ['主力净流入', '超大单净流入', '大单净流入', '中单净流入', '小单净流入'],
+          textStyle: {
+            color: varibleColors['--main-text-color'],
+            fontSize: 10,
           },
-        };
-        chartInstance?.setOption({
-          title: {
-            text: '',
+        },
+        grid: {
+          left: 0,
+          right: 5,
+          bottom: 0,
+          containLabel: true,
+        },
+        xAxis: {
+          type: 'time',
+          boundaryGap: false,
+          axisLabel: {
+            fontSize: 10,
           },
-          tooltip: {
-            trigger: 'axis',
-            position: 'inside',
+        },
+        yAxis: {
+          type: 'value',
+          axisLabel: {
+            formatter: `{value}亿`,
+            fontSize: 10,
           },
-          legend: {
-            data: [
-              '主力净流入',
-              '超大单净流入',
-              '大单净流入',
-              '中单净流入',
-              '小单净流入',
-            ],
-            textStyle: {
-              color: varibleColors['--main-text-color'],
-              fontSize: 10,
-            },
+        },
+        dataZoom: [
+          {
+            type: 'inside',
+            minValueSpan: 3600 * 24 * 1000 * 7,
+            start: 90,
+            end: 100,
           },
-          grid: {
-            left: 0,
-            right: 5,
-            bottom: 0,
-            containLabel: true,
+        ],
+        series: [
+          {
+            name: '主力净流入',
+            data: result.map(({ datetime, zljlr }: any) => [datetime, zljlr]),
+            ...seriesStyle,
           },
-          xAxis: {
-            type: 'time',
-            boundaryGap: false,
-            axisLabel: {
-              fontSize: 10,
-            },
+          {
+            name: '超大单净流入',
+            data: result.map(({ datetime, cddjlr }: any) => [datetime, cddjlr]),
+            ...seriesStyle,
           },
-          yAxis: {
-            type: 'value',
-            axisLabel: {
-              formatter: `{value}亿`,
-              fontSize: 10,
-            },
+          {
+            name: '大单净流入',
+            data: result.map(({ datetime, ddjlr }: any) => [datetime, ddjlr]),
+            ...seriesStyle,
           },
-          dataZoom: [
-            {
-              type: 'inside',
-              minValueSpan: 3600 * 24 * 1000 * 7,
-              start: 90,
-              end: 100,
-            },
-          ],
-          series: [
-            {
-              name: '主力净流入',
-              data: result.map(({ datetime, zljlr }: any) => [datetime, zljlr]),
-              ...seriesStyle,
-            },
-            {
-              name: '超大单净流入',
-              data: result.map(({ datetime, cddjlr }: any) => [
-                datetime,
-                cddjlr,
-              ]),
-              ...seriesStyle,
-            },
-            {
-              name: '大单净流入',
-              data: result.map(({ datetime, ddjlr }: any) => [datetime, ddjlr]),
-              ...seriesStyle,
-            },
-            {
-              name: '中单净流入',
-              data: result.map(({ datetime, zdjlr }: any) => [datetime, zdjlr]),
-              ...seriesStyle,
-            },
-            {
-              name: '小单净流入',
-              data: result.map(({ datetime, xdjlr }: any) => [datetime, xdjlr]),
-              ...seriesStyle,
-            },
-          ],
-        });
-      },
-    }
-  );
+          {
+            name: '中单净流入',
+            data: result.map(({ datetime, zdjlr }: any) => [datetime, zdjlr]),
+            ...seriesStyle,
+          },
+          {
+            name: '小单净流入',
+            data: result.map(({ datetime, xdjlr }: any) => [datetime, xdjlr]),
+            ...seriesStyle,
+          },
+        ],
+      });
+    },
+  });
 
   useRenderEcharts(
     () => {

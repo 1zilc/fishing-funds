@@ -16,16 +16,9 @@ interface StockListProps {
 
 const StockList: React.FC<StockListProps> = (props) => {
   const stocks = useSelector((state: StoreState) => state.stock.stocks);
-  const stocksLoading = useSelector(
-    (state: StoreState) => state.stock.stocksLoading
-  );
+  const stocksLoading = useSelector((state: StoreState) => state.stock.stocksLoading);
 
-  const {
-    data: detailStockSecid,
-    show: showDetailDrawer,
-    set: setDetailDrawer,
-    close: closeDetailDrawer,
-  } = useDrawer('');
+  const { data: detailStockSecid, show: showDetailDrawer, set: setDetailDrawer, close: closeDetailDrawer } = useDrawer('');
 
   const list = stocks.filter(props.filter);
 
@@ -36,13 +29,7 @@ const StockList: React.FC<StockListProps> = (props) => {
       <LoadingBar show={stocksLoading} />
       {list.length ? (
         syncStockSettingDone ? (
-          list.map((stock) => (
-            <StockRow
-              key={stock.secid}
-              stock={stock}
-              onDetail={setDetailDrawer}
-            />
-          ))
+          list.map((stock) => <StockRow key={stock.secid} stock={stock} onDetail={setDetailDrawer} />)
         ) : (
           <Empty text="正在同步股票设置~" />
         )
@@ -50,11 +37,7 @@ const StockList: React.FC<StockListProps> = (props) => {
         <Empty text="暂无股票数据~" />
       )}
       <CustomDrawer show={showDetailDrawer}>
-        <DetailStockContent
-          onEnter={closeDetailDrawer}
-          onClose={closeDetailDrawer}
-          secid={detailStockSecid}
-        />
+        <DetailStockContent onEnter={closeDetailDrawer} onClose={closeDetailDrawer} secid={detailStockSecid} />
       </CustomDrawer>
     </div>
   );

@@ -1,150 +1,42 @@
 import { AnyAction } from 'redux';
 
-import {
-  SORT_ZINDEXS,
-  SET_ZINDEXS_LOADING,
-  TOGGLE_ZINDEX_COLLAPSE,
-  TOGGLE_ZINDEXS_COLLAPSE,
-  SORT_ZINDEXS_WITH_COLLAPSE_CHACHED,
-  getZindexConfig,
-} from '@/actions/zindex';
-import { getSortMode } from '@/actions/sort';
-import * as Enums from '@/utils/enums';
-import * as Utils from '@/utils';
+import { SYNC_ZIDNEXS, SET_ZINDEXS_LOADING, SYNC_ZIDNEX_CONFIG } from '@/actions/zindex';
+
+import { Reducer } from '@/reducers/types';
+import * as Helpers from '@/helpers';
 
 export interface ZindexState {
   zindexs: (Zindex.ResponseItem & Zindex.ExtraRow)[];
   zindexsLoading: boolean;
+  config: { zindexConfig: Zindex.SettingItem[]; codeMap: Helpers.Zindex.CodeZindexMap; selectZindexs: string[] };
 }
 
-const sortZindexs = (
-  state: ZindexState,
-  responseZindexs?: Zindex.ResponseItem[]
-): ZindexState => {
-  const { zindexs } = state;
-  const {
-    zindexSortMode: { type: zindexSortType, order: zindexSortorder },
-  } = getSortMode();
-  const { codeMap } = getZindexConfig();
-  const sortList: Zindex.ResponseItem[] = Utils.DeepCopy(
-    responseZindexs || zindexs
-  );
-  sortList.sort((a, b) => {
-    const t = zindexSortorder === Enums.SortOrderType.Asc ? 1 : -1;
-    switch (zindexSortType) {
-      case Enums.ZindexSortType.Zdd:
-        return (a.zdd - b.zdd) * t;
-      case Enums.ZindexSortType.Zdf:
-        return (a.zdf - b.zdf) * t;
-      case Enums.ZindexSortType.Zsz:
-        return (a.zsz - b.zsz) * t;
-      case Enums.ZindexSortType.Custom:
-      default:
-        return (codeMap[b.code]?.originSort - codeMap[a.code]?.originSort) * t;
-    }
-  });
-
-  return {
-    ...state,
-    zindexs: sortList,
-  };
-};
-
-function setZindexsLoading(state: ZindexState, loading: boolean) {
-  return {
-    ...state,
-    zindexsLoading: loading,
-  };
-}
-
-const sortZindexsWithCollapseChached = (
-  state: ZindexState,
-  responseZindexs: Zindex.ResponseItem[]
-): ZindexState => {
-  const { zindexs } = state;
-  const { zindexConfig } = getZindexConfig();
-  const zindexsCodeToMap = zindexs.reduce((map, zindex) => {
-    map[zindex.code] = zindex;
-    return map;
-  }, {} as any);
-
-  const zindexsWithCollapseChached = responseZindexs
-    .filter(Boolean)
-    .map((_) => ({
-      ...(zindexsCodeToMap[_.code] || {}),
-      ..._,
-    }));
-
-  const zindexWithChachedCodeToMap = zindexsWithCollapseChached.reduce(
-    (map, zindex) => {
-      map[zindex.code] = zindex;
-      return map;
-    },
-    {} as any
-  );
-
-  zindexConfig.forEach((zindex) => {
-    const responseZindex = zindexWithChachedCodeToMap[zindex.code];
-    const stateZindex = zindexsCodeToMap[zindex.code];
-    if (!responseZindex && stateZindex) {
-      zindexsWithCollapseChached.push(stateZindex);
-    }
-  });
-
-  return sortZindexs(state, zindexsWithCollapseChached);
-};
-
-const toggleZindexCollapse = (
-  state: ZindexState,
-  zindex: Zindex.ResponseItem & Zindex.ExtraRow
-): ZindexState => {
-  const { zindexs } = state;
-  const cloneZindexs: (Zindex.ResponseItem & Zindex.ExtraRow)[] =
-    Utils.DeepCopy(zindexs);
-  cloneZindexs.forEach((_) => {
-    if (_.code === zindex.code) {
-      _.collapse = !zindex.collapse;
-    }
-  });
-  return {
-    ...state,
-    zindexs: cloneZindexs,
-  };
-};
-
-const toggleZindexsCollapse = (state: ZindexState): ZindexState => {
-  const { zindexs } = state;
-  const cloneZindexs: (Zindex.ResponseItem & Zindex.ExtraRow)[] =
-    Utils.DeepCopy(zindexs);
-  const expandAllZindexs = zindexs.every((_) => _.collapse);
-  cloneZindexs.forEach((_) => {
-    _.collapse = !expandAllZindexs;
-  });
-  return {
-    ...state,
-    zindexs: cloneZindexs,
-  };
-};
-
-export default function zindex(
-  state: ZindexState = {
+const zindex: Reducer<ZindexState> = (
+  state = {
     zindexs: [],
     zindexsLoading: false,
+    config: Helpers.Zindex.GetZindexConfig(),
   },
-  action: AnyAction
-): ZindexState {
+  action
+) => {
   switch (action.type) {
-    case SORT_ZINDEXS:
-      return sortZindexs(state, action.payload);
     case SET_ZINDEXS_LOADING:
-      return setZindexsLoading(state, action.payload);
-    case SORT_ZINDEXS_WITH_COLLAPSE_CHACHED:
-      return sortZindexsWithCollapseChached(state, action.payload);
-    case TOGGLE_ZINDEX_COLLAPSE:
-      return toggleZindexCollapse(state, action.payload);
-    case TOGGLE_ZINDEXS_COLLAPSE:
-      return toggleZindexsCollapse(state);
+      return {
+        ...state,
+        zindexsLoading: action.payload,
+      };
+    case SYNC_ZIDNEXS:
+      return {
+        ...state,
+        zindexs: action.payload,
+      };
+    case SYNC_ZIDNEX_CONFIG:
+      return {
+        ...state,
+        config: action.payload,
+      };
     default:
       return state;
   }
-}
+};
+export default zindex;

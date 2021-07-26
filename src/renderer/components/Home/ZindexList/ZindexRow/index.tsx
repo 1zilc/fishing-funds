@@ -7,7 +7,7 @@ import { ReactComponent as ArrowUpIcon } from '@/assets/icons/arrow-up.svg';
 import Collapse from '@/components/Collapse';
 import ArrowLine from '@/components/ArrowLine';
 import { StoreState } from '@/reducers/types';
-import { TOGGLE_ZINDEX_COLLAPSE } from '@/actions/zindex';
+import { toggleZindexCollapseAction } from '@/actions/zindex';
 import * as Utils from '@/utils';
 import styles from './index.scss';
 
@@ -24,9 +24,7 @@ const arrowSize = {
 const ZindexRow: React.FC<RowProps> = (props) => {
   const { zindex } = props;
   const dispatch = useDispatch();
-  const { conciseSetting } = useSelector(
-    (state: StoreState) => state.setting.systemSetting
-  );
+  const { conciseSetting } = useSelector((state: StoreState) => state.setting.systemSetting);
 
   const onDetailClick = () => {
     props.onDetail(zindex.code);
@@ -37,18 +35,11 @@ const ZindexRow: React.FC<RowProps> = (props) => {
       <div
         className={classnames(styles.row, 'hoverable')}
         onClick={() => {
-          dispatch({
-            type: TOGGLE_ZINDEX_COLLAPSE,
-            payload: zindex,
-          });
+          dispatch(toggleZindexCollapseAction(zindex));
         }}
       >
         <div className={styles.arrow}>
-          {zindex.collapse ? (
-            <ArrowUpIcon style={{ ...arrowSize }} />
-          ) : (
-            <ArrowDownIcon style={{ ...arrowSize }} />
-          )}
+          {zindex.collapse ? <ArrowUpIcon style={{ ...arrowSize }} /> : <ArrowDownIcon style={{ ...arrowSize }} />}
         </div>
         <div style={{ flex: 1 }}>
           <div style={{ display: 'flex', alignItems: 'center' }}>
@@ -64,33 +55,14 @@ const ZindexRow: React.FC<RowProps> = (props) => {
           )}
         </div>
         <div className={classnames(styles.value)}>
-          <div
-            className={classnames(
-              styles.zsz,
-              Utils.GetValueColor(zindex.zdf).textClass
-            )}
-          >
+          <div className={classnames(styles.zsz, Utils.GetValueColor(zindex.zdf).textClass)}>
             {zindex.zsz}
             <ArrowLine value={zindex.zdf} />
           </div>
           {!conciseSetting && (
             <div className={styles.zd}>
-              <div
-                className={classnames(
-                  styles.zdd,
-                  Utils.GetValueColor(zindex.zdd).textClass
-                )}
-              >
-                {Utils.Yang(zindex.zdd)}
-              </div>
-              <div
-                className={classnames(
-                  styles.zdf,
-                  Utils.GetValueColor(zindex.zdf).textClass
-                )}
-              >
-                {Utils.Yang(zindex.zdf)} %
-              </div>
+              <div className={classnames(styles.zdd, Utils.GetValueColor(zindex.zdd).textClass)}>{Utils.Yang(zindex.zdd)}</div>
+              <div className={classnames(styles.zdf, Utils.GetValueColor(zindex.zdf).textClass)}>{Utils.Yang(zindex.zdf)} %</div>
             </div>
           )}
         </div>
@@ -100,36 +72,18 @@ const ZindexRow: React.FC<RowProps> = (props) => {
           {conciseSetting && (
             <section>
               <span>涨跌点：</span>
-              <span
-                className={classnames(
-                  Utils.GetValueColor(zindex.zdd).textClass
-                )}
-              >
-                {Utils.Yang(zindex.zdd)}
-              </span>
+              <span className={classnames(Utils.GetValueColor(zindex.zdd).textClass)}>{Utils.Yang(zindex.zdd)}</span>
             </section>
           )}
           {conciseSetting && (
             <section>
               <span>涨跌幅：</span>
-              <span
-                className={classnames(
-                  Utils.GetValueColor(zindex.zdf).textClass
-                )}
-              >
-                {Utils.Yang(zindex.zdf)} %
-              </span>
+              <span className={classnames(Utils.GetValueColor(zindex.zdf).textClass)}>{Utils.Yang(zindex.zdf)} %</span>
             </section>
           )}
           <section>
             <span>今开：</span>
-            <span
-              className={classnames(
-                Utils.GetValueColor(zindex.jk - zindex.zs).textClass
-              )}
-            >
-              {zindex.jk}
-            </span>
+            <span className={classnames(Utils.GetValueColor(zindex.jk - zindex.zs).textClass)}>{zindex.jk}</span>
           </section>
           <section>
             <span>昨收：</span>
@@ -137,23 +91,11 @@ const ZindexRow: React.FC<RowProps> = (props) => {
           </section>
           <section>
             <span>最高：</span>
-            <span
-              className={classnames(
-                Utils.GetValueColor(zindex.zg - zindex.zs).textClass
-              )}
-            >
-              {zindex.zg}
-            </span>
+            <span className={classnames(Utils.GetValueColor(zindex.zg - zindex.zs).textClass)}>{zindex.zg}</span>
           </section>
           <section>
             <span>最低：</span>
-            <span
-              className={classnames(
-                Utils.GetValueColor(zindex.zd - zindex.zs).textClass
-              )}
-            >
-              {zindex.zd}
-            </span>
+            <span className={classnames(Utils.GetValueColor(zindex.zd - zindex.zs).textClass)}>{zindex.zd}</span>
           </section>
           <section>
             <span>换手：</span>

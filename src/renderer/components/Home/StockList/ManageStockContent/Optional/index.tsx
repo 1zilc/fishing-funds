@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React, { useMemo } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { ReactSortable } from 'react-sortablejs';
 import classnames from 'classnames';
 
@@ -9,33 +10,22 @@ import { ReactComponent as RemoveIcon } from '@/assets/icons/remove.svg';
 import CustomDrawer from '@/components/CustomDrawer';
 import Empty from '@/components/Empty';
 import AddStockContent from '@/components/Home/StockList/AddStockContent';
-import { getStockConfig, deleteStock, setStockConfig } from '@/actions/stock';
+import { deleteStockAction, setStockConfigAction } from '@/actions/stock';
 import { useDrawer } from '@/utils/hooks';
+import { StoreState } from '@/reducers/types';
 import styles from './index.scss';
 
-export interface OptionalProps {
-  active: boolean;
-}
+export interface OptionalProps {}
 
 const { dialog } = window.contextModules.electron;
 
-const Optional: React.FC<OptionalProps> = ({ active }) => {
-  const [sortStockConfig, setSortStockConfig] = useState<
-    (Stock.SettingItem & Fund.SortRow)[]
-  >([]);
-  const {
-    show: showAddDrawer,
-    set: setAddDrawer,
-    close: closeAddDrawer,
-  } = useDrawer(null);
-
-  function updateSortStockConfig() {
-    const { stockConfig } = getStockConfig();
-    setSortStockConfig(stockConfig.map((_) => ({ ..._, id: _.secid })));
-  }
+const Optional: React.FC<OptionalProps> = () => {
+  const dispatch = useDispatch();
+  const { codeMap, stockConfig } = useSelector((state: StoreState) => state.stock.config);
+  const { show: showAddDrawer, set: setAddDrawer, close: closeAddDrawer } = useDrawer(null);
+  const sortStockConfig = useMemo(() => stockConfig.map((_) => ({ ..._, id: _.secid })), [stockConfig]);
 
   function onSortStockConfig(sortList: Stock.SettingItem[]) {
-    const { codeMap } = getStockConfig();
     const stockConfig = sortList.map((item) => {
       const stock = codeMap[item.secid];
       return {
@@ -46,8 +36,7 @@ const Optional: React.FC<OptionalProps> = ({ active }) => {
         type: stock.type,
       };
     });
-    setStockConfig(stockConfig);
-    updateSortStockConfig();
+    dispatch(setStockConfigAction(stockConfig));
   }
 
   async function onRemoveStock(stock: Stock.SettingItem) {
@@ -58,36 +47,17 @@ const Optional: React.FC<OptionalProps> = ({ active }) => {
       buttons: ['确定', '取消'],
     });
     if (response === 0) {
-      deleteStock(stock.secid);
-      updateSortStockConfig();
+      dispatch(deleteStockAction(stock.secid));
     }
   }
-
-  useEffect(updateSortStockConfig, [active]);
-
-  useEffect(() => {
-    if (active) {
-      updateSortStockConfig();
-    }
-  }, [active]);
 
   return (
     <div className={styles.content}>
       {sortStockConfig.length ? (
-        <ReactSortable
-          animation={200}
-          delay={2}
-          list={sortStockConfig}
-          setList={onSortStockConfig}
-          dragClass={styles.dragItem}
-          swap
-        >
+        <ReactSortable animation={200} delay={2} list={sortStockConfig} setList={onSortStockConfig} dragClass={styles.dragItem} swap>
           {sortStockConfig.map((stock) => {
             return (
-              <PureCard
-                key={stock.secid}
-                className={classnames(styles.row, 'hoverable')}
-              >
+              <PureCard key={stock.secid} className={classnames(styles.row, 'hoverable')}>
                 <RemoveIcon
                   className={styles.remove}
                   onClick={(e) => {
@@ -119,13 +89,7 @@ const Optional: React.FC<OptionalProps> = ({ active }) => {
         <AddIcon />
       </div>
       <CustomDrawer show={showAddDrawer}>
-        <AddStockContent
-          onClose={closeAddDrawer}
-          onEnter={() => {
-            updateSortStockConfig();
-            closeAddDrawer();
-          }}
-        />
+        <AddStockContent onClose={closeAddDrawer} onEnter={closeAddDrawer} />
       </CustomDrawer>
     </div>
   );

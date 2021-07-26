@@ -15,26 +15,18 @@ export interface StocksProps {
 
 const Stocks: React.FC<StocksProps> = ({ code }) => {
   const [stockList, setStockList] = useState<any[]>([]);
-  const {
-    data: secid,
-    show: showDetailDrawer,
-    set: setDetailDrawer,
-    close: closeDetailDrawer,
-  } = useDrawer('');
+  const { data: secid, show: showDetailDrawer, set: setDetailDrawer, close: closeDetailDrawer } = useDrawer('');
 
-  const { loading: listLoading } = useRequest(
-    Services.Quotation.GetStocksFromEasymoney,
-    {
-      throwOnError: true,
-      pollingInterval: 1000 * 60,
-      defaultParams: [code],
-      cacheKey: `GetStocksFromEasymoney/${code}`,
-      onSuccess: (result) => {
-        result.sort((a, b) => b.zdf - a.zdf);
-        setStockList(result);
-      },
-    }
-  );
+  const { loading: listLoading } = useRequest(Services.Quotation.GetStocksFromEasymoney, {
+    throwOnError: true,
+    pollingInterval: 1000 * 60,
+    defaultParams: [code],
+    cacheKey: `GetStocksFromEasymoney/${code}`,
+    onSuccess: (result) => {
+      result.sort((a, b) => b.zdf - a.zdf);
+      setStockList(result);
+    },
+  });
 
   const columns = [
     {
@@ -53,11 +45,7 @@ const Stocks: React.FC<StocksProps> = ({ code }) => {
     {
       title: '涨跌幅',
       dataIndex: 'zdf',
-      render: (text: number) => (
-        <div className={Utils.GetValueColor(text).textClass}>
-          {Utils.Yang(text)} %
-        </div>
-      ),
+      render: (text: number) => <div className={Utils.GetValueColor(text).textClass}>{Utils.Yang(text)} %</div>,
     },
   ];
 
@@ -79,11 +67,7 @@ const Stocks: React.FC<StocksProps> = ({ code }) => {
         })}
       />
       <CustomDrawer show={showDetailDrawer}>
-        <DetailStockContent
-          onClose={closeDetailDrawer}
-          onEnter={closeDetailDrawer}
-          secid={secid}
-        />
+        <DetailStockContent onClose={closeDetailDrawer} onEnter={closeDetailDrawer} secid={secid} />
       </CustomDrawer>
     </div>
   );

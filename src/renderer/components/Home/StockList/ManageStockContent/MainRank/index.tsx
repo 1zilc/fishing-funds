@@ -1,4 +1,5 @@
 import React, { PropsWithChildren, useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { Table, Divider } from 'antd';
 import { useRequest } from 'ahooks';
 import classnames from 'classnames';
@@ -7,8 +8,8 @@ import CustomDrawer from '@/components/CustomDrawer';
 import DetailStockContent from '@/components/Home/StockList/DetailStockContent';
 import AddStockContent from '@/components/Home/StockList/AddStockContent';
 import TypeSelection from '@/components/TypeSelection';
-import { getStockConfig } from '@/actions/stock';
 import { useDrawer } from '@/utils/hooks';
+import { StoreState } from '@/reducers/types';
 import * as Services from '@/services';
 import * as Utils from '@/utils';
 import styles from './index.scss';
@@ -28,21 +29,11 @@ const RenderColorCol = ({ value }: { value: string }) => {
 const MainRank: React.FC<PropsWithChildren<MainRankProps>> = () => {
   const [dayType, setDayType] = useState(dayTypeList[0]);
   const [data, setData] = useState([]);
-  const { codeMap } = getStockConfig();
+  const { codeMap, stockConfig } = useSelector((state: StoreState) => state.stock.config);
 
-  const {
-    data: detailSecid,
-    show: showDetailDrawer,
-    set: setDetailDrawer,
-    close: closeDetailDrawer,
-  } = useDrawer('');
+  const { data: detailSecid, show: showDetailDrawer, set: setDetailDrawer, close: closeDetailDrawer } = useDrawer('');
 
-  const {
-    data: addName,
-    show: showAddDrawer,
-    set: setAddDrawer,
-    close: closeAddDrawer,
-  } = useDrawer('');
+  const { data: addName, show: showAddDrawer, set: setAddDrawer, close: closeAddDrawer } = useDrawer('');
 
   const columns = [
     {
@@ -54,9 +45,7 @@ const MainRank: React.FC<PropsWithChildren<MainRankProps>> = () => {
     {
       title: `日涨跌`,
       dataIndex: 'zdf',
-      render: (text: string) => (
-        <div className={Utils.GetValueColor(text).textClass}>{text}%</div>
-      ),
+      render: (text: string) => <div className={Utils.GetValueColor(text).textClass}>{text}%</div>,
       sorter: (a: any, b: any) => a.zdf - b.zdf,
     },
     {
@@ -84,15 +73,12 @@ const MainRank: React.FC<PropsWithChildren<MainRankProps>> = () => {
     },
   ];
 
-  const { run: runGetMainRankFromEastmoney, loading } = useRequest(
-    Services.Stock.GetMainRankFromEastmoney,
-    {
-      manual: true,
-      cacheKey: `GetMainRankFromEastmoney/${dayType.code}`,
-      throwOnError: true,
-      onSuccess: setData,
-    }
-  );
+  const { run: runGetMainRankFromEastmoney, loading } = useRequest(Services.Stock.GetMainRankFromEastmoney, {
+    manual: true,
+    cacheKey: `GetMainRankFromEastmoney/${dayType.code}`,
+    throwOnError: true,
+    onSuccess: setData,
+  });
 
   useEffect(() => {
     runGetMainRankFromEastmoney(dayType.code);
@@ -100,12 +86,7 @@ const MainRank: React.FC<PropsWithChildren<MainRankProps>> = () => {
 
   return (
     <div className={styles.content}>
-      <TypeSelection
-        types={dayTypeList}
-        activeType={dayType.type}
-        onSelected={setDayType}
-        style={{ marginTop: 10, marginBottom: 10 }}
-      />
+      <TypeSelection types={dayTypeList} activeType={dayType.type} onSelected={setDayType} style={{ marginTop: 10, marginBottom: 10 }} />
       <Table
         rowKey="code"
         size="small"
@@ -122,18 +103,10 @@ const MainRank: React.FC<PropsWithChildren<MainRankProps>> = () => {
         })}
       />
       <CustomDrawer show={showDetailDrawer}>
-        <DetailStockContent
-          onEnter={closeDetailDrawer}
-          onClose={closeDetailDrawer}
-          secid={detailSecid}
-        />
+        <DetailStockContent onEnter={closeDetailDrawer} onClose={closeDetailDrawer} secid={detailSecid} />
       </CustomDrawer>
       <CustomDrawer show={showAddDrawer}>
-        <AddStockContent
-          defaultName={addName}
-          onClose={closeAddDrawer}
-          onEnter={closeAddDrawer}
-        />
+        <AddStockContent defaultName={addName} onClose={closeAddDrawer} onEnter={closeAddDrawer} />
       </CustomDrawer>
     </div>
   );

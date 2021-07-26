@@ -4,7 +4,7 @@ declare global {
   }
 }
 
-window.jsonpgz = function (response) {
+window.jsonpgz = (response) => {
   return response;
 };
 

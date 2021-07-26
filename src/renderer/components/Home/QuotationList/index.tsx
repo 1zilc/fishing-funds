@@ -16,12 +16,8 @@ interface QuotationListProps {
 }
 
 const QuotationList: React.FC<QuotationListProps> = (props) => {
-  const quotations = useSelector(
-    (state: StoreState) => state.quotation.quotations
-  );
-  const quotationsLoading = useSelector(
-    (state: StoreState) => state.quotation.quotationsLoading
-  );
+  const quotations = useSelector((state: StoreState) => state.quotation.quotations);
+  const quotationsLoading = useSelector((state: StoreState) => state.quotation.quotationsLoading);
   const {
     data: quodationCode,
     show: showDetailQuodationDrawer,
@@ -29,12 +25,7 @@ const QuotationList: React.FC<QuotationListProps> = (props) => {
     close: closeDetailQuodationDrawer,
   } = useDrawer('');
 
-  const {
-    data: stockSecid,
-    show: showDetailStockDrawer,
-    set: setDetailStockDrawer,
-    close: closeDetailStockDrawer,
-  } = useDrawer('');
+  const { data: stockSecid, show: showDetailStockDrawer, set: setDetailStockDrawer, close: closeDetailStockDrawer } = useDrawer('');
 
   const list = quotations.filter(props.filter);
 
@@ -54,18 +45,10 @@ const QuotationList: React.FC<QuotationListProps> = (props) => {
         <Empty text="暂无板块数据~" />
       )}
       <CustomDrawer show={showDetailQuodationDrawer}>
-        <DetailQuotationContent
-          onEnter={closeDetailQuodationDrawer}
-          onClose={closeDetailQuodationDrawer}
-          code={quodationCode}
-        />
+        <DetailQuotationContent onEnter={closeDetailQuodationDrawer} onClose={closeDetailQuodationDrawer} code={quodationCode} />
       </CustomDrawer>
       <CustomDrawer show={showDetailStockDrawer}>
-        <DetailStockContent
-          onEnter={closeDetailStockDrawer}
-          onClose={closeDetailStockDrawer}
-          secid={stockSecid}
-        />
+        <DetailStockContent onEnter={closeDetailStockDrawer} onClose={closeDetailStockDrawer} secid={stockSecid} />
       </CustomDrawer>
     </div>
   );

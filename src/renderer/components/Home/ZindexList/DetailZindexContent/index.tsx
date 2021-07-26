@@ -20,9 +20,7 @@ export interface DetailFundContentProps {
 
 const DetailZindexContent: React.FC<DetailFundContentProps> = (props) => {
   const { code } = props;
-  const [zindex, setZindex] = useState<
-    Zindex.ResponseItem | Record<string, any>
-  >({});
+  const [zindex, setZindex] = useState<Zindex.ResponseItem | Record<string, any>>({});
 
   useRequest(Services.Zindex.FromEastmoney, {
     throwOnError: true,
@@ -33,44 +31,23 @@ const DetailZindexContent: React.FC<DetailFundContentProps> = (props) => {
   });
 
   return (
-    <CustomDrawerContent
-      title="指数详情"
-      enterText="确定"
-      onClose={props.onClose}
-      onEnter={props.onEnter}
-    >
+    <CustomDrawerContent title="指数详情" enterText="确定" onClose={props.onClose} onEnter={props.onEnter}>
       <div className={styles.content}>
         <div className={styles.container}>
           <h3 className={styles.titleRow}>
             <span>{zindex?.name}</span>
-            <span
-              className={classnames(Utils.GetValueColor(zindex.zdd).textClass)}
-            >
-              {zindex?.zsz}
-            </span>
+            <span className={classnames(Utils.GetValueColor(zindex.zdd).textClass)}>{zindex?.zsz}</span>
           </h3>
           <div className={styles.subTitleRow}>
             <span>{zindex?.zindexCode}</span>
             <div>
               <span className={styles.detailItemLabel}>涨跌点：</span>
-              <span
-                className={classnames(
-                  Utils.GetValueColor(zindex.zdd).textClass
-                )}
-              >
-                {Utils.Yang(zindex?.zdd)}
-              </span>
+              <span className={classnames(Utils.GetValueColor(zindex.zdd).textClass)}>{Utils.Yang(zindex?.zdd)}</span>
             </div>
           </div>
           <div className={styles.detail}>
             <div className={classnames(styles.detailItem, 'text-left')}>
-              <div
-                className={classnames(
-                  Utils.GetValueColor(zindex.zdf).textClass
-                )}
-              >
-                {Utils.Yang(zindex.zdf)}%
-              </div>
+              <div className={classnames(Utils.GetValueColor(zindex.zdf).textClass)}>{Utils.Yang(zindex.zdf)}%</div>
               <div className={styles.detailItemLabel}>涨跌幅</div>
             </div>
             <div className={classnames(styles.detailItem, 'text-center')}>
@@ -84,13 +61,7 @@ const DetailZindexContent: React.FC<DetailFundContentProps> = (props) => {
           </div>
           <div className={styles.detail}>
             <div className={classnames(styles.detailItem, 'text-left')}>
-              <div
-                className={classnames(
-                  Utils.GetValueColor(zindex.jk - zindex.zs).textClass
-                )}
-              >
-                {Utils.Yang(zindex.jk)}
-              </div>
+              <div className={classnames(Utils.GetValueColor(zindex.jk - zindex.zs).textClass)}>{Utils.Yang(zindex.jk)}</div>
               <div className={styles.detailItemLabel}>今开</div>
             </div>
             <div className={classnames(styles.detailItem, 'text-center')}>

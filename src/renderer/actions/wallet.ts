@@ -25,18 +25,22 @@ export function changeEyeStatusAction(status: Enums.EyeStatus): AnyAction {
 
 export function toggleEyeStatusAction(): ThunkAction {
   return (dispatch: Dispatch, getState: GetState) => {
-    const {
-      wallet: { eyeStatus },
-    } = getState();
+    try {
+      const {
+        wallet: { eyeStatus },
+      } = getState();
 
-    switch (eyeStatus) {
-      case Enums.EyeStatus.Open:
-        dispatch(changeEyeStatusAction(Enums.EyeStatus.Close));
-        break;
-      case Enums.EyeStatus.Close:
-      default:
-        dispatch(changeEyeStatusAction(Enums.EyeStatus.Open));
-        break;
+      switch (eyeStatus) {
+        case Enums.EyeStatus.Open:
+          dispatch(changeEyeStatusAction(Enums.EyeStatus.Close));
+          break;
+        case Enums.EyeStatus.Close:
+        default:
+          dispatch(changeEyeStatusAction(Enums.EyeStatus.Open));
+          break;
+      }
+    } catch (error) {
+      console.log('开关eye出错', error);
     }
   };
 }
@@ -56,49 +60,61 @@ export function syncWalletConfigAction(): AnyAction {
 
 export function addWalletAction(wallet: Wallet.SettingItem): ThunkAction {
   return (dispatch, getState) => {
-    const {
-      wallet: {
-        config: { walletConfig },
-      },
-    } = getState();
-    Utils.SetStorage(CONST.STORAGE.WALLET_SETTING, [...walletConfig, wallet]);
-    dispatch(syncWalletConfigAction());
+    try {
+      const {
+        wallet: {
+          config: { walletConfig },
+        },
+      } = getState();
+      Utils.SetStorage(CONST.STORAGE.WALLET_SETTING, [...walletConfig, wallet]);
+      dispatch(syncWalletConfigAction());
+    } catch (error) {
+      console.log('添加钱包出错', error);
+    }
   };
 }
 
 export function updateWalletAction(wallet: Wallet.SettingItem): ThunkAction {
   return (dispatch, getState) => {
-    const {
-      wallet: {
-        config: { walletConfig },
-      },
-    } = getState();
-    walletConfig.forEach((item) => {
-      if (wallet.code === item.code) {
-        item.name = wallet.name;
-        item.iconIndex = wallet.iconIndex;
-      }
-    });
-    Utils.SetStorage(CONST.STORAGE.WALLET_SETTING, walletConfig);
-    dispatch(syncWalletConfigAction());
+    try {
+      const {
+        wallet: {
+          config: { walletConfig },
+        },
+      } = getState();
+      walletConfig.forEach((item) => {
+        if (wallet.code === item.code) {
+          item.name = wallet.name;
+          item.iconIndex = wallet.iconIndex;
+        }
+      });
+      Utils.SetStorage(CONST.STORAGE.WALLET_SETTING, walletConfig);
+      dispatch(syncWalletConfigAction());
+    } catch (error) {
+      console.log('更新钱包出错', error);
+    }
   };
 }
 
 export function deleteWalletAction(code: string): ThunkAction {
   return (dispatch, getState) => {
-    const {
-      wallet: {
-        config: { walletConfig },
-      },
-    } = getState();
-    walletConfig.forEach((item, index) => {
-      if (code === item.code) {
-        const cloneWalletSetting = Utils.DeepCopy(walletConfig);
-        cloneWalletSetting.splice(index, 1);
-        Utils.SetStorage(CONST.STORAGE.WALLET_SETTING, cloneWalletSetting);
-      }
-    });
-    return syncWalletConfigAction();
+    try {
+      const {
+        wallet: {
+          config: { walletConfig },
+        },
+      } = getState();
+      walletConfig.forEach((item, index) => {
+        if (code === item.code) {
+          const cloneWalletSetting = Utils.DeepCopy(walletConfig);
+          cloneWalletSetting.splice(index, 1);
+          Utils.SetStorage(CONST.STORAGE.WALLET_SETTING, cloneWalletSetting);
+        }
+      });
+      dispatch(syncWalletConfigAction());
+    } catch (error) {
+      console.log('删除钱包出错', error);
+    }
   };
 }
 
@@ -176,64 +192,72 @@ export function loadFixWalletsFundsAction(): PromiseAction {
 
 export function syncWalletStateAction(state: Wallet.StateItem): ThunkAction {
   return (dispatch, getState) => {
-    const {
-      wallet: {
-        wallets,
-        config: { codeMap },
-      },
-    } = getState();
-    const cloneWallets = Utils.DeepCopy(wallets);
-    const currentWalletConfig = codeMap[state.code];
-    const walletState = cloneWallets.find(({ code }) => code === state.code);
-    const fundsCodeToMap = (walletState?.funds || []).reduce((map, fund) => {
-      map[fund.fundcode!] = fund;
-      return map;
-    }, {} as Record<string, Fund.ResponseItem & Fund.FixData>);
+    try {
+      const {
+        wallet: {
+          wallets,
+          config: { codeMap },
+        },
+      } = getState();
+      const cloneWallets = Utils.DeepCopy(wallets);
+      const currentWalletConfig = codeMap[state.code];
+      const walletState = cloneWallets.find(({ code }) => code === state.code);
+      const fundsCodeToMap = (walletState?.funds || []).reduce((map, fund) => {
+        map[fund.fundcode!] = fund;
+        return map;
+      }, {} as Record<string, Fund.ResponseItem & Fund.FixData>);
 
-    state.funds = state.funds.map((_) => ({
-      ...(fundsCodeToMap[_!.fundcode!] || {}),
-      ..._,
-    }));
+      state.funds = state.funds.map((_) => ({
+        ...(fundsCodeToMap[_!.fundcode!] || {}),
+        ..._,
+      }));
 
-    const itemFundsCodeToMap = state.funds.reduce((map, fund) => {
-      map[fund.fundcode!] = fund;
-      return map;
-    }, {} as Record<string, Fund.ResponseItem & Fund.FixData>);
+      const itemFundsCodeToMap = state.funds.reduce((map, fund) => {
+        map[fund.fundcode!] = fund;
+        return map;
+      }, {} as Record<string, Fund.ResponseItem & Fund.FixData>);
 
-    currentWalletConfig.funds.forEach((fund) => {
-      const responseFund = itemFundsCodeToMap[fund.code];
-      const stateFund = fundsCodeToMap[fund.code];
-      if (!responseFund && stateFund) {
-        state.funds.push(stateFund);
-      }
-    });
+      currentWalletConfig.funds.forEach((fund) => {
+        const responseFund = itemFundsCodeToMap[fund.code];
+        const stateFund = fundsCodeToMap[fund.code];
+        if (!responseFund && stateFund) {
+          state.funds.push(stateFund);
+        }
+      });
 
-    cloneWallets.forEach((wallet, index) => {
-      if (wallet.code === state.code) {
-        cloneWallets[index] = state;
-      }
-    });
+      cloneWallets.forEach((wallet, index) => {
+        if (wallet.code === state.code) {
+          cloneWallets[index] = state;
+        }
+      });
 
-    dispatch({ type: SYNC_WALLETS, payload: cloneWallets });
+      dispatch({ type: SYNC_WALLETS, payload: cloneWallets });
+    } catch (error) {
+      console.log('同步钱包状态出错', error);
+    }
   };
 }
 
 export function syncFixWalletStateAction(state: Wallet.StateItem): ThunkAction {
   return (dispatch, getState) => {
-    const {
-      wallet: { wallets },
-    } = getState();
-    const cloneWallets = Utils.DeepCopy(wallets);
-    const { funds } = Helpers.Wallet.GetWalletState(state.code);
-    const mergefixFunds = Helpers.Fund.MergeFixFunds(funds, state.funds);
-    const sortFunds = Helpers.Fund.SortFunds(mergefixFunds);
+    try {
+      const {
+        wallet: { wallets },
+      } = getState();
+      const cloneWallets = Utils.DeepCopy(wallets);
+      const { funds } = Helpers.Wallet.GetWalletState(state.code);
+      const mergefixFunds = Helpers.Fund.MergeFixFunds(funds, state.funds);
+      const sortFunds = Helpers.Fund.SortFunds(mergefixFunds);
 
-    cloneWallets.forEach((wallet, index) => {
-      if (wallet.code === state.code) {
-        cloneWallets[index].funds = sortFunds;
-      }
-    });
+      cloneWallets.forEach((wallet, index) => {
+        if (wallet.code === state.code) {
+          cloneWallets[index].funds = sortFunds;
+        }
+      });
 
-    dispatch({ type: SYNC_WALLETS, payload: cloneWallets });
+      dispatch({ type: SYNC_WALLETS, payload: cloneWallets });
+    } catch (error) {
+      console.log('删除钱包状态fix出错', error);
+    }
   };
 }

@@ -16,16 +16,9 @@ interface ZindexListProps {
 
 const ZindexList: React.FC<ZindexListProps> = (props) => {
   const zindexs = useSelector((state: StoreState) => state.zindex.zindexs);
-  const zindexsLoading = useSelector(
-    (state: StoreState) => state.zindex.zindexsLoading
-  );
+  const zindexsLoading = useSelector((state: StoreState) => state.zindex.zindexsLoading);
 
-  const {
-    data: detailZindexCode,
-    show: showDetailDrawer,
-    set: setDetailDrawer,
-    close: closeDetailDrawer,
-  } = useDrawer('');
+  const { data: detailZindexCode, show: showDetailDrawer, set: setDetailDrawer, close: closeDetailDrawer } = useDrawer('');
 
   const list = zindexs.filter(props.filter);
 
@@ -33,22 +26,12 @@ const ZindexList: React.FC<ZindexListProps> = (props) => {
     <div className={styles.container}>
       <LoadingBar show={zindexsLoading} />
       {list.length ? (
-        list.map((zindex) => (
-          <ZindexRow
-            key={zindex.code}
-            zindex={zindex}
-            onDetail={setDetailDrawer}
-          />
-        ))
+        list.map((zindex) => <ZindexRow key={zindex.code} zindex={zindex} onDetail={setDetailDrawer} />)
       ) : (
         <Empty text="暂无指数数据~" />
       )}
       <CustomDrawer show={showDetailDrawer}>
-        <DetailZindexContent
-          onEnter={closeDetailDrawer}
-          onClose={closeDetailDrawer}
-          code={detailZindexCode}
-        />
+        <DetailZindexContent onEnter={closeDetailDrawer} onClose={closeDetailDrawer} code={detailZindexCode} />
       </CustomDrawer>
     </div>
   );

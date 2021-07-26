@@ -18,77 +18,72 @@ const areaTypeList = [
 ];
 
 const Area: React.FC<IndustryProps> = () => {
-  const { ref: chartRef, chartInstance } = useResizeEchart(
-    CONST.DEFAULT.ECHARTS_SCALE
-  );
+  const { ref: chartRef, chartInstance } = useResizeEchart(CONST.DEFAULT.ECHARTS_SCALE);
   const [areaType, setAreaType] = useState(areaTypeList[0]);
   const { varibleColors, darkMode } = useHomeContext();
 
-  const { run: runGetFundPerformanceFromEastmoney } = useRequest(
-    Services.Quotation.GetFundFlowFromEastmoney,
-    {
-      manual: true,
-      throwOnError: true,
-      cacheKey: `GetFundFlowFromEastmoney/${areaType.code}/${areaType.type}`,
-      onSuccess: (result) => {
-        chartInstance?.setOption({
-          title: {
-            show: false,
+  const { run: runGetFundPerformanceFromEastmoney } = useRequest(Services.Quotation.GetFundFlowFromEastmoney, {
+    manual: true,
+    throwOnError: true,
+    cacheKey: `GetFundFlowFromEastmoney/${areaType.code}/${areaType.type}`,
+    onSuccess: (result) => {
+      chartInstance?.setOption({
+        title: {
+          show: false,
+        },
+        tooltip: {
+          trigger: 'axis',
+          axisPointer: {
+            type: 'shadow', // 默认为直线，可选为：'line' | 'shadow'
           },
-          tooltip: {
-            trigger: 'axis',
-            axisPointer: {
-              type: 'shadow', // 默认为直线，可选为：'line' | 'shadow'
-            },
+        },
+        grid: {
+          top: '3%',
+          left: 0,
+          right: 0,
+          bottom: 0,
+          containLabel: true,
+        },
+        xAxis: {
+          type: 'category',
+          axisLabel: {
+            fontSize: 10,
+            interval: 0,
+            formatter: (value: string) => value.split('').join('\n'),
           },
-          grid: {
-            top: '3%',
-            left: 0,
-            right: 0,
-            bottom: 0,
-            containLabel: true,
+          data: result.map(({ name }) => name) || [],
+        },
+        yAxis: {
+          type: 'value',
+          axisLabel: {
+            formatter: `{value}亿`,
+            fontSize: 10,
           },
-          xAxis: {
-            type: 'category',
-            axisLabel: {
-              fontSize: 10,
-              interval: 0,
-              formatter: (value: string) => value.split('').join('\n'),
-            },
-            data: result.map(({ name }) => name) || [],
+        },
+        series: [
+          {
+            type: 'bar',
+            data: result.map(({ value }) => {
+              return {
+                value,
+                itemStyle: {
+                  color: Utils.GetValueColor(value).color,
+                },
+              };
+            }),
           },
-          yAxis: {
-            type: 'value',
-            axisLabel: {
-              formatter: `{value}亿`,
-              fontSize: 10,
-            },
+        ],
+        dataZoom: [
+          {
+            type: 'inside',
+            start: 0,
+            end: 40,
+            maxValueSpan: 50,
           },
-          series: [
-            {
-              type: 'bar',
-              data: result.map(({ value }) => {
-                return {
-                  value,
-                  itemStyle: {
-                    color: Utils.GetValueColor(value).color,
-                  },
-                };
-              }),
-            },
-          ],
-          dataZoom: [
-            {
-              type: 'inside',
-              start: 0,
-              end: 40,
-              maxValueSpan: 50,
-            },
-          ],
-        });
-      },
-    }
-  );
+        ],
+      });
+    },
+  });
 
   useRenderEcharts(
     () => {
@@ -101,11 +96,7 @@ const Area: React.FC<IndustryProps> = () => {
   return (
     <div className={styles.content}>
       <div ref={chartRef} style={{ width: '100%' }} />
-      <TypeSelection
-        types={areaTypeList}
-        activeType={areaType.type}
-        onSelected={setAreaType}
-      />
+      <TypeSelection types={areaTypeList} activeType={areaType.type} onSelected={setAreaType} />
     </div>
   );
 };

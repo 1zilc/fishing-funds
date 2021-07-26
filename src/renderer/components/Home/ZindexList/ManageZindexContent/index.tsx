@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { Checkbox } from 'antd';
+import { useDispatch, useSelector } from 'react-redux';
 import { useBoolean } from 'ahooks';
 import classnames from 'classnames';
 import { ReactSortable } from 'react-sortablejs';
@@ -8,7 +9,8 @@ import PureCard from '@/components/Card/PureCard';
 import { ReactComponent as MenuIcon } from '@/assets/icons/menu.svg';
 import Eye from '@/components/Eye';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
-import { getZindexConfig, setZindexConfig } from '@/actions/zindex';
+import { setZindexConfigAction } from '@/actions/zindex';
+import { StoreState } from '@/reducers/types';
 import * as Enums from '@/utils/enums';
 import * as Utils from '@/utils';
 import styles from './index.scss';
@@ -28,8 +30,8 @@ interface MarketProps {
 
 const Market: React.FC<MarketProps> = (props) => {
   const { name, code, selections } = props;
-  const { zindexConfig } = getZindexConfig();
   const [eyeOpen, { toggle }] = useBoolean(true);
+  const { zindexConfig } = useSelector((state: StoreState) => state.zindex.config);
   const { indeterminate, checked } = useMemo(() => {
     const selectedMap = Utils.MakeMap(selections);
     const markets = zindexConfig.filter((_) => _.type === code);
@@ -47,11 +49,7 @@ const Market: React.FC<MarketProps> = (props) => {
 
   return (
     <PureCard className={styles.market}>
-      <Checkbox
-        indeterminate={indeterminate}
-        checked={checked}
-        onChange={(e) => props.onCheckChange(e.target.checked, code)}
-      >
+      <Checkbox indeterminate={indeterminate} checked={checked} onChange={(e) => props.onCheckChange(e.target.checked, code)}>
         {name}
       </Checkbox>
       <Eye status={eyeOpen} onClick={toggle} />
@@ -71,10 +69,9 @@ export const marketsConfig = [
 const marketsGroup = Utils.Group(marketsConfig, 2);
 
 const ManageZindexContent: React.FC<ManageZindexContentProps> = (props) => {
-  const { zindexConfig, selectZindexs } = getZindexConfig();
-  const [sortZindexConfig, setSortZindexConfig] = useState(
-    zindexConfig.map((_) => ({ ..._, id: _.code, eyeOpen: true }))
-  );
+  const dispatch = useDispatch();
+  const { zindexConfig, selectZindexs } = useSelector((state: StoreState) => state.zindex.config);
+  const [sortZindexConfig, setSortZindexConfig] = useState(zindexConfig.map((_) => ({ ..._, id: _.code, eyeOpen: true })));
   const [selections, setSelections] = useState(selectZindexs);
 
   function onSave() {
@@ -82,19 +79,15 @@ const ManageZindexContent: React.FC<ManageZindexContentProps> = (props) => {
     sortZindexConfig.forEach((zindex) => {
       zindex.show = !!selectedMap[zindex.code];
     });
-    setZindexConfig(sortZindexConfig);
+    dispatch(setZindexConfigAction(sortZindexConfig));
     props.onEnter();
   }
 
   function onMarketCheckChange(status: boolean, code: Enums.ZindexType) {
     const selectedMap = Utils.MakeMap(selections);
     const newSelections = [
-      ...sortZindexConfig
-        .filter((_) => _.type !== code && selectedMap[_.code])
-        .map((_) => _.code),
-      ...sortZindexConfig
-        .filter((_) => _.type === code && status)
-        .map((_) => _.code),
+      ...sortZindexConfig.filter((_) => _.type !== code && selectedMap[_.code]).map((_) => _.code),
+      ...sortZindexConfig.filter((_) => _.type === code && status).map((_) => _.code),
     ];
     setSelections(newSelections);
   }
@@ -109,12 +102,7 @@ const ManageZindexContent: React.FC<ManageZindexContentProps> = (props) => {
   }
 
   return (
-    <CustomDrawerContent
-      title="指数自选"
-      enterText="保存"
-      onEnter={onSave}
-      onClose={props.onClose}
-    >
+    <CustomDrawerContent title="指数自选" enterText="保存" onEnter={onSave} onClose={props.onClose}>
       <div className={styles.content}>
         {marketsGroup.map((markets, index) => (
           <div key={index} className={styles.markets}>
@@ -131,19 +119,8 @@ const ManageZindexContent: React.FC<ManageZindexContentProps> = (props) => {
             ))}
           </div>
         ))}
-        <Checkbox.Group
-          style={{ width: '100%' }}
-          onChange={(e) => setSelections(e.map((i) => String(i)))}
-          value={selections}
-        >
-          <ReactSortable
-            animation={200}
-            delay={2}
-            list={sortZindexConfig}
-            setList={setSortZindexConfig}
-            dragClass={styles.dragItem}
-            swap
-          >
+        <Checkbox.Group style={{ width: '100%' }} onChange={(e) => setSelections(e.map((i) => String(i)))} value={selections}>
+          <ReactSortable animation={200} delay={2} list={sortZindexConfig} setList={setSortZindexConfig} dragClass={styles.dragItem} swap>
             {sortZindexConfig.map((zindex) => {
               return (
                 <PureCard

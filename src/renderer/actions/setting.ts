@@ -8,16 +8,20 @@ export const SYNC_SETTING = 'SYNC_SETTING';
 
 export function setSystemSettingAction(setting: System.Setting): ThunkAction {
   return (dispatch, getState) => {
-    const {
-      setting: { systemSetting },
-    } = getState();
+    try {
+      const {
+        setting: { systemSetting },
+      } = getState();
 
-    Utils.SetStorage(CONST.STORAGE.SYSTEM_SETTING, {
-      ...systemSetting,
-      ...setting,
-    });
+      Utils.SetStorage(CONST.STORAGE.SYSTEM_SETTING, {
+        ...systemSetting,
+        ...setting,
+      });
 
-    dispatch(syncSystemSettingAction());
+      dispatch(syncSystemSettingAction());
+    } catch (error) {
+      console.log('设置系统设置出错', error);
+    }
   };
 }
 

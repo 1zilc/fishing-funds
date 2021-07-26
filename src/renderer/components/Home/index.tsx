@@ -20,8 +20,6 @@ import { marketsConfig } from '@/components/Home/ZindexList/ManageZindexContent'
 import { stockTypesConfig } from '@/components/Home/StockList/AddStockContent';
 import { StoreState } from '@/reducers/types';
 import { useNativeThemeColor } from '@/utils/hooks';
-import { getZindexConfig } from '@/actions/zindex';
-import { getStockConfig } from '@/actions/stock';
 import * as Enums from '@/utils/enums';
 import * as CONST from '@/constants';
 import styles from './index.scss';
@@ -61,7 +59,8 @@ const FundGroup = () => {
 };
 
 const ZindexGroup = () => {
-  const { codeMap: zindexCodeMap } = getZindexConfig();
+  const { codeMap: zindexCodeMap } = useSelector((state: StoreState) => state.zindex.config);
+
   return (
     <GroupTab>
       <Tabs.TabPane tab="全部" key={String(-1)}>
@@ -92,7 +91,7 @@ const QuotationGroup = () => {
 };
 
 const StockGroup = () => {
-  const { codeMap: stockCodeMap } = getStockConfig();
+  const { codeMap: stockCodeMap } = useSelector((state: StoreState) => state.stock.config);
 
   return (
     <GroupTab>

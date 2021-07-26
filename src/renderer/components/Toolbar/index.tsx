@@ -17,9 +17,9 @@ import FundStatisticsContent from '@/components/Home/FundList/FundStatisticsCont
 import ManageZindexContent from '@/components/Home/ZindexList/ManageZindexContent';
 import FundFlowContent from '@/components/Home/QuotationList/FundFlowContent';
 import { StoreState } from '@/reducers/types';
-import { loadZindexs } from '@/actions/zindex';
-import { loadQuotations } from '@/actions/quotation';
-import { loadStocks } from '@/actions/stock';
+import { loadZindexsAction } from '@/actions/zindex';
+import { loadQuotationsAction } from '@/actions/quotation';
+import { loadStocksAction } from '@/actions/stock';
 import { useScrollToTop, useActions, useFreshFunds } from '@/utils/hooks';
 import * as Enums from '@/utils/enums';
 import * as CONST from '@/constants';
@@ -34,13 +34,13 @@ const ToolBar: React.FC<ToolBarProps> = () => {
   const updateInfo = useSelector((state: StoreState) => state.updater.updateInfo);
   const tabsActiveKey = useSelector((state: StoreState) => state.tabs.activeKey);
 
-  const { run: runLoadZindexs } = useThrottleFn(useActions(loadZindexs), {
+  const { run: runLoadZindexs } = useThrottleFn(useActions(loadZindexsAction), {
     wait: CONST.DEFAULT.FRESH_BUTTON_THROTTLE_DELAY,
   });
-  const { run: runLoadQuotations } = useThrottleFn(useActions(loadQuotations), {
+  const { run: runLoadQuotations } = useThrottleFn(useActions(loadQuotationsAction), {
     wait: CONST.DEFAULT.FRESH_BUTTON_THROTTLE_DELAY,
   });
-  const { run: runLoadStocks } = useThrottleFn(useActions(loadStocks), {
+  const { run: runLoadStocks } = useThrottleFn(useActions(loadStocksAction), {
     wait: CONST.DEFAULT.FRESH_BUTTON_THROTTLE_DELAY,
   });
 
