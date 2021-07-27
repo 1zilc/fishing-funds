@@ -22,6 +22,7 @@ import { StoreState } from '@/reducers/types';
 import { useNativeThemeColor, useCurrentWallet } from '@/utils/hooks';
 import * as Enums from '@/utils/enums';
 import * as CONST from '@/constants';
+import * as Helpers from '@/helpers';
 import styles from './index.scss';
 
 export interface HomeProps {}
@@ -53,6 +54,9 @@ const FundGroup = () => {
       </Tabs.TabPane>
       <Tabs.TabPane tab="自选" key={String(2)}>
         <FundList filter={(fund) => !fundCodeMap[fund.fundcode!].cyfe} />
+      </Tabs.TabPane>
+      <Tabs.TabPane tab="净值更新" key={String(3)}>
+        <FundList filter={(fund) => !!Helpers.Fund.CalcFund(fund).isFix} />
       </Tabs.TabPane>
     </GroupTab>
   );
