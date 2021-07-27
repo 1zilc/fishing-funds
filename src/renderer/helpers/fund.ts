@@ -32,6 +32,12 @@ export function GetRemoteFundsMap() {
   return Utils.GetStorage<Record<string, Fund.RemoteFund>>(CONST.STORAGE.REMOTE_FUND_MAP, {});
 }
 
+export function GetRemoteFunds() {
+  return Object.entries(Utils.GetStorage<Record<string, Fund.RemoteFund>>(CONST.STORAGE.REMOTE_FUND_MAP, {})).map(
+    ([code, remoteFund]) => remoteFund
+  );
+}
+
 export async function GetFunds(config?: Fund.SettingItem[]) {
   const { fundConfig } = GetFundConfig();
   const { fundApiTypeSetting } = Helpers.Setting.GetSystemSetting();

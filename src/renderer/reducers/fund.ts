@@ -1,5 +1,6 @@
 import { SET_REMOTE_FUNDS_LOADING, SET_REMOTE_FUNDS, SET_FUNDS_LOADING } from '@/actions/fund';
 import { Reducer } from '@/reducers/types';
+import * as Helpers from '@/helpers';
 
 export interface FundState {
   fundsLoading: boolean;
@@ -10,7 +11,7 @@ export interface FundState {
 const fund: Reducer<FundState> = (
   state = {
     fundsLoading: false,
-    remoteFunds: [],
+    remoteFunds: Helpers.Fund.GetRemoteFunds(),
     remoteFundsLoading: false,
   },
   action

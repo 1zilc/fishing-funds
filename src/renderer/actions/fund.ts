@@ -36,19 +36,35 @@ export function setFundConfigAction(config: Fund.SettingItem[]): ThunkAction {
   };
 }
 
-export function setRemoteFundsAction(remoteFunds: Fund.RemoteFund[]): AnyAction {
-  const remoteMap = Utils.GetStorage(CONST.STORAGE.REMOTE_FUND_MAP, {});
-  const newRemoteMap = remoteFunds.reduce((r, c) => {
-    r[c[0]] = c;
-    return r;
-  }, {} as Record<string, Fund.RemoteFund>);
+export function setRemoteFundsAction(remoteFunds: Fund.RemoteFund[]): ThunkAction {
+  return (dispatch, getState) => {
+    try {
+      const remoteMap = Utils.GetStorage(CONST.STORAGE.REMOTE_FUND_MAP, {});
+      const newRemoteMap = remoteFunds.reduce((r, c) => {
+        r[c[0]] = c;
+        return r;
+      }, {} as Record<string, Fund.RemoteFund>);
 
-  Utils.SetStorage(CONST.STORAGE.REMOTE_FUND_MAP, {
-    ...remoteMap,
-    ...newRemoteMap,
-  });
+      Utils.SetStorage(CONST.STORAGE.REMOTE_FUND_MAP, {
+        ...remoteMap,
+        ...newRemoteMap,
+      });
+      dispatch(syncRemoteFundsAction());
+    } catch (error) {
+      console.log('设置基金库出错', error);
+    }
+  };
+}
 
-  return { type: SET_REMOTE_FUNDS, payload: remoteFunds };
+export function syncRemoteFundsAction(): ThunkAction {
+  return (dispatch, getState) => {
+    try {
+      const remoteFunds = Helpers.Fund.GetRemoteFunds();
+      dispatch({ type: SET_REMOTE_FUNDS, payload: remoteFunds });
+    } catch (error) {
+      console.log('同步基金库出错', error);
+    }
+  };
 }
 
 export function addFundAction(fund: Fund.SettingItem): ThunkAction {
