@@ -244,7 +244,7 @@ export function useActions(actions: any, deps?: any[]) {
 export function useSyncFixFundSetting() {
   const dispatch = useDispatch();
   const [done, { setTrue }] = useBoolean(false);
-  const { fundConfig } = useSelector((state: StoreState) => state.fund.config);
+  const { currentWalletFundsConfig: fundConfig } = useCurrentWallet();
 
   async function FixFundSetting(fundConfig: Fund.SettingItem[]) {
     try {

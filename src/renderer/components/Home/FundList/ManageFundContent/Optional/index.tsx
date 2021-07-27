@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { ReactSortable } from 'react-sortablejs';
 import classnames from 'classnames';
 
@@ -14,7 +14,7 @@ import AddFundContent from '@/components/Home/FundList/AddFundContent';
 import EditFundContent from '@/components/Home/FundList/EditFundContent';
 import { deleteFundAction, setFundConfigAction } from '@/actions/fund';
 import { useSyncFixFundSetting, useDrawer, useCurrentWallet } from '@/utils/hooks';
-import { StoreState } from '@/reducers/types';
+
 import styles from './index.scss';
 
 export interface OptionalProps {}
@@ -147,7 +147,7 @@ const Optional: React.FC<OptionalProps> = () => {
         <AddFundContent onClose={closeAddDrawer} onEnter={closeAddDrawer} />
       </CustomDrawer>
       <CustomDrawer show={showEditDrawer}>
-        <EditFundContent onClose={closeEditDrawer} onEnter={closeAddDrawer} fund={editFundData} />
+        <EditFundContent onClose={closeEditDrawer} onEnter={closeEditDrawer} fund={editFundData} />
       </CustomDrawer>
     </div>
   );

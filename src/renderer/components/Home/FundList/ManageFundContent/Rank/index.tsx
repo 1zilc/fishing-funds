@@ -9,7 +9,7 @@ import AddFundContent from '@/components/Home/FundList/AddFundContent';
 import DetailFundContent from '@/components/Home/FundList/DetailFundContent';
 import TypeSelection from '@/components/TypeSelection';
 import { StoreState } from '@/reducers/types';
-import { useDrawer } from '@/utils/hooks';
+import { useDrawer, useCurrentWallet } from '@/utils/hooks';
 import * as Services from '@/services';
 import * as Utils from '@/utils';
 import styles from './index.scss';
@@ -34,7 +34,7 @@ const RenderColorCol = ({ value }: { value: string }) => {
 const Rank: React.FC<PropsWithChildren<RankProps>> = () => {
   const [fundType, setFundType] = useState(fundTypeList[0]);
   const [data, setData] = useState([]);
-  const { codeMap } = useSelector((state: StoreState) => state.fund.config);
+  const { currentWalletFundsCodeMap: codeMap } = useCurrentWallet();
   const { data: detailCode, show: showDetailDrawer, set: setDetailDrawer, close: closeDetailDrawer } = useDrawer('');
 
   const { data: addCode, show: showAddDrawer, set: setAddDrawer, close: closeAddDrawer } = useDrawer('');

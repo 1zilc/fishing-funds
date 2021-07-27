@@ -1,5 +1,4 @@
 import { batch } from 'react-redux';
-import { AnyAction } from 'redux';
 
 import { ThunkAction, PromiseAction } from '@/reducers/types';
 import * as Utils from '@/utils';
@@ -10,13 +9,16 @@ export const SET_QUOTATIONS_LOADING = 'SET_QUOTATIONS_LOADING';
 export const SYNC_FAVORITE_QUOTATION_MAP = 'SYNC_FAVORITE_QUOTATION_MAP';
 export const SYNC_QUOTATIONS = 'SYNC_QUOTATIONS';
 
-export function syncFavoriteQuotationMapAction(code: string, status: boolean): AnyAction {
-  const favoriteQuotationMap = Helpers.Quotation.GetFavoriteQuotationMap();
-  favoriteQuotationMap[code] = status;
-  Utils.SetStorage(CONST.STORAGE.FAVORITE_QUOTATION_MAP, favoriteQuotationMap);
-  return {
-    type: SYNC_FAVORITE_QUOTATION_MAP,
-    payload: favoriteQuotationMap,
+export function syncFavoriteQuotationMapAction(code: string, status: boolean): ThunkAction {
+  return async (dispatch, getState) => {
+    try {
+      const favoriteQuotationMap = Helpers.Quotation.GetFavoriteQuotationMap();
+      favoriteQuotationMap[code] = status;
+      Utils.SetStorage(CONST.STORAGE.FAVORITE_QUOTATION_MAP, favoriteQuotationMap);
+      dispatch({ type: SYNC_FAVORITE_QUOTATION_MAP, payload: favoriteQuotationMap });
+    } catch (error) {
+      console.log('同步关注板块出错', error);
+    }
   };
 }
 
@@ -35,6 +37,7 @@ export function loadQuotationsAction(): PromiseAction {
     }
   };
 }
+
 export function loadQuotationsWithoutLoadingAction(): PromiseAction {
   return async (dispatch, getState) => {
     try {
@@ -120,6 +123,12 @@ export function sortQuotationsAction(): ThunkAction {
   };
 }
 
-export function syncQuotationsStateAction(quotations: Quotation.ResponseItem[]): AnyAction {
-  return { type: SYNC_QUOTATIONS, payload: quotations };
+export function syncQuotationsStateAction(quotations: Quotation.ResponseItem[]): ThunkAction {
+  return (dispatch, getState) => {
+    try {
+      dispatch({ type: SYNC_QUOTATIONS, payload: quotations });
+    } catch (error) {
+      console.log('同步板块状态出错', error);
+    }
+  };
 }

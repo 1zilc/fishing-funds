@@ -1,15 +1,10 @@
 import { SET_REMOTE_FUNDS_LOADING, SET_REMOTE_FUNDS, SET_FUNDS_LOADING } from '@/actions/fund';
 import { Reducer } from '@/reducers/types';
-import * as Helpers from '@/helpers';
 
 export interface FundState {
   fundsLoading: boolean;
   remoteFunds: Fund.RemoteFund[];
   remoteFundsLoading: boolean;
-  config: {
-    fundConfig: Fund.SettingItem[];
-    codeMap: Helpers.Fund.CodeFundMap;
-  };
 }
 
 const fund: Reducer<FundState> = (
@@ -17,7 +12,6 @@ const fund: Reducer<FundState> = (
     fundsLoading: false,
     remoteFunds: [],
     remoteFundsLoading: false,
-    config: Helpers.Fund.GetFundConfig(),
   },
   action
 ) => {

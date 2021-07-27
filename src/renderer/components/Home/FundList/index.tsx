@@ -27,17 +27,14 @@ const FundList: React.FC<FundListProps> = (props) => {
     set: setEditDrawer,
     close: closeEditDrawer,
   } = useDrawer({ cyfe: 0, code: '', name: '' });
-
-  const { data: detailFundCode, show: showDetailDrawer, set: setDetailDrawer, close: closeDetailDrawer } = useDrawer('');
-
   const freshFunds = useFreshFunds(0);
+  const { data: detailFundCode, show: showDetailDrawer, set: setDetailDrawer, close: closeDetailDrawer } = useDrawer('');
+  const list = funds.filter(props.filter);
 
-  const enterEditDrawer = () => {
+  function enterEditDrawer() {
     freshFunds();
     closeEditDrawer();
-  };
-
-  const list = funds.filter(props.filter);
+  }
 
   return (
     <div className={styles.container}>

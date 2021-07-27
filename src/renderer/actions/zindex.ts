@@ -1,5 +1,4 @@
 import { batch } from 'react-redux';
-import { AnyAction } from 'redux';
 
 import { Dispatch, GetState, ThunkAction, PromiseAction } from '@/reducers/types';
 import * as Utils from '@/utils';
@@ -21,11 +20,14 @@ export function setZindexConfigAction(zindexConfig: Zindex.SettingItem[]): Thunk
   };
 }
 
-export function syncZindexConfigAction(): AnyAction {
-  const config = Helpers.Zindex.GetZindexConfig();
-  return {
-    type: SYNC_ZIDNEX_CONFIG,
-    payload: config,
+export function syncZindexConfigAction(): ThunkAction {
+  return (dispatch, getState) => {
+    try {
+      const config = Helpers.Zindex.GetZindexConfig();
+      dispatch({ type: SYNC_ZIDNEX_CONFIG, payload: config });
+    } catch (error) {
+      console.log('同步指数配置出错', error);
+    }
   };
 }
 
@@ -146,6 +148,12 @@ export function sortZindexsCachedAction(responseZindexs: Zindex.ResponseItem[]):
   };
 }
 
-export function syncZindexsStateAction(zindex: (Zindex.ResponseItem & Zindex.ExtraRow)[]): AnyAction {
-  return { type: SYNC_ZIDNEXS, payload: zindex };
+export function syncZindexsStateAction(zindex: (Zindex.ResponseItem & Zindex.ExtraRow)[]): ThunkAction {
+  return (dispatch, getState) => {
+    try {
+      dispatch({ type: SYNC_ZIDNEXS, payload: zindex });
+    } catch (error) {
+      console.log('同步指数状态出错', error);
+    }
+  };
 }

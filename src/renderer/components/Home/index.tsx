@@ -19,7 +19,7 @@ import GroupTab from '@/components/GroupTab';
 import { marketsConfig } from '@/components/Home/ZindexList/ManageZindexContent';
 import { stockTypesConfig } from '@/components/Home/StockList/AddStockContent';
 import { StoreState } from '@/reducers/types';
-import { useNativeThemeColor } from '@/utils/hooks';
+import { useNativeThemeColor, useCurrentWallet } from '@/utils/hooks';
 import * as Enums from '@/utils/enums';
 import * as CONST from '@/constants';
 import styles from './index.scss';
@@ -42,7 +42,7 @@ export function useHomeContext() {
 }
 
 const FundGroup = () => {
-  const { codeMap: fundCodeMap } = useSelector((state: StoreState) => state.fund.config);
+  const { currentWalletFundsCodeMap: fundCodeMap } = useCurrentWallet();
   return (
     <GroupTab>
       <Tabs.TabPane tab="全部" key={String(0)}>

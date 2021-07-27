@@ -2,7 +2,7 @@ import { AnyAction } from 'redux';
 import { batch } from 'react-redux';
 import dayjs from 'dayjs';
 
-import { Dispatch, GetState, ThunkAction, PromiseAction } from '@/reducers/types';
+import { ThunkAction, PromiseAction } from '@/reducers/types';
 import { syncFixWalletStateAction, setWalletConfigAction, syncWalletStateAction } from '@/actions/wallet';
 import * as Services from '@/services';
 import * as Utils from '@/utils';
@@ -54,11 +54,7 @@ export function setRemoteFundsAction(remoteFunds: Fund.RemoteFund[]): AnyAction 
 export function addFundAction(fund: Fund.SettingItem): ThunkAction {
   return (dispatch, getState) => {
     try {
-      const {
-        fund: {
-          config: { fundConfig },
-        },
-      } = getState();
+      const { fundConfig } = Helpers.Fund.GetFundConfig();
       const cloneFundConfig = Utils.DeepCopy(fundConfig);
       const exist = cloneFundConfig.find((item) => fund.code === item.code);
       if (!exist) {
@@ -74,12 +70,7 @@ export function addFundAction(fund: Fund.SettingItem): ThunkAction {
 export function updateFundAction(fund: { code: string; cyfe?: number; name?: string; cbj?: number | null }): ThunkAction {
   return (dispatch, getState) => {
     try {
-      const {
-        fund: {
-          config: { fundConfig },
-        },
-      } = getState();
-
+      const { fundConfig } = Helpers.Fund.GetFundConfig();
       const cloneFundConfig = Utils.DeepCopy(fundConfig);
       cloneFundConfig.forEach((item) => {
         if (fund.code === item.code) {
@@ -120,7 +111,7 @@ export function deleteFundAction(code: string): ThunkAction {
 }
 
 export function loadRemoteFundsAction(): ThunkAction {
-  return async (dispatch: Dispatch, getState: GetState) => {
+  return async (dispatch, getState) => {
     try {
       dispatch({ type: SET_REMOTE_FUNDS_LOADING, payload: true });
       const remoteFunds = await Services.Fund.GetRemoteFundsFromEastmoney();
@@ -136,7 +127,7 @@ export function loadRemoteFundsAction(): ThunkAction {
 }
 
 export function loadFundsAction(): ThunkAction {
-  return async (dispatch: Dispatch, getState: GetState) => {
+  return async (dispatch, getState) => {
     try {
       dispatch({ type: SET_FUNDS_LOADING, payload: true });
       const responseFunds = (await Helpers.Fund.GetFunds()).filter(Utils.NotEmpty);
@@ -191,11 +182,7 @@ export function sortFundsAction(): ThunkAction {
 export function sortFundsCachedAction(responseFunds: Fund.ResponseItem[]): ThunkAction {
   return (dispatch, getState) => {
     try {
-      const {
-        fund: {
-          config: { fundConfig },
-        },
-      } = getState();
+      const { fundConfig } = Helpers.Fund.GetFundConfig();
       const { funds, code } = Helpers.Wallet.GetCurrentWalletState();
       const now = dayjs().format('MM-DD HH:mm:ss');
       const fundsCodeToMap = funds.reduce((map, fund) => {

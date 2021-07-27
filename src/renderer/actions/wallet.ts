@@ -1,8 +1,6 @@
 import dayjs from 'dayjs';
-import { AnyAction } from 'redux';
 
-import { GetState, Dispatch, ThunkAction, PromiseAction } from '@/reducers/types';
-
+import { ThunkAction, PromiseAction } from '@/reducers/types';
 import * as Enums from '@/utils/enums';
 import * as CONST from '@/constants';
 import * as Utils from '@/utils';
@@ -15,16 +13,19 @@ export const CHANGE_CURRENT_WALLET_CODE = 'CHANGE_CURRENT_WALLET_CODE';
 export const SYNC_WALLET_CONFIG = 'SYNC_WALLET_CONFIG';
 export const SYNC_WALLETS = 'SYNC_WALLETS';
 
-export function changeEyeStatusAction(status: Enums.EyeStatus): AnyAction {
-  Utils.SetStorage(CONST.STORAGE.EYE_STATUS, status);
-  return {
-    type: CHANGE_EYE_STATUS,
-    payload: status,
+export function changeEyeStatusAction(status: Enums.EyeStatus): ThunkAction {
+  return (dispatch, getState) => {
+    try {
+      Utils.SetStorage(CONST.STORAGE.EYE_STATUS, status);
+      dispatch({ type: CHANGE_EYE_STATUS, payload: status });
+    } catch (error) {
+      console.log('改变eye状态出错', error);
+    }
   };
 }
 
 export function toggleEyeStatusAction(): ThunkAction {
-  return (dispatch: Dispatch, getState: GetState) => {
+  return (dispatch, getState) => {
     try {
       const {
         wallet: { eyeStatus },
@@ -45,16 +46,25 @@ export function toggleEyeStatusAction(): ThunkAction {
   };
 }
 
-export function setWalletConfigAction(config: Wallet.SettingItem[]): AnyAction {
-  Utils.SetStorage(CONST.STORAGE.WALLET_SETTING, config);
-  return syncWalletConfigAction();
+export function setWalletConfigAction(config: Wallet.SettingItem[]): ThunkAction {
+  return (dispatch, getState) => {
+    try {
+      Utils.SetStorage(CONST.STORAGE.WALLET_SETTING, config);
+      dispatch(syncWalletConfigAction());
+    } catch (error) {
+      console.log('设置钱包配置出错', error);
+    }
+  };
 }
 
-export function syncWalletConfigAction(): AnyAction {
-  const config = Helpers.Wallet.GetWalletConfig();
-  return {
-    type: SYNC_WALLET_CONFIG,
-    payload: config,
+export function syncWalletConfigAction(): ThunkAction {
+  return (dispatch, getState) => {
+    try {
+      const config = Helpers.Wallet.GetWalletConfig();
+      dispatch({ type: SYNC_WALLET_CONFIG, payload: config });
+    } catch (error) {
+      console.log('同步钱包配置出错', error);
+    }
   };
 }
 
@@ -118,11 +128,14 @@ export function deleteWalletAction(code: string): ThunkAction {
   };
 }
 
-export function selectWalletAction(code: string): AnyAction {
-  Utils.SetStorage(CONST.STORAGE.CURRENT_WALLET_CODE, code);
-  return {
-    type: CHANGE_CURRENT_WALLET_CODE,
-    payload: code,
+export function selectWalletAction(code: string): ThunkAction {
+  return (dispatch, getState) => {
+    try {
+      Utils.SetStorage(CONST.STORAGE.CURRENT_WALLET_CODE, code);
+      dispatch({ type: CHANGE_CURRENT_WALLET_CODE, payload: code });
+    } catch (error) {
+      console.log('选择钱包出错', error);
+    }
   };
 }
 

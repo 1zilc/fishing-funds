@@ -1,12 +1,8 @@
 import { batch } from 'react-redux';
-import { AnyAction } from 'redux';
 
-import { Dispatch, GetState, ThunkAction, PromiseAction } from '@/reducers/types';
-import * as Adapter from '@/utils/adpters';
-import * as Services from '@/services';
+import { ThunkAction, PromiseAction } from '@/reducers/types';
 import * as Utils from '@/utils';
 import * as CONST from '@/constants';
-import * as Enums from '@/utils/enums';
 import * as Helpers from '@/helpers';
 
 export const SET_STOCKS_LOADING = 'SET_STOCKS_LOADING';
@@ -23,7 +19,7 @@ export function addStockAction(stock: Stock.SettingItem): ThunkAction {
       } = getState();
       const cloneStockConfig = Utils.DeepCopy(stockConfig);
       const exist = cloneStockConfig.find((item) => stock.secid === item.secid);
-      if (exist) {
+      if (!exist) {
         cloneStockConfig.push(stock);
       }
       dispatch(setStockConfigAction(cloneStockConfig));
@@ -33,8 +29,8 @@ export function addStockAction(stock: Stock.SettingItem): ThunkAction {
   };
 }
 
-export function updateStockAction(stock: { secid: string; type?: number }) {
-  return (dispatch: Dispatch, getState: GetState) => {
+export function updateStockAction(stock: { secid: string; type?: number }): ThunkAction {
+  return (dispatch, getState) => {
     try {
       const {
         stock: {
@@ -56,7 +52,7 @@ export function updateStockAction(stock: { secid: string; type?: number }) {
 }
 
 export function deleteStockAction(secid: string): ThunkAction {
-  return (dispatch: Dispatch, getState: GetState) => {
+  return (dispatch, getState) => {
     try {
       const {
         stock: {
@@ -77,7 +73,7 @@ export function deleteStockAction(secid: string): ThunkAction {
 }
 
 export function setStockConfigAction(stockConfig: Stock.SettingItem[]): ThunkAction {
-  return (dispatch: Dispatch, getState: GetState) => {
+  return (dispatch, getState) => {
     try {
       Utils.SetStorage(CONST.STORAGE.STOCK_SETTING, stockConfig);
       dispatch(syncStockConfigAction());
@@ -87,11 +83,14 @@ export function setStockConfigAction(stockConfig: Stock.SettingItem[]): ThunkAct
   };
 }
 
-export function syncStockConfigAction(): AnyAction {
-  const config = Helpers.Stock.GetStockConfig();
-  return {
-    type: SYNC_STOCK_CONFIG,
-    payload: config,
+export function syncStockConfigAction(): ThunkAction {
+  return (dispatch, getState) => {
+    try {
+      const config = Helpers.Stock.GetStockConfig();
+      dispatch({ type: SYNC_STOCK_CONFIG, payload: config });
+    } catch (error) {
+      console.log('同步股票配置失败', error);
+    }
   };
 }
 
@@ -109,8 +108,8 @@ export function sortStocksAction(): ThunkAction {
   };
 }
 
-export function loadStocksAction() {
-  return async (dispatch: Dispatch, getState: GetState) => {
+export function loadStocksAction(): PromiseAction {
+  return async (dispatch, getState) => {
     try {
       dispatch({ type: SET_STOCKS_LOADING, payload: true });
       const responseStocks = (await Helpers.Stock.GetStocks()).filter(Utils.NotEmpty) as Stock.ResponseItem[];
@@ -125,8 +124,8 @@ export function loadStocksAction() {
   };
 }
 
-export function loadStocksWithoutLoadingAction() {
-  return async (dispatch: Dispatch, getState: GetState) => {
+export function loadStocksWithoutLoadingAction(): PromiseAction {
+  return async (dispatch, getState) => {
     try {
       const responseStocks = (await Helpers.Stock.GetStocks()).filter(Utils.NotEmpty) as Stock.ResponseItem[];
       dispatch(sortStocksCachedAction(responseStocks));
@@ -136,8 +135,8 @@ export function loadStocksWithoutLoadingAction() {
   };
 }
 
-export function sortStocksCachedAction(responseStocks: Stock.ResponseItem[]) {
-  return async (dispatch: Dispatch, getState: GetState) => {
+export function sortStocksCachedAction(responseStocks: Stock.ResponseItem[]): PromiseAction {
+  return async (dispatch, getState) => {
     try {
       const {
         stock: {
@@ -176,8 +175,8 @@ export function sortStocksCachedAction(responseStocks: Stock.ResponseItem[]) {
   };
 }
 
-export function toggleStockCollapseAction(stock: Stock.ResponseItem & Stock.ExtraRow) {
-  return async (dispatch: Dispatch, getState: GetState) => {
+export function toggleStockCollapseAction(stock: Stock.ResponseItem & Stock.ExtraRow): ThunkAction {
+  return (dispatch, getState) => {
     try {
       const {
         stock: { stocks },
@@ -197,8 +196,8 @@ export function toggleStockCollapseAction(stock: Stock.ResponseItem & Stock.Extr
   };
 }
 
-export function toggleAllStocksCollapseAction() {
-  return async (dispatch: Dispatch, getState: GetState) => {
+export function toggleAllStocksCollapseAction(): ThunkAction {
+  return async (dispatch, getState) => {
     try {
       const {
         stock: { stocks },
@@ -215,6 +214,12 @@ export function toggleAllStocksCollapseAction() {
   };
 }
 
-export function syncStocksStateAction(stock: (Stock.ResponseItem & Stock.ExtraRow)[]): AnyAction {
-  return { type: SYNC_STOCKS, payload: stock };
+export function syncStocksStateAction(stock: (Stock.ResponseItem & Stock.ExtraRow)[]): ThunkAction {
+  return (dispatch, getState) => {
+    try {
+      dispatch({ type: SYNC_STOCKS, payload: stock });
+    } catch (error) {
+      console.log('同步股票状态出错', error);
+    }
+  };
 }
