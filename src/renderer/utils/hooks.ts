@@ -17,6 +17,7 @@ import * as CONST from '@/constants';
 import * as Adapter from '@/utils/adpters';
 import * as Services from '@/services';
 import * as Helpers from '@/helpers';
+import * as Enums from '@/utils/enums';
 
 const { invoke, dialog, ipcRenderer, clipboard, app } = window.contextModules.electron;
 
@@ -164,6 +165,33 @@ export function useConfigClipboard() {
       ipcRenderer.removeAllListeners('clipboard-funds-import');
     };
   }, []);
+}
+
+export function useTrayContent() {
+  const { trayContentSetting } = useSelector((state: StoreState) => state.setting.systemSetting);
+  const {
+    currentWalletState: { funds },
+  } = useCurrentWallet();
+  const calcResult = Helpers.Fund.CalcFunds(funds);
+
+  useEffect(() => {
+    let content = '';
+    switch (trayContentSetting) {
+      case Enums.TrayContent.Sy:
+        content = ` ${Utils.Yang(calcResult.sygz.toFixed(2))} ¥`;
+        break;
+      case Enums.TrayContent.Syl:
+        content = ` ${Utils.Yang(calcResult.gssyl.toFixed(2))} %`;
+        break;
+      case Enums.TrayContent.None:
+      default:
+        break;
+    }
+    ipcRenderer.invoke('set-tray-content', content);
+    return () => {
+      ipcRenderer.removeAllListeners('set-tray-content');
+    };
+  }, [trayContentSetting, calcResult]);
 }
 
 export function useNativeTheme() {

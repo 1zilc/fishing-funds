@@ -14,6 +14,7 @@ import { ReactComponent as LineCharIcon } from '@/assets/icons/line-chart.svg';
 import { ReactComponent as TShirtIcon } from '@/assets/icons/t-shirt.svg';
 import { ReactComponent as GlobalIcon } from '@/assets/icons/global.svg';
 import { ReactComponent as GroupIcon } from '@/assets/icons/group.svg';
+import { ReactComponent as NotificationIcon } from '@/assets/icons/notification.svg';
 import { defalutSystemSetting } from '@/helpers/setting';
 import { setSystemSettingAction } from '@/actions/setting';
 import { StoreState } from '@/reducers/types';
@@ -94,13 +95,13 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
     lowKeySetting,
     baseFontSizeSetting,
     systemThemeSetting,
-    autoStartSetting,
     adjustmentNotificationSetting,
+    trayContentSetting,
+    autoStartSetting,
     autoFreshSetting,
     freshDelaySetting,
     autoCheckUpdateSetting,
   } = useSelector((state: StoreState) => state.setting.systemSetting);
-
   const updateInfo = useSelector((state: StoreState) => state.updater.updateInfo);
   const isUpdateAvaliable = !!updateInfo.version;
 
@@ -111,9 +112,11 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
   const [lowKey, setLowKey] = useState(lowKeySetting);
   const [baseFontSize, setBaseFontSize] = useState(baseFontSizeSetting);
   const [systemTheme, setSystemTheme] = useState(systemThemeSetting);
+  // 通知设置
+  const [adjustmentNotification, setAdjustmentNotification] = useState(adjustmentNotificationSetting);
+  const [trayContent, setTrayContent] = useState(trayContentSetting);
   // 通用设置
   const [autoStart, setAutoStart] = useState(autoStartSetting);
-  const [adjustmentNotification, setAdjustmentNotification] = useState(adjustmentNotificationSetting);
   const [autoFresh, setAutoFresh] = useState(autoFreshSetting);
   const [freshDelay, setFreshDelay] = useState(freshDelaySetting);
   const [autoCheckUpdate, setAutoCheckUpdate] = useState(autoCheckUpdateSetting);
@@ -126,8 +129,9 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
         lowKeySetting: lowKey,
         baseFontSizeSetting: baseFontSize,
         systemThemeSetting: systemTheme,
-        autoStartSetting: autoStart,
         adjustmentNotificationSetting: adjustmentNotification,
+        trayContentSetting: trayContent,
+        autoStartSetting: autoStart,
         autoFreshSetting: autoFresh,
         freshDelaySetting: freshDelay || defalutSystemSetting.freshDelaySetting,
         autoCheckUpdateSetting: autoCheckUpdate,
@@ -223,15 +227,34 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
             </section>
           </div>
         </StandCard>
-        <StandCard icon={<SettingIcon />} title="通用设置">
+        <StandCard icon={<NotificationIcon />} title="通知设置">
+          <div className={classnames(styles.setting, 'card-body')}>
+            <section>
+              <label>调仓提醒：</label>
+              <Switch size="small" checked={adjustmentNotification} onChange={setAdjustmentNotification} />
+            </section>
+            <section>
+              <label>托盘内容：</label>
+              <Radio.Group
+                optionType="button"
+                size="small"
+                buttonStyle="solid"
+                options={[
+                  { label: '收益', value: Enums.TrayContent.Sy },
+                  { label: '收益率', value: Enums.TrayContent.Syl },
+                  { label: '无', value: Enums.TrayContent.None },
+                ]}
+                onChange={(e) => setTrayContent(e.target.value)}
+                value={trayContent}
+              />
+            </section>
+          </div>
+        </StandCard>
+        <StandCard icon={<SettingIcon />} title="系统设置">
           <div className={classnames(styles.setting, 'card-body')}>
             <section>
               <label>开机自启：</label>
               <Switch size="small" checked={autoStart} onChange={setAutoStart} />
-            </section>
-            <section>
-              <label>调仓提醒：</label>
-              <Switch size="small" checked={adjustmentNotification} onChange={setAdjustmentNotification} />
             </section>
             <section>
               <label>自动刷新：</label>

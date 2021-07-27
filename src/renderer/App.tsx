@@ -3,13 +3,21 @@ import { MemoryRouter as Router, Switch, Route } from 'react-router-dom';
 import * as CONST from '@/constants';
 import HomePage from '@/containers/HomePage';
 
-import { useUpdater, useAdjustmentNotification, useConfigClipboard, useBootStrap, useMappingLocalToSystemSetting } from '@/utils/hooks';
+import {
+  useUpdater,
+  useAdjustmentNotification,
+  useConfigClipboard,
+  useBootStrap,
+  useMappingLocalToSystemSetting,
+  useTrayContent,
+} from '@/utils/hooks';
 import '@/app.global.scss';
 
 const App: React.FC<Record<string, unknown>> = () => {
   useUpdater();
   useAdjustmentNotification();
   useConfigClipboard();
+  useTrayContent();
   useMappingLocalToSystemSetting();
   useBootStrap();
 
