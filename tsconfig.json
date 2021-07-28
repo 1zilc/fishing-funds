@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
-    "target": "ES2020",
-    "module": "commonjs",
+    "target": "esnext",
+    "module": "esnext",
     "lib": ["dom", "esnext"],
     "declaration": false,
     "declarationMap": false,
@@ -27,5 +27,10 @@
     }
   },
   "include": ["./src/**/*"],
-  "exclude": ["test", "build/release", "build/app/dist", ".erb/dll"]
+  "exclude": ["test", "build/release", "build/app/dist", ".erb/dll"],
+  "ts-node": {
+    "compilerOptions": {
+      "module": "commonjs"
+    }
+  }
 }
