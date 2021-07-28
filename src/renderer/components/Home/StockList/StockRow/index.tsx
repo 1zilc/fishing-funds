@@ -28,6 +28,8 @@ const TrendChart: React.FC<{
 }> = ({ trends = [], zs = 0 }) => {
   const { ref: chartRef, chartInstance } = useResizeEchart(0.24);
   const { darkMode } = useHomeContext();
+  const { lowKeySetting } = useSelector((state: StoreState) => state.setting.systemSetting);
+
   useRenderEcharts(
     () => {
       const { color } = Utils.GetValueColor(Number(trends[trends.length - 1]?.last) - zs);
@@ -85,7 +87,7 @@ const TrendChart: React.FC<{
       });
     },
     chartInstance,
-    [darkMode, zs, trends]
+    [darkMode, zs, trends, lowKeySetting]
   );
   return <div ref={chartRef} style={{ width: 72 }} />;
 };
