@@ -244,6 +244,10 @@ export function syncWalletStateAction(state: Wallet.StateItem): ThunkAction {
         }
       });
 
+      if (!walletState) {
+        cloneWallets.push(state);
+      }
+
       dispatch({ type: SYNC_WALLETS, payload: cloneWallets });
     } catch (error) {
       console.log('同步钱包状态出错', error);

@@ -41,6 +41,7 @@ export function GetRemoteFunds() {
 export async function GetFunds(config?: Fund.SettingItem[]) {
   const { fundConfig } = GetFundConfig();
   const { fundApiTypeSetting } = Helpers.Setting.GetSystemSetting();
+  console.log(config || fundConfig);
   const collectors = (config || fundConfig).map(
     ({ code }) =>
       () =>

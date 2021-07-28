@@ -142,11 +142,12 @@ export function loadRemoteFundsAction(): ThunkAction {
   };
 }
 
-export function loadFundsAction(): ThunkAction {
+export function loadFundsAction(): PromiseAction {
   return async (dispatch, getState) => {
     try {
       dispatch({ type: SET_FUNDS_LOADING, payload: true });
       const responseFunds = (await Helpers.Fund.GetFunds()).filter(Utils.NotEmpty);
+      console.log(await Helpers.Fund.GetFunds());
 
       batch(() => {
         dispatch({ type: SET_FUNDS_LOADING, payload: false });
@@ -205,7 +206,7 @@ export function sortFundsCachedAction(responseFunds: Fund.ResponseItem[]): Thunk
         map[fund.fundcode!] = fund;
         return map;
       }, {} as any);
-      const fundsWithChached = responseFunds.filter(Utils.NotEmpty).map((_) => ({
+      const fundsWithChached = responseFunds.map((_) => ({
         ...(fundsCodeToMap[_.fundcode!] || {}),
         ..._,
       }));
