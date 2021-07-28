@@ -5,10 +5,10 @@ import { useSelector } from 'react-redux';
 
 import PureCard from '@/components/Card/PureCard';
 import Score from '@/components/Home/FundList/FundStatisticsContent/AssetsStatistics/Score';
-import { calcWalletsFund, calcFunds } from '@/actions/fund';
 import { StoreState } from '@/reducers/types';
 import * as Enums from '@/utils/enums';
 import * as Utils from '@/utils';
+import * as Helpers from '@/helpers';
 import styles from './index.scss';
 
 interface AssetsStatisticsProps {
@@ -16,19 +16,13 @@ interface AssetsStatisticsProps {
   codes: string[];
 }
 
-const AssetsStatistics: React.FC<AssetsStatisticsProps> = ({
-  funds,
-  codes,
-}) => {
+const AssetsStatistics: React.FC<AssetsStatisticsProps> = ({ funds, codes }) => {
   const eyeStatus = useSelector((state: StoreState) => state.wallet.eyeStatus);
-  const walletsMap = useSelector(
-    (state: StoreState) => state.wallet.walletsMap
-  );
   const eyeOpen = eyeStatus === Enums.EyeStatus.Open;
   // 盈利钱包数
   const winWalletCount = codes.reduce((result, code) => {
-    const funds = walletsMap[code]?.funds || [];
-    const { sygz } = calcFunds(funds, code);
+    const funds = Helpers.Wallet.GetWalletState(code).funds || [];
+    const { sygz } = Helpers.Fund.CalcFunds(funds, code);
     return result + (sygz > 0 ? 1 : 0);
   }, 0);
   // 盈利基金数
@@ -36,7 +30,7 @@ const AssetsStatistics: React.FC<AssetsStatisticsProps> = ({
   // 总资产
   const { cyje, jrsygz, cysy, cbje } = funds.reduce(
     (result, fund) => {
-      const { cyje, jrsygz, cysy, cbje } = calcWalletsFund(fund, codes);
+      const { cyje, jrsygz, cysy, cbje } = Helpers.Fund.CalcWalletsFund(fund, codes);
       result.cyje += cyje;
       result.jrsygz += jrsygz;
       result.cysy += cysy;
@@ -48,33 +42,15 @@ const AssetsStatistics: React.FC<AssetsStatisticsProps> = ({
   const gssyl = cyje ? NP.times(NP.divide(jrsygz, cyje), 100) : 0;
   const cysyl = cbje ? NP.times(NP.divide(cysy, cbje), 100) : 0;
 
-  const displayCyje = eyeOpen
-    ? cyje.toFixed(2)
-    : Utils.Encrypt(cyje.toFixed(2));
-  const displaySygz = eyeOpen
-    ? Utils.Yang(jrsygz.toFixed(2))
-    : Utils.Encrypt(Utils.Yang(jrsygz.toFixed(2)));
-  const displayGssyl = eyeOpen
-    ? gssyl.toFixed(2)
-    : Utils.Encrypt(gssyl.toFixed(2));
-  const displayWinWalletCount = eyeOpen
-    ? winWalletCount
-    : Utils.Encrypt(String(winWalletCount));
-  const displayWinFundCount = eyeOpen
-    ? winFundCount
-    : Utils.Encrypt(String(winFundCount));
-  const displayCodesLength = eyeOpen
-    ? codes.length
-    : Utils.Encrypt(String(codes.length));
-  const displayFundsLength = eyeOpen
-    ? funds.length
-    : Utils.Encrypt(String(funds.length));
-  const displayCysy = eyeOpen
-    ? Utils.Yang(cysy.toFixed(2))
-    : Utils.Encrypt(Utils.Yang(cysy.toFixed(2)));
-  const displayCysyl = eyeOpen
-    ? cysyl.toFixed(2)
-    : Utils.Encrypt(cysyl.toFixed(2));
+  const displayCyje = eyeOpen ? cyje.toFixed(2) : Utils.Encrypt(cyje.toFixed(2));
+  const displaySygz = eyeOpen ? Utils.Yang(jrsygz.toFixed(2)) : Utils.Encrypt(Utils.Yang(jrsygz.toFixed(2)));
+  const displayGssyl = eyeOpen ? gssyl.toFixed(2) : Utils.Encrypt(gssyl.toFixed(2));
+  const displayWinWalletCount = eyeOpen ? winWalletCount : Utils.Encrypt(String(winWalletCount));
+  const displayWinFundCount = eyeOpen ? winFundCount : Utils.Encrypt(String(winFundCount));
+  const displayCodesLength = eyeOpen ? codes.length : Utils.Encrypt(String(codes.length));
+  const displayFundsLength = eyeOpen ? funds.length : Utils.Encrypt(String(funds.length));
+  const displayCysy = eyeOpen ? Utils.Yang(cysy.toFixed(2)) : Utils.Encrypt(Utils.Yang(cysy.toFixed(2)));
+  const displayCysyl = eyeOpen ? cysyl.toFixed(2) : Utils.Encrypt(cysyl.toFixed(2));
 
   return (
     <PureCard className={styles.content}>

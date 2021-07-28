@@ -6,9 +6,15 @@ const { got } = window.contextModules;
 // 天天基金获取股票
 export async function FromEastmoney(secid: string) {
   try {
-    const { trends } = await GetTrendFromEastmoney(secid);
-    const { zx, code, name, market, zs, zdd, zdf, zg, zd, jk } =
-      await GetDetailFromEastmoney(secid);
+    const responseTrends = await GetTrendFromEastmoney(secid);
+    const responseDetail = await GetDetailFromEastmoney(secid);
+
+    if (!responseTrends || !Object.keys(responseDetail).length) {
+      return null;
+    }
+
+    const { trends } = responseTrends;
+    const { zx, code, name, market, zs, zdd, zdf, zg, zd, jk } = responseDetail!;
 
     return {
       secid,
@@ -92,9 +98,7 @@ export async function GetTrendFromEastmoney(secid: string) {
         time: 1625620887;
         kind: 1;
         prePrice: 2012.9;
-        trends: [
-          '2021-07-07 09:30,2012.90,2012.90,2013.00,2012.00,0,0.00,2012.900'
-        ];
+        trends: ['2021-07-07 09:30,2012.90,2012.90,2013.00,2012.00,0,0.00,2012.900'];
       };
     }>('http://push2.eastmoney.com/api/qt/stock/trends2/get', {
       searchParams: {
@@ -129,16 +133,13 @@ export async function GetTrendFromEastmoney(secid: string) {
 
 export async function GetPicTrendFromEastmoney(secid: string) {
   try {
-    const { rawBody }: any = await got(
-      'http://webquotepic.eastmoney.com/GetPic.aspx',
-      {
-        searchParams: {
-          nid: secid,
-          imageType: 'GNR',
-          token: Utils.MakeHash(),
-        },
-      }
-    );
+    const { rawBody }: any = await got('http://webquotepic.eastmoney.com/GetPic.aspx', {
+      searchParams: {
+        nid: secid,
+        imageType: 'GNR',
+        token: Utils.MakeHash(),
+      },
+    });
     // const base64Str = rawBody.toString('base64');
     const b64encoded = btoa(String.fromCharCode.apply(null, rawBody));
     return `data:image/png;base64,${b64encoded}`;
@@ -337,9 +338,7 @@ export async function GetKFromEastmoney(secid: string, code: number) {
         decimal: 2;
         dktotal: 4747;
         preKPrice: 206.69;
-        klines: [
-          '2021-07-09,2059.97,1972.11,2110.00,1945.00,244227,49006317568.00,8.02,-4.11,-84.59,1.94'
-        ];
+        klines: ['2021-07-09,2059.97,1972.11,2110.00,1945.00,244227,49006317568.00,8.02,-4.11,-84.59,1.94'];
       };
     }>('http://68.push2his.eastmoney.com/api/qt/stock/kline/get', {
       searchParams: {
@@ -409,8 +408,7 @@ export async function GetSelfRankFromEastmoney(code: string) {
       };
     }>('http://push2.eastmoney.com/api/qt/clist/get', {
       searchParams: {
-        fields:
-          'f2,f3,f12,f13,f14,f62,f184,f225,f165,f263,f109,f175,f264,f160,f100,f124,f265,f1,f267,f164,f174',
+        fields: 'f2,f3,f12,f13,f14,f62,f184,f225,f165,f263,f109,f175,f264,f160,f100,f124,f265,f1,f267,f164,f174',
         fid: code,
         po: 1,
         pz: 200,
@@ -474,8 +472,7 @@ export async function GetMainRankFromEastmoney(code: string) {
       };
     }>('http://push2.eastmoney.com/api/qt/clist/get', {
       searchParams: {
-        fields:
-          'f2,f3,f12,f13,f14,f62,f184,f225,f165,f263,f109,f175,f176,f264,f160,f100,f124,f265,f1',
+        fields: 'f2,f3,f12,f13,f14,f62,f184,f225,f165,f263,f109,f175,f176,f264,f160,f100,f124,f265,f1',
         fid: code,
         po: 1,
         pz: 200,

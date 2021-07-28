@@ -3,10 +3,10 @@ import React, { useState } from 'react';
 import { useHomeContext } from '@/components/Home';
 import { useResizeEchart, useRenderEcharts } from '@/utils/hooks';
 import TypeSelection from '@/components/TypeSelection';
-import { calcFund, calcWalletsFund } from '@/actions/fund';
 import * as CONST from '@/constants';
 import * as Enums from '@/utils/enums';
 import * as Utils from '@/utils';
+import * as Helpers from '@/helpers';
 import styles from './index.scss';
 
 interface FundRankProps {
@@ -22,9 +22,7 @@ const rankTypeList = [
 ];
 
 const FundRank: React.FC<FundRankProps> = ({ funds = [], codes = [] }) => {
-  const { ref: chartRef, chartInstance } = useResizeEchart(
-    Math.max(CONST.DEFAULT.ECHARTS_SCALE, funds.length / 12)
-  );
+  const { ref: chartRef, chartInstance } = useResizeEchart(Math.max(CONST.DEFAULT.ECHARTS_SCALE, funds.length / 12));
   const [rankType, setRankType] = useState(rankTypeList[0]);
   const { varibleColors, darkMode } = useHomeContext();
 
@@ -42,8 +40,7 @@ const FundRank: React.FC<FundRankProps> = ({ funds = [], codes = [] }) => {
               name,
               data: { originValue },
             } = datas[0];
-            return rankType.type === Enums.FundRankType.Sy ||
-              rankType.type === Enums.FundRankType.Cysy
+            return rankType.type === Enums.FundRankType.Sy || rankType.type === Enums.FundRankType.Cysy
               ? `${name}：${originValue}元`
               : `${name}：${originValue}%`;
           },
@@ -62,11 +59,7 @@ const FundRank: React.FC<FundRankProps> = ({ funds = [], codes = [] }) => {
           type: 'value',
           axisLabel: {
             fontSize: 10,
-            formatter:
-              rankType.type === Enums.FundRankType.Sy ||
-              rankType.type === Enums.FundRankType.Cysy
-                ? `{value}元`
-                : `{value}%`,
+            formatter: rankType.type === Enums.FundRankType.Sy || rankType.type === Enums.FundRankType.Cysy ? `{value}元` : `{value}%`,
           },
         },
         yAxis: {
@@ -88,10 +81,10 @@ const FundRank: React.FC<FundRankProps> = ({ funds = [], codes = [] }) => {
             },
             data: funds
               .sort((a, b) => {
-                const calcA = calcFund(a);
-                const calcB = calcFund(b);
-                const calcWalletsA = calcWalletsFund(a, codes);
-                const calcWalletsB = calcWalletsFund(b, codes);
+                const calcA = Helpers.Fund.CalcFund(a);
+                const calcB = Helpers.Fund.CalcFund(b);
+                const calcWalletsA = Helpers.Fund.CalcWalletsFund(a, codes);
+                const calcWalletsB = Helpers.Fund.CalcWalletsFund(b, codes);
                 if (rankType.type === Enums.FundRankType.Sy) {
                   return calcWalletsA.jrsygz - calcWalletsB.jrsygz;
                 } else if (rankType.type === Enums.FundRankType.Syl) {
@@ -103,8 +96,8 @@ const FundRank: React.FC<FundRankProps> = ({ funds = [], codes = [] }) => {
                 }
               })
               .map((fund) => {
-                const calcFundResult = calcFund(fund);
-                const calcWalletsFundResult = calcWalletsFund(fund, codes);
+                const calcFundResult = Helpers.Fund.CalcFund(fund);
+                const calcWalletsFundResult = Helpers.Fund.CalcWalletsFund(fund, codes);
                 const value =
                   rankType.type === Enums.FundRankType.Sy
                     ? calcWalletsFundResult.jrsygz
@@ -137,11 +130,7 @@ const FundRank: React.FC<FundRankProps> = ({ funds = [], codes = [] }) => {
   return (
     <div className={styles.content}>
       <div ref={chartRef} style={{ width: '100%' }} />
-      <TypeSelection
-        types={rankTypeList}
-        activeType={rankType.type}
-        onSelected={setRankType}
-      />
+      <TypeSelection types={rankTypeList} activeType={rankType.type} onSelected={setRankType} />
     </div>
   );
 };

@@ -3,11 +3,10 @@ import React, { useState } from 'react';
 import { useHomeContext } from '@/components/Home';
 import { useResizeEchart, useRenderEcharts } from '@/utils/hooks';
 import TypeSelection from '@/components/TypeSelection';
-import { getRemoteFundsMap, calcFund, calcFunds } from '@/actions/fund';
-import { getCurrentWallet } from '@/actions/wallet';
 import * as CONST from '@/constants';
 import * as Enums from '@/utils/enums';
 import * as Utils from '@/utils';
+import * as Helpers from '@/helpers';
 
 interface WalletIncomeProps {
   funds: (Fund.ResponseItem & Fund.FixData)[];
@@ -19,13 +18,8 @@ const incomeTypeList = [
   { name: '持有收益', type: Enums.WalletIncomType.Cysy, code: '' },
 ];
 
-const WalletIncome: React.FC<WalletIncomeProps> = ({
-  funds = [],
-  codes = [],
-}) => {
-  const { ref: chartRef, chartInstance } = useResizeEchart(
-    CONST.DEFAULT.ECHARTS_SCALE
-  );
+const WalletIncome: React.FC<WalletIncomeProps> = ({ funds = [], codes = [] }) => {
+  const { ref: chartRef, chartInstance } = useResizeEchart(CONST.DEFAULT.ECHARTS_SCALE);
   const [incomeType, setIncomeType] = useState(incomeTypeList[0]);
 
   const { darkMode } = useHomeContext();
@@ -52,7 +46,7 @@ const WalletIncome: React.FC<WalletIncomeProps> = ({
         },
         xAxis: {
           type: 'category',
-          data: codes.map((code) => getCurrentWallet(code).name),
+          data: codes.map((code) => Helpers.Wallet.GetCurrentWallet(code).name),
           axisLabel: {
             fontSize: 10,
           },
@@ -71,11 +65,8 @@ const WalletIncome: React.FC<WalletIncomeProps> = ({
               focus: 'series',
             },
             data: codes.map((code) => {
-              const { sygz, cysy } = calcFunds(funds, code);
-              const value =
-                incomeType.type === Enums.WalletIncomType.Jrsy
-                  ? sygz.toFixed(2)
-                  : cysy.toFixed(2);
+              const { sygz, cysy } = Helpers.Fund.CalcFunds(funds, code);
+              const value = incomeType.type === Enums.WalletIncomType.Jrsy ? sygz.toFixed(2) : cysy.toFixed(2);
               return {
                 value,
                 itemStyle: {
@@ -95,11 +86,7 @@ const WalletIncome: React.FC<WalletIncomeProps> = ({
   return (
     <div>
       <div ref={chartRef} style={{ width: '100%' }} />
-      <TypeSelection
-        types={incomeTypeList}
-        activeType={incomeType.type}
-        onSelected={setIncomeType}
-      />
+      <TypeSelection types={incomeTypeList} activeType={incomeType.type} onSelected={setIncomeType} />
     </div>
   );
 };

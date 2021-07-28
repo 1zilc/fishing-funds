@@ -41,16 +41,9 @@ const FundManagerContent: React.FC<FundManagerContentProps> = (props) => {
   });
 
   return (
-    <CustomDrawerContent
-      title="基金经理"
-      onClose={props.onClose}
-      onEnter={props.onEnter}
-    >
+    <CustomDrawerContent title="基金经理" onClose={props.onClose} onEnter={props.onEnter}>
       <div className={styles.content} ref={ref}>
-        <div
-          className={classnames(styles.avatarContent)}
-          style={{ backgroundImage: `url(${manager.pic})` }}
-        >
+        <div className={classnames(styles.avatarContent)} style={{ backgroundImage: `url(${manager.pic})` }}>
           <div
             className={classnames(styles.avatar, {
               [styles.avatarMiniMode]: miniMode,
@@ -78,39 +71,22 @@ const FundManagerContent: React.FC<FundManagerContentProps> = (props) => {
           </div>
         </div>
         <div className={styles.container}>
-          <Tabs
-            defaultActiveKey={String(Enums.ManagerPowerType.Appraise)}
-            animated={{ tabPane: true }}
-            tabBarGutter={15}
-          >
-            <Tabs.TabPane
-              tab="能力评估"
-              key={String(Enums.ManagerPowerType.Appraise)}
-            >
+          <Tabs animated={{ tabPane: true }} tabBarGutter={15}>
+            <Tabs.TabPane tab="能力评估" key={String(Enums.ManagerPowerType.Appraise)}>
               <ChartCard>
                 <Appraise power={manager.power} />
               </ChartCard>
             </Tabs.TabPane>
-            <Tabs.TabPane
-              tab="收益统计"
-              key={String(Enums.ManagerPowerType.Profit)}
-            >
+            <Tabs.TabPane tab="收益统计" key={String(Enums.ManagerPowerType.Profit)}>
               <ChartCard>
                 <Profit profit={manager.profit} />
               </ChartCard>
             </Tabs.TabPane>
           </Tabs>
         </div>
-        <Tabs
-          defaultActiveKey={String(0)}
-          animated={{ tabPane: true }}
-          tabBarGutter={15}
-          tabBarStyle={{ marginLeft: 15 }}
-        >
+        <Tabs animated={{ tabPane: true }} tabBarGutter={15} tabBarStyle={{ marginLeft: 15 }}>
           <Tabs.TabPane tab={`${manager.name || ''}管理过的基金`} key={0}>
-            <ManageHistoryFundList
-              manageHistoryFunds={managerDetail.manageHistoryFunds}
-            />
+            <ManageHistoryFundList manageHistoryFunds={managerDetail.manageHistoryFunds} />
           </Tabs.TabPane>
         </Tabs>
       </div>

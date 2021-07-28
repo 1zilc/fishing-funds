@@ -9,26 +9,23 @@ import { ReactComponent as SortArrowDownIcon } from '@/assets/icons/sort-arrow-d
 import { ReactComponent as ArrowDownIcon } from '@/assets/icons/arrow-down.svg';
 import { ReactComponent as ArrowUpIcon } from '@/assets/icons/arrow-up.svg';
 import {
-  getSortMode,
-  getSortConfig,
-  setFundSortMode,
-  troggleFundSortOrder,
-  setZindexSortMode,
-  troggleZindexSortOrder,
-  setQuotationSortMode,
-  troggleQuotationSortOrder,
-  setStockSortMode,
-  troggleStockSortOrder,
+  setFundSortModeAction,
+  troggleFundSortOrderAction,
+  setZindexSortModeAction,
+  troggleZindexSortOrderAction,
+  setQuotationSortModeAction,
+  troggleQuotationSortOrderAction,
+  setStockSortModeAction,
+  troggleStockSortOrderAction,
 } from '@/actions/sort';
 import { StoreState } from '@/reducers/types';
-import { SORT_FUNDS, TOGGLE_FUNDS_COLLAPSE } from '@/actions/fund';
-import { SORT_ZINDEXS, TOGGLE_ZINDEXS_COLLAPSE } from '@/actions/zindex';
-import {
-  SORT_QUOTATIONS,
-  TOGGLE_QUOTATIONS_COLLAPSE,
-} from '@/actions/quotation';
-import { SORT_STOCKS, TOGGLE_STOCKS_COLLAPSE } from '@/actions/stock';
+import { toggleAllFundsCollapseAction } from '@/actions/fund';
+import { toggleAllZindexsCollapseAction } from '@/actions/zindex';
+import { toggleAllQuotationsCollapse } from '@/actions/quotation';
+import { toggleAllStocksCollapseAction } from '@/actions/stock';
+import { useCurrentWallet } from '@/utils/hooks';
 import * as Enums from '@/utils/enums';
+import * as Helpers from '@/helpers';
 import styles from './index.scss';
 
 export interface SortBarProps {}
@@ -41,7 +38,8 @@ const SortBar: React.FC<SortBarProps> = () => {
     zindexSortMode: { type: zindexSortType, order: zindexSortOrder },
     quotationSortMode: { type: quotationSortType, order: quotationSortOrder },
     stockSortMode: { type: stockSortType, order: stockSortOrder },
-  } = getSortMode();
+  } = useSelector((state: StoreState) => state.sort.sortMode);
+
   const {
     fundSortModeOptions,
     fundSortModeOptionsMap,
@@ -51,20 +49,18 @@ const SortBar: React.FC<SortBarProps> = () => {
     quotationSortModeOptionsMap,
     stockSortModeOptions,
     stockSortModeOptionsMap,
-  } = getSortConfig();
+  } = Helpers.Sort.GetSortConfig();
 
   const [visible, setVisible] = useState(true);
   const { run: debounceSetVisible } = useDebounceFn(() => setVisible(true), {
     wait: 200,
   });
-  const tabsActiveKey = useSelector(
-    (state: StoreState) => state.tabs.activeKey
-  );
-  const funds = useSelector((state: StoreState) => state.fund.funds);
+  const tabsActiveKey = useSelector((state: StoreState) => state.tabs.activeKey);
+  const {
+    currentWalletState: { funds },
+  } = useCurrentWallet();
   const zindexs = useSelector((state: StoreState) => state.zindex.zindexs);
-  const quotations = useSelector(
-    (state: StoreState) => state.quotation.quotations
-  );
+  const quotations = useSelector((state: StoreState) => state.quotation.quotations);
   const stocks = useSelector((state: StoreState) => state.stock.stocks);
 
   const [expandAllFunds, expandSomeFunds] = useMemo(() => {
@@ -76,39 +72,17 @@ const SortBar: React.FC<SortBarProps> = () => {
   }, [zindexs]);
 
   const [expandAllQuotations, expandSomeQuotations] = useMemo(() => {
-    return [
-      quotations.every((_) => _.collapse),
-      quotations.some((_) => _.collapse),
-    ];
+    return [quotations.every((_) => _.collapse), quotations.some((_) => _.collapse)];
   }, [quotations]);
 
   const [expandAllStocks, expandSomeStocks] = useMemo(() => {
     return [stocks.every((_) => _.collapse), stocks.some((_) => _.collapse)];
   }, [stocks]);
 
-  const toggleFundsCollapse = () => {
-    dispatch({
-      type: TOGGLE_FUNDS_COLLAPSE,
-    });
-  };
-
-  const toggleZindexsCollapse = () => {
-    dispatch({
-      type: TOGGLE_ZINDEXS_COLLAPSE,
-    });
-  };
-
-  const toggleQuotationsCollapse = () => {
-    dispatch({
-      type: TOGGLE_QUOTATIONS_COLLAPSE,
-    });
-  };
-
-  const toggleStocksCollapse = () => {
-    dispatch({
-      type: TOGGLE_STOCKS_COLLAPSE,
-    });
-  };
+  const toggleFundsCollapse = () => dispatch(toggleAllFundsCollapseAction());
+  const toggleZindexsCollapse = () => dispatch(toggleAllZindexsCollapseAction());
+  const toggleQuotationsCollapse = () => dispatch(toggleAllQuotationsCollapse());
+  const toggleStocksCollapse = () => dispatch(toggleAllStocksCollapseAction());
 
   useScroll(document, () => {
     setVisible(false);
@@ -131,19 +105,9 @@ const SortBar: React.FC<SortBarProps> = () => {
               <Dropdown
                 placement="bottomRight"
                 overlay={
-                  <Menu
-                    selectedKeys={[
-                      String(fundSortModeOptionsMap[fundSortType].key),
-                    ]}
-                  >
+                  <Menu selectedKeys={[String(fundSortModeOptionsMap[fundSortType].key)]}>
                     {fundSortModeOptions.map(({ key, value }) => (
-                      <Menu.Item
-                        key={String(key)}
-                        onClick={() => {
-                          setFundSortMode({ type: key });
-                          dispatch({ type: SORT_FUNDS });
-                        }}
-                      >
+                      <Menu.Item key={String(key)} onClick={() => dispatch(setFundSortModeAction({ type: key }))}>
                         {value}
                       </Menu.Item>
                     ))}
@@ -153,23 +117,15 @@ const SortBar: React.FC<SortBarProps> = () => {
                 <a>{fundSortModeOptionsMap[fundSortType].value}</a>
               </Dropdown>
             </div>
-            <div
-              className={styles.sort}
-              onClick={() => {
-                troggleFundSortOrder();
-                dispatch({ type: SORT_FUNDS });
-              }}
-            >
+            <div className={styles.sort} onClick={() => dispatch(troggleFundSortOrderAction())}>
               <SortArrowUpIcon
                 className={classsames({
-                  [styles.selectOrder]:
-                    fundSortOrder === Enums.SortOrderType.Asc,
+                  [styles.selectOrder]: fundSortOrder === Enums.SortOrderType.Asc,
                 })}
               />
               <SortArrowDownIcon
                 className={classsames({
-                  [styles.selectOrder]:
-                    fundSortOrder === Enums.SortOrderType.Desc,
+                  [styles.selectOrder]: fundSortOrder === Enums.SortOrderType.Desc,
                 })}
               />
             </div>
@@ -188,21 +144,9 @@ const SortBar: React.FC<SortBarProps> = () => {
               <Dropdown
                 placement="bottomRight"
                 overlay={
-                  <Menu
-                    selectedKeys={[
-                      String(zindexSortModeOptionsMap[zindexSortType].key),
-                    ]}
-                  >
+                  <Menu selectedKeys={[String(zindexSortModeOptionsMap[zindexSortType].key)]}>
                     {zindexSortModeOptions.map(({ key, value }) => (
-                      <Menu.Item
-                        key={String(key)}
-                        onClick={() => {
-                          setZindexSortMode({
-                            type: key,
-                          });
-                          dispatch({ type: SORT_ZINDEXS });
-                        }}
-                      >
+                      <Menu.Item key={String(key)} onClick={() => dispatch(setZindexSortModeAction({ type: key }))}>
                         {value}
                       </Menu.Item>
                     ))}
@@ -212,23 +156,15 @@ const SortBar: React.FC<SortBarProps> = () => {
                 <a>{zindexSortModeOptionsMap[zindexSortType].value}</a>
               </Dropdown>
             </div>
-            <div
-              className={styles.sort}
-              onClick={() => {
-                troggleZindexSortOrder();
-                dispatch({ type: SORT_ZINDEXS });
-              }}
-            >
+            <div className={styles.sort} onClick={() => dispatch(troggleZindexSortOrderAction())}>
               <SortArrowUpIcon
                 className={classsames({
-                  [styles.selectOrder]:
-                    zindexSortOrder === Enums.SortOrderType.Asc,
+                  [styles.selectOrder]: zindexSortOrder === Enums.SortOrderType.Asc,
                 })}
               />
               <SortArrowDownIcon
                 className={classsames({
-                  [styles.selectOrder]:
-                    zindexSortOrder === Enums.SortOrderType.Desc,
+                  [styles.selectOrder]: zindexSortOrder === Enums.SortOrderType.Desc,
                 })}
               />
             </div>
@@ -247,23 +183,9 @@ const SortBar: React.FC<SortBarProps> = () => {
               <Dropdown
                 placement="bottomRight"
                 overlay={
-                  <Menu
-                    selectedKeys={[
-                      String(
-                        quotationSortModeOptionsMap[quotationSortType].key
-                      ),
-                    ]}
-                  >
+                  <Menu selectedKeys={[String(quotationSortModeOptionsMap[quotationSortType].key)]}>
                     {quotationSortModeOptions.map(({ key, value }) => (
-                      <Menu.Item
-                        key={String(key)}
-                        onClick={() => {
-                          setQuotationSortMode({
-                            type: key,
-                          });
-                          dispatch({ type: SORT_QUOTATIONS });
-                        }}
-                      >
+                      <Menu.Item key={String(key)} onClick={() => dispatch(setQuotationSortModeAction({ type: key }))}>
                         {value}
                       </Menu.Item>
                     ))}
@@ -273,23 +195,15 @@ const SortBar: React.FC<SortBarProps> = () => {
                 <a>{quotationSortModeOptionsMap[quotationSortType].value}</a>
               </Dropdown>
             </div>
-            <div
-              className={styles.sort}
-              onClick={() => {
-                troggleQuotationSortOrder();
-                dispatch({ type: SORT_QUOTATIONS });
-              }}
-            >
+            <div className={styles.sort} onClick={() => dispatch(troggleQuotationSortOrderAction())}>
               <SortArrowUpIcon
                 className={classsames({
-                  [styles.selectOrder]:
-                    quotationSortOrder === Enums.SortOrderType.Asc,
+                  [styles.selectOrder]: quotationSortOrder === Enums.SortOrderType.Asc,
                 })}
               />
               <SortArrowDownIcon
                 className={classsames({
-                  [styles.selectOrder]:
-                    quotationSortOrder === Enums.SortOrderType.Desc,
+                  [styles.selectOrder]: quotationSortOrder === Enums.SortOrderType.Desc,
                 })}
               />
             </div>
@@ -308,20 +222,17 @@ const SortBar: React.FC<SortBarProps> = () => {
               <Dropdown
                 placement="bottomRight"
                 overlay={
-                  <Menu
-                    selectedKeys={[
-                      String(stockSortModeOptionsMap[stockSortType].key),
-                    ]}
-                  >
+                  <Menu selectedKeys={[String(stockSortModeOptionsMap[stockSortType].key)]}>
                     {stockSortModeOptions.map(({ key, value }) => (
                       <Menu.Item
                         key={String(key)}
-                        onClick={() => {
-                          setStockSortMode({
-                            type: key,
-                          });
-                          dispatch({ type: SORT_STOCKS });
-                        }}
+                        onClick={() =>
+                          dispatch(
+                            setStockSortModeAction({
+                              type: key,
+                            })
+                          )
+                        }
                       >
                         {value}
                       </Menu.Item>
@@ -332,23 +243,15 @@ const SortBar: React.FC<SortBarProps> = () => {
                 <a>{stockSortModeOptionsMap[stockSortType].value}</a>
               </Dropdown>
             </div>
-            <div
-              className={styles.sort}
-              onClick={() => {
-                troggleStockSortOrder();
-                dispatch({ type: SORT_STOCKS });
-              }}
-            >
+            <div className={styles.sort} onClick={() => dispatch(troggleStockSortOrderAction())}>
               <SortArrowUpIcon
                 className={classsames({
-                  [styles.selectOrder]:
-                    stockSortOrder === Enums.SortOrderType.Asc,
+                  [styles.selectOrder]: stockSortOrder === Enums.SortOrderType.Asc,
                 })}
               />
               <SortArrowDownIcon
                 className={classsames({
-                  [styles.selectOrder]:
-                    stockSortOrder === Enums.SortOrderType.Desc,
+                  [styles.selectOrder]: stockSortOrder === Enums.SortOrderType.Desc,
                 })}
               />
             </div>
@@ -359,11 +262,7 @@ const SortBar: React.FC<SortBarProps> = () => {
     }
   }
 
-  return (
-    <div className={classsames(styles.content, { [styles.visible]: visible })}>
-      {renderMenu()}
-    </div>
-  );
+  return <div className={classsames(styles.content, { [styles.visible]: visible })}>{renderMenu()}</div>;
 };
 
 export default SortBar;

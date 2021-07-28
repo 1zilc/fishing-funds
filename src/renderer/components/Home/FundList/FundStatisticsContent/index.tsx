@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Tabs } from 'antd';
 import { useSelector } from 'react-redux';
 
@@ -12,7 +12,7 @@ import WalletIncome from '@/components/Home/FundList/FundStatisticsContent/Walle
 import WalletConfig from '@/components/Home/FundList/FundStatisticsContent/WalletConfig';
 import AssetsStatistics from '@/components/Home/FundList/FundStatisticsContent/AssetsStatistics';
 import AssetsConfig from '@/components/Home/FundList/FundStatisticsContent/AssetsConfig';
-import { getWalletConfig, walletIcons } from '@/actions/wallet';
+import { walletIcons } from '@/helpers/wallet';
 import { StoreState } from '@/reducers/types';
 import styles from './index.scss';
 
@@ -22,29 +22,27 @@ export interface FundStatisticsContentProps {
 }
 
 const FundStatisticsContent: React.FC<FundStatisticsContentProps> = (props) => {
-  const { walletConfig } = getWalletConfig();
-  const walletsMap = useSelector(
-    (state: StoreState) => state.wallet.walletsMap
+  const { walletConfig } = useSelector((state: StoreState) => state.wallet.config);
+  const wallets = useSelector((state: StoreState) => state.wallet.wallets);
+  const [statusMap, setStatusMap] = useState<Record<string, boolean>>(
+    walletConfig.reduce((r, c) => {
+      r[c.code] = true;
+      return r;
+    }, {} as Record<string, boolean>)
   );
-  const [statusMap, setStatusMap] = useState<Record<string, boolean>>({});
+
   const funds = useMemo(() => {
-    const funds: (Fund.ResponseItem & Fund.FixData)[] = [];
+    const allFunds: (Fund.ResponseItem & Fund.FixData)[] = [];
     const fundCodeMap = new Map();
-    Object.entries(walletsMap).forEach(([code, item]) => {
+    wallets.forEach(({ code, funds }) => {
       if (statusMap[code]) {
-        Array.prototype.push.apply(funds, item.funds);
+        allFunds.push(...funds);
       }
     });
-    return funds.filter(
-      (fund) =>
-        !fundCodeMap.has(fund.fundcode!) &&
-        fundCodeMap.set(fund.fundcode!, true)
-    );
-  }, [statusMap, walletsMap]);
-  const codes = useMemo(
-    () => Object.keys(statusMap).filter((key) => statusMap[key]),
-    [statusMap]
-  );
+    return allFunds.filter((fund) => !fundCodeMap.has(fund.fundcode!) && fundCodeMap.set(fund.fundcode!, true));
+  }, [statusMap, wallets]);
+
+  const codes = useMemo(() => Object.keys(statusMap).filter((key) => statusMap[key]), [statusMap]);
 
   function changeWalletStatus(code: string, status: boolean) {
     setStatusMap({
@@ -53,21 +51,8 @@ const FundStatisticsContent: React.FC<FundStatisticsContentProps> = (props) => {
     });
   }
 
-  useEffect(() => {
-    const statusMap = walletConfig.reduce((r, c) => {
-      r[c.code] = true;
-      return r;
-    }, {} as Record<string, boolean>);
-    setStatusMap(statusMap);
-  }, []);
-
   return (
-    <CustomDrawerContent
-      title="基金统计"
-      enterText="确定"
-      onEnter={props.onClose}
-      onClose={props.onClose}
-    >
+    <CustomDrawerContent title="基金统计" enterText="确定" onEnter={props.onEnter} onClose={props.onClose}>
       <div className={styles.content}>
         <AssetsStatistics funds={funds} codes={codes} />
         <div className={styles.wallets}>
@@ -75,18 +60,11 @@ const FundStatisticsContent: React.FC<FundStatisticsContentProps> = (props) => {
             <PureCard key={wallet.code} className={styles.wallet}>
               <img src={walletIcons[wallet.iconIndex]} />
               {wallet.name}
-              <Eye
-                status={statusMap[wallet.code]}
-                onClick={(status) => changeWalletStatus(wallet.code, status)}
-              />
+              <Eye status={statusMap[wallet.code]} onClick={(status) => changeWalletStatus(wallet.code, status)} />
             </PureCard>
           ))}
         </div>
-        <Tabs
-          defaultActiveKey={String(0)}
-          animated={{ tabPane: true }}
-          tabBarGutter={15}
-        >
+        <Tabs animated={{ tabPane: true }} tabBarGutter={15}>
           <Tabs.TabPane tab="持基结构" key={String(0)}>
             <ChartCard>
               <TypeConfig funds={funds} />
@@ -98,11 +76,7 @@ const FundStatisticsContent: React.FC<FundStatisticsContentProps> = (props) => {
             </ChartCard>
           </Tabs.TabPane>
         </Tabs>
-        <Tabs
-          defaultActiveKey={String(0)}
-          animated={{ tabPane: true }}
-          tabBarGutter={15}
-        >
+        <Tabs animated={{ tabPane: true }} tabBarGutter={15}>
           <Tabs.TabPane tab="钱包配置" key={String(0)}>
             <ChartCard>
               <WalletConfig funds={funds} codes={codes} />
@@ -114,11 +88,7 @@ const FundStatisticsContent: React.FC<FundStatisticsContentProps> = (props) => {
             </ChartCard>
           </Tabs.TabPane>
         </Tabs>
-        <Tabs
-          defaultActiveKey={String(0)}
-          animated={{ tabPane: true }}
-          tabBarGutter={15}
-        >
+        <Tabs animated={{ tabPane: true }} tabBarGutter={15}>
           <Tabs.TabPane tab="基金排行" key={String(0)}>
             <ChartCard>
               <FundRank funds={funds} codes={codes} />

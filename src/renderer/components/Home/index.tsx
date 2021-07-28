@@ -15,11 +15,14 @@ import Footer from '@/components/Footer';
 import SortBar from '@/components/SortBar';
 import TabsBar from '@/components/TabsBar';
 import Collect from '@/components/Collect';
+import GroupTab from '@/components/GroupTab';
+import { marketsConfig } from '@/components/Home/ZindexList/ManageZindexContent';
+import { stockTypesConfig } from '@/components/Home/StockList/AddStockContent';
 import { StoreState } from '@/reducers/types';
-import { useNativeThemeColor } from '@/utils/hooks';
+import { useNativeThemeColor, useCurrentWallet } from '@/utils/hooks';
 import * as Enums from '@/utils/enums';
-
 import * as CONST from '@/constants';
+import * as Helpers from '@/helpers';
 import styles from './index.scss';
 
 export interface HomeProps {}
@@ -39,14 +42,79 @@ export function useHomeContext() {
   return context;
 }
 
-const Home: React.FC<HomeProps> = () => {
-  const tabsActiveKey = useSelector(
-    (state: StoreState) => state.tabs.activeKey
+const FundGroup = () => {
+  const { currentWalletFundsCodeMap: fundCodeMap } = useCurrentWallet();
+  return (
+    <GroupTab>
+      <Tabs.TabPane tab="全部" key={String(0)}>
+        <FundList filter={() => true} />
+      </Tabs.TabPane>
+      <Tabs.TabPane tab="持有" key={String(1)}>
+        <FundList filter={(fund) => !!fundCodeMap[fund.fundcode!].cyfe} />
+      </Tabs.TabPane>
+      <Tabs.TabPane tab="自选" key={String(2)}>
+        <FundList filter={(fund) => !fundCodeMap[fund.fundcode!].cyfe} />
+      </Tabs.TabPane>
+      <Tabs.TabPane tab="净值更新" key={String(3)}>
+        <FundList filter={(fund) => !!Helpers.Fund.CalcFund(fund).isFix} />
+      </Tabs.TabPane>
+    </GroupTab>
   );
+};
 
-  const { colors: varibleColors, darkMode } = useNativeThemeColor(
-    CONST.VARIBLES
+const ZindexGroup = () => {
+  const { codeMap: zindexCodeMap } = useSelector((state: StoreState) => state.zindex.config);
+
+  return (
+    <GroupTab>
+      <Tabs.TabPane tab="全部" key={String(-1)}>
+        <ZindexList filter={() => true} />
+      </Tabs.TabPane>
+      {marketsConfig.map((market) => (
+        <Tabs.TabPane tab={market.name.slice(0, 2)} key={String(market.code)}>
+          <ZindexList filter={(zindex) => zindexCodeMap[zindex.code!].type === market.code} />
+        </Tabs.TabPane>
+      ))}
+    </GroupTab>
   );
+};
+
+const QuotationGroup = () => {
+  const favoriteQuotationMap = useSelector((state: StoreState) => state.quotation.favoriteQuotationMap);
+
+  return (
+    <GroupTab>
+      <Tabs.TabPane tab="全部" key={String(0)}>
+        <QuotationList filter={() => true} />
+      </Tabs.TabPane>
+      <Tabs.TabPane tab="关注" key={String(1)}>
+        <QuotationList filter={(quotaion) => favoriteQuotationMap[quotaion.code]} />
+      </Tabs.TabPane>
+    </GroupTab>
+  );
+};
+
+const StockGroup = () => {
+  const { codeMap: stockCodeMap } = useSelector((state: StoreState) => state.stock.config);
+
+  return (
+    <GroupTab>
+      <Tabs.TabPane tab="全部" key={String(-1)}>
+        <StockList filter={() => true} />
+      </Tabs.TabPane>
+      {stockTypesConfig.map((type) => (
+        <Tabs.TabPane tab={type.name.slice(0, 2)} key={String(type.code)}>
+          <StockList filter={(stock) => stockCodeMap[stock.secid].type === type.code} />
+        </Tabs.TabPane>
+      ))}
+    </GroupTab>
+  );
+};
+
+const Home: React.FC<HomeProps> = () => {
+  const tabsActiveKey = useSelector((state: StoreState) => state.tabs.activeKey);
+
+  const { colors: varibleColors, darkMode } = useNativeThemeColor(CONST.VARIBLES);
 
   return (
     <HomeContext.Provider value={{ darkMode, varibleColors }}>
@@ -56,23 +124,18 @@ const Home: React.FC<HomeProps> = () => {
           <Wallet />
           <SortBar />
         </Header>
-        <Tabs
-          defaultActiveKey={String(tabsActiveKey)}
-          renderTabBar={() => <></>}
-          activeKey={String(tabsActiveKey)}
-          animated={{ tabPane: true, inkBar: false }}
-        >
-          <Tabs.TabPane key={String(Enums.TabKeyType.Funds)} forceRender>
-            <FundList />
+        <Tabs renderTabBar={() => <></>} activeKey={String(tabsActiveKey)} animated={{ tabPane: true, inkBar: false }}>
+          <Tabs.TabPane key={String(Enums.TabKeyType.Funds)}>
+            <FundGroup />
           </Tabs.TabPane>
-          <Tabs.TabPane key={String(Enums.TabKeyType.Zindex)} forceRender>
-            <ZindexList />
+          <Tabs.TabPane key={String(Enums.TabKeyType.Zindex)}>
+            <ZindexGroup />
           </Tabs.TabPane>
-          <Tabs.TabPane key={String(Enums.TabKeyType.Quotation)} forceRender>
-            <QuotationList />
+          <Tabs.TabPane key={String(Enums.TabKeyType.Quotation)}>
+            <QuotationGroup />
           </Tabs.TabPane>
-          <Tabs.TabPane key={String(Enums.TabKeyType.Stock)} forceRender>
-            <StockList />
+          <Tabs.TabPane key={String(Enums.TabKeyType.Stock)}>
+            <StockGroup />
           </Tabs.TabPane>
         </Tabs>
         <Footer>

@@ -6,7 +6,8 @@ declare namespace Wallet {
     funds: Fund.SettingItem[];
   }
   export interface StateItem {
-    funds: (Fund.ResponseItem & Fund.FixData)[];
+    code: string;
+    funds: (Fund.ResponseItem & Fund.FixData & Fund.ExtraRow)[];
     updateTime: string;
   }
   export interface OriginRow {

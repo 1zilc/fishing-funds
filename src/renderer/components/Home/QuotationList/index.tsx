@@ -11,13 +11,13 @@ import { StoreState } from '@/reducers/types';
 import { useDrawer } from '@/utils/hooks';
 import styles from './index.scss';
 
-const QuotationList = () => {
-  const quotations = useSelector(
-    (state: StoreState) => state.quotation.quotations
-  );
-  const quotationsLoading = useSelector(
-    (state: StoreState) => state.quotation.quotationsLoading
-  );
+interface QuotationListProps {
+  filter: (quotation: Quotation.ResponseItem & Quotation.ExtraRow) => boolean;
+}
+
+const QuotationList: React.FC<QuotationListProps> = (props) => {
+  const quotations = useSelector((state: StoreState) => state.quotation.quotations);
+  const quotationsLoading = useSelector((state: StoreState) => state.quotation.quotationsLoading);
   const {
     data: quodationCode,
     show: showDetailQuodationDrawer,
@@ -25,18 +25,15 @@ const QuotationList = () => {
     close: closeDetailQuodationDrawer,
   } = useDrawer('');
 
-  const {
-    data: stockSecid,
-    show: showDetailStockDrawer,
-    set: setDetailStockDrawer,
-    close: closeDetailStockDrawer,
-  } = useDrawer('');
+  const { data: stockSecid, show: showDetailStockDrawer, set: setDetailStockDrawer, close: closeDetailStockDrawer } = useDrawer('');
+
+  const list = quotations.filter(props.filter);
 
   return (
     <div className={styles.container}>
       <LoadingBar show={quotationsLoading} />
-      {quotations.length ? (
-        quotations.map((quotation) => (
+      {list.length ? (
+        list.map((quotation) => (
           <QuotationRow
             key={quotation.name}
             quotation={quotation}
@@ -48,18 +45,10 @@ const QuotationList = () => {
         <Empty text="暂无板块数据~" />
       )}
       <CustomDrawer show={showDetailQuodationDrawer}>
-        <DetailQuotationContent
-          onEnter={closeDetailQuodationDrawer}
-          onClose={closeDetailQuodationDrawer}
-          code={quodationCode}
-        />
+        <DetailQuotationContent onEnter={closeDetailQuodationDrawer} onClose={closeDetailQuodationDrawer} code={quodationCode} />
       </CustomDrawer>
       <CustomDrawer show={showDetailStockDrawer}>
-        <DetailStockContent
-          onEnter={closeDetailStockDrawer}
-          onClose={closeDetailStockDrawer}
-          secid={stockSecid}
-        />
+        <DetailStockContent onEnter={closeDetailStockDrawer} onClose={closeDetailStockDrawer} secid={stockSecid} />
       </CustomDrawer>
     </div>
   );

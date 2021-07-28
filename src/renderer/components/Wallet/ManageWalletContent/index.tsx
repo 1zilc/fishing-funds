@@ -11,11 +11,7 @@ import CustomDrawerContent from '@/components/CustomDrawer/Content';
 import EditWalletContent from '@/components/Wallet/EditWalletContent';
 import { StoreState } from '@/reducers/types';
 import { useDrawer } from '@/utils/hooks';
-import {
-  getWalletConfig,
-  setWalletConfig,
-  selectWallet,
-} from '@/actions/wallet';
+import { setWalletConfigAction, selectWalletAction } from '@/actions/wallet';
 import styles from './index.scss';
 
 export interface ManageWalletContentProps {
@@ -25,21 +21,12 @@ export interface ManageWalletContentProps {
 
 const ManageWalletContent: React.FC<ManageWalletContentProps> = (props) => {
   const dispatch = useDispatch();
-  const currentWalletCode = useSelector(
-    (state: StoreState) => state.wallet.currentWalletCode
-  );
-  const wallets = useSelector((state: StoreState) => state.wallet.wallets);
-  const [sortWalletConfig, setSortWalletConfig] = useState<
-    (Wallet.SettingItem & Wallet.SortRow)[]
-  >([]);
-
+  const currentWalletCode = useSelector((state: StoreState) => state.wallet.currentWalletCode);
+  const { codeMap, walletConfig } = useSelector((state: StoreState) => state.wallet.config);
+  const [sortWalletConfig, setSortWalletConfig] = useState<(Wallet.SettingItem & Wallet.SortRow)[]>([]);
   const [selectedCode, setSelectedCode] = useState(currentWalletCode);
 
-  const {
-    show: showAddDrawer,
-    set: setAddDrawer,
-    close: closeAddDrawer,
-  } = useDrawer(null);
+  const { show: showAddDrawer, set: setAddDrawer, close: closeAddDrawer } = useDrawer(null);
 
   const {
     data: editWalletData,
@@ -53,43 +40,31 @@ const ManageWalletContent: React.FC<ManageWalletContentProps> = (props) => {
     funds: [],
   });
 
-  const onSelectWallet = async (wallet: Wallet.SettingItem) => {
+  async function onSelectWallet(wallet: Wallet.SettingItem) {
     const { code } = wallet;
     setSelectedCode(code);
     setTimeout(onSave);
-  };
+  }
 
-  const onSortWalletConfig = (sortList: Wallet.SettingItem[]) => {
-    const { codeMap } = getWalletConfig();
+  function onSortWalletConfig(sortList: Wallet.SettingItem[]) {
     const walletConfig = sortList.map((item) => codeMap[item.code]);
-    dispatch(setWalletConfig(walletConfig));
-  };
+    dispatch(setWalletConfigAction(walletConfig));
+  }
 
-  const onSave = () => {
-    dispatch(selectWallet(selectedCode));
+  function onSave() {
+    dispatch(selectWalletAction(selectedCode));
     props.onEnter();
-  };
+  }
 
   useEffect(() => {
-    setSortWalletConfig(wallets.map((_) => ({ ..._, id: _.code })));
-  }, [wallets]);
+    setSortWalletConfig(walletConfig.map((_) => ({ ..._, id: _.code })));
+  }, [walletConfig]);
 
   return (
-    <CustomDrawerContent
-      title="管理钱包"
-      enterText="确定"
-      onEnter={onSave}
-      onClose={props.onClose}
-    >
+    <CustomDrawerContent title="管理钱包" enterText="确定" onEnter={onSave} onClose={props.onClose}>
       <div className={styles.content}>
         {sortWalletConfig.length ? (
-          <ReactSortable
-            animation={200}
-            delay={2}
-            list={sortWalletConfig}
-            setList={onSortWalletConfig}
-            swap
-          >
+          <ReactSortable animation={200} delay={2} list={sortWalletConfig} setList={onSortWalletConfig} swap>
             {sortWalletConfig.map((wallet) => (
               <WalletRow
                 key={wallet.code}
@@ -118,11 +93,7 @@ const ManageWalletContent: React.FC<ManageWalletContentProps> = (props) => {
         <AddWalletContent onClose={closeAddDrawer} onEnter={closeAddDrawer} />
       </CustomDrawer>
       <CustomDrawer show={showEditDrawer}>
-        <EditWalletContent
-          onClose={closeEditDrawer}
-          onEnter={closeEditDrawer}
-          wallet={editWalletData}
-        />
+        <EditWalletContent onClose={closeEditDrawer} onEnter={closeEditDrawer} wallet={editWalletData} />
       </CustomDrawer>
     </CustomDrawerContent>
   );

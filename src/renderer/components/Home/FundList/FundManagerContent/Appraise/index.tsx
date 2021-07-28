@@ -17,9 +17,7 @@ const Appraise: React.FC<AppraiseProps> = ({
     jzrq: '',
   },
 }) => {
-  const { ref: chartRef, chartInstance } = useResizeEchart(
-    CONST.DEFAULT.ECHARTS_SCALE
-  );
+  const { ref: chartRef, chartInstance } = useResizeEchart(CONST.DEFAULT.ECHARTS_SCALE);
   const { darkMode } = useHomeContext();
 
   useRenderEcharts(

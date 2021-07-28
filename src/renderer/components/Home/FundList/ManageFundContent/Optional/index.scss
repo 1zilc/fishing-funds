@@ -51,16 +51,18 @@
 }
 
 .editor {
-  margin-left: 10px;
+  margin-left: var(--base-padding);
   cursor: pointer;
   height: 12px;
   width: 12px;
   fill: var(--svg-icon-color);
 }
 
+.cbj,
 .cyfe {
   display: flex;
   align-items: center;
+  font-size: calc(11rem / var(--base-font-size));
 }
 
 .add {

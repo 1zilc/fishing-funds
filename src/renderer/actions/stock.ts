@@ -1,104 +1,225 @@
 import { batch } from 'react-redux';
 
-import { Dispatch, GetState } from '@/reducers/types';
-import * as Adapter from '@/utils/adpters';
-import * as Services from '@/services';
+import { ThunkAction, PromiseAction } from '@/reducers/types';
 import * as Utils from '@/utils';
 import * as CONST from '@/constants';
-import * as Enums from '@/utils/enums';
+import * as Helpers from '@/helpers';
 
-export const SET_STOCKS = 'SET_STOCKS';
 export const SET_STOCKS_LOADING = 'SET_STOCKS_LOADING';
-export const TOGGLE_STOCK_COLLAPSE = 'TOGGLE_STOCK_COLLAPSE';
-export const TOGGLE_STOCKS_COLLAPSE = 'TOGGLE_STOCKS_COLLAPSE';
-export const SORT_STOCKS = 'SORT_STOCKS';
-export const SORT_STOCKS_WITH_COLLAPSE_CHACHED =
-  'SORT_STOCKS_WITH_COLLAPSE_CHACHED';
-export interface CodeStockMap {
-  [index: string]: Stock.SettingItem & { originSort: number };
-}
+export const SYNC_STOCKS = 'SYNC_STOCKS';
+export const SYNC_STOCK_CONFIG = 'SYNC_STOCK_CONFIG';
 
-export function getStockConfig() {
-  const stockConfig: Stock.SettingItem[] = Utils.GetStorage(
-    CONST.STORAGE.STOCK_SETTING,
-    []
-  );
-  const codeMap = stockConfig.reduce((r, c, i) => {
-    r[c.secid] = { ...c, originSort: i };
-    return r;
-  }, {} as CodeStockMap);
-
-  return { stockConfig, codeMap };
-}
-
-export function addStock(stock: Stock.SettingItem) {
-  const { stockConfig } = getStockConfig();
-  const notExist =
-    stockConfig.filter((item) => stock.secid === item.secid).length === 0;
-  if (notExist) {
-    setStockConfig([...stockConfig, stock]);
-  }
-}
-
-export async function getStocks() {
-  const { stockConfig } = getStockConfig();
-  const collectors = stockConfig.map(
-    ({ secid }) =>
-      () =>
-        getStock(secid)
-  );
-  return Adapter.ChokeGroupAdapter(collectors, 5, 500);
-}
-
-export async function getStock(secid: string) {
-  return Services.Stock.FromEastmoney(secid);
-}
-
-export async function setStockConfig(stockConfig: Stock.SettingItem[]) {
-  Utils.SetStorage(CONST.STORAGE.STOCK_SETTING, stockConfig);
-}
-
-export function deleteStock(secid: string) {
-  const { stockConfig } = getStockConfig();
-  stockConfig.forEach((item, index) => {
-    if (secid === item.secid) {
-      const cloneStockSetting = JSON.parse(JSON.stringify(stockConfig));
-      cloneStockSetting.splice(index, 1);
-      setStockConfig(cloneStockSetting);
+export function addStockAction(stock: Stock.SettingItem): ThunkAction {
+  return (dispatch, getState) => {
+    try {
+      const {
+        stock: {
+          config: { stockConfig },
+        },
+      } = getState();
+      const cloneStockConfig = Utils.DeepCopy(stockConfig);
+      const exist = cloneStockConfig.find((item) => stock.secid === item.secid);
+      if (!exist) {
+        cloneStockConfig.push(stock);
+      }
+      dispatch(setStockConfigAction(cloneStockConfig));
+    } catch (error) {
+      console.log('添加指数配置出错', error);
     }
-  });
+  };
 }
 
-export function loadStocks() {
-  return async (dispatch: Dispatch, getState: GetState) => {
+export function updateStockAction(stock: { secid: string; type?: number }): ThunkAction {
+  return (dispatch, getState) => {
+    try {
+      const {
+        stock: {
+          config: { stockConfig },
+        },
+      } = getState();
+      stockConfig.forEach((item) => {
+        if (stock.secid === item.secid) {
+          if (stock.type !== undefined) {
+            item.type = stock.type;
+          }
+        }
+      });
+      dispatch(setStockConfigAction(stockConfig));
+    } catch (error) {
+      console.log('设置股票配置出错', error);
+    }
+  };
+}
+
+export function deleteStockAction(secid: string): ThunkAction {
+  return (dispatch, getState) => {
+    try {
+      const {
+        stock: {
+          config: { stockConfig },
+        },
+      } = getState();
+      stockConfig.forEach((item, index) => {
+        if (secid === item.secid) {
+          const cloneStockSetting = JSON.parse(JSON.stringify(stockConfig));
+          cloneStockSetting.splice(index, 1);
+          dispatch(setStockConfigAction(cloneStockSetting));
+        }
+      });
+    } catch (error) {
+      console.log('删除股票出错', error);
+    }
+  };
+}
+
+export function setStockConfigAction(stockConfig: Stock.SettingItem[]): ThunkAction {
+  return (dispatch, getState) => {
+    try {
+      Utils.SetStorage(CONST.STORAGE.STOCK_SETTING, stockConfig);
+      dispatch(syncStockConfigAction());
+    } catch (error) {
+      console.log('设置股票配置出错', error);
+    }
+  };
+}
+
+export function syncStockConfigAction(): ThunkAction {
+  return (dispatch, getState) => {
+    try {
+      const config = Helpers.Stock.GetStockConfig();
+      dispatch({ type: SYNC_STOCK_CONFIG, payload: config });
+    } catch (error) {
+      console.log('同步股票配置失败', error);
+    }
+  };
+}
+
+export function sortStocksAction(): ThunkAction {
+  return (dispatch, getState) => {
+    try {
+      const {
+        stock: { stocks },
+      } = getState();
+      const sortStocks = Helpers.Stock.SortStocks(stocks);
+      dispatch(syncStocksStateAction(sortStocks));
+    } catch (error) {
+      console.log('股票排序错误', error);
+    }
+  };
+}
+
+export function loadStocksAction(): PromiseAction {
+  return async (dispatch, getState) => {
     try {
       dispatch({ type: SET_STOCKS_LOADING, payload: true });
-      const stocks = await getStocks();
+      const responseStocks = (await Helpers.Stock.GetStocks()).filter(Utils.NotEmpty) as Stock.ResponseItem[];
       batch(() => {
-        dispatch({
-          type: SORT_STOCKS_WITH_COLLAPSE_CHACHED,
-          payload: stocks,
-        });
+        dispatch(sortStocksCachedAction(responseStocks));
         dispatch({ type: SET_STOCKS_LOADING, payload: false });
       });
-    } catch {
+    } catch (error) {
+      console.log('加载股票失败', error);
       dispatch({ type: SET_STOCKS_LOADING, payload: false });
     }
   };
 }
 
-export function loadStocksWithoutLoading() {
-  return async (dispatch: Dispatch, getState: GetState) => {
+export function loadStocksWithoutLoadingAction(): PromiseAction {
+  return async (dispatch, getState) => {
     try {
-      const stocks = await getStocks();
-      batch(() => {
-        dispatch({
-          type: SORT_STOCKS_WITH_COLLAPSE_CHACHED,
-          payload: stocks,
-        });
-      });
+      const responseStocks = (await Helpers.Stock.GetStocks()).filter(Utils.NotEmpty) as Stock.ResponseItem[];
+      dispatch(sortStocksCachedAction(responseStocks));
     } catch (error) {
       console.log('静默加载股票失败', error);
+    }
+  };
+}
+
+export function sortStocksCachedAction(responseStocks: Stock.ResponseItem[]): PromiseAction {
+  return async (dispatch, getState) => {
+    try {
+      const {
+        stock: {
+          stocks,
+          config: { stockConfig },
+        },
+      } = getState();
+
+      const stocksCodeToMap = stocks.reduce((map, stock) => {
+        map[stock.secid] = stock;
+        return map;
+      }, {} as any);
+
+      const stocksWithChached = responseStocks.filter(Boolean).map((_) => ({
+        ...(stocksCodeToMap[_.secid] || {}),
+        ..._,
+      }));
+
+      const stocksWithChachedCodeToMap = stocksWithChached.reduce((map, stock) => {
+        map[stock.secid] = stock;
+        return map;
+      }, {} as any);
+
+      stockConfig.forEach((stock) => {
+        const responseStock = stocksWithChachedCodeToMap[stock.secid];
+        const stateStock = stocksCodeToMap[stock.secid];
+        if (!responseStock && stateStock) {
+          stocksWithChached.push(stateStock);
+        }
+      });
+      const sortStocks = Helpers.Stock.SortStocks(stocksWithChached);
+      dispatch(syncStocksStateAction(sortStocks));
+    } catch (error) {
+      console.log('股票带缓存排序出错', error);
+    }
+  };
+}
+
+export function toggleStockCollapseAction(stock: Stock.ResponseItem & Stock.ExtraRow): ThunkAction {
+  return (dispatch, getState) => {
+    try {
+      const {
+        stock: { stocks },
+      } = getState();
+
+      const cloneStocks = Utils.DeepCopy(stocks);
+      cloneStocks.forEach((_) => {
+        if (_.secid === stock.secid) {
+          _.collapse = !stock.collapse;
+        }
+      });
+
+      dispatch(syncStocksStateAction(cloneStocks));
+    } catch (error) {
+      console.log('股票展开/折叠出错', error);
+    }
+  };
+}
+
+export function toggleAllStocksCollapseAction(): ThunkAction {
+  return async (dispatch, getState) => {
+    try {
+      const {
+        stock: { stocks },
+      } = getState();
+      const cloneStocks = Utils.DeepCopy(stocks);
+      const expandAllStocks = stocks.every((_) => _.collapse);
+      cloneStocks.forEach((_) => {
+        _.collapse = !expandAllStocks;
+      });
+      dispatch(syncStocksStateAction(cloneStocks));
+    } catch (error) {
+      console.log('全部股票展开/折叠出错', error);
+    }
+  };
+}
+
+export function syncStocksStateAction(stock: (Stock.ResponseItem & Stock.ExtraRow)[]): ThunkAction {
+  return (dispatch, getState) => {
+    try {
+      dispatch({ type: SYNC_STOCKS, payload: stock });
+    } catch (error) {
+      console.log('同步股票状态出错', error);
     }
   };
 }

@@ -21,19 +21,10 @@ export interface DetailFundContentProps {
 
 const FundFlowContent: React.FC<DetailFundContentProps> = (props) => {
   return (
-    <CustomDrawerContent
-      title="板块资金流"
-      enterText="确定"
-      onClose={props.onClose}
-      onEnter={props.onEnter}
-    >
+    <CustomDrawerContent title="板块资金流" enterText="确定" onClose={props.onClose} onEnter={props.onEnter}>
       <div className={styles.content}>
         <div className={styles.container}>
-          <Tabs
-            defaultActiveKey={String(0)}
-            animated={{ tabPane: true }}
-            tabBarGutter={15}
-          >
+          <Tabs animated={{ tabPane: true }} tabBarGutter={15}>
             <Tabs.TabPane tab="北向资金" key={String(0)}>
               <ChartCard>
                 <NorthFlow />
@@ -47,11 +38,7 @@ const FundFlowContent: React.FC<DetailFundContentProps> = (props) => {
           </Tabs>
         </div>
         <div className={styles.container}>
-          <Tabs
-            defaultActiveKey={String(0)}
-            animated={{ tabPane: true }}
-            tabBarGutter={15}
-          >
+          <Tabs animated={{ tabPane: true }} tabBarGutter={15}>
             <Tabs.TabPane tab="北向日线" key={String(0)}>
               <ChartCard>
                 <NorthDay />
@@ -65,15 +52,8 @@ const FundFlowContent: React.FC<DetailFundContentProps> = (props) => {
           </Tabs>
         </div>
         <div className={styles.container}>
-          <Tabs
-            defaultActiveKey={String(Enums.TrendType.Performance)}
-            animated={{ tabPane: true }}
-            tabBarGutter={15}
-          >
-            <Tabs.TabPane
-              tab="行业资金流"
-              key={String(Enums.TrendType.Performance)}
-            >
+          <Tabs animated={{ tabPane: true }} tabBarGutter={15}>
+            <Tabs.TabPane tab="行业资金流" key={String(Enums.TrendType.Performance)}>
               <ChartCard>
                 <Industry />
               </ChartCard>
@@ -81,15 +61,8 @@ const FundFlowContent: React.FC<DetailFundContentProps> = (props) => {
           </Tabs>
         </div>
         <div className={styles.container}>
-          <Tabs
-            defaultActiveKey={String(Enums.HistoryType.Performance)}
-            animated={{ tabPane: true }}
-            tabBarGutter={15}
-          >
-            <Tabs.TabPane
-              tab="概念资金流"
-              key={String(Enums.HistoryType.Performance)}
-            >
+          <Tabs animated={{ tabPane: true }} tabBarGutter={15}>
+            <Tabs.TabPane tab="概念资金流" key={String(Enums.HistoryType.Performance)}>
               <ChartCard>
                 <Concept />
               </ChartCard>
@@ -97,15 +70,8 @@ const FundFlowContent: React.FC<DetailFundContentProps> = (props) => {
           </Tabs>
         </div>
         <div className={styles.container}>
-          <Tabs
-            defaultActiveKey={String(Enums.WareHouseType.Stock)}
-            animated={{ tabPane: true }}
-            tabBarGutter={15}
-          >
-            <Tabs.TabPane
-              tab="地域资金流"
-              key={String(Enums.WareHouseType.Stock)}
-            >
+          <Tabs animated={{ tabPane: true }} tabBarGutter={15}>
+            <Tabs.TabPane tab="地域资金流" key={String(Enums.WareHouseType.Stock)}>
               <ChartCard>
                 <Area />
               </ChartCard>

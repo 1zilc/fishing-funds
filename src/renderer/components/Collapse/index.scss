@@ -1,0 +1,7 @@
+.content {
+  transition: max-height 0.21s cubic-bezier(0.645, 0.045, 0.355, 1);
+  overflow: hidden;
+}
+.collapse {
+  max-height: 0 !important;
+}

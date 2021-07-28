@@ -12,9 +12,7 @@ interface HistoryBarProps {
 }
 
 const HistoryBar: React.FC<HistoryBarProps> = ({ data = [] }) => {
-  const { ref: chartRef, chartInstance } = useResizeEchart(
-    CONST.DEFAULT.ECHARTS_SCALE
-  );
+  const { ref: chartRef, chartInstance } = useResizeEchart(CONST.DEFAULT.ECHARTS_SCALE);
   const { varibleColors, darkMode } = useHomeContext();
 
   useRenderEcharts(

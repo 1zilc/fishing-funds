@@ -22,86 +22,79 @@ const performanceTypeList = [
   { name: '最大', type: Enums.PerformanceType.Max, code: 'se' },
 ];
 const Performance: React.FC<PerformanceProps> = ({ code }) => {
-  const { ref: chartRef, chartInstance } = useResizeEchart(
-    CONST.DEFAULT.ECHARTS_SCALE
-  );
-  const [performanceType, setPerformanceType] = useState(
-    performanceTypeList[2]
-  );
+  const { ref: chartRef, chartInstance } = useResizeEchart(CONST.DEFAULT.ECHARTS_SCALE);
+  const [performanceType, setPerformanceType] = useState(performanceTypeList[2]);
   const { varibleColors, darkMode } = useHomeContext();
-  const { run: runGetFundPerformanceFromEastmoney } = useRequest(
-    Services.Fund.GetFundPerformanceFromEastmoney,
-    {
-      manual: true,
-      throwOnError: true,
-      cacheKey: `GetFundPerformanceFromEastmoney/${code}/${performanceType.code}`,
-      onSuccess: (result) => {
-        chartInstance?.setOption({
-          title: {
-            text: '',
+  const { run: runGetFundPerformanceFromEastmoney } = useRequest(Services.Fund.GetFundPerformanceFromEastmoney, {
+    manual: true,
+    throwOnError: true,
+    cacheKey: `GetFundPerformanceFromEastmoney/${code}/${performanceType.code}`,
+    onSuccess: (result) => {
+      chartInstance?.setOption({
+        title: {
+          text: '',
+        },
+        tooltip: {
+          trigger: 'axis',
+          position: 'inside',
+        },
+        legend: {
+          data: result?.map(({ name }) => name) || [],
+          textStyle: {
+            color: varibleColors['--main-text-color'],
+            fontSize: 10,
           },
-          tooltip: {
-            trigger: 'axis',
-            position: 'inside',
+        },
+        grid: {
+          left: 0,
+          right: 0,
+          bottom: 0,
+          containLabel: true,
+        },
+        xAxis: {
+          type: 'time',
+          boundaryGap: false,
+          axisLabel: {
+            fontSize: 10,
           },
-          legend: {
-            data: result?.map(({ name }) => name) || [],
-            textStyle: {
-              color: varibleColors['--main-text-color'],
-              fontSize: 10,
+        },
+        yAxis: {
+          type: 'value',
+          axisLabel: {
+            formatter: `{value}%`,
+            fontSize: 10,
+          },
+        },
+        dataZoom: [
+          {
+            type: 'inside',
+            minValueSpan: 3600 * 24 * 1000 * 7,
+          },
+        ],
+        series:
+          result?.map((_, i) => ({
+            ..._,
+            type: 'line',
+            showSymbol: false,
+            symbol: 'none',
+            lineStyle: {
+              width: 1,
             },
-          },
-          grid: {
-            left: 0,
-            right: 0,
-            bottom: 0,
-            containLabel: true,
-          },
-          xAxis: {
-            type: 'time',
-            boundaryGap: false,
-            axisLabel: {
-              fontSize: 10,
-            },
-          },
-          yAxis: {
-            type: 'value',
-            axisLabel: {
-              formatter: `{value}%`,
-              fontSize: 10,
-            },
-          },
-          dataZoom: [
-            {
-              type: 'inside',
-              minValueSpan: 3600 * 24 * 1000 * 7,
-            },
-          ],
-          series:
-            result?.map((_, i) => ({
-              ..._,
-              type: 'line',
-              showSymbol: false,
-              symbol: 'none',
-              lineStyle: {
-                width: 1,
+            markPoint: i === 0 && {
+              symbol: 'pin',
+              symbolSize: 30,
+              label: {
+                formatter: '{c}%',
               },
-              markPoint: i === 0 && {
-                symbol: 'pin',
-                symbolSize: 30,
-                label: {
-                  formatter: '{c}%',
-                },
-                data: [
-                  { type: 'max', label: { fontSize: 10 } },
-                  { type: 'min', label: { fontSize: 10 } },
-                ],
-              },
-            })) || [],
-        });
-      },
-    }
-  );
+              data: [
+                { type: 'max', label: { fontSize: 10 } },
+                { type: 'min', label: { fontSize: 10 } },
+              ],
+            },
+          })) || [],
+      });
+    },
+  });
 
   useRenderEcharts(
     () => {
@@ -114,11 +107,7 @@ const Performance: React.FC<PerformanceProps> = ({ code }) => {
   return (
     <div className={styles.content}>
       <div ref={chartRef} style={{ width: '100%' }} />
-      <TypeSelection
-        types={performanceTypeList}
-        activeType={performanceType.type}
-        onSelected={setPerformanceType}
-      />
+      <TypeSelection types={performanceTypeList} activeType={performanceType.type} onSelected={setPerformanceType} />
     </div>
   );
 };

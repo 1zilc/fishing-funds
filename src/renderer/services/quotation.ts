@@ -48,26 +48,30 @@ export async function GetQuotationsFromEastmoney() {
       },
       responseType: 'json',
     });
-    const result: Quotation.ResponseItem[] = data.data.diff.map((i) => ({
-      code: i.f12, // 板块代码
-      name: i.f14, // 板块名称
-      zxj: i.f2, // 最新价
-      zde: NP.times(i.f20, i.f3, 10 ** -2), // 涨跌额
-      zdd: i.f4, // 涨跌点
-      zdf: i.f3, // 涨跌幅 -0.44
-      zsz: i.f20, // 总市值
-      hs: i.f8, // 换手
-      szjs: i.f104, // 上涨家数
-      xdjs: i.f105, // 下跌家数
-      lzgpCode: i.f140, // 领涨股票code
-      lzgpMarket: i.f141, // 领涨股票code
-      lzgpName: i.f128, // 领涨股票
-      lzgpZdf: i.f136, // 领涨股票涨跌幅
-      ldgpCode: i.f208, // 领跌股票code
-      ldgpMarket: i.f209, // 领跌股票code
-      ldgpName: i.f207, // 领跌股票
-      ldgpZdf: i.f222, // 领跌股票涨跌幅
-    }));
+    const result: Quotation.ResponseItem[] = data.data.diff.map((i) => {
+      i.f3 = Number(i.f3) || 0;
+
+      return {
+        code: i.f12, // 板块代码
+        name: i.f14, // 板块名称
+        zxj: i.f2, // 最新价
+        zde: NP.times(i.f20, i.f3, 10 ** -2), // 涨跌额
+        zdd: i.f4, // 涨跌点
+        zdf: i.f3, // 涨跌幅 -0.44
+        zsz: i.f20, // 总市值
+        hs: i.f8, // 换手
+        szjs: i.f104, // 上涨家数
+        xdjs: i.f105, // 下跌家数
+        lzgpCode: i.f140, // 领涨股票code
+        lzgpMarket: i.f141, // 领涨股票code
+        lzgpName: i.f128, // 领涨股票
+        lzgpZdf: i.f136, // 领涨股票涨跌幅
+        ldgpCode: i.f208, // 领跌股票code
+        ldgpMarket: i.f209, // 领跌股票code
+        ldgpName: i.f207, // 领跌股票
+        ldgpZdf: i.f222, // 领跌股票涨跌幅
+      };
+    });
 
     return result;
   } catch (error) {

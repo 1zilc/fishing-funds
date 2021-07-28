@@ -10,39 +10,28 @@ import { StoreState } from '@/reducers/types';
 import { useDrawer } from '@/utils/hooks';
 import styles from './index.scss';
 
-const ZindexList = () => {
-  const zindexs = useSelector((state: StoreState) => state.zindex.zindexs);
-  const zindexsLoading = useSelector(
-    (state: StoreState) => state.zindex.zindexsLoading
-  );
+interface ZindexListProps {
+  filter: (zindex: Zindex.ResponseItem & Zindex.ExtraRow) => boolean;
+}
 
-  const {
-    data: detailZindexCode,
-    show: showDetailDrawer,
-    set: setDetailDrawer,
-    close: closeDetailDrawer,
-  } = useDrawer('');
+const ZindexList: React.FC<ZindexListProps> = (props) => {
+  const zindexs = useSelector((state: StoreState) => state.zindex.zindexs);
+  const zindexsLoading = useSelector((state: StoreState) => state.zindex.zindexsLoading);
+
+  const { data: detailZindexCode, show: showDetailDrawer, set: setDetailDrawer, close: closeDetailDrawer } = useDrawer('');
+
+  const list = zindexs.filter(props.filter);
 
   return (
     <div className={styles.container}>
       <LoadingBar show={zindexsLoading} />
-      {zindexs.length ? (
-        zindexs.map((zindex) => (
-          <ZindexRow
-            key={zindex.zindexCode}
-            zindex={zindex}
-            onDetail={setDetailDrawer}
-          />
-        ))
+      {list.length ? (
+        list.map((zindex) => <ZindexRow key={zindex.code} zindex={zindex} onDetail={setDetailDrawer} />)
       ) : (
         <Empty text="暂无指数数据~" />
       )}
       <CustomDrawer show={showDetailDrawer}>
-        <DetailZindexContent
-          onEnter={closeDetailDrawer}
-          onClose={closeDetailDrawer}
-          code={detailZindexCode}
-        />
+        <DetailZindexContent onEnter={closeDetailDrawer} onClose={closeDetailDrawer} code={detailZindexCode} />
       </CustomDrawer>
     </div>
   );

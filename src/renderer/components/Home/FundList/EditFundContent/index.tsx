@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { InputNumber } from 'antd';
 
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
-import { updateFund } from '@/actions/fund';
+import { updateFundAction } from '@/actions/fund';
 import styles from './index.scss';
 
 export interface EditFundContentProps {
@@ -13,25 +14,17 @@ export interface EditFundContentProps {
 
 const EditFundContent: React.FC<EditFundContentProps> = (props) => {
   const { fund } = props;
+  const dispatch = useDispatch();
   const [cyfe, setCyfe] = useState<any>(fund.cyfe);
   const [cbj, setCbj] = useState<any>(fund.cbj);
 
   function onSave() {
-    updateFund({
-      code: fund.code,
-      cyfe: cyfe ?? 0,
-      cbj: cbj ?? undefined,
-    });
+    dispatch(updateFundAction({ code: fund.code, cyfe: cyfe ?? 0, cbj: cbj ?? undefined }));
     props.onEnter();
   }
 
   return (
-    <CustomDrawerContent
-      title="修改基金"
-      enterText="保存"
-      onClose={props.onClose}
-      onEnter={onSave}
-    >
+    <CustomDrawerContent title="修改基金" enterText="保存" onClose={props.onClose} onEnter={onSave}>
       <div className={styles.content}>
         <section>
           <label>基金名称：</label>

@@ -7,42 +7,37 @@ import LoadingBar from '@/components/LoadingBar';
 import DetailStockContent from '@/components/Home/StockList/DetailStockContent';
 import CustomDrawer from '@/components/CustomDrawer';
 import { StoreState } from '@/reducers/types';
-import { useDrawer } from '@/utils/hooks';
+import { useDrawer, useSyncFixStockSetting } from '@/utils/hooks';
 import styles from './index.scss';
 
-const StockList = () => {
-  const stocks = useSelector((state: StoreState) => state.stock.stocks);
-  const stocksLoading = useSelector(
-    (state: StoreState) => state.stock.stocksLoading
-  );
+interface StockListProps {
+  filter: (stock: Stock.ResponseItem & Stock.ExtraRow) => boolean;
+}
 
-  const {
-    data: detailStockSecid,
-    show: showDetailDrawer,
-    set: setDetailDrawer,
-    close: closeDetailDrawer,
-  } = useDrawer('');
+const StockList: React.FC<StockListProps> = (props) => {
+  const stocks = useSelector((state: StoreState) => state.stock.stocks);
+  const stocksLoading = useSelector((state: StoreState) => state.stock.stocksLoading);
+
+  const { data: detailStockSecid, show: showDetailDrawer, set: setDetailDrawer, close: closeDetailDrawer } = useDrawer('');
+
+  const list = stocks.filter(props.filter);
+
+  const { done: syncStockSettingDone } = useSyncFixStockSetting();
 
   return (
     <div className={styles.container}>
       <LoadingBar show={stocksLoading} />
-      {stocks.length ? (
-        stocks.map((stock) => (
-          <StockRow
-            key={stock.secid}
-            stock={stock}
-            onDetail={setDetailDrawer}
-          />
-        ))
+      {list.length ? (
+        syncStockSettingDone ? (
+          list.map((stock) => <StockRow key={stock.secid} stock={stock} onDetail={setDetailDrawer} />)
+        ) : (
+          <Empty text="正在同步股票设置~" />
+        )
       ) : (
         <Empty text="暂无股票数据~" />
       )}
       <CustomDrawer show={showDetailDrawer}>
-        <DetailStockContent
-          onEnter={closeDetailDrawer}
-          onClose={closeDetailDrawer}
-          secid={detailStockSecid}
-        />
+        <DetailStockContent onEnter={closeDetailDrawer} onClose={closeDetailDrawer} secid={detailStockSecid} />
       </CustomDrawer>
     </div>
   );

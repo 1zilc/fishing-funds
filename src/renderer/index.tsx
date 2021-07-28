@@ -12,7 +12,7 @@ import '@/utils/window';
 
 Utils.ClearExpiredStorage();
 
-const store = configureStore();
+export const store = configureStore();
 
 NP.enableBoundaryChecking(false);
 

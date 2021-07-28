@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React, { useMemo } from 'react';
+import { useDispatch } from 'react-redux';
 import { ReactSortable } from 'react-sortablejs';
 import classnames from 'classnames';
 
@@ -11,25 +12,19 @@ import CustomDrawer from '@/components/CustomDrawer';
 import Empty from '@/components/Empty';
 import AddFundContent from '@/components/Home/FundList/AddFundContent';
 import EditFundContent from '@/components/Home/FundList/EditFundContent';
-import { getFundConfig, deleteFund, setFundConfig } from '@/actions/fund';
-import { useSyncFixFundSetting, useDrawer } from '@/utils/hooks';
+import { deleteFundAction, setFundConfigAction } from '@/actions/fund';
+import { useSyncFixFundSetting, useDrawer, useCurrentWallet } from '@/utils/hooks';
+
 import styles from './index.scss';
 
-export interface OptionalProps {
-  active: boolean;
-}
+export interface OptionalProps {}
 
 const { dialog } = window.contextModules.electron;
 
-const Optional: React.FC<OptionalProps> = ({ active }) => {
-  const [sortFundConfig, setSortFundConfig] = useState<
-    (Fund.SettingItem & Fund.SortRow)[]
-  >([]);
-  const {
-    show: showAddDrawer,
-    set: setAddDrawer,
-    close: closeAddDrawer,
-  } = useDrawer(null);
+const Optional: React.FC<OptionalProps> = () => {
+  const dispatch = useDispatch();
+  const { show: showAddDrawer, set: setAddDrawer, close: closeAddDrawer } = useDrawer(null);
+  const { currentWalletFundsConfig: fundConfig, currentWalletFundsCodeMap: codeMap } = useCurrentWallet();
 
   const {
     data: editFundData,
@@ -43,15 +38,11 @@ const Optional: React.FC<OptionalProps> = ({ active }) => {
     cbj: undefined,
   });
 
+  const sortFundConfig = useMemo(() => fundConfig.map((_) => ({ ..._, id: _.code })), [fundConfig]);
+
   const { done: syncFundSettingDone } = useSyncFixFundSetting();
 
-  function updateSortFundConfig() {
-    const { fundConfig } = getFundConfig();
-    setSortFundConfig(fundConfig.map((_) => ({ ..._, id: _.code })));
-  }
-
   function onSortFundConfig(sortList: Fund.SettingItem[]) {
-    const { codeMap } = getFundConfig();
     const fundConfig = sortList.map((item) => {
       const fund = codeMap[item.code];
       return {
@@ -61,8 +52,7 @@ const Optional: React.FC<OptionalProps> = ({ active }) => {
         cbj: fund.cbj,
       };
     });
-    setFundConfig(fundConfig);
-    updateSortFundConfig();
+    dispatch(setFundConfigAction(fundConfig));
   }
 
   async function onRemoveFund(fund: Fund.SettingItem) {
@@ -73,37 +63,18 @@ const Optional: React.FC<OptionalProps> = ({ active }) => {
       buttons: ['确定', '取消'],
     });
     if (response === 0) {
-      deleteFund(fund.code);
-      updateSortFundConfig();
+      dispatch(deleteFundAction(fund.code));
     }
   }
-
-  useEffect(updateSortFundConfig, [syncFundSettingDone, active]);
-
-  useEffect(() => {
-    if (active) {
-      updateSortFundConfig();
-    }
-  }, [active]);
 
   return (
     <div className={styles.content}>
       {sortFundConfig.length ? (
         syncFundSettingDone ? (
-          <ReactSortable
-            animation={200}
-            delay={2}
-            list={sortFundConfig}
-            setList={onSortFundConfig}
-            dragClass={styles.dragItem}
-            swap
-          >
+          <ReactSortable animation={200} delay={2} list={sortFundConfig} setList={onSortFundConfig} dragClass={styles.dragItem} swap>
             {sortFundConfig.map((fund) => {
               return (
-                <PureCard
-                  key={fund.code}
-                  className={classnames(styles.row, 'hoverable')}
-                >
+                <PureCard key={fund.code} className={classnames(styles.row, 'hoverable')}>
                   <RemoveIcon
                     className={styles.remove}
                     onClick={(e) => {
@@ -131,6 +102,25 @@ const Optional: React.FC<OptionalProps> = ({ active }) => {
                           }}
                         />
                       </span>
+                      <span className={styles.cbj}>
+                        成本价：
+                        {fund.cbj !== undefined ? (
+                          <span>{fund.cbj}</span>
+                        ) : (
+                          <a
+                            onClick={() => {
+                              setEditDrawer({
+                                name: fund.name,
+                                cyfe: fund.cyfe,
+                                code: fund.code,
+                                cbj: fund.cbj,
+                              });
+                            }}
+                          >
+                            录入
+                          </a>
+                        )}
+                      </span>
                     </div>
                   </div>
                   <MenuIcon className={styles.menu} />
@@ -154,23 +144,10 @@ const Optional: React.FC<OptionalProps> = ({ active }) => {
         <AddIcon />
       </div>
       <CustomDrawer show={showAddDrawer}>
-        <AddFundContent
-          onClose={closeAddDrawer}
-          onEnter={() => {
-            updateSortFundConfig();
-            closeAddDrawer();
-          }}
-        />
+        <AddFundContent onClose={closeAddDrawer} onEnter={closeAddDrawer} />
       </CustomDrawer>
       <CustomDrawer show={showEditDrawer}>
-        <EditFundContent
-          onClose={closeEditDrawer}
-          onEnter={() => {
-            updateSortFundConfig();
-            closeEditDrawer();
-          }}
-          fund={editFundData}
-        />
+        <EditFundContent onClose={closeEditDrawer} onEnter={closeEditDrawer} fund={editFundData} />
       </CustomDrawer>
     </div>
   );

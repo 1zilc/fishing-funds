@@ -6,49 +6,38 @@ import Empty from '@/components/Empty';
 import FundRow from '@/components/Home/FundList/FundRow';
 import DetailFundContent from '@/components/Home/FundList/DetailFundContent';
 import CustomDrawer from '@/components/CustomDrawer';
-import { getFunds, getFixFunds, mergeFixFunds, calcFund } from '@/actions/fund';
 import { useFixTimeToDo, useDrawer } from '@/utils/hooks';
 import { StoreState } from '@/reducers/types';
+import * as Helpers from '@/helpers';
 import styles from './index.scss';
 
 export interface SameFundListProps {
   swithSameType: string[][];
 }
 const SameFundList: React.FC<SameFundListProps> = ({ swithSameType = [] }) => {
-  const { autoFreshSetting, freshDelaySetting } = useSelector(
-    (state: StoreState) => state.setting.systemSetting
-  );
-  const [sameFunds, setSameFunds] = useState<
-    (Fund.ResponseItem & Fund.ExtraRow)[]
-  >([]);
+  const { autoFreshSetting, freshDelaySetting } = useSelector((state: StoreState) => state.setting.systemSetting);
+  const [sameFunds, setSameFunds] = useState<(Fund.ResponseItem & Fund.ExtraRow)[]>([]);
 
-  const {
-    data: detailFundCode,
-    show: showDetailDrawer,
-    set: setDetailDrawer,
-    close: closeDetailDrawer,
-  } = useDrawer('');
+  const { data: detailFundCode, show: showDetailDrawer, set: setDetailDrawer, close: closeDetailDrawer } = useDrawer('');
 
-  const { run: runGetFunds } = useRequest(getFunds, {
+  const { run: runGetFunds } = useRequest(Helpers.Fund.GetFunds, {
     manual: true,
     throwOnError: true,
     onSuccess: (result: Fund.ResponseItem[]) => {
-      const sameFunds = result
-        .filter(Boolean)
-        .sort((a, b) => Number(b.gszzl) - Number(a.gszzl));
+      const sameFunds = result.filter(Boolean).sort((a, b) => Number(b.gszzl) - Number(a.gszzl));
       setSameFunds(sameFunds);
       runGetFixFunds(sameFunds);
     },
   });
 
-  const { run: runGetFixFunds } = useRequest(getFixFunds, {
+  const { run: runGetFixFunds } = useRequest(Helpers.Fund.GetFixFunds, {
     manual: true,
     throwOnError: true,
     onSuccess: (result: Fund.FixData[]) => {
-      const fixFunds = mergeFixFunds(sameFunds, result);
+      const fixFunds = Helpers.Fund.MergeFixFunds(sameFunds, result);
       const cloneFunds = fixFunds.filter(Boolean).sort((a, b) => {
-        const calcA = calcFund(a);
-        const calcB = calcFund(b);
+        const calcA = Helpers.Fund.CalcFund(a);
+        const calcB = Helpers.Fund.CalcFund(b);
         return Number(calcB.gszzl) - Number(calcA.gszzl);
       });
       setSameFunds(cloneFunds);
@@ -71,31 +60,17 @@ const SameFundList: React.FC<SameFundListProps> = ({ swithSameType = [] }) => {
   }, [swithSameType]);
 
   // 间隔时间检查最新净值
-  useFixTimeToDo(
-    () => autoFreshSetting && runGetFixFunds(sameFunds),
-    freshDelaySetting * 1000 * 60
-  );
+  useFixTimeToDo(() => autoFreshSetting && runGetFixFunds(sameFunds), freshDelaySetting * 1000 * 60);
 
   return (
     <div className={styles.content}>
       {sameFunds.length ? (
-        sameFunds.map((fund) => (
-          <FundRow
-            key={fund.fundcode}
-            readOnly
-            fund={fund}
-            onDetail={setDetailDrawer}
-          />
-        ))
+        sameFunds.map((fund) => <FundRow key={fund.fundcode} readOnly fund={fund} onDetail={setDetailDrawer} />)
       ) : (
         <Empty text="暂无同类型基金数据~" />
       )}
       <CustomDrawer show={showDetailDrawer}>
-        <DetailFundContent
-          onEnter={closeDetailDrawer}
-          onClose={closeDetailDrawer}
-          code={detailFundCode}
-        />
+        <DetailFundContent onEnter={closeDetailDrawer} onClose={closeDetailDrawer} code={detailFundCode} />
       </CustomDrawer>
     </div>
   );

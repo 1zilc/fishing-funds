@@ -11,16 +11,7 @@
 // import 'core-js/stable';
 // import 'regenerator-runtime/runtime';
 import path from 'path';
-import {
-  app,
-  globalShortcut,
-  ipcMain,
-  nativeImage,
-  nativeTheme,
-  Tray,
-  Menu,
-  dialog,
-} from 'electron';
+import { app, globalShortcut, ipcMain, nativeImage, nativeTheme, Tray, Menu, dialog } from 'electron';
 
 import { menubar, Menubar } from 'menubar';
 import AppUpdater from './autoUpdater';
@@ -32,9 +23,7 @@ let myWindow: any = null;
 let mb: Menubar;
 let appUpdater: AppUpdater;
 
-const EXTRA_RESOURCES_PATH = app.isPackaged
-  ? path.join(process.resourcesPath, 'assets')
-  : path.join(__dirname, '../../assets');
+const EXTRA_RESOURCES_PATH = app.isPackaged ? path.join(process.resourcesPath, 'assets') : path.join(__dirname, '../../assets');
 
 const getAssetPath = (resourceFilename: string): string => {
   return path.join(EXTRA_RESOURCES_PATH, resourceFilename);
@@ -68,9 +57,7 @@ const contextMenu = Menu.buildFromTemplate([
   { role: 'quit', label: '退出' },
 ]);
 
-const nativeMenuIcon = nativeImage.createFromPath(
-  getAssetPath('menu/iconTemplate.png')
-);
+const nativeMenuIcon = nativeImage.createFromPath(getAssetPath('menu/iconTemplate.png'));
 
 const nativeIcon = nativeImage.createFromPath(getAssetPath('icon.png'));
 
@@ -79,10 +66,7 @@ if (process.env.NODE_ENV === 'production') {
   sourceMapSupport.install();
 }
 
-if (
-  process.env.NODE_ENV === 'development' ||
-  process.env.DEBUG_PROD === 'true'
-) {
+if (process.env.NODE_ENV === 'development' || process.env.DEBUG_PROD === 'true') {
   require('electron-debug')();
 }
 
@@ -91,18 +75,14 @@ const installExtensions = async () => {
   const forceDownload = !!process.env.UPGRADE_EXTENSIONS;
   const extensions = ['REACT_DEVELOPER_TOOLS', 'REDUX_DEVTOOLS'];
 
-  return Promise.all(
-    extensions.map((name) => installer.default(installer[name], forceDownload))
-  ).catch(console.log);
+  return Promise.all(extensions.map((name) => installer.default(installer[name], forceDownload))).catch(console.log);
 };
 const createMenubar = async () => {
-  if (
-    process.env.NODE_ENV === 'development' ||
-    process.env.DEBUG_PROD === 'true'
-  ) {
+  if (process.env.NODE_ENV === 'development' || process.env.DEBUG_PROD === 'true') {
     await installExtensions();
   }
   const tray = new Tray(nativeMenuIcon);
+  tray.setToolTip('Fishing Funds');
   const mainWindowState = windowStateKeeper({
     defaultWidth: 300,
     defaultHeight: 520,
@@ -171,10 +151,7 @@ const createMenubar = async () => {
   });
 
   // To avoid a flash when opening your menubar app, you can disable backgrounding the app using the following:
-  mb.app.commandLine.appendSwitch(
-    'disable-backgrounding-occluded-windows',
-    'true'
-  );
+  mb.app.commandLine.appendSwitch('disable-backgrounding-occluded-windows', 'true');
 
   ipcMain.handle('show-message-box', async (event, config) => {
     return dialog.showMessageBox(config);
@@ -194,7 +171,9 @@ const createMenubar = async () => {
   ipcMain.handle('app-quit', (event, config) => {
     app.quit();
   });
-
+  ipcMain.handle('set-tray-content', (event, config) => {
+    tray.setTitle(config);
+  });
   // new AppUpdater({ icon: nativeIcon, win: mb.window });
 };
 

@@ -7,12 +7,12 @@ import { ReactComponent as ConsumptionIcon } from '@/assets/icons/consumption.sv
 import Eye from '@/components/Eye';
 import { useHeaderContext } from '@/components/Header';
 import { StoreState } from '@/reducers/types';
-import { selectWallet, toggleEyeStatus } from '@/actions/wallet';
-import { calcFunds } from '@/actions/fund';
+import { selectWalletAction, toggleEyeStatusAction } from '@/actions/wallet';
 import { useCurrentWallet, useFreshFunds } from '@/utils/hooks';
 import * as Enums from '@/utils/enums';
 import * as Utils from '@/utils';
 import * as CONST from '@/constants';
+import * as Helpers from '@/helpers';
 import styles from './index.scss';
 
 export interface WalletProps {}
@@ -21,28 +21,23 @@ const Wallet: React.FC<WalletProps> = () => {
   const dispatch = useDispatch();
   const { miniMode } = useHeaderContext();
   const eyeStatus = useSelector((state: StoreState) => state.wallet.eyeStatus);
-  const wallets = useSelector((state: StoreState) => state.wallet.wallets);
-  const currentWalletCode = useSelector(
-    (state: StoreState) => state.wallet.currentWalletCode
-  );
-  const { currentWallet, currentWalletState } = useCurrentWallet();
+  const currentWalletCode = useSelector((state: StoreState) => state.wallet.currentWalletCode);
+  const { walletConfig } = useSelector((state: StoreState) => state.wallet.config);
+  const { currentWalletConfig, currentWalletState } = useCurrentWallet();
   const freshFunds = useFreshFunds(CONST.DEFAULT.FRESH_BUTTON_THROTTLE_DELAY);
+
   const WalletIcon = useMemo(() => {
-    const { ReactComponent } = require(`@/assets/icons/wallet/${
-      currentWallet.iconIndex || 0
-    }.svg`);
+    const { ReactComponent } = require(`@/assets/icons/wallet/${currentWalletConfig.iconIndex || 0}.svg`);
     return ReactComponent;
-  }, [currentWallet]);
+  }, [currentWalletConfig]);
 
   const { funds, updateTime } = currentWalletState;
 
   const { displayZje, displaySygz } = useMemo(() => {
-    const { zje, sygz } = calcFunds(funds);
+    const { zje, sygz } = Helpers.Fund.CalcFunds(funds);
     const eyeOpen = eyeStatus === Enums.EyeStatus.Open;
     const displayZje = eyeOpen ? zje.toFixed(2) : Utils.Encrypt(zje.toFixed(2));
-    const displaySygz = eyeOpen
-      ? Utils.Yang(sygz.toFixed(2))
-      : Utils.Encrypt(Utils.Yang(sygz.toFixed(2)));
+    const displaySygz = eyeOpen ? Utils.Yang(sygz.toFixed(2)) : Utils.Encrypt(Utils.Yang(sygz.toFixed(2)));
     return {
       displayZje,
       displaySygz,
@@ -51,23 +46,18 @@ const Wallet: React.FC<WalletProps> = () => {
 
   async function onSelectWallet(wallet: Wallet.SettingItem) {
     const { code } = wallet;
-    dispatch(selectWallet(code));
+    dispatch(selectWalletAction(code));
     freshFunds();
   }
 
   return (
-    <div
-      className={classnames(styles.content, { [styles.miniMode]: miniMode })}
-    >
+    <div className={classnames(styles.content, { [styles.miniMode]: miniMode })}>
       <Dropdown
         placement="bottomRight"
         overlay={
           <Menu selectedKeys={[currentWalletCode]}>
-            {wallets.map((wallet) => (
-              <Menu.Item
-                key={wallet.code}
-                onClick={() => onSelectWallet(wallet)}
-              >
+            {walletConfig.map((wallet) => (
+              <Menu.Item key={wallet.code} onClick={() => onSelectWallet(wallet)}>
                 {wallet.name}
               </Menu.Item>
             ))}
@@ -78,9 +68,7 @@ const Wallet: React.FC<WalletProps> = () => {
       </Dropdown>
       <div className={styles.info}>
         <div className={styles.timeBar}>
-          <div className={styles.last}>
-            刷新时间：{updateTime || '还没有刷新过哦~'}
-          </div>
+          <div className={styles.last}>刷新时间：{updateTime || '还没有刷新过哦~'}</div>
         </div>
         <div className={styles.moneyBar}>
           <div>
@@ -96,11 +84,7 @@ const Wallet: React.FC<WalletProps> = () => {
           </div>
         </div>
       </div>
-      <Eye
-        classNames={styles.eye}
-        status={eyeStatus === Enums.EyeStatus.Open}
-        onClick={() => dispatch(toggleEyeStatus())}
-      />
+      <Eye classNames={styles.eye} status={eyeStatus === Enums.EyeStatus.Open} onClick={() => dispatch(toggleEyeStatusAction())} />
     </div>
   );
 };

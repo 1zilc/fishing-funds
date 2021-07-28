@@ -10,9 +10,7 @@ export interface ProfitProps {
 }
 
 const Profit: React.FC<ProfitProps> = ({ profit }) => {
-  const { ref: chartRef, chartInstance } = useResizeEchart(
-    CONST.DEFAULT.ECHARTS_SCALE
-  );
+  const { ref: chartRef, chartInstance } = useResizeEchart(CONST.DEFAULT.ECHARTS_SCALE);
   const { darkMode } = useHomeContext();
 
   useRenderEcharts(
@@ -50,8 +48,7 @@ const Profit: React.FC<ProfitProps> = ({ profit }) => {
             itemStyle: {
               normal: {
                 color: (params: any) => {
-                  const item =
-                    profit?.series?.[0]?.data?.[params.dataIndex] || {};
+                  const item = profit?.series?.[0]?.data?.[params.dataIndex] || {};
                   return item.color || params.color;
                 },
               },

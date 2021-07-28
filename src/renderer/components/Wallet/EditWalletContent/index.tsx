@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { Input } from 'antd';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import WalletSelection from '@/components/Wallet/WalletSelection';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
-import { getWalletConfig, updateWallet } from '@/actions/wallet';
+import { updateWalletAction } from '@/actions/wallet';
+import { StoreState } from '@/reducers/types';
 import styles from './index.scss';
 
 export interface AddFundContentProps {
@@ -18,14 +19,11 @@ const EditWalletContent: React.FC<AddFundContentProps> = (props) => {
   const dispatch = useDispatch();
   const [name, setName] = useState<string>(wallet.name);
   const [iconIndex, setIconIndex] = useState<number>(wallet.iconIndex);
-  const [fieldNameMessageTip, setFieldNameMessageTip] =
-    useState<Field.MessageTip>({ show: false, text: '' });
+  const [fieldNameMessageTip, setFieldNameMessageTip] = useState<Field.MessageTip>({ show: false, text: '' });
+  const { walletConfig } = useSelector((state: StoreState) => state.wallet.config);
 
-  const onSave = async () => {
-    const { walletConfig } = getWalletConfig();
-    const repeatName = walletConfig.some(
-      (_wallet) => _wallet.name === name && wallet.code !== _wallet.code
-    );
+  async function onSave() {
+    const repeatName = walletConfig.some((_wallet) => _wallet.name === name && wallet.code !== _wallet.code);
     if (!name) {
       setFieldNameMessageTip({ show: true, text: '请输入钱包名称~' });
       return;
@@ -35,17 +33,12 @@ const EditWalletContent: React.FC<AddFundContentProps> = (props) => {
       return;
     }
     setFieldNameMessageTip({ show: false, text: '' });
-    dispatch(updateWallet({ ...props.wallet, name, iconIndex }));
+    dispatch(updateWalletAction({ ...props.wallet, name, iconIndex }));
     props.onEnter();
-  };
+  }
 
   return (
-    <CustomDrawerContent
-      title="编辑钱包"
-      enterText="保存"
-      onEnter={onSave}
-      onClose={props.onClose}
-    >
+    <CustomDrawerContent title="编辑钱包" enterText="保存" onEnter={onSave} onClose={props.onClose}>
       <div className={styles.content}>
         <section>
           <label>

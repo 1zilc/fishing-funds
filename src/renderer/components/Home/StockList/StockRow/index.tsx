@@ -1,13 +1,13 @@
 import React from 'react';
-import { Collapse } from 'react-collapse';
 import classnames from 'classnames';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { ReactComponent as ArrowDownIcon } from '@/assets/icons/arrow-down.svg';
 import { ReactComponent as ArrowUpIcon } from '@/assets/icons/arrow-up.svg';
 import { useHomeContext } from '@/components/Home';
+import Collapse from '@/components/Collapse';
 import { StoreState } from '@/reducers/types';
-import { TOGGLE_STOCK_COLLAPSE } from '@/actions/stock';
+import { toggleStockCollapseAction } from '@/actions/stock';
 import { useResizeEchart, useRenderEcharts } from '@/utils/hooks';
 import * as Utils from '@/utils';
 import styles from './index.scss';
@@ -28,11 +28,11 @@ const TrendChart: React.FC<{
 }> = ({ trends = [], zs = 0 }) => {
   const { ref: chartRef, chartInstance } = useResizeEchart(0.24);
   const { darkMode } = useHomeContext();
+  const { lowKeySetting } = useSelector((state: StoreState) => state.setting.systemSetting);
+
   useRenderEcharts(
     () => {
-      const { color } = Utils.GetValueColor(
-        Number(trends[trends.length - 1]?.last) - zs
-      );
+      const { color } = Utils.GetValueColor(Number(trends[trends.length - 1]?.last) - zs);
       chartInstance?.setOption({
         title: {
           text: '',
@@ -87,7 +87,7 @@ const TrendChart: React.FC<{
       });
     },
     chartInstance,
-    [darkMode, zs, trends]
+    [darkMode, zs, trends, lowKeySetting]
   );
   return <div ref={chartRef} style={{ width: 72 }} />;
 };
@@ -95,9 +95,7 @@ const TrendChart: React.FC<{
 const StockRow: React.FC<RowProps> = (props) => {
   const { stock } = props;
   const dispatch = useDispatch();
-  const { conciseSetting } = useSelector(
-    (state: StoreState) => state.setting.systemSetting
-  );
+  const { conciseSetting } = useSelector((state: StoreState) => state.setting.systemSetting);
 
   const onDetailClick = () => {
     props.onDetail(stock.secid);
@@ -105,21 +103,9 @@ const StockRow: React.FC<RowProps> = (props) => {
 
   return (
     <>
-      <div
-        className={classnames(styles.row, 'hoverable')}
-        onClick={() => {
-          dispatch({
-            type: TOGGLE_STOCK_COLLAPSE,
-            payload: stock,
-          });
-        }}
-      >
+      <div className={classnames(styles.row, 'hoverable')} onClick={() => dispatch(toggleStockCollapseAction(stock))}>
         <div className={styles.arrow}>
-          {stock.collapse ? (
-            <ArrowUpIcon style={{ ...arrowSize }} />
-          ) : (
-            <ArrowDownIcon style={{ ...arrowSize }} />
-          )}
+          {stock.collapse ? <ArrowUpIcon style={{ ...arrowSize }} /> : <ArrowDownIcon style={{ ...arrowSize }} />}
         </div>
         <div style={{ flex: 1 }}>
           <div
@@ -140,12 +126,7 @@ const StockRow: React.FC<RowProps> = (props) => {
           )}
         </div>
         <div className={classnames(styles.value)}>
-          <div
-            className={classnames(
-              styles.zx,
-              Utils.GetValueColor(stock.zdf).textClass
-            )}
-          >
+          <div className={classnames(styles.zx, Utils.GetValueColor(stock.zdf).textClass)}>
             <TrendChart trends={stock.trends} zs={stock.zs} />
             {/* {stock.zx} */}
             {/* <ArrowLine value={stock.zdf} /> */}
@@ -153,14 +134,7 @@ const StockRow: React.FC<RowProps> = (props) => {
           {!conciseSetting && (
             <div className={styles.zd}>
               <div className={classnames(styles.zdd)}>{stock.zx}</div>
-              <div
-                className={classnames(
-                  styles.zdf,
-                  Utils.GetValueColor(stock.zdf).textClass
-                )}
-              >
-                {Utils.Yang(stock.zdf)} %
-              </div>
+              <div className={classnames(styles.zdf, Utils.GetValueColor(stock.zdf).textClass)}>{Utils.Yang(stock.zdf)} %</div>
             </div>
           )}
         </div>
@@ -170,21 +144,13 @@ const StockRow: React.FC<RowProps> = (props) => {
           {conciseSetting && (
             <section>
               <span>涨跌点：</span>
-              <span
-                className={classnames(Utils.GetValueColor(stock.zdd).textClass)}
-              >
-                {Utils.Yang(stock.zdd)}
-              </span>
+              <span className={classnames(Utils.GetValueColor(stock.zdd).textClass)}>{Utils.Yang(stock.zdd)}</span>
             </section>
           )}
           {conciseSetting && (
             <section>
               <span>涨跌幅：</span>
-              <span
-                className={classnames(Utils.GetValueColor(stock.zdf).textClass)}
-              >
-                {Utils.Yang(stock.zdf)} %
-              </span>
+              <span className={classnames(Utils.GetValueColor(stock.zdf).textClass)}>{Utils.Yang(stock.zdf)} %</span>
             </section>
           )}
           <section>

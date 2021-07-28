@@ -35,18 +35,8 @@ export interface DetailFundContentProps {
 const DetailFundContent: React.FC<DetailFundContentProps> = (props) => {
   const { code } = props;
   const [fund, setFund] = useState<Fund.FixData | Record<string, any>>({});
-  const [pingzhongdata, setPingzhongdata] = useState<
-    Fund.PingzhongData | Record<string, any>
-  >({});
-
-  const [
-    showManagerDrawer,
-    {
-      setTrue: openManagerDrawer,
-      setFalse: closeManagerDrawer,
-      toggle: ToggleManagerDrawer,
-    },
-  ] = useBoolean(false);
+  const [pingzhongdata, setPingzhongdata] = useState<Fund.PingzhongData | Record<string, any>>({});
+  const [showManagerDrawer, { setTrue: openManagerDrawer, setFalse: closeManagerDrawer, toggle: ToggleManagerDrawer }] = useBoolean(false);
 
   useRequest(Services.Fund.GetFixFromEastMoney, {
     throwOnError: true,
@@ -62,19 +52,10 @@ const DetailFundContent: React.FC<DetailFundContentProps> = (props) => {
     cacheKey: `GetFundDetailFromEastmoney/${code}`,
   });
 
-  const syl_1n =
-    pingzhongdata.syl_1n ||
-    pingzhongdata.syl_6y ||
-    pingzhongdata.syl_3y ||
-    pingzhongdata.syl_1y;
+  const syl_1n = pingzhongdata.syl_1n || pingzhongdata.syl_6y || pingzhongdata.syl_3y || pingzhongdata.syl_1y;
 
   return (
-    <CustomDrawerContent
-      title="基金详情"
-      enterText="确定"
-      onClose={props.onClose}
-      onEnter={props.onEnter}
-    >
+    <CustomDrawerContent title="基金详情" enterText="确定" onClose={props.onClose} onEnter={props.onEnter}>
       <div className={styles.content}>
         <div className={styles.container}>
           <h3>{fund?.fixName}</h3>
@@ -82,31 +63,16 @@ const DetailFundContent: React.FC<DetailFundContentProps> = (props) => {
             <span>{fund?.code}</span>
             <span>
               基金经理：
-              <a onClick={openManagerDrawer}>
-                {pingzhongdata.Data_currentFundManager?.[0]?.name}
-              </a>
+              <a onClick={openManagerDrawer}>{pingzhongdata.Data_currentFundManager?.[0]?.name}</a>
             </span>
           </div>
           <div className={styles.detail}>
             <div className={styles.detailItem}>
-              <div
-                className={classnames(
-                  styles.syl_1n,
-                  Utils.GetValueColor(syl_1n).textClass
-                )}
-              >
-                {Utils.Yang(syl_1n)}%
-              </div>
+              <div className={classnames(styles.syl_1n, Utils.GetValueColor(syl_1n).textClass)}>{Utils.Yang(syl_1n)}%</div>
               <div className={styles.detailItemLabel}>近一年涨跌幅</div>
             </div>
             <div className={classnames(styles.detailItem, 'text-center')}>
-              <div
-                className={classnames(
-                  Utils.GetValueColor(fund?.fixZzl).textClass
-                )}
-              >
-                {Utils.Yang(fund?.fixZzl)}%
-              </div>
+              <div className={classnames(Utils.GetValueColor(fund?.fixZzl).textClass)}>{Utils.Yang(fund?.fixZzl)}%</div>
               <div className={styles.detailItemLabel}>日涨跌幅</div>
             </div>
             <div className={classnames(styles.detailItem, 'text-center')}>
@@ -116,15 +82,8 @@ const DetailFundContent: React.FC<DetailFundContentProps> = (props) => {
           </div>
         </div>
         <div className={styles.container}>
-          <Tabs
-            defaultActiveKey={String(Enums.TrendType.Performance)}
-            animated={{ tabPane: true }}
-            tabBarGutter={15}
-          >
-            <Tabs.TabPane
-              tab="历史业绩"
-              key={String(Enums.TrendType.Performance)}
-            >
+          <Tabs animated={{ tabPane: true }} tabBarGutter={15}>
+            <Tabs.TabPane tab="历史业绩" key={String(Enums.TrendType.Performance)}>
               <ChartCard auto>
                 <HistoryPerformance
                   syl_1n={pingzhongdata.syl_1n}
@@ -143,15 +102,8 @@ const DetailFundContent: React.FC<DetailFundContentProps> = (props) => {
           </Tabs>
         </div>
         <div className={styles.container}>
-          <Tabs
-            defaultActiveKey={String(Enums.HistoryType.Performance)}
-            animated={{ tabPane: true }}
-            tabBarGutter={15}
-          >
-            <Tabs.TabPane
-              tab="业绩走势"
-              key={String(Enums.HistoryType.Performance)}
-            >
+          <Tabs animated={{ tabPane: true }} tabBarGutter={15}>
+            <Tabs.TabPane tab="业绩走势" key={String(Enums.HistoryType.Performance)}>
               <ChartCard>
                 <Performance code={code} />
               </ChartCard>
@@ -164,121 +116,64 @@ const DetailFundContent: React.FC<DetailFundContentProps> = (props) => {
           </Tabs>
         </div>
         <div className={styles.container}>
-          <Tabs
-            defaultActiveKey={String(Enums.WareHouseType.Stock)}
-            animated={{ tabPane: true }}
-            tabBarGutter={15}
-          >
-            <Tabs.TabPane
-              tab="股票持仓"
-              key={String(Enums.WareHouseType.Stock)}
-            >
+          <Tabs animated={{ tabPane: true }} tabBarGutter={15}>
+            <Tabs.TabPane tab="股票持仓" key={String(Enums.WareHouseType.Stock)}>
               <ChartCard>
-                <StockWareHouse
-                  code={code}
-                  stockCodes={pingzhongdata.stockCodesNew!}
-                />
+                <StockWareHouse code={code} stockCodes={pingzhongdata.stockCodesNew!} />
               </ChartCard>
             </Tabs.TabPane>
-            <Tabs.TabPane
-              tab="债券持仓"
-              key={String(Enums.WareHouseType.Securities)}
-            >
+            <Tabs.TabPane tab="债券持仓" key={String(Enums.WareHouseType.Securities)}>
               <ChartCard>
-                <SecuritiesWareHouse
-                  code={code}
-                  securitiesCodes={pingzhongdata.zqCodesNew!}
-                />
+                <SecuritiesWareHouse code={code} securitiesCodes={pingzhongdata.zqCodesNew!} />
               </ChartCard>
             </Tabs.TabPane>
-            <Tabs.TabPane
-              tab="股票仓位测算"
-              key={String(Enums.WareHouseType.StockEstimate)}
-            >
+            <Tabs.TabPane tab="股票仓位测算" key={String(Enums.WareHouseType.StockEstimate)}>
               <ChartCard>
-                <StockWareHouseEstimate
-                  fundSharesPositions={pingzhongdata.Data_fundSharesPositions!}
-                />
+                <StockWareHouseEstimate fundSharesPositions={pingzhongdata.Data_fundSharesPositions!} />
               </ChartCard>
             </Tabs.TabPane>
           </Tabs>
         </div>
         <div className={styles.container}>
-          <Tabs
-            defaultActiveKey={String(Enums.ConfigType.Assets)}
-            animated={{ tabPane: true }}
-            tabBarGutter={15}
-          >
+          <Tabs animated={{ tabPane: true }} tabBarGutter={15}>
             <Tabs.TabPane tab="资产配置" key={String(Enums.ConfigType.Assets)}>
               <ChartCard>
-                <Assets
-                  Data_assetAllocation={pingzhongdata.Data_assetAllocation}
-                />
+                <Assets Data_assetAllocation={pingzhongdata.Data_assetAllocation} />
               </ChartCard>
             </Tabs.TabPane>
             <Tabs.TabPane tab="持有人结构" key={String(Enums.ConfigType.Hold)}>
               <ChartCard>
-                <Hold
-                  Data_holderStructure={pingzhongdata.Data_holderStructure}
-                />
+                <Hold Data_holderStructure={pingzhongdata.Data_holderStructure} />
               </ChartCard>
             </Tabs.TabPane>
             <Tabs.TabPane tab="规模变动" key={String(Enums.ConfigType.Scale)}>
               <ChartCard>
-                <Scale
-                  Data_fluctuationScale={pingzhongdata.Data_fluctuationScale}
-                />
+                <Scale Data_fluctuationScale={pingzhongdata.Data_fluctuationScale} />
               </ChartCard>
             </Tabs.TabPane>
           </Tabs>
         </div>
         <div className={styles.container}>
-          <Tabs
-            defaultActiveKey={String(Enums.SimilarCompareType.Rank)}
-            animated={{ tabPane: true }}
-            tabBarGutter={15}
-          >
-            <Tabs.TabPane
-              tab="同类排名"
-              key={String(Enums.SimilarCompareType.Rank)}
-            >
+          <Tabs animated={{ tabPane: true }} tabBarGutter={15}>
+            <Tabs.TabPane tab="同类排名" key={String(Enums.SimilarCompareType.Rank)}>
               <ChartCard>
-                <SimilarRank
-                  rateInSimilarType={pingzhongdata.Data_rateInSimilarType}
-                />
+                <SimilarRank rateInSimilarType={pingzhongdata.Data_rateInSimilarType} />
               </ChartCard>
             </Tabs.TabPane>
-            <Tabs.TabPane
-              tab="百分比排名"
-              key={String(Enums.SimilarCompareType.Proportion)}
-            >
+            <Tabs.TabPane tab="百分比排名" key={String(Enums.SimilarCompareType.Proportion)}>
               <ChartCard>
-                <SimilarProportion
-                  rateInSimilarPersent={pingzhongdata.Data_rateInSimilarPersent}
-                />
+                <SimilarProportion rateInSimilarPersent={pingzhongdata.Data_rateInSimilarPersent} />
               </ChartCard>
             </Tabs.TabPane>
-            <Tabs.TabPane
-              tab="业绩评价"
-              key={String(Enums.SimilarCompareType.Evaluation)}
-            >
+            <Tabs.TabPane tab="业绩评价" key={String(Enums.SimilarCompareType.Evaluation)}>
               <ChartCard>
-                <PerformanceEvaluation
-                  Data_performanceEvaluation={
-                    pingzhongdata.Data_performanceEvaluation
-                  }
-                />
+                <PerformanceEvaluation Data_performanceEvaluation={pingzhongdata.Data_performanceEvaluation} />
               </ChartCard>
             </Tabs.TabPane>
           </Tabs>
         </div>
         <div>
-          <Tabs
-            defaultActiveKey={String(0)}
-            animated={{ tabPane: true }}
-            tabBarGutter={15}
-            tabBarStyle={{ marginLeft: 15 }}
-          >
+          <Tabs animated={{ tabPane: true }} tabBarGutter={15} tabBarStyle={{ marginLeft: 15 }}>
             <Tabs.TabPane tab="同类型基金涨幅榜" key={String(0)}>
               <SameFundList swithSameType={pingzhongdata.swithSameType} />
             </Tabs.TabPane>

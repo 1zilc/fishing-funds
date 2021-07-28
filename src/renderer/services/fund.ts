@@ -9,10 +9,7 @@ const { got } = window.contextModules;
 // 天天基金
 export async function FromEastmoney(code: string) {
   try {
-    const { body } = await got(
-      `http://fundgz.1234567.com.cn/js/${code}.js`,
-      {}
-    );
+    const { body } = await got(`http://fundgz.1234567.com.cn/js/${code}.js`, {});
     if (body.startsWith('jsonpgz')) {
       const fund: Fund.ResponseItem = eval(body);
       if (fund === undefined) {
@@ -41,9 +38,7 @@ export async function FromDayFund(code: string) {
     if (body === '||||%|%|||||') {
       return null;
     }
-    const { body: html } = await got(
-      `https://www.dayfund.cn/fundinfo/${code}.html`
-    );
+    const { body: html } = await got(`https://www.dayfund.cn/fundinfo/${code}.html`);
     const $ = cheerio.load(html);
     const [name] = $('meta[name=keywords]').attr('content')?.split(',') || [''];
     const [
@@ -100,9 +95,7 @@ export async function FromTencent(code: string) {
     const jzrq = $('#main3').text();
     const gsz = $('#main5').text() || ssgsz;
     const gzTime = `${time.slice(0, 2)}:${time.slice(2)}`;
-    const gszzl = NP.times(NP.divide(NP.minus(gsz, dwjz), dwjz), 100).toFixed(
-      2
-    );
+    const gszzl = NP.times(NP.divide(NP.minus(gsz, dwjz), dwjz), 100).toFixed(2);
 
     return {
       name,
@@ -133,9 +126,7 @@ export async function FromSina(code: string) {
     if (!data) {
       return null;
     }
-    const { body: html } = await got(
-      `https://finance.sina.com.cn/fund/quotes/${code}/bc.shtml`
-    );
+    const { body: html } = await got(`https://finance.sina.com.cn/fund/quotes/${code}/bc.shtml`);
     const $ = cheerio.load(html);
     const jzrq = $('#fund_info_blk2 > .fund_data_date').text().slice(5);
     const [name, time, gsz, dwjz, zjz, unknow1, gszzl, gzrq] = data.split(',');
@@ -157,15 +148,12 @@ export async function FromSina(code: string) {
 // 好买基金
 export async function FromHowbuy(code: string) {
   try {
-    const { body } = await got(
-      `https://www.howbuy.com/fund/ajax/gmfund/valuation/valuationnav.htm`,
-      {
-        method: 'post',
-        searchParams: {
-          jjdm: code,
-        },
-      }
-    );
+    const { body } = await got(`https://www.howbuy.com/fund/ajax/gmfund/valuation/valuationnav.htm`, {
+      method: 'post',
+      searchParams: {
+        jjdm: code,
+      },
+    });
     if (!body) {
       return null;
     }
@@ -240,37 +228,13 @@ export async function FromEtf(code: string) {
     const { body: html } = await got(`http://www.etf88.com/jj/${code}/`, {});
     const $ = cheerio.load(html);
     const name = $('h1[class="name"]').text();
-    const firstDate = $('.table')
-      .eq(1)
-      .find('tbody tr')
-      .eq(0)
-      .find('td')
-      .eq(0)
-      .text();
+    const firstDate = $('.table').eq(1).find('tbody tr').eq(0).find('td').eq(0).text();
 
-    const firstJz = $('.table')
-      .eq(1)
-      .find('tbody tr')
-      .eq(0)
-      .find('td')
-      .eq(1)
-      .text();
+    const firstJz = $('.table').eq(1).find('tbody tr').eq(0).find('td').eq(1).text();
 
-    const secondDate = $('.table')
-      .eq(1)
-      .find('tbody tr')
-      .eq(1)
-      .find('td')
-      .eq(0)
-      .text();
+    const secondDate = $('.table').eq(1).find('tbody tr').eq(1).find('td').eq(0).text();
 
-    const secondJz = $('.table')
-      .eq(1)
-      .find('tbody tr')
-      .eq(1)
-      .find('td')
-      .eq(1)
-      .text();
+    const secondJz = $('.table').eq(1).find('tbody tr').eq(1).find('td').eq(1).text();
     const dwjz = data.gzrq === firstDate ? secondJz : firstJz;
 
     const jzrq = $('.fund-d-title')
@@ -299,10 +263,7 @@ export async function FromEtf(code: string) {
 // 从天天基金获取估值图片
 export async function GetEstimatedFromEastmoney(code: string) {
   try {
-    const { rawBody }: any = await got(
-      `http://j4.dfcfw.com/charts/pic6/${code}.png`,
-      {}
-    );
+    const { rawBody }: any = await got(`http://j4.dfcfw.com/charts/pic6/${code}.png`, {});
     // const base64Str = rawBody.toString('base64');
     const b64encoded = btoa(String.fromCharCode.apply(null, rawBody));
     return `data:image/png;base64,${b64encoded}`;
@@ -313,22 +274,12 @@ export async function GetEstimatedFromEastmoney(code: string) {
 }
 
 // 从天天基金获取股票持仓
-export async function GetStockWareHouseFromEastmoney(
-  code: string,
-  stockCodes: string[]
-) {
+export async function GetStockWareHouseFromEastmoney(code: string, stockCodes: string[]) {
   try {
-    const { body: html } = await got(
-      `http://fund.eastmoney.com/${code}.html`,
-      {}
-    );
+    const { body: html } = await got(`http://fund.eastmoney.com/${code}.html`, {});
     const $ = cheerio.load(html);
     const secids = (stockCodes || []).join(',') || '';
-    const tors = $('#quotationItem_DataTable')
-      .find('#position_shares')
-      .find('tr > td:nth-child(2)')
-      .text()
-      .split('%');
+    const tors = $('#quotationItem_DataTable').find('#position_shares').find('tr > td:nth-child(2)').text().split('%');
 
     const {
       body: { data },
@@ -370,22 +321,12 @@ export async function GetStockWareHouseFromEastmoney(
 }
 
 // 从天天基金获取债券持仓
-export async function GetSecuritiesWareHouseFromEastmoney(
-  code: string,
-  securitiesCodes: string
-) {
+export async function GetSecuritiesWareHouseFromEastmoney(code: string, securitiesCodes: string) {
   try {
-    const { body: html } = await got(
-      `http://fund.eastmoney.com/${code}.html`,
-      {}
-    );
+    const { body: html } = await got(`http://fund.eastmoney.com/${code}.html`, {});
     const $ = cheerio.load(html);
     const secids = securitiesCodes || '';
-    const tors = $('#quotationItem_DataTable')
-      .find('#position_bonds')
-      .find('tr > td:nth-child(2)')
-      .text()
-      .split('%');
+    const tors = $('#quotationItem_DataTable').find('#position_bonds').find('tr > td:nth-child(2)').text().split('%');
 
     const {
       body: { data },
@@ -428,10 +369,7 @@ export async function GetSecuritiesWareHouseFromEastmoney(
 // 从天天基金获取基金详情
 export async function GetFundDetailFromEastmoney(code: string) {
   try {
-    const { body } = await got(
-      `http://fund.eastmoney.com/pingzhongdata/${code}.js`,
-      {}
-    );
+    const { body } = await got(`http://fund.eastmoney.com/pingzhongdata/${code}.js`, {});
     const response: Fund.PingzhongData = Utils.parsepingzhongdata(body);
     return response;
   } catch (error) {
@@ -472,10 +410,7 @@ export async function GetFundPerformanceFromEastmoney(
 // 从天天基金获取所有基金信息
 export async function GetRemoteFundsFromEastmoney() {
   try {
-    const { body } = await got(
-      'http://fund.eastmoney.com/js/fundcode_search.js',
-      {}
-    );
+    const { body } = await got('http://fund.eastmoney.com/js/fundcode_search.js', {});
     return Utils.ParseRemoteFunds(body);
   } catch (error) {
     console.log(error);
@@ -511,9 +446,7 @@ export async function GetFixFromEastMoney(code: string) {
 // 从天天基金查询基金经理详情信息
 export async function GetFundManagerDetailFromEastMoney(code: string) {
   try {
-    const { body: html } = await got(
-      `http://fund.eastmoney.com/manager/${code}.html`
-    );
+    const { body: html } = await got(`http://fund.eastmoney.com/manager/${code}.html`);
     const $ = cheerio.load(html);
     const description = $('meta[name="description"]').attr('content');
     const table = $('.content_in').find('.ftrs')[0];
@@ -577,38 +510,22 @@ export async function GetQDIIFundFromEastMoney(code: string) {
 // 查询定投排行
 export async function GetAutomaticPlanFromEastmoney(type: number) {
   try {
-    const { body: html } = await got(
-      'http://fund.eastmoney.com/api/Dtshph.ashx',
-      {
-        searchParams: {
-          c: 'dwjz',
-          t: type,
-          s: 'desc',
-          issale: 1,
-          page: 1,
-          psize: 200,
-          _: new Date().getTime(),
-        },
-      }
-    );
+    const { body: html } = await got('http://fund.eastmoney.com/api/Dtshph.ashx', {
+      searchParams: {
+        c: 'dwjz',
+        t: type,
+        s: 'desc',
+        issale: 1,
+        page: 1,
+        psize: 200,
+        _: new Date().getTime(),
+      },
+    });
     const $ = cheerio.load(html);
     const data = $('tbody tr')
       .toArray()
       .map((tr) => {
-        const [
-          checkbox,
-          no,
-          code,
-          name,
-          more,
-          dwjz,
-          jzrq,
-          y1,
-          y2,
-          y3,
-          y5,
-          star,
-        ] = $(tr)
+        const [checkbox, no, code, name, more, dwjz, jzrq, y1, y2, y3, y5, star] = $(tr)
           .find('td')
           .toArray()
           .map((td) => $(td).text());
@@ -635,30 +552,27 @@ export async function GetAutomaticPlanFromEastmoney(type: number) {
 export async function GetRankDataFromEasemoney(type: string) {
   try {
     const now = new Date();
-    const { body } = await got(
-      'http://fund.eastmoney.com/data/rankhandler.aspx',
-      {
-        headers: {
-          Referer: 'http://fund.eastmoney.com/data/fundranking.html',
-        },
-        searchParams: {
-          op: 'ph',
-          dt: 'kf',
-          ft: type,
-          rs: '',
-          gs: 0,
-          sc: '1yzf',
-          st: 'desc',
-          qdii: '',
-          tabSubtype: ',,,,,',
-          pi: 1,
-          pn: 200,
-          dx: 1,
-          sd: `${now.getFullYear() - 1}-${now.getMonth() + 1}-${now.getDate()}`,
-          ed: `${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()}`,
-        },
-      }
-    );
+    const { body } = await got('http://fund.eastmoney.com/data/rankhandler.aspx', {
+      headers: {
+        Referer: 'http://fund.eastmoney.com/data/fundranking.html',
+      },
+      searchParams: {
+        op: 'ph',
+        dt: 'kf',
+        ft: type,
+        rs: '',
+        gs: 0,
+        sc: '1yzf',
+        st: 'desc',
+        qdii: '',
+        tabSubtype: ',,,,,',
+        pi: 1,
+        pn: 200,
+        dx: 1,
+        sd: `${now.getFullYear() - 1}-${now.getMonth() + 1}-${now.getDate()}`,
+        ed: `${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()}`,
+      },
+    });
     return eval(`(() => {
       ${body}
       return rankData.datas;

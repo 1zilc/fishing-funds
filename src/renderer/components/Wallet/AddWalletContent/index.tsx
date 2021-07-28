@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Input } from 'antd';
 
 import WalletSelection from '@/components/Wallet/WalletSelection';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
-import { getWalletConfig, addWallet } from '@/actions/wallet';
+import { addWalletAction } from '@/actions/wallet';
+import { StoreState } from '@/reducers/types';
 import * as Utils from '@/utils';
 import styles from './index.scss';
 
@@ -15,11 +16,10 @@ export interface AddFundContentProps {
 
 const AddWalletContent: React.FC<AddFundContentProps> = (props) => {
   const dispatch = useDispatch();
-  const { walletConfig } = getWalletConfig();
+  const { walletConfig } = useSelector((state: StoreState) => state.wallet.config);
   const [name, setName] = useState('');
   const [iconIndex, setIconIndex] = useState(0);
-  const [fieldNameMessageTip, setFieldNameMessageTip] =
-    useState<Field.MessageTip>({ show: false, text: '' });
+  const [fieldNameMessageTip, setFieldNameMessageTip] = useState<Field.MessageTip>({ show: false, text: '' });
 
   const onAdd = async () => {
     const repeatName = walletConfig.some((wallet) => wallet.name === name);
@@ -34,17 +34,12 @@ const AddWalletContent: React.FC<AddFundContentProps> = (props) => {
       return;
     }
     setFieldNameMessageTip({ show: false, text: '' });
-    dispatch(addWallet({ name, iconIndex, code, funds: [] }));
+    dispatch(addWalletAction({ name, iconIndex, code, funds: [] }));
     props.onEnter();
   };
 
   return (
-    <CustomDrawerContent
-      title="添加钱包"
-      enterText="添加"
-      onEnter={onAdd}
-      onClose={props.onClose}
-    >
+    <CustomDrawerContent title="添加钱包" enterText="添加" onEnter={onAdd} onClose={props.onClose}>
       <div className={styles.content}>
         <section>
           <label>

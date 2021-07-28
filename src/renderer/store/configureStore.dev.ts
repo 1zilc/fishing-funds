@@ -1,5 +1,6 @@
 import { createStore, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
+import promise from 'redux-promise';
 import { routerActions } from 'connected-react-router';
 import { createLogger } from 'redux-logger';
 import createRootReducer from '../reducers';
@@ -10,7 +11,7 @@ declare global {
     __REDUX_DEVTOOLS_EXTENSION_COMPOSE__: (
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       obj: Record<string, any>
-    ) => Function;
+    ) => (...arg: any) => any;
   }
   interface NodeModule {
     hot?: {
@@ -27,7 +28,7 @@ const configureStore = (initialState?: StoreState) => {
   const enhancers = [];
 
   // Thunk Middleware
-  middleware.push(thunk);
+  middleware.push(thunk, promise);
 
   // Logging Middleware
   const logger = createLogger({

@@ -9,12 +9,8 @@ interface SimilarProportionProps {
   rateInSimilarPersent?: [][];
 }
 
-const SimilarProportion: React.FC<SimilarProportionProps> = ({
-  rateInSimilarPersent = [],
-}) => {
-  const { ref: chartRef, chartInstance } = useResizeEchart(
-    CONST.DEFAULT.ECHARTS_SCALE
-  );
+const SimilarProportion: React.FC<SimilarProportionProps> = ({ rateInSimilarPersent = [] }) => {
+  const { ref: chartRef, chartInstance } = useResizeEchart(CONST.DEFAULT.ECHARTS_SCALE);
   const { varibleColors, darkMode } = useHomeContext();
 
   useRenderEcharts(

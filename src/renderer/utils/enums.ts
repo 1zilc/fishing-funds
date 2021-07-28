@@ -144,3 +144,9 @@ export enum WalletIncomType {
   Jrsy,
   Cysy,
 }
+
+export enum TrayContent {
+  Sy,
+  Syl,
+  None,
+}

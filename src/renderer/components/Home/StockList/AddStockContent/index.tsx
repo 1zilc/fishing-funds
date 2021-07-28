@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { useDebounceFn, useRequest } from 'ahooks';
 import { Input, Tabs } from 'antd';
 
@@ -7,10 +7,10 @@ import DetailStockContent from '@/components/Home/StockList/DetailStockContent';
 import CustomDrawer from '@/components/CustomDrawer';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
 import Empty from '@/components/Empty';
-import { addStock, getStock, getStockConfig } from '@/actions/stock';
+import { addStockAction } from '@/actions/stock';
 import { StoreState } from '@/reducers/types';
 import { useDrawer } from '@/utils/hooks';
-import * as Enums from '@/utils/enums';
+import * as Helpers from '@/helpers';
 import * as Services from '@/services';
 import styles from './index.scss';
 
@@ -22,41 +22,46 @@ export interface AddStockContentProps {
 
 const { Search } = Input;
 
-const excludeTypes = [
-  // 7, // 三板
-  8, // 基金
+export const stockTypesConfig = [
+  { name: 'AB股', code: 1 },
+  // { name: '指数', code: 2 },
+  // { name: '板块', code: 3 },
+  { name: '港股', code: 4 },
+  { name: '美股', code: 5 },
+  { name: '英股', code: 6 },
+  { name: '三板', code: 7 },
+  // { name: '基金', code: 8 },
+  { name: '债券', code: 9 },
 ];
 
 const AddStockContent: React.FC<AddStockContentProps> = (props) => {
   const { defaultName } = props;
-  const { codeMap } = getStockConfig();
+  const dispatch = useDispatch();
   const [none, setNone] = useState<boolean>(false);
   const [groupList, setGroupList] = useState<Stock.SearchResut[]>([]);
+  const { codeMap } = useSelector((state: StoreState) => state.stock.config);
 
   const { run: runSearch } = useRequest(Services.Stock.SearchFromEastmoney, {
     manual: true,
     throwOnError: true,
-    onSuccess: (res) =>
-      setGroupList(res.filter(({ Type }) => !excludeTypes.includes(Type))),
+    onSuccess: (res) => setGroupList(res.filter(({ Type }) => stockTypesConfig.map(({ code }) => code).includes(Type))),
   });
 
-  const {
-    data: detailSecid,
-    show: showDetailDrawer,
-    set: setDetailDrawer,
-    close: closeDetailDrawer,
-  } = useDrawer('');
+  const { data: detailSecid, show: showDetailDrawer, set: setDetailDrawer, close: closeDetailDrawer } = useDrawer('');
 
-  async function onAdd(secid: string) {
-    const stock = await getStock(secid);
+  async function onAdd(secid: string, type: number) {
+    const stock = await Helpers.Stock.GetStock(secid);
     if (stock) {
       setNone(false);
-      addStock({
-        market: stock.market!,
-        code: stock.code!,
-        secid: stock.secid,
-        name: stock.name!,
-      });
+      dispatch(
+        addStockAction({
+          market: stock.market!,
+          code: stock.code!,
+          secid: stock.secid,
+          name: stock.name!,
+          type,
+        })
+      );
       props.onEnter();
     } else {
       setNone(true);
@@ -79,23 +84,11 @@ const AddStockContent: React.FC<AddStockContentProps> = (props) => {
   }, [defaultName]);
 
   return (
-    <CustomDrawerContent
-      title="添加股票"
-      enterText="确定"
-      onEnter={props.onEnter}
-      onClose={props.onClose}
-    >
+    <CustomDrawerContent title="添加股票" enterText="确定" onEnter={props.onEnter} onClose={props.onClose}>
       <div className={styles.content}>
         <section>
           <label>关键字：</label>
-          <Search
-            defaultValue={defaultName}
-            type="text"
-            placeholder="股票代码或名称关键字"
-            enterButton
-            onSearch={onSearch}
-            size="small"
-          />
+          <Search defaultValue={defaultName} type="text" placeholder="股票代码或名称关键字" enterButton onSearch={onSearch} size="small" />
         </section>
         {none && (
           <section>
@@ -104,21 +97,13 @@ const AddStockContent: React.FC<AddStockContentProps> = (props) => {
         )}
       </div>
       {groupList.length ? (
-        <Tabs
-          animated={{ tabPane: true }}
-          tabBarGutter={15}
-          tabBarStyle={{ marginLeft: 15 }}
-        >
+        <Tabs animated={{ tabPane: true }} tabBarGutter={15} tabBarStyle={{ marginLeft: 15 }}>
           {groupList.map(({ Datas, Name, Type }) => (
             <Tabs.TabPane tab={Name} key={String(Type)}>
               {Datas.map(({ Name, Code, MktNum }) => {
                 const secid = `${MktNum}.${Code}`;
                 return (
-                  <div
-                    key={secid}
-                    className={styles.stock}
-                    onClick={() => setDetailDrawer(secid)}
-                  >
+                  <div key={secid} className={styles.stock} onClick={() => setDetailDrawer(secid)}>
                     <div>
                       <div className={styles.name}>
                         <span className={styles.nameText}>{Name}</span>
@@ -133,7 +118,7 @@ const AddStockContent: React.FC<AddStockContentProps> = (props) => {
                       <button
                         className={styles.select}
                         onClick={(e) => {
-                          onAdd(secid);
+                          onAdd(secid, Type);
                           e.stopPropagation();
                         }}
                       >
@@ -150,11 +135,7 @@ const AddStockContent: React.FC<AddStockContentProps> = (props) => {
         <Empty text="暂无相关数据~" />
       )}
       <CustomDrawer show={showDetailDrawer}>
-        <DetailStockContent
-          onEnter={closeDetailDrawer}
-          onClose={closeDetailDrawer}
-          secid={detailSecid}
-        />
+        <DetailStockContent onEnter={closeDetailDrawer} onClose={closeDetailDrawer} secid={detailSecid} />
       </CustomDrawer>
     </CustomDrawerContent>
   );

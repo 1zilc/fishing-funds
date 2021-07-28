@@ -1,10 +1,12 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 
 import { useHomeContext } from '@/components/Home';
 import { useResizeEchart, useRenderEcharts } from '@/utils/hooks';
-import { getRemoteFundsMap, calcFund } from '@/actions/fund';
+import { StoreState } from '@/reducers/types';
 import * as CONST from '@/constants';
 import * as Utils from '@/utils';
+import * as Helpers from '@/helpers';
 import styles from './index.scss';
 
 interface TypeConfigProps {
@@ -12,15 +14,12 @@ interface TypeConfigProps {
 }
 
 const TypeConfig: React.FC<TypeConfigProps> = ({ funds = [] }) => {
-  const { ref: chartRef, chartInstance } = useResizeEchart(
-    CONST.DEFAULT.ECHARTS_SCALE
-  );
-
+  const { ref: chartRef, chartInstance } = useResizeEchart(CONST.DEFAULT.ECHARTS_SCALE);
   const { varibleColors, darkMode } = useHomeContext();
 
   useRenderEcharts(
     () => {
-      const remoteFundsMap = getRemoteFundsMap();
+      const remoteFundsMap = Helpers.Fund.GetRemoteFundsMap();
       const typeMap: Record<string, Fund.ResponseItem[]> = {};
       funds.forEach((fund) => {
         const type = remoteFundsMap[fund.fundcode!]?.[3];
@@ -31,22 +30,13 @@ const TypeConfig: React.FC<TypeConfigProps> = ({ funds = [] }) => {
         }
       });
       chartInstance?.setOption({
-        color: [
-          '#5470c6',
-          '#fac858',
-          '#ee6666',
-          '#73c0de',
-          '#3ba272',
-          '#fc8452',
-          '#9a60b4',
-          '#ea7ccc',
-        ],
+        color: ['#5470c6', '#fac858', '#ee6666', '#73c0de', '#3ba272', '#fc8452', '#9a60b4', '#ea7ccc'],
         series: {
           type: 'sunburst',
           data: Object.entries(typeMap).map(([type, funds]) => ({
             name: type,
             children: funds.map((fund) => {
-              const calcFundResult = calcFund(fund);
+              const calcFundResult = Helpers.Fund.CalcFund(fund);
               return {
                 name: calcFundResult.name,
                 value: 1,
