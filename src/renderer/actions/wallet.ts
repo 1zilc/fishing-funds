@@ -1,4 +1,5 @@
 import dayjs from 'dayjs';
+import { batch } from 'react-redux';
 
 import { ThunkAction, PromiseAction } from '@/reducers/types';
 import * as Enums from '@/utils/enums';
@@ -131,8 +132,12 @@ export function deleteWalletAction(code: string): ThunkAction {
 export function selectWalletAction(code: string): ThunkAction {
   return (dispatch, getState) => {
     try {
-      Utils.SetStorage(CONST.STORAGE.CURRENT_WALLET_CODE, code);
-      dispatch({ type: CHANGE_CURRENT_WALLET_CODE, payload: code });
+      const config = Helpers.Wallet.GetWalletConfig();
+
+      batch(() => {
+        dispatch({ type: CHANGE_CURRENT_WALLET_CODE, payload: code });
+        dispatch(syncWalletConfigAction());
+      });
     } catch (error) {
       console.log('选择钱包出错', error);
     }
