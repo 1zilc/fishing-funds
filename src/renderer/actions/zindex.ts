@@ -122,7 +122,7 @@ export function sortZindexsCachedAction(responseZindexs: Zindex.ResponseItem[]):
         return map;
       }, {} as any);
 
-      const zindexsWithCollapseChached = responseZindexs.filter(Boolean).map((_) => ({
+      const zindexsWithCollapseChached = responseZindexs.map((_) => ({
         ...(zindexsCodeToMap[_.code] || {}),
         ..._,
       }));
@@ -132,13 +132,15 @@ export function sortZindexsCachedAction(responseZindexs: Zindex.ResponseItem[]):
         return map;
       }, {} as any);
 
-      zindexConfig.forEach((zindex) => {
-        const responseZindex = zindexWithChachedCodeToMap[zindex.code];
-        const stateZindex = zindexsCodeToMap[zindex.code];
-        if (!responseZindex && stateZindex) {
-          zindexsWithCollapseChached.push(stateZindex);
-        }
-      });
+      zindexConfig
+        .filter(({ show }) => show)
+        .forEach((zindex) => {
+          const responseZindex = zindexWithChachedCodeToMap[zindex.code];
+          const stateZindex = zindexsCodeToMap[zindex.code];
+          if (!responseZindex && stateZindex) {
+            zindexsWithCollapseChached.push(stateZindex);
+          }
+        });
 
       const sortZindexs = Helpers.Zindex.SortZindexs(zindexsWithCollapseChached);
       dispatch(syncZindexsStateAction(sortZindexs));

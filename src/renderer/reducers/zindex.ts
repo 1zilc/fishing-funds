@@ -1,7 +1,4 @@
-import { AnyAction } from 'redux';
-
 import { SYNC_ZIDNEXS, SET_ZINDEXS_LOADING, SYNC_ZIDNEX_CONFIG } from '@/actions/zindex';
-
 import { Reducer } from '@/reducers/types';
 import * as Helpers from '@/helpers';
 
