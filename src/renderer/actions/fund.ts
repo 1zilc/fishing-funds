@@ -147,7 +147,6 @@ export function loadFundsAction(): PromiseAction {
     try {
       dispatch({ type: SET_FUNDS_LOADING, payload: true });
       const responseFunds = (await Helpers.Fund.GetFunds()).filter(Utils.NotEmpty);
-      console.log(await Helpers.Fund.GetFunds());
 
       batch(() => {
         dispatch({ type: SET_FUNDS_LOADING, payload: false });
