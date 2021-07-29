@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { ReactSortable } from 'react-sortablejs';
 
@@ -23,10 +23,8 @@ const ManageWalletContent: React.FC<ManageWalletContentProps> = (props) => {
   const dispatch = useDispatch();
   const currentWalletCode = useSelector((state: StoreState) => state.wallet.currentWalletCode);
   const { codeMap, walletConfig } = useSelector((state: StoreState) => state.wallet.config);
-  const [sortWalletConfig, setSortWalletConfig] = useState<(Wallet.SettingItem & Wallet.SortRow)[]>([]);
-  const [selectedCode, setSelectedCode] = useState(currentWalletCode);
-
   const { show: showAddDrawer, set: setAddDrawer, close: closeAddDrawer } = useDrawer(null);
+  const sortWalletConfig = useMemo(() => walletConfig.map((_) => ({ ..._, id: _.code })), [walletConfig]);
 
   const {
     data: editWalletData,
@@ -42,8 +40,7 @@ const ManageWalletContent: React.FC<ManageWalletContentProps> = (props) => {
 
   async function onSelectWallet(wallet: Wallet.SettingItem) {
     const { code } = wallet;
-    setSelectedCode(code);
-    setTimeout(onSave);
+    dispatch(selectWalletAction(code));
   }
 
   function onSortWalletConfig(sortList: Wallet.SettingItem[]) {
@@ -51,17 +48,8 @@ const ManageWalletContent: React.FC<ManageWalletContentProps> = (props) => {
     dispatch(setWalletConfigAction(walletConfig));
   }
 
-  function onSave() {
-    dispatch(selectWalletAction(selectedCode));
-    props.onEnter();
-  }
-
-  useEffect(() => {
-    setSortWalletConfig(walletConfig.map((_) => ({ ..._, id: _.code })));
-  }, [walletConfig]);
-
   return (
-    <CustomDrawerContent title="管理钱包" enterText="确定" onEnter={onSave} onClose={props.onClose}>
+    <CustomDrawerContent title="管理钱包" enterText="确定" onEnter={props.onEnter} onClose={props.onClose}>
       <div className={styles.content}>
         {sortWalletConfig.length ? (
           <ReactSortable animation={200} delay={2} list={sortWalletConfig} setList={onSortWalletConfig} swap>
@@ -69,9 +57,12 @@ const ManageWalletContent: React.FC<ManageWalletContentProps> = (props) => {
               <WalletRow
                 key={wallet.code}
                 wallet={wallet}
-                onClick={(wallet) => setSelectedCode(wallet.code)}
-                onDoubleClick={onSelectWallet}
-                selected={selectedCode === wallet.code}
+                onClick={(wallet) => onSelectWallet(wallet)}
+                onDoubleClick={(wallet) => {
+                  onSelectWallet(wallet);
+                  props.onEnter();
+                }}
+                selected={currentWalletCode === wallet.code}
                 onEdit={setEditDrawer}
               />
             ))}
