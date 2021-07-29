@@ -153,8 +153,8 @@ export function loadWalletsFundsAction(): PromiseAction {
         },
       } = getState();
       const collects = walletConfig.map(({ funds: fundsConfig, code: walletCode }) => async () => {
-        const responseFunds = await Helpers.Fund.GetFunds(fundsConfig);
-        const sortFunds = Helpers.Fund.SortFunds(responseFunds.filter(Utils.NotEmpty));
+        const responseFunds = (await Helpers.Fund.GetFunds(fundsConfig)).filter(Utils.NotEmpty);
+        const sortFunds = Helpers.Fund.SortFunds(responseFunds, walletCode);
         const now = dayjs().format('MM-DD HH:mm:ss');
         dispatch(
           syncWalletStateAction({
@@ -219,6 +219,7 @@ export function syncWalletStateAction(state: Wallet.StateItem): ThunkAction {
       } = getState();
       const cloneWallets = Utils.DeepCopy(wallets);
       const currentWalletConfig = codeMap[state.code];
+      const configCodeMap = Helpers.Fund.GetCodeMap(currentWalletConfig.funds);
       const walletState = cloneWallets.find(({ code }) => code === state.code);
       const fundsCodeToMap = (walletState?.funds || []).reduce((map, fund) => {
         map[fund.fundcode!] = fund;
@@ -226,7 +227,7 @@ export function syncWalletStateAction(state: Wallet.StateItem): ThunkAction {
       }, {} as Record<string, Fund.ResponseItem & Fund.FixData>);
 
       state.funds = state.funds.map((_) => ({
-        ...(fundsCodeToMap[_!.fundcode!] || {}),
+        ...(fundsCodeToMap[_.fundcode!] || {}),
         ..._,
       }));
 
@@ -242,6 +243,8 @@ export function syncWalletStateAction(state: Wallet.StateItem): ThunkAction {
           state.funds.push(stateFund);
         }
       });
+
+      state.funds = state.funds.filter(({ fundcode }) => configCodeMap[fundcode!]);
 
       cloneWallets.forEach((wallet, index) => {
         if (wallet.code === state.code) {
@@ -269,7 +272,7 @@ export function syncFixWalletStateAction(state: Wallet.StateItem): ThunkAction {
       const cloneWallets = Utils.DeepCopy(wallets);
       const { funds } = Helpers.Wallet.GetWalletState(state.code);
       const mergefixFunds = Helpers.Fund.MergeFixFunds(funds, state.funds);
-      const sortFunds = Helpers.Fund.SortFunds(mergefixFunds);
+      const sortFunds = Helpers.Fund.SortFunds(mergefixFunds, state.code);
 
       cloneWallets.forEach((wallet, index) => {
         if (wallet.code === state.code) {

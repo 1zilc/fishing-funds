@@ -149,7 +149,8 @@ export function useConfigClipboard() {
     });
     ipcRenderer.on('clipboard-funds-copy', (e, data) => {
       try {
-        const { fundConfig } = Helpers.Fund.GetFundConfig();
+        const currentWalletCode = Helpers.Wallet.GetCurrentWalletCode();
+        const { fundConfig } = Helpers.Fund.GetFundConfig(currentWalletCode);
         clipboard.writeText(JSON.stringify(fundConfig));
         dialog.showMessageBox({
           title: `复制成功`,
@@ -169,10 +170,11 @@ export function useConfigClipboard() {
 
 export function useTrayContent() {
   const { trayContentSetting } = useSelector((state: StoreState) => state.setting.systemSetting);
+  const currentWalletCode = useSelector((state: StoreState) => state.wallet.currentWalletCode);
   const {
     currentWalletState: { funds },
   } = useCurrentWallet();
-  const calcResult = Helpers.Fund.CalcFunds(funds);
+  const calcResult = Helpers.Fund.CalcFunds(funds, currentWalletCode);
 
   useEffect(() => {
     let content = '';

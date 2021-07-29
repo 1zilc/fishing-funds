@@ -17,10 +17,9 @@ interface FundListProps {
 
 const FundList: React.FC<FundListProps> = (props) => {
   const {
-    currentWalletCode, // 当前钱包 code
-    currentWalletState, // 当前钱包状态
     currentWalletState: { funds },
   } = useCurrentWallet();
+  console.log(funds);
 
   const fundsLoading = useSelector((state: StoreState) => state.fund.fundsLoading);
   const a = useSelector((state: StoreState) => state.wallet.wallets);
