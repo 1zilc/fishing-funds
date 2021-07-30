@@ -12,7 +12,7 @@
 ![GitHub top language](https://img.shields.io/github/languages/top/1zilc/fishing-funds?color=red)
 ![GitHub package.json dependency version (dev dep on branch)](https://img.shields.io/github/package-json/dependency-version/1zilc/fishing-funds/dev/electron/master)
 ![GitHub package.json dependency version (prod)](https://img.shields.io/github/package-json/dependency-version/1zilc/fishing-funds/menubar)
-![GitHub commit activity](https://img.shields.io/github/commit-activity/m/1zilc/fishing-funds)
+<a href="https://qm.qq.com/cgi-bin/qm/qr?k=Su4GnbsicHvsPrbLMwNu557LyZQO19KZ&jump_from=webapi"><img src="https://img.shields.io/badge/QQ%E7%BE%A4-732268738-red" alt="QQ群" /></a>
 ![GitHub](https://img.shields.io/github/license/1zilc/fishing-funds)
 
 > 显示基金涨跌状态栏小应用,数据源来自天天基金等

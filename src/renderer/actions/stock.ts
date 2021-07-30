@@ -12,11 +12,7 @@ export const SYNC_STOCK_CONFIG = 'SYNC_STOCK_CONFIG';
 export function addStockAction(stock: Stock.SettingItem): ThunkAction {
   return (dispatch, getState) => {
     try {
-      const {
-        stock: {
-          config: { stockConfig },
-        },
-      } = getState();
+      const { stockConfig } = Helpers.Stock.GetStockConfig();
       const cloneStockConfig = Utils.DeepCopy(stockConfig);
       const exist = cloneStockConfig.find((item) => stock.secid === item.secid);
       if (!exist) {
@@ -32,11 +28,7 @@ export function addStockAction(stock: Stock.SettingItem): ThunkAction {
 export function updateStockAction(stock: { secid: string; type?: number }): ThunkAction {
   return (dispatch, getState) => {
     try {
-      const {
-        stock: {
-          config: { stockConfig },
-        },
-      } = getState();
+      const { stockConfig } = Helpers.Stock.GetStockConfig();
       stockConfig.forEach((item) => {
         if (stock.secid === item.secid) {
           if (stock.type !== undefined) {
@@ -54,11 +46,8 @@ export function updateStockAction(stock: { secid: string; type?: number }): Thun
 export function deleteStockAction(secid: string): ThunkAction {
   return (dispatch, getState) => {
     try {
-      const {
-        stock: {
-          config: { stockConfig },
-        },
-      } = getState();
+      const { stockConfig } = Helpers.Stock.GetStockConfig();
+
       stockConfig.forEach((item, index) => {
         if (secid === item.secid) {
           const cloneStockSetting = JSON.parse(JSON.stringify(stockConfig));
@@ -75,8 +64,14 @@ export function deleteStockAction(secid: string): ThunkAction {
 export function setStockConfigAction(stockConfig: Stock.SettingItem[]): ThunkAction {
   return (dispatch, getState) => {
     try {
+      const {
+        stock: { stocks },
+      } = getState();
       Utils.SetStorage(CONST.STORAGE.STOCK_SETTING, stockConfig);
-      dispatch(syncStockConfigAction());
+      batch(() => {
+        dispatch(syncStockConfigAction());
+        dispatch(syncStocksStateAction(stocks));
+      });
     } catch (error) {
       console.log('设置股票配置出错', error);
     }
@@ -139,11 +134,9 @@ export function sortStocksCachedAction(responseStocks: Stock.ResponseItem[]): Pr
   return async (dispatch, getState) => {
     try {
       const {
-        stock: {
-          stocks,
-          config: { stockConfig },
-        },
+        stock: { stocks },
       } = getState();
+      const { stockConfig } = Helpers.Stock.GetStockConfig();
 
       const stocksCodeToMap = stocks.reduce((map, stock) => {
         map[stock.secid] = stock;
@@ -214,10 +207,12 @@ export function toggleAllStocksCollapseAction(): ThunkAction {
   };
 }
 
-export function syncStocksStateAction(stock: (Stock.ResponseItem & Stock.ExtraRow)[]): ThunkAction {
+export function syncStocksStateAction(stocks: (Stock.ResponseItem & Stock.ExtraRow)[]): ThunkAction {
   return (dispatch, getState) => {
     try {
-      dispatch({ type: SYNC_STOCKS, payload: stock });
+      const { codeMap } = Helpers.Stock.GetStockConfig();
+      const filterStocks = stocks.filter(({ secid }) => codeMap[secid]);
+      dispatch({ type: SYNC_STOCKS, payload: filterStocks });
     } catch (error) {
       console.log('同步股票状态出错', error);
     }

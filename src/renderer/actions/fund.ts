@@ -14,22 +14,24 @@ export const SET_REMOTE_FUNDS_LOADING = 'SET_REMOTE_FUNDS_LOADING';
 export const SET_FUNDS = 'SET_FUNDS';
 export const SET_FUNDS_LOADING = 'SET_FUNDS_LOADING';
 
-export function setFundConfigAction(config: Fund.SettingItem[]): ThunkAction {
+export function setFundConfigAction(config: Fund.SettingItem[], walletCode: string): ThunkAction {
   return (dispatch, getState) => {
     try {
       const {
         wallet: {
-          currentWalletCode,
           config: { walletConfig },
         },
       } = getState();
-
+      const walletState = Helpers.Wallet.GetCurrentWalletState();
       const newWalletConfig = walletConfig.map((item) => ({
         ...item,
-        funds: currentWalletCode === item.code ? config : item.funds,
+        funds: walletCode === item.code ? config : item.funds,
       }));
 
-      dispatch(setWalletConfigAction(newWalletConfig));
+      batch(() => {
+        dispatch(setWalletConfigAction(newWalletConfig));
+        dispatch(syncWalletStateAction(walletState));
+      });
     } catch (error) {
       console.log('设置基金配置出错', error);
     }
@@ -70,13 +72,16 @@ export function syncRemoteFundsAction(): ThunkAction {
 export function addFundAction(fund: Fund.SettingItem): ThunkAction {
   return (dispatch, getState) => {
     try {
-      const { fundConfig } = Helpers.Fund.GetFundConfig();
+      const {
+        wallet: { currentWalletCode },
+      } = getState();
+      const { fundConfig } = Helpers.Fund.GetFundConfig(currentWalletCode);
       const cloneFundConfig = Utils.DeepCopy(fundConfig);
       const exist = cloneFundConfig.find((item) => fund.code === item.code);
       if (!exist) {
         cloneFundConfig.push(fund);
       }
-      dispatch(setFundConfigAction(cloneFundConfig));
+      dispatch(setFundConfigAction(cloneFundConfig, currentWalletCode));
     } catch (error) {
       console.log('添加基金出错', error);
     }
@@ -86,7 +91,10 @@ export function addFundAction(fund: Fund.SettingItem): ThunkAction {
 export function updateFundAction(fund: { code: string; cyfe?: number; name?: string; cbj?: number | null }): ThunkAction {
   return (dispatch, getState) => {
     try {
-      const { fundConfig } = Helpers.Fund.GetFundConfig();
+      const {
+        wallet: { currentWalletCode },
+      } = getState();
+      const { fundConfig } = Helpers.Fund.GetFundConfig(currentWalletCode);
       const cloneFundConfig = Utils.DeepCopy(fundConfig);
       cloneFundConfig.forEach((item) => {
         if (fund.code === item.code) {
@@ -102,7 +110,7 @@ export function updateFundAction(fund: { code: string; cyfe?: number; name?: str
         }
       });
 
-      dispatch(setFundConfigAction(cloneFundConfig));
+      dispatch(setFundConfigAction(cloneFundConfig, currentWalletCode));
     } catch (error) {
       console.log('更新基金出错', error);
     }
@@ -112,12 +120,15 @@ export function updateFundAction(fund: { code: string; cyfe?: number; name?: str
 export function deleteFundAction(code: string): ThunkAction {
   return (dispatch, getState) => {
     try {
-      const { funds } = Helpers.Wallet.GetCurrentWallet();
-      funds.forEach((item, index) => {
+      const {
+        wallet: { currentWalletCode },
+      } = getState();
+      const { fundConfig } = Helpers.Fund.GetFundConfig(currentWalletCode);
+      fundConfig.forEach((item, index) => {
         if (code === item.code) {
-          const cloneFundConfig = Utils.DeepCopy(funds);
+          const cloneFundConfig = Utils.DeepCopy(fundConfig);
           cloneFundConfig.splice(index, 1);
-          dispatch(setFundConfigAction(cloneFundConfig));
+          dispatch(setFundConfigAction(cloneFundConfig, currentWalletCode));
         }
       });
     } catch (error) {
@@ -135,8 +146,8 @@ export function loadRemoteFundsAction(): ThunkAction {
         dispatch(setRemoteFundsAction(remoteFunds));
         dispatch({ type: SET_REMOTE_FUNDS_LOADING, payload: false });
       });
-    } catch {
-      console.log('加载远程基金库出错');
+    } catch (error) {
+      console.log('加载远程基金库出错', error);
       dispatch({ type: SET_REMOTE_FUNDS_LOADING, payload: false });
     }
   };
@@ -145,15 +156,18 @@ export function loadRemoteFundsAction(): ThunkAction {
 export function loadFundsAction(): PromiseAction {
   return async (dispatch, getState) => {
     try {
+      const {
+        wallet: { currentWalletCode },
+      } = getState();
+      const { fundConfig } = Helpers.Fund.GetFundConfig(currentWalletCode);
       dispatch({ type: SET_FUNDS_LOADING, payload: true });
-      const responseFunds = (await Helpers.Fund.GetFunds()).filter(Utils.NotEmpty);
-
+      const responseFunds = (await Helpers.Fund.GetFunds(fundConfig)).filter(Utils.NotEmpty);
       batch(() => {
+        dispatch(sortFundsCachedAction(responseFunds, currentWalletCode));
         dispatch({ type: SET_FUNDS_LOADING, payload: false });
-        dispatch(sortFundsCachedAction(responseFunds));
       });
-    } catch {
-      console.log('加载基金出错');
+    } catch (error) {
+      console.log('加载基金出错', error);
       dispatch({ type: SET_FUNDS_LOADING, payload: false });
     }
   };
@@ -162,8 +176,12 @@ export function loadFundsAction(): PromiseAction {
 export function loadFundsWithoutLoadingAction(): PromiseAction {
   return async (dispatch, getState) => {
     try {
-      const responseFunds = (await Helpers.Fund.GetFunds()).filter(Utils.NotEmpty);
-      dispatch(sortFundsCachedAction(responseFunds));
+      const {
+        wallet: { currentWalletCode },
+      } = getState();
+      const { fundConfig } = Helpers.Fund.GetFundConfig(currentWalletCode);
+      const responseFunds = (await Helpers.Fund.GetFunds(fundConfig)).filter(Utils.NotEmpty);
+      dispatch(sortFundsCachedAction(responseFunds, currentWalletCode));
     } catch (error) {
       console.log('静默加载基金失败', error);
     }
@@ -187,7 +205,7 @@ export function sortFundsAction(): ThunkAction {
   return (dispatch, getState) => {
     try {
       const { funds, updateTime, code } = Helpers.Wallet.GetCurrentWalletState();
-      const sortFunds = Helpers.Fund.SortFunds(funds);
+      const sortFunds = Helpers.Fund.SortFunds(funds, code);
       dispatch(syncWalletStateAction({ code, funds: sortFunds, updateTime }));
     } catch (error) {
       console.log('基金排序错误', error);
@@ -195,10 +213,10 @@ export function sortFundsAction(): ThunkAction {
   };
 }
 
-export function sortFundsCachedAction(responseFunds: Fund.ResponseItem[]): ThunkAction {
+export function sortFundsCachedAction(responseFunds: Fund.ResponseItem[], walletCode: string): ThunkAction {
   return (dispatch, getState) => {
     try {
-      const { fundConfig } = Helpers.Fund.GetFundConfig();
+      const { fundConfig } = Helpers.Fund.GetFundConfig(walletCode);
       const { funds, code } = Helpers.Wallet.GetCurrentWalletState();
       const now = dayjs().format('MM-DD HH:mm:ss');
       const fundsCodeToMap = funds.reduce((map, fund) => {
@@ -220,7 +238,7 @@ export function sortFundsCachedAction(responseFunds: Fund.ResponseItem[]): Thunk
           fundsWithChached.push(stateFund);
         }
       });
-      const sortFunds = Helpers.Fund.SortFunds(fundsWithChached);
+      const sortFunds = Helpers.Fund.SortFunds(fundsWithChached, code);
       dispatch(syncWalletStateAction({ code, funds: sortFunds, updateTime: now }));
     } catch (error) {
       console.log('基金带缓存排序出错', error);

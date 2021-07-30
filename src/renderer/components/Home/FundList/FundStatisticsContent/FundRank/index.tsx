@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 import { useHomeContext } from '@/components/Home';
-import { useResizeEchart, useRenderEcharts } from '@/utils/hooks';
+import { useResizeEchart, useRenderEcharts, useCurrentWallet } from '@/utils/hooks';
 import TypeSelection from '@/components/TypeSelection';
 import * as CONST from '@/constants';
 import * as Enums from '@/utils/enums';
@@ -25,6 +25,7 @@ const FundRank: React.FC<FundRankProps> = ({ funds = [], codes = [] }) => {
   const { ref: chartRef, chartInstance } = useResizeEchart(Math.max(CONST.DEFAULT.ECHARTS_SCALE, funds.length / 12));
   const [rankType, setRankType] = useState(rankTypeList[0]);
   const { varibleColors, darkMode } = useHomeContext();
+  const { currentWalletCode } = useCurrentWallet();
 
   useRenderEcharts(
     () => {
@@ -81,8 +82,8 @@ const FundRank: React.FC<FundRankProps> = ({ funds = [], codes = [] }) => {
             },
             data: funds
               .sort((a, b) => {
-                const calcA = Helpers.Fund.CalcFund(a);
-                const calcB = Helpers.Fund.CalcFund(b);
+                const calcA = Helpers.Fund.CalcFund(a, currentWalletCode);
+                const calcB = Helpers.Fund.CalcFund(b, currentWalletCode);
                 const calcWalletsA = Helpers.Fund.CalcWalletsFund(a, codes);
                 const calcWalletsB = Helpers.Fund.CalcWalletsFund(b, codes);
                 if (rankType.type === Enums.FundRankType.Sy) {
@@ -96,7 +97,7 @@ const FundRank: React.FC<FundRankProps> = ({ funds = [], codes = [] }) => {
                 }
               })
               .map((fund) => {
-                const calcFundResult = Helpers.Fund.CalcFund(fund);
+                const calcFundResult = Helpers.Fund.CalcFund(fund, currentWalletCode);
                 const calcWalletsFundResult = Helpers.Fund.CalcWalletsFund(fund, codes);
                 const value =
                   rankType.type === Enums.FundRankType.Sy
@@ -124,7 +125,7 @@ const FundRank: React.FC<FundRankProps> = ({ funds = [], codes = [] }) => {
       });
     },
     chartInstance,
-    [darkMode, funds, rankType, codes]
+    [darkMode, funds, rankType, codes, currentWalletCode]
   );
 
   return (

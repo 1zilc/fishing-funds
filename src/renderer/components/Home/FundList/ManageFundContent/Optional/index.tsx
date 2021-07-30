@@ -24,7 +24,7 @@ const { dialog } = window.contextModules.electron;
 const Optional: React.FC<OptionalProps> = () => {
   const dispatch = useDispatch();
   const { show: showAddDrawer, set: setAddDrawer, close: closeAddDrawer } = useDrawer(null);
-  const { currentWalletFundsConfig: fundConfig, currentWalletFundsCodeMap: codeMap } = useCurrentWallet();
+  const { currentWalletFundsConfig: fundConfig, currentWalletFundsCodeMap: codeMap, currentWalletCode } = useCurrentWallet();
 
   const {
     data: editFundData,
@@ -52,7 +52,7 @@ const Optional: React.FC<OptionalProps> = () => {
         cbj: fund.cbj,
       };
     });
-    dispatch(setFundConfigAction(fundConfig));
+    dispatch(setFundConfigAction(fundConfig, currentWalletCode));
   }
 
   async function onRemoveFund(fund: Fund.SettingItem) {

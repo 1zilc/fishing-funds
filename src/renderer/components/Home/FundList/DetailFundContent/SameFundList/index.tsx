@@ -6,7 +6,7 @@ import Empty from '@/components/Empty';
 import FundRow from '@/components/Home/FundList/FundRow';
 import DetailFundContent from '@/components/Home/FundList/DetailFundContent';
 import CustomDrawer from '@/components/CustomDrawer';
-import { useFixTimeToDo, useDrawer } from '@/utils/hooks';
+import { useFixTimeToDo, useDrawer, useCurrentWallet } from '@/utils/hooks';
 import { StoreState } from '@/reducers/types';
 import * as Helpers from '@/helpers';
 import styles from './index.scss';
@@ -17,9 +17,8 @@ export interface SameFundListProps {
 const SameFundList: React.FC<SameFundListProps> = ({ swithSameType = [] }) => {
   const { autoFreshSetting, freshDelaySetting } = useSelector((state: StoreState) => state.setting.systemSetting);
   const [sameFunds, setSameFunds] = useState<(Fund.ResponseItem & Fund.ExtraRow)[]>([]);
-
   const { data: detailFundCode, show: showDetailDrawer, set: setDetailDrawer, close: closeDetailDrawer } = useDrawer('');
-
+  const { currentWalletCode } = useCurrentWallet();
   const { run: runGetFunds } = useRequest(Helpers.Fund.GetFunds, {
     manual: true,
     throwOnError: true,
@@ -36,8 +35,8 @@ const SameFundList: React.FC<SameFundListProps> = ({ swithSameType = [] }) => {
     onSuccess: (result: Fund.FixData[]) => {
       const fixFunds = Helpers.Fund.MergeFixFunds(sameFunds, result);
       const cloneFunds = fixFunds.filter(Boolean).sort((a, b) => {
-        const calcA = Helpers.Fund.CalcFund(a);
-        const calcB = Helpers.Fund.CalcFund(b);
+        const calcA = Helpers.Fund.CalcFund(a, currentWalletCode);
+        const calcB = Helpers.Fund.CalcFund(b, currentWalletCode);
         return Number(calcB.gszzl) - Number(calcA.gszzl);
       });
       setSameFunds(cloneFunds);

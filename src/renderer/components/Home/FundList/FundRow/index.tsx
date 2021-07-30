@@ -8,6 +8,7 @@ import { ReactComponent as ArrowUpIcon } from '@/assets/icons/arrow-up.svg';
 import Collapse from '@/components/Collapse';
 import { toggleFundCollapseAction } from '@/actions/fund';
 import { StoreState } from '@/reducers/types';
+import { useCurrentWallet } from '@/utils/hooks';
 import * as Utils from '@/utils';
 import * as Helpers from '@/helpers';
 import styles from './index.scss';
@@ -28,7 +29,8 @@ const FundRow: React.FC<RowProps> = (props) => {
   const { fund, readOnly } = props;
   const dispatch = useDispatch();
   const { conciseSetting } = useSelector((state: StoreState) => state.setting.systemSetting);
-  const calcFundResult = Helpers.Fund.CalcFund(fund);
+  const { currentWalletCode } = useCurrentWallet();
+  const calcFundResult = Helpers.Fund.CalcFund(fund, currentWalletCode);
   const { isFix } = calcFundResult;
 
   function onRowClick() {

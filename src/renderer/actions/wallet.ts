@@ -1,4 +1,5 @@
 import dayjs from 'dayjs';
+import { batch } from 'react-redux';
 
 import { ThunkAction, PromiseAction } from '@/reducers/types';
 import * as Enums from '@/utils/enums';
@@ -71,13 +72,8 @@ export function syncWalletConfigAction(): ThunkAction {
 export function addWalletAction(wallet: Wallet.SettingItem): ThunkAction {
   return (dispatch, getState) => {
     try {
-      const {
-        wallet: {
-          config: { walletConfig },
-        },
-      } = getState();
-      Utils.SetStorage(CONST.STORAGE.WALLET_SETTING, [...walletConfig, wallet]);
-      dispatch(syncWalletConfigAction());
+      const { walletConfig } = Helpers.Wallet.GetWalletConfig();
+      dispatch(setWalletConfigAction([...walletConfig, wallet]));
     } catch (error) {
       console.log('添加钱包出错', error);
     }
@@ -87,19 +83,14 @@ export function addWalletAction(wallet: Wallet.SettingItem): ThunkAction {
 export function updateWalletAction(wallet: Wallet.SettingItem): ThunkAction {
   return (dispatch, getState) => {
     try {
-      const {
-        wallet: {
-          config: { walletConfig },
-        },
-      } = getState();
+      const { walletConfig } = Helpers.Wallet.GetWalletConfig();
       walletConfig.forEach((item) => {
         if (wallet.code === item.code) {
           item.name = wallet.name;
           item.iconIndex = wallet.iconIndex;
         }
       });
-      Utils.SetStorage(CONST.STORAGE.WALLET_SETTING, walletConfig);
-      dispatch(syncWalletConfigAction());
+      dispatch(setWalletConfigAction(walletConfig));
     } catch (error) {
       console.log('更新钱包出错', error);
     }
@@ -109,19 +100,14 @@ export function updateWalletAction(wallet: Wallet.SettingItem): ThunkAction {
 export function deleteWalletAction(code: string): ThunkAction {
   return (dispatch, getState) => {
     try {
-      const {
-        wallet: {
-          config: { walletConfig },
-        },
-      } = getState();
+      const { walletConfig } = Helpers.Wallet.GetWalletConfig();
       walletConfig.forEach((item, index) => {
         if (code === item.code) {
           const cloneWalletSetting = Utils.DeepCopy(walletConfig);
           cloneWalletSetting.splice(index, 1);
-          Utils.SetStorage(CONST.STORAGE.WALLET_SETTING, cloneWalletSetting);
+          dispatch(setWalletConfigAction(cloneWalletSetting));
         }
       });
-      dispatch(syncWalletConfigAction());
     } catch (error) {
       console.log('删除钱包出错', error);
     }
@@ -132,7 +118,10 @@ export function selectWalletAction(code: string): ThunkAction {
   return (dispatch, getState) => {
     try {
       Utils.SetStorage(CONST.STORAGE.CURRENT_WALLET_CODE, code);
-      dispatch({ type: CHANGE_CURRENT_WALLET_CODE, payload: code });
+      batch(() => {
+        dispatch({ type: CHANGE_CURRENT_WALLET_CODE, payload: code });
+        dispatch(syncWalletConfigAction());
+      });
     } catch (error) {
       console.log('选择钱包出错', error);
     }
@@ -142,14 +131,10 @@ export function selectWalletAction(code: string): ThunkAction {
 export function loadWalletsFundsAction(): PromiseAction {
   return async (dispatch, getState) => {
     try {
-      const {
-        wallet: {
-          config: { walletConfig },
-        },
-      } = getState();
+      const { walletConfig } = Helpers.Wallet.GetWalletConfig();
       const collects = walletConfig.map(({ funds: fundsConfig, code: walletCode }) => async () => {
-        const responseFunds = await Helpers.Fund.GetFunds(fundsConfig);
-        const sortFunds = Helpers.Fund.SortFunds(responseFunds.filter(Utils.NotEmpty));
+        const responseFunds = (await Helpers.Fund.GetFunds(fundsConfig)).filter(Utils.NotEmpty);
+        const sortFunds = Helpers.Fund.SortFunds(responseFunds, walletCode);
         const now = dayjs().format('MM-DD HH:mm:ss');
         dispatch(
           syncWalletStateAction({
@@ -207,21 +192,20 @@ export function syncWalletStateAction(state: Wallet.StateItem): ThunkAction {
   return (dispatch, getState) => {
     try {
       const {
-        wallet: {
-          wallets,
-          config: { codeMap },
-        },
+        wallet: { wallets },
       } = getState();
+      const { codeMap } = Helpers.Wallet.GetWalletConfig();
       const cloneWallets = Utils.DeepCopy(wallets);
       const currentWalletConfig = codeMap[state.code];
+      const { codeMap: configCodeMap } = Helpers.Fund.GetFundConfig(state.code);
       const walletState = cloneWallets.find(({ code }) => code === state.code);
-      const fundsCodeToMap = (walletState?.funds || []).reduce((map, fund) => {
+      const stateCodeToMap = (walletState?.funds || []).reduce((map, fund) => {
         map[fund.fundcode!] = fund;
         return map;
       }, {} as Record<string, Fund.ResponseItem & Fund.FixData>);
 
       state.funds = state.funds.map((_) => ({
-        ...(fundsCodeToMap[_!.fundcode!] || {}),
+        ...(stateCodeToMap[_.fundcode!] || {}),
         ..._,
       }));
 
@@ -232,11 +216,13 @@ export function syncWalletStateAction(state: Wallet.StateItem): ThunkAction {
 
       currentWalletConfig.funds.forEach((fund) => {
         const responseFund = itemFundsCodeToMap[fund.code];
-        const stateFund = fundsCodeToMap[fund.code];
+        const stateFund = stateCodeToMap[fund.code];
         if (!responseFund && stateFund) {
           state.funds.push(stateFund);
         }
       });
+
+      state.funds = state.funds.filter(({ fundcode }) => configCodeMap[fundcode!]);
 
       cloneWallets.forEach((wallet, index) => {
         if (wallet.code === state.code) {
@@ -264,7 +250,7 @@ export function syncFixWalletStateAction(state: Wallet.StateItem): ThunkAction {
       const cloneWallets = Utils.DeepCopy(wallets);
       const { funds } = Helpers.Wallet.GetWalletState(state.code);
       const mergefixFunds = Helpers.Fund.MergeFixFunds(funds, state.funds);
-      const sortFunds = Helpers.Fund.SortFunds(mergefixFunds);
+      const sortFunds = Helpers.Fund.SortFunds(mergefixFunds, state.code);
 
       cloneWallets.forEach((wallet, index) => {
         if (wallet.code === state.code) {

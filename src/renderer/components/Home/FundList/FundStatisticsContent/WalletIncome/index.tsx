@@ -46,7 +46,7 @@ const WalletIncome: React.FC<WalletIncomeProps> = ({ funds = [], codes = [] }) =
         },
         xAxis: {
           type: 'category',
-          data: codes.map((code) => Helpers.Wallet.GetCurrentWallet(code).name),
+          data: codes.map((code) => Helpers.Wallet.GetCurrentWalletConfig(code).name),
           axisLabel: {
             fontSize: 10,
           },

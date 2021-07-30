@@ -1,7 +1,7 @@
 import { useCallback, useLayoutEffect, useMemo, useState, useEffect, useRef, Fragment } from 'react';
 import { useInterval, useBoolean, useThrottleFn, useSize } from 'ahooks';
 import { bindActionCreators } from 'redux';
-import { useDispatch, useSelector } from 'react-redux';
+import { batch, useDispatch, useSelector } from 'react-redux';
 import dayjs from 'dayjs';
 import * as echarts from 'echarts';
 
@@ -100,8 +100,8 @@ export function useConfigClipboard() {
 
   useLayoutEffect(() => {
     ipcRenderer.on('clipboard-funds-import', async (e, data) => {
-      const limit = 1024;
       try {
+        const limit = 1024;
         const text = clipboard.readText();
         const json: any[] = JSON.parse(text);
         if (json.length > limit) {
@@ -117,27 +117,29 @@ export function useConfigClipboard() {
             name: '',
             cyfe: Number(fund.cyfe) < 0 ? 0 : Number(fund.cyfe) || 0,
             code: fund.code && String(fund.code),
-            cbj: fund.cbj !== undefined && fund.cbj !== null ? (Number(fund.cbj) < 0 ? undefined : Number(fund.cbj)) : undefined,
+            cbj: Utils.NotEmpty(fund.cbj) ? (Number(fund.cbj) < 0 ? undefined : Number(fund.cbj)) : undefined,
           }))
           .filter(({ code }) => code);
         const codeMap = Helpers.Fund.GetCodeMap(fundConfig);
         // 去重复
         const fundConfigSet = Object.entries(codeMap).map(([code, fund]) => fund);
-        const responseFunds = await Helpers.Fund.GetFunds(fundConfigSet);
-        const znewFundConfig = responseFunds.filter(Boolean);
-        const newFundConfig = znewFundConfig.map((fund) => ({
+        const responseFunds = (await Helpers.Fund.GetFunds(fundConfigSet)).filter(Utils.NotEmpty);
+        const newFundConfig = responseFunds.map((fund) => ({
           name: fund!.name!,
           code: fund!.fundcode!,
           cyfe: codeMap[fund!.fundcode!].cyfe,
           cbj: codeMap[fund!.fundcode!].cbj,
         }));
-        dispatch(setFundConfigAction(newFundConfig));
+        const currentWalletCode = Helpers.Wallet.GetCurrentWalletCode();
+        batch(() => {
+          dispatch(setFundConfigAction(newFundConfig, currentWalletCode));
+          dispatch(loadFundsAction());
+        });
         await dialog.showMessageBox({
           type: 'info',
           title: `导入完成`,
           message: `更新：${newFundConfig.length}个，总共：${json.length}个`,
         });
-        dispatch(loadFundsAction());
       } catch (error) {
         console.log('基金json解析失败', error);
         dialog.showMessageBox({
@@ -149,7 +151,8 @@ export function useConfigClipboard() {
     });
     ipcRenderer.on('clipboard-funds-copy', (e, data) => {
       try {
-        const { fundConfig } = Helpers.Fund.GetFundConfig();
+        const currentWalletCode = Helpers.Wallet.GetCurrentWalletCode();
+        const { fundConfig } = Helpers.Fund.GetFundConfig(currentWalletCode);
         clipboard.writeText(JSON.stringify(fundConfig));
         dialog.showMessageBox({
           title: `复制成功`,
@@ -169,10 +172,11 @@ export function useConfigClipboard() {
 
 export function useTrayContent() {
   const { trayContentSetting } = useSelector((state: StoreState) => state.setting.systemSetting);
+  const currentWalletCode = useSelector((state: StoreState) => state.wallet.currentWalletCode);
   const {
     currentWalletState: { funds },
   } = useCurrentWallet();
-  const calcResult = Helpers.Fund.CalcFunds(funds);
+  const calcResult = Helpers.Fund.CalcFunds(funds, currentWalletCode);
 
   useEffect(() => {
     let content = '';
@@ -395,6 +399,7 @@ export function useCurrentWallet() {
   };
   const currentWalletFundsCodeMap = Helpers.Fund.GetCodeMap(currentWalletConfig.funds);
   const currentWalletFundsConfig = currentWalletConfig.funds;
+  currentWalletState.funds = currentWalletState.funds.filter(({ fundcode }) => currentWalletFundsCodeMap[fundcode!]);
 
   return {
     currentWalletFundsConfig, // 当前钱包基金配置

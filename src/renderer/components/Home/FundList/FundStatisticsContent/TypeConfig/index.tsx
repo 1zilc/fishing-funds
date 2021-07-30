@@ -2,7 +2,7 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 
 import { useHomeContext } from '@/components/Home';
-import { useResizeEchart, useRenderEcharts } from '@/utils/hooks';
+import { useResizeEchart, useRenderEcharts, useCurrentWallet } from '@/utils/hooks';
 import { StoreState } from '@/reducers/types';
 import * as CONST from '@/constants';
 import * as Utils from '@/utils';
@@ -16,6 +16,7 @@ interface TypeConfigProps {
 const TypeConfig: React.FC<TypeConfigProps> = ({ funds = [] }) => {
   const { ref: chartRef, chartInstance } = useResizeEchart(CONST.DEFAULT.ECHARTS_SCALE);
   const { varibleColors, darkMode } = useHomeContext();
+  const { currentWalletCode } = useCurrentWallet();
 
   useRenderEcharts(
     () => {
@@ -36,7 +37,7 @@ const TypeConfig: React.FC<TypeConfigProps> = ({ funds = [] }) => {
           data: Object.entries(typeMap).map(([type, funds]) => ({
             name: type,
             children: funds.map((fund) => {
-              const calcFundResult = Helpers.Fund.CalcFund(fund);
+              const calcFundResult = Helpers.Fund.CalcFund(fund, currentWalletCode);
               return {
                 name: calcFundResult.name,
                 value: 1,
@@ -81,7 +82,7 @@ const TypeConfig: React.FC<TypeConfigProps> = ({ funds = [] }) => {
       });
     },
     chartInstance,
-    [darkMode, funds]
+    [darkMode, funds, currentWalletCode]
   );
 
   return (

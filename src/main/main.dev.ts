@@ -11,13 +11,12 @@
 // import 'core-js/stable';
 // import 'regenerator-runtime/runtime';
 import path from 'path';
+import log from 'electron-log';
+import windowStateKeeper from 'electron-window-state';
 import { app, globalShortcut, ipcMain, nativeImage, nativeTheme, Tray, Menu, dialog } from 'electron';
-
 import { menubar, Menubar } from 'menubar';
 import AppUpdater from './autoUpdater';
 import { resolveHtmlPath } from './util';
-
-const windowStateKeeper = require('electron-window-state');
 
 let myWindow: any = null;
 let mb: Menubar;
@@ -63,6 +62,7 @@ const nativeIcon = nativeImage.createFromPath(getAssetPath('icon.png'));
 
 if (process.env.NODE_ENV === 'production') {
   const sourceMapSupport = require('source-map-support');
+  Object.assign(console, log.functions);
   sourceMapSupport.install();
 }
 
@@ -224,6 +224,5 @@ if (!isSingleInstance) {
       myWindow.focus();
     }
   });
-
   app.whenReady().then(createMenubar).catch(console.log);
 }

@@ -22,9 +22,9 @@ export function GetWalletConfig() {
   return { walletConfig, codeMap };
 }
 
-export function GetCurrentWallet(code?: string) {
+export function GetCurrentWalletConfig(code: string) {
   const { walletConfig } = GetWalletConfig();
-  const currentWalletCode = code || Utils.GetStorage(CONST.STORAGE.CURRENT_WALLET_CODE, defaultWallet.code);
+  const currentWalletCode = code;
   return walletConfig.find(({ code }) => currentWalletCode === code) || defaultWallet;
 }
 
@@ -44,10 +44,7 @@ export function GetCurrentWalletCode() {
 }
 
 export function GetCurrentWalletState() {
-  const {
-    wallet: { currentWalletCode },
-  } = store.getState();
-
+  const currentWalletCode = GetCurrentWalletCode();
   return GetWalletState(currentWalletCode);
 }
 

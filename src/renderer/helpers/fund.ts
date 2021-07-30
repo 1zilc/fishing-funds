@@ -14,8 +14,8 @@ export interface CodeRemoteFundMap {
   [index: string]: Fund.RemoteFund;
 }
 
-export function GetFundConfig(code?: string) {
-  const wallet = Helpers.Wallet.GetCurrentWallet(code);
+export function GetFundConfig(walletCode: string) {
+  const wallet = Helpers.Wallet.GetCurrentWalletConfig(walletCode);
   const fundConfig = wallet.funds;
   const codeMap = GetCodeMap(fundConfig);
   return { fundConfig, codeMap };
@@ -38,8 +38,9 @@ export function GetRemoteFunds() {
   );
 }
 
-export async function GetFunds(config?: Fund.SettingItem[]) {
-  const { fundConfig } = GetFundConfig();
+export async function GetFunds(config: Fund.SettingItem[]) {
+  const walletCode = Helpers.Wallet.GetCurrentWalletCode();
+  const { fundConfig } = GetFundConfig(walletCode);
   const { fundApiTypeSetting } = Helpers.Setting.GetSystemSetting();
   const collectors = (config || fundConfig).map(
     ({ code }) =>
@@ -84,8 +85,8 @@ export async function GetFund(code: string) {
   }
 }
 
-export function CalcFund(fund: Fund.ResponseItem & Fund.FixData, code?: string) {
-  const { codeMap } = GetFundConfig(code);
+export function CalcFund(fund: Fund.ResponseItem & Fund.FixData, walletCode: string) {
+  const { codeMap } = GetFundConfig(walletCode);
   const isFix = fund.fixDate && fund.fixDate === fund.gztime?.slice(5, 10);
   const cyfe = codeMap[fund.fundcode!]?.cyfe || 0;
   const cbj = codeMap[fund.fundcode!]?.cbj;
@@ -123,7 +124,7 @@ export function CalcFund(fund: Fund.ResponseItem & Fund.FixData, code?: string) 
   };
 }
 
-export function CalcFunds(funds: Fund.ResponseItem[] = [], code?: string) {
+export function CalcFunds(funds: Fund.ResponseItem[] = [], code: string) {
   const { codeMap } = GetFundConfig(code);
   const [zje, gszje, sygz, cysy, cbje] = funds.reduce(
     ([a, b, c, d, e], fund) => {
@@ -194,16 +195,16 @@ export function MergeFixFunds(funds: (Fund.ResponseItem & Fund.FixData)[], fixFu
   return cloneFunds;
 }
 
-export function SortFunds(funds: Fund.ResponseItem[]) {
-  const { codeMap } = GetFundConfig();
+export function SortFunds(funds: Fund.ResponseItem[], walletCode: string) {
+  const { codeMap } = GetFundConfig(walletCode);
   const {
     fundSortMode: { type: fundSortType, order: fundSortorder },
   } = Helpers.Sort.GetSortMode();
   const sortList = Utils.DeepCopy(funds);
 
   sortList.sort((a, b) => {
-    const calcA = Helpers.Fund.CalcFund(a);
-    const calcB = Helpers.Fund.CalcFund(b);
+    const calcA = Helpers.Fund.CalcFund(a, walletCode);
+    const calcB = Helpers.Fund.CalcFund(b, walletCode);
     const t = fundSortorder === Enums.SortOrderType.Asc ? 1 : -1;
     switch (fundSortType) {
       case Enums.FundSortType.Growth:
