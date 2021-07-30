@@ -132,6 +132,7 @@ export function deleteWalletAction(code: string): ThunkAction {
 export function selectWalletAction(code: string): ThunkAction {
   return (dispatch, getState) => {
     try {
+      Utils.SetStorage(CONST.STORAGE.CURRENT_WALLET_CODE, code);
       batch(() => {
         dispatch({ type: CHANGE_CURRENT_WALLET_CODE, payload: code });
         dispatch(syncWalletConfigAction());
