@@ -14,19 +14,18 @@ export const SET_REMOTE_FUNDS_LOADING = 'SET_REMOTE_FUNDS_LOADING';
 export const SET_FUNDS = 'SET_FUNDS';
 export const SET_FUNDS_LOADING = 'SET_FUNDS_LOADING';
 
-export function setFundConfigAction(config: Fund.SettingItem[]): ThunkAction {
+export function setFundConfigAction(config: Fund.SettingItem[], walletCode: string): ThunkAction {
   return (dispatch, getState) => {
     try {
       const {
         wallet: {
-          currentWalletCode,
           config: { walletConfig },
         },
       } = getState();
 
       const newWalletConfig = walletConfig.map((item) => ({
         ...item,
-        funds: currentWalletCode === item.code ? config : item.funds,
+        funds: walletCode === item.code ? config : item.funds,
       }));
 
       dispatch(setWalletConfigAction(newWalletConfig));
@@ -79,7 +78,7 @@ export function addFundAction(fund: Fund.SettingItem): ThunkAction {
       if (!exist) {
         cloneFundConfig.push(fund);
       }
-      dispatch(setFundConfigAction(cloneFundConfig));
+      dispatch(setFundConfigAction(cloneFundConfig, currentWalletCode));
     } catch (error) {
       console.log('添加基金出错', error);
     }
@@ -108,7 +107,7 @@ export function updateFundAction(fund: { code: string; cyfe?: number; name?: str
         }
       });
 
-      dispatch(setFundConfigAction(cloneFundConfig));
+      dispatch(setFundConfigAction(cloneFundConfig, currentWalletCode));
     } catch (error) {
       console.log('更新基金出错', error);
     }
@@ -126,7 +125,7 @@ export function deleteFundAction(code: string): ThunkAction {
         if (code === item.code) {
           const cloneFundConfig = Utils.DeepCopy(fundConfig);
           cloneFundConfig.splice(index, 1);
-          dispatch(setFundConfigAction(cloneFundConfig));
+          dispatch(setFundConfigAction(cloneFundConfig, currentWalletCode));
         }
       });
     } catch (error) {

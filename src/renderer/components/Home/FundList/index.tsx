@@ -19,11 +19,7 @@ const FundList: React.FC<FundListProps> = (props) => {
   const {
     currentWalletState: { funds },
   } = useCurrentWallet();
-  console.log(funds);
-
   const fundsLoading = useSelector((state: StoreState) => state.fund.fundsLoading);
-  const a = useSelector((state: StoreState) => state.wallet.wallets);
-
   const {
     data: editFundData,
     show: showEditDrawer,

@@ -44,7 +44,6 @@ export function useHomeContext() {
 
 const FundGroup = () => {
   const { currentWalletFundsCodeMap: fundCodeMap, currentWalletCode } = useCurrentWallet();
-  console.log(fundCodeMap);
 
   return (
     <GroupTab>

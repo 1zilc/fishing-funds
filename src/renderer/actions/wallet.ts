@@ -132,8 +132,6 @@ export function deleteWalletAction(code: string): ThunkAction {
 export function selectWalletAction(code: string): ThunkAction {
   return (dispatch, getState) => {
     try {
-      const config = Helpers.Wallet.GetWalletConfig();
-
       batch(() => {
         dispatch({ type: CHANGE_CURRENT_WALLET_CODE, payload: code });
         dispatch(syncWalletConfigAction());
@@ -219,15 +217,15 @@ export function syncWalletStateAction(state: Wallet.StateItem): ThunkAction {
       } = getState();
       const cloneWallets = Utils.DeepCopy(wallets);
       const currentWalletConfig = codeMap[state.code];
-      const configCodeMap = Helpers.Fund.GetCodeMap(currentWalletConfig.funds);
+      const { codeMap: configCodeMap } = Helpers.Fund.GetFundConfig(state.code);
       const walletState = cloneWallets.find(({ code }) => code === state.code);
-      const fundsCodeToMap = (walletState?.funds || []).reduce((map, fund) => {
+      const stateCodeToMap = (walletState?.funds || []).reduce((map, fund) => {
         map[fund.fundcode!] = fund;
         return map;
       }, {} as Record<string, Fund.ResponseItem & Fund.FixData>);
 
       state.funds = state.funds.map((_) => ({
-        ...(fundsCodeToMap[_.fundcode!] || {}),
+        ...(stateCodeToMap[_.fundcode!] || {}),
         ..._,
       }));
 
@@ -238,7 +236,7 @@ export function syncWalletStateAction(state: Wallet.StateItem): ThunkAction {
 
       currentWalletConfig.funds.forEach((fund) => {
         const responseFund = itemFundsCodeToMap[fund.code];
-        const stateFund = fundsCodeToMap[fund.code];
+        const stateFund = stateCodeToMap[fund.code];
         if (!responseFund && stateFund) {
           state.funds.push(stateFund);
         }
