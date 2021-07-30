@@ -130,8 +130,8 @@ export function useConfigClipboard() {
           cyfe: codeMap[fund!.fundcode!].cyfe,
           cbj: codeMap[fund!.fundcode!].cbj,
         }));
+        const currentWalletCode = Helpers.Wallet.GetCurrentWalletCode();
         batch(() => {
-          const currentWalletCode = Helpers.Wallet.GetCurrentWalletCode();
           dispatch(setFundConfigAction(newFundConfig, currentWalletCode));
           dispatch(loadFundsAction());
         });

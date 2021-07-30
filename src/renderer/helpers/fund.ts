@@ -15,7 +15,7 @@ export interface CodeRemoteFundMap {
 }
 
 export function GetFundConfig(walletCode: string) {
-  const wallet = Helpers.Wallet.GetWalletConfig(walletCode);
+  const wallet = Helpers.Wallet.GetCurrentWalletConfig(walletCode);
   const fundConfig = wallet.funds;
   const codeMap = GetCodeMap(fundConfig);
   return { fundConfig, codeMap };

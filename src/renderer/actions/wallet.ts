@@ -61,7 +61,7 @@ export function setWalletConfigAction(config: Wallet.SettingItem[]): ThunkAction
 export function syncWalletConfigAction(): ThunkAction {
   return (dispatch, getState) => {
     try {
-      const config = Helpers.Wallet.GetCurrentWallet();
+      const config = Helpers.Wallet.GetWalletConfig();
       dispatch({ type: SYNC_WALLET_CONFIG, payload: config });
     } catch (error) {
       console.log('同步钱包配置出错', error);
@@ -72,13 +72,8 @@ export function syncWalletConfigAction(): ThunkAction {
 export function addWalletAction(wallet: Wallet.SettingItem): ThunkAction {
   return (dispatch, getState) => {
     try {
-      const {
-        wallet: {
-          config: { walletConfig },
-        },
-      } = getState();
-      Utils.SetStorage(CONST.STORAGE.WALLET_SETTING, [...walletConfig, wallet]);
-      dispatch(syncWalletConfigAction());
+      const { walletConfig } = Helpers.Wallet.GetWalletConfig();
+      dispatch(setWalletConfigAction([...walletConfig, wallet]));
     } catch (error) {
       console.log('添加钱包出错', error);
     }
@@ -88,19 +83,14 @@ export function addWalletAction(wallet: Wallet.SettingItem): ThunkAction {
 export function updateWalletAction(wallet: Wallet.SettingItem): ThunkAction {
   return (dispatch, getState) => {
     try {
-      const {
-        wallet: {
-          config: { walletConfig },
-        },
-      } = getState();
+      const { walletConfig } = Helpers.Wallet.GetWalletConfig();
       walletConfig.forEach((item) => {
         if (wallet.code === item.code) {
           item.name = wallet.name;
           item.iconIndex = wallet.iconIndex;
         }
       });
-      Utils.SetStorage(CONST.STORAGE.WALLET_SETTING, walletConfig);
-      dispatch(syncWalletConfigAction());
+      dispatch(setWalletConfigAction(walletConfig));
     } catch (error) {
       console.log('更新钱包出错', error);
     }
@@ -110,19 +100,14 @@ export function updateWalletAction(wallet: Wallet.SettingItem): ThunkAction {
 export function deleteWalletAction(code: string): ThunkAction {
   return (dispatch, getState) => {
     try {
-      const {
-        wallet: {
-          config: { walletConfig },
-        },
-      } = getState();
+      const { walletConfig } = Helpers.Wallet.GetWalletConfig();
       walletConfig.forEach((item, index) => {
         if (code === item.code) {
           const cloneWalletSetting = Utils.DeepCopy(walletConfig);
           cloneWalletSetting.splice(index, 1);
-          Utils.SetStorage(CONST.STORAGE.WALLET_SETTING, cloneWalletSetting);
+          dispatch(setWalletConfigAction(cloneWalletSetting));
         }
       });
-      dispatch(syncWalletConfigAction());
     } catch (error) {
       console.log('删除钱包出错', error);
     }
@@ -146,11 +131,7 @@ export function selectWalletAction(code: string): ThunkAction {
 export function loadWalletsFundsAction(): PromiseAction {
   return async (dispatch, getState) => {
     try {
-      const {
-        wallet: {
-          config: { walletConfig },
-        },
-      } = getState();
+      const { walletConfig } = Helpers.Wallet.GetWalletConfig();
       const collects = walletConfig.map(({ funds: fundsConfig, code: walletCode }) => async () => {
         const responseFunds = (await Helpers.Fund.GetFunds(fundsConfig)).filter(Utils.NotEmpty);
         const sortFunds = Helpers.Fund.SortFunds(responseFunds, walletCode);
@@ -211,11 +192,9 @@ export function syncWalletStateAction(state: Wallet.StateItem): ThunkAction {
   return (dispatch, getState) => {
     try {
       const {
-        wallet: {
-          wallets,
-          config: { codeMap },
-        },
+        wallet: { wallets },
       } = getState();
+      const { codeMap } = Helpers.Wallet.GetWalletConfig();
       const cloneWallets = Utils.DeepCopy(wallets);
       const currentWalletConfig = codeMap[state.code];
       const { codeMap: configCodeMap } = Helpers.Fund.GetFundConfig(state.code);

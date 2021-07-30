@@ -16,7 +16,7 @@ const WalletConfig: React.FC<WalletConfigProps> = ({ funds, codes }) => {
 
   useRenderEcharts(
     () => {
-      const walletsName = codes.map((code) => Helpers.Wallet.GetWalletConfig(code).name);
+      const walletsName = codes.map((code) => Helpers.Wallet.GetCurrentWalletConfig(code).name);
       chartInstance?.setOption(
         {
           tooltip: {

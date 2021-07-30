@@ -22,13 +22,16 @@ export function setFundConfigAction(config: Fund.SettingItem[], walletCode: stri
           config: { walletConfig },
         },
       } = getState();
-
+      const walletState = Helpers.Wallet.GetCurrentWalletState();
       const newWalletConfig = walletConfig.map((item) => ({
         ...item,
         funds: walletCode === item.code ? config : item.funds,
       }));
 
-      dispatch(setWalletConfigAction(newWalletConfig));
+      batch(() => {
+        dispatch(setWalletConfigAction(newWalletConfig));
+        dispatch(syncWalletStateAction(walletState));
+      });
     } catch (error) {
       console.log('设置基金配置出错', error);
     }
