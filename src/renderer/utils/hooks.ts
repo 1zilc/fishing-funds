@@ -399,6 +399,7 @@ export function useCurrentWallet() {
   };
   const currentWalletFundsCodeMap = Helpers.Fund.GetCodeMap(currentWalletConfig.funds);
   const currentWalletFundsConfig = currentWalletConfig.funds;
+  currentWalletState.funds = currentWalletState.funds.filter(({ fundcode }) => currentWalletFundsCodeMap[fundcode!]);
 
   return {
     currentWalletFundsConfig, // 当前钱包基金配置
