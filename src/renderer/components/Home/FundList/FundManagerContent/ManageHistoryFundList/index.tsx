@@ -7,7 +7,7 @@ import FundRow from '@/components/Home/FundList/FundRow';
 import DetailFundContent from '@/components/Home/FundList/DetailFundContent';
 import CustomDrawer from '@/components/CustomDrawer';
 import { StoreState } from '@/reducers/types';
-import { useFixTimeToDo, useDrawer } from '@/utils/hooks';
+import { useFixTimeToDo, useDrawer, useCurrentWallet } from '@/utils/hooks';
 import * as Helpers from '@/helpers';
 import styles from './index.scss';
 
@@ -17,7 +17,7 @@ export interface ManageHistoryFundListProps {
 const ManageHistoryFundList: React.FC<ManageHistoryFundListProps> = ({ manageHistoryFunds = [] }) => {
   const { autoFreshSetting, freshDelaySetting } = useSelector((state: StoreState) => state.setting.systemSetting);
   const [manageHistoryFundList, setManageHistoryFundList] = useState<(Fund.ResponseItem & Fund.ExtraRow)[]>([]);
-
+  const { currentWalletCode } = useCurrentWallet();
   const { data: detailFundCode, show: showDetailDrawer, set: setDetailDrawer, close: closeDetailDrawer } = useDrawer('');
 
   const { run: runGetFunds } = useRequest(Helpers.Fund.GetFunds, {
@@ -36,8 +36,8 @@ const ManageHistoryFundList: React.FC<ManageHistoryFundListProps> = ({ manageHis
     onSuccess: (result: Fund.FixData[]) => {
       const fixFunds = Helpers.Fund.MergeFixFunds(manageHistoryFundList, result);
       const cloneFunds = fixFunds.filter(Boolean).sort((a, b) => {
-        const calcA = Helpers.Fund.CalcFund(a);
-        const calcB = Helpers.Fund.CalcFund(b);
+        const calcA = Helpers.Fund.CalcFund(a, currentWalletCode);
+        const calcB = Helpers.Fund.CalcFund(b, currentWalletCode);
         return Number(calcB.gszzl) - Number(calcA.gszzl);
       });
       setManageHistoryFundList(cloneFunds);

@@ -39,7 +39,7 @@ const AssetsConfig: React.FC<AssetsConfigProps> = ({ funds, codes }) => {
             center: ['50%', '50%'],
             data: codes.map((code) => {
               const { zje } = Helpers.Fund.CalcFunds(funds, code);
-              const { name } = Helpers.Wallet.GetCurrentWallet(code);
+              const { name } = Helpers.Wallet.GetWalletConfig(code);
               return {
                 value: zje.toFixed(2),
                 name,

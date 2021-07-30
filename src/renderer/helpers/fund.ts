@@ -15,7 +15,7 @@ export interface CodeRemoteFundMap {
 }
 
 export function GetFundConfig(walletCode: string) {
-  const wallet = Helpers.Wallet.GetCurrentWallet(walletCode);
+  const wallet = Helpers.Wallet.GetWalletConfig(walletCode);
   const fundConfig = wallet.funds;
   const codeMap = GetCodeMap(fundConfig);
   return { fundConfig, codeMap };
@@ -85,8 +85,8 @@ export async function GetFund(code: string) {
   }
 }
 
-export function CalcFund(fund: Fund.ResponseItem & Fund.FixData, code: string) {
-  const { codeMap } = GetFundConfig(code);
+export function CalcFund(fund: Fund.ResponseItem & Fund.FixData, walletCode: string) {
+  const { codeMap } = GetFundConfig(walletCode);
   const isFix = fund.fixDate && fund.fixDate === fund.gztime?.slice(5, 10);
   const cyfe = codeMap[fund.fundcode!]?.cyfe || 0;
   const cbj = codeMap[fund.fundcode!]?.cbj;

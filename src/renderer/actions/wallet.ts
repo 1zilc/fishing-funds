@@ -61,7 +61,7 @@ export function setWalletConfigAction(config: Wallet.SettingItem[]): ThunkAction
 export function syncWalletConfigAction(): ThunkAction {
   return (dispatch, getState) => {
     try {
-      const config = Helpers.Wallet.GetWalletConfig();
+      const config = Helpers.Wallet.GetCurrentWallet();
       dispatch({ type: SYNC_WALLET_CONFIG, payload: config });
     } catch (error) {
       console.log('同步钱包配置出错', error);

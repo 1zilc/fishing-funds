@@ -16,14 +16,14 @@ export const defaultWallet: Wallet.SettingItem = {
 
 export const walletIcons = new Array(40).fill('').map((_, index) => require(`@/assets/icons/wallet/${index}.svg`).default);
 
-export function GetWalletConfig() {
+export function GetCurrentWallet() {
   const walletConfig: Wallet.SettingItem[] = Utils.GetStorage(CONST.STORAGE.WALLET_SETTING, [defaultWallet]);
   const codeMap = GetCodeMap(walletConfig);
   return { walletConfig, codeMap };
 }
 
-export function GetCurrentWallet(code: string) {
-  const { walletConfig } = GetWalletConfig();
+export function GetWalletConfig(code: string) {
+  const { walletConfig } = GetCurrentWallet();
   const currentWalletCode = code;
   return walletConfig.find(({ code }) => currentWalletCode === code) || defaultWallet;
 }
