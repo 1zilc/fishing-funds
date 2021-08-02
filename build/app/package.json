@@ -1,7 +1,7 @@
 {
   "name": "fishing-funds",
   "productName": "Fishing Funds",
-  "version": "4.4.2",
+  "version": "4.5.0",
   "description": "显示基金涨跌状态栏小应用,数据源来自天天基金等",
   "main": "./dist/main/main.prod.js",
   "author": {

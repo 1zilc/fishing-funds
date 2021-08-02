@@ -190,8 +190,7 @@ export default merge(baseConfig, {
     }),
 
     new BundleAnalyzerPlugin({
-      analyzerMode:
-        process.env.OPEN_ANALYZER === 'true' ? 'server' : 'disabled',
+      analyzerMode: process.env.OPEN_ANALYZER === 'true' ? 'server' : 'disabled',
       openAnalyzer: process.env.OPEN_ANALYZER === 'true',
     }),
 
@@ -206,5 +205,7 @@ export default merge(baseConfig, {
       isBrowser: false,
       isDevelopment: process.env.NODE_ENV !== 'production',
     }),
+
+    new AntdDayjsWebpackPlugin(),
   ],
 });

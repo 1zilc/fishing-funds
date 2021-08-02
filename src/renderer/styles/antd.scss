@@ -1,4 +1,6 @@
 @import '~antd/dist/antd.compact.css';
+@import './antd/table.scss';
+@import './antd/pagination.scss';
 
 .ant-tabs-nav::before {
   border: none !important;
@@ -20,9 +22,17 @@
 .ant-tabs-tab:first-child {
   margin-left: 0 !important;
 }
-
 .ant-drawer-body::-webkit-scrollbar {
   width: 0;
+}
+.ant-tabs {
+  color: var(--main-text-color);
+}
+.ant-checkbox-wrapper {
+  color: var(--main-text-color);
+}
+.ant-radio-wrapper {
+  color: var(--main-text-color);
 }
 .ant-checkbox-indeterminate .ant-checkbox-inner {
   border-color: var(--main-text-color);

@@ -51,10 +51,10 @@ const FundGroup = () => {
         <FundList filter={() => true} />
       </Tabs.TabPane>
       <Tabs.TabPane tab="持有" key={String(1)}>
-        <FundList filter={(fund) => !!fundCodeMap[fund.fundcode!].cyfe} />
+        <FundList filter={(fund) => !!fundCodeMap[fund.fundcode!]?.cyfe} />
       </Tabs.TabPane>
       <Tabs.TabPane tab="自选" key={String(2)}>
-        <FundList filter={(fund) => !fundCodeMap[fund.fundcode!].cyfe} />
+        <FundList filter={(fund) => !fundCodeMap[fund.fundcode!]?.cyfe} />
       </Tabs.TabPane>
       <Tabs.TabPane tab="净值更新" key={String(3)}>
         <FundList filter={(fund) => !!Helpers.Fund.CalcFund(fund, currentWalletCode).isFix} />

@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import classnames from 'classnames';
 import { useSelector, useDispatch } from 'react-redux';
-import { InputNumber, Radio, Badge, Switch, Slider } from 'antd';
+import { InputNumber, Radio, Badge, Switch, Slider, TimePicker } from 'antd';
+import dayjs from 'dayjs';
 
 import PureCard from '@/components/Card/PureCard';
 import StandCard from '@/components/Card/StandCard';
@@ -22,7 +23,7 @@ import * as Enums from '@/utils/enums';
 import * as Utils from '@/utils';
 import styles from './index.scss';
 
-export const ffVersion = '4.4.2';
+export const ffVersion = '4.5.0';
 export interface SettingContentProps {
   onEnter: () => void;
   onClose: () => void;
@@ -96,6 +97,7 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
     baseFontSizeSetting,
     systemThemeSetting,
     adjustmentNotificationSetting,
+    adjustmentNotificationTimeSetting,
     trayContentSetting,
     autoStartSetting,
     autoFreshSetting,
@@ -114,6 +116,7 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
   const [systemTheme, setSystemTheme] = useState(systemThemeSetting);
   // 通知设置
   const [adjustmentNotification, setAdjustmentNotification] = useState(adjustmentNotificationSetting);
+  const [adjustmentNotificationTime, setAdjustmentNotifitationTime] = useState(adjustmentNotificationTimeSetting);
   const [trayContent, setTrayContent] = useState(trayContentSetting);
   // 通用设置
   const [autoStart, setAutoStart] = useState(autoStartSetting);
@@ -130,6 +133,7 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
         baseFontSizeSetting: baseFontSize,
         systemThemeSetting: systemTheme,
         adjustmentNotificationSetting: adjustmentNotification,
+        adjustmentNotificationTimeSetting: adjustmentNotificationTime || defalutSystemSetting.adjustmentNotificationTimeSetting,
         trayContentSetting: trayContent,
         autoStartSetting: autoStart,
         autoFreshSetting: autoFresh,
@@ -152,6 +156,8 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
       message: `已复制到粘贴板`,
     });
   }
+
+  console.log(adjustmentNotificationTime);
 
   return (
     <CustomDrawerContent title="设置" enterText="保存" onClose={props.onClose} onEnter={onSave}>
@@ -232,6 +238,17 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
             <section>
               <label>调仓提醒：</label>
               <Switch size="small" checked={adjustmentNotification} onChange={setAdjustmentNotification} />
+            </section>
+            <section>
+              <label>提醒时间：</label>
+              <TimePicker
+                disabled={!adjustmentNotification}
+                allowClear={false}
+                size="small"
+                value={dayjs(adjustmentNotificationTime)}
+                onChange={(v) => setAdjustmentNotifitationTime(dayjs(v).format())}
+                format="HH:mm"
+              />
             </section>
             <section>
               <label>托盘内容：</label>

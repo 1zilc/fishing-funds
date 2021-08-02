@@ -1,5 +1,5 @@
 import NP from 'number-precision';
-import dayjs from 'dayjs';
+import dayjs, { Dayjs } from 'dayjs';
 
 import { defaultWallet } from '@/helpers/wallet';
 import * as Enums from '@/utils/enums';
@@ -101,14 +101,16 @@ export function JudgeFixTime(timestamp: number) {
   return (isWorkDay && isFixTime) || !isWorkDay;
 }
 
-export function JudgeAdjustmentNotificationTime(timestamp: number) {
+export function JudgeAdjustmentNotificationTime(timestamp: number, adjustmentNotificationTime: string) {
   const now = dayjs(timestamp);
   const hour = now.get('hour');
   const day = now.get('day');
   const minute = now.get('minute');
   const isWorkDay = day >= 1 && day <= 5;
+  const settingTime = dayjs(adjustmentNotificationTime);
+
   return {
-    isAdjustmentNotificationTime: isWorkDay && hour === 14 && minute >= 30,
+    isAdjustmentNotificationTime: isWorkDay && hour >= settingTime.hour() && minute >= settingTime.minute(),
     now,
   };
 }

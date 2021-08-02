@@ -1,3 +1,4 @@
+import dayjs from 'dayjs';
 import * as Enums from '@/utils/enums';
 import * as Utils from '@/utils';
 import * as CONST from '@/constants';
@@ -11,6 +12,7 @@ export const defalutSystemSetting: System.Setting = {
   systemThemeSetting: Enums.SystemThemeType.Auto,
 
   adjustmentNotificationSetting: false,
+  adjustmentNotificationTimeSetting: dayjs().hour(14).minute(30).format(),
   trayContentSetting: Enums.TrayContent.None,
 
   autoStartSetting: true,

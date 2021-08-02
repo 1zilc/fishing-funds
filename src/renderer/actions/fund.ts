@@ -1,4 +1,3 @@
-import { AnyAction } from 'redux';
 import { batch } from 'react-redux';
 import dayjs from 'dayjs';
 
@@ -17,11 +16,7 @@ export const SET_FUNDS_LOADING = 'SET_FUNDS_LOADING';
 export function setFundConfigAction(config: Fund.SettingItem[], walletCode: string): ThunkAction {
   return (dispatch, getState) => {
     try {
-      const {
-        wallet: {
-          config: { walletConfig },
-        },
-      } = getState();
+      const { walletConfig } = Helpers.Wallet.GetWalletConfig();
       const walletState = Helpers.Wallet.GetCurrentWalletState();
       const newWalletConfig = walletConfig.map((item) => ({
         ...item,
@@ -72,9 +67,7 @@ export function syncRemoteFundsAction(): ThunkAction {
 export function addFundAction(fund: Fund.SettingItem): ThunkAction {
   return (dispatch, getState) => {
     try {
-      const {
-        wallet: { currentWalletCode },
-      } = getState();
+      const currentWalletCode = Helpers.Wallet.GetCurrentWalletCode();
       const { fundConfig } = Helpers.Fund.GetFundConfig(currentWalletCode);
       const cloneFundConfig = Utils.DeepCopy(fundConfig);
       const exist = cloneFundConfig.find((item) => fund.code === item.code);
@@ -91,9 +84,7 @@ export function addFundAction(fund: Fund.SettingItem): ThunkAction {
 export function updateFundAction(fund: { code: string; cyfe?: number; name?: string; cbj?: number | null }): ThunkAction {
   return (dispatch, getState) => {
     try {
-      const {
-        wallet: { currentWalletCode },
-      } = getState();
+      const currentWalletCode = Helpers.Wallet.GetCurrentWalletCode();
       const { fundConfig } = Helpers.Fund.GetFundConfig(currentWalletCode);
       const cloneFundConfig = Utils.DeepCopy(fundConfig);
       cloneFundConfig.forEach((item) => {
@@ -120,9 +111,7 @@ export function updateFundAction(fund: { code: string; cyfe?: number; name?: str
 export function deleteFundAction(code: string): ThunkAction {
   return (dispatch, getState) => {
     try {
-      const {
-        wallet: { currentWalletCode },
-      } = getState();
+      const currentWalletCode = Helpers.Wallet.GetCurrentWalletCode();
       const { fundConfig } = Helpers.Fund.GetFundConfig(currentWalletCode);
       fundConfig.forEach((item, index) => {
         if (code === item.code) {
@@ -156,9 +145,7 @@ export function loadRemoteFundsAction(): ThunkAction {
 export function loadFundsAction(): PromiseAction {
   return async (dispatch, getState) => {
     try {
-      const {
-        wallet: { currentWalletCode },
-      } = getState();
+      const currentWalletCode = Helpers.Wallet.GetCurrentWalletCode();
       const { fundConfig } = Helpers.Fund.GetFundConfig(currentWalletCode);
       dispatch({ type: SET_FUNDS_LOADING, payload: true });
       const responseFunds = (await Helpers.Fund.GetFunds(fundConfig)).filter(Utils.NotEmpty);
@@ -176,9 +163,7 @@ export function loadFundsAction(): PromiseAction {
 export function loadFundsWithoutLoadingAction(): PromiseAction {
   return async (dispatch, getState) => {
     try {
-      const {
-        wallet: { currentWalletCode },
-      } = getState();
+      const currentWalletCode = Helpers.Wallet.GetCurrentWalletCode();
       const { fundConfig } = Helpers.Fund.GetFundConfig(currentWalletCode);
       const responseFunds = (await Helpers.Fund.GetFunds(fundConfig)).filter(Utils.NotEmpty);
       dispatch(sortFundsCachedAction(responseFunds, currentWalletCode));

@@ -356,14 +356,18 @@ export function useSyncFixStockSetting() {
 
 export function useAdjustmentNotification() {
   const systemSetting = useSelector((state: StoreState) => state.setting.systemSetting);
-  const { adjustmentNotificationSetting } = systemSetting;
+  const { adjustmentNotificationSetting, adjustmentNotificationTimeSetting } = systemSetting;
+
   useInterval(
     async () => {
       if (!adjustmentNotificationSetting) {
         return;
       }
       const timestamp = await Helpers.Time.GetCurrentHours();
-      const { isAdjustmentNotificationTime, now } = Utils.JudgeAdjustmentNotificationTime(Number(timestamp));
+      const { isAdjustmentNotificationTime, now } = Utils.JudgeAdjustmentNotificationTime(
+        Number(timestamp),
+        adjustmentNotificationTimeSetting
+      );
       const month = now.get('month');
       const date = now.get('date');
       const hour = now.get('hour');
@@ -380,7 +384,7 @@ export function useAdjustmentNotification() {
         Utils.SetStorage(CONST.STORAGE.ADJUSTMENT_NOTIFICATION_DATE, currentDate);
       }
     },
-    1000 * 60 * 5,
+    1000 * 60,
     {
       immediate: true,
     }
@@ -490,6 +494,9 @@ export function useMappingLocalToSystemSetting() {
   const systemThemeSetting = useSelector((state: StoreState) => state.setting.systemSetting.systemThemeSetting);
   const autoStartSetting = useSelector((state: StoreState) => state.setting.systemSetting.autoStartSetting);
   const lowKeySetting = useSelector((state: StoreState) => state.setting.systemSetting.lowKeySetting);
+  const adjustmentNotificationTimeSetting = useSelector(
+    (state: StoreState) => state.setting.systemSetting.adjustmentNotificationTimeSetting
+  );
   useLayoutEffect(() => {
     Utils.UpdateSystemTheme(systemThemeSetting);
   }, [systemThemeSetting]);
@@ -505,4 +512,7 @@ export function useMappingLocalToSystemSetting() {
       document.body.classList.remove('lowKey');
     }
   }, [lowKeySetting]);
+  useLayoutEffect(() => {
+    Utils.ClearStorage(CONST.STORAGE.ADJUSTMENT_NOTIFICATION_DATE);
+  }, [adjustmentNotificationTimeSetting]);
 }

@@ -8,6 +8,7 @@ declare namespace System {
     systemThemeSetting: number; // 系统主题 "dark" | "light" | "auto"
 
     adjustmentNotificationSetting: boolean; // 调仓提醒
+    adjustmentNotificationTimeSetting: string; // 调仓时间
     trayContentSetting: number; // 托盘内容
 
     autoStartSetting: boolean; // 自动启动
