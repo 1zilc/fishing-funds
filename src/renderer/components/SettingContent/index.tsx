@@ -157,8 +157,6 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
     });
   }
 
-  console.log(adjustmentNotificationTime);
-
   return (
     <CustomDrawerContent title="设置" enterText="保存" onClose={props.onClose} onEnter={onSave}>
       <style>{` html { font-size: ${baseFontSize}px }`}</style>

@@ -384,7 +384,7 @@ export function useAdjustmentNotification() {
         Utils.SetStorage(CONST.STORAGE.ADJUSTMENT_NOTIFICATION_DATE, currentDate);
       }
     },
-    1000 * 60,
+    1000 * 50,
     {
       immediate: true,
     }

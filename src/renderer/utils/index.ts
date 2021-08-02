@@ -110,7 +110,7 @@ export function JudgeAdjustmentNotificationTime(timestamp: number, adjustmentNot
   const settingTime = dayjs(adjustmentNotificationTime);
 
   return {
-    isAdjustmentNotificationTime: isWorkDay && hour >= settingTime.hour() && minute >= settingTime.minute(),
+    isAdjustmentNotificationTime: isWorkDay && hour === settingTime.hour() && minute === settingTime.minute(),
     now,
   };
 }
