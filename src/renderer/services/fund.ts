@@ -430,9 +430,9 @@ export async function GetFixFromEastMoney(code: string) {
 
     const result: Fund.FixData = {
       code,
-      fixDwjz,
       fixName,
-      fixZzl: fixZzl?.replace(/[^0-9/./-]/g, ''),
+      fixDwjz: fixDwjz?.replace(/[^0-9/.]/g, '') || '0',
+      fixZzl: fixZzl?.replace(/[^0-9/./-]/g, '') || '0',
       fixDate: fixDate?.replace(/[^0-9/-]/g, ''),
     };
 
