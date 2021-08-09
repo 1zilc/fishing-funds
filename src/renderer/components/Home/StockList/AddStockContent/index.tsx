@@ -12,6 +12,7 @@ import { StoreState } from '@/reducers/types';
 import { useDrawer } from '@/utils/hooks';
 import * as Helpers from '@/helpers';
 import * as Services from '@/services';
+import * as Enums from '@/utils/enums';
 import styles from './index.scss';
 
 export interface AddStockContentProps {
@@ -23,15 +24,15 @@ export interface AddStockContentProps {
 const { Search } = Input;
 
 export const stockTypesConfig = [
-  { name: 'AB股', code: 1 },
-  // { name: '指数', code: 2 },
-  // { name: '板块', code: 3 },
-  { name: '港股', code: 4 },
-  { name: '美股', code: 5 },
-  { name: '英股', code: 6 },
-  { name: '三板', code: 7 },
-  // { name: '基金', code: 8 },
-  { name: '债券', code: 9 },
+  { name: 'AB股', code: Enums.StockMarketType.AB },
+  // { name: '指数', code:  Enums.StockMarketType.Zindex },
+  // { name: '板块', code:  Enums.StockMarketType.Quotation },
+  { name: '港股', code: Enums.StockMarketType.HK },
+  { name: '美股', code: Enums.StockMarketType.US },
+  { name: '英股', code: Enums.StockMarketType.UK },
+  { name: '三板', code: Enums.StockMarketType.XSB },
+  // { name: '基金', code:  Enums.StockMarketType.Fund },
+  { name: '债券', code: Enums.StockMarketType.Bond },
 ];
 
 const AddStockContent: React.FC<AddStockContentProps> = (props) => {

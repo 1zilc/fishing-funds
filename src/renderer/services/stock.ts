@@ -1,4 +1,5 @@
 import * as Utils from '@/utils';
+import cheerio from 'cheerio';
 import NP from 'number-precision';
 
 const { got } = window.contextModules;
@@ -496,5 +497,261 @@ export async function GetMainRankFromEastmoney(code: string) {
   } catch (error) {
     console.log(error);
     return [];
+  }
+}
+
+export async function GetABCompany(secid: string) {
+  try {
+    const [mk, code] = secid.split('.');
+    const { body } = await got<{
+      jbzl: {
+        gsmc: '贵州茅台酒股份有限公司';
+        ywmc: 'Kweichow Moutai Co.,Ltd.';
+        cym: '贵州茅台->G茅台';
+        agdm: '600519';
+        agjc: '贵州茅台';
+        bgdm: '--';
+        bgjc: '--';
+        hgdm: '--';
+        hgjc: '--';
+        zqlb: '上交所主板A股';
+        sshy: '酿酒行业';
+        ssjys: '上海证券交易所';
+        sszjhhy: '制造业-酒、饮料和精制茶制造业';
+        zjl: '李静仁(代)';
+        frdb: '高卫东';
+        dm: '刘刚';
+        dsz: '高卫东';
+        zqswdb: '蔡聪应';
+        dlds: '章靖忠,许定波,陆金海';
+        lxdh: '0851-22386002';
+        dzxx: 'mtdm@moutaichina.com';
+        cz: '0851-22386193';
+        gswz: 'www.moutaichina.com';
+        bgdz: '贵州省仁怀市茅台镇';
+        zcdz: '贵州省仁怀市茅台镇';
+        qy: '贵州';
+        yzbm: '564501';
+        zczb: '12.56亿';
+        gsdj: '9152000071430580XT';
+        gyrs: '29031';
+        glryrs: '14';
+        lssws: '北京市金杜律师事务所';
+        kjssws: '天职国际会计师事务所(特殊普通合伙)';
+        gsjj: '    贵州茅台酒股份有限公司是由中国贵州茅台酒厂有限责任公司、贵州茅台酒厂技术开发公司、贵州省轻纺集体工业联社、深圳清华大学研究院、中国食品发酵工业研究所、北京糖业烟酒公司、江苏省糖烟酒总公司、上海捷强烟草糖酒(集团)有限公司等八家公司共同发起,并经过贵州省人民政府黔府函字(1999)291号文件批准设立的股份有限公司。目前,贵州茅台酒股份有限公司茅台酒年生产量四万吨;43°、38°、33°茅台酒拓展了茅台酒家族低度酒的发展空间;茅台王子酒、茅台迎宾酒满足了中低档消费者的需求;15年、30年、50年、80年陈年茅台酒填补了我国极品酒、年份酒、陈年老窖的空白;在国内独创年代梯级式的产品开发模式。形成了低度、高中低档、极品三大系列200多个规格品种,全方位跻身市场,从而占据了白酒市场制高点,称雄于中国极品酒市场。';
+        jyfw: '茅台酒系列产品的生产与销售;饮料、食品、包装材料的生产、销售;防伪技术开发、信息产业相关产品的研制、开发;酒店经营管理、住宿、餐饮、娱乐、洗浴及停车场管理服务(具体内容以工商核定登记为准)';
+      };
+      fxxg: {
+        clrq: '1999-11-20';
+        ssrq: '2001-08-27';
+        fxsyl: '23.93';
+        wsfxrq: '2001-07-31';
+        fxfs: '网下定价发行';
+        mgmz: '1.00';
+        fxl: '7150万';
+        mgfxj: '31.39';
+        fxfy: '4842万';
+        fxzsz: '22.44亿';
+        mjzjje: '22.02亿';
+        srkpj: '34.51';
+        srspj: '35.55';
+        srhsl: '56.83%';
+        srzgj: '37.78';
+        wxpszql: '--';
+        djzql: '1.13%';
+      };
+      Code: 'SH600519';
+      CodeType: 'ABStock';
+      SecuCode: '600519.SH';
+      SecurityCode: '600519';
+      SecurityShortName: '贵州茅台';
+      MarketCode: '01';
+      Market: 'SH';
+      SecurityType: null;
+      ExpireTime: '/Date(-62135596800000)/';
+    }>(`http://f10.eastmoney.com/CompanySurvey/CompanySurveyAjax?code=${mk === '0' ? 'sz' : 'sh'}${code}`, {
+      responseType: 'json',
+    });
+    return {
+      gsjs: body.jbzl.gsjj,
+    };
+  } catch (error) {
+    console.log(error);
+    return {
+      gsjs: '',
+    };
+  }
+}
+
+export async function GetHKCompany(secid: string) {
+  try {
+    const [mk, code] = secid.split('.');
+    const { body } = await got<{
+      zqzl: {
+        zqdm: '01810.HK';
+        zqjc: '小米集团-W';
+        ssrq: '2018/7/9 0:00:00';
+        zqlx: '非H股';
+        jys: '香港交易所';
+        bk: '主板';
+        mgmz: '0.0000025 USD';
+        zxjydw: '200';
+        zxspj: '26.35';
+        isin: 'KYG9830T1067';
+        sfhgtbd: '是';
+        sfsgtbd: '是';
+      };
+      gszl: {
+        gsmc: '小米集团';
+        ywmc: 'XIAOMI CORPORATION';
+        zcd: 'Cayman Islands 开曼群岛（英属）';
+        zcdz: 'PO Box 309, Ugland House, Grand Cayman, Cayman Islands';
+        gsclrq: '2010-01-05';
+        bgdz: '中国北京市海淀区清河中街68号华润五彩城写字楼,香港皇后大道东183号合和中心54楼';
+        dsz: '雷军';
+        gswz: 'www.mi.com';
+        zczb: '675,000 USD';
+        gsms: '苏嘉敏';
+        njr: '12-31';
+        email: 'xiaomi@hkstrategies.com';
+        ygrs: '22,074';
+        lxdh: '--';
+        hss: '罗兵咸永道会计师事务所';
+        cz: '+86 (10) 6060-6666';
+        gsjs: '    小米集团是一家以手机、智能硬件和IoT平台为核心的互联网公司。公司的产品按照产品功能、形态及模式,大体上可以划分为智能手机、IoT和生活消费产品、互联网服务产品。作为一家由工程师和设计师创建的公司,小米集团崇尚大胆创新的互联网文化,并不断探索前沿科技。创新精神在小米蓬勃发展并渗透到每个角落,并引导小米集团所做的一切。同时,小米集团不懈追求效率的持续提升。小米集团致力於降低运营成本,并同时把效率提升产生的价值回馈给小米集团的用户。小米集团独特且强大的铁人三项商业模式由三个相互协作的支柱组成(1)创新、高质量、精心设计且专注於卓越用户体验的硬件,(2)使小米集团能以厚道的价格销售产品的高效新零售和(3)丰富的互联网服务。';
+        sshy: '资讯科技器材';
+      };
+    }>(`http://emweb.securities.eastmoney.com/PC_HKF10/CompanyProfile/PageAjax?code=${code}`, {
+      responseType: 'json',
+    });
+    return {
+      gsjs: body.gszl.gsjs,
+    };
+  } catch (error) {
+    console.log(error);
+    return {
+      gsjs: '',
+    };
+  }
+}
+
+export async function GetUSCompany(secid: string) {
+  try {
+    const [mk, code] = secid.split('.');
+    const { body } = await got<{
+      data: {
+        zqzl: [
+          {
+            SECURITYCODE: 'TSLA.O';
+            SECURITYSHORTNAME: '特斯拉';
+            ISINCODE: 'US88160R1014';
+            SECURITYTYPE: '美股';
+            TRADEMARKET: 'NASDAQ';
+            LISTEDDATE: '2010-06-29';
+            FISCALDATE: '12-31';
+            PARVALUE: '0.001 USD';
+            ADSZS: '--';
+          }
+        ];
+        gszl: [
+          {
+            SECURITYCODE: 'TSLA.O';
+            SECURITYSHORTNAME: '特斯拉';
+            COMPNAME: 'Tesla, Inc.';
+            COMPNAMECN: '特斯拉公司';
+            INDUSTRY: '汽车制造商';
+            SHAREH: '--';
+            CAPITAL: '--';
+            CHAIRMAN: 'Robyn M. Denholm';
+            SECY: '--';
+            FOUNDDATE: '2003-07-01';
+            EMPLOYNUM: '70757';
+            MAINBUSIN: '--';
+            ADDRESS: '美国特拉华州';
+            OFFICEADDRESS: '3500 Deer Creek Road, Palo Alto, California, USA';
+            WEBSITE: 'www.tesla.com';
+            EMAIL: 'NASales@tesla.com';
+            PHONE: '+1 (650) 681-5000';
+            FAX: '+1 (650) 681-5101';
+            COMPPROFILE: '    特斯拉公司是一家美国电动汽车及能源公司,2003年7月1日,由马丁·艾伯哈德和马克·塔彭宁共同创立。特斯拉设计、开发、制造、销售和租赁高性能全电动汽车和能源发电和存储系统,并提供与其产品相关的服务。特斯拉是全球首家垂直整合的可持续能源公司,提供端到端的清洁能源产品,包括发电、存储和消费。\n    特斯拉目前或正计划推出电动汽车,以满足广泛的消费和商用车市场,包括Model 3、Model Y、Model S、Model X、Cybertruck、Tesla Semi和一款新的Tesla Roadster。结合其动力系统、自动驾驶和全自动驾驶(“FSD”)硬件和神经网络的技术进步,其电动汽车拥有领先里程和充电灵活性等优势;优越的加速、操控和安全特性;一套独特的方便用户和信息娱乐功能;通过无线更新启用额外功能的能力;以及节省充电、维护和其他拥有成本。';
+          }
+        ];
+        zygc_bgq: [
+          {
+            SECURITYCODE: 'TSLA.O';
+            REPORTDATE: '2021-06-30';
+          }
+        ];
+        zygc_cp: [
+          {
+            SECURITYCODE: 'TSLA.O';
+            SECURITYSHORTNAME: '特斯拉';
+            REPORTDATE: '2021-06-30';
+            STARTDATE: '2021-01-01';
+            CURRENCY: 'USD';
+            CLASS: '1';
+            RANK: '1';
+            PRODUCTNAME: 'Automotive sales without resale value guarantee';
+            MBREVENUE: '17345000000';
+            RATIO: '77.6166823287242';
+          }
+        ];
+        zygc_dq: [
+          {
+            SECURITYCODE: 'TSLA.O';
+            SECURITYSHORTNAME: '特斯拉';
+            REPORTDATE: '2021-06-30';
+            STARTDATE: '2021-01-01';
+            CURRENCY: 'USD';
+            CLASS: '1';
+            RANK: '1';
+            REGIONNAME: 'United States';
+            MBREVENUE: '9629000000';
+            RATIO: '43.0885577482436';
+          }
+        ];
+        ggyj: [
+          {
+            SECURITYCODE: 'TSLA.O';
+            SECURITYSHORTNAME: '特斯拉';
+            NAMEEN: 'Robyn M. Denholm';
+            SEX: '女';
+            EDUCATION: '博士';
+            BIRTHDATE: '1964';
+            OCCUPATION: 'Independent Director，Chairman of the Board';
+            RESUME: '--';
+            RESUMEEN: 'Robyn Denholm has been a member of the Board since August 2014 and its Chair since November 2018. Since January 2021, Ms. Denholm has been an operating partner of Blackbird Ventures, a venture capital firm. From January 2017 through June 2019, Ms. Denholm was with Telstra Corporation Limited, a telecommunications company (“Telstra”), where she served as Chief Financial Officer and Head of Strategy from October 2018 through June 2019, and Chief Operations Officer from January 2017 to October 2018. Prior to Telstra, from August 2007 to July 2016, Ms. Denholm was with Juniper Networks, Inc., a manufacturer of networking equipment, serving in executive roles including Executive Vice President, Chief Financial Officer and Chief Operations Officer. Prior to joining Juniper Networks, Ms. Denholm served in various executive roles at Sun Microsystems, Inc. from January 1996 to August 2007. Ms. Denholm also served at Toyota Motor Corporation Australia for seven years and at Arthur Andersen & Company for five years in various finance assignments. Ms. Denholm previously served as a director of ABB Ltd. from 2016 to 2017. Ms. Denholm is a Fellow of the Institute of Chartered Accountants of Australia/New Zealand, a member of the Australian Institute of Company Directors, and holds a Bachelor’s degree in Economics from the University of Sydney, and a Master’s degree in Commerce and a Doctor of Business Administration (honoris causa) from the University of New South Wales.';
+            TOTALCOUNT: '12';
+          }
+        ];
+      };
+    }>(`http://emweb.eastmoney.com/pc_usf10/CompanyInfo/PageAjax?fullCode=${code}.O`, {
+      responseType: 'json',
+    });
+    return {
+      gsjs: body.data.gszl[0].COMPPROFILE,
+    };
+  } catch (error) {
+    console.log(error);
+    return {
+      gsjs: '',
+    };
+  }
+}
+
+export async function GetXSBCompany(secid: string) {
+  try {
+    const [mk, code] = secid.split('.');
+    const { body: html } = await got(`http:xinsanban.eastmoney.com/F10/CompanyInfo/Introduction/${code}.html`);
+    const $ = cheerio.load(html);
+    const gsjs = $('.company-info-brief .company-page-item-right').last().text();
+    return {
+      gsjs,
+    };
+  } catch (error) {
+    console.log(error);
+    return {
+      gsjs: '',
+    };
   }
 }

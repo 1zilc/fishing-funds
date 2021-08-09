@@ -69,6 +69,10 @@ declare namespace Stock {
     GubaCode: string; // '839489';
     UnifiedCode: string; // '839489';
   }
+
+  export interface Company {
+    gsjs: string;
+  }
   export interface ExtraRow {
     collapse?: boolean;
   }
