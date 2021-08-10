@@ -150,3 +150,14 @@ export enum TrayContent {
   Syl,
   None,
 }
+export enum StockMarketType {
+  AB = 1,
+  Zindex = 2,
+  Quotation = 3,
+  HK = 4,
+  US = 5,
+  UK = 6,
+  XSB = 7,
+  Fund = 8,
+  Bond = 9,
+}

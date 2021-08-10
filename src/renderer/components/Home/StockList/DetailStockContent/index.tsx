@@ -4,9 +4,11 @@ import { useRequest } from 'ahooks';
 import { Tabs } from 'antd';
 
 import ChartCard from '@/components/Card/ChartCard';
+import PureCard from '@/components/Card/PureCard';
 import Trend from '@/components/Home/StockList/DetailStockContent/Trend';
 import Estimate from '@/components/Home/StockList/DetailStockContent/Estimate';
 import K from '@/components/Home/StockList/DetailStockContent/K';
+import Company from '@/components/Home/StockList/DetailStockContent/Company';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
 import * as Services from '@/services';
 import * as Utils from '@/utils';
@@ -123,6 +125,15 @@ const DetailStockContent: React.FC<DetailStockContentProps> = (props) => {
               <ChartCard>
                 <K secid={secid} />
               </ChartCard>
+            </Tabs.TabPane>
+          </Tabs>
+        </div>
+        <div className={styles.container}>
+          <Tabs animated={{ tabPane: true }} tabBarGutter={15}>
+            <Tabs.TabPane tab="公司概况" key={String(0)}>
+              <PureCard>
+                <Company secid={secid} />
+              </PureCard>
             </Tabs.TabPane>
           </Tabs>
         </div>

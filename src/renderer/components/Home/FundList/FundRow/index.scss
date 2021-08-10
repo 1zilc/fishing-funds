@@ -7,7 +7,6 @@
   background-color: var(--background-color);
   color: var(--main-text-color);
   z-index: 2;
-  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -16,8 +15,6 @@
   overflow: hidden;
 
   &:hover {
-    border-bottom: 1px solid var(--hover-color);
-
     .arrow {
       svg {
         fill: var(--main-text-color);
@@ -26,7 +23,7 @@
 
     .conciseValue,
     .value {
-      filter: brightness(125%);
+      filter: brightness(115%);
     }
   }
 }

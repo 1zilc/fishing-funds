@@ -33,7 +33,7 @@ const ZindexRow: React.FC<RowProps> = (props) => {
   return (
     <>
       <div
-        className={classnames(styles.row, 'hoverable')}
+        className={classnames(styles.row)}
         onClick={() => {
           dispatch(toggleZindexCollapseAction(zindex));
         }}

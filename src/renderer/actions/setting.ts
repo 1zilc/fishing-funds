@@ -8,9 +8,7 @@ export const SYNC_SETTING = 'SYNC_SETTING';
 export function setSystemSettingAction(setting: System.Setting): ThunkAction {
   return (dispatch, getState) => {
     try {
-      const {
-        setting: { systemSetting },
-      } = getState();
+      const systemSetting = Helpers.Setting.GetSystemSetting();
 
       Utils.SetStorage(CONST.STORAGE.SYSTEM_SETTING, {
         ...systemSetting,

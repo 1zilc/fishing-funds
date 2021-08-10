@@ -9,7 +9,7 @@ import baseConfig from './webpack.config.base';
 import webpackPaths from './webpack.paths';
 import checkNodeEnv from '../scripts/check-node-env';
 import ReactRefreshWebpackPlugin from '@pmmmwh/react-refresh-webpack-plugin';
-import ReactRefreshTypeScript from 'react-refresh-typescript';
+import AntdDayjsWebpackPlugin from 'antd-dayjs-webpack-plugin';
 
 // When an ESLint server is running, we can't set the NODE_ENV so we'll check if it's
 // at the dev webpack config is not accidentally run in a production environment
@@ -20,22 +20,13 @@ if (process.env.NODE_ENV === 'production') {
 const port = process.env.PORT || 1212;
 const publicPath = webpackPaths.distRendererPath;
 const manifest = path.resolve(webpackPaths.dllPath, 'renderer.json');
-const requiredByDLLConfig = module.parent.filename.includes(
-  'webpack.config.renderer.dev.dll'
-);
+const requiredByDLLConfig = module.parent.filename.includes('webpack.config.renderer.dev.dll');
 
 /**
  * Warn if the DLL is not built
  */
-if (
-  !requiredByDLLConfig &&
-  !(fs.existsSync(webpackPaths.dllPath) && fs.existsSync(manifest))
-) {
-  console.log(
-    chalk.black.bgYellow.bold(
-      'The DLL files are missing. Sit back while we build them for you with "yarn build-dll"'
-    )
-  );
+if (!requiredByDLLConfig && !(fs.existsSync(webpackPaths.dllPath) && fs.existsSync(manifest))) {
+  console.log(chalk.black.bgYellow.bold('The DLL files are missing. Sit back while we build them for you with "yarn build-dll"'));
   execSync('yarn postinstall');
 }
 
@@ -71,9 +62,6 @@ export default merge(baseConfig, {
           loader: 'ts-loader',
           options: {
             happyPackMode: true,
-            getCustomTransformers: () => ({
-              before: [ReactRefreshTypeScript()],
-            }),
           },
         },
       },
@@ -265,6 +253,8 @@ export default merge(baseConfig, {
       isDevelopment: process.env.NODE_ENV !== 'production',
       nodeModules: webpackPaths.appNodeModulesPath,
     }),
+
+    new AntdDayjsWebpackPlugin(),
   ],
 
   node: {
@@ -283,9 +273,8 @@ export default merge(baseConfig, {
     hot: true,
     headers: { 'Access-Control-Allow-Origin': '*' },
     watchOptions: {
-      aggregateTimeout: 300,
+      aggregateTimeout: 500,
       ignored: /node_modules/,
-      poll: 100,
     },
     historyApiFallback: {
       verbose: true,
