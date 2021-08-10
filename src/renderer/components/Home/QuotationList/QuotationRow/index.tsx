@@ -36,7 +36,7 @@ const QuotationRow: React.FC<RowProps> = (props) => {
 
   return (
     <>
-      <div className={classnames(styles.row, 'hoverable')} onClick={() => dispatch(toggleQuotationCollapse(quotation))}>
+      <div className={classnames(styles.row)} onClick={() => dispatch(toggleQuotationCollapse(quotation))}>
         <div className={styles.arrow}>
           {quotation.collapse ? <ArrowUpIcon style={{ ...arrowSize }} /> : <ArrowDownIcon style={{ ...arrowSize }} />}
         </div>

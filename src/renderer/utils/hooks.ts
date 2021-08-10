@@ -501,9 +501,7 @@ export function useMappingLocalToSystemSetting() {
     Utils.UpdateSystemTheme(systemThemeSetting);
   }, [systemThemeSetting]);
   useLayoutEffect(() => {
-    app.setLoginItemSettings({
-      openAtLogin: autoStartSetting,
-    });
+    app.setLoginItemSettings({ openAtLogin: autoStartSetting });
   }, [autoStartSetting]);
   useLayoutEffect(() => {
     if (lowKeySetting) {
@@ -512,7 +510,19 @@ export function useMappingLocalToSystemSetting() {
       document.body.classList.remove('lowKey');
     }
   }, [lowKeySetting]);
-  useLayoutEffect(() => {
+  useAfterMounted(() => {
     Utils.ClearStorage(CONST.STORAGE.ADJUSTMENT_NOTIFICATION_DATE);
   }, [adjustmentNotificationTimeSetting]);
+}
+
+export function useAfterMounted(fn: any, dep: any[] = []) {
+  const [flag, { setTrue }] = useBoolean(false);
+  useEffect(() => {
+    setTrue();
+  }, []);
+  useLayoutEffect(() => {
+    if (flag) {
+      fn();
+    }
+  }, [flag, ...dep]);
 }

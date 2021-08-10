@@ -103,7 +103,7 @@ const StockRow: React.FC<RowProps> = (props) => {
 
   return (
     <>
-      <div className={classnames(styles.row, 'hoverable')} onClick={() => dispatch(toggleStockCollapseAction(stock))}>
+      <div className={classnames(styles.row)} onClick={() => dispatch(toggleStockCollapseAction(stock))}>
         <div className={styles.arrow}>
           {stock.collapse ? <ArrowUpIcon style={{ ...arrowSize }} /> : <ArrowDownIcon style={{ ...arrowSize }} />}
         </div>
