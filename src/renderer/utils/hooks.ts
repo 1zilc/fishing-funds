@@ -1,20 +1,17 @@
 import { useCallback, useLayoutEffect, useMemo, useState, useEffect, useRef, Fragment } from 'react';
 import { useInterval, useBoolean, useThrottleFn, useSize } from 'ahooks';
 import { bindActionCreators } from 'redux';
-import { batch, useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import dayjs from 'dayjs';
 import * as echarts from 'echarts';
 
 import { updateAvaliableAction } from '@/actions/updater';
-import { loadWalletsFundsAction, loadFixWalletsFundsAction } from '@/actions/wallet';
-import { loadQuotationsWithoutLoadingAction } from '@/actions/quotation';
-import { loadZindexsWithoutLoadingAction } from '@/actions/zindex';
-import { loadStocksWithoutLoadingAction, updateStockAction } from '@/actions/stock';
-import { updateFundAction, setFundConfigAction, loadFundsAction, loadRemoteFundsAction, loadFixFundsAction } from '@/actions/fund';
+import { updateStockAction } from '@/actions/stock';
+import { updateFundAction, setFundConfigAction } from '@/actions/fund';
 import { StoreState } from '@/reducers/types';
 import * as Utils from '@/utils';
 import * as CONST from '@/constants';
-import * as Adapter from '@/utils/adpters';
+import * as Adapters from '@/utils/adpters';
 import * as Services from '@/services';
 import * as Helpers from '@/helpers';
 import * as Enums from '@/utils/enums';
@@ -131,10 +128,8 @@ export function useConfigClipboard() {
           cbj: codeMap[fund!.fundcode!].cbj,
         }));
         const currentWalletCode = Helpers.Wallet.GetCurrentWalletCode();
-        batch(() => {
-          dispatch(setFundConfigAction(newFundConfig, currentWalletCode));
-          dispatch(loadFundsAction());
-        });
+        dispatch(setFundConfigAction(newFundConfig, currentWalletCode));
+        await Helpers.Fund.LoadFunds(true);
         await dialog.showMessageBox({
           type: 'info',
           title: `导入完成`,
@@ -334,7 +329,7 @@ export function useSyncFixStockSetting() {
               return searchResult;
             })
       );
-      await Adapter.ChokeAllAdapter(collectors, 100);
+      await Adapters.ChokeAllAdapter(collectors, 100);
     } catch (error) {
       console.log(error);
     } finally {
@@ -415,16 +410,16 @@ export function useCurrentWallet() {
 }
 
 export function useFreshFunds(throttleDelay: number) {
-  const { run: runLoadFunds } = useThrottleFn(useActions(loadFundsAction), {
+  const { run: runLoadFunds } = useThrottleFn(Helpers.Fund.LoadFunds, {
     wait: throttleDelay,
   });
-  const { run: runLoadFixFunds } = useThrottleFn(useActions(loadFixFundsAction), {
+  const { run: runLoadFixFunds } = useThrottleFn(Helpers.Fund.LoadFixFunds, {
     wait: throttleDelay,
   });
   const freshFunds = useScrollToTop({
     after: async () => {
       const isFixTime = Utils.JudgeFixTime(dayjs().valueOf());
-      await runLoadFunds();
+      await runLoadFunds(true);
       if (isFixTime) {
         await runLoadFixFunds();
       }
@@ -435,12 +430,12 @@ export function useFreshFunds(throttleDelay: number) {
 
 export function useBootStrap() {
   const { freshDelaySetting, autoFreshSetting } = useSelector((state: StoreState) => state.setting.systemSetting);
-  const runLoadRemoteFunds = useActions(loadRemoteFundsAction);
-  const runLoadWalletsFunds = useActions(loadWalletsFundsAction);
-  const runLoadFixWalletsFunds = useActions(loadFixWalletsFundsAction);
-  const runLoadZindexs = useActions(loadZindexsWithoutLoadingAction);
-  const runLoadQuotations = useActions(loadQuotationsWithoutLoadingAction);
-  const runLoadStocks = useActions(loadStocksWithoutLoadingAction);
+  const runLoadRemoteFunds = () => Helpers.Fund.LoadRemoteFunds();
+  const runLoadWalletsFunds = () => Helpers.Wallet.LoadWalletsFunds();
+  const runLoadFixWalletsFunds = () => Helpers.Wallet.loadFixWalletsFunds();
+  const runLoadZindexs = () => Helpers.Zindex.LoadZindexs(false);
+  const runLoadQuotations = () => Helpers.Quotation.LoadQuotations(false);
+  const runLoadStocks = () => Helpers.Stock.loadStocks(false);
 
   // 间隔时间刷新远程基金数据
   useInterval(() => {
@@ -450,9 +445,9 @@ export function useBootStrap() {
   // 间隔时间刷新基金,指数，板块，钱包
   useWorkDayTimeToDo(() => {
     if (autoFreshSetting) {
-      Adapter.ConCurrencyAllAdapter([
-        () => Adapter.ChokeAllAdapter([runLoadWalletsFunds]),
-        () => Adapter.ChokeAllAdapter([runLoadZindexs, runLoadQuotations, runLoadStocks]),
+      Adapters.ConCurrencyAllAdapter([
+        () => Adapters.ChokeAllAdapter([runLoadWalletsFunds]),
+        () => Adapters.ChokeAllAdapter([runLoadZindexs, runLoadQuotations, runLoadStocks]),
       ]);
     }
   }, freshDelaySetting * 1000 * 60);
@@ -460,15 +455,15 @@ export function useBootStrap() {
   // 间隔时间检查最新净值
   useFixTimeToDo(() => {
     if (autoFreshSetting) {
-      Adapter.ChokeAllAdapter([runLoadFixWalletsFunds]);
+      Adapters.ChokeAllAdapter([runLoadFixWalletsFunds]);
     }
   }, freshDelaySetting * 1000 * 60);
 
   // 第一次刷新所有数据
   useEffect(() => {
-    Adapter.ConCurrencyAllAdapter([
-      () => Adapter.ChokeAllAdapter([runLoadRemoteFunds, runLoadWalletsFunds, runLoadFixWalletsFunds]),
-      () => Adapter.ChokeAllAdapter([runLoadZindexs, runLoadQuotations, runLoadStocks]),
+    Adapters.ConCurrencyAllAdapter([
+      () => Adapters.ChokeAllAdapter([runLoadRemoteFunds, runLoadWalletsFunds, runLoadFixWalletsFunds]),
+      () => Adapters.ChokeAllAdapter([runLoadZindexs, runLoadQuotations, runLoadStocks]),
     ]);
   }, []);
 }

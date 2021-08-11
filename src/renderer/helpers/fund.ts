@@ -1,5 +1,9 @@
 import NP from 'number-precision';
-
+import dayjs from 'dayjs';
+import { batch } from 'react-redux';
+import { store } from '@/.';
+import { SET_FUNDS_LOADING, sortFundsCachedAction, SET_REMOTE_FUNDS_LOADING, setRemoteFundsAction } from '@/actions/fund';
+import { syncFixWalletStateAction } from '@/actions/wallet';
 import * as Services from '@/services';
 import * as Enums from '@/utils/enums';
 import * as Utils from '@/utils';
@@ -226,4 +230,44 @@ export function SortFunds(funds: Fund.ResponseItem[], walletCode: string) {
   });
 
   return sortList;
+}
+
+export async function LoadFunds(loading: boolean) {
+  try {
+    const currentWalletCode = Helpers.Wallet.GetCurrentWalletCode();
+    const { fundConfig } = Helpers.Fund.GetFundConfig(currentWalletCode);
+    store.dispatch({ type: SET_FUNDS_LOADING, payload: loading && true });
+    const responseFunds = (await Helpers.Fund.GetFunds(fundConfig)).filter(Utils.NotEmpty);
+    batch(() => {
+      store.dispatch(sortFundsCachedAction(responseFunds, currentWalletCode));
+      store.dispatch({ type: SET_FUNDS_LOADING, payload: false });
+    });
+  } catch (error) {
+    console.log('加载基金出错', error);
+    store.dispatch({ type: SET_FUNDS_LOADING, payload: false });
+  }
+}
+
+export async function LoadFixFunds() {
+  try {
+    const { funds, code } = Helpers.Wallet.GetCurrentWalletState();
+    const fixFunds = (await Helpers.Fund.GetFixFunds(funds)).filter(Utils.NotEmpty);
+    const now = dayjs().format('MM-DD HH:mm:ss');
+    store.dispatch(syncFixWalletStateAction({ code, funds: fixFunds, updateTime: now }));
+  } catch (error) {
+    console.log('加载最新净值失败', error);
+  }
+}
+export async function LoadRemoteFunds() {
+  try {
+    store.dispatch({ type: SET_REMOTE_FUNDS_LOADING, payload: true });
+    const remoteFunds = await Services.Fund.GetRemoteFundsFromEastmoney();
+    batch(() => {
+      store.dispatch(setRemoteFundsAction(remoteFunds));
+      store.dispatch({ type: SET_REMOTE_FUNDS_LOADING, payload: false });
+    });
+  } catch (error) {
+    console.log('加载远程基金库出错', error);
+    store.dispatch({ type: SET_REMOTE_FUNDS_LOADING, payload: false });
+  }
 }

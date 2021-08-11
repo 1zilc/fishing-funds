@@ -1,3 +1,6 @@
+import { batch } from 'react-redux';
+import { store } from '@/.';
+import { SET_QUOTATIONS_LOADING, sortQuotationsCachedAction } from '@/actions/quotation';
 import * as Services from '@/services';
 import * as Utils from '@/utils';
 import * as CONST from '@/constants';
@@ -41,4 +44,18 @@ export function SortQuotations(responseQuotations: Quotation.ResponseItem[]) {
   });
 
   return sortList;
+}
+
+export async function LoadQuotations(loading?: boolean) {
+  try {
+    store.dispatch({ type: SET_QUOTATIONS_LOADING, payload: loading && true });
+    const responseQuotations = await Helpers.Quotation.GetQuotations();
+    batch(() => {
+      store.dispatch(sortQuotationsCachedAction(responseQuotations));
+      store.dispatch({ type: SET_QUOTATIONS_LOADING, payload: false });
+    });
+  } catch (error) {
+    console.log('加载板块出错', error);
+    store.dispatch({ type: SET_QUOTATIONS_LOADING, payload: false });
+  }
 }

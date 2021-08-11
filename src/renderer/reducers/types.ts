@@ -25,12 +25,12 @@ export type StoreState = {
 
 export type GetState = () => StoreState;
 
-export type Dispatch = ReduxDispatch<any>;
+export type Dispatch = ReduxThunkDispatch<StoreState, unknown, Action<string>>;
 
-export type Store = ReduxStore<StoreState, AnyAction>;
+export type Store = ReduxStore<StoreState, any | Dispatch>;
 
-export type ThunkAction<T = void> = (dispatch: ReduxThunkDispatch<StoreState, unknown, Action<string>>, getState: GetState) => T;
+export type ThunkAction<T = void> = (dispatch: Dispatch, getState: GetState) => T;
 
 export type PromiseAction<T = void> = (dispatch: Dispatch, getState: GetState) => Promise<T>;
 
-export type Reducer<S> = (state: S, action: AnyAction) => S;
+export type Reducer<S> = (state: S, action: any | Dispatch) => S;

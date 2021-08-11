@@ -1,9 +1,8 @@
 import { batch } from 'react-redux';
 import dayjs from 'dayjs';
 
-import { ThunkAction, PromiseAction } from '@/reducers/types';
-import { syncFixWalletStateAction, setWalletConfigAction, syncWalletStateAction } from '@/actions/wallet';
-import * as Services from '@/services';
+import { ThunkAction } from '@/reducers/types';
+import { setWalletConfigAction, syncWalletStateAction } from '@/actions/wallet';
 import * as Utils from '@/utils';
 import * as CONST from '@/constants';
 import * as Helpers from '@/helpers';
@@ -122,66 +121,6 @@ export function deleteFundAction(code: string): ThunkAction {
       });
     } catch (error) {
       console.log('删除基金出错', error);
-    }
-  };
-}
-
-export function loadRemoteFundsAction(): ThunkAction {
-  return async (dispatch, getState) => {
-    try {
-      dispatch({ type: SET_REMOTE_FUNDS_LOADING, payload: true });
-      const remoteFunds = await Services.Fund.GetRemoteFundsFromEastmoney();
-      batch(() => {
-        dispatch(setRemoteFundsAction(remoteFunds));
-        dispatch({ type: SET_REMOTE_FUNDS_LOADING, payload: false });
-      });
-    } catch (error) {
-      console.log('加载远程基金库出错', error);
-      dispatch({ type: SET_REMOTE_FUNDS_LOADING, payload: false });
-    }
-  };
-}
-
-export function loadFundsAction(): PromiseAction {
-  return async (dispatch, getState) => {
-    try {
-      const currentWalletCode = Helpers.Wallet.GetCurrentWalletCode();
-      const { fundConfig } = Helpers.Fund.GetFundConfig(currentWalletCode);
-      dispatch({ type: SET_FUNDS_LOADING, payload: true });
-      const responseFunds = (await Helpers.Fund.GetFunds(fundConfig)).filter(Utils.NotEmpty);
-      batch(() => {
-        dispatch(sortFundsCachedAction(responseFunds, currentWalletCode));
-        dispatch({ type: SET_FUNDS_LOADING, payload: false });
-      });
-    } catch (error) {
-      console.log('加载基金出错', error);
-      dispatch({ type: SET_FUNDS_LOADING, payload: false });
-    }
-  };
-}
-
-export function loadFundsWithoutLoadingAction(): PromiseAction {
-  return async (dispatch, getState) => {
-    try {
-      const currentWalletCode = Helpers.Wallet.GetCurrentWalletCode();
-      const { fundConfig } = Helpers.Fund.GetFundConfig(currentWalletCode);
-      const responseFunds = (await Helpers.Fund.GetFunds(fundConfig)).filter(Utils.NotEmpty);
-      dispatch(sortFundsCachedAction(responseFunds, currentWalletCode));
-    } catch (error) {
-      console.log('静默加载基金失败', error);
-    }
-  };
-}
-
-export function loadFixFundsAction(): PromiseAction {
-  return async (dispatch, getState) => {
-    try {
-      const { funds, code } = Helpers.Wallet.GetCurrentWalletState();
-      const fixFunds = (await Helpers.Fund.GetFixFunds(funds)).filter(Utils.NotEmpty);
-      const now = dayjs().format('MM-DD HH:mm:ss');
-      dispatch(syncFixWalletStateAction({ code, funds: fixFunds, updateTime: now }));
-    } catch (error) {
-      console.log('加载最新净值失败', error);
     }
   };
 }

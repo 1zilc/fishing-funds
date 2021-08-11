@@ -1,6 +1,4 @@
-import { batch } from 'react-redux';
-
-import { Dispatch, GetState, ThunkAction, PromiseAction } from '@/reducers/types';
+import { ThunkAction } from '@/reducers/types';
 import * as Utils from '@/utils';
 import * as CONST from '@/constants';
 import * as Helpers from '@/helpers';
@@ -10,7 +8,7 @@ export const SYNC_ZIDNEX_CONFIG = 'SYNC_ZIDNEX_CONFIG';
 export const SYNC_ZIDNEXS = 'SYNC_ZIDNEXS';
 
 export function setZindexConfigAction(zindexConfig: Zindex.SettingItem[]): ThunkAction {
-  return (dispatch: Dispatch, getState: GetState) => {
+  return (dispatch, getState) => {
     try {
       Utils.SetStorage(CONST.STORAGE.ZINDEX_SETTING, zindexConfig);
       dispatch(syncZindexConfigAction());
@@ -27,33 +25,6 @@ export function syncZindexConfigAction(): ThunkAction {
       dispatch({ type: SYNC_ZIDNEX_CONFIG, payload: config });
     } catch (error) {
       console.log('同步指数配置出错', error);
-    }
-  };
-}
-
-export function loadZindexsAction(): PromiseAction {
-  return async (dispatch: Dispatch, getState: GetState) => {
-    try {
-      dispatch({ type: SET_ZINDEXS_LOADING, payload: true });
-      const responseZindexs = (await Helpers.Zindex.GetZindexs()).filter(Utils.NotEmpty);
-      batch(() => {
-        dispatch(sortZindexsCachedAction(responseZindexs));
-        dispatch({ type: SET_ZINDEXS_LOADING, payload: false });
-      });
-    } catch (error) {
-      console.log('加载指数出错', error);
-      dispatch({ type: SET_ZINDEXS_LOADING, payload: false });
-    }
-  };
-}
-
-export function loadZindexsWithoutLoadingAction(): PromiseAction {
-  return async (dispatch: Dispatch, getState: GetState) => {
-    try {
-      const responseZindexs = (await Helpers.Zindex.GetZindexs()).filter(Utils.NotEmpty);
-      dispatch(sortZindexsCachedAction(responseZindexs));
-    } catch (error) {
-      console.log('静默加载指数失败', error);
     }
   };
 }

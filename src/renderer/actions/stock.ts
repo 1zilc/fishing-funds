@@ -103,35 +103,8 @@ export function sortStocksAction(): ThunkAction {
   };
 }
 
-export function loadStocksAction(): PromiseAction {
-  return async (dispatch, getState) => {
-    try {
-      dispatch({ type: SET_STOCKS_LOADING, payload: true });
-      const responseStocks = (await Helpers.Stock.GetStocks()).filter(Utils.NotEmpty) as Stock.ResponseItem[];
-      batch(() => {
-        dispatch(sortStocksCachedAction(responseStocks));
-        dispatch({ type: SET_STOCKS_LOADING, payload: false });
-      });
-    } catch (error) {
-      console.log('加载股票失败', error);
-      dispatch({ type: SET_STOCKS_LOADING, payload: false });
-    }
-  };
-}
-
-export function loadStocksWithoutLoadingAction(): PromiseAction {
-  return async (dispatch, getState) => {
-    try {
-      const responseStocks = (await Helpers.Stock.GetStocks()).filter(Utils.NotEmpty) as Stock.ResponseItem[];
-      dispatch(sortStocksCachedAction(responseStocks));
-    } catch (error) {
-      console.log('静默加载股票失败', error);
-    }
-  };
-}
-
-export function sortStocksCachedAction(responseStocks: Stock.ResponseItem[]): PromiseAction {
-  return async (dispatch, getState) => {
+export function sortStocksCachedAction(responseStocks: Stock.ResponseItem[]): ThunkAction {
+  return (dispatch, getState) => {
     try {
       const {
         stock: { stocks },
