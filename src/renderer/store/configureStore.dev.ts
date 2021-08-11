@@ -1,6 +1,5 @@
 import { createStore, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
-import promise from 'redux-promise';
 import { routerActions } from 'connected-react-router';
 import { createLogger } from 'redux-logger';
 import createRootReducer from '../reducers';
@@ -28,7 +27,7 @@ const configureStore = (initialState?: StoreState) => {
   const enhancers = [];
 
   // Thunk Middleware
-  middleware.push(thunk, promise);
+  middleware.push(thunk);
 
   // Logging Middleware
   const logger = createLogger({

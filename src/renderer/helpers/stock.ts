@@ -1,3 +1,6 @@
+import { batch } from 'react-redux';
+import { store } from '@/.';
+import { sortStocksCachedAction, SET_STOCKS_LOADING } from '@/actions/stock';
 import * as Adapter from '@/utils/adpters';
 import * as Services from '@/services';
 import * as Utils from '@/utils';
@@ -55,4 +58,18 @@ export function SortStocks(responseStocks: Stock.ResponseItem[]) {
   });
 
   return sortList;
+}
+
+export async function loadStocks(loading: boolean) {
+  try {
+    store.dispatch({ type: SET_STOCKS_LOADING, payload: loading && true });
+    const responseStocks = (await Helpers.Stock.GetStocks()).filter(Utils.NotEmpty) as Stock.ResponseItem[];
+    batch(() => {
+      store.dispatch(sortStocksCachedAction(responseStocks));
+      store.dispatch({ type: SET_STOCKS_LOADING, payload: false });
+    });
+  } catch (error) {
+    console.log('加载股票失败', error);
+    store.dispatch({ type: SET_STOCKS_LOADING, payload: false });
+  }
 }

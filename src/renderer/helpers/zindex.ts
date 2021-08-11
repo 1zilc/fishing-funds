@@ -1,3 +1,6 @@
+import { batch } from 'react-redux';
+import { store } from '@/.';
+import { sortZindexsCachedAction, SET_ZINDEXS_LOADING } from '@/actions/zindex';
 import * as Adapter from '@/utils/adpters';
 import * as Services from '@/services';
 import * as Utils from '@/utils';
@@ -549,4 +552,18 @@ export async function GetRemoteZindexConfig() {
   const a3 = eval(b3);
   const result = [...a1, ...a2, ...a3];
   return result;
+}
+
+export async function LoadZindexs(loading: boolean) {
+  try {
+    store.dispatch({ type: SET_ZINDEXS_LOADING, payload: loading && true });
+    const responseZindexs = (await Helpers.Zindex.GetZindexs()).filter(Utils.NotEmpty);
+    batch(() => {
+      store.dispatch(sortZindexsCachedAction(responseZindexs));
+      store.dispatch({ type: SET_ZINDEXS_LOADING, payload: false });
+    });
+  } catch (error) {
+    console.log('加载指数出错', error);
+    store.dispatch({ type: SET_ZINDEXS_LOADING, payload: false });
+  }
 }

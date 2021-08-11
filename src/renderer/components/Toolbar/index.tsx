@@ -17,12 +17,10 @@ import FundStatisticsContent from '@/components/Home/FundList/FundStatisticsCont
 import ManageZindexContent from '@/components/Home/ZindexList/ManageZindexContent';
 import FundFlowContent from '@/components/Home/QuotationList/FundFlowContent';
 import { StoreState } from '@/reducers/types';
-import { loadZindexsAction } from '@/actions/zindex';
-import { loadQuotationsAction } from '@/actions/quotation';
-import { loadStocksAction } from '@/actions/stock';
-import { useScrollToTop, useActions, useFreshFunds } from '@/utils/hooks';
+import { useScrollToTop, useFreshFunds } from '@/utils/hooks';
 import * as Enums from '@/utils/enums';
 import * as CONST from '@/constants';
+import * as Helpers from '@/helpers';
 import styles from './index.scss';
 
 export interface ToolBarProps {}
@@ -34,20 +32,14 @@ const ToolBar: React.FC<ToolBarProps> = () => {
   const updateInfo = useSelector((state: StoreState) => state.updater.updateInfo);
   const tabsActiveKey = useSelector((state: StoreState) => state.tabs.activeKey);
 
-  const { run: runLoadZindexs } = useThrottleFn(useActions(loadZindexsAction), {
-    wait: CONST.DEFAULT.FRESH_BUTTON_THROTTLE_DELAY,
-  });
-  const { run: runLoadQuotations } = useThrottleFn(useActions(loadQuotationsAction), {
-    wait: CONST.DEFAULT.FRESH_BUTTON_THROTTLE_DELAY,
-  });
-  const { run: runLoadStocks } = useThrottleFn(useActions(loadStocksAction), {
-    wait: CONST.DEFAULT.FRESH_BUTTON_THROTTLE_DELAY,
-  });
+  const { run: runLoadZindexs } = useThrottleFn(Helpers.Zindex.LoadZindexs, { wait: CONST.DEFAULT.FRESH_BUTTON_THROTTLE_DELAY });
+  const { run: runLoadQuotations } = useThrottleFn(Helpers.Quotation.LoadQuotations, { wait: CONST.DEFAULT.FRESH_BUTTON_THROTTLE_DELAY });
+  const { run: runLoadStocks } = useThrottleFn(Helpers.Stock.loadStocks, { wait: CONST.DEFAULT.FRESH_BUTTON_THROTTLE_DELAY });
 
   const freshFunds = useFreshFunds(CONST.DEFAULT.FRESH_BUTTON_THROTTLE_DELAY);
-  const freshZindexs = useScrollToTop({ after: runLoadZindexs });
-  const freshQuotations = useScrollToTop({ after: runLoadQuotations });
-  const freshStocks = useScrollToTop({ after: runLoadStocks });
+  const freshZindexs = useScrollToTop({ after: () => runLoadZindexs(true) });
+  const freshQuotations = useScrollToTop({ after: () => runLoadQuotations(true) });
+  const freshStocks = useScrollToTop({ after: () => runLoadStocks(true) });
 
   const [showManageFundDrawer, { setTrue: openManageFundDrawer, setFalse: closeManageFundDrawer, toggle: ToggleManageFundDrawer }] =
     useBoolean(false);

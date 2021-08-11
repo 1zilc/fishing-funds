@@ -1,12 +1,9 @@
-import dayjs from 'dayjs';
 import { batch } from 'react-redux';
 
-import { ThunkAction, PromiseAction } from '@/reducers/types';
+import { ThunkAction } from '@/reducers/types';
 import * as Enums from '@/utils/enums';
 import * as CONST from '@/constants';
 import * as Utils from '@/utils';
-import * as Adapter from '@/utils/adpters';
-import * as Services from '@/services';
 import * as Helpers from '@/helpers';
 
 export const CHANGE_EYE_STATUS = 'CHANGE_EYE_STATUS';
@@ -124,66 +121,6 @@ export function selectWalletAction(code: string): ThunkAction {
       });
     } catch (error) {
       console.log('选择钱包出错', error);
-    }
-  };
-}
-
-export function loadWalletsFundsAction(): PromiseAction {
-  return async (dispatch, getState) => {
-    try {
-      const { walletConfig } = Helpers.Wallet.GetWalletConfig();
-      const collects = walletConfig.map(({ funds: fundsConfig, code: walletCode }) => async () => {
-        const responseFunds = (await Helpers.Fund.GetFunds(fundsConfig)).filter(Utils.NotEmpty);
-        const sortFunds = Helpers.Fund.SortFunds(responseFunds, walletCode);
-        const now = dayjs().format('MM-DD HH:mm:ss');
-        dispatch(
-          syncWalletStateAction({
-            code: walletCode,
-            funds: sortFunds,
-            updateTime: now,
-          })
-        );
-        return responseFunds;
-      });
-      await Adapter.ChokeAllAdapter<(Fund.ResponseItem | null)[]>(collects, CONST.DEFAULT.LOAD_WALLET_DELAY);
-    } catch (error) {
-      console.log('刷新钱包基金出错', error);
-    }
-  };
-}
-
-export function loadFixWalletsFundsAction(): PromiseAction {
-  return async (dispatch, getState) => {
-    try {
-      const {
-        wallet: { wallets },
-      } = getState();
-
-      const fixCollects = wallets.map((wallet) => {
-        const collectors = (wallet.funds || [])
-          .filter(({ fixDate, gztime }) => !fixDate || fixDate !== gztime?.slice(5, 10))
-          .map(
-            ({ fundcode }) =>
-              () =>
-                Services.Fund.GetFixFromEastMoney(fundcode!)
-          );
-        return async () => {
-          const fixFunds = await Adapter.ConCurrencyAllAdapter<Fund.FixData>(collectors);
-          const now = dayjs().format('MM-DD HH:mm:ss');
-          dispatch(
-            syncFixWalletStateAction({
-              code: wallet.code,
-              funds: fixFunds.filter(Utils.NotEmpty),
-              updateTime: now,
-            })
-          );
-          return fixFunds;
-        };
-      });
-
-      await Adapter.ChokeAllAdapter<(Fund.FixData | null)[]>(fixCollects, CONST.DEFAULT.LOAD_WALLET_DELAY);
-    } catch (error) {
-      console.log('刷新钱包基金fix出错', error);
     }
   };
 }

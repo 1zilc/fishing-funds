@@ -1,6 +1,4 @@
-import { batch } from 'react-redux';
-
-import { ThunkAction, PromiseAction } from '@/reducers/types';
+import { ThunkAction } from '@/reducers/types';
 import * as Utils from '@/utils';
 import * as CONST from '@/constants';
 import * as Helpers from '@/helpers';
@@ -18,33 +16,6 @@ export function syncFavoriteQuotationMapAction(code: string, status: boolean): T
       dispatch({ type: SYNC_FAVORITE_QUOTATION_MAP, payload: favoriteQuotationMap });
     } catch (error) {
       console.log('同步关注板块出错', error);
-    }
-  };
-}
-
-export function loadQuotationsAction(): PromiseAction {
-  return async (dispatch, getState) => {
-    try {
-      dispatch({ type: SET_QUOTATIONS_LOADING, payload: true });
-      const responseQuotations = await Helpers.Quotation.GetQuotations();
-      batch(() => {
-        dispatch(sortQuotationsCachedAction(responseQuotations));
-        dispatch({ type: SET_QUOTATIONS_LOADING, payload: false });
-      });
-    } catch (error) {
-      console.log('加载板块出错', error);
-      dispatch({ type: SET_QUOTATIONS_LOADING, payload: false });
-    }
-  };
-}
-
-export function loadQuotationsWithoutLoadingAction(): PromiseAction {
-  return async (dispatch, getState) => {
-    try {
-      const responseQuotations = await await Helpers.Quotation.GetQuotations();
-      dispatch(sortQuotationsCachedAction(responseQuotations));
-    } catch (error) {
-      console.log('静默加载板块出错', error);
     }
   };
 }

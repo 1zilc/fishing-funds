@@ -17,10 +17,10 @@ export const store = configureStore();
 NP.enableBoundaryChecking(false);
 
 render(
-  <Provider store={store}>
-    <ConfigProvider locale={zhCN}>
+  <ConfigProvider locale={zhCN}>
+    <Provider store={store}>
       <App />
-    </ConfigProvider>
-  </Provider>,
+    </Provider>
+  </ConfigProvider>,
   document.getElementById('root')
 );
