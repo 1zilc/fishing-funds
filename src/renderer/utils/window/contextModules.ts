@@ -10,12 +10,17 @@ declare global {
         ipcRenderer: IpcRenderer;
         dialog: Dialog;
         app: App;
-        clipboard: Clipboard;
+        clipboard: {
+          writeText: Clipboard['writeText'];
+          readText: Clipboard['readText'];
+          writeImage: (dataUrl: string) => void;
+        };
         invoke: {
           showCurrentWindow: () => void;
           getShouldUseDarkColors: () => Promise<boolean>;
           setNativeThemeSource: (theme: string) => Promise<void>;
         };
+        saveImage: (filePath: string, dataUrl: string) => Promise<void>;
       };
       process: {
         production: boolean;

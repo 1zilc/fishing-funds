@@ -1,5 +1,6 @@
-import { contextBridge, ipcRenderer, shell, app, clipboard, nativeTheme } from 'electron';
+import { contextBridge, ipcRenderer, shell, app, clipboard, nativeTheme, nativeImage, dialog } from 'electron';
 import got from 'got';
+import * as fs from 'fs';
 
 contextBridge.exposeInMainWorld('contextModules', {
   got: async (url: string, config = {}) => got(url, { ...config, retry: 3, timeout: 6000 }),
@@ -26,6 +27,7 @@ contextBridge.exposeInMainWorld('contextModules', {
     },
     dialog: {
       showMessageBox: async (config: any) => ipcRenderer.invoke('show-message-box', config),
+      showSaveDialog: async (config: any) => ipcRenderer.invoke('show-save-dialog', config),
     },
     invoke: {
       showCurrentWindow: () => ipcRenderer.invoke('show-current-window'),
@@ -39,6 +41,16 @@ contextBridge.exposeInMainWorld('contextModules', {
     clipboard: {
       readText: clipboard.readText,
       writeText: clipboard.writeText,
+      writeImage: (dataUrl: string) => clipboard.writeImage(nativeImage.createFromDataURL(dataUrl)),
+    },
+    saveImage: (filePath: string, dataUrl: string) => {
+      try {
+        const data = dataUrl.match(/^data:([A-Za-z-+/]+);base64,(.+)$/);
+        const imageBuffer = Buffer.from(data![2], 'base64');
+        fs.writeFileSync(`${filePath}`, imageBuffer);
+      } catch (error) {
+        console.log('图片写入失败', error);
+      }
     },
   },
 });

@@ -4,6 +4,7 @@ import classnames from 'classnames';
 import { useSelector } from 'react-redux';
 
 import PureCard from '@/components/Card/PureCard';
+import ChartCard from '@/components/Card/ChartCard';
 import Score from '@/components/Home/FundList/FundStatisticsContent/AssetsStatistics/Score';
 import { StoreState } from '@/reducers/types';
 import * as Enums from '@/utils/enums';
@@ -53,83 +54,87 @@ const AssetsStatistics: React.FC<AssetsStatisticsProps> = ({ funds, codes }) => 
   const displayCysyl = eyeOpen ? cysyl.toFixed(2) : Utils.Encrypt(cysyl.toFixed(2));
 
   return (
-    <PureCard className={styles.content}>
-      <div style={{ textAlign: 'center' }}>
-        <div>总资产</div>
-        <div
-          style={{
-            fontSize: 20,
-            fontWeight: 500,
-            lineHeight: '24px',
-            marginBottom: 10,
-          }}
-        >
-          {eyeOpen ? '￥' : ''}
-          {displayCyje}
+    <>
+      <PureCard className={styles.content}>
+        <div style={{ textAlign: 'center' }}>
+          <div>总资产</div>
+          <div
+            style={{
+              fontSize: 20,
+              fontWeight: 500,
+              lineHeight: '24px',
+              marginBottom: 10,
+            }}
+          >
+            {eyeOpen ? '￥' : ''}
+            {displayCyje}
+          </div>
+          <div className={styles.row}>
+            <div>
+              钱包：{displayCodesLength}
+              {eyeOpen ? '个' : ''}
+            </div>
+            <div>
+              基金：{displayFundsLength}
+              {eyeOpen ? '支' : ''}
+            </div>
+          </div>
+          <div className={styles.row}>
+            <div>盈利数：{displayWinWalletCount}</div>
+            <div>正增幅：{displayWinFundCount}</div>
+          </div>
+          <div className={styles.row}>
+            <div>
+              收益(今)：
+              <span
+                className={classnames({
+                  [Utils.GetValueColor(displaySygz).textClass]: eyeOpen,
+                })}
+              >
+                {displaySygz}
+              </span>
+            </div>
+            <div>
+              收益率(今)：
+              <span
+                className={classnames({
+                  [Utils.GetValueColor(displayGssyl).textClass]: eyeOpen,
+                })}
+              >
+                {displayGssyl}
+                {eyeOpen ? '%' : ''}
+              </span>
+            </div>
+          </div>
+          <div className={styles.row}>
+            <div>
+              持有收益：
+              <span
+                className={classnames({
+                  [Utils.GetValueColor(displayCysy).textClass]: eyeOpen,
+                })}
+              >
+                {displayCysy}
+              </span>
+            </div>
+            <div>
+              持有收益率：
+              <span
+                className={classnames({
+                  [Utils.GetValueColor(displayCysyl).textClass]: eyeOpen,
+                })}
+              >
+                {displayCysyl}
+                {eyeOpen ? '%' : ''}
+              </span>
+            </div>
+          </div>
         </div>
-        <div className={styles.row}>
-          <div>
-            钱包：{displayCodesLength}
-            {eyeOpen ? '个' : ''}
-          </div>
-          <div>
-            基金：{displayFundsLength}
-            {eyeOpen ? '支' : ''}
-          </div>
-        </div>
-        <div className={styles.row}>
-          <div>盈利数：{displayWinWalletCount}</div>
-          <div>正增幅：{displayWinFundCount}</div>
-        </div>
-        <div className={styles.row}>
-          <div>
-            收益(今)：
-            <span
-              className={classnames({
-                [Utils.GetValueColor(displaySygz).textClass]: eyeOpen,
-              })}
-            >
-              {displaySygz}
-            </span>
-          </div>
-          <div>
-            收益率(今)：
-            <span
-              className={classnames({
-                [Utils.GetValueColor(displayGssyl).textClass]: eyeOpen,
-              })}
-            >
-              {displayGssyl}
-              {eyeOpen ? '%' : ''}
-            </span>
-          </div>
-        </div>
-        <div className={styles.row}>
-          <div>
-            持有收益：
-            <span
-              className={classnames({
-                [Utils.GetValueColor(displayCysy).textClass]: eyeOpen,
-              })}
-            >
-              {displayCysy}
-            </span>
-          </div>
-          <div>
-            持有收益率：
-            <span
-              className={classnames({
-                [Utils.GetValueColor(displayCysyl).textClass]: eyeOpen,
-              })}
-            >
-              {displayCysyl}
-              {eyeOpen ? '%' : ''}
-            </span>
-          </div>
-        </div>
-      </div>
-      <Score gssyl={gssyl} />
-    </PureCard>
+      </PureCard>
+      <ChartCard auto>
+        <Score gssyl={gssyl} />
+      </ChartCard>
+    </>
   );
 };
 

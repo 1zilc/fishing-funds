@@ -9,6 +9,7 @@
   box-sizing: border-box;
   width: 100%;
   flex-wrap: wrap;
+  margin-top: var(--base-padding);
 }
 .wallet {
   display: flex;
