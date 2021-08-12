@@ -13,3 +13,16 @@
 .autoSize {
   min-height: auto;
 }
+.toolbar {
+  display: flex;
+  padding-bottom: 5px;
+  justify-content: flex-end;
+
+  svg {
+    width: 12px;
+    height: 12px;
+    margin-left: 5px;
+    cursor: pointer;
+    fill: var(--main-text-color);
+  }
+}

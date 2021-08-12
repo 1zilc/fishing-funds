@@ -156,6 +156,9 @@ const createMenubar = async () => {
   ipcMain.handle('show-message-box', async (event, config) => {
     return dialog.showMessageBox(config);
   });
+  ipcMain.handle('show-save-dialog', async (event, config) => {
+    return dialog.showSaveDialog(config);
+  });
   ipcMain.handle('show-current-window', (event, config) => {
     mb.window?.show();
   });
