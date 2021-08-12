@@ -5,7 +5,16 @@
 .ant-tabs-nav::before {
   border: none !important;
 }
-
+.ant-checkbox-checked .ant-checkbox-inner,
+.ant-radio-group-solid .ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled) {
+  background: var(--primary-color);
+  border-color: var(--primary-color);
+}
+.ant-tabs-ink-bar,
+.ant-switch-checked {
+  background-color: var(--primary-color);
+}
+.ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn,
 .ant-dropdown-trigger {
   color: var(--primary-color);
 }
