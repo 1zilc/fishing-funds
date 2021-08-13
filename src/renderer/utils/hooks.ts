@@ -435,7 +435,8 @@ export function useBootStrap() {
   const runLoadFixWalletsFunds = () => Helpers.Wallet.loadFixWalletsFunds();
   const runLoadZindexs = () => Helpers.Zindex.LoadZindexs(false);
   const runLoadQuotations = () => Helpers.Quotation.LoadQuotations(false);
-  const runLoadStocks = () => Helpers.Stock.loadStocks(false);
+  const runLoadStocks = () => Helpers.Stock.LoadStocks(false);
+  const runLoadCoins = () => Helpers.Coin.LoadCoins(false);
 
   // 间隔时间刷新远程基金数据
   useInterval(() => {
@@ -447,7 +448,7 @@ export function useBootStrap() {
     if (autoFreshSetting) {
       Adapters.ConCurrencyAllAdapter([
         () => Adapters.ChokeAllAdapter([runLoadWalletsFunds]),
-        () => Adapters.ChokeAllAdapter([runLoadZindexs, runLoadQuotations, runLoadStocks]),
+        () => Adapters.ChokeAllAdapter([runLoadZindexs, runLoadQuotations, runLoadStocks, runLoadCoins]),
       ]);
     }
   }, freshDelaySetting * 1000 * 60);
@@ -463,7 +464,7 @@ export function useBootStrap() {
   useEffect(() => {
     Adapters.ConCurrencyAllAdapter([
       () => Adapters.ChokeAllAdapter([runLoadRemoteFunds, runLoadWalletsFunds, runLoadFixWalletsFunds]),
-      () => Adapters.ChokeAllAdapter([runLoadZindexs, runLoadQuotations, runLoadStocks]),
+      () => Adapters.ChokeAllAdapter([runLoadZindexs, runLoadQuotations, runLoadStocks, runLoadCoins]),
     ]);
   }, []);
 }

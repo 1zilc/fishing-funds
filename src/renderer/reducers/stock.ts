@@ -1,9 +1,5 @@
-import { AnyAction } from 'redux';
-
 import { SET_STOCKS_LOADING, SYNC_STOCK_CONFIG, SYNC_STOCKS } from '@/actions/stock';
-
 import { Reducer } from '@/reducers/types';
-import * as Utils from '@/utils';
 import * as Helpers from '@/helpers';
 
 export interface StockState {

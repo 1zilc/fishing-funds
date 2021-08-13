@@ -8,6 +8,7 @@ export type SortState = {
     zindexSortMode: Helpers.Sort.ZindexSortMode;
     quotationSortMode: Helpers.Sort.QuotationSortType;
     stockSortMode: Helpers.Sort.StockSortType;
+    coinSortMode: Helpers.Sort.CoinSortType;
   };
 };
 

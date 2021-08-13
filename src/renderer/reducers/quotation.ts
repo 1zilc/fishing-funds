@@ -1,5 +1,4 @@
-import { AnyAction } from 'redux';
-
+import { Reducer } from '@/reducers/types';
 import { SET_QUOTATIONS_LOADING, SYNC_QUOTATIONS, SYNC_FAVORITE_QUOTATION_MAP } from '@/actions/quotation';
 import * as Helpers from '@/helpers';
 
@@ -9,14 +8,14 @@ export interface QuotationState {
   favoriteQuotationMap: Record<string, boolean>;
 }
 
-export default function quotation(
+const quotation: Reducer<QuotationState> = (
   state = {
     quotations: [],
     quotationsLoading: false,
     favoriteQuotationMap: Helpers.Quotation.GetFavoriteQuotationMap(),
   },
-  action: AnyAction
-) {
+  action
+) => {
   switch (action.type) {
     case SYNC_QUOTATIONS:
       return {
@@ -36,4 +35,5 @@ export default function quotation(
     default:
       return state;
   }
-}
+};
+export default quotation;

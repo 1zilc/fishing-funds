@@ -1,6 +1,5 @@
-import { AnyAction } from 'redux';
-
-import { UPDATE_AVALIABLE } from '../actions/updater';
+import { Reducer } from '@/reducers/types';
+import { UPDATE_AVALIABLE } from '@/actions/updater';
 
 export interface UpdaderState {
   updateInfo: {
@@ -14,12 +13,20 @@ export interface UpdaderState {
   };
 }
 
-export default function uptader(
+const uptader: Reducer<UpdaderState> = (
   state = {
-    updateInfo: {},
+    updateInfo: {
+      files: [],
+      path: '',
+      releaseDate: '',
+      releaseName: '',
+      releaseNotes: '',
+      sha512: '',
+      version: '',
+    },
   },
-  action: AnyAction
-) {
+  action
+) => {
   switch (action.type) {
     case UPDATE_AVALIABLE:
       return {
@@ -29,4 +36,5 @@ export default function uptader(
     default:
       return state;
   }
-}
+};
+export default uptader;

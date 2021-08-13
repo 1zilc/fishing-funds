@@ -69,7 +69,7 @@ export function GetWalletState(walletCode: string) {
 }
 export async function LoadWalletsFunds() {
   try {
-    const { walletConfig } = Helpers.Wallet.GetWalletConfig();
+    const { walletConfig } = GetWalletConfig();
     const collects = walletConfig.map(({ funds: fundsConfig, code: walletCode }) => async () => {
       const responseFunds = (await Helpers.Fund.GetFunds(fundsConfig)).filter(Utils.NotEmpty);
       const sortFunds = Helpers.Fund.SortFunds(responseFunds, walletCode);

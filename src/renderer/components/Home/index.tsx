@@ -8,6 +8,7 @@ import FundList from '@/components/Home/FundList';
 import ZindexList from '@/components/Home/ZindexList';
 import QuotationList from '@/components/Home/QuotationList';
 import StockList from '@/components/Home/StockList';
+import CoinList from '@/components/Home/CoinList';
 import Toolbar from '@/components/Toolbar';
 import Wallet from '@/components/Wallet/index';
 import Header from '@/components/Header';
@@ -112,6 +113,16 @@ const StockGroup = () => {
   );
 };
 
+const CoinGroup = () => {
+  return (
+    <GroupTab>
+      <Tabs.TabPane tab="全部" key={String(-1)}>
+        <CoinList filter={() => true} />
+      </Tabs.TabPane>
+    </GroupTab>
+  );
+};
+
 const Home: React.FC<HomeProps> = () => {
   const tabsActiveKey = useSelector((state: StoreState) => state.tabs.activeKey);
 
@@ -137,6 +148,9 @@ const Home: React.FC<HomeProps> = () => {
           </Tabs.TabPane>
           <Tabs.TabPane key={String(Enums.TabKeyType.Stock)}>
             <StockGroup />
+          </Tabs.TabPane>
+          <Tabs.TabPane key={String(Enums.TabKeyType.Coin)}>
+            <CoinGroup />
           </Tabs.TabPane>
         </Tabs>
         <Footer>

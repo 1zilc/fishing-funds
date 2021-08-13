@@ -207,8 +207,8 @@ export function SortFunds(funds: Fund.ResponseItem[], walletCode: string) {
   const sortList = Utils.DeepCopy(funds);
 
   sortList.sort((a, b) => {
-    const calcA = Helpers.Fund.CalcFund(a, walletCode);
-    const calcB = Helpers.Fund.CalcFund(b, walletCode);
+    const calcA = CalcFund(a, walletCode);
+    const calcB = CalcFund(b, walletCode);
     const t = fundSortorder === Enums.SortOrderType.Asc ? 1 : -1;
     switch (fundSortType) {
       case Enums.FundSortType.Growth:
@@ -235,9 +235,9 @@ export function SortFunds(funds: Fund.ResponseItem[], walletCode: string) {
 export async function LoadFunds(loading: boolean) {
   try {
     const currentWalletCode = Helpers.Wallet.GetCurrentWalletCode();
-    const { fundConfig } = Helpers.Fund.GetFundConfig(currentWalletCode);
+    const { fundConfig } = GetFundConfig(currentWalletCode);
     store.dispatch({ type: SET_FUNDS_LOADING, payload: loading && true });
-    const responseFunds = (await Helpers.Fund.GetFunds(fundConfig)).filter(Utils.NotEmpty);
+    const responseFunds = (await GetFunds(fundConfig)).filter(Utils.NotEmpty);
     batch(() => {
       store.dispatch(sortFundsCachedAction(responseFunds, currentWalletCode));
       store.dispatch({ type: SET_FUNDS_LOADING, payload: false });
@@ -251,7 +251,7 @@ export async function LoadFunds(loading: boolean) {
 export async function LoadFixFunds() {
   try {
     const { funds, code } = Helpers.Wallet.GetCurrentWalletState();
-    const fixFunds = (await Helpers.Fund.GetFixFunds(funds)).filter(Utils.NotEmpty);
+    const fixFunds = (await GetFixFunds(funds)).filter(Utils.NotEmpty);
     const now = dayjs().format('MM-DD HH:mm:ss');
     store.dispatch(syncFixWalletStateAction({ code, funds: fixFunds, updateTime: now }));
   } catch (error) {

@@ -6,6 +6,7 @@ import fund from './fund';
 import zindex from './zindex';
 import quotation from './quotation';
 import stock from './stock';
+import coin from './coin';
 import setting from './setting';
 import sort from './sort';
 
@@ -18,6 +19,7 @@ export default function createRootReducer() {
     zindex,
     quotation,
     stock,
+    coin,
     setting,
     sort,
   });
