@@ -20,6 +20,11 @@ export interface StockSortType {
   order: Enums.SortOrderType;
 }
 
+export interface CoinSortType {
+  type: Enums.CoinSortType;
+  order: Enums.SortOrderType;
+}
+
 export const fundSortModeOptions: Option.EnumsOption<Enums.FundSortType>[] = [
   { key: Enums.FundSortType.Custom, value: '自定义' },
   { key: Enums.FundSortType.Growth, value: '今日涨幅' },
@@ -54,6 +59,13 @@ export const stockSortModeOptions: Option.EnumsOption<Enums.StockSortType>[] = [
   { key: Enums.StockSortType.Zx, value: '最新值' },
 ];
 
+export const coinSortModeOptions: Option.EnumsOption<Enums.CoinSortType>[] = [
+  { key: Enums.CoinSortType.Custom, value: '自定义' },
+  { key: Enums.CoinSortType.Zdf, value: '24H涨跌幅' },
+  { key: Enums.CoinSortType.Price, value: '价格' },
+  { key: Enums.CoinSortType.Rank, value: '排名' },
+];
+
 export function GetSortConfig() {
   const fundSortModeOptionsMap = fundSortModeOptions.reduce((r, c) => {
     r[c.key] = c;
@@ -75,15 +87,22 @@ export function GetSortConfig() {
     return r;
   }, {} as Record<Enums.StockSortType, Option.EnumsOption<Enums.StockSortType>>);
 
+  const coinSortModeOptionsMap = coinSortModeOptions.reduce((r, c) => {
+    r[c.key] = c;
+    return r;
+  }, {} as Record<Enums.CoinSortType, Option.EnumsOption<Enums.CoinSortType>>);
+
   return {
     fundSortModeOptions,
     zindexSortModeOptions,
     quotationSortModeOptions,
     stockSortModeOptions,
+    coinSortModeOptions,
     fundSortModeOptionsMap,
     zindexSortModeOptionsMap,
     quotationSortModeOptionsMap,
     stockSortModeOptionsMap,
+    coinSortModeOptionsMap,
   };
 }
 
@@ -104,5 +123,9 @@ export function GetSortMode() {
     type: Enums.StockSortType.Custom,
     order: Enums.SortOrderType.Desc,
   });
-  return { fundSortMode, zindexSortMode, quotationSortMode, stockSortMode };
+  const coinSortMode: CoinSortType = Utils.GetStorage(CONST.STORAGE.COIN_SORT_MODE, {
+    type: Enums.CoinSortType.Price,
+    order: Enums.SortOrderType.Desc,
+  });
+  return { fundSortMode, zindexSortMode, quotationSortMode, stockSortMode, coinSortMode };
 }

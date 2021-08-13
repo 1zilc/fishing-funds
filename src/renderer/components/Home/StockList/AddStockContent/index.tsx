@@ -39,7 +39,7 @@ const AddStockContent: React.FC<AddStockContentProps> = (props) => {
   const { defaultName } = props;
   const dispatch = useDispatch();
   const [none, setNone] = useState<boolean>(false);
-  const [groupList, setGroupList] = useState<Stock.SearchResut[]>([]);
+  const [groupList, setGroupList] = useState<Stock.SearchResult[]>([]);
   const { codeMap } = useSelector((state: StoreState) => state.stock.config);
 
   const { run: runSearch } = useRequest(Services.Stock.SearchFromEastmoney, {

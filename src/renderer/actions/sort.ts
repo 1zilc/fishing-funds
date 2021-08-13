@@ -6,6 +6,7 @@ import { sortFundsAction } from '@/actions/fund';
 import { sortZindexsAction } from '@/actions/zindex';
 import { sortQuotationsAction } from '@/actions/quotation';
 import { sortStocksAction } from '@/actions/stock';
+import { sortCoinsAction } from '@/actions/coin';
 import * as Enums from '@/utils/enums';
 import * as Utils from '@/utils';
 import * as CONST from '@/constants';
@@ -100,6 +101,28 @@ export function setStockSortModeAction(stockSortMode: { type?: Enums.StockSortTy
       });
     } catch (error) {
       console.log('设置股票排序方式出错', error);
+    }
+  };
+}
+
+export function setCoinSortModeAction(coinSortMode: { type?: Enums.CoinSortType; order?: Enums.SortOrderType }): ThunkAction {
+  return (dispatch, getState) => {
+    try {
+      const {
+        sort: {
+          sortMode: { coinSortMode: _ },
+        },
+      } = getState();
+      Utils.SetStorage(CONST.STORAGE.COIN_SORT_MODE, {
+        ..._,
+        ...coinSortMode,
+      });
+      batch(() => {
+        dispatch(syncSortModeAction());
+        dispatch(sortCoinsAction());
+      });
+    } catch (error) {
+      console.log('设置货币排序方式出错', error);
     }
   };
 }
@@ -201,6 +224,32 @@ export function troggleStockSortOrderAction(): ThunkAction {
       });
     } catch (error) {
       console.log('设置股票排序顺序出错', error);
+    }
+  };
+}
+
+export function troggleCoinSortOrderAction(): ThunkAction {
+  return (dispatch, getState) => {
+    try {
+      const {
+        sort: {
+          sortMode: {
+            coinSortMode,
+            coinSortMode: { order },
+          },
+        },
+      } = getState();
+      Utils.SetStorage(CONST.STORAGE.COIN_SORT_MODE, {
+        ...coinSortMode,
+        order: order === Enums.SortOrderType.Asc ? Enums.SortOrderType.Desc : Enums.SortOrderType.Asc,
+      });
+
+      batch(() => {
+        dispatch(syncSortModeAction());
+        dispatch(sortCoinsAction());
+      });
+    } catch (error) {
+      console.log('设置货币排序顺序出错', error);
     }
   };
 }

@@ -17,12 +17,15 @@ import {
   troggleQuotationSortOrderAction,
   setStockSortModeAction,
   troggleStockSortOrderAction,
+  setCoinSortModeAction,
+  troggleCoinSortOrderAction,
 } from '@/actions/sort';
 import { StoreState } from '@/reducers/types';
 import { toggleAllFundsCollapseAction } from '@/actions/fund';
 import { toggleAllZindexsCollapseAction } from '@/actions/zindex';
 import { toggleAllQuotationsCollapse } from '@/actions/quotation';
 import { toggleAllStocksCollapseAction } from '@/actions/stock';
+import { toggleAllCoinsCollapseAction } from '@/actions/coin';
 import { useCurrentWallet } from '@/utils/hooks';
 import * as Enums from '@/utils/enums';
 import * as Helpers from '@/helpers';
@@ -38,6 +41,7 @@ const SortBar: React.FC<SortBarProps> = () => {
     zindexSortMode: { type: zindexSortType, order: zindexSortOrder },
     quotationSortMode: { type: quotationSortType, order: quotationSortOrder },
     stockSortMode: { type: stockSortType, order: stockSortOrder },
+    coinSortMode: { type: coinSortType, order: coinSortOrder },
   } = useSelector((state: StoreState) => state.sort.sortMode);
 
   const {
@@ -49,6 +53,8 @@ const SortBar: React.FC<SortBarProps> = () => {
     quotationSortModeOptionsMap,
     stockSortModeOptions,
     stockSortModeOptionsMap,
+    coinSortModeOptions,
+    coinSortModeOptionsMap,
   } = Helpers.Sort.GetSortConfig();
 
   const [visible, setVisible] = useState(true);
@@ -62,6 +68,7 @@ const SortBar: React.FC<SortBarProps> = () => {
   const zindexs = useSelector((state: StoreState) => state.zindex.zindexs);
   const quotations = useSelector((state: StoreState) => state.quotation.quotations);
   const stocks = useSelector((state: StoreState) => state.stock.stocks);
+  const coins = useSelector((state: StoreState) => state.coin.coins);
 
   const [expandAllFunds, expandSomeFunds] = useMemo(() => {
     return [funds.every((_) => _.collapse), funds.some((_) => _.collapse)];
@@ -79,10 +86,15 @@ const SortBar: React.FC<SortBarProps> = () => {
     return [stocks.every((_) => _.collapse), stocks.some((_) => _.collapse)];
   }, [stocks]);
 
+  const [expandAllCoins, expandSomeCoins] = useMemo(() => {
+    return [coins.every((_) => _.collapse), coins.some((_) => _.collapse)];
+  }, [coins]);
+
   const toggleFundsCollapse = () => dispatch(toggleAllFundsCollapseAction());
   const toggleZindexsCollapse = () => dispatch(toggleAllZindexsCollapseAction());
   const toggleQuotationsCollapse = () => dispatch(toggleAllQuotationsCollapse());
   const toggleStocksCollapse = () => dispatch(toggleAllStocksCollapseAction());
+  const toggleCoinsCollapse = () => dispatch(toggleAllCoinsCollapseAction());
 
   useScroll(document, () => {
     setVisible(false);
@@ -224,16 +236,7 @@ const SortBar: React.FC<SortBarProps> = () => {
                 overlay={
                   <Menu selectedKeys={[String(stockSortModeOptionsMap[stockSortType].key)]}>
                     {stockSortModeOptions.map(({ key, value }) => (
-                      <Menu.Item
-                        key={String(key)}
-                        onClick={() =>
-                          dispatch(
-                            setStockSortModeAction({
-                              type: key,
-                            })
-                          )
-                        }
-                      >
+                      <Menu.Item key={String(key)} onClick={() => dispatch(setStockSortModeAction({ type: key }))}>
                         {value}
                       </Menu.Item>
                     ))}
@@ -252,6 +255,45 @@ const SortBar: React.FC<SortBarProps> = () => {
               <SortArrowDownIcon
                 className={classsames({
                   [styles.selectOrder]: stockSortOrder === Enums.SortOrderType.Desc,
+                })}
+              />
+            </div>
+          </div>
+        );
+      case Enums.TabKeyType.Coin:
+        return (
+          <div className={styles.bar}>
+            <div className={styles.arrow} onClick={toggleCoinsCollapse}>
+              {expandAllCoins ? <ArrowUpIcon /> : <ArrowDownIcon />}
+            </div>
+            <div className={styles.name} onClick={toggleCoinsCollapse}>
+              货币名称
+            </div>
+            <div className={styles.mode}>
+              <Dropdown
+                placement="bottomRight"
+                overlay={
+                  <Menu selectedKeys={[String(coinSortModeOptionsMap[coinSortType].key)]}>
+                    {coinSortModeOptions.map(({ key, value }) => (
+                      <Menu.Item key={String(key)} onClick={() => dispatch(setCoinSortModeAction({ type: key }))}>
+                        {value}
+                      </Menu.Item>
+                    ))}
+                  </Menu>
+                }
+              >
+                <a>{coinSortModeOptionsMap[coinSortType].value}</a>
+              </Dropdown>
+            </div>
+            <div className={styles.sort} onClick={() => dispatch(troggleCoinSortOrderAction())}>
+              <SortArrowUpIcon
+                className={classsames({
+                  [styles.selectOrder]: coinSortOrder === Enums.SortOrderType.Asc,
+                })}
+              />
+              <SortArrowDownIcon
+                className={classsames({
+                  [styles.selectOrder]: coinSortOrder === Enums.SortOrderType.Desc,
                 })}
               />
             </div>

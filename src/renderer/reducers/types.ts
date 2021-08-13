@@ -8,6 +8,7 @@ import { FundState } from './fund';
 import { ZindexState } from './zindex';
 import { QuotationState } from './quotation';
 import { StockState } from './stock';
+import { CoinState } from './coin';
 import { SettingState } from './setting';
 import { SortState } from './sort';
 
@@ -21,6 +22,7 @@ export type StoreState = {
   stock: StockState;
   setting: SettingState;
   sort: SortState;
+  coin: CoinState;
 };
 
 export type GetState = () => StoreState;

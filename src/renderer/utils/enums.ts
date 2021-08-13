@@ -52,6 +52,13 @@ export enum StockSortType {
   Zx, // 指数值
 }
 
+export enum CoinSortType {
+  Custom, // 自定义
+  Zdf, // 24H涨跌幅
+  Price, // 价值
+  Rank, // 排名
+}
+
 export enum SortOrderType {
   Desc,
   Asc,
@@ -62,6 +69,7 @@ export enum TabKeyType {
   Zindex,
   Quotation,
   Stock,
+  Coin,
 }
 // 走势类型
 export enum TrendType {

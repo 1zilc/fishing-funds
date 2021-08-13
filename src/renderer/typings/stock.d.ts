@@ -51,7 +51,7 @@ declare namespace Stock {
     trends: TrendItem[]; // 趋势
   }
 
-  export interface SearchResut {
+  export interface SearchResult {
     Type: number; // 7,
     Name: string; // "三板",
     Count: number; // 3;

@@ -49,7 +49,7 @@ export function SortQuotations(responseQuotations: Quotation.ResponseItem[]) {
 export async function LoadQuotations(loading?: boolean) {
   try {
     store.dispatch({ type: SET_QUOTATIONS_LOADING, payload: loading && true });
-    const responseQuotations = await Helpers.Quotation.GetQuotations();
+    const responseQuotations = await GetQuotations();
     batch(() => {
       store.dispatch(sortQuotationsCachedAction(responseQuotations));
       store.dispatch({ type: SET_QUOTATIONS_LOADING, payload: false });

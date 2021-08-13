@@ -60,10 +60,10 @@ export function SortStocks(responseStocks: Stock.ResponseItem[]) {
   return sortList;
 }
 
-export async function loadStocks(loading: boolean) {
+export async function LoadStocks(loading: boolean) {
   try {
     store.dispatch({ type: SET_STOCKS_LOADING, payload: loading && true });
-    const responseStocks = (await Helpers.Stock.GetStocks()).filter(Utils.NotEmpty) as Stock.ResponseItem[];
+    const responseStocks = (await GetStocks()).filter(Utils.NotEmpty) as Stock.ResponseItem[];
     batch(() => {
       store.dispatch(sortStocksCachedAction(responseStocks));
       store.dispatch({ type: SET_STOCKS_LOADING, payload: false });

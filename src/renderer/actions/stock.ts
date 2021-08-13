@@ -1,6 +1,6 @@
 import { batch } from 'react-redux';
 
-import { ThunkAction, PromiseAction } from '@/reducers/types';
+import { ThunkAction } from '@/reducers/types';
 import * as Utils from '@/utils';
 import * as CONST from '@/constants';
 import * as Helpers from '@/helpers';
@@ -20,7 +20,7 @@ export function addStockAction(stock: Stock.SettingItem): ThunkAction {
       }
       dispatch(setStockConfigAction(cloneStockConfig));
     } catch (error) {
-      console.log('添加指数配置出错', error);
+      console.log('添加股票配置出错', error);
     }
   };
 }
