@@ -38,6 +38,8 @@
   "build": {
     "productName": "Fishing Funds",
     "appId": "com.electron.1zilc.fishing-funds",
+    "asar": true,
+    "asarUnpack": "**\\*.{node,dll}",
     "copyright": "Copyright © 2021 1zilc",
     "files": [
       "dist",
