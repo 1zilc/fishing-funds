@@ -60,10 +60,6 @@ const nativeMenuIcon = nativeImage.createFromPath(getAssetPath('menu/iconTemplat
 
 const nativeIcon = nativeImage.createFromPath(getAssetPath('icon.png'));
 
-if (process.env.NODE_ENV !== 'production') {
-  module.paths.push(require('../../.erb/configs/webpack.paths').appNodeModulesPath);
-}
-
 if (process.env.NODE_ENV === 'production') {
   const sourceMapSupport = require('source-map-support');
   Object.assign(console, log.functions);
