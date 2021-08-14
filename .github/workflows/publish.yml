@@ -25,6 +25,7 @@ jobs:
         with:
           node-version: '14'
       - run: yarn install
+      - run: yarn postinstall
       - run: yarn release-all
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
