@@ -20,11 +20,7 @@
   transition: all 0.3s;
 
   &:hover {
-    background-image: linear-gradient(
-      to right,
-      var(--background-color),
-      var(--increase-bg-color)
-    ) !important;
+    background-image: linear-gradient(to right, var(--background-color), var(--increase-bg-color)) !important;
   }
 }
 
@@ -32,11 +28,7 @@
   transition: all 0.3s;
 
   &:hover {
-    background-image: linear-gradient(
-      to right,
-      var(--background-color),
-      var(--reduce-bg-color)
-    ) !important;
+    background-image: linear-gradient(to right, var(--background-color), var(--reduce-bg-color)) !important;
   }
 }
 

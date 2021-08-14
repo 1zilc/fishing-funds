@@ -16,7 +16,7 @@ const ManageStockContent: React.FC<ManageStockContentProps> = (props) => {
   return (
     <CustomDrawerContent title="管理货币" enterText="确定" onEnter={props.onEnter} onClose={props.onClose}>
       <div className={styles.content}>
-        <Tabs animated={{ tabPane: true }} tabBarGutter={15}>
+        <Tabs animated={{ tabPane: true }} tabBarGutter={15} destroyInactiveTabPane>
           <Tabs.TabPane tab="自选货币" key={String(0)}>
             <Optional />
           </Tabs.TabPane>

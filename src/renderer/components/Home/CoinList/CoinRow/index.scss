@@ -11,6 +11,7 @@
   align-items: center;
   justify-content: space-between;
   width: 100%;
+  cursor: pointer;
 
   &:hover {
     .arrow {
@@ -111,4 +112,11 @@
   text-align: center;
   width: 100%;
   box-sizing: border-box;
+}
+.coin {
+  height: 8px;
+  width: 8px;
+  margin-left: var(--base-padding);
+  border-radius: 50%;
+  margin-bottom: 2px;
 }

@@ -49,7 +49,7 @@ export function setCoinConfigAction(coinConfig: Coin.SettingItem[]): ThunkAction
       const {
         coin: { coins },
       } = getState();
-      Utils.SetStorage(CONST.STORAGE.STOCK_SETTING, coinConfig);
+      Utils.SetStorage(CONST.STORAGE.COIN_SETTING, coinConfig);
       batch(() => {
         dispatch(syncCoinConfigAction());
         dispatch(syncCoinsStateAction(coins));

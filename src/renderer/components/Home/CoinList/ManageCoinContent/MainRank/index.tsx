@@ -5,7 +5,7 @@ import { useRequest } from 'ahooks';
 import classnames from 'classnames';
 
 import CustomDrawer from '@/components/CustomDrawer';
-import DetailStockContent from '@/components/Home/StockList/DetailStockContent';
+import DetailCoinContent from '@/components/Home/CoinList/DetailCoinContent';
 import AddCoinContent from '@/components/Home/CoinList/AddCoinContent';
 import TypeSelection from '@/components/TypeSelection';
 import { useDrawer } from '@/utils/hooks';
@@ -17,7 +17,7 @@ import styles from './index.scss';
 interface MainRankProps {}
 
 const RenderColorCol = ({ value }: { value: string }) => {
-  return <div className={Utils.GetValueColor(value).textClass}>{value}%</div>;
+  return <div className={Utils.GetValueColor(value).textClass}>{value}</div>;
 };
 
 const MainRank: React.FC<PropsWithChildren<MainRankProps>> = () => {
@@ -42,7 +42,7 @@ const MainRank: React.FC<PropsWithChildren<MainRankProps>> = () => {
       sorter: (a: any, b: any) => a.changePercent24Hr - b.changePercent24Hr,
     },
     {
-      title: `价格`,
+      title: `价格$`,
       dataIndex: 'priceUsd',
       render: (text: string) => <RenderColorCol value={text} />,
       sorter: (a: any, b: any) => a.priceUsd - b.priceUsd,
@@ -91,7 +91,7 @@ const MainRank: React.FC<PropsWithChildren<MainRankProps>> = () => {
         })}
       />
       <CustomDrawer show={showDetailDrawer}>
-        <DetailStockContent onEnter={closeDetailDrawer} onClose={closeDetailDrawer} secid={detailCode} />
+        <DetailCoinContent onEnter={closeDetailDrawer} onClose={closeDetailDrawer} code={detailCode} />
       </CustomDrawer>
       <CustomDrawer show={showAddDrawer}>
         <AddCoinContent defaultName={addName} onClose={closeAddDrawer} onEnter={closeAddDrawer} />

@@ -17,6 +17,7 @@ declare namespace Coin {
     priceUsd: string;
     changePercent24Hr: string;
     vwap24Hr: string;
+    updateTime: string; // 01-01 12:00
   }
 
   export interface ExtraRow {

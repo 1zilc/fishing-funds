@@ -3,6 +3,7 @@ import html2canvas from 'html2canvas';
 import classnames from 'classnames';
 import { ReactComponent as DownloadIcon } from '@/assets/icons/download.svg';
 import { ReactComponent as CopyIcon } from '@/assets/icons/copy.svg';
+import { ReactComponent as RefreshIcon } from '@/assets/icons/refresh.svg';
 
 import styles from './index.scss';
 
@@ -11,6 +12,7 @@ export interface ChartCardProps {
   onClick?: any;
   onDoubleClick?: any;
   auto?: boolean;
+  onFresh?: () => void;
 }
 
 const { clipboard, dialog, saveImage } = window.contextModules.electron;
@@ -20,7 +22,14 @@ const size = {
   width: 12,
 };
 
-export const ChartCard: React.FC<PropsWithChildren<ChartCardProps>> = ({ onClick, onDoubleClick, className = {}, children, auto }) => {
+export const ChartCard: React.FC<PropsWithChildren<ChartCardProps>> = ({
+  onFresh,
+  onClick,
+  onDoubleClick,
+  className = {},
+  children,
+  auto,
+}) => {
   const chartRef = useRef<HTMLDivElement>(null);
   async function writeChartToClipboard() {
     try {
@@ -75,6 +84,7 @@ export const ChartCard: React.FC<PropsWithChildren<ChartCardProps>> = ({ onClick
       onDoubleClick={onDoubleClick}
     >
       <div className={styles.toolbar}>
+        {onFresh && <RefreshIcon onClick={onFresh} />}
         <DownloadIcon onClick={downLoadChartToLocal} />
         <CopyIcon onClick={writeChartToClipboard} />
       </div>
