@@ -15,13 +15,13 @@
 }
 .toolbar {
   display: flex;
-  padding-bottom: 5px;
+  padding-bottom: var(--base-padding);
   justify-content: flex-end;
 
   svg {
     width: 12px;
     height: 12px;
-    margin-left: 5px;
+    margin-left: var(--base-padding);
     cursor: pointer;
     fill: var(--main-text-color);
   }

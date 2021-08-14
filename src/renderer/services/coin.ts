@@ -1,13 +1,13 @@
 import NP from 'number-precision';
+import dayjs from 'dayjs';
 import * as Utils from '@/utils';
 
 const { got } = window.contextModules;
 
 export async function FromCoinCap(keyword: string, codes = '') {
-  console.log(keyword, codes);
   try {
     const {
-      body: { data },
+      body: { data, timestamp },
     } = await got<{
       data: [
         {
@@ -38,7 +38,6 @@ export async function FromCoinCap(keyword: string, codes = '') {
       },
       responseType: 'json',
     });
-    console.log(data);
 
     return data.map((item) => ({
       ...item,
@@ -50,6 +49,7 @@ export async function FromCoinCap(keyword: string, codes = '') {
       priceUsd: Number(item.priceUsd).toFixed(2),
       vwap24Hr: Number(item.vwap24Hr).toFixed(2),
       changePercent24Hr: Number(item.changePercent24Hr).toFixed(2),
+      updateTime: dayjs(timestamp).format('MM-DD HH:mm'),
     }));
   } catch (error) {
     console.log(error);
@@ -97,5 +97,34 @@ export async function GetFromCoinCap(code: string) {
   } catch (error) {
     console.log(error);
     return null;
+  }
+}
+
+export async function GetHistoryFromCoinCap(code: string, interval: string) {
+  // interval m1, m5, m15, m30, h1, h2, h6, h12, d1
+  try {
+    const {
+      body: { data },
+    } = await got<{
+      data: {
+        priceUsd: '10250.7246875711059188';
+        time: 1565913600000;
+        date: '2019-08-16T00:00:00.000Z';
+      }[];
+      timestamp: 1628823545124;
+    }>(`https://api.coincap.io/v2/assets/${code}/history`, {
+      searchParams: { interval },
+      headers: {
+        'Accept-Encoding': 'gzip',
+      },
+      responseType: 'json',
+    });
+    return data.map((item) => ({
+      time: item.time,
+      priceUsd: Number(item.priceUsd).toFixed(2),
+    }));
+  } catch (error) {
+    console.log(error);
+    return [];
   }
 }

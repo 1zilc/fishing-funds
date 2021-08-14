@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useDebounceFn, useRequest } from 'ahooks';
 import { Input, Tabs } from 'antd';
 
-import DetailStockContent from '@/components/Home/StockList/DetailStockContent';
+import DetailCoinContent from '@/components/Home/CoinList/DetailCoinContent';
 import CustomDrawer from '@/components/CustomDrawer';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
 import Empty from '@/components/Empty';
@@ -79,7 +79,7 @@ const AddCoinContent: React.FC<AddCoinContentProps> = (props) => {
         </section>
         {none && (
           <section>
-            <span className={styles.none}>添加货币失败，未找到或数据出错~</span>
+            <span className={styles.none}>数据出错或网络原因请多次尝试~</span>
           </section>
         )}
       </div>
@@ -115,7 +115,7 @@ const AddCoinContent: React.FC<AddCoinContentProps> = (props) => {
         <Empty text="暂无相关数据~" />
       )}
       <CustomDrawer show={showDetailDrawer}>
-        <DetailStockContent onEnter={closeDetailDrawer} onClose={closeDetailDrawer} secid={detailCode} />
+        <DetailCoinContent onEnter={closeDetailDrawer} onClose={closeDetailDrawer} code={detailCode} />
       </CustomDrawer>
     </CustomDrawerContent>
   );

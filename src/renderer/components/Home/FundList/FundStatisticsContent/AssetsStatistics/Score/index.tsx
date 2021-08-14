@@ -1,11 +1,15 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useRequest } from 'ahooks';
 import { useSelector } from 'react-redux';
+import classnames from 'classnames';
 
 import { useHomeContext } from '@/components/Home';
 import { useResizeEchart, useRenderEcharts } from '@/utils/hooks';
 import { StoreState } from '@/reducers/types';
+import * as Enums from '@/utils/enums';
 import * as Services from '@/services';
+import * as Utils from '@/utils';
+import styles from './index.scss';
 
 export interface ScoreProps {
   gssyl: number;
@@ -20,6 +24,9 @@ const Score: React.FC<ScoreProps> = ({ gssyl = 0 }) => {
   const { ref: chartRef, chartInstance } = useResizeEchart(0.48);
   const { varibleColors, darkMode } = useHomeContext();
   const { freshDelaySetting, autoFreshSetting } = useSelector((state: StoreState) => state.setting.systemSetting);
+  const eyeStatus = useSelector((state: StoreState) => state.wallet.eyeStatus);
+  const eyeOpen = eyeStatus === Enums.EyeStatus.Open;
+  const [HS, setHS] = useState('');
 
   const { run: runGetZindexFromEastmoney } = useRequest(Services.Zindex.FromEastmoney, {
     pollingInterval: autoFreshSetting ? 1000 * 60 * freshDelaySetting : undefined,
@@ -117,6 +124,7 @@ const Score: React.FC<ScoreProps> = ({ gssyl = 0 }) => {
           },
         ],
       });
+      setHS(String(indexNumber));
     },
   });
 
@@ -130,6 +138,20 @@ const Score: React.FC<ScoreProps> = ({ gssyl = 0 }) => {
 
   return (
     <div>
+      <div className={styles.row}>
+        <div>
+          评分指标-沪深300(今)：
+          <span
+            className={classnames({
+              [Utils.GetValueColor(HS).textClass]: eyeOpen,
+            })}
+          >
+            {HS}
+            {eyeOpen ? '%' : ''}
+          </span>
+        </div>
+      </div>
+
       <div ref={chartRef} style={{ width: '100%' }} />
     </div>
   );

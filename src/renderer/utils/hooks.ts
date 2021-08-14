@@ -448,7 +448,7 @@ export function useBootStrap() {
     if (autoFreshSetting) {
       Adapters.ConCurrencyAllAdapter([
         () => Adapters.ChokeAllAdapter([runLoadWalletsFunds]),
-        () => Adapters.ChokeAllAdapter([runLoadZindexs, runLoadQuotations, runLoadStocks, runLoadCoins]),
+        () => Adapters.ChokeAllAdapter([runLoadZindexs, runLoadQuotations, runLoadStocks]),
       ]);
     }
   }, freshDelaySetting * 1000 * 60);
@@ -457,6 +457,13 @@ export function useBootStrap() {
   useFixTimeToDo(() => {
     if (autoFreshSetting) {
       Adapters.ChokeAllAdapter([runLoadFixWalletsFunds]);
+    }
+  }, freshDelaySetting * 1000 * 60);
+
+  // 间隔时间刷新货币
+  useInterval(() => {
+    if (autoFreshSetting) {
+      Adapters.ChokeAllAdapter([runLoadCoins]);
     }
   }, freshDelaySetting * 1000 * 60);
 

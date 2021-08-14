@@ -1,0 +1,7 @@
+.row {
+  display: flex;
+  width: 100%;
+  justify-content: space-around;
+  text-align: center;
+  font-size: calc(10rem / var(--base-font-size));
+}

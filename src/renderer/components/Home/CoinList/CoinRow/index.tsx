@@ -1,5 +1,6 @@
 import React from 'react';
 import classnames from 'classnames';
+import ColorHash from 'color-hash';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { ReactComponent as ArrowDownIcon } from '@/assets/icons/arrow-down.svg';
@@ -20,12 +21,13 @@ const arrowSize = {
   width: 12,
   height: 12,
 };
+const colorHash = new ColorHash();
 
 const CoinRow: React.FC<RowProps> = (props) => {
   const { coin } = props;
   const dispatch = useDispatch();
   const { conciseSetting } = useSelector((state: StoreState) => state.setting.systemSetting);
-
+  const coinColor = colorHash.hex(coin.code);
   const onDetailClick = () => {
     props.onDetail(coin.code);
   };
@@ -44,11 +46,19 @@ const CoinRow: React.FC<RowProps> = (props) => {
             }}
           >
             <span className={styles.zindexName}>{coin.symbol}</span>
+            <span
+              className={styles.coin}
+              style={{
+                background: coinColor,
+                boxShadow: `0 2px 5px ${coinColor}`,
+              }}
+            />
           </div>
           {!conciseSetting && (
             <div className={styles.rowBar}>
               <div>
                 <span className={styles.code}>{coin.code}</span>
+                <span>{coin.updateTime}</span>
               </div>
             </div>
           )}
@@ -75,7 +85,7 @@ const CoinRow: React.FC<RowProps> = (props) => {
           </section>
           <section>
             <span>当前市值：</span>
-            <span>{coin.marketCapUsd} 亿</span>
+            <span>{coin.marketCapUsd}亿</span>
           </section>
           <section>
             <span>挖掘个数：</span>

@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import CoinRow from '@/components/Home/CoinList/CoinRow';
 import Empty from '@/components/Empty';
 import LoadingBar from '@/components/LoadingBar';
-import DetailStockContent from '@/components/Home/StockList/DetailStockContent';
+import DetailCoinContent from '@/components/Home/CoinList/DetailCoinContent';
 import CustomDrawer from '@/components/CustomDrawer';
 import { StoreState } from '@/reducers/types';
 import { useDrawer } from '@/utils/hooks';
@@ -31,7 +31,7 @@ const CoinList: React.FC<CoinListProps> = (props) => {
         <Empty text="暂无货币数据~" />
       )}
       <CustomDrawer show={showDetailDrawer}>
-        <DetailStockContent onEnter={closeDetailDrawer} onClose={closeDetailDrawer} secid={detailCoinCode} />
+        <DetailCoinContent onEnter={closeDetailDrawer} onClose={closeDetailDrawer} code={detailCoinCode} />
       </CustomDrawer>
     </div>
   );
