@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useCallback } from 'react';
 import { useRequest } from 'ahooks';
 
 import { useHomeContext } from '@/components/Home';
+import ChartCard from '@/components/Card/ChartCard';
 import { useResizeEchart, useRenderEcharts } from '@/utils/hooks';
 import * as CONST from '@/constants';
 import * as Services from '@/services';
@@ -102,10 +103,16 @@ const Trend: React.FC<PerformanceProps> = ({ secid, zs = 0 }) => {
     [darkMode, secid, zs]
   );
 
+  const freshChart = useCallback(() => {
+    runGetTrendFromEastmoney(secid);
+  }, [secid]);
+
   return (
-    <div className={styles.content}>
-      <div ref={chartRef} style={{ width: '100%' }} />
-    </div>
+    <ChartCard onFresh={freshChart}>
+      <div className={styles.content}>
+        <div ref={chartRef} style={{ width: '100%' }} />
+      </div>
+    </ChartCard>
   );
 };
 

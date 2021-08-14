@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { useRequest } from 'ahooks';
 
+import ChartCard from '@/components/Card/ChartCard';
 import { useHomeContext } from '@/components/Home';
 import { useResizeEchart, useRenderEcharts } from '@/utils/hooks';
 import * as CONST from '@/constants';
@@ -102,10 +103,16 @@ const RealTimeFundFlow: React.FC<RealTimeFundFlowProps> = ({ code = '' }) => {
     [darkMode, code]
   );
 
+  const freshChart = useCallback(() => {
+    runGetRealTimeFundFlowFromEasymoney(code);
+  }, [code]);
+
   return (
-    <div className={styles.content}>
-      <div ref={chartRef} style={{ width: '100%' }} />
-    </div>
+    <ChartCard onFresh={freshChart}>
+      <div className={styles.content}>
+        <div ref={chartRef} style={{ width: '100%' }} />
+      </div>
+    </ChartCard>
   );
 };
 

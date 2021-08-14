@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { useRequest } from 'ahooks';
 
+import ChartCard from '@/components/Card/ChartCard';
 import { useHomeContext } from '@/components/Home';
 import TypeSelection from '@/components/TypeSelection';
 import { useResizeEchart, useRenderEcharts } from '@/utils/hooks';
@@ -114,11 +115,17 @@ const Trend: React.FC<PerformanceProps> = ({ code, zs = 0 }) => {
     [darkMode, code, trend.code, zs]
   );
 
+  const freshChart = useCallback(() => {
+    runGetTrendFromEastmoney(code, trend.code);
+  }, [code, trend.code]);
+
   return (
-    <div className={styles.content}>
-      <div ref={chartRef} style={{ width: '100%' }} />
-      <TypeSelection types={trendTypeList} activeType={trend.type} onSelected={setTrendType} flex />
-    </div>
+    <ChartCard onFresh={freshChart}>
+      <div className={styles.content}>
+        <div ref={chartRef} style={{ width: '100%' }} />
+        <TypeSelection types={trendTypeList} activeType={trend.type} onSelected={setTrendType} flex />
+      </div>
+    </ChartCard>
   );
 };
 

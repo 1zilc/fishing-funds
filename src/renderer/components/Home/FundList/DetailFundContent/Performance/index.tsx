@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { useRequest } from 'ahooks';
 
 import { useHomeContext } from '@/components/Home';
+import ChartCard from '@/components/Card/ChartCard';
 import TypeSelection from '@/components/TypeSelection';
 import { useResizeEchart, useRenderEcharts } from '@/utils/hooks';
 import * as CONST from '@/constants';
@@ -101,14 +102,20 @@ const Performance: React.FC<PerformanceProps> = ({ code }) => {
       runGetFundPerformanceFromEastmoney(code, performanceType.code);
     },
     chartInstance,
-    [darkMode, performanceType.code]
+    [darkMode, code, performanceType.code]
   );
 
+  const freshChart = useCallback(() => {
+    runGetFundPerformanceFromEastmoney(code, performanceType.code);
+  }, [code, performanceType.code]);
+
   return (
-    <div className={styles.content}>
-      <div ref={chartRef} style={{ width: '100%' }} />
-      <TypeSelection types={performanceTypeList} activeType={performanceType.type} onSelected={setPerformanceType} />
-    </div>
+    <ChartCard onFresh={freshChart}>
+      <div className={styles.content}>
+        <div ref={chartRef} style={{ width: '100%' }} />
+        <TypeSelection types={performanceTypeList} activeType={performanceType.type} onSelected={setPerformanceType} />
+      </div>
+    </ChartCard>
   );
 };
 
