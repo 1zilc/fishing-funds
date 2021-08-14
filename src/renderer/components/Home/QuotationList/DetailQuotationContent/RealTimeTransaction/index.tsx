@@ -1,8 +1,8 @@
-import React from 'react';
-import {} from 'react-dom/server';
+import React, { useCallback } from 'react';
 import { useRequest } from 'ahooks';
 
 import { useHomeContext } from '@/components/Home';
+import ChartCard from '@/components/Card/ChartCard';
 import { useResizeEchart, useRenderEcharts } from '@/utils/hooks';
 import * as CONST from '@/constants';
 import * as Services from '@/services';
@@ -126,11 +126,16 @@ const RealTimeTransaction: React.FC<RealTimeTransactionProps> = ({ code = '' }) 
     chartInstance,
     [darkMode, code]
   );
+  const freshChart = useCallback(() => {
+    runGetTransactionFromEasymoney(code);
+  }, [code]);
 
   return (
-    <div className={styles.content}>
-      <div ref={chartRef} style={{ width: '100%' }} />
-    </div>
+    <ChartCard auto onFresh={freshChart}>
+      <div className={styles.content}>
+        <div ref={chartRef} style={{ width: '100%' }} />
+      </div>
+    </ChartCard>
   );
 };
 

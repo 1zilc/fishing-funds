@@ -65,32 +65,24 @@ const DetailQuotationContent: React.FC<DetailQuotationContentProps> = (props) =>
         <div className={styles.container}>
           <Tabs animated={{ tabPane: true }} tabBarGutter={15}>
             <Tabs.TabPane tab="实时资金流向" key={String(Enums.FundFlowType.RealTime)}>
-              <ChartCard>
-                <RealTimeFundFlow code={code} />
-              </ChartCard>
+              <RealTimeFundFlow code={code} />
             </Tabs.TabPane>
             <Tabs.TabPane tab="盘后资金流向" key={String(Enums.FundFlowType.AfterTime)}>
-              <ChartCard>
-                <AfterTimeFundFlow code={code} />
-              </ChartCard>
+              <AfterTimeFundFlow code={code} />
             </Tabs.TabPane>
           </Tabs>
         </div>
         <div className={styles.container}>
           <Tabs animated={{ tabPane: true }} tabBarGutter={15}>
             <Tabs.TabPane tab="实时成交分布" key={String(0)}>
-              <ChartCard>
-                <RealTimeTransaction code={code} />
-              </ChartCard>
+              <RealTimeTransaction code={code} />
             </Tabs.TabPane>
           </Tabs>
         </div>
         <div className={styles.container}>
           <Tabs animated={{ tabPane: true }} tabBarGutter={15}>
             <Tabs.TabPane tab={`${quotation.name}个股`} key={String(0)}>
-              <ChartCard auto>
-                <Stocks code={code} />
-              </ChartCard>
+              <Stocks code={code} />
             </Tabs.TabPane>
           </Tabs>
         </div>

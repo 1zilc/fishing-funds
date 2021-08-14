@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { useRequest } from 'ahooks';
 
 import { useHomeContext } from '@/components/Home';
@@ -96,8 +96,12 @@ const Trend: React.FC<PerformanceProps> = ({ code }) => {
     [darkMode, code, interval.type]
   );
 
+  const freshChart = useCallback(() => {
+    runGetHistoryFromCoinCap(code, interval.code);
+  }, [code, interval.code]);
+
   return (
-    <ChartCard onFresh={() => runGetHistoryFromCoinCap(code, interval.code)}>
+    <ChartCard onFresh={freshChart}>
       <div className={styles.content}>
         <div ref={chartRef} style={{ width: '100%' }} />
         <TypeSelection types={intervalTypeList} activeType={interval.type} onSelected={setInterval} colspan={6} />

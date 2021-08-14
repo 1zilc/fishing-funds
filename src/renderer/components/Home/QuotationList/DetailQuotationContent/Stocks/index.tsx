@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { useRequest } from 'ahooks';
 import { Table } from 'antd';
 
 import DetailStockContent from '@/components/Home/StockList/DetailStockContent';
+import ChartCard from '@/components/Card/ChartCard';
 import CustomDrawer from '@/components/CustomDrawer';
 import { useDrawer } from '@/utils/hooks';
 import * as Services from '@/services';
@@ -17,7 +18,7 @@ const Stocks: React.FC<StocksProps> = ({ code }) => {
   const [stockList, setStockList] = useState<any[]>([]);
   const { data: secid, show: showDetailDrawer, set: setDetailDrawer, close: closeDetailDrawer } = useDrawer('');
 
-  const { loading: listLoading } = useRequest(Services.Quotation.GetStocksFromEasymoney, {
+  const { loading: listLoading, run: runGetStocksFromEasymoney } = useRequest(Services.Quotation.GetStocksFromEasymoney, {
     throwOnError: true,
     pollingInterval: 1000 * 60,
     defaultParams: [code],
@@ -49,27 +50,33 @@ const Stocks: React.FC<StocksProps> = ({ code }) => {
     },
   ];
 
+  const freshChart = useCallback(() => {
+    runGetStocksFromEasymoney(code);
+  }, [code]);
+
   return (
-    <div className={styles.content}>
-      <Table
-        loading={listLoading}
-        rowKey="code"
-        size="small"
-        columns={columns}
-        dataSource={stockList}
-        pagination={{
-          defaultPageSize: 20,
-          hideOnSinglePage: true,
-          position: ['bottomCenter'],
-        }}
-        onRow={(record) => ({
-          onClick: () => setDetailDrawer(`${record.market}.${record.code}`),
-        })}
-      />
-      <CustomDrawer show={showDetailDrawer}>
-        <DetailStockContent onClose={closeDetailDrawer} onEnter={closeDetailDrawer} secid={secid} />
-      </CustomDrawer>
-    </div>
+    <ChartCard auto onFresh={freshChart}>
+      <div className={styles.content}>
+        <Table
+          loading={listLoading}
+          rowKey="code"
+          size="small"
+          columns={columns}
+          dataSource={stockList}
+          pagination={{
+            defaultPageSize: 20,
+            hideOnSinglePage: true,
+            position: ['bottomCenter'],
+          }}
+          onRow={(record) => ({
+            onClick: () => setDetailDrawer(`${record.market}.${record.code}`),
+          })}
+        />
+        <CustomDrawer show={showDetailDrawer}>
+          <DetailStockContent onClose={closeDetailDrawer} onEnter={closeDetailDrawer} secid={secid} />
+        </CustomDrawer>
+      </div>
+    </ChartCard>
   );
 };
 

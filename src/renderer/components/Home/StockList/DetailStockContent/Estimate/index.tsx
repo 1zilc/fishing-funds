@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { useRequest } from 'ahooks';
 
+import ChartCard from '@/components/Card/ChartCard';
 import PictureImage from '@/assets/img/picture.svg';
 import PictureFailedImage from '@/assets/img/picture-failed.svg';
 import * as Services from '@/services';
@@ -12,7 +13,7 @@ export interface EstimateProps {
 }
 const Estimate: React.FC<EstimateProps> = ({ secid }) => {
   const [estimate, setEstimate] = useState(PictureImage);
-  useRequest(Services.Stock.GetPicTrendFromEastmoney, {
+  const { run: runGetPicTrendFromEastmoney } = useRequest(Services.Stock.GetPicTrendFromEastmoney, {
     pollingInterval: CONST.DEFAULT.ESTIMATE_FUND_DELAY,
     throwOnError: true,
     defaultParams: [secid],
@@ -20,10 +21,16 @@ const Estimate: React.FC<EstimateProps> = ({ secid }) => {
     cacheKey: `GetPicTrendFromEastmoney/${secid}`,
   });
 
+  const freshChart = useCallback(() => {
+    runGetPicTrendFromEastmoney(secid);
+  }, [secid]);
+
   return (
-    <div className={styles.estimate}>
-      <img src={estimate || PictureFailedImage} />
-    </div>
+    <ChartCard onFresh={freshChart}>
+      <div className={styles.estimate}>
+        <img src={estimate || PictureFailedImage} />
+      </div>
+    </ChartCard>
   );
 };
 

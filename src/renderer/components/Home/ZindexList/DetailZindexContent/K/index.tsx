@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
-import classnames from 'classnames';
+import React, { useState, useCallback } from 'react';
 import { useRequest } from 'ahooks';
 import NP from 'number-precision';
 
+import ChartCard from '@/components/Card/ChartCard';
 import { useHomeContext } from '@/components/Home';
 import TypeSelection from '@/components/TypeSelection';
 import { useResizeEchart, useRenderEcharts } from '@/utils/hooks';
@@ -173,11 +173,17 @@ const K: React.FC<PerformanceProps> = ({ code = '' }) => {
     [darkMode, code, year.code]
   );
 
+  const freshChart = useCallback(() => {
+    runGetKFromEastmoney(code, year.code);
+  }, [code, year.code]);
+
   return (
-    <div className={styles.content}>
-      <div ref={chartRef} style={{ width: '100%' }} />
-      <TypeSelection types={yearTypeList} activeType={year.type} onSelected={setYearType} flex />
-    </div>
+    <ChartCard onFresh={freshChart}>
+      <div className={styles.content}>
+        <div ref={chartRef} style={{ width: '100%' }} />
+        <TypeSelection types={yearTypeList} activeType={year.type} onSelected={setYearType} flex />
+      </div>
+    </ChartCard>
   );
 };
 

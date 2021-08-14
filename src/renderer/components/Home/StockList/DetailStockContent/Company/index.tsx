@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useRequest } from 'ahooks';
+import ChartCard from '@/components/Card/ChartCard';
 import { useSelector } from 'react-redux';
 
 import { useHomeContext } from '@/components/Home';
@@ -19,6 +19,7 @@ export interface CompanyProps {
 const Company: React.FC<CompanyProps> = ({ secid }) => {
   const [company, setCompany] = useState<Stock.Company>(defaultCompany);
   const { codeMap } = useSelector((state: StoreState) => state.stock.config);
+  const stock = codeMap[secid];
 
   async function getCompany(type: Enums.StockMarketType) {
     let company = defaultCompany;
@@ -42,14 +43,15 @@ const Company: React.FC<CompanyProps> = ({ secid }) => {
   }
 
   useEffect(() => {
-    const stock = codeMap[secid];
     getCompany(stock?.type);
   }, []);
 
   return (
-    <div className={styles.content}>
-      <span>{company.gsjs || '暂无简介~'}</span>
-    </div>
+    <ChartCard auto onFresh={() => getCompany(stock?.type)}>
+      <div className={styles.content}>
+        <span>{company.gsjs || '暂无简介~'}</span>
+      </div>
+    </ChartCard>
   );
 };
 

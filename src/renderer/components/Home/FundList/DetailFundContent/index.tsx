@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { useBoolean, useRequest } from 'ahooks';
 import classnames from 'classnames';
 import { Tabs } from 'antd';
@@ -45,7 +45,7 @@ const DetailFundContent: React.FC<DetailFundContentProps> = (props) => {
     cacheKey: `GetFixFromEastMoney/${code}`,
   });
 
-  useRequest(Services.Fund.GetFundDetailFromEastmoney, {
+  const { run: runGetFundDetailFromEastmoney } = useRequest(Services.Fund.GetFundDetailFromEastmoney, {
     throwOnError: true,
     defaultParams: [code],
     onSuccess: setPingzhongdata,
@@ -53,6 +53,10 @@ const DetailFundContent: React.FC<DetailFundContentProps> = (props) => {
   });
 
   const syl_1n = pingzhongdata.syl_1n || pingzhongdata.syl_6y || pingzhongdata.syl_3y || pingzhongdata.syl_1y;
+
+  const freshPingzhongdata = useCallback(() => {
+    runGetFundDetailFromEastmoney(code);
+  }, [code]);
 
   return (
     <CustomDrawerContent title="基金详情" enterText="确定" onClose={props.onClose} onEnter={props.onEnter}>
@@ -84,7 +88,7 @@ const DetailFundContent: React.FC<DetailFundContentProps> = (props) => {
         <div className={styles.container}>
           <Tabs animated={{ tabPane: true }} tabBarGutter={15}>
             <Tabs.TabPane tab="历史业绩" key={String(Enums.TrendType.Performance)}>
-              <ChartCard auto>
+              <ChartCard auto onFresh={freshPingzhongdata}>
                 <HistoryPerformance
                   syl_1n={pingzhongdata.syl_1n}
                   syl_6y={pingzhongdata.syl_6y}
@@ -95,7 +99,7 @@ const DetailFundContent: React.FC<DetailFundContentProps> = (props) => {
               </ChartCard>
             </Tabs.TabPane>
             <Tabs.TabPane tab="历史净值" key={String(Enums.TrendType.Estimate)}>
-              <ChartCard auto>
+              <ChartCard auto onFresh={freshPingzhongdata}>
                 <HistoryValue data={pingzhongdata.Data_netWorthTrend} />
               </ChartCard>
             </Tabs.TabPane>
@@ -104,31 +108,27 @@ const DetailFundContent: React.FC<DetailFundContentProps> = (props) => {
         <div className={styles.container}>
           <Tabs animated={{ tabPane: true }} tabBarGutter={15}>
             <Tabs.TabPane tab="业绩走势" key={String(Enums.HistoryType.Performance)}>
-              <ChartCard>
-                <Performance code={code} />
-              </ChartCard>
+              <Performance code={code} />
             </Tabs.TabPane>
             <Tabs.TabPane tab="净值估算" key={String(Enums.HistoryType.Value)}>
-              <ChartCard>
-                <Estimate code={code} />
-              </ChartCard>
+              <Estimate code={code} />
             </Tabs.TabPane>
           </Tabs>
         </div>
         <div className={styles.container}>
           <Tabs animated={{ tabPane: true }} tabBarGutter={15}>
             <Tabs.TabPane tab="股票持仓" key={String(Enums.WareHouseType.Stock)}>
-              <ChartCard>
+              <ChartCard onFresh={freshPingzhongdata}>
                 <StockWareHouse code={code} stockCodes={pingzhongdata.stockCodesNew!} />
               </ChartCard>
             </Tabs.TabPane>
             <Tabs.TabPane tab="债券持仓" key={String(Enums.WareHouseType.Securities)}>
-              <ChartCard>
+              <ChartCard onFresh={freshPingzhongdata}>
                 <SecuritiesWareHouse code={code} securitiesCodes={pingzhongdata.zqCodesNew!} />
               </ChartCard>
             </Tabs.TabPane>
             <Tabs.TabPane tab="股票仓位测算" key={String(Enums.WareHouseType.StockEstimate)}>
-              <ChartCard>
+              <ChartCard onFresh={freshPingzhongdata}>
                 <StockWareHouseEstimate fundSharesPositions={pingzhongdata.Data_fundSharesPositions!} />
               </ChartCard>
             </Tabs.TabPane>
@@ -137,17 +137,17 @@ const DetailFundContent: React.FC<DetailFundContentProps> = (props) => {
         <div className={styles.container}>
           <Tabs animated={{ tabPane: true }} tabBarGutter={15}>
             <Tabs.TabPane tab="资产配置" key={String(Enums.ConfigType.Assets)}>
-              <ChartCard>
+              <ChartCard onFresh={freshPingzhongdata}>
                 <Assets Data_assetAllocation={pingzhongdata.Data_assetAllocation} />
               </ChartCard>
             </Tabs.TabPane>
             <Tabs.TabPane tab="持有人结构" key={String(Enums.ConfigType.Hold)}>
-              <ChartCard>
+              <ChartCard onFresh={freshPingzhongdata}>
                 <Hold Data_holderStructure={pingzhongdata.Data_holderStructure} />
               </ChartCard>
             </Tabs.TabPane>
             <Tabs.TabPane tab="规模变动" key={String(Enums.ConfigType.Scale)}>
-              <ChartCard>
+              <ChartCard onFresh={freshPingzhongdata}>
                 <Scale Data_fluctuationScale={pingzhongdata.Data_fluctuationScale} />
               </ChartCard>
             </Tabs.TabPane>
@@ -156,17 +156,17 @@ const DetailFundContent: React.FC<DetailFundContentProps> = (props) => {
         <div className={styles.container}>
           <Tabs animated={{ tabPane: true }} tabBarGutter={15}>
             <Tabs.TabPane tab="同类排名" key={String(Enums.SimilarCompareType.Rank)}>
-              <ChartCard>
+              <ChartCard onFresh={freshPingzhongdata}>
                 <SimilarRank rateInSimilarType={pingzhongdata.Data_rateInSimilarType} />
               </ChartCard>
             </Tabs.TabPane>
             <Tabs.TabPane tab="百分比排名" key={String(Enums.SimilarCompareType.Proportion)}>
-              <ChartCard>
+              <ChartCard onFresh={freshPingzhongdata}>
                 <SimilarProportion rateInSimilarPersent={pingzhongdata.Data_rateInSimilarPersent} />
               </ChartCard>
             </Tabs.TabPane>
             <Tabs.TabPane tab="业绩评价" key={String(Enums.SimilarCompareType.Evaluation)}>
-              <ChartCard>
+              <ChartCard onFresh={freshPingzhongdata}>
                 <PerformanceEvaluation Data_performanceEvaluation={pingzhongdata.Data_performanceEvaluation} />
               </ChartCard>
             </Tabs.TabPane>
