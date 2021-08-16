@@ -49,7 +49,7 @@ const ZindexRow: React.FC<RowProps> = (props) => {
             <div className={styles.rowBar}>
               <div>
                 <span className={styles.code}>{zindex.zindexCode}</span>
-                {/* <span>{zindex.gztime.slice(5)}</span> */}
+                <span>{zindex.time}</span>
               </div>
             </div>
           )}
