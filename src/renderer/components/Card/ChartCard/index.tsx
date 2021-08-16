@@ -84,6 +84,7 @@ export const ChartCard: React.FC<PropsWithChildren<ChartCardProps>> = ({
       })}
       onClick={onClick}
       onDoubleClick={onDoubleClick}
+      ref={chartRef}
     >
       <div className={styles.toolbar}>
         {TitleBar && <div style={{ flex: 1 }}>{TitleBar}</div>}
@@ -91,7 +92,7 @@ export const ChartCard: React.FC<PropsWithChildren<ChartCardProps>> = ({
         <DownloadIcon onClick={downLoadChartToLocal} />
         <CopyIcon onClick={writeChartToClipboard} />
       </div>
-      <div ref={chartRef}>{children}</div>
+      {children}
     </aside>
   );
 };
