@@ -59,7 +59,6 @@ export async function LoadCoins(loading: boolean) {
   try {
     store.dispatch({ type: SET_COINS_LOADING, payload: loading && true });
     const responseCoins = (await GetCoins()).filter(Utils.NotEmpty) as Coin.ResponseItem[];
-    console.log(responseCoins);
     batch(() => {
       store.dispatch(sortCoinsCachedAction(responseCoins));
       store.dispatch({ type: SET_COINS_LOADING, payload: false });

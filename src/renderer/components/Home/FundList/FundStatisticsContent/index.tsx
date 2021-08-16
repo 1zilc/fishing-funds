@@ -14,6 +14,7 @@ import AssetsStatistics from '@/components/Home/FundList/FundStatisticsContent/A
 import AssetsConfig from '@/components/Home/FundList/FundStatisticsContent/AssetsConfig';
 import { walletIcons } from '@/helpers/wallet';
 import { StoreState } from '@/reducers/types';
+import * as Helper from '@/helpers';
 import styles from './index.scss';
 
 export interface FundStatisticsContentProps {
@@ -35,8 +36,10 @@ const FundStatisticsContent: React.FC<FundStatisticsContentProps> = (props) => {
     const allFunds: (Fund.ResponseItem & Fund.FixData)[] = [];
     const fundCodeMap = new Map();
     wallets.forEach(({ code, funds }) => {
+      const fundConfig = Helper.Wallet.GetCurrentWalletConfig(code).funds;
+      const fundCodeMap = Helper.Fund.GetCodeMap(fundConfig);
       if (statusMap[code]) {
-        allFunds.push(...funds);
+        allFunds.push(...funds.filter((fund) => !!fundCodeMap[fund.fundcode!]?.cyfe));
       }
     });
     return allFunds.filter((fund) => !fundCodeMap.has(fund.fundcode!) && fundCodeMap.set(fund.fundcode!, true));
