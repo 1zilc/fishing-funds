@@ -27,6 +27,7 @@ declare namespace Stock {
     hs: number; // 换手
     zdd: number; // 涨跌点
     zdf: number; /// 涨跌幅
+    time: string; // 时间
   }
 
   export interface TrendItem {
@@ -48,6 +49,7 @@ declare namespace Stock {
     zg: number; // 最高
     zd: number; // 最低
     jk: number; // 今开
+    time: string; // 时间
     trends: TrendItem[]; // 趋势
   }
 
@@ -71,7 +73,12 @@ declare namespace Stock {
   }
 
   export interface Company {
-    gsjs: string;
+    gsjs: string; // 公司介绍
+    sshy: string; // 所属行业
+    dsz: string; // 董事长
+    zcdz: string; // 注册地址
+    clrq: string; // 成立日期
+    ssrq: string; // 上市日期
   }
   export interface ExtraRow {
     collapse?: boolean;

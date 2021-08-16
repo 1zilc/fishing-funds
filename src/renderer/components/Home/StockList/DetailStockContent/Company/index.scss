@@ -1,4 +1,10 @@
 .content {
   display: block;
   color: var(--inner-text-color);
+  label {
+    word-break: keep-all;
+  }
+  div {
+    display: flex;
+  }
 }

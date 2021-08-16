@@ -120,7 +120,7 @@ const StockRow: React.FC<RowProps> = (props) => {
             <div className={styles.rowBar}>
               <div>
                 <span className={styles.code}>{stock.code}</span>
-                {/* <span>{zindex.gztime.slice(5)}</span> */}
+                <span>{stock.time}</span>
               </div>
             </div>
           )}

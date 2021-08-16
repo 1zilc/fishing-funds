@@ -23,6 +23,7 @@ export async function FromEastmoney(code: string) {
         f57: string; // code
         f58: string; // name
         f60: number; // 昨收
+        f86: number; // 时间戳（秒）
         f107: number; // market
         f168: number; // 换手
         f169: number; // 涨跌点
@@ -31,7 +32,7 @@ export async function FromEastmoney(code: string) {
       };
     }>('http://push2.eastmoney.com/api/qt/stock/get?=', {
       searchParams: {
-        fields: 'f43,f44,f45,f46,f57,f58,f60,f107,f168,f169,f170,f171',
+        fields: 'f43,f44,f45,f46,f57,f58,f60,f86,f107,f168,f169,f170,f171',
         secid: code, // 1.000001
         _: new Date().getTime(),
       },
@@ -52,6 +53,7 @@ export async function FromEastmoney(code: string) {
       zf: NP.divide(data.data.f171, 100),
       type: data.data.f107,
       code: `${data.data.f107}.${data.data.f57}`,
+      time: dayjs.unix(data.data.f86).format('MM-DD HH:mm'),
     };
   } catch (error) {
     console.log(error);
@@ -120,9 +122,7 @@ export async function GetKFromEastmoney(code: string, year: number) {
         name: '创业大盘';
         decimal: 2;
         dktotal: 477;
-        klines: [
-          '2019-04-18,3105.00,3078.87,3113.69,3077.85,13321590,21989221888.00,0.00'
-        ];
+        klines: ['2019-04-18,3105.00,3078.87,3113.69,3077.85,13321590,21989221888.00,0.00'];
       };
     }>('http://push2his.eastmoney.com/api/qt/stock/kline/get', {
       searchParams: {

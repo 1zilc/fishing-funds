@@ -1,6 +1,8 @@
-import * as Utils from '@/utils';
+import dayjs from 'dayjs';
 import cheerio from 'cheerio';
 import NP from 'number-precision';
+import * as Utils from '@/utils';
+import { defaultCompany } from '@/components/Home/StockList/DetailStockContent/Company';
 
 const { got } = window.contextModules;
 
@@ -15,7 +17,7 @@ export async function FromEastmoney(secid: string) {
     }
 
     const { trends } = responseTrends;
-    const { zx, code, name, market, zs, zdd, zdf, zg, zd, jk } = responseDetail!;
+    const { zx, code, name, market, zs, zdd, zdf, zg, zd, jk, time } = responseDetail!;
 
     return {
       secid,
@@ -29,6 +31,7 @@ export async function FromEastmoney(secid: string) {
       zg,
       zd,
       jk,
+      time,
       trends,
     };
   } catch (error) {
@@ -318,6 +321,7 @@ export async function GetDetailFromEastmoney(secid: string) {
       hs: data.f168, // 换手
       zdd: data.f169, // 涨跌点
       zdf: data.f170, /// 涨跌幅
+      time: dayjs.unix(data.f86).format('MM-DD HH:mm'),
     };
   } catch (error) {
     return {};
@@ -573,13 +577,16 @@ export async function GetABCompany(secid: string) {
       responseType: 'json',
     });
     return {
-      gsjs: body.jbzl.gsjj,
+      gsjs: body.jbzl.gsjj, // 公司介绍
+      sshy: body.jbzl.sshy, // 所属行业
+      dsz: body.jbzl.dsz, // 董事长
+      zcdz: body.jbzl.zcdz, // 注册地址
+      clrq: body.fxxg.clrq, // 成立日期
+      ssrq: body.fxxg.ssrq, // 上市日期
     };
   } catch (error) {
     console.log(error);
-    return {
-      gsjs: '',
-    };
+    return defaultCompany;
   }
 }
 
@@ -626,12 +633,15 @@ export async function GetHKCompany(secid: string) {
     });
     return {
       gsjs: body.gszl.gsjs,
+      sshy: body.gszl.sshy, // 所属行业
+      dsz: body.gszl.dsz, // 董事长
+      zcdz: body.gszl.zcdz, // 注册地址
+      clrq: body.gszl.gsclrq, // 成立日期
+      ssrq: body.zqzl.ssrq, // 上市日期
     };
   } catch (error) {
     console.log(error);
-    return {
-      gsjs: '',
-    };
+    return defaultCompany;
   }
 }
 
@@ -730,12 +740,15 @@ export async function GetUSCompany(secid: string) {
     });
     return {
       gsjs: body.data.gszl[0].COMPPROFILE,
+      sshy: body.data.gszl[0].INDUSTRY, // 所属行业
+      dsz: body.data.gszl[0].CHAIRMAN, // 董事长
+      zcdz: body.data.gszl[0].ADDRESS, // 注册地址
+      clrq: body.data.gszl[0].FOUNDDATE, // 成立日期
+      ssrq: body.data.zqzl[0].LISTEDDATE, // 上市日期
     };
   } catch (error) {
     console.log(error);
-    return {
-      gsjs: '',
-    };
+    return defaultCompany;
   }
 }
 
@@ -744,14 +757,23 @@ export async function GetXSBCompany(secid: string) {
     const [mk, code] = secid.split('.');
     const { body: html } = await got(`http:xinsanban.eastmoney.com/F10/CompanyInfo/Introduction/${code}.html`);
     const $ = cheerio.load(html);
-    const gsjs = $('.company-info-brief .company-page-item-right').last().text();
+    const gsjs = $("span:contains('公司简介')").next().text();
+    const sshy = $("span:contains('行业分类')").next().text();
+    const dsz = $("span:contains('法人代表')").next().text();
+    const zcdz = $("span:contains('注册地址')").next().text();
+    const clrq = $("span:contains('成立日期')").next().text();
+    const ssrq = $("span:contains('挂牌日期')").next().text();
+
     return {
       gsjs,
+      sshy,
+      dsz,
+      zcdz,
+      clrq,
+      ssrq,
     };
   } catch (error) {
     console.log(error);
-    return {
-      gsjs: '',
-    };
+    return defaultCompany;
   }
 }
