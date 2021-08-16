@@ -66,7 +66,7 @@ const DetailCoinContent: React.FC<DetailCoinContentProps> = (props) => {
             </div>
             <div className={classnames(styles.detailItem, 'text-center')}>
               <div>{coin?.supply}万</div>
-              <div className={styles.detailItemLabel}>挖掘个数</div>
+              <div className={styles.detailItemLabel}>流通个数</div>
             </div>
             <div className={classnames(styles.detailItem, 'text-right')}>{}</div>
           </div>
