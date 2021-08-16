@@ -2,9 +2,7 @@ import React, { useEffect, useState } from 'react';
 import ChartCard from '@/components/Card/ChartCard';
 import { useSelector } from 'react-redux';
 
-import { useHomeContext } from '@/components/Home';
 import { StoreState } from '@/reducers/types';
-import * as CONST from '@/constants';
 import * as Services from '@/services';
 import * as Enums from '@/utils/enums';
 import styles from './index.scss';
@@ -75,7 +73,7 @@ const Company: React.FC<CompanyProps> = ({ secid }) => {
           <span>{company.ssrq || '暂无~'}</span>
         </div>
         <div>
-          <span>{company.gsjs || '暂无~'}</span>
+          <span>{company.gsjs || '暂无公司简介~'}</span>
         </div>
       </div>
     </ChartCard>
