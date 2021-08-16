@@ -285,3 +285,27 @@ export function GetValueColor(number?: number | string) {
 export function NotEmpty<TValue>(value: TValue | null | undefined): value is TValue {
   return value !== null && value !== undefined;
 }
+
+export function CalcZDHC(list: number[]) {
+  try {
+    const mins: number[] = [];
+    const HCs: number[] = [];
+    if (list.length) {
+      let min = list[list.length - 1];
+      for (let i = 0; i < list.length; i++) {
+        min = Math.min(list[list.length - 1 - i], min);
+        mins.unshift(min);
+      }
+      for (let i = 0; i < list.length; i++) {
+        const HC = (list[i] - mins[i]) / list[i];
+        HCs.unshift(HC);
+      }
+      return NP.times(Math.max(...HCs), 100).toFixed(2);
+    } else {
+      return '--';
+    }
+  } catch (error) {
+    console.log('最大回撤计算出错');
+    return '--';
+  }
+}

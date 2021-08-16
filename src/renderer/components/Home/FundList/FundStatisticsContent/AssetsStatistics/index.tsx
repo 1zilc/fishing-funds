@@ -4,7 +4,6 @@ import classnames from 'classnames';
 import { useSelector } from 'react-redux';
 
 import PureCard from '@/components/Card/PureCard';
-import ChartCard from '@/components/Card/ChartCard';
 import Score from '@/components/Home/FundList/FundStatisticsContent/AssetsStatistics/Score';
 import { StoreState } from '@/reducers/types';
 import * as Enums from '@/utils/enums';
@@ -131,9 +130,7 @@ const AssetsStatistics: React.FC<AssetsStatisticsProps> = ({ funds, codes }) => 
           </div>
         </div>
       </PureCard>
-      <ChartCard auto>
-        <Score gssyl={gssyl} />
-      </ChartCard>
+      <Score gssyl={gssyl} />
     </>
   );
 };

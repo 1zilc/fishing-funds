@@ -3,6 +3,7 @@ import { useRequest } from 'ahooks';
 import { useSelector } from 'react-redux';
 import classnames from 'classnames';
 
+import ChartCard from '@/components/Card/ChartCard';
 import { useHomeContext } from '@/components/Home';
 import { useResizeEchart, useRenderEcharts } from '@/utils/hooks';
 import { StoreState } from '@/reducers/types';
@@ -137,23 +138,17 @@ const Score: React.FC<ScoreProps> = ({ gssyl = 0 }) => {
   );
 
   return (
-    <div>
-      <div className={styles.row}>
-        <div>
+    <ChartCard
+      auto
+      TitleBar={
+        <div className={styles.row}>
           评分指标-沪深300(今)：
-          <span
-            className={classnames({
-              [Utils.GetValueColor(HS).textClass]: eyeOpen,
-            })}
-          >
-            {HS}
-            {eyeOpen ? '%' : ''}
-          </span>
+          <span className={classnames(Utils.GetValueColor(HS).textClass)}>{HS}%</span>
         </div>
-      </div>
-
+      }
+    >
       <div ref={chartRef} style={{ width: '100%' }} />
-    </div>
+    </ChartCard>
   );
 };
 
