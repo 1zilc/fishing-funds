@@ -1,4 +1,4 @@
-import React, { PropsWithChildren, useRef } from 'react';
+import React, { PropsWithChildren, ReactNode, useRef } from 'react';
 import html2canvas from 'html2canvas';
 import classnames from 'classnames';
 import { ReactComponent as DownloadIcon } from '@/assets/icons/download.svg';
@@ -13,6 +13,7 @@ export interface ChartCardProps {
   onDoubleClick?: any;
   auto?: boolean;
   onFresh?: () => void;
+  TitleBar?: ReactNode;
 }
 
 const { clipboard, dialog, saveImage } = window.contextModules.electron;
@@ -29,6 +30,7 @@ export const ChartCard: React.FC<PropsWithChildren<ChartCardProps>> = ({
   className = {},
   children,
   auto,
+  TitleBar,
 }) => {
   const chartRef = useRef<HTMLDivElement>(null);
   async function writeChartToClipboard() {
@@ -84,6 +86,7 @@ export const ChartCard: React.FC<PropsWithChildren<ChartCardProps>> = ({
       onDoubleClick={onDoubleClick}
     >
       <div className={styles.toolbar}>
+        {TitleBar && <div style={{ flex: 1 }}>{TitleBar}</div>}
         {onFresh && <RefreshIcon onClick={onFresh} />}
         <DownloadIcon onClick={downLoadChartToLocal} />
         <CopyIcon onClick={writeChartToClipboard} />

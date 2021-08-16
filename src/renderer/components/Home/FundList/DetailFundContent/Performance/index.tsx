@@ -8,6 +8,7 @@ import { useResizeEchart, useRenderEcharts } from '@/utils/hooks';
 import * as CONST from '@/constants';
 import * as Services from '@/services';
 import * as Enums from '@/utils/enums';
+import * as Utils from '@/utils';
 
 import styles from './index.scss';
 
@@ -20,12 +21,13 @@ const performanceTypeList = [
   { name: '6月', type: Enums.PerformanceType.HalfYear, code: 'hy' },
   { name: '1年', type: Enums.PerformanceType.Year, code: 'y' },
   { name: '3年', type: Enums.PerformanceType.ThreeYear, code: 'try' },
-  { name: '最大', type: Enums.PerformanceType.Max, code: 'se' },
+  { name: '成立', type: Enums.PerformanceType.Max, code: 'se' },
 ];
 const Performance: React.FC<PerformanceProps> = ({ code }) => {
   const { ref: chartRef, chartInstance } = useResizeEchart(CONST.DEFAULT.ECHARTS_SCALE);
   const [performanceType, setPerformanceType] = useState(performanceTypeList[2]);
   const { varibleColors, darkMode } = useHomeContext();
+  const [ZDHC, setZDHC] = useState('');
   const { run: runGetFundPerformanceFromEastmoney } = useRequest(Services.Fund.GetFundPerformanceFromEastmoney, {
     manual: true,
     throwOnError: true,
@@ -94,6 +96,13 @@ const Performance: React.FC<PerformanceProps> = ({ code }) => {
             },
           })) || [],
       });
+      try {
+        const values = result?.[0]?.data.map(([time, rate]: any) => 1 + (1 * rate) / 100);
+        setZDHC(Utils.CalcZDHC(values));
+      } catch (error) {
+        setZDHC('--');
+        console.log('最大回撤计算出错');
+      }
     },
   });
 
@@ -110,7 +119,14 @@ const Performance: React.FC<PerformanceProps> = ({ code }) => {
   }, [code, performanceType.code]);
 
   return (
-    <ChartCard onFresh={freshChart}>
+    <ChartCard
+      onFresh={freshChart}
+      TitleBar={
+        <div className={styles.zdhc}>
+          {performanceType.name}最大回撤：<span>{ZDHC}%</span>
+        </div>
+      }
+    >
       <div className={styles.content}>
         <div ref={chartRef} style={{ width: '100%' }} />
         <TypeSelection types={performanceTypeList} activeType={performanceType.type} onSelected={setPerformanceType} />
