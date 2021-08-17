@@ -35,7 +35,6 @@ const K: React.FC<PerformanceProps> = ({ code = '' }) => {
     cacheKey: `GetKFromCoingecko/${code}`,
     onSuccess: (result) => {
       // 数据意义：开盘(open)，收盘(close)，最低(lowest)，最高(highest)
-      console.log(result);
       const values = result.map((_) => [_.kp, _.sp, _.zd, _.zg]);
       chartInstance?.setOption({
         title: {
