@@ -2,9 +2,9 @@ import React, { useState, useCallback } from 'react';
 import { useRequest } from 'ahooks';
 import { useSelector } from 'react-redux';
 
+import ChartCard from '@/components/Card/ChartCard';
 import { useHomeContext } from '@/components/Home';
 import TypeSelection from '@/components/TypeSelection';
-import ChartCard from '@/components/Card/ChartCard';
 import { useResizeEchart, useRenderEcharts } from '@/utils/hooks';
 import { StoreState } from '@/reducers/types';
 import * as CONST from '@/constants';
@@ -24,81 +24,85 @@ const dateTypeList = [
   { name: '1年', type: 6, code: 365 },
 ];
 
-const Trend: React.FC<PerformanceProps> = ({ code }) => {
+const K: React.FC<PerformanceProps> = ({ code = '' }) => {
   const { ref: chartRef, chartInstance } = useResizeEchart(CONST.DEFAULT.ECHARTS_SCALE);
-  const [date, setDateType] = useState(dateTypeList[2]);
-  const { darkMode } = useHomeContext();
   const coinUnitSetting = useSelector((state: StoreState) => state.setting.systemSetting.coinUnitSetting);
-  const { run: runGetHistoryFromCoingecko } = useRequest(Services.Coin.GetHistoryFromCoingecko, {
+  const [date, setDateType] = useState(dateTypeList[2]);
+  const { varibleColors, darkMode } = useHomeContext();
+  const { run: runGetKFromCoingecko } = useRequest(Services.Coin.GetKFromCoingecko, {
     manual: true,
     throwOnError: true,
-    cacheKey: `GetHistoryFromCoingecko/${code}`,
-    pollingInterval: CONST.DEFAULT.ESTIMATE_FUND_DELAY,
+    cacheKey: `GetKFromCoingecko/${code}`,
     onSuccess: (result) => {
+      // 数据意义：开盘(open)，收盘(close)，最低(lowest)，最高(highest)
+      console.log(result);
+      const values = result.map((_) => [_.kp, _.sp, _.zd, _.zg]);
       chartInstance?.setOption({
         title: {
           text: '',
+          left: 0,
         },
         tooltip: {
           trigger: 'axis',
-          position: 'inside',
+          axisPointer: {
+            type: 'cross',
+          },
+        },
+        legend: {
+          data: ['K线'],
+          textStyle: {
+            color: varibleColors['--main-text-color'],
+            fontSize: 10,
+          },
         },
         grid: {
           left: 0,
           right: 5,
           bottom: 0,
-          top: 20,
           containLabel: true,
         },
         xAxis: {
-          type: 'time',
-          data: result.prices.map(({ time }) => time),
-          boundaryGap: false,
-          axisLabel: {
-            fontSize: 10,
-          },
+          type: 'category',
+          data: result.map(({ time }) => time),
         },
-        yAxis: [
+        yAxis: {
+          scale: true,
+        },
+        dataZoom: [
           {
-            type: 'value',
-            axisLabel: {
-              fontSize: 10,
-            },
-            scale: true,
-          },
-          {
-            type: 'value',
-            axisLabel: {
-              fontSize: 10,
-            },
-            scale: true,
+            type: 'inside',
+            start: 80,
+            end: 100,
           },
         ],
         series: [
           {
-            data: result.prices.map(({ time, price }) => [time, price]),
-            type: 'line',
-            name: `价格 ${coinUnitSetting}`,
-            showSymbol: false,
-            symbol: 'none',
-            smooth: true,
+            name: 'K线',
+            type: 'candlestick',
+            data: values,
+            itemStyle: {
+              color: varibleColors['--increase-color'],
+              color0: varibleColors['--reduce-color'],
+            },
             markPoint: {
-              symbol: 'pin',
-              symbolSize: 30,
               data: [
-                { type: 'max', label: { fontSize: 10 } },
-                { type: 'min', label: { fontSize: 10 } },
+                {
+                  name: '最高值',
+                  type: 'max',
+                  valueDim: 'highest',
+                },
+                {
+                  name: '最低值',
+                  type: 'min',
+                  valueDim: 'lowest',
+                },
+                {
+                  name: '平均值',
+                  type: 'average',
+                  valueDim: 'close',
+                },
               ],
             },
-          },
-          {
-            data: result.vol24h.map(({ time, price }) => [time, price]),
-            yAxisIndex: 1,
-            type: 'line',
-            name: `24H交易量 (亿)`,
-            showSymbol: false,
-            symbol: 'none',
-            smooth: true,
           },
         ],
       });
@@ -107,14 +111,14 @@ const Trend: React.FC<PerformanceProps> = ({ code }) => {
 
   useRenderEcharts(
     () => {
-      runGetHistoryFromCoingecko(code, coinUnitSetting, date.code);
+      runGetKFromCoingecko(code, coinUnitSetting, date.code);
     },
     chartInstance,
     [darkMode, code, coinUnitSetting, date.code]
   );
 
   const freshChart = useCallback(() => {
-    runGetHistoryFromCoingecko(code, coinUnitSetting, date.code);
+    runGetKFromCoingecko(code, coinUnitSetting, date.code);
   }, [code, coinUnitSetting, date.code]);
 
   return (
@@ -127,4 +131,4 @@ const Trend: React.FC<PerformanceProps> = ({ code }) => {
   );
 };
 
-export default Trend;
+export default K;

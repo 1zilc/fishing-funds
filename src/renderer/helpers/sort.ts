@@ -61,9 +61,9 @@ export const stockSortModeOptions: Option.EnumsOption<Enums.StockSortType>[] = [
 
 export const coinSortModeOptions: Option.EnumsOption<Enums.CoinSortType>[] = [
   { key: Enums.CoinSortType.Custom, value: '自定义' },
-  { key: Enums.CoinSortType.Zdf, value: '24H涨跌幅' },
   { key: Enums.CoinSortType.Price, value: '价格' },
-  { key: Enums.CoinSortType.Rank, value: '排名' },
+  { key: Enums.CoinSortType.Zdf, value: '24H涨跌幅' },
+  { key: Enums.CoinSortType.Volum, value: '24H交易量' },
 ];
 
 export function GetSortConfig() {

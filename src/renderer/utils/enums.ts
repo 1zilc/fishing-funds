@@ -56,7 +56,7 @@ export enum CoinSortType {
   Custom, // 自定义
   Zdf, // 24H涨跌幅
   Price, // 价值
-  Rank, // 排名
+  Volum, // 24H交易量
 }
 
 export enum SortOrderType {
@@ -168,4 +168,10 @@ export enum StockMarketType {
   XSB = 7,
   Fund = 8,
   Bond = 9,
+}
+
+export enum CoinUnitType {
+  Usd = 'usd',
+  Cny = 'cny',
+  Btc = 'btc',
 }

@@ -8,6 +8,8 @@ import * as Helpers from '@/helpers';
 export const SET_COINS_LOADING = 'SET_COINS_LOADING';
 export const SYNC_COINS = 'SYNC_COINS';
 export const SYNC_COINS_CONFIG = 'SYNC_COINS_CONFIG';
+export const SET_REMOTE_COINS_LOADING = 'SET_REMOTE_COINS_LOADING';
+export const SET_REMOTE_COINS = 'SET_REMOTE_COINS';
 
 export function addCoinAction(coin: Coin.SettingItem): ThunkAction {
   return (dispatch, getState) => {
@@ -170,6 +172,37 @@ export function syncCoinsStateAction(coins: (Coin.ResponseItem & Coin.ExtraRow)[
       dispatch({ type: SYNC_COINS, payload: filterCoins });
     } catch (error) {
       console.log('同步货币状态出错', error);
+    }
+  };
+}
+
+export function setRemoteCoinsAction(remoteCoins: Coin.RemoteCoin[]): ThunkAction {
+  return (dispatch, getState) => {
+    try {
+      const remoteMap = Utils.GetStorage(CONST.STORAGE.REMOTE_COIN_MAP, {});
+      const newRemoteMap = remoteCoins.reduce((r, c) => {
+        r[c.code] = c;
+        return r;
+      }, {} as Record<string, Coin.RemoteCoin>);
+
+      Utils.SetStorage(CONST.STORAGE.REMOTE_COIN_MAP, {
+        ...remoteMap,
+        ...newRemoteMap,
+      });
+      dispatch(syncRemoteCoinsAction());
+    } catch (error) {
+      console.log('设置货币库出错', error);
+    }
+  };
+}
+
+export function syncRemoteCoinsAction(): ThunkAction {
+  return (dispatch, getState) => {
+    try {
+      const remoteCoins = Helpers.Coin.GetRemoteCoins();
+      dispatch({ type: SET_REMOTE_COINS, payload: remoteCoins });
+    } catch (error) {
+      console.log('同步货币库出错', error);
     }
   };
 }

@@ -195,33 +195,49 @@ export async function UpdateSystemTheme(setting: Enums.SystemThemeType) {
   }
 }
 
-export function UnitConvert(num: number) {
-  function strNumSize(tempNum: number) {
-    const stringNum = tempNum.toString();
-    const index = stringNum.indexOf('.');
-    let newNum = stringNum;
-    if (index !== -1) {
-      newNum = stringNum.substring(0, index);
-    }
-    return newNum.length;
+export function UnitTransform(value: number) {
+  const newValue = ['', '', ''];
+  let fr = 1000;
+  const ad = 1;
+  let num = 3;
+  const fm = 1;
+  while (value / fr >= 1) {
+    fr *= 10;
+    num += 1;
   }
-  const moneyUnits = ['元', '万', '亿', '万亿'];
-  const dividend = 10000;
-  let curentNum = num;
-  // 转换数字
-  let curentUnit = moneyUnits[0];
-  // 转换单位
-  for (let i = 0; i < 4; i++) {
-    curentUnit = moneyUnits[i];
-    if (strNumSize(curentNum) < 5) {
-      break;
+  if (num <= 4) {
+    // 千
+    newValue[1] = '千';
+    newValue[0] = NP.divide(value, 1000).toFixed(2);
+  } else if (num <= 8) {
+    // 万
+    const text1 = parseInt(String(num - 4), 10) / 3 > 1 ? '千万' : '万';
+    const fm = text1 === '万' ? 10000 : 10000000;
+    newValue[1] = text1;
+    newValue[0] = NP.divide(value, fm).toFixed(2);
+  } else if (num <= 16) {
+    // 亿
+    let text1 = (num - 8) / 3 > 1 ? '千亿' : '亿';
+    text1 = (num - 8) / 4 > 1 ? '万亿' : text1;
+    text1 = (num - 8) / 7 > 1 ? '千万亿' : text1;
+    let fm = 1;
+    if (text1 === '亿') {
+      fm = 100000000;
+    } else if (text1 === '千亿') {
+      fm = 100000000000;
+    } else if (text1 === '万亿') {
+      fm = 1000000000000;
+    } else if (text1 === '千万亿') {
+      fm = 1000000000000000;
     }
-    curentNum /= dividend;
+    newValue[1] = text1;
+    newValue[0] = NP.divide(value, fm).toFixed(2);
   }
-  return {
-    num: curentNum.toFixed(2),
-    unit: curentUnit,
-  };
+  if (value < 1000) {
+    newValue[1] = '';
+    newValue[0] = value.toFixed(2);
+  }
+  return newValue.join('');
 }
 
 export function MakeHash() {

@@ -1,4 +1,4 @@
-import { SYNC_COINS_CONFIG, SYNC_COINS, SET_COINS_LOADING } from '@/actions/coin';
+import { SYNC_COINS_CONFIG, SYNC_COINS, SET_COINS_LOADING, SET_REMOTE_COINS, SET_REMOTE_COINS_LOADING } from '@/actions/coin';
 import { Reducer } from '@/reducers/types';
 import * as Helpers from '@/helpers';
 
@@ -9,6 +9,8 @@ export interface CoinState {
     coinConfig: Coin.SettingItem[];
     codeMap: Helpers.Coin.CodeCoinMap;
   };
+  remoteCoins: Coin.RemoteCoin[];
+  remoteCoinsLoading: boolean;
 }
 
 const coin: Reducer<CoinState> = (
@@ -16,6 +18,8 @@ const coin: Reducer<CoinState> = (
     coins: [],
     coinsLoading: false,
     config: Helpers.Coin.GetCoinConfig(),
+    remoteCoins: [],
+    remoteCoinsLoading: false,
   },
   action
 ) => {
@@ -34,6 +38,16 @@ const coin: Reducer<CoinState> = (
       return {
         ...state,
         config: action.payload,
+      };
+    case SET_REMOTE_COINS:
+      return {
+        ...state,
+        remoteCoins: action.payload,
+      };
+    case SET_REMOTE_COINS_LOADING:
+      return {
+        ...state,
+        remoteCoinsLoading: action.payload,
       };
     default:
       return state;

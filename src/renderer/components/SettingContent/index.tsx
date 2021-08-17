@@ -16,6 +16,7 @@ import { ReactComponent as TShirtIcon } from '@/assets/icons/t-shirt.svg';
 import { ReactComponent as GlobalIcon } from '@/assets/icons/global.svg';
 import { ReactComponent as GroupIcon } from '@/assets/icons/group.svg';
 import { ReactComponent as NotificationIcon } from '@/assets/icons/notification.svg';
+import { ReactComponent as BitCoinIcon } from '@/assets/icons/bit-coin.svg';
 import { defalutSystemSetting } from '@/helpers/setting';
 import { setSystemSettingAction } from '@/actions/setting';
 import { StoreState } from '@/reducers/types';
@@ -99,6 +100,7 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
     adjustmentNotificationSetting,
     adjustmentNotificationTimeSetting,
     trayContentSetting,
+    coinUnitSetting,
     autoStartSetting,
     autoFreshSetting,
     freshDelaySetting,
@@ -118,6 +120,8 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
   const [adjustmentNotification, setAdjustmentNotification] = useState(adjustmentNotificationSetting);
   const [adjustmentNotificationTime, setAdjustmentNotifitationTime] = useState(adjustmentNotificationTimeSetting);
   const [trayContent, setTrayContent] = useState(trayContentSetting);
+  // 货币单位
+  const [coinUnit, setCoinUnitSetting] = useState(coinUnitSetting);
   // 通用设置
   const [autoStart, setAutoStart] = useState(autoStartSetting);
   const [autoFresh, setAutoFresh] = useState(autoFreshSetting);
@@ -135,6 +139,7 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
         adjustmentNotificationSetting: adjustmentNotification,
         adjustmentNotificationTimeSetting: adjustmentNotificationTime || defalutSystemSetting.adjustmentNotificationTimeSetting,
         trayContentSetting: trayContent,
+        coinUnitSetting: coinUnit,
         autoStartSetting: autoStart,
         autoFreshSetting: autoFresh,
         freshDelaySetting: freshDelay || defalutSystemSetting.freshDelaySetting,
@@ -263,6 +268,21 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
                 value={trayContent}
               />
             </section>
+          </div>
+        </StandCard>
+        <StandCard icon={<BitCoinIcon />} title="货币单位">
+          <div className={classnames(styles.setting, 'card-body')}>
+            <Radio.Group value={coinUnit} onChange={(e) => setCoinUnitSetting(e.target.value)}>
+              <Radio className={styles.radio} value={Enums.CoinUnitType.Usd}>
+                USD ($)
+              </Radio>
+              <Radio className={styles.radio} value={Enums.CoinUnitType.Cny}>
+                CNY (¥)
+              </Radio>
+              <Radio className={styles.radio} value={Enums.CoinUnitType.Btc}>
+                BTC (฿)
+              </Radio>
+            </Radio.Group>
           </div>
         </StandCard>
         <StandCard icon={<SettingIcon />} title="系统设置">

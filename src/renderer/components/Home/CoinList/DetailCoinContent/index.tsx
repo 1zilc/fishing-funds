@@ -1,12 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useCallback } from 'react';
 import classnames from 'classnames';
-import { useRequest } from 'ahooks';
+import { useScroll, useRequest } from 'ahooks';
 import { Tabs } from 'antd';
 
+import ChartCard from '@/components/Card/ChartCard';
 import Trend from '@/components/Home/CoinList/DetailCoinContent/Trend';
+import K from '@/components/Home/CoinList/DetailCoinContent/K';
+import Appraise from '@/components/Home/CoinList/DetailCoinContent/Appraise';
+import Sentiment from '@/components/Home/CoinList/DetailCoinContent/Sentiment';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
 import * as Services from '@/services';
-import * as Utils from '@/utils';
 
 import styles from './index.scss';
 
@@ -18,63 +21,93 @@ export interface DetailCoinContentProps {
 
 const DetailCoinContent: React.FC<DetailCoinContentProps> = (props) => {
   const { code } = props;
-  const [coin, setCoin] = useState<Coin.ResponseItem | null>(null);
+  const [coin, setCoin] = useState<Coin.DetailItem | null>(null);
+  const ref = useRef(null);
+  const position = useScroll(ref, (val) => val.top <= 520);
+  const miniMode = position.top > 40;
 
-  useRequest(Services.Coin.GetFromCoinCap, {
+  const { run: runGetDetailFromCoingecko } = useRequest(Services.Coin.GetDetailFromCoingecko, {
     throwOnError: true,
     pollingInterval: 1000 * 60,
     defaultParams: [code],
     onSuccess: setCoin,
-    cacheKey: `GetFromCoinCap/${code}`,
+    cacheKey: `GetDetailFromCoingecko/${code}`,
   });
+
+  const freshDetail = useCallback(() => {
+    runGetDetailFromCoingecko(code);
+  }, [code]);
 
   return (
     <CustomDrawerContent title="货币详情" enterText="确定" onClose={props.onClose} onEnter={props.onEnter}>
-      <div className={styles.content}>
+      <div className={styles.content} ref={ref}>
+        <div className={classnames(styles.avatarContent)} style={{ backgroundImage: `url(${coin?.image.large})` }}>
+          <div
+            className={classnames(styles.avatar, {
+              [styles.avatarMiniMode]: miniMode,
+            })}
+          >
+            <img src={coin?.image.large} />
+          </div>
+        </div>
         <div className={styles.container}>
           <h3 className={styles.titleRow}>
-            <span>{coin?.symbol}</span>
-            <span className={classnames(Utils.GetValueColor(coin?.changePercent24Hr).textClass)}>{coin?.priceUsd}</span>
+            <span>{coin?.symbol.toUpperCase()}</span>
+            <span>排名：{coin?.market_cap_rank}</span>
           </h3>
           <div className={styles.subTitleRow}>
-            <span>{coin?.code}</span>
+            <span>{coin?.id}</span>
             <div>
-              <span className={styles.detailItemLabel}>24H涨跌幅：</span>
-              <span className={classnames(Utils.GetValueColor(coin?.changePercent24Hr).textClass)}>
-                {Utils.Yang(coin?.changePercent24Hr)}%
-              </span>
+              <span className={styles.detailItemLabel}>发行日期：</span>
+              <span>{coin?.genesis_date}</span>
             </div>
           </div>
           <div className={styles.detail}>
             <div className={classnames(styles.detailItem, 'text-left')}>
-              <div>{coin?.rank}</div>
-              <div className={styles.detailItemLabel}>排名</div>
+              <div>{coin?.country_origin || '无'}</div>
+              <div className={styles.detailItemLabel}>起源国家</div>
             </div>
             <div className={classnames(styles.detailItem, 'text-center')}>
-              <div>{coin?.marketCapUsd}亿</div>
-              <div className={styles.detailItemLabel}>当前市值</div>
+              <div>{coin?.hashing_algorithm || '无'}</div>
+              <div className={styles.detailItemLabel}>hash算法</div>
             </div>
             <div className={classnames(styles.detailItem, 'text-right')}>
-              <div>{coin?.volumeUsd24Hr}亿</div>
-              <div className={styles.detailItemLabel}>24H交易量</div>
+              <div>{coin?.block_time_in_minutes}分钟</div>
+              <div className={styles.detailItemLabel}>区块时间</div>
             </div>
           </div>
           <div className={styles.detail}>
             <div className={classnames(styles.detailItem, 'text-left')}>
-              <div>{coin?.maxSupply ? `${coin?.maxSupply}万` : '无信息'}</div>
-              <div className={styles.detailItemLabel}>总发行</div>
+              <div>{coin?.public_interest_score || '无'}</div>
+              <div className={styles.detailItemLabel}>趣味得分</div>
             </div>
-            <div className={classnames(styles.detailItem, 'text-center')}>
-              <div>{coin?.supply}万</div>
-              <div className={styles.detailItemLabel}>流通个数</div>
-            </div>
-            <div className={classnames(styles.detailItem, 'text-right')}>{}</div>
+            <div className={classnames(styles.detailItem, 'text-center')}> </div>
+            <div className={classnames(styles.detailItem, 'text-right')}> </div>
           </div>
         </div>
         <div className={styles.container}>
           <Tabs animated={{ tabPane: true }} tabBarGutter={15}>
             <Tabs.TabPane tab="近期走势" key={String(0)}>
               <Trend code={code} />
+            </Tabs.TabPane>
+            <Tabs.TabPane tab="货币评估" key={String(1)}>
+              <ChartCard onFresh={freshDetail}>
+                <Appraise
+                  data={[coin?.coingecko_score || 0, coin?.developer_score || 0, coin?.community_score || 0, coin?.liquidity_score || 0]}
+                />
+              </ChartCard>
+            </Tabs.TabPane>
+            <Tabs.TabPane tab="大众趋势" key={String(2)}>
+              <ChartCard onFresh={freshDetail}>
+                <Sentiment up={coin?.sentiment_votes_up_percentage} down={coin?.sentiment_votes_down_percentage} />
+              </ChartCard>
+            </Tabs.TabPane>
+          </Tabs>
+        </div>
+        <div className={styles.container}>
+          <Tabs animated={{ tabPane: true }} tabBarGutter={15}>
+            <Tabs.TabPane tab="K线" key={String(0)}>
+              <K code={code} />
             </Tabs.TabPane>
           </Tabs>
         </div>
