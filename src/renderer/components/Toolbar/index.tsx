@@ -135,6 +135,7 @@ const ToolBar: React.FC<ToolBarProps> = () => {
             freshFunds();
             freshZindexs();
             freshQuotations();
+            freshCoins();
             closeSettingDrawer();
           }}
         />

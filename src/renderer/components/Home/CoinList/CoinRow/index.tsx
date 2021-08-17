@@ -10,6 +10,7 @@ import Collapse from '@/components/Collapse';
 import { StoreState } from '@/reducers/types';
 import { toggleCoinCollapseAction } from '@/actions/coin';
 import * as Utils from '@/utils';
+import * as Helpers from '@/helpers';
 import styles from './index.scss';
 
 export interface RowProps {
@@ -28,6 +29,7 @@ const CoinRow: React.FC<RowProps> = (props) => {
   const dispatch = useDispatch();
   const { conciseSetting } = useSelector((state: StoreState) => state.setting.systemSetting);
   const coinColor = colorHash.hex(coin.code);
+  const { symbol } = Helpers.Coin.GetCurrentCoin(coin.code);
   const onDetailClick = () => {
     props.onDetail(coin.code);
   };
@@ -45,7 +47,7 @@ const CoinRow: React.FC<RowProps> = (props) => {
               alignItems: 'center',
             }}
           >
-            <span className={styles.zindexName}>{coin.symbol}</span>
+            <span className={styles.zindexName}>{symbol.toUpperCase()}</span>
             <span
               className={styles.coin}
               style={{
@@ -64,15 +66,13 @@ const CoinRow: React.FC<RowProps> = (props) => {
           )}
         </div>
         <div className={classnames(styles.value)}>
-          <div className={classnames(styles.zx, Utils.GetValueColor(coin.changePercent24Hr).textClass)}>
-            {coin.priceUsd}
-            <ArrowLine value={coin.changePercent24Hr} />
+          <div className={classnames(styles.zx, Utils.GetValueColor(coin.change24h).textClass)}>
+            {coin.price}
+            <ArrowLine value={coin.change24h} />
           </div>
           {!conciseSetting && (
             <div className={styles.zd}>
-              <div className={classnames(styles.zdf, Utils.GetValueColor(coin.changePercent24Hr).textClass)}>
-                {Utils.Yang(coin.changePercent24Hr)} %
-              </div>
+              <div className={classnames(styles.zdf, Utils.GetValueColor(coin.change24h).textClass)}>{Utils.Yang(coin.change24h)} %</div>
             </div>
           )}
         </div>
@@ -80,35 +80,17 @@ const CoinRow: React.FC<RowProps> = (props) => {
       <Collapse isOpened={!!coin.collapse}>
         <div className={styles.collapseContent}>
           <section>
-            <span>排名：</span>
-            <span>{coin.rank}</span>
-          </section>
-          <section>
-            <span>当前市值：</span>
-            <span>{coin.marketCapUsd}亿</span>
-          </section>
-          <section>
-            <span>挖掘个数：</span>
-            <span>{coin.supply}万</span>
-          </section>
-          <section>
-            <span>总发行：</span>
-            <span>{coin.maxSupply ? `${coin.maxSupply}万` : '无信息'}</span>
+            <span>总市值：</span>
+            <span>{coin.marketCap}</span>
           </section>
           <section>
             <span>24H交易量：</span>
-            <span>{coin.volumeUsd24Hr}亿</span>
-          </section>
-          <section>
-            <span>24H均价：</span>
-            <span>{coin.vwap24Hr}</span>
+            <span>{coin.vol24h}</span>
           </section>
           {conciseSetting && (
             <section>
               <span>24H涨跌幅：</span>
-              <span className={classnames(Utils.GetValueColor(coin.changePercent24Hr).textClass)}>
-                {Utils.Yang(coin.changePercent24Hr)} %
-              </span>
+              <span className={classnames(Utils.GetValueColor(coin.change24h).textClass)}>{Utils.Yang(coin.change24h)} %</span>
             </section>
           )}
           <div className={styles.view}>

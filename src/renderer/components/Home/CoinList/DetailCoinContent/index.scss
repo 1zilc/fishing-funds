@@ -1,5 +1,11 @@
 .content {
-  padding: var(--base-padding) 0;
+  padding: 0 0 var(--base-padding) 0;
+  overflow-y: scroll;
+  height: calc(100vh - 48px);
+
+  &::-webkit-scrollbar {
+    width: 0;
+  }
 
   h3 {
     color: var(--main-text-color);
@@ -65,4 +71,54 @@
   align-items: center;
   justify-content: space-between;
   font-size: calc(11rem / var(--base-font-size));
+}
+
+.avatarContent {
+  width: 100%;
+  min-height: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  overflow: hidden;
+  position: relative;
+  border-bottom: 1px solid var(--border-color);
+  margin-bottom: var(--base-padding);
+
+  &::before {
+    content: '';
+    display: block;
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    z-index: 1;
+    backdrop-filter: saturate(180%) blur(20px);
+  }
+}
+
+.avatar {
+  width: 50vw;
+  height: 50vw;
+  border-radius: 50%;
+  overflow: hidden;
+  box-sizing: border-box;
+  background-color: var(--inner-color);
+  transition: all 0.2s;
+  z-index: 2;
+
+  img {
+    transition: all 0.3s;
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+.avatarMiniMode {
+  width: 96px;
+  height: 96px;
 }

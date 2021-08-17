@@ -431,6 +431,7 @@ export function useFreshFunds(throttleDelay: number) {
 export function useBootStrap() {
   const { freshDelaySetting, autoFreshSetting } = useSelector((state: StoreState) => state.setting.systemSetting);
   const runLoadRemoteFunds = () => Helpers.Fund.LoadRemoteFunds();
+  const runLoadRemoteCoins = () => Helpers.Coin.LoadRemoteCoins();
   const runLoadWalletsFunds = () => Helpers.Wallet.LoadWalletsFunds();
   const runLoadFixWalletsFunds = () => Helpers.Wallet.loadFixWalletsFunds();
   const runLoadZindexs = () => Helpers.Zindex.LoadZindexs(false);
@@ -438,9 +439,10 @@ export function useBootStrap() {
   const runLoadStocks = () => Helpers.Stock.LoadStocks(false);
   const runLoadCoins = () => Helpers.Coin.LoadCoins(false);
 
-  // 间隔时间刷新远程基金数据
+  // 间隔时间刷新远程基金数据,远程货币数据
   useInterval(() => {
     runLoadRemoteFunds();
+    runLoadRemoteCoins();
   }, 1000 * 60 * 60 * 24);
 
   // 间隔时间刷新基金,指数，板块，钱包
@@ -470,7 +472,7 @@ export function useBootStrap() {
   // 第一次刷新所有数据
   useEffect(() => {
     Adapters.ConCurrencyAllAdapter([
-      () => Adapters.ChokeAllAdapter([runLoadRemoteFunds, runLoadWalletsFunds, runLoadFixWalletsFunds]),
+      () => Adapters.ChokeAllAdapter([runLoadRemoteFunds, runLoadRemoteCoins, runLoadWalletsFunds, runLoadFixWalletsFunds]),
       () => Adapters.ChokeAllAdapter([runLoadZindexs, runLoadQuotations, runLoadStocks, runLoadCoins]),
     ]);
   }, []);

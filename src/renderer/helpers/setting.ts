@@ -15,6 +15,8 @@ export const defalutSystemSetting: System.Setting = {
   adjustmentNotificationTimeSetting: dayjs().hour(14).minute(30).format(),
   trayContentSetting: Enums.TrayContent.None,
 
+  coinUnitSetting: Enums.CoinUnitType.Usd,
+
   autoStartSetting: true,
   autoFreshSetting: true,
   freshDelaySetting: 1,

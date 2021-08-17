@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useDebounceFn, useRequest } from 'ahooks';
+import { useDebounceFn } from 'ahooks';
 import { Input, Tabs } from 'antd';
 
 import DetailCoinContent from '@/components/Home/CoinList/DetailCoinContent';
@@ -11,8 +11,6 @@ import { addCoinAction } from '@/actions/coin';
 import { StoreState } from '@/reducers/types';
 import { useDrawer } from '@/utils/hooks';
 import * as Helpers from '@/helpers';
-import * as Services from '@/services';
-import * as Enums from '@/utils/enums';
 import styles from './index.scss';
 
 export interface AddCoinContentProps {
@@ -27,15 +25,9 @@ const AddCoinContent: React.FC<AddCoinContentProps> = (props) => {
   const { defaultName } = props;
   const dispatch = useDispatch();
   const [none, setNone] = useState<boolean>(false);
-  const [coins, setCoins] = useState<Coin.ResponseItem[]>([]);
+  const [coins, setCoins] = useState<Coin.RemoteCoin[]>([]);
   const { codeMap } = useSelector((state: StoreState) => state.coin.config);
-
-  const { run: runSearch } = useRequest(Services.Coin.FromCoinCap, {
-    manual: true,
-    throwOnError: true,
-    onSuccess: setCoins,
-  });
-
+  const remoteCoins = useSelector((state: StoreState) => state.coin.remoteCoins);
   const { data: detailCode, show: showDetailDrawer, set: setDetailDrawer, close: closeDetailDrawer } = useDrawer('');
 
   async function onAdd(code: string) {
@@ -44,8 +36,8 @@ const AddCoinContent: React.FC<AddCoinContentProps> = (props) => {
       setNone(false);
       dispatch(
         addCoinAction({
-          code: coin.code,
-          symbol: coin.symbol,
+          code: coin.id,
+          symbol: coin.symbol.toUpperCase(),
           name: coin.name!,
         })
       );
@@ -61,12 +53,19 @@ const AddCoinContent: React.FC<AddCoinContentProps> = (props) => {
       setCoins([]);
       return;
     }
-    runSearch(value);
+    setCoins(
+      remoteCoins.filter((remoteCoin) => {
+        const { code, symbol } = remoteCoin;
+        return (
+          symbol.toLocaleUpperCase().indexOf(value.toLocaleUpperCase()) !== -1 || code.toLocaleUpperCase() === value.toLocaleUpperCase()
+        );
+      })
+    );
   });
 
   useEffect(() => {
     if (defaultName) {
-      runSearch(defaultName);
+      onSearch(defaultName);
     }
   }, [defaultName]);
 
@@ -84,12 +83,13 @@ const AddCoinContent: React.FC<AddCoinContentProps> = (props) => {
         )}
       </div>
       {coins.length ? (
-        coins.map(({ code, symbol }) => {
+        coins.map(({ code }) => {
+          const { symbol } = Helpers.Coin.GetCurrentCoin(code);
           return (
             <div key={code} className={styles.stock} onClick={() => setDetailDrawer(code)}>
               <div>
                 <div className={styles.name}>
-                  <span className={styles.nameText}>{symbol}</span>
+                  <span className={styles.nameText}>{symbol.toUpperCase()}</span>
                 </div>
                 <div className={styles.code}>{code}</div>
               </div>

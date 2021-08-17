@@ -1,9 +1,11 @@
 import NP from 'number-precision';
 import dayjs from 'dayjs';
 import * as Utils from '@/utils';
+import { helper } from 'echarts';
 
 const { got } = window.contextModules;
 
+// CoinCap
 export async function FromCoinCap(keyword: string, codes = '') {
   try {
     const {
@@ -126,5 +128,147 @@ export async function GetHistoryFromCoinCap(code: string, interval: string) {
   } catch (error) {
     console.log(error);
     return [];
+  }
+}
+
+// Coingecko
+export async function FromCoingecko(codes: string, currency: string) {
+  try {
+    const { body } = await got<
+      Record<
+        string,
+        {
+          btc: 1.0;
+          btc_market_cap: 18788387.0;
+          btc_24h_vol: 736517.4638024335;
+          btc_24h_change: 0.0;
+          usd: 46310;
+          usd_market_cap: 866740147397.4691;
+          usd_24h_vol: 34086961197.17789;
+          usd_24h_change: -2.9264155483511267;
+          cny: 299962;
+          cny_market_cap: 5611795758339.655;
+          cny_24h_vol: 220788065066.3608;
+          cny_24h_change: -2.9339084535836757;
+          last_updated_at: 1629166496;
+        } & Record<string, any>
+      >
+    >(`https://api.coingecko.com/api/v3/simple/price`, {
+      searchParams: {
+        ids: codes,
+        vs_currencies: 'btc,usd,cny',
+        include_market_cap: true,
+        include_24hr_vol: true,
+        include_24hr_change: true,
+        include_last_updated_at: true,
+      },
+      responseType: 'json',
+    });
+    return Object.entries(body).map(([code, data]) => ({
+      code,
+      price: data[`${currency}`],
+      marketCap: Utils.UnitTransform(data[`${currency}_market_cap`]),
+      vol24h: Utils.UnitTransform(data[`${currency}_24h_vol`]),
+      change24h: data[`${currency}_24h_change`].toFixed(2),
+      updateTime: dayjs.unix(data.last_updated_at).format('MM-DD HH:mm'),
+    }));
+  } catch (error) {
+    return [];
+  }
+}
+
+export async function GetDetailFromCoingecko(code: string) {
+  try {
+    const { body } = await got<Coin.DetailItem>(`https://api.coingecko.com/api/v3/coins/${code}`, {
+      searchParams: {
+        localization: false,
+        tickers: false,
+        market_data: false,
+        community_data: false,
+        developer_data: false,
+        sparkline: false,
+      },
+      responseType: 'json',
+    });
+    return body;
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+}
+
+export async function GetRemoteCoinsFromCoingecko() {
+  try {
+    const { body } = await got<
+      {
+        id: string;
+        symbol: string;
+        name: string;
+      }[]
+    >('https://api.coingecko.com/api/v3/coins/list', {
+      responseType: 'json',
+    });
+    return body.map((coin) => ({
+      name: coin.name,
+      symbol: coin.symbol.toUpperCase(),
+      code: coin.id,
+    }));
+  } catch (error) {
+    console.log(error);
+    return [];
+  }
+}
+
+export async function GetKFromCoingecko(code: string, currency: string, days: number) {
+  try {
+    const { body } = await got<[1597795200000, 85083.78, 85083.78, 82712.82, 82712.82][]>(
+      `https://api.coingecko.com/api/v3/coins/${code}/ohlc`,
+      {
+        searchParams: {
+          days,
+          vs_currency: currency,
+        },
+        responseType: 'json',
+      }
+    );
+    return body.map(([time, o, h, l, c]) => ({
+      time: dayjs(time).format('YYYY-MM-DD HH:mm'),
+      kp: o,
+      sp: c,
+      zd: l,
+      zg: h,
+    }));
+  } catch (error) {
+    console.log(error);
+    return [];
+  }
+}
+
+export async function GetHistoryFromCoingecko(code: string, currency: string, days: number) {
+  try {
+    const { body } = await got<{
+      prices: [1629106772337, 47108.05433394351][];
+      market_caps: [1629106772337, 47108.05433394351][];
+      total_volumes: [1629106772337, 47108.05433394351][];
+    }>(`https://api.coingecko.com/api/v3/coins/${code}/market_chart`, {
+      searchParams: { vs_currency: currency, days },
+      headers: {
+        'Accept-Encoding': 'gzip',
+      },
+      responseType: 'json',
+    });
+    return {
+      prices: body.prices.map(([time, value]) => ({
+        time,
+        price: value.toFixed(2),
+      })),
+      vol24h: body.total_volumes.map(([time, value]) => ({
+        time,
+        price: NP.divide(value, 10 ** 8).toFixed(2),
+      })),
+    };
+  } catch (error) {
+    console.log(error);
+    return { prices: [], vol24h: [] };
   }
 }

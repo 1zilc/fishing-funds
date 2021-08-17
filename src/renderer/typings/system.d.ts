@@ -11,6 +11,8 @@ declare namespace System {
     adjustmentNotificationTimeSetting: string; // 调仓时间
     trayContentSetting: number; // 托盘内容
 
+    coinUnitSetting: string; // 货币单位
+
     autoStartSetting: boolean; // 自动启动
     autoFreshSetting: boolean; // 自动刷新
     freshDelaySetting: number; // 刷新时间间隔
