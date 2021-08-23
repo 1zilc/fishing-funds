@@ -9,7 +9,7 @@ export default class AppUpdater {
     autoUpdater.autoDownload = false;
     log.transports.file.level = 'info';
     autoUpdater.logger = log;
-    autoUpdater.setFeedURL('https://ff-releases.1zilc.top');
+    autoUpdater.setFeedURL('https://download.1zilc.top');
     autoUpdater.on('error', (error) => {});
 
     // 检查事件
