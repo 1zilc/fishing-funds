@@ -1,4 +1,4 @@
-import { contextBridge, ipcRenderer, shell, app, clipboard, nativeTheme, nativeImage, dialog } from 'electron';
+import { contextBridge, ipcRenderer, shell, clipboard, nativeImage } from 'electron';
 import got from 'got';
 import * as fs from 'fs';
 
@@ -13,7 +13,6 @@ contextBridge.exposeInMainWorld('contextModules', {
       openExternal: shell.openExternal,
     },
     ipcRenderer: {
-      send: ipcRenderer.send,
       invoke: ipcRenderer.invoke,
       removeAllListeners: ipcRenderer.removeAllListeners,
       on(channel: string, func: any) {
