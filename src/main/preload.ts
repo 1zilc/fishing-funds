@@ -1,6 +1,7 @@
 import { contextBridge, ipcRenderer, shell, clipboard, nativeImage } from 'electron';
 import got from 'got';
 import * as fs from 'fs';
+import { base64ToBuffer } from './util';
 
 contextBridge.exposeInMainWorld('contextModules', {
   got: async (url: string, config = {}) => got(url, { ...config, retry: 3, timeout: 6000 }),
@@ -16,7 +17,13 @@ contextBridge.exposeInMainWorld('contextModules', {
       invoke: ipcRenderer.invoke,
       removeAllListeners: ipcRenderer.removeAllListeners,
       on(channel: string, func: any) {
-        const validChannels = ['nativeTheme-updated', 'clipboard-funds-copy', 'clipboard-funds-import', 'update-available'];
+        const validChannels = [
+          'nativeTheme-updated',
+          'clipboard-funds-copy',
+          'clipboard-funds-import',
+          'update-available',
+          'change-current-wallet-code',
+        ];
         if (validChannels.includes(channel)) {
           return ipcRenderer.on(channel, (event, ...args) => func(event, ...args));
         } else {
@@ -44,8 +51,7 @@ contextBridge.exposeInMainWorld('contextModules', {
     },
     saveImage: (filePath: string, dataUrl: string) => {
       try {
-        const data = dataUrl.match(/^data:([A-Za-z-+/]+);base64,(.+)$/);
-        const imageBuffer = Buffer.from(data![2], 'base64');
+        const imageBuffer = base64ToBuffer(dataUrl);
         fs.writeFileSync(`${filePath}`, imageBuffer);
       } catch (error) {
         console.log('图片写入失败', error);

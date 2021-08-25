@@ -1,7 +1,7 @@
 import log from 'electron-log';
 import { app } from 'electron';
 import { URL } from 'url';
-import path from 'path';
+import * as path from 'path';
 
 export function resolveHtmlPath(htmlFileName: string) {
   if (process.env.NODE_ENV === 'development') {
@@ -46,4 +46,10 @@ export async function checkEnvTool() {
   if (process.env.NODE_ENV === 'development' || process.env.DEBUG_PROD === 'true') {
     await installExtensions();
   }
+}
+
+export function base64ToBuffer(dataUrl: string) {
+  const data = dataUrl.match(/^data:([A-Za-z-+/]+);base64,(.+)$/);
+  const imageBuffer = Buffer.from(data![2], 'base64');
+  return imageBuffer;
 }

@@ -10,6 +10,7 @@ import {
   useBootStrap,
   useMappingLocalToSystemSetting,
   useTrayContent,
+  useUpdateContextMenuWalletsState,
 } from '@/utils/hooks';
 import '@/app.global.scss';
 
@@ -19,6 +20,7 @@ const App: React.FC<Record<string, unknown>> = () => {
   useConfigClipboard();
   useTrayContent();
   useMappingLocalToSystemSetting();
+  useUpdateContextMenuWalletsState();
   useBootStrap();
 
   return (

@@ -8,6 +8,7 @@ import * as echarts from 'echarts';
 import { updateAvaliableAction } from '@/actions/updater';
 import { updateStockAction } from '@/actions/stock';
 import { updateFundAction, setFundConfigAction } from '@/actions/fund';
+import { selectWalletAction } from '@/actions/wallet';
 import { StoreState } from '@/reducers/types';
 import * as Utils from '@/utils';
 import * as CONST from '@/constants';
@@ -187,9 +188,6 @@ export function useTrayContent() {
         break;
     }
     ipcRenderer.invoke('set-tray-content', content);
-    return () => {
-      ipcRenderer.removeAllListeners('set-tray-content');
-    };
   }, [trayContentSetting, calcResult]);
 }
 
@@ -530,4 +528,53 @@ export function useAfterMounted(fn: any, dep: any[] = []) {
       fn();
     }
   }, [flag, ...dep]);
+}
+
+export function useUpdateContextMenuWalletsState() {
+  const dispatch = useDispatch();
+  const wallets = useSelector((state: StoreState) => state.wallet.wallets);
+  const trayContentSetting = useSelector((state: StoreState) => state.setting.systemSetting.trayContentSetting);
+  const currentWalletCode = useSelector((state: StoreState) => state.wallet.currentWalletCode);
+  const freshFunds = useFreshFunds(0);
+
+  useEffect(() => {
+    ipcRenderer.invoke(
+      'update-tray-context-menu-wallets',
+      wallets.map((wallet) => {
+        const walletConfig = Helpers.Wallet.GetCurrentWalletConfig(wallet.code);
+        const calcResult = Helpers.Fund.CalcFunds(wallet.funds, wallet.code);
+        let value = '';
+        switch (trayContentSetting) {
+          case Enums.TrayContent.Sy:
+            value = ` ${Utils.Yang(calcResult.sygz.toFixed(2))} ¥`;
+            break;
+          case Enums.TrayContent.Syl:
+            value = ` ${Utils.Yang(calcResult.gssyl.toFixed(2))} %`;
+            break;
+          case Enums.TrayContent.None:
+          default:
+            break;
+        }
+        return {
+          label: `${walletConfig.name}  ${value}`,
+          type: currentWalletCode === wallet.code ? 'radio' : 'normal',
+          iconIndex: walletConfig.iconIndex,
+          id: wallet.code,
+        };
+      })
+    );
+  }, [wallets, trayContentSetting, currentWalletCode]);
+  useLayoutEffect(() => {
+    ipcRenderer.on('change-current-wallet-code', (e, code) => {
+      try {
+        dispatch(selectWalletAction(code));
+        freshFunds();
+      } catch (error) {
+        console.log(`切换钱包${code}失败`, error);
+      }
+    });
+    return () => {
+      ipcRenderer.removeAllListeners('change-current-wallet-code');
+    };
+  });
 }

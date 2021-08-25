@@ -10,10 +10,11 @@
 import { app, globalShortcut, ipcMain, nativeTheme, dialog } from 'electron';
 import windowStateKeeper from 'electron-window-state';
 import AppUpdater from './autoUpdater';
-import { appIcon } from './icon';
+import { appIcon, generateWalletIcon } from './icon';
 import { createTray } from './tray';
 import { createMenubar, buildContextMenu } from './menubar';
 import { lockSingleInstance, checkEnvTool } from './util';
+import { item } from '@/components/Home/FundList/FundManagerContent/index.scss';
 
 async function init() {
   lockSingleInstance();
@@ -94,8 +95,13 @@ function main() {
       appUpdater.checkUpdate('renderer');
     }
   });
-  ipcMain.handle('update-tray-context-menu-wallets', (event) => {
-    contextMenu = buildContextMenu({ mb, appUpdater }, []);
+  ipcMain.handle('update-tray-context-menu-wallets', (event, config) => {
+    const menus = config.map((item: any) => ({
+      ...item,
+      icon: generateWalletIcon(item.iconIndex),
+      click: () => mb.window?.webContents.send('change-current-wallet-code', item.id),
+    }));
+    contextMenu = buildContextMenu({ mb, appUpdater }, menus);
   });
   // menubar 相关监听
   mb.on('after-create-window', () => {
