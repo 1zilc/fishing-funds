@@ -576,5 +576,5 @@ export function useUpdateContextMenuWalletsState() {
     return () => {
       ipcRenderer.removeAllListeners('change-current-wallet-code');
     };
-  });
+  }, []);
 }
