@@ -271,7 +271,7 @@
     "redux-promise": "^0.6.0",
     "redux-thunk": "^2.3.0",
     "sortablejs": "^1.13.0",
-    "swiper": "^6.7.0"
+    "swiper": "^7.0.0"
   },
   "devEngines": {
     "node": ">=10.x",
