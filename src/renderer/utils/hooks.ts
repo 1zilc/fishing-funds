@@ -102,6 +102,7 @@ export function useConfigClipboard() {
         const limit = 1024;
         const text = clipboard.readText();
         const json: any[] = JSON.parse(text);
+        const currentWalletCode = Helpers.Wallet.GetCurrentWalletCode();
         if (json.length > limit) {
           dialog.showMessageBox({
             type: 'info',
@@ -110,7 +111,8 @@ export function useConfigClipboard() {
           });
           return;
         }
-        const fundConfig = json
+        const { codeMap: oldCodeMap } = Helpers.Fund.GetFundConfig(currentWalletCode);
+        const jsonFundConfig = json
           .map((fund) => ({
             name: '',
             cyfe: Number(fund.cyfe) < 0 ? 0 : Number(fund.cyfe) || 0,
@@ -118,20 +120,25 @@ export function useConfigClipboard() {
             cbj: Utils.NotEmpty(fund.cbj) ? (Number(fund.cbj) < 0 ? undefined : Number(fund.cbj)) : undefined,
           }))
           .filter(({ code }) => code);
-        const codeMap = Helpers.Fund.GetCodeMap(fundConfig);
+        const jsonCodeMap = Helpers.Fund.GetCodeMap(jsonFundConfig);
         // 去重复
-        const fundConfigSet = Object.entries(codeMap).map(([code, fund]) => fund);
+        const fundConfigSet = Object.entries(jsonCodeMap).map(([code, fund]) => fund);
         const responseFunds = (await Helpers.Fund.GetFunds(fundConfigSet)).filter(Utils.NotEmpty);
         const newFundConfig = responseFunds.map((fund) => ({
           name: fund!.name!,
           code: fund!.fundcode!,
-          cyfe: codeMap[fund!.fundcode!].cyfe,
-          cbj: codeMap[fund!.fundcode!].cbj,
+          cyfe: jsonCodeMap[fund!.fundcode!].cyfe,
+          cbj: jsonCodeMap[fund!.fundcode!].cbj,
         }));
-        const currentWalletCode = Helpers.Wallet.GetCurrentWalletCode();
-        dispatch(setFundConfigAction(newFundConfig, currentWalletCode));
-        await Helpers.Fund.LoadFunds(true);
-        await dialog.showMessageBox({
+        const newCodeMap = Helpers.Fund.GetCodeMap(newFundConfig);
+        const allCodeMap = {
+          ...oldCodeMap,
+          ...newCodeMap,
+        };
+        const allFundConfig = Object.entries(allCodeMap).map(([code, fund]) => fund);
+        dispatch(setFundConfigAction(allFundConfig, currentWalletCode));
+        Helpers.Fund.LoadFunds(true);
+        dialog.showMessageBox({
           type: 'info',
           title: `导入完成`,
           message: `更新：${newFundConfig.length}个，总共：${json.length}个`,

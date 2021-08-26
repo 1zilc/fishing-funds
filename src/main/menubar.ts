@@ -10,8 +10,8 @@ export function createMenubar({ tray, mainWindowState }: { tray: Tray; mainWindo
     index: resolveHtmlPath('index.html'),
     tray,
     tooltip: 'Fishing Funds',
-    preloadWindow: false,
-    showOnAllWorkspaces: true,
+    preloadWindow: true,
+    showOnAllWorkspaces: false,
     showDockIcon: false,
 
     browserWindow: {

@@ -123,6 +123,7 @@ function main() {
     mainWindowState.manage(mb.window!);
     // 检查更新
     appUpdater.checkUpdate('renderer');
+    mb.window?.setVisibleOnAllWorkspaces(true);
   });
 
   // new AppUpdater({ icon: nativeIcon, win: mb.window });
