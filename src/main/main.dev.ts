@@ -14,7 +14,6 @@ import { appIcon, generateWalletIcon } from './icon';
 import { createTray } from './tray';
 import { createMenubar, buildContextMenu } from './menubar';
 import { lockSingleInstance, checkEnvTool } from './util';
-import { item } from '@/components/Home/FundList/FundManagerContent/index.scss';
 
 async function init() {
   lockSingleInstance();

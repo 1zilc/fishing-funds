@@ -33,7 +33,7 @@ const ManageHistoryFundList: React.FC<ManageHistoryFundListProps> = ({ manageHis
   const { run: runGetFixFunds } = useRequest(Helpers.Fund.GetFixFunds, {
     manual: true,
     throwOnError: true,
-    onSuccess: (result: Fund.FixData[]) => {
+    onSuccess: (result) => {
       const fixFunds = Helpers.Fund.MergeFixFunds(manageHistoryFundList, result);
       const cloneFunds = fixFunds.filter(Boolean).sort((a, b) => {
         const calcA = Helpers.Fund.CalcFund(a, currentWalletCode);

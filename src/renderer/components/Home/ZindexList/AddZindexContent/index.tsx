@@ -3,11 +3,11 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useDebounceFn, useRequest } from 'ahooks';
 import { Input, Tabs } from 'antd';
 
-import DetailStockContent from '@/components/Home/StockList/DetailStockContent';
+import DetailZindexContent from '@/components/Home/ZindexList/DetailZindexContent';
 import CustomDrawer from '@/components/CustomDrawer';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
 import Empty from '@/components/Empty';
-import { addStockAction } from '@/actions/stock';
+import { addZindexAction } from '@/actions/zindex';
 import { StoreState } from '@/reducers/types';
 import { useDrawer } from '@/utils/hooks';
 import * as Helpers from '@/helpers';
@@ -15,7 +15,7 @@ import * as Services from '@/services';
 import * as Enums from '@/utils/enums';
 import styles from './index.scss';
 
-export interface AddStockContentProps {
+export interface AddZindexContentProps {
   defaultName?: string;
   onEnter: () => void;
   onClose: () => void;
@@ -24,23 +24,23 @@ export interface AddStockContentProps {
 const { Search } = Input;
 
 export const stockTypesConfig = [
-  { name: 'AB股', code: Enums.StockMarketType.AB },
-  // { name: '指数', code: Enums.StockMarketType.Zindex },
+  // { name: 'AB股', code: Enums.StockMarketType.AB },
+  { name: '指数', code: Enums.StockMarketType.Zindex },
   // { name: '板块', code:  Enums.StockMarketType.Quotation },
-  { name: '港股', code: Enums.StockMarketType.HK },
-  { name: '美股', code: Enums.StockMarketType.US },
-  { name: '英股', code: Enums.StockMarketType.UK },
-  { name: '三板', code: Enums.StockMarketType.XSB },
+  // { name: '港股', code: Enums.StockMarketType.HK },
+  // { name: '美股', code: Enums.StockMarketType.US },
+  // { name: '英股', code: Enums.StockMarketType.UK },
+  // { name: '三板', code: Enums.StockMarketType.XSB },
   // { name: '基金', code:  Enums.StockMarketType.Fund },
-  { name: '债券', code: Enums.StockMarketType.Bond },
+  // { name: '债券', code: Enums.StockMarketType.Bond },
 ];
 
-const AddStockContent: React.FC<AddStockContentProps> = (props) => {
+const AddZindexContent: React.FC<AddZindexContentProps> = (props) => {
   const { defaultName } = props;
   const dispatch = useDispatch();
   const [none, setNone] = useState<boolean>(false);
   const [groupList, setGroupList] = useState<Stock.SearchResult[]>([]);
-  const { codeMap } = useSelector((state: StoreState) => state.stock.config);
+  const { codeMap } = useSelector((state: StoreState) => state.zindex.config);
 
   const { run: runSearch } = useRequest(Services.Stock.SearchFromEastmoney, {
     manual: true,
@@ -50,17 +50,14 @@ const AddStockContent: React.FC<AddStockContentProps> = (props) => {
 
   const { data: detailSecid, show: showDetailDrawer, set: setDetailDrawer, close: closeDetailDrawer } = useDrawer('');
 
-  async function onAdd(secid: string, type: number) {
-    const stock = await Helpers.Stock.GetStock(secid);
-    if (stock) {
+  async function onAdd(secid: string) {
+    const zindex = await Helpers.Zindex.GetZindex(secid);
+    if (zindex) {
       setNone(false);
       dispatch(
-        addStockAction({
-          market: stock.market!,
-          code: stock.code!,
-          secid: stock.secid,
-          name: stock.name!,
-          type,
+        addZindexAction({
+          code: zindex.code!,
+          name: zindex.name!,
         })
       );
       props.onEnter();
@@ -85,15 +82,15 @@ const AddStockContent: React.FC<AddStockContentProps> = (props) => {
   }, [defaultName]);
 
   return (
-    <CustomDrawerContent title="添加股票" enterText="确定" onEnter={props.onEnter} onClose={props.onClose}>
+    <CustomDrawerContent title="添加指数" enterText="确定" onEnter={props.onEnter} onClose={props.onClose}>
       <div className={styles.content}>
         <section>
           <label>关键字：</label>
-          <Search defaultValue={defaultName} type="text" placeholder="股票代码或名称关键字" enterButton onSearch={onSearch} size="small" />
+          <Search defaultValue={defaultName} type="text" placeholder="指数代码或名称关键字" enterButton onSearch={onSearch} size="small" />
         </section>
         {none && (
           <section>
-            <span className={styles.none}>添加股票失败，未找到或数据出错~</span>
+            <span className={styles.none}>添加指数失败，未找到或数据出错~</span>
           </section>
         )}
       </div>
@@ -119,7 +116,7 @@ const AddStockContent: React.FC<AddStockContentProps> = (props) => {
                       <button
                         className={styles.select}
                         onClick={(e) => {
-                          onAdd(secid, Type);
+                          onAdd(secid);
                           e.stopPropagation();
                         }}
                       >
@@ -136,10 +133,10 @@ const AddStockContent: React.FC<AddStockContentProps> = (props) => {
         <Empty text="暂无相关数据~" />
       )}
       <CustomDrawer show={showDetailDrawer}>
-        <DetailStockContent onEnter={closeDetailDrawer} onClose={closeDetailDrawer} secid={detailSecid} />
+        <DetailZindexContent onEnter={closeDetailDrawer} onClose={closeDetailDrawer} code={detailSecid} />
       </CustomDrawer>
     </CustomDrawerContent>
   );
 };
 
-export default AddStockContent;
+export default AddZindexContent;

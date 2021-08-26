@@ -264,6 +264,12 @@ export function ClearExpiredStorage() {
     ClearStorage(CONST.STORAGE.FUND_SETTING);
     ClearStorage(CONST.STORAGE.WALLET_INDEX);
   }
+  // 未自选指数 4.7.0已废除
+  const zindexSetting = GetStorage(CONST.STORAGE.ZINDEX_SETTING);
+  SetStorage(
+    CONST.STORAGE.ZINDEX_SETTING,
+    zindexSetting.filter((zindex: any) => zindex.show !== false)
+  );
 }
 
 export function Group<T>(array: T[], num: number) {
