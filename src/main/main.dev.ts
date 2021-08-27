@@ -71,6 +71,9 @@ function main() {
   ipcMain.handle('show-save-dialog', async (event, config) => {
     return dialog.showSaveDialog(config);
   });
+  ipcMain.handle('show-open-dialog', async (event, config) => {
+    return dialog.showOpenDialog(config);
+  });
   ipcMain.handle('show-current-window', (event, config) => {
     mb.window?.show();
   });
@@ -122,9 +125,10 @@ function main() {
     mainWindowState.manage(mb.window!);
     // 检查更新
     appUpdater.checkUpdate('renderer');
+  });
+  mb.on('ready', () => {
     mb.window?.setVisibleOnAllWorkspaces(true);
   });
-
   // new AppUpdater({ icon: nativeIcon, win: mb.window });
 }
 

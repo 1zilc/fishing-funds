@@ -4,7 +4,7 @@
   "description": "显示基金涨跌状态栏小应用,数据源来自天天基金等",
   "scripts": {
     "build": "concurrently \"yarn build:main\" \"yarn build:renderer\"",
-    "build:preload": "yarn tsc ./src/main/preload.ts",
+    "build:preload": "yarn tsc ./src/main/preload.ts --resolveJsonModule",
     "build:main": "cross-env NODE_ENV=production webpack --config ./.erb/configs/webpack.config.main.prod.babel.js",
     "build:renderer": "cross-env NODE_ENV=production webpack --config ./.erb/configs/webpack.config.renderer.prod.babel.js",
     "rebuild": "electron-rebuild --parallel --types prod,dev,optional --module-dir src",
@@ -259,6 +259,7 @@
     "history": "^4.10.0",
     "html2canvas": "^1.2.2",
     "iconv-lite": "^0.6.2",
+    "js-base64": "^3.6.1",
     "menubar": "^9.0.2",
     "number-precision": "^1.5.0",
     "react": "^17.0.2",

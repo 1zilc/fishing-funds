@@ -5,7 +5,8 @@ import { defaultWallet } from '@/helpers/wallet';
 import * as Enums from '@/utils/enums';
 import * as CONST from '@/constants';
 
-const { invoke } = window.contextModules.electron;
+const { invoke, encodeFF, decodeFF } = window.contextModules.electron;
+const { version } = window.contextModules.process;
 
 export function Yang(num: string | number | undefined) {
   try {
@@ -266,10 +267,12 @@ export function ClearExpiredStorage() {
   }
   // 未自选指数 4.7.0已废除
   const zindexSetting = GetStorage(CONST.STORAGE.ZINDEX_SETTING);
-  SetStorage(
-    CONST.STORAGE.ZINDEX_SETTING,
-    zindexSetting.filter((zindex: any) => zindex.show !== false)
-  );
+  if (zindexSetting !== null) {
+    SetStorage(
+      CONST.STORAGE.ZINDEX_SETTING,
+      zindexSetting.filter((zindex: any) => zindex.show !== false)
+    );
+  }
 }
 
 export function Group<T>(array: T[], num: number) {
@@ -330,4 +333,34 @@ export function CalcZDHC(list: number[]) {
     console.log('最大回撤计算出错');
     return '--';
   }
+}
+
+export function GenerateBackupConfig() {
+  const config = Object.keys(CONST.STORAGE).reduce<Record<string, any>>((data, key) => {
+    const content = GetStorage(key);
+    if (content !== undefined) {
+      data[key] = content;
+    }
+    return data;
+  }, {});
+  const fileConfig: Backup.Config = {
+    name: 'Fishing-Funds-Backup',
+    author: '1zilc',
+    website: 'https://ff.1zilc.top',
+    github: 'https://github.com/1zilc/fishing-funds',
+    version: version,
+    content: encodeFF(config),
+    timestamp: Date.now(),
+    suffix: 'ff',
+  };
+  return fileConfig;
+}
+
+export function coverBackupConfig(fileConfig: Backup.Config) {
+  const content = decodeFF(fileConfig.content);
+  Object.entries(content).forEach(([key, value]) => {
+    if (key in CONST.STORAGE && value !== undefined) {
+      SetStorage(key, value);
+    }
+  });
 }

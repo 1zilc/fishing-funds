@@ -1,7 +1,8 @@
-import { useCallback, useLayoutEffect, useMemo, useState, useEffect, useRef, Fragment } from 'react';
+import { useCallback, useLayoutEffect, useState, useEffect, useRef } from 'react';
 import { useInterval, useBoolean, useThrottleFn, useSize } from 'ahooks';
-import { bindActionCreators } from 'redux';
 import { useDispatch, useSelector } from 'react-redux';
+import { compose } from 'redux';
+import { Base64 } from 'js-base64';
 import dayjs from 'dayjs';
 import * as echarts from 'echarts';
 
@@ -17,7 +18,7 @@ import * as Services from '@/services';
 import * as Helpers from '@/helpers';
 import * as Enums from '@/utils/enums';
 
-const { invoke, dialog, ipcRenderer, clipboard, app } = window.contextModules.electron;
+const { invoke, dialog, ipcRenderer, clipboard, app, saveString, encodeFF, decodeFF, readFile } = window.contextModules.electron;
 
 export function useWorkDayTimeToDo(todo: () => void, delay: number, config?: { immediate: boolean }): void {
   useInterval(
@@ -93,7 +94,7 @@ export function useUpdater() {
   }, [autoCheckUpdateSetting]);
 }
 
-export function useConfigClipboard() {
+export function useFundsClipboard() {
   const dispatch = useDispatch();
 
   useLayoutEffect(() => {
@@ -144,12 +145,12 @@ export function useConfigClipboard() {
           message: `更新：${newFundConfig.length}个，总共：${json.length}个`,
         });
       } catch (error) {
-        console.log('基金json解析失败', error);
         dialog.showMessageBox({
           type: 'info',
-          title: `基金JSON解析失败`,
+          title: `解析失败`,
           message: `请检查JSON格式`,
         });
+        console.log('基金json解析失败', error);
       }
     });
     ipcRenderer.on('clipboard-funds-copy', (e, data) => {
@@ -163,12 +164,81 @@ export function useConfigClipboard() {
           message: `已复制${fundConfig.length}支基金配置到粘贴板`,
         });
       } catch (error) {
+        dialog.showMessageBox({
+          type: 'info',
+          title: `复制失败`,
+          message: `基金JSON复制失败`,
+        });
         console.log('复制基金json失败', error);
       }
     });
     return () => {
-      ipcRenderer.removeAllListeners('update-available');
       ipcRenderer.removeAllListeners('clipboard-funds-import');
+      ipcRenderer.removeAllListeners('clipboard-funds-copy');
+    };
+  }, []);
+}
+
+export function useAllConfigBackup() {
+  useLayoutEffect(() => {
+    ipcRenderer.on('backup-all-config-export', async (e, data) => {
+      try {
+        const backupConfig = Utils.GenerateBackupConfig();
+        const { filePath, canceled } = await dialog.showSaveDialog({
+          title: '保存',
+          defaultPath: `${backupConfig.name}-${backupConfig.timestamp}.${backupConfig.suffix}`,
+        });
+        if (canceled) {
+          return;
+        }
+        const encodeBackupConfig = compose(Base64.encode, encodeFF)(backupConfig);
+        saveString(filePath!, encodeBackupConfig);
+        dialog.showMessageBox({
+          type: 'info',
+          title: `导出成功`,
+          message: `已导出全局配置文件至${filePath}`,
+        });
+      } catch (error) {
+        dialog.showMessageBox({
+          type: 'info',
+          title: `导出失败`,
+          message: `导出全局配置文件失败`,
+        });
+        console.log('导出全局配置文件失败', error);
+      }
+    });
+    ipcRenderer.on('backup-all-config-import', async (e, data) => {
+      try {
+        const { filePaths, canceled } = await dialog.showOpenDialog({
+          title: '选择备份文件',
+          filters: [{ name: 'Fishing Funds', extensions: ['ff'] }],
+        });
+        const filePath = filePaths[0];
+        if (canceled || !filePath) {
+          return;
+        }
+        const encodeBackupConfig = readFile(filePath);
+        const backupConfig: Backup.Config = compose(decodeFF, Base64.decode)(encodeBackupConfig);
+        Utils.coverBackupConfig(backupConfig);
+        await dialog.showMessageBox({
+          type: 'info',
+          title: `导入成功`,
+          message: `导入全局配置成功, 请重新启动Fishing Funds`,
+        });
+        app.quit();
+      } catch (error) {
+        dialog.showMessageBox({
+          type: 'info',
+          title: `导入失败`,
+          message: `导入全局配置文件失败`,
+        });
+        console.log('导入全局配置文件失败', error);
+      }
+    });
+
+    return () => {
+      ipcRenderer.removeAllListeners('backup-all-config-export');
+      ipcRenderer.removeAllListeners('backup-all-config-import');
     };
   }, []);
 }
@@ -258,19 +328,6 @@ export function useRenderEcharts(callback: () => void, instance: echarts.ECharts
       callback();
     }
   }, [instance, ...dep]);
-}
-
-export function useActions(actions: any, deps?: any[]) {
-  const dispatch = useDispatch();
-  return useMemo(
-    () => {
-      if (Array.isArray(actions)) {
-        return actions.map((a) => bindActionCreators(a, dispatch));
-      }
-      return bindActionCreators(actions, dispatch);
-    },
-    deps ? [dispatch, ...deps] : [dispatch]
-  );
 }
 
 export function useSyncFixFundSetting() {

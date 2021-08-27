@@ -64,11 +64,15 @@ export function buildContextMenu(
     },
     { type: 'separator' },
     {
-      click: () => {},
+      click: () => {
+        mb.window?.webContents.send('backup-all-config-import');
+      },
       label: '导入全局配置',
     },
     {
-      click: () => {},
+      click: () => {
+        mb.window?.webContents.send('backup-all-config-export');
+      },
       label: '导出全局配置',
     },
     { type: 'separator' },

@@ -20,11 +20,16 @@ declare global {
           getShouldUseDarkColors: () => Promise<boolean>;
           setNativeThemeSource: (theme: string) => Promise<void>;
         };
-        saveImage: (filePath: string, dataUrl: string) => Promise<void>;
+        saveImage: (filePath: string, dataUrl: string) => void;
+        saveString: (filePath: string, content: string) => void;
+        encodeFF: (content: any) => string;
+        decodeFF: (content: string) => any;
+        readFile: (content: string) => string;
       };
       process: {
         production: boolean;
         electron: string;
+        version: string;
       };
     };
   }
