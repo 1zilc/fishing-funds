@@ -48,6 +48,9 @@
     ],
     "afterSign": ".erb/scripts/notarize.js",
     "mac": {
+      "extendInfo": {
+        "LSUIElement": "true"
+      },
       "target": [
         {
           "target": "dmg",

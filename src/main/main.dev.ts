@@ -125,6 +125,7 @@ function main() {
     mainWindowState.manage(mb.window!);
     // 检查更新
     appUpdater.checkUpdate('renderer');
+    app.dock.hide();
   });
   mb.on('ready', () => {
     mb.window?.setVisibleOnAllWorkspaces(true);
