@@ -11,8 +11,8 @@ export function createMenubar({ tray, mainWindowState }: { tray: Tray; mainWindo
     tray,
     tooltip: 'Fishing Funds',
     preloadWindow: true,
-    showOnAllWorkspaces: false,
-    showDockIcon: false,
+    showOnAllWorkspaces: true,
+    // showDockIcon: false,
 
     browserWindow: {
       backgroundColor: '#fff',

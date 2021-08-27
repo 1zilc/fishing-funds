@@ -128,7 +128,7 @@ function main() {
     app.dock.hide();
   });
   mb.on('ready', () => {
-    mb.window?.setVisibleOnAllWorkspaces(true);
+    // mb.window?.setVisibleOnAllWorkspaces(true);
   });
   // new AppUpdater({ icon: nativeIcon, win: mb.window });
 }
