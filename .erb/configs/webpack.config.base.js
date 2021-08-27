@@ -4,7 +4,7 @@
 
 import webpack from 'webpack';
 import webpackPaths from './webpack.paths.js';
-import { dependencies as externals } from '../../build/app/package.json';
+import { dependencies as externals, version } from '../../build/app/package.json';
 export default {
   externals: [...Object.keys(externals || {})],
   module: {
@@ -49,6 +49,7 @@ export default {
   plugins: [
     new webpack.EnvironmentPlugin({
       NODE_ENV: 'production',
+      VERSION: version,
     }),
   ],
 };

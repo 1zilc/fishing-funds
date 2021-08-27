@@ -24,14 +24,13 @@ import * as Enums from '@/utils/enums';
 import * as Utils from '@/utils';
 import styles from './index.scss';
 
-export const ffVersion = '4.6.0';
 export interface SettingContentProps {
   onEnter: () => void;
   onClose: () => void;
 }
 
 const { shell, app, clipboard, dialog } = window.contextModules.electron;
-const { electron } = window.contextModules.process;
+const { electron, version } = window.contextModules.process;
 
 const linksGroup = Utils.Group(
   [
@@ -178,7 +177,7 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
         >
           <Logo />
           <Badge count={isUpdateAvaliable ? `v${updateInfo.version} 可更新` : 0} style={{ fontSize: 8 }} size="small">
-            <div className={styles.appName}>Fishing Funds v{ffVersion}</div>
+            <div className={styles.appName}>Fishing Funds v{version}</div>
           </Badge>
         </PureCard>
         <StandCard icon={<LineCharIcon />} title="数据来源">
