@@ -16,7 +16,7 @@ import styles from './index.scss';
 export interface RowProps {
   fund: Fund.ResponseItem & Fund.ExtraRow & Fund.FixData;
   readOnly?: boolean;
-  onEdit?: (fund: Fund.SettingItem) => void;
+  onEdit?: (fund: Fund.SettingItem, focus: 'cbj' | 'cyfe') => void;
   onDetail?: (code: string) => void;
 }
 
@@ -47,14 +47,17 @@ const FundRow: React.FC<RowProps> = (props) => {
     }
   }
 
-  function onEditClick() {
+  function onEditClick(focus: 'cbj' | 'cyfe') {
     if (props.onEdit) {
-      props.onEdit({
-        name: fund.name!,
-        code: fund.fundcode!,
-        cyfe: Number(calcFundResult.cyfe),
-        cbj: calcFundResult.cbj,
-      });
+      props.onEdit(
+        {
+          name: fund.name!,
+          code: fund.fundcode!,
+          cyfe: Number(calcFundResult.cyfe),
+          cbj: calcFundResult.cbj,
+        },
+        focus
+      );
     }
   }
 
@@ -107,12 +110,12 @@ const FundRow: React.FC<RowProps> = (props) => {
           </section>
           <section>
             <span>成本价：</span>
-            {calcFundResult.cbj !== undefined ? <span>{calcFundResult.cbj}</span> : <a onClick={onEditClick}>录入</a>}
+            {calcFundResult.cbj !== undefined ? <span>{calcFundResult.cbj}</span> : <a onClick={() => onEditClick('cbj')}>录入</a>}
           </section>
           <section>
             <span>持有份额：</span>
             <span>{calcFundResult.cyfe}</span>
-            <EditIcon className={styles.editor} onClick={onEditClick} />
+            <EditIcon className={styles.editor} onClick={() => onEditClick('cyfe')} />
           </section>
           <section>
             <span>成本金额：</span>
