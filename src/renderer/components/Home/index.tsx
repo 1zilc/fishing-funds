@@ -17,7 +17,6 @@ import SortBar from '@/components/SortBar';
 import TabsBar from '@/components/TabsBar';
 import Collect from '@/components/Collect';
 import GroupTab from '@/components/GroupTab';
-import { marketsConfig } from '@/components/Home/ZindexList/ManageZindexContent';
 import { stockTypesConfig } from '@/components/Home/StockList/AddStockContent';
 import { StoreState } from '@/reducers/types';
 import { useNativeThemeColor, useCurrentWallet } from '@/utils/hooks';
@@ -72,11 +71,6 @@ const ZindexGroup = () => {
       <Tabs.TabPane tab="全部" key={String(-1)}>
         <ZindexList filter={() => true} />
       </Tabs.TabPane>
-      {marketsConfig.map((market) => (
-        <Tabs.TabPane tab={market.name.slice(0, 2)} key={String(market.code)}>
-          <ZindexList filter={(zindex) => zindexCodeMap[zindex.code!].type === market.code} />
-        </Tabs.TabPane>
-      ))}
     </GroupTab>
   );
 };

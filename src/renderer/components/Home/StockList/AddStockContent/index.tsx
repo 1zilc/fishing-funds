@@ -25,7 +25,7 @@ const { Search } = Input;
 
 export const stockTypesConfig = [
   { name: 'AB股', code: Enums.StockMarketType.AB },
-  // { name: '指数', code:  Enums.StockMarketType.Zindex },
+  // { name: '指数', code: Enums.StockMarketType.Zindex },
   // { name: '板块', code:  Enums.StockMarketType.Quotation },
   { name: '港股', code: Enums.StockMarketType.HK },
   { name: '美股', code: Enums.StockMarketType.US },

@@ -62,7 +62,7 @@ export const ChartCard: React.FC<PropsWithChildren<ChartCardProps>> = ({
       if (canceled) {
         return;
       }
-      await saveImage(filePath!, dataUrl);
+      saveImage(filePath!, dataUrl);
       dialog.showMessageBox({
         title: '保存成功',
         type: 'info',

@@ -14,6 +14,7 @@ module.exports = {
     'import/no-named-as-default': 0,
     'import/no-cycle': 0,
     'import/no-dynamic-require': 0,
+    'import/extensions': 0,
     'react/destructuring-assignment': 0,
     'react/button-has-type': 0,
     'react/prop-types': 0,

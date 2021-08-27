@@ -1,13 +1,15 @@
-import { useCallback, useLayoutEffect, useMemo, useState, useEffect, useRef, Fragment } from 'react';
+import { useCallback, useLayoutEffect, useState, useEffect, useRef } from 'react';
 import { useInterval, useBoolean, useThrottleFn, useSize } from 'ahooks';
-import { bindActionCreators } from 'redux';
 import { useDispatch, useSelector } from 'react-redux';
+import { compose } from 'redux';
+import { Base64 } from 'js-base64';
 import dayjs from 'dayjs';
 import * as echarts from 'echarts';
 
 import { updateAvaliableAction } from '@/actions/updater';
 import { updateStockAction } from '@/actions/stock';
 import { updateFundAction, setFundConfigAction } from '@/actions/fund';
+import { selectWalletAction } from '@/actions/wallet';
 import { StoreState } from '@/reducers/types';
 import * as Utils from '@/utils';
 import * as CONST from '@/constants';
@@ -16,7 +18,7 @@ import * as Services from '@/services';
 import * as Helpers from '@/helpers';
 import * as Enums from '@/utils/enums';
 
-const { invoke, dialog, ipcRenderer, clipboard, app } = window.contextModules.electron;
+const { invoke, dialog, ipcRenderer, clipboard, app, saveString, encodeFF, decodeFF, readFile } = window.contextModules.electron;
 
 export function useWorkDayTimeToDo(todo: () => void, delay: number, config?: { immediate: boolean }): void {
   useInterval(
@@ -78,7 +80,7 @@ export function useUpdater() {
   const dispatch = useDispatch();
   const { autoCheckUpdateSetting } = useSelector((state: StoreState) => state.setting.systemSetting);
   // 一个小时检查一次版本
-  useInterval(() => autoCheckUpdateSetting && ipcRenderer.send('check-update'), 1000 * 60 * 60);
+  useInterval(() => autoCheckUpdateSetting && ipcRenderer.invoke('check-update'), 1000 * 60 * 60);
 
   useEffect(() => {
     ipcRenderer.on('update-available', (e, data) => {
@@ -92,7 +94,7 @@ export function useUpdater() {
   }, [autoCheckUpdateSetting]);
 }
 
-export function useConfigClipboard() {
+export function useFundsClipboard() {
   const dispatch = useDispatch();
 
   useLayoutEffect(() => {
@@ -101,6 +103,7 @@ export function useConfigClipboard() {
         const limit = 1024;
         const text = clipboard.readText();
         const json: any[] = JSON.parse(text);
+        const currentWalletCode = Helpers.Wallet.GetCurrentWalletCode();
         if (json.length > limit) {
           dialog.showMessageBox({
             type: 'info',
@@ -109,7 +112,8 @@ export function useConfigClipboard() {
           });
           return;
         }
-        const fundConfig = json
+        const { codeMap: oldCodeMap } = Helpers.Fund.GetFundConfig(currentWalletCode);
+        const jsonFundConfig = json
           .map((fund) => ({
             name: '',
             cyfe: Number(fund.cyfe) < 0 ? 0 : Number(fund.cyfe) || 0,
@@ -117,31 +121,36 @@ export function useConfigClipboard() {
             cbj: Utils.NotEmpty(fund.cbj) ? (Number(fund.cbj) < 0 ? undefined : Number(fund.cbj)) : undefined,
           }))
           .filter(({ code }) => code);
-        const codeMap = Helpers.Fund.GetCodeMap(fundConfig);
+        const jsonCodeMap = Helpers.Fund.GetCodeMap(jsonFundConfig);
         // 去重复
-        const fundConfigSet = Object.entries(codeMap).map(([code, fund]) => fund);
+        const fundConfigSet = Object.entries(jsonCodeMap).map(([code, fund]) => fund);
         const responseFunds = (await Helpers.Fund.GetFunds(fundConfigSet)).filter(Utils.NotEmpty);
         const newFundConfig = responseFunds.map((fund) => ({
           name: fund!.name!,
           code: fund!.fundcode!,
-          cyfe: codeMap[fund!.fundcode!].cyfe,
-          cbj: codeMap[fund!.fundcode!].cbj,
+          cyfe: jsonCodeMap[fund!.fundcode!].cyfe,
+          cbj: jsonCodeMap[fund!.fundcode!].cbj,
         }));
-        const currentWalletCode = Helpers.Wallet.GetCurrentWalletCode();
-        dispatch(setFundConfigAction(newFundConfig, currentWalletCode));
-        await Helpers.Fund.LoadFunds(true);
-        await dialog.showMessageBox({
+        const newCodeMap = Helpers.Fund.GetCodeMap(newFundConfig);
+        const allCodeMap = {
+          ...oldCodeMap,
+          ...newCodeMap,
+        };
+        const allFundConfig = Object.entries(allCodeMap).map(([code, fund]) => fund);
+        dispatch(setFundConfigAction(allFundConfig, currentWalletCode));
+        Helpers.Fund.LoadFunds(true);
+        dialog.showMessageBox({
           type: 'info',
           title: `导入完成`,
           message: `更新：${newFundConfig.length}个，总共：${json.length}个`,
         });
       } catch (error) {
-        console.log('基金json解析失败', error);
         dialog.showMessageBox({
           type: 'info',
-          title: `基金JSON解析失败`,
+          title: `解析失败`,
           message: `请检查JSON格式`,
         });
+        console.log('基金json解析失败', error);
       }
     });
     ipcRenderer.on('clipboard-funds-copy', (e, data) => {
@@ -155,12 +164,81 @@ export function useConfigClipboard() {
           message: `已复制${fundConfig.length}支基金配置到粘贴板`,
         });
       } catch (error) {
+        dialog.showMessageBox({
+          type: 'info',
+          title: `复制失败`,
+          message: `基金JSON复制失败`,
+        });
         console.log('复制基金json失败', error);
       }
     });
     return () => {
-      ipcRenderer.removeAllListeners('update-available');
       ipcRenderer.removeAllListeners('clipboard-funds-import');
+      ipcRenderer.removeAllListeners('clipboard-funds-copy');
+    };
+  }, []);
+}
+
+export function useAllConfigBackup() {
+  useLayoutEffect(() => {
+    ipcRenderer.on('backup-all-config-export', async (e, data) => {
+      try {
+        const backupConfig = Utils.GenerateBackupConfig();
+        const { filePath, canceled } = await dialog.showSaveDialog({
+          title: '保存',
+          defaultPath: `${backupConfig.name}-${backupConfig.timestamp}.${backupConfig.suffix}`,
+        });
+        if (canceled) {
+          return;
+        }
+        const encodeBackupConfig = compose(Base64.encode, encodeFF)(backupConfig);
+        saveString(filePath!, encodeBackupConfig);
+        dialog.showMessageBox({
+          type: 'info',
+          title: `导出成功`,
+          message: `已导出全局配置文件至${filePath}`,
+        });
+      } catch (error) {
+        dialog.showMessageBox({
+          type: 'info',
+          title: `导出失败`,
+          message: `导出全局配置文件失败`,
+        });
+        console.log('导出全局配置文件失败', error);
+      }
+    });
+    ipcRenderer.on('backup-all-config-import', async (e, data) => {
+      try {
+        const { filePaths, canceled } = await dialog.showOpenDialog({
+          title: '选择备份文件',
+          filters: [{ name: 'Fishing Funds', extensions: ['ff'] }],
+        });
+        const filePath = filePaths[0];
+        if (canceled || !filePath) {
+          return;
+        }
+        const encodeBackupConfig = readFile(filePath);
+        const backupConfig: Backup.Config = compose(decodeFF, Base64.decode)(encodeBackupConfig);
+        Utils.coverBackupConfig(backupConfig);
+        await dialog.showMessageBox({
+          type: 'info',
+          title: `导入成功`,
+          message: `导入全局配置成功, 请重新启动Fishing Funds`,
+        });
+        app.quit();
+      } catch (error) {
+        dialog.showMessageBox({
+          type: 'info',
+          title: `导入失败`,
+          message: `导入全局配置文件失败`,
+        });
+        console.log('导入全局配置文件失败', error);
+      }
+    });
+
+    return () => {
+      ipcRenderer.removeAllListeners('backup-all-config-export');
+      ipcRenderer.removeAllListeners('backup-all-config-import');
     };
   }, []);
 }
@@ -187,9 +265,6 @@ export function useTrayContent() {
         break;
     }
     ipcRenderer.invoke('set-tray-content', content);
-    return () => {
-      ipcRenderer.removeAllListeners('set-tray-content');
-    };
   }, [trayContentSetting, calcResult]);
 }
 
@@ -253,19 +328,6 @@ export function useRenderEcharts(callback: () => void, instance: echarts.ECharts
       callback();
     }
   }, [instance, ...dep]);
-}
-
-export function useActions(actions: any, deps?: any[]) {
-  const dispatch = useDispatch();
-  return useMemo(
-    () => {
-      if (Array.isArray(actions)) {
-        return actions.map((a) => bindActionCreators(a, dispatch));
-      }
-      return bindActionCreators(actions, dispatch);
-    },
-    deps ? [dispatch, ...deps] : [dispatch]
-  );
 }
 
 export function useSyncFixFundSetting() {
@@ -530,4 +592,53 @@ export function useAfterMounted(fn: any, dep: any[] = []) {
       fn();
     }
   }, [flag, ...dep]);
+}
+
+export function useUpdateContextMenuWalletsState() {
+  const dispatch = useDispatch();
+  const wallets = useSelector((state: StoreState) => state.wallet.wallets);
+  const trayContentSetting = useSelector((state: StoreState) => state.setting.systemSetting.trayContentSetting);
+  const currentWalletCode = useSelector((state: StoreState) => state.wallet.currentWalletCode);
+  const freshFunds = useFreshFunds(0);
+
+  useEffect(() => {
+    ipcRenderer.invoke(
+      'update-tray-context-menu-wallets',
+      wallets.map((wallet) => {
+        const walletConfig = Helpers.Wallet.GetCurrentWalletConfig(wallet.code);
+        const calcResult = Helpers.Fund.CalcFunds(wallet.funds, wallet.code);
+        let value = '';
+        switch (trayContentSetting) {
+          case Enums.TrayContent.Sy:
+            value = ` ${Utils.Yang(calcResult.sygz.toFixed(2))} ¥`;
+            break;
+          case Enums.TrayContent.Syl:
+            value = ` ${Utils.Yang(calcResult.gssyl.toFixed(2))} %`;
+            break;
+          case Enums.TrayContent.None:
+          default:
+            break;
+        }
+        return {
+          label: `${walletConfig.name}  ${value}`,
+          type: currentWalletCode === wallet.code ? 'radio' : 'normal',
+          iconIndex: walletConfig.iconIndex,
+          id: wallet.code,
+        };
+      })
+    );
+  }, [wallets, trayContentSetting, currentWalletCode]);
+  useLayoutEffect(() => {
+    ipcRenderer.on('change-current-wallet-code', (e, code) => {
+      try {
+        dispatch(selectWalletAction(code));
+        freshFunds();
+      } catch (error) {
+        console.log(`切换钱包${code}失败`, error);
+      }
+    });
+    return () => {
+      ipcRenderer.removeAllListeners('change-current-wallet-code');
+    };
+  }, []);
 }

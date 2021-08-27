@@ -6,19 +6,23 @@ import * as CONST from '@/constants';
 import {
   useUpdater,
   useAdjustmentNotification,
-  useConfigClipboard,
+  useFundsClipboard,
   useBootStrap,
   useMappingLocalToSystemSetting,
   useTrayContent,
+  useUpdateContextMenuWalletsState,
+  useAllConfigBackup,
 } from '@/utils/hooks';
 import '@/app.global.scss';
 
 const App: React.FC<Record<string, unknown>> = () => {
   useUpdater();
   useAdjustmentNotification();
-  useConfigClipboard();
+  useFundsClipboard();
+  useAllConfigBackup();
   useTrayContent();
   useMappingLocalToSystemSetting();
+  useUpdateContextMenuWalletsState();
   useBootStrap();
 
   return (

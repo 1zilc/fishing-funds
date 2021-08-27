@@ -7,6 +7,40 @@ export const SET_ZINDEXS_LOADING = 'SET_ZINDEXS_LOADING';
 export const SYNC_ZIDNEX_CONFIG = 'SYNC_ZIDNEX_CONFIG';
 export const SYNC_ZIDNEXS = 'SYNC_ZIDNEXS';
 
+export function addZindexAction(zindex: Zindex.SettingItem): ThunkAction {
+  return (dispatch, getState) => {
+    try {
+      const { zindexConfig } = Helpers.Zindex.GetZindexConfig();
+      const cloneZindexConfig = Utils.DeepCopy(zindexConfig);
+      const exist = cloneZindexConfig.find((item) => zindex.code === item.code);
+      if (!exist) {
+        cloneZindexConfig.push(zindex);
+      }
+      dispatch(setZindexConfigAction(cloneZindexConfig));
+    } catch (error) {
+      console.log('添加指数配置出错', error);
+    }
+  };
+}
+
+export function deleteZindexAction(code: string): ThunkAction {
+  return (dispatch, getState) => {
+    try {
+      const { zindexConfig } = Helpers.Zindex.GetZindexConfig();
+
+      zindexConfig.forEach((item, index) => {
+        if (code === item.code) {
+          const cloneZindexSetting = JSON.parse(JSON.stringify(zindexConfig));
+          cloneZindexSetting.splice(index, 1);
+          dispatch(setZindexConfigAction(cloneZindexSetting));
+        }
+      });
+    } catch (error) {
+      console.log('删除指数出错', error);
+    }
+  };
+}
+
 export function setZindexConfigAction(zindexConfig: Zindex.SettingItem[]): ThunkAction {
   return (dispatch, getState) => {
     try {
@@ -103,15 +137,13 @@ export function sortZindexsCachedAction(responseZindexs: Zindex.ResponseItem[]):
         return map;
       }, {} as any);
 
-      zindexConfig
-        .filter(({ show }) => show)
-        .forEach((zindex) => {
-          const responseZindex = zindexWithChachedCodeToMap[zindex.code];
-          const stateZindex = zindexsCodeToMap[zindex.code];
-          if (!responseZindex && stateZindex) {
-            zindexsWithCollapseChached.push(stateZindex);
-          }
-        });
+      zindexConfig.forEach((zindex) => {
+        const responseZindex = zindexWithChachedCodeToMap[zindex.code];
+        const stateZindex = zindexsCodeToMap[zindex.code];
+        if (!responseZindex && stateZindex) {
+          zindexsWithCollapseChached.push(stateZindex);
+        }
+      });
 
       const sortZindexs = Helpers.Zindex.SortZindexs(zindexsWithCollapseChached);
       dispatch(syncZindexsStateAction(sortZindexs));

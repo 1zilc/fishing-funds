@@ -21,8 +21,7 @@ export async function FromEastmoney(code: string) {
       return null;
     }
   } catch (error) {
-    console.log(error);
-    return null;
+    return await GetQDIIFundFromEastMoney(code);
   }
 }
 
@@ -435,11 +434,10 @@ export async function GetFixFromEastMoney(code: string) {
       fixZzl: fixZzl?.replace(/[^0-9/./-]/g, '') || '0',
       fixDate: fixDate?.replace(/[^0-9/-]/g, ''),
     };
-
     return result;
   } catch (error) {
     console.log(error);
-    return {};
+    return null;
   }
 }
 

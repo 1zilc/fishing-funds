@@ -27,15 +27,18 @@ const Optional: React.FC<OptionalProps> = () => {
   const { currentWalletFundsConfig: fundConfig, currentWalletFundsCodeMap: codeMap, currentWalletCode } = useCurrentWallet();
 
   const {
-    data: editFundData,
+    data: editData,
     show: showEditDrawer,
     set: setEditDrawer,
     close: closeEditDrawer,
-  } = useDrawer<Fund.SettingItem>({
-    cyfe: 0,
-    code: '',
-    name: '',
-    cbj: undefined,
+  } = useDrawer({
+    focus: '',
+    fundData: {
+      cyfe: 0,
+      code: '',
+      name: '',
+      cbj: undefined as number | undefined,
+    },
   });
 
   const sortFundConfig = useMemo(() => fundConfig.map((_) => ({ ..._, id: _.code })), [fundConfig]);
@@ -94,10 +97,13 @@ const Optional: React.FC<OptionalProps> = () => {
                           className={styles.editor}
                           onClick={() => {
                             setEditDrawer({
-                              name: fund.name,
-                              cyfe: fund.cyfe,
-                              code: fund.code,
-                              cbj: fund.cbj,
+                              fundData: {
+                                name: fund.name,
+                                cyfe: fund.cyfe,
+                                code: fund.code,
+                                cbj: fund.cbj,
+                              },
+                              focus: 'cyfe',
                             });
                           }}
                         />
@@ -110,10 +116,13 @@ const Optional: React.FC<OptionalProps> = () => {
                           <a
                             onClick={() => {
                               setEditDrawer({
-                                name: fund.name,
-                                cyfe: fund.cyfe,
-                                code: fund.code,
-                                cbj: fund.cbj,
+                                fundData: {
+                                  name: fund.name,
+                                  cyfe: fund.cyfe,
+                                  code: fund.code,
+                                  cbj: fund.cbj,
+                                },
+                                focus: 'cbj',
                               });
                             }}
                           >
@@ -147,7 +156,7 @@ const Optional: React.FC<OptionalProps> = () => {
         <AddFundContent onClose={closeAddDrawer} onEnter={closeAddDrawer} />
       </CustomDrawer>
       <CustomDrawer show={showEditDrawer}>
-        <EditFundContent onClose={closeEditDrawer} onEnter={closeEditDrawer} fund={editFundData} />
+        <EditFundContent onClose={closeEditDrawer} onEnter={closeEditDrawer} fund={editData.fundData} focus={editData.focus} />
       </CustomDrawer>
     </div>
   );

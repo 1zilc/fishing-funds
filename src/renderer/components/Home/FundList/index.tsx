@@ -21,11 +21,14 @@ const FundList: React.FC<FundListProps> = (props) => {
   } = useCurrentWallet();
   const fundsLoading = useSelector((state: StoreState) => state.fund.fundsLoading);
   const {
-    data: editFundData,
+    data: editData,
     show: showEditDrawer,
     set: setEditDrawer,
     close: closeEditDrawer,
-  } = useDrawer({ cyfe: 0, code: '', name: '' });
+  } = useDrawer({
+    focus: '',
+    fundData: { cyfe: 0, code: '', name: '' },
+  });
   const freshFunds = useFreshFunds(0);
   const { data: detailFundCode, show: showDetailDrawer, set: setDetailDrawer, close: closeDetailDrawer } = useDrawer('');
   const list = funds.filter(props.filter);
@@ -39,12 +42,19 @@ const FundList: React.FC<FundListProps> = (props) => {
     <div className={styles.container}>
       <LoadingBar show={fundsLoading} />
       {list.length ? (
-        list.map((fund) => <FundRow key={fund.fundcode} fund={fund} onEdit={setEditDrawer} onDetail={setDetailDrawer} />)
+        list.map((fund) => (
+          <FundRow
+            key={fund.fundcode}
+            fund={fund}
+            onEdit={(fundData, focus) => setEditDrawer({ fundData, focus })}
+            onDetail={setDetailDrawer}
+          />
+        ))
       ) : (
         <Empty text="暂无基金数据~" />
       )}
       <CustomDrawer show={showEditDrawer}>
-        <EditFundContent onClose={closeEditDrawer} onEnter={enterEditDrawer} fund={editFundData} />
+        <EditFundContent onClose={closeEditDrawer} onEnter={enterEditDrawer} fund={editData.fundData} focus={editData.focus} />
       </CustomDrawer>
       <CustomDrawer show={showDetailDrawer}>
         <DetailFundContent onEnter={closeDetailDrawer} onClose={closeDetailDrawer} code={detailFundCode} />

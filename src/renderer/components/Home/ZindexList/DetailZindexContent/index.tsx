@@ -3,7 +3,6 @@ import classnames from 'classnames';
 import { useRequest } from 'ahooks';
 import { Tabs } from 'antd';
 
-import ChartCard from '@/components/Card/ChartCard';
 import Trend from '@/components/Home/ZindexList/DetailZindexContent/Trend';
 import K from '@/components/Home/ZindexList/DetailZindexContent/K';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';

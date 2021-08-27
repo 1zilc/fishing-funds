@@ -1,5 +1,5 @@
 import React from 'react';
-
+import { useKeyPress } from 'ahooks';
 import Collect from '@/components/Collect';
 import styles from './index.scss';
 
@@ -11,14 +11,19 @@ export interface CustomDrawerContentProps {
   enterText?: string;
 }
 
-const CustomDrawer: React.FC<CustomDrawerContentProps> = ({
-  onEnter,
-  onClose,
-  title,
-  closeText,
-  enterText,
-  children,
-}) => {
+const CustomDrawer: React.FC<CustomDrawerContentProps> = ({ onEnter, onClose, title, closeText, enterText, children }) => {
+  useKeyPress(['Escape', 'Enter'], (e) => {
+    switch (e.key) {
+      case 'Escape':
+        onClose();
+        break;
+      case 'Enter':
+      default:
+        onEnter();
+        break;
+    }
+  });
+
   return (
     <div className={styles.content}>
       <div className={styles.header}>

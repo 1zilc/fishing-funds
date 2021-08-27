@@ -4,7 +4,7 @@
   "description": "显示基金涨跌状态栏小应用,数据源来自天天基金等",
   "scripts": {
     "build": "concurrently \"yarn build:main\" \"yarn build:renderer\"",
-    "build:preload": "yarn tsc ./src/main/preload.ts",
+    "build:preload": "yarn tsc ./src/main/preload.ts --resolveJsonModule",
     "build:main": "cross-env NODE_ENV=production webpack --config ./.erb/configs/webpack.config.main.prod.babel.js",
     "build:renderer": "cross-env NODE_ENV=production webpack --config ./.erb/configs/webpack.config.renderer.prod.babel.js",
     "rebuild": "electron-rebuild --parallel --types prod,dev,optional --module-dir src",
@@ -48,6 +48,9 @@
     ],
     "afterSign": ".erb/scripts/notarize.js",
     "mac": {
+      "extendInfo": {
+        "LSUIElement": "true"
+      },
       "target": [
         {
           "target": "dmg",
@@ -164,7 +167,7 @@
     "@babel/core": "^7.14.0",
     "@babel/preset-env": "^7.14.4",
     "@babel/register": "^7.13.16",
-    "@pmmmwh/react-refresh-webpack-plugin": "^0.4.3",
+    "@pmmmwh/react-refresh-webpack-plugin": "0.5.0-rc.5",
     "@svgr/webpack": "^5.5.0",
     "@teamsupercell/typings-for-css-modules-loader": "^2.5.1",
     "@testing-library/jest-dom": "^5.12.0",
@@ -174,7 +177,7 @@
     "@types/enzyme-adapter-react-16": "^1.0.6",
     "@types/history": "^4.7.8",
     "@types/jest": "^27.0.1",
-    "@types/node": "16.6.1",
+    "@types/node": "16.7.2",
     "@types/react": "^17.0.5",
     "@types/react-dom": "^17.0.3",
     "@types/react-router": "^5.1.14",
@@ -202,7 +205,7 @@
     "enzyme-to-json": "^3.6.2",
     "eslint": "^7.25.0",
     "eslint-config-airbnb": "^18.2.0",
-    "eslint-config-airbnb-typescript": "^12.3.1",
+    "eslint-config-airbnb-typescript": "^14.0.0",
     "eslint-config-erb": "^3.0.0",
     "eslint-config-prettier": "8.3.0",
     "eslint-import-resolver-webpack": "^0.13.0",
@@ -237,7 +240,7 @@
     "webpack": "^5.38.1",
     "webpack-bundle-analyzer": "^4.4.1",
     "webpack-cli": "^4.6.0",
-    "webpack-dev-server": "^3.11.2",
+    "webpack-dev-server": "^4.0.0",
     "webpack-merge": "^5.7.3",
     "yarn-deduplicate": "^3.1.0"
   },
@@ -259,6 +262,7 @@
     "history": "^4.10.0",
     "html2canvas": "^1.2.2",
     "iconv-lite": "^0.6.2",
+    "js-base64": "^3.6.1",
     "menubar": "^9.0.2",
     "number-precision": "^1.5.0",
     "react": "^17.0.2",
@@ -271,7 +275,7 @@
     "redux-promise": "^0.6.0",
     "redux-thunk": "^2.3.0",
     "sortablejs": "^1.13.0",
-    "swiper": "^6.7.0"
+    "swiper": "^7.0.1"
   },
   "devEngines": {
     "node": ">=10.x",

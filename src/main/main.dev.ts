@@ -1,5 +1,3 @@
-/* eslint global-require: off, no-console: off */
-
 /**
  * This module executes inside of electron's main process. You can start
  * electron renderer process from here and communicate with the other processes
@@ -8,156 +6,73 @@
  * When running `yarn build` or `yarn build:main`, this file is compiled to
  * `./src/main.prod.js` using webpack. This gives us some performance wins.
  */
-// import 'core-js/stable';
-// import 'regenerator-runtime/runtime';
-import path from 'path';
-import log from 'electron-log';
+
+import { app, globalShortcut, ipcMain, nativeTheme, dialog } from 'electron';
 import windowStateKeeper from 'electron-window-state';
-import { app, globalShortcut, ipcMain, nativeImage, nativeTheme, Tray, Menu, dialog } from 'electron';
-import { menubar, Menubar } from 'menubar';
 import AppUpdater from './autoUpdater';
-import { resolveHtmlPath } from './util';
+import { appIcon, generateWalletIcon } from './icon';
+import { createTray } from './tray';
+import { createMenubar, buildContextMenu } from './menubar';
+import { lockSingleInstance, checkEnvTool } from './util';
 
-let myWindow: any = null;
-let mb: Menubar;
-let appUpdater: AppUpdater;
-
-const EXTRA_RESOURCES_PATH = app.isPackaged ? path.join(process.resourcesPath, 'assets') : path.join(__dirname, '../../assets');
-
-const getAssetPath = (resourceFilename: string): string => {
-  return path.join(EXTRA_RESOURCES_PATH, resourceFilename);
-};
-
-const contextMenu = Menu.buildFromTemplate([
-  {
-    role: 'about',
-    label: '关于 Fishing Funds',
-  },
-  {
-    click: () => {
-      appUpdater.checkUpdate('mainer');
-    },
-    label: '检查更新',
-  },
-  { type: 'separator' },
-  {
-    click: () => {
-      mb.window?.webContents.send('clipboard-funds-import');
-    },
-    label: '从粘贴板导入',
-  },
-  {
-    click: () => {
-      mb.window?.webContents.send('clipboard-funds-copy');
-    },
-    label: '复制基金JSON配置',
-  },
-  { type: 'separator' },
-  { role: 'quit', label: '退出' },
-]);
-
-const nativeMenuIcon = nativeImage.createFromPath(getAssetPath('menu/iconTemplate.png'));
-
-const nativeIcon = nativeImage.createFromPath(getAssetPath('icon.png'));
-
-if (process.env.NODE_ENV === 'production') {
-  const sourceMapSupport = require('source-map-support');
-  Object.assign(console, log.functions);
-  sourceMapSupport.install();
+async function init() {
+  lockSingleInstance();
+  await app.whenReady();
+  await checkEnvTool();
+  main();
 }
 
-if (process.env.NODE_ENV === 'development' || process.env.DEBUG_PROD === 'true') {
-  require('electron-debug')();
-}
-
-const installExtensions = async () => {
-  const installer = require('electron-devtools-installer');
-  const forceDownload = !!process.env.UPGRADE_EXTENSIONS;
-  const extensions = ['REACT_DEVELOPER_TOOLS', 'REDUX_DEVTOOLS'];
-
-  return Promise.all(extensions.map((name) => installer.default(installer[name], forceDownload))).catch(console.log);
-};
-const createMenubar = async () => {
-  if (process.env.NODE_ENV === 'development' || process.env.DEBUG_PROD === 'true') {
-    await installExtensions();
-  }
-  const tray = new Tray(nativeMenuIcon);
-  tray.setToolTip('Fishing Funds');
-  const mainWindowState = windowStateKeeper({
-    defaultWidth: 300,
-    defaultHeight: 520,
-  });
-  mb = menubar({
-    index: resolveHtmlPath('index.html'),
-    // icon: path.join(__dirname, '../resources/menu/iconTemplate.png'),
-    // icon: 'resources/icon.png',
-    // icon: nativeMenuIcon,
-    tray,
-    tooltip: 'Fishing Funds',
-    preloadWindow: true,
-    showOnAllWorkspaces: false,
-    showDockIcon: false,
-
-    browserWindow: {
-      backgroundColor: '#fff',
-      width: mainWindowState.width,
-      height: mainWindowState.height,
-      minHeight: 400,
-      minWidth: 300,
-      maxHeight: 1000,
-      maxWidth: 600,
-      webPreferences: {
-        contextIsolation: true,
-        enableRemoteModule: false,
-        nodeIntegration: false,
-        devTools: !app.isPackaged,
-        webviewTag: true,
-        preload: path.join(__dirname, 'preload.js'),
-      },
-    },
-  });
-
-  // open devtools
-  mb.on('after-create-window', () => {
-    myWindow = mb.window;
-    // 实例化更新程序
-    appUpdater = new AppUpdater({ icon: nativeIcon, win: mb.window });
-    appUpdater.checkUpdate('renderer');
-
-    // app.dock.hide();
-    if (!app.isPackaged) {
-      mb.window!.webContents.openDevTools({ mode: 'undocked' });
-    }
-    // 监听主题颜色变化
-    nativeTheme.on('updated', () => {
-      mb.window?.webContents.send('nativeTheme-updated', {
-        darkMode: nativeTheme.shouldUseDarkColors,
-      });
-    });
-    // TODO: 暂时关闭自动更新，需要apple签名
-    ipcMain.on('check-update', (e) => {
-      if (app.isPackaged) {
-        appUpdater.checkUpdate('renderer');
-      }
-    });
-    // store electron window size state
-    mainWindowState.manage(mb.window!);
-  });
-  // add contextMenu
-  mb.on('ready', () => {
-    tray.on('right-click', () => {
-      mb.tray.popUpContextMenu(contextMenu);
-    });
-  });
-
-  // To avoid a flash when opening your menubar app, you can disable backgrounding the app using the following:
+function main() {
+  const tray = createTray();
+  const mainWindowState = windowStateKeeper({ defaultWidth: 300, defaultHeight: 550 });
+  const mb = createMenubar({ tray, mainWindowState });
+  const appUpdater = new AppUpdater({ icon: appIcon, win: mb.window });
+  let contextMenu = buildContextMenu({ mb, appUpdater }, []);
   mb.app.commandLine.appendSwitch('disable-backgrounding-occluded-windows', 'true');
-
+  // app 相关监听
+  app.on('window-all-closed', function () {
+    // Respect the OSX convention of having the application in memory even
+    // after all windows have been closed
+    if (process.platform !== 'darwin') {
+      app.quit();
+    }
+  });
+  app.on('browser-window-focus', function () {
+    if (app.isPackaged) {
+      globalShortcut.register('CommandOrControl+Shift+R', () => {
+        console.log('CommandOrControl+Shift+R is pressed: Shortcut Disabled');
+      });
+      globalShortcut.register('CommandOrControl+R', () => {
+        console.log('CommandOrControl+R is pressed: Shortcut Disabled');
+      });
+      globalShortcut.register('F5', () => {
+        console.log('F5 is pressed: Shortcut Disabled');
+      });
+    }
+  });
+  app.on('browser-window-blur', function () {
+    if (app.isPackaged) {
+      globalShortcut.unregister('CommandOrControl+R');
+      globalShortcut.unregister('F5');
+      globalShortcut.unregister('CommandOrControl+Shift+R');
+    }
+  });
+  app.on('second-instance', function (event, argv, cwd) {
+    // Someone tried to run a second instance, we should focus our window.
+    if (mb.window) {
+      if (mb.window.isMinimized()) mb.window.restore();
+      mb.window.focus();
+    }
+  });
+  // ipcMain 主进程相关监听
   ipcMain.handle('show-message-box', async (event, config) => {
     return dialog.showMessageBox(config);
   });
   ipcMain.handle('show-save-dialog', async (event, config) => {
     return dialog.showSaveDialog(config);
+  });
+  ipcMain.handle('show-open-dialog', async (event, config) => {
+    return dialog.showOpenDialog(config);
   });
   ipcMain.handle('show-current-window', (event, config) => {
     mb.window?.show();
@@ -177,55 +92,45 @@ const createMenubar = async () => {
   ipcMain.handle('set-tray-content', (event, config) => {
     tray.setTitle(config);
   });
-  // new AppUpdater({ icon: nativeIcon, win: mb.window });
-};
-
-/**
- * Add event listeners...
- */
-
-app.on('window-all-closed', () => {
-  // Respect the OSX convention of having the application in memory even
-  // after all windows have been closed
-  if (process.platform !== 'darwin') {
-    app.quit();
-  }
-});
-
-app.on('browser-window-focus', function () {
-  if (app.isPackaged) {
-    globalShortcut.register('CommandOrControl+Shift+R', () => {
-      console.log('CommandOrControl+Shift+R is pressed: Shortcut Disabled');
-    });
-    globalShortcut.register('CommandOrControl+R', () => {
-      console.log('CommandOrControl+R is pressed: Shortcut Disabled');
-    });
-    globalShortcut.register('F5', () => {
-      console.log('F5 is pressed: Shortcut Disabled');
-    });
-  }
-});
-
-app.on('browser-window-blur', function () {
-  if (app.isPackaged) {
-    globalShortcut.unregister('CommandOrControl+R');
-    globalShortcut.unregister('F5');
-    globalShortcut.unregister('CommandOrControl+Shift+R');
-  }
-});
-
-/** Check if single instance, if not, simply quit new instance */
-const isSingleInstance = app.requestSingleInstanceLock();
-if (!isSingleInstance) {
-  app.quit();
-} else {
-  // Behaviour on second instance for parent process- Pretty much optional
-  app.on('second-instance', (event, argv, cwd) => {
-    // Someone tried to run a second instance, we should focus our window.
-    if (myWindow) {
-      if (myWindow.isMinimized()) myWindow.restore();
-      myWindow.focus();
+  ipcMain.handle('check-update', (event) => {
+    if (app.isPackaged) {
+      appUpdater.checkUpdate('renderer');
     }
   });
-  app.whenReady().then(createMenubar).catch(console.log);
+  ipcMain.handle('update-tray-context-menu-wallets', (event, config) => {
+    const menus = config.map((item: any) => ({
+      ...item,
+      icon: generateWalletIcon(item.iconIndex),
+      click: () => mb.window?.webContents.send('change-current-wallet-code', item.id),
+    }));
+    contextMenu = buildContextMenu({ mb, appUpdater }, menus);
+  });
+  // menubar 相关监听
+  mb.on('after-create-window', () => {
+    // 打开开发者工具
+    if (!app.isPackaged) {
+      mb.window!.webContents.openDevTools({ mode: 'undocked' });
+    }
+    // 右键菜单
+    tray.on('right-click', () => {
+      mb.tray.popUpContextMenu(contextMenu);
+    });
+    // 监听主题颜色变化
+    nativeTheme.on('updated', () => {
+      mb.window?.webContents.send('nativeTheme-updated', {
+        darkMode: nativeTheme.shouldUseDarkColors,
+      });
+    });
+    // 存储窗口大小
+    mainWindowState.manage(mb.window!);
+    // 检查更新
+    appUpdater.checkUpdate('renderer');
+    app.dock.hide();
+  });
+  mb.on('ready', () => {
+    // mb.window?.setVisibleOnAllWorkspaces(true);
+  });
+  // new AppUpdater({ icon: nativeIcon, win: mb.window });
 }
+
+init().catch(console.log);
