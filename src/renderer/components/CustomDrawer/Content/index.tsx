@@ -12,14 +12,14 @@ export interface CustomDrawerContentProps {
 }
 
 const CustomDrawer: React.FC<CustomDrawerContentProps> = ({ onEnter, onClose, title, closeText, enterText, children }) => {
-  useKeyPress(['Escape', 'Enter'], (e) => {
+  useKeyPress(['Escape'], (e) => {
     switch (e.key) {
       case 'Escape':
         onClose();
         break;
       case 'Enter':
       default:
-        onEnter();
+        // onEnter();
         break;
     }
   });
