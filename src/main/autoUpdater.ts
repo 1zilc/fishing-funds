@@ -10,7 +10,6 @@ export default class AppUpdater {
     autoUpdater.autoDownload = false;
     log.transports.file.level = 'info';
     autoUpdater.logger = log;
-    (autoUpdater as any).currentVersion = '4.7.0';
     autoUpdater.setFeedURL('https://download.1zilc.top');
     autoUpdater.on('error', (error) => {});
 
