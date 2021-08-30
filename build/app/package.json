@@ -1,7 +1,7 @@
 {
   "name": "fishing-funds",
   "productName": "Fishing Funds",
-  "version": "4.7.1",
+  "version": "4.7.3",
   "description": "基金、大盘、股票、虚拟货币状态栏显示小应用,支持MacOS、Windows、Linux客户端,数据源来自天天基金等",
   "main": "./dist/main/main.prod.js",
   "author": {
