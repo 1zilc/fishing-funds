@@ -21,6 +21,7 @@ declare namespace Fund {
     fixZzl?: string;
     fixDate?: string;
     fixDwjz?: string;
+    isCurrency?: boolean;
   }
 
   export interface ExtraRow {

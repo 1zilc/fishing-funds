@@ -422,17 +422,27 @@ export async function GetFixFromEastMoney(code: string) {
   try {
     const { body: html } = await got(`http://fund.eastmoney.com/${code}.html`);
     const $ = cheerio.load(html);
-    const fixZzl = $('.fix_zzl').text();
-    const fixDate = $('.fix_date').text();
-    const fixDwjz = $('.fix_dwjz').text();
+    const isCurrency = $('.sp01').find('a').text().includes('每万份收益');
+    const fixZzl =
+      $('.fix_zzl')
+        .text()
+        ?.replace(/[^0-9/./-]/g, '') || '0';
+    const fixDate = $('.fix_date')
+      .text()
+      ?.replace(/[^0-9/-]/g, '');
+    const fixDwjz =
+      $('.fix_dwjz')
+        .text()
+        ?.replace(/[^0-9/.]/g, '') || '0';
     const fixName = $('.fix_fname').text();
 
     const result: Fund.FixData = {
       code,
       fixName,
-      fixDwjz: fixDwjz?.replace(/[^0-9/.]/g, '') || '0',
-      fixZzl: fixZzl?.replace(/[^0-9/./-]/g, '') || '0',
-      fixDate: fixDate?.replace(/[^0-9/-]/g, ''),
+      fixDwjz: isCurrency ? '1.0000' : fixDwjz,
+      fixZzl: isCurrency ? (Number(fixDwjz) / 10000).toFixed(2) : fixZzl,
+      fixDate,
+      isCurrency,
     };
     return result;
   } catch (error) {
@@ -489,7 +499,7 @@ export async function GetFundManagerDetailFromEastMoney(code: string) {
 export async function GetQDIIFundFromEastMoney(code: string) {
   try {
     const { gztime } = (await FromEastmoney('161725'))! as Fund.ResponseItem; // TODO:估值时间暂时使用白酒最后一次开门时间
-    const { fixDwjz, fixName, fixDate } = (await GetFixFromEastMoney(code))!;
+    const { fixDwjz, fixName, fixDate, fixZzl } = (await GetFixFromEastMoney(code))!;
     return {
       name: fixName,
       dwjz: fixDwjz,
@@ -497,7 +507,7 @@ export async function GetQDIIFundFromEastMoney(code: string) {
       gztime,
       jzrq: `${new Date().getFullYear()}-${fixDate}`,
       gsz: fixDwjz,
-      gszzl: '',
+      gszzl: fixZzl,
     };
   } catch (error) {
     console.log(error);
