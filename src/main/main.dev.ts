@@ -26,7 +26,7 @@ function main() {
   const tray = createTray();
   const mainWindowState = windowStateKeeper({ defaultWidth: 300, defaultHeight: 550 });
   const mb = createMenubar({ tray, mainWindowState });
-  const appUpdater = new AppUpdater({ icon: appIcon, win: mb.window });
+  const appUpdater = new AppUpdater({ icon: appIcon, mb });
   let contextMenu = buildContextMenu({ mb, appUpdater }, []);
   mb.app.commandLine.appendSwitch('disable-backgrounding-occluded-windows', 'true');
   // app 相关监听

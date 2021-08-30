@@ -1,14 +1,16 @@
 import { NativeImage, BrowserWindow, dialog, shell } from 'electron';
+import { Menubar } from 'menubar';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 
 export default class AppUpdater {
   process = '';
 
-  constructor(conf: { icon?: NativeImage; win?: BrowserWindow }) {
+  constructor(conf: { icon?: NativeImage; mb: Menubar }) {
     autoUpdater.autoDownload = false;
     log.transports.file.level = 'info';
     autoUpdater.logger = log;
+    (autoUpdater as any).currentVersion = '4.7.0';
     autoUpdater.setFeedURL('https://download.1zilc.top');
     autoUpdater.on('error', (error) => {});
 
@@ -69,7 +71,7 @@ export default class AppUpdater {
             });
           break;
         case 'renderer':
-          conf.win?.webContents.send('update-available', data);
+          conf.mb.window?.webContents.send('update-available', data);
           break;
         default:
           break;
