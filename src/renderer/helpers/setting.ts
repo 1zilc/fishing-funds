@@ -13,7 +13,7 @@ export const defalutSystemSetting: System.Setting = {
 
   adjustmentNotificationSetting: false,
   adjustmentNotificationTimeSetting: dayjs().hour(14).minute(30).format(),
-  trayContentSetting: Enums.TrayContent.None,
+  trayContentSetting: Enums.TrayContent.Sy,
 
   coinUnitSetting: Enums.CoinUnitType.Usd,
 
