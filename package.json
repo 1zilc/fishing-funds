@@ -167,7 +167,7 @@
     "@babel/core": "^7.14.0",
     "@babel/preset-env": "^7.14.4",
     "@babel/register": "^7.13.16",
-    "@pmmmwh/react-refresh-webpack-plugin": "0.5.0-rc.5",
+    "@pmmmwh/react-refresh-webpack-plugin": "0.5.0-rc.6",
     "@svgr/webpack": "^5.5.0",
     "@teamsupercell/typings-for-css-modules-loader": "^2.5.1",
     "@testing-library/jest-dom": "^5.12.0",
