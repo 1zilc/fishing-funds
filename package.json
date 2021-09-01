@@ -107,9 +107,11 @@
     "snap": {
       "confinement": "classic",
       "summary": "Display real-time trends of Chinese funds in the menubar.",
-      "channels": [
-        "stable"
-      ]
+      "publish": {
+        "channels": [
+          "stable"
+        ]
+      }
     },
     "directories": {
       "app": "build/app",
