@@ -13,7 +13,6 @@ on:
     branches: [v4]
   pull_request:
     branches: [v4]
-    
 
 jobs:
   build_package:
@@ -22,6 +21,9 @@ jobs:
     steps:
       - name: Setup repo
         uses: actions/checkout@v2
+
+      - name: Install OS Dependencies
+        run: brew install rpm
 
       - name: Run build
         uses: actions/setup-node@v2
