@@ -9,11 +9,15 @@
 
 import { app, globalShortcut, ipcMain, nativeTheme, dialog } from 'electron';
 import windowStateKeeper from 'electron-window-state';
+import { Menubar } from 'menubar';
 import AppUpdater from './autoUpdater';
 import { appIcon, generateWalletIcon } from './icon';
 import { createTray } from './tray';
 import { createMenubar, buildContextMenu } from './menubar';
-import { lockSingleInstance, checkEnvTool } from './util';
+import { lockSingleInstance, checkEnvTool, sendMessageToRenderer } from './util';
+
+let mb: Menubar;
+let openBackupFilePath = '';
 
 async function init() {
   lockSingleInstance();
@@ -25,45 +29,11 @@ async function init() {
 function main() {
   const tray = createTray();
   const mainWindowState = windowStateKeeper({ defaultWidth: 300, defaultHeight: 550 });
-  const mb = createMenubar({ tray, mainWindowState });
+  mb = createMenubar({ tray, mainWindowState });
   const appUpdater = new AppUpdater({ icon: appIcon, mb });
   let contextMenu = buildContextMenu({ mb, appUpdater }, []);
   mb.app.commandLine.appendSwitch('disable-backgrounding-occluded-windows', 'true');
-  // app 相关监听
-  app.on('window-all-closed', function () {
-    // Respect the OSX convention of having the application in memory even
-    // after all windows have been closed
-    if (process.platform !== 'darwin') {
-      app.quit();
-    }
-  });
-  app.on('browser-window-focus', function () {
-    if (app.isPackaged) {
-      globalShortcut.register('CommandOrControl+Shift+R', () => {
-        console.log('CommandOrControl+Shift+R is pressed: Shortcut Disabled');
-      });
-      globalShortcut.register('CommandOrControl+R', () => {
-        console.log('CommandOrControl+R is pressed: Shortcut Disabled');
-      });
-      globalShortcut.register('F5', () => {
-        console.log('F5 is pressed: Shortcut Disabled');
-      });
-    }
-  });
-  app.on('browser-window-blur', function () {
-    if (app.isPackaged) {
-      globalShortcut.unregister('CommandOrControl+R');
-      globalShortcut.unregister('F5');
-      globalShortcut.unregister('CommandOrControl+Shift+R');
-    }
-  });
-  app.on('second-instance', function (event, argv, cwd) {
-    // Someone tried to run a second instance, we should focus our window.
-    if (mb.window) {
-      if (mb.window.isMinimized()) mb.window.restore();
-      mb.window.focus();
-    }
-  });
+
   // ipcMain 主进程相关监听
   ipcMain.handle('show-message-box', async (event, config) => {
     return dialog.showMessageBox(config);
@@ -101,7 +71,7 @@ function main() {
     const menus = config.map((item: any) => ({
       ...item,
       icon: generateWalletIcon(item.iconIndex),
-      click: () => mb.window?.webContents.send('change-current-wallet-code', item.id),
+      click: () => sendMessageToRenderer(mb, 'change-current-wallet-code', item.id),
     }));
     contextMenu = buildContextMenu({ mb, appUpdater }, menus);
   });
@@ -117,20 +87,66 @@ function main() {
     });
     // 监听主题颜色变化
     nativeTheme.on('updated', () => {
-      mb.window?.webContents.send('nativeTheme-updated', {
-        darkMode: nativeTheme.shouldUseDarkColors,
-      });
+      sendMessageToRenderer(mb, 'nativeTheme-updated', { darkMode: nativeTheme.shouldUseDarkColors });
     });
     // 存储窗口大小
     mainWindowState.manage(mb.window!);
     // 检查更新
     appUpdater.checkUpdate('renderer');
     app.dock.hide();
+    // 是否打开备份文件
+    if (openBackupFilePath) {
+      sendMessageToRenderer(mb, 'open-backup-file', openBackupFilePath);
+    }
   });
   mb.on('ready', () => {
     // mb.window?.setVisibleOnAllWorkspaces(true);
   });
   // new AppUpdater({ icon: nativeIcon, win: mb.window });
 }
+
+// app 相关监听
+app.on('window-all-closed', () => {
+  // Respect the OSX convention of having the application in memory even
+  // after all windows have been closed
+  if (process.platform !== 'darwin') {
+    app.quit();
+  }
+});
+app.on('browser-window-focus', () => {
+  if (app.isPackaged) {
+    globalShortcut.register('CommandOrControl+Shift+R', () => {
+      console.log('CommandOrControl+Shift+R is pressed: Shortcut Disabled');
+    });
+    globalShortcut.register('CommandOrControl+R', () => {
+      console.log('CommandOrControl+R is pressed: Shortcut Disabled');
+    });
+    globalShortcut.register('F5', () => {
+      console.log('F5 is pressed: Shortcut Disabled');
+    });
+  }
+});
+app.on('browser-window-blur', () => {
+  if (app.isPackaged) {
+    globalShortcut.unregister('CommandOrControl+R');
+    globalShortcut.unregister('F5');
+    globalShortcut.unregister('CommandOrControl+Shift+R');
+  }
+});
+app.on('second-instance', (event, argv, cwd) => {
+  // Someone tried to run a second instance, we should focus our window.
+  if (mb.window) {
+    if (mb.window.isMinimized()) mb.window.restore();
+    mb.window.focus();
+  }
+});
+app.on('open-file', (even, path: string) => {
+  if (mb?.window) {
+    sendMessageToRenderer(mb, 'open-backup-file', path);
+    console.log(sendMessageToRenderer);
+  } else {
+    openBackupFilePath = path;
+  }
+});
 
 init().catch(console.log);
