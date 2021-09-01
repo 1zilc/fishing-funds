@@ -19,9 +19,6 @@ jobs:
     steps:
       - name: Setup repo
         uses: actions/checkout@v2
-        
-      - name: Install OS Dependencies
-        run: brew install rpm
 
       - name: Run build
         uses: actions/setup-node@v2
@@ -32,8 +29,6 @@ jobs:
       - run: yarn release-all
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
-        
+
       - name: Codecov
         uses: codecov/codecov-action@v1.5.2
-        
-
