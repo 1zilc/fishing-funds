@@ -104,6 +104,13 @@
       ],
       "category": "Financial"
     },
+    "snap": {
+      "confinement": "classic",
+      "summary": "Display real-time trends of Chinese funds in the menubar.",
+      "channels": [
+        "stable"
+      ]
+    },
     "directories": {
       "app": "build/app",
       "buildResources": "assets",
