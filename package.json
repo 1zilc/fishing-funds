@@ -100,8 +100,6 @@
     "linux": {
       "target": [
         "AppImage",
-        "deb",
-        "rpm",
         "snap"
       ],
       "category": "Financial"
