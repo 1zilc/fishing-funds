@@ -338,7 +338,7 @@ export function CalcZDHC(list: number[]) {
 export function GenerateBackupConfig() {
   const config = Object.keys(CONST.STORAGE).reduce<Record<string, any>>((data, key) => {
     const content = GetStorage(key);
-    if (content !== undefined) {
+    if (content !== undefined && content !== null) {
       data[key] = content;
     }
     return data;
@@ -359,7 +359,7 @@ export function GenerateBackupConfig() {
 export function coverBackupConfig(fileConfig: Backup.Config) {
   const content = decodeFF(fileConfig.content);
   Object.entries(content).forEach(([key, value]) => {
-    if (key in CONST.STORAGE && value !== undefined) {
+    if (key in CONST.STORAGE && value !== undefined && value !== null) {
       SetStorage(key, value);
     }
   });

@@ -3,7 +3,7 @@ import windowStateKeeper from 'electron-window-state';
 import { menubar, Menubar } from 'menubar';
 import { app, Tray, Menu } from 'electron';
 import AppUpdater from './autoUpdater';
-import { resolveHtmlPath } from './util';
+import { resolveHtmlPath, sendMessageToRenderer } from './util';
 
 export function createMenubar({ tray, mainWindowState }: { tray: Tray; mainWindowState: windowStateKeeper.State }) {
   return menubar({
@@ -52,26 +52,26 @@ export function buildContextMenu(
     { type: 'separator' },
     {
       click: () => {
-        mb.window?.webContents.send('clipboard-funds-import');
+        sendMessageToRenderer(mb, 'clipboard-funds-import');
       },
       label: '录入基金JSON配置',
     },
     {
       click: () => {
-        mb.window?.webContents.send('clipboard-funds-copy');
+        sendMessageToRenderer(mb, 'clipboard-funds-copy');
       },
       label: '复制基金JSON配置',
     },
     { type: 'separator' },
     {
       click: () => {
-        mb.window?.webContents.send('backup-all-config-import');
+        sendMessageToRenderer(mb, 'backup-all-config-import');
       },
       label: '导入全局配置',
     },
     {
       click: () => {
-        mb.window?.webContents.send('backup-all-config-export');
+        sendMessageToRenderer(mb, 'backup-all-config-export');
       },
       label: '导出全局配置',
     },

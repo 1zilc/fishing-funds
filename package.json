@@ -47,6 +47,14 @@
       "package.json"
     ],
     "afterSign": ".erb/scripts/notarize.js",
+    "fileAssociations": [
+      {
+        "ext": "ff",
+        "role": "Editor",
+        "description": "Fishing Funds 备份文件",
+        "icon": "assets/icon"
+      }
+    ],
     "mac": {
       "extendInfo": {
         "LSUIElement": "true"
@@ -91,7 +99,10 @@
     },
     "linux": {
       "target": [
-        "AppImage"
+        "AppImage",
+        "deb",
+        "rpm",
+        "snap"
       ],
       "category": "Financial"
     },
@@ -167,7 +178,7 @@
     "@babel/core": "^7.14.0",
     "@babel/preset-env": "^7.14.4",
     "@babel/register": "^7.13.16",
-    "@pmmmwh/react-refresh-webpack-plugin": "0.5.0-rc.5",
+    "@pmmmwh/react-refresh-webpack-plugin": "0.5.0-rc.6",
     "@svgr/webpack": "^5.5.0",
     "@teamsupercell/typings-for-css-modules-loader": "^2.5.1",
     "@testing-library/jest-dom": "^5.12.0",
@@ -177,7 +188,7 @@
     "@types/enzyme-adapter-react-16": "^1.0.6",
     "@types/history": "^4.7.8",
     "@types/jest": "^27.0.1",
-    "@types/node": "16.7.6",
+    "@types/node": "16.7.10",
     "@types/react": "^17.0.5",
     "@types/react-dom": "^17.0.3",
     "@types/react-router": "^5.1.14",
@@ -213,7 +224,7 @@
     "eslint-plugin-import": "^2.22.0",
     "eslint-plugin-jest": "^24.3.6",
     "eslint-plugin-jsx-a11y": "6.4.1",
-    "eslint-plugin-prettier": "^3.4.0",
+    "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-promise": "^5.1.0",
     "eslint-plugin-react": "^7.23.2",
     "eslint-plugin-react-hooks": "^4.0.8",

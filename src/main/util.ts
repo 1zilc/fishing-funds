@@ -1,4 +1,5 @@
 import log from 'electron-log';
+import { Menubar } from 'menubar';
 import { app } from 'electron';
 import { URL } from 'url';
 import * as path from 'path';
@@ -52,4 +53,8 @@ export function base64ToBuffer(dataUrl: string) {
   const data = dataUrl.match(/^data:([A-Za-z-+/]+);base64,(.+)$/);
   const imageBuffer = Buffer.from(data![2], 'base64');
   return imageBuffer;
+}
+
+export function sendMessageToRenderer(mb: Menubar, key: string, data?: any) {
+  return mb.window?.webContents.send(key, data);
 }

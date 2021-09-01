@@ -27,6 +27,7 @@ contextBridge.exposeInMainWorld('contextModules', {
           'backup-all-config-export',
           'backup-all-config-import',
           'update-available',
+          'open-backup-file',
           'change-current-wallet-code',
         ];
         if (validChannels.includes(channel)) {

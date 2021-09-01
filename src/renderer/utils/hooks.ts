@@ -235,10 +235,38 @@ export function useAllConfigBackup() {
         console.log('导入全局配置文件失败', error);
       }
     });
+    ipcRenderer.on('open-backup-file', async (e, filePath) => {
+      try {
+        const encodeBackupConfig = readFile(filePath);
+        const backupConfig: Backup.Config = compose(decodeFF, Base64.decode)(encodeBackupConfig);
+        const { response } = await dialog.showMessageBox({
+          title: `确认从备份文件恢复`,
+          message: `备份时间：${dayjs(backupConfig.timestamp).format('YYYY-MM-DD HH:mm:ss')} ，当前数据将被覆盖，请谨慎操作`,
+          buttons: ['确定', '取消'],
+        });
+        if (response === 0) {
+          Utils.coverBackupConfig(backupConfig);
+          await dialog.showMessageBox({
+            type: 'info',
+            title: `恢复成功`,
+            message: `恢复备份成功, 请重新启动Fishing Funds`,
+          });
+          app.quit();
+        }
+      } catch (error) {
+        dialog.showMessageBox({
+          type: 'info',
+          title: `恢复失败`,
+          message: `恢复备份文件失败`,
+        });
+        console.log('恢复备份文件失败', error);
+      }
+    });
 
     return () => {
       ipcRenderer.removeAllListeners('backup-all-config-export');
       ipcRenderer.removeAllListeners('backup-all-config-import');
+      ipcRenderer.removeAllListeners('open-backup-file');
     };
   }, []);
 }
