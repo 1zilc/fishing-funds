@@ -22,9 +22,6 @@ jobs:
       - name: Setup repo
         uses: actions/checkout@v2
 
-      - name: Install OS Dependencies
-        run: brew install rpm
-
       - name: Run build
         uses: actions/setup-node@v2
         with:
