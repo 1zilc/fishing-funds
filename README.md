@@ -130,9 +130,10 @@ interface FundSetting {
 - [Jr Prévost](https://github.com/3on)
 - [Electron React Boilerplate](https://github.com/electron-react-boilerplate/electron-react-boilerplate)
 - [menubar](https://github.com/maxogden/menubar)
-- [Ant Design](https://ant.design/index-cn)
+- [Ant Design](https://github.com/ant-design/ant-design/)
 - [ahooks](https://github.com/alibaba/hooks)
 - [echarts](https://github.com/apache/echarts)
+- [Remix Icon](https://github.com/Remix-Design/RemixIcon)
 
 ## 许可证
 
