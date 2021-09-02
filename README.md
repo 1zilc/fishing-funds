@@ -5,6 +5,7 @@
 # Fishing Funds
 
 ![GitHub release (latest by date)](https://img.shields.io/github/v/release/1zilc/fishing-funds)
+[![fishing-funds](https://snapcraft.io/fishing-funds/badge.svg)](https://snapcraft.io/fishing-funds)
 ![GitHub Release Date](https://img.shields.io/github/release-date/1zilc/fishing-funds)
 ![GitHub all releases](https://img.shields.io/github/downloads/1zilc/fishing-funds/total)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/ee4fd509a7184f738eeb9048959b1f56)](https://app.codacy.com/gh/1zilc/fishing-funds?utm_source=github.com&utm_medium=referral&utm_content=1zilc/fishing-funds&utm_campaign=Badge_Grade_Settings)
@@ -122,6 +123,7 @@ interface FundSetting {
 - [MacWk](https://www.macwk.com/soft/fishing-funds)
 - [马克喵](https://www.macat.vip/4257.html)
 - [Mac 毒](https://www.macdo.cn/34786.html)
+- [Snap Store](https://snapcraft.io/fishing-funds)
 
 ## 感谢
 

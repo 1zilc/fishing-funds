@@ -84,6 +84,10 @@ const recordSiteGroup = Utils.Group(
       url: 'https://www.macdo.cn/34786.html',
       name: 'Mac毒',
     },
+    {
+      url: 'https://snapcraft.io/fishing-funds',
+      name: 'SnapStore',
+    },
   ],
   3
 );
