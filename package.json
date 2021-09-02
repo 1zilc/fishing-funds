@@ -106,7 +106,13 @@
     },
     "snap": {
       "confinement": "strict",
-      "summary": "Display real-time trends of Chinese funds in the menubar."
+      "summary": "Display real-time trends of Chinese funds in the menubar.",
+      "publish": {
+        "provider": "snapStore",
+        "channels": [
+          "stable"
+        ]
+      }
     },
     "directories": {
       "app": "build/app",
@@ -116,19 +122,11 @@
     "extraResources": [
       "./assets/**"
     ],
-    "publish": [
-      {
-        "provider": "github",
-        "owner": "1zilc",
-        "repo": "fishing-funds"
-      },
-      {
-        "provider": "snapStore",
-        "channels": [
-          "stable"
-        ]
-      }
-    ]
+    "publish": {
+      "provider": "github",
+      "owner": "1zilc",
+      "repo": "fishing-funds"
+    }
   },
   "repository": {
     "type": "git",
