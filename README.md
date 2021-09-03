@@ -135,6 +135,10 @@ interface FundSetting {
 - [echarts](https://github.com/apache/echarts)
 - [Remix Icon](https://github.com/Remix-Design/RemixIcon)
 
+## Star Charts
+
+[![Stargazers over time](https://starchart.cc/1zilc/fishing-funds.svg)](https://starchart.cc/1zilc/fishing-funds)
+
 ## 许可证
 
 - [GPLv3](https://github.com/1zilc/fishing-funds/blob/master/LICENSE)
