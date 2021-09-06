@@ -32,11 +32,58 @@ export interface DetailFundContentProps {
   code: string;
 }
 
+export const ContinuousTag: React.FC<{ values: number[] }> = ({ values = [] }) => {
+  values.reverse();
+  const up = values[0] > 0;
+  const down = values[0] < 0;
+  let maxUpDay = 0;
+  let maxDownDay = 0;
+  for (let i = 0; i < values.length; i++) {
+    if (values[i] > 0) {
+      maxUpDay++;
+    } else {
+      break;
+    }
+  }
+  for (let i = 0; i < values.length; i++) {
+    if (values[i] < 0) {
+      maxDownDay++;
+    } else {
+      break;
+    }
+  }
+  const maxDay = Math.max(maxDownDay, maxUpDay);
+
+  if (up && maxDay >= 3) {
+    return (
+      <span className={styles.continuous}>
+        连涨{maxUpDay}天 <i className={'text-up'}>↑</i>
+      </span>
+    );
+  }
+  if (down && maxDay >= 3) {
+    return (
+      <span className={styles.continuous}>
+        连跌{maxDownDay}天 <i className={'text-down'}>↓</i>
+      </span>
+    );
+  }
+  return <></>;
+};
+
+export const ExceedTag: React.FC<{ value: number }> = ({ value }) => {
+  if (value !== undefined) {
+    return <span className={styles.exceed}>{`> ${value}%`}</span>;
+  }
+  return <></>;
+};
+
 const DetailFundContent: React.FC<DetailFundContentProps> = (props) => {
   const { code } = props;
   const [fund, setFund] = useState<Fund.FixData | Record<string, any>>({});
   const [pingzhongdata, setPingzhongdata] = useState<Fund.PingzhongData | Record<string, any>>({});
   const [showManagerDrawer, { setTrue: openManagerDrawer, setFalse: closeManagerDrawer, toggle: ToggleManagerDrawer }] = useBoolean(false);
+  const rateInSimilarPersent = pingzhongdata.Data_rateInSimilarPersent || [];
 
   useRequest(Services.Fund.GetFixFromEastMoney, {
     throwOnError: true,
@@ -57,7 +104,7 @@ const DetailFundContent: React.FC<DetailFundContentProps> = (props) => {
   const freshPingzhongdata = useCallback(() => {
     runGetFundDetailFromEastmoney(code);
   }, [code]);
-
+  console.log((pingzhongdata.Data_netWorthTrend || []).map(({ equityReturn }: any) => equityReturn));
   return (
     <CustomDrawerContent title="基金详情" enterText="确定" onClose={props.onClose} onEnter={props.onEnter}>
       <div className={styles.content}>
@@ -65,6 +112,10 @@ const DetailFundContent: React.FC<DetailFundContentProps> = (props) => {
           <h3>{fund?.fixName}</h3>
           <div className={styles.subTitleRow}>
             <span>{fund?.code}</span>
+            <div className={styles.labels}>
+              <ContinuousTag values={(pingzhongdata.Data_netWorthTrend || []).map(({ equityReturn }: any) => equityReturn)} />
+              <ExceedTag value={rateInSimilarPersent[rateInSimilarPersent.length - 1]?.[1]} />
+            </div>
             <span>
               基金经理：
               <a onClick={openManagerDrawer}>{pingzhongdata.Data_currentFundManager?.[0]?.name}</a>

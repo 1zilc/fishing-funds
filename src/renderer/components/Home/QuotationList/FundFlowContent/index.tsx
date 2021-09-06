@@ -63,25 +63,17 @@ const FundFlowContent: React.FC<DetailFundContentProps> = (props) => {
         </div>
         <div className={styles.container}>
           <Tabs animated={{ tabPane: true }} tabBarGutter={15}>
-            <Tabs.TabPane tab="行业资金流" key={String(Enums.TrendType.Performance)}>
+            <Tabs.TabPane tab="行业资金流" key={String(0)}>
               <ChartCard>
                 <Industry />
               </ChartCard>
             </Tabs.TabPane>
-          </Tabs>
-        </div>
-        <div className={styles.container}>
-          <Tabs animated={{ tabPane: true }} tabBarGutter={15}>
-            <Tabs.TabPane tab="概念资金流" key={String(Enums.HistoryType.Performance)}>
+            <Tabs.TabPane tab="概念资金流" key={String(1)}>
               <ChartCard>
                 <Concept />
               </ChartCard>
             </Tabs.TabPane>
-          </Tabs>
-        </div>
-        <div className={styles.container}>
-          <Tabs animated={{ tabPane: true }} tabBarGutter={15}>
-            <Tabs.TabPane tab="地域资金流" key={String(Enums.WareHouseType.Stock)}>
+            <Tabs.TabPane tab="地域资金流" key={String(2)}>
               <ChartCard>
                 <Area />
               </ChartCard>
