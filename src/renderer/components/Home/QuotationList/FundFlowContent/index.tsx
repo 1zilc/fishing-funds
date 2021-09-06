@@ -10,6 +10,7 @@ import NorthFlow from '@/components/Home/QuotationList/FundFlowContent/NorthFlow
 import SouthFlow from '@/components/Home/QuotationList/FundFlowContent/SouthFlow';
 import NorthDay from '@/components/Home/QuotationList/FundFlowContent/NorthDay';
 import SouthDay from '@/components/Home/QuotationList/FundFlowContent/SouthDay';
+import QuotationMap from '@/components/Home/QuotationList/FundFlowContent/QuotationMap';
 
 import * as Enums from '@/utils/enums';
 import styles from './index.scss';
@@ -23,6 +24,15 @@ const FundFlowContent: React.FC<DetailFundContentProps> = (props) => {
   return (
     <CustomDrawerContent title="板块资金流" enterText="确定" onClose={props.onClose} onEnter={props.onEnter}>
       <div className={styles.content}>
+        <div className={styles.container}>
+          <Tabs animated={{ tabPane: true }} tabBarGutter={15}>
+            <Tabs.TabPane tab="板块概览" key={String(0)}>
+              <ChartCard>
+                <QuotationMap />
+              </ChartCard>
+            </Tabs.TabPane>
+          </Tabs>
+        </div>
         <div className={styles.container}>
           <Tabs animated={{ tabPane: true }} tabBarGutter={15}>
             <Tabs.TabPane tab="北向资金" key={String(0)}>
