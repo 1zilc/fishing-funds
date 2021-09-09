@@ -10,6 +10,7 @@ import * as Utils from '@/utils';
 import 'electron-disable-file-drop';
 import '@/utils/window';
 
+Utils.CheckEnvTool();
 Utils.ClearExpiredStorage();
 
 export const store = configureStore();

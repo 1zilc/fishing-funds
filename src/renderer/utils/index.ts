@@ -6,7 +6,8 @@ import * as Enums from '@/utils/enums';
 import * as CONST from '@/constants';
 
 const { invoke, encodeFF, decodeFF } = window.contextModules.electron;
-const { version } = window.contextModules.process;
+const { version, production } = window.contextModules.process;
+const log = window.contextModules.log;
 
 export function Yang(num: string | number | undefined) {
   try {
@@ -388,5 +389,10 @@ export function ColorRgba(sHex: string, alpha = 1) {
     return 'rgba(' + sColorChange.join(',') + ',' + alpha + ')';
   } else {
     return sColor;
+  }
+}
+export function CheckEnvTool() {
+  if (production) {
+    Object.assign(console, log.functions);
   }
 }

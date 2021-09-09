@@ -1,5 +1,6 @@
 import { GotRequestFunction } from 'got/dist/source';
 import { Shell, Dialog, App, IpcRenderer, Clipboard } from 'electron';
+import { ElectronLog } from 'electron-log';
 
 declare global {
   interface Window {
@@ -31,6 +32,7 @@ declare global {
         electron: string;
         version: string;
       };
+      log: ElectronLog;
     };
   }
 }
