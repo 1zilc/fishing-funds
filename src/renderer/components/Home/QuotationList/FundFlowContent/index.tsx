@@ -27,56 +27,40 @@ const FundFlowContent: React.FC<DetailFundContentProps> = (props) => {
         <div className={styles.container}>
           <Tabs animated={{ tabPane: true }} tabBarGutter={15}>
             <Tabs.TabPane tab="板块概览" key={String(0)}>
-              <ChartCard>
-                <QuotationMap />
-              </ChartCard>
+              <QuotationMap />
             </Tabs.TabPane>
           </Tabs>
         </div>
         <div className={styles.container}>
           <Tabs animated={{ tabPane: true }} tabBarGutter={15}>
             <Tabs.TabPane tab="北向资金" key={String(0)}>
-              <ChartCard>
-                <NorthFlow />
-              </ChartCard>
+              <NorthFlow />
             </Tabs.TabPane>
             <Tabs.TabPane tab="南向资金" key={String(1)}>
-              <ChartCard>
-                <SouthFlow />
-              </ChartCard>
+              <SouthFlow />
             </Tabs.TabPane>
           </Tabs>
         </div>
         <div className={styles.container}>
           <Tabs animated={{ tabPane: true }} tabBarGutter={15}>
             <Tabs.TabPane tab="北向日线" key={String(0)}>
-              <ChartCard>
-                <NorthDay />
-              </ChartCard>
+              <NorthDay />
             </Tabs.TabPane>
             <Tabs.TabPane tab="南向日线" key={String(1)}>
-              <ChartCard>
-                <SouthDay />
-              </ChartCard>
+              <SouthDay />
             </Tabs.TabPane>
           </Tabs>
         </div>
         <div className={styles.container}>
           <Tabs animated={{ tabPane: true }} tabBarGutter={15}>
             <Tabs.TabPane tab="行业资金流" key={String(0)}>
-              <ChartCard>
-                <Industry />
-              </ChartCard>
+              <Industry />
             </Tabs.TabPane>
             <Tabs.TabPane tab="概念资金流" key={String(1)}>
-              <ChartCard>
-                <Concept />
-              </ChartCard>
+              <Concept />
             </Tabs.TabPane>
             <Tabs.TabPane tab="地域资金流" key={String(2)}>
-              <ChartCard>
-                <Area />
-              </ChartCard>
+              <Area />
             </Tabs.TabPane>
           </Tabs>
         </div>

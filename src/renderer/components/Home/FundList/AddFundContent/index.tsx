@@ -27,6 +27,7 @@ const AddFundContent: React.FC<AddFundContentProps> = (props) => {
   const [code, setCode] = useState<string>('');
   const [cyfe, setCyfe] = useState<number>(0);
   const [cbj, setCbj] = useState<any>();
+  const [zdfRange, setZdfRange] = useState<any>();
   const [none, setNone] = useState<boolean>(false);
   const [fundList, setFundlist] = useState<Fund.RemoteFund[]>([]);
   const remoteFunds = useSelector((state: StoreState) => state.fund.remoteFunds);
@@ -37,7 +38,15 @@ const AddFundContent: React.FC<AddFundContentProps> = (props) => {
     const fund = await Helpers.Fund.GetFund(code);
     if (fund) {
       setNone(false);
-      dispatch(addFundAction({ code, cyfe: cyfe ?? 0, name: fund.name || '未知', cbj: cbj ?? undefined }));
+      dispatch(
+        addFundAction({
+          code,
+          cyfe: cyfe ?? 0,
+          name: fund.name || '未知',
+          cbj: cbj ?? undefined,
+          zdfRange: zdfRange ?? undefined,
+        })
+      );
       props.onEnter();
     } else {
       setNone(true);
@@ -136,6 +145,19 @@ const AddFundContent: React.FC<AddFundContentProps> = (props) => {
             precision={4}
             value={cbj}
             onChange={setCbj}
+            size="small"
+            style={{ width: '100%' }}
+          />
+        </section>
+        <section>
+          <label>涨跌幅提醒范围（%）：</label>
+          <InputNumber
+            placeholder="涨跌幅超过该范围将发出系统通知"
+            min={0.01}
+            max={30}
+            precision={2}
+            value={zdfRange}
+            onChange={setZdfRange}
             size="small"
             style={{ width: '100%' }}
           />

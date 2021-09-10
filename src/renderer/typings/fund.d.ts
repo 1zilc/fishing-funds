@@ -4,6 +4,7 @@ declare namespace Fund {
     code: string;
     cyfe: number;
     cbj?: number;
+    zdfRange?: number;
   }
   export interface ResponseItem {
     name?: string; // 名称 '诺安混合'

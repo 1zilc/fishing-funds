@@ -16,6 +16,20 @@
   .menu {
     justify-self: flex-end;
     fill: var(--svg-icon-color);
+    height: 16px;
+    width: 16px;
+    margin-left: var(--base-padding);
+
+    &:hover {
+      cursor: pointer;
+    }
+  }
+  .function {
+    justify-self: flex-end;
+    fill: var(--svg-icon-color);
+    height: 12px;
+    width: 12px;
+    margin-left: var(--base-padding);
 
     &:hover {
       cursor: pointer;

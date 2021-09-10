@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { useRequest } from 'ahooks';
 
 import { useHomeContext } from '@/components/Home';
+import ChartCard from '@/components/Card/ChartCard';
 import TypeSelection from '@/components/TypeSelection';
 import { useResizeEchart, useRenderEcharts } from '@/utils/hooks';
 import * as CONST from '@/constants';
@@ -116,11 +117,17 @@ const SouthDay: React.FC<SouthDayProps> = () => {
     [darkMode, dayType.code]
   );
 
+  const freshChart = useCallback(() => {
+    runGetSouthDayFromEastmoney(fields1, dayType.code);
+  }, [fields1, dayType.code]);
+
   return (
-    <div className={styles.content}>
-      <div ref={chartRef} style={{ width: '100%' }} />
-      <TypeSelection types={dayTypeList} activeType={dayType.type} onSelected={setDayType} />
-    </div>
+    <ChartCard onFresh={freshChart}>
+      <div className={styles.content}>
+        <div ref={chartRef} style={{ width: '100%' }} />
+        <TypeSelection types={dayTypeList} activeType={dayType.type} onSelected={setDayType} />
+      </div>
+    </ChartCard>
   );
 };
 

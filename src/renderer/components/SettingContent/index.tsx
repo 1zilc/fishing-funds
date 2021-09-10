@@ -102,6 +102,7 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
     systemThemeSetting,
     adjustmentNotificationSetting,
     adjustmentNotificationTimeSetting,
+    riskNotificationSetting,
     trayContentSetting,
     coinUnitSetting,
     autoStartSetting,
@@ -122,6 +123,7 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
   // 通知设置
   const [adjustmentNotification, setAdjustmentNotification] = useState(adjustmentNotificationSetting);
   const [adjustmentNotificationTime, setAdjustmentNotifitationTime] = useState(adjustmentNotificationTimeSetting);
+  const [riskNotification, setRiskNotification] = useState(riskNotificationSetting);
   const [trayContent, setTrayContent] = useState(trayContentSetting);
   // 货币单位
   const [coinUnit, setCoinUnitSetting] = useState(coinUnitSetting);
@@ -141,6 +143,7 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
         systemThemeSetting: systemTheme,
         adjustmentNotificationSetting: adjustmentNotification,
         adjustmentNotificationTimeSetting: adjustmentNotificationTime || defalutSystemSetting.adjustmentNotificationTimeSetting,
+        riskNotificationSetting: riskNotification,
         trayContentSetting: trayContent,
         coinUnitSetting: coinUnit,
         autoStartSetting: autoStart,
@@ -255,6 +258,10 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
                 onChange={(v) => setAdjustmentNotifitationTime(dayjs(v).format())}
                 format="HH:mm"
               />
+            </section>
+            <section>
+              <label>涨跌提醒：</label>
+              <Switch size="small" checked={riskNotification} onChange={setRiskNotification} />
             </section>
             <section>
               <label>托盘内容：</label>

@@ -80,7 +80,13 @@ export function addFundAction(fund: Fund.SettingItem): ThunkAction {
   };
 }
 
-export function updateFundAction(fund: { code: string; cyfe?: number; name?: string; cbj?: number | null }): ThunkAction {
+export function updateFundAction(fund: {
+  code: string;
+  cyfe?: number;
+  name?: string;
+  cbj?: number | null;
+  zdfRange?: number | null;
+}): ThunkAction {
   return (dispatch, getState) => {
     try {
       const currentWalletCode = Helpers.Wallet.GetCurrentWalletCode();
@@ -93,6 +99,9 @@ export function updateFundAction(fund: { code: string; cyfe?: number; name?: str
           }
           if (fund.cbj !== null) {
             item.cbj = fund.cbj;
+          }
+          if (fund.zdfRange !== null) {
+            item.zdfRange = fund.zdfRange;
           }
           if (fund.name !== undefined) {
             item.name = fund.name;

@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { useHomeContext } from '@/components/Home';
+import ChartCard from '@/components/Card/ChartCard';
 import { useResizeEchart, useRenderEcharts } from '@/utils/hooks';
 import { useSelector } from 'react-redux';
 import { StoreState } from '@/reducers/types';
@@ -54,9 +55,11 @@ const QuotationMap: React.FC<QuotationMapProps> = () => {
   );
 
   return (
-    <div className={styles.content}>
-      <div ref={chartRef} style={{ width: '100%' }} />
-    </div>
+    <ChartCard>
+      <div className={styles.content}>
+        <div ref={chartRef} style={{ width: '100%' }} />
+      </div>
+    </ChartCard>
   );
 };
 

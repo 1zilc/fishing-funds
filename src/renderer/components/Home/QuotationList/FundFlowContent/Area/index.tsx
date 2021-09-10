@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { useRequest } from 'ahooks';
 
 import { useHomeContext } from '@/components/Home';
+import ChartCard from '@/components/Card/ChartCard';
 import TypeSelection from '@/components/TypeSelection';
 import { useResizeEchart, useRenderEcharts } from '@/utils/hooks';
 import * as CONST from '@/constants';
@@ -93,11 +94,17 @@ const Area: React.FC<IndustryProps> = () => {
     [darkMode, areaType.code, areaType.type]
   );
 
+  const freshChart = useCallback(() => {
+    runGetFundPerformanceFromEastmoney(areaType.code, areaType.type);
+  }, [areaType.code, areaType.type]);
+
   return (
-    <div className={styles.content}>
-      <div ref={chartRef} style={{ width: '100%' }} />
-      <TypeSelection types={areaTypeList} activeType={areaType.type} onSelected={setAreaType} />
-    </div>
+    <ChartCard onFresh={freshChart}>
+      <div className={styles.content}>
+        <div ref={chartRef} style={{ width: '100%' }} />
+        <TypeSelection types={areaTypeList} activeType={areaType.type} onSelected={setAreaType} />
+      </div>
+    </ChartCard>
   );
 };
 

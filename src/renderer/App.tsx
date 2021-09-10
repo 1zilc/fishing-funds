@@ -6,6 +6,7 @@ import * as CONST from '@/constants';
 import {
   useUpdater,
   useAdjustmentNotification,
+  useRiskNotification,
   useFundsClipboard,
   useBootStrap,
   useMappingLocalToSystemSetting,
@@ -18,6 +19,7 @@ import '@/app.global.scss';
 const App: React.FC<Record<string, unknown>> = () => {
   useUpdater();
   useAdjustmentNotification();
+  useRiskNotification();
   useFundsClipboard();
   useAllConfigBackup();
   useTrayContent();

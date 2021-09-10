@@ -48,6 +48,7 @@ const FundRow: React.FC<RowProps> = (props) => {
   }
 
   function onEditClick(focus: 'cbj' | 'cyfe') {
+    const { codeMap } = Helpers.Fund.GetFundConfig(currentWalletCode);
     if (props.onEdit) {
       props.onEdit(
         {
@@ -55,6 +56,7 @@ const FundRow: React.FC<RowProps> = (props) => {
           code: fund.fundcode!,
           cyfe: Number(calcFundResult.cyfe),
           cbj: calcFundResult.cbj,
+          zdfRange: codeMap[fund.fundcode!]?.zdfRange,
         },
         focus
       );

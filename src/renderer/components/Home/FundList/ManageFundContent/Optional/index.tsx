@@ -8,18 +8,21 @@ import { ReactComponent as AddIcon } from '@/assets/icons/add.svg';
 import { ReactComponent as MenuIcon } from '@/assets/icons/menu.svg';
 import { ReactComponent as RemoveIcon } from '@/assets/icons/remove.svg';
 import { ReactComponent as EditIcon } from '@/assets/icons/edit.svg';
+import { ReactComponent as CopyIcon } from '@/assets/icons/copy.svg';
+import { ReactComponent as BellsLineIcon } from '@/assets/icons/bells-line.svg';
+import { ReactComponent as BellsFillIcon } from '@/assets/icons/bells-fill.svg';
 import CustomDrawer from '@/components/CustomDrawer';
 import Empty from '@/components/Empty';
 import AddFundContent from '@/components/Home/FundList/AddFundContent';
 import EditFundContent from '@/components/Home/FundList/EditFundContent';
-import { deleteFundAction, setFundConfigAction } from '@/actions/fund';
+import { deleteFundAction, setFundConfigAction, updateFundAction } from '@/actions/fund';
 import { useSyncFixFundSetting, useDrawer, useCurrentWallet } from '@/utils/hooks';
 
 import styles from './index.scss';
 
 export interface OptionalProps {}
 
-const { dialog } = window.contextModules.electron;
+const { dialog, clipboard } = window.contextModules.electron;
 
 const Optional: React.FC<OptionalProps> = () => {
   const dispatch = useDispatch();
@@ -38,6 +41,7 @@ const Optional: React.FC<OptionalProps> = () => {
       code: '',
       name: '',
       cbj: undefined as number | undefined,
+      zdfRange: undefined as number | undefined,
     },
   });
 
@@ -48,12 +52,7 @@ const Optional: React.FC<OptionalProps> = () => {
   function onSortFundConfig(sortList: Fund.SettingItem[]) {
     const fundConfig = sortList.map((item) => {
       const fund = codeMap[item.code];
-      return {
-        name: fund.name,
-        cyfe: fund.cyfe,
-        code: fund.code,
-        cbj: fund.cbj,
-      };
+      return fund;
     });
     dispatch(setFundConfigAction(fundConfig, currentWalletCode));
   }
@@ -70,6 +69,41 @@ const Optional: React.FC<OptionalProps> = () => {
     }
   }
 
+  function onCopyFund(fund: Fund.SettingItem) {
+    try {
+      clipboard.writeText(JSON.stringify([fund]));
+      dialog.showMessageBox({
+        title: `复制成功`,
+        type: 'info',
+        message: `已复制 ${fund.name} 配置到粘贴板`,
+      });
+    } catch (error) {
+      dialog.showMessageBox({
+        type: 'info',
+        title: `复制失败`,
+        message: `基金JSON复制失败`,
+      });
+      console.log('复制基金json失败', error);
+    }
+  }
+
+  async function onCancleRiskNotice(fund: Fund.SettingItem) {
+    const { response } = await dialog.showMessageBox({
+      title: '取消涨跌通知',
+      type: 'info',
+      message: `确认取消 ${fund.name || ''} 涨跌范围 ${fund.zdfRange}% 通知`,
+      buttons: ['确定', '取消'],
+    });
+    if (response === 0) {
+      dispatch(
+        updateFundAction({
+          ...fund,
+          zdfRange: undefined,
+        })
+      );
+    }
+  }
+
   return (
     <div className={styles.content}>
       {sortFundConfig.length ? (
@@ -78,60 +112,48 @@ const Optional: React.FC<OptionalProps> = () => {
             {sortFundConfig.map((fund) => {
               return (
                 <PureCard key={fund.code} className={classnames(styles.row, 'hoverable')}>
-                  <RemoveIcon
-                    className={styles.remove}
-                    onClick={(e) => {
-                      onRemoveFund(fund);
-                      e.stopPropagation();
-                    }}
-                  />
+                  <RemoveIcon className={styles.remove} onClick={() => onRemoveFund(fund)} />
                   <div className={styles.inner}>
                     <div className={styles.name}>
                       {fund.name}
                       <span className={styles.code}>（{fund.code}）</span>
                     </div>
-                    <div>
-                      <span className={styles.cyfe}>
-                        持有份额：{fund.cyfe.toFixed(2)}
-                        <EditIcon
-                          className={styles.editor}
-                          onClick={() => {
-                            setEditDrawer({
-                              fundData: {
-                                name: fund.name,
-                                cyfe: fund.cyfe,
-                                code: fund.code,
-                                cbj: fund.cbj,
-                              },
-                              focus: 'cyfe',
-                            });
-                          }}
-                        />
-                      </span>
-                      <span className={styles.cbj}>
-                        成本价：
-                        {fund.cbj !== undefined ? (
-                          <span>{fund.cbj}</span>
-                        ) : (
-                          <a
-                            onClick={() => {
-                              setEditDrawer({
-                                fundData: {
-                                  name: fund.name,
-                                  cyfe: fund.cyfe,
-                                  code: fund.code,
-                                  cbj: fund.cbj,
-                                },
-                                focus: 'cbj',
-                              });
-                            }}
-                          >
-                            录入
-                          </a>
-                        )}
-                      </span>
-                    </div>
                   </div>
+                  <EditIcon
+                    className={styles.function}
+                    onClick={() =>
+                      setEditDrawer({
+                        fundData: {
+                          name: fund.name,
+                          cyfe: fund.cyfe,
+                          code: fund.code,
+                          cbj: fund.cbj,
+                          zdfRange: fund.zdfRange,
+                        },
+                        focus: '',
+                      })
+                    }
+                  />
+                  {fund.zdfRange ? (
+                    <BellsFillIcon className={styles.function} onClick={() => onCancleRiskNotice(fund)} />
+                  ) : (
+                    <BellsLineIcon
+                      className={styles.function}
+                      onClick={() =>
+                        setEditDrawer({
+                          fundData: {
+                            name: fund.name,
+                            cyfe: fund.cyfe,
+                            code: fund.code,
+                            cbj: fund.cbj,
+                            zdfRange: fund.zdfRange,
+                          },
+                          focus: 'zdfRange',
+                        })
+                      }
+                    />
+                  )}
+                  <CopyIcon className={styles.function} onClick={() => onCopyFund(fund)} />
                   <MenuIcon className={styles.menu} />
                 </PureCard>
               );
