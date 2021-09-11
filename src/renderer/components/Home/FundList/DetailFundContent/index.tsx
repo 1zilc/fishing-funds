@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from 'react';
 import { useBoolean, useRequest } from 'ahooks';
 import classnames from 'classnames';
-import { Tabs } from 'antd';
+import { Tabs, Rate } from 'antd';
 
 import ChartCard from '@/components/Card/ChartCard';
 import CustomDrawer from '@/components/CustomDrawer';
@@ -21,6 +21,7 @@ import PerformanceEvaluation from '@/components/Home/FundList/DetailFundContent/
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
 import SameFundList from '@/components/Home/FundList/DetailFundContent/SameFundList';
 import FundManagerContent from '@/components/Home/FundList/FundManagerContent';
+import { useFundRating } from '@/utils/hooks';
 import * as Services from '@/services';
 import * as Utils from '@/utils';
 import * as Enums from '@/utils/enums';
@@ -78,12 +79,21 @@ export const ExceedTag: React.FC<{ value: number }> = ({ value }) => {
   return <></>;
 };
 
+export const TypeTag: React.FC<{ type?: string }> = ({ type }) => {
+  if (type !== undefined) {
+    return <span className={styles.type}>{type}</span>;
+  }
+  return <></>;
+};
+
 const DetailFundContent: React.FC<DetailFundContentProps> = (props) => {
   const { code } = props;
   const [fund, setFund] = useState<Fund.FixData | Record<string, any>>({});
   const [pingzhongdata, setPingzhongdata] = useState<Fund.PingzhongData | Record<string, any>>({});
+  const { star: fundStar, type: fundType } = useFundRating(code);
   const [showManagerDrawer, { setTrue: openManagerDrawer, setFalse: closeManagerDrawer, toggle: ToggleManagerDrawer }] = useBoolean(false);
   const rateInSimilarPersent = pingzhongdata.Data_rateInSimilarPersent || [];
+  const syl_1n = pingzhongdata.syl_1n || pingzhongdata.syl_6y || pingzhongdata.syl_3y || pingzhongdata.syl_1y;
 
   useRequest(Services.Fund.GetFixFromEastMoney, {
     throwOnError: true,
@@ -99,23 +109,25 @@ const DetailFundContent: React.FC<DetailFundContentProps> = (props) => {
     cacheKey: `GetFundDetailFromEastmoney/${code}`,
   });
 
-  const syl_1n = pingzhongdata.syl_1n || pingzhongdata.syl_6y || pingzhongdata.syl_3y || pingzhongdata.syl_1y;
-
   const freshPingzhongdata = useCallback(() => {
     runGetFundDetailFromEastmoney(code);
   }, [code]);
-  console.log((pingzhongdata.Data_netWorthTrend || []).map(({ equityReturn }: any) => equityReturn));
+
   return (
     <CustomDrawerContent title="基金详情" enterText="确定" onClose={props.onClose} onEnter={props.onEnter}>
       <div className={styles.content}>
         <div className={styles.container}>
           <h3>{fund?.fixName}</h3>
           <div className={styles.subTitleRow}>
-            <span>{fund?.code}</span>
+            <Rate allowHalf defaultValue={fundStar} disabled />
             <div className={styles.labels}>
-              <ContinuousTag values={(pingzhongdata.Data_netWorthTrend || []).map(({ equityReturn }: any) => equityReturn)} />
+              <TypeTag type={fundType} />
               <ExceedTag value={rateInSimilarPersent[rateInSimilarPersent.length - 1]?.[1]} />
+              <ContinuousTag values={(pingzhongdata.Data_netWorthTrend || []).map(({ equityReturn }: any) => equityReturn)} />
             </div>
+          </div>
+          <div className={styles.subTitleRow}>
+            <span>{fund?.code}</span>
             <span>
               基金经理：
               <a onClick={openManagerDrawer}>{pingzhongdata.Data_currentFundManager?.[0]?.name}</a>

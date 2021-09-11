@@ -285,3 +285,34 @@ export function useAfterMounted(fn: any, dep: any[] = []) {
     }
   }, [flag, ...dep]);
 }
+
+export function useFundRating(code: string) {
+  const fundRatingMap = useSelector((state: StoreState) => state.fund.fundRatingMap);
+  const fundRating = fundRatingMap[code];
+  let star = 0;
+  if (fundRating) {
+    let total = 0;
+    let count = 0;
+    if (fundRating.szStar) {
+      total += Number(fundRating.szStar);
+      count++;
+    }
+    if (fundRating.zsStar) {
+      total += Number(fundRating.zsStar);
+      count++;
+    }
+    if (fundRating.jaStar) {
+      total += Number(fundRating.jaStar);
+      count++;
+    }
+    if (count === 0) {
+      star = 0;
+    } else {
+      star = total / count;
+    }
+  }
+  return {
+    ...(fundRating || {}),
+    star,
+  };
+}

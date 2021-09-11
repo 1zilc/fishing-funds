@@ -1,4 +1,4 @@
-import { SET_REMOTE_FUNDS_LOADING, SET_REMOTE_FUNDS, SET_FUNDS_LOADING } from '@/actions/fund';
+import { SET_REMOTE_FUNDS_LOADING, SET_REMOTE_FUNDS, SET_FUNDS_LOADING, SET_FUND_RATING_MAP } from '@/actions/fund';
 import { Reducer } from '@/reducers/types';
 import * as Helpers from '@/helpers';
 
@@ -6,6 +6,7 @@ export interface FundState {
   fundsLoading: boolean;
   remoteFunds: Fund.RemoteFund[];
   remoteFundsLoading: boolean;
+  fundRatingMap: Record<string, Fund.RantingItem>;
 }
 
 const fund: Reducer<FundState> = (
@@ -13,6 +14,7 @@ const fund: Reducer<FundState> = (
     fundsLoading: false,
     remoteFunds: Helpers.Fund.GetRemoteFunds(),
     remoteFundsLoading: false,
+    fundRatingMap: {},
   },
   action
 ) => {
@@ -31,6 +33,11 @@ const fund: Reducer<FundState> = (
       return {
         ...state,
         remoteFundsLoading: action.payload,
+      };
+    case SET_FUND_RATING_MAP:
+      return {
+        ...state,
+        fundRatingMap: action.payload,
       };
     default:
       return state;
