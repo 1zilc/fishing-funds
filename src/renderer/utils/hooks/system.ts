@@ -109,7 +109,7 @@ export function useRiskNotification() {
         console.log('涨跌提醒出错', error);
       }
     },
-    1000 * 3,
+    1000 * 60,
     {
       immediate: true,
     }
