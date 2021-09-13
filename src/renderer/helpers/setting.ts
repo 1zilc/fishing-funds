@@ -11,8 +11,9 @@ export const defalutSystemSetting: System.Setting = {
   baseFontSizeSetting: 12,
   systemThemeSetting: Enums.SystemThemeType.Auto,
 
-  adjustmentNotificationSetting: false,
+  adjustmentNotificationSetting: true,
   adjustmentNotificationTimeSetting: dayjs().hour(14).minute(30).format(),
+  riskNotificationSetting: true,
   trayContentSetting: Enums.TrayContent.Sy,
 
   coinUnitSetting: Enums.CoinUnitType.Usd,

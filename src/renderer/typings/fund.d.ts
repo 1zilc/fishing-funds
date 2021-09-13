@@ -4,6 +4,7 @@ declare namespace Fund {
     code: string;
     cyfe: number;
     cbj?: number;
+    zdfRange?: number;
   }
   export interface ResponseItem {
     name?: string; // 名称 '诺安混合'
@@ -88,7 +89,6 @@ declare namespace Fund {
     /* 近一月收益率 */
     syl_1y?: string;
   }
-
   export interface WareHouse {
     zxz: string;
     name: string;
@@ -157,5 +157,14 @@ declare namespace Fund {
       days: string; // 担任天数
       rzhb: string; // 任职回报率
     }
+  }
+  export interface RantingItem {
+    code: string;
+    name: string;
+    type: string;
+    szStar: string;
+    zsStar: string;
+    jaStar: string;
+    total: number;
   }
 }

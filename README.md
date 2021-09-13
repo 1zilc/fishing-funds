@@ -5,6 +5,7 @@
 # Fishing Funds
 
 ![GitHub release (latest by date)](https://img.shields.io/github/v/release/1zilc/fishing-funds)
+[![fishing-funds](https://snapcraft.io/fishing-funds/badge.svg)](https://snapcraft.io/fishing-funds)
 ![GitHub Release Date](https://img.shields.io/github/release-date/1zilc/fishing-funds)
 ![GitHub all releases](https://img.shields.io/github/downloads/1zilc/fishing-funds/total)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/ee4fd509a7184f738eeb9048959b1f56)](https://app.codacy.com/gh/1zilc/fishing-funds?utm_source=github.com&utm_medium=referral&utm_content=1zilc/fishing-funds&utm_campaign=Badge_Grade_Settings)
@@ -36,10 +37,8 @@
 - 本项目参考[electron-react-boilerplate-menubar](https://github.com/3on/electron-react-boilerplate-menubar)，基于[Electron React Boilerplate](https://github.com/electron-react-boilerplate/electron-react-boilerplate)  
   和[menubar](https://github.com/maxogden/menubar)开发
 - 采用天天基金等数据源接口，实时显示当前基金涨跌情况，计算显示收益，大盘实时数据，板块行情，股票走势，加密虚拟货币等
-- 软件中所有的数据仅供参考,一切收益或是亏损按当天实际为准
-- 本项目是个人自用状态栏小插件，完全开源免费，喜欢的小伙伴 star 一下，如果觉得好用也可在软件中打赏支持:)
-- 在使用中遇到 bug 欢迎[issues](https://github.com/1zilc/fishing-funds/issues)
-- 如果有好的建议或改进欢迎 [PR](https://github.com/1zilc/fishing-funds/pulls)
+- 软件中所有的数据仅供参考,一切收益或是亏损按当天实际为准，任何走势，排行数据均来自于第三方网站不代表作者观点
+- 本项目是个人自用状态栏小插件，完全开源免费，仅供学习交流
 
 ## 数据源
 
@@ -56,20 +55,19 @@
 
 ## 下载使用
 
-- [官网下载](https://ff.1zilc.top)
-- [Github 下载](https://github.com/1zilc/fishing-funds/releases)
-
-> 注意 ⚠️：由于 Catalina 之后不支持 32 位程序，暂无 Windows32 位安装包，可自行下载源码打包
-
-```bash
-yarn package-win
-```
-
-> 注意 ⚠️：由于 MacOS 不允许打开未经 Apple 公证的程序，如果出现软件无法打开请进行以下操作
+> 注意 ⚠️：由于 MacOS 不允许打开未经 Apple 公证的程序，如果出现软件无法打开请进行以下操作 或[参考这里](https://github.com/1zilc/fishing-funds/issues/149)
 
 ```bash
 进入 「设置」- 「安全性与隐私」- 「通用」- 「允许从以下位置下载的App」-「仍然打开」
 ```
+
+- [官网下载](https://ff.1zilc.top)
+- [Github 下载](https://github.com/1zilc/fishing-funds/releases)
+
+## 讨论交流
+
+- QQ 群: [732268738](https://github.com/1zilc/fishing-funds/blob/master/screenshots/group1.jpg)
+- issues: [#106](https://github.com/1zilc/fishing-funds/issues/106)
 
 ## 导入导出
 
@@ -104,12 +102,9 @@ interface FundSetting {
 ]
 ```
 
-## 讨论交流
-
-- QQ 群: [732268738](https://github.com/1zilc/fishing-funds/blob/master/screenshots/group1.jpg)
-- issues: [#106](https://github.com/1zilc/fishing-funds/issues/106)
-
 ## 支持作者
+
+Fishing Funds 是一款个人开发小软件，开源后深受大家的喜爱，接受了大量宝贵的改进建议，感谢大家的反馈，作者利用空闲时间开发不易，您的支持可以给本项目的开发和完善提供巨大的动力，感谢对本软件的喜爱和认可:)
 
 | 微信                                                                                                               | 支付宝                                                                                                             |
 | ------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------ |
@@ -120,18 +115,22 @@ interface FundSetting {
 - [柠檬精选](https://lemon.qq.com/lab/app/FishingFunds.html)
 - [Electron Apps](https://www.electronjs.org/apps/fishing-funds)
 - [MacWk](https://www.macwk.com/soft/fishing-funds)
-- [马克喵](https://www.macat.vip/4257.html)
-- [Mac 毒](https://www.macdo.cn/34786.html)
+- [Snap Store](https://snapcraft.io/fishing-funds)
 
 ## 感谢
 
 - [Jr Prévost](https://github.com/3on)
 - [Electron React Boilerplate](https://github.com/electron-react-boilerplate/electron-react-boilerplate)
 - [menubar](https://github.com/maxogden/menubar)
-- [Ant Design](https://ant.design/index-cn)
+- [Ant Design](https://github.com/ant-design/ant-design/)
 - [ahooks](https://github.com/alibaba/hooks)
 - [echarts](https://github.com/apache/echarts)
+- [Remix Icon](https://github.com/Remix-Design/RemixIcon)
 
 ## 许可证
 
 - [GPLv3](https://github.com/1zilc/fishing-funds/blob/master/LICENSE)
+
+## Star Charts
+
+[![Stargazers over time](https://starchart.cc/1zilc/fishing-funds.svg)](https://starchart.cc/1zilc/fishing-funds)

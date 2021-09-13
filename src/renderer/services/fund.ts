@@ -590,3 +590,27 @@ export async function GetRankDataFromEasemoney(type: string) {
     return [];
   }
 }
+
+// 查询基金评级排行
+export async function GetFundRatingFromEasemoney() {
+  try {
+    const { body: html } = await got('http://fund.eastmoney.com/data/fundrating.html', {});
+    const $ = cheerio.load(html);
+    const script = $('#fundinfo').find('script').html();
+    const fundinfos = eval(`(() => {
+      ${script}
+      return fundinfos;
+    })()`);
+    const result: Fund.RantingItem[] = fundinfos.split('_').map((item: string) => {
+      // 270007|广发大盘成长混合|混合型-偏股|苗宇|30331916|广发|80000248|2|4|0|3|0|5|0|1|0|5|1|0.15%|1|1|002|211|GFDPCZHH|GFJJ|30331916
+      const [code, name, type, manager, v1, jj, v2, totalFullStar, v3, v4, zsStar, v5, szStar, v6, v7, v8, jaStar] = item.split('|');
+      const total = 0 + Number(szStar || 0) + Number(zsStar || 0) + Number(jaStar || 0);
+      return { code, name, type, szStar, zsStar, jaStar, total };
+    });
+    result.sort((a, b) => b.total - a.total);
+    return result;
+  } catch (error) {
+    console.log(error);
+    return [];
+  }
+}

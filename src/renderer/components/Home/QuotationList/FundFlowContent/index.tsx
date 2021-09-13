@@ -10,6 +10,7 @@ import NorthFlow from '@/components/Home/QuotationList/FundFlowContent/NorthFlow
 import SouthFlow from '@/components/Home/QuotationList/FundFlowContent/SouthFlow';
 import NorthDay from '@/components/Home/QuotationList/FundFlowContent/NorthDay';
 import SouthDay from '@/components/Home/QuotationList/FundFlowContent/SouthDay';
+import QuotationMap from '@/components/Home/QuotationList/FundFlowContent/QuotationMap';
 
 import * as Enums from '@/utils/enums';
 import styles from './index.scss';
@@ -25,56 +26,41 @@ const FundFlowContent: React.FC<DetailFundContentProps> = (props) => {
       <div className={styles.content}>
         <div className={styles.container}>
           <Tabs animated={{ tabPane: true }} tabBarGutter={15}>
+            <Tabs.TabPane tab="板块概览" key={String(0)}>
+              <QuotationMap />
+            </Tabs.TabPane>
+          </Tabs>
+        </div>
+        <div className={styles.container}>
+          <Tabs animated={{ tabPane: true }} tabBarGutter={15}>
             <Tabs.TabPane tab="北向资金" key={String(0)}>
-              <ChartCard>
-                <NorthFlow />
-              </ChartCard>
+              <NorthFlow />
             </Tabs.TabPane>
             <Tabs.TabPane tab="南向资金" key={String(1)}>
-              <ChartCard>
-                <SouthFlow />
-              </ChartCard>
+              <SouthFlow />
             </Tabs.TabPane>
           </Tabs>
         </div>
         <div className={styles.container}>
           <Tabs animated={{ tabPane: true }} tabBarGutter={15}>
             <Tabs.TabPane tab="北向日线" key={String(0)}>
-              <ChartCard>
-                <NorthDay />
-              </ChartCard>
+              <NorthDay />
             </Tabs.TabPane>
             <Tabs.TabPane tab="南向日线" key={String(1)}>
-              <ChartCard>
-                <SouthDay />
-              </ChartCard>
+              <SouthDay />
             </Tabs.TabPane>
           </Tabs>
         </div>
         <div className={styles.container}>
           <Tabs animated={{ tabPane: true }} tabBarGutter={15}>
-            <Tabs.TabPane tab="行业资金流" key={String(Enums.TrendType.Performance)}>
-              <ChartCard>
-                <Industry />
-              </ChartCard>
+            <Tabs.TabPane tab="行业资金流" key={String(0)}>
+              <Industry />
             </Tabs.TabPane>
-          </Tabs>
-        </div>
-        <div className={styles.container}>
-          <Tabs animated={{ tabPane: true }} tabBarGutter={15}>
-            <Tabs.TabPane tab="概念资金流" key={String(Enums.HistoryType.Performance)}>
-              <ChartCard>
-                <Concept />
-              </ChartCard>
+            <Tabs.TabPane tab="概念资金流" key={String(1)}>
+              <Concept />
             </Tabs.TabPane>
-          </Tabs>
-        </div>
-        <div className={styles.container}>
-          <Tabs animated={{ tabPane: true }} tabBarGutter={15}>
-            <Tabs.TabPane tab="地域资金流" key={String(Enums.WareHouseType.Stock)}>
-              <ChartCard>
-                <Area />
-              </ChartCard>
+            <Tabs.TabPane tab="地域资金流" key={String(2)}>
+              <Area />
             </Tabs.TabPane>
           </Tabs>
         </div>

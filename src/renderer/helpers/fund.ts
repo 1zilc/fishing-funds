@@ -2,7 +2,13 @@ import NP from 'number-precision';
 import dayjs from 'dayjs';
 import { batch } from 'react-redux';
 import { store } from '@/.';
-import { SET_FUNDS_LOADING, sortFundsCachedAction, SET_REMOTE_FUNDS_LOADING, setRemoteFundsAction } from '@/actions/fund';
+import {
+  SET_FUNDS_LOADING,
+  sortFundsCachedAction,
+  SET_REMOTE_FUNDS_LOADING,
+  setRemoteFundsAction,
+  setFundRatingMapAction,
+} from '@/actions/fund';
 import { syncFixWalletStateAction } from '@/actions/wallet';
 import * as Services from '@/services';
 import * as Enums from '@/utils/enums';
@@ -40,6 +46,9 @@ export function GetRemoteFunds() {
   return Object.entries(Utils.GetStorage<Record<string, Fund.RemoteFund>>(CONST.STORAGE.REMOTE_FUND_MAP, {})).map(
     ([code, remoteFund]) => remoteFund
   );
+}
+export function GetFundsRatingMap() {
+  return Utils.GetStorage<Record<string, Fund.RantingItem>>(CONST.STORAGE.FUND_RATING_MAP, {});
 }
 
 export async function GetFunds(config: Fund.SettingItem[]) {
@@ -258,6 +267,7 @@ export async function LoadFixFunds() {
     console.log('加载最新净值失败', error);
   }
 }
+
 export async function LoadRemoteFunds() {
   try {
     store.dispatch({ type: SET_REMOTE_FUNDS_LOADING, payload: true });
@@ -269,5 +279,14 @@ export async function LoadRemoteFunds() {
   } catch (error) {
     console.log('加载远程基金库出错', error);
     store.dispatch({ type: SET_REMOTE_FUNDS_LOADING, payload: false });
+  }
+}
+
+export async function LoadFundRatingMap() {
+  try {
+    const remoteRantings = await Services.Fund.GetFundRatingFromEasemoney();
+    store.dispatch(setFundRatingMapAction(remoteRantings));
+  } catch (error) {
+    console.log('加载基金评级错误', error);
   }
 }

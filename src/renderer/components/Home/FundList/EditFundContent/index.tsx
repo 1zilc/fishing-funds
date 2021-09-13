@@ -18,11 +18,20 @@ const EditFundContent: React.FC<EditFundContentProps> = (props) => {
   const dispatch = useDispatch();
   const [cyfe, setCyfe] = useState<any>(fund.cyfe);
   const [cbj, setCbj] = useState<any>(fund.cbj);
+  const [zdfRange, setZdfRange] = useState<any>(fund.zdfRange);
   const cbjInputRef = useRef<HTMLInputElement>(null);
   const cyfeInputRef = useRef<HTMLInputElement>(null);
+  const zdfRangeInputRef = useRef<HTMLInputElement>(null);
 
   function onSave() {
-    dispatch(updateFundAction({ code: fund.code, cyfe: cyfe ?? 0, cbj: cbj ?? undefined }));
+    dispatch(
+      updateFundAction({
+        code: fund.code,
+        cyfe: cyfe ?? 0,
+        cbj: cbj ?? undefined,
+        zdfRange: zdfRange ?? undefined,
+      })
+    );
     props.onEnter();
   }
 
@@ -33,6 +42,9 @@ const EditFundContent: React.FC<EditFundContentProps> = (props) => {
         break;
       case 'cyfe':
         cyfeInputRef.current?.focus();
+        break;
+      case 'zdfRange':
+        zdfRangeInputRef.current?.focus();
         break;
       default:
         break;
@@ -71,7 +83,21 @@ const EditFundContent: React.FC<EditFundContentProps> = (props) => {
             min={0}
             precision={4}
             value={cbj}
-            onChange={(e) => setCbj(e)}
+            onChange={setCbj}
+            size="small"
+            style={{ width: '100%' }}
+          />
+        </section>
+        <section>
+          <label>涨跌幅提醒范围（%）：</label>
+          <InputNumber
+            ref={zdfRangeInputRef}
+            placeholder="涨跌幅超过该范围将发出系统通知"
+            min={0.01}
+            max={30}
+            precision={2}
+            value={zdfRange}
+            onChange={setZdfRange}
             size="small"
             style={{ width: '100%' }}
           />

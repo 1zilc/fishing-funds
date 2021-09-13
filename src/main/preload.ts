@@ -1,6 +1,7 @@
 import { contextBridge, ipcRenderer, shell, clipboard, nativeImage } from 'electron';
 import got from 'got';
 import { encode, decode } from 'js-base64';
+import log from 'electron-log';
 import * as fs from 'fs';
 import { base64ToBuffer } from './util';
 import { version } from '../../build/app/package.json';
@@ -86,4 +87,5 @@ contextBridge.exposeInMainWorld('contextModules', {
       return fs.readFileSync(path, 'utf-8');
     },
   },
+  log: log,
 });

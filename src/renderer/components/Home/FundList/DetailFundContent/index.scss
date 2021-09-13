@@ -53,3 +53,33 @@
   justify-content: space-between;
   font-size: calc(11rem / var(--base-font-size));
 }
+.labels {
+  display: flex;
+  flex: 1;
+  margin-left: var(--base-padding);
+  align-items: flex-start;
+  flex-wrap: wrap;
+}
+.type,
+.exceed,
+.continuous {
+  border-radius: 3px;
+  font-size: 8px;
+  padding: 0 4px;
+  text-align: center;
+  word-break: keep-all;
+  margin: 5px 5px 0 0;
+  white-space: nowrap;
+}
+.continuous {
+  color: var(--main-text-color);
+  border: 1px solid var(--main-text-color);
+}
+.exceed {
+  color: var(--warn-color);
+  border: 1px solid var(--warn-color);
+}
+.type {
+  border: 1px solid var(--primary-color);
+  color: var(--primary-color);
+}

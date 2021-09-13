@@ -8,6 +8,7 @@ import * as CONST from '@/constants';
 import * as Helpers from '@/helpers';
 
 export const SET_REMOTE_FUNDS = 'SET_REMOTE_FUNDS';
+export const SET_FUND_RATING_MAP = 'SET_FUND_RATING_MAP';
 export const SET_REMOTE_FUNDS_LOADING = 'SET_REMOTE_FUNDS_LOADING';
 export const SET_FUNDS = 'SET_FUNDS';
 export const SET_FUNDS_LOADING = 'SET_FUNDS_LOADING';
@@ -52,6 +53,26 @@ export function setRemoteFundsAction(remoteFunds: Fund.RemoteFund[]): ThunkActio
   };
 }
 
+export function setFundRatingMapAction(fundRantings: Fund.RantingItem[]): ThunkAction {
+  return (dispatch, getState) => {
+    try {
+      const fundRatingMap = Helpers.Fund.GetFundsRatingMap();
+      const nweFundRantingMap = fundRantings.reduce<Record<string, Fund.RantingItem>>((map, rant) => {
+        map[rant.code] = rant;
+        return map;
+      }, {});
+
+      Utils.SetStorage(CONST.STORAGE.FUND_RATING_MAP, {
+        ...fundRatingMap,
+        ...nweFundRantingMap,
+      });
+      dispatch(syncFundRatingMapAction());
+    } catch (error) {
+      console.log('设置基金评级出错', error);
+    }
+  };
+}
+
 export function syncRemoteFundsAction(): ThunkAction {
   return (dispatch, getState) => {
     try {
@@ -59,6 +80,17 @@ export function syncRemoteFundsAction(): ThunkAction {
       dispatch({ type: SET_REMOTE_FUNDS, payload: remoteFunds });
     } catch (error) {
       console.log('同步基金库出错', error);
+    }
+  };
+}
+
+export function syncFundRatingMapAction(): ThunkAction {
+  return (dispatch, getState) => {
+    try {
+      const fundRatingMap = Helpers.Fund.GetFundsRatingMap();
+      dispatch({ type: SET_FUND_RATING_MAP, payload: fundRatingMap });
+    } catch (error) {
+      console.log('同步基金评级出错', error);
     }
   };
 }
@@ -80,7 +112,13 @@ export function addFundAction(fund: Fund.SettingItem): ThunkAction {
   };
 }
 
-export function updateFundAction(fund: { code: string; cyfe?: number; name?: string; cbj?: number | null }): ThunkAction {
+export function updateFundAction(fund: {
+  code: string;
+  cyfe?: number;
+  name?: string;
+  cbj?: number | null;
+  zdfRange?: number | null;
+}): ThunkAction {
   return (dispatch, getState) => {
     try {
       const currentWalletCode = Helpers.Wallet.GetCurrentWalletCode();
@@ -93,6 +131,9 @@ export function updateFundAction(fund: { code: string; cyfe?: number; name?: str
           }
           if (fund.cbj !== null) {
             item.cbj = fund.cbj;
+          }
+          if (fund.zdfRange !== null) {
+            item.zdfRange = fund.zdfRange;
           }
           if (fund.name !== undefined) {
             item.name = fund.name;

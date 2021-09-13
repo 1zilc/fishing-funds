@@ -5,6 +5,7 @@ import PureCard from '@/components/Card/PureCard';
 import Optional from '@/components/Home/FundList/ManageFundContent/Optional';
 import Automatic from '@/components/Home/FundList/ManageFundContent/Automatic';
 import Rank from '@/components/Home/FundList/ManageFundContent/Rank';
+import Ranting from '@/components/Home/FundList/ManageFundContent/Ranting';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
 import styles from './index.scss';
 
@@ -29,6 +30,11 @@ const ManageFundContent: React.FC<ManageFundContentProps> = (props) => {
           <Tabs.TabPane tab="定投排行" key={String(2)}>
             <PureCard>
               <Automatic />
+            </PureCard>
+          </Tabs.TabPane>
+          <Tabs.TabPane tab="评级排行" key={String(3)}>
+            <PureCard>
+              <Ranting />
             </PureCard>
           </Tabs.TabPane>
         </Tabs>
