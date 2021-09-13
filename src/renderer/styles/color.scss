@@ -54,3 +54,13 @@
 .svg-none {
   fill: var(--reverse-text-color);
 }
+
+.boder-up {
+  border-color: var(--increase-color);
+}
+.boder-down {
+  border-color: var(--reduce-color);
+}
+.boder-none {
+  border-color: var(--reverse-text-color);
+}

@@ -56,18 +56,10 @@ export const ContinuousTag: React.FC<{ values: number[] }> = ({ values = [] }) =
   const maxDay = Math.max(maxDownDay, maxUpDay);
 
   if (up && maxDay >= 3) {
-    return (
-      <span className={styles.continuous}>
-        连涨{maxUpDay}天 <i className={'text-up'}>↑</i>
-      </span>
-    );
+    return <span className={classnames(styles.continuous, 'text-up', 'boder-up')}>{maxUpDay}天 ↗</span>;
   }
   if (down && maxDay >= 3) {
-    return (
-      <span className={styles.continuous}>
-        连跌{maxDownDay}天 <i className={'text-down'}>↓</i>
-      </span>
-    );
+    return <span className={classnames(styles.continuous, 'text-down', 'boder-down')}>{maxDownDay}天 ↘</span>;
   }
   return <></>;
 };
