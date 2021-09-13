@@ -77,14 +77,6 @@ const recordSiteGroup = Utils.Group(
       name: 'MacWk',
     },
     {
-      url: 'https://www.macat.vip/4257.html',
-      name: '马克喵',
-    },
-    {
-      url: 'https://www.macdo.cn/34786.html',
-      name: 'Mac毒',
-    },
-    {
       url: 'https://snapcraft.io/fishing-funds',
       name: 'SnapStore',
     },

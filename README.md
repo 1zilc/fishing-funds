@@ -115,8 +115,6 @@ Fishing Funds 是一款个人开发小软件，开源后深受大家的喜爱，
 - [柠檬精选](https://lemon.qq.com/lab/app/FishingFunds.html)
 - [Electron Apps](https://www.electronjs.org/apps/fishing-funds)
 - [MacWk](https://www.macwk.com/soft/fishing-funds)
-- [马克喵](https://www.macat.vip/4257.html)
-- [Mac 毒](https://www.macdo.cn/34786.html)
 - [Snap Store](https://snapcraft.io/fishing-funds)
 
 ## 感谢
