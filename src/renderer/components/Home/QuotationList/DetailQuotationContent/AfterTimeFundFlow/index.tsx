@@ -15,8 +15,7 @@ export interface AfterTimeFundFlowProps {
 const AfterTimeFundFlow: React.FC<AfterTimeFundFlowProps> = ({ code = '' }) => {
   const { ref: chartRef, chartInstance } = useResizeEchart(CONST.DEFAULT.ECHARTS_SCALE);
   const { varibleColors, darkMode } = useHomeContext();
-  const { run: runGetAfterTimeFundFlowFromEasymoney } = useRequest(Services.Quotation.GetAfterTimeFundFlowFromEasymoney, {
-    manual: true,
+  const { run: runGetAfterTimeFundFlowFromEasymoney } = useRequest(() => Services.Quotation.GetAfterTimeFundFlowFromEasymoney(code), {
     throwOnError: true,
     cacheKey: `GetAfterTimeFundFlowFromEasymoney/${code}`,
     pollingInterval: 1000 * 60,
@@ -101,22 +100,12 @@ const AfterTimeFundFlow: React.FC<AfterTimeFundFlowProps> = ({ code = '' }) => {
         ],
       });
     },
+    refreshDeps: [darkMode, code],
+    ready: !!chartInstance,
   });
 
-  useRenderEcharts(
-    () => {
-      runGetAfterTimeFundFlowFromEasymoney(code);
-    },
-    chartInstance,
-    [darkMode, code]
-  );
-
-  const freshChart = useCallback(() => {
-    runGetAfterTimeFundFlowFromEasymoney(code);
-  }, [code]);
-
   return (
-    <ChartCard auto onFresh={freshChart}>
+    <ChartCard auto onFresh={runGetAfterTimeFundFlowFromEasymoney}>
       <div className={styles.content}>
         <div ref={chartRef} style={{ width: '100%' }} />
       </div>

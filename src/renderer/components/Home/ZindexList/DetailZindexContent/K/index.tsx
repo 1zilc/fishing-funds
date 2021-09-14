@@ -42,7 +42,7 @@ const K: React.FC<PerformanceProps> = ({ code = '' }) => {
   const { ref: chartRef, chartInstance } = useResizeEchart(CONST.DEFAULT.ECHARTS_SCALE);
   const [year, setYearType] = useState(yearTypeList[0]);
   const { varibleColors, darkMode } = useHomeContext();
-  const { run: runGetKFromEastmoney } = useRequest(Services.Zindex.GetKFromEastmoney, {
+  const { run: runGetKFromEastmoney } = useRequest(() => Services.Zindex.GetKFromEastmoney(code, year.code), {
     manual: true,
     throwOnError: true,
     cacheKey: `GetKFromEastmoney/${code}`,
@@ -163,22 +163,12 @@ const K: React.FC<PerformanceProps> = ({ code = '' }) => {
         ],
       });
     },
+    refreshDeps: [darkMode, code, year.code],
+    ready: !!chartInstance,
   });
 
-  useRenderEcharts(
-    () => {
-      runGetKFromEastmoney(code, year.code);
-    },
-    chartInstance,
-    [darkMode, code, year.code]
-  );
-
-  const freshChart = useCallback(() => {
-    runGetKFromEastmoney(code, year.code);
-  }, [code, year.code]);
-
   return (
-    <ChartCard onFresh={freshChart}>
+    <ChartCard onFresh={runGetKFromEastmoney}>
       <div className={styles.content}>
         <div ref={chartRef} style={{ width: '100%' }} />
         <TypeSelection types={yearTypeList} activeType={year.type} onSelected={setYearType} flex />

@@ -44,8 +44,7 @@ const K: React.FC<PerformanceProps> = ({ secid = '' }) => {
   const { ref: chartRef, chartInstance } = useResizeEchart(CONST.DEFAULT.ECHARTS_SCALE);
   const [k, setKType] = useState(kTypeList[0]);
   const { varibleColors, darkMode } = useHomeContext();
-  const { run: runGetKFromEastmoney } = useRequest(Services.Stock.GetKFromEastmoney, {
-    manual: true,
+  const { run: runGetKFromEastmoney } = useRequest(() => Services.Stock.GetKFromEastmoney(secid, k.code), {
     throwOnError: true,
     cacheKey: `GetKFromEastmoney/${secid}/${k.code}`,
     onSuccess: (result) => {
@@ -165,22 +164,12 @@ const K: React.FC<PerformanceProps> = ({ secid = '' }) => {
         ],
       });
     },
+    refreshDeps: [darkMode, secid, k.code],
+    ready: !!chartInstance,
   });
 
-  useRenderEcharts(
-    () => {
-      runGetKFromEastmoney(secid, k.code);
-    },
-    chartInstance,
-    [darkMode, secid, k.code]
-  );
-
-  const freshChart = useCallback(() => {
-    runGetKFromEastmoney(secid, k.code);
-  }, [secid, k.code]);
-
   return (
-    <ChartCard onFresh={freshChart}>
+    <ChartCard onFresh={runGetKFromEastmoney}>
       <div className={styles.content}>
         <div ref={chartRef} style={{ width: '100%' }} />
         <TypeSelection types={kTypeList} activeType={k.type} onSelected={setKType} colspan={6} />

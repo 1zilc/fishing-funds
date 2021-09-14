@@ -173,14 +173,10 @@ const DetailFundContent: React.FC<DetailFundContentProps> = (props) => {
         <div className={styles.container}>
           <Tabs animated={{ tabPane: true }} tabBarGutter={15}>
             <Tabs.TabPane tab="股票持仓" key={String(Enums.WareHouseType.Stock)}>
-              <ChartCard onFresh={freshPingzhongdata}>
-                <StockWareHouse code={code} stockCodes={pingzhongdata.stockCodesNew!} />
-              </ChartCard>
+              <StockWareHouse code={code} stockCodes={pingzhongdata.stockCodesNew!} />
             </Tabs.TabPane>
             <Tabs.TabPane tab="债券持仓" key={String(Enums.WareHouseType.Securities)}>
-              <ChartCard onFresh={freshPingzhongdata}>
-                <SecuritiesWareHouse code={code} securitiesCodes={pingzhongdata.zqCodesNew!} />
-              </ChartCard>
+              <SecuritiesWareHouse code={code} securitiesCodes={pingzhongdata.zqCodesNew!} />
             </Tabs.TabPane>
             <Tabs.TabPane tab="股票仓位测算" key={String(Enums.WareHouseType.StockEstimate)}>
               <ChartCard onFresh={freshPingzhongdata}>

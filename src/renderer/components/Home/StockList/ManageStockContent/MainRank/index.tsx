@@ -73,16 +73,12 @@ const MainRank: React.FC<PropsWithChildren<MainRankProps>> = () => {
     },
   ];
 
-  const { run: runGetMainRankFromEastmoney, loading } = useRequest(Services.Stock.GetMainRankFromEastmoney, {
-    manual: true,
+  const { loading } = useRequest(() => Services.Stock.GetMainRankFromEastmoney(dayType.code), {
     cacheKey: `GetMainRankFromEastmoney/${dayType.code}`,
     throwOnError: true,
     onSuccess: setData,
+    refreshDeps: [dayType.code],
   });
-
-  useEffect(() => {
-    runGetMainRankFromEastmoney(dayType.code);
-  }, [dayType.code]);
 
   return (
     <div className={styles.content}>

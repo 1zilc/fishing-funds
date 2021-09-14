@@ -90,17 +90,12 @@ const Automatic: React.FC<PropsWithChildren<AutomaticProps>> = () => {
     },
   ];
 
-  const { run: runGetAutomaticPlanFromEastMoney, loading } = useRequest(Services.Fund.GetAutomaticPlanFromEastmoney, {
-    manual: true,
+  const { loading } = useRequest(() => Services.Fund.GetAutomaticPlanFromEastmoney(fundType.type), {
     cacheKey: `GetAutomaticPlanFromEastmoney/${fundType.type}`,
     throwOnError: true,
     onSuccess: setData,
-    refreshDeps: [fundType],
+    refreshDeps: [fundType.type],
   });
-
-  useEffect(() => {
-    runGetAutomaticPlanFromEastMoney(fundType.type);
-  }, [fundType]);
 
   return (
     <div className={styles.content}>

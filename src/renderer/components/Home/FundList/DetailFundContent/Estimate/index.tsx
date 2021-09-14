@@ -13,20 +13,16 @@ export interface EstimateProps {
 }
 const Estimate: React.FC<EstimateProps> = ({ code }) => {
   const [estimate, setEstimate] = useState(PictureImage);
-  const { run: runGetEstimatedFromEastmoney } = useRequest(Services.Fund.GetEstimatedFromEastmoney, {
+  const { run: runGetEstimatedFromEastmoney } = useRequest(() => Services.Fund.GetEstimatedFromEastmoney(code), {
     pollingInterval: CONST.DEFAULT.ESTIMATE_FUND_DELAY,
     throwOnError: true,
-    defaultParams: [code],
     onSuccess: setEstimate,
     cacheKey: `GetEstimatedFromEastmoney/${code}`,
+    refreshDeps: [code],
   });
 
-  const freshChart = useCallback(() => {
-    runGetEstimatedFromEastmoney(code);
-  }, [code]);
-
   return (
-    <ChartCard onFresh={freshChart}>
+    <ChartCard onFresh={runGetEstimatedFromEastmoney}>
       <div className={styles.estimate}>
         <img src={estimate || PictureFailedImage} />
       </div>

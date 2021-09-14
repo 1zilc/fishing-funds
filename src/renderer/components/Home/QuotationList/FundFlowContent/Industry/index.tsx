@@ -1,10 +1,10 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState } from 'react';
 import { useRequest } from 'ahooks';
 
 import { useHomeContext } from '@/components/Home';
 import ChartCard from '@/components/Card/ChartCard';
 import TypeSelection from '@/components/TypeSelection';
-import { useResizeEchart, useRenderEcharts } from '@/utils/hooks';
+import { useResizeEchart } from '@/utils/hooks';
 import * as CONST from '@/constants';
 import * as Services from '@/services';
 import * as Utils from '@/utils';
@@ -23,83 +23,75 @@ const Industry: React.FC<IndustryProps> = () => {
   const [industryType, setIndustryType] = useState(industryTypeList[0]);
   const { varibleColors, darkMode } = useHomeContext();
 
-  const { run: runGetFundPerformanceFromEastmoney } = useRequest(Services.Quotation.GetFundFlowFromEastmoney, {
-    manual: true,
-    throwOnError: true,
-    cacheKey: `GetFundFlowFromEastmoney/${industryType.code}/${industryType.type}`,
-    onSuccess: (result) => {
-      chartInstance?.setOption({
-        title: {
-          show: false,
-        },
-        tooltip: {
-          trigger: 'axis',
-          axisPointer: {
-            type: 'shadow', // 默认为直线，可选为：'line' | 'shadow'
+  const { run: runGetFundPerformanceFromEastmoney } = useRequest(
+    () => Services.Quotation.GetFundFlowFromEastmoney(industryType.code, industryType.type),
+    {
+      throwOnError: true,
+      cacheKey: `GetFundFlowFromEastmoney/${industryType.code}/${industryType.type}`,
+      onSuccess: (result) => {
+        chartInstance?.setOption({
+          title: {
+            show: false,
           },
-        },
-        grid: {
-          top: '3%',
-          left: 0,
-          right: 0,
-          bottom: 0,
-          containLabel: true,
-        },
-        xAxis: {
-          type: 'category',
-          axisLabel: {
-            fontSize: 10,
-            interval: 0,
-            formatter: (value: string) => value.split('').join('\n'),
+          tooltip: {
+            trigger: 'axis',
+            axisPointer: {
+              type: 'shadow', // 默认为直线，可选为：'line' | 'shadow'
+            },
           },
-          data: result.map(({ name }) => name) || [],
-        },
-        yAxis: {
-          type: 'value',
-          axisLabel: {
-            formatter: `{value}亿`,
-            fontSize: 10,
+          grid: {
+            top: '3%',
+            left: 0,
+            right: 0,
+            bottom: 0,
+            containLabel: true,
           },
-        },
-        series: [
-          {
-            type: 'bar',
-            data: result.map(({ value }) => {
-              return {
-                value,
-                itemStyle: {
-                  color: Utils.GetValueColor(value).color,
-                },
-              };
-            }),
+          xAxis: {
+            type: 'category',
+            axisLabel: {
+              fontSize: 10,
+              interval: 0,
+              formatter: (value: string) => value.split('').join('\n'),
+            },
+            data: result.map(({ name }) => name) || [],
           },
-        ],
-        dataZoom: [
-          {
-            type: 'inside',
-            start: 0,
-            end: 20,
-            maxValueSpan: 50,
+          yAxis: {
+            type: 'value',
+            axisLabel: {
+              formatter: `{value}亿`,
+              fontSize: 10,
+            },
           },
-        ],
-      });
-    },
-  });
-
-  useRenderEcharts(
-    () => {
-      runGetFundPerformanceFromEastmoney(industryType.code, industryType.type);
-    },
-    chartInstance,
-    [darkMode, industryType.code, industryType.type]
+          series: [
+            {
+              type: 'bar',
+              data: result.map(({ value }) => {
+                return {
+                  value,
+                  itemStyle: {
+                    color: Utils.GetValueColor(value).color,
+                  },
+                };
+              }),
+            },
+          ],
+          dataZoom: [
+            {
+              type: 'inside',
+              start: 0,
+              end: 20,
+              maxValueSpan: 50,
+            },
+          ],
+        });
+      },
+      refreshDeps: [darkMode, industryType.code, industryType.type],
+      ready: !!chartInstance,
+    }
   );
 
-  const freshChart = useCallback(() => {
-    runGetFundPerformanceFromEastmoney(industryType.code, industryType.type);
-  }, [industryType.code, industryType.type]);
-
   return (
-    <ChartCard onFresh={freshChart}>
+    <ChartCard onFresh={runGetFundPerformanceFromEastmoney}>
       <div className={styles.content}>
         <div ref={chartRef} style={{ width: '100%' }} />
         <TypeSelection types={industryTypeList} activeType={industryType.type} onSelected={setIndustryType} />

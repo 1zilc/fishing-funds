@@ -17,8 +17,7 @@ const Trend: React.FC<PerformanceProps> = ({ secid, zs = 0 }) => {
   const { ref: chartRef, chartInstance } = useResizeEchart(CONST.DEFAULT.ECHARTS_SCALE);
 
   const { darkMode } = useHomeContext();
-  const { run: runGetTrendFromEastmoney } = useRequest(Services.Stock.GetTrendFromEastmoney, {
-    manual: true,
+  const { run: runGetTrendFromEastmoney } = useRequest(() => Services.Stock.GetTrendFromEastmoney(secid), {
     throwOnError: true,
     cacheKey: `GetTrendFromEastmoney/${secid}`,
     pollingInterval: CONST.DEFAULT.ESTIMATE_FUND_DELAY,
@@ -93,22 +92,12 @@ const Trend: React.FC<PerformanceProps> = ({ secid, zs = 0 }) => {
         ],
       });
     },
+    refreshDeps: [darkMode, secid, zs],
+    ready: !!chartInstance,
   });
 
-  useRenderEcharts(
-    () => {
-      runGetTrendFromEastmoney(secid);
-    },
-    chartInstance,
-    [darkMode, secid, zs]
-  );
-
-  const freshChart = useCallback(() => {
-    runGetTrendFromEastmoney(secid);
-  }, [secid]);
-
   return (
-    <ChartCard onFresh={freshChart}>
+    <ChartCard onFresh={runGetTrendFromEastmoney}>
       <div className={styles.content}>
         <div ref={chartRef} style={{ width: '100%' }} />
       </div>

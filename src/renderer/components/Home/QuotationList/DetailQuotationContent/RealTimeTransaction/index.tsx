@@ -16,8 +16,7 @@ const RealTimeTransaction: React.FC<RealTimeTransactionProps> = ({ code = '' }) 
   const { ref: chartRef, chartInstance } = useResizeEchart(CONST.DEFAULT.ECHARTS_SCALE);
   const { varibleColors, darkMode } = useHomeContext();
 
-  const { run: runGetTransactionFromEasymoney } = useRequest(Services.Quotation.GetTransactionFromEasymoney, {
-    manual: true,
+  const { run: runGetTransactionFromEasymoney } = useRequest(() => Services.Quotation.GetTransactionFromEasymoney(code), {
     throwOnError: true,
     cacheKey: `GetTransactionFromEasymoney/${code}`,
     pollingInterval: 1000 * 60,
@@ -117,21 +116,12 @@ const RealTimeTransaction: React.FC<RealTimeTransactionProps> = ({ code = '' }) 
         ],
       });
     },
+    refreshDeps: [darkMode, code],
+    ready: !!chartInstance,
   });
 
-  useRenderEcharts(
-    () => {
-      runGetTransactionFromEasymoney(code);
-    },
-    chartInstance,
-    [darkMode, code]
-  );
-  const freshChart = useCallback(() => {
-    runGetTransactionFromEasymoney(code);
-  }, [code]);
-
   return (
-    <ChartCard auto onFresh={freshChart}>
+    <ChartCard auto onFresh={runGetTransactionFromEasymoney}>
       <div className={styles.content}>
         <div ref={chartRef} style={{ width: '100%' }} />
       </div>
