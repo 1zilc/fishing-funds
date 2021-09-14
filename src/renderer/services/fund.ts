@@ -4,6 +4,7 @@ import iconv from 'iconv-lite';
 import NP from 'number-precision';
 import cheerio from 'cheerio';
 import * as Utils from '@/utils';
+import dayjs from 'dayjs';
 
 const { got } = window.contextModules;
 // 天天基金
@@ -21,6 +22,7 @@ export async function FromEastmoney(code: string) {
       return null;
     }
   } catch (error) {
+    console.log(error);
     return await GetQDIIFundFromEastMoney(code);
   }
 }
@@ -253,6 +255,153 @@ export async function FromEtf(code: string) {
       dwjz, // 当前净值 '1.1111'
       gsz: temp.gzprice, // 估算值 '1.2222'
     };
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+}
+
+// 支付宝-蚂蚁基金
+export async function FromFund123(code: string) {
+  try {
+    const { body: html, headers } = await got(`https://www.fund123.cn/matiaria`, {
+      searchParams: {
+        fundCode: code,
+      },
+    });
+    const $ = cheerio.load(html);
+    const script = $('script').eq(2).html();
+    const fixscript = script?.replace(/window\.context/g, 'var o');
+    const context = eval(`(() => {
+      ${fixscript}
+      return o;
+    })()`);
+    const {
+      csrf,
+      materialInfo: {
+        productId,
+        fundCode,
+        fundBrief: { fundNameAbbr },
+        titleInfo: { netValue, netValueDate },
+      },
+    }: {
+      success: true;
+      message: '请求成功';
+      materialInfo: {
+        productId: '20170808000230030000000000013513';
+        fundCode: '002258';
+        fundType: '混合型';
+        titleInfo: {
+          fundLimit: '0--';
+          netValue: '3.6580';
+          netValueDate: '09-13';
+          profitSevenDays: '--';
+          profitTenThousand: '--';
+          dayOfGrowth: '2.46';
+          lastWeek: '5.88';
+          riskEvaluation: '中高风险';
+          establishmentDate: '2017-09-21';
+          assetSize: '1.04亿';
+          fundManagerName: '韩创';
+        };
+        fundBrief: {
+          fundNameAbbr: '大成国企改革灵活配置混合';
+          fundName: '大成国企改革灵活配置混合型证券投资基金';
+          fundCode: '002258';
+          establishmentDate: '2017-\n          09-\n          21';
+          shareSize: '41784787.66';
+          assetSize: '104651741.15';
+          fundManagerName: '韩创';
+          saleStatus: '正常申购';
+          fundCompanyName: '大成基金管理有限公司';
+          trusteeName: '中国银行股份有限公司';
+          manageRate: '1.5%';
+          trusteeRate: '0.25%';
+          purchaseMinMount: '10.00';
+          redeemMinMount: '1';
+          purchaseRatio: '--';
+          redeemRatio: '--';
+          generalInfo: {
+            fundName: '大成国企改革灵活配置混合型证券投资基金';
+            establishmentDate: '2017-\n            09-\n            21';
+            fundCode: '002258';
+            assetSize: '104651741.15';
+            fundCompanyName: '--';
+            trusteeName: '中国银行股份有限公司';
+            fundManagerBackground: '    韩创，中国国籍，金融学硕士，9年证券从业年限，具有基金从业资格。2012年6月至2015年6月曾任招商证券研究部研究员。2015年6月加入大成基金管理有限公司，历任研究部研究员、基金经理助理。2019年1月10日至2020年2月3日，担任大成消费主题混合型证券投资基金的基金经理。2019年1月10日起，担任大成新锐产业混合型证券投资基金的基金经理。2020年1月2日起，担任大成睿景灵活配置混合型证券投资基金的基金经理。2021年2月9日起，担任大成产业趋势混合型证券投资基金的基金经理。自2021年1月13日起，担任大成国企改革灵活配置混合型证券投资基金的基金经理。自2021年6月30日起，担任大成核心趋势混合型证券投资基金的基金经理。';
+            fundManagerInfoList: [
+              { key: '1'; fundName: '大成新锐产业混合型证券投资基金'; officeDate: '2019-01-10  至今'; earnings: '3.979472' },
+              { key: '2'; fundName: '大成睿景灵活配置混合型证券投资基金A类'; officeDate: '2020-01-02  至今'; earnings: '2.241387' },
+              { key: '3'; fundName: '大成睿景灵活配置混合型证券投资基金C类'; officeDate: '2020-01-02  至今'; earnings: '2.201024' },
+              { key: '4'; fundName: '大成国企改革灵活配置混合型证券投资基金'; officeDate: '2021-01-13  至今'; earnings: '0.794896' },
+              { key: '5'; fundName: '大成产业趋势混合型证券投资基金A类'; officeDate: '2021-02-09  至今'; earnings: '0.448205' },
+              { key: '6'; fundName: '大成产业趋势混合型证券投资基金C类'; officeDate: '2021-02-09  至今'; earnings: '0.441500' },
+              { key: '7'; fundName: '大成核心趋势混合型证券投资基金C类'; officeDate: '2021-06-30  至今'; earnings: '0.225799' },
+              { key: '8'; fundName: '大成核心趋势混合型证券投资基金A类'; officeDate: '2021-06-30  至今'; earnings: '0.226099' }
+            ];
+            investPhilosophy: '    本基金的投资目标是通过投资于国企改革相关的优质上市公司，在严格控制风险的前提下，力争获取超越业绩比较基准的收益。';
+            investStrategy: '    本基金通过对宏观经济环境、国家经济政策、股票市场风险、债券市场整体收益率曲线变化和资金供求关系等因素的分析，研判经济周期在美林投资时钟理论所处的阶段，综合评价各类资产的市场趋势、预期风险收益水平和配置时机。\r\n    本基金认为当前受益于国企改革的上市公司股票涉及多个行业，本基金将通过自下而上研究入库的方式，对各个行业中受益于国企改革主题的上市公司进行深入研究，并将这些股票组成本基金的核心股票库。\r\n    本基金将根据融资买入股票成本以及其他投资工具收益率综合评估是否采用融资方式买入股票，本基金在任何交易日日终持有的融资买入股票与直接买入股票市值之和，不得超过基金资产净值的95%。\r\n    本基金的债券投资采取稳健的投资管理方式，获得与风险相匹配的投资收益，以实现在一定程度上规避股票市场的系统性风险和保证基金资产的流动性。\r\n    中小企业私募债票面利率较高、信用风险较大、二级市场流动性较差。';
+          };
+        };
+      };
+      isLogin: false;
+      csrf: 'GZiniT4s-CXuZczggNnZdY5lDoIb7ea5Jjho';
+      isCloseEstimate: false;
+      pageName: 'matiaria?fundCode=002258';
+      uriBroker: {
+        'favicon.ico.url': 'https://gw.alipayobjects.com/zos/rmsportal/mgPTSSvpLkKrsQwhoDzv.ico';
+        'app.404.url': 'https://www.alipay.com/404.html';
+        'zdrmdata.rest.url': 'http://zdrmdata-pool.gz00g.alipay.com';
+        'app.errorpage.url': 'https://www.alipay.com/50x.html';
+        'authcenter.url': 'https://auth.alipay.com';
+        'app.goto.url': 'https://my.alipay.com/portal/i.htm';
+        'bumng.url': 'https://bumng.alipay.com';
+        'omeo.check.url': 'http://omeo-pool.gz00g.alipay.com';
+        'omeo.get.url': 'https://omeo.alipay.com';
+        'assets.url': 'https://gw.alipayobjects.com/a';
+      };
+    } = context;
+    const cookies = headers['set-cookie'];
+    const now = dayjs();
+    const res = await got<{
+      success: true;
+      list: {
+        bizSeq: 0;
+        time: 1631583000000;
+        forecastNetValue: string; //'4.22780306';
+        forecastGrowth: string; //'-0.00662522';
+      }[];
+    }>(`https://www.fund123.cn/api/fund/queryFundEstimateIntraday`, {
+      method: 'POST',
+      searchParams: {
+        _csrf: csrf,
+      },
+      headers: {
+        cookie: cookies?.join(''),
+        'content-type': 'application/json',
+      },
+      body: JSON.stringify({
+        startTime: now.format('YYYY-MM-DD'),
+        endTime: now.add(1, 'day').format('YYYY-MM-DD'),
+        limit: 200,
+        productId: productId,
+        format: true,
+        source: 'WEALTHBFFWEB',
+      }),
+      responseType: 'json',
+    });
+    const { body } = res;
+    const last = body.list.pop()!;
+    const result = {
+      name: fundNameAbbr,
+      fundcode: fundCode,
+      gztime: dayjs(last.time).format('YYYY-MM-DD HH:mm'),
+      gsz: last.forecastNetValue,
+      gszzl: (Number(last.forecastGrowth) * 100).toFixed(2),
+      jzrq: `${now.year()}-${netValueDate}`,
+      dwjz: netValue,
+    };
+    return result;
   } catch (error) {
     console.log(error);
     return null;

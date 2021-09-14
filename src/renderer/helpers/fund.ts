@@ -91,6 +91,8 @@ export async function GetFund(code: string) {
       return Services.Fund.FromHowbuy(code);
     case Enums.FundApiType.Etf:
       return Services.Fund.FromEtf(code);
+    case Enums.FundApiType.Ant:
+      return Services.Fund.FromFund123(code);
     case Enums.FundApiType.Eastmoney:
     default:
       // 默认请求天天基金

@@ -185,14 +185,17 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
               <Radio className={styles.radio} value={Enums.FundApiType.Eastmoney}>
                 天天基金
               </Radio>
+              <Radio className={styles.radio} value={Enums.FundApiType.Ant}>
+                蚂蚁基金
+              </Radio>
               <Radio className={styles.radio} value={Enums.FundApiType.Tencent}>
                 腾讯证券
               </Radio>
-              <Radio className={styles.radio} value={Enums.FundApiType.Dayfund}>
-                基金速查网
-              </Radio>
               <Radio className={styles.radio} value={Enums.FundApiType.Sina}>
                 新浪基金
+              </Radio>
+              <Radio className={styles.radio} value={Enums.FundApiType.Dayfund}>
+                基金速查网
               </Radio>
               <Radio className={styles.radio} value={Enums.FundApiType.Howbuy}>
                 好买基金

@@ -16,6 +16,7 @@ export enum FundApiType {
   Sina, // 新浪基金
   Howbuy, // 好买基金
   Etf, // 易天富
+  Ant, // 蚂蚁基金
 }
 
 export enum FundSortType {
