@@ -24,7 +24,6 @@ export function createMenubar({ tray, mainWindowState }: { tray: Tray; mainWindo
       maxWidth: 600,
       webPreferences: {
         contextIsolation: true,
-        enableRemoteModule: false,
         nodeIntegration: false,
         devTools: !app.isPackaged,
         webviewTag: true,

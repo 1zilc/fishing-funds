@@ -100,9 +100,37 @@ export async function GetFund(code: string) {
   }
 }
 
+// // 蚂蚁
+// collapse: true
+// dwjz: "1.3927"
+// fixDate: "09-14"
+// fixDwjz: "1.3927"
+// fixZzl: "0.32"
+// fundcode: "011103"
+// gsz: "1.39290000"
+// gszzl: "0.34"
+// gztime: "2021-09-14 15:00"
+// jzrq: "2021-09-14"
+// name: "天弘中证光伏产业指数C"
+
+// // 天天
+// collapse: true
+// dwjz: "1.3882"
+// fixDate: "09-14"
+// fixDwjz: "1.3927"
+// fixZzl: "0.32"
+// fundcode: "011103"
+// gsz: "1.3923"
+// gszzl: "0.29"
+// gztime: "2021-09-14 15:00"
+// jzrq: "2021-09-13"
+// name: "天弘中证光伏产业指数C"
+
 export function CalcFund(fund: Fund.ResponseItem & Fund.FixData, walletCode: string) {
   const { codeMap } = GetFundConfig(walletCode);
-  const isFix = fund.fixDate && fund.fixDate === fund.gztime?.slice(5, 10);
+  const gzrq = fund.gztime?.slice(5, 10);
+  const isFix = fund.fixDate && fund.fixDate === gzrq;
+  fund.dwjz = isFix && fund.jzrq === gzrq ? (Number(fund.fixDwjz) * (1 - Number(fund.fixZzl))).toFixed(4) : fund.dwjz;
   const cyfe = codeMap[fund.fundcode!]?.cyfe || 0;
   const cbj = codeMap[fund.fundcode!]?.cbj;
   const gsz = isFix ? fund.fixDwjz! : fund.gsz!;
