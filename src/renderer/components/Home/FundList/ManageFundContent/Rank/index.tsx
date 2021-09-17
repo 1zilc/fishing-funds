@@ -84,7 +84,6 @@ const Rank: React.FC<PropsWithChildren<RankProps>> = () => {
   ];
 
   const { loading } = useRequest(() => Services.Fund.GetRankDataFromEasemoney(fundType.type), {
-    cacheKey: `GetRankDataFromEasemoney/${fundType.type}`,
     throwOnError: true,
     onSuccess: (result) => {
       setData(

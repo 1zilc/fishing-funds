@@ -18,7 +18,6 @@ const RealTimeTransaction: React.FC<RealTimeTransactionProps> = ({ code = '' }) 
 
   const { run: runGetTransactionFromEasymoney } = useRequest(() => Services.Quotation.GetTransactionFromEasymoney(code), {
     throwOnError: true,
-    cacheKey: `GetTransactionFromEasymoney/${code}`,
     pollingInterval: 1000 * 60,
     onSuccess: (result) => {
       chartInstance?.setOption({

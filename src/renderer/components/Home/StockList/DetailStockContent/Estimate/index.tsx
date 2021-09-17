@@ -17,7 +17,6 @@ const Estimate: React.FC<EstimateProps> = ({ secid }) => {
     pollingInterval: CONST.DEFAULT.ESTIMATE_FUND_DELAY,
     throwOnError: true,
     onSuccess: setEstimate,
-    cacheKey: `GetPicTrendFromEastmoney/${secid}`,
     refreshDeps: [secid],
   });
 

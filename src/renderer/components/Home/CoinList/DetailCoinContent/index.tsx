@@ -31,7 +31,6 @@ const DetailCoinContent: React.FC<DetailCoinContentProps> = (props) => {
     pollingInterval: 1000 * 60,
     defaultParams: [code],
     onSuccess: setCoin,
-    cacheKey: `GetDetailFromCoingecko/${code}`,
   });
 
   const freshDetail = useCallback(() => {

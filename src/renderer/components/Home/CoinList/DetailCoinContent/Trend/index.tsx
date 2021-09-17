@@ -1,11 +1,11 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState } from 'react';
 import { useRequest } from 'ahooks';
 import { useSelector } from 'react-redux';
 
 import { useHomeContext } from '@/components/Home';
 import TypeSelection from '@/components/TypeSelection';
 import ChartCard from '@/components/Card/ChartCard';
-import { useResizeEchart, useRenderEcharts } from '@/utils/hooks';
+import { useResizeEchart } from '@/utils/hooks';
 import { StoreState } from '@/reducers/types';
 import * as CONST from '@/constants';
 import * as Services from '@/services';
@@ -29,10 +29,8 @@ const Trend: React.FC<PerformanceProps> = ({ code }) => {
   const [date, setDateType] = useState(dateTypeList[2]);
   const { darkMode } = useHomeContext();
   const coinUnitSetting = useSelector((state: StoreState) => state.setting.systemSetting.coinUnitSetting);
-  const { run: runGetHistoryFromCoingecko } = useRequest(Services.Coin.GetHistoryFromCoingecko, {
-    manual: true,
+  const { run: runGetHistoryFromCoingecko } = useRequest(() => Services.Coin.GetHistoryFromCoingecko(code, coinUnitSetting, date.code), {
     throwOnError: true,
-    cacheKey: `GetHistoryFromCoingecko/${code}`,
     pollingInterval: CONST.DEFAULT.ESTIMATE_FUND_DELAY,
     onSuccess: (result) => {
       chartInstance?.setOption({
@@ -103,22 +101,12 @@ const Trend: React.FC<PerformanceProps> = ({ code }) => {
         ],
       });
     },
+    refreshDeps: [darkMode, code, coinUnitSetting, date.code],
+    ready: !!chartInstance,
   });
 
-  useRenderEcharts(
-    () => {
-      runGetHistoryFromCoingecko(code, coinUnitSetting, date.code);
-    },
-    chartInstance,
-    [darkMode, code, coinUnitSetting, date.code]
-  );
-
-  const freshChart = useCallback(() => {
-    runGetHistoryFromCoingecko(code, coinUnitSetting, date.code);
-  }, [code, coinUnitSetting, date.code]);
-
   return (
-    <ChartCard onFresh={freshChart}>
+    <ChartCard onFresh={runGetHistoryFromCoingecko}>
       <div className={styles.content}>
         <div ref={chartRef} style={{ width: '100%' }} />
         <TypeSelection types={dateTypeList} activeType={date.type} onSelected={setDateType} flex />

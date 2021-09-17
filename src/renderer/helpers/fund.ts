@@ -71,6 +71,8 @@ export async function GetFunds(config: Fund.SettingItem[]) {
       return Adapter.ChokeGroupAdapter<Fund.ResponseItem>(collectors, 3, 300);
     case Enums.FundApiType.Etf:
       return Adapter.ChokeGroupAdapter<Fund.ResponseItem>(collectors, 3, 300);
+    case Enums.FundApiType.Ant:
+      return Adapter.ChokeGroupAdapter<Fund.ResponseItem>(collectors, 4, 400);
     case Enums.FundApiType.Eastmoney:
     default:
       return Adapter.ChokeGroupAdapter<Fund.ResponseItem>(collectors, 5, 500);

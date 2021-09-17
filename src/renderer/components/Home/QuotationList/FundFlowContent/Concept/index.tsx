@@ -27,7 +27,6 @@ const Concept: React.FC<IndustryProps> = () => {
     () => Services.Quotation.GetFundFlowFromEastmoney(conceptType.code, conceptType.type),
     {
       throwOnError: true,
-      cacheKey: `GetFundFlowFromEastmoney/${conceptType.code}/${conceptType.type}`,
       onSuccess: (result) => {
         chartInstance?.setOption({
           title: {

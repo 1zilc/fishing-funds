@@ -91,14 +91,12 @@ const DetailFundContent: React.FC<DetailFundContentProps> = (props) => {
     throwOnError: true,
     defaultParams: [code],
     onSuccess: setFund,
-    cacheKey: `GetFixFromEastMoney/${code}`,
   });
 
   const { run: runGetFundDetailFromEastmoney } = useRequest(Services.Fund.GetFundDetailFromEastmoney, {
     throwOnError: true,
     defaultParams: [code],
     onSuccess: setPingzhongdata,
-    cacheKey: `GetFundDetailFromEastmoney/${code}`,
   });
 
   const freshPingzhongdata = useCallback(() => {

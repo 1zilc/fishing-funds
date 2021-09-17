@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import classnames from 'classnames';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -30,7 +30,7 @@ const FundRow: React.FC<RowProps> = (props) => {
   const dispatch = useDispatch();
   const { conciseSetting } = useSelector((state: StoreState) => state.setting.systemSetting);
   const { currentWalletCode } = useCurrentWallet();
-  const calcFundResult = Helpers.Fund.CalcFund(fund, currentWalletCode);
+  const calcFundResult = useMemo(() => Helpers.Fund.CalcFund(fund, currentWalletCode), [fund, currentWalletCode]);
   const { isFix } = calcFundResult;
 
   function onRowClick() {

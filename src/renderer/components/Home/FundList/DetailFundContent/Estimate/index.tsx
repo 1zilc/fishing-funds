@@ -17,7 +17,6 @@ const Estimate: React.FC<EstimateProps> = ({ code }) => {
     pollingInterval: CONST.DEFAULT.ESTIMATE_FUND_DELAY,
     throwOnError: true,
     onSuccess: setEstimate,
-    cacheKey: `GetEstimatedFromEastmoney/${code}`,
     refreshDeps: [code],
   });
 

@@ -29,7 +29,6 @@ const SouthDay: React.FC<SouthDayProps> = () => {
   const { run: runGetSouthDayFromEastmoney } = useRequest(() => Services.Quotation.GetSouthDayFromEastmoney(fields1, dayType.code), {
     throwOnError: true,
     pollingInterval: 1000 * 60,
-    cacheKey: `GetSouthDayFromEastmoney/${fields1}/${dayType.code}`,
     onSuccess: (result) => {
       chartInstance?.setOption({
         title: {

@@ -69,7 +69,6 @@ const Ranting: React.FC<PropsWithChildren<RantingProps>> = () => {
   ];
 
   const { loading } = useRequest(Services.Fund.GetFundRatingFromEasemoney, {
-    cacheKey: `GetFundRatingFromEasemoney`,
     throwOnError: true,
     onSuccess: setData,
   });

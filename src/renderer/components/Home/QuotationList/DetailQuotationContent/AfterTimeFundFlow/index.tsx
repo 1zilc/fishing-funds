@@ -17,7 +17,6 @@ const AfterTimeFundFlow: React.FC<AfterTimeFundFlowProps> = ({ code = '' }) => {
   const { varibleColors, darkMode } = useHomeContext();
   const { run: runGetAfterTimeFundFlowFromEasymoney } = useRequest(() => Services.Quotation.GetAfterTimeFundFlowFromEasymoney(code), {
     throwOnError: true,
-    cacheKey: `GetAfterTimeFundFlowFromEasymoney/${code}`,
     pollingInterval: 1000 * 60,
     onSuccess: (result) => {
       const seriesStyle = {

@@ -29,10 +29,8 @@ const K: React.FC<PerformanceProps> = ({ code = '' }) => {
   const coinUnitSetting = useSelector((state: StoreState) => state.setting.systemSetting.coinUnitSetting);
   const [date, setDateType] = useState(dateTypeList[2]);
   const { varibleColors, darkMode } = useHomeContext();
-  const { run: runGetKFromCoingecko } = useRequest(Services.Coin.GetKFromCoingecko, {
-    manual: true,
+  const { run: runGetKFromCoingecko } = useRequest(() => Services.Coin.GetKFromCoingecko(code, coinUnitSetting, date.code), {
     throwOnError: true,
-    cacheKey: `GetKFromCoingecko/${code}`,
     onSuccess: (result) => {
       // 数据意义：开盘(open)，收盘(close)，最低(lowest)，最高(highest)
       const values = result.map((_) => [_.kp, _.sp, _.zd, _.zg]);
@@ -106,22 +104,12 @@ const K: React.FC<PerformanceProps> = ({ code = '' }) => {
         ],
       });
     },
+    refreshDeps: [darkMode, code, coinUnitSetting, date.code],
+    ready: !!chartInstance,
   });
 
-  useRenderEcharts(
-    () => {
-      runGetKFromCoingecko(code, coinUnitSetting, date.code);
-    },
-    chartInstance,
-    [darkMode, code, coinUnitSetting, date.code]
-  );
-
-  const freshChart = useCallback(() => {
-    runGetKFromCoingecko(code, coinUnitSetting, date.code);
-  }, [code, coinUnitSetting, date.code]);
-
   return (
-    <ChartCard onFresh={freshChart}>
+    <ChartCard onFresh={runGetKFromCoingecko}>
       <div className={styles.content}>
         <div ref={chartRef} style={{ width: '100%' }} />
         <TypeSelection types={dateTypeList} activeType={date.type} onSelected={setDateType} flex />

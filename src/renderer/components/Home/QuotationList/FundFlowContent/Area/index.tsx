@@ -27,7 +27,6 @@ const Area: React.FC<IndustryProps> = () => {
     () => Services.Quotation.GetFundFlowFromEastmoney(areaType.code, areaType.type),
     {
       throwOnError: true,
-      cacheKey: `GetFundFlowFromEastmoney/${areaType.code}/${areaType.type}`,
       onSuccess: (result) => {
         chartInstance?.setOption({
           title: {

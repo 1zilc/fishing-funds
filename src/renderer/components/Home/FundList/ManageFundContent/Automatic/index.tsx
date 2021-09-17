@@ -91,7 +91,6 @@ const Automatic: React.FC<PropsWithChildren<AutomaticProps>> = () => {
   ];
 
   const { loading } = useRequest(() => Services.Fund.GetAutomaticPlanFromEastmoney(fundType.type), {
-    cacheKey: `GetAutomaticPlanFromEastmoney/${fundType.type}`,
     throwOnError: true,
     onSuccess: setData,
     refreshDeps: [fundType.type],

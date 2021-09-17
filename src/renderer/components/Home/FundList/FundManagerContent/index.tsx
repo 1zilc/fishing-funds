@@ -36,7 +36,6 @@ const FundManagerContent: React.FC<FundManagerContentProps> = (props) => {
   useRequest(Services.Fund.GetFundManagerDetailFromEastMoney, {
     throwOnError: true,
     defaultParams: [manager.id],
-    cacheKey: `GetFundManagerDetailFromEastMoney/${manager.id}`,
     onSuccess: setManagerDetail,
   });
 

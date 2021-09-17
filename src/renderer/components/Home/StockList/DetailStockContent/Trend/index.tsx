@@ -19,7 +19,6 @@ const Trend: React.FC<PerformanceProps> = ({ secid, zs = 0 }) => {
   const { darkMode } = useHomeContext();
   const { run: runGetTrendFromEastmoney } = useRequest(() => Services.Stock.GetTrendFromEastmoney(secid), {
     throwOnError: true,
-    cacheKey: `GetTrendFromEastmoney/${secid}`,
     pollingInterval: CONST.DEFAULT.ESTIMATE_FUND_DELAY,
     onSuccess: ({ trends }) => {
       chartInstance?.setOption({

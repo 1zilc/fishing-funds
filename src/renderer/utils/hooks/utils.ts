@@ -118,6 +118,9 @@ export function useResizeEchart(scale = 1) {
       renderer: 'svg',
     });
     setChartInstance(instance);
+    return () => {
+      instance.dispose();
+    };
   }, []);
 
   useEffect(() => {

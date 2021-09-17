@@ -39,7 +39,6 @@ const StockWareHouse: React.FC<StockWareHouseProps> = ({ code, stockCodes }) => 
 
   const { run: runGetStockWareHouseFromEastmoney } = useRequest(() => Services.Fund.GetStockWareHouseFromEastmoney(code, stockCodes), {
     throwOnError: true,
-    cacheKey: `GetStockWareHouseFromEastmoney/${code}`,
     onSuccess: (result) => {
       chartInstance?.setOption({
         backgroundColor: 'transparent',

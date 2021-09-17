@@ -22,7 +22,6 @@ const SouthFlow: React.FC<SouthFlowProps> = () => {
   const { run: runGetFlowFromEastmoney } = useRequest(() => Services.Quotation.GetFlowFromEastmoney(fields1, code), {
     throwOnError: true,
     pollingInterval: 1000 * 60,
-    cacheKey: `GetFlowFromEastmoney/${fields1}/${code}`,
     onSuccess: (result) => {
       chartInstance?.setOption({
         title: {
