@@ -271,7 +271,7 @@ export async function FromFund123(code: string) {
     });
     const $ = cheerio.load(html);
     const script = $('script').eq(2).html();
-    const fixscript = script?.replace(/window\.context/g, 'var o');
+    const fixscript = script?.replace(/window\.context/g, 'const o');
     const context = eval(`(() => {
       ${fixscript}
       return o;
@@ -401,6 +401,7 @@ export async function FromFund123(code: string) {
       jzrq: `${now.year()}-${netValueDate}`,
       dwjz: netValue,
     };
+
     return result;
   } catch (error) {
     console.log(error);

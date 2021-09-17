@@ -42,8 +42,7 @@ export async function GetQuotationsFromEastmoney() {
         po: 1,
         pn: 1,
         pz: 100,
-        fields:
-          'f2,f3,f4,f8,f12,f14,f20,f128,f136,f104,f105,f140,f207,f208,f222',
+        fields: 'f2,f3,f4,f8,f12,f14,f20,f128,f136,f104,f105,f140,f207,f208,f222',
         _: new Date().getTime(),
       },
       responseType: 'json',
@@ -115,8 +114,7 @@ export async function GetQuotationDetailFromEastmoney(code: string) {
         fltt: 2,
         _: new Date().getTime(),
         secid: `90.${code}`,
-        fields:
-          'f57,f58,f107,f43,f169,f170,f171,f47,f48,f60,f46,f44,f45,f168,f113,f114,f444,f445,f446,f447',
+        fields: 'f57,f58,f107,f43,f169,f170,f171,f47,f48,f60,f46,f44,f45,f168,f113,f114,f444,f445,f446,f447',
       },
       responseType: 'json',
     });
@@ -225,8 +223,7 @@ export async function GetStocksFromEasymoney(code: string) {
         np: 1,
         invt: 2,
         fltt: 2,
-        fields:
-          'f12,f13,f14,f2,f3,f62,f184,f66,f69,f72,f75,f78,f81,f84,f87,f204,f205,f124',
+        fields: 'f12,f13,f14,f2,f3,f62,f184,f66,f69,f72,f75,f78,f81,f84,f87,f204,f205,f124',
         fs: `b:${code}`,
       },
       responseType: 'json',
@@ -434,10 +431,7 @@ export async function GetFundFlowFromEastmoney(code: string, type: string) {
   }
 }
 
-export async function GetFlowFromEastmoney(
-  fields1: string,
-  code: 'n2s' | 's2n'
-) {
+export async function GetFlowFromEastmoney(fields1: string, code: 'n2s' | 's2n') {
   try {
     const { body } = await got<{
       rc: 0;
@@ -482,10 +476,7 @@ export async function GetFlowFromEastmoney(
   }
 }
 
-export async function GetNorthDayFromEastmoney(
-  fields1: string,
-  fields2: string
-) {
+export async function GetNorthDayFromEastmoney(fields1: string, fields2: string) {
   try {
     const { body } = await got<{
       rc: 0;
@@ -510,24 +501,9 @@ export async function GetNorthDayFromEastmoney(
     });
 
     return {
-      hk2sh: body.data.hk2sh
-        .map((_) => _.split(','))
-        .map(([date, value]) => [
-          date,
-          NP.divide(Number(value), 10 ** 4).toFixed(2),
-        ]),
-      hk2sz: body.data.hk2sz
-        .map((_) => _.split(','))
-        .map(([date, value]) => [
-          date,
-          NP.divide(Number(value), 10 ** 4).toFixed(2),
-        ]),
-      s2n: body.data.s2n
-        .map((_) => _.split(','))
-        .map(([date, value]) => [
-          date,
-          NP.divide(Number(value), 10 ** 4).toFixed(2),
-        ]),
+      hk2sh: body.data.hk2sh.map((_) => _.split(',')).map(([date, value]) => [date, NP.divide(Number(value), 10 ** 4).toFixed(2)]),
+      hk2sz: body.data.hk2sz.map((_) => _.split(',')).map(([date, value]) => [date, NP.divide(Number(value), 10 ** 4).toFixed(2)]),
+      s2n: body.data.s2n.map((_) => _.split(',')).map(([date, value]) => [date, NP.divide(Number(value), 10 ** 4).toFixed(2)]),
     };
   } catch (error) {
     console.log(error);
@@ -538,10 +514,7 @@ export async function GetNorthDayFromEastmoney(
     };
   }
 }
-export async function GetSouthDayFromEastmoney(
-  fields1: string,
-  fields2: string
-) {
+export async function GetSouthDayFromEastmoney(fields1: string, fields2: string) {
   try {
     const { body } = await got<{
       rc: 0;
@@ -566,24 +539,9 @@ export async function GetSouthDayFromEastmoney(
     });
 
     return {
-      sh2hk: body.data.sh2hk
-        .map((_) => _.split(','))
-        .map(([date, value]) => [
-          date,
-          NP.divide(Number(value), 10 ** 4).toFixed(2),
-        ]),
-      sz2hk: body.data.sz2hk
-        .map((_) => _.split(','))
-        .map(([date, value]) => [
-          date,
-          NP.divide(Number(value), 10 ** 4).toFixed(2),
-        ]),
-      n2s: body.data.n2s
-        .map((_) => _.split(','))
-        .map(([date, value]) => [
-          date,
-          NP.divide(Number(value), 10 ** 4).toFixed(2),
-        ]),
+      sh2hk: body.data.sh2hk.map((_) => _.split(',')).map(([date, value]) => [date, NP.divide(Number(value), 10 ** 4).toFixed(2)]),
+      sz2hk: body.data.sz2hk.map((_) => _.split(',')).map(([date, value]) => [date, NP.divide(Number(value), 10 ** 4).toFixed(2)]),
+      n2s: body.data.n2s.map((_) => _.split(',')).map(([date, value]) => [date, NP.divide(Number(value), 10 ** 4).toFixed(2)]),
     };
   } catch (error) {
     console.log(error);

@@ -129,8 +129,9 @@ export async function GetFund(code: string) {
 export function CalcFund(fund: Fund.ResponseItem & Fund.FixData, walletCode: string) {
   const { codeMap } = GetFundConfig(walletCode);
   const gzrq = fund.gztime?.slice(5, 10);
+  const jzrq = fund.jzrq?.slice(5);
   const isFix = fund.fixDate && fund.fixDate === gzrq;
-  fund.dwjz = isFix && fund.jzrq === gzrq ? (Number(fund.fixDwjz) * (1 - Number(fund.fixZzl))).toFixed(4) : fund.dwjz;
+  fund.dwjz = isFix && jzrq === gzrq ? (Number(fund.fixDwjz) * (1 - Number(fund.fixZzl) / 100)).toFixed(4) : fund.dwjz;
   const cyfe = codeMap[fund.fundcode!]?.cyfe || 0;
   const cbj = codeMap[fund.fundcode!]?.cbj;
   const gsz = isFix ? fund.fixDwjz! : fund.gsz!;
