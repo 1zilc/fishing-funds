@@ -176,3 +176,8 @@ export enum CoinUnitType {
   Cny = 'cny',
   Btc = 'btc',
 }
+
+export enum TimestampType {
+  Local,
+  Network,
+}

@@ -101,6 +101,7 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
     autoFreshSetting,
     freshDelaySetting,
     autoCheckUpdateSetting,
+    timestampSetting,
   } = useSelector((state: StoreState) => state.setting.systemSetting);
   const updateInfo = useSelector((state: StoreState) => state.updater.updateInfo);
   const isUpdateAvaliable = !!updateInfo.version;
@@ -124,6 +125,7 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
   const [autoFresh, setAutoFresh] = useState(autoFreshSetting);
   const [freshDelay, setFreshDelay] = useState(freshDelaySetting);
   const [autoCheckUpdate, setAutoCheckUpdate] = useState(autoCheckUpdateSetting);
+  const [timestamp, setTimestamp] = useState(timestampSetting);
 
   function onSave() {
     dispatch(
@@ -142,6 +144,7 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
         autoFreshSetting: autoFresh,
         freshDelaySetting: freshDelay || defalutSystemSetting.freshDelaySetting,
         autoCheckUpdateSetting: autoCheckUpdate,
+        timestampSetting: timestamp,
       })
     );
     props.onEnter();
@@ -316,6 +319,20 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
             <section>
               <label>自动检查更新：</label>
               <Switch size="small" checked={autoCheckUpdate} onChange={setAutoCheckUpdate} />
+            </section>
+            <section>
+              <label>时间戳：</label>
+              <Radio.Group
+                optionType="button"
+                size="small"
+                buttonStyle="solid"
+                options={[
+                  { label: '本地', value: Enums.TimestampType.Local },
+                  { label: '网络', value: Enums.TimestampType.Network },
+                ]}
+                onChange={(e) => setTimestamp(e.target.value)}
+                value={timestamp}
+              />
             </section>
           </div>
         </StandCard>

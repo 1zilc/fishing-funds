@@ -22,6 +22,7 @@ export const defalutSystemSetting: System.Setting = {
   autoFreshSetting: true,
   freshDelaySetting: 1,
   autoCheckUpdateSetting: true,
+  timestampSetting: Enums.TimestampType.Network,
 };
 
 export function GetSystemSetting() {
