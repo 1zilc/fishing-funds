@@ -501,9 +501,9 @@ export async function GetNorthDayFromEastmoney(fields1: string, fields2: string)
     });
 
     return {
-      hk2sh: body.data.hk2sh.map((_) => _.split(',')).map(([date, value]) => [date, NP.divide(Number(value), 10 ** 4).toFixed(2)]),
-      hk2sz: body.data.hk2sz.map((_) => _.split(',')).map(([date, value]) => [date, NP.divide(Number(value), 10 ** 4).toFixed(2)]),
-      s2n: body.data.s2n.map((_) => _.split(',')).map(([date, value]) => [date, NP.divide(Number(value), 10 ** 4).toFixed(2)]),
+      hk2sh: body.data.hk2sh.map((_) => _.split(',')).map(([date, value]) => [date, NP.divide(value, 10 ** 4).toFixed(2)]),
+      hk2sz: body.data.hk2sz.map((_) => _.split(',')).map(([date, value]) => [date, NP.divide(value, 10 ** 4).toFixed(2)]),
+      s2n: body.data.s2n.map((_) => _.split(',')).map(([date, value]) => [date, NP.divide(value, 10 ** 4).toFixed(2)]),
     };
   } catch (error) {
     console.log(error);
@@ -539,9 +539,9 @@ export async function GetSouthDayFromEastmoney(fields1: string, fields2: string)
     });
 
     return {
-      sh2hk: body.data.sh2hk.map((_) => _.split(',')).map(([date, value]) => [date, NP.divide(Number(value), 10 ** 4).toFixed(2)]),
-      sz2hk: body.data.sz2hk.map((_) => _.split(',')).map(([date, value]) => [date, NP.divide(Number(value), 10 ** 4).toFixed(2)]),
-      n2s: body.data.n2s.map((_) => _.split(',')).map(([date, value]) => [date, NP.divide(Number(value), 10 ** 4).toFixed(2)]),
+      sh2hk: body.data.sh2hk.map((_) => _.split(',')).map(([date, value]) => [date, NP.divide(value, 10 ** 4).toFixed(2)]),
+      sz2hk: body.data.sz2hk.map((_) => _.split(',')).map(([date, value]) => [date, NP.divide(value, 10 ** 4).toFixed(2)]),
+      n2s: body.data.n2s.map((_) => _.split(',')).map(([date, value]) => [date, NP.divide(value, 10 ** 4).toFixed(2)]),
     };
   } catch (error) {
     console.log(error);

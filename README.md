@@ -46,7 +46,7 @@
 > 强烈建议使用天天基金的数据源，最快同时估值也最准确
 
 - [天天基金](https://fund.eastmoney.com/) ★★★★★ (推荐)
-- [蚂蚁基金](https://www.fund123.cn/) ★★★★★
+- [蚂蚁基金](https://www.fund123.cn/) ★★★★☆
 - [腾讯证券](https://stockapp.finance.qq.com/mstats/) ★★★★☆
 - [新浪基金](https://finance.sina.com.cn/fund/) ★★★★☆
 - [基金速查网](https://www.dayfund.cn/) ★★★☆☆

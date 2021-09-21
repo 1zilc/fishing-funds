@@ -282,7 +282,7 @@ export async function FromFund123(code: string) {
         productId,
         fundCode,
         fundBrief: { fundNameAbbr },
-        titleInfo: { netValue, netValueDate },
+        titleInfo: { netValue, netValueDate, dayOfGrowth },
       },
     }: {
       success: true;
@@ -293,7 +293,7 @@ export async function FromFund123(code: string) {
         fundType: '混合型';
         titleInfo: {
           fundLimit: '0--';
-          netValue: '3.6580';
+          netValue: string; // '3.6580';
           netValueDate: '09-13';
           profitSevenDays: '--';
           profitTenThousand: '--';
@@ -392,6 +392,12 @@ export async function FromFund123(code: string) {
     });
     const { body } = res;
     const last = body.list.pop()!;
+    const gzData = dayjs(last.time).format('MM-DD');
+    let dwjz = netValue;
+
+    if (netValueDate === gzData) {
+      dwjz = String(NP.divide(netValue, NP.divide(NP.plus(100, dayOfGrowth), 100)));
+    }
     const result = {
       name: fundNameAbbr,
       fundcode: fundCode,
@@ -399,7 +405,7 @@ export async function FromFund123(code: string) {
       gsz: last.forecastNetValue,
       gszzl: (Number(last.forecastGrowth) * 100).toFixed(2),
       jzrq: `${now.year()}-${netValueDate}`,
-      dwjz: netValue,
+      dwjz: dwjz,
     };
 
     return result;

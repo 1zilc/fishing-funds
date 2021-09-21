@@ -102,38 +102,11 @@ export async function GetFund(code: string) {
   }
 }
 
-// // 蚂蚁
-// collapse: true
-// dwjz: "1.3927"
-// fixDate: "09-14"
-// fixDwjz: "1.3927"
-// fixZzl: "0.32"
-// fundcode: "011103"
-// gsz: "1.39290000"
-// gszzl: "0.34"
-// gztime: "2021-09-14 15:00"
-// jzrq: "2021-09-14"
-// name: "天弘中证光伏产业指数C"
-
-// // 天天
-// collapse: true
-// dwjz: "1.3882"
-// fixDate: "09-14"
-// fixDwjz: "1.3927"
-// fixZzl: "0.32"
-// fundcode: "011103"
-// gsz: "1.3923"
-// gszzl: "0.29"
-// gztime: "2021-09-14 15:00"
-// jzrq: "2021-09-13"
-// name: "天弘中证光伏产业指数C"
-
 export function CalcFund(fund: Fund.ResponseItem & Fund.FixData, walletCode: string) {
   const { codeMap } = GetFundConfig(walletCode);
   const gzrq = fund.gztime?.slice(5, 10);
   const jzrq = fund.jzrq?.slice(5);
   const isFix = fund.fixDate && fund.fixDate === gzrq;
-  fund.dwjz = isFix && jzrq === gzrq ? (Number(fund.fixDwjz) * (1 - Number(fund.fixZzl) / 100)).toFixed(4) : fund.dwjz;
   const cyfe = codeMap[fund.fundcode!]?.cyfe || 0;
   const cbj = codeMap[fund.fundcode!]?.cbj;
   const gsz = isFix ? fund.fixDwjz! : fund.gsz!;
@@ -166,7 +139,7 @@ export function CalcFund(fund: Fund.ResponseItem & Fund.FixData, walletCode: str
     gsz, // 估算值（最新）
     dwjz, // 单位净值（上一次）
     gszzl: isFix ? fund.fixZzl : fund.gszzl, // 估算收益率
-    jzrq: isFix ? fund.fixDate : fund.jzrq?.slice(5), // 净值日期
+    jzrq: isFix ? fund.fixDate : jzrq, // 净值日期
   };
 }
 
