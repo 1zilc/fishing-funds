@@ -1,5 +1,3 @@
-/* eslint-disable no-eval */
-
 import iconv from 'iconv-lite';
 import NP from 'number-precision';
 import cheerio from 'cheerio';
