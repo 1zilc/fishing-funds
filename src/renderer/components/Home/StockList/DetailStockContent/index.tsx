@@ -30,7 +30,6 @@ const DetailStockContent: React.FC<DetailStockContentProps> = (props) => {
     pollingInterval: 1000 * 60,
     defaultParams: [secid],
     onSuccess: setStock,
-    cacheKey: `GetDetailFromEastmoney/${secid}`,
   });
 
   return (

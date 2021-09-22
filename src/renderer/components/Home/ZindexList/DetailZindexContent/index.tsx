@@ -26,7 +26,6 @@ const DetailZindexContent: React.FC<DetailFundContentProps> = (props) => {
     pollingInterval: 1000 * 60,
     defaultParams: [code],
     onSuccess: setZindex,
-    cacheKey: `FromEastmoney/${code}`,
   });
 
   return (

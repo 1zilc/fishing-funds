@@ -28,99 +28,90 @@ const Performance: React.FC<PerformanceProps> = ({ code }) => {
   const [performanceType, setPerformanceType] = useState(performanceTypeList[2]);
   const { varibleColors, darkMode } = useHomeContext();
   const [ZDHC, setZDHC] = useState('');
-  const { run: runGetFundPerformanceFromEastmoney } = useRequest(Services.Fund.GetFundPerformanceFromEastmoney, {
-    manual: true,
-    throwOnError: true,
-    cacheKey: `GetFundPerformanceFromEastmoney/${code}/${performanceType.code}`,
-    onSuccess: (result) => {
-      chartInstance?.setOption({
-        title: {
-          text: '',
-        },
-        tooltip: {
-          trigger: 'axis',
-          position: 'inside',
-        },
-        legend: {
-          data: result?.map(({ name }) => name) || [],
-          textStyle: {
-            color: varibleColors['--main-text-color'],
-            fontSize: 10,
+  const { run: runGetFundPerformanceFromEastmoney } = useRequest(
+    () => Services.Fund.GetFundPerformanceFromEastmoney(code, performanceType.code),
+    {
+      throwOnError: true,
+      onSuccess: (result) => {
+        chartInstance?.setOption({
+          title: {
+            text: '',
           },
-        },
-        grid: {
-          left: 0,
-          right: 0,
-          bottom: 0,
-          containLabel: true,
-        },
-        xAxis: {
-          type: 'time',
-          boundaryGap: false,
-          axisLabel: {
-            fontSize: 10,
+          tooltip: {
+            trigger: 'axis',
+            position: 'inside',
           },
-        },
-        yAxis: {
-          type: 'value',
-          axisLabel: {
-            formatter: `{value}%`,
-            fontSize: 10,
-          },
-        },
-        dataZoom: [
-          {
-            type: 'inside',
-            minValueSpan: 3600 * 24 * 1000 * 7,
-          },
-        ],
-        series:
-          result?.map((_, i) => ({
-            ..._,
-            type: 'line',
-            showSymbol: false,
-            symbol: 'none',
-            lineStyle: {
-              width: 1,
+          legend: {
+            data: result?.map(({ name }) => name) || [],
+            textStyle: {
+              color: varibleColors['--main-text-color'],
+              fontSize: 10,
             },
-            markPoint: i === 0 && {
-              symbol: 'pin',
-              symbolSize: 30,
-              label: {
-                formatter: '{c}%',
+          },
+          grid: {
+            left: 0,
+            right: 0,
+            bottom: 0,
+            containLabel: true,
+          },
+          xAxis: {
+            type: 'time',
+            boundaryGap: false,
+            axisLabel: {
+              fontSize: 10,
+            },
+          },
+          yAxis: {
+            type: 'value',
+            axisLabel: {
+              formatter: `{value}%`,
+              fontSize: 10,
+            },
+          },
+          dataZoom: [
+            {
+              type: 'inside',
+              minValueSpan: 3600 * 24 * 1000 * 7,
+            },
+          ],
+          series:
+            result?.map((_, i) => ({
+              ..._,
+              type: 'line',
+              showSymbol: false,
+              symbol: 'none',
+              lineStyle: {
+                width: 1,
               },
-              data: [
-                { type: 'max', label: { fontSize: 10 } },
-                { type: 'min', label: { fontSize: 10 } },
-              ],
-            },
-          })) || [],
-      });
-      try {
-        const values = result?.[0]?.data.map(([time, rate]: any) => 1 + (1 * rate) / 100);
-        setZDHC(Utils.CalcZDHC(values));
-      } catch (error) {
-        setZDHC('--');
-        console.log('最大回撤计算出错');
-      }
-    },
-  });
-
-  useRenderEcharts(
-    () => {
-      runGetFundPerformanceFromEastmoney(code, performanceType.code);
-    },
-    chartInstance,
-    [darkMode, code, performanceType.code]
+              markPoint: i === 0 && {
+                symbol: 'pin',
+                symbolSize: 30,
+                label: {
+                  formatter: '{c}%',
+                },
+                data: [
+                  { type: 'max', label: { fontSize: 10 } },
+                  { type: 'min', label: { fontSize: 10 } },
+                ],
+              },
+            })) || [],
+        });
+        try {
+          const values = result?.[0]?.data.map(([time, rate]: any) => 1 + (1 * rate) / 100);
+          setZDHC(Utils.CalcZDHC(values));
+        } catch (error) {
+          setZDHC('--');
+          console.log('最大回撤计算出错');
+        }
+      },
+      refreshDeps: [darkMode, code, performanceType.code],
+      ready: !!chartInstance,
+    }
   );
-
-  const freshChart = useCallback(() => {
-    runGetFundPerformanceFromEastmoney(code, performanceType.code);
-  }, [code, performanceType.code]);
 
   return (
     <ChartCard
-      onFresh={freshChart}
+      onFresh={runGetFundPerformanceFromEastmoney}
       TitleBar={
         <div className={styles.zdhc}>
           {performanceType.name}最大回撤：<span>{ZDHC}%</span>

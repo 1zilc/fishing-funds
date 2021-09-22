@@ -25,10 +25,8 @@ const Trend: React.FC<PerformanceProps> = ({ code, zs = 0 }) => {
   const { ref: chartRef, chartInstance } = useResizeEchart(CONST.DEFAULT.ECHARTS_SCALE);
   const [trend, setTrendType] = useState(trendTypeList[0]);
   const { darkMode, varibleColors } = useHomeContext();
-  const { run: runGetTrendFromEastmoney } = useRequest(Services.Zindex.GetTrendFromEastmoney, {
-    manual: true,
+  const { run: runGetTrendFromEastmoney } = useRequest(() => Services.Zindex.GetTrendFromEastmoney(code, trend.code), {
     throwOnError: true,
-    cacheKey: `GetTrendFromEastmoney/${code}/${trend.code}`,
     onSuccess: (result) => {
       chartInstance?.setOption({
         title: {
@@ -105,22 +103,12 @@ const Trend: React.FC<PerformanceProps> = ({ code, zs = 0 }) => {
         ],
       });
     },
+    refreshDeps: [darkMode, code, trend.code, zs],
+    ready: !!chartInstance,
   });
 
-  useRenderEcharts(
-    () => {
-      runGetTrendFromEastmoney(code, trend.code);
-    },
-    chartInstance,
-    [darkMode, code, trend.code, zs]
-  );
-
-  const freshChart = useCallback(() => {
-    runGetTrendFromEastmoney(code, trend.code);
-  }, [code, trend.code]);
-
   return (
-    <ChartCard onFresh={freshChart}>
+    <ChartCard onFresh={runGetTrendFromEastmoney}>
       <div className={styles.content}>
         <div ref={chartRef} style={{ width: '100%' }} />
         <TypeSelection types={trendTypeList} activeType={trend.type} onSelected={setTrendType} flex />

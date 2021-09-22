@@ -19,11 +19,9 @@ const NorthFlow: React.FC<NorthFlowProps> = () => {
   const { ref: chartRef, chartInstance } = useResizeEchart(CONST.DEFAULT.ECHARTS_SCALE);
 
   const { varibleColors, darkMode } = useHomeContext();
-  const { run: runGetFlowFromEastmoney } = useRequest(Services.Quotation.GetFlowFromEastmoney, {
-    manual: true,
+  const { run: runGetFlowFromEastmoney } = useRequest(() => Services.Quotation.GetFlowFromEastmoney(fields1, code), {
     throwOnError: true,
     pollingInterval: 1000 * 60,
-    cacheKey: `GetFlowFromEastmoney/${fields1}/${code}`,
     onSuccess: (result) => {
       chartInstance?.setOption({
         title: {
@@ -96,22 +94,12 @@ const NorthFlow: React.FC<NorthFlowProps> = () => {
         ],
       });
     },
+    refreshDeps: [darkMode, code],
+    ready: !!chartInstance,
   });
 
-  useRenderEcharts(
-    () => {
-      runGetFlowFromEastmoney(fields1, code);
-    },
-    chartInstance,
-    [darkMode]
-  );
-
-  const freshChart = useCallback(() => {
-    runGetFlowFromEastmoney(fields1, code);
-  }, [fields1, code]);
-
   return (
-    <ChartCard onFresh={freshChart}>
+    <ChartCard onFresh={runGetFlowFromEastmoney}>
       <div className={styles.content}>
         <div ref={chartRef} style={{ width: '100%' }} />
       </div>

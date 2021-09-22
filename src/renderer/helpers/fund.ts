@@ -71,6 +71,8 @@ export async function GetFunds(config: Fund.SettingItem[]) {
       return Adapter.ChokeGroupAdapter<Fund.ResponseItem>(collectors, 3, 300);
     case Enums.FundApiType.Etf:
       return Adapter.ChokeGroupAdapter<Fund.ResponseItem>(collectors, 3, 300);
+    case Enums.FundApiType.Ant:
+      return Adapter.ChokeGroupAdapter<Fund.ResponseItem>(collectors, 4, 400);
     case Enums.FundApiType.Eastmoney:
     default:
       return Adapter.ChokeGroupAdapter<Fund.ResponseItem>(collectors, 5, 500);
@@ -91,6 +93,8 @@ export async function GetFund(code: string) {
       return Services.Fund.FromHowbuy(code);
     case Enums.FundApiType.Etf:
       return Services.Fund.FromEtf(code);
+    case Enums.FundApiType.Ant:
+      return Services.Fund.FromFund123(code);
     case Enums.FundApiType.Eastmoney:
     default:
       // 默认请求天天基金
@@ -100,7 +104,9 @@ export async function GetFund(code: string) {
 
 export function CalcFund(fund: Fund.ResponseItem & Fund.FixData, walletCode: string) {
   const { codeMap } = GetFundConfig(walletCode);
-  const isFix = fund.fixDate && fund.fixDate === fund.gztime?.slice(5, 10);
+  const gzrq = fund.gztime?.slice(5, 10);
+  const jzrq = fund.jzrq?.slice(5);
+  const isFix = fund.fixDate && fund.fixDate === gzrq;
   const cyfe = codeMap[fund.fundcode!]?.cyfe || 0;
   const cbj = codeMap[fund.fundcode!]?.cbj;
   const gsz = isFix ? fund.fixDwjz! : fund.gsz!;
@@ -133,7 +139,7 @@ export function CalcFund(fund: Fund.ResponseItem & Fund.FixData, walletCode: str
     gsz, // 估算值（最新）
     dwjz, // 单位净值（上一次）
     gszzl: isFix ? fund.fixZzl : fund.gszzl, // 估算收益率
-    jzrq: isFix ? fund.fixDate : fund.jzrq?.slice(5), // 净值日期
+    jzrq: isFix ? fund.fixDate : jzrq, // 净值日期
   };
 }
 

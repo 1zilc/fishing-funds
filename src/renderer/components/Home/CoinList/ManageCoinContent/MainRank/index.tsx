@@ -67,7 +67,6 @@ const MainRank: React.FC<PropsWithChildren<MainRankProps>> = () => {
   ];
 
   const { loading } = useRequest(Services.Coin.FromCoinCap, {
-    cacheKey: `FromCoinCap`,
     defaultParams: ['', ''],
     throwOnError: true,
     onSuccess: setData,

@@ -15,10 +15,8 @@ export interface RealTimeFundFlowProps {
 const RealTimeFundFlow: React.FC<RealTimeFundFlowProps> = ({ code = '' }) => {
   const { ref: chartRef, chartInstance } = useResizeEchart(CONST.DEFAULT.ECHARTS_SCALE);
   const { varibleColors, darkMode } = useHomeContext();
-  const { run: runGetRealTimeFundFlowFromEasymoney } = useRequest(Services.Quotation.GetRealTimeFundFlowFromEasymoney, {
-    manual: true,
+  const { run: runGetRealTimeFundFlowFromEasymoney } = useRequest(() => Services.Quotation.GetRealTimeFundFlowFromEasymoney(code), {
     pollingInterval: 1000 * 60,
-    cacheKey: `GetRealTimeFundFlowFromEasymoney/${code}`,
     throwOnError: true,
     onSuccess: (result) => {
       const seriesStyle = {
@@ -93,22 +91,12 @@ const RealTimeFundFlow: React.FC<RealTimeFundFlowProps> = ({ code = '' }) => {
         ],
       });
     },
+    refreshDeps: [darkMode, code],
+    ready: !!chartInstance,
   });
 
-  useRenderEcharts(
-    () => {
-      runGetRealTimeFundFlowFromEasymoney(code);
-    },
-    chartInstance,
-    [darkMode, code]
-  );
-
-  const freshChart = useCallback(() => {
-    runGetRealTimeFundFlowFromEasymoney(code);
-  }, [code]);
-
   return (
-    <ChartCard onFresh={freshChart}>
+    <ChartCard onFresh={runGetRealTimeFundFlowFromEasymoney}>
       <div className={styles.content}>
         <div ref={chartRef} style={{ width: '100%' }} />
       </div>

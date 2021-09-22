@@ -29,11 +29,9 @@ const Score: React.FC<ScoreProps> = ({ gssyl = 0 }) => {
   const eyeOpen = eyeStatus === Enums.EyeStatus.Open;
   const [HS, setHS] = useState('');
 
-  const { run: runGetZindexFromEastmoney } = useRequest(Services.Zindex.FromEastmoney, {
+  const { run: runGetZindexFromEastmoney } = useRequest(() => Services.Zindex.FromEastmoney(indexCode), {
     pollingInterval: autoFreshSetting ? 1000 * 60 * freshDelaySetting : undefined,
-    manual: true,
     throwOnError: true,
-    cacheKey: `FromEastmoney/${indexCode}`,
     onSuccess: (result) => {
       if (!result) {
         return;
@@ -127,19 +125,13 @@ const Score: React.FC<ScoreProps> = ({ gssyl = 0 }) => {
       });
       setHS(String(indexNumber));
     },
+    refreshDeps: [darkMode, gssyl],
   });
-
-  useRenderEcharts(
-    () => {
-      runGetZindexFromEastmoney(indexCode);
-    },
-    chartInstance,
-    [darkMode, gssyl]
-  );
 
   return (
     <ChartCard
       auto
+      onFresh={runGetZindexFromEastmoney}
       TitleBar={
         <div className={styles.row}>
           评分指标-沪深300(今)：

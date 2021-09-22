@@ -26,11 +26,9 @@ const NorthDay: React.FC<NorthDayProps> = () => {
   const [dayType, setDayType] = useState(dayTypeList[0]);
 
   const { varibleColors, darkMode } = useHomeContext();
-  const { run: runGetNorthDayFromEastmoney } = useRequest(Services.Quotation.GetNorthDayFromEastmoney, {
-    manual: true,
+  const { run: runGetNorthDayFromEastmoney } = useRequest(() => Services.Quotation.GetNorthDayFromEastmoney(fields1, dayType.code), {
     throwOnError: true,
     pollingInterval: 1000 * 60,
-    cacheKey: `GetNorthDayFromEastmoney/${fields1}/${dayType.code}`,
     onSuccess: (result) => {
       chartInstance?.setOption({
         title: {
@@ -107,22 +105,12 @@ const NorthDay: React.FC<NorthDayProps> = () => {
         ],
       });
     },
+    refreshDeps: [darkMode, dayType.code],
+    ready: !!chartInstance,
   });
 
-  useRenderEcharts(
-    () => {
-      runGetNorthDayFromEastmoney(fields1, dayType.code);
-    },
-    chartInstance,
-    [darkMode, dayType.code]
-  );
-
-  const freshChart = useCallback(() => {
-    runGetNorthDayFromEastmoney(fields1, dayType.code);
-  }, [fields1, dayType.code]);
-
   return (
-    <ChartCard onFresh={freshChart}>
+    <ChartCard onFresh={runGetNorthDayFromEastmoney}>
       <div className={styles.content}>
         <div ref={chartRef} style={{ width: '100%' }} />
         <TypeSelection types={dayTypeList} activeType={dayType.type} onSelected={setDayType} />

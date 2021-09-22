@@ -83,9 +83,7 @@ const Rank: React.FC<PropsWithChildren<RankProps>> = () => {
     },
   ];
 
-  const { run: runGetRankDataFromEasemoney, loading } = useRequest(Services.Fund.GetRankDataFromEasemoney, {
-    manual: true,
-    cacheKey: `GetRankDataFromEasemoney/${fundType.type}`,
+  const { loading } = useRequest(() => Services.Fund.GetRankDataFromEasemoney(fundType.type), {
     throwOnError: true,
     onSuccess: (result) => {
       setData(
@@ -101,12 +99,8 @@ const Rank: React.FC<PropsWithChildren<RankProps>> = () => {
         })
       );
     },
-    refreshDeps: [fundType],
+    refreshDeps: [fundType.type],
   });
-
-  useEffect(() => {
-    runGetRankDataFromEasemoney(fundType.type);
-  }, [fundType]);
 
   return (
     <div className={styles.content}>

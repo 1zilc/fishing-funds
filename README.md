@@ -16,7 +16,7 @@
 <a href="https://qm.qq.com/cgi-bin/qm/qr?k=Su4GnbsicHvsPrbLMwNu557LyZQO19KZ&jump_from=webapi"><img src="https://img.shields.io/badge/QQ%E7%BE%A4-732268738-red" alt="QQ群" /></a>
 ![GitHub](https://img.shields.io/github/license/1zilc/fishing-funds)
 
-> 基金、大盘、股票、虚拟货币状态栏显示小应用,支持 MacOS、Windows、Linux 客户端,数据源来自天天基金等
+> 基金、大盘、股票、虚拟货币状态栏显示小应用,支持 MacOS、Windows、Linux 客户端,数据源来自天天基金,蚂蚁基金,腾讯证券,新浪基金等
 
 ## 软件截图
 
@@ -43,13 +43,13 @@
 ## 数据源
 
 > 注意 ⚠️：不同的数据源可能会有反爬机制，刷新时的请求速度会有所差异  
-> 强烈建议使用天天基金的数据源，最快同时估值也最准确  
-> 如果有好的数据源，欢迎[issues](https://github.com/1zilc/fishing-funds/issues)补充
+> 强烈建议使用天天基金的数据源，最快同时估值也最准确
 
 - [天天基金](https://fund.eastmoney.com/) ★★★★★ (推荐)
+- [蚂蚁基金](https://www.fund123.cn/) ★★★★☆
 - [腾讯证券](https://stockapp.finance.qq.com/mstats/) ★★★★☆
-- [基金速查网](https://www.dayfund.cn/) ★★★☆☆
 - [新浪基金](https://finance.sina.com.cn/fund/) ★★★★☆
+- [基金速查网](https://www.dayfund.cn/) ★★★☆☆
 - [好买基金](https://www.howbuy.com/fund/) ★★★☆☆
 - [易天富](http://www.etf88.com/) ★★★☆☆
 
@@ -104,7 +104,7 @@ interface FundSetting {
 
 ## 支持作者
 
-Fishing Funds 是一款个人开发小软件，开源后深受大家的喜爱，接受了大量宝贵的改进建议，感谢大家的反馈，作者利用空闲时间开发不易，您的支持可以给本项目的开发和完善提供巨大的动力，感谢对本软件的喜爱和认可:)
+作者利用空闲时间开发不易，您的支持可以给本项目的开发和完善提供巨大的动力，感谢对本软件的喜爱和认可:)
 
 | 微信                                                                                                               | 支付宝                                                                                                             |
 | ------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------ |

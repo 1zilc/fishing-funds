@@ -3,6 +3,7 @@ import { renderToString } from 'react-dom/server';
 import { useRequest } from 'ahooks';
 
 import { useHomeContext } from '@/components/Home';
+import ChartCard from '@/components/Card/ChartCard';
 import CustomDrawer from '@/components/CustomDrawer';
 import DetailStockContent from '@/components/Home/StockList/DetailStockContent';
 import { useResizeEchart, useRenderEcharts, useDrawer } from '@/utils/hooks';
@@ -36,10 +37,8 @@ const StockWareHouse: React.FC<StockWareHouseProps> = ({ code, stockCodes }) => 
   const { varibleColors, darkMode } = useHomeContext();
   const { data: stockSecid, show: showDetailStockDrawer, set: setDetailStockDrawer, close: closeDetailStockDrawer } = useDrawer('');
 
-  const { run: runGetStockWareHouseFromEastmoney } = useRequest(Services.Fund.GetStockWareHouseFromEastmoney, {
-    manual: true,
+  const { run: runGetStockWareHouseFromEastmoney } = useRequest(() => Services.Fund.GetStockWareHouseFromEastmoney(code, stockCodes), {
     throwOnError: true,
-    cacheKey: `GetStockWareHouseFromEastmoney/${code}`,
     onSuccess: (result) => {
       chartInstance?.setOption({
         backgroundColor: 'transparent',
@@ -96,12 +95,6 @@ const StockWareHouse: React.FC<StockWareHouseProps> = ({ code, stockCodes }) => 
           },
         ],
       });
-    },
-  });
-
-  useRenderEcharts(
-    () => {
-      runGetStockWareHouseFromEastmoney(code, stockCodes);
       chartInstance?.off('click');
       chartInstance?.on('click', (params: any) => {
         const { market, code } = params.data.item;
@@ -109,17 +102,19 @@ const StockWareHouse: React.FC<StockWareHouseProps> = ({ code, stockCodes }) => 
         setDetailStockDrawer(secid);
       });
     },
-    chartInstance,
-    [darkMode, code, stockCodes]
-  );
+    refreshDeps: [darkMode, code, stockCodes],
+    ready: !!chartInstance,
+  });
 
   return (
-    <div className={styles.content}>
-      <div ref={chartRef} style={{ width: '100%' }} />
-      <CustomDrawer show={showDetailStockDrawer}>
-        <DetailStockContent onEnter={closeDetailStockDrawer} onClose={closeDetailStockDrawer} secid={stockSecid} />
-      </CustomDrawer>
-    </div>
+    <ChartCard onFresh={runGetStockWareHouseFromEastmoney}>
+      <div className={styles.content}>
+        <div ref={chartRef} style={{ width: '100%' }} />
+        <CustomDrawer show={showDetailStockDrawer}>
+          <DetailStockContent onEnter={closeDetailStockDrawer} onClose={closeDetailStockDrawer} secid={stockSecid} />
+        </CustomDrawer>
+      </div>
+    </ChartCard>
   );
 };
 

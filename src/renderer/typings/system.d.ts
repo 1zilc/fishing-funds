@@ -18,5 +18,6 @@ declare namespace System {
     autoFreshSetting: boolean; // 自动刷新
     freshDelaySetting: number; // 刷新时间间隔
     autoCheckUpdateSetting: boolean; // 自动检查更新
+    timestampSetting: number; // 时间戳
   }
 }

@@ -8,6 +8,7 @@ import { ReactComponent as RefreshIcon } from '@/assets/icons/refresh.svg';
 import { ReactComponent as SettingIcon } from '@/assets/icons/setting.svg';
 import { ReactComponent as WalletIcon } from '@/assets/icons/wallet.svg';
 import { ReactComponent as ChartBoxIcon } from '@/assets/icons/chart-box.svg';
+import { ReactComponent as NewsIcon } from '@/assets/icons/news.svg';
 import CustomDrawer from '@/components/CustomDrawer';
 import ManageFundContent from '@/components/Home/FundList/ManageFundContent';
 import ManageWalletContent from '@/components/Wallet/ManageWalletContent';
@@ -17,6 +18,7 @@ import SettingContent from '@/components/SettingContent';
 import FundStatisticsContent from '@/components/Home/FundList/FundStatisticsContent';
 import ManageZindexContent from '@/components/Home/ZindexList/ManageZindexContent';
 import FundFlowContent from '@/components/Home/QuotationList/FundFlowContent';
+import NewsContent from '@/components/Home/NewsList/NewsContent';
 import { StoreState } from '@/reducers/types';
 import { useScrollToTop, useFreshFunds } from '@/utils/hooks';
 import * as Enums from '@/utils/enums';
@@ -61,6 +63,7 @@ const ToolBar: React.FC<ToolBarProps> = () => {
   ] = useBoolean(false);
   const [showFundFlowDrawer, { setTrue: openFundFlowDrawer, setFalse: closeFundFlowDrawer, toggle: ToggleFundFlowDrawer }] =
     useBoolean(false);
+  const [showNewsDrawer, { setTrue: openNewsDrawer, setFalse: closeNewsDrawer, toggle: ToggleNewsDrawer }] = useBoolean(false);
 
   return (
     <>
@@ -70,6 +73,7 @@ const ToolBar: React.FC<ToolBarProps> = () => {
         {tabsActiveKey === Enums.TabKeyType.Funds && <MenuAddIcon style={{ ...iconSize }} onClick={openManageFundDrawer} />}
         {tabsActiveKey === Enums.TabKeyType.Funds && <WalletIcon style={{ ...iconSize }} onClick={openManageWalletDrawer} />}
         {tabsActiveKey === Enums.TabKeyType.Zindex && <MenuAddIcon style={{ ...iconSize }} onClick={openManageZindexDrawer} />}
+        {tabsActiveKey === Enums.TabKeyType.Zindex && <NewsIcon style={{ ...iconSize }} onClick={openNewsDrawer} />}
         {tabsActiveKey === Enums.TabKeyType.Quotation && <ChartBoxIcon style={{ ...iconSize }} onClick={openFundFlowDrawer} />}
         {tabsActiveKey === Enums.TabKeyType.Stock && <MenuAddIcon style={{ ...iconSize }} onClick={openManageStockDrawer} />}
         {tabsActiveKey === Enums.TabKeyType.Coin && <MenuAddIcon style={{ ...iconSize }} onClick={openManageCoinDrawer} />}
@@ -79,6 +83,7 @@ const ToolBar: React.FC<ToolBarProps> = () => {
         {tabsActiveKey === Enums.TabKeyType.Stock && <RefreshIcon style={{ ...iconSize }} onClick={freshStocks} />}
         {tabsActiveKey === Enums.TabKeyType.Coin && <RefreshIcon style={{ ...iconSize }} onClick={freshCoins} />}
         {tabsActiveKey === Enums.TabKeyType.Funds && <ChartBoxIcon style={{ ...iconSize }} onClick={openFundStatisticsDrawer} />}
+        {tabsActiveKey === Enums.TabKeyType.Zindex && <ChartBoxIcon style={{ ...iconSize }} onClick={openFundFlowDrawer} />}{' '}
         <Badge dot={!!updateInfo.version}>
           <SettingIcon style={{ ...iconSize }} onClick={openSettingDrawer} />
         </Badge>
@@ -145,6 +150,9 @@ const ToolBar: React.FC<ToolBarProps> = () => {
       </CustomDrawer>
       <CustomDrawer show={showFundsStatisticsDrawer}>
         <FundStatisticsContent onClose={closeFundStatisticsDrawer} onEnter={closeFundStatisticsDrawer} />
+      </CustomDrawer>
+      <CustomDrawer show={showNewsDrawer}>
+        <NewsContent onClose={closeNewsDrawer} onEnter={closeNewsDrawer} />
       </CustomDrawer>
     </>
   );

@@ -26,11 +26,9 @@ const SouthDay: React.FC<SouthDayProps> = () => {
   const [dayType, setDayType] = useState(dayTypeList[0]);
 
   const { varibleColors, darkMode } = useHomeContext();
-  const { run: runGetSouthDayFromEastmoney } = useRequest(Services.Quotation.GetSouthDayFromEastmoney, {
-    manual: true,
+  const { run: runGetSouthDayFromEastmoney } = useRequest(() => Services.Quotation.GetSouthDayFromEastmoney(fields1, dayType.code), {
     throwOnError: true,
     pollingInterval: 1000 * 60,
-    cacheKey: `GetSouthDayFromEastmoney/${fields1}/${dayType.code}`,
     onSuccess: (result) => {
       chartInstance?.setOption({
         title: {
@@ -107,22 +105,12 @@ const SouthDay: React.FC<SouthDayProps> = () => {
         ],
       });
     },
+    refreshDeps: [darkMode, dayType.code],
+    ready: !!chartInstance,
   });
 
-  useRenderEcharts(
-    () => {
-      runGetSouthDayFromEastmoney(fields1, dayType.code);
-    },
-    chartInstance,
-    [darkMode, dayType.code]
-  );
-
-  const freshChart = useCallback(() => {
-    runGetSouthDayFromEastmoney(fields1, dayType.code);
-  }, [fields1, dayType.code]);
-
   return (
-    <ChartCard onFresh={freshChart}>
+    <ChartCard onFresh={runGetSouthDayFromEastmoney}>
       <div className={styles.content}>
         <div ref={chartRef} style={{ width: '100%' }} />
         <TypeSelection types={dayTypeList} activeType={dayType.type} onSelected={setDayType} />

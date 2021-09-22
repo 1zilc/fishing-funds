@@ -1,5 +1,5 @@
 import NP from 'number-precision';
-import dayjs, { Dayjs } from 'dayjs';
+import dayjs from 'dayjs';
 
 import { defaultWallet } from '@/helpers/wallet';
 import * as Enums from '@/utils/enums';
