@@ -10,9 +10,9 @@ name: Test
 
 on:
   push:
-    branches: [v4]
+    branches: [v5]
   pull_request:
-    branches: [v4]
+    branches: [v5]
 
 jobs:
   build_package:
@@ -25,6 +25,6 @@ jobs:
       - name: Run build
         uses: actions/setup-node@v2
         with:
-          node-version: '14'
+          node-version: '16'
       - run: yarn install
       - run: yarn package-all
