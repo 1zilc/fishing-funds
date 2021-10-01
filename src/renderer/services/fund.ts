@@ -409,7 +409,7 @@ export async function FromFund123(code: string) {
     return result;
   } catch (error) {
     console.log(error);
-    return null;
+    return await GetQDIIFundFromEastMoney(code);
   }
 }
 
@@ -652,13 +652,13 @@ export async function GetFundManagerDetailFromEastMoney(code: string) {
 // 查询QDII基金信息
 export async function GetQDIIFundFromEastMoney(code: string) {
   try {
-    const { gztime } = (await FromEastmoney('161725'))! as Fund.ResponseItem; // TODO:估值时间暂时使用白酒最后一次开门时间
+    // const { gztime } = (await FromEastmoney('161725'))! as Fund.ResponseItem; // TODO:估值时间暂时使用白酒最后一次开门时间
     const { fixDwjz, fixName, fixDate, fixZzl } = (await GetFixFromEastMoney(code))!;
     return {
       name: fixName,
       dwjz: fixDwjz,
       fundcode: code,
-      gztime,
+      gztime: `${new Date().getFullYear()}-${fixDate}`,
       jzrq: `${new Date().getFullYear()}-${fixDate}`,
       gsz: fixDwjz,
       gszzl: fixZzl,

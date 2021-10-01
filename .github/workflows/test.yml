@@ -10,9 +10,9 @@ name: Test
 
 on:
   push:
-    branches: [v4]
+    branches: [v4, v5]
   pull_request:
-    branches: [v4]
+    branches: [v4, v5]
 
 jobs:
   build_package:
