@@ -8,18 +8,9 @@ export interface PureCardProps {
   onDoubleClick?: any;
 }
 
-export const PureCard: React.FC<PropsWithChildren<PureCardProps>> = ({
-  onClick,
-  onDoubleClick,
-  className = {},
-  children,
-}) => {
+export const PureCard: React.FC<PropsWithChildren<PureCardProps>> = ({ onClick, onDoubleClick, className = {}, children }) => {
   return (
-    <aside
-      className={classnames(styles.content, className)}
-      onClick={onClick}
-      onDoubleClick={onDoubleClick}
-    >
+    <aside className={classnames(styles.content, className)} onClick={onClick} onDoubleClick={onDoubleClick}>
       {children}
     </aside>
   );
