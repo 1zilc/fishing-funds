@@ -29,9 +29,9 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: '16'
-      - run: yarn install
-      - run: yarn postinstall
-      - run: yarn release-all
+      - run: npm install
+      - run: npm run postinstall
+      - run: npm run release-all
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
 

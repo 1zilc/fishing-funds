@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
-    "target": "esnext",
-    "module": "esnext",
+    "target": "ES2019",
+    "module": "CommonJS",
     "lib": ["dom", "esnext"],
     "declaration": false,
     "declarationMap": false,
@@ -21,16 +21,12 @@
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "resolveJsonModule": true,
-    "allowJs": false,
+    "allowJs": true,
+    "outDir": "release/app/dist",
     "paths": {
       "@/*": ["./src/renderer/*"]
     }
   },
   "include": ["./src/**/*"],
-  "exclude": ["test", "build/release", "build/app/dist", ".erb/dll"],
-  "ts-node": {
-    "compilerOptions": {
-      "module": "commonjs"
-    }
-  }
+  "exclude": ["test", "build/release", "release/app/dist", ".erb/dll"]
 }

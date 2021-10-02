@@ -28,7 +28,7 @@ export default merge(baseConfig, {
   /**
    * Use `module` from `webpack.config.renderer.dev.js`
    */
-  module: require('./webpack.config.renderer.dev.babel').default.module,
+  module: require('./webpack.config.renderer.dev').default.module,
 
   entry: {
     renderer: Object.keys(dependencies || {}),
@@ -42,8 +42,6 @@ export default merge(baseConfig, {
       type: 'var',
     },
   },
-
-  stats: 'errors-only',
 
   plugins: [
     new webpack.DllPlugin({

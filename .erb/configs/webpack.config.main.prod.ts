@@ -30,7 +30,7 @@ export default merge(baseConfig, {
   target: 'electron-main',
 
   entry: {
-    'main.prod': path.join(webpackPaths.srcMainPath, 'main.dev.ts'),
+    main: path.join(webpackPaths.srcMainPath, 'main.ts'),
     preload: path.join(webpackPaths.srcMainPath, 'preload.ts'),
   },
 
@@ -49,8 +49,7 @@ export default merge(baseConfig, {
 
   plugins: [
     new BundleAnalyzerPlugin({
-      analyzerMode:
-        process.env.OPEN_ANALYZER === 'true' ? 'server' : 'disabled',
+      analyzerMode: process.env.OPEN_ANALYZER === 'true' ? 'server' : 'disabled',
       openAnalyzer: process.env.OPEN_ANALYZER === 'true',
     }),
 

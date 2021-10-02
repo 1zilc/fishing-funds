@@ -3,29 +3,29 @@
   "productName": "Fishing Funds",
   "description": "基金、大盘、股票、虚拟货币状态栏显示小应用,支持 MacOS、Windows、Linux 客户端,数据源来自天天基金,蚂蚁基金,腾讯证券,新浪基金等",
   "scripts": {
-    "build": "concurrently \"yarn build:main\" \"yarn build:renderer\"",
+    "build": "concurrently \"npm run build:main\" \"npm run build:renderer\"",
     "build:preload": "yarn tsc ./src/main/preload.ts --resolveJsonModule",
-    "build:main": "cross-env NODE_ENV=production webpack --config ./.erb/configs/webpack.config.main.prod.babel.js",
-    "build:renderer": "cross-env NODE_ENV=production webpack --config ./.erb/configs/webpack.config.renderer.prod.babel.js",
+    "build:main": "cross-env NODE_ENV=production TS_NODE_TRANSPILE_ONLY=true webpack --config ./.erb/configs/webpack.config.main.prod.ts",
+    "build:renderer": "cross-env NODE_ENV=production TS_NODE_TRANSPILE_ONLY=true webpack --config ./.erb/configs/webpack.config.renderer.prod.ts",
     "rebuild": "electron-rebuild --parallel --types prod,dev,optional --module-dir src",
     "lint": "cross-env NODE_ENV=development eslint . --cache --ext .js,.jsx,.ts,.tsx",
-    "package": "rm -rf build/release && yarn build && electron-builder build --publish never",
-    "package-mac": "rm -rf build/release && yarn build && electron-builder build --mac -p never",
-    "package-linux": "rm -rf build/release && yarn build && electron-builder build --linux -p never",
-    "package-win": "rm -rf build/release && yarn build && electron-builder build --win --x64 -p never",
-    "package-all": "rm -rf build/release && yarn build && electron-builder build -mwl -p never",
-    "release-all": "rm -rf build/release && yarn build && electron-builder build -mwl -p always",
-    "postinstall": "node -r @babel/register .erb/scripts/check-native-dep.js && electron-builder install-app-deps && yarn cross-env NODE_ENV=development webpack --config ./.erb/configs/webpack.config.renderer.dev.dll.babel.js && opencollective-postinstall && yarn-deduplicate yarn.lock",
-    "start": "node ./.erb/scripts/check-port-in-use.js && yarn build:preload && yarn start:renderer",
-    "start:main": "cross-env NODE_ENV=development && electron -r ts-node/register ./src/main/main.dev.ts",
-    "start:renderer": "cross-env NODE_ENV=development webpack serve --config ./.erb/configs/webpack.config.renderer.dev.babel.js",
+    "package": "ts-node ./.erb/scripts/clean.js dist && npm run build && electron-builder build --publish never",
+    "package-mac": "ts-node ./.erb/scripts/clean.js dist && npm run build && electron-builder build --mac -p never",
+    "package-linux": "ts-node ./.erb/scripts/clean.js dist && npm run build && electron-builder build --linux -p never",
+    "package-win": "ts-node ./.erb/scripts/clean.js dist && npm run build && electron-builder build --win --x64 -p never",
+    "package-all": "ts-node ./.erb/scripts/clean.js dist && npm run build && electron-builder build -mwl -p never",
+    "release-all": "ts-node ./.erb/scripts/clean.js dist && npm run build && electron-builder build -mwl -p always",
+    "postinstall": "ts-node .erb/scripts/check-native-dep.js && electron-builder install-app-deps && cross-env NODE_ENV=development TS_NODE_TRANSPILE_ONLY=true webpack --config ./.erb/configs/webpack.config.renderer.dev.dll.ts && opencollective-postinstall",
+    "start": "ts-node ./.erb/scripts/check-port-in-use.js && npm run build:preload && npm run start:renderer",
+    "start:main": "cross-env NODE_ENV=development electron -r ts-node/register/transpile-only ./src/main/main.ts",
+    "start:renderer": "cross-env NODE_ENV=development TS_NODE_TRANSPILE_ONLY=true webpack serve --config ./.erb/configs/webpack.config.renderer.dev.ts",
     "test": "jest"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
       "cross-env NODE_ENV=development eslint --cache --fix"
     ],
-    "{*.json,.{babelrc,eslintrc,prettierrc}}": [
+    "{*.json,.{eslintrc,prettierrc}}": [
       "prettier --ignore-path .eslintignore --parser json --write"
     ],
     "*.{css,scss}": [
@@ -115,9 +115,9 @@
       }
     },
     "directories": {
-      "app": "build/app",
+      "app": "release/app",
       "buildResources": "assets",
-      "output": "build/release"
+      "output": "release/build"
     },
     "extraResources": [
       "./assets/**"
@@ -176,16 +176,16 @@
     ],
     "moduleDirectories": [
       "node_modules",
-      "build/app/node_modules"
+      "release/app/node_modules"
+    ],
+    "testPathIgnorePatterns": [
+      "release/app/dist"
     ],
     "setupFiles": [
       "./.erb/scripts/check-build-exists.js"
     ]
   },
   "devDependencies": {
-    "@babel/core": "^7.14.0",
-    "@babel/preset-env": "^7.14.4",
-    "@babel/register": "^7.13.16",
     "@pmmmwh/react-refresh-webpack-plugin": "0.5.1",
     "@svgr/webpack": "^5.5.0",
     "@teamsupercell/typings-for-css-modules-loader": "^2.5.1",
@@ -315,5 +315,6 @@
     "hooks": {
       "pre-commit": "lint-staged"
     }
-  }
+  },
+  "__npminstall_done": false
 }
