@@ -45,19 +45,51 @@ export default merge(baseConfig, {
 
   module: {
     rules: [
+      // Add SASS support  - compile all .global.scss files and pipe it to style.css
       {
-        // CSS/SCSS
-        test: /\.s?css$/,
+        test: /\.global\.(scss|sass)$/,
         use: [
           {
             loader: MiniCssExtractPlugin.loader,
+          },
+          {
+            loader: 'css-loader',
             options: {
-              // `./dist` can't be inerhited for publicPath for styles. Otherwise generated paths will be ./dist/dist
-              publicPath: './',
+              sourceMap: false,
+              importLoaders: 1,
             },
           },
-          'css-loader',
-          'sass-loader',
+          {
+            loader: 'sass-loader',
+            options: {
+              sourceMap: false,
+            },
+          },
+        ],
+      },
+      // Add SASS support  - compile all other .scss files and pipe it to style.css
+      {
+        test: /^((?!\.global).)*\.(scss|sass)$/,
+        use: [
+          {
+            loader: MiniCssExtractPlugin.loader,
+          },
+          {
+            loader: 'css-loader',
+            options: {
+              modules: {
+                localIdentName: '[name]__[local]__[hash:base64:5]',
+              },
+              importLoaders: 1,
+              sourceMap: false,
+            },
+          },
+          {
+            loader: 'sass-loader',
+            options: {
+              sourceMap: false,
+            },
+          },
         ],
       },
       // WOFF Font

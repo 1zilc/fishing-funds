@@ -119,6 +119,7 @@ export async function FromSina(code: string) {
         'Content-Type': 'application/javascript; charset=utf-8',
       },
     });
+
     const utf8String = iconv.decode(rawBody, 'GB18030');
     const [w, contnet] = utf8String.split('=');
     const data = contnet.replace(/(")|(;)|(\s)/g, '');

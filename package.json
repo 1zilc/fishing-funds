@@ -315,6 +315,5 @@
     "hooks": {
       "pre-commit": "lint-staged"
     }
-  },
-  "__npminstall_done": false
+  }
 }
