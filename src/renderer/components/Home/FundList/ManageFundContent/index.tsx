@@ -23,19 +23,13 @@ const ManageFundContent: React.FC<ManageFundContentProps> = (props) => {
             <Optional />
           </Tabs.TabPane>
           <Tabs.TabPane tab="近期好基" key={String(1)}>
-            <PureCard>
-              <Rank />
-            </PureCard>
+            <Rank />
           </Tabs.TabPane>
           <Tabs.TabPane tab="定投排行" key={String(2)}>
-            <PureCard>
-              <Automatic />
-            </PureCard>
+            <Automatic />
           </Tabs.TabPane>
           <Tabs.TabPane tab="评级排行" key={String(3)}>
-            <PureCard>
-              <Ranting />
-            </PureCard>
+            <Ranting />
           </Tabs.TabPane>
         </Tabs>
       </div>

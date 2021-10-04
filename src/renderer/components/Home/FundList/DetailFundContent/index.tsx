@@ -24,6 +24,7 @@ import CustomDrawerContent from '@/components/CustomDrawer/Content';
 import SameFundList from '@/components/Home/FundList/DetailFundContent/SameFundList';
 import FundManagerContent from '@/components/Home/FundList/FundManagerContent';
 import IndustryLayout from '@/components/Home/FundList/DetailFundContent/IndustryLayout';
+import WarehouseEvent from '@/components/Home/FundList/DetailFundContent/WarehouseEvent';
 import { APIOptions } from '@/components/SettingContent';
 import { useFundRating } from '@/utils/hooks';
 import * as Services from '@/services';
@@ -254,6 +255,9 @@ const DetailFundContent: React.FC<DetailFundContentProps> = (props) => {
               <ChartCard onFresh={runGetFundDetailFromEastmoney}>
                 <Hold Data_holderStructure={pingzhongdata.Data_holderStructure} />
               </ChartCard>
+            </Tabs.TabPane>
+            <Tabs.TabPane tab="仓位变动" key={String(Enums.ConfigType.WareHouse)}>
+              <WarehouseEvent code={code} />
             </Tabs.TabPane>
             <Tabs.TabPane tab="规模变动" key={String(Enums.ConfigType.Scale)}>
               <ChartCard onFresh={runGetFundDetailFromEastmoney}>

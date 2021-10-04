@@ -79,7 +79,7 @@ const Funds: React.FC<PropsWithChildren<FundsProps>> = ({ code }) => {
     <ChartCard auto onFresh={runGetFundsFromEasymoney}>
       <div className={styles.content}>
         <Table
-          rowKey="code"
+          rowKey="FCODE"
           size="small"
           columns={columns}
           dataSource={data}

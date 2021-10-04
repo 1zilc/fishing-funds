@@ -94,6 +94,7 @@ export enum WareHouseType {
 export enum ConfigType {
   Scale, // 规模变动呢
   Hold, // 持有人结构
+  WareHouse, // 仓位
   Assets, // 资产配置
 }
 // 走势类型

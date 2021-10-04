@@ -2,3 +2,6 @@
   position: relative;
   box-sizing: border-box;
 }
+.date {
+  font-size: calc(10rem / var(--base-font-size));
+}
