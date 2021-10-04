@@ -51,6 +51,8 @@ export function SortStocks(responseStocks: Stock.ResponseItem[]) {
         return (Number(a.zdf) - Number(b.zdf)) * t;
       case Enums.StockSortType.Zx:
         return (Number(a.zx) - Number(b.zx)) * t;
+      case Enums.StockSortType.Name:
+        return b.name.localeCompare(a.name, 'zh') * t;
       case Enums.StockSortType.Custom:
       default:
         return (codeMap[b.secid!]?.originSort - codeMap[a.secid!]?.originSort) * t;

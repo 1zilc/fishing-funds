@@ -47,6 +47,8 @@ export function SortCoins(responseCoins: Coin.ResponseItem[]) {
         return (Number(a.change24h) - Number(b.change24h)) * t;
       case Enums.CoinSortType.Volum:
         return (Number(a.vol24h) - Number(b.vol24h)) * t;
+      case Enums.CoinSortType.Name:
+        return b.code.localeCompare(a.code, 'zh') * t;
       case Enums.CoinSortType.Custom:
       default:
         return (codeMap[b.code!]?.originSort - codeMap[a.code!]?.originSort) * t;

@@ -8,6 +8,8 @@ import FundHistoryValueContent from '@/components/Home/FundList/FundHistoryValue
 import * as Utils from '@/utils';
 import styles from './index.scss';
 
+const weekday = require('dayjs/plugin/weekday');
+dayjs.extend(weekday);
 export interface HistoryValueProps {
   data?: { x: number; y: number; equityReturn: number; unitMoney: 0 }[];
 }
@@ -22,7 +24,7 @@ const HistoryValue: React.FC<HistoryValueProps> = ({ data = [] }) => {
     {
       title: '日期',
       dataIndex: 'x',
-      render: (text: number) => dayjs(text).format('YYYY-MM-DD'),
+      render: (text: number) => `${dayjs(text).format('YYYY-MM-DD')} ${Utils.GetWeekDay(dayjs(text).day())}`,
     },
     {
       title: '单位净值',

@@ -28,6 +28,7 @@ export enum FundSortType {
   Estimate, // 估值
   Income, // 收益
   IncomeRate, // 收益率
+  Name, // a-z
 }
 
 export enum ZindexSortType {
@@ -35,6 +36,7 @@ export enum ZindexSortType {
   Zdd, // 涨跌点
   Zdf, // 涨跌幅
   Zsz, // 指数值
+  Name, // a-z
 }
 
 export enum QuotationSortType {
@@ -45,6 +47,7 @@ export enum QuotationSortType {
   Zxj, // 最新价
   Szjs, // 上涨家数
   Xdjs, // 下跌家数
+  Name, // a-z
 }
 
 export enum StockSortType {
@@ -52,6 +55,7 @@ export enum StockSortType {
   Zdd, // 涨跌点
   Zdf, // 涨跌幅
   Zx, // 指数值
+  Name, // a-z
 }
 
 export enum CoinSortType {
@@ -59,6 +63,7 @@ export enum CoinSortType {
   Zdf, // 24H涨跌幅
   Price, // 价值
   Volum, // 24H交易量
+  Name, // a-z
 }
 
 export enum SortOrderType {

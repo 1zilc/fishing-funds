@@ -33,6 +33,7 @@ export const fundSortModeOptions: Option.EnumsOption<Enums.FundSortType>[] = [
   { key: Enums.FundSortType.Estimate, value: '今日总值' },
   { key: Enums.FundSortType.Income, value: '持有收益' },
   { key: Enums.FundSortType.IncomeRate, value: '持有收益率' },
+  { key: Enums.FundSortType.Name, value: '名称（A-Z）' },
 ];
 
 export const zindexSortModeOptions: Option.EnumsOption<Enums.ZindexSortType>[] = [
@@ -40,6 +41,7 @@ export const zindexSortModeOptions: Option.EnumsOption<Enums.ZindexSortType>[] =
   { key: Enums.ZindexSortType.Zdd, value: '涨跌点' },
   { key: Enums.ZindexSortType.Zdf, value: '涨跌幅' },
   { key: Enums.ZindexSortType.Zsz, value: '指数值' },
+  { key: Enums.ZindexSortType.Name, value: '名称（A-Z）' },
 ];
 
 export const quotationSortModeOptions: Option.EnumsOption<Enums.QuotationSortType>[] = [
@@ -50,6 +52,7 @@ export const quotationSortModeOptions: Option.EnumsOption<Enums.QuotationSortTyp
   { key: Enums.QuotationSortType.Zxj, value: '最新价' },
   { key: Enums.QuotationSortType.Szjs, value: '上涨家数' },
   { key: Enums.QuotationSortType.Xdjs, value: '下跌家数' },
+  { key: Enums.QuotationSortType.Name, value: '名称（A-Z）' },
 ];
 
 export const stockSortModeOptions: Option.EnumsOption<Enums.StockSortType>[] = [
@@ -57,6 +60,7 @@ export const stockSortModeOptions: Option.EnumsOption<Enums.StockSortType>[] = [
   { key: Enums.StockSortType.Zdd, value: '涨跌点' },
   { key: Enums.StockSortType.Zdf, value: '涨跌幅' },
   { key: Enums.StockSortType.Zx, value: '最新值' },
+  { key: Enums.StockSortType.Name, value: '名称（A-Z）' },
 ];
 
 export const coinSortModeOptions: Option.EnumsOption<Enums.CoinSortType>[] = [
@@ -64,6 +68,7 @@ export const coinSortModeOptions: Option.EnumsOption<Enums.CoinSortType>[] = [
   { key: Enums.CoinSortType.Price, value: '价格' },
   { key: Enums.CoinSortType.Zdf, value: '24H涨跌幅' },
   { key: Enums.CoinSortType.Volum, value: '24H交易量' },
+  { key: Enums.CoinSortType.Name, value: '名称（A-Z）' },
 ];
 
 export function GetSortConfig() {
