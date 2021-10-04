@@ -3,8 +3,10 @@ import NP from 'number-precision';
 import cheerio from 'cheerio';
 import * as Utils from '@/utils';
 import dayjs from 'dayjs';
+import { data } from '_cheerio@1.0.0-rc.10@cheerio/lib/api/attributes';
 
 const { got } = window.contextModules;
+
 // 天天基金
 export async function FromEastmoney(code: string) {
   try {
@@ -408,6 +410,142 @@ export async function FromFund123(code: string) {
     };
 
     return result;
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+}
+
+// 同花顺-爱基金
+export async function FromFund10jqka(code: string) {
+  try {
+    const { body } = await got<{
+      data: [
+        {
+          code: '003834';
+          enddate: '2021-09-30';
+          type: 'nohbx';
+          net: '3.8040';
+          totalnet: '3.8040';
+          ranges: '0.1330';
+          rate: '3.62';
+          net1: '3.6710';
+          totalnet1: '3.6710';
+          enddate1: '2021-09-29';
+          mark: 'ths';
+          updatetime: '211003024536';
+          hqcode: 'JSH123';
+          name: '华夏能源革新股票A';
+          fundtype: '股票型';
+          clrq: '2017-06-07';
+          manager: '郑泽鸿';
+          orgname: '华夏基金管理有限公司';
+          dqlcqx: '-1';
+          dqrq: '';
+          sgstat: '限制大额';
+          shstat: '开放';
+          money: '50.0000';
+          sgoldfl: '1.5';
+          sgfl: '0.15';
+          rgStart: '2017-05-04';
+          rgEnd: '2017-06-02';
+          rcsgStart: '2017-07-07';
+          rcshStart: '2017-07-07';
+          ifnew: 0;
+          rgfl: '0.15';
+          rgflold: '1.5';
+          buy: '1';
+          dt: '1';
+          zkl: '0.1';
+          zdsg: '10';
+          nowyear: '40.73';
+          week: '-5.89';
+          month: '-9.10';
+          tmonth: '12.64';
+          year: '130.27';
+          hyear: '55.84';
+          tyear: '346.48';
+          mz: '1.0000';
+          themeList: [
+            {
+              field_name: '特斯拉';
+              field_type: '概念';
+              id: 'd0a32faf345dc75d9c7c8f2479f9224a';
+            },
+            {
+              field_name: '三星';
+              field_type: '概念';
+              id: '5131c72b5ed2ef94eaca2675bc7c6f0d';
+            }
+          ];
+          thsqbfl: '';
+          jjgm: '66.35';
+          levelOfRiskCode: '706003';
+          levelOfRisk: '中风险';
+          ifzj: '1';
+          ifgz: '1';
+          iszcg: '1';
+          iszcz: '0';
+          isfof: '0';
+          asset: '224.10';
+          fundBanner: [];
+          showType: '1';
+          rgStartReal: '2017-05-04';
+          rgStartRealTime: '2017-05-04 00:00:00';
+          rgEndRealTime: '2017-06-02 15:00:00';
+          fastcash: '1';
+          dqlc: 0;
+          lcqx: '--';
+          maxStar: '5';
+          nowtime: 1633309917000;
+        }
+      ];
+      error: {
+        id: 0;
+        msg: 'is access';
+      };
+    }>(`https://fund.10jqka.com.cn/data/client/myfund/${code}`, {
+      responseType: 'json',
+    });
+    const data = body.data.pop();
+    if (!data) {
+      return null;
+    }
+    const now = new Date();
+    const { body: script } = await got('https://gz-fund.10jqka.com.cn/', {
+      searchParams: {
+        module: 'api',
+        controller: 'index',
+        action: 'chart',
+        info: `vm_fd_${data.hqcode}`,
+        _: Date.now(),
+        start: dayjs(now).format('MMDD'),
+      },
+    });
+
+    const string = eval(`(()=>{
+      const ${script};
+      return vm_fd_${data.hqcode};
+    })()`);
+
+    const [info, dwjz, gsinfo] = string.split('~');
+    const gzdata = info.split('|').pop();
+    if (gsinfo) {
+      const last: string = gsinfo.split(';').pop();
+      const [time, gsz, dwjz, zero] = last.split(',');
+      const gszzl = NP.divide(NP.minus(gsz, dwjz), dwjz, 0.01).toFixed(2);
+      return {
+        name: data.name,
+        fundcode: data.code,
+        gztime: `${gzdata} ${time.slice(0, 2)}:${time.slice(2)}`,
+        gszzl: gszzl,
+        jzrq: data.enddate1,
+        dwjz: data.net1,
+        gsz,
+      };
+    } else {
+      return null;
+    }
   } catch (error) {
     console.log(error);
     return null;

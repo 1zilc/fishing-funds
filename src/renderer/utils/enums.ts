@@ -10,13 +10,14 @@ export enum EyeStatus {
 }
 
 export enum FundApiType {
-  Eastmoney, // 天天基金
+  Eastmoney, // 东方财富-天天基金
   Dayfund, // 基金速查网
   Tencent, // 腾讯证券
   Sina, // 新浪基金
   Howbuy, // 好买基金
   Etf, // 易天富
-  Ant, // 蚂蚁基金
+  Ant, // 支付宝-蚂蚁基金
+  Fund10jqka, // 同花顺-爱基金
 }
 
 export enum FundSortType {
