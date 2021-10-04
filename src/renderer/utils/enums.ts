@@ -188,3 +188,10 @@ export enum TimestampType {
   Local,
   Network,
 }
+
+export enum QuotationType {
+  All,
+  Area,
+  Industry,
+  Concept,
+}

@@ -18,6 +18,7 @@ export async function GetQuotationsFromEastmoney() {
           f3: number; // 涨跌幅
           f4: number; // 涨跌点
           f12: string; // "BK0428" 板块代码
+          f19: number; // 板块分类 1 地域 2 行业 3 概念
           f20: number; // 总市值
           f8: number; // 换手率
           f104: number; // 上涨家数
@@ -34,15 +35,15 @@ export async function GetQuotationsFromEastmoney() {
       };
     }>('http://77.push2.eastmoney.com/api/qt/clist/get', {
       searchParams: {
-        fs: 'm:90+t:2+f:!50',
+        fs: 'm:90',
         fid: 'f3',
         invt: 2,
         fltt: 2,
         np: 1,
         po: 1,
         pn: 1,
-        pz: 100,
-        fields: 'f2,f3,f4,f8,f12,f14,f20,f128,f136,f104,f105,f140,f207,f208,f222',
+        pz: 1000,
+        fields: 'f2,f3,f4,f8,f12,f14,f19,f20,f128,f136,f104,f105,f140,f207,f208,f222',
         _: new Date().getTime(),
       },
       responseType: 'json',
@@ -53,6 +54,7 @@ export async function GetQuotationsFromEastmoney() {
       return {
         code: i.f12, // 板块代码
         name: i.f14, // 板块名称
+        type: i.f19, // 板块分类
         zxj: i.f2, // 最新价
         zde: NP.times(i.f20, i.f3, 10 ** -2), // 涨跌额
         zdd: i.f4, // 涨跌点
@@ -173,11 +175,6 @@ export async function GetRealTimeFundFlowFromEasymoney(code: string) {
   }
 }
 
-/**
- *
- * @param code 板块代码: BK0428
- * 从天天基金获取板块个股资金流
- */
 export async function GetStocksFromEasymoney(code: string) {
   try {
     const {
@@ -514,6 +511,7 @@ export async function GetNorthDayFromEastmoney(fields1: string, fields2: string)
     };
   }
 }
+
 export async function GetSouthDayFromEastmoney(fields1: string, fields2: string) {
   try {
     const { body } = await got<{
@@ -550,5 +548,61 @@ export async function GetSouthDayFromEastmoney(fields1: string, fields2: string)
       sz2hk: [],
       n2s: [],
     };
+  }
+}
+
+export async function GetFundsFromEasymoney(code: string) {
+  try {
+    const {
+      body: { Data },
+    } = await got<{
+      Data: [
+        {
+          FCODE: '168501';
+          SHORTNAME: '北信瑞丰产业升级';
+          ISSALES: '1';
+          ISBUY: '1';
+          FTYPE: '混合型-偏股';
+          MINSG: '10';
+          RATE: '0.15%';
+          SOURCERATE: '1.50%';
+          SYRQ: '2021-09-30';
+          SYL_Z: '-6.27';
+          SYL_Y: '-9.09';
+          SYL_3Y: '12.62';
+          SYL_6Y: '33.11';
+          SYL_1N: '40.65';
+          SYL_2N: '179.73';
+          SYL_3N: '207.1';
+          SYL_JN: '13.44';
+          DWJZ: '2.7777';
+          RZDF: '3.04';
+          SON_1N: '91.25';
+        }
+      ];
+      ErrCode: 0;
+      ErrMsg: null;
+      TotalCount: 30;
+      Expansion: null;
+      PageSize: 100;
+      PageIndex: 1;
+    }>('http://api.fund.eastmoney.com/ztjj/GetBKRelTopicFund', {
+      headers: {
+        Referer: 'http://fund.eastmoney.com/',
+      },
+      searchParams: {
+        sort: 'SYL_Z',
+        sorttype: 'asc',
+        pagesize: 100,
+        pageindex: 1,
+        tp: code,
+        _: Date.now(),
+      },
+      responseType: 'json',
+    });
+    return Data;
+  } catch (error) {
+    console.log(error);
+    return [];
   }
 }

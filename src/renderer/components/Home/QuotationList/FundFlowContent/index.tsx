@@ -26,8 +26,14 @@ const FundFlowContent: React.FC<DetailFundContentProps> = (props) => {
       <div className={styles.content}>
         <div className={styles.container}>
           <Tabs animated={{ tabPane: true }} tabBarGutter={15}>
-            <Tabs.TabPane tab="板块概览" key={String(0)}>
-              <QuotationMap />
+            <Tabs.TabPane tab="行业概览" key={String(0)}>
+              <QuotationMap type={Enums.QuotationType.Industry} />
+            </Tabs.TabPane>
+            <Tabs.TabPane tab="概念概览" key={String(1)}>
+              <QuotationMap type={Enums.QuotationType.Concept} />
+            </Tabs.TabPane>
+            <Tabs.TabPane tab="地域概览" key={String(2)}>
+              <QuotationMap type={Enums.QuotationType.Area} />
             </Tabs.TabPane>
           </Tabs>
         </div>

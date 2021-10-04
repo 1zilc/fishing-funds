@@ -80,10 +80,16 @@ const QuotationGroup = () => {
 
   return (
     <GroupTab>
-      <Tabs.TabPane tab="全部" key={String(0)}>
-        <QuotationList filter={() => true} />
+      <Tabs.TabPane tab="行业" key={String(0)}>
+        <QuotationList filter={(quotation) => quotation.type === Enums.QuotationType.Industry} />
       </Tabs.TabPane>
-      <Tabs.TabPane tab="关注" key={String(1)}>
+      <Tabs.TabPane tab="概念" key={String(1)}>
+        <QuotationList filter={(quotation) => quotation.type === Enums.QuotationType.Concept} />
+      </Tabs.TabPane>
+      <Tabs.TabPane tab="地域" key={String(2)}>
+        <QuotationList filter={(quotation) => quotation.type === Enums.QuotationType.Area} />
+      </Tabs.TabPane>
+      <Tabs.TabPane tab="关注" key={String(3)}>
         <QuotationList filter={(quotaion) => favoriteQuotationMap[quotaion.code]} />
       </Tabs.TabPane>
     </GroupTab>

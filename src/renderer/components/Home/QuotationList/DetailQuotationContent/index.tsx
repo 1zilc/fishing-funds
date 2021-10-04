@@ -3,10 +3,10 @@ import classnames from 'classnames';
 import { useRequest } from 'ahooks';
 import { Tabs } from 'antd';
 
-import ChartCard from '@/components/Card/ChartCard';
 import RealTimeFundFlow from '@/components/Home/QuotationList/DetailQuotationContent/RealTimeFundFlow';
 import AfterTimeFundFlow from '@/components/Home/QuotationList/DetailQuotationContent/AfterTimeFundFlow';
 import Stocks from '@/components/Home/QuotationList/DetailQuotationContent/Stocks';
+import Funds from '@/components/Home/QuotationList/DetailQuotationContent/Funds';
 import RealTimeTransaction from '@/components/Home/QuotationList/DetailQuotationContent/RealTimeTransaction';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
 
@@ -80,7 +80,10 @@ const DetailQuotationContent: React.FC<DetailQuotationContentProps> = (props) =>
         </div>
         <div className={styles.container}>
           <Tabs animated={{ tabPane: true }} tabBarGutter={15}>
-            <Tabs.TabPane tab={`${quotation.name}个股`} key={String(0)}>
+            <Tabs.TabPane tab="主题基金" key={String(0)}>
+              <Funds code={code} />
+            </Tabs.TabPane>
+            <Tabs.TabPane tab={`${quotation.name}个股`} key={String(1)}>
               <Stocks code={code} />
             </Tabs.TabPane>
           </Tabs>
