@@ -4,8 +4,7 @@ import { useRequest } from 'ahooks';
 
 import ChartCard from '@/components/Card/ChartCard';
 import CustomDrawer from '@/components/CustomDrawer';
-import AddFundContent from '@/components/Home/FundList/AddFundContent';
-import DetailFundContent from '@/components/Home/FundList/DetailFundContent';
+import DetailStockContent from '@/components/Home/StockList/DetailStockContent';
 import { useDrawer, useCurrentWallet } from '@/utils/hooks';
 import * as Services from '@/services';
 import * as Utils from '@/utils';
@@ -68,11 +67,11 @@ const WarehouseEvent: React.FC<PropsWithChildren<WarehouseEventProps>> = ({ code
             position: ['bottomCenter'],
           }}
           onRow={(record) => ({
-            onClick: () => setDetailDrawer(record.code),
+            onClick: () => setDetailDrawer(`${record.NEWTEXCH}.${record.GPDM}`),
           })}
         />
         <CustomDrawer show={showDetailDrawer}>
-          <DetailFundContent onEnter={closeDetailDrawer} onClose={closeDetailDrawer} code={detailCode} />
+          <DetailStockContent onEnter={closeDetailDrawer} onClose={closeDetailDrawer} secid={detailCode} />
         </CustomDrawer>
       </div>
     </ChartCard>
