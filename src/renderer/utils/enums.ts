@@ -86,6 +86,7 @@ export enum TrendType {
 // 持仓类型
 export enum WareHouseType {
   Stock, // 股票
+  IndustryLayout, // 行业持仓
   Securities, // 债券
   StockEstimate, // 股票仓位测算
 }

@@ -23,6 +23,7 @@ import PerformanceEvaluation from '@/components/Home/FundList/DetailFundContent/
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
 import SameFundList from '@/components/Home/FundList/DetailFundContent/SameFundList';
 import FundManagerContent from '@/components/Home/FundList/FundManagerContent';
+import IndustryLayout from '@/components/Home/FundList/DetailFundContent/IndustryLayout';
 import { APIOptions } from '@/components/SettingContent';
 import { useFundRating } from '@/utils/hooks';
 import * as Services from '@/services';
@@ -231,6 +232,9 @@ const DetailFundContent: React.FC<DetailFundContentProps> = (props) => {
             </Tabs.TabPane>
             <Tabs.TabPane tab="债券持仓" key={String(Enums.WareHouseType.Securities)}>
               <SecuritiesWareHouse code={code} securitiesCodes={pingzhongdata.zqCodesNew!} />
+            </Tabs.TabPane>
+            <Tabs.TabPane tab="行业布局" key={String(Enums.WareHouseType.IndustryLayout)}>
+              <IndustryLayout code={code} />
             </Tabs.TabPane>
             <Tabs.TabPane tab="股票仓位测算" key={String(Enums.WareHouseType.StockEstimate)}>
               <ChartCard onFresh={runGetFundDetailFromEastmoney}>

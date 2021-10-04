@@ -1138,3 +1138,57 @@ export async function GetFundRatingFromEasemoney() {
     return [];
   }
 }
+
+// 查询基金持仓行业占比
+export async function GetIndustryRateFromEaseMoney(code: string) {
+  try {
+    const { body } = await got<{
+      Datas: {
+        fundStocks: {
+          GPDM: 'MSFT';
+          GPJC: '微软';
+          JZBL: string;
+          TEXCH: '7';
+          ISINVISBL: '--';
+          PCTNVCHGTYPE: '--';
+          PCTNVCHG: '--';
+          NEWTEXCH: '105';
+          INDEXCODE: '--';
+          INDEXNAME: string;
+        }[];
+        fundboods: [];
+        fundfofs: [];
+        ETFCODE: null;
+        ETFSHORTNAME: null;
+      };
+      ErrCode: 0;
+      Success: true;
+      ErrMsg: null;
+      Message: null;
+      ErrorCode: '0';
+      ErrorMessage: null;
+      ErrorMsgLst: null;
+      TotalCount: 1;
+      Expansion: '2021-06-30';
+    }>(`http://fundmobapi.eastmoney.com/FundMNewApi/FundMNInverstPosition`, {
+      searchParams: {
+        product: 'EFund',
+        FCODE: code,
+        deviceid: 1,
+        version: '6.2.7',
+        plat: 'Android',
+      },
+      responseType: 'json',
+    });
+    return {
+      stocks: body.Datas.fundStocks,
+      expansion: body.Expansion,
+    };
+  } catch (error) {
+    console.log(error);
+    return {
+      stocks: [],
+      expansion: '',
+    };
+  }
+}

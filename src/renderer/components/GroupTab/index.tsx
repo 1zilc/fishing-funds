@@ -14,12 +14,7 @@ const GroupTap: React.FC<PropsWithChildren<Record<string, any>>> = (props) => {
   };
 
   return (
-    <Tabs
-      size="small"
-      animated={{ tabPane: true, inkBar: true }}
-      tabBarGutter={15}
-      tabBarStyle={groupBarStyle}
-    >
+    <Tabs size="small" animated={{ tabPane: true, inkBar: true }} tabBarGutter={15} tabBarStyle={groupBarStyle}>
       {props.children}
     </Tabs>
   );
