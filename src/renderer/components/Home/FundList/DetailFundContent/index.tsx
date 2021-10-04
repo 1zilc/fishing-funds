@@ -6,6 +6,7 @@ import { Tabs, Rate } from 'antd';
 import ChartCard from '@/components/Card/ChartCard';
 import CustomDrawer from '@/components/CustomDrawer';
 import Estimate from '@/components/Home/FundList/DetailFundContent/Estimate';
+import InvestStyle from '@/components/Home/FundList/DetailFundContent/InvestStyle';
 import Performance from '@/components/Home/FundList/DetailFundContent/Performance';
 import HistoryPerformance from '@/components/Home/FundList/DetailFundContent/HistoryPerformance';
 import HistoryValue from '@/components/Home/FundList/DetailFundContent/HistoryValue';
@@ -165,6 +166,9 @@ const DetailFundContent: React.FC<DetailFundContentProps> = (props) => {
             </Tabs.TabPane>
             <Tabs.TabPane tab="净值估算" key={String(Enums.HistoryType.Value)}>
               <Estimate code={code} />
+            </Tabs.TabPane>
+            <Tabs.TabPane tab="投资风格" key={String(Enums.HistoryType.InvestStyle)}>
+              <InvestStyle code={code} />
             </Tabs.TabPane>
           </Tabs>
         </div>

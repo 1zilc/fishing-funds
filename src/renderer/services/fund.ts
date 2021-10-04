@@ -550,7 +550,18 @@ export async function FromFund10jqka(code: string) {
 export async function GetEstimatedFromEastmoney(code: string) {
   try {
     const { rawBody }: any = await got(`http://j4.dfcfw.com/charts/pic6/${code}.png`, {});
-    // const base64Str = rawBody.toString('base64');
+    const b64encoded = btoa(String.fromCharCode.apply(null, rawBody));
+    return `data:image/png;base64,${b64encoded}`;
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+}
+
+// 从天天基金获取投资风格图片
+export async function GetInverstStyleFromEastmoney(code: string) {
+  try {
+    const { rawBody }: any = await got(`http://j3.dfcfw.com/images/InvestStyle/${code}.png`, {});
     const b64encoded = btoa(String.fromCharCode.apply(null, rawBody));
     return `data:image/png;base64,${b64encoded}`;
   } catch (error) {
