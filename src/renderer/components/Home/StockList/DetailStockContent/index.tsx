@@ -3,8 +3,6 @@ import classnames from 'classnames';
 import { useRequest } from 'ahooks';
 import { Tabs } from 'antd';
 
-import ChartCard from '@/components/Card/ChartCard';
-import PureCard from '@/components/Card/PureCard';
 import Trend from '@/components/Home/StockList/DetailStockContent/Trend';
 import Estimate from '@/components/Home/StockList/DetailStockContent/Estimate';
 import K from '@/components/Home/StockList/DetailStockContent/K';

@@ -83,3 +83,24 @@
   border: 1px solid var(--primary-color);
   color: var(--primary-color);
 }
+.urls {
+  display: flex;
+  flex-wrap: wrap;
+}
+.apiTag {
+  border-radius: 10px;
+  margin: var(--base-padding) var(--base-padding) 0 0;
+  display: inline-block;
+  padding: 0 5px;
+  font-size: calc(10rem / var(--base-font-size));
+  color: #fff;
+  cursor: pointer;
+  word-break: keep-all;
+  transition: all 0.3s;
+  &:last-child {
+    margin-right: 0;
+  }
+  &:hover {
+    filter: brightness(115%);
+  }
+}

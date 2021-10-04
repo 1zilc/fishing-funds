@@ -1,5 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import { useBoolean, useRequest } from 'ahooks';
+import ColorHash from 'color-hash';
 import classnames from 'classnames';
 import { Tabs, Rate } from 'antd';
 
@@ -22,12 +23,16 @@ import PerformanceEvaluation from '@/components/Home/FundList/DetailFundContent/
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
 import SameFundList from '@/components/Home/FundList/DetailFundContent/SameFundList';
 import FundManagerContent from '@/components/Home/FundList/FundManagerContent';
+import { APIOptions } from '@/components/SettingContent';
 import { useFundRating } from '@/utils/hooks';
 import * as Services from '@/services';
 import * as Utils from '@/utils';
 import * as Enums from '@/utils/enums';
 import styles from './index.scss';
 
+const colorHash = new ColorHash();
+
+const { shell } = window.contextModules.electron;
 export interface DetailFundContentProps {
   onEnter: () => void;
   onClose: () => void;
@@ -77,6 +82,56 @@ export const TypeTag: React.FC<{ type?: string }> = ({ type }) => {
     return <span className={styles.type}>{type}</span>;
   }
   return <></>;
+};
+
+export const APIUrls: React.FC<{ code: string }> = ({ code }) => {
+  function onMore(type: Enums.FundApiType) {
+    switch (type) {
+      case Enums.FundApiType.Eastmoney:
+        shell.openExternal(`http://fund.eastmoney.com/${code}.html`);
+        break;
+      case Enums.FundApiType.Ant:
+        shell.openExternal(`https://www.fund123.cn/matiaria?fundCode=${code}`);
+        break;
+      case Enums.FundApiType.Fund10jqka:
+        shell.openExternal(`http://fund.10jqka.com.cn/${code}/`);
+        break;
+      case Enums.FundApiType.Tencent:
+        shell.openExternal(`https://gu.qq.com/${code}`);
+        break;
+      case Enums.FundApiType.Sina:
+        shell.openExternal(`http://finance.sina.com.cn/fund/quotes/${code}/bc.shtml`);
+        break;
+      case Enums.FundApiType.Dayfund:
+        shell.openExternal(`https://www.dayfund.cn/fundinfo/${code}.html`);
+        break;
+      case Enums.FundApiType.Howbuy:
+        shell.openExternal(`https://www.howbuy.com/fund/${code}/`);
+        break;
+      case Enums.FundApiType.Etf:
+        shell.openExternal(`https://www.etf88.com/jj/${code}/`);
+        break;
+      default:
+        break;
+    }
+  }
+  return (
+    <div className={styles.urls}>
+      {APIOptions.map((api) => {
+        const color = colorHash.hex(`${api.name}${code}`);
+        return (
+          <div
+            key={api.code}
+            className={styles.apiTag}
+            style={{ background: color, boxShadow: `0 2px 5px ${color}` }}
+            onClick={() => onMore(api.code)}
+          >
+            {api.name}
+          </div>
+        );
+      })}
+    </div>
+  );
 };
 
 const DetailFundContent: React.FC<DetailFundContentProps> = (props) => {
@@ -134,6 +189,7 @@ const DetailFundContent: React.FC<DetailFundContentProps> = (props) => {
               <div className={styles.detailItemLabel}>净值 {fund?.fixDate}</div>
             </div>
           </div>
+          <APIUrls code={code} />
         </div>
         <div className={styles.container}>
           <Tabs animated={{ tabPane: true }} tabBarGutter={15}>
