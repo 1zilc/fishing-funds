@@ -83,4 +83,10 @@ declare namespace Stock {
   export interface ExtraRow {
     collapse?: boolean;
   }
+
+  export interface IndustryItem {
+    name: string;
+    code: string;
+    secid: string;
+  }
 }

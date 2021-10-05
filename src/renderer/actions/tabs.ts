@@ -12,7 +12,7 @@ export function setTabActiveKeyAction(key: Enums.TabKeyType): AnyAction {
     payload: key,
   };
 }
-export function setTabskeyMap(key: Enums.TabKeyType, activeKey: number): ThunkAction {
+export function setTabskeyMapAction(key: Enums.TabKeyType, activeKey: number): ThunkAction {
   return (dispatch, getState) => {
     try {
       const {

@@ -777,3 +777,47 @@ export async function GetXSBCompany(secid: string) {
     return defaultCompany;
   }
 }
+
+// 1 主要 2 同类 3 所属板块
+export async function GetIndustryFromEastmoney(secid: string, type: 1 | 2 | 3) {
+  try {
+    const { body } = await got<{
+      rc: 0;
+      rt: 18;
+      svr: 182994846;
+      lt: 1;
+      full: 1;
+      data: {
+        total: 38;
+        diff: {
+          '0': {
+            f12: string; //'600059';
+            f13: string; //'1'
+            f14: string; //'古越龙山';
+          };
+        };
+      };
+    }>(`http://push2.eastmoney.com/api/qt/slist/get`, {
+      searchParams: {
+        pi: 0,
+        pz: 100,
+        fields: 'f12,f13,f14',
+        spt: type,
+        secid,
+      },
+      responseType: 'json',
+    });
+    const result = Object.values(body.data.diff).map((i) => ({
+      name: i.f14,
+      code: i.f12,
+      secid: `${i.f13}.${i.f12}`,
+    }));
+    if (type === 1 && result.length > 1) {
+      result.shift();
+    }
+    return result;
+  } catch (error) {
+    console.log(error);
+    return [];
+  }
+}

@@ -3,7 +3,7 @@ import { Tabs } from 'antd';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHomeContext } from '@/components/Home';
 import { StoreState } from '@/reducers/types';
-import { setTabskeyMap } from '@/actions/tabs';
+import { setTabskeyMapAction } from '@/actions/tabs';
 import * as Enums from '@/utils/enums';
 
 export interface GroupTapProps {
@@ -30,7 +30,7 @@ const GroupTap: React.FC<PropsWithChildren<GroupTapProps>> = (props) => {
       tabBarGutter={15}
       tabBarStyle={groupBarStyle}
       destroyInactiveTabPane
-      onChange={(e) => dispatch(setTabskeyMap(tabKey, Number(e)))}
+      onChange={(e) => dispatch(setTabskeyMapAction(tabKey, Number(e)))}
     >
       {props.children}
     </Tabs>

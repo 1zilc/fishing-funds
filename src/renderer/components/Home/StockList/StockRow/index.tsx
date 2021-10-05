@@ -1,5 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import classnames from 'classnames';
+import ColorHash from 'color-hash';
+import { useRequest } from 'ahooks';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { ReactComponent as ArrowDownIcon } from '@/assets/icons/arrow-down.svg';
@@ -7,11 +9,13 @@ import { ReactComponent as ArrowUpIcon } from '@/assets/icons/arrow-up.svg';
 import { useHomeContext } from '@/components/Home';
 import Collapse from '@/components/Collapse';
 import { StoreState } from '@/reducers/types';
-import { toggleStockCollapseAction } from '@/actions/stock';
+import { toggleStockCollapseAction, setIndustryMapAction } from '@/actions/stock';
 import { useResizeEchart, useRenderEcharts } from '@/utils/hooks';
+import * as Services from '@/services';
 import * as Utils from '@/utils';
 import styles from './index.scss';
 
+const colorHash = new ColorHash();
 export interface RowProps {
   stock: Stock.ResponseItem & Stock.ExtraRow;
   onDetail: (code: string) => void;
@@ -96,10 +100,17 @@ const StockRow: React.FC<RowProps> = (props) => {
   const { stock } = props;
   const dispatch = useDispatch();
   const { conciseSetting } = useSelector((state: StoreState) => state.setting.systemSetting);
+  const industrys = useSelector((state: StoreState) => state.stock.industryMap[stock.secid]) || [];
 
-  const onDetailClick = () => {
-    props.onDetail(stock.secid);
-  };
+  useRequest(() => Services.Stock.GetIndustryFromEastmoney(stock.secid, 1), {
+    throwOnError: true,
+    onSuccess: (datas) => {
+      if (datas.length) {
+        dispatch(setIndustryMapAction(stock.secid, datas));
+      }
+    },
+    ready: !industrys.length,
+  });
 
   return (
     <>
@@ -112,9 +123,18 @@ const StockRow: React.FC<RowProps> = (props) => {
             style={{
               display: 'flex',
               alignItems: 'center',
+              flexWrap: 'wrap',
             }}
           >
-            <span className={styles.zindexName}>{stock.name}</span>
+            <span className={styles.stockName}>{stock.name}</span>
+            {industrys.map((industry) => {
+              const color = colorHash.hex(industry.name);
+              return (
+                <span key={industry.code} className={styles.tag} style={{ color, border: `1px solid ${color}` }}>
+                  {industry.name}
+                </span>
+              );
+            })}
           </div>
           {!conciseSetting && (
             <div className={styles.rowBar}>
@@ -170,7 +190,7 @@ const StockRow: React.FC<RowProps> = (props) => {
             <span className="text-down">{stock.zd}</span>
           </section>
           <div className={styles.view}>
-            <a onClick={onDetailClick}>{'查看详情 >'}</a>
+            <a onClick={() => props.onDetail(stock.secid)}>{'查看详情 >'}</a>
           </div>
         </div>
       </Collapse>
