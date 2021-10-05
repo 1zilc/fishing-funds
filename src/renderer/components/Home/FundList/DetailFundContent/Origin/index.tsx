@@ -1,9 +1,7 @@
 import React from 'react';
 import { Table } from 'antd';
-import ChartCard from '@/components/Card/ChartCard';
 import { APIOptions } from '@/components/SettingContent';
 import * as Enums from '@/utils/enums';
-import styles from './index.scss';
 
 const { shell } = window.contextModules.electron;
 

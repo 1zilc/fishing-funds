@@ -136,7 +136,12 @@ const Home: React.FC<HomeProps> = () => {
           <Wallet />
           <SortBar />
         </Header>
-        <Tabs renderTabBar={() => <></>} activeKey={String(tabsActiveKey)} animated={{ tabPane: true, inkBar: false }}>
+        <Tabs
+          renderTabBar={() => <></>}
+          activeKey={String(tabsActiveKey)}
+          animated={{ tabPane: true, inkBar: false }}
+          destroyInactiveTabPane
+        >
           <Tabs.TabPane key={String(Enums.TabKeyType.Funds)}>
             <FundGroup />
           </Tabs.TabPane>
