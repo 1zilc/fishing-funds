@@ -3,7 +3,6 @@ import NP from 'number-precision';
 import cheerio from 'cheerio';
 import * as Utils from '@/utils';
 import dayjs from 'dayjs';
-import { data } from '_cheerio@1.0.0-rc.10@cheerio/lib/api/attributes';
 
 const { got } = window.contextModules;
 
