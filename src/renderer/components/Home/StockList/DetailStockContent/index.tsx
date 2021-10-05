@@ -4,6 +4,7 @@ import { useRequest } from 'ahooks';
 import { Tabs } from 'antd';
 
 import Trend from '@/components/Home/StockList/DetailStockContent/Trend';
+import ColorfulTags from '@/components/ColorfulTags';
 import Estimate from '@/components/Home/StockList/DetailStockContent/Estimate';
 import K from '@/components/Home/StockList/DetailStockContent/K';
 import Company from '@/components/Home/StockList/DetailStockContent/Company';
@@ -22,12 +23,18 @@ export interface DetailStockContentProps {
 const DetailStockContent: React.FC<DetailStockContentProps> = (props) => {
   const { secid } = props;
   const [stock, setStock] = useState<Stock.DetailItem | Record<string, any>>({});
-
+  const [industrys, setIndustrys] = useState<Stock.IndustryItem[]>([]);
   useRequest(Services.Stock.GetDetailFromEastmoney, {
     throwOnError: true,
     pollingInterval: 1000 * 60,
     defaultParams: [secid],
     onSuccess: setStock,
+  });
+
+  useRequest(Services.Stock.GetIndustryFromEastmoney, {
+    throwOnError: true,
+    defaultParams: [secid, 3],
+    onSuccess: setIndustrys,
   });
 
   return (
@@ -101,6 +108,7 @@ const DetailStockContent: React.FC<DetailStockContentProps> = (props) => {
               <div className={styles.detailItemLabel}>均价</div>
             </div>
           </div>
+          <ColorfulTags tags={industrys.map((industry) => industry.name)} />
         </div>
         <div className={styles.container}>
           <Tabs animated={{ tabPane: true }} tabBarGutter={15}>
