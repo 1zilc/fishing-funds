@@ -8,6 +8,7 @@ import ColorfulTags from '@/components/ColorfulTags';
 import Estimate from '@/components/Home/StockList/DetailStockContent/Estimate';
 import K from '@/components/Home/StockList/DetailStockContent/K';
 import Company from '@/components/Home/StockList/DetailStockContent/Company';
+import Stocks from '@/components/Home/StockList/DetailStockContent/Stocks';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
 import * as Services from '@/services';
 import * as Utils from '@/utils';
@@ -131,6 +132,9 @@ const DetailStockContent: React.FC<DetailStockContentProps> = (props) => {
           <Tabs animated={{ tabPane: true }} tabBarGutter={15}>
             <Tabs.TabPane tab="公司概况" key={String(0)}>
               <Company secid={secid} />
+            </Tabs.TabPane>
+            <Tabs.TabPane tab="同类股票" key={String(1)}>
+              <Stocks secid={secid} />
             </Tabs.TabPane>
           </Tabs>
         </div>
