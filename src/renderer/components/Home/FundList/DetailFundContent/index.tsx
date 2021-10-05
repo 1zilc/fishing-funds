@@ -26,6 +26,7 @@ import FundManagerContent from '@/components/Home/FundList/FundManagerContent';
 import IndustryLayout from '@/components/Home/FundList/DetailFundContent/IndustryLayout';
 import WarehouseEvent from '@/components/Home/FundList/DetailFundContent/WarehouseEvent';
 import Origin from '@/components/Home/FundList/DetailFundContent/Origin';
+import { ReactComponent as CopyIcon } from '@/assets/icons/copy.svg';
 
 import { useFundRating } from '@/utils/hooks';
 import * as Services from '@/services';
@@ -117,7 +118,7 @@ const DetailFundContent: React.FC<DetailFundContentProps> = (props) => {
     <CustomDrawerContent title="基金详情" enterText="确定" onClose={props.onClose} onEnter={props.onEnter}>
       <div className={styles.content}>
         <div className={styles.container}>
-          <h3>{fund?.fixName}</h3>
+          <h3 className="copify">{fund?.fixName}</h3>
           <div className={styles.subTitleRow}>
             <Rate allowHalf defaultValue={fundStar} disabled />
             <div className={styles.labels}>
@@ -127,7 +128,7 @@ const DetailFundContent: React.FC<DetailFundContentProps> = (props) => {
             </div>
           </div>
           <div className={styles.subTitleRow}>
-            <span>{fund?.code}</span>
+            <span className="copify">{fund?.code}</span>
             <span>
               基金经理：
               <a onClick={openManagerDrawer}>{pingzhongdata.Data_currentFundManager?.[0]?.name}</a>

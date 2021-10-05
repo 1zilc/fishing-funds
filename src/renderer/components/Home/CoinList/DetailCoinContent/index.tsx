@@ -51,11 +51,11 @@ const DetailCoinContent: React.FC<DetailCoinContentProps> = (props) => {
         </div>
         <div className={styles.container}>
           <h3 className={styles.titleRow}>
-            <span>{coin?.symbol.toUpperCase()}</span>
+            <span className="copify">{coin?.symbol.toUpperCase()}</span>
             <span>排名：{coin?.market_cap_rank}</span>
           </h3>
           <div className={styles.subTitleRow}>
-            <span>{coin?.id}</span>
+            <span className="copify">{coin?.id}</span>
             <div>
               <span className={styles.detailItemLabel}>发行日期：</span>
               <span>{coin?.genesis_date}</span>

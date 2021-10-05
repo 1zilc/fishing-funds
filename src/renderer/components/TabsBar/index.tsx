@@ -35,7 +35,6 @@ const tabs = [
 ];
 const TabsBar: React.FC<TabsBarProps> = () => {
   const dispatch = useDispatch();
-
   const tabsActiveKey = useSelector((state: StoreState) => state.tabs.activeKey);
 
   return (

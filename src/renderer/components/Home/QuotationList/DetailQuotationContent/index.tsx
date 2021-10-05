@@ -36,11 +36,11 @@ const DetailQuotationContent: React.FC<DetailQuotationContentProps> = (props) =>
       <div className={styles.content}>
         <div className={styles.container}>
           <h3 className={styles.titleRow}>
-            <span>{quotation?.name}</span>
+            <span className="copify">{quotation?.name}</span>
             <span className={classnames(Utils.GetValueColor(quotation.zdd).textClass)}>{quotation?.zxj}</span>
           </h3>
           <div className={styles.subTitleRow}>
-            <span>{quotation?.code}</span>
+            <span className="copify">{quotation?.code}</span>
             <div>
               <span className={styles.detailItemLabel}>最新价：</span>
               <span className={classnames(Utils.GetValueColor(quotation.zdd).textClass)}>{Utils.Yang(quotation?.zdd)}</span>
