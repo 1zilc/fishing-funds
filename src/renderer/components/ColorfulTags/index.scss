@@ -1,0 +1,23 @@
+.content {
+  display: block;
+}
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+}
+.tag {
+  border-radius: 10px;
+  margin: var(--base-padding) var(--base-padding) 0 0;
+  display: inline-block;
+  padding: 0 5px;
+  font-size: calc(10rem / var(--base-font-size));
+  color: #fff;
+  word-break: keep-all;
+  transition: all 0.3s;
+  &:last-child {
+    margin-right: 0;
+  }
+  &:hover {
+    filter: brightness(115%);
+  }
+}

@@ -1,11 +1,11 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useMemo } from 'react';
 import { useBoolean, useRequest } from 'ahooks';
-import ColorHash from 'color-hash';
 import classnames from 'classnames';
 import { Tabs, Rate } from 'antd';
 
 import ChartCard from '@/components/Card/ChartCard';
 import CustomDrawer from '@/components/CustomDrawer';
+import ColorfulTags from '@/components/ColorfulTags';
 import Estimate from '@/components/Home/FundList/DetailFundContent/Estimate';
 import InvestStyle from '@/components/Home/FundList/DetailFundContent/InvestStyle';
 import Performance from '@/components/Home/FundList/DetailFundContent/Performance';
@@ -25,16 +25,14 @@ import SameFundList from '@/components/Home/FundList/DetailFundContent/SameFundL
 import FundManagerContent from '@/components/Home/FundList/FundManagerContent';
 import IndustryLayout from '@/components/Home/FundList/DetailFundContent/IndustryLayout';
 import WarehouseEvent from '@/components/Home/FundList/DetailFundContent/WarehouseEvent';
-import { APIOptions } from '@/components/SettingContent';
+import Origin from '@/components/Home/FundList/DetailFundContent/Origin';
+
 import { useFundRating } from '@/utils/hooks';
 import * as Services from '@/services';
 import * as Utils from '@/utils';
 import * as Enums from '@/utils/enums';
 import styles from './index.scss';
 
-const colorHash = new ColorHash();
-
-const { shell } = window.contextModules.electron;
 export interface DetailFundContentProps {
   onEnter: () => void;
   onClose: () => void;
@@ -86,64 +84,16 @@ export const TypeTag: React.FC<{ type?: string }> = ({ type }) => {
   return <></>;
 };
 
-export const APIUrls: React.FC<{ code: string }> = ({ code }) => {
-  function onMore(type: Enums.FundApiType) {
-    switch (type) {
-      case Enums.FundApiType.Eastmoney:
-        shell.openExternal(`http://fund.eastmoney.com/${code}.html`);
-        break;
-      case Enums.FundApiType.Ant:
-        shell.openExternal(`https://www.fund123.cn/matiaria?fundCode=${code}`);
-        break;
-      case Enums.FundApiType.Fund10jqka:
-        shell.openExternal(`http://fund.10jqka.com.cn/${code}/`);
-        break;
-      case Enums.FundApiType.Tencent:
-        shell.openExternal(`https://gu.qq.com/${code}`);
-        break;
-      case Enums.FundApiType.Sina:
-        shell.openExternal(`http://finance.sina.com.cn/fund/quotes/${code}/bc.shtml`);
-        break;
-      case Enums.FundApiType.Dayfund:
-        shell.openExternal(`https://www.dayfund.cn/fundinfo/${code}.html`);
-        break;
-      case Enums.FundApiType.Howbuy:
-        shell.openExternal(`https://www.howbuy.com/fund/${code}/`);
-        break;
-      case Enums.FundApiType.Etf:
-        shell.openExternal(`https://www.etf88.com/jj/${code}/`);
-        break;
-      default:
-        break;
-    }
-  }
-  return (
-    <div className={styles.urls}>
-      {APIOptions.map((api) => {
-        const color = colorHash.hex(`${api.name}${code}`);
-        return (
-          <div
-            key={api.code}
-            className={styles.apiTag}
-            style={{ background: color, boxShadow: `0 2px 5px ${color}` }}
-            onClick={() => onMore(api.code)}
-          >
-            {api.name}
-          </div>
-        );
-      })}
-    </div>
-  );
-};
-
 const DetailFundContent: React.FC<DetailFundContentProps> = (props) => {
   const { code } = props;
   const [fund, setFund] = useState<Fund.FixData | Record<string, any>>({});
   const [pingzhongdata, setPingzhongdata] = useState<Fund.PingzhongData | Record<string, any>>({});
+  const [industryData, setIndustryData] = useState({ stocks: [] as any[], expansion: '' });
   const { star: fundStar, type: fundType } = useFundRating(code);
   const [showManagerDrawer, { setTrue: openManagerDrawer, setFalse: closeManagerDrawer, toggle: ToggleManagerDrawer }] = useBoolean(false);
   const rateInSimilarPersent = pingzhongdata.Data_rateInSimilarPersent || [];
   const syl_1n = pingzhongdata.syl_1n || pingzhongdata.syl_6y || pingzhongdata.syl_3y || pingzhongdata.syl_1y;
+  const industryTags = useMemo(() => Array.from(new Set(industryData.stocks.map((stock) => stock.INDEXNAME))), [industryData.stocks]);
 
   useRequest(Services.Fund.GetFixFromEastMoney, {
     throwOnError: true,
@@ -154,6 +104,12 @@ const DetailFundContent: React.FC<DetailFundContentProps> = (props) => {
   const { run: runGetFundDetailFromEastmoney } = useRequest(() => Services.Fund.GetFundDetailFromEastmoney(code), {
     throwOnError: true,
     onSuccess: setPingzhongdata,
+    refreshDeps: [code],
+  });
+
+  const { run: runGetIndustryRateFromEaseMoney } = useRequest(() => Services.Fund.GetIndustryRateFromEaseMoney(code), {
+    throwOnError: true,
+    onSuccess: setIndustryData,
     refreshDeps: [code],
   });
 
@@ -191,11 +147,11 @@ const DetailFundContent: React.FC<DetailFundContentProps> = (props) => {
               <div className={styles.detailItemLabel}>净值 {fund?.fixDate}</div>
             </div>
           </div>
-          <APIUrls code={code} />
+          <ColorfulTags tags={industryTags} />
         </div>
         <div className={styles.container}>
           <Tabs animated={{ tabPane: true }} tabBarGutter={15}>
-            <Tabs.TabPane tab="历史业绩" key={String(Enums.TrendType.Performance)}>
+            <Tabs.TabPane tab="历史业绩" key={String(0)}>
               <ChartCard auto onFresh={runGetFundDetailFromEastmoney}>
                 <HistoryPerformance
                   syl_1n={pingzhongdata.syl_1n}
@@ -206,9 +162,14 @@ const DetailFundContent: React.FC<DetailFundContentProps> = (props) => {
                 />
               </ChartCard>
             </Tabs.TabPane>
-            <Tabs.TabPane tab="历史净值" key={String(Enums.TrendType.Estimate)}>
+            <Tabs.TabPane tab="历史净值" key={String(1)}>
               <ChartCard auto onFresh={runGetFundDetailFromEastmoney}>
                 <HistoryValue data={pingzhongdata.Data_netWorthTrend} />
+              </ChartCard>
+            </Tabs.TabPane>
+            <Tabs.TabPane tab="源网站" key={String(2)}>
+              <ChartCard auto>
+                <Origin code={code} />
               </ChartCard>
             </Tabs.TabPane>
           </Tabs>
@@ -235,7 +196,9 @@ const DetailFundContent: React.FC<DetailFundContentProps> = (props) => {
               <SecuritiesWareHouse code={code} securitiesCodes={pingzhongdata.zqCodesNew!} />
             </Tabs.TabPane>
             <Tabs.TabPane tab="行业布局" key={String(Enums.WareHouseType.IndustryLayout)}>
-              <IndustryLayout code={code} />
+              <ChartCard onFresh={runGetIndustryRateFromEaseMoney} TitleBar={<div className={styles.date}>{industryData.expansion}</div>}>
+                <IndustryLayout stocks={industryData.stocks} />
+              </ChartCard>
             </Tabs.TabPane>
             <Tabs.TabPane tab="股票仓位测算" key={String(Enums.WareHouseType.StockEstimate)}>
               <ChartCard onFresh={runGetFundDetailFromEastmoney}>
@@ -257,7 +220,13 @@ const DetailFundContent: React.FC<DetailFundContentProps> = (props) => {
               </ChartCard>
             </Tabs.TabPane>
             <Tabs.TabPane tab="仓位变动" key={String(Enums.ConfigType.WareHouse)}>
-              <WarehouseEvent code={code} />
+              <ChartCard
+                auto
+                onFresh={runGetIndustryRateFromEaseMoney}
+                TitleBar={<div className={styles.date}>{industryData.expansion}</div>}
+              >
+                <WarehouseEvent stocks={industryData.stocks} />
+              </ChartCard>
             </Tabs.TabPane>
             <Tabs.TabPane tab="规模变动" key={String(Enums.ConfigType.Scale)}>
               <ChartCard onFresh={runGetFundDetailFromEastmoney}>

@@ -11,12 +11,10 @@ import * as Utils from '@/utils';
 import styles from './index.scss';
 
 interface WarehouseEventProps {
-  code: string;
+  stocks: any[];
 }
 
-const WarehouseEvent: React.FC<PropsWithChildren<WarehouseEventProps>> = ({ code }) => {
-  const [data, setData] = useState<any[]>([]);
-  const [date, setDate] = useState('');
+const WarehouseEvent: React.FC<PropsWithChildren<WarehouseEventProps>> = ({ stocks }) => {
   const { data: detailCode, show: showDetailDrawer, set: setDetailDrawer, close: closeDetailDrawer } = useDrawer('');
 
   const columns = [
@@ -44,37 +42,26 @@ const WarehouseEvent: React.FC<PropsWithChildren<WarehouseEventProps>> = ({ code
     },
   ];
 
-  const { run: runGetFundRatingFromEasemoney, loading } = useRequest(() => Services.Fund.GetIndustryRateFromEaseMoney(code), {
-    throwOnError: true,
-    onSuccess: ({ stocks, expansion }) => {
-      setData(stocks);
-      setDate(expansion);
-    },
-  });
-
   return (
-    <ChartCard auto onFresh={runGetFundRatingFromEasemoney} TitleBar={<div className={styles.date}>{date}</div>}>
-      <div className={styles.content}>
-        <Table
-          rowKey="GPDM"
-          size="small"
-          columns={columns}
-          dataSource={data}
-          loading={loading}
-          pagination={{
-            defaultPageSize: 20,
-            hideOnSinglePage: true,
-            position: ['bottomCenter'],
-          }}
-          onRow={(record) => ({
-            onClick: () => setDetailDrawer(`${record.NEWTEXCH}.${record.GPDM}`),
-          })}
-        />
-        <CustomDrawer show={showDetailDrawer}>
-          <DetailStockContent onEnter={closeDetailDrawer} onClose={closeDetailDrawer} secid={detailCode} />
-        </CustomDrawer>
-      </div>
-    </ChartCard>
+    <div className={styles.content}>
+      <Table
+        rowKey="GPDM"
+        size="small"
+        columns={columns}
+        dataSource={stocks}
+        pagination={{
+          defaultPageSize: 20,
+          hideOnSinglePage: true,
+          position: ['bottomCenter'],
+        }}
+        onRow={(record) => ({
+          onClick: () => setDetailDrawer(`${record.NEWTEXCH}.${record.GPDM}`),
+        })}
+      />
+      <CustomDrawer show={showDetailDrawer}>
+        <DetailStockContent onEnter={closeDetailDrawer} onClose={closeDetailDrawer} secid={detailCode} />
+      </CustomDrawer>
+    </div>
   );
 };
 export default WarehouseEvent;

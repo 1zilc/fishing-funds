@@ -78,11 +78,7 @@ export enum TabKeyType {
   Stock,
   Coin,
 }
-// 走势类型
-export enum TrendType {
-  Performance, // 业绩走势
-  Estimate, // 估值走势
-}
+
 // 持仓类型
 export enum WareHouseType {
   Stock, // 股票
