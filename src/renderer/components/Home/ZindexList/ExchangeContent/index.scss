@@ -1,3 +1,7 @@
 .content {
   display: block;
+  padding: var(--base-padding) 0;
+}
+.container {
+  padding: 0 var(--base-padding);
 }

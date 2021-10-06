@@ -6,6 +6,6 @@ export interface CollectProps {
 const { production } = window.contextModules.process;
 
 export const Collect: React.FC<CollectProps> = ({ title }) => {
-  return <>{!production && <iframe src={`https://ff.1zilc.top/collect?title=${title}`} style={{ display: 'none' }} />}</>;
+  return <>{production && <iframe src={`https://ff.1zilc.top/collect?title=${title}`} style={{ display: 'none' }} />}</>;
 };
 export default Collect;
