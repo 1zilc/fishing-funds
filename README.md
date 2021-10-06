@@ -34,7 +34,7 @@
 
 ## 项目介绍
 
-- 本项目参考[electron-react-boilerplate-menubar](https://github.com/3on/electron-react-boilerplate-menubar)，基于[Electron React Boilerplate](https://github.com/electron-react-boilerplate/electron-react-boilerplate)  
+- 本项目参考[electron-react-boilerplate-menubar](https://github.com/3on/electron-react-boilerplate-menubar)，基于[Electron React Boilerplate](https://github.com/electron-react-boilerplate/electron-react-boilerplate)
   和[menubar](https://github.com/maxogden/menubar)开发
 - 采用天天基金等数据源接口，实时显示当前基金涨跌情况，计算显示收益，大盘实时数据，板块行情，股票走势，加密虚拟货币等
 - 软件中所有的数据仅供参考，一切收益或是亏损按当天实际为准，任何走势，排行数据均来自于第三方网站不代表作者观点
@@ -42,7 +42,7 @@
 
 ## 数据源
 
-> 注意 ⚠️：不同的数据源可能会有反爬机制，刷新时的请求速度会有所差异  
+> 注意 ⚠️：不同的数据源可能会有反爬机制，刷新时的请求速度会有所差异
 > 强烈建议使用天天基金的数据源，最快同时估值也最准确
 
 - [东方财富-天天基金](https://fund.eastmoney.com/) ★★★★★ (推荐)

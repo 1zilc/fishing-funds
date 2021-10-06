@@ -1,8 +1,8 @@
 import React from 'react';
 import classnames from 'classnames';
 
-import { ReactComponent as EyeIcon } from '@assets/icons/eye.svg';
-import { ReactComponent as EyeCloseIcon } from '@assets/icons/eye-close.svg';
+import { ReactComponent as EyeIcon } from '@assets/remix/eye.svg';
+import { ReactComponent as EyeCloseIcon } from '@assets/remix/eye-close.svg';
 import styles from './index.scss';
 
 export interface EyeProps {

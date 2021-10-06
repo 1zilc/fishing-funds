@@ -7,8 +7,8 @@ import SwiperCore, { Autoplay, EffectCoverflow, Pagination } from 'swiper';
 import StandCard from '@/components/Card/StandCard';
 import wechatQRcodeImage from '@assets/qrcode/wechat.png';
 import alipayQRcodeImage from '@assets/qrcode/alipay.png';
-import { ReactComponent as WechatPayIcon } from '@assets/icons/wechat-pay.svg';
-import { ReactComponent as AliPayIcon } from '@assets/icons/alipay.svg';
+import { ReactComponent as WechatPayIcon } from '@assets/remix/wechat-pay.svg';
+import { ReactComponent as AliPayIcon } from '@assets/remix/alipay.svg';
 
 import styles from './index.scss';
 

@@ -3,8 +3,8 @@ import classnames from 'classnames';
 import { useDispatch, useSelector } from 'react-redux';
 import NP from 'number-precision';
 
-import { ReactComponent as ArrowDownIcon } from '@assets/icons/arrow-down.svg';
-import { ReactComponent as ArrowUpIcon } from '@assets/icons/arrow-up.svg';
+import { ReactComponent as ArrowDownIcon } from '@assets/remix/arrow-down.svg';
+import { ReactComponent as ArrowUpIcon } from '@assets/remix/arrow-up.svg';
 import ArrowLine from '@/components/ArrowLine';
 import Collapse from '@/components/Collapse';
 import { StoreState } from '@/reducers/types';
