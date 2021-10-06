@@ -2,6 +2,7 @@ import { batch } from 'react-redux';
 import dayjs from 'dayjs';
 import { store } from '@/.';
 import { syncWalletStateAction, syncFixWalletStateAction } from '@/actions/wallet';
+
 import * as CONST from '@/constants';
 import * as Utils from '@/utils';
 import * as Enums from '@/utils/enums';
@@ -20,7 +21,7 @@ export const defaultWallet: Wallet.SettingItem = {
   funds: [],
 };
 
-export const walletIcons = new Array(40).fill('').map((_, index) => require(`@/assets/icons/wallet/${index}.svg`).default);
+export const walletIcons = new Array(40).fill('').map((_, index) => require(`@assets/wallet/${index}.png`).default);
 
 export function GetWalletConfig() {
   const walletConfig: Wallet.SettingItem[] = Utils.GetStorage(CONST.STORAGE.WALLET_SETTING, [defaultWallet]);

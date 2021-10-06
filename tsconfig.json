@@ -24,11 +24,12 @@
     "allowJs": true,
     "outDir": "release/app/dist",
     "paths": {
-      "@/*": ["./src/renderer/*"]
+      "@/*": ["./src/renderer/*"],
+      "@assets/*": ["./assets/*"]
     }
   },
   "include": ["./src/**/*"],
-  "exclude": ["test", "build/release", "release/app/dist", ".erb/dll"],
+  "exclude": ["test", "release/app/dist", ".erb/dll"],
   "ts-node": {
     "compilerOptions": {
       "module": "commonjs"

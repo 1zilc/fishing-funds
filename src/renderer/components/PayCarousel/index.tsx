@@ -5,10 +5,10 @@ import { SwiperOptions } from 'swiper/types/swiper-options';
 import SwiperCore, { Autoplay, EffectCoverflow, Pagination } from 'swiper';
 
 import StandCard from '@/components/Card/StandCard';
-import wechatQRcodeImage from '@/assets/qrcode/wechat.png';
-import alipayQRcodeImage from '@/assets/qrcode/alipay.png';
-import { ReactComponent as WechatPayIcon } from '@/assets/icons/wechat-pay.svg';
-import { ReactComponent as AliPayIcon } from '@/assets/icons/alipay.svg';
+import wechatQRcodeImage from '@assets/qrcode/wechat.png';
+import alipayQRcodeImage from '@assets/qrcode/alipay.png';
+import { ReactComponent as WechatPayIcon } from '@assets/icons/wechat-pay.svg';
+import { ReactComponent as AliPayIcon } from '@assets/icons/alipay.svg';
 
 import styles from './index.scss';
 
@@ -39,20 +39,14 @@ const PayCarousel: React.FC<PayCarouselProps> = () => {
     <div className={styles.content}>
       <Swiper {...config} style={{ padding: '0 10px 20px' }}>
         <SwiperSlide>
-          <StandCard
-            icon={<AliPayIcon className={styles.alipay} />}
-            title="支付宝"
-          >
+          <StandCard icon={<AliPayIcon className={styles.alipay} />} title="支付宝">
             <div className={classnames(styles.pay, 'card-body')}>
               <img src={alipayQRcodeImage} />
             </div>
           </StandCard>
         </SwiperSlide>
         <SwiperSlide>
-          <StandCard
-            icon={<WechatPayIcon className={styles.wechat} />}
-            title="微信"
-          >
+          <StandCard icon={<WechatPayIcon className={styles.wechat} />} title="微信">
             <div className={classnames(styles.pay, 'card-body')}>
               <img src={wechatQRcodeImage} />
             </div>

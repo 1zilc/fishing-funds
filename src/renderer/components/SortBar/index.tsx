@@ -4,10 +4,10 @@ import { useSelector, useDispatch } from 'react-redux';
 import classsames from 'classnames';
 import { Dropdown, Menu } from 'antd';
 
-import { ReactComponent as SortArrowUpIcon } from '@/assets/icons/sort-arrow-up.svg';
-import { ReactComponent as SortArrowDownIcon } from '@/assets/icons/sort-arrow-down.svg';
-import { ReactComponent as ArrowDownIcon } from '@/assets/icons/arrow-down.svg';
-import { ReactComponent as ArrowUpIcon } from '@/assets/icons/arrow-up.svg';
+import { ReactComponent as SortArrowUpIcon } from '@assets/icons/sort-arrow-up.svg';
+import { ReactComponent as SortArrowDownIcon } from '@assets/icons/sort-arrow-down.svg';
+import { ReactComponent as ArrowDownIcon } from '@assets/icons/arrow-down.svg';
+import { ReactComponent as ArrowUpIcon } from '@assets/icons/arrow-up.svg';
 import {
   setFundSortModeAction,
   troggleFundSortOrderAction,

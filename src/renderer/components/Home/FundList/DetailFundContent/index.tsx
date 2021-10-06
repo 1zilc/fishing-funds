@@ -26,9 +26,9 @@ import FundManagerContent from '@/components/Home/FundList/FundManagerContent';
 import IndustryLayout from '@/components/Home/FundList/DetailFundContent/IndustryLayout';
 import WarehouseEvent from '@/components/Home/FundList/DetailFundContent/WarehouseEvent';
 import Origin from '@/components/Home/FundList/DetailFundContent/Origin';
-import { ReactComponent as CopyIcon } from '@/assets/icons/copy.svg';
+import AddFundContent from '@/components/Home/FundList/AddFundContent';
 
-import { useFundRating } from '@/utils/hooks';
+import { useFundRating, useCurrentWallet, useDrawer } from '@/utils/hooks';
 import * as Services from '@/services';
 import * as Utils from '@/utils';
 import * as Enums from '@/utils/enums';
@@ -91,6 +91,8 @@ const DetailFundContent: React.FC<DetailFundContentProps> = (props) => {
   const [pingzhongdata, setPingzhongdata] = useState<Fund.PingzhongData | Record<string, any>>({});
   const [industryData, setIndustryData] = useState({ stocks: [] as any[], expansion: '' });
   const { star: fundStar, type: fundType } = useFundRating(code);
+  const { currentWalletFundsCodeMap: codeMap } = useCurrentWallet();
+  const { data: addCode, show: showAddDrawer, set: setAddDrawer, close: closeAddDrawer } = useDrawer(code);
   const [showManagerDrawer, { setTrue: openManagerDrawer, setFalse: closeManagerDrawer, toggle: ToggleManagerDrawer }] = useBoolean(false);
   const rateInSimilarPersent = pingzhongdata.Data_rateInSimilarPersent || [];
   const syl_1n = pingzhongdata.syl_1n || pingzhongdata.syl_6y || pingzhongdata.syl_3y || pingzhongdata.syl_1y;
@@ -118,7 +120,10 @@ const DetailFundContent: React.FC<DetailFundContentProps> = (props) => {
     <CustomDrawerContent title="基金详情" enterText="确定" onClose={props.onClose} onEnter={props.onEnter}>
       <div className={styles.content}>
         <div className={styles.container}>
-          <h3 className="copify">{fund?.fixName}</h3>
+          <div className={styles.titleRow}>
+            <h3 className="copify">{fund?.fixName}</h3>
+            {!codeMap[code] && <a onClick={() => setAddDrawer(code)}>+加自选</a>}
+          </div>
           <div className={styles.subTitleRow}>
             <Rate allowHalf defaultValue={fundStar} disabled />
             <div className={styles.labels}>
@@ -269,6 +274,9 @@ const DetailFundContent: React.FC<DetailFundContentProps> = (props) => {
           onClose={closeManagerDrawer}
           manager={pingzhongdata.Data_currentFundManager?.[0]}
         />
+      </CustomDrawer>
+      <CustomDrawer show={showAddDrawer}>
+        <AddFundContent defaultCode={addCode} onClose={closeAddDrawer} onEnter={closeAddDrawer} />
       </CustomDrawer>
     </CustomDrawerContent>
   );

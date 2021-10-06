@@ -3,12 +3,12 @@ import { Badge } from 'antd';
 import { useSelector } from 'react-redux';
 import { useBoolean, useThrottleFn } from 'ahooks';
 
-import { ReactComponent as MenuAddIcon } from '@/assets/icons/menu-add.svg';
-import { ReactComponent as RefreshIcon } from '@/assets/icons/refresh.svg';
-import { ReactComponent as SettingIcon } from '@/assets/icons/setting.svg';
-import { ReactComponent as WalletIcon } from '@/assets/icons/wallet.svg';
-import { ReactComponent as ChartBoxIcon } from '@/assets/icons/chart-box.svg';
-import { ReactComponent as NewsIcon } from '@/assets/icons/news.svg';
+import { ReactComponent as MenuAddIcon } from '@assets/icons/menu-add.svg';
+import { ReactComponent as RefreshIcon } from '@assets/icons/refresh.svg';
+import { ReactComponent as SettingIcon } from '@assets/icons/setting.svg';
+import { ReactComponent as WalletIcon } from '@assets/icons/wallet.svg';
+import { ReactComponent as ChartBoxIcon } from '@assets/icons/chart-box.svg';
+import { ReactComponent as NewsIcon } from '@assets/icons/news.svg';
 import CustomDrawer from '@/components/CustomDrawer';
 import ManageFundContent from '@/components/Home/FundList/ManageFundContent';
 import ManageWalletContent from '@/components/Wallet/ManageWalletContent';

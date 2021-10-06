@@ -47,6 +47,7 @@ export default {
     modules: [webpackPaths.srcPath, 'node_modules'],
     alias: {
       '@': webpackPaths.srcRendererPath,
+      '@assets': webpackPaths.assetsPath,
     },
   },
 

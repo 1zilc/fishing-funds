@@ -20,7 +20,9 @@ const distRendererPath = path.join(distPath, 'renderer');
 
 const buildPath = path.join(releasePath, 'build');
 
-module.exports = {
+const assetsPath = path.join(rootPath, 'assets');
+
+export = {
   rootPath,
   dllPath,
   srcPath,
@@ -35,4 +37,5 @@ module.exports = {
   distMainPath,
   distRendererPath,
   buildPath,
+  assetsPath,
 };

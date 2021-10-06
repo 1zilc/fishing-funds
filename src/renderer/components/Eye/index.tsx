@@ -1,8 +1,8 @@
 import React from 'react';
 import classnames from 'classnames';
 
-import { ReactComponent as EyeIcon } from '@/assets/icons/eye.svg';
-import { ReactComponent as EyeCloseIcon } from '@/assets/icons/eye-close.svg';
+import { ReactComponent as EyeIcon } from '@assets/icons/eye.svg';
+import { ReactComponent as EyeCloseIcon } from '@assets/icons/eye-close.svg';
 import styles from './index.scss';
 
 export interface EyeProps {
@@ -22,17 +22,9 @@ const Eye: React.FC<EyeProps> = (props) => {
   return (
     <>
       {status ? (
-        <EyeIcon
-          className={classnames(styles.eye, classNames)}
-          style={style}
-          onClick={toggle}
-        />
+        <EyeIcon className={classnames(styles.eye, classNames)} style={style} onClick={toggle} />
       ) : (
-        <EyeCloseIcon
-          className={classnames(styles.eye, classNames)}
-          style={style}
-          onClick={toggle}
-        />
+        <EyeCloseIcon className={classnames(styles.eye, classNames)} style={style} onClick={toggle} />
       )}
     </>
   );
