@@ -9,7 +9,6 @@ import Stocks from '@/components/Home/QuotationList/DetailQuotationContent/Stock
 import Funds from '@/components/Home/QuotationList/DetailQuotationContent/Funds';
 import RealTimeTransaction from '@/components/Home/QuotationList/DetailQuotationContent/RealTimeTransaction';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
-
 import * as Services from '@/services';
 import * as Utils from '@/utils';
 import * as Enums from '@/utils/enums';

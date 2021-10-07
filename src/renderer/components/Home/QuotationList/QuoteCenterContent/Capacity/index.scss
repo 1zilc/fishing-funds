@@ -1,0 +1,17 @@
+.content {
+  display: flex;
+  width: 100%;
+  align-items: center;
+}
+.info {
+  flex: 1;
+  margin-left: var(--base-padding);
+  h3 {
+    color: var(--main-text-color);
+  }
+  p {
+    font-size: 1rem;
+    word-break: break-all;
+    color: var(--inner-text-color);
+  }
+}

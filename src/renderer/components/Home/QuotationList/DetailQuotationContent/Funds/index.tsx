@@ -69,7 +69,7 @@ const Funds: React.FC<PropsWithChildren<FundsProps>> = ({ code }) => {
     },
   ];
 
-  const { run: runGetFundsFromEasymoney, loading } = useRequest(() => Services.Quotation.GetFundsFromEasymoney(code), {
+  const { run: runGetFundsFromEasymoney, loading } = useRequest(() => Services.Quotation.GetFundsFromEastmoney(code), {
     throwOnError: true,
     onSuccess: setData,
     refreshDeps: [code],

@@ -27,6 +27,18 @@
         "component": "templates/chart/index.tsx",
         "style": "templates/chart/index.scss"
       }
+    },
+    "content": {
+      "path": "src/renderer/components",
+      "withIndex": false,
+      "withLazy": false,
+      "withStory": false,
+      "withStyle": true,
+      "withTest": false,
+      "customTemplates": {
+        "component": "templates/content/index.tsx",
+        "style": "templates/content/index.scss"
+      }
     }
   }
 }

@@ -1,4 +1,4 @@
-import React, { PropsWithChildren, useRef } from 'react';
+import React, { PropsWithChildren, useLayoutEffect, useRef, useState } from 'react';
 
 import classnames from 'classnames';
 import styles from './index.scss';
@@ -10,12 +10,16 @@ interface CollapseProps {
 
 const Collapse: React.FC<PropsWithChildren<CollapseProps>> = (props) => {
   const contentRef = useRef<HTMLDivElement>(null);
+  const [max, setMax] = useState(contentRef.current?.clientHeight);
+  useLayoutEffect(() => {
+    setMax(contentRef.current?.clientHeight);
+  }, []);
 
   return (
     <div
       className={classnames(styles.content)}
       style={{
-        maxHeight: props.isOpened ? contentRef.current?.clientHeight : 0,
+        maxHeight: props.isOpened ? max : 0,
         ...props.style,
       }}
     >

@@ -10,6 +10,7 @@ import { ReactComponent as WalletIcon } from '@assets/remix/wallet.svg';
 import { ReactComponent as ChartBoxIcon } from '@assets/remix/chart-box.svg';
 import { ReactComponent as NewsIcon } from '@assets/remix/news.svg';
 import { ReactComponent as ExchangeIcon } from '@assets/remix/exchange.svg';
+import { ReactComponent as BubbleIcon } from '@assets/remix/bubble.svg';
 import CustomDrawer from '@/components/CustomDrawer';
 import ManageFundContent from '@/components/Home/FundList/ManageFundContent';
 import ManageWalletContent from '@/components/Wallet/ManageWalletContent';
@@ -21,6 +22,7 @@ import ManageZindexContent from '@/components/Home/ZindexList/ManageZindexConten
 import FundFlowContent from '@/components/Home/QuotationList/FundFlowContent';
 import NewsContent from '@/components/Home/NewsList/NewsContent';
 import ExchangeContent from '@/components/Home/ZindexList/ExchangeContent';
+import QuoteCenterContent from '@/components/Home/QuotationList/QuoteCenterContent';
 import { StoreState } from '@/reducers/types';
 import { useScrollToTop, useFreshFunds } from '@/utils/hooks';
 import * as Enums from '@/utils/enums';
@@ -68,6 +70,8 @@ const ToolBar: React.FC<ToolBarProps> = () => {
   const [showNewsDrawer, { setTrue: openNewsDrawer, setFalse: closeNewsDrawer, toggle: ToggleNewsDrawer }] = useBoolean(false);
   const [showExchangeDrawer, { setTrue: openExchangeDrawer, setFalse: closeExchangeDrawer, toggle: ToggleExchangeDrawer }] =
     useBoolean(false);
+  const [showQuoteCenterDrawer, { setTrue: openQuoteCenterDrawer, setFalse: closeQuoteCenterDrawer, toggle: ToggleQuoteCenterDrawer }] =
+    useBoolean(false);
 
   return (
     <>
@@ -88,6 +92,7 @@ const ToolBar: React.FC<ToolBarProps> = () => {
         {tabsActiveKey === Enums.TabKeyType.Coin && <RefreshIcon style={{ ...iconSize }} onClick={freshCoins} />}
         {tabsActiveKey === Enums.TabKeyType.Funds && <ChartBoxIcon style={{ ...iconSize }} onClick={openFundStatisticsDrawer} />}
         {tabsActiveKey === Enums.TabKeyType.Zindex && <ExchangeIcon style={{ ...iconSize }} onClick={openExchangeDrawer} />}
+        {tabsActiveKey === Enums.TabKeyType.Quotation && <BubbleIcon style={{ ...iconSize }} onClick={openQuoteCenterDrawer} />}
         <Badge dot={!!updateInfo.version}>
           <SettingIcon style={{ ...iconSize }} onClick={openSettingDrawer} />
         </Badge>
@@ -160,6 +165,9 @@ const ToolBar: React.FC<ToolBarProps> = () => {
       </CustomDrawer>
       <CustomDrawer show={showExchangeDrawer}>
         <ExchangeContent onClose={closeExchangeDrawer} onEnter={closeExchangeDrawer} />
+      </CustomDrawer>
+      <CustomDrawer show={showQuoteCenterDrawer}>
+        <QuoteCenterContent onClose={closeQuoteCenterDrawer} onEnter={closeQuoteCenterDrawer} />
       </CustomDrawer>
     </>
   );

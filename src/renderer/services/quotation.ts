@@ -551,7 +551,7 @@ export async function GetSouthDayFromEastmoney(fields1: string, fields2: string)
   }
 }
 
-export async function GetFundsFromEasymoney(code: string) {
+export async function GetFundsFromEastmoney(code: string) {
   try {
     const {
       body: { Data },
@@ -604,5 +604,81 @@ export async function GetFundsFromEasymoney(code: string) {
   } catch (error) {
     console.log(error);
     return [];
+  }
+}
+
+export async function GetQuoteCenterFromEastmoney() {
+  try {
+    const { body } = await got<{
+      re: true;
+      message: '';
+      result: {
+        TopText: {
+          PositionInd: 64;
+          Title: '市场中期趋势向上';
+          Content: '市场短期震荡向上概率较大，利多因素逐渐显现';
+        };
+        MarketStyle: [
+          {
+            Category: '权重';
+            ThemeList: [
+              {
+                Code: '010005';
+                Name: '煤炭';
+                IsImportant: '0';
+                TopCode: '010';
+                TopName: '供给侧改革';
+                DayType: 1;
+                Chg: '3.95';
+                HotRate: 30.0442;
+              }
+            ];
+          }
+        ];
+        Recommend: [
+          {
+            Title: '短线机会';
+            DefaultText: '短线机会';
+            ThemeList: [
+              {
+                Code: 'e03002';
+                Name: '固废处理';
+                Chg: '0.53';
+                TopCode: '';
+                TopName: '';
+                IsImportant: '0';
+                Reason: '中央会议重点提及污染防治，环保“十四五”规划编制进入关键阶段';
+                StockList: [
+                  {
+                    Code: '600008';
+                    Name: '首创环保';
+                    Market: '01';
+                    Chg: '0.27';
+                  }
+                ];
+              }
+            ];
+          }
+        ];
+      }[];
+    }>('http://quote.eastmoney.com/zhuti/api/fenggeindex', {
+      responseType: 'json',
+    });
+    const result = body.result.pop();
+    if (!result) {
+      throw new Error();
+    }
+    return result;
+  } catch (error) {
+    console.log(error);
+    return {
+      TopText: {
+        PositionInd: 0,
+        Title: '',
+        Content: '',
+      },
+      MarketStyle: [],
+      Recommend: [],
+    };
   }
 }
