@@ -75,3 +75,26 @@ export async function GetListFromEastmoney(po: string, fs: string) {
     return [];
   }
 }
+
+export async function GetGlobalBondFromEastmoney() {
+  try {
+    const { body: script } = await got('http://quote.eastmoney.com/center/api/qqzq.js', {
+      searchParams: {
+        _: new Date().getTime(),
+      },
+    });
+    const result: {
+      code: string; //'US2Y_B';
+      name: string; //'美国2年期国债';
+      percent: string; //'0.00';
+      price: string; // 0.22;
+      timestamp: string; // 1629467984;
+    }[] = eval(`(()=>{
+      ${script};
+      return BONDdata;
+    })()`);
+    return result;
+  } catch (error) {
+    return [];
+  }
+}
