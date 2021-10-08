@@ -14,19 +14,19 @@
   cursor: pointer;
   border-radius: var(--base-radius);
 
-  svg {
+  img {
     transition: transform 0.3s;
   }
 
   &:hover {
-    svg {
+    img {
       transform: scale(1.2);
     }
   }
 }
 
 .selected {
-  svg {
+  img {
     transform: scale(1.2);
   }
 }

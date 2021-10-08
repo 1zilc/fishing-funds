@@ -1,4 +1,4 @@
-import React, { createContext, useContext } from 'react';
+import React, { createContext, useContext, useState } from 'react';
 import classnames from 'classnames';
 import { Tabs } from 'antd';
 import { useSelector } from 'react-redux';
@@ -46,7 +46,7 @@ const FundGroup = () => {
   const { currentWalletFundsCodeMap: fundCodeMap, currentWalletCode } = useCurrentWallet();
 
   return (
-    <GroupTab>
+    <GroupTab tabKey={Enums.TabKeyType.Funds}>
       <Tabs.TabPane tab="全部" key={String(0)}>
         <FundList filter={() => true} />
       </Tabs.TabPane>
@@ -64,10 +64,10 @@ const FundGroup = () => {
 };
 
 const ZindexGroup = () => {
-  const { codeMap: zindexCodeMap } = useSelector((state: StoreState) => state.zindex.config);
+  // const { codeMap: zindexCodeMap } = useSelector((state: StoreState) => state.zindex.config);
 
   return (
-    <GroupTab>
+    <GroupTab tabKey={Enums.TabKeyType.Zindex}>
       <Tabs.TabPane tab="全部" key={String(-1)}>
         <ZindexList filter={() => true} />
       </Tabs.TabPane>
@@ -79,11 +79,17 @@ const QuotationGroup = () => {
   const favoriteQuotationMap = useSelector((state: StoreState) => state.quotation.favoriteQuotationMap);
 
   return (
-    <GroupTab>
-      <Tabs.TabPane tab="全部" key={String(0)}>
-        <QuotationList filter={() => true} />
+    <GroupTab tabKey={Enums.TabKeyType.Quotation}>
+      <Tabs.TabPane tab="行业" key={String(0)}>
+        <QuotationList filter={(quotation) => quotation.type === Enums.QuotationType.Industry} />
       </Tabs.TabPane>
-      <Tabs.TabPane tab="关注" key={String(1)}>
+      <Tabs.TabPane tab="概念" key={String(1)}>
+        <QuotationList filter={(quotation) => quotation.type === Enums.QuotationType.Concept} />
+      </Tabs.TabPane>
+      <Tabs.TabPane tab="地域" key={String(2)}>
+        <QuotationList filter={(quotation) => quotation.type === Enums.QuotationType.Area} />
+      </Tabs.TabPane>
+      <Tabs.TabPane tab="关注" key={String(3)}>
         <QuotationList filter={(quotaion) => favoriteQuotationMap[quotaion.code]} />
       </Tabs.TabPane>
     </GroupTab>
@@ -94,7 +100,7 @@ const StockGroup = () => {
   const { codeMap: stockCodeMap } = useSelector((state: StoreState) => state.stock.config);
 
   return (
-    <GroupTab>
+    <GroupTab tabKey={Enums.TabKeyType.Stock}>
       <Tabs.TabPane tab="全部" key={String(-1)}>
         <StockList filter={() => true} />
       </Tabs.TabPane>
@@ -109,7 +115,7 @@ const StockGroup = () => {
 
 const CoinGroup = () => {
   return (
-    <GroupTab>
+    <GroupTab tabKey={Enums.TabKeyType.Coin}>
       <Tabs.TabPane tab="全部" key={String(-1)}>
         <CoinList filter={() => true} />
       </Tabs.TabPane>
@@ -117,9 +123,31 @@ const CoinGroup = () => {
   );
 };
 
-const Home: React.FC<HomeProps> = () => {
+const Body = () => {
   const tabsActiveKey = useSelector((state: StoreState) => state.tabs.activeKey);
 
+  return (
+    <Tabs renderTabBar={() => <></>} activeKey={String(tabsActiveKey)} animated={{ tabPane: true, inkBar: false }} destroyInactiveTabPane>
+      <Tabs.TabPane key={String(Enums.TabKeyType.Funds)}>
+        <FundGroup />
+      </Tabs.TabPane>
+      <Tabs.TabPane key={String(Enums.TabKeyType.Zindex)}>
+        <ZindexGroup />
+      </Tabs.TabPane>
+      <Tabs.TabPane key={String(Enums.TabKeyType.Quotation)}>
+        <QuotationGroup />
+      </Tabs.TabPane>
+      <Tabs.TabPane key={String(Enums.TabKeyType.Stock)}>
+        <StockGroup />
+      </Tabs.TabPane>
+      <Tabs.TabPane key={String(Enums.TabKeyType.Coin)}>
+        <CoinGroup />
+      </Tabs.TabPane>
+    </Tabs>
+  );
+};
+
+const Home: React.FC<HomeProps> = () => {
   const { colors: varibleColors, darkMode } = useNativeThemeColor(CONST.VARIBLES);
 
   return (
@@ -130,23 +158,7 @@ const Home: React.FC<HomeProps> = () => {
           <Wallet />
           <SortBar />
         </Header>
-        <Tabs renderTabBar={() => <></>} activeKey={String(tabsActiveKey)} animated={{ tabPane: true, inkBar: false }}>
-          <Tabs.TabPane key={String(Enums.TabKeyType.Funds)}>
-            <FundGroup />
-          </Tabs.TabPane>
-          <Tabs.TabPane key={String(Enums.TabKeyType.Zindex)}>
-            <ZindexGroup />
-          </Tabs.TabPane>
-          <Tabs.TabPane key={String(Enums.TabKeyType.Quotation)}>
-            <QuotationGroup />
-          </Tabs.TabPane>
-          <Tabs.TabPane key={String(Enums.TabKeyType.Stock)}>
-            <StockGroup />
-          </Tabs.TabPane>
-          <Tabs.TabPane key={String(Enums.TabKeyType.Coin)}>
-            <CoinGroup />
-          </Tabs.TabPane>
-        </Tabs>
+        <Body />
         <Footer>
           <Toolbar />
           <TabsBar />

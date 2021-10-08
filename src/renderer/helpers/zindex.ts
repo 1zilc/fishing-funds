@@ -71,6 +71,8 @@ export function SortZindexs(responseZindexs: Zindex.ResponseItem[]) {
         return (a.zdf - b.zdf) * t;
       case Enums.ZindexSortType.Zsz:
         return (a.zsz - b.zsz) * t;
+      case Enums.ZindexSortType.Name:
+        return b.name.localeCompare(a.name, 'zh') * t;
       case Enums.ZindexSortType.Custom:
       default:
         return (codeMap[b.code]?.originSort - codeMap[a.code]?.originSort) * t;

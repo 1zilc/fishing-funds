@@ -2,6 +2,7 @@ import React, { PropsWithChildren, useState, useEffect } from 'react';
 import { Table } from 'antd';
 import { useRequest } from 'ahooks';
 
+import ChartCard from '@/components/Card/ChartCard';
 import CustomDrawer from '@/components/CustomDrawer';
 import AddFundContent from '@/components/Home/FundList/AddFundContent';
 import DetailFundContent from '@/components/Home/FundList/DetailFundContent';
@@ -68,35 +69,37 @@ const Ranting: React.FC<PropsWithChildren<RantingProps>> = () => {
     },
   ];
 
-  const { loading } = useRequest(Services.Fund.GetFundRatingFromEasemoney, {
+  const { run: runGetFundRatingFromEasemoney, loading } = useRequest(Services.Fund.GetFundRatingFromEasemoney, {
     throwOnError: true,
     onSuccess: setData,
   });
 
   return (
-    <div className={styles.content}>
-      <Table
-        rowKey="code"
-        size="small"
-        columns={columns}
-        dataSource={data}
-        loading={loading}
-        pagination={{
-          defaultPageSize: 20,
-          hideOnSinglePage: true,
-          position: ['bottomCenter'],
-        }}
-        onRow={(record) => ({
-          onClick: () => setDetailDrawer(record.code),
-        })}
-      />
-      <CustomDrawer show={showDetailDrawer}>
-        <DetailFundContent onEnter={closeDetailDrawer} onClose={closeDetailDrawer} code={detailCode} />
-      </CustomDrawer>
-      <CustomDrawer show={showAddDrawer}>
-        <AddFundContent defaultCode={addCode} onClose={closeAddDrawer} onEnter={closeAddDrawer} />
-      </CustomDrawer>
-    </div>
+    <ChartCard auto onFresh={runGetFundRatingFromEasemoney}>
+      <div className={styles.content}>
+        <Table
+          rowKey="code"
+          size="small"
+          columns={columns}
+          dataSource={data}
+          loading={loading}
+          pagination={{
+            defaultPageSize: 20,
+            hideOnSinglePage: true,
+            position: ['bottomCenter'],
+          }}
+          onRow={(record) => ({
+            onClick: () => setDetailDrawer(record.code),
+          })}
+        />
+        <CustomDrawer show={showDetailDrawer}>
+          <DetailFundContent onEnter={closeDetailDrawer} onClose={closeDetailDrawer} code={detailCode} />
+        </CustomDrawer>
+        <CustomDrawer show={showAddDrawer}>
+          <AddFundContent defaultCode={addCode} onClose={closeAddDrawer} onEnter={closeAddDrawer} />
+        </CustomDrawer>
+      </div>
+    </ChartCard>
   );
 };
 export default Ranting;

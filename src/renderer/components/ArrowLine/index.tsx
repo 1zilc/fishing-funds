@@ -1,7 +1,7 @@
 import React from 'react';
-import { ReactComponent as ArrowDownLineIcon } from '@/assets/icons/arrow-down-line.svg';
-import { ReactComponent as ArrowUpLineIcon } from '@/assets/icons/arrow-up-line.svg';
-import { ReactComponent as SubtractLineIcon } from '@/assets/icons/subtract-line.svg';
+import { ReactComponent as ArrowDownLineIcon } from '@assets/remix/arrow-down-line.svg';
+import { ReactComponent as ArrowUpLineIcon } from '@assets/remix/arrow-up-line.svg';
+import { ReactComponent as SubtractLineIcon } from '@assets/remix/subtract-line.svg';
 
 export interface ArrowLineProps {
   value?: string | number;

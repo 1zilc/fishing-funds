@@ -3,13 +3,12 @@ import classnames from 'classnames';
 import { useRequest } from 'ahooks';
 import { Tabs } from 'antd';
 
-import ChartCard from '@/components/Card/ChartCard';
 import RealTimeFundFlow from '@/components/Home/QuotationList/DetailQuotationContent/RealTimeFundFlow';
 import AfterTimeFundFlow from '@/components/Home/QuotationList/DetailQuotationContent/AfterTimeFundFlow';
 import Stocks from '@/components/Home/QuotationList/DetailQuotationContent/Stocks';
+import Funds from '@/components/Home/QuotationList/DetailQuotationContent/Funds';
 import RealTimeTransaction from '@/components/Home/QuotationList/DetailQuotationContent/RealTimeTransaction';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
-
 import * as Services from '@/services';
 import * as Utils from '@/utils';
 import * as Enums from '@/utils/enums';
@@ -36,11 +35,11 @@ const DetailQuotationContent: React.FC<DetailQuotationContentProps> = (props) =>
       <div className={styles.content}>
         <div className={styles.container}>
           <h3 className={styles.titleRow}>
-            <span>{quotation?.name}</span>
+            <span className="copify">{quotation?.name}</span>
             <span className={classnames(Utils.GetValueColor(quotation.zdd).textClass)}>{quotation?.zxj}</span>
           </h3>
           <div className={styles.subTitleRow}>
-            <span>{quotation?.code}</span>
+            <span className="copify">{quotation?.code}</span>
             <div>
               <span className={styles.detailItemLabel}>最新价：</span>
               <span className={classnames(Utils.GetValueColor(quotation.zdd).textClass)}>{Utils.Yang(quotation?.zdd)}</span>
@@ -80,7 +79,10 @@ const DetailQuotationContent: React.FC<DetailQuotationContentProps> = (props) =>
         </div>
         <div className={styles.container}>
           <Tabs animated={{ tabPane: true }} tabBarGutter={15}>
-            <Tabs.TabPane tab={`${quotation.name}个股`} key={String(0)}>
+            <Tabs.TabPane tab="主题基金" key={String(0)}>
+              <Funds code={code} />
+            </Tabs.TabPane>
+            <Tabs.TabPane tab={`${quotation.name}个股`} key={String(1)}>
               <Stocks code={code} />
             </Tabs.TabPane>
           </Tabs>

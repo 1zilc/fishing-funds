@@ -10,13 +10,14 @@ export enum EyeStatus {
 }
 
 export enum FundApiType {
-  Eastmoney, // 天天基金
+  Eastmoney, // 东方财富-天天基金
   Dayfund, // 基金速查网
   Tencent, // 腾讯证券
   Sina, // 新浪基金
   Howbuy, // 好买基金
   Etf, // 易天富
-  Ant, // 蚂蚁基金
+  Ant, // 支付宝-蚂蚁基金
+  Fund10jqka, // 同花顺-爱基金
 }
 
 export enum FundSortType {
@@ -27,6 +28,7 @@ export enum FundSortType {
   Estimate, // 估值
   Income, // 收益
   IncomeRate, // 收益率
+  Name, // a-z
 }
 
 export enum ZindexSortType {
@@ -34,6 +36,7 @@ export enum ZindexSortType {
   Zdd, // 涨跌点
   Zdf, // 涨跌幅
   Zsz, // 指数值
+  Name, // a-z
 }
 
 export enum QuotationSortType {
@@ -44,6 +47,7 @@ export enum QuotationSortType {
   Zxj, // 最新价
   Szjs, // 上涨家数
   Xdjs, // 下跌家数
+  Name, // a-z
 }
 
 export enum StockSortType {
@@ -51,6 +55,7 @@ export enum StockSortType {
   Zdd, // 涨跌点
   Zdf, // 涨跌幅
   Zx, // 指数值
+  Name, // a-z
 }
 
 export enum CoinSortType {
@@ -58,6 +63,7 @@ export enum CoinSortType {
   Zdf, // 24H涨跌幅
   Price, // 价值
   Volum, // 24H交易量
+  Name, // a-z
 }
 
 export enum SortOrderType {
@@ -72,14 +78,11 @@ export enum TabKeyType {
   Stock,
   Coin,
 }
-// 走势类型
-export enum TrendType {
-  Performance, // 业绩走势
-  Estimate, // 估值走势
-}
+
 // 持仓类型
 export enum WareHouseType {
   Stock, // 股票
+  IndustryLayout, // 行业持仓
   Securities, // 债券
   StockEstimate, // 股票仓位测算
 }
@@ -87,6 +90,7 @@ export enum WareHouseType {
 export enum ConfigType {
   Scale, // 规模变动呢
   Hold, // 持有人结构
+  WareHouse, // 仓位
   Assets, // 资产配置
 }
 // 走势类型
@@ -116,6 +120,7 @@ export enum SimilarCompareType {
 export enum HistoryType {
   Performance,
   Value,
+  InvestStyle,
 }
 
 // 经理能力类型
@@ -180,4 +185,11 @@ export enum CoinUnitType {
 export enum TimestampType {
   Local,
   Network,
+}
+
+export enum QuotationType {
+  All,
+  Area,
+  Industry,
+  Concept,
 }

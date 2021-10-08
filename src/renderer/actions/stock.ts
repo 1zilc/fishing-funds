@@ -8,6 +8,7 @@ import * as Helpers from '@/helpers';
 export const SET_STOCKS_LOADING = 'SET_STOCKS_LOADING';
 export const SYNC_STOCKS = 'SYNC_STOCKS';
 export const SYNC_STOCK_CONFIG = 'SYNC_STOCK_CONFIG';
+export const SET_INDUSTRY_MAP = 'SET_INDUSTRY_MAP';
 
 export function addStockAction(stock: Stock.SettingItem): ThunkAction {
   return (dispatch, getState) => {
@@ -188,6 +189,19 @@ export function syncStocksStateAction(stocks: (Stock.ResponseItem & Stock.ExtraR
       dispatch({ type: SYNC_STOCKS, payload: filterStocks });
     } catch (error) {
       console.log('同步股票状态出错', error);
+    }
+  };
+}
+
+export function setIndustryMapAction(secid: string, industrys: Stock.IndustryItem[]): ThunkAction {
+  return (dispatch, getState) => {
+    try {
+      const {
+        stock: { industryMap },
+      } = getState();
+      dispatch({ type: SET_INDUSTRY_MAP, payload: { ...industryMap, [secid]: industrys } });
+    } catch (error) {
+      console.log('设置股票行业出错', error);
     }
   };
 }

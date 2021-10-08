@@ -3,12 +3,12 @@ import classnames from 'classnames';
 import { useRequest } from 'ahooks';
 import { Tabs } from 'antd';
 
-import ChartCard from '@/components/Card/ChartCard';
-import PureCard from '@/components/Card/PureCard';
 import Trend from '@/components/Home/StockList/DetailStockContent/Trend';
+import ColorfulTags from '@/components/ColorfulTags';
 import Estimate from '@/components/Home/StockList/DetailStockContent/Estimate';
 import K from '@/components/Home/StockList/DetailStockContent/K';
 import Company from '@/components/Home/StockList/DetailStockContent/Company';
+import Stocks from '@/components/Home/StockList/DetailStockContent/Stocks';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
 import * as Services from '@/services';
 import * as Utils from '@/utils';
@@ -24,7 +24,7 @@ export interface DetailStockContentProps {
 const DetailStockContent: React.FC<DetailStockContentProps> = (props) => {
   const { secid } = props;
   const [stock, setStock] = useState<Stock.DetailItem | Record<string, any>>({});
-
+  const [industrys, setIndustrys] = useState<Stock.IndustryItem[]>([]);
   useRequest(Services.Stock.GetDetailFromEastmoney, {
     throwOnError: true,
     pollingInterval: 1000 * 60,
@@ -32,16 +32,22 @@ const DetailStockContent: React.FC<DetailStockContentProps> = (props) => {
     onSuccess: setStock,
   });
 
+  useRequest(Services.Stock.GetIndustryFromEastmoney, {
+    throwOnError: true,
+    defaultParams: [secid, 3],
+    onSuccess: setIndustrys,
+  });
+
   return (
     <CustomDrawerContent title="股票详情" enterText="确定" onClose={props.onClose} onEnter={props.onEnter}>
       <div className={styles.content}>
         <div className={styles.container}>
           <h3 className={styles.titleRow}>
-            <span>{stock.name}</span>
+            <span className="copify">{stock.name}</span>
             <span className={classnames(Utils.GetValueColor(stock.zdd).textClass)}>{stock.zx}</span>
           </h3>
           <div className={styles.subTitleRow}>
-            <span>{stock.code}</span>
+            <span className="copify">{stock.code}</span>
             <div>
               <span className={styles.detailItemLabel}>涨跌点：</span>
               <span className={classnames(Utils.GetValueColor(stock.zdd).textClass)}>{Utils.Yang(stock.zdd)}</span>
@@ -103,6 +109,7 @@ const DetailStockContent: React.FC<DetailStockContentProps> = (props) => {
               <div className={styles.detailItemLabel}>均价</div>
             </div>
           </div>
+          <ColorfulTags tags={industrys.map((industry) => industry.name)} />
         </div>
         <div className={styles.container}>
           <Tabs animated={{ tabPane: true }} tabBarGutter={15}>
@@ -125,6 +132,9 @@ const DetailStockContent: React.FC<DetailStockContentProps> = (props) => {
           <Tabs animated={{ tabPane: true }} tabBarGutter={15}>
             <Tabs.TabPane tab="公司概况" key={String(0)}>
               <Company secid={secid} />
+            </Tabs.TabPane>
+            <Tabs.TabPane tab="同类股票" key={String(1)}>
+              <Stocks secid={secid} />
             </Tabs.TabPane>
           </Tabs>
         </div>

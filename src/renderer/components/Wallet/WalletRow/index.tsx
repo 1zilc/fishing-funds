@@ -3,9 +3,9 @@ import classnames from 'classnames';
 import { useDispatch, useSelector } from 'react-redux';
 
 import StandCard from '@/components/Card/StandCard';
-import { ReactComponent as RemoveIcon } from '@/assets/icons/remove.svg';
-import { ReactComponent as CheckboxIcon } from '@/assets/icons/checkbox.svg';
-import { ReactComponent as EditIcon } from '@/assets/icons/edit.svg';
+import { ReactComponent as RemoveIcon } from '@assets/remix/remove.svg';
+import { ReactComponent as CheckboxIcon } from '@assets/remix/checkbox.svg';
+import { ReactComponent as EditIcon } from '@assets/remix/edit.svg';
 import { deleteWalletAction } from '@/actions/wallet';
 import { walletIcons } from '@/helpers/wallet';
 import { StoreState } from '@/reducers/types';

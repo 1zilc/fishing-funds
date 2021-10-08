@@ -15,4 +15,5 @@ export default [
   '--blur-color',
   '--base-font-size',
   '--base-padding',
+  '--warn-color',
 ];

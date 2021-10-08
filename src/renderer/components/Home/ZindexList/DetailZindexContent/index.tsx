@@ -33,11 +33,11 @@ const DetailZindexContent: React.FC<DetailFundContentProps> = (props) => {
       <div className={styles.content}>
         <div className={styles.container}>
           <h3 className={styles.titleRow}>
-            <span>{zindex?.name}</span>
+            <span className="copify">{zindex?.name}</span>
             <span className={classnames(Utils.GetValueColor(zindex.zdd).textClass)}>{zindex?.zsz}</span>
           </h3>
           <div className={styles.subTitleRow}>
-            <span>{zindex?.zindexCode}</span>
+            <span className="copify">{zindex?.zindexCode}</span>
             <div>
               <span className={styles.detailItemLabel}>涨跌点：</span>
               <span className={classnames(Utils.GetValueColor(zindex.zdd).textClass)}>{Utils.Yang(zindex?.zdd)}</span>

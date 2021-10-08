@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
-    "target": "esnext",
-    "module": "esnext",
+    "target": "es2020",
+    "module": "es2020",
     "lib": ["dom", "esnext"],
     "declaration": false,
     "declarationMap": false,
@@ -21,13 +21,15 @@
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "resolveJsonModule": true,
-    "allowJs": false,
+    "allowJs": true,
+    "outDir": "release/app/dist",
     "paths": {
-      "@/*": ["./src/renderer/*"]
+      "@/*": ["./src/renderer/*"],
+      "@assets/*": ["./assets/*"]
     }
   },
   "include": ["./src/**/*"],
-  "exclude": ["test", "build/release", "build/app/dist", ".erb/dll"],
+  "exclude": ["test", "release/app/dist", ".erb/dll"],
   "ts-node": {
     "compilerOptions": {
       "module": "commonjs"

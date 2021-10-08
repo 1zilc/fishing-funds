@@ -2,6 +2,7 @@ import React, { PropsWithChildren, useState, useEffect } from 'react';
 import { Table } from 'antd';
 import { useRequest } from 'ahooks';
 
+import ChartCard from '@/components/Card/ChartCard';
 import CustomDrawer from '@/components/CustomDrawer';
 import AddFundContent from '@/components/Home/FundList/AddFundContent';
 import DetailFundContent from '@/components/Home/FundList/DetailFundContent';
@@ -90,37 +91,44 @@ const Automatic: React.FC<PropsWithChildren<AutomaticProps>> = () => {
     },
   ];
 
-  const { loading } = useRequest(() => Services.Fund.GetAutomaticPlanFromEastmoney(fundType.type), {
+  const { run: runGetAutomaticPlanFromEastmoney, loading } = useRequest(() => Services.Fund.GetAutomaticPlanFromEastmoney(fundType.type), {
     throwOnError: true,
     onSuccess: setData,
     refreshDeps: [fundType.type],
   });
 
   return (
-    <div className={styles.content}>
-      <TypeSelection types={fundTypeList} activeType={fundType.type} onSelected={setFundType} style={{ marginTop: 10, marginBottom: 10 }} />
-      <Table
-        rowKey="code"
-        size="small"
-        columns={columns}
-        dataSource={data}
-        loading={loading}
-        pagination={{
-          defaultPageSize: 20,
-          hideOnSinglePage: true,
-          position: ['bottomCenter'],
-        }}
-        onRow={(record) => ({
-          onClick: () => setDetailDrawer(record.code),
-        })}
-      />
-      <CustomDrawer show={showDetailDrawer}>
-        <DetailFundContent onEnter={closeDetailDrawer} onClose={closeDetailDrawer} code={detailCode} />
-      </CustomDrawer>
-      <CustomDrawer show={showAddDrawer}>
-        <AddFundContent defaultCode={addCode} onClose={closeAddDrawer} onEnter={closeAddDrawer} />
-      </CustomDrawer>
-    </div>
+    <ChartCard auto onFresh={runGetAutomaticPlanFromEastmoney}>
+      <div className={styles.content}>
+        <TypeSelection
+          types={fundTypeList}
+          activeType={fundType.type}
+          onSelected={setFundType}
+          style={{ marginTop: 10, marginBottom: 10 }}
+        />
+        <Table
+          rowKey="code"
+          size="small"
+          columns={columns}
+          dataSource={data}
+          loading={loading}
+          pagination={{
+            defaultPageSize: 20,
+            hideOnSinglePage: true,
+            position: ['bottomCenter'],
+          }}
+          onRow={(record) => ({
+            onClick: () => setDetailDrawer(record.code),
+          })}
+        />
+        <CustomDrawer show={showDetailDrawer}>
+          <DetailFundContent onEnter={closeDetailDrawer} onClose={closeDetailDrawer} code={detailCode} />
+        </CustomDrawer>
+        <CustomDrawer show={showAddDrawer}>
+          <AddFundContent defaultCode={addCode} onClose={closeAddDrawer} onEnter={closeAddDrawer} />
+        </CustomDrawer>
+      </div>
+    </ChartCard>
   );
 };
 export default Automatic;

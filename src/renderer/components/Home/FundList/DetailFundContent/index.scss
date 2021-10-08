@@ -17,7 +17,11 @@
     font-weight: 600;
   }
 }
-
+.titleRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
 .container {
   padding: 0 var(--base-padding);
 }
@@ -82,4 +86,8 @@
 .type {
   border: 1px solid var(--primary-color);
   color: var(--primary-color);
+}
+
+.date {
+  font-size: calc(10rem / var(--base-font-size));
 }

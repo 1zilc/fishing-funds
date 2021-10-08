@@ -26,7 +26,7 @@
   }
 }
 
-.zindexName {
+.stockName {
   font-weight: 600;
   font-size: calc(14rem / var(--base-font-size));
   margin-bottom: 2px;
@@ -49,7 +49,7 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  width: 150px;
+  // width: 150px;
   text-align: center;
   transition: all 0.3s;
 }
@@ -111,4 +111,19 @@
   text-align: center;
   width: 100%;
   box-sizing: border-box;
+}
+
+.tag {
+  border-radius: 3px;
+  font-size: 8px;
+  padding: 0 4px;
+  text-align: center;
+  word-break: keep-all;
+  margin-left: 5px;
+  transition: 0.3s;
+  margin-bottom: 2px;
+
+  &:hover {
+    filter: brightness(115%);
+  }
 }

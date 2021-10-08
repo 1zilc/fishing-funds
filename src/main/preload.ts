@@ -4,7 +4,7 @@ import { encode, decode } from 'js-base64';
 import log from 'electron-log';
 import * as fs from 'fs';
 import { base64ToBuffer } from './util';
-import { version } from '../../build/app/package.json';
+import { version } from '../../release/app/package.json';
 
 contextBridge.exposeInMainWorld('contextModules', {
   got: async (url: string, config = {}) => got(url, { ...config, retry: 3, timeout: 6000 }),

@@ -5,6 +5,7 @@ import * as Utils from '@/utils';
 import dayjs from 'dayjs';
 
 const { got } = window.contextModules;
+
 // 天天基金
 export async function FromEastmoney(code: string) {
   try {
@@ -119,6 +120,7 @@ export async function FromSina(code: string) {
         'Content-Type': 'application/javascript; charset=utf-8',
       },
     });
+
     const utf8String = iconv.decode(rawBody, 'GB18030');
     const [w, contnet] = utf8String.split('=');
     const data = contnet.replace(/(")|(;)|(\s)/g, '');
@@ -409,7 +411,137 @@ export async function FromFund123(code: string) {
     return result;
   } catch (error) {
     console.log(error);
-    return await GetQDIIFundFromEastMoney(code);
+    return await GetQDIIFundFromFund123(code);
+  }
+}
+
+// 同花顺-爱基金
+export async function FromFund10jqka(code: string) {
+  try {
+    const { body } = await got<{
+      data: [
+        {
+          code: '003834';
+          enddate: '2021-09-30';
+          type: 'nohbx';
+          net: '3.8040';
+          totalnet: '3.8040';
+          ranges: '0.1330';
+          rate: '3.62';
+          net1: '3.6710';
+          totalnet1: '3.6710';
+          enddate1: '2021-09-29';
+          mark: 'ths';
+          updatetime: '211003024536';
+          hqcode: 'JSH123';
+          name: '华夏能源革新股票A';
+          fundtype: '股票型';
+          clrq: '2017-06-07';
+          manager: '郑泽鸿';
+          orgname: '华夏基金管理有限公司';
+          dqlcqx: '-1';
+          dqrq: '';
+          sgstat: '限制大额';
+          shstat: '开放';
+          money: '50.0000';
+          sgoldfl: '1.5';
+          sgfl: '0.15';
+          rgStart: '2017-05-04';
+          rgEnd: '2017-06-02';
+          rcsgStart: '2017-07-07';
+          rcshStart: '2017-07-07';
+          ifnew: 0;
+          rgfl: '0.15';
+          rgflold: '1.5';
+          buy: '1';
+          dt: '1';
+          zkl: '0.1';
+          zdsg: '10';
+          nowyear: '40.73';
+          week: '-5.89';
+          month: '-9.10';
+          tmonth: '12.64';
+          year: '130.27';
+          hyear: '55.84';
+          tyear: '346.48';
+          mz: '1.0000';
+          themeList: [
+            {
+              field_name: '特斯拉';
+              field_type: '概念';
+              id: 'd0a32faf345dc75d9c7c8f2479f9224a';
+            },
+            {
+              field_name: '三星';
+              field_type: '概念';
+              id: '5131c72b5ed2ef94eaca2675bc7c6f0d';
+            }
+          ];
+          thsqbfl: '';
+          jjgm: '66.35';
+          levelOfRiskCode: '706003';
+          levelOfRisk: '中风险';
+          ifzj: '1';
+          ifgz: '1';
+          iszcg: '1';
+          iszcz: '0';
+          isfof: '0';
+          asset: '224.10';
+          fundBanner: [];
+          showType: '1';
+          rgStartReal: '2017-05-04';
+          rgStartRealTime: '2017-05-04 00:00:00';
+          rgEndRealTime: '2017-06-02 15:00:00';
+          fastcash: '1';
+          dqlc: 0;
+          lcqx: '--';
+          maxStar: '5';
+          nowtime: 1633309917000;
+        }
+      ];
+      error: {
+        id: 0;
+        msg: 'is access';
+      };
+    }>(`https://fund.10jqka.com.cn/data/client/myfund/${code}`, {
+      responseType: 'json',
+    });
+    const data = body.data.pop()!;
+    const now = new Date();
+    const { body: script } = await got('https://gz-fund.10jqka.com.cn/', {
+      searchParams: {
+        module: 'api',
+        controller: 'index',
+        action: 'chart',
+        info: `vm_fd_${data.hqcode}`,
+        _: Date.now(),
+        start: dayjs(now).format('MMDD'),
+      },
+    });
+
+    const string = eval(`(()=>{
+      const ${script};
+      return vm_fd_${data.hqcode};
+    })()`);
+
+    const [info, _dwjz, gsinfo] = string.split('~');
+    const gzdata = info.split('|').pop();
+
+    const last: string = gsinfo.split(';').pop();
+    const [time, gsz, dwjz, zero] = last.split(',');
+    const gszzl = NP.divide(NP.minus(gsz, dwjz), dwjz, 0.01).toFixed(2);
+    return {
+      name: data.name,
+      fundcode: data.code,
+      gztime: `${gzdata} ${time.slice(0, 2)}:${time.slice(2)}`,
+      gszzl: gszzl,
+      jzrq: data.enddate1,
+      dwjz: data.net1,
+      gsz,
+    };
+  } catch (error) {
+    console.log(error);
+    return await GetQDIIFundFromFund10jqka(code);
   }
 }
 
@@ -417,7 +549,18 @@ export async function FromFund123(code: string) {
 export async function GetEstimatedFromEastmoney(code: string) {
   try {
     const { rawBody }: any = await got(`http://j4.dfcfw.com/charts/pic6/${code}.png`, {});
-    // const base64Str = rawBody.toString('base64');
+    const b64encoded = btoa(String.fromCharCode.apply(null, rawBody));
+    return `data:image/png;base64,${b64encoded}`;
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+}
+
+// 从天天基金获取投资风格图片
+export async function GetInverstStyleFromEastmoney(code: string) {
+  try {
+    const { rawBody }: any = await got(`http://j3.dfcfw.com/images/InvestStyle/${code}.png`, {});
     const b64encoded = btoa(String.fromCharCode.apply(null, rawBody));
     return `data:image/png;base64,${b64encoded}`;
   } catch (error) {
@@ -649,7 +792,7 @@ export async function GetFundManagerDetailFromEastMoney(code: string) {
   }
 }
 
-// 查询QDII基金信息
+// 查询天天基金QDII基金信息
 export async function GetQDIIFundFromEastMoney(code: string) {
   try {
     // const { gztime } = (await FromEastmoney('161725'))! as Fund.ResponseItem; // TODO:估值时间暂时使用白酒最后一次开门时间
@@ -658,10 +801,236 @@ export async function GetQDIIFundFromEastMoney(code: string) {
       name: fixName,
       dwjz: fixDwjz,
       fundcode: code,
-      gztime: `${new Date().getFullYear()}-${fixDate}`,
+      gztime: `${new Date().getFullYear()}-暂无估值`,
       jzrq: `${new Date().getFullYear()}-${fixDate}`,
       gsz: fixDwjz,
-      gszzl: fixZzl,
+      gszzl: '',
+    };
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+}
+
+// 查询蚂蚁基金QDII基金信息
+export async function GetQDIIFundFromFund123(code: string) {
+  try {
+    const { body: html, headers } = await got(`https://www.fund123.cn/matiaria`, {
+      searchParams: {
+        fundCode: code,
+      },
+    });
+    const $ = cheerio.load(html);
+    const script = $('script').eq(2).html();
+    const fixscript = script?.replace(/window\.context/g, 'const o');
+    const context = eval(`(() => {
+      ${fixscript}
+      return o;
+    })()`);
+    const {
+      csrf,
+      materialInfo: {
+        productId,
+        fundCode,
+        fundBrief: { fundNameAbbr },
+        titleInfo: { netValue, netValueDate, dayOfGrowth },
+      },
+    }: {
+      success: true;
+      message: '请求成功';
+      materialInfo: {
+        productId: '20170808000230030000000000013513';
+        fundCode: '002258';
+        fundType: '混合型';
+        titleInfo: {
+          fundLimit: '0--';
+          netValue: string; // '3.6580';
+          netValueDate: '09-13';
+          profitSevenDays: '--';
+          profitTenThousand: '--';
+          dayOfGrowth: '2.46';
+          lastWeek: '5.88';
+          riskEvaluation: '中高风险';
+          establishmentDate: '2017-09-21';
+          assetSize: '1.04亿';
+          fundManagerName: '韩创';
+        };
+        fundBrief: {
+          fundNameAbbr: '大成国企改革灵活配置混合';
+          fundName: '大成国企改革灵活配置混合型证券投资基金';
+          fundCode: '002258';
+          establishmentDate: '2017-\n          09-\n          21';
+          shareSize: '41784787.66';
+          assetSize: '104651741.15';
+          fundManagerName: '韩创';
+          saleStatus: '正常申购';
+          fundCompanyName: '大成基金管理有限公司';
+          trusteeName: '中国银行股份有限公司';
+          manageRate: '1.5%';
+          trusteeRate: '0.25%';
+          purchaseMinMount: '10.00';
+          redeemMinMount: '1';
+          purchaseRatio: '--';
+          redeemRatio: '--';
+          generalInfo: {
+            fundName: '大成国企改革灵活配置混合型证券投资基金';
+            establishmentDate: '2017-\n            09-\n            21';
+            fundCode: '002258';
+            assetSize: '104651741.15';
+            fundCompanyName: '--';
+            trusteeName: '中国银行股份有限公司';
+            fundManagerBackground: '    韩创，中国国籍，金融学硕士，9年证券从业年限，具有基金从业资格。2012年6月至2015年6月曾任招商证券研究部研究员。2015年6月加入大成基金管理有限公司，历任研究部研究员、基金经理助理。2019年1月10日至2020年2月3日，担任大成消费主题混合型证券投资基金的基金经理。2019年1月10日起，担任大成新锐产业混合型证券投资基金的基金经理。2020年1月2日起，担任大成睿景灵活配置混合型证券投资基金的基金经理。2021年2月9日起，担任大成产业趋势混合型证券投资基金的基金经理。自2021年1月13日起，担任大成国企改革灵活配置混合型证券投资基金的基金经理。自2021年6月30日起，担任大成核心趋势混合型证券投资基金的基金经理。';
+            fundManagerInfoList: [
+              { key: '1'; fundName: '大成新锐产业混合型证券投资基金'; officeDate: '2019-01-10  至今'; earnings: '3.979472' },
+              { key: '2'; fundName: '大成睿景灵活配置混合型证券投资基金A类'; officeDate: '2020-01-02  至今'; earnings: '2.241387' },
+              { key: '3'; fundName: '大成睿景灵活配置混合型证券投资基金C类'; officeDate: '2020-01-02  至今'; earnings: '2.201024' },
+              { key: '4'; fundName: '大成国企改革灵活配置混合型证券投资基金'; officeDate: '2021-01-13  至今'; earnings: '0.794896' },
+              { key: '5'; fundName: '大成产业趋势混合型证券投资基金A类'; officeDate: '2021-02-09  至今'; earnings: '0.448205' },
+              { key: '6'; fundName: '大成产业趋势混合型证券投资基金C类'; officeDate: '2021-02-09  至今'; earnings: '0.441500' },
+              { key: '7'; fundName: '大成核心趋势混合型证券投资基金C类'; officeDate: '2021-06-30  至今'; earnings: '0.225799' },
+              { key: '8'; fundName: '大成核心趋势混合型证券投资基金A类'; officeDate: '2021-06-30  至今'; earnings: '0.226099' }
+            ];
+            investPhilosophy: '    本基金的投资目标是通过投资于国企改革相关的优质上市公司，在严格控制风险的前提下，力争获取超越业绩比较基准的收益。';
+            investStrategy: '    本基金通过对宏观经济环境、国家经济政策、股票市场风险、债券市场整体收益率曲线变化和资金供求关系等因素的分析，研判经济周期在美林投资时钟理论所处的阶段，综合评价各类资产的市场趋势、预期风险收益水平和配置时机。\r\n    本基金认为当前受益于国企改革的上市公司股票涉及多个行业，本基金将通过自下而上研究入库的方式，对各个行业中受益于国企改革主题的上市公司进行深入研究，并将这些股票组成本基金的核心股票库。\r\n    本基金将根据融资买入股票成本以及其他投资工具收益率综合评估是否采用融资方式买入股票，本基金在任何交易日日终持有的融资买入股票与直接买入股票市值之和，不得超过基金资产净值的95%。\r\n    本基金的债券投资采取稳健的投资管理方式，获得与风险相匹配的投资收益，以实现在一定程度上规避股票市场的系统性风险和保证基金资产的流动性。\r\n    中小企业私募债票面利率较高、信用风险较大、二级市场流动性较差。';
+          };
+        };
+      };
+      isLogin: false;
+      csrf: 'GZiniT4s-CXuZczggNnZdY5lDoIb7ea5Jjho';
+      isCloseEstimate: false;
+      pageName: 'matiaria?fundCode=002258';
+      uriBroker: {
+        'favicon.ico.url': 'https://gw.alipayobjects.com/zos/rmsportal/mgPTSSvpLkKrsQwhoDzv.ico';
+        'app.404.url': 'https://www.alipay.com/404.html';
+        'zdrmdata.rest.url': 'http://zdrmdata-pool.gz00g.alipay.com';
+        'app.errorpage.url': 'https://www.alipay.com/50x.html';
+        'authcenter.url': 'https://auth.alipay.com';
+        'app.goto.url': 'https://my.alipay.com/portal/i.htm';
+        'bumng.url': 'https://bumng.alipay.com';
+        'omeo.check.url': 'http://omeo-pool.gz00g.alipay.com';
+        'omeo.get.url': 'https://omeo.alipay.com';
+        'assets.url': 'https://gw.alipayobjects.com/a';
+      };
+    } = context;
+    const now = dayjs();
+
+    const result = {
+      name: fundNameAbbr,
+      fundcode: fundCode,
+      gztime: `${new Date().getFullYear()}-暂无估值`,
+      gsz: netValue,
+      gszzl: '',
+      jzrq: `${now.year()}-${netValueDate}`,
+      dwjz: netValue,
+    };
+
+    return result;
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+}
+
+// 查询同花顺QDII基金信息
+export async function GetQDIIFundFromFund10jqka(code: string) {
+  try {
+    const { body } = await got<{
+      data: [
+        {
+          code: '003834';
+          enddate: '2021-09-30';
+          type: 'nohbx';
+          net: '3.8040';
+          totalnet: '3.8040';
+          ranges: '0.1330';
+          rate: '3.62';
+          net1: '3.6710';
+          totalnet1: '3.6710';
+          enddate1: '2021-09-29';
+          mark: 'ths';
+          updatetime: '211003024536';
+          hqcode: 'JSH123';
+          name: '华夏能源革新股票A';
+          fundtype: '股票型';
+          clrq: '2017-06-07';
+          manager: '郑泽鸿';
+          orgname: '华夏基金管理有限公司';
+          dqlcqx: '-1';
+          dqrq: '';
+          sgstat: '限制大额';
+          shstat: '开放';
+          money: '50.0000';
+          sgoldfl: '1.5';
+          sgfl: '0.15';
+          rgStart: '2017-05-04';
+          rgEnd: '2017-06-02';
+          rcsgStart: '2017-07-07';
+          rcshStart: '2017-07-07';
+          ifnew: 0;
+          rgfl: '0.15';
+          rgflold: '1.5';
+          buy: '1';
+          dt: '1';
+          zkl: '0.1';
+          zdsg: '10';
+          nowyear: '40.73';
+          week: '-5.89';
+          month: '-9.10';
+          tmonth: '12.64';
+          year: '130.27';
+          hyear: '55.84';
+          tyear: '346.48';
+          mz: '1.0000';
+          themeList: [
+            {
+              field_name: '特斯拉';
+              field_type: '概念';
+              id: 'd0a32faf345dc75d9c7c8f2479f9224a';
+            },
+            {
+              field_name: '三星';
+              field_type: '概念';
+              id: '5131c72b5ed2ef94eaca2675bc7c6f0d';
+            }
+          ];
+          thsqbfl: '';
+          jjgm: '66.35';
+          levelOfRiskCode: '706003';
+          levelOfRisk: '中风险';
+          ifzj: '1';
+          ifgz: '1';
+          iszcg: '1';
+          iszcz: '0';
+          isfof: '0';
+          asset: '224.10';
+          fundBanner: [];
+          showType: '1';
+          rgStartReal: '2017-05-04';
+          rgStartRealTime: '2017-05-04 00:00:00';
+          rgEndRealTime: '2017-06-02 15:00:00';
+          fastcash: '1';
+          dqlc: 0;
+          lcqx: '--';
+          maxStar: '5';
+          nowtime: 1633309917000;
+        }
+      ];
+      error: {
+        id: 0;
+        msg: 'is access';
+      };
+    }>(`https://fund.10jqka.com.cn/data/client/myfund/${code}`, {
+      responseType: 'json',
+    });
+    const data = body.data.pop()!;
+    return {
+      name: data.name,
+      fundcode: data.code,
+      gztime: `${new Date().getFullYear()}-暂无估值`,
+      gszzl: '',
+      jzrq: data.enddate,
+      dwjz: data.net,
+      gsz: data.net,
     };
   } catch (error) {
     console.log(error);
@@ -766,5 +1135,59 @@ export async function GetFundRatingFromEasemoney() {
   } catch (error) {
     console.log(error);
     return [];
+  }
+}
+
+// 查询基金持仓行业占比
+export async function GetIndustryRateFromEaseMoney(code: string) {
+  try {
+    const { body } = await got<{
+      Datas: {
+        fundStocks: {
+          GPDM: 'MSFT';
+          GPJC: '微软';
+          JZBL: string;
+          TEXCH: '7';
+          ISINVISBL: '--';
+          PCTNVCHGTYPE: '--';
+          PCTNVCHG: '--';
+          NEWTEXCH: '105';
+          INDEXCODE: '--';
+          INDEXNAME: string;
+        }[];
+        fundboods: [];
+        fundfofs: [];
+        ETFCODE: null;
+        ETFSHORTNAME: null;
+      };
+      ErrCode: 0;
+      Success: true;
+      ErrMsg: null;
+      Message: null;
+      ErrorCode: '0';
+      ErrorMessage: null;
+      ErrorMsgLst: null;
+      TotalCount: 1;
+      Expansion: '2021-06-30';
+    }>(`http://fundmobapi.eastmoney.com/FundMNewApi/FundMNInverstPosition`, {
+      searchParams: {
+        product: 'EFund',
+        FCODE: code,
+        deviceid: 1,
+        version: '6.2.7',
+        plat: 'Android',
+      },
+      responseType: 'json',
+    });
+    return {
+      stocks: body.Datas?.fundStocks || [],
+      expansion: body.Expansion || '',
+    };
+  } catch (error) {
+    console.log(error);
+    return {
+      stocks: [],
+      expansion: '',
+    };
   }
 }

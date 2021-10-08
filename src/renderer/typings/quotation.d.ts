@@ -4,6 +4,7 @@ declare namespace Quotation {
   export interface ResponseItem {
     code: string; // 板块代码
     name: string; // 名称 '有色金属'
+    type: number; // 板块分类
     zxj: number; // 最新价
     zde: number; // 涨跌额
     zdd: number; // 涨跌点

@@ -3,12 +3,13 @@ import classnames from 'classnames';
 import { useDispatch, useSelector } from 'react-redux';
 import { Dropdown, Menu } from 'antd';
 
-import { ReactComponent as ConsumptionIcon } from '@/assets/icons/consumption.svg';
+import { ReactComponent as ConsumptionIcon } from '@assets/remix/consumption.svg';
 import Eye from '@/components/Eye';
 import { useHeaderContext } from '@/components/Header';
 import { StoreState } from '@/reducers/types';
 import { selectWalletAction, toggleEyeStatusAction } from '@/actions/wallet';
 import { useCurrentWallet, useFreshFunds } from '@/utils/hooks';
+import { walletIcons } from '@/helpers/wallet';
 import * as Enums from '@/utils/enums';
 import * as Utils from '@/utils';
 import * as CONST from '@/constants';
@@ -25,11 +26,6 @@ const Wallet: React.FC<WalletProps> = () => {
   const { walletConfig } = useSelector((state: StoreState) => state.wallet.config);
   const { currentWalletConfig, currentWalletState } = useCurrentWallet();
   const freshFunds = useFreshFunds(CONST.DEFAULT.FRESH_BUTTON_THROTTLE_DELAY);
-
-  const WalletIcon = useMemo(() => {
-    const { ReactComponent } = require(`@/assets/icons/wallet/${currentWalletConfig.iconIndex || 0}.svg`);
-    return ReactComponent;
-  }, [currentWalletConfig]);
 
   const { funds, updateTime } = currentWalletState;
 
@@ -64,7 +60,9 @@ const Wallet: React.FC<WalletProps> = () => {
           </Menu>
         }
       >
-        <WalletIcon className={styles.walletIcon} />
+        <div className={styles.walletIcon}>
+          <img src={walletIcons[currentWalletConfig.iconIndex || 0]} />
+        </div>
       </Dropdown>
       <div className={styles.info}>
         <div className={styles.timeBar}>

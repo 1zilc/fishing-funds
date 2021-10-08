@@ -1,0 +1,25 @@
+.content {
+  display: block;
+  padding: var(--base-padding) 0 48px;
+}
+.container {
+  padding: 0 var(--base-padding);
+}
+.cardTitle {
+  font-size: calc(10rem / var(--base-font-size));
+}
+
+.footer {
+  text-align: center;
+  height: 36px;
+  line-height: 36px;
+  background-color: var(--inner-color);
+  color: var(--inner-text-color);
+  font-size: calc(10rem / var(--base-font-size));
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  box-sizing: border-box;
+  border-top: 1px solid var(--border-color);
+  z-index: 100;
+}

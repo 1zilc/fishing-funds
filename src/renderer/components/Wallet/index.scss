@@ -22,6 +22,16 @@
     width: calc(40rem / var(--base-font-size));
     transition: height 0.2s, width 0.2s;
     background-color: transparent !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    img {
+      width: 100%;
+      // height: 100%;
+      display: block;
+      object-fit: cover;
+    }
   }
 
   .info {

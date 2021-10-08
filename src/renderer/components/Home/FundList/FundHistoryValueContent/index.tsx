@@ -21,8 +21,7 @@ const FundHistoryValueContent: React.FC<HistoryValueProps> = (props) => {
     {
       title: '日期',
       dataIndex: 'x',
-
-      render: (text: number) => dayjs(text).format('YYYY-MM-DD'),
+      render: (text: number) => `${dayjs(text).format('YYYY-MM-DD')} ${Utils.GetWeekDay(dayjs(text).day())}`,
     },
     {
       title: '单位净值',

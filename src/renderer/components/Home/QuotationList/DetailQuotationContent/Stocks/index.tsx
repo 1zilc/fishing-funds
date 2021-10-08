@@ -18,14 +18,14 @@ const Stocks: React.FC<StocksProps> = ({ code }) => {
   const [stockList, setStockList] = useState<any[]>([]);
   const { data: secid, show: showDetailDrawer, set: setDetailDrawer, close: closeDetailDrawer } = useDrawer('');
 
-  const { loading: listLoading, run: runGetStocksFromEasymoney } = useRequest(Services.Quotation.GetStocksFromEasymoney, {
+  const { loading, run: runGetStocksFromEasymoney } = useRequest(() => Services.Quotation.GetStocksFromEasymoney(code), {
     throwOnError: true,
     pollingInterval: 1000 * 60,
-    defaultParams: [code],
     onSuccess: (result) => {
       result.sort((a, b) => b.zdf - a.zdf);
       setStockList(result);
     },
+    refreshDeps: [code],
   });
 
   const columns = [
@@ -49,15 +49,11 @@ const Stocks: React.FC<StocksProps> = ({ code }) => {
     },
   ];
 
-  const freshChart = useCallback(() => {
-    runGetStocksFromEasymoney(code);
-  }, [code]);
-
   return (
-    <ChartCard auto onFresh={freshChart}>
+    <ChartCard auto onFresh={runGetStocksFromEasymoney}>
       <div className={styles.content}>
         <Table
-          loading={listLoading}
+          loading={loading}
           rowKey="code"
           size="small"
           columns={columns}

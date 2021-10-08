@@ -1,11 +1,7 @@
 import React from 'react';
 import classnames from 'classnames';
+import { walletIcons } from '@/helpers/wallet';
 import styles from './index.scss';
-
-const wallets = new Array(40).fill('').map((_, index) => {
-  const { ReactComponent } = require(`@/assets/icons/wallet/${index}.svg`);
-  return ReactComponent;
-});
 
 const size = {
   width: 24,
@@ -21,7 +17,7 @@ export const WalletSelection: React.FC<WalletSelectionProps> = (props) => {
   const { index: walletIndex } = props;
   return (
     <div className={styles.content}>
-      {wallets.map((Icon, index) => (
+      {walletIcons.map((iconUrl, index) => (
         <div
           key={index}
           className={classnames(
@@ -34,7 +30,7 @@ export const WalletSelection: React.FC<WalletSelectionProps> = (props) => {
           )}
           onClick={() => props.onChange && props.onChange(index)}
         >
-          <Icon {...size} />
+          <img src={iconUrl} {...size} />
         </div>
       ))}
     </div>

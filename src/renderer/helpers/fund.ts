@@ -73,6 +73,8 @@ export async function GetFunds(config: Fund.SettingItem[]) {
       return Adapter.ChokeGroupAdapter<Fund.ResponseItem>(collectors, 3, 300);
     case Enums.FundApiType.Ant:
       return Adapter.ChokeGroupAdapter<Fund.ResponseItem>(collectors, 4, 400);
+    case Enums.FundApiType.Fund10jqka:
+      return Adapter.ChokeGroupAdapter<Fund.ResponseItem>(collectors, 5, 500);
     case Enums.FundApiType.Eastmoney:
     default:
       return Adapter.ChokeGroupAdapter<Fund.ResponseItem>(collectors, 5, 500);
@@ -95,6 +97,8 @@ export async function GetFund(code: string) {
       return Services.Fund.FromEtf(code);
     case Enums.FundApiType.Ant:
       return Services.Fund.FromFund123(code);
+    case Enums.FundApiType.Fund10jqka:
+      return Services.Fund.FromFund10jqka(code);
     case Enums.FundApiType.Eastmoney:
     default:
       // 默认请求天天基金
@@ -238,6 +242,8 @@ export function SortFunds(funds: Fund.ResponseItem[], walletCode: string) {
         return (Number(calcA.cysy || 0) - Number(calcB.cysy || 0)) * t;
       case Enums.FundSortType.IncomeRate:
         return (Number(calcA.cysyl) - Number(calcB.cysyl || 0)) * t;
+      case Enums.FundSortType.Name:
+        return calcA.name!.localeCompare(calcB.name!, 'zh') * t;
       case Enums.FundSortType.Custom:
       default:
         return (codeMap[b.fundcode!]?.originSort - codeMap[a.fundcode!]?.originSort) * t;

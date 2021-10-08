@@ -1,4 +1,4 @@
-import { SET_STOCKS_LOADING, SYNC_STOCK_CONFIG, SYNC_STOCKS } from '@/actions/stock';
+import { SET_STOCKS_LOADING, SYNC_STOCK_CONFIG, SYNC_STOCKS, SET_INDUSTRY_MAP } from '@/actions/stock';
 import { Reducer } from '@/reducers/types';
 import * as Helpers from '@/helpers';
 
@@ -9,6 +9,7 @@ export interface StockState {
     stockConfig: Stock.SettingItem[];
     codeMap: Helpers.Stock.CodeStockMap;
   };
+  industryMap: Record<string, Stock.IndustryItem[]>;
 }
 
 const stock: Reducer<StockState> = (
@@ -16,6 +17,7 @@ const stock: Reducer<StockState> = (
     stocks: [],
     stocksLoading: false,
     config: Helpers.Stock.GetStockConfig(),
+    industryMap: {},
   },
   action
 ) => {
@@ -34,6 +36,11 @@ const stock: Reducer<StockState> = (
       return {
         ...state,
         config: action.payload,
+      };
+    case SET_INDUSTRY_MAP:
+      return {
+        ...state,
+        industryMap: action.payload,
       };
     default:
       return state;

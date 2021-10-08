@@ -37,6 +37,8 @@ export function SortQuotations(responseQuotations: Quotation.ResponseItem[]) {
         return (Number(a.szjs) - Number(b.szjs)) * t;
       case Enums.QuotationSortType.Xdjs:
         return (Number(a.xdjs) - Number(b.xdjs)) * t;
+      case Enums.QuotationSortType.Name:
+        return b.name.localeCompare(a.name, 'zh') * t;
       case Enums.QuotationSortType.Zdf:
       default:
         return (Number(a.zdf) - Number(b.zdf)) * t;

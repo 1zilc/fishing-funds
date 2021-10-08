@@ -1,14 +1,12 @@
-import React, { PropsWithChildren, useState, useEffect } from 'react';
-import { Table, Divider } from 'antd';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { PropsWithChildren, useState } from 'react';
+import { Table } from 'antd';
 import { useRequest } from 'ahooks';
-import classnames from 'classnames';
 
+import ChartCard from '@/components/Card/ChartCard';
 import CustomDrawer from '@/components/CustomDrawer';
 import AddFundContent from '@/components/Home/FundList/AddFundContent';
 import DetailFundContent from '@/components/Home/FundList/DetailFundContent';
 import TypeSelection from '@/components/TypeSelection';
-import { StoreState } from '@/reducers/types';
 import { useDrawer, useCurrentWallet } from '@/utils/hooks';
 import * as Services from '@/services';
 import * as Utils from '@/utils';
@@ -83,7 +81,7 @@ const Rank: React.FC<PropsWithChildren<RankProps>> = () => {
     },
   ];
 
-  const { loading } = useRequest(() => Services.Fund.GetRankDataFromEasemoney(fundType.type), {
+  const { run: runGetRankDataFromEasemoney, loading } = useRequest(() => Services.Fund.GetRankDataFromEasemoney(fundType.type), {
     throwOnError: true,
     onSuccess: (result) => {
       setData(
@@ -103,36 +101,38 @@ const Rank: React.FC<PropsWithChildren<RankProps>> = () => {
   });
 
   return (
-    <div className={styles.content}>
-      <TypeSelection
-        types={fundTypeList}
-        activeType={fundType.type}
-        onSelected={setFundType}
-        style={{ marginTop: 10, marginBottom: 10 }}
-        colspan={4}
-      />
-      <Table
-        rowKey="code"
-        size="small"
-        columns={columns}
-        dataSource={data}
-        loading={loading}
-        pagination={{
-          defaultPageSize: 20,
-          hideOnSinglePage: true,
-          position: ['bottomCenter'],
-        }}
-        onRow={(record) => ({
-          onClick: () => setDetailDrawer(record.code),
-        })}
-      />
-      <CustomDrawer show={showDetailDrawer}>
-        <DetailFundContent onEnter={closeDetailDrawer} onClose={closeDetailDrawer} code={detailCode} />
-      </CustomDrawer>
-      <CustomDrawer show={showAddDrawer}>
-        <AddFundContent defaultCode={addCode} onClose={closeAddDrawer} onEnter={closeAddDrawer} />
-      </CustomDrawer>
-    </div>
+    <ChartCard auto onFresh={runGetRankDataFromEasemoney}>
+      <div className={styles.content}>
+        <TypeSelection
+          types={fundTypeList}
+          activeType={fundType.type}
+          onSelected={setFundType}
+          style={{ marginTop: 10, marginBottom: 10 }}
+          colspan={4}
+        />
+        <Table
+          rowKey="code"
+          size="small"
+          columns={columns}
+          dataSource={data}
+          loading={loading}
+          pagination={{
+            defaultPageSize: 20,
+            hideOnSinglePage: true,
+            position: ['bottomCenter'],
+          }}
+          onRow={(record) => ({
+            onClick: () => setDetailDrawer(record.code),
+          })}
+        />
+        <CustomDrawer show={showDetailDrawer}>
+          <DetailFundContent onEnter={closeDetailDrawer} onClose={closeDetailDrawer} code={detailCode} />
+        </CustomDrawer>
+        <CustomDrawer show={showAddDrawer}>
+          <AddFundContent defaultCode={addCode} onClose={closeAddDrawer} onEnter={closeAddDrawer} />
+        </CustomDrawer>
+      </div>
+    </ChartCard>
   );
 };
 export default Rank;

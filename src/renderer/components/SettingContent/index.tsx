@@ -9,14 +9,14 @@ import StandCard from '@/components/Card/StandCard';
 import Logo from '@/components/Logo';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
 import PayCarousel from '@/components/PayCarousel';
-import { ReactComponent as SettingIcon } from '@/assets/icons/setting.svg';
-import { ReactComponent as LinkIcon } from '@/assets/icons/link.svg';
-import { ReactComponent as LineCharIcon } from '@/assets/icons/line-chart.svg';
-import { ReactComponent as TShirtIcon } from '@/assets/icons/t-shirt.svg';
-import { ReactComponent as GlobalIcon } from '@/assets/icons/global.svg';
-import { ReactComponent as GroupIcon } from '@/assets/icons/group.svg';
-import { ReactComponent as NotificationIcon } from '@/assets/icons/notification.svg';
-import { ReactComponent as BitCoinIcon } from '@/assets/icons/bit-coin.svg';
+import { ReactComponent as SettingIcon } from '@assets/remix/setting.svg';
+import { ReactComponent as LinkIcon } from '@assets/remix/link.svg';
+import { ReactComponent as LineCharIcon } from '@assets/remix/line-chart.svg';
+import { ReactComponent as TShirtIcon } from '@assets/remix/t-shirt.svg';
+import { ReactComponent as GlobalIcon } from '@assets/remix/global.svg';
+import { ReactComponent as GroupIcon } from '@assets/remix/group.svg';
+import { ReactComponent as NotificationIcon } from '@assets/remix/notification.svg';
+import { ReactComponent as BitCoinIcon } from '@assets/remix/bit-coin.svg';
 import { defalutSystemSetting } from '@/helpers/setting';
 import { setSystemSettingAction } from '@/actions/setting';
 import { StoreState } from '@/reducers/types';
@@ -83,6 +83,41 @@ const recordSiteGroup = Utils.Group(
   ],
   3
 );
+
+export const APIOptions = [
+  {
+    name: '东方财富-天天基金',
+    code: Enums.FundApiType.Eastmoney,
+  },
+  {
+    name: '支付宝-蚂蚁基金',
+    code: Enums.FundApiType.Ant,
+  },
+  {
+    name: '同花顺-爱基金',
+    code: Enums.FundApiType.Fund10jqka,
+  },
+  {
+    name: '腾讯证券',
+    code: Enums.FundApiType.Tencent,
+  },
+  {
+    name: '新浪基金',
+    code: Enums.FundApiType.Sina,
+  },
+  {
+    name: '基金速查网',
+    code: Enums.FundApiType.Dayfund,
+  },
+  {
+    name: '好买基金',
+    code: Enums.FundApiType.Howbuy,
+  },
+  {
+    name: '易天富',
+    code: Enums.FundApiType.Etf,
+  },
+];
 
 const SettingContent: React.FC<SettingContentProps> = (props) => {
   const dispatch = useDispatch();
@@ -185,27 +220,11 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
         <StandCard icon={<LineCharIcon />} title="数据来源">
           <div className={classnames(styles.setting, 'card-body')}>
             <Radio.Group value={fundapiType} onChange={(e) => setFundApiType(e.target.value)}>
-              <Radio className={styles.radio} value={Enums.FundApiType.Eastmoney}>
-                天天基金
-              </Radio>
-              <Radio className={styles.radio} value={Enums.FundApiType.Ant}>
-                蚂蚁基金
-              </Radio>
-              <Radio className={styles.radio} value={Enums.FundApiType.Tencent}>
-                腾讯证券
-              </Radio>
-              <Radio className={styles.radio} value={Enums.FundApiType.Sina}>
-                新浪基金
-              </Radio>
-              <Radio className={styles.radio} value={Enums.FundApiType.Dayfund}>
-                基金速查网
-              </Radio>
-              <Radio className={styles.radio} value={Enums.FundApiType.Howbuy}>
-                好买基金
-              </Radio>
-              <Radio className={styles.radio} value={Enums.FundApiType.Etf}>
-                易天富
-              </Radio>
+              {APIOptions.map((api) => (
+                <Radio key={api.code} className={styles.radio} value={api.code}>
+                  {api.name}
+                </Radio>
+              ))}
             </Radio.Group>
           </div>
         </StandCard>
