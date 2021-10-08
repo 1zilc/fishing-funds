@@ -28,7 +28,7 @@ interface RecommendProps {
 }
 
 const Recommend: React.FC<RecommendProps> = (props) => {
-  const { ThemeList } = props;
+  const { ThemeList = [] } = props;
   const { data: detailSecid, show: showDetailDrawer, set: setDetailDrawer, close: closeDetailDrawer } = useDrawer('');
 
   return (
@@ -65,7 +65,7 @@ const Recommend: React.FC<RecommendProps> = (props) => {
                   sorter: (a: any, b: any) => a.Chg - b.Chg,
                 },
               ]}
-              dataSource={t.StockList}
+              dataSource={t.StockList || []}
               pagination={{
                 defaultPageSize: 5,
                 hideOnSinglePage: true,

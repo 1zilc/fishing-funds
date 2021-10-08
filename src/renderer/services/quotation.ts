@@ -668,7 +668,12 @@ export async function GetQuoteCenterFromEastmoney() {
     if (!result) {
       throw new Error();
     }
-    return result;
+    console.log(result);
+    return {
+      ...result,
+      MarketStyle: result.MarketStyle || [],
+      Recommend: result.Recommend || [],
+    };
   } catch (error) {
     console.log(error);
     return {

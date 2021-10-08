@@ -1180,8 +1180,8 @@ export async function GetIndustryRateFromEaseMoney(code: string) {
       responseType: 'json',
     });
     return {
-      stocks: body.Datas.fundStocks,
-      expansion: body.Expansion,
+      stocks: body.Datas?.fundStocks || [],
+      expansion: body.Expansion || '',
     };
   } catch (error) {
     console.log(error);

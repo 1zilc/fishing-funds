@@ -25,7 +25,7 @@ const FundFlowContent: React.FC<DetailFundContentProps> = (props) => {
     <CustomDrawerContent title="板块资金流" enterText="确定" onClose={props.onClose} onEnter={props.onEnter}>
       <div className={styles.content}>
         <div className={styles.container}>
-          <Tabs animated={{ tabPane: true }} tabBarGutter={15}>
+          <Tabs animated={{ tabPane: true }} tabBarGutter={15} destroyInactiveTabPane>
             <Tabs.TabPane tab="行业概览" key={String(0)}>
               <QuotationMap type={Enums.QuotationType.Industry} />
             </Tabs.TabPane>

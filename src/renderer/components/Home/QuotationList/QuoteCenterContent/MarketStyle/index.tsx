@@ -20,7 +20,7 @@ interface MarketStyleProps {
 }
 
 const MarketStyle: React.FC<MarketStyleProps> = (props) => {
-  const { ThemeList } = props;
+  const { ThemeList = [] } = props;
   const { ref: chartRef, chartInstance } = useResizeEchart(CONST.DEFAULT.ECHARTS_SCALE);
   const { varibleColors, darkMode } = useHomeContext();
 
