@@ -21,11 +21,7 @@ export const StandCard: React.FC<PropsWithChildren<StandCardProps>> = ({
   children,
 }) => {
   return (
-    <aside
-      className={classnames(styles.content, className)}
-      onClick={onClick}
-      onDoubleClick={onDoubleClick}
-    >
+    <aside className={classnames(styles.content, className)} onClick={onClick} onDoubleClick={onDoubleClick}>
       {(icon || title) && (
         <div className={styles.header}>
           <div className={styles.icon}>{icon}</div>

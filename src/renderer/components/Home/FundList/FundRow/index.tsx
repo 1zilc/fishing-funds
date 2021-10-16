@@ -2,9 +2,9 @@ import React, { useMemo } from 'react';
 import classnames from 'classnames';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { ReactComponent as EditIcon } from '@assets/remix/edit.svg';
-import { ReactComponent as ArrowDownIcon } from '@assets/remix/arrow-down.svg';
-import { ReactComponent as ArrowUpIcon } from '@assets/remix/arrow-up.svg';
+import { ReactComponent as EditIcon } from '@static/icon/edit.svg';
+import { ReactComponent as ArrowDownIcon } from '@static/icon/arrow-down.svg';
+import { ReactComponent as ArrowUpIcon } from '@static/icon/arrow-up.svg';
 import Collapse from '@/components/Collapse';
 import { toggleFundCollapseAction } from '@/actions/fund';
 import { StoreState } from '@/reducers/types';

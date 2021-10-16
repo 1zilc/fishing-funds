@@ -143,7 +143,6 @@ app.on('second-instance', (event, argv, cwd) => {
 app.on('open-file', (even, path: string) => {
   if (mb?.window) {
     sendMessageToRenderer(mb, 'open-backup-file', path);
-    console.log(sendMessageToRenderer);
   } else {
     openBackupFilePath = path;
   }
