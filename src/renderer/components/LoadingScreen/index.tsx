@@ -8,9 +8,7 @@ import styles from './index.scss';
 
 export interface LoadingScreenProps {}
 const LoadingScreen: React.FC<LoadingScreenProps> = () => {
-  const remoteFundsLoading = useSelector(
-    (state: StoreState) => state.fund.remoteFundsLoading
-  );
+  const remoteFundsLoading = useSelector((state: StoreState) => state.fund.remoteFundsLoading);
   return (
     <div
       className={classnames(styles.content, {
