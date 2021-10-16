@@ -34,12 +34,7 @@ const TypeSelection: React.FC<TypeSelectionProps> = ({
     <div className={styles.selections} style={style}>
       <Row gutter={[padding, padding]}>
         {types.map((item) => (
-          <Col
-            key={item.type}
-            span={colspan}
-            flex={flex ? colspan : undefined}
-            style={{ textAlign: 'center' }}
-          >
+          <Col key={item.type} span={colspan} flex={flex ? colspan : undefined} style={{ textAlign: 'center' }}>
             <span
               className={classnames(styles.selection, {
                 [styles.active]: activeType === item.type,

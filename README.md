@@ -107,9 +107,9 @@ interface FundSetting {
 
 作者利用空闲时间开发不易，您的支持可以给本项目的开发和完善提供巨大的动力，感谢对本软件的喜爱和认可:)
 
-| 微信                                                                                                  | 支付宝                                                                                                |
-| ----------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
-| <img src="https://github.com/1zilc/fishing-funds/blob/master/assets/qrcode/wechat.png" width="108" /> | <img src="https://github.com/1zilc/fishing-funds/blob/master/assets/qrcode/alipay.png" width="108" /> |
+| 微信                                                                                                      | 支付宝                                                                                                    |
+| --------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
+| <img src="https://github.com/1zilc/fishing-funds/blob/master/src/static/qrcode/wechat.png" width="108" /> | <img src="https://github.com/1zilc/fishing-funds/blob/master/src/static/qrcode/alipay.png" width="108" /> |
 
 ## 收录网站
 

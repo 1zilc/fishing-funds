@@ -19,6 +19,10 @@ export default {
         use: ['@svgr/webpack'],
       },
       {
+        test: /\.(?:ico|gif|png|jpg|jpeg|webp)$/,
+        type: 'asset/resource',
+      },
+      {
         test: /\.[jt]sx?$/,
         exclude: /node_modules/,
         use: {
@@ -48,6 +52,7 @@ export default {
     alias: {
       '@': webpackPaths.srcRendererPath,
       '@assets': webpackPaths.assetsPath,
+      '@static': webpackPaths.staticPath,
     },
   },
 

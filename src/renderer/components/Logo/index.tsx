@@ -1,5 +1,3 @@
-import React from 'react';
-
 import LogoImage from '@assets/icon.png';
 import styles from './index.scss';
 

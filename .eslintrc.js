@@ -17,6 +17,7 @@ module.exports = {
     'import/extensions': 0,
     'react/destructuring-assignment': 0,
     'react/button-has-type': 0,
+    'react/react-in-jsx-scope': 0,
     'react/prop-types': 0,
     'react/display-name': 0,
     'react/no-array-index-key': 1,

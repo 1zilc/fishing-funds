@@ -25,7 +25,8 @@
     "outDir": "release/app/dist",
     "paths": {
       "@/*": ["./src/renderer/*"],
-      "@assets/*": ["./assets/*"]
+      "@assets/*": ["./assets/*"],
+      "@static/*": ["./src/static/*"]
     }
   },
   "include": ["./src/**/*"],
