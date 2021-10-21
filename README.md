@@ -1,5 +1,5 @@
 <p align="center">
-<img src="https://github.com/1zilc/fishing-funds/blob/master/assets/icon.png" width="108">
+<img src="https://download.1zilc.top/ff/icon.png" width="108">
 </p>
 
 # Fishing Funds
@@ -22,13 +22,13 @@
 
 <figure class="half">
 
-<img src="https://github.com/1zilc/fishing-funds/blob/master/screenshots/1.png" width="25%"  /><img src="https://github.com/1zilc/fishing-funds/blob/master/screenshots/2.png" width="25%"  /><img src="https://github.com/1zilc/fishing-funds/blob/master/screenshots/3.png" width="25%"  /><img src="https://github.com/1zilc/fishing-funds/blob/master/screenshots/4.png" width="25%"  />
+<img src="https://download.1zilc.top/ff/screenshots/1.png" width="25%"  /><img src="https://download.1zilc.top/ff/screenshots/2.png" width="25%"  /><img src="https://download.1zilc.top/ff/screenshots/3.png" width="25%"  /><img src="https://download.1zilc.top/ff/screenshots/4.png" width="25%"  />
 
 </figure>
 
 <figure class="half">
 
-<img src="https://github.com/1zilc/fishing-funds/blob/master/screenshots/5.png" width="25%"  /><img src="https://github.com/1zilc/fishing-funds/blob/master/screenshots/6.png" width="25%"  /><img src="https://github.com/1zilc/fishing-funds/blob/master/screenshots/7.png" width="25%"  /><img src="https://github.com/1zilc/fishing-funds/blob/master/screenshots/8.png" width="25%"  />
+<img src="https://download.1zilc.top/ff/screenshots/5.png" width="25%"  /><img src="https://download.1zilc.top/ff/screenshots/6.png" width="25%"  /><img src="https://download.1zilc.top/ff/screenshots/7.png" width="25%"  /><img src="https://download.1zilc.top/ff/screenshots/8.png" width="25%"  />
 
 </figure>
 
@@ -67,7 +67,7 @@
 
 ## 讨论交流
 
-- QQ 群: [732268738](https://github.com/1zilc/fishing-funds/blob/master/screenshots/group1.jpg)
+- QQ 群: [732268738](https://download.1zilc.top/ff/screenshots/group1.jpg)
 - issues: [#106](https://github.com/1zilc/fishing-funds/issues/106)
 
 ## 导入导出
@@ -107,9 +107,9 @@ interface FundSetting {
 
 作者利用空闲时间开发不易，您的支持可以给本项目的开发和完善提供巨大的动力，感谢对本软件的喜爱和认可:)
 
-| 微信                                                                                                      | 支付宝                                                                                                    |
-| --------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
-| <img src="https://github.com/1zilc/fishing-funds/blob/master/src/static/qrcode/wechat.png" width="108" /> | <img src="https://github.com/1zilc/fishing-funds/blob/master/src/static/qrcode/alipay.png" width="108" /> |
+| 微信                                                                      | 支付宝                                                                    |
+| ------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
+| <img src="https://download.1zilc.top/ff/qrcode/wechat.png" width="108" /> | <img src="https://download.1zilc.top/ff/qrcode/alipay.png" width="108" /> |
 
 ## 收录网站
 
