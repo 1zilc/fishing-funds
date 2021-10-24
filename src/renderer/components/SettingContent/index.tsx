@@ -144,6 +144,7 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
     trayContentSetting,
     coinUnitSetting,
     httpProxySetting,
+    httpProxyWhitelistSetting,
     httpProxyAddressSetting,
     httpProxyRuleSetting,
     autoStartSetting,
@@ -171,6 +172,7 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
   const [coinUnit, setCoinUnit] = useState(coinUnitSetting);
   // 代理设置
   const [httpProxy, setHttpProxy] = useState(httpProxySetting);
+  const [httpProxyWhitelist, setHttpProxyWhitelist] = useState(httpProxyWhitelistSetting);
   const [httpProxyAddress, setHttpProxyAddress] = useState(httpProxyAddressSetting);
   const [httpProxyRule, setHttpProxyRule] = useState(httpProxyRuleSetting);
   // 通用设置
@@ -194,6 +196,7 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
         trayContentSetting: trayContent,
         coinUnitSetting: coinUnit,
         httpProxySetting: httpProxy,
+        httpProxyWhitelistSetting: httpProxyWhitelist,
         httpProxyAddressSetting: httpProxyAddress,
         httpProxyRuleSetting: httpProxyRule,
         autoStartSetting: autoStart,
@@ -363,21 +366,34 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
             </Radio.Group>
           </div>
         </StandCard>
-        <StandCard icon={<GlobalIcon />} title="代理设置">
+        <StandCard
+          icon={<GlobalIcon />}
+          title="代理设置"
+          extra={
+            <div className={styles.guide}>
+              <Guide
+                list={[
+                  { name: 'http代理', text: '由于众所周知的原因，部分接口需开启代理访问' },
+                  { name: '白名单模式', text: '开启后代理规则中的域名将不走代理，其余接口全部代理' },
+                  { name: '代理地址', text: '例如http://127.0.0.1:1087' },
+                  { name: '代理规则', text: `需要走代理的域名，使用逗号分隔，主要用于货币接口，无特殊原因不建议手动修改` },
+                ]}
+              />
+            </div>
+          }
+        >
           <div className={classnames(styles.setting, 'card-body')}>
             <section>
-              <label>HTTP代理：</label>
+              <label>http代理：</label>
               <Switch size="small" checked={httpProxy} onChange={setHttpProxy} />
             </section>
             <section>
+              <label>白名单模式：</label>
+              <Switch size="small" checked={httpProxyWhitelist} onChange={setHttpProxyWhitelist} />
+            </section>
+            <section>
               <label>代理地址：</label>
-              <Input
-                size="small"
-                value={httpProxyAddress}
-                onChange={(e) => setHttpProxyAddress(e.target.value)}
-                disabled={!httpProxy}
-                placeholder="例如http://127.0.0.1:1087"
-              />
+              <Input size="small" value={httpProxyAddress} onChange={(e) => setHttpProxyAddress(e.target.value)} disabled={!httpProxy} />
             </section>
             <section>
               <label>代理规则：</label>
@@ -385,7 +401,6 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
                 value={httpProxyRule}
                 onChange={(e) => setHttpProxyRule(e.target.value)}
                 disabled={!httpProxy}
-                placeholder="逗号分隔需要走代理的域名，主要用于货币获取，无需手动修改"
               ></Input.TextArea>
             </section>
           </div>
@@ -398,6 +413,7 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
               <Guide
                 list={[
                   { name: '自动刷新', text: '开启后将自动间隔预设时间进行数据刷新' },
+                  { name: '刷新间隔', text: '单位（分钟）' },
                   { name: '时间戳', text: '当前时间节点默认使用淘宝、苏宁等网络时间戳，若自动刷新功能失效，请尝试切换到本地时间戳' },
                 ]}
               />

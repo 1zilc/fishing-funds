@@ -15,6 +15,7 @@ declare namespace System {
     coinUnitSetting: string; // 货币单位
 
     httpProxySetting: boolean; // http代理
+    httpProxyWhitelistSetting: boolean; // http白名单模式
     httpProxyAddressSetting: string; // http 代理地址
     httpProxyRuleSetting: string; // http 代理规则
 
