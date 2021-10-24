@@ -63,6 +63,7 @@
 ```
 
 - [官网下载](https://ff.1zilc.top)
+- [阿里云网盘下载](https://alist.1zilc.top/home/Fishing%20Funds)
 - [Github 下载](https://github.com/1zilc/fishing-funds/releases)
 
 ## 讨论交流

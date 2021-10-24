@@ -156,7 +156,9 @@ export enum FundRankType {
 }
 export enum WalletIncomType {
   Jrsy,
+  Jrsyl,
   Cysy,
+  Cysyl,
 }
 
 export enum TrayContent {

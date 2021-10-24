@@ -14,8 +14,10 @@ interface WalletIncomeProps {
 }
 
 const incomeTypeList = [
-  { name: '今日收益', type: Enums.WalletIncomType.Jrsy, code: '' },
+  { name: '收益(今)', type: Enums.WalletIncomType.Jrsy, code: '' },
+  { name: '收益率(今)', type: Enums.WalletIncomType.Jrsyl, code: '' },
   { name: '持有收益', type: Enums.WalletIncomType.Cysy, code: '' },
+  { name: '持有收益率', type: Enums.WalletIncomType.Cysyl, code: '' },
 ];
 
 const WalletIncome: React.FC<WalletIncomeProps> = ({ funds = [], codes = [] }) => {
@@ -54,7 +56,9 @@ const WalletIncome: React.FC<WalletIncomeProps> = ({ funds = [], codes = [] }) =
         yAxis: {
           type: 'value',
           axisLabel: {
-            formatter: `{value}元`,
+            formatter: `{value}${
+              incomeType.type === Enums.WalletIncomType.Jrsy || incomeType.type === Enums.WalletIncomType.Cysy ? '元' : '%'
+            }`,
             fontSize: 10,
           },
         },
@@ -65,8 +69,14 @@ const WalletIncome: React.FC<WalletIncomeProps> = ({ funds = [], codes = [] }) =
               focus: 'series',
             },
             data: codes.map((code) => {
-              const { sygz, cysy } = Helpers.Fund.CalcFunds(funds, code);
-              const value = incomeType.type === Enums.WalletIncomType.Jrsy ? sygz.toFixed(2) : cysy.toFixed(2);
+              const { sygz, gssyl, cysy, cysyl } = Helpers.Fund.CalcFunds(funds, code);
+              const values = {
+                [Enums.WalletIncomType.Jrsy]: sygz.toFixed(2),
+                [Enums.WalletIncomType.Jrsyl]: gssyl.toFixed(2),
+                [Enums.WalletIncomType.Cysy]: cysy.toFixed(2),
+                [Enums.WalletIncomType.Cysyl]: cysyl.toFixed(2),
+              };
+              const value = values[incomeType.type];
               return {
                 value,
                 itemStyle: {

@@ -4,6 +4,7 @@ import { Table, Divider } from 'antd';
 import { useRequest } from 'ahooks';
 import classnames from 'classnames';
 
+import ChartCard from '@/components/Card/ChartCard';
 import CustomDrawer from '@/components/CustomDrawer';
 import DetailCoinContent from '@/components/Home/CoinList/DetailCoinContent';
 import AddCoinContent from '@/components/Home/CoinList/AddCoinContent';
@@ -66,36 +67,37 @@ const MainRank: React.FC<PropsWithChildren<MainRankProps>> = () => {
     },
   ];
 
-  const { loading } = useRequest(Services.Coin.FromCoinCap, {
-    defaultParams: ['', ''],
+  const { run: runCoinFromCoinCap, loading } = useRequest(() => Services.Coin.FromCoinCap('', ''), {
     throwOnError: true,
     onSuccess: setData,
   });
 
   return (
-    <div className={styles.content}>
-      <Table
-        rowKey="code"
-        size="small"
-        columns={columns}
-        dataSource={data}
-        loading={loading}
-        pagination={{
-          defaultPageSize: 20,
-          hideOnSinglePage: true,
-          position: ['bottomCenter'],
-        }}
-        onRow={(record) => ({
-          onClick: () => setDetailDrawer(record.code),
-        })}
-      />
-      <CustomDrawer show={showDetailDrawer}>
-        <DetailCoinContent onEnter={closeDetailDrawer} onClose={closeDetailDrawer} code={detailCode} />
-      </CustomDrawer>
-      <CustomDrawer show={showAddDrawer}>
-        <AddCoinContent defaultName={addName} onClose={closeAddDrawer} onEnter={closeAddDrawer} />
-      </CustomDrawer>
-    </div>
+    <ChartCard auto onFresh={runCoinFromCoinCap}>
+      <div className={styles.content}>
+        <Table
+          rowKey="code"
+          size="small"
+          columns={columns}
+          dataSource={data}
+          loading={loading}
+          pagination={{
+            defaultPageSize: 20,
+            hideOnSinglePage: true,
+            position: ['bottomCenter'],
+          }}
+          onRow={(record) => ({
+            onClick: () => setDetailDrawer(record.code),
+          })}
+        />
+        <CustomDrawer show={showDetailDrawer}>
+          <DetailCoinContent onEnter={closeDetailDrawer} onClose={closeDetailDrawer} code={detailCode} />
+        </CustomDrawer>
+        <CustomDrawer show={showAddDrawer}>
+          <AddCoinContent defaultName={addName} onClose={closeAddDrawer} onEnter={closeAddDrawer} />
+        </CustomDrawer>
+      </div>
+    </ChartCard>
   );
 };
 export default MainRank;
