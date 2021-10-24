@@ -178,6 +178,12 @@
   animation: colorful 9s infinite;
 }
 
+.guide {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
 @keyframes colorful {
   0% {
     background-position: 10% 0%;

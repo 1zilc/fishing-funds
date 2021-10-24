@@ -1,0 +1,15 @@
+.content {
+  // width: 100%;
+  color: '#fff';
+}
+.name {
+  font-weight: bold;
+  word-break: keep-all;
+}
+.text {
+  word-break: break-all;
+}
+.item {
+  display: flex;
+  justify-content: flex-start;
+}

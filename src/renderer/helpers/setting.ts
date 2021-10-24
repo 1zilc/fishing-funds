@@ -18,6 +18,10 @@ export const defalutSystemSetting: System.Setting = {
 
   coinUnitSetting: Enums.CoinUnitType.Usd,
 
+  httpProxySetting: false,
+  httpProxyAddressSetting: 'http://127.0.0.1:1087',
+  httpProxyRuleSetting: 'api.coingecko.com,api.coincap.io',
+
   autoStartSetting: true,
   autoFreshSetting: true,
   freshDelaySetting: 1,
