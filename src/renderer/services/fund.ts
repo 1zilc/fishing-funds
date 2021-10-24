@@ -530,13 +530,14 @@ export async function FromFund10jqka(code: string) {
     const last: string = gsinfo.split(';').pop();
     const [time, gsz, dwjz, zero] = last.split(',');
     const gszzl = NP.divide(NP.minus(gsz, dwjz), dwjz, 0.01).toFixed(2);
+
     return {
       name: data.name,
       fundcode: data.code,
       gztime: `${gzdata} ${time.slice(0, 2)}:${time.slice(2)}`,
       gszzl: gszzl,
-      jzrq: data.enddate1,
-      dwjz: data.net1,
+      jzrq: data.enddate,
+      dwjz: data.net,
       gsz,
     };
   } catch (error) {
