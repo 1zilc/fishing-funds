@@ -389,7 +389,7 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
             </section>
             <section>
               <label>白名单模式：</label>
-              <Switch size="small" checked={httpProxyWhitelist} onChange={setHttpProxyWhitelist} />
+              <Switch size="small" checked={httpProxyWhitelist} onChange={setHttpProxyWhitelist} disabled={!httpProxy} />
             </section>
             <section>
               <label>代理地址：</label>
