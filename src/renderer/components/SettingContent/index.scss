@@ -6,15 +6,16 @@
     padding: 0 0;
   }
 
-  & > label {
+  section > label {
     font-size: 1rem;
-    width: 100px;
     margin-bottom: 5px;
     display: block;
+    word-break: keep-all;
   }
 
+  textArea,
   input {
-    width: 100%;
+    width: 100px;
     outline: none;
     border: 1px solid var(--border-color);
     // height: 20px;

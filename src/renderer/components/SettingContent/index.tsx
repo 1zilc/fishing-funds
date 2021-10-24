@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import classnames from 'classnames';
 import { useSelector, useDispatch } from 'react-redux';
-import { InputNumber, Radio, Badge, Switch, Slider, TimePicker } from 'antd';
+import { InputNumber, Radio, Badge, Switch, Slider, TimePicker, Input } from 'antd';
 import dayjs from 'dayjs';
 
 import PureCard from '@/components/Card/PureCard';
@@ -17,6 +17,7 @@ import { ReactComponent as GlobalIcon } from '@static/icon/global.svg';
 import { ReactComponent as GroupIcon } from '@static/icon/group.svg';
 import { ReactComponent as NotificationIcon } from '@static/icon/notification.svg';
 import { ReactComponent as BitCoinIcon } from '@static/icon/bit-coin.svg';
+import { ReactComponent as WindowIcon } from '@static/icon/window.svg';
 import { defalutSystemSetting } from '@/helpers/setting';
 import { setSystemSettingAction } from '@/actions/setting';
 import { StoreState } from '@/reducers/types';
@@ -312,6 +313,22 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
             </Radio.Group>
           </div>
         </StandCard>
+        <StandCard icon={<GlobalIcon />} title="代理设置">
+          <div className={classnames(styles.setting, 'card-body')}>
+            <section>
+              <label>HTTP代理：</label>
+              <Switch size="small" checked={autoStart} onChange={setAutoStart} />
+            </section>
+            <section>
+              <label>代理地址：</label>
+              <Input size="small" />
+            </section>
+            <section>
+              <label>代理规则：</label>
+              <Input.TextArea></Input.TextArea>
+            </section>
+          </div>
+        </StandCard>
         <StandCard icon={<SettingIcon />} title="系统设置">
           <div className={classnames(styles.setting, 'card-body')}>
             <section>
@@ -387,7 +404,7 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
             </section>
           </div>
         </StandCard>
-        <StandCard icon={<GlobalIcon />} title="收录网站">
+        <StandCard icon={<WindowIcon />} title="收录网站">
           <div className={classnames('card-body')}>
             {recordSiteGroup.map((links, index) => (
               <div key={index} className={styles.link}>

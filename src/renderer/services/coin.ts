@@ -173,6 +173,7 @@ export async function FromCoingecko(codes: string, currency: string) {
       updateTime: dayjs.unix(data.last_updated_at).format('MM-DD HH:mm'),
     }));
   } catch (error) {
+    console.log(error);
     return [];
   }
 }

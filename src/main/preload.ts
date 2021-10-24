@@ -6,8 +6,22 @@ import * as fs from 'fs';
 import { base64ToBuffer } from './util';
 import { version } from '../../release/app/package.json';
 
+const HttpProxyAgent = require('http-proxy-agent');
+const HttpsProxyAgent = require('https-proxy-agent');
+
 contextBridge.exposeInMainWorld('contextModules', {
-  got: async (url: string, config = {}) => got(url, { ...config, retry: 3, timeout: 6000 }),
+  got: async (url: string, config = {}) => {
+    // const {} = localStorage.getItem('')
+    return got(url, {
+      ...config,
+      retry: 3,
+      timeout: 6000,
+      agent: {
+        http: HttpProxyAgent('http://127.0.0.1:1087'),
+        https: HttpsProxyAgent('http://127.0.0.1:1087'),
+      },
+    });
+  },
   process: {
     production: process.env.NODE_ENV === 'production',
     electron: process.versions.electron,
