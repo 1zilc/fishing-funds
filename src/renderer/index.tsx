@@ -10,12 +10,13 @@ import * as Utils from '@/utils';
 import 'electron-disable-file-drop';
 import '@/utils/window';
 
+NP.enableBoundaryChecking(false);
+
 Utils.CheckEnvTool();
+Utils.InitSystemSettingStorage();
 Utils.ClearExpiredStorage();
 
 export const store = configureStore();
-
-NP.enableBoundaryChecking(false);
 
 render(
   <ConfigProvider locale={zhCN}>

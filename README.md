@@ -63,12 +63,23 @@
 ```
 
 - [官网下载](https://ff.1zilc.top)
+- [阿里云网盘下载](https://alist.1zilc.top/home/Fishing%20Funds)
 - [Github 下载](https://github.com/1zilc/fishing-funds/releases)
 
 ## 讨论交流
 
 - QQ 群: [732268738](https://download.1zilc.top/ff/screenshots/group1.jpg)
 - issues: [#106](https://github.com/1zilc/fishing-funds/issues/106)
+
+## http 代理
+
+由于众所周知的原因，部分接口无法访问，Fishing Funds 支持代理访问
+
+| 选项         | 说明                                                         |
+| ------------ | ------------------------------------------------------------ |
+| 默认代理地址 | `http://127.0.0.1:1087`                                      |
+| 默认代理规则 | `api.coingecko.com,api.coincap.io`                           |
+| 白名单模式   | 默认关闭，开启后代理规则中的域名将不走代理，其余接口全部代理 |
 
 ## 导入导出
 

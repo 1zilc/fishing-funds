@@ -4,6 +4,7 @@ import dayjs from 'dayjs';
 import { defaultWallet } from '@/helpers/wallet';
 import * as Enums from '@/utils/enums';
 import * as CONST from '@/constants';
+import * as Helpers from '@/helpers';
 
 const { invoke, encodeFF, decodeFF } = window.contextModules.electron;
 const { version, production } = window.contextModules.process;
@@ -244,6 +245,11 @@ export function UnitTransform(value: number) {
 
 export function MakeHash() {
   return Math.random().toString(36).substr(2);
+}
+
+export function InitSystemSettingStorage() {
+  const systemSetting = Helpers.Setting.GetSystemSetting();
+  SetStorage(CONST.STORAGE.SYSTEM_SETTING, systemSetting);
 }
 
 export function ClearExpiredStorage() {

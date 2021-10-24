@@ -3,11 +3,39 @@ import got from 'got';
 import { encode, decode } from 'js-base64';
 import log from 'electron-log';
 import * as fs from 'fs';
+import * as CONST from '../renderer/constants';
 import { base64ToBuffer } from './util';
 import { version } from '../../release/app/package.json';
 
+const HttpProxyAgent = require('http-proxy-agent');
+const HttpsProxyAgent = require('https-proxy-agent');
+
 contextBridge.exposeInMainWorld('contextModules', {
-  got: async (url: string, config = {}) => got(url, { ...config, retry: 3, timeout: 6000 }),
+  got: async (url: string, config = {}) => {
+    const { httpProxyAddressSetting, httpProxySetting, httpProxyWhitelistSetting, httpProxyRuleSetting }: any = JSON.parse(
+      localStorage.getItem(CONST.STORAGE.SYSTEM_SETTING)!
+    );
+    const httpProxyRuleMap = (httpProxyRuleSetting ?? '').split(',').reduce((map: Record<string, boolean>, address: string) => {
+      map[address] = true;
+      return map;
+    }, {});
+
+    const { host } = new URL(url);
+    const agent = Object.fromEntries(
+      httpProxySetting && httpProxyWhitelistSetting !== !!httpProxyRuleMap[host]
+        ? [
+            ['http', HttpProxyAgent(httpProxyAddressSetting)],
+            ['https', HttpsProxyAgent(httpProxyAddressSetting)],
+          ]
+        : []
+    );
+    return got(url, {
+      ...config,
+      retry: 3,
+      timeout: 7000,
+      agent,
+    });
+  },
   process: {
     production: process.env.NODE_ENV === 'production',
     electron: process.versions.electron,

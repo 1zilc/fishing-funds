@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import classnames from 'classnames';
 import { useSelector, useDispatch } from 'react-redux';
-import { InputNumber, Radio, Badge, Switch, Slider, TimePicker } from 'antd';
+import { InputNumber, Radio, Badge, Switch, Slider, TimePicker, Input } from 'antd';
 import dayjs from 'dayjs';
 
 import PureCard from '@/components/Card/PureCard';
@@ -9,6 +9,7 @@ import StandCard from '@/components/Card/StandCard';
 import Logo from '@/components/Logo';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
 import PayCarousel from '@/components/PayCarousel';
+import Guide from '@/components/Guide';
 import { ReactComponent as SettingIcon } from '@static/icon/setting.svg';
 import { ReactComponent as LinkIcon } from '@static/icon/link.svg';
 import { ReactComponent as LineCharIcon } from '@static/icon/line-chart.svg';
@@ -17,12 +18,14 @@ import { ReactComponent as GlobalIcon } from '@static/icon/global.svg';
 import { ReactComponent as GroupIcon } from '@static/icon/group.svg';
 import { ReactComponent as NotificationIcon } from '@static/icon/notification.svg';
 import { ReactComponent as BitCoinIcon } from '@static/icon/bit-coin.svg';
+import { ReactComponent as WindowIcon } from '@static/icon/window.svg';
 import { defalutSystemSetting } from '@/helpers/setting';
 import { setSystemSettingAction } from '@/actions/setting';
 import { StoreState } from '@/reducers/types';
 import * as Enums from '@/utils/enums';
 import * as Utils from '@/utils';
 import styles from './index.scss';
+import { text } from 'stream/consumers';
 
 export interface SettingContentProps {
   onEnter: () => void;
@@ -88,34 +91,42 @@ export const APIOptions = [
   {
     name: '东方财富-天天基金',
     code: Enums.FundApiType.Eastmoney,
+    recommond: '★★★★★ (推荐)',
   },
   {
     name: '支付宝-蚂蚁基金',
     code: Enums.FundApiType.Ant,
+    recommond: '★★★★☆',
   },
   {
     name: '同花顺-爱基金',
     code: Enums.FundApiType.Fund10jqka,
+    recommond: '★★★★☆',
   },
   {
     name: '腾讯证券',
     code: Enums.FundApiType.Tencent,
+    recommond: '★★★★☆',
   },
   {
     name: '新浪基金',
     code: Enums.FundApiType.Sina,
+    recommond: '★★★★☆',
   },
   {
     name: '基金速查网',
     code: Enums.FundApiType.Dayfund,
+    recommond: '★★★☆☆',
   },
   {
     name: '好买基金',
     code: Enums.FundApiType.Howbuy,
+    recommond: '★★★☆☆',
   },
   {
     name: '易天富',
     code: Enums.FundApiType.Etf,
+    recommond: '★★★☆☆',
   },
 ];
 
@@ -132,6 +143,10 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
     riskNotificationSetting,
     trayContentSetting,
     coinUnitSetting,
+    httpProxySetting,
+    httpProxyWhitelistSetting,
+    httpProxyAddressSetting,
+    httpProxyRuleSetting,
     autoStartSetting,
     autoFreshSetting,
     freshDelaySetting,
@@ -154,7 +169,12 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
   const [riskNotification, setRiskNotification] = useState(riskNotificationSetting);
   const [trayContent, setTrayContent] = useState(trayContentSetting);
   // 货币单位
-  const [coinUnit, setCoinUnitSetting] = useState(coinUnitSetting);
+  const [coinUnit, setCoinUnit] = useState(coinUnitSetting);
+  // 代理设置
+  const [httpProxy, setHttpProxy] = useState(httpProxySetting);
+  const [httpProxyWhitelist, setHttpProxyWhitelist] = useState(httpProxyWhitelistSetting);
+  const [httpProxyAddress, setHttpProxyAddress] = useState(httpProxyAddressSetting);
+  const [httpProxyRule, setHttpProxyRule] = useState(httpProxyRuleSetting);
   // 通用设置
   const [autoStart, setAutoStart] = useState(autoStartSetting);
   const [autoFresh, setAutoFresh] = useState(autoFreshSetting);
@@ -175,6 +195,10 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
         riskNotificationSetting: riskNotification,
         trayContentSetting: trayContent,
         coinUnitSetting: coinUnit,
+        httpProxySetting: httpProxy,
+        httpProxyWhitelistSetting: httpProxyWhitelist,
+        httpProxyAddressSetting: httpProxyAddress,
+        httpProxyRuleSetting: httpProxyRule,
         autoStartSetting: autoStart,
         autoFreshSetting: autoFresh,
         freshDelaySetting: freshDelay || defalutSystemSetting.freshDelaySetting,
@@ -217,7 +241,15 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
             <div className={styles.appName}>Fishing Funds v{version}</div>
           </Badge>
         </PureCard>
-        <StandCard icon={<LineCharIcon />} title="数据来源">
+        <StandCard
+          icon={<LineCharIcon />}
+          title="数据来源"
+          extra={
+            <div className={styles.guide}>
+              <Guide list={APIOptions.map(({ name, recommond }) => ({ name, text: recommond }))} />
+            </div>
+          }
+        >
           <div className={classnames(styles.setting, 'card-body')}>
             <Radio.Group value={fundapiType} onChange={(e) => setFundApiType(e.target.value)}>
               {APIOptions.map((api) => (
@@ -259,7 +291,21 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
             </section>
           </div>
         </StandCard>
-        <StandCard icon={<NotificationIcon />} title="通知设置">
+        <StandCard
+          icon={<NotificationIcon />}
+          title="通知设置"
+          extra={
+            <div className={styles.guide}>
+              <Guide
+                list={[
+                  { name: '调仓提醒', text: '将在预设时间发出调仓通知' },
+                  { name: '涨跌提醒', text: '开启后可在基金设置中配置自定义涨幅提醒' },
+                  { name: '托盘内容', text: '仅限macos客户端，菜单栏显示当日收益等信息' },
+                ]}
+              />
+            </div>
+          }
+        >
           <div className={classnames(styles.setting, 'card-body')}>
             <section>
               <label>调仓提醒：</label>
@@ -297,9 +343,17 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
             </section>
           </div>
         </StandCard>
-        <StandCard icon={<BitCoinIcon />} title="货币单位">
+        <StandCard
+          icon={<BitCoinIcon />}
+          title="货币单位"
+          extra={
+            <div className={styles.guide}>
+              <Guide list={[{ name: '货币单位', text: '仅用做货币模块单位换算，其余模块单位均为人民币' }]} />
+            </div>
+          }
+        >
           <div className={classnames(styles.setting, 'card-body')}>
-            <Radio.Group value={coinUnit} onChange={(e) => setCoinUnitSetting(e.target.value)}>
+            <Radio.Group value={coinUnit} onChange={(e) => setCoinUnit(e.target.value)}>
               <Radio className={styles.radio} value={Enums.CoinUnitType.Usd}>
                 USD ($)
               </Radio>
@@ -312,7 +366,60 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
             </Radio.Group>
           </div>
         </StandCard>
-        <StandCard icon={<SettingIcon />} title="系统设置">
+        <StandCard
+          icon={<GlobalIcon />}
+          title="代理设置"
+          extra={
+            <div className={styles.guide}>
+              <Guide
+                list={[
+                  { name: 'http代理', text: '由于众所周知的原因，部分接口需开启代理访问' },
+                  { name: '白名单模式', text: '默认关闭，开启后代理规则中的域名将不走代理，其余接口全部代理' },
+                  { name: '代理地址', text: '例如http://127.0.0.1:1087' },
+                  { name: '代理规则', text: `需要走代理的域名，使用英文逗号分隔，主要用于货币接口，无特殊原因不建议手动修改` },
+                ]}
+              />
+            </div>
+          }
+        >
+          <div className={classnames(styles.setting, 'card-body')}>
+            <section>
+              <label>http代理：</label>
+              <Switch size="small" checked={httpProxy} onChange={setHttpProxy} />
+            </section>
+            <section>
+              <label>白名单模式：</label>
+              <Switch size="small" checked={httpProxyWhitelist} onChange={setHttpProxyWhitelist} disabled={!httpProxy} />
+            </section>
+            <section>
+              <label>代理地址：</label>
+              <Input size="small" value={httpProxyAddress} onChange={(e) => setHttpProxyAddress(e.target.value)} disabled={!httpProxy} />
+            </section>
+            <section>
+              <label>代理规则：</label>
+              <Input.TextArea
+                value={httpProxyRule}
+                onChange={(e) => setHttpProxyRule(e.target.value)}
+                disabled={!httpProxy}
+              ></Input.TextArea>
+            </section>
+          </div>
+        </StandCard>
+        <StandCard
+          icon={<SettingIcon />}
+          title="系统设置"
+          extra={
+            <div className={styles.guide}>
+              <Guide
+                list={[
+                  { name: '自动刷新', text: '开启后将自动间隔预设时间进行数据刷新' },
+                  { name: '刷新间隔', text: '单位（分钟）' },
+                  { name: '时间戳', text: '当前时间节点默认使用淘宝、苏宁等网络时间戳，若自动刷新功能失效，请尝试切换到本地时间戳' },
+                ]}
+              />
+            </div>
+          }
+        >
           <div className={classnames(styles.setting, 'card-body')}>
             <section>
               <label>开机自启：</label>
@@ -356,7 +463,15 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
           </div>
         </StandCard>
         <PayCarousel />
-        <StandCard icon={<LinkIcon />} title="关于 Fishing Funds">
+        <StandCard
+          icon={<LinkIcon />}
+          title="关于 Fishing Funds"
+          extra={
+            <div className={styles.guide}>
+              <Guide list={[{ name: '☕️', text: 'buy me a coffee :)' }]} />
+            </div>
+          }
+        >
           <div className={classnames('card-body')}>
             <div className={classnames(styles.describe)}>
               Fishing Funds
@@ -387,7 +502,7 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
             </section>
           </div>
         </StandCard>
-        <StandCard icon={<GlobalIcon />} title="收录网站">
+        <StandCard icon={<WindowIcon />} title="收录网站">
           <div className={classnames('card-body')}>
             {recordSiteGroup.map((links, index) => (
               <div key={index} className={styles.link}>
