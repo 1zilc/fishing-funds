@@ -22,7 +22,8 @@ const buildPath = path.join(releasePath, 'build');
 
 const assetsPath = path.join(rootPath, 'assets');
 
-export = {
+
+export default {
   rootPath,
   dllPath,
   srcPath,
