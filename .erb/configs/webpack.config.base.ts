@@ -52,7 +52,6 @@ export default {
     alias: {
       '@': webpackPaths.srcRendererPath,
       '@assets': webpackPaths.assetsPath,
-      '@static': webpackPaths.staticPath,
     },
   },
 
