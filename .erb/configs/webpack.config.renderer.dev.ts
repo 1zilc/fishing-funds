@@ -53,128 +53,30 @@ export default merge(baseConfig, {
   module: {
     rules: [
       {
-        test: /\.global\.css$/,
+        test: /\.s?css$/,
         use: [
-          {
-            loader: 'style-loader',
-          },
+          'style-loader',
           {
             loader: 'css-loader',
             options: {
-              sourceMap: true,
-            },
-          },
-        ],
-      },
-      {
-        test: /^((?!\.global).)*\.css$/,
-        use: [
-          {
-            loader: 'style-loader',
-          },
-          {
-            loader: 'css-loader',
-            options: {
-              modules: {
-                localIdentName: '[name]__[local]__[hash:base64:5]',
-              },
+              modules: true,
               sourceMap: true,
               importLoaders: 1,
             },
           },
+          'sass-loader',
         ],
+        include: /\.module\.s?(c|a)ss$/,
       },
-      // SASS support - compile all .global.scss files and pipe it to style.css
       {
-        test: /\.global\.(scss|sass)$/,
-        use: [
-          {
-            loader: 'style-loader',
-          },
-          {
-            loader: 'css-loader',
-            options: {
-              sourceMap: true,
-            },
-          },
-          {
-            loader: 'sass-loader',
-          },
-        ],
+        test: /\.s?css$/,
+        use: ['style-loader', 'css-loader', 'sass-loader'],
+        exclude: /\.module\.s?(c|a)ss$/,
       },
-      // SASS support - compile all other .scss files and pipe it to style.css
+      //Font Loader
       {
-        test: /^((?!\.global).)*\.(scss|sass)$/,
-        use: [
-          {
-            loader: 'style-loader',
-          },
-          {
-            loader: '@teamsupercell/typings-for-css-modules-loader',
-          },
-          {
-            loader: 'css-loader',
-            options: {
-              modules: {
-                localIdentName: '[name]__[local]__[hash:base64:5]',
-              },
-              sourceMap: true,
-              importLoaders: 1,
-            },
-          },
-          {
-            loader: 'sass-loader',
-          },
-        ],
-      },
-      // WOFF Font
-      {
-        test: /\.woff(\?v=\d+\.\d+\.\d+)?$/,
-        use: {
-          loader: 'url-loader',
-          options: {
-            limit: 10000,
-            mimetype: 'application/font-woff',
-          },
-        },
-      },
-      // WOFF2 Font
-      {
-        test: /\.woff2(\?v=\d+\.\d+\.\d+)?$/,
-        use: {
-          loader: 'url-loader',
-          options: {
-            limit: 10000,
-            mimetype: 'application/font-woff',
-          },
-        },
-      },
-      // OTF Font
-      {
-        test: /\.otf(\?v=\d+\.\d+\.\d+)?$/,
-        use: {
-          loader: 'url-loader',
-          options: {
-            limit: 10000,
-            mimetype: 'font/otf',
-          },
-        },
-      },
-      // TTF Font
-      {
-        test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/,
-        use: {
-          loader: 'url-loader',
-          options: {
-            limit: 10000,
-            mimetype: 'application/octet-stream',
-          },
-        },
-      },
-      // EOT Font
-      {
-        test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,
-        use: 'file-loader',
+        test: /\.(woff|woff2|eot|ttf|otf)$/i,
+        type: 'asset/resource',
       },
       // SVG Font
       {
