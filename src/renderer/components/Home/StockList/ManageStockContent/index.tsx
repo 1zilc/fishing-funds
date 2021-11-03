@@ -6,7 +6,7 @@ import Optional from '@/components/Home/StockList/ManageStockContent/Optional';
 import SelfRank from '@/components/Home/StockList/ManageStockContent/SelfRank';
 import MainRank from '@/components/Home/StockList/ManageStockContent/MainRank';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
-import styles from './index.scss';
+import styles from './index.module.scss';
 
 export interface ManageStockContentProps {
   onEnter: () => void;

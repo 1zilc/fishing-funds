@@ -7,7 +7,7 @@ import LiveList from '@/components/Home/NewsList/NewsContent/LiveList';
 import ListedList from '@/components/Home/NewsList/NewsContent/ListedList';
 import GlobalList from '@/components/Home/NewsList/NewsContent/GlobalList';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
-import styles from './index.scss';
+import styles from './index.module.scss';
 
 interface NewsContentProps {
   onEnter: () => void;

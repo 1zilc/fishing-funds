@@ -9,7 +9,7 @@ import ArrowLine from '@/components/ArrowLine';
 import { StoreState } from '@/reducers/types';
 import { toggleZindexCollapseAction } from '@/actions/zindex';
 import * as Utils from '@/utils';
-import styles from './index.scss';
+import styles from './index.module.scss';
 
 export interface RowProps {
   zindex: Zindex.ResponseItem & Zindex.ExtraRow;

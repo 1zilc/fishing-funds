@@ -13,7 +13,7 @@ import AddZindexContent from '@/components/Home/ZindexList/AddZindexContent';
 import { deleteZindexAction, setZindexConfigAction } from '@/actions/zindex';
 import { useDrawer } from '@/utils/hooks';
 import { StoreState } from '@/reducers/types';
-import styles from './index.scss';
+import styles from './index.module.scss';
 
 export interface OptionalProps {}
 

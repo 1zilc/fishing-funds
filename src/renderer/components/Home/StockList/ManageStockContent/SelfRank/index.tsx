@@ -12,7 +12,7 @@ import { useDrawer } from '@/utils/hooks';
 import { StoreState } from '@/reducers/types';
 import * as Services from '@/services';
 import * as Utils from '@/utils';
-import styles from './index.scss';
+import styles from './index.module.scss';
 
 interface SelfRankProps {}
 

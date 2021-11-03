@@ -3,7 +3,7 @@ import classnames from 'classnames';
 
 import { ReactComponent as EyeIcon } from '@/static/icon/eye.svg';
 import { ReactComponent as EyeCloseIcon } from '@/static/icon/eye-close.svg';
-import styles from './index.scss';
+import styles from './index.module.scss';
 
 export interface EyeProps {
   style?: Record<string, any>;

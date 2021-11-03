@@ -13,7 +13,7 @@ import AddCoinContent from '@/components/Home/CoinList/AddCoinContent';
 import { deleteCoinAction, setCoinConfigAction } from '@/actions/coin';
 import { useDrawer } from '@/utils/hooks';
 import { StoreState } from '@/reducers/types';
-import styles from './index.scss';
+import styles from './index.module.scss';
 
 export interface OptionalProps {}
 

@@ -12,7 +12,7 @@ import CustomDrawerContent from '@/components/CustomDrawer/Content';
 import * as Services from '@/services';
 import * as Utils from '@/utils';
 import * as Enums from '@/utils/enums';
-import styles from './index.scss';
+import styles from './index.module.scss';
 
 export interface DetailQuotationContentProps {
   onEnter: () => void;

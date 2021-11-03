@@ -14,7 +14,7 @@ import {
   useUpdateContextMenuWalletsState,
   useAllConfigBackup,
 } from '@/utils/hooks';
-import '@/app.global.scss';
+import '@/app.scss';
 
 const App: React.FC<Record<string, unknown>> = () => {
   useUpdater();

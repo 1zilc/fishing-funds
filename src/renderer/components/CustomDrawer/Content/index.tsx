@@ -1,7 +1,7 @@
 import React from 'react';
 import { useKeyPress } from 'ahooks';
 import Collect from '@/components/Collect';
-import styles from './index.scss';
+import styles from './index.module.scss';
 
 export interface CustomDrawerContentProps {
   onEnter: () => void;

@@ -13,7 +13,7 @@ import { toggleStockCollapseAction, setIndustryMapAction } from '@/actions/stock
 import { useResizeEchart, useRenderEcharts } from '@/utils/hooks';
 import * as Services from '@/services';
 import * as Utils from '@/utils';
-import styles from './index.scss';
+import styles from './index.module.scss';
 
 const colorHash = new ColorHash();
 export interface RowProps {

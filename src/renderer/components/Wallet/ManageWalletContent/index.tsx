@@ -12,7 +12,7 @@ import EditWalletContent from '@/components/Wallet/EditWalletContent';
 import { StoreState } from '@/reducers/types';
 import { useDrawer } from '@/utils/hooks';
 import { setWalletConfigAction, selectWalletAction } from '@/actions/wallet';
-import styles from './index.scss';
+import styles from './index.module.scss';
 
 export interface ManageWalletContentProps {
   onEnter: () => void;

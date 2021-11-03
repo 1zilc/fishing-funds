@@ -13,7 +13,7 @@ import AddStockContent from '@/components/Home/StockList/AddStockContent';
 import { deleteStockAction, setStockConfigAction } from '@/actions/stock';
 import { useDrawer } from '@/utils/hooks';
 import { StoreState } from '@/reducers/types';
-import styles from './index.scss';
+import styles from './index.module.scss';
 
 export interface OptionalProps {}
 

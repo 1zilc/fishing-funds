@@ -7,7 +7,7 @@ import CustomDrawer from '@/components/CustomDrawer';
 import DetailStockContent from '@/components/Home/StockList/DetailStockContent';
 import { useDrawer } from '@/utils/hooks';
 import * as Utils from '@/utils';
-import styles from './index.scss';
+import styles from './index.module.scss';
 
 interface RecommendProps {
   ThemeList: {

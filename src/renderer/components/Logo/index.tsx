@@ -1,5 +1,5 @@
 import LogoImage from '@assets/icon.png';
-import styles from './index.scss';
+import styles from './index.module.scss';
 
 const Logo = () => {
   return (

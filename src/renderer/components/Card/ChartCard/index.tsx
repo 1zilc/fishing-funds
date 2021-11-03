@@ -5,7 +5,7 @@ import { ReactComponent as DownloadIcon } from '@/static/icon/download.svg';
 import { ReactComponent as CopyIcon } from '@/static/icon/copy.svg';
 import { ReactComponent as RefreshIcon } from '@/static/icon/refresh.svg';
 
-import styles from './index.scss';
+import styles from './index.module.scss';
 
 export interface ChartCardProps {
   className?: string;

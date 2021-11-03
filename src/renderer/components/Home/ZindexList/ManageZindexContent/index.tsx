@@ -3,7 +3,7 @@ import { Tabs } from 'antd';
 
 import Optional from '@/components/Home/ZindexList/ManageZindexContent/Optional';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
-import styles from './index.scss';
+import styles from './index.module.scss';
 
 export interface ManageZindexContentProps {
   onEnter: () => void;

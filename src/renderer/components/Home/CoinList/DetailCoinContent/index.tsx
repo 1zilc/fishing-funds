@@ -11,7 +11,7 @@ import Sentiment from '@/components/Home/CoinList/DetailCoinContent/Sentiment';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
 import * as Services from '@/services';
 
-import styles from './index.scss';
+import styles from './index.module.scss';
 
 export interface DetailCoinContentProps {
   onEnter: () => void;

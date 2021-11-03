@@ -11,7 +11,7 @@ import { StoreState } from '@/reducers/types';
 import { toggleCoinCollapseAction } from '@/actions/coin';
 import * as Utils from '@/utils';
 import * as Helpers from '@/helpers';
-import styles from './index.scss';
+import styles from './index.module.scss';
 
 export interface RowProps {
   coin: Coin.ResponseItem & Coin.ExtraRow;

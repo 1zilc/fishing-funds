@@ -7,7 +7,7 @@ import { StoreState } from '@/reducers/types';
 import * as CONST from '@/constants';
 import * as Utils from '@/utils';
 import * as Helpers from '@/helpers';
-import styles from './index.scss';
+import styles from './index.module.scss';
 
 interface TypeConfigProps {
   funds: (Fund.ResponseItem & Fund.FixData)[];

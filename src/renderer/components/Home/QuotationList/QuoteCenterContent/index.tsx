@@ -8,7 +8,7 @@ import Capacity from '@/components/Home/QuotationList/QuoteCenterContent/Capacit
 import MarketStyle from '@/components/Home/QuotationList/QuoteCenterContent/MarketStyle';
 import Recommend from '@/components/Home/QuotationList/QuoteCenterContent/Recommend';
 import * as Services from '@/services';
-import styles from './index.scss';
+import styles from './index.module.scss';
 
 interface QuoteCenterContentProps {
   onEnter: () => void;

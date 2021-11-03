@@ -4,7 +4,7 @@ import classnames from 'classnames';
 import { Spin } from 'antd';
 
 import { StoreState } from '@/reducers/types';
-import styles from './index.scss';
+import styles from './index.module.scss';
 
 export interface LoadingScreenProps {}
 const LoadingScreen: React.FC<LoadingScreenProps> = () => {

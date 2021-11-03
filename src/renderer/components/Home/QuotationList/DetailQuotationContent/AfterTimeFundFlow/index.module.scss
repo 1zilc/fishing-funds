@@ -17,11 +17,11 @@
   cursor: pointer;
   color: var(--cancel-text-color);
   background-color: var(--cancel-color);
-  transition: all .2s;
+  transition: all 0.2s;
   position: relative;
 
   &:hover {
-    opacity: .8;
+    opacity: 0.8;
   }
 }
 

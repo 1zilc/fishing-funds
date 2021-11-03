@@ -8,7 +8,7 @@ import { StoreState } from '@/reducers/types';
 import * as CONST from '@/constants';
 import * as Enums from '@/utils/enums';
 import * as Utils from '@/utils';
-import styles from './index.scss';
+import styles from './index.module.scss';
 
 interface QuotationMapProps {
   type: Enums.QuotationType;

@@ -6,7 +6,7 @@ import dayjs from 'dayjs';
 import CustomDrawer from '@/components/CustomDrawer';
 import FundHistoryValueContent from '@/components/Home/FundList/FundHistoryValueContent';
 import * as Utils from '@/utils';
-import styles from './index.scss';
+import styles from './index.module.scss';
 
 const weekday = require('dayjs/plugin/weekday');
 dayjs.extend(weekday);

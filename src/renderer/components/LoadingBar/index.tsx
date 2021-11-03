@@ -2,7 +2,7 @@ import React from 'react';
 import classnames from 'classnames';
 import { Spin } from 'antd';
 
-import styles from './index.scss';
+import styles from './index.module.scss';
 
 export interface LoadingBarProps {
   show: boolean;

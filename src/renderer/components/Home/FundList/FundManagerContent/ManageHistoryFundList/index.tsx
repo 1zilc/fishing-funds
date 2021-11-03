@@ -9,7 +9,7 @@ import CustomDrawer from '@/components/CustomDrawer';
 import { StoreState } from '@/reducers/types';
 import { useFixTimeToDo, useDrawer, useCurrentWallet } from '@/utils/hooks';
 import * as Helpers from '@/helpers';
-import styles from './index.scss';
+import styles from './index.module.scss';
 
 export interface ManageHistoryFundListProps {
   manageHistoryFunds?: Fund.Manager.ManageHistoryFund[];

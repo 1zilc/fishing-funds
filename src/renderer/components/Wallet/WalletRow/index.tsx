@@ -12,7 +12,7 @@ import { StoreState } from '@/reducers/types';
 import * as Utils from '@/utils';
 import * as Enums from '@/utils/enums';
 import * as Helpers from '@/helpers';
-import styles from './index.scss';
+import styles from './index.module.scss';
 
 export interface WalletRowProps {
   wallet: Wallet.SettingItem;

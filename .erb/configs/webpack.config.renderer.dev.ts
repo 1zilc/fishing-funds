@@ -57,9 +57,14 @@ export default merge(baseConfig, {
         use: [
           'style-loader',
           {
+            loader: '@teamsupercell/typings-for-css-modules-loader',
+          },
+          {
             loader: 'css-loader',
             options: {
-              modules: true,
+              modules: {
+                localIdentName: '[name]__[local]__[hash:base64:5]',
+              },
               sourceMap: true,
               importLoaders: 1,
             },

@@ -1,6 +1,6 @@
 import React from 'react';
 import ColorHash from 'color-hash';
-import styles from './index.scss';
+import styles from './index.module.scss';
 
 const colorHash = new ColorHash();
 

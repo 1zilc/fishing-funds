@@ -1,7 +1,7 @@
 import React from 'react';
 import { Progress } from 'antd';
 import classnames from 'classnames';
-import styles from './index.scss';
+import styles from './index.module.scss';
 
 interface CapacityProps {
   TopText: {

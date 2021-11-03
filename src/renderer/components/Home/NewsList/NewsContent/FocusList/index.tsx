@@ -4,7 +4,7 @@ import { Table } from 'antd';
 import { useRequest } from 'ahooks';
 
 import * as Services from '@/services';
-import styles from './index.scss';
+import styles from './index.module.scss';
 
 interface FocusListProps {}
 

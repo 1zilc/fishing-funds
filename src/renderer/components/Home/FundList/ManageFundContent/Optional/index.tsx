@@ -18,7 +18,7 @@ import EditFundContent from '@/components/Home/FundList/EditFundContent';
 import { deleteFundAction, setFundConfigAction, updateFundAction } from '@/actions/fund';
 import { useSyncFixFundSetting, useDrawer, useCurrentWallet } from '@/utils/hooks';
 
-import styles from './index.scss';
+import styles from './index.module.scss';
 
 export interface OptionalProps {}
 

@@ -15,7 +15,7 @@ import AssetsConfig from '@/components/Home/FundList/FundStatisticsContent/Asset
 import { walletIcons } from '@/helpers/wallet';
 import { StoreState } from '@/reducers/types';
 import * as Helper from '@/helpers';
-import styles from './index.scss';
+import styles from './index.module.scss';
 
 export interface FundStatisticsContentProps {
   onEnter: () => void;

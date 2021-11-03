@@ -6,7 +6,7 @@ import PictureImage from '@/static/img/picture.svg';
 import PictureFailedImage from '@/static/img/picture-failed.svg';
 import * as Services from '@/services';
 import * as CONST from '@/constants';
-import styles from './index.scss';
+import styles from './index.module.scss';
 
 export interface EstimateProps {
   code: string;
