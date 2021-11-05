@@ -2,7 +2,7 @@
   padding: 0 4px 0 8px;
   border-bottom: 1px solid var(--border-color);
   background-color: var(--background-color);
-  transition: transform .1s;
+  transition: transform 0.1s;
   position: absolute;
   width: 100%;
   bottom: -32px;
@@ -19,7 +19,6 @@
 }
 
 .bar {
-
   display: flex;
   align-items: center;
   color: var(--main-text-color);
@@ -35,7 +34,7 @@
   svg {
     height: 12px;
     width: 12px;
-    fill: var(--main-text-color)
+    fill: var(--main-text-color);
   }
 }
 
@@ -43,10 +42,10 @@
   position: relative;
   cursor: pointer;
   flex: 1;
-  transition: opacity .2s;
+  transition: opacity 0.2s;
 
   &:hover {
-    opacity: .8;
+    opacity: 0.8;
   }
 }
 
@@ -66,7 +65,7 @@
   }
 
   svg {
-    opacity: .5;
+    opacity: 0.5;
     fill: var(--main-text-color);
 
     &:nth-child(1) {
@@ -77,7 +76,6 @@
       transform: translateY(-4px);
     }
   }
-
 }
 
 .selectOrder {

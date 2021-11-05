@@ -21,7 +21,6 @@ const distRendererPath = path.join(distPath, 'renderer');
 const buildPath = path.join(releasePath, 'build');
 
 const assetsPath = path.join(rootPath, 'assets');
-const staticPath = path.join(srcPath, 'static');
 
 export = {
   rootPath,
@@ -39,5 +38,4 @@ export = {
   distRendererPath,
   buildPath,
   assetsPath,
-  staticPath,
 };

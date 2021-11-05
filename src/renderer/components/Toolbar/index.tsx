@@ -3,14 +3,14 @@ import { Badge } from 'antd';
 import { useSelector } from 'react-redux';
 import { useBoolean, useThrottleFn } from 'ahooks';
 
-import { ReactComponent as MenuAddIcon } from '@static/icon/menu-add.svg';
-import { ReactComponent as RefreshIcon } from '@static/icon/refresh.svg';
-import { ReactComponent as SettingIcon } from '@static/icon/setting.svg';
-import { ReactComponent as WalletIcon } from '@static/icon/wallet.svg';
-import { ReactComponent as ChartBoxIcon } from '@static/icon/chart-box.svg';
-import { ReactComponent as NewsIcon } from '@static/icon/news.svg';
-import { ReactComponent as ExchangeIcon } from '@static/icon/exchange.svg';
-import { ReactComponent as BubbleIcon } from '@static/icon/bubble.svg';
+import { ReactComponent as MenuAddIcon } from '@/static/icon/menu-add.svg';
+import { ReactComponent as RefreshIcon } from '@/static/icon/refresh.svg';
+import { ReactComponent as SettingIcon } from '@/static/icon/setting.svg';
+import { ReactComponent as WalletIcon } from '@/static/icon/wallet.svg';
+import { ReactComponent as ChartBoxIcon } from '@/static/icon/chart-box.svg';
+import { ReactComponent as NewsIcon } from '@/static/icon/news.svg';
+import { ReactComponent as ExchangeIcon } from '@/static/icon/exchange.svg';
+import { ReactComponent as BubbleIcon } from '@/static/icon/bubble.svg';
 import CustomDrawer from '@/components/CustomDrawer';
 import ManageFundContent from '@/components/Home/FundList/ManageFundContent';
 import ManageWalletContent from '@/components/Wallet/ManageWalletContent';
@@ -28,7 +28,7 @@ import { useScrollToTop, useFreshFunds } from '@/utils/hooks';
 import * as Enums from '@/utils/enums';
 import * as CONST from '@/constants';
 import * as Helpers from '@/helpers';
-import styles from './index.scss';
+import styles from './index.module.scss';
 
 export interface ToolBarProps {}
 

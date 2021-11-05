@@ -2,7 +2,7 @@ import React from 'react';
 import { Tabs } from 'antd';
 
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
-import styles from './index.scss';
+import styles from './index.module.scss';
 
 interface TemplateNameProps {
   onEnter: () => void;

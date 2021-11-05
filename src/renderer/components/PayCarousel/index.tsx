@@ -5,12 +5,12 @@ import { SwiperOptions } from 'swiper/types/swiper-options';
 import SwiperCore, { Autoplay, EffectCoverflow, Pagination } from 'swiper';
 
 import StandCard from '@/components/Card/StandCard';
-import wechatQRcodeImage from '@static/qrcode/wechat.png';
-import alipayQRcodeImage from '@static/qrcode/alipay.png';
-import { ReactComponent as WechatPayIcon } from '@static/icon/wechat-pay.svg';
-import { ReactComponent as AliPayIcon } from '@static/icon/alipay.svg';
+import wechatQRcodeImage from '@/static/qrcode/wechat.png';
+import alipayQRcodeImage from '@/static/qrcode/alipay.png';
+import { ReactComponent as WechatPayIcon } from '@/static/icon/wechat-pay.svg';
+import { ReactComponent as AliPayIcon } from '@/static/icon/alipay.svg';
 
-import styles from './index.scss';
+import styles from './index.module.scss';
 
 export interface PayCarouselProps {}
 

@@ -8,7 +8,7 @@ import CrossExchange from '@/components/Home/ZindexList/ExchangeContent/CrossExc
 import CnyCenterExchange from '@/components/Home/ZindexList/ExchangeContent/CnyCenterExchange';
 import CnyMixExchange from '@/components/Home/ZindexList/ExchangeContent/CnyMixExchange';
 import GlobalBond from '@/components/Home/ZindexList/ExchangeContent/GlobalBond';
-import styles from './index.scss';
+import styles from './index.module.scss';
 
 interface ExchangeContentProps {
   onEnter: () => void;

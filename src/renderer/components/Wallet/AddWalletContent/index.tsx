@@ -7,7 +7,7 @@ import CustomDrawerContent from '@/components/CustomDrawer/Content';
 import { addWalletAction } from '@/actions/wallet';
 import { StoreState } from '@/reducers/types';
 import * as Utils from '@/utils';
-import styles from './index.scss';
+import styles from './index.module.scss';
 
 export interface AddFundContentProps {
   onEnter: () => void;

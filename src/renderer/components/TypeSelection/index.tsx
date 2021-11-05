@@ -3,7 +3,7 @@ import { Row, Col } from 'antd';
 import classnames from 'classnames';
 
 import { useHomeContext } from '@/components/Home';
-import styles from './index.scss';
+import styles from './index.module.scss';
 
 export interface TypeOption {
   name: string;

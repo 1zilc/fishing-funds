@@ -6,7 +6,7 @@ import { useHomeContext } from '@/components/Home';
 import { useResizeEchart, useRenderEcharts } from '@/utils/hooks';
 import * as CONST from '@/constants';
 import * as Services from '@/services';
-import styles from './index.scss';
+import styles from './index.module.scss';
 
 export interface RealTimeFundFlowProps {
   code: string;

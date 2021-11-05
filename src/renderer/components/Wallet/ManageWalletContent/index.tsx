@@ -2,7 +2,7 @@ import React, { useEffect, useState, useMemo } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { ReactSortable } from 'react-sortablejs';
 
-import { ReactComponent as AddIcon } from '@static/icon/add.svg';
+import { ReactComponent as AddIcon } from '@/static/icon/add.svg';
 import Empty from '@/components/Empty';
 import CustomDrawer from '@/components/CustomDrawer';
 import AddWalletContent from '@/components/Wallet/AddWalletContent';
@@ -12,7 +12,7 @@ import EditWalletContent from '@/components/Wallet/EditWalletContent';
 import { StoreState } from '@/reducers/types';
 import { useDrawer } from '@/utils/hooks';
 import { setWalletConfigAction, selectWalletAction } from '@/actions/wallet';
-import styles from './index.scss';
+import styles from './index.module.scss';
 
 export interface ManageWalletContentProps {
   onEnter: () => void;

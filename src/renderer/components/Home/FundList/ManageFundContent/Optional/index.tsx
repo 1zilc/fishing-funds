@@ -4,13 +4,13 @@ import { ReactSortable } from 'react-sortablejs';
 import classnames from 'classnames';
 
 import PureCard from '@/components/Card/PureCard';
-import { ReactComponent as AddIcon } from '@static/icon/add.svg';
-import { ReactComponent as MenuIcon } from '@static/icon/menu.svg';
-import { ReactComponent as RemoveIcon } from '@static/icon/remove.svg';
-import { ReactComponent as EditIcon } from '@static/icon/edit.svg';
-import { ReactComponent as CopyIcon } from '@static/icon/copy.svg';
-import { ReactComponent as BellsLineIcon } from '@static/icon/bells-line.svg';
-import { ReactComponent as BellsFillIcon } from '@static/icon/bells-fill.svg';
+import { ReactComponent as AddIcon } from '@/static/icon/add.svg';
+import { ReactComponent as MenuIcon } from '@/static/icon/menu.svg';
+import { ReactComponent as RemoveIcon } from '@/static/icon/remove.svg';
+import { ReactComponent as EditIcon } from '@/static/icon/edit.svg';
+import { ReactComponent as CopyIcon } from '@/static/icon/copy.svg';
+import { ReactComponent as BellsLineIcon } from '@/static/icon/bells-line.svg';
+import { ReactComponent as BellsFillIcon } from '@/static/icon/bells-fill.svg';
 import CustomDrawer from '@/components/CustomDrawer';
 import Empty from '@/components/Empty';
 import AddFundContent from '@/components/Home/FundList/AddFundContent';
@@ -18,7 +18,7 @@ import EditFundContent from '@/components/Home/FundList/EditFundContent';
 import { deleteFundAction, setFundConfigAction, updateFundAction } from '@/actions/fund';
 import { useSyncFixFundSetting, useDrawer, useCurrentWallet } from '@/utils/hooks';
 
-import styles from './index.scss';
+import styles from './index.module.scss';
 
 export interface OptionalProps {}
 

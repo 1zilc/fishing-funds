@@ -3,7 +3,7 @@ import classnames from 'classnames';
 import { useDispatch, useSelector } from 'react-redux';
 import { Dropdown, Menu } from 'antd';
 
-import { ReactComponent as ConsumptionIcon } from '@static/icon/consumption.svg';
+import { ReactComponent as ConsumptionIcon } from '@/static/icon/consumption.svg';
 import Eye from '@/components/Eye';
 import { useHeaderContext } from '@/components/Header';
 import { StoreState } from '@/reducers/types';
@@ -14,7 +14,7 @@ import * as Enums from '@/utils/enums';
 import * as Utils from '@/utils';
 import * as CONST from '@/constants';
 import * as Helpers from '@/helpers';
-import styles from './index.scss';
+import styles from './index.module.scss';
 
 export interface WalletProps {}
 

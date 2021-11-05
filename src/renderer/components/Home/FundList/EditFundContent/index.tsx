@@ -4,7 +4,7 @@ import { InputNumber } from 'antd';
 
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
 import { updateFundAction } from '@/actions/fund';
-import styles from './index.scss';
+import styles from './index.module.scss';
 
 export interface EditFundContentProps {
   onEnter: () => void;

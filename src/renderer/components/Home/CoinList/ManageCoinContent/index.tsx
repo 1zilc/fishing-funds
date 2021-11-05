@@ -4,7 +4,7 @@ import { Tabs } from 'antd';
 import Optional from '@/components/Home/CoinList/ManageCoinContent/Optional';
 import MainRank from '@/components/Home/CoinList/ManageCoinContent/MainRank';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
-import styles from './index.scss';
+import styles from './index.module.scss';
 
 export interface ManageStockContentProps {
   onEnter: () => void;

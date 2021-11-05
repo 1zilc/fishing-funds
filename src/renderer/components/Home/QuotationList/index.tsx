@@ -9,7 +9,7 @@ import DetailQuotationContent from '@/components/Home/QuotationList/DetailQuotat
 import DetailStockContent from '@/components/Home/StockList/DetailStockContent';
 import { StoreState } from '@/reducers/types';
 import { useDrawer } from '@/utils/hooks';
-import styles from './index.scss';
+import styles from './index.module.scss';
 
 interface QuotationListProps {
   filter: (quotation: Quotation.ResponseItem & Quotation.ExtraRow) => boolean;
