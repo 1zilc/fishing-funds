@@ -668,7 +668,6 @@ export async function GetQuoteCenterFromEastmoney() {
     if (!result) {
       throw new Error();
     }
-    console.log(result);
     return {
       ...result,
       MarketStyle: result.MarketStyle || [],
@@ -685,5 +684,70 @@ export async function GetQuoteCenterFromEastmoney() {
       MarketStyle: [],
       Recommend: [],
     };
+  }
+}
+
+export async function GetHodingFromEastmoney(marketCode: string, reportName: string) {
+  try {
+    const { body } = await got<{
+      version: 'a81c1cb169f170d8033693dfe021910a';
+      result: {
+        pages: 5;
+        data: {
+          MARKET_CODE: '005';
+          HOLD_DATE: '2021-11-04 00:00:00';
+          CHANGE_RATE: 0.987946369799;
+          ADD_MARKET_CAP: number;
+          ADD_MARKET_RATE: number;
+          HOLD_MARKET_CAP: 2617466290663.51;
+          HOLD_MARKET_RATE: 0.035640881672;
+          ADD_MARKET_BCODE: '016031';
+          ADD_MARKET_BNAME: '酿酒行业';
+          BOARD_RATE_BCODE: '016021';
+          BOARD_RATE_BNAME: '仪器仪表';
+          MARKET_RATE_BCODE: '016031';
+          MARKET_RATE_BNAME: '酿酒行业';
+          ADD_MARKET_MCODE: '600460';
+          ADD_MARKET_MNAME: '士兰微';
+          ADD_SHARES_MCODE: '002027';
+          ADD_SHARES_MNAME: '分众传媒';
+          MARKET_RATE_MCODE: '300073';
+          MARKET_RATE_MNAME: '当升科技';
+          ADD_MARKET_OLDBCODE: '477';
+          BOARD_RATE_OLDBCODE: '458';
+          MARKET_RATE_OLDBCODE: '477';
+          ADD_MARKET_NEWBCODE: 'BK0477';
+          BOARD_RATE_NEWBCODE: 'BK0458';
+          MARKET_RATE_NEWBCODE: 'BK0477';
+        }[];
+        count: 229;
+      };
+      success: true;
+      message: 'ok';
+      code: 0;
+    }>('http://datacenter-web.eastmoney.com/api/data/v1/get', {
+      searchParams: {
+        sortColumns: 'HOLD_DATE',
+        sortTypes: -1,
+        pageSize: 1000,
+        pageNumber: 1,
+        columns: 'ALL',
+        source: 'WEB',
+        client: 'WEB',
+        reportName,
+        filter: `(MARKET_CODE="${marketCode}")`,
+      },
+      responseType: 'json',
+    });
+
+    const result = body.result?.data || [];
+    result.forEach((item) => {
+      item.ADD_MARKET_CAP = Number(NP.divide(item.ADD_MARKET_CAP, 10 ** 8).toFixed(2));
+      item.ADD_MARKET_RATE = Number(NP.times(item.ADD_MARKET_RATE, 10 ** 3).toFixed(2));
+    });
+    return result;
+  } catch (error) {
+    console.log(error);
+    return [];
   }
 }
