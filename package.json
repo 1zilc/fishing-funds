@@ -282,7 +282,7 @@
     "electron-log": "^4.3.5",
     "electron-updater": "^4.3.8",
     "electron-window-state": "^5.0.3",
-    "got": "^11.8.1",
+    "got": "^11.8.2",
     "history": "^4.10.0",
     "html2canvas": "^1.2.2",
     "https-proxy-agent": "^5.0.0",
