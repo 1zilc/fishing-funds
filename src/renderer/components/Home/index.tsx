@@ -64,12 +64,18 @@ const FundGroup = () => {
 };
 
 const ZindexGroup = () => {
-  // const { codeMap: zindexCodeMap } = useSelector((state: StoreState) => state.zindex.config);
+  const { codeMap: zindexCodeMap } = useSelector((state: StoreState) => state.zindex.config);
 
   return (
     <GroupTab tabKey={Enums.TabKeyType.Zindex}>
-      <Tabs.TabPane tab="全部" key={String(-1)}>
+      <Tabs.TabPane tab="全部" key={String(0)}>
         <ZindexList filter={() => true} />
+      </Tabs.TabPane>
+      <Tabs.TabPane tab="上涨" key={String(1)}>
+        <ZindexList filter={(zindex) => zindex.zdd >= 0} />
+      </Tabs.TabPane>
+      <Tabs.TabPane tab="下跌" key={String(2)}>
+        <ZindexList filter={(zindex) => zindex.zdd < 0} />
       </Tabs.TabPane>
     </GroupTab>
   );
