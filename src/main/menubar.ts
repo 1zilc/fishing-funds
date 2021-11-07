@@ -25,6 +25,7 @@ export function createMenubar({ tray, mainWindowState }: { tray: Tray; mainWindo
       webPreferences: {
         contextIsolation: true,
         nodeIntegration: false,
+        webviewTag: true,
         devTools: !app.isPackaged,
         preload: path.join(__dirname, 'preload.js'),
       },
