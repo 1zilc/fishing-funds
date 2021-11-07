@@ -49,7 +49,6 @@ export const ChartCard: React.FC<PropsWithChildren<ChartCardProps>> = ({
         type: 'error',
         message: `图片复制出现错误`,
       });
-      console.log('图片复制错误', error);
     }
   }
 
@@ -74,7 +73,6 @@ export const ChartCard: React.FC<PropsWithChildren<ChartCardProps>> = ({
         type: 'error',
         message: `图片保存出现错误`,
       });
-      console.log('图片保存错误', error);
     }
   }
   return (

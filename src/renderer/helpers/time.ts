@@ -20,7 +20,6 @@ export async function GetCurrentHours() {
         return (await Adapter.ChokePreemptiveAdapter<string>(collectors)) || now;
     }
   } catch (error) {
-    console.log('获取远程时间出错', error);
     return now;
   }
 }

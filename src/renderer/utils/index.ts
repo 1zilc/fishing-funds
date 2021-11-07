@@ -50,7 +50,6 @@ export function DeepCopy<T>(object: T): T {
       }
       return dataTmp;
     } catch (error) {
-      console.log('深拷贝出错，返回原始对象');
       return data;
     }
   }
@@ -337,7 +336,6 @@ export function CalcZDHC(list: number[]) {
       return '--';
     }
   } catch (error) {
-    console.log('最大回撤计算出错');
     return '--';
   }
 }

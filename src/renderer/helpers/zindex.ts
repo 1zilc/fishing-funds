@@ -132,7 +132,6 @@ export async function LoadZindexs(loading: boolean) {
       store.dispatch({ type: SET_ZINDEXS_LOADING, payload: false });
     });
   } catch (error) {
-    console.log('加载指数出错', error);
     store.dispatch({ type: SET_ZINDEXS_LOADING, payload: false });
   }
 }

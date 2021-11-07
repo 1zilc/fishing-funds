@@ -76,7 +76,6 @@ export async function GetQuotationsFromEastmoney() {
 
     return result;
   } catch (error) {
-    console.log(error);
     return [];
   }
 }
@@ -131,7 +130,6 @@ export async function GetQuotationDetailFromEastmoney(code: string) {
       hsl: data.f168,
     };
   } catch (error) {
-    console.log(error);
     return {};
   }
 }
@@ -170,7 +168,6 @@ export async function GetRealTimeFundFlowFromEasymoney(code: string) {
     });
     return result;
   } catch (error) {
-    console.log(error);
     return [];
   }
 }
@@ -233,7 +230,6 @@ export async function GetStocksFromEasymoney(code: string) {
       zdf: item.f3,
     }));
   } catch (error) {
-    console.log(error);
     return [];
   }
 }
@@ -319,7 +315,6 @@ export async function GetTransactionFromEasymoney(code: string) {
       xdlc: Number(NP.divide(temp.f83, billion).toFixed(2)),
     };
   } catch (error) {
-    console.log(error);
     return {};
   }
 }
@@ -372,7 +367,6 @@ export async function GetAfterTimeFundFlowFromEasymoney(code: string) {
     });
     return result;
   } catch (error) {
-    console.log(error);
     return [];
   }
 }
@@ -423,7 +417,6 @@ export async function GetFundFlowFromEastmoney(code: string, type: string) {
 
     return result;
   } catch (error) {
-    console.log(error);
     return [];
   }
 }
@@ -468,7 +461,6 @@ export async function GetFlowFromEastmoney(fields1: string, code: 'n2s' | 's2n')
         };
       });
   } catch (error) {
-    console.log(error);
     return [];
   }
 }
@@ -503,7 +495,6 @@ export async function GetNorthDayFromEastmoney(fields1: string, fields2: string)
       s2n: body.data.s2n.map((_) => _.split(',')).map(([date, value]) => [date, NP.divide(value, 10 ** 4).toFixed(2)]),
     };
   } catch (error) {
-    console.log(error);
     return {
       hk2sh: [],
       hk2sz: [],
@@ -542,7 +533,6 @@ export async function GetSouthDayFromEastmoney(fields1: string, fields2: string)
       n2s: body.data.n2s.map((_) => _.split(',')).map(([date, value]) => [date, NP.divide(value, 10 ** 4).toFixed(2)]),
     };
   } catch (error) {
-    console.log(error);
     return {
       sh2hk: [],
       sz2hk: [],
@@ -602,7 +592,6 @@ export async function GetFundsFromEastmoney(code: string) {
     });
     return Data;
   } catch (error) {
-    console.log(error);
     return [];
   }
 }
@@ -674,7 +663,6 @@ export async function GetQuoteCenterFromEastmoney() {
       Recommend: result.Recommend || [],
     };
   } catch (error) {
-    console.log(error);
     return {
       TopText: {
         PositionInd: 0,
@@ -747,7 +735,6 @@ export async function GetHodingFromEastmoney(marketCode: string, reportName: str
     });
     return result;
   } catch (error) {
-    console.log(error);
     return [];
   }
 }

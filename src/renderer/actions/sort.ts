@@ -30,9 +30,7 @@ export function setFundSortModeAction(fundSortMode: { type?: Enums.FundSortType;
         dispatch(syncSortModeAction());
         dispatch(sortFundsAction());
       });
-    } catch (error) {
-      console.log('设置基金排序方式出错', error);
-    }
+    } catch (error) {}
   };
 }
 
@@ -52,9 +50,7 @@ export function setZindexSortModeAction(zindexSortMode: { type?: Enums.ZindexSor
         dispatch(syncSortModeAction());
         dispatch(sortZindexsAction());
       });
-    } catch (error) {
-      console.log('设置指数排序方式出错', error);
-    }
+    } catch (error) {}
   };
 }
 
@@ -77,9 +73,7 @@ export function setQuotationSortModeAction(quotationSortMode: {
         dispatch(syncSortModeAction());
         dispatch(sortQuotationsAction());
       });
-    } catch (error) {
-      console.log('设置板块排序方式出错', error);
-    }
+    } catch (error) {}
   };
 }
 
@@ -99,9 +93,7 @@ export function setStockSortModeAction(stockSortMode: { type?: Enums.StockSortTy
         dispatch(syncSortModeAction());
         dispatch(sortStocksAction());
       });
-    } catch (error) {
-      console.log('设置股票排序方式出错', error);
-    }
+    } catch (error) {}
   };
 }
 
@@ -121,9 +113,7 @@ export function setCoinSortModeAction(coinSortMode: { type?: Enums.CoinSortType;
         dispatch(syncSortModeAction());
         dispatch(sortCoinsAction());
       });
-    } catch (error) {
-      console.log('设置货币排序方式出错', error);
-    }
+    } catch (error) {}
   };
 }
 
@@ -146,9 +136,7 @@ export function troggleFundSortOrderAction(): ThunkAction {
         dispatch(syncSortModeAction());
         dispatch(sortFundsAction());
       });
-    } catch (error) {
-      console.log('设置基金排序顺序出错', error);
-    }
+    } catch (error) {}
   };
 }
 
@@ -171,9 +159,7 @@ export function troggleZindexSortOrderAction(): ThunkAction {
         dispatch(syncSortModeAction());
         dispatch(sortZindexsAction());
       });
-    } catch (error) {
-      console.log('设置指数排序顺序出错', error);
-    }
+    } catch (error) {}
   };
 }
 
@@ -196,9 +182,7 @@ export function troggleQuotationSortOrderAction(): ThunkAction {
         dispatch(syncSortModeAction());
         dispatch(sortQuotationsAction());
       });
-    } catch (error) {
-      console.log('设置板块排序顺序出错', error);
-    }
+    } catch (error) {}
   };
 }
 
@@ -222,9 +206,7 @@ export function troggleStockSortOrderAction(): ThunkAction {
         dispatch(syncSortModeAction());
         dispatch(sortStocksAction());
       });
-    } catch (error) {
-      console.log('设置股票排序顺序出错', error);
-    }
+    } catch (error) {}
   };
 }
 
@@ -248,9 +230,7 @@ export function troggleCoinSortOrderAction(): ThunkAction {
         dispatch(syncSortModeAction());
         dispatch(sortCoinsAction());
       });
-    } catch (error) {
-      console.log('设置货币排序顺序出错', error);
-    }
+    } catch (error) {}
   };
 }
 

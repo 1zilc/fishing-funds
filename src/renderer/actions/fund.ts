@@ -27,9 +27,7 @@ export function setFundConfigAction(config: Fund.SettingItem[], walletCode: stri
         dispatch(setWalletConfigAction(newWalletConfig));
         dispatch(syncWalletStateAction(walletState));
       });
-    } catch (error) {
-      console.log('设置基金配置出错', error);
-    }
+    } catch (error) {}
   };
 }
 
@@ -47,9 +45,7 @@ export function setRemoteFundsAction(remoteFunds: Fund.RemoteFund[]): ThunkActio
         ...newRemoteMap,
       });
       dispatch(syncRemoteFundsAction());
-    } catch (error) {
-      console.log('设置基金库出错', error);
-    }
+    } catch (error) {}
   };
 }
 
@@ -67,9 +63,7 @@ export function setFundRatingMapAction(fundRantings: Fund.RantingItem[]): ThunkA
         ...nweFundRantingMap,
       });
       dispatch(syncFundRatingMapAction());
-    } catch (error) {
-      console.log('设置基金评级出错', error);
-    }
+    } catch (error) {}
   };
 }
 
@@ -78,9 +72,7 @@ export function syncRemoteFundsAction(): ThunkAction {
     try {
       const remoteFunds = Helpers.Fund.GetRemoteFunds();
       dispatch({ type: SET_REMOTE_FUNDS, payload: remoteFunds });
-    } catch (error) {
-      console.log('同步基金库出错', error);
-    }
+    } catch (error) {}
   };
 }
 
@@ -89,9 +81,7 @@ export function syncFundRatingMapAction(): ThunkAction {
     try {
       const fundRatingMap = Helpers.Fund.GetFundsRatingMap();
       dispatch({ type: SET_FUND_RATING_MAP, payload: fundRatingMap });
-    } catch (error) {
-      console.log('同步基金评级出错', error);
-    }
+    } catch (error) {}
   };
 }
 
@@ -106,9 +96,7 @@ export function addFundAction(fund: Fund.SettingItem): ThunkAction {
         cloneFundConfig.push(fund);
       }
       dispatch(setFundConfigAction(cloneFundConfig, currentWalletCode));
-    } catch (error) {
-      console.log('添加基金出错', error);
-    }
+    } catch (error) {}
   };
 }
 
@@ -142,9 +130,7 @@ export function updateFundAction(fund: {
       });
 
       dispatch(setFundConfigAction(cloneFundConfig, currentWalletCode));
-    } catch (error) {
-      console.log('更新基金出错', error);
-    }
+    } catch (error) {}
   };
 }
 
@@ -160,9 +146,7 @@ export function deleteFundAction(code: string): ThunkAction {
           dispatch(setFundConfigAction(cloneFundConfig, currentWalletCode));
         }
       });
-    } catch (error) {
-      console.log('删除基金出错', error);
-    }
+    } catch (error) {}
   };
 }
 
@@ -172,9 +156,7 @@ export function sortFundsAction(): ThunkAction {
       const { funds, updateTime, code } = Helpers.Wallet.GetCurrentWalletState();
       const sortFunds = Helpers.Fund.SortFunds(funds, code);
       dispatch(syncWalletStateAction({ code, funds: sortFunds, updateTime }));
-    } catch (error) {
-      console.log('基金排序错误', error);
-    }
+    } catch (error) {}
   };
 }
 
@@ -205,9 +187,7 @@ export function sortFundsCachedAction(responseFunds: Fund.ResponseItem[], wallet
       });
       const sortFunds = Helpers.Fund.SortFunds(fundsWithChached, code);
       dispatch(syncWalletStateAction({ code, funds: sortFunds, updateTime: now }));
-    } catch (error) {
-      console.log('基金带缓存排序出错', error);
-    }
+    } catch (error) {}
   };
 }
 
@@ -222,9 +202,7 @@ export function toggleFundCollapseAction(fund: Fund.ResponseItem & Fund.ExtraRow
         }
       });
       dispatch(syncWalletStateAction({ code, funds: cloneFunds, updateTime }));
-    } catch (error) {
-      console.log('基金展开/折叠出错', error);
-    }
+    } catch (error) {}
   };
 }
 
@@ -238,8 +216,6 @@ export function toggleAllFundsCollapseAction(): ThunkAction {
         _.collapse = !expandAllFunds;
       });
       dispatch(syncWalletStateAction({ code, funds: cloneFunds, updateTime }));
-    } catch (error) {
-      console.log('全部基金展开/折叠出错', error);
-    }
+    } catch (error) {}
   };
 }

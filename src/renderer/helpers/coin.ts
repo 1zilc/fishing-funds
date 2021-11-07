@@ -67,7 +67,6 @@ export async function LoadCoins(loading: boolean) {
       store.dispatch({ type: SET_COINS_LOADING, payload: false });
     });
   } catch (error) {
-    console.log('加载货币失败', error);
     store.dispatch({ type: SET_COINS_LOADING, payload: false });
   }
 }
@@ -81,7 +80,6 @@ export async function LoadRemoteCoins() {
       store.dispatch({ type: SET_REMOTE_COINS_LOADING, payload: false });
     });
   } catch (error) {
-    console.log('加载远程货币库出错', error);
     store.dispatch({ type: SET_REMOTE_COINS_LOADING, payload: false });
   }
 }

@@ -21,7 +21,6 @@ export async function FromEastmoney(code: string) {
       return null;
     }
   } catch (error) {
-    console.log(error);
     return await GetQDIIFundFromEastMoney(code);
   }
 }
@@ -66,7 +65,6 @@ export async function FromDayFund(code: string) {
       gsz,
     };
   } catch (error) {
-    console.log(error);
     return null;
   }
 }
@@ -107,7 +105,6 @@ export async function FromTencent(code: string) {
       gszzl,
     };
   } catch (error) {
-    console.log(error);
     return null;
   }
 }
@@ -141,7 +138,6 @@ export async function FromSina(code: string) {
       gszzl: Number(gszzl).toFixed(2),
     };
   } catch (error) {
-    console.log(error);
     return null;
   }
 }
@@ -188,7 +184,6 @@ export async function FromHowbuy(code: string) {
       gszzl: Number(gszzl).toFixed(2),
     };
   } catch (error) {
-    console.log(error);
     return null;
   }
 }
@@ -256,7 +251,6 @@ export async function FromEtf(code: string) {
       gsz: temp.gzprice, // 估算值 '1.2222'
     };
   } catch (error) {
-    console.log(error);
     return null;
   }
 }
@@ -410,7 +404,6 @@ export async function FromFund123(code: string) {
 
     return result;
   } catch (error) {
-    console.log(error);
     return await GetQDIIFundFromFund123(code);
   }
 }
@@ -541,7 +534,6 @@ export async function FromFund10jqka(code: string) {
       gsz,
     };
   } catch (error) {
-    console.log(error);
     return await GetQDIIFundFromFund10jqka(code);
   }
 }
@@ -553,7 +545,6 @@ export async function GetEstimatedFromEastmoney(code: string) {
     const b64encoded = btoa(String.fromCharCode.apply(null, rawBody));
     return `data:image/png;base64,${b64encoded}`;
   } catch (error) {
-    console.log(error);
     return null;
   }
 }
@@ -565,7 +556,6 @@ export async function GetInverstStyleFromEastmoney(code: string) {
     const b64encoded = btoa(String.fromCharCode.apply(null, rawBody));
     return `data:image/png;base64,${b64encoded}`;
   } catch (error) {
-    console.log(error);
     return null;
   }
 }
@@ -612,7 +602,6 @@ export async function GetStockWareHouseFromEastmoney(code: string, stockCodes: s
     });
     return result;
   } catch (error) {
-    console.log(error);
     return [];
   }
 }
@@ -658,7 +647,6 @@ export async function GetSecuritiesWareHouseFromEastmoney(code: string, securiti
     });
     return result;
   } catch (error) {
-    console.log(error);
     return [];
   }
 }
@@ -670,7 +658,6 @@ export async function GetFundDetailFromEastmoney(code: string) {
     const response: Fund.PingzhongData = Utils.parsepingzhongdata(body);
     return response;
   } catch (error) {
-    console.log(error);
     return {};
   }
 }
@@ -699,7 +686,6 @@ export async function GetFundPerformanceFromEastmoney(
     const result: any[] = Data;
     return result;
   } catch (error) {
-    console.log(error);
     return [];
   }
 }
@@ -710,7 +696,6 @@ export async function GetRemoteFundsFromEastmoney() {
     const { body } = await got('http://fund.eastmoney.com/js/fundcode_search.js', {});
     return Utils.ParseRemoteFunds(body);
   } catch (error) {
-    console.log(error);
     return [];
   }
 }
@@ -744,7 +729,6 @@ export async function GetFixFromEastMoney(code: string) {
     };
     return result;
   } catch (error) {
-    console.log(error);
     return null;
   }
 }
@@ -788,7 +772,6 @@ export async function GetFundManagerDetailFromEastMoney(code: string) {
       description,
     };
   } catch (error) {
-    console.log(error);
     return {};
   }
 }
@@ -808,7 +791,6 @@ export async function GetQDIIFundFromEastMoney(code: string) {
       gszzl: '',
     };
   } catch (error) {
-    console.log(error);
     return null;
   }
 }
@@ -927,7 +909,6 @@ export async function GetQDIIFundFromFund123(code: string) {
 
     return result;
   } catch (error) {
-    console.log(error);
     return null;
   }
 }
@@ -1034,7 +1015,6 @@ export async function GetQDIIFundFromFund10jqka(code: string) {
       gsz: data.net,
     };
   } catch (error) {
-    console.log(error);
     return null;
   }
 }
@@ -1075,7 +1055,6 @@ export async function GetAutomaticPlanFromEastmoney(type: number) {
       });
     return data;
   } catch (error) {
-    console.log(error);
     return [];
   }
 }
@@ -1110,7 +1089,6 @@ export async function GetRankDataFromEasemoney(type: string) {
       return rankData.datas;
     })()`);
   } catch (error) {
-    console.log(error);
     return [];
   }
 }
@@ -1134,7 +1112,6 @@ export async function GetFundRatingFromEasemoney() {
     result.sort((a, b) => b.total - a.total);
     return result;
   } catch (error) {
-    console.log(error);
     return [];
   }
 }
@@ -1185,7 +1162,6 @@ export async function GetIndustryRateFromEaseMoney(code: string) {
       expansion: body.Expansion || '',
     };
   } catch (error) {
-    console.log(error);
     return {
       stocks: [],
       expansion: '',

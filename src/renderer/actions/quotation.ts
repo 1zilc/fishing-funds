@@ -14,9 +14,7 @@ export function syncFavoriteQuotationMapAction(code: string, status: boolean): T
       favoriteQuotationMap[code] = status;
       Utils.SetStorage(CONST.STORAGE.FAVORITE_QUOTATION_MAP, favoriteQuotationMap);
       dispatch({ type: SYNC_FAVORITE_QUOTATION_MAP, payload: favoriteQuotationMap });
-    } catch (error) {
-      console.log('同步关注板块出错', error);
-    }
+    } catch (error) {}
   };
 }
 
@@ -37,9 +35,7 @@ export function sortQuotationsCachedAction(responseQuotations: Quotation.Respons
       }));
       const sortQuotations = Helpers.Quotation.SortQuotations(quotationsWithCollapseChached);
       dispatch(syncQuotationsStateAction(sortQuotations));
-    } catch (error) {
-      console.log('板块带缓存排序出错', error);
-    }
+    } catch (error) {}
   };
 }
 
@@ -56,9 +52,7 @@ export function toggleQuotationCollapse(quotation: Quotation.ResponseItem & Quot
         }
       });
       dispatch(syncQuotationsStateAction(cloneQuotations));
-    } catch (error) {
-      console.log('板块展开/折叠出错', error);
-    }
+    } catch (error) {}
   };
 }
 
@@ -74,9 +68,7 @@ export function toggleAllQuotationsCollapse(): ThunkAction {
         _.collapse = !expandAllQuotations;
       });
       dispatch(syncQuotationsStateAction(cloneQuotations));
-    } catch (error) {
-      console.log('全部板块展开/折叠出错', error);
-    }
+    } catch (error) {}
   };
 }
 
@@ -88,9 +80,7 @@ export function sortQuotationsAction(): ThunkAction {
       } = getState();
       const sortQuotations = Helpers.Quotation.SortQuotations(quotations);
       dispatch(syncQuotationsStateAction(sortQuotations));
-    } catch (error) {
-      console.log('基金排序错误', error);
-    }
+    } catch (error) {}
   };
 }
 
@@ -98,8 +88,6 @@ export function syncQuotationsStateAction(quotations: Quotation.ResponseItem[]):
   return (dispatch, getState) => {
     try {
       dispatch({ type: SYNC_QUOTATIONS, payload: quotations });
-    } catch (error) {
-      console.log('同步板块状态出错', error);
-    }
+    } catch (error) {}
   };
 }

@@ -83,7 +83,6 @@ const Optional: React.FC<OptionalProps> = () => {
         title: `复制失败`,
         message: `基金JSON复制失败`,
       });
-      console.log('复制基金json失败', error);
     }
   }
 

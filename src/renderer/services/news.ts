@@ -15,7 +15,6 @@ export async function GetLiveList() {
     })()`);
     return list;
   } catch (error) {
-    console.log(error);
     return [];
   }
 }
@@ -35,7 +34,6 @@ export async function GetFocusList() {
     })()`);
     return list;
   } catch (error) {
-    console.log(error);
     return [];
   }
 }
@@ -54,7 +52,6 @@ export async function GetListedList() {
     })()`);
     return list;
   } catch (error) {
-    console.log(error);
     return [];
   }
 }
@@ -73,7 +70,6 @@ export async function GetGlobalList() {
     })()`);
     return list;
   } catch (error) {
-    console.log(error);
     return [];
   }
 }

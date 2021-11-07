@@ -21,9 +21,7 @@ export function addCoinAction(coin: Coin.SettingItem): ThunkAction {
         cloneCoinConfig.push(coin);
       }
       dispatch(setCoinConfigAction(cloneCoinConfig));
-    } catch (error) {
-      console.log('添加货币配置出错', error);
-    }
+    } catch (error) {}
   };
 }
 
@@ -39,9 +37,7 @@ export function deleteCoinAction(code: string): ThunkAction {
           dispatch(setCoinConfigAction(cloneCoinSetting));
         }
       });
-    } catch (error) {
-      console.log('删除货币出错', error);
-    }
+    } catch (error) {}
   };
 }
 
@@ -56,9 +52,7 @@ export function setCoinConfigAction(coinConfig: Coin.SettingItem[]): ThunkAction
         dispatch(syncCoinConfigAction());
         dispatch(syncCoinsStateAction(coins));
       });
-    } catch (error) {
-      console.log('设置货币配置出错', error);
-    }
+    } catch (error) {}
   };
 }
 
@@ -67,9 +61,7 @@ export function syncCoinConfigAction(): ThunkAction {
     try {
       const config = Helpers.Coin.GetCoinConfig();
       dispatch({ type: SYNC_COINS_CONFIG, payload: config });
-    } catch (error) {
-      console.log('同步货币配置失败', error);
-    }
+    } catch (error) {}
   };
 }
 
@@ -81,9 +73,7 @@ export function sortCoinsAction(): ThunkAction {
       } = getState();
       const sortCoins = Helpers.Coin.SortCoins(coins);
       dispatch(syncCoinsStateAction(sortCoins));
-    } catch (error) {
-      console.log('货币排序错误', error);
-    }
+    } catch (error) {}
   };
 }
 
@@ -119,9 +109,7 @@ export function sortCoinsCachedAction(responseCoins: Coin.ResponseItem[]): Thunk
       });
       const sortCoins = Helpers.Coin.SortCoins(coinsWithChached);
       dispatch(syncCoinsStateAction(sortCoins));
-    } catch (error) {
-      console.log('货币带缓存排序出错', error);
-    }
+    } catch (error) {}
   };
 }
 
@@ -140,9 +128,7 @@ export function toggleCoinCollapseAction(coin: Coin.ResponseItem & Coin.ExtraRow
       });
 
       dispatch(syncCoinsStateAction(cloneCoins));
-    } catch (error) {
-      console.log('货币展开/折叠出错', error);
-    }
+    } catch (error) {}
   };
 }
 
@@ -158,9 +144,7 @@ export function toggleAllCoinsCollapseAction(): ThunkAction {
         _.collapse = !expandAllCoins;
       });
       dispatch(syncCoinsStateAction(cloneCoins));
-    } catch (error) {
-      console.log('全部货币展开/折叠出错', error);
-    }
+    } catch (error) {}
   };
 }
 
@@ -170,9 +154,7 @@ export function syncCoinsStateAction(coins: (Coin.ResponseItem & Coin.ExtraRow)[
       const { codeMap } = Helpers.Coin.GetCoinConfig();
       const filterCoins = coins.filter(({ code }) => codeMap[code]);
       dispatch({ type: SYNC_COINS, payload: filterCoins });
-    } catch (error) {
-      console.log('同步货币状态出错', error);
-    }
+    } catch (error) {}
   };
 }
 
@@ -190,9 +172,7 @@ export function setRemoteCoinsAction(remoteCoins: Coin.RemoteCoin[]): ThunkActio
         ...newRemoteMap,
       });
       dispatch(syncRemoteCoinsAction());
-    } catch (error) {
-      console.log('设置货币库出错', error);
-    }
+    } catch (error) {}
   };
 }
 
@@ -201,8 +181,6 @@ export function syncRemoteCoinsAction(): ThunkAction {
     try {
       const remoteCoins = Helpers.Coin.GetRemoteCoins();
       dispatch({ type: SET_REMOTE_COINS, payload: remoteCoins });
-    } catch (error) {
-      console.log('同步货币库出错', error);
-    }
+    } catch (error) {}
   };
 }

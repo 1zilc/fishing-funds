@@ -57,7 +57,6 @@ export async function LoadQuotations(loading?: boolean) {
       store.dispatch({ type: SET_QUOTATIONS_LOADING, payload: false });
     });
   } catch (error) {
-    console.log('加载板块出错', error);
     store.dispatch({ type: SET_QUOTATIONS_LOADING, payload: false });
   }
 }

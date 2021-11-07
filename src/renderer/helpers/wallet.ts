@@ -84,9 +84,7 @@ export async function LoadWalletsFunds() {
       return responseFunds;
     });
     await Adpters.ChokeAllAdapter<(Fund.ResponseItem | null)[]>(collects, CONST.DEFAULT.LOAD_WALLET_DELAY);
-  } catch (error) {
-    console.log('刷新钱包基金出错', error);
-  }
+  } catch (error) {}
 }
 
 export async function loadFixWalletsFunds() {
@@ -118,7 +116,5 @@ export async function loadFixWalletsFunds() {
     });
 
     await Adpters.ChokeAllAdapter<(Fund.FixData | null)[]>(fixCollects, CONST.DEFAULT.LOAD_WALLET_DELAY);
-  } catch (error) {
-    console.log('刷新钱包基金fix出错', error);
-  }
+  } catch (error) {}
 }

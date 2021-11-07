@@ -6,3 +6,4 @@ export * as Stock from './stock';
 export * as Coin from './coin';
 export * as News from './news';
 export * as Exchange from './exchange';
+export * as Log from './log';

@@ -16,9 +16,7 @@ export function changeEyeStatusAction(status: Enums.EyeStatus): ThunkAction {
     try {
       Utils.SetStorage(CONST.STORAGE.EYE_STATUS, status);
       dispatch({ type: CHANGE_EYE_STATUS, payload: status });
-    } catch (error) {
-      console.log('改变eye状态出错', error);
-    }
+    } catch (error) {}
   };
 }
 
@@ -38,9 +36,7 @@ export function toggleEyeStatusAction(): ThunkAction {
           dispatch(changeEyeStatusAction(Enums.EyeStatus.Open));
           break;
       }
-    } catch (error) {
-      console.log('开关eye出错', error);
-    }
+    } catch (error) {}
   };
 }
 
@@ -49,9 +45,7 @@ export function setWalletConfigAction(config: Wallet.SettingItem[]): ThunkAction
     try {
       Utils.SetStorage(CONST.STORAGE.WALLET_SETTING, config);
       dispatch(syncWalletConfigAction());
-    } catch (error) {
-      console.log('设置钱包配置出错', error);
-    }
+    } catch (error) {}
   };
 }
 
@@ -65,9 +59,7 @@ export function syncWalletConfigAction(): ThunkAction {
       const newWallets = wallets.filter((stateItem) => config.codeMap[stateItem.code]);
       dispatch({ type: SYNC_WALLET_CONFIG, payload: config });
       dispatch({ type: SYNC_WALLETS, payload: newWallets });
-    } catch (error) {
-      console.log('同步钱包配置出错', error);
-    }
+    } catch (error) {}
   };
 }
 
@@ -76,9 +68,7 @@ export function addWalletAction(wallet: Wallet.SettingItem): ThunkAction {
     try {
       const { walletConfig } = Helpers.Wallet.GetWalletConfig();
       dispatch(setWalletConfigAction([...walletConfig, wallet]));
-    } catch (error) {
-      console.log('添加钱包出错', error);
-    }
+    } catch (error) {}
   };
 }
 
@@ -93,9 +83,7 @@ export function updateWalletAction(wallet: Wallet.SettingItem): ThunkAction {
         }
       });
       dispatch(setWalletConfigAction(walletConfig));
-    } catch (error) {
-      console.log('更新钱包出错', error);
-    }
+    } catch (error) {}
   };
 }
 
@@ -110,9 +98,7 @@ export function deleteWalletAction(code: string): ThunkAction {
           dispatch(setWalletConfigAction(cloneWalletSetting));
         }
       });
-    } catch (error) {
-      console.log('删除钱包出错', error);
-    }
+    } catch (error) {}
   };
 }
 
@@ -124,9 +110,7 @@ export function selectWalletAction(code: string): ThunkAction {
         dispatch({ type: CHANGE_CURRENT_WALLET_CODE, payload: code });
         dispatch(syncWalletConfigAction());
       });
-    } catch (error) {
-      console.log('选择钱包出错', error);
-    }
+    } catch (error) {}
   };
 }
 
@@ -177,9 +161,7 @@ export function syncWalletStateAction(state: Wallet.StateItem): ThunkAction {
       }
 
       dispatch({ type: SYNC_WALLETS, payload: cloneWallets });
-    } catch (error) {
-      console.log('同步钱包状态出错', error);
-    }
+    } catch (error) {}
   };
 }
 
@@ -201,8 +183,6 @@ export function syncFixWalletStateAction(state: Wallet.StateItem): ThunkAction {
       });
 
       dispatch({ type: SYNC_WALLETS, payload: cloneWallets });
-    } catch (error) {
-      console.log('删除钱包状态fix出错', error);
-    }
+    } catch (error) {}
   };
 }
