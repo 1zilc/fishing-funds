@@ -738,3 +738,71 @@ export async function GetHodingFromEastmoney(marketCode: string, reportName: str
     return [];
   }
 }
+
+export async function GetMutualQuotaFromEastmoney() {
+  try {
+    const { body } = await got<{
+      version: 'f5a499e30bac57207cc9f491db6bdfdd';
+      result: {
+        pages: 1;
+        data: {
+          TRADE_DATE: '2021-11-08 00:00:00';
+          MUTUAL_TYPE: '002';
+          BOARD_TYPE: '沪港通';
+          MUTUAL_TYPE_NAME: '港股通(沪)';
+          FUNDS_DIRECTION: '南向';
+          INDEX_CODE: 'HSI';
+          INDEX_NAME: '恒生指数';
+          BOARD_CODE: 'HK32';
+          status: 3;
+          dayNetAmtIn: number;
+          dayAmtRemain: number;
+          dayAmtThreshold: number;
+          f104: 217;
+          f105: 133;
+          f106: 22;
+          INDEX_f3: -0.43;
+          netBuyAmt: -37721.68;
+        }[];
+        count: 4;
+      };
+      success: true;
+      message: 'ok';
+      code: 0;
+    }>('http://datacenter-web.eastmoney.com/api/data/get', {
+      searchParams: {
+        type: 'RPT_MUTUAL_QUOTA',
+        sty: 'TRADE_DATE,MUTUAL_TYPE,BOARD_TYPE,MUTUAL_TYPE_NAME,FUNDS_DIRECTION,INDEX_CODE,INDEX_NAME,BOARD_CODE',
+        extraCols:
+          'status~07~BOARD_CODE,dayNetAmtIn~07~BOARD_CODE,dayAmtRemain~07~BOARD_CODE,dayAmtThreshold~07~BOARD_CODE,f104~07~BOARD_CODE,f105~07~BOARD_CODE,f106~07~BOARD_CODE,f3~03~INDEX_CODE~INDEX_f3,netBuyAmt~07~BOARD_CODE',
+        p: 1,
+        ps: 200,
+        sr: 1,
+        st: 'MUTUAL_TYPE',
+        source: 'WEB',
+        client: 'WEB',
+        _: Date.now(),
+      },
+      responseType: 'json',
+    });
+
+    const result = body.result?.data || [];
+    return result.map((item) => ({
+      type: item.BOARD_TYPE,
+      quota: item.MUTUAL_TYPE_NAME,
+      direction: item.FUNDS_DIRECTION,
+      indexName: item.INDEX_NAME,
+      indexCode: item.INDEX_CODE,
+      indexZdf: item.INDEX_f3,
+      dayNetAmtIn: Number(NP.divide(item.dayNetAmtIn, 10 ** 4).toFixed(2)),
+      dayAmtRemain: Number(NP.divide(item.dayAmtRemain, 10 ** 4).toFixed(2)),
+      dayAmtThreshold: Number(NP.divide(item.dayAmtThreshold, 10 ** 4).toFixed(2)),
+      sz: item.f104,
+      xd: item.f105,
+      cp: item.f106,
+      status: item.status,
+    }));
+  } catch (error) {
+    return [];
+  }
+}

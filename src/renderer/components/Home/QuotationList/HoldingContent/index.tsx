@@ -4,6 +4,7 @@ import { Tabs } from 'antd';
 import PureCard from '@/components/Card/PureCard';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
 import History from '@/components/Home/QuotationList/HoldingContent/History';
+import MutualQuota from '@/components/Home/QuotationList/HoldingContent/MutualQuota';
 import styles from './index.module.scss';
 
 interface HoldingContentProps {
@@ -15,6 +16,7 @@ const HoldingContent: React.FC<HoldingContentProps> = (props) => {
   return (
     <CustomDrawerContent title="沪深港通持股" onClose={props.onClose} onEnter={props.onEnter}>
       <div className={styles.content}>
+        <MutualQuota />
         <div className={styles.container}>
           <Tabs animated={{ tabPane: true }} tabBarGutter={15}>
             <Tabs.TabPane tab="北向" key={String(0)}>

@@ -5,6 +5,7 @@ import classnames from 'classnames';
 import PureCard from '@/components/Card/PureCard';
 import CustomDrawer from '@/components/CustomDrawer';
 import DetailStockContent from '@/components/Home/StockList/DetailStockContent';
+import AddStockContent from '@/components/Home/StockList/AddStockContent';
 import { useDrawer } from '@/utils/hooks';
 import * as Utils from '@/utils';
 import styles from './index.module.scss';
@@ -29,7 +30,7 @@ interface RecommendProps {
 
 const Recommend: React.FC<RecommendProps> = (props) => {
   const { ThemeList = [] } = props;
-  const { data: detailSecid, show: showDetailDrawer, set: setDetailDrawer, close: closeDetailDrawer } = useDrawer('');
+  const { data: stockName, show: showAddStockDrawer, set: setAddStockDrawer, close: closeAddStockDrawer } = useDrawer('');
 
   return (
     <div className={styles.content}>
@@ -72,14 +73,14 @@ const Recommend: React.FC<RecommendProps> = (props) => {
                 position: ['bottomCenter'],
               }}
               onRow={(record) => ({
-                onClick: () => setDetailDrawer(`${Number(record.Market)}.${record.Code}`),
+                onClick: () => setAddStockDrawer(record.Name),
               })}
             />
           </div>
         </PureCard>
       ))}
-      <CustomDrawer show={showDetailDrawer}>
-        <DetailStockContent onEnter={closeDetailDrawer} onClose={closeDetailDrawer} secid={detailSecid} />
+      <CustomDrawer show={showAddStockDrawer}>
+        <AddStockContent onEnter={closeAddStockDrawer} onClose={closeAddStockDrawer} defaultName={stockName} />
       </CustomDrawer>
     </div>
   );

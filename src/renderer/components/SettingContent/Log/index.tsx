@@ -5,7 +5,6 @@ import { useRequest } from 'ahooks';
 
 import * as Services from '@/services';
 import styles from './index.module.scss';
-import { item } from '@/components/Guide/index.module.scss';
 
 interface LogProps {}
 
@@ -20,32 +19,34 @@ const Log: React.FC<LogProps> = () => {
     }[]
   >([]);
 
-  useRequest(Services.Log.GetLog, {
+  const { loading } = useRequest(Services.Log.GetLog, {
     throwOnError: true,
     onSuccess: setLogs,
   });
 
   return (
-    <div className={classnames(styles.content)}>
-      <Timeline>
-        {logs.map((log) => (
-          <Timeline.Item
-            key={log.version}
-            color={log.version.slice(1) === version ? 'blue' : log.version.slice(1) > version ? 'green' : 'gray'}
-          >
-            <div className={classnames(styles.item, styles.title)}>
-              <div>{log.version}</div>
-              <div>{log.date}</div>
-            </div>
-            {log.contents.map((content, index) => (
-              <div className={styles.item} key={index}>
-                {content}
+    <Spin spinning={loading}>
+      <div className={classnames(styles.content)}>
+        <Timeline>
+          {logs.map((log) => (
+            <Timeline.Item
+              key={log.version}
+              color={log.version.slice(1) === version ? 'blue' : log.version.slice(1) > version ? 'green' : 'gray'}
+            >
+              <div className={classnames(styles.item, styles.title)}>
+                <div>{log.version}</div>
+                <div>{log.date}</div>
               </div>
-            ))}
-          </Timeline.Item>
-        ))}
-      </Timeline>
-    </div>
+              {log.contents.map((content, index) => (
+                <div className={styles.item} key={index}>
+                  {content}
+                </div>
+              ))}
+            </Timeline.Item>
+          ))}
+        </Timeline>
+      </div>
+    </Spin>
   );
 };
 

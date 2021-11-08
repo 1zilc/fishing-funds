@@ -20,11 +20,10 @@ export interface DetailFundContentProps {
 const DetailZindexContent: React.FC<DetailFundContentProps> = (props) => {
   const { code } = props;
   const [zindex, setZindex] = useState<Zindex.ResponseItem | Record<string, any>>({});
-
-  useRequest(Services.Zindex.FromEastmoney, {
+  console.log(code, zindex);
+  useRequest(() => Services.Zindex.FromEastmoney(code), {
     throwOnError: true,
     pollingInterval: 1000 * 60,
-    defaultParams: [code],
     onSuccess: setZindex,
   });
 

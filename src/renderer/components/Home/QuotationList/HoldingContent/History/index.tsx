@@ -3,6 +3,10 @@ import dayjs from 'dayjs';
 import { Table } from 'antd';
 import { useRequest } from 'ahooks';
 
+import CustomDrawer from '@/components/CustomDrawer';
+import DetailQuotationContent from '@/components/Home/QuotationList/DetailQuotationContent';
+import AddStockContent from '@/components/Home/StockList/AddStockContent';
+import { useDrawer } from '@/utils/hooks';
 import * as Services from '@/services';
 import * as Utils from '@/utils';
 import styles from './index.module.scss';
@@ -16,7 +20,15 @@ const { shell } = window.contextModules.electron;
 
 const NorthHistory: React.FC<PropsWithChildren<NorthHistoryProps>> = (props) => {
   const { marketCode, reportName } = props;
-  const [data, setData] = useState<News.ResponseItem[]>([]);
+  const [data, setData] = useState<any[]>([]);
+  const {
+    data: quodationCode,
+    show: showDetailQuodationDrawer,
+    set: setDetailQuodationDrawer,
+    close: closeDetailQuodationDrawer,
+  } = useDrawer('');
+
+  const { data: stockName, show: showAddStockDrawer, set: setAddStockDrawer, close: closeAddStockDrawer } = useDrawer('');
 
   const { loading } = useRequest(Services.Quotation.GetHodingFromEastmoney, {
     defaultParams: [marketCode, reportName],
@@ -27,7 +39,7 @@ const NorthHistory: React.FC<PropsWithChildren<NorthHistoryProps>> = (props) => 
   return (
     <div className={styles.content}>
       <Table
-        rowKey="id"
+        rowKey="HOLD_DATE"
         size="small"
         columns={[
           {
@@ -53,32 +65,32 @@ const NorthHistory: React.FC<PropsWithChildren<NorthHistoryProps>> = (props) => 
             title: '市值增持',
             dataIndex: 'ADD_MARKET_BNAME',
             ellipsis: true,
-            render: (text: string) => <a>{text}</a>,
+            render: (text: string, record) => <a onClick={() => setDetailQuodationDrawer(record.ADD_MARKET_NEWBCODE)}>{text}</a>,
           },
           {
             title: '占比增持',
             dataIndex: 'BOARD_RATE_BNAME',
             ellipsis: true,
-            render: (text: string) => <a>{text}</a>,
+            render: (text: string, record) => <a onClick={() => setDetailQuodationDrawer(record.BOARD_RATE_NEWBCODE)}>{text}</a>,
           },
 
           {
             title: '市值增持',
             dataIndex: 'ADD_MARKET_MNAME',
             ellipsis: true,
-            render: (text: string) => <a>{text}</a>,
+            render: (text: string, record) => <a onClick={() => setAddStockDrawer(record.ADD_MARKET_MNAME)}>{text}</a>,
           },
           {
             title: '股数增持',
             dataIndex: 'ADD_SHARES_MNAME',
             ellipsis: true,
-            render: (text: string) => <a>{text}</a>,
+            render: (text: string, record) => <a onClick={() => setAddStockDrawer(record.ADD_SHARES_MNAME)}>{text}</a>,
           },
           {
             title: '占比增持',
             dataIndex: 'MARKET_RATE_MNAME',
             ellipsis: true,
-            render: (text: string) => <a>{text}</a>,
+            render: (text: string, record) => <a onClick={() => setAddStockDrawer(record.MARKET_RATE_MNAME)}>{text}</a>,
           },
         ]}
         dataSource={data}
@@ -88,10 +100,13 @@ const NorthHistory: React.FC<PropsWithChildren<NorthHistoryProps>> = (props) => 
           hideOnSinglePage: true,
           position: ['bottomCenter'],
         }}
-        onRow={(record) => ({
-          onClick: () => shell.openExternal(record.url_unique),
-        })}
       />
+      <CustomDrawer show={showDetailQuodationDrawer}>
+        <DetailQuotationContent onEnter={closeDetailQuodationDrawer} onClose={closeDetailQuodationDrawer} code={quodationCode} />
+      </CustomDrawer>
+      <CustomDrawer show={showAddStockDrawer}>
+        <AddStockContent onEnter={closeAddStockDrawer} onClose={closeAddStockDrawer} defaultName={stockName} />
+      </CustomDrawer>
     </div>
   );
 };

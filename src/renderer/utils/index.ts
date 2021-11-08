@@ -310,6 +310,7 @@ export function GetValueColor(number?: number | string) {
       value > 0 ? varibleColors['--increase-color'] : value < 0 ? varibleColors['--reduce-color'] : varibleColors['--reverse-text-color'],
     textClass: value > 0 ? 'text-up' : value < 0 ? 'text-down' : 'text-none',
     blockClass: value > 0 ? 'block-up' : value < 0 ? 'block-down' : 'block-none',
+    string: value > 0 ? '↗' : value < 0 ? '↘' : '-',
   };
 }
 
