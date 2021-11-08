@@ -16,7 +16,7 @@
 <a href="https://qm.qq.com/cgi-bin/qm/qr?k=Su4GnbsicHvsPrbLMwNu557LyZQO19KZ&jump_from=webapi"><img src="https://img.shields.io/badge/QQ%E7%BE%A4-732268738-red" alt="QQ群" /></a>
 ![GitHub](https://img.shields.io/github/license/1zilc/fishing-funds)
 
-> 基金,大盘,股票,虚拟货币状态栏显示小应用,支持 MacOS,Windows,Linux 客户端,数据源来自天天基金,蚂蚁基金,爱基金,腾讯证券,新浪基金等
+> 基金,大盘,股票,虚拟货币状态栏显示小应用,基于 Electron 开发,支持 MacOS,Windows,Linux 客户端,数据源来自天天基金,蚂蚁基金,爱基金,腾讯证券,新浪基金等
 
 ## 软件截图
 
