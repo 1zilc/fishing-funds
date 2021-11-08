@@ -3,6 +3,7 @@ import classnames from 'classnames';
 import { useRequest } from 'ahooks';
 import { Tabs } from 'antd';
 
+import CustomDrawer from '@/components/CustomDrawer';
 import Trend from '@/components/Home/StockList/DetailStockContent/Trend';
 import ColorfulTags from '@/components/ColorfulTags';
 import Estimate from '@/components/Home/StockList/DetailStockContent/Estimate';
@@ -10,6 +11,9 @@ import K from '@/components/Home/StockList/DetailStockContent/K';
 import Company from '@/components/Home/StockList/DetailStockContent/Company';
 import Stocks from '@/components/Home/StockList/DetailStockContent/Stocks';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
+import AddStockContent from '@/components/Home/StockList/AddStockContent';
+import { useDrawer } from '@/utils/hooks';
+import * as Helpers from '@/helpers';
 import * as Services from '@/services';
 import * as Utils from '@/utils';
 
@@ -25,6 +29,8 @@ const DetailStockContent: React.FC<DetailStockContentProps> = (props) => {
   const { secid } = props;
   const [stock, setStock] = useState<Stock.DetailItem | Record<string, any>>({});
   const [industrys, setIndustrys] = useState<Stock.IndustryItem[]>([]);
+  const { data: addSecid, show: showAddDrawer, set: setAddDrawer, close: closeAddDrawer } = useDrawer(secid);
+  const { codeMap } = Helpers.Stock.GetStockConfig();
   useRequest(Services.Stock.GetDetailFromEastmoney, {
     throwOnError: true,
     pollingInterval: 1000 * 60,
@@ -47,7 +53,14 @@ const DetailStockContent: React.FC<DetailStockContentProps> = (props) => {
             <span className={classnames(Utils.GetValueColor(stock.zdd).textClass)}>{stock.zx}</span>
           </h3>
           <div className={styles.subTitleRow}>
-            <span className="copify">{stock.code}</span>
+            <div>
+              <span className="copify">{stock.code}</span>
+              {!codeMap[secid] && (
+                <a className={styles.selfAdd} onClick={() => setAddDrawer(secid)}>
+                  +加自选
+                </a>
+              )}
+            </div>
             <div>
               <span className={styles.detailItemLabel}>涨跌点：</span>
               <span className={classnames(Utils.GetValueColor(stock.zdd).textClass)}>{Utils.Yang(stock.zdd)}</span>
@@ -139,6 +152,9 @@ const DetailStockContent: React.FC<DetailStockContentProps> = (props) => {
           </Tabs>
         </div>
       </div>
+      <CustomDrawer show={showAddDrawer}>
+        <AddStockContent defaultName={stock?.code} onClose={closeAddDrawer} onEnter={closeAddDrawer} />
+      </CustomDrawer>
     </CustomDrawerContent>
   );
 };
