@@ -17,8 +17,10 @@ export function Yang(num: string | number | undefined) {
     }
     if (Number(num) < 0) {
       return String(num);
-    } else {
+    } else if (Number(num) > 0) {
       return `+${num}`;
+    } else {
+      return '0';
     }
   } catch (error) {
     return String(num);

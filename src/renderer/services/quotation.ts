@@ -754,7 +754,7 @@ export async function GetMutualQuotaFromEastmoney() {
           INDEX_CODE: 'HSI';
           INDEX_NAME: '恒生指数';
           BOARD_CODE: 'HK32';
-          status: 3;
+          status: number;
           dayNetAmtIn: number;
           dayAmtRemain: number;
           dayAmtThreshold: number;
@@ -787,6 +787,10 @@ export async function GetMutualQuotaFromEastmoney() {
     });
 
     const result = body.result?.data || [];
+    const statusMap: Record<number, string> = {
+      1: '额度可用',
+      3: '收盘',
+    };
     return result.map((item) => ({
       type: item.BOARD_TYPE,
       quota: item.MUTUAL_TYPE_NAME,
@@ -800,7 +804,7 @@ export async function GetMutualQuotaFromEastmoney() {
       sz: item.f104,
       xd: item.f105,
       cp: item.f106,
-      status: item.status,
+      status: statusMap[item.status],
     }));
   } catch (error) {
     return [];
