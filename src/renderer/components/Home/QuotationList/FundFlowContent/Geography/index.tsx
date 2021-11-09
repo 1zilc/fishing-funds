@@ -22,6 +22,14 @@ const Geography: React.FC<GeographyProps> = () => {
         tooltip: {
           show: true,
         },
+        visualMap: {
+          show: false,
+          min: -2,
+          max: 2,
+          inRange: {
+            color: [Utils.GetValueColor(-1).color, Utils.GetValueColor(0).color, Utils.GetValueColor(1).color],
+          },
+        },
         series: [
           {
             name: '中国',
@@ -38,21 +46,13 @@ const Geography: React.FC<GeographyProps> = () => {
               },
             },
             roam: true,
+
             data: quotations
               .filter((quotation) => quotation.type === Enums.QuotationType.Area)
               .map((quotation) => {
-                const alphas = [0.6, 0.7, 0.8, 0.9, 1];
-                const alphaindex = Math.ceil(Math.min(Math.abs(quotation.zdf), 5));
-                const colorAlpha = quotation.zdf === 0 ? 1 : alphas[alphaindex];
-                const color = Utils.GetValueColor(quotation.zdf).color;
-                const rgba = Utils.ColorRgba(color, colorAlpha);
                 return {
                   name: quotation.name.replace('板块', ''),
                   value: quotation.zdf,
-                  itemStyle: {
-                    areaColor: rgba,
-                    color: rgba,
-                  },
                 };
               }),
           },

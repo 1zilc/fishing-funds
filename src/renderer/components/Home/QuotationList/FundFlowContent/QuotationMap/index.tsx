@@ -24,9 +24,18 @@ const QuotationMap: React.FC<QuotationMapProps> = ({ type }) => {
       chartInstance?.setOption({
         tooltip: {
           formatter: (item: any) => {
-            const { name, zdf } = item.data;
-            return `${name}：${Utils.Yang(zdf)}%`;
+            const { name, value } = item.data;
+            return `${name}：${Utils.Yang(value[1])}%`;
           },
+        },
+        visualMap: {
+          show: false,
+          min: -2,
+          max: 2,
+          inRange: {
+            color: [Utils.GetValueColor(-1).color, Utils.GetValueColor(0).color, Utils.GetValueColor(1).color],
+          },
+          dimension: 1,
         },
         series: [
           {
@@ -37,18 +46,9 @@ const QuotationMap: React.FC<QuotationMapProps> = ({ type }) => {
             data: quotations
               .filter((quotation) => quotation.type === type)
               .map((quotation) => {
-                const alphas = [0.6, 0.7, 0.8, 0.9, 1];
-                const alphaindex = Math.ceil(Math.min(Math.abs(quotation.zdf), 5));
-                const colorAlpha = quotation.zdf === 0 ? 1 : alphas[alphaindex];
-                const color = Utils.GetValueColor(quotation.zdf).color;
-                const rgba = Utils.ColorRgba(color, colorAlpha);
                 return {
                   name: quotation.name,
-                  value: quotation.zsz,
-                  zdf: quotation.zdf,
-                  itemStyle: {
-                    color: rgba,
-                  },
+                  value: [quotation.zsz, quotation.zdf],
                 };
               }),
           },
