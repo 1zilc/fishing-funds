@@ -15,12 +15,10 @@ export function Yang(num: string | number | undefined) {
     if (num === undefined) {
       return '';
     }
-    if (Number(num) < 0) {
-      return String(num);
-    } else if (Number(num) > 0) {
+    if (Number(num) > 0) {
       return `+${num}`;
     } else {
-      return '0';
+      return String(num);
     }
   } catch (error) {
     return String(num);

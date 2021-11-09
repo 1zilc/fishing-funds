@@ -64,13 +64,15 @@ const QuoteCenterContent: React.FC<QuoteCenterContentProps> = (props) => {
   return (
     <CustomDrawerContent title="行情中心" enterText="确定" onClose={props.onClose} onEnter={props.onEnter}>
       <div className={styles.content}>
-        <ChartCard
-          auto
-          onFresh={runGetQuoteCenterFromEastmoney}
-          TitleBar={<span className={styles.cardTitle}>建议仓位 {data.TopText.PositionInd}%</span>}
-        >
-          <Capacity TopText={data.TopText} />
-        </ChartCard>
+        <div className={styles.container}>
+          <ChartCard
+            auto
+            onFresh={runGetQuoteCenterFromEastmoney}
+            TitleBar={<span className={styles.cardTitle}>建议仓位 {data.TopText.PositionInd}%</span>}
+          >
+            <Capacity TopText={data.TopText} />
+          </ChartCard>
+        </div>
         <div className={styles.container}>
           <Tabs animated={{ tabPane: true }} tabBarGutter={15}>
             {data.MarketStyle.map((m) => (
