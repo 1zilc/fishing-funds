@@ -37,7 +37,7 @@ const Geography: React.FC<GeographyProps> = () => {
             mapType: 'china',
             selectedMode: false,
             itemStyle: {
-              normal: { label: { show: false }, borderColor: varibleColors['--main-text-color'] },
+              normal: { label: { show: false }, borderColor: varibleColors['--background-color'] },
             },
             emphasis: {
               label: { show: true, color: varibleColors['--main-text-color'] },
