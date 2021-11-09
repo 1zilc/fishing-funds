@@ -20,7 +20,7 @@ const Geography: React.FC<GeographyProps> = () => {
     () => {
       chartInstance?.setOption({
         tooltip: {
-          show: false,
+          show: true,
         },
         series: [
           {
@@ -51,6 +51,7 @@ const Geography: React.FC<GeographyProps> = () => {
                   value: quotation.zdf,
                   itemStyle: {
                     areaColor: rgba,
+                    color: rgba,
                   },
                 };
               }),
