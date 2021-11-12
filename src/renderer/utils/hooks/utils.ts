@@ -317,3 +317,13 @@ export function useFundRating(code: string) {
     star,
   };
 }
+
+export function useAutoDestroySortableRef() {
+  const sortableRef = useRef<any>(null);
+  useLayoutEffect(() => {
+    return () => {
+      sortableRef.current?.sortable?.destroy?.();
+    };
+  }, []);
+  return sortableRef;
+}

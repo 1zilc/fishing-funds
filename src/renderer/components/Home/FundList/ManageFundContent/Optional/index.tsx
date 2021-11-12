@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useRef, useLayoutEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { ReactSortable } from 'react-sortablejs';
 import classnames from 'classnames';
@@ -16,7 +16,7 @@ import Empty from '@/components/Empty';
 import AddFundContent from '@/components/Home/FundList/AddFundContent';
 import EditFundContent from '@/components/Home/FundList/EditFundContent';
 import { deleteFundAction, setFundConfigAction, updateFundAction } from '@/actions/fund';
-import { useSyncFixFundSetting, useDrawer, useCurrentWallet } from '@/utils/hooks';
+import { useSyncFixFundSetting, useDrawer, useCurrentWallet, useAutoDestroySortableRef } from '@/utils/hooks';
 
 import styles from './index.module.scss';
 
@@ -26,6 +26,7 @@ const { dialog, clipboard } = window.contextModules.electron;
 
 const Optional: React.FC<OptionalProps> = () => {
   const dispatch = useDispatch();
+  const sortableRef = useAutoDestroySortableRef();
   const { show: showAddDrawer, set: setAddDrawer, close: closeAddDrawer } = useDrawer(null);
   const { currentWalletFundsConfig: fundConfig, currentWalletFundsCodeMap: codeMap, currentWalletCode } = useCurrentWallet();
 
@@ -107,7 +108,15 @@ const Optional: React.FC<OptionalProps> = () => {
     <div className={styles.content}>
       {sortFundConfig.length ? (
         syncFundSettingDone ? (
-          <ReactSortable animation={200} delay={2} list={sortFundConfig} setList={onSortFundConfig} dragClass={styles.dragItem} swap>
+          <ReactSortable
+            ref={sortableRef}
+            animation={200}
+            delay={2}
+            list={sortFundConfig}
+            setList={onSortFundConfig}
+            dragClass={styles.dragItem}
+            swap
+          >
             {sortFundConfig.map((fund) => {
               return (
                 <PureCard key={fund.code} className={classnames(styles.row, 'hoverable')}>

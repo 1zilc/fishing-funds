@@ -11,7 +11,7 @@ import CustomDrawer from '@/components/CustomDrawer';
 import Empty from '@/components/Empty';
 import AddCoinContent from '@/components/Home/CoinList/AddCoinContent';
 import { deleteCoinAction, setCoinConfigAction } from '@/actions/coin';
-import { useDrawer } from '@/utils/hooks';
+import { useDrawer, useAutoDestroySortableRef } from '@/utils/hooks';
 import { StoreState } from '@/reducers/types';
 import styles from './index.module.scss';
 
@@ -21,6 +21,7 @@ const { dialog } = window.contextModules.electron;
 
 const Optional: React.FC<OptionalProps> = () => {
   const dispatch = useDispatch();
+  const sortableRef = useAutoDestroySortableRef();
   const { codeMap, coinConfig } = useSelector((state: StoreState) => state.coin.config);
   const { show: showAddDrawer, set: setAddDrawer, close: closeAddDrawer } = useDrawer(null);
   const sortCoinConfig = useMemo(() => coinConfig.map((_) => ({ ..._, id: _.code })), [coinConfig]);
@@ -52,7 +53,15 @@ const Optional: React.FC<OptionalProps> = () => {
   return (
     <div className={styles.content}>
       {sortCoinConfig.length ? (
-        <ReactSortable animation={200} delay={2} list={sortCoinConfig} setList={onSortCoinConfig} dragClass={styles.dragItem} swap>
+        <ReactSortable
+          ref={sortableRef}
+          animation={200}
+          delay={2}
+          list={sortCoinConfig}
+          setList={onSortCoinConfig}
+          dragClass={styles.dragItem}
+          swap
+        >
           {sortCoinConfig.map((coin) => {
             return (
               <PureCard key={coin.code} className={classnames(styles.row, 'hoverable')}>

@@ -11,7 +11,7 @@ import CustomDrawer from '@/components/CustomDrawer';
 import Empty from '@/components/Empty';
 import AddZindexContent from '@/components/Home/ZindexList/AddZindexContent';
 import { deleteZindexAction, setZindexConfigAction } from '@/actions/zindex';
-import { useDrawer } from '@/utils/hooks';
+import { useDrawer, useAutoDestroySortableRef } from '@/utils/hooks';
 import { StoreState } from '@/reducers/types';
 import styles from './index.module.scss';
 
@@ -21,6 +21,7 @@ const { dialog } = window.contextModules.electron;
 
 const Optional: React.FC<OptionalProps> = () => {
   const dispatch = useDispatch();
+  const sortableRef = useAutoDestroySortableRef();
   const { codeMap, zindexConfig } = useSelector((state: StoreState) => state.zindex.config);
   const { show: showAddDrawer, set: setAddDrawer, close: closeAddDrawer } = useDrawer(null);
   const sortZindexConfig = useMemo(() => zindexConfig.map((_) => ({ ..._, id: _.code })), [zindexConfig]);
@@ -51,7 +52,15 @@ const Optional: React.FC<OptionalProps> = () => {
   return (
     <div className={styles.content}>
       {sortZindexConfig.length ? (
-        <ReactSortable animation={200} delay={2} list={sortZindexConfig} setList={onSortZindexConfig} dragClass={styles.dragItem} swap>
+        <ReactSortable
+          ref={sortableRef}
+          animation={200}
+          delay={2}
+          list={sortZindexConfig}
+          setList={onSortZindexConfig}
+          dragClass={styles.dragItem}
+          swap
+        >
           {sortZindexConfig.map((zindex) => {
             const [market, code] = zindex.code.split('.');
             return (
