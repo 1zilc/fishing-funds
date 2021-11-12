@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import classnames from 'classnames';
+import { useDispatch, useSelector } from 'react-redux';
 import { useRequest } from 'ahooks';
 import { Tabs } from 'antd';
 
@@ -9,6 +10,8 @@ import Stocks from '@/components/Home/QuotationList/DetailQuotationContent/Stock
 import Funds from '@/components/Home/QuotationList/DetailQuotationContent/Funds';
 import RealTimeTransaction from '@/components/Home/QuotationList/DetailQuotationContent/RealTimeTransaction';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
+import { syncFavoriteQuotationMapAction } from '@/actions/quotation';
+import { StoreState } from '@/reducers/types';
 import * as Services from '@/services';
 import * as Utils from '@/utils';
 import * as Enums from '@/utils/enums';
@@ -22,7 +25,11 @@ export interface DetailQuotationContentProps {
 
 const DetailQuotationContent: React.FC<DetailQuotationContentProps> = (props) => {
   const { code } = props;
+  const dispatch = useDispatch();
   const [quotation, setQuotation] = useState<Quotation.DetailData | Record<string, any>>({});
+  const favoriteQuotationMap = useSelector((state: StoreState) => state.quotation.favoriteQuotationMap);
+  const { conciseSetting } = useSelector((state: StoreState) => state.setting.systemSetting);
+  const favorited = favoriteQuotationMap[quotation.code];
 
   useRequest(Services.Quotation.GetQuotationDetailFromEastmoney, {
     throwOnError: true,
@@ -39,7 +46,19 @@ const DetailQuotationContent: React.FC<DetailQuotationContentProps> = (props) =>
             <span className={classnames(Utils.GetValueColor(quotation.zdd).textClass)}>{quotation?.zxj}</span>
           </h3>
           <div className={styles.subTitleRow}>
-            <span className="copify">{quotation?.code}</span>
+            <div>
+              <span className="copify">{quotation?.code}</span>
+              {favorited ? (
+                <a className={styles.selfAdd} onClick={() => dispatch(syncFavoriteQuotationMapAction(quotation.code, false))}>
+                  已关注
+                </a>
+              ) : (
+                <a className={styles.selfAdd} onClick={() => dispatch(syncFavoriteQuotationMapAction(quotation.code, true))}>
+                  未关注
+                </a>
+              )}
+            </div>
+
             <div>
               <span className={styles.detailItemLabel}>最新价：</span>
               <span className={classnames(Utils.GetValueColor(quotation.zdd).textClass)}>{Utils.Yang(quotation?.zdd)}</span>

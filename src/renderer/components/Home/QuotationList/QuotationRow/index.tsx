@@ -25,8 +25,8 @@ const arrowSize = {
 
 const QuotationRow: React.FC<RowProps> = (props) => {
   const { quotation } = props;
-  const favoriteQuotationMap = useSelector((state: StoreState) => state.quotation.favoriteQuotationMap);
   const dispatch = useDispatch();
+  const favoriteQuotationMap = useSelector((state: StoreState) => state.quotation.favoriteQuotationMap);
   const { conciseSetting } = useSelector((state: StoreState) => state.setting.systemSetting);
   const favorited = favoriteQuotationMap[quotation.code];
 
