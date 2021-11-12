@@ -64,7 +64,7 @@ const FundGroup = () => {
 };
 
 const ZindexGroup = () => {
-  const { codeMap: zindexCodeMap } = useSelector((state: StoreState) => state.zindex.config);
+  // const { codeMap: zindexCodeMap } = useSelector((state: StoreState) => state.zindex.config);
 
   return (
     <GroupTab tabKey={Enums.TabKeyType.Zindex}>
@@ -122,8 +122,14 @@ const StockGroup = () => {
 const CoinGroup = () => {
   return (
     <GroupTab tabKey={Enums.TabKeyType.Coin}>
-      <Tabs.TabPane tab="全部" key={String(-1)}>
+      <Tabs.TabPane tab="全部" key={String(0)}>
         <CoinList filter={() => true} />
+      </Tabs.TabPane>
+      <Tabs.TabPane tab="上涨" key={String(1)}>
+        <CoinList filter={(coin) => Number(coin.change24h) >= 0} />
+      </Tabs.TabPane>
+      <Tabs.TabPane tab="下跌" key={String(2)}>
+        <CoinList filter={(coin) => Number(coin.change24h) < 0} />
       </Tabs.TabPane>
     </GroupTab>
   );

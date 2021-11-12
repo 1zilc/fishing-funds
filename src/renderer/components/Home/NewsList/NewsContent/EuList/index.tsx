@@ -6,20 +6,20 @@ import ChartCard from '@/components/Card/ChartCard';
 import * as Services from '@/services';
 import styles from './index.module.scss';
 
-interface ListedListProps {}
+interface EuListProps {}
 
 const { shell } = window.contextModules.electron;
 
-const ListedList: React.FC<PropsWithChildren<ListedListProps>> = () => {
+const EuList: React.FC<PropsWithChildren<EuListProps>> = () => {
   const [data, setData] = useState<News.ResponseItem[]>([]);
 
-  const { loading, run: runNewsGetListedList } = useRequest(Services.News.GetListedList, {
+  const { loading, run: runNewsGetEuList } = useRequest(Services.News.GetEuList, {
     throwOnError: true,
     onSuccess: setData,
   });
 
   return (
-    <ChartCard auto onFresh={runNewsGetListedList}>
+    <ChartCard auto onFresh={runNewsGetEuList}>
       <div className={styles.content}>
         <Table
           rowKey="id"
@@ -54,4 +54,4 @@ const ListedList: React.FC<PropsWithChildren<ListedListProps>> = () => {
   );
 };
 
-export default ListedList;
+export default EuList;
