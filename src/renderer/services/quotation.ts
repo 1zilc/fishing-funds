@@ -810,3 +810,59 @@ export async function GetMutualQuotaFromEastmoney() {
     return [];
   }
 }
+
+export async function GetTodyHotFromEastmoney() {
+  try {
+    const { body } = await got<{
+      re: true;
+      message: '';
+      result: {
+        TableName: 'TodayOpportunityWeb';
+        TotalPage: 1;
+        ConsumeMSecond: 0;
+        SplitSymbol: '|';
+        FieldName: 'CategoryPchg,CategoryCode,CategoryName,IsImportant,ParentCode,ParentName,Reason,SecuCode,SecuName,Market,SecuCode2,SecuName2,Market2,IsFocused,Importance';
+        Data: [
+          '2.06|111|太阳能|0|||2019至2023年，国内光伏焊带市场需求空间可达到121亿元！|002309|中利集团|02||||0|',
+          '-0.03|a158|养老概念|0|||再出“实招”提档升级养老服务|300212|易华录|02||||0|',
+          '0.71|084|区块链|0|||利用数字财政支持重点项目建设情况开展专项调研|002405|四维图新|02||||0|',
+          '1.75|a11|风电|0|||中美达成强化气候行动联合宣言|002309|中利集团|02||||0|',
+          '0.69|006003008|VR&AR|0|006|人工智能|炒股的尽头是“元宇宙”？400多家企业注册相关商标 多家上市公司被监管“盯上”|600358|国旅联合|01||||0|'
+        ];
+      }[];
+    }>('http://quote.eastmoney.com/zhuti/api/todayopportunity', {
+      responseType: 'json',
+    });
+    const result = body.result[0].Data.map((item) => {
+      const [
+        CategoryPchg,
+        CategoryCode,
+        CategoryName,
+        IsImportant,
+        ParentCode,
+        ParentName,
+        Reason,
+        SecuCode,
+        SecuName,
+        Market,
+        SecuCode2,
+        SecuName2,
+        Market2,
+        IsFocused,
+        Importance,
+      ] = item.split('|');
+
+      return {
+        zdf: CategoryPchg,
+        name: CategoryName,
+        reason: Reason,
+        stockName: SecuName,
+        stockCode: SecuCode,
+      };
+    });
+
+    return result;
+  } catch (error) {
+    return [];
+  }
+}
