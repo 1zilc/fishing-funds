@@ -8,6 +8,8 @@ import Capacity from '@/components/Home/QuotationList/QuoteCenterContent/Capacit
 import MarketStyle from '@/components/Home/QuotationList/QuoteCenterContent/MarketStyle';
 import Recommend from '@/components/Home/QuotationList/QuoteCenterContent/Recommend';
 import TodayHot from '@/components/Home/QuotationList/QuoteCenterContent/TodayHot';
+import HotTheme from '@/components/Home/QuotationList/QuoteCenterContent/HotTheme';
+import RecentHot from '@/components/Home/QuotationList/QuoteCenterContent/RecentHot';
 import * as Services from '@/services';
 import styles from './index.module.scss';
 
@@ -79,14 +81,11 @@ const QuoteCenterContent: React.FC<QuoteCenterContentProps> = (props) => {
             <Tabs.TabPane tab="今日机会" key={String(1)}>
               <TodayHot />
             </Tabs.TabPane>
-            <Tabs.TabPane tab="热门主题" key={String(2)}>
-              <ChartCard
-                auto
-                onFresh={runGetQuoteCenterFromEastmoney}
-                TitleBar={<span className={styles.cardTitle}>建议仓位 {data.TopText.PositionInd}%</span>}
-              >
-                <Capacity TopText={data.TopText} />
-              </ChartCard>
+            <Tabs.TabPane tab="近期热点" key={String(2)}>
+              <RecentHot />
+            </Tabs.TabPane>
+            <Tabs.TabPane tab="热门主题" key={String(3)}>
+              <HotTheme />
             </Tabs.TabPane>
           </Tabs>
         </div>

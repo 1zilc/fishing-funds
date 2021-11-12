@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import NP from 'number-precision';
 import classnames from 'classnames';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 
 import PureCard from '@/components/Card/PureCard';
 import Score from '@/components/Home/FundList/FundStatisticsContent/AssetsStatistics/Score';
+import Eye from '@/components/Eye';
 import { StoreState } from '@/reducers/types';
+import { toggleEyeStatusAction } from '@/actions/wallet';
 import * as Enums from '@/utils/enums';
 import * as Utils from '@/utils';
 import * as Helpers from '@/helpers';
@@ -17,6 +19,7 @@ interface AssetsStatisticsProps {
 }
 
 const AssetsStatistics: React.FC<AssetsStatisticsProps> = ({ funds, codes }) => {
+  const dispatch = useDispatch();
   const eyeStatus = useSelector((state: StoreState) => state.wallet.eyeStatus);
   const eyeOpen = eyeStatus === Enums.EyeStatus.Open;
   // 盈利钱包数
@@ -56,7 +59,10 @@ const AssetsStatistics: React.FC<AssetsStatisticsProps> = ({ funds, codes }) => 
     <>
       <PureCard className={styles.content}>
         <div style={{ textAlign: 'center' }}>
-          <div>总资产</div>
+          <div className={styles.titleBar}>
+            <span>总资产(元)</span>
+            <Eye status={eyeStatus === Enums.EyeStatus.Open} onClick={() => dispatch(toggleEyeStatusAction())} />
+          </div>
           <div
             style={{
               fontSize: 20,

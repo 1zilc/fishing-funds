@@ -10,3 +10,11 @@
   text-align: center;
   font-size: calc(10rem / var(--base-font-size));
 }
+.titleBar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  span {
+    margin: 0 var(--base-padding) 0 calc(2 * var(--base-padding));
+  }
+}

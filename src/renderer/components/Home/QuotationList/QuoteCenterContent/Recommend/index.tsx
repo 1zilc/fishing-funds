@@ -4,7 +4,6 @@ import classnames from 'classnames';
 
 import PureCard from '@/components/Card/PureCard';
 import CustomDrawer from '@/components/CustomDrawer';
-import DetailStockContent from '@/components/Home/StockList/DetailStockContent';
 import AddStockContent from '@/components/Home/StockList/AddStockContent';
 import { useDrawer } from '@/utils/hooks';
 import * as Utils from '@/utils';

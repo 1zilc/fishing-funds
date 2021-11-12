@@ -9,33 +9,31 @@ import * as Services from '@/services';
 import * as Utils from '@/utils';
 import styles from './index.module.scss';
 
-interface HotThemeProps {}
+interface RecentHotProps {}
 
-const HotTheme: React.FC<HotThemeProps> = () => {
+const RecentHot: React.FC<RecentHotProps> = () => {
   const [data, setData] = useState<any[]>([]);
   const { data: stockName, show: showAddStockDrawer, set: setAddStockDrawer, close: closeAddStockDrawer } = useDrawer('');
 
-  const { loading, run: runQuotationGetHotThemeFromEastmoney } = useRequest(Services.Quotation.GetHotThemeFromEastmoney, {
+  const { loading, run: runQuotationGetRecentHotFromEastmoney } = useRequest(Services.Quotation.GetRecentHotFromEastmoney, {
     throwOnError: true,
     onSuccess: setData,
   });
 
   return (
-    <ChartCard auto onFresh={runQuotationGetHotThemeFromEastmoney}>
+    <ChartCard auto onFresh={runQuotationGetRecentHotFromEastmoney}>
       <div className={styles.content}>
         <Table
           rowKey="name"
           size="small"
           columns={[
             {
-              title: '板块',
-              dataIndex: 'name',
+              title: '排名',
+              render: (text: string, record, number) => number + 1,
             },
             {
-              title: '板块涨跌幅',
-              dataIndex: 'zdf',
-              render: (text: number) => <div className={Utils.GetValueColor(text).textClass}>{Utils.Yang(text)} %</div>,
-              sorter: (a: any, b: any) => Number(a.zdf) - Number(b.zdf),
+              title: '板块',
+              dataIndex: 'name',
             },
             {
               title: '个股',
@@ -62,4 +60,4 @@ const HotTheme: React.FC<HotThemeProps> = () => {
   );
 };
 
-export default HotTheme;
+export default RecentHot;

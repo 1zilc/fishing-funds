@@ -811,7 +811,7 @@ export async function GetMutualQuotaFromEastmoney() {
   }
 }
 
-export async function GetTodyHotFromEastmoney() {
+export async function GetTodayHotFromEastmoney() {
   try {
     const { body } = await got<{
       re: true;
@@ -856,6 +856,79 @@ export async function GetTodyHotFromEastmoney() {
         zdf: CategoryPchg,
         name: CategoryName,
         reason: Reason,
+        stockName: SecuName,
+        stockCode: SecuCode,
+      };
+    });
+
+    return result;
+  } catch (error) {
+    return [];
+  }
+}
+
+export async function GetHotThemeFromEastmoney() {
+  try {
+    const { body } = await got<{
+      re: true;
+      message: '';
+      result: {
+        TableName: 'TodayOpportunityWeb';
+        TotalPage: 1;
+        ConsumeMSecond: 0;
+        SplitSymbol: '|';
+        FieldName: 'CategoryCode,CategoryName,ParentCode,ParentName,CategoryPchg,SecuCode,SecuName,IsImportant,Market';
+        Data: ['a141|虚拟电厂|||6.30|300376|易事特|0|02'];
+      }[];
+    }>('http://quote.eastmoney.com/zhuti/api/hottheme', {
+      searchParams: {
+        startIndex: 1,
+        pageSize: 100,
+      },
+      responseType: 'json',
+    });
+    const result = body.result[0].Data.map((item) => {
+      const [CategoryCode, CategoryName, ParentCode, ParentName, CategoryPchg, SecuCode, SecuName, IsImportant, Market] = item.split('|');
+
+      return {
+        zdf: CategoryPchg,
+        name: CategoryName,
+        stockName: SecuName,
+        stockCode: SecuCode,
+      };
+    });
+
+    return result;
+  } catch (error) {
+    return [];
+  }
+}
+
+export async function GetRecentHotFromEastmoney() {
+  try {
+    const { body } = await got<{
+      re: true;
+      message: '';
+      result: {
+        TableName: 'TodayOpportunityWeb';
+        TotalPage: 1;
+        ConsumeMSecond: 0;
+        SplitSymbol: '|';
+        FieldName: 'CategoryCode,CategoryName,IsImportant,ParentCode,ParentName,SecuCode,SecuName,Market,IsFocused';
+        Data: ['a198|元宇宙概念|0|||300081|恒信东方|02|0'];
+      }[];
+    }>('http://quote.eastmoney.com/zhuti/api/recenthot', {
+      searchParams: {
+        startIndex: 1,
+        pageSize: 100,
+      },
+      responseType: 'json',
+    });
+    const result = body.result[0].Data.map((item) => {
+      const [CategoryCode, CategoryName, IsImportant, ParentCode, ParentName, SecuCode, SecuName, Market, IsFocused] = item.split('|');
+
+      return {
+        name: CategoryName,
         stockName: SecuName,
         stockCode: SecuCode,
       };

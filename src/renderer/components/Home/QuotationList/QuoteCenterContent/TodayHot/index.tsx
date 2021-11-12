@@ -23,7 +23,7 @@ const TodayHot: React.FC<TodayHotProps> = () => {
   >([]);
   const { data: stockName, show: showAddStockDrawer, set: setAddStockDrawer, close: closeAddStockDrawer } = useDrawer('');
 
-  useRequest(Services.Quotation.GetTodyHotFromEastmoney, {
+  useRequest(Services.Quotation.GetTodayHotFromEastmoney, {
     throwOnError: true,
     onSuccess: setHots,
   });

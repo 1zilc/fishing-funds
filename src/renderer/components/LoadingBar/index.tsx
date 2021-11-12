@@ -14,7 +14,7 @@ const LoadingBar: React.FC<LoadingBarProps> = ({ show }) => {
         [styles.disable]: !show,
       })}
     >
-      <Spin size="small" spinning={show} />
+      <Spin size="small" spinning={show} tip="理财有风险，投资需谨慎" />
     </div>
   );
 };
