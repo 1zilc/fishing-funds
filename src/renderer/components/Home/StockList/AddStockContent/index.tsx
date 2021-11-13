@@ -48,7 +48,7 @@ const AddStockContent: React.FC<AddStockContentProps> = (props) => {
     onSuccess: (res) => setGroupList(res.filter(({ Type }) => stockTypesConfig.map(({ code }) => code).includes(Type))),
   });
 
-  const { data: detailSecid, show: showDetailDrawer, set: setDetailDrawer, close: closeDetailDrawer } = useDrawer('');
+  const { data: detailData, show: showDetailDrawer, set: setDetailDrawer, close: closeDetailDrawer } = useDrawer({ secid: '', type: 0 });
 
   async function onAdd(secid: string, type: number) {
     const stock = await Helpers.Stock.GetStock(secid);
@@ -104,7 +104,7 @@ const AddStockContent: React.FC<AddStockContentProps> = (props) => {
               {Datas.map(({ Name, Code, MktNum }) => {
                 const secid = `${MktNum}.${Code}`;
                 return (
-                  <div key={secid} className={styles.stock} onClick={() => setDetailDrawer(secid)}>
+                  <div key={secid} className={styles.stock} onClick={() => setDetailDrawer({ secid, type: Type })}>
                     <div>
                       <div className={styles.name}>
                         <span className={styles.nameText}>{Name}</span>
@@ -136,7 +136,7 @@ const AddStockContent: React.FC<AddStockContentProps> = (props) => {
         <Empty text="暂无相关数据~" />
       )}
       <CustomDrawer show={showDetailDrawer}>
-        <DetailStockContent onEnter={closeDetailDrawer} onClose={closeDetailDrawer} secid={detailSecid} />
+        <DetailStockContent onEnter={closeDetailDrawer} onClose={closeDetailDrawer} secid={detailData.secid} type={detailData.type} />
       </CustomDrawer>
     </CustomDrawerContent>
   );

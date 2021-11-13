@@ -48,7 +48,7 @@ const DetailStockContent: React.FC<DetailStockContentProps> = (props) => {
     try {
       const code = stock.code || secid.split('.').pop();
       let stockType = type;
-      if (stockType === undefined) {
+      if (!stockType) {
         const result = await Services.Stock.SearchFromEastmoney(code);
         result.forEach((market) => {
           market.Datas.forEach(({ MktNum, Code }) => {
@@ -58,7 +58,7 @@ const DetailStockContent: React.FC<DetailStockContentProps> = (props) => {
           });
         });
       }
-      if (stockType === undefined) {
+      if (!stockType) {
         return;
       }
       dispatch(
