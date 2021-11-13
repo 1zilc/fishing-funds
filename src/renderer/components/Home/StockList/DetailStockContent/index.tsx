@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import classnames from 'classnames';
+import { useDispatch, useSelector } from 'react-redux';
 import { useRequest } from 'ahooks';
-import { Tabs } from 'antd';
+import { message, Tabs } from 'antd';
 
-import CustomDrawer from '@/components/CustomDrawer';
 import Trend from '@/components/Home/StockList/DetailStockContent/Trend';
 import ColorfulTags from '@/components/ColorfulTags';
 import Estimate from '@/components/Home/StockList/DetailStockContent/Estimate';
@@ -11,9 +11,8 @@ import K from '@/components/Home/StockList/DetailStockContent/K';
 import Company from '@/components/Home/StockList/DetailStockContent/Company';
 import Stocks from '@/components/Home/StockList/DetailStockContent/Stocks';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
-import AddStockContent from '@/components/Home/StockList/AddStockContent';
-import { useDrawer } from '@/utils/hooks';
-import * as Helpers from '@/helpers';
+import { addStockAction } from '@/actions/stock';
+import { StoreState } from '@/reducers/types';
 import * as Services from '@/services';
 import * as Utils from '@/utils';
 
@@ -23,14 +22,15 @@ export interface DetailStockContentProps {
   onEnter: () => void;
   onClose: () => void;
   secid: string;
+  type?: number;
 }
 
 const DetailStockContent: React.FC<DetailStockContentProps> = (props) => {
-  const { secid } = props;
+  const { secid, type } = props;
+  const dispatch = useDispatch();
   const [stock, setStock] = useState<Stock.DetailItem | Record<string, any>>({});
   const [industrys, setIndustrys] = useState<Stock.IndustryItem[]>([]);
-  const { data: addSecid, show: showAddDrawer, set: setAddDrawer, close: closeAddDrawer } = useDrawer(secid);
-  const { codeMap } = Helpers.Stock.GetStockConfig();
+  const { codeMap } = useSelector((state: StoreState) => state.stock.config);
   useRequest(Services.Stock.GetDetailFromEastmoney, {
     throwOnError: true,
     pollingInterval: 1000 * 60,
@@ -44,6 +44,37 @@ const DetailStockContent: React.FC<DetailStockContentProps> = (props) => {
     onSuccess: setIndustrys,
   });
 
+  async function onAdd() {
+    try {
+      const code = stock.code || secid.split('.').pop();
+      let stockType = type;
+      if (stockType === undefined) {
+        const result = await Services.Stock.SearchFromEastmoney(code);
+        result.forEach((market) => {
+          market.Datas.forEach(({ MktNum, Code }) => {
+            if (secid === `${MktNum}.${Code}`) {
+              stockType = market.Type;
+            }
+          });
+        });
+      }
+      if (stockType === undefined) {
+        return;
+      }
+      dispatch(
+        addStockAction({
+          market: stock.market!,
+          code: stock.code!,
+          name: stock.name!,
+          secid,
+          type: stockType,
+        })
+      );
+    } catch (error) {
+      message.error('添加失败');
+    }
+  }
+
   return (
     <CustomDrawerContent title="股票详情" enterText="确定" onClose={props.onClose} onEnter={props.onEnter}>
       <div className={styles.content}>
@@ -56,7 +87,7 @@ const DetailStockContent: React.FC<DetailStockContentProps> = (props) => {
             <div>
               <span className="copify">{stock.code}</span>
               {!codeMap[secid] && (
-                <a className={styles.selfAdd} onClick={() => setAddDrawer(secid)}>
+                <a className={styles.selfAdd} onClick={onAdd}>
                   +加自选
                 </a>
               )}
@@ -152,9 +183,6 @@ const DetailStockContent: React.FC<DetailStockContentProps> = (props) => {
           </Tabs>
         </div>
       </div>
-      <CustomDrawer show={showAddDrawer}>
-        <AddStockContent defaultName={stock?.code} onClose={closeAddDrawer} onEnter={closeAddDrawer} />
-      </CustomDrawer>
     </CustomDrawerContent>
   );
 };
