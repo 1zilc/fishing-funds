@@ -12,6 +12,8 @@ import WalletIncome from '@/components/Home/FundList/FundStatisticsContent/Walle
 import WalletConfig from '@/components/Home/FundList/FundStatisticsContent/WalletConfig';
 import AssetsStatistics from '@/components/Home/FundList/FundStatisticsContent/AssetsStatistics';
 import AssetsConfig from '@/components/Home/FundList/FundStatisticsContent/AssetsConfig';
+import FundWarehouse from '@/components/Home/FundList/FundStatisticsContent/FundWarehouse';
+import FundOverview from '@/components/Home/FundList/FundStatisticsContent/FundOverview';
 import { walletIcons } from '@/helpers/wallet';
 import { StoreState } from '@/reducers/types';
 import * as Helper from '@/helpers';
@@ -78,23 +80,31 @@ const FundStatisticsContent: React.FC<FundStatisticsContentProps> = (props) => {
               <AssetsConfig funds={funds} codes={codes} />
             </ChartCard>
           </Tabs.TabPane>
-        </Tabs>
-        <Tabs animated={{ tabPane: true }} tabBarGutter={15}>
-          <Tabs.TabPane tab="钱包配置" key={String(0)}>
+          <Tabs.TabPane tab="钱包配置" key={String(2)}>
             <ChartCard>
               <WalletConfig funds={funds} codes={codes} />
             </ChartCard>
           </Tabs.TabPane>
-          <Tabs.TabPane tab="钱包收益" key={String(1)}>
+          <Tabs.TabPane tab="钱包收益" key={String(3)}>
             <ChartCard>
               <WalletIncome funds={funds} codes={codes} />
             </ChartCard>
           </Tabs.TabPane>
         </Tabs>
         <Tabs animated={{ tabPane: true }} tabBarGutter={15}>
-          <Tabs.TabPane tab="基金排行" key={String(0)}>
+          <Tabs.TabPane tab="基金收益概览" key={String(0)}>
+            <ChartCard>
+              <FundOverview funds={funds} codes={codes} />
+            </ChartCard>
+          </Tabs.TabPane>
+          <Tabs.TabPane tab="基金收益排行" key={String(1)}>
             <ChartCard>
               <FundRank funds={funds} codes={codes} />
+            </ChartCard>
+          </Tabs.TabPane>
+          <Tabs.TabPane tab="基金持仓排行" key={String(2)}>
+            <ChartCard>
+              <FundWarehouse funds={funds} codes={codes} />
             </ChartCard>
           </Tabs.TabPane>
         </Tabs>
