@@ -175,7 +175,7 @@
     "enzyme-adapter-react-16": "^1.15.6",
     "enzyme-to-json": "^3.6.2",
     "eslint": "^7.25.0",
-    "eslint-config-airbnb": "^18.2.0",
+    "eslint-config-airbnb": "^19.0.0",
     "eslint-config-airbnb-typescript": "^15.0.0",
     "eslint-config-erb": "^3.0.0",
     "eslint-config-prettier": "8.3.0",
