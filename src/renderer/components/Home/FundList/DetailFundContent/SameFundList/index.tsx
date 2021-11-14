@@ -9,7 +9,7 @@ import CustomDrawer from '@/components/CustomDrawer';
 import { useFixTimeToDo, useDrawer, useCurrentWallet } from '@/utils/hooks';
 import { StoreState } from '@/reducers/types';
 import * as Helpers from '@/helpers';
-import styles from './index.scss';
+import styles from './index.module.scss';
 
 export interface SameFundListProps {
   swithSameType: string[][];

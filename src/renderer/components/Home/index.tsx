@@ -23,7 +23,7 @@ import { useNativeThemeColor, useCurrentWallet } from '@/utils/hooks';
 import * as Enums from '@/utils/enums';
 import * as CONST from '@/constants';
 import * as Helpers from '@/helpers';
-import styles from './index.scss';
+import styles from './index.module.scss';
 
 export interface HomeProps {}
 
@@ -68,8 +68,14 @@ const ZindexGroup = () => {
 
   return (
     <GroupTab tabKey={Enums.TabKeyType.Zindex}>
-      <Tabs.TabPane tab="全部" key={String(-1)}>
+      <Tabs.TabPane tab="全部" key={String(0)}>
         <ZindexList filter={() => true} />
+      </Tabs.TabPane>
+      <Tabs.TabPane tab="上涨" key={String(1)}>
+        <ZindexList filter={(zindex) => zindex.zdd >= 0} />
+      </Tabs.TabPane>
+      <Tabs.TabPane tab="下跌" key={String(2)}>
+        <ZindexList filter={(zindex) => zindex.zdd < 0} />
       </Tabs.TabPane>
     </GroupTab>
   );
@@ -116,8 +122,14 @@ const StockGroup = () => {
 const CoinGroup = () => {
   return (
     <GroupTab tabKey={Enums.TabKeyType.Coin}>
-      <Tabs.TabPane tab="全部" key={String(-1)}>
+      <Tabs.TabPane tab="全部" key={String(0)}>
         <CoinList filter={() => true} />
+      </Tabs.TabPane>
+      <Tabs.TabPane tab="上涨" key={String(1)}>
+        <CoinList filter={(coin) => Number(coin.change24h) >= 0} />
+      </Tabs.TabPane>
+      <Tabs.TabPane tab="下跌" key={String(2)}>
+        <CoinList filter={(coin) => Number(coin.change24h) < 0} />
       </Tabs.TabPane>
     </GroupTab>
   );

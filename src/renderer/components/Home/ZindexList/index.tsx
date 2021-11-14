@@ -8,7 +8,7 @@ import DetailZindexContent from '@/components/Home/ZindexList/DetailZindexConten
 import CustomDrawer from '@/components/CustomDrawer';
 import { StoreState } from '@/reducers/types';
 import { useDrawer } from '@/utils/hooks';
-import styles from './index.scss';
+import styles from './index.module.scss';
 
 interface ZindexListProps {
   filter: (zindex: Zindex.ResponseItem & Zindex.ExtraRow) => boolean;

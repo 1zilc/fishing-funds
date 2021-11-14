@@ -67,9 +67,7 @@ export default class AppUpdater {
               }
               return null;
             })
-            .catch((error) => {
-              console.log(error);
-            });
+            .catch((error) => {});
           break;
         case 'renderer':
           sendMessageToRenderer(conf.mb, 'update-available', data);
@@ -99,8 +97,6 @@ export default class AppUpdater {
     try {
       // autoUpdater.currentVersion = '1.2.0';
       autoUpdater.checkForUpdates();
-    } catch {
-      console.log('检查更新失败');
-    }
+    } catch {}
   }
 }

@@ -107,7 +107,6 @@ contextBridge.exposeInMainWorld('contextModules', {
         const body = content.slice(protocolLength);
         return JSON.parse(decode(body));
       } catch (error) {
-        console.log('解码失败', error);
         return null;
       }
     },

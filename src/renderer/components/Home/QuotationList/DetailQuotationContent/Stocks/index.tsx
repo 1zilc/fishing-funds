@@ -8,7 +8,7 @@ import CustomDrawer from '@/components/CustomDrawer';
 import { useDrawer } from '@/utils/hooks';
 import * as Services from '@/services';
 import * as Utils from '@/utils';
-import styles from './index.scss';
+import styles from './index.module.scss';
 
 export interface StocksProps {
   code: string;

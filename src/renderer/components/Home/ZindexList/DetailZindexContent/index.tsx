@@ -9,7 +9,7 @@ import CustomDrawerContent from '@/components/CustomDrawer/Content';
 import * as Services from '@/services';
 import * as Utils from '@/utils';
 
-import styles from './index.scss';
+import styles from './index.module.scss';
 
 export interface DetailFundContentProps {
   onEnter: () => void;
@@ -21,10 +21,9 @@ const DetailZindexContent: React.FC<DetailFundContentProps> = (props) => {
   const { code } = props;
   const [zindex, setZindex] = useState<Zindex.ResponseItem | Record<string, any>>({});
 
-  useRequest(Services.Zindex.FromEastmoney, {
+  useRequest(() => Services.Zindex.FromEastmoney(code), {
     throwOnError: true,
     pollingInterval: 1000 * 60,
-    defaultParams: [code],
     onSuccess: setZindex,
   });
 

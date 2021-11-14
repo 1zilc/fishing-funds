@@ -56,7 +56,6 @@ export async function FromEastmoney(code: string) {
       time: dayjs.unix(data.data.f86).format('MM-DD HH:mm'),
     };
   } catch (error) {
-    console.log(error);
     return null;
   }
 }
@@ -103,7 +102,6 @@ export async function GetTrendFromEastmoney(code: string, ndays: number) {
       };
     });
   } catch (error) {
-    console.log(error);
     return [];
   }
 }
@@ -151,7 +149,6 @@ export async function GetKFromEastmoney(code: string, year: number) {
       };
     });
   } catch (error) {
-    console.log(error);
     return [];
   }
 }

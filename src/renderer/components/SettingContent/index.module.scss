@@ -1,0 +1,200 @@
+.content {
+  padding: 0 var(--base-padding);
+  // margin-top: 20px;
+
+  section {
+    padding: 0 0;
+  }
+
+  section > label {
+    font-size: 1rem;
+    margin-bottom: 5px;
+    display: block;
+    word-break: keep-all;
+  }
+
+  textArea,
+  input {
+    width: 50%;
+    outline: none;
+    border: 1px solid var(--border-color);
+    // height: 20px;
+  }
+}
+
+.logo {
+  // width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  margin: 10px 10px 0 !important;
+
+  .appName {
+    margin-top: 10px;
+    text-align: center;
+    font-size: 1rem;
+    color: var(--inner-text-color);
+    font-weight: 500;
+  }
+}
+
+.setting {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  padding: 15px 0;
+
+  & > section {
+    width: 100%;
+    display: flex;
+    font-size: 1rem;
+    align-items: center;
+    box-sizing: border-box;
+    justify-content: space-between;
+    padding: 5px 28px;
+
+    label {
+      // height: 20px;
+      line-height: 20px;
+      margin: 0;
+    }
+  }
+
+  .fill {
+    width: 100%;
+  }
+
+  .radio {
+    font-size: 1rem;
+    display: flex;
+    width: 100%;
+    align-items: center;
+    line-height: 20px;
+    padding: 5px 28px;
+
+    span {
+      top: 0;
+    }
+  }
+}
+
+.title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+
+  svg {
+    width: 20px;
+    height: 20px;
+    margin-right: 5px;
+    fill: var(--svg-icon-color);
+  }
+
+  &::after {
+    content: '';
+    display: block;
+    flex: 1;
+    margin-left: 10px;
+    border-top: 1px solid var(--border-color);
+  }
+}
+
+.link {
+  font-size: 1rem;
+  text-align: center;
+
+  i {
+    margin: 0 10px;
+    height: 100%;
+    border-left: 1px solid var(--border-color);
+    &:last-child {
+      display: none;
+    }
+  }
+}
+
+.exit {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  padding-bottom: 56px;
+  margin-top: var(--base-padding);
+
+  button {
+    color: var(--inner-text-color);
+    background-color: transparent;
+    border: 1px solid var(--border-color);
+    font-size: calc(10rem / var(--base-font-size));
+  }
+}
+
+.describe {
+  font-size: calc(11rem / var(--base-font-size));
+  color: var(--inner-text-color);
+  font-weight: 500;
+  text-indent: calc(11rem / var(--base-font-size) * 2);
+  margin-bottom: var(--base-padding);
+}
+
+.version {
+  text-align: center;
+  height: 36px;
+  line-height: 36px;
+  background-color: var(--inner-color);
+  color: var(--inner-text-color);
+  font-size: calc(10rem / var(--base-font-size));
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  box-sizing: border-box;
+  border-top: 1px solid var(--border-color);
+  z-index: 100;
+}
+
+.group {
+  display: flex;
+  align-items: center;
+  padding: 10px 28px;
+  justify-content: space-around;
+  width: 100%;
+
+  & > section {
+    display: flex;
+    font-size: 1rem;
+    align-items: center;
+    box-sizing: border-box;
+
+    label {
+      // height: 20px;
+      line-height: 20px;
+      margin: 0;
+    }
+  }
+}
+
+.colorful {
+  animation: colorful 9s infinite;
+}
+
+.guide {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+@keyframes colorful {
+  0% {
+    background-position: 10% 0%;
+  }
+
+  50% {
+    background-position: 91% 100%;
+  }
+
+  100% {
+    background-position: 10% 0%;
+  }
+}

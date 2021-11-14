@@ -4,16 +4,16 @@ import { ReactSortable } from 'react-sortablejs';
 import classnames from 'classnames';
 
 import PureCard from '@/components/Card/PureCard';
-import { ReactComponent as AddIcon } from '@static/icon/add.svg';
-import { ReactComponent as MenuIcon } from '@static/icon/menu.svg';
-import { ReactComponent as RemoveIcon } from '@static/icon/remove.svg';
+import { ReactComponent as AddIcon } from '@/static/icon/add.svg';
+import { ReactComponent as MenuIcon } from '@/static/icon/menu.svg';
+import { ReactComponent as RemoveIcon } from '@/static/icon/remove.svg';
 import CustomDrawer from '@/components/CustomDrawer';
 import Empty from '@/components/Empty';
 import AddStockContent from '@/components/Home/StockList/AddStockContent';
 import { deleteStockAction, setStockConfigAction } from '@/actions/stock';
-import { useDrawer } from '@/utils/hooks';
+import { useDrawer, useAutoDestroySortableRef } from '@/utils/hooks';
 import { StoreState } from '@/reducers/types';
-import styles from './index.scss';
+import styles from './index.module.scss';
 
 export interface OptionalProps {}
 
@@ -21,6 +21,7 @@ const { dialog } = window.contextModules.electron;
 
 const Optional: React.FC<OptionalProps> = () => {
   const dispatch = useDispatch();
+  const sortableRef = useAutoDestroySortableRef();
   const { codeMap, stockConfig } = useSelector((state: StoreState) => state.stock.config);
   const { show: showAddDrawer, set: setAddDrawer, close: closeAddDrawer } = useDrawer(null);
   const sortStockConfig = useMemo(() => stockConfig.map((_) => ({ ..._, id: _.secid })), [stockConfig]);
@@ -54,7 +55,15 @@ const Optional: React.FC<OptionalProps> = () => {
   return (
     <div className={styles.content}>
       {sortStockConfig.length ? (
-        <ReactSortable animation={200} delay={2} list={sortStockConfig} setList={onSortStockConfig} dragClass={styles.dragItem} swap>
+        <ReactSortable
+          ref={sortableRef}
+          animation={200}
+          delay={2}
+          list={sortStockConfig}
+          setList={onSortStockConfig}
+          dragClass={styles.dragItem}
+          swap
+        >
           {sortStockConfig.map((stock) => {
             return (
               <PureCard key={stock.secid} className={classnames(styles.row, 'hoverable')}>

@@ -4,7 +4,7 @@ import { renderToString } from 'react-dom/server';
 import { useHomeContext } from '@/components/Home';
 import { useResizeEchart, useRenderEcharts } from '@/utils/hooks';
 import * as CONST from '@/constants';
-import styles from './index.scss';
+import styles from './index.module.scss';
 
 interface ScaleProps {
   Data_fluctuationScale: {

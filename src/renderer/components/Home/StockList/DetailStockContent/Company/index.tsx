@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux';
 import { StoreState } from '@/reducers/types';
 import * as Services from '@/services';
 import * as Enums from '@/utils/enums';
-import styles from './index.scss';
+import styles from './index.module.scss';
 
 export const defaultCompany: Stock.Company = {
   gsjs: '',

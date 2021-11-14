@@ -11,7 +11,7 @@ import { addCoinAction } from '@/actions/coin';
 import { StoreState } from '@/reducers/types';
 import { useDrawer } from '@/utils/hooks';
 import * as Helpers from '@/helpers';
-import styles from './index.scss';
+import styles from './index.module.scss';
 
 export interface AddCoinContentProps {
   defaultName?: string;

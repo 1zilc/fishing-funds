@@ -7,7 +7,7 @@ import Automatic from '@/components/Home/FundList/ManageFundContent/Automatic';
 import Rank from '@/components/Home/FundList/ManageFundContent/Rank';
 import Ranting from '@/components/Home/FundList/ManageFundContent/Ranting';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
-import styles from './index.scss';
+import styles from './index.module.scss';
 
 export interface ManageFundContentProps {
   onEnter: () => void;

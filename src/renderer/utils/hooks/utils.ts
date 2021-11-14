@@ -155,7 +155,6 @@ export function useSyncFixFundSetting() {
         );
       });
     } catch (error) {
-      console.log(error);
     } finally {
       setTrue();
     }
@@ -200,7 +199,6 @@ export function useSyncFixStockSetting() {
       );
       await Adapters.ChokeAllAdapter(collectors, 100);
     } catch (error) {
-      console.log(error);
     } finally {
       setTrue();
     }
@@ -318,4 +316,14 @@ export function useFundRating(code: string) {
     ...(fundRating || {}),
     star,
   };
+}
+
+export function useAutoDestroySortableRef() {
+  const sortableRef = useRef<any>(null);
+  useLayoutEffect(() => {
+    return () => {
+      sortableRef.current?.sortable?.destroy?.();
+    };
+  }, []);
+  return sortableRef;
 }

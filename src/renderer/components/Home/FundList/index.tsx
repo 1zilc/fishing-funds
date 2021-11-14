@@ -9,7 +9,7 @@ import DetailFundContent from '@/components/Home/FundList/DetailFundContent';
 import CustomDrawer from '@/components/CustomDrawer';
 import { StoreState } from '@/reducers/types';
 import { useDrawer, useFreshFunds, useCurrentWallet } from '@/utils/hooks';
-import styles from './index.scss';
+import styles from './index.module.scss';
 
 interface FundListProps {
   filter: (fund: Fund.ResponseItem & Fund.ExtraRow & Fund.FixData) => boolean;

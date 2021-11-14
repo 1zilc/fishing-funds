@@ -11,9 +11,10 @@ import SouthFlow from '@/components/Home/QuotationList/FundFlowContent/SouthFlow
 import NorthDay from '@/components/Home/QuotationList/FundFlowContent/NorthDay';
 import SouthDay from '@/components/Home/QuotationList/FundFlowContent/SouthDay';
 import QuotationMap from '@/components/Home/QuotationList/FundFlowContent/QuotationMap';
+import Geography from '@/components/Home/QuotationList/FundFlowContent/Geography';
 
 import * as Enums from '@/utils/enums';
-import styles from './index.scss';
+import styles from './index.module.scss';
 
 export interface DetailFundContentProps {
   onEnter: () => void;
@@ -34,6 +35,11 @@ const FundFlowContent: React.FC<DetailFundContentProps> = (props) => {
             </Tabs.TabPane>
             <Tabs.TabPane tab="地域概览" key={String(2)}>
               <QuotationMap type={Enums.QuotationType.Area} />
+            </Tabs.TabPane>
+            <Tabs.TabPane tab="地图概览" key={String(3)}>
+              <ChartCard>
+                <Geography />
+              </ChartCard>
             </Tabs.TabPane>
           </Tabs>
         </div>

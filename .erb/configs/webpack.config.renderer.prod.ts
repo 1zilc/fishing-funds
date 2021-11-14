@@ -45,101 +45,31 @@ export default merge(baseConfig, {
 
   module: {
     rules: [
-      // Add SASS support  - compile all .global.scss files and pipe it to style.css
       {
-        test: /\.global\.(scss|sass)$/,
+        test: /\.s?(a|c)ss$/,
         use: [
-          {
-            loader: MiniCssExtractPlugin.loader,
-          },
+          MiniCssExtractPlugin.loader,
           {
             loader: 'css-loader',
             options: {
-              sourceMap: false,
+              modules: true,
+              sourceMap: true,
               importLoaders: 1,
             },
           },
-          {
-            loader: 'sass-loader',
-            options: {
-              sourceMap: false,
-            },
-          },
+          'sass-loader',
         ],
+        include: /\.module\.s?(c|a)ss$/,
       },
-      // Add SASS support  - compile all other .scss files and pipe it to style.css
       {
-        test: /^((?!\.global).)*\.(scss|sass)$/,
-        use: [
-          {
-            loader: MiniCssExtractPlugin.loader,
-          },
-          {
-            loader: 'css-loader',
-            options: {
-              modules: {
-                localIdentName: '[name]__[local]__[hash:base64:5]',
-              },
-              importLoaders: 1,
-              sourceMap: false,
-            },
-          },
-          {
-            loader: 'sass-loader',
-            options: {
-              sourceMap: false,
-            },
-          },
-        ],
+        test: /\.s?(a|c)ss$/,
+        use: [MiniCssExtractPlugin.loader, 'css-loader', 'sass-loader'],
+        exclude: /\.module\.s?(c|a)ss$/,
       },
-      // WOFF Font
+      //Font Loader
       {
-        test: /\.woff(\?v=\d+\.\d+\.\d+)?$/,
-        use: {
-          loader: 'url-loader',
-          options: {
-            limit: 10000,
-            mimetype: 'application/font-woff',
-          },
-        },
-      },
-      // WOFF2 Font
-      {
-        test: /\.woff2(\?v=\d+\.\d+\.\d+)?$/,
-        use: {
-          loader: 'url-loader',
-          options: {
-            limit: 10000,
-            mimetype: 'application/font-woff',
-          },
-        },
-      },
-      // OTF Font
-      {
-        test: /\.otf(\?v=\d+\.\d+\.\d+)?$/,
-        use: {
-          loader: 'url-loader',
-          options: {
-            limit: 10000,
-            mimetype: 'font/otf',
-          },
-        },
-      },
-      // TTF Font
-      {
-        test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/,
-        use: {
-          loader: 'url-loader',
-          options: {
-            limit: 10000,
-            mimetype: 'application/octet-stream',
-          },
-        },
-      },
-      // EOT Font
-      {
-        test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,
-        use: 'file-loader',
+        test: /\.(woff|woff2|eot|ttf|otf)$/i,
+        type: 'asset/resource',
       },
       // SVG Font
       {

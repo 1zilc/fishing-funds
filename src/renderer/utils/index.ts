@@ -15,10 +15,10 @@ export function Yang(num: string | number | undefined) {
     if (num === undefined) {
       return '';
     }
-    if (Number(num) < 0) {
-      return String(num);
-    } else {
+    if (Number(num) > 0) {
       return `+${num}`;
+    } else {
+      return String(num);
     }
   } catch (error) {
     return String(num);
@@ -50,7 +50,6 @@ export function DeepCopy<T>(object: T): T {
       }
       return dataTmp;
     } catch (error) {
-      console.log('深拷贝出错，返回原始对象');
       return data;
     }
   }
@@ -311,6 +310,7 @@ export function GetValueColor(number?: number | string) {
       value > 0 ? varibleColors['--increase-color'] : value < 0 ? varibleColors['--reduce-color'] : varibleColors['--reverse-text-color'],
     textClass: value > 0 ? 'text-up' : value < 0 ? 'text-down' : 'text-none',
     blockClass: value > 0 ? 'block-up' : value < 0 ? 'block-down' : 'block-none',
+    string: value > 0 ? '↗' : value < 0 ? '↘' : '-',
   };
 }
 
@@ -337,7 +337,6 @@ export function CalcZDHC(list: number[]) {
       return '--';
     }
   } catch (error) {
-    console.log('最大回撤计算出错');
     return '--';
   }
 }

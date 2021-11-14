@@ -264,7 +264,6 @@ export async function LoadFunds(loading: boolean) {
       store.dispatch({ type: SET_FUNDS_LOADING, payload: false });
     });
   } catch (error) {
-    console.log('加载基金出错', error);
     store.dispatch({ type: SET_FUNDS_LOADING, payload: false });
   }
 }
@@ -275,9 +274,7 @@ export async function LoadFixFunds() {
     const fixFunds = (await GetFixFunds(funds)).filter(Utils.NotEmpty);
     const now = dayjs().format('MM-DD HH:mm:ss');
     store.dispatch(syncFixWalletStateAction({ code, funds: fixFunds, updateTime: now }));
-  } catch (error) {
-    console.log('加载最新净值失败', error);
-  }
+  } catch (error) {}
 }
 
 export async function LoadRemoteFunds() {
@@ -289,7 +286,6 @@ export async function LoadRemoteFunds() {
       store.dispatch({ type: SET_REMOTE_FUNDS_LOADING, payload: false });
     });
   } catch (error) {
-    console.log('加载远程基金库出错', error);
     store.dispatch({ type: SET_REMOTE_FUNDS_LOADING, payload: false });
   }
 }
@@ -298,7 +294,5 @@ export async function LoadFundRatingMap() {
   try {
     const remoteRantings = await Services.Fund.GetFundRatingFromEasemoney();
     store.dispatch(setFundRatingMapAction(remoteRantings));
-  } catch (error) {
-    console.log('加载基金评级错误', error);
-  }
+  } catch (error) {}
 }

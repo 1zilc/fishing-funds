@@ -5,7 +5,7 @@ import { Table } from 'antd';
 import CustomDrawer from '@/components/CustomDrawer';
 import FundHistoryValueContent from '@/components/Home/FundList/FundHistoryValueContent';
 import * as Utils from '@/utils';
-import styles from './index.scss';
+import styles from './index.module.scss';
 
 export interface HistoryPerformanceProps {
   syl_1n?: string;

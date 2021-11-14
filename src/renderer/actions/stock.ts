@@ -20,9 +20,7 @@ export function addStockAction(stock: Stock.SettingItem): ThunkAction {
         cloneStockConfig.push(stock);
       }
       dispatch(setStockConfigAction(cloneStockConfig));
-    } catch (error) {
-      console.log('添加股票配置出错', error);
-    }
+    } catch (error) {}
   };
 }
 
@@ -38,9 +36,7 @@ export function updateStockAction(stock: { secid: string; type?: number }): Thun
         }
       });
       dispatch(setStockConfigAction(stockConfig));
-    } catch (error) {
-      console.log('设置股票配置出错', error);
-    }
+    } catch (error) {}
   };
 }
 
@@ -56,9 +52,7 @@ export function deleteStockAction(secid: string): ThunkAction {
           dispatch(setStockConfigAction(cloneStockSetting));
         }
       });
-    } catch (error) {
-      console.log('删除股票出错', error);
-    }
+    } catch (error) {}
   };
 }
 
@@ -73,9 +67,7 @@ export function setStockConfigAction(stockConfig: Stock.SettingItem[]): ThunkAct
         dispatch(syncStockConfigAction());
         dispatch(syncStocksStateAction(stocks));
       });
-    } catch (error) {
-      console.log('设置股票配置出错', error);
-    }
+    } catch (error) {}
   };
 }
 
@@ -84,9 +76,7 @@ export function syncStockConfigAction(): ThunkAction {
     try {
       const config = Helpers.Stock.GetStockConfig();
       dispatch({ type: SYNC_STOCK_CONFIG, payload: config });
-    } catch (error) {
-      console.log('同步股票配置失败', error);
-    }
+    } catch (error) {}
   };
 }
 
@@ -98,9 +88,7 @@ export function sortStocksAction(): ThunkAction {
       } = getState();
       const sortStocks = Helpers.Stock.SortStocks(stocks);
       dispatch(syncStocksStateAction(sortStocks));
-    } catch (error) {
-      console.log('股票排序错误', error);
-    }
+    } catch (error) {}
   };
 }
 
@@ -136,9 +124,7 @@ export function sortStocksCachedAction(responseStocks: Stock.ResponseItem[]): Th
       });
       const sortStocks = Helpers.Stock.SortStocks(stocksWithChached);
       dispatch(syncStocksStateAction(sortStocks));
-    } catch (error) {
-      console.log('股票带缓存排序出错', error);
-    }
+    } catch (error) {}
   };
 }
 
@@ -157,9 +143,7 @@ export function toggleStockCollapseAction(stock: Stock.ResponseItem & Stock.Extr
       });
 
       dispatch(syncStocksStateAction(cloneStocks));
-    } catch (error) {
-      console.log('股票展开/折叠出错', error);
-    }
+    } catch (error) {}
   };
 }
 
@@ -175,9 +159,7 @@ export function toggleAllStocksCollapseAction(): ThunkAction {
         _.collapse = !expandAllStocks;
       });
       dispatch(syncStocksStateAction(cloneStocks));
-    } catch (error) {
-      console.log('全部股票展开/折叠出错', error);
-    }
+    } catch (error) {}
   };
 }
 
@@ -187,9 +169,7 @@ export function syncStocksStateAction(stocks: (Stock.ResponseItem & Stock.ExtraR
       const { codeMap } = Helpers.Stock.GetStockConfig();
       const filterStocks = stocks.filter(({ secid }) => codeMap[secid]);
       dispatch({ type: SYNC_STOCKS, payload: filterStocks });
-    } catch (error) {
-      console.log('同步股票状态出错', error);
-    }
+    } catch (error) {}
   };
 }
 
@@ -200,8 +180,6 @@ export function setIndustryMapAction(secid: string, industrys: Stock.IndustryIte
         stock: { industryMap },
       } = getState();
       dispatch({ type: SET_INDUSTRY_MAP, payload: { ...industryMap, [secid]: industrys } });
-    } catch (error) {
-      console.log('设置股票行业出错', error);
-    }
+    } catch (error) {}
   };
 }

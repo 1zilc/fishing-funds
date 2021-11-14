@@ -148,7 +148,6 @@ export async function GetPicTrendFromEastmoney(secid: string) {
     const b64encoded = btoa(String.fromCharCode.apply(null, rawBody));
     return `data:image/png;base64,${b64encoded}`;
   } catch (error) {
-    console.log(error);
     return null;
   }
 }
@@ -372,7 +371,6 @@ export async function GetKFromEastmoney(secid: string, code: number) {
       };
     });
   } catch (error) {
-    console.log(error);
     return [];
   }
 }
@@ -436,7 +434,6 @@ export async function GetSelfRankFromEastmoney(code: string) {
       zdf: _.f3,
     }));
   } catch (error) {
-    console.log(error);
     return [];
   }
 }
@@ -499,7 +496,6 @@ export async function GetMainRankFromEastmoney(code: string) {
       zdf: _.f3,
     }));
   } catch (error) {
-    console.log(error);
     return [];
   }
 }
@@ -585,7 +581,6 @@ export async function GetABCompany(secid: string) {
       ssrq: body.fxxg.ssrq, // 上市日期
     };
   } catch (error) {
-    console.log(error);
     return defaultCompany;
   }
 }
@@ -640,7 +635,6 @@ export async function GetHKCompany(secid: string) {
       ssrq: body.zqzl.ssrq, // 上市日期
     };
   } catch (error) {
-    console.log(error);
     return defaultCompany;
   }
 }
@@ -747,7 +741,6 @@ export async function GetUSCompany(secid: string) {
       ssrq: body.data.zqzl[0].LISTEDDATE, // 上市日期
     };
   } catch (error) {
-    console.log(error);
     return defaultCompany;
   }
 }
@@ -773,7 +766,6 @@ export async function GetXSBCompany(secid: string) {
       ssrq,
     };
   } catch (error) {
-    console.log(error);
     return defaultCompany;
   }
 }
@@ -817,7 +809,6 @@ export async function GetIndustryFromEastmoney(secid: string, type: 1 | 2 | 3) {
     }
     return result;
   } catch (error) {
-    console.log(error);
     return [];
   }
 }

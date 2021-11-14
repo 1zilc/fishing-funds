@@ -16,9 +16,7 @@ export function setSystemSettingAction(setting: System.Setting): ThunkAction {
       });
 
       dispatch(syncSystemSettingAction());
-    } catch (error) {
-      console.log('设置系统设置出错', error);
-    }
+    } catch (error) {}
   };
 }
 
@@ -27,8 +25,6 @@ export function syncSystemSettingAction(): ThunkAction {
     try {
       const systemSetting = Helpers.Setting.GetSystemSetting();
       dispatch({ type: SYNC_SETTING, payload: systemSetting });
-    } catch (error) {
-      console.log('同步系统设置出错', error);
-    }
+    } catch (error) {}
   };
 }

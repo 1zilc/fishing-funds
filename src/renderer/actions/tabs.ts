@@ -19,8 +19,6 @@ export function setTabskeyMapAction(key: Enums.TabKeyType, activeKey: number): T
         tabs: { tabsKeyMap },
       } = getState();
       dispatch({ type: SET_TABS_KEY_MAP, payload: { ...tabsKeyMap, [key]: activeKey } });
-    } catch (error) {
-      console.log('修改tabsKeyMap出错', error);
-    }
+    } catch (error) {}
   };
 }

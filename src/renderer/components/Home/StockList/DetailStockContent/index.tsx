@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import classnames from 'classnames';
+import { useDispatch, useSelector } from 'react-redux';
 import { useRequest } from 'ahooks';
-import { Tabs } from 'antd';
+import { message, Tabs } from 'antd';
 
 import Trend from '@/components/Home/StockList/DetailStockContent/Trend';
 import ColorfulTags from '@/components/ColorfulTags';
@@ -10,21 +11,26 @@ import K from '@/components/Home/StockList/DetailStockContent/K';
 import Company from '@/components/Home/StockList/DetailStockContent/Company';
 import Stocks from '@/components/Home/StockList/DetailStockContent/Stocks';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
+import { addStockAction } from '@/actions/stock';
+import { StoreState } from '@/reducers/types';
 import * as Services from '@/services';
 import * as Utils from '@/utils';
 
-import styles from './index.scss';
+import styles from './index.module.scss';
 
 export interface DetailStockContentProps {
   onEnter: () => void;
   onClose: () => void;
   secid: string;
+  type?: number;
 }
 
 const DetailStockContent: React.FC<DetailStockContentProps> = (props) => {
-  const { secid } = props;
+  const { secid, type } = props;
+  const dispatch = useDispatch();
   const [stock, setStock] = useState<Stock.DetailItem | Record<string, any>>({});
   const [industrys, setIndustrys] = useState<Stock.IndustryItem[]>([]);
+  const { codeMap } = useSelector((state: StoreState) => state.stock.config);
   useRequest(Services.Stock.GetDetailFromEastmoney, {
     throwOnError: true,
     pollingInterval: 1000 * 60,
@@ -38,6 +44,37 @@ const DetailStockContent: React.FC<DetailStockContentProps> = (props) => {
     onSuccess: setIndustrys,
   });
 
+  async function onAdd() {
+    try {
+      const code = stock.code || secid.split('.').pop();
+      let stockType = type;
+      if (!stockType) {
+        const result = await Services.Stock.SearchFromEastmoney(code);
+        result.forEach((market) => {
+          market.Datas.forEach(({ MktNum, Code }) => {
+            if (secid === `${MktNum}.${Code}`) {
+              stockType = market.Type;
+            }
+          });
+        });
+      }
+      if (!stockType) {
+        return;
+      }
+      dispatch(
+        addStockAction({
+          market: stock.market!,
+          code: stock.code!,
+          name: stock.name!,
+          secid,
+          type: stockType,
+        })
+      );
+    } catch (error) {
+      message.error('添加失败');
+    }
+  }
+
   return (
     <CustomDrawerContent title="股票详情" enterText="确定" onClose={props.onClose} onEnter={props.onEnter}>
       <div className={styles.content}>
@@ -47,7 +84,14 @@ const DetailStockContent: React.FC<DetailStockContentProps> = (props) => {
             <span className={classnames(Utils.GetValueColor(stock.zdd).textClass)}>{stock.zx}</span>
           </h3>
           <div className={styles.subTitleRow}>
-            <span className="copify">{stock.code}</span>
+            <div>
+              <span className="copify">{stock.code}</span>
+              {!codeMap[secid] && (
+                <a className={styles.selfAdd} onClick={onAdd}>
+                  +加自选
+                </a>
+              )}
+            </div>
             <div>
               <span className={styles.detailItemLabel}>涨跌点：</span>
               <span className={classnames(Utils.GetValueColor(stock.zdd).textClass)}>{Utils.Yang(stock.zdd)}</span>

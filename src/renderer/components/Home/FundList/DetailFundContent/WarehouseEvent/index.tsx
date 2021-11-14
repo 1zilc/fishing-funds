@@ -8,7 +8,7 @@ import DetailStockContent from '@/components/Home/StockList/DetailStockContent';
 import { useDrawer, useCurrentWallet } from '@/utils/hooks';
 import * as Services from '@/services';
 import * as Utils from '@/utils';
-import styles from './index.scss';
+import styles from './index.module.scss';
 
 interface WarehouseEventProps {
   stocks: any[];

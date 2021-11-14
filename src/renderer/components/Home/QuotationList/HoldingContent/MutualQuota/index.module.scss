@@ -1,0 +1,24 @@
+.content {
+  display: block;
+  padding: 0 var(--base-padding);
+}
+.card {
+  padding: var(--base-padding);
+  text-align: center;
+  font-size: calc(10rem / var(--base-font-size));
+}
+.tag {
+  font-size: 12px;
+  height: 18px;
+  width: 18px;
+  text-align: center;
+  display: block;
+}
+.row {
+  display: flex;
+  // justify-content: space-between;
+}
+.item {
+  // display: flex;
+  flex: 1;
+}

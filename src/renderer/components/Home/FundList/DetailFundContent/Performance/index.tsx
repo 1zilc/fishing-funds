@@ -10,7 +10,7 @@ import * as Services from '@/services';
 import * as Enums from '@/utils/enums';
 import * as Utils from '@/utils';
 
-import styles from './index.scss';
+import styles from './index.module.scss';
 
 export interface PerformanceProps {
   code: string;
@@ -101,7 +101,6 @@ const Performance: React.FC<PerformanceProps> = ({ code }) => {
           setZDHC(Utils.CalcZDHC(values));
         } catch (error) {
           setZDHC('--');
-          console.log('最大回撤计算出错');
         }
       },
       refreshDeps: [darkMode, code, performanceType.code],

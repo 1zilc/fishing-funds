@@ -3,16 +3,16 @@ import classnames from 'classnames';
 import { useDispatch, useSelector } from 'react-redux';
 
 import StandCard from '@/components/Card/StandCard';
-import { ReactComponent as RemoveIcon } from '@static/icon/remove.svg';
-import { ReactComponent as CheckboxIcon } from '@static/icon/checkbox.svg';
-import { ReactComponent as EditIcon } from '@static/icon/edit.svg';
+import { ReactComponent as RemoveIcon } from '@/static/icon/remove.svg';
+import { ReactComponent as CheckboxIcon } from '@/static/icon/checkbox.svg';
+import { ReactComponent as EditIcon } from '@/static/icon/edit.svg';
 import { deleteWalletAction } from '@/actions/wallet';
 import { walletIcons } from '@/helpers/wallet';
 import { StoreState } from '@/reducers/types';
 import * as Utils from '@/utils';
 import * as Enums from '@/utils/enums';
 import * as Helpers from '@/helpers';
-import styles from './index.scss';
+import styles from './index.module.scss';
 
 export interface WalletRowProps {
   wallet: Wallet.SettingItem;

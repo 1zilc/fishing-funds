@@ -1,0 +1,33 @@
+.content {
+  display: block;
+}
+.card {
+  padding: var(--base-padding);
+  display: flex;
+  align-items: center;
+}
+.avatar {
+  height: 32px;
+  width: 32px;
+  margin-right: var(--base-padding);
+}
+.title {
+  display: flex;
+  align-items: center;
+  h3 {
+    color: var(--main-text-color);
+  }
+}
+.text {
+  color: var(--inner-text-color);
+}
+.tag {
+  border-radius: 3px;
+  font-size: 8px;
+  padding: 0 4px;
+  text-align: center;
+  word-break: keep-all;
+  margin-left: 10px;
+  white-space: nowrap;
+  border: 1px solid;
+}

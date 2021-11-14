@@ -4,16 +4,16 @@ import { ReactSortable } from 'react-sortablejs';
 import classnames from 'classnames';
 
 import PureCard from '@/components/Card/PureCard';
-import { ReactComponent as AddIcon } from '@static/icon/add.svg';
-import { ReactComponent as MenuIcon } from '@static/icon/menu.svg';
-import { ReactComponent as RemoveIcon } from '@static/icon/remove.svg';
+import { ReactComponent as AddIcon } from '@/static/icon/add.svg';
+import { ReactComponent as MenuIcon } from '@/static/icon/menu.svg';
+import { ReactComponent as RemoveIcon } from '@/static/icon/remove.svg';
 import CustomDrawer from '@/components/CustomDrawer';
 import Empty from '@/components/Empty';
 import AddZindexContent from '@/components/Home/ZindexList/AddZindexContent';
 import { deleteZindexAction, setZindexConfigAction } from '@/actions/zindex';
-import { useDrawer } from '@/utils/hooks';
+import { useDrawer, useAutoDestroySortableRef } from '@/utils/hooks';
 import { StoreState } from '@/reducers/types';
-import styles from './index.scss';
+import styles from './index.module.scss';
 
 export interface OptionalProps {}
 
@@ -21,6 +21,7 @@ const { dialog } = window.contextModules.electron;
 
 const Optional: React.FC<OptionalProps> = () => {
   const dispatch = useDispatch();
+  const sortableRef = useAutoDestroySortableRef();
   const { codeMap, zindexConfig } = useSelector((state: StoreState) => state.zindex.config);
   const { show: showAddDrawer, set: setAddDrawer, close: closeAddDrawer } = useDrawer(null);
   const sortZindexConfig = useMemo(() => zindexConfig.map((_) => ({ ..._, id: _.code })), [zindexConfig]);
@@ -51,7 +52,15 @@ const Optional: React.FC<OptionalProps> = () => {
   return (
     <div className={styles.content}>
       {sortZindexConfig.length ? (
-        <ReactSortable animation={200} delay={2} list={sortZindexConfig} setList={onSortZindexConfig} dragClass={styles.dragItem} swap>
+        <ReactSortable
+          ref={sortableRef}
+          animation={200}
+          delay={2}
+          list={sortZindexConfig}
+          setList={onSortZindexConfig}
+          dragClass={styles.dragItem}
+          swap
+        >
           {sortZindexConfig.map((zindex) => {
             const [market, code] = zindex.code.split('.');
             return (

@@ -17,9 +17,7 @@ export function addZindexAction(zindex: Zindex.SettingItem): ThunkAction {
         cloneZindexConfig.push(zindex);
       }
       dispatch(setZindexConfigAction(cloneZindexConfig));
-    } catch (error) {
-      console.log('添加指数配置出错', error);
-    }
+    } catch (error) {}
   };
 }
 
@@ -35,9 +33,7 @@ export function deleteZindexAction(code: string): ThunkAction {
           dispatch(setZindexConfigAction(cloneZindexSetting));
         }
       });
-    } catch (error) {
-      console.log('删除指数出错', error);
-    }
+    } catch (error) {}
   };
 }
 
@@ -46,9 +42,7 @@ export function setZindexConfigAction(zindexConfig: Zindex.SettingItem[]): Thunk
     try {
       Utils.SetStorage(CONST.STORAGE.ZINDEX_SETTING, zindexConfig);
       dispatch(syncZindexConfigAction());
-    } catch (error) {
-      console.log('设置指数配置出错', error);
-    }
+    } catch (error) {}
   };
 }
 
@@ -57,9 +51,7 @@ export function syncZindexConfigAction(): ThunkAction {
     try {
       const config = Helpers.Zindex.GetZindexConfig();
       dispatch({ type: SYNC_ZIDNEX_CONFIG, payload: config });
-    } catch (error) {
-      console.log('同步指数配置出错', error);
-    }
+    } catch (error) {}
   };
 }
 
@@ -77,9 +69,7 @@ export function toggleZindexCollapseAction(zindex: Zindex.ResponseItem & Zindex.
         }
       });
       dispatch(syncZindexsStateAction(cloneZindexs));
-    } catch (error) {
-      console.log('指数展开/折叠出错', error);
-    }
+    } catch (error) {}
   };
 }
 
@@ -95,9 +85,7 @@ export function toggleAllZindexsCollapseAction(): ThunkAction {
         _.collapse = !expandAllZindexs;
       });
       dispatch(syncZindexsStateAction(cloneZindexs));
-    } catch (error) {
-      console.log('全部指数展开/折叠出错', error);
-    }
+    } catch (error) {}
   };
 }
 
@@ -109,9 +97,7 @@ export function sortZindexsAction(): ThunkAction {
       } = getState();
       const sortZindexs = Helpers.Zindex.SortZindexs(zindexs);
       dispatch(syncZindexsStateAction(sortZindexs));
-    } catch (error) {
-      console.log('指数排序错误', error);
-    }
+    } catch (error) {}
   };
 }
 
@@ -147,9 +133,7 @@ export function sortZindexsCachedAction(responseZindexs: Zindex.ResponseItem[]):
 
       const sortZindexs = Helpers.Zindex.SortZindexs(zindexsWithCollapseChached);
       dispatch(syncZindexsStateAction(sortZindexs));
-    } catch (error) {
-      console.log('指数带缓存排序出错', error);
-    }
+    } catch (error) {}
   };
 }
 
@@ -157,8 +141,6 @@ export function syncZindexsStateAction(zindex: (Zindex.ResponseItem & Zindex.Ext
   return (dispatch, getState) => {
     try {
       dispatch({ type: SYNC_ZIDNEXS, payload: zindex });
-    } catch (error) {
-      console.log('同步指数状态出错', error);
-    }
+    } catch (error) {}
   };
 }

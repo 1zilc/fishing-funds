@@ -1,0 +1,24 @@
+.content {
+  height: 100%;
+  width: 100%;
+  min-height: 32px;
+  min-width: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  overflow: hidden;
+
+  img {
+    height: 100%;
+    width: 100%;
+    display: block;
+    object-fit: cover;
+  }
+
+  span {
+    color: #fff;
+    font-weight: 500;
+    font-size: calc(14rem / var(--base-font-size));
+  }
+}

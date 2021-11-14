@@ -1,0 +1,15 @@
+.content {
+  display: block;
+  padding: 15px;
+  box-sizing: border-box;
+  min-height: 100px;
+}
+.item {
+  color: var(--main-text-color) !important;
+}
+.title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: bold;
+}

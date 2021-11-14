@@ -54,7 +54,6 @@ export async function FromCoinCap(keyword: string, codes = '') {
       updateTime: dayjs(timestamp).format('MM-DD HH:mm'),
     }));
   } catch (error) {
-    console.log(error);
     return [];
   }
 }
@@ -97,7 +96,6 @@ export async function GetFromCoinCap(code: string) {
       changePercent24Hr: Number(data.changePercent24Hr).toFixed(2),
     };
   } catch (error) {
-    console.log(error);
     return null;
   }
 }
@@ -126,7 +124,6 @@ export async function GetHistoryFromCoinCap(code: string, interval: string) {
       priceUsd: Number(item.priceUsd).toFixed(2),
     }));
   } catch (error) {
-    console.log(error);
     return [];
   }
 }
@@ -173,7 +170,6 @@ export async function FromCoingecko(codes: string, currency: string) {
       updateTime: dayjs.unix(data.last_updated_at).format('MM-DD HH:mm'),
     }));
   } catch (error) {
-    console.log(error);
     return [];
   }
 }
@@ -193,7 +189,6 @@ export async function GetDetailFromCoingecko(code: string) {
     });
     return body;
   } catch (error) {
-    console.log(error);
     return null;
   }
 }
@@ -215,7 +210,6 @@ export async function GetRemoteCoinsFromCoingecko() {
       code: coin.id,
     }));
   } catch (error) {
-    console.log(error);
     return [];
   }
 }
@@ -240,7 +234,6 @@ export async function GetKFromCoingecko(code: string, currency: string, days: nu
       zg: h,
     }));
   } catch (error) {
-    console.log(error);
     return [];
   }
 }
@@ -269,7 +262,6 @@ export async function GetHistoryFromCoingecko(code: string, currency: string, da
       })),
     };
   } catch (error) {
-    console.log(error);
     return { prices: [], vol24h: [] };
   }
 }

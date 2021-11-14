@@ -71,7 +71,6 @@ export async function LoadStocks(loading: boolean) {
       store.dispatch({ type: SET_STOCKS_LOADING, payload: false });
     });
   } catch (error) {
-    console.log('加载股票失败', error);
     store.dispatch({ type: SET_STOCKS_LOADING, payload: false });
   }
 }

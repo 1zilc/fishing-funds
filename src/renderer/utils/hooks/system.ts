@@ -105,9 +105,7 @@ export function useRiskNotification() {
           });
         });
         setRiskMap(cloneRiskMap);
-      } catch (error) {
-        console.log('涨跌提醒出错', error);
-      }
+      } catch (error) {}
     },
     1000 * 60,
     {
@@ -172,7 +170,6 @@ export function useFundsClipboard() {
           title: `解析失败`,
           message: `请检查JSON格式`,
         });
-        console.log('基金json解析失败', error);
       }
     });
     ipcRenderer.on('clipboard-funds-copy', (e, data) => {
@@ -191,7 +188,6 @@ export function useFundsClipboard() {
           title: `复制失败`,
           message: `基金JSON复制失败`,
         });
-        console.log('复制基金json失败', error);
       }
     });
     return () => {
@@ -349,9 +345,7 @@ export function useUpdateContextMenuWalletsState() {
       try {
         dispatch(selectWalletAction(code));
         freshFunds();
-      } catch (error) {
-        console.log(`切换钱包${code}失败`, error);
-      }
+      } catch (error) {}
     });
     return () => {
       ipcRenderer.removeAllListeners('change-current-wallet-code');
@@ -384,7 +378,6 @@ export function useAllConfigBackup() {
           title: `导出失败`,
           message: `导出全局配置文件失败`,
         });
-        console.log('导出全局配置文件失败', error);
       }
     });
     ipcRenderer.on('backup-all-config-import', async (e, data) => {
@@ -412,7 +405,6 @@ export function useAllConfigBackup() {
           title: `导入失败`,
           message: `导入全局配置文件失败`,
         });
-        console.log('导入全局配置文件失败', error);
       }
     });
     ipcRenderer.on('open-backup-file', async (e, filePath) => {
@@ -439,7 +431,6 @@ export function useAllConfigBackup() {
           title: `恢复失败`,
           message: `恢复备份文件失败`,
         });
-        console.log('恢复备份文件失败', error);
       }
     });
 

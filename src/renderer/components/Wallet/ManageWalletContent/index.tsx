@@ -2,7 +2,7 @@ import React, { useEffect, useState, useMemo } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { ReactSortable } from 'react-sortablejs';
 
-import { ReactComponent as AddIcon } from '@static/icon/add.svg';
+import { ReactComponent as AddIcon } from '@/static/icon/add.svg';
 import Empty from '@/components/Empty';
 import CustomDrawer from '@/components/CustomDrawer';
 import AddWalletContent from '@/components/Wallet/AddWalletContent';
@@ -10,9 +10,9 @@ import WalletRow from '@/components/Wallet/WalletRow';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
 import EditWalletContent from '@/components/Wallet/EditWalletContent';
 import { StoreState } from '@/reducers/types';
-import { useDrawer } from '@/utils/hooks';
+import { useDrawer, useAutoDestroySortableRef } from '@/utils/hooks';
 import { setWalletConfigAction, selectWalletAction } from '@/actions/wallet';
-import styles from './index.scss';
+import styles from './index.module.scss';
 
 export interface ManageWalletContentProps {
   onEnter: () => void;
@@ -21,6 +21,7 @@ export interface ManageWalletContentProps {
 
 const ManageWalletContent: React.FC<ManageWalletContentProps> = (props) => {
   const dispatch = useDispatch();
+  const sortableRef = useAutoDestroySortableRef();
   const currentWalletCode = useSelector((state: StoreState) => state.wallet.currentWalletCode);
   const { codeMap, walletConfig } = useSelector((state: StoreState) => state.wallet.config);
   const { show: showAddDrawer, set: setAddDrawer, close: closeAddDrawer } = useDrawer(null);
@@ -52,7 +53,7 @@ const ManageWalletContent: React.FC<ManageWalletContentProps> = (props) => {
     <CustomDrawerContent title="管理钱包" enterText="确定" onEnter={props.onEnter} onClose={props.onClose}>
       <div className={styles.content}>
         {sortWalletConfig.length ? (
-          <ReactSortable animation={200} delay={2} list={sortWalletConfig} setList={onSortWalletConfig} swap>
+          <ReactSortable ref={sortableRef} animation={200} delay={2} list={sortWalletConfig} setList={onSortWalletConfig} swap>
             {sortWalletConfig.map((wallet) => (
               <WalletRow
                 key={wallet.code}

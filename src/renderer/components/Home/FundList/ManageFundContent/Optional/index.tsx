@@ -1,24 +1,24 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useRef, useLayoutEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { ReactSortable } from 'react-sortablejs';
 import classnames from 'classnames';
 
 import PureCard from '@/components/Card/PureCard';
-import { ReactComponent as AddIcon } from '@static/icon/add.svg';
-import { ReactComponent as MenuIcon } from '@static/icon/menu.svg';
-import { ReactComponent as RemoveIcon } from '@static/icon/remove.svg';
-import { ReactComponent as EditIcon } from '@static/icon/edit.svg';
-import { ReactComponent as CopyIcon } from '@static/icon/copy.svg';
-import { ReactComponent as BellsLineIcon } from '@static/icon/bells-line.svg';
-import { ReactComponent as BellsFillIcon } from '@static/icon/bells-fill.svg';
+import { ReactComponent as AddIcon } from '@/static/icon/add.svg';
+import { ReactComponent as MenuIcon } from '@/static/icon/menu.svg';
+import { ReactComponent as RemoveIcon } from '@/static/icon/remove.svg';
+import { ReactComponent as EditIcon } from '@/static/icon/edit.svg';
+import { ReactComponent as CopyIcon } from '@/static/icon/copy.svg';
+import { ReactComponent as BellsLineIcon } from '@/static/icon/bells-line.svg';
+import { ReactComponent as BellsFillIcon } from '@/static/icon/bells-fill.svg';
 import CustomDrawer from '@/components/CustomDrawer';
 import Empty from '@/components/Empty';
 import AddFundContent from '@/components/Home/FundList/AddFundContent';
 import EditFundContent from '@/components/Home/FundList/EditFundContent';
 import { deleteFundAction, setFundConfigAction, updateFundAction } from '@/actions/fund';
-import { useSyncFixFundSetting, useDrawer, useCurrentWallet } from '@/utils/hooks';
+import { useSyncFixFundSetting, useDrawer, useCurrentWallet, useAutoDestroySortableRef } from '@/utils/hooks';
 
-import styles from './index.scss';
+import styles from './index.module.scss';
 
 export interface OptionalProps {}
 
@@ -26,6 +26,7 @@ const { dialog, clipboard } = window.contextModules.electron;
 
 const Optional: React.FC<OptionalProps> = () => {
   const dispatch = useDispatch();
+  const sortableRef = useAutoDestroySortableRef();
   const { show: showAddDrawer, set: setAddDrawer, close: closeAddDrawer } = useDrawer(null);
   const { currentWalletFundsConfig: fundConfig, currentWalletFundsCodeMap: codeMap, currentWalletCode } = useCurrentWallet();
 
@@ -83,7 +84,6 @@ const Optional: React.FC<OptionalProps> = () => {
         title: `复制失败`,
         message: `基金JSON复制失败`,
       });
-      console.log('复制基金json失败', error);
     }
   }
 
@@ -108,7 +108,15 @@ const Optional: React.FC<OptionalProps> = () => {
     <div className={styles.content}>
       {sortFundConfig.length ? (
         syncFundSettingDone ? (
-          <ReactSortable animation={200} delay={2} list={sortFundConfig} setList={onSortFundConfig} dragClass={styles.dragItem} swap>
+          <ReactSortable
+            ref={sortableRef}
+            animation={200}
+            delay={2}
+            list={sortFundConfig}
+            setList={onSortFundConfig}
+            dragClass={styles.dragItem}
+            swap
+          >
             {sortFundConfig.map((fund) => {
               return (
                 <PureCard key={fund.code} className={classnames(styles.row, 'hoverable')}>

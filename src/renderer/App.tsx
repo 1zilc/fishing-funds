@@ -1,5 +1,5 @@
 import React from 'react';
-import { MemoryRouter as Router, Switch, Route } from 'react-router-dom';
+import { MemoryRouter as Router, Routes, Route } from 'react-router-dom';
 import HomePage from '@/containers/HomePage';
 import * as CONST from '@/constants';
 
@@ -14,7 +14,7 @@ import {
   useUpdateContextMenuWalletsState,
   useAllConfigBackup,
 } from '@/utils/hooks';
-import '@/app.global.scss';
+import '@/app.scss';
 
 const App: React.FC<Record<string, unknown>> = () => {
   useUpdater();
@@ -29,9 +29,9 @@ const App: React.FC<Record<string, unknown>> = () => {
 
   return (
     <Router>
-      <Switch>
-        <Route path={CONST.ROUTES.HOME} component={HomePage} />
-      </Switch>
+      <Routes>
+        <Route path={CONST.ROUTES.HOME} element={<HomePage />} />
+      </Routes>
     </Router>
   );
 };

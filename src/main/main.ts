@@ -115,15 +115,9 @@ app.on('window-all-closed', () => {
 });
 app.on('browser-window-focus', () => {
   if (app.isPackaged) {
-    globalShortcut.register('CommandOrControl+Shift+R', () => {
-      console.log('CommandOrControl+Shift+R is pressed: Shortcut Disabled');
-    });
-    globalShortcut.register('CommandOrControl+R', () => {
-      console.log('CommandOrControl+R is pressed: Shortcut Disabled');
-    });
-    globalShortcut.register('F5', () => {
-      console.log('F5 is pressed: Shortcut Disabled');
-    });
+    globalShortcut.register('CommandOrControl+Shift+R', () => {});
+    globalShortcut.register('CommandOrControl+R', () => {});
+    globalShortcut.register('F5', () => {});
   }
 });
 app.on('browser-window-blur', () => {

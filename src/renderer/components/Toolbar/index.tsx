@@ -3,14 +3,16 @@ import { Badge } from 'antd';
 import { useSelector } from 'react-redux';
 import { useBoolean, useThrottleFn } from 'ahooks';
 
-import { ReactComponent as MenuAddIcon } from '@static/icon/menu-add.svg';
-import { ReactComponent as RefreshIcon } from '@static/icon/refresh.svg';
-import { ReactComponent as SettingIcon } from '@static/icon/setting.svg';
-import { ReactComponent as WalletIcon } from '@static/icon/wallet.svg';
-import { ReactComponent as ChartBoxIcon } from '@static/icon/chart-box.svg';
-import { ReactComponent as NewsIcon } from '@static/icon/news.svg';
-import { ReactComponent as ExchangeIcon } from '@static/icon/exchange.svg';
-import { ReactComponent as BubbleIcon } from '@static/icon/bubble.svg';
+import { ReactComponent as MenuAddIcon } from '@/static/icon/menu-add.svg';
+import { ReactComponent as RefreshIcon } from '@/static/icon/refresh.svg';
+import { ReactComponent as SettingIcon } from '@/static/icon/setting.svg';
+import { ReactComponent as WalletIcon } from '@/static/icon/wallet.svg';
+import { ReactComponent as ChartBoxIcon } from '@/static/icon/chart-box.svg';
+import { ReactComponent as NewsIcon } from '@/static/icon/news.svg';
+import { ReactComponent as ExchangeIcon } from '@/static/icon/exchange.svg';
+import { ReactComponent as BubbleIcon } from '@/static/icon/bubble.svg';
+import { ReactComponent as OrderIcon } from '@/static/icon/order.svg';
+import { ReactComponent as PieIcon } from '@/static/icon/pie.svg';
 import CustomDrawer from '@/components/CustomDrawer';
 import ManageFundContent from '@/components/Home/FundList/ManageFundContent';
 import ManageWalletContent from '@/components/Wallet/ManageWalletContent';
@@ -23,12 +25,13 @@ import FundFlowContent from '@/components/Home/QuotationList/FundFlowContent';
 import NewsContent from '@/components/Home/NewsList/NewsContent';
 import ExchangeContent from '@/components/Home/ZindexList/ExchangeContent';
 import QuoteCenterContent from '@/components/Home/QuotationList/QuoteCenterContent';
+import HoldingContent from '@/components/Home/QuotationList/HoldingContent';
 import { StoreState } from '@/reducers/types';
 import { useScrollToTop, useFreshFunds } from '@/utils/hooks';
 import * as Enums from '@/utils/enums';
 import * as CONST from '@/constants';
 import * as Helpers from '@/helpers';
-import styles from './index.scss';
+import styles from './index.module.scss';
 
 export interface ToolBarProps {}
 
@@ -72,6 +75,7 @@ const ToolBar: React.FC<ToolBarProps> = () => {
     useBoolean(false);
   const [showQuoteCenterDrawer, { setTrue: openQuoteCenterDrawer, setFalse: closeQuoteCenterDrawer, toggle: ToggleQuoteCenterDrawer }] =
     useBoolean(false);
+  const [showHoldingDrawer, { setTrue: openHoldingDrawer, setFalse: closeHoldingDrawer, toggle: ToggleHoldingDrawer }] = useBoolean(false);
 
   return (
     <>
@@ -82,6 +86,7 @@ const ToolBar: React.FC<ToolBarProps> = () => {
         {tabsActiveKey === Enums.TabKeyType.Funds && <WalletIcon style={{ ...iconSize }} onClick={openManageWalletDrawer} />}
         {tabsActiveKey === Enums.TabKeyType.Zindex && <MenuAddIcon style={{ ...iconSize }} onClick={openManageZindexDrawer} />}
         {tabsActiveKey === Enums.TabKeyType.Zindex && <NewsIcon style={{ ...iconSize }} onClick={openNewsDrawer} />}
+        {tabsActiveKey === Enums.TabKeyType.Quotation && <OrderIcon style={{ ...iconSize }} onClick={openHoldingDrawer} />}
         {tabsActiveKey === Enums.TabKeyType.Quotation && <ChartBoxIcon style={{ ...iconSize }} onClick={openFundFlowDrawer} />}
         {tabsActiveKey === Enums.TabKeyType.Stock && <MenuAddIcon style={{ ...iconSize }} onClick={openManageStockDrawer} />}
         {tabsActiveKey === Enums.TabKeyType.Coin && <MenuAddIcon style={{ ...iconSize }} onClick={openManageCoinDrawer} />}
@@ -90,7 +95,7 @@ const ToolBar: React.FC<ToolBarProps> = () => {
         {tabsActiveKey === Enums.TabKeyType.Quotation && <RefreshIcon style={{ ...iconSize }} onClick={freshQuotations} />}
         {tabsActiveKey === Enums.TabKeyType.Stock && <RefreshIcon style={{ ...iconSize }} onClick={freshStocks} />}
         {tabsActiveKey === Enums.TabKeyType.Coin && <RefreshIcon style={{ ...iconSize }} onClick={freshCoins} />}
-        {tabsActiveKey === Enums.TabKeyType.Funds && <ChartBoxIcon style={{ ...iconSize }} onClick={openFundStatisticsDrawer} />}
+        {tabsActiveKey === Enums.TabKeyType.Funds && <PieIcon style={{ ...iconSize }} onClick={openFundStatisticsDrawer} />}
         {tabsActiveKey === Enums.TabKeyType.Zindex && <ExchangeIcon style={{ ...iconSize }} onClick={openExchangeDrawer} />}
         {tabsActiveKey === Enums.TabKeyType.Quotation && <BubbleIcon style={{ ...iconSize }} onClick={openQuoteCenterDrawer} />}
         <Badge dot={!!updateInfo.version}>
@@ -168,6 +173,9 @@ const ToolBar: React.FC<ToolBarProps> = () => {
       </CustomDrawer>
       <CustomDrawer show={showQuoteCenterDrawer}>
         <QuoteCenterContent onClose={closeQuoteCenterDrawer} onEnter={closeQuoteCenterDrawer} />
+      </CustomDrawer>
+      <CustomDrawer show={showHoldingDrawer}>
+        <HoldingContent onClose={closeHoldingDrawer} onEnter={closeHoldingDrawer} />
       </CustomDrawer>
     </>
   );

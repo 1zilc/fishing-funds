@@ -7,8 +7,11 @@ import ChartCard from '@/components/Card/ChartCard';
 import Capacity from '@/components/Home/QuotationList/QuoteCenterContent/Capacity';
 import MarketStyle from '@/components/Home/QuotationList/QuoteCenterContent/MarketStyle';
 import Recommend from '@/components/Home/QuotationList/QuoteCenterContent/Recommend';
+import TodayHot from '@/components/Home/QuotationList/QuoteCenterContent/TodayHot';
+import HotTheme from '@/components/Home/QuotationList/QuoteCenterContent/HotTheme';
+import RecentHot from '@/components/Home/QuotationList/QuoteCenterContent/RecentHot';
 import * as Services from '@/services';
-import styles from './index.scss';
+import styles from './index.module.scss';
 
 interface QuoteCenterContentProps {
   onEnter: () => void;
@@ -64,13 +67,28 @@ const QuoteCenterContent: React.FC<QuoteCenterContentProps> = (props) => {
   return (
     <CustomDrawerContent title="行情中心" enterText="确定" onClose={props.onClose} onEnter={props.onEnter}>
       <div className={styles.content}>
-        <ChartCard
-          auto
-          onFresh={runGetQuoteCenterFromEastmoney}
-          TitleBar={<span className={styles.cardTitle}>建议仓位 {data.TopText.PositionInd}%</span>}
-        >
-          <Capacity TopText={data.TopText} />
-        </ChartCard>
+        <div className={styles.container}>
+          <Tabs animated={{ tabPane: true }} tabBarGutter={15}>
+            <Tabs.TabPane tab="建议仓位" key={String(0)}>
+              <ChartCard
+                auto
+                onFresh={runGetQuoteCenterFromEastmoney}
+                TitleBar={<span className={styles.cardTitle}>建议仓位 {data.TopText.PositionInd}%</span>}
+              >
+                <Capacity TopText={data.TopText} />
+              </ChartCard>
+            </Tabs.TabPane>
+            <Tabs.TabPane tab="今日机会" key={String(1)}>
+              <TodayHot />
+            </Tabs.TabPane>
+            <Tabs.TabPane tab="近期热点" key={String(2)}>
+              <RecentHot />
+            </Tabs.TabPane>
+            <Tabs.TabPane tab="热门主题" key={String(3)}>
+              <HotTheme />
+            </Tabs.TabPane>
+          </Tabs>
+        </div>
         <div className={styles.container}>
           <Tabs animated={{ tabPane: true }} tabBarGutter={15}>
             {data.MarketStyle.map((m) => (

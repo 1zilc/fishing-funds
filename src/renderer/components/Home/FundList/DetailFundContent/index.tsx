@@ -32,7 +32,7 @@ import { useFundRating, useCurrentWallet, useDrawer } from '@/utils/hooks';
 import * as Services from '@/services';
 import * as Utils from '@/utils';
 import * as Enums from '@/utils/enums';
-import styles from './index.scss';
+import styles from './index.module.scss';
 
 export interface DetailFundContentProps {
   onEnter: () => void;
@@ -122,7 +122,6 @@ const DetailFundContent: React.FC<DetailFundContentProps> = (props) => {
         <div className={styles.container}>
           <div className={styles.titleRow}>
             <h3 className="copify">{fund?.fixName}</h3>
-            {!codeMap[code] && <a onClick={() => setAddDrawer(code)}>+加自选</a>}
           </div>
           <div className={styles.subTitleRow}>
             <Rate allowHalf defaultValue={fundStar} disabled />
@@ -133,11 +132,18 @@ const DetailFundContent: React.FC<DetailFundContentProps> = (props) => {
             </div>
           </div>
           <div className={styles.subTitleRow}>
-            <span className="copify">{fund?.code}</span>
-            <span>
-              基金经理：
+            <div>
+              <span className="copify">{fund?.code}</span>
+              {!codeMap[code] && (
+                <a className={styles.selfAdd} onClick={() => setAddDrawer(code)}>
+                  +加自选
+                </a>
+              )}
+            </div>
+            <div>
+              <span>基金经理：</span>
               <a onClick={openManagerDrawer}>{pingzhongdata.Data_currentFundManager?.[0]?.name}</a>
-            </span>
+            </div>
           </div>
           <div className={styles.detail}>
             <div className={styles.detailItem}>

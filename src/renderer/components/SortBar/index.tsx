@@ -4,10 +4,10 @@ import { useSelector, useDispatch } from 'react-redux';
 import classsames from 'classnames';
 import { Dropdown, Menu } from 'antd';
 
-import { ReactComponent as SortArrowUpIcon } from '@static/icon/sort-arrow-up.svg';
-import { ReactComponent as SortArrowDownIcon } from '@static/icon/sort-arrow-down.svg';
-import { ReactComponent as ArrowDownIcon } from '@static/icon/arrow-down.svg';
-import { ReactComponent as ArrowUpIcon } from '@static/icon/arrow-up.svg';
+import { ReactComponent as SortArrowUpIcon } from '@/static/icon/sort-arrow-up.svg';
+import { ReactComponent as SortArrowDownIcon } from '@/static/icon/sort-arrow-down.svg';
+import { ReactComponent as ArrowDownIcon } from '@/static/icon/arrow-down.svg';
+import { ReactComponent as ArrowUpIcon } from '@/static/icon/arrow-up.svg';
 import {
   setFundSortModeAction,
   troggleFundSortOrderAction,
@@ -29,7 +29,7 @@ import { toggleAllCoinsCollapseAction } from '@/actions/coin';
 import { useCurrentWallet } from '@/utils/hooks';
 import * as Enums from '@/utils/enums';
 import * as Helpers from '@/helpers';
-import styles from './index.scss';
+import styles from './index.module.scss';
 
 export interface SortBarProps {}
 

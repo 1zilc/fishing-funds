@@ -76,7 +76,6 @@ export async function GetQuotationsFromEastmoney() {
 
     return result;
   } catch (error) {
-    console.log(error);
     return [];
   }
 }
@@ -131,7 +130,6 @@ export async function GetQuotationDetailFromEastmoney(code: string) {
       hsl: data.f168,
     };
   } catch (error) {
-    console.log(error);
     return {};
   }
 }
@@ -170,7 +168,6 @@ export async function GetRealTimeFundFlowFromEasymoney(code: string) {
     });
     return result;
   } catch (error) {
-    console.log(error);
     return [];
   }
 }
@@ -233,7 +230,6 @@ export async function GetStocksFromEasymoney(code: string) {
       zdf: item.f3,
     }));
   } catch (error) {
-    console.log(error);
     return [];
   }
 }
@@ -319,7 +315,6 @@ export async function GetTransactionFromEasymoney(code: string) {
       xdlc: Number(NP.divide(temp.f83, billion).toFixed(2)),
     };
   } catch (error) {
-    console.log(error);
     return {};
   }
 }
@@ -372,7 +367,6 @@ export async function GetAfterTimeFundFlowFromEasymoney(code: string) {
     });
     return result;
   } catch (error) {
-    console.log(error);
     return [];
   }
 }
@@ -423,7 +417,6 @@ export async function GetFundFlowFromEastmoney(code: string, type: string) {
 
     return result;
   } catch (error) {
-    console.log(error);
     return [];
   }
 }
@@ -468,7 +461,6 @@ export async function GetFlowFromEastmoney(fields1: string, code: 'n2s' | 's2n')
         };
       });
   } catch (error) {
-    console.log(error);
     return [];
   }
 }
@@ -503,7 +495,6 @@ export async function GetNorthDayFromEastmoney(fields1: string, fields2: string)
       s2n: body.data.s2n.map((_) => _.split(',')).map(([date, value]) => [date, NP.divide(value, 10 ** 4).toFixed(2)]),
     };
   } catch (error) {
-    console.log(error);
     return {
       hk2sh: [],
       hk2sz: [],
@@ -542,7 +533,6 @@ export async function GetSouthDayFromEastmoney(fields1: string, fields2: string)
       n2s: body.data.n2s.map((_) => _.split(',')).map(([date, value]) => [date, NP.divide(value, 10 ** 4).toFixed(2)]),
     };
   } catch (error) {
-    console.log(error);
     return {
       sh2hk: [],
       sz2hk: [],
@@ -602,7 +592,6 @@ export async function GetFundsFromEastmoney(code: string) {
     });
     return Data;
   } catch (error) {
-    console.log(error);
     return [];
   }
 }
@@ -668,14 +657,12 @@ export async function GetQuoteCenterFromEastmoney() {
     if (!result) {
       throw new Error();
     }
-    console.log(result);
     return {
       ...result,
       MarketStyle: result.MarketStyle || [],
       Recommend: result.Recommend || [],
     };
   } catch (error) {
-    console.log(error);
     return {
       TopText: {
         PositionInd: 0,
@@ -685,5 +672,270 @@ export async function GetQuoteCenterFromEastmoney() {
       MarketStyle: [],
       Recommend: [],
     };
+  }
+}
+
+export async function GetHodingFromEastmoney(marketCode: string, reportName: string) {
+  try {
+    const { body } = await got<{
+      version: 'a81c1cb169f170d8033693dfe021910a';
+      result: {
+        pages: 5;
+        data: {
+          MARKET_CODE: '005';
+          HOLD_DATE: '2021-11-04 00:00:00';
+          CHANGE_RATE: 0.987946369799;
+          ADD_MARKET_CAP: number;
+          ADD_MARKET_RATE: number;
+          HOLD_MARKET_CAP: 2617466290663.51;
+          HOLD_MARKET_RATE: 0.035640881672;
+          ADD_MARKET_BCODE: '016031';
+          ADD_MARKET_BNAME: '酿酒行业';
+          BOARD_RATE_BCODE: '016021';
+          BOARD_RATE_BNAME: '仪器仪表';
+          MARKET_RATE_BCODE: '016031';
+          MARKET_RATE_BNAME: '酿酒行业';
+          ADD_MARKET_MCODE: '600460';
+          ADD_MARKET_MNAME: '士兰微';
+          ADD_SHARES_MCODE: '002027';
+          ADD_SHARES_MNAME: '分众传媒';
+          MARKET_RATE_MCODE: '300073';
+          MARKET_RATE_MNAME: '当升科技';
+          ADD_MARKET_OLDBCODE: '477';
+          BOARD_RATE_OLDBCODE: '458';
+          MARKET_RATE_OLDBCODE: '477';
+          ADD_MARKET_NEWBCODE: 'BK0477';
+          BOARD_RATE_NEWBCODE: 'BK0458';
+          MARKET_RATE_NEWBCODE: 'BK0477';
+        }[];
+        count: 229;
+      };
+      success: true;
+      message: 'ok';
+      code: 0;
+    }>('http://datacenter-web.eastmoney.com/api/data/v1/get', {
+      searchParams: {
+        sortColumns: 'HOLD_DATE',
+        sortTypes: -1,
+        pageSize: 1000,
+        pageNumber: 1,
+        columns: 'ALL',
+        source: 'WEB',
+        client: 'WEB',
+        reportName,
+        filter: `(MARKET_CODE="${marketCode}")`,
+      },
+      responseType: 'json',
+    });
+
+    const result = body.result?.data || [];
+    result.forEach((item) => {
+      item.ADD_MARKET_CAP = Number(NP.divide(item.ADD_MARKET_CAP, 10 ** 8).toFixed(2));
+      item.ADD_MARKET_RATE = Number(NP.times(item.ADD_MARKET_RATE, 10 ** 3).toFixed(2));
+    });
+    return result;
+  } catch (error) {
+    return [];
+  }
+}
+
+export async function GetMutualQuotaFromEastmoney() {
+  try {
+    const { body } = await got<{
+      version: 'f5a499e30bac57207cc9f491db6bdfdd';
+      result: {
+        pages: 1;
+        data: {
+          TRADE_DATE: '2021-11-08 00:00:00';
+          MUTUAL_TYPE: '002';
+          BOARD_TYPE: '沪港通';
+          MUTUAL_TYPE_NAME: '港股通(沪)';
+          FUNDS_DIRECTION: '南向';
+          INDEX_CODE: 'HSI';
+          INDEX_NAME: '恒生指数';
+          BOARD_CODE: 'HK32';
+          status: number;
+          dayNetAmtIn: number;
+          dayAmtRemain: number;
+          dayAmtThreshold: number;
+          f104: 217;
+          f105: 133;
+          f106: 22;
+          INDEX_f3: -0.43;
+          netBuyAmt: -37721.68;
+        }[];
+        count: 4;
+      };
+      success: true;
+      message: 'ok';
+      code: 0;
+    }>('http://datacenter-web.eastmoney.com/api/data/get', {
+      searchParams: {
+        type: 'RPT_MUTUAL_QUOTA',
+        sty: 'TRADE_DATE,MUTUAL_TYPE,BOARD_TYPE,MUTUAL_TYPE_NAME,FUNDS_DIRECTION,INDEX_CODE,INDEX_NAME,BOARD_CODE',
+        extraCols:
+          'status~07~BOARD_CODE,dayNetAmtIn~07~BOARD_CODE,dayAmtRemain~07~BOARD_CODE,dayAmtThreshold~07~BOARD_CODE,f104~07~BOARD_CODE,f105~07~BOARD_CODE,f106~07~BOARD_CODE,f3~03~INDEX_CODE~INDEX_f3,netBuyAmt~07~BOARD_CODE',
+        p: 1,
+        ps: 200,
+        sr: 1,
+        st: 'MUTUAL_TYPE',
+        source: 'WEB',
+        client: 'WEB',
+        _: Date.now(),
+      },
+      responseType: 'json',
+    });
+
+    const result = body.result?.data || [];
+    const statusMap: Record<number, string> = {
+      1: '额度可用',
+      3: '收盘',
+    };
+    return result.map((item) => ({
+      type: item.BOARD_TYPE,
+      quota: item.MUTUAL_TYPE_NAME,
+      direction: item.FUNDS_DIRECTION,
+      indexName: item.INDEX_NAME,
+      indexCode: item.INDEX_CODE,
+      indexZdf: item.INDEX_f3,
+      dayNetAmtIn: Number(NP.divide(item.dayNetAmtIn, 10 ** 4).toFixed(2)),
+      dayAmtRemain: Number(NP.divide(item.dayAmtRemain, 10 ** 4).toFixed(2)),
+      dayAmtThreshold: Number(NP.divide(item.dayAmtThreshold, 10 ** 4).toFixed(2)),
+      sz: item.f104,
+      xd: item.f105,
+      cp: item.f106,
+      status: statusMap[item.status],
+    }));
+  } catch (error) {
+    return [];
+  }
+}
+
+export async function GetTodayHotFromEastmoney() {
+  try {
+    const { body } = await got<{
+      re: true;
+      message: '';
+      result: {
+        TableName: 'TodayOpportunityWeb';
+        TotalPage: 1;
+        ConsumeMSecond: 0;
+        SplitSymbol: '|';
+        FieldName: 'CategoryPchg,CategoryCode,CategoryName,IsImportant,ParentCode,ParentName,Reason,SecuCode,SecuName,Market,SecuCode2,SecuName2,Market2,IsFocused,Importance';
+        Data: [
+          '2.06|111|太阳能|0|||2019至2023年，国内光伏焊带市场需求空间可达到121亿元！|002309|中利集团|02||||0|',
+          '-0.03|a158|养老概念|0|||再出“实招”提档升级养老服务|300212|易华录|02||||0|',
+          '0.71|084|区块链|0|||利用数字财政支持重点项目建设情况开展专项调研|002405|四维图新|02||||0|',
+          '1.75|a11|风电|0|||中美达成强化气候行动联合宣言|002309|中利集团|02||||0|',
+          '0.69|006003008|VR&AR|0|006|人工智能|炒股的尽头是“元宇宙”？400多家企业注册相关商标 多家上市公司被监管“盯上”|600358|国旅联合|01||||0|'
+        ];
+      }[];
+    }>('http://quote.eastmoney.com/zhuti/api/todayopportunity', {
+      responseType: 'json',
+    });
+    const result = body.result[0].Data.map((item) => {
+      const [
+        CategoryPchg,
+        CategoryCode,
+        CategoryName,
+        IsImportant,
+        ParentCode,
+        ParentName,
+        Reason,
+        SecuCode,
+        SecuName,
+        Market,
+        SecuCode2,
+        SecuName2,
+        Market2,
+        IsFocused,
+        Importance,
+      ] = item.split('|');
+
+      return {
+        zdf: CategoryPchg,
+        name: CategoryName,
+        reason: Reason,
+        stockName: SecuName,
+        stockCode: SecuCode,
+      };
+    });
+
+    return result;
+  } catch (error) {
+    return [];
+  }
+}
+
+export async function GetHotThemeFromEastmoney() {
+  try {
+    const { body } = await got<{
+      re: true;
+      message: '';
+      result: {
+        TableName: 'TodayOpportunityWeb';
+        TotalPage: 1;
+        ConsumeMSecond: 0;
+        SplitSymbol: '|';
+        FieldName: 'CategoryCode,CategoryName,ParentCode,ParentName,CategoryPchg,SecuCode,SecuName,IsImportant,Market';
+        Data: ['a141|虚拟电厂|||6.30|300376|易事特|0|02'];
+      }[];
+    }>('http://quote.eastmoney.com/zhuti/api/hottheme', {
+      searchParams: {
+        startIndex: 1,
+        pageSize: 100,
+      },
+      responseType: 'json',
+    });
+    const result = body.result[0].Data.map((item) => {
+      const [CategoryCode, CategoryName, ParentCode, ParentName, CategoryPchg, SecuCode, SecuName, IsImportant, Market] = item.split('|');
+
+      return {
+        zdf: CategoryPchg,
+        name: CategoryName,
+        stockName: SecuName,
+        stockCode: SecuCode,
+      };
+    });
+
+    return result;
+  } catch (error) {
+    return [];
+  }
+}
+
+export async function GetRecentHotFromEastmoney() {
+  try {
+    const { body } = await got<{
+      re: true;
+      message: '';
+      result: {
+        TableName: 'TodayOpportunityWeb';
+        TotalPage: 1;
+        ConsumeMSecond: 0;
+        SplitSymbol: '|';
+        FieldName: 'CategoryCode,CategoryName,IsImportant,ParentCode,ParentName,SecuCode,SecuName,Market,IsFocused';
+        Data: ['a198|元宇宙概念|0|||300081|恒信东方|02|0'];
+      }[];
+    }>('http://quote.eastmoney.com/zhuti/api/recenthot', {
+      searchParams: {
+        startIndex: 1,
+        pageSize: 100,
+      },
+      responseType: 'json',
+    });
+    const result = body.result[0].Data.map((item) => {
+      const [CategoryCode, CategoryName, IsImportant, ParentCode, ParentName, SecuCode, SecuName, Market, IsFocused] = item.split('|');
+
+      return {
+        name: CategoryName,
+        stockName: SecuName,
+        stockCode: SecuCode,
+      };
+    });
+
+    return result;
+  } catch (error) {
+    return [];
   }
 }

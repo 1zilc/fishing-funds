@@ -9,7 +9,7 @@ import DetailQuotationContent from '@/components/Home/QuotationList/DetailQuotat
 import CustomDrawer from '@/components/CustomDrawer';
 import { StoreState } from '@/reducers/types';
 import { useDrawer, useSyncFixStockSetting } from '@/utils/hooks';
-import styles from './index.scss';
+import styles from './index.module.scss';
 
 interface StockListProps {
   filter: (stock: Stock.ResponseItem & Stock.ExtraRow) => boolean;
