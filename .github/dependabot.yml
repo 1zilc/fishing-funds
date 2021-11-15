@@ -9,4 +9,4 @@ updates:
     directory: '/' # Location of package manifests
     schedule:
       interval: 'daily'
-    target-branch: 'v5'
+    target-branch: 'dev'
