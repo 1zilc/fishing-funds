@@ -141,7 +141,7 @@
     "setupFiles": ["./.erb/scripts/check-build-exists.js"]
   },
   "devDependencies": {
-    "@pmmmwh/react-refresh-webpack-plugin": "0.5.1",
+    "@pmmmwh/react-refresh-webpack-plugin": "0.5.2",
     "@svgr/webpack": "^5.5.0",
     "@teamsupercell/typings-for-css-modules-loader": "^2.5.1",
     "@testing-library/jest-dom": "^5.12.0",
