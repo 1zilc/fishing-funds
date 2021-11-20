@@ -12,15 +12,18 @@ import * as Services from '@/services';
 import * as Utils from '@/utils';
 import styles from './index.module.scss';
 
-interface AutomaticProps {}
+interface TodayProps {}
 
 const fundTypeList = [
-  { name: '全部', type: 0, code: '0' },
-  { name: '股票', type: 1, code: '1' },
-  { name: '混合', type: 2, code: '2' },
-  { name: '债券', type: 3, code: '3' },
-  { name: '指数', type: 4, code: '4' },
-  { name: 'QDII', type: 5, code: '5' },
+  { name: '全部', type: 1, code: '1' },
+  { name: '股票', type: 2, code: '2' },
+  { name: '混合', type: 3, code: '3' },
+  { name: '债券', type: 4, code: '4' },
+  { name: '指数', type: 5, code: '5' },
+  { name: 'QDII', type: 6, code: '6' },
+  { name: 'ETF', type: 7, code: '7' },
+  { name: 'LOF', type: 8, code: '8' },
+  { name: '场内', type: 9, code: '9' },
 ];
 
 const RenderColorCol = ({ value }: { value: string }) => {
@@ -28,7 +31,7 @@ const RenderColorCol = ({ value }: { value: string }) => {
   return <div className={Utils.GetValueColor(text).textClass}>{value}</div>;
 };
 
-const Automatic: React.FC<PropsWithChildren<AutomaticProps>> = () => {
+const Today: React.FC<PropsWithChildren<TodayProps>> = () => {
   const [fundType, setFundType] = useState(fundTypeList[0]);
   const [data, setData] = useState([]);
   const { currentWalletFundsCodeMap: codeMap } = useCurrentWallet();
@@ -48,47 +51,32 @@ const Automatic: React.FC<PropsWithChildren<AutomaticProps>> = () => {
   const columns = [
     {
       title: '名称',
-      dataIndex: 'name',
+      dataIndex: 'jjjc',
       ellipsis: true,
       render: (text: string) => <a>{text}</a>,
     },
     {
-      title: '1年',
-      dataIndex: 'y1',
-      render: (text: string) => <RenderColorCol value={text} />,
-      sorter: (a: any, b: any) => {
-        const a1 = a.y1.substring(0, a.y1.length - 1);
-        const b1 = b.y1.substring(0, b.y1.length - 1);
-        return Number(a1) - Number(b1);
-      },
+      title: '净值',
+      dataIndex: 'dwjz',
+      sorter: (a: any, b: any) => Number(a.dwjz) - Number(b.dwjz),
     },
     {
-      title: '3年',
-      dataIndex: 'y3',
+      title: '估算涨跌幅',
+      dataIndex: 'gszzl',
       render: (text: string) => <RenderColorCol value={text} />,
       sorter: (a: any, b: any) => {
-        const a1 = a.y3.substring(0, a.y3.length - 1);
-        const b1 = b.y3.substring(0, b.y3.length - 1);
-        return Number(a1) - Number(b1);
-      },
-    },
-    {
-      title: '5年',
-      dataIndex: 'y5',
-      render: (text: string) => <RenderColorCol value={text} />,
-      sorter: (a: any, b: any) => {
-        const a1 = a.y5.substring(0, a.y5.length - 1);
-        const b1 = b.y5.substring(0, b.y5.length - 1);
+        const a1 = a.gszzl.substring(0, a.gszzl.length - 1);
+        const b1 = b.gszzl.substring(0, b.gszzl.length - 1);
         return Number(a1) - Number(b1);
       },
     },
     {
       title: '操作',
       render: (text: string, record: any) => {
-        return !codeMap[record.code] ? (
+        return !codeMap[record.bzdm] ? (
           <a
             onClick={(e) => {
-              setAddDrawer(record.code);
+              setAddDrawer(record.bzdm);
               e.stopPropagation();
             }}
           >
@@ -101,8 +89,8 @@ const Automatic: React.FC<PropsWithChildren<AutomaticProps>> = () => {
     },
   ];
 
-  const { run: runGetAutomaticPlanFromEastmoney, loading } = useRequest(
-    () => Services.Fund.GetAutomaticPlanFromEastmoney(fundType.type),
+  const { run: runGetTodayListFromEastmoney, loading } = useRequest(
+    () => Services.Fund.GetTodayListFromEastmoney(fundType.type),
     {
       throwOnError: true,
       onSuccess: setData,
@@ -111,13 +99,14 @@ const Automatic: React.FC<PropsWithChildren<AutomaticProps>> = () => {
   );
 
   return (
-    <ChartCard auto onFresh={runGetAutomaticPlanFromEastmoney}>
+    <ChartCard auto onFresh={runGetTodayListFromEastmoney}>
       <div className={styles.content}>
         <TypeSelection
           types={fundTypeList}
           activeType={fundType.type}
           onSelected={setFundType}
           style={{ marginTop: 10, marginBottom: 10 }}
+          colspan={4}
         />
         <Table
           rowKey="code"
@@ -131,7 +120,7 @@ const Automatic: React.FC<PropsWithChildren<AutomaticProps>> = () => {
             position: ['bottomCenter'],
           }}
           onRow={(record) => ({
-            onClick: () => setDetailDrawer(record.code),
+            onClick: () => setDetailDrawer(record.bzdm),
           })}
         />
         <CustomDrawer show={showDetailDrawer}>
@@ -152,4 +141,4 @@ const Automatic: React.FC<PropsWithChildren<AutomaticProps>> = () => {
     </ChartCard>
   );
 };
-export default Automatic;
+export default Today;
