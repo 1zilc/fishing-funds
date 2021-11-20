@@ -9,7 +9,7 @@
     "build:renderer": "cross-env NODE_ENV=production TS_NODE_TRANSPILE_ONLY=true webpack --config ./.erb/configs/webpack.config.renderer.prod.ts",
     "build:icon": "electron-icon-builder --input=./assets/icon.png --output=./icon-build",
     "rebuild": "electron-rebuild --parallel --types prod,dev,optional --module-dir src",
-    "lint": "cross-env NODE_ENV=development eslint . --cache --ext .js,.jsx,.ts,.tsx",
+    "lint": "cross-env NODE_ENV=development eslint . --cache --ext .ts,.tsx --fix",
     "package": "ts-node ./.erb/scripts/clean.js dist && npm run build && electron-builder build --publish never",
     "package-mac": "ts-node ./.erb/scripts/clean.js dist && npm run build && electron-builder build --mac -p never",
     "package-linux": "ts-node ./.erb/scripts/clean.js dist && npm run build && electron-builder build --linux -p never",
@@ -24,18 +24,10 @@
     "prepare": "husky install"
   },
   "lint-staged": {
-    "*.{js,jsx,ts,tsx}": [
-      "cross-env NODE_ENV=development eslint --cache --fix"
-    ],
-    "{*.json,.{eslintrc,prettierrc}}": [
-      "prettier --ignore-path .eslintignore --parser json --write"
-    ],
-    "*.{css,scss}": [
-      "prettier --ignore-path .eslintignore --single-quote --write"
-    ],
-    "*.{html,md,yml}": [
-      "prettier --ignore-path .eslintignore --single-quote --write"
-    ]
+    "*.{js,jsx,ts,tsx}": ["cross-env NODE_ENV=development eslint --cache --fix"],
+    "{*.json,.{eslintrc,prettierrc}}": ["prettier --ignore-path .eslintignore --parser json --write"],
+    "*.{css,scss}": ["prettier --ignore-path .eslintignore --single-quote --write"],
+    "*.{html,md,yml}": ["prettier --ignore-path .eslintignore --single-quote --write"]
   },
   "build": {
     "productName": "Fishing Funds",
@@ -43,11 +35,7 @@
     "asar": true,
     "asarUnpack": "**\\*.{node,dll}",
     "copyright": "Copyright © 2021 1zilc",
-    "files": [
-      "dist",
-      "node_modules",
-      "package.json"
-    ],
+    "files": ["dist", "node_modules", "package.json"],
     "afterSign": ".erb/scripts/notarize.js",
     "fileAssociations": [
       {
@@ -64,10 +52,7 @@
       "target": [
         {
           "target": "dmg",
-          "arch": [
-            "x64",
-            "arm64"
-          ]
+          "arch": ["x64", "arm64"]
         }
       ],
       "type": "distribution",
@@ -91,19 +76,14 @@
       ]
     },
     "win": {
-      "target": [
-        "nsis"
-      ]
+      "target": ["nsis"]
     },
     "nsis": {
       "oneClick": false,
       "allowToChangeInstallationDirectory": true
     },
     "linux": {
-      "target": [
-        "AppImage",
-        "snap"
-      ],
+      "target": ["AppImage", "snap"],
       "category": "Financial"
     },
     "snap": {
@@ -111,9 +91,7 @@
       "summary": "Display real-time trends of Chinese funds in the menubar.",
       "publish": {
         "provider": "snapStore",
-        "channels": [
-          "stable"
-        ]
+        "channels": ["stable"]
       }
     },
     "directories": {
@@ -121,9 +99,7 @@
       "buildResources": "assets",
       "output": "release/build"
     },
-    "extraResources": [
-      "./assets/**"
-    ],
+    "extraResources": ["./assets/**"],
     "publish": [
       {
         "provider": "github",
@@ -152,18 +128,7 @@
   "bugs": {
     "url": "https://github.com/1zilc/fishing-funds/issues"
   },
-  "keywords": [
-    "funds",
-    "electron",
-    "boilerplate",
-    "react",
-    "typescript",
-    "ts",
-    "sass",
-    "webpack",
-    "hot",
-    "reload"
-  ],
+  "keywords": ["funds", "electron", "boilerplate", "react", "typescript", "ts", "sass", "webpack", "hot", "reload"],
   "homepage": "https://github.com/1zilc",
   "jest": {
     "testURL": "http://localhost/",
@@ -171,23 +136,10 @@
       "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/.erb/mocks/fileMock.js",
       "\\.(css|less|sass|scss)$": "identity-obj-proxy"
     },
-    "moduleFileExtensions": [
-      "js",
-      "jsx",
-      "ts",
-      "tsx",
-      "json"
-    ],
-    "moduleDirectories": [
-      "node_modules",
-      "release/app/node_modules"
-    ],
-    "testPathIgnorePatterns": [
-      "release/app/dist"
-    ],
-    "setupFiles": [
-      "./.erb/scripts/check-build-exists.js"
-    ]
+    "moduleFileExtensions": ["js", "jsx", "ts", "tsx", "json"],
+    "moduleDirectories": ["node_modules", "release/app/node_modules"],
+    "testPathIgnorePatterns": ["release/app/dist"],
+    "setupFiles": ["./.erb/scripts/check-build-exists.js"]
   },
   "devDependencies": {
     "@pmmmwh/react-refresh-webpack-plugin": "^0.5.2",
@@ -304,19 +256,5 @@
     "npm": ">=6.x",
     "yarn": ">=1.21.3"
   },
-  "browserslist": [],
-  "prettier": {
-    "overrides": [
-      {
-        "files": [
-          ".prettierrc",
-          ".eslintrc"
-        ],
-        "options": {
-          "parser": "json"
-        }
-      }
-    ],
-    "singleQuote": true
-  }
+  "browserslist": []
 }
