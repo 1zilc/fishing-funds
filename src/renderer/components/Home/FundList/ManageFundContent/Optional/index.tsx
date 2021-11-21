@@ -91,14 +91,15 @@ const Optional: React.FC<OptionalProps> = () => {
     const { response } = await dialog.showMessageBox({
       title: '取消涨跌通知',
       type: 'info',
-      message: `确认取消 ${fund.name || ''} 涨跌范围 ${fund.zdfRange}% 通知`,
+      message: `确认取消 ${fund.name || ''} 涨跌范围、基金净值通知`,
       buttons: ['确定', '取消'],
     });
     if (response === 0) {
       dispatch(
         updateFundAction({
-          ...fund,
+          code: fund.code,
           zdfRange: undefined,
+          jzNotice: undefined,
         })
       );
     }
@@ -142,7 +143,7 @@ const Optional: React.FC<OptionalProps> = () => {
                       })
                     }
                   />
-                  {fund.zdfRange ? (
+                  {fund.zdfRange || fund.jzNotice ? (
                     <BellsFillIcon className={styles.function} onClick={() => onCancleRiskNotice(fund)} />
                   ) : (
                     <BellsLineIcon

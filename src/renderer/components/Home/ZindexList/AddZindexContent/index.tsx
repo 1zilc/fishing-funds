@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useDebounceFn, useRequest } from 'ahooks';
-import { Input, Tabs } from 'antd';
+import { Input, Tabs, message } from 'antd';
 
 import DetailZindexContent from '@/components/Home/ZindexList/DetailZindexContent';
 import CustomDrawer from '@/components/CustomDrawer';
@@ -38,7 +38,6 @@ export const stockTypesConfig = [
 const AddZindexContent: React.FC<AddZindexContentProps> = (props) => {
   const { defaultName } = props;
   const dispatch = useDispatch();
-  const [none, setNone] = useState<boolean>(false);
   const [groupList, setGroupList] = useState<Stock.SearchResult[]>([]);
   const { codeMap } = useSelector((state: StoreState) => state.zindex.config);
 
@@ -53,7 +52,6 @@ const AddZindexContent: React.FC<AddZindexContentProps> = (props) => {
   async function onAdd(secid: string) {
     const zindex = await Helpers.Zindex.GetZindex(secid);
     if (zindex) {
-      setNone(false);
       dispatch(
         addZindexAction({
           code: zindex.code!,
@@ -62,7 +60,7 @@ const AddZindexContent: React.FC<AddZindexContentProps> = (props) => {
       );
       props.onEnter();
     } else {
-      setNone(true);
+      message.error('添加指数失败，未找到或数据出错~');
     }
   }
 
@@ -88,11 +86,6 @@ const AddZindexContent: React.FC<AddZindexContentProps> = (props) => {
           <label>关键字：</label>
           <Search defaultValue={defaultName} type="text" placeholder="指数代码或名称关键字" enterButton onSearch={onSearch} size="small" />
         </section>
-        {none && (
-          <section>
-            <span className={styles.none}>添加指数失败，未找到或数据出错~</span>
-          </section>
-        )}
       </div>
       {groupList.length ? (
         <Tabs animated={{ tabPane: true }} tabBarGutter={15} tabBarStyle={{ marginLeft: 15 }}>

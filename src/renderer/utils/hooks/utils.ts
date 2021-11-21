@@ -150,7 +150,6 @@ export function useSyncFixFundSetting() {
           updateFundAction({
             code: responseFund!.fundcode!,
             name: responseFund!.name,
-            cbj: null,
           })
         );
       });

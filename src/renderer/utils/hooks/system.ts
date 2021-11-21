@@ -74,14 +74,16 @@ export function useAdjustmentNotification() {
 }
 
 export function useRiskNotification() {
-  const [riskMap, setRiskMap] = useState<Record<string, boolean>>({});
+  const [zdfRangeMap, setZdfRangeMap] = useState<Record<string, boolean>>({});
+  const [jzNoticeMap, setJzNoticeMap] = useState<Record<string, boolean>>({});
   const systemSetting = useSelector((state: StoreState) => state.setting.systemSetting);
   const wallets = useSelector((state: StoreState) => state.wallet.wallets);
   const { riskNotificationSetting } = systemSetting;
 
   useInterval(
     () => {
-      const cloneRiskMap = Utils.DeepCopy(riskMap);
+      const cloneZdfRangeMap = Utils.DeepCopy(zdfRangeMap);
+      const cloneJzNoticeMap = Utils.DeepCopy(jzNoticeMap);
       if (!riskNotificationSetting) {
         return;
       }
@@ -91,20 +93,39 @@ export function useRiskNotification() {
           const walletConfig = Helpers.Wallet.GetCurrentWalletConfig(wallet.code);
           wallet.funds?.forEach((fund) => {
             const zdfRange = codeMap[fund.fundcode!]?.zdfRange;
+            const jzNotice = codeMap[fund.fundcode!]?.jzNotice;
             const riskKey = `${wallet.code}-${fund.fundcode}`;
-            const noticed = cloneRiskMap[riskKey];
-            if (zdfRange && Math.abs(zdfRange) < Math.abs(Number(fund.gszzl)) && !noticed) {
+            const zdfRangeNoticed = cloneZdfRangeMap[riskKey];
+            const jzNoticeNoticed = cloneJzNoticeMap[riskKey];
+
+            if (zdfRange && Math.abs(zdfRange) < Math.abs(Number(fund.gszzl)) && !zdfRangeNoticed) {
               const notification = new Notification('涨跌提醒', {
                 body: `${walletConfig.name} ${fund.name} ${Utils.Yang(fund.gszzl)}%`,
               });
               notification.onclick = () => {
                 invoke.showCurrentWindow();
               };
-              cloneRiskMap[riskKey] = true;
+              cloneZdfRangeMap[riskKey] = true;
+            }
+
+            if (
+              jzNotice &&
+              ((Number(fund.dwjz) <= jzNotice && Number(fund.gsz) >= jzNotice) ||
+                (Number(fund.dwjz) >= jzNotice && Number(fund.gsz) <= jzNotice)) &&
+              !jzNoticeNoticed
+            ) {
+              const notification = new Notification('净值提醒', {
+                body: `${walletConfig.name} ${fund.name} ${fund.gsz}`,
+              });
+              notification.onclick = () => {
+                invoke.showCurrentWindow();
+              };
+              cloneJzNoticeMap[riskKey] = true;
             }
           });
         });
-        setRiskMap(cloneRiskMap);
+        setZdfRangeMap(cloneZdfRangeMap);
+        setJzNoticeMap(cloneJzNoticeMap);
       } catch (error) {}
     },
     1000 * 60,

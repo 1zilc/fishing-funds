@@ -303,7 +303,7 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
                   <Guide
                     list={[
                       { name: '调仓提醒', text: '将在预设时间发出调仓通知' },
-                      { name: '涨跌提醒', text: '开启后可在基金设置中配置自定义涨幅提醒' },
+                      { name: '基金提醒', text: '开启后可在基金设置中配置自定义涨幅、净值提醒' },
                       { name: '托盘内容', text: '仅限macos客户端，菜单栏显示当日收益等信息' },
                     ]}
                   />
@@ -327,7 +327,7 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
                   />
                 </section>
                 <section>
-                  <label>涨跌提醒：</label>
+                  <label>基金提醒：</label>
                   <Switch size="small" checked={riskNotification} onChange={setRiskNotification} />
                 </section>
                 <section>

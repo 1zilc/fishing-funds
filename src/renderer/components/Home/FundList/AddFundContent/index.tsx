@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useDebounceFn, useBoolean } from 'ahooks';
-import { Input, InputNumber } from 'antd';
+import { useDebounceFn } from 'ahooks';
+import { Input, InputNumber, message } from 'antd';
 
 import DetailFundContent from '@/components/Home/FundList/DetailFundContent';
 import CustomDrawer from '@/components/CustomDrawer';
@@ -28,7 +28,8 @@ const AddFundContent: React.FC<AddFundContentProps> = (props) => {
   const [cyfe, setCyfe] = useState<number>(0);
   const [cbj, setCbj] = useState<any>();
   const [zdfRange, setZdfRange] = useState<any>();
-  const [none, setNone] = useState<boolean>(false);
+  const [jzNotice, setJzNotice] = useState<any>();
+  const [memo, setMemo] = useState<any>();
   const [fundList, setFundlist] = useState<Fund.RemoteFund[]>([]);
   const remoteFunds = useSelector((state: StoreState) => state.fund.remoteFunds);
   const { currentWalletFundsCodeMap: codeMap } = useCurrentWallet();
@@ -37,7 +38,6 @@ const AddFundContent: React.FC<AddFundContentProps> = (props) => {
   async function onAdd() {
     const fund = await Helpers.Fund.GetFund(code);
     if (fund) {
-      setNone(false);
       dispatch(
         addFundAction({
           code,
@@ -49,7 +49,7 @@ const AddFundContent: React.FC<AddFundContentProps> = (props) => {
       );
       props.onEnter();
     } else {
-      setNone(true);
+      message.error('添加基金失败，未找到或数据出错~');
     }
   }
 
@@ -162,11 +162,29 @@ const AddFundContent: React.FC<AddFundContentProps> = (props) => {
             style={{ width: '100%' }}
           />
         </section>
-        {none && (
-          <section>
-            <span className={styles.none}>添加基金失败，未找到或数据出错~</span>
-          </section>
-        )}
+        <section>
+          <label>净值提醒：</label>
+          <InputNumber
+            placeholder="净值达到该值将发出系统通知"
+            min={0.0001}
+            precision={4}
+            value={jzNotice}
+            onChange={setJzNotice}
+            size="small"
+            style={{ width: '100%' }}
+          />
+        </section>
+        <section>
+          <label>备注：</label>
+          <Input.TextArea
+            rows={5}
+            placeholder="额外记录"
+            value={memo}
+            onChange={(e) => setMemo(e.target.value)}
+            size="small"
+            style={{ width: '100%' }}
+          />
+        </section>
       </div>
       {(name || code) &&
         fundList.map(([code, pinyin, name, type, quanpin]) => (

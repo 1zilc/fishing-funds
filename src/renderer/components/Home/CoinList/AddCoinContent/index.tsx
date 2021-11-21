@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useDebounceFn } from 'ahooks';
-import { Input, Tabs } from 'antd';
+import { Input, message } from 'antd';
 
 import DetailCoinContent from '@/components/Home/CoinList/DetailCoinContent';
 import CustomDrawer from '@/components/CustomDrawer';
@@ -24,7 +24,6 @@ const { Search } = Input;
 const AddCoinContent: React.FC<AddCoinContentProps> = (props) => {
   const { defaultName } = props;
   const dispatch = useDispatch();
-  const [none, setNone] = useState<boolean>(false);
   const [coins, setCoins] = useState<Coin.RemoteCoin[]>([]);
   const { codeMap } = useSelector((state: StoreState) => state.coin.config);
   const remoteCoins = useSelector((state: StoreState) => state.coin.remoteCoins);
@@ -33,7 +32,6 @@ const AddCoinContent: React.FC<AddCoinContentProps> = (props) => {
   async function onAdd(code: string) {
     const coin = await Helpers.Coin.GetCoin(code);
     if (coin) {
-      setNone(false);
       dispatch(
         addCoinAction({
           code: coin.id,
@@ -43,7 +41,7 @@ const AddCoinContent: React.FC<AddCoinContentProps> = (props) => {
       );
       props.onEnter();
     } else {
-      setNone(true);
+      message.error('数据出错或网络原因请多次尝试~');
     }
   }
 
@@ -76,11 +74,6 @@ const AddCoinContent: React.FC<AddCoinContentProps> = (props) => {
           <label>关键字：</label>
           <Search defaultValue={defaultName} type="text" placeholder="货币代码或名称关键字" enterButton onSearch={onSearch} size="small" />
         </section>
-        {none && (
-          <section>
-            <span className={styles.none}>数据出错或网络原因请多次尝试~</span>
-          </section>
-        )}
       </div>
       {coins.length ? (
         coins.map(({ code }) => {

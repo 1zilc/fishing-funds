@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useDebounceFn, useRequest } from 'ahooks';
-import { Input, Tabs } from 'antd';
+import { Input, Tabs, message } from 'antd';
 
 import DetailStockContent from '@/components/Home/StockList/DetailStockContent';
 import CustomDrawer from '@/components/CustomDrawer';
@@ -38,7 +38,6 @@ export const stockTypesConfig = [
 const AddStockContent: React.FC<AddStockContentProps> = (props) => {
   const { defaultName } = props;
   const dispatch = useDispatch();
-  const [none, setNone] = useState<boolean>(false);
   const [groupList, setGroupList] = useState<Stock.SearchResult[]>([]);
   const { codeMap } = useSelector((state: StoreState) => state.stock.config);
 
@@ -53,7 +52,6 @@ const AddStockContent: React.FC<AddStockContentProps> = (props) => {
   async function onAdd(secid: string, type: number) {
     const stock = await Helpers.Stock.GetStock(secid);
     if (stock) {
-      setNone(false);
       dispatch(
         addStockAction({
           market: stock.market!,
@@ -65,7 +63,7 @@ const AddStockContent: React.FC<AddStockContentProps> = (props) => {
       );
       props.onEnter();
     } else {
-      setNone(true);
+      message.error('添加股票失败，未找到或数据出错~');
     }
   }
 
@@ -91,11 +89,6 @@ const AddStockContent: React.FC<AddStockContentProps> = (props) => {
           <label>关键字：</label>
           <Search defaultValue={defaultName} type="text" placeholder="股票代码或名称关键字" enterButton onSearch={onSearch} size="small" />
         </section>
-        {none && (
-          <section>
-            <span className={styles.none}>添加股票失败，未找到或数据出错~</span>
-          </section>
-        )}
       </div>
       {groupList.length ? (
         <Tabs animated={{ tabPane: true }} tabBarGutter={15} tabBarStyle={{ marginLeft: 15 }}>

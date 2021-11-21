@@ -57,6 +57,8 @@ const FundRow: React.FC<RowProps> = (props) => {
           cyfe: Number(calcFundResult.cyfe),
           cbj: calcFundResult.cbj,
           zdfRange: codeMap[fund.fundcode!]?.zdfRange,
+          jzNotice: codeMap[fund.fundcode!]?.jzNotice,
+          memo: codeMap[fund.fundcode!]?.memo,
         },
         focus
       );
