@@ -195,7 +195,7 @@
     "husky": "^7.0.0",
     "identity-obj-proxy": "^3.0.0",
     "jest": "^27.0.4",
-    "lint-staged": "^11.0.0",
+    "lint-staged": "^12.1.1",
     "mini-css-extract-plugin": "^2.1.0",
     "opencollective-postinstall": "^2.0.3",
     "prettier": "^2.2.1",
