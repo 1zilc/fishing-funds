@@ -124,7 +124,8 @@ export function useResizeEchart(scale = 1) {
   }, []);
 
   useEffect(() => {
-    chartInstance?.resize({ height: chartRefWidth! * scale });
+    const height = chartRefWidth! * scale;
+    chartInstance?.resize({ height: height > 200 ? 200 : height });
   }, [chartRefWidth]);
   return { ref: chartRef, chartRefWidth, chartInstance, setChartInstance };
 }
