@@ -45,7 +45,7 @@ const FundOverview: React.FC<FundOverviewProps> = (props) => {
               const calcWalletsFundResult = Helpers.Fund.CalcWalletsFund(fund, codes);
               return {
                 name: fund.name,
-                value: [calcWalletsFundResult.cyje, fund.gszzl],
+                value: [calcWalletsFundResult.cyje, fund.gszzl || 0],
               };
             }),
           },
