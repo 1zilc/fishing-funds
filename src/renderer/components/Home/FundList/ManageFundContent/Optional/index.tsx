@@ -43,6 +43,7 @@ const Optional: React.FC<OptionalProps> = () => {
       name: '',
       cbj: undefined as number | undefined,
       zdfRange: undefined as number | undefined,
+      memo: '' as string | undefined,
     },
   });
 
@@ -138,6 +139,7 @@ const Optional: React.FC<OptionalProps> = () => {
                           code: fund.code,
                           cbj: fund.cbj,
                           zdfRange: fund.zdfRange,
+                          memo: fund.memo,
                         },
                         focus: '',
                       })
@@ -156,6 +158,7 @@ const Optional: React.FC<OptionalProps> = () => {
                             code: fund.code,
                             cbj: fund.cbj,
                             zdfRange: fund.zdfRange,
+                            memo: fund.memo,
                           },
                           focus: 'zdfRange',
                         })

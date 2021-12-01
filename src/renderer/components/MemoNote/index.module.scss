@@ -1,0 +1,10 @@
+.content {
+  height: 100%;
+  width: 100%;
+  background: var(--hover-color);
+  padding: var(--base-padding);
+  border-radius: 5px;
+  overflow: hidden;
+  margin: var(--base-padding) 0;
+  white-space: pre-wrap;
+}

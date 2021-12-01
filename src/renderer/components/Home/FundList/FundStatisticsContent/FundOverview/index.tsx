@@ -53,7 +53,7 @@ const FundOverview: React.FC<FundOverviewProps> = (props) => {
       });
     },
     chartInstance,
-    [darkMode, codes]
+    [varibleColors, darkMode, codes]
   );
 
   return (

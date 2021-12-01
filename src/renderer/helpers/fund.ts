@@ -113,6 +113,7 @@ export function CalcFund(fund: Fund.ResponseItem & Fund.FixData, walletCode: str
   const isFix = fund.fixDate && fund.fixDate === gzrq;
   const cyfe = codeMap[fund.fundcode!]?.cyfe || 0;
   const cbj = codeMap[fund.fundcode!]?.cbj;
+  const memo = codeMap[fund.fundcode!]?.memo;
   const gsz = isFix ? fund.fixDwjz! : fund.gsz!;
   const dwjz = isFix ? fund.fixDwjz! : fund.dwjz!;
   const bjz = NP.minus(gsz!, fund.dwjz!);
@@ -132,6 +133,7 @@ export function CalcFund(fund: Fund.ResponseItem & Fund.FixData, walletCode: str
     ...fund,
     cyfe, // 持有份额
     cbj, // 成本价
+    memo, // 备注
     cbje, // 成本金额
     cyje, // 持有金额
     cysyl, // 持有收益率
