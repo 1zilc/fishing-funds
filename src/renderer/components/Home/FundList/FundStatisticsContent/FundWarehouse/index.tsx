@@ -12,7 +12,7 @@ interface FundWarehouseProps {
 }
 
 const FundRank: React.FC<FundWarehouseProps> = ({ funds = [], codes = [] }) => {
-  const { ref: chartRef, chartInstance } = useResizeEchart(Math.max(CONST.DEFAULT.ECHARTS_SCALE, funds.length / 12));
+  const { ref: chartRef, chartInstance } = useResizeEchart(Math.max(CONST.DEFAULT.ECHARTS_SCALE, funds.length / 12), true);
   const { varibleColors, darkMode } = useHomeContext();
   const { currentWalletCode } = useCurrentWallet();
 

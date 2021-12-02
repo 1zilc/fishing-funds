@@ -58,9 +58,9 @@ const SortBar: React.FC<SortBarProps> = () => {
   } = Helpers.Sort.GetSortConfig();
 
   const [visible, setVisible] = useState(true);
-  // const { run: debounceSetVisible } = useDebounceFn(() => setVisible(true), {
-  //   wait: 200,
-  // });
+  const { run: debounceSetVisible } = useDebounceFn(() => setVisible(true), {
+    wait: 200,
+  });
   const tabsActiveKey = useSelector((state: StoreState) => state.tabs.activeKey);
   const {
     currentWalletState: { funds },
@@ -96,11 +96,11 @@ const SortBar: React.FC<SortBarProps> = () => {
   const toggleStocksCollapse = () => dispatch(toggleAllStocksCollapseAction());
   const toggleCoinsCollapse = () => dispatch(toggleAllCoinsCollapseAction());
 
-  // useScroll(document, () => {
-  //   setVisible(false);
-  //   debounceSetVisible();
-  //   return true;
-  // });
+  useScroll(document, () => {
+    setVisible(false);
+    debounceSetVisible();
+    return true;
+  });
 
   function renderMenu() {
     switch (tabsActiveKey) {

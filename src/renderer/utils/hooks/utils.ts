@@ -109,7 +109,7 @@ export function useNativeThemeColor(varibles: string[]) {
   return { darkMode, colors };
 }
 
-export function useResizeEchart(scale = 1) {
+export function useResizeEchart(scale = 1, unlimited?: boolean) {
   const chartRef = useRef<HTMLDivElement>(null);
   const [chartInstance, setChartInstance] = useState<echarts.ECharts | null>(null);
   const { width: chartRefWidth } = useSize(chartRef);
@@ -125,8 +125,8 @@ export function useResizeEchart(scale = 1) {
 
   useEffect(() => {
     const height = chartRefWidth! * scale;
-    chartInstance?.resize({ height: height > 200 ? 200 : height });
-  }, [chartRefWidth]);
+    chartInstance?.resize({ height: unlimited ? height : height > 200 ? 200 : height });
+  }, [chartRefWidth, unlimited]);
   return { ref: chartRef, chartRefWidth, chartInstance, setChartInstance };
 }
 
