@@ -3,8 +3,8 @@ import classnames from 'classnames';
 import ColorHash from 'color-hash';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { ReactComponent as ArrowDownIcon } from '@/static/icon/arrow-down.svg';
-import { ReactComponent as ArrowUpIcon } from '@/static/icon/arrow-up.svg';
+import ArrowDownIcon from '@/static/icon/arrow-down.svg';
+import ArrowUpIcon from '@/static/icon/arrow-up.svg';
 import ArrowLine from '@/components/ArrowLine';
 import Collapse from '@/components/Collapse';
 import { StoreState } from '@/reducers/types';

@@ -1,9 +1,9 @@
 import React, { PropsWithChildren, ReactNode, useRef } from 'react';
 import html2canvas from 'html2canvas';
 import classnames from 'classnames';
-import { ReactComponent as DownloadIcon } from '@/static/icon/download.svg';
-import { ReactComponent as CopyIcon } from '@/static/icon/copy.svg';
-import { ReactComponent as RefreshIcon } from '@/static/icon/refresh.svg';
+import DownloadIcon from '@/static/icon/download.svg';
+import CopyIcon from '@/static/icon/copy.svg';
+import RefreshIcon from '@/static/icon/refresh.svg';
 
 import styles from './index.module.scss';
 

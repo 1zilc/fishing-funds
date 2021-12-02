@@ -4,10 +4,10 @@ import { useSelector, useDispatch } from 'react-redux';
 import classsames from 'classnames';
 import { Dropdown, Menu } from 'antd';
 
-import { ReactComponent as SortArrowUpIcon } from '@/static/icon/sort-arrow-up.svg';
-import { ReactComponent as SortArrowDownIcon } from '@/static/icon/sort-arrow-down.svg';
-import { ReactComponent as ArrowDownIcon } from '@/static/icon/arrow-down.svg';
-import { ReactComponent as ArrowUpIcon } from '@/static/icon/arrow-up.svg';
+import SortArrowUpIcon from '@/static/icon/sort-arrow-up.svg';
+import SortArrowDownIcon from '@/static/icon/sort-arrow-down.svg';
+import ArrowDownIcon from '@/static/icon/arrow-down.svg';
+import ArrowUpIcon from '@/static/icon/arrow-up.svg';
 import {
   setFundSortModeAction,
   troggleFundSortOrderAction,
@@ -58,9 +58,9 @@ const SortBar: React.FC<SortBarProps> = () => {
   } = Helpers.Sort.GetSortConfig();
 
   const [visible, setVisible] = useState(true);
-  const { run: debounceSetVisible } = useDebounceFn(() => setVisible(true), {
-    wait: 200,
-  });
+  // const { run: debounceSetVisible } = useDebounceFn(() => setVisible(true), {
+  //   wait: 200,
+  // });
   const tabsActiveKey = useSelector((state: StoreState) => state.tabs.activeKey);
   const {
     currentWalletState: { funds },
@@ -96,11 +96,11 @@ const SortBar: React.FC<SortBarProps> = () => {
   const toggleStocksCollapse = () => dispatch(toggleAllStocksCollapseAction());
   const toggleCoinsCollapse = () => dispatch(toggleAllCoinsCollapseAction());
 
-  useScroll(document, () => {
-    setVisible(false);
-    debounceSetVisible();
-    return true;
-  });
+  // useScroll(document, () => {
+  //   setVisible(false);
+  //   debounceSetVisible();
+  //   return true;
+  // });
 
   function renderMenu() {
     switch (tabsActiveKey) {

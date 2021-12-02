@@ -4,9 +4,9 @@ import { ReactSortable } from 'react-sortablejs';
 import classnames from 'classnames';
 
 import PureCard from '@/components/Card/PureCard';
-import { ReactComponent as AddIcon } from '@/static/icon/add.svg';
-import { ReactComponent as MenuIcon } from '@/static/icon/menu.svg';
-import { ReactComponent as RemoveIcon } from '@/static/icon/remove.svg';
+import AddIcon from '@/static/icon/add.svg';
+import MenuIcon from '@/static/icon/menu.svg';
+import RemoveIcon from '@/static/icon/remove.svg';
 import CustomDrawer from '@/components/CustomDrawer';
 import Empty from '@/components/Empty';
 import AddZindexContent from '@/components/Home/ZindexList/AddZindexContent';

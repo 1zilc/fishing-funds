@@ -1,7 +1,7 @@
 import React from 'react';
 import { Tooltip, Button } from 'antd';
 import { useHomeContext } from '@/components/Home';
-import { ReactComponent as QuestionIcon } from '@/static/icon/question.svg';
+import QuestionIcon from '@/static/icon/question.svg';
 import styles from './index.module.scss';
 
 export interface GuideProps {

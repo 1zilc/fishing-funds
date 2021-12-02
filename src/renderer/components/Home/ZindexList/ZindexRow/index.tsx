@@ -2,8 +2,8 @@ import React from 'react';
 import classnames from 'classnames';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { ReactComponent as ArrowDownIcon } from '@/static/icon/arrow-down.svg';
-import { ReactComponent as ArrowUpIcon } from '@/static/icon/arrow-up.svg';
+import ArrowDownIcon from '@/static/icon/arrow-down.svg';
+import ArrowUpIcon from '@/static/icon/arrow-up.svg';
 import Collapse from '@/components/Collapse';
 import ArrowLine from '@/components/ArrowLine';
 import { StoreState } from '@/reducers/types';

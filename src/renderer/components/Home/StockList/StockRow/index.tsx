@@ -4,8 +4,8 @@ import ColorHash from 'color-hash';
 import { useRequest } from 'ahooks';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { ReactComponent as ArrowDownIcon } from '@/static/icon/arrow-down.svg';
-import { ReactComponent as ArrowUpIcon } from '@/static/icon/arrow-up.svg';
+import ArrowDownIcon from '@/static/icon/arrow-down.svg';
+import ArrowUpIcon from '@/static/icon/arrow-up.svg';
 import { useHomeContext } from '@/components/Home';
 import Collapse from '@/components/Collapse';
 import { StoreState } from '@/reducers/types';
