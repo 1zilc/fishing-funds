@@ -54,7 +54,7 @@ const QuotationRow: React.FC<RowProps> = (props) => {
             <div className={styles.rowBar}>
               {quotation.zdf < 0 ? (
                 <>
-                  <span className={styles.code}>{quotation.lzgpName}</span>
+                  <span className={styles.code}>{quotation.ldgpName}</span>
                   <span className={classnames(Utils.GetValueColor(quotation.ldgpZdf).textClass)}>领跌</span>
                   <span className={classnames(Utils.GetValueColor(quotation.ldgpZdf).textClass)}>{Utils.Yang(quotation.ldgpZdf)} %</span>
                 </>
