@@ -26,15 +26,6 @@ const FundOverview: React.FC<FundOverviewProps> = (props) => {
             return `${name}：${Utils.Yang(value[1])}%`;
           },
         },
-        visualMap: {
-          show: false,
-          min: -2,
-          max: 2,
-          inRange: {
-            color: [Utils.GetValueColor(-1).color, Utils.GetValueColor(0).color, Utils.GetValueColor(1).color],
-          },
-          dimension: 1,
-        },
         series: [
           {
             height: '100%',
@@ -46,6 +37,9 @@ const FundOverview: React.FC<FundOverviewProps> = (props) => {
               return {
                 name: fund.name,
                 value: [calcWalletsFundResult.cyje, fund.gszzl || 0],
+                itemStyle: {
+                  color: Utils.GetValueMapColor(fund.gszzl || 0),
+                },
               };
             }),
           },
