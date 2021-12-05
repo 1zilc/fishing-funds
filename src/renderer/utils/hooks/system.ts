@@ -88,7 +88,7 @@ export function useRiskNotification() {
         return;
       }
       try {
-        wallets.map((wallet) => {
+        wallets.forEach((wallet) => {
           const { codeMap } = Helpers.Fund.GetFundConfig(wallet.code);
           const walletConfig = Helpers.Wallet.GetCurrentWalletConfig(wallet.code);
           wallet.funds?.forEach((fund) => {
