@@ -312,6 +312,13 @@ export function useFundRating(code: string) {
       star = total / count;
     }
   }
+
+  useEffect(() => {
+    if (!Object.keys(fundRatingMap)) {
+      Helpers.Fund.LoadFundRatingMap();
+    }
+  }, [fundRatingMap]);
+
   return {
     ...(fundRating || {}),
     star,

@@ -1,5 +1,6 @@
-import React, { PropsWithChildren, useState, useEffect } from 'react';
+import React, { PropsWithChildren, useMemo } from 'react';
 import { Table } from 'antd';
+import { useSelector, useDispatch } from 'react-redux';
 import { useRequest } from 'ahooks';
 
 import ChartCard from '@/components/Card/ChartCard';
@@ -7,18 +8,20 @@ import CustomDrawer from '@/components/CustomDrawer';
 import AddFundContent from '@/components/Home/FundList/AddFundContent';
 import DetailFundContent from '@/components/Home/FundList/DetailFundContent';
 import { useDrawer, useCurrentWallet } from '@/utils/hooks';
+import { setFundRatingMapAction } from '@/actions/fund';
+import { StoreState } from '@/reducers/types';
 import * as Services from '@/services';
-import * as Utils from '@/utils';
 import styles from './index.module.scss';
 
 interface RantingProps {}
 
 const Ranting: React.FC<PropsWithChildren<RantingProps>> = () => {
-  const [data, setData] = useState([]);
+  const dispatch = useDispatch();
   const { currentWalletFundsCodeMap: codeMap } = useCurrentWallet();
   const { data: detailCode, show: showDetailDrawer, set: setDetailDrawer, close: closeDetailDrawer } = useDrawer('');
   const { data: addCode, show: showAddDrawer, set: setAddDrawer, close: closeAddDrawer } = useDrawer('');
-
+  const fundRatingMap = useSelector((state: StoreState) => state.fund.fundRatingMap);
+  const fundRating = useMemo(() => Object.values(fundRatingMap), [fundRatingMap]);
   const columns = [
     {
       title: '名称',
@@ -71,7 +74,8 @@ const Ranting: React.FC<PropsWithChildren<RantingProps>> = () => {
 
   const { run: runGetFundRatingFromEasemoney, loading } = useRequest(Services.Fund.GetFundRatingFromEasemoney, {
     throwOnError: true,
-    onSuccess: setData,
+    onSuccess: dispatch(setFundRatingMapAction),
+    ready: !Object.keys(fundRatingMap),
   });
 
   return (
@@ -81,7 +85,7 @@ const Ranting: React.FC<PropsWithChildren<RantingProps>> = () => {
           rowKey="code"
           size="small"
           columns={columns}
-          dataSource={data}
+          dataSource={fundRating}
           loading={loading}
           pagination={{
             defaultPageSize: 20,
