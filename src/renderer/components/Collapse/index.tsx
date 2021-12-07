@@ -1,4 +1,4 @@
-import React, { PropsWithChildren, useRef, useMemo } from 'react';
+import React, { PropsWithChildren, useLayoutEffect, useRef, useState } from 'react';
 
 import classnames from 'classnames';
 import styles from './index.module.scss';
@@ -10,7 +10,11 @@ interface CollapseProps {
 
 const Collapse: React.FC<PropsWithChildren<CollapseProps>> = (props) => {
   const contentRef = useRef<HTMLDivElement>(null);
-  const max = useMemo(() => contentRef.current?.clientHeight, [contentRef.current?.clientHeight]);
+  const [max, setMax] = useState(contentRef.current?.clientHeight);
+
+  useLayoutEffect(() => {
+    setMax(contentRef.current?.clientHeight);
+  }, [contentRef.current?.clientHeight]);
 
   return (
     <div
