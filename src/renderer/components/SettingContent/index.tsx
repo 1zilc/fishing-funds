@@ -11,16 +11,16 @@ import CustomDrawerContent from '@/components/CustomDrawer/Content';
 import PayCarousel from '@/components/PayCarousel';
 import Guide from '@/components/Guide';
 import Log from '@/components/SettingContent/Log';
-import { ReactComponent as SettingIcon } from '@/static/icon/setting.svg';
-import { ReactComponent as LinkIcon } from '@/static/icon/link.svg';
-import { ReactComponent as LineCharIcon } from '@/static/icon/line-chart.svg';
-import { ReactComponent as TShirtIcon } from '@/static/icon/t-shirt.svg';
-import { ReactComponent as GlobalIcon } from '@/static/icon/global.svg';
-import { ReactComponent as GroupIcon } from '@/static/icon/group.svg';
-import { ReactComponent as NotificationIcon } from '@/static/icon/notification.svg';
-import { ReactComponent as BitCoinIcon } from '@/static/icon/bit-coin.svg';
-import { ReactComponent as WindowIcon } from '@/static/icon/window.svg';
-import { ReactComponent as CalendarIcon } from '@/static/icon/calendar.svg';
+import SettingIcon from '@/static/icon/setting.svg';
+import LinkIcon from '@/static/icon/link.svg';
+import LineCharIcon from '@/static/icon/line-chart.svg';
+import TShirtIcon from '@/static/icon/t-shirt.svg';
+import GlobalIcon from '@/static/icon/global.svg';
+import GroupIcon from '@/static/icon/group.svg';
+import NotificationIcon from '@/static/icon/notification.svg';
+import BitCoinIcon from '@/static/icon/bit-coin.svg';
+import WindowIcon from '@/static/icon/window.svg';
+import CalendarIcon from '@/static/icon/calendar.svg';
 import { defalutSystemSetting } from '@/helpers/setting';
 import { setSystemSettingAction } from '@/actions/setting';
 import { StoreState } from '@/reducers/types';
@@ -303,7 +303,7 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
                   <Guide
                     list={[
                       { name: '调仓提醒', text: '将在预设时间发出调仓通知' },
-                      { name: '涨跌提醒', text: '开启后可在基金设置中配置自定义涨幅提醒' },
+                      { name: '基金提醒', text: '开启后可在基金设置中配置自定义涨幅、净值提醒' },
                       { name: '托盘内容', text: '仅限macos客户端，菜单栏显示当日收益等信息' },
                     ]}
                   />
@@ -327,7 +327,7 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
                   />
                 </section>
                 <section>
-                  <label>涨跌提醒：</label>
+                  <label>基金提醒：</label>
                   <Switch size="small" checked={riskNotification} onChange={setRiskNotification} />
                 </section>
                 <section>

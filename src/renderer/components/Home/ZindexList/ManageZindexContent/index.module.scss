@@ -1,6 +1,7 @@
 .content {
-  padding: var(--base-padding);
   position: relative;
+  box-sizing: border-box;
+  padding: 0 var(--base-padding) var(--base-padding);
 }
 
 .row {

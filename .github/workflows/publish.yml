@@ -28,8 +28,8 @@ jobs:
       - name: Run build
         uses: actions/setup-node@v2
         with:
-          node-version: '14'
-      - run: npm install
+          node-version: 16
+      - run: npm install --force
       - run: npm run postinstall
       - run: npm run release-all
         env:

@@ -4,13 +4,13 @@ import { ReactSortable } from 'react-sortablejs';
 import classnames from 'classnames';
 
 import PureCard from '@/components/Card/PureCard';
-import { ReactComponent as AddIcon } from '@/static/icon/add.svg';
-import { ReactComponent as MenuIcon } from '@/static/icon/menu.svg';
-import { ReactComponent as RemoveIcon } from '@/static/icon/remove.svg';
-import { ReactComponent as EditIcon } from '@/static/icon/edit.svg';
-import { ReactComponent as CopyIcon } from '@/static/icon/copy.svg';
-import { ReactComponent as BellsLineIcon } from '@/static/icon/bells-line.svg';
-import { ReactComponent as BellsFillIcon } from '@/static/icon/bells-fill.svg';
+import AddIcon from '@/static/icon/add.svg';
+import MenuIcon from '@/static/icon/menu.svg';
+import RemoveIcon from '@/static/icon/remove.svg';
+import EditIcon from '@/static/icon/edit.svg';
+import CopyIcon from '@/static/icon/copy.svg';
+import BellsLineIcon from '@/static/icon/bells-line.svg';
+import BellsFillIcon from '@/static/icon/bells-fill.svg';
 import CustomDrawer from '@/components/CustomDrawer';
 import Empty from '@/components/Empty';
 import AddFundContent from '@/components/Home/FundList/AddFundContent';
@@ -43,6 +43,7 @@ const Optional: React.FC<OptionalProps> = () => {
       name: '',
       cbj: undefined as number | undefined,
       zdfRange: undefined as number | undefined,
+      memo: '' as string | undefined,
     },
   });
 
@@ -91,14 +92,15 @@ const Optional: React.FC<OptionalProps> = () => {
     const { response } = await dialog.showMessageBox({
       title: '取消涨跌通知',
       type: 'info',
-      message: `确认取消 ${fund.name || ''} 涨跌范围 ${fund.zdfRange}% 通知`,
+      message: `确认取消 ${fund.name || ''} 涨跌范围、基金净值通知`,
       buttons: ['确定', '取消'],
     });
     if (response === 0) {
       dispatch(
         updateFundAction({
-          ...fund,
+          code: fund.code,
           zdfRange: undefined,
+          jzNotice: undefined,
         })
       );
     }
@@ -137,12 +139,13 @@ const Optional: React.FC<OptionalProps> = () => {
                           code: fund.code,
                           cbj: fund.cbj,
                           zdfRange: fund.zdfRange,
+                          memo: fund.memo,
                         },
                         focus: '',
                       })
                     }
                   />
-                  {fund.zdfRange ? (
+                  {fund.zdfRange || fund.jzNotice ? (
                     <BellsFillIcon className={styles.function} onClick={() => onCancleRiskNotice(fund)} />
                   ) : (
                     <BellsLineIcon
@@ -155,6 +158,7 @@ const Optional: React.FC<OptionalProps> = () => {
                             code: fund.code,
                             cbj: fund.cbj,
                             zdfRange: fund.zdfRange,
+                            memo: fund.memo,
                           },
                           focus: 'zdfRange',
                         })

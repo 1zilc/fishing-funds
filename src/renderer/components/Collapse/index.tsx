@@ -11,9 +11,10 @@ interface CollapseProps {
 const Collapse: React.FC<PropsWithChildren<CollapseProps>> = (props) => {
   const contentRef = useRef<HTMLDivElement>(null);
   const [max, setMax] = useState(contentRef.current?.clientHeight);
+
   useLayoutEffect(() => {
     setMax(contentRef.current?.clientHeight);
-  }, []);
+  }, [contentRef.current?.clientHeight]);
 
   return (
     <div

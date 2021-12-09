@@ -104,8 +104,10 @@ export function updateFundAction(fund: {
   code: string;
   cyfe?: number;
   name?: string;
-  cbj?: number | null;
-  zdfRange?: number | null;
+  cbj?: number;
+  zdfRange?: number;
+  jzNotice?: number;
+  memo?: string;
 }): ThunkAction {
   return (dispatch, getState) => {
     try {
@@ -114,18 +116,9 @@ export function updateFundAction(fund: {
       const cloneFundConfig = Utils.DeepCopy(fundConfig);
       cloneFundConfig.forEach((item) => {
         if (fund.code === item.code) {
-          if (fund.cyfe !== undefined) {
-            item.cyfe = fund.cyfe;
-          }
-          if (fund.cbj !== null) {
-            item.cbj = fund.cbj;
-          }
-          if (fund.zdfRange !== null) {
-            item.zdfRange = fund.zdfRange;
-          }
-          if (fund.name !== undefined) {
-            item.name = fund.name;
-          }
+          Object.keys(fund).forEach((key) => {
+            (item[key as keyof Fund.SettingItem] as any) = fund[key as keyof Fund.SettingItem];
+          });
         }
       });
 

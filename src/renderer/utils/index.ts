@@ -406,3 +406,12 @@ export function CheckEnvTool() {
 export function GetWeekDay(day: number) {
   return ['星期天', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'][day];
 }
+
+export function GetValueMapColor(value: any = 0) {
+  const alphas = [0.6, 0.7, 0.8, 0.9, 1];
+  const alphaindex = Math.ceil(Math.min(Math.abs(value) * 1.5, 5));
+  const colorAlpha = value === 0 ? 1 : alphas[alphaindex];
+  const color = GetValueColor(value).color;
+  const rgba = ColorRgba(color, colorAlpha);
+  return rgba;
+}

@@ -9,7 +9,10 @@ const { got } = window.contextModules;
 // 天天基金
 export async function FromEastmoney(code: string) {
   try {
-    const { body } = await got(`http://fundgz.1234567.com.cn/js/${code}.js`, {});
+    const { body } = await got(
+      `http://fundgz.1234567.com.cn/js/${code}.js`,
+      {}
+    );
     if (body.startsWith('jsonpgz')) {
       const fund: Fund.ResponseItem = eval(body);
       if (fund === undefined) {
@@ -37,7 +40,9 @@ export async function FromDayFund(code: string) {
     if (body === '||||%|%|||||') {
       return null;
     }
-    const { body: html } = await got(`https://www.dayfund.cn/fundinfo/${code}.html`);
+    const { body: html } = await got(
+      `https://www.dayfund.cn/fundinfo/${code}.html`
+    );
     const $ = cheerio.load(html);
     const [name] = $('meta[name=keywords]').attr('content')?.split(',') || [''];
     const [
@@ -93,7 +98,9 @@ export async function FromTencent(code: string) {
     const jzrq = $('#main3').text();
     const gsz = $('#main5').text() || ssgsz;
     const gzTime = `${time.slice(0, 2)}:${time.slice(2)}`;
-    const gszzl = NP.times(NP.divide(NP.minus(gsz, dwjz), dwjz), 100).toFixed(2);
+    const gszzl = NP.times(NP.divide(NP.minus(gsz, dwjz), dwjz), 100).toFixed(
+      2
+    );
 
     return {
       name,
@@ -124,7 +131,9 @@ export async function FromSina(code: string) {
     if (!data) {
       return null;
     }
-    const { body: html } = await got(`https://finance.sina.com.cn/fund/quotes/${code}/bc.shtml`);
+    const { body: html } = await got(
+      `https://finance.sina.com.cn/fund/quotes/${code}/bc.shtml`
+    );
     const $ = cheerio.load(html);
     const jzrq = $('#fund_info_blk2 > .fund_data_date').text().slice(5);
     const [name, time, gsz, dwjz, zjz, unknow1, gszzl, gzrq] = data.split(',');
@@ -145,12 +154,15 @@ export async function FromSina(code: string) {
 // 好买基金
 export async function FromHowbuy(code: string) {
   try {
-    const { body } = await got(`https://www.howbuy.com/fund/ajax/gmfund/valuation/valuationnav.htm`, {
-      method: 'post',
-      searchParams: {
-        jjdm: code,
-      },
-    });
+    const { body } = await got(
+      `https://www.howbuy.com/fund/ajax/gmfund/valuation/valuationnav.htm`,
+      {
+        method: 'post',
+        searchParams: {
+          jjdm: code,
+        },
+      }
+    );
     if (!body) {
       return null;
     }
@@ -224,13 +236,37 @@ export async function FromEtf(code: string) {
     const { body: html } = await got(`http://www.etf88.com/jj/${code}/`, {});
     const $ = cheerio.load(html);
     const name = $('h1[class="name"]').text();
-    const firstDate = $('.table').eq(1).find('tbody tr').eq(0).find('td').eq(0).text();
+    const firstDate = $('.table')
+      .eq(1)
+      .find('tbody tr')
+      .eq(0)
+      .find('td')
+      .eq(0)
+      .text();
 
-    const firstJz = $('.table').eq(1).find('tbody tr').eq(0).find('td').eq(1).text();
+    const firstJz = $('.table')
+      .eq(1)
+      .find('tbody tr')
+      .eq(0)
+      .find('td')
+      .eq(1)
+      .text();
 
-    const secondDate = $('.table').eq(1).find('tbody tr').eq(1).find('td').eq(0).text();
+    const secondDate = $('.table')
+      .eq(1)
+      .find('tbody tr')
+      .eq(1)
+      .find('td')
+      .eq(0)
+      .text();
 
-    const secondJz = $('.table').eq(1).find('tbody tr').eq(1).find('td').eq(1).text();
+    const secondJz = $('.table')
+      .eq(1)
+      .find('tbody tr')
+      .eq(1)
+      .find('td')
+      .eq(1)
+      .text();
     const dwjz = data.gzrq === firstDate ? secondJz : firstJz;
 
     const jzrq = $('.fund-d-title')
@@ -258,11 +294,14 @@ export async function FromEtf(code: string) {
 // 支付宝-蚂蚁基金
 export async function FromFund123(code: string) {
   try {
-    const { body: html, headers } = await got(`https://www.fund123.cn/matiaria`, {
-      searchParams: {
-        fundCode: code,
-      },
-    });
+    const { body: html, headers } = await got(
+      `https://www.fund123.cn/matiaria`,
+      {
+        searchParams: {
+          fundCode: code,
+        },
+      }
+    );
     const $ = cheerio.load(html);
     const script = $('script').eq(2).html();
     const fixscript = script?.replace(/window\.context/g, 'const o');
@@ -324,14 +363,54 @@ export async function FromFund123(code: string) {
             trusteeName: '中国银行股份有限公司';
             fundManagerBackground: '    韩创，中国国籍，金融学硕士，9年证券从业年限，具有基金从业资格。2012年6月至2015年6月曾任招商证券研究部研究员。2015年6月加入大成基金管理有限公司，历任研究部研究员、基金经理助理。2019年1月10日至2020年2月3日，担任大成消费主题混合型证券投资基金的基金经理。2019年1月10日起，担任大成新锐产业混合型证券投资基金的基金经理。2020年1月2日起，担任大成睿景灵活配置混合型证券投资基金的基金经理。2021年2月9日起，担任大成产业趋势混合型证券投资基金的基金经理。自2021年1月13日起，担任大成国企改革灵活配置混合型证券投资基金的基金经理。自2021年6月30日起，担任大成核心趋势混合型证券投资基金的基金经理。';
             fundManagerInfoList: [
-              { key: '1'; fundName: '大成新锐产业混合型证券投资基金'; officeDate: '2019-01-10  至今'; earnings: '3.979472' },
-              { key: '2'; fundName: '大成睿景灵活配置混合型证券投资基金A类'; officeDate: '2020-01-02  至今'; earnings: '2.241387' },
-              { key: '3'; fundName: '大成睿景灵活配置混合型证券投资基金C类'; officeDate: '2020-01-02  至今'; earnings: '2.201024' },
-              { key: '4'; fundName: '大成国企改革灵活配置混合型证券投资基金'; officeDate: '2021-01-13  至今'; earnings: '0.794896' },
-              { key: '5'; fundName: '大成产业趋势混合型证券投资基金A类'; officeDate: '2021-02-09  至今'; earnings: '0.448205' },
-              { key: '6'; fundName: '大成产业趋势混合型证券投资基金C类'; officeDate: '2021-02-09  至今'; earnings: '0.441500' },
-              { key: '7'; fundName: '大成核心趋势混合型证券投资基金C类'; officeDate: '2021-06-30  至今'; earnings: '0.225799' },
-              { key: '8'; fundName: '大成核心趋势混合型证券投资基金A类'; officeDate: '2021-06-30  至今'; earnings: '0.226099' }
+              {
+                key: '1';
+                fundName: '大成新锐产业混合型证券投资基金';
+                officeDate: '2019-01-10  至今';
+                earnings: '3.979472';
+              },
+              {
+                key: '2';
+                fundName: '大成睿景灵活配置混合型证券投资基金A类';
+                officeDate: '2020-01-02  至今';
+                earnings: '2.241387';
+              },
+              {
+                key: '3';
+                fundName: '大成睿景灵活配置混合型证券投资基金C类';
+                officeDate: '2020-01-02  至今';
+                earnings: '2.201024';
+              },
+              {
+                key: '4';
+                fundName: '大成国企改革灵活配置混合型证券投资基金';
+                officeDate: '2021-01-13  至今';
+                earnings: '0.794896';
+              },
+              {
+                key: '5';
+                fundName: '大成产业趋势混合型证券投资基金A类';
+                officeDate: '2021-02-09  至今';
+                earnings: '0.448205';
+              },
+              {
+                key: '6';
+                fundName: '大成产业趋势混合型证券投资基金C类';
+                officeDate: '2021-02-09  至今';
+                earnings: '0.441500';
+              },
+              {
+                key: '7';
+                fundName: '大成核心趋势混合型证券投资基金C类';
+                officeDate: '2021-06-30  至今';
+                earnings: '0.225799';
+              },
+              {
+                key: '8';
+                fundName: '大成核心趋势混合型证券投资基金A类';
+                officeDate: '2021-06-30  至今';
+                earnings: '0.226099';
+              }
             ];
             investPhilosophy: '    本基金的投资目标是通过投资于国企改革相关的优质上市公司，在严格控制风险的前提下，力争获取超越业绩比较基准的收益。';
             investStrategy: '    本基金通过对宏观经济环境、国家经济政策、股票市场风险、债券市场整体收益率曲线变化和资金供求关系等因素的分析，研判经济周期在美林投资时钟理论所处的阶段，综合评价各类资产的市场趋势、预期风险收益水平和配置时机。\r\n    本基金认为当前受益于国企改革的上市公司股票涉及多个行业，本基金将通过自下而上研究入库的方式，对各个行业中受益于国企改革主题的上市公司进行深入研究，并将这些股票组成本基金的核心股票库。\r\n    本基金将根据融资买入股票成本以及其他投资工具收益率综合评估是否采用融资方式买入股票，本基金在任何交易日日终持有的融资买入股票与直接买入股票市值之和，不得超过基金资产净值的95%。\r\n    本基金的债券投资采取稳健的投资管理方式，获得与风险相匹配的投资收益，以实现在一定程度上规避股票市场的系统性风险和保证基金资产的流动性。\r\n    中小企业私募债票面利率较高、信用风险较大、二级市场流动性较差。';
@@ -390,7 +469,9 @@ export async function FromFund123(code: string) {
     let dwjz = netValue;
 
     if (netValueDate === gzData) {
-      dwjz = String(NP.divide(netValue, NP.divide(NP.plus(100, dayOfGrowth), 100)));
+      dwjz = String(
+        NP.divide(netValue, NP.divide(NP.plus(100, dayOfGrowth), 100))
+      );
     }
     const result = {
       name: fundNameAbbr,
@@ -541,7 +622,10 @@ export async function FromFund10jqka(code: string) {
 // 从天天基金获取估值图片
 export async function GetEstimatedFromEastmoney(code: string) {
   try {
-    const { rawBody }: any = await got(`http://j4.dfcfw.com/charts/pic6/${code}.png`, {});
+    const { rawBody }: any = await got(
+      `http://j4.dfcfw.com/charts/pic6/${code}.png`,
+      {}
+    );
     const b64encoded = btoa(String.fromCharCode.apply(null, rawBody));
     return `data:image/png;base64,${b64encoded}`;
   } catch (error) {
@@ -552,7 +636,10 @@ export async function GetEstimatedFromEastmoney(code: string) {
 // 从天天基金获取投资风格图片
 export async function GetInverstStyleFromEastmoney(code: string) {
   try {
-    const { rawBody }: any = await got(`http://j3.dfcfw.com/images/InvestStyle/${code}.png`, {});
+    const { rawBody }: any = await got(
+      `http://j3.dfcfw.com/images/InvestStyle/${code}.png`,
+      {}
+    );
     const b64encoded = btoa(String.fromCharCode.apply(null, rawBody));
     return `data:image/png;base64,${b64encoded}`;
   } catch (error) {
@@ -561,12 +648,22 @@ export async function GetInverstStyleFromEastmoney(code: string) {
 }
 
 // 从天天基金获取股票持仓
-export async function GetStockWareHouseFromEastmoney(code: string, stockCodes: string[]) {
+export async function GetStockWareHouseFromEastmoney(
+  code: string,
+  stockCodes: string[]
+) {
   try {
-    const { body: html } = await got(`http://fund.eastmoney.com/${code}.html`, {});
+    const { body: html } = await got(
+      `http://fund.eastmoney.com/${code}.html`,
+      {}
+    );
     const $ = cheerio.load(html);
     const secids = (stockCodes || []).join(',') || '';
-    const tors = $('#quotationItem_DataTable').find('#position_shares').find('tr > td:nth-child(2)').text().split('%');
+    const tors = $('#quotationItem_DataTable')
+      .find('#position_shares')
+      .find('tr > td:nth-child(2)')
+      .text()
+      .split('%');
 
     const {
       body: { data },
@@ -607,12 +704,22 @@ export async function GetStockWareHouseFromEastmoney(code: string, stockCodes: s
 }
 
 // 从天天基金获取债券持仓
-export async function GetSecuritiesWareHouseFromEastmoney(code: string, securitiesCodes: string) {
+export async function GetSecuritiesWareHouseFromEastmoney(
+  code: string,
+  securitiesCodes: string
+) {
   try {
-    const { body: html } = await got(`http://fund.eastmoney.com/${code}.html`, {});
+    const { body: html } = await got(
+      `http://fund.eastmoney.com/${code}.html`,
+      {}
+    );
     const $ = cheerio.load(html);
     const secids = securitiesCodes || '';
-    const tors = $('#quotationItem_DataTable').find('#position_bonds').find('tr > td:nth-child(2)').text().split('%');
+    const tors = $('#quotationItem_DataTable')
+      .find('#position_bonds')
+      .find('tr > td:nth-child(2)')
+      .text()
+      .split('%');
 
     const {
       body: { data },
@@ -654,7 +761,10 @@ export async function GetSecuritiesWareHouseFromEastmoney(code: string, securiti
 // 从天天基金获取基金详情
 export async function GetFundDetailFromEastmoney(code: string) {
   try {
-    const { body } = await got(`http://fund.eastmoney.com/pingzhongdata/${code}.js`, {});
+    const { body } = await got(
+      `http://fund.eastmoney.com/pingzhongdata/${code}.js`,
+      {}
+    );
     const response: Fund.PingzhongData = Utils.parsepingzhongdata(body);
     return response;
   } catch (error) {
@@ -693,7 +803,10 @@ export async function GetFundPerformanceFromEastmoney(
 // 从天天基金获取所有基金信息
 export async function GetRemoteFundsFromEastmoney() {
   try {
-    const { body } = await got('http://fund.eastmoney.com/js/fundcode_search.js', {});
+    const { body } = await got(
+      'http://fund.eastmoney.com/js/fundcode_search.js',
+      {}
+    );
     return Utils.ParseRemoteFunds(body);
   } catch (error) {
     return [];
@@ -736,7 +849,9 @@ export async function GetFixFromEastMoney(code: string) {
 // 从天天基金查询基金经理详情信息
 export async function GetFundManagerDetailFromEastMoney(code: string) {
   try {
-    const { body: html } = await got(`http://fund.eastmoney.com/manager/${code}.html`);
+    const { body: html } = await got(
+      `http://fund.eastmoney.com/manager/${code}.html`
+    );
     const $ = cheerio.load(html);
     const description = $('meta[name="description"]').attr('content');
     const table = $('.content_in').find('.ftrs')[0];
@@ -780,7 +895,9 @@ export async function GetFundManagerDetailFromEastMoney(code: string) {
 export async function GetQDIIFundFromEastMoney(code: string) {
   try {
     // const { gztime } = (await FromEastmoney('161725'))! as Fund.ResponseItem; // TODO:估值时间暂时使用白酒最后一次开门时间
-    const { fixDwjz, fixName, fixDate, fixZzl } = (await GetFixFromEastMoney(code))!;
+    const { fixDwjz, fixName, fixDate, fixZzl } = (await GetFixFromEastMoney(
+      code
+    ))!;
     return {
       name: fixName,
       dwjz: fixDwjz,
@@ -798,11 +915,14 @@ export async function GetQDIIFundFromEastMoney(code: string) {
 // 查询蚂蚁基金QDII基金信息
 export async function GetQDIIFundFromFund123(code: string) {
   try {
-    const { body: html, headers } = await got(`https://www.fund123.cn/matiaria`, {
-      searchParams: {
-        fundCode: code,
-      },
-    });
+    const { body: html, headers } = await got(
+      `https://www.fund123.cn/matiaria`,
+      {
+        searchParams: {
+          fundCode: code,
+        },
+      }
+    );
     const $ = cheerio.load(html);
     const script = $('script').eq(2).html();
     const fixscript = script?.replace(/window\.context/g, 'const o');
@@ -864,14 +984,54 @@ export async function GetQDIIFundFromFund123(code: string) {
             trusteeName: '中国银行股份有限公司';
             fundManagerBackground: '    韩创，中国国籍，金融学硕士，9年证券从业年限，具有基金从业资格。2012年6月至2015年6月曾任招商证券研究部研究员。2015年6月加入大成基金管理有限公司，历任研究部研究员、基金经理助理。2019年1月10日至2020年2月3日，担任大成消费主题混合型证券投资基金的基金经理。2019年1月10日起，担任大成新锐产业混合型证券投资基金的基金经理。2020年1月2日起，担任大成睿景灵活配置混合型证券投资基金的基金经理。2021年2月9日起，担任大成产业趋势混合型证券投资基金的基金经理。自2021年1月13日起，担任大成国企改革灵活配置混合型证券投资基金的基金经理。自2021年6月30日起，担任大成核心趋势混合型证券投资基金的基金经理。';
             fundManagerInfoList: [
-              { key: '1'; fundName: '大成新锐产业混合型证券投资基金'; officeDate: '2019-01-10  至今'; earnings: '3.979472' },
-              { key: '2'; fundName: '大成睿景灵活配置混合型证券投资基金A类'; officeDate: '2020-01-02  至今'; earnings: '2.241387' },
-              { key: '3'; fundName: '大成睿景灵活配置混合型证券投资基金C类'; officeDate: '2020-01-02  至今'; earnings: '2.201024' },
-              { key: '4'; fundName: '大成国企改革灵活配置混合型证券投资基金'; officeDate: '2021-01-13  至今'; earnings: '0.794896' },
-              { key: '5'; fundName: '大成产业趋势混合型证券投资基金A类'; officeDate: '2021-02-09  至今'; earnings: '0.448205' },
-              { key: '6'; fundName: '大成产业趋势混合型证券投资基金C类'; officeDate: '2021-02-09  至今'; earnings: '0.441500' },
-              { key: '7'; fundName: '大成核心趋势混合型证券投资基金C类'; officeDate: '2021-06-30  至今'; earnings: '0.225799' },
-              { key: '8'; fundName: '大成核心趋势混合型证券投资基金A类'; officeDate: '2021-06-30  至今'; earnings: '0.226099' }
+              {
+                key: '1';
+                fundName: '大成新锐产业混合型证券投资基金';
+                officeDate: '2019-01-10  至今';
+                earnings: '3.979472';
+              },
+              {
+                key: '2';
+                fundName: '大成睿景灵活配置混合型证券投资基金A类';
+                officeDate: '2020-01-02  至今';
+                earnings: '2.241387';
+              },
+              {
+                key: '3';
+                fundName: '大成睿景灵活配置混合型证券投资基金C类';
+                officeDate: '2020-01-02  至今';
+                earnings: '2.201024';
+              },
+              {
+                key: '4';
+                fundName: '大成国企改革灵活配置混合型证券投资基金';
+                officeDate: '2021-01-13  至今';
+                earnings: '0.794896';
+              },
+              {
+                key: '5';
+                fundName: '大成产业趋势混合型证券投资基金A类';
+                officeDate: '2021-02-09  至今';
+                earnings: '0.448205';
+              },
+              {
+                key: '6';
+                fundName: '大成产业趋势混合型证券投资基金C类';
+                officeDate: '2021-02-09  至今';
+                earnings: '0.441500';
+              },
+              {
+                key: '7';
+                fundName: '大成核心趋势混合型证券投资基金C类';
+                officeDate: '2021-06-30  至今';
+                earnings: '0.225799';
+              },
+              {
+                key: '8';
+                fundName: '大成核心趋势混合型证券投资基金A类';
+                officeDate: '2021-06-30  至今';
+                earnings: '0.226099';
+              }
             ];
             investPhilosophy: '    本基金的投资目标是通过投资于国企改革相关的优质上市公司，在严格控制风险的前提下，力争获取超越业绩比较基准的收益。';
             investStrategy: '    本基金通过对宏观经济环境、国家经济政策、股票市场风险、债券市场整体收益率曲线变化和资金供求关系等因素的分析，研判经济周期在美林投资时钟理论所处的阶段，综合评价各类资产的市场趋势、预期风险收益水平和配置时机。\r\n    本基金认为当前受益于国企改革的上市公司股票涉及多个行业，本基金将通过自下而上研究入库的方式，对各个行业中受益于国企改革主题的上市公司进行深入研究，并将这些股票组成本基金的核心股票库。\r\n    本基金将根据融资买入股票成本以及其他投资工具收益率综合评估是否采用融资方式买入股票，本基金在任何交易日日终持有的融资买入股票与直接买入股票市值之和，不得超过基金资产净值的95%。\r\n    本基金的债券投资采取稳健的投资管理方式，获得与风险相匹配的投资收益，以实现在一定程度上规避股票市场的系统性风险和保证基金资产的流动性。\r\n    中小企业私募债票面利率较高、信用风险较大、二级市场流动性较差。';
@@ -1022,22 +1182,38 @@ export async function GetQDIIFundFromFund10jqka(code: string) {
 // 查询定投排行
 export async function GetAutomaticPlanFromEastmoney(type: number) {
   try {
-    const { body: html } = await got('http://fund.eastmoney.com/api/Dtshph.ashx', {
-      searchParams: {
-        c: 'dwjz',
-        t: type,
-        s: 'desc',
-        issale: 1,
-        page: 1,
-        psize: 200,
-        _: new Date().getTime(),
-      },
-    });
+    const { body: html } = await got(
+      'http://fund.eastmoney.com/api/Dtshph.ashx',
+      {
+        searchParams: {
+          c: 'dwjz',
+          t: type,
+          s: 'desc',
+          issale: 1,
+          page: 1,
+          psize: 200,
+          _: new Date().getTime(),
+        },
+      }
+    );
     const $ = cheerio.load(html);
     const data = $('tbody tr')
       .toArray()
       .map((tr) => {
-        const [checkbox, no, code, name, more, dwjz, jzrq, y1, y2, y3, y5, star] = $(tr)
+        const [
+          checkbox,
+          no,
+          code,
+          name,
+          more,
+          dwjz,
+          jzrq,
+          y1,
+          y2,
+          y3,
+          y5,
+          star,
+        ] = $(tr)
           .find('td')
           .toArray()
           .map((td) => $(td).text());
@@ -1063,27 +1239,30 @@ export async function GetAutomaticPlanFromEastmoney(type: number) {
 export async function GetRankDataFromEasemoney(type: string) {
   try {
     const now = new Date();
-    const { body } = await got('http://fund.eastmoney.com/data/rankhandler.aspx', {
-      headers: {
-        Referer: 'http://fund.eastmoney.com/data/fundranking.html',
-      },
-      searchParams: {
-        op: 'ph',
-        dt: 'kf',
-        ft: type,
-        rs: '',
-        gs: 0,
-        sc: '1yzf',
-        st: 'desc',
-        qdii: '',
-        tabSubtype: ',,,,,',
-        pi: 1,
-        pn: 200,
-        dx: 1,
-        sd: `${now.getFullYear() - 1}-${now.getMonth() + 1}-${now.getDate()}`,
-        ed: `${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()}`,
-      },
-    });
+    const { body } = await got(
+      'http://fund.eastmoney.com/data/rankhandler.aspx',
+      {
+        headers: {
+          Referer: 'http://fund.eastmoney.com/data/fundranking.html',
+        },
+        searchParams: {
+          op: 'ph',
+          dt: 'kf',
+          ft: type,
+          rs: '',
+          gs: 0,
+          sc: '1yzf',
+          st: 'desc',
+          qdii: '',
+          tabSubtype: ',,,,,',
+          pi: 1,
+          pn: 200,
+          dx: 1,
+          sd: `${now.getFullYear() - 1}-${now.getMonth() + 1}-${now.getDate()}`,
+          ed: `${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()}`,
+        },
+      }
+    );
     return eval(`(() => {
       ${body}
       return rankData.datas;
@@ -1096,19 +1275,43 @@ export async function GetRankDataFromEasemoney(type: string) {
 // 查询基金评级排行
 export async function GetFundRatingFromEasemoney() {
   try {
-    const { body: html } = await got('http://fund.eastmoney.com/data/fundrating.html', {});
+    const { body: html } = await got(
+      'http://fund.eastmoney.com/data/fundrating.html',
+      {}
+    );
     const $ = cheerio.load(html);
     const script = $('#fundinfo').find('script').html();
     const fundinfos = eval(`(() => {
       ${script}
       return fundinfos;
     })()`);
-    const result: Fund.RantingItem[] = fundinfos.split('_').map((item: string) => {
-      // 270007|广发大盘成长混合|混合型-偏股|苗宇|30331916|广发|80000248|2|4|0|3|0|5|0|1|0|5|1|0.15%|1|1|002|211|GFDPCZHH|GFJJ|30331916
-      const [code, name, type, manager, v1, jj, v2, totalFullStar, v3, v4, zsStar, v5, szStar, v6, v7, v8, jaStar] = item.split('|');
-      const total = 0 + Number(szStar || 0) + Number(zsStar || 0) + Number(jaStar || 0);
-      return { code, name, type, szStar, zsStar, jaStar, total };
-    });
+    const result: Fund.RantingItem[] = fundinfos
+      .split('_')
+      .map((item: string) => {
+        // 270007|广发大盘成长混合|混合型-偏股|苗宇|30331916|广发|80000248|2|4|0|3|0|5|0|1|0|5|1|0.15%|1|1|002|211|GFDPCZHH|GFJJ|30331916
+        const [
+          code,
+          name,
+          type,
+          manager,
+          v1,
+          jj,
+          v2,
+          totalFullStar,
+          v3,
+          v4,
+          zsStar,
+          v5,
+          szStar,
+          v6,
+          v7,
+          v8,
+          jaStar,
+        ] = item.split('|');
+        const total =
+          0 + Number(szStar || 0) + Number(zsStar || 0) + Number(jaStar || 0);
+        return { code, name, type, szStar, zsStar, jaStar, total };
+      });
     result.sort((a, b) => b.total - a.total);
     return result;
   } catch (error) {
@@ -1166,5 +1369,78 @@ export async function GetIndustryRateFromEaseMoney(code: string) {
       stocks: [],
       expansion: '',
     };
+  }
+}
+
+// 查询今日排行
+export async function GetTodayListFromEastmoney(type: number) {
+  try {
+    const { body } = await got<{
+      Data: {
+        typeStr: '1';
+        sort: '3';
+        sortType: 'desc';
+        canbuy: '0';
+        gzrq: '2021-11-18';
+        gxrq: '2021-11-19';
+        list: {
+          bzdm: '502010';
+          ListTexch: '1';
+          FScaleType: '01';
+          PLevel: 103.0;
+          JJGSID: '80000229';
+          IsExchg: '0';
+          FType: '指数型-股票';
+          Discount: 1.0;
+          Rate: '0.10%';
+          feature: '020,050,051,054';
+          fundtype: '001';
+          gxrq: '2021-11-19';
+          jjlx3: null;
+          IsListTrade: '1';
+          jjlx2: null;
+          shzt: null;
+          sgzt: '开放申购';
+          isbuy: '1';
+          gzrq: '2021-11-18';
+          gspc: '0.02%';
+          gsz: '1.2869';
+          gszzl: '1.95%';
+          jzzzl: '1.93%';
+          dwjz: '1.2623';
+          gbdwjz: '1.2867';
+          jjjcpy: 'YFDZZQZZQGSZSLOFA';
+          jjjc: '易方达中证全指证券公司指数(LOF)A';
+          jjlx: null;
+          gszzlcolor: 'ui-table-up';
+          jzzzlcolor: 'ui-table-up';
+        }[];
+      };
+      ErrCode: 0;
+      ErrMsg: null;
+      TotalCount: 12631;
+      Expansion: null;
+      PageSize: 200;
+      PageIndex: 1;
+    }>('http://api.fund.eastmoney.com/FundGuZhi/GetFundGZList', {
+      searchParams: {
+        type,
+        sort: 3,
+        orderType: 'desc',
+        canbuy: 0,
+        pageIndex: 1,
+        pageSize: 200,
+        _: new Date().getTime(),
+      },
+      headers: {
+        Referer: 'ttp://fund.eastmoney.com/',
+      },
+      responseType: 'json',
+    });
+
+    const data = body.Data.list;
+    return data;
+  } catch (error) {
+    return [];
   }
 }

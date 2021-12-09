@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useDispatch } from 'react-redux';
-import { InputNumber } from 'antd';
+import { InputNumber, Input } from 'antd';
 
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
 import { updateFundAction } from '@/actions/fund';
@@ -19,9 +19,13 @@ const EditFundContent: React.FC<EditFundContentProps> = (props) => {
   const [cyfe, setCyfe] = useState<any>(fund.cyfe);
   const [cbj, setCbj] = useState<any>(fund.cbj);
   const [zdfRange, setZdfRange] = useState<any>(fund.zdfRange);
+  const [jzNotice, setJzNotice] = useState<any>(fund.jzNotice);
+  const [memo, setMemo] = useState<any>(fund.memo);
   const cbjInputRef = useRef<HTMLInputElement>(null);
   const cyfeInputRef = useRef<HTMLInputElement>(null);
   const zdfRangeInputRef = useRef<HTMLInputElement>(null);
+  const jzNoticeInputRef = useRef<HTMLInputElement>(null);
+  const memoInputRef = useRef<HTMLInputElement>(null);
 
   function onSave() {
     dispatch(
@@ -30,6 +34,8 @@ const EditFundContent: React.FC<EditFundContentProps> = (props) => {
         cyfe: cyfe ?? 0,
         cbj: cbj ?? undefined,
         zdfRange: zdfRange ?? undefined,
+        jzNotice: jzNotice ?? undefined,
+        memo: memo ?? undefined,
       })
     );
     props.onEnter();
@@ -45,6 +51,12 @@ const EditFundContent: React.FC<EditFundContentProps> = (props) => {
         break;
       case 'zdfRange':
         zdfRangeInputRef.current?.focus();
+        break;
+      case 'jzNotice':
+        jzNoticeInputRef.current?.focus();
+        break;
+      case 'memo':
+        memoInputRef.current?.focus();
         break;
       default:
         break;
@@ -98,6 +110,31 @@ const EditFundContent: React.FC<EditFundContentProps> = (props) => {
             precision={2}
             value={zdfRange}
             onChange={setZdfRange}
+            size="small"
+            style={{ width: '100%' }}
+          />
+        </section>
+        <section>
+          <label>净值提醒：</label>
+          <InputNumber
+            ref={jzNoticeInputRef}
+            placeholder="净值达到该值将发出系统通知"
+            min={0.0001}
+            precision={4}
+            value={jzNotice}
+            onChange={setJzNotice}
+            size="small"
+            style={{ width: '100%' }}
+          />
+        </section>
+        <section>
+          <label>备注：</label>
+          <Input.TextArea
+            ref={memoInputRef}
+            rows={5}
+            placeholder="额外记录"
+            value={memo}
+            onChange={(e) => setMemo(e.target.value)}
             size="small"
             style={{ width: '100%' }}
           />

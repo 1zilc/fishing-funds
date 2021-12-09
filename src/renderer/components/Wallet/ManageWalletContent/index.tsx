@@ -2,7 +2,7 @@ import React, { useEffect, useState, useMemo } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { ReactSortable } from 'react-sortablejs';
 
-import { ReactComponent as AddIcon } from '@/static/icon/add.svg';
+import AddIcon from '@/static/icon/add.svg';
 import Empty from '@/components/Empty';
 import CustomDrawer from '@/components/CustomDrawer';
 import AddWalletContent from '@/components/Wallet/AddWalletContent';

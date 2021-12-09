@@ -2,10 +2,11 @@ import React, { useMemo } from 'react';
 import classnames from 'classnames';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { ReactComponent as EditIcon } from '@/static/icon/edit.svg';
-import { ReactComponent as ArrowDownIcon } from '@/static/icon/arrow-down.svg';
-import { ReactComponent as ArrowUpIcon } from '@/static/icon/arrow-up.svg';
+import EditIcon from '@/static/icon/edit.svg';
+import ArrowDownIcon from '@/static/icon/arrow-down.svg';
+import ArrowUpIcon from '@/static/icon/arrow-up.svg';
 import Collapse from '@/components/Collapse';
+import MemoNote from '@/components/MemoNote';
 import { toggleFundCollapseAction } from '@/actions/fund';
 import { StoreState } from '@/reducers/types';
 import { useCurrentWallet } from '@/utils/hooks';
@@ -57,6 +58,8 @@ const FundRow: React.FC<RowProps> = (props) => {
           cyfe: Number(calcFundResult.cyfe),
           cbj: calcFundResult.cbj,
           zdfRange: codeMap[fund.fundcode!]?.zdfRange,
+          jzNotice: codeMap[fund.fundcode!]?.jzNotice,
+          memo: codeMap[fund.fundcode!]?.memo,
         },
         focus
       );
@@ -145,6 +148,7 @@ const FundRow: React.FC<RowProps> = (props) => {
             <span>{isFix ? '今日总额：' : '估算总值：'}</span>
             <span>¥ {calcFundResult.gszz.toFixed(2)}</span>
           </section>
+          {calcFundResult.memo && <MemoNote text={calcFundResult.memo} />}
           <div className={styles.view}>
             <a onClick={onDetailClick}>{'查看详情 >'}</a>
           </div>

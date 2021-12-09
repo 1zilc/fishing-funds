@@ -22,7 +22,7 @@ const rankTypeList = [
 ];
 
 const FundRank: React.FC<FundRankProps> = ({ funds = [], codes = [] }) => {
-  const { ref: chartRef, chartInstance } = useResizeEchart(Math.max(CONST.DEFAULT.ECHARTS_SCALE, funds.length / 12));
+  const { ref: chartRef, chartInstance } = useResizeEchart(Math.max(CONST.DEFAULT.ECHARTS_SCALE, funds.length / 12), true);
   const [rankType, setRankType] = useState(rankTypeList[0]);
   const { varibleColors, darkMode } = useHomeContext();
   const { currentWalletCode } = useCurrentWallet();

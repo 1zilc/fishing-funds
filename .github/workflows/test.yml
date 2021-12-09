@@ -25,11 +25,11 @@ jobs:
       - name: Install Node.js, NPM and Yarn
         uses: actions/setup-node@v2
         with:
-          node-version: 14
+          node-version: 16
 
       - name: Run npm install
         run: |
-          npm install
+          npm install --force
 
       - name: Run npm test
         env:

@@ -15,7 +15,8 @@ export default {
   module: {
     rules: [
       {
-        test: /\.svg$/,
+        test: /\.svg$/i,
+        issuer: /\.[jt]sx?$/,
         use: ['@svgr/webpack'],
       },
       {

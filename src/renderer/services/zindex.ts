@@ -152,3 +152,61 @@ export async function GetKFromEastmoney(code: string, year: number) {
     return [];
   }
 }
+
+// 中国 居民消费价格指数(CPI)等指数
+export async function GetEconomyIndexFromEastmoney(market: number) {
+  try {
+    const { body } = await got<string>('https://datainterface.eastmoney.com/EM_DataCenter/JS.aspx', {
+      searchParams: {
+        type: 'GJZB',
+        sty: 'ZGZB',
+        p: 1,
+        ps: 200,
+        mkt: market,
+        _: new Date().getTime(),
+      },
+    });
+    const data = eval(body);
+    const result = data.map((item: string) => {
+      return item.split(',');
+    });
+    return result;
+  } catch (error) {
+    return [];
+  }
+}
+// 油价
+export async function GetOilPriceFromEastmoney() {
+  try {
+    const { body } = await got<{
+      version: '63fa26740fe0adbc234c8c41e0d5894d';
+      result: {
+        pages: 18;
+        data: {
+          close: 52.31;
+          date: '2019/8/7';
+          qy: 7595.0;
+          cy: 6615.0;
+        }[];
+        count: 8940;
+      };
+      success: true;
+      message: 'ok';
+      code: 0;
+    }>('https://datacenter-web.eastmoney.com/api/data/get', {
+      searchParams: {
+        type: 'RPTA_WEB_JY_HQ',
+        sty: 'ALL',
+        st: 'date',
+        sr: -1,
+        p: 1,
+        ps: 5000,
+        _: new Date().getTime(),
+      },
+      responseType: 'json',
+    });
+    return body.result.data;
+  } catch (error) {
+    return [];
+  }
+}

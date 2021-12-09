@@ -3,7 +3,7 @@ import classnames from 'classnames';
 import { useDispatch, useSelector } from 'react-redux';
 import { Dropdown, Menu } from 'antd';
 
-import { ReactComponent as ConsumptionIcon } from '@/static/icon/consumption.svg';
+import ConsumptionIcon from '@/static/icon/consumption.svg';
 import Eye from '@/components/Eye';
 import { useHeaderContext } from '@/components/Header';
 import { StoreState } from '@/reducers/types';

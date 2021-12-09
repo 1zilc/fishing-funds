@@ -28,7 +28,7 @@ async function init() {
 
 function main() {
   const tray = createTray();
-  const mainWindowState = windowStateKeeper({ defaultWidth: 300, defaultHeight: 720 });
+  const mainWindowState = windowStateKeeper({ defaultWidth: 325, defaultHeight: 768 });
   mb = createMenubar({ tray, mainWindowState });
   const appUpdater = new AppUpdater({ icon: appIcon, mb });
   let contextMenu = buildContextMenu({ mb, appUpdater }, []);

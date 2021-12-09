@@ -28,15 +28,6 @@ const QuotationMap: React.FC<QuotationMapProps> = ({ type }) => {
             return `${name}：${Utils.Yang(value[1])}%`;
           },
         },
-        visualMap: {
-          show: false,
-          min: -2,
-          max: 2,
-          inRange: {
-            color: [Utils.GetValueColor(-1).color, Utils.GetValueColor(0).color, Utils.GetValueColor(1).color],
-          },
-          dimension: 1,
-        },
         series: [
           {
             height: '100%',
@@ -49,6 +40,9 @@ const QuotationMap: React.FC<QuotationMapProps> = ({ type }) => {
                 return {
                   name: quotation.name,
                   value: [quotation.zsz, quotation.zdf],
+                  itemStyle: {
+                    color: Utils.GetValueMapColor(quotation.zdf || 0),
+                  },
                 };
               }),
           },

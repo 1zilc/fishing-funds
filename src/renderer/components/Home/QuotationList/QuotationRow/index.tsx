@@ -3,8 +3,8 @@ import classnames from 'classnames';
 import { useDispatch, useSelector } from 'react-redux';
 import NP from 'number-precision';
 
-import { ReactComponent as ArrowDownIcon } from '@/static/icon/arrow-down.svg';
-import { ReactComponent as ArrowUpIcon } from '@/static/icon/arrow-up.svg';
+import ArrowDownIcon from '@/static/icon/arrow-down.svg';
+import ArrowUpIcon from '@/static/icon/arrow-up.svg';
 import ArrowLine from '@/components/ArrowLine';
 import Collapse from '@/components/Collapse';
 import { StoreState } from '@/reducers/types';
@@ -54,7 +54,7 @@ const QuotationRow: React.FC<RowProps> = (props) => {
             <div className={styles.rowBar}>
               {quotation.zdf < 0 ? (
                 <>
-                  <span className={styles.code}>{quotation.lzgpName}</span>
+                  <span className={styles.code}>{quotation.ldgpName}</span>
                   <span className={classnames(Utils.GetValueColor(quotation.ldgpZdf).textClass)}>领跌</span>
                   <span className={classnames(Utils.GetValueColor(quotation.ldgpZdf).textClass)}>{Utils.Yang(quotation.ldgpZdf)} %</span>
                 </>
