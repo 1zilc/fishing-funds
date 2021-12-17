@@ -15,7 +15,6 @@ const ConsumerConfidenceIndex: React.FC<ConsumerConfidenceIndexProps> = () => {
   const { varibleColors, darkMode } = useHomeContext();
 
   const { run: runGetEconomyIndexFromEastmoney } = useRequest(() => Services.Zindex.GetEconomyIndexFromEastmoney(4), {
-    throwOnError: true,
     onSuccess: (result) => {
       try {
         chartInstance?.setOption({

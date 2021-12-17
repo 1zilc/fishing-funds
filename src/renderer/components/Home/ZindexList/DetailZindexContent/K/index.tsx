@@ -43,7 +43,6 @@ const K: React.FC<PerformanceProps> = ({ code = '' }) => {
   const [year, setYearType] = useState(yearTypeList[0]);
   const { varibleColors, darkMode } = useHomeContext();
   const { run: runGetKFromEastmoney } = useRequest(() => Services.Zindex.GetKFromEastmoney(code, year.code), {
-    throwOnError: true,
     onSuccess: (result) => {
       // 数据意义：开盘(open)，收盘(close)，最低(lowest)，最高(highest)
       const values = result.map((_) => [_.kp, _.sp, _.zd, _.zg]);

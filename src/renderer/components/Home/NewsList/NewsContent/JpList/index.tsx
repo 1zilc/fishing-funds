@@ -14,7 +14,6 @@ const JpList: React.FC<PropsWithChildren<JpListProps>> = () => {
   const [data, setData] = useState<News.ResponseItem[]>([]);
 
   const { loading, run: runNewsGetJpList } = useRequest(Services.News.GetJpList, {
-    throwOnError: true,
     onSuccess: setData,
   });
 

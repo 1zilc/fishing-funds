@@ -14,7 +14,6 @@ const FocusList: React.FC<PropsWithChildren<FocusListProps>> = () => {
   const [data, setData] = useState<News.ResponseItem[]>([]);
 
   const { loading, run: runNewsGetFocusList } = useRequest(Services.News.GetFocusList, {
-    throwOnError: true,
     onSuccess: setData,
   });
 

@@ -14,7 +14,6 @@ const ChinaList: React.FC<PropsWithChildren<ChinaListProps>> = () => {
   const [data, setData] = useState<News.ResponseItem[]>([]);
 
   const { loading, run: runNewsGetChinaList } = useRequest(Services.News.GetChinaList, {
-    throwOnError: true,
     onSuccess: setData,
   });
 

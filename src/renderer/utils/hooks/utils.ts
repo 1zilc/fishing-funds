@@ -112,7 +112,7 @@ export function useNativeThemeColor(varibles: string[]) {
 export function useResizeEchart(scale = 1, unlimited?: boolean) {
   const chartRef = useRef<HTMLDivElement>(null);
   const [chartInstance, setChartInstance] = useState<echarts.ECharts | null>(null);
-  const { width: chartRefWidth } = useSize(chartRef);
+  const size = useSize(chartRef);
   useEffect(() => {
     const instance = echarts.init(chartRef.current!, undefined, {
       renderer: 'svg',
@@ -124,10 +124,12 @@ export function useResizeEchart(scale = 1, unlimited?: boolean) {
   }, []);
 
   useEffect(() => {
-    const height = chartRefWidth! * scale;
-    chartInstance?.resize({ height: unlimited ? height : height > 200 ? 200 : height });
-  }, [chartRefWidth, unlimited]);
-  return { ref: chartRef, chartRefWidth, chartInstance, setChartInstance };
+    if (size?.width) {
+      const height = size?.width * scale;
+      chartInstance?.resize({ height: unlimited ? height : height > 200 ? 200 : height });
+    }
+  }, [size?.width, unlimited]);
+  return { ref: chartRef, chartInstance, setChartInstance };
 }
 
 export function useRenderEcharts(callback: () => void, instance: echarts.ECharts | null, dep: any[] = []) {

@@ -17,7 +17,6 @@ const RealTimeTransaction: React.FC<RealTimeTransactionProps> = ({ code = '' }) 
   const { varibleColors, darkMode } = useHomeContext();
 
   const { run: runGetTransactionFromEasymoney } = useRequest(() => Services.Quotation.GetTransactionFromEasymoney(code), {
-    throwOnError: true,
     pollingInterval: 1000 * 60,
     onSuccess: (result) => {
       chartInstance?.setOption({

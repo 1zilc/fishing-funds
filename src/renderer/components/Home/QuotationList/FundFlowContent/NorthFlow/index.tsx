@@ -20,7 +20,6 @@ const NorthFlow: React.FC<NorthFlowProps> = () => {
 
   const { varibleColors, darkMode } = useHomeContext();
   const { run: runGetFlowFromEastmoney } = useRequest(() => Services.Quotation.GetFlowFromEastmoney(fields1, code), {
-    throwOnError: true,
     pollingInterval: 1000 * 60,
     onSuccess: (result) => {
       chartInstance?.setOption({

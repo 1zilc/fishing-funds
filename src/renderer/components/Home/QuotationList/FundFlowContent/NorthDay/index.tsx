@@ -27,7 +27,6 @@ const NorthDay: React.FC<NorthDayProps> = () => {
 
   const { varibleColors, darkMode } = useHomeContext();
   const { run: runGetNorthDayFromEastmoney } = useRequest(() => Services.Quotation.GetNorthDayFromEastmoney(fields1, dayType.code), {
-    throwOnError: true,
     pollingInterval: 1000 * 60,
     onSuccess: (result) => {
       chartInstance?.setOption({

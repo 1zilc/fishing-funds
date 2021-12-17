@@ -14,7 +14,6 @@ const ExchangeList: React.FC<PropsWithChildren<ExchangeListProps>> = () => {
   const [data, setData] = useState<News.ResponseItem[]>([]);
 
   const { loading, run: runNewsGetExchangeList } = useRequest(Services.News.GetExchangeList, {
-    throwOnError: true,
     onSuccess: setData,
   });
 

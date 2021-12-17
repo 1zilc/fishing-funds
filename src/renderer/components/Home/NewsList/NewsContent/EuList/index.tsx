@@ -14,7 +14,6 @@ const EuList: React.FC<PropsWithChildren<EuListProps>> = () => {
   const [data, setData] = useState<News.ResponseItem[]>([]);
 
   const { loading, run: runNewsGetEuList } = useRequest(Services.News.GetEuList, {
-    throwOnError: true,
     onSuccess: setData,
   });
 

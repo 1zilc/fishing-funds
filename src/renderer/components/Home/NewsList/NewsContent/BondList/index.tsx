@@ -14,7 +14,6 @@ const BondList: React.FC<PropsWithChildren<BondListProps>> = () => {
   const [data, setData] = useState<News.ResponseItem[]>([]);
 
   const { loading, run: runNewsGetBondList } = useRequest(Services.News.GetBondList, {
-    throwOnError: true,
     onSuccess: setData,
   });
 

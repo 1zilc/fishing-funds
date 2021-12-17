@@ -14,7 +14,6 @@ const GoodsList: React.FC<PropsWithChildren<GoodsListProps>> = () => {
   const [data, setData] = useState<News.ResponseItem[]>([]);
 
   const { loading, run: runNewsGetLiveList } = useRequest(Services.News.GetLiveList, {
-    throwOnError: true,
     onSuccess: setData,
   });
 

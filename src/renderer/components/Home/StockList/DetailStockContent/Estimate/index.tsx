@@ -15,7 +15,7 @@ const Estimate: React.FC<EstimateProps> = ({ secid }) => {
   const [estimate, setEstimate] = useState(PictureImage);
   const { run: runGetPicTrendFromEastmoney } = useRequest(() => Services.Stock.GetPicTrendFromEastmoney(secid), {
     pollingInterval: CONST.DEFAULT.ESTIMATE_FUND_DELAY,
-    throwOnError: true,
+
     onSuccess: setEstimate,
     refreshDeps: [secid],
   });

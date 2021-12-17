@@ -14,7 +14,6 @@ const FundList: React.FC<PropsWithChildren<FundListProps>> = () => {
   const [data, setData] = useState<News.ResponseItem[]>([]);
 
   const { loading, run: runNewsGetFundList } = useRequest(Services.News.GetFundList, {
-    throwOnError: true,
     onSuccess: setData,
   });
 

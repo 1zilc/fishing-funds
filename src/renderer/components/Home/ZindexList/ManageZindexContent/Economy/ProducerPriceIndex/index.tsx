@@ -15,7 +15,6 @@ const ProducerPriceIndex: React.FC<ProducerPriceIndexProps> = () => {
   const { varibleColors, darkMode } = useHomeContext();
 
   const { run: runGetEconomyIndexFromEastmoney } = useRequest(() => Services.Zindex.GetEconomyIndexFromEastmoney(22), {
-    throwOnError: true,
     onSuccess: (result) => {
       try {
         chartInstance?.setOption({

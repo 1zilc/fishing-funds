@@ -39,7 +39,6 @@ const CrossExchange: React.FC<PropsWithChildren<CrossExchangeProps>> = () => {
   ];
 
   const { run: runGetListFromEastmoney, loading } = useRequest(() => Services.Exchange.GetListFromEastmoney('0', 'b:MK0301'), {
-    throwOnError: true,
     onSuccess: setData,
   });
 

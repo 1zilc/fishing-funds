@@ -14,7 +14,6 @@ const GlobalList: React.FC<PropsWithChildren<GlobalListProps>> = () => {
   const [data, setData] = useState<News.ResponseItem[]>([]);
 
   const { loading, run: runNewsGetGlobalList } = useRequest(Services.News.GetGlobalList, {
-    throwOnError: true,
     onSuccess: setData,
   });
 

@@ -1,12 +1,12 @@
-import { contextBridge, ipcRenderer, shell, clipboard, nativeImage } from 'electron';
 import got from 'got';
-import { encode, decode } from 'js-base64';
 import log from 'electron-log';
+import { contextBridge, ipcRenderer, shell, clipboard, nativeImage } from 'electron';
+import { encode, decode } from 'js-base64';
 import * as fs from 'fs';
 import * as CONST from '../renderer/constants';
 import { base64ToBuffer } from './util';
-import { version } from '../../release/app/package.json';
 
+const { version } = require('../../release/app/package.json');
 const HttpProxyAgent = require('http-proxy-agent');
 const HttpsProxyAgent = require('https-proxy-agent');
 
