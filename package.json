@@ -151,7 +151,7 @@
     "@types/enzyme": "^3.10.5",
     "@types/enzyme-adapter-react-16": "^1.0.6",
     "@types/jest": "^27.0.1",
-    "@types/node": "16.11.7",
+    "@types/node": "17.0.4",
     "@types/react": "^17.0.5",
     "@types/react-dom": "^17.0.3",
     "@types/react-test-renderer": "^17.0.1",
