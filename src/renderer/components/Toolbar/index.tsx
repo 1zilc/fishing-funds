@@ -79,7 +79,7 @@ const ToolBar: React.FC<ToolBarProps> = () => {
 
   return (
     <>
-      <style>{` html { filter: ${lowKeySetting && 'grayscale(100%)'} }`}</style>
+      <style>{` html { filter: ${lowKeySetting && 'grayscale(90%)'} }`}</style>
       <style>{` html { font-size: ${baseFontSizeSetting}px }`}</style>
       <div className={styles.bar}>
         {tabsActiveKey === Enums.TabKeyType.Funds && <MenuAddIcon style={{ ...iconSize }} onClick={openManageFundDrawer} />}
