@@ -3,6 +3,7 @@ import { Drawer } from 'antd';
 
 export interface CustomDrawerProps {
   show: boolean;
+  [index: string]: any;
 }
 const CustomDrawer: React.FC<PropsWithChildren<CustomDrawerProps>> = ({ show, children, ...config }) => {
   const [drawerOpened, setDrawerOpened] = useState(show);
@@ -13,6 +14,7 @@ const CustomDrawer: React.FC<PropsWithChildren<CustomDrawerProps>> = ({ show, ch
       handler={false}
       placement="bottom"
       height="100vh"
+      width="100%"
       keyboard={false}
       afterVisibleChange={setDrawerOpened}
       bodyStyle={{ padding: 0 }}

@@ -98,7 +98,7 @@ const DetailFundContent: React.FC<DetailFundContentProps> = (props) => {
   const syl_1n = pingzhongdata.syl_1n || pingzhongdata.syl_6y || pingzhongdata.syl_3y || pingzhongdata.syl_1y;
   const industryTags = useMemo(() => Array.from(new Set(industryData.stocks.map((stock) => stock.INDEXNAME))), [industryData.stocks]);
 
-  useRequest(Services.Fund.GetFixFromEastMoney, {
+  useRequest(() => Services.Fund.GetFixFromEastMoney(code), {
     defaultParams: [code],
     onSuccess: setFund,
   });

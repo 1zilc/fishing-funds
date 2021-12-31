@@ -1,0 +1,48 @@
+.content {
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: var(--base-padding);
+  box-sizing: border-box;
+}
+.title {
+  font-size: 14px;
+  font-weight: 500;
+}
+.apps {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 60px);
+  justify-content: space-between;
+  padding: var(--base-padding) 0;
+}
+.appContent {
+  padding: 5px 0;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+}
+.app {
+  height: 40px;
+  width: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--base-padding);
+  background-color: #fff;
+  cursor: pointer;
+
+  svg {
+    fill: #fff;
+  }
+}
+.name {
+  text-align: center;
+  width: 100%;
+  color: var(--main-text-color);
+  font-size: 10px;
+  padding-top: 5px;
+}

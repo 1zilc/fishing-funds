@@ -31,6 +31,9 @@
 .ant-tabs-tab:first-child {
   margin-left: 0 !important;
 }
+.ant-drawer-content {
+  background-color: initial;
+}
 .ant-drawer-body::-webkit-scrollbar {
   width: 0;
 }

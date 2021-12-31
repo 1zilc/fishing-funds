@@ -10,7 +10,7 @@ import Logo from '@/components/Logo';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
 import PayCarousel from '@/components/PayCarousel';
 import Guide from '@/components/Guide';
-import Log from '@/components/SettingContent/Log';
+import Log from '@/components/Toolbar/SettingContent/Log';
 import SettingIcon from '@/static/icon/setting.svg';
 import LinkIcon from '@/static/icon/link.svg';
 import LineCharIcon from '@/static/icon/line-chart.svg';

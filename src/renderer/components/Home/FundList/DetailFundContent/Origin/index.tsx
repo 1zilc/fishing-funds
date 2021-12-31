@@ -1,6 +1,6 @@
 import React from 'react';
 import { Table } from 'antd';
-import { APIOptions } from '@/components/SettingContent';
+import { APIOptions } from '@/components/Toolbar/SettingContent';
 import * as Enums from '@/utils/enums';
 
 const { shell } = window.contextModules.electron;
