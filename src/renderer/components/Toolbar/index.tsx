@@ -21,7 +21,6 @@ export interface ToolBarProps {}
 const iconSize = { height: 18, width: 18 };
 
 const ToolBar: React.FC<ToolBarProps> = () => {
-  const { lowKeySetting, baseFontSizeSetting } = useSelector((state: StoreState) => state.setting.systemSetting);
   const updateInfo = useSelector((state: StoreState) => state.updater.updateInfo);
   const tabsActiveKey = useSelector((state: StoreState) => state.tabs.activeKey);
 
@@ -64,8 +63,6 @@ const ToolBar: React.FC<ToolBarProps> = () => {
 
   return (
     <>
-      <style>{` html { filter: ${lowKeySetting && 'grayscale(90%)'} }`}</style>
-      <style>{` html { font-size: ${baseFontSizeSetting}px }`}</style>
       <div className={styles.bar}>
         <AppsIcon style={{ ...iconSize }} onClick={openAppCenterDrawer} />
         <RefreshIcon style={{ ...iconSize }} onClick={fresh} />
