@@ -4,8 +4,9 @@ import { Drawer } from 'antd';
 export interface CustomDrawerProps {
   show: boolean;
   [index: string]: any;
+  cached?: boolean;
 }
-const CustomDrawer: React.FC<PropsWithChildren<CustomDrawerProps>> = ({ show, children, ...config }) => {
+const CustomDrawer: React.FC<PropsWithChildren<CustomDrawerProps>> = ({ show, children, cached, ...config }) => {
   const [drawerOpened, setDrawerOpened] = useState(show);
   return (
     <Drawer
@@ -21,7 +22,7 @@ const CustomDrawer: React.FC<PropsWithChildren<CustomDrawerProps>> = ({ show, ch
       push={false}
       {...config}
     >
-      {(show || drawerOpened) && children}
+      {(cached || show || drawerOpened) && children}
     </Drawer>
   );
 };

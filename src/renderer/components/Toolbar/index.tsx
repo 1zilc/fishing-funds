@@ -55,17 +55,8 @@ const ToolBar: React.FC<ToolBarProps> = () => {
           <SettingIcon style={{ ...iconSize }} onClick={openSettingDrawer} />
         </Badge>
       </div>
-      <CustomDrawer
-        show={showAppCenterDrawer}
-        maskStyle={{
-          backgroundColor: ' var(--blur-color)',
-          backdropFilter: 'saturate(180%) blur(20px)',
-        }}
-        contentWrapperStyle={{ boxShadow: 'none' }}
-        placement="left"
-        afterVisibleChange={() => {}}
-      >
-        <AppCenterContent onClose={closeAppCenterDrawer} />
+      <CustomDrawer show={showAppCenterDrawer} cached>
+        <AppCenterContent onEnter={closeAppCenterDrawer} onClose={closeAppCenterDrawer} />
       </CustomDrawer>
       <CustomDrawer show={showSettingDrawer}>
         <SettingContent

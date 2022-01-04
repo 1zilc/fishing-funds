@@ -1,11 +1,5 @@
 .content {
-  min-height: 100vh;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
   padding: var(--base-padding);
-  box-sizing: border-box;
 }
 .title {
   font-size: 14px;
@@ -38,6 +32,11 @@
   svg {
     fill: #fff;
   }
+  i {
+    font-style: normal;
+    text-align: center;
+    color: #fff;
+  }
 }
 .name {
   text-align: center;
@@ -45,4 +44,11 @@
   color: var(--main-text-color);
   font-size: 10px;
   padding-top: 5px;
+}
+.back {
+  padding: var(--base-padding);
+  text-align: center;
+  background-color: var(--primary-color);
+  color: #fff;
+  cursor: pointer;
 }

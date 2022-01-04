@@ -12,7 +12,9 @@ import OrderIcon from '@/static/icon/order.svg';
 import PieIcon from '@/static/icon/pie.svg';
 
 import CustomDrawer from '@/components/CustomDrawer';
+import CustomDrawerContent from '@/components/CustomDrawer/Content';
 import StandCard from '@/components/Card/StandCard';
+import PureCard from '@/components/Card/PureCard';
 import ManageFundContent from '@/components/Home/FundList/ManageFundContent';
 import ManageWalletContent from '@/components/Wallet/ManageWalletContent';
 import ManageStockContent from '@/components/Home/StockList/ManageStockContent';
@@ -32,6 +34,7 @@ const colorHash = new ColorHash();
 
 interface AppCenterContentProps {
   onClose: () => void;
+  onEnter: () => void;
 }
 interface AppConfig {
   name: string;
@@ -83,139 +86,140 @@ const AppCenterContent: React.FC<AppCenterContentProps> = (props) => {
   const [showHoldingDrawer, { setTrue: openHoldingDrawer, setFalse: closeHoldingDrawer, toggle: ToggleHoldingDrawer }] = useBoolean(false);
 
   return (
-    <div className={styles.content}>
-      <div onClick={props.onClose}>返回</div>
-      <StandCard title="数据管理">
-        {constructApps([
-          {
-            name: '钱包管理',
-            icon: <WalletIcon style={{ ...iconSize }} />,
-            click: openManageWalletDrawer,
-          },
-          {
-            name: '基金管理',
-            icon: <MenuAddIcon style={{ ...iconSize }} />,
-            click: openManageFundDrawer,
-          },
-          {
-            name: '指数管理',
-            icon: <MenuAddIcon style={{ ...iconSize }} />,
-            click: openManageZindexDrawer,
-          },
-          {
-            name: '股票管理',
-            icon: <MenuAddIcon style={{ ...iconSize }} />,
-            click: openManageStockDrawer,
-          },
-          {
-            name: '货币管理',
-            icon: <MenuAddIcon style={{ ...iconSize }} />,
-            click: openManageCoinDrawer,
-          },
-        ])}
-      </StandCard>
-      <StandCard title="特色功能">
-        {constructApps([
-          {
-            name: '基金统计',
-            icon: <PieIcon style={{ ...iconSize }} />,
-            click: openFundStatisticsDrawer,
-          },
-        ])}
-      </StandCard>
-      <StandCard title="拓展功能">
-        {constructApps([
-          {
-            name: '新闻动态',
-            icon: <NewsIcon style={{ ...iconSize }} />,
-            click: openNewsDrawer,
-          },
-          {
-            name: '沪深港通',
-            icon: <OrderIcon style={{ ...iconSize }} />,
-            click: openHoldingDrawer,
-          },
-          {
-            name: '板块资金',
-            icon: <ChartBoxIcon style={{ ...iconSize }} />,
-            click: openFundFlowDrawer,
-          },
-          {
-            name: '外汇债券',
-            icon: <ExchangeIcon style={{ ...iconSize }} />,
-            click: openExchangeDrawer,
-          },
-          {
-            name: '行情中心',
-            icon: <BubbleIcon style={{ ...iconSize }} />,
-            click: openQuoteCenterDrawer,
-          },
-        ])}
-      </StandCard>
-      <CustomDrawer show={showManageFundDrawer}>
-        <ManageFundContent
-          onClose={closeManageFundDrawer}
-          onEnter={() => {
-            // freshFunds();
-            closeManageFundDrawer();
-          }}
-        />
-      </CustomDrawer>
-      <CustomDrawer show={showManageWalletDrawer}>
-        <ManageWalletContent
-          onClose={closeManageWalletDrawer}
-          onEnter={() => {
-            // freshFunds();
-            closeManageWalletDrawer();
-          }}
-        />
-      </CustomDrawer>
-      <CustomDrawer show={showManageZindexDrawer}>
-        <ManageZindexContent
-          onClose={closeManageZindexDrawer}
-          onEnter={() => {
-            // freshZindexs();
-            closeManageZindexDrawer();
-          }}
-        />
-      </CustomDrawer>
-      <CustomDrawer show={showManageStockDrawer}>
-        <ManageStockContent
-          onClose={closeManageStockDrawer}
-          onEnter={() => {
-            // freshStocks();
-            closeManageStockDrawer();
-          }}
-        />
-      </CustomDrawer>
-      <CustomDrawer show={showManageCoinDrawer}>
-        <ManageCoinContent
-          onClose={closeManageCoinDrawer}
-          onEnter={() => {
-            // freshCoins();
-            closeManageCoinDrawer();
-          }}
-        />
-      </CustomDrawer>
-      <CustomDrawer show={showFundFlowDrawer}>
-        <FundFlowContent onClose={closeFundFlowDrawer} onEnter={closeFundFlowDrawer} />
-      </CustomDrawer>
-      <CustomDrawer show={showFundsStatisticsDrawer}>
-        <FundStatisticsContent onClose={closeFundStatisticsDrawer} onEnter={closeFundStatisticsDrawer} />
-      </CustomDrawer>
-      <CustomDrawer show={showNewsDrawer}>
-        <NewsContent onClose={closeNewsDrawer} onEnter={closeNewsDrawer} />
-      </CustomDrawer>
-      <CustomDrawer show={showExchangeDrawer}>
-        <ExchangeContent onClose={closeExchangeDrawer} onEnter={closeExchangeDrawer} />
-      </CustomDrawer>
-      <CustomDrawer show={showQuoteCenterDrawer}>
-        <QuoteCenterContent onClose={closeQuoteCenterDrawer} onEnter={closeQuoteCenterDrawer} />
-      </CustomDrawer>
-      <CustomDrawer show={showHoldingDrawer}>
-        <HoldingContent onClose={closeHoldingDrawer} onEnter={closeHoldingDrawer} />
-      </CustomDrawer>
-    </div>
+    <CustomDrawerContent title="功能中心" enterText="确定" onEnter={props.onEnter} onClose={props.onClose}>
+      <div className={styles.content}>
+        <StandCard title="数据管理">
+          {constructApps([
+            {
+              name: '基金管理',
+              icon: <i style={{ ...iconSize }}>基</i>,
+              click: openManageFundDrawer,
+            },
+            {
+              name: '指数管理',
+              icon: <i style={{ ...iconSize }}>指</i>,
+              click: openManageZindexDrawer,
+            },
+            {
+              name: '股票管理',
+              icon: <i style={{ ...iconSize }}>股</i>,
+              click: openManageStockDrawer,
+            },
+            {
+              name: '货币管理',
+              icon: <i style={{ ...iconSize }}>币</i>,
+              click: openManageCoinDrawer,
+            },
+            {
+              name: '钱包管理',
+              icon: <WalletIcon style={{ ...iconSize }} />,
+              click: openManageWalletDrawer,
+            },
+          ])}
+        </StandCard>
+        <StandCard title="特色功能">
+          {constructApps([
+            {
+              name: '基金统计',
+              icon: <PieIcon style={{ ...iconSize }} />,
+              click: openFundStatisticsDrawer,
+            },
+          ])}
+        </StandCard>
+        <StandCard title="拓展功能">
+          {constructApps([
+            {
+              name: '新闻动态',
+              icon: <NewsIcon style={{ ...iconSize }} />,
+              click: openNewsDrawer,
+            },
+            {
+              name: '沪深港通',
+              icon: <OrderIcon style={{ ...iconSize }} />,
+              click: openHoldingDrawer,
+            },
+            {
+              name: '板块资金',
+              icon: <ChartBoxIcon style={{ ...iconSize }} />,
+              click: openFundFlowDrawer,
+            },
+            {
+              name: '外汇债券',
+              icon: <ExchangeIcon style={{ ...iconSize }} />,
+              click: openExchangeDrawer,
+            },
+            {
+              name: '行情中心',
+              icon: <BubbleIcon style={{ ...iconSize }} />,
+              click: openQuoteCenterDrawer,
+            },
+          ])}
+        </StandCard>
+        <CustomDrawer show={showManageFundDrawer}>
+          <ManageFundContent
+            onClose={closeManageFundDrawer}
+            onEnter={() => {
+              // freshFunds();
+              closeManageFundDrawer();
+            }}
+          />
+        </CustomDrawer>
+        <CustomDrawer show={showManageWalletDrawer}>
+          <ManageWalletContent
+            onClose={closeManageWalletDrawer}
+            onEnter={() => {
+              // freshFunds();
+              closeManageWalletDrawer();
+            }}
+          />
+        </CustomDrawer>
+        <CustomDrawer show={showManageZindexDrawer}>
+          <ManageZindexContent
+            onClose={closeManageZindexDrawer}
+            onEnter={() => {
+              // freshZindexs();
+              closeManageZindexDrawer();
+            }}
+          />
+        </CustomDrawer>
+        <CustomDrawer show={showManageStockDrawer}>
+          <ManageStockContent
+            onClose={closeManageStockDrawer}
+            onEnter={() => {
+              // freshStocks();
+              closeManageStockDrawer();
+            }}
+          />
+        </CustomDrawer>
+        <CustomDrawer show={showManageCoinDrawer}>
+          <ManageCoinContent
+            onClose={closeManageCoinDrawer}
+            onEnter={() => {
+              // freshCoins();
+              closeManageCoinDrawer();
+            }}
+          />
+        </CustomDrawer>
+        <CustomDrawer show={showFundFlowDrawer}>
+          <FundFlowContent onClose={closeFundFlowDrawer} onEnter={closeFundFlowDrawer} />
+        </CustomDrawer>
+        <CustomDrawer show={showFundsStatisticsDrawer}>
+          <FundStatisticsContent onClose={closeFundStatisticsDrawer} onEnter={closeFundStatisticsDrawer} />
+        </CustomDrawer>
+        <CustomDrawer show={showNewsDrawer}>
+          <NewsContent onClose={closeNewsDrawer} onEnter={closeNewsDrawer} />
+        </CustomDrawer>
+        <CustomDrawer show={showExchangeDrawer}>
+          <ExchangeContent onClose={closeExchangeDrawer} onEnter={closeExchangeDrawer} />
+        </CustomDrawer>
+        <CustomDrawer show={showQuoteCenterDrawer}>
+          <QuoteCenterContent onClose={closeQuoteCenterDrawer} onEnter={closeQuoteCenterDrawer} />
+        </CustomDrawer>
+        <CustomDrawer show={showHoldingDrawer}>
+          <HoldingContent onClose={closeHoldingDrawer} onEnter={closeHoldingDrawer} />
+        </CustomDrawer>
+      </div>
+    </CustomDrawerContent>
   );
 };
 
