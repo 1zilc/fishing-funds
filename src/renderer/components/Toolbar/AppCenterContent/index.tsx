@@ -76,6 +76,7 @@ const AppCenterContent: React.FC<AppCenterContentProps> = (props) => {
     showFundsStatisticsDrawer,
     { setTrue: openFundStatisticsDrawer, setFalse: closeFundStatisticsDrawer, toggle: ToggleFundStatisticsDrawer },
   ] = useBoolean(false);
+
   const [showFundFlowDrawer, { setTrue: openFundFlowDrawer, setFalse: closeFundFlowDrawer, toggle: ToggleFundFlowDrawer }] =
     useBoolean(false);
   const [showNewsDrawer, { setTrue: openNewsDrawer, setFalse: closeNewsDrawer, toggle: ToggleNewsDrawer }] = useBoolean(false);

@@ -85,12 +85,18 @@ contextBridge.exposeInMainWorld('contextModules', {
       writeText: clipboard.writeText,
       writeImage: (dataUrl: string) => clipboard.writeImage(nativeImage.createFromDataURL(dataUrl)),
     },
+  },
+  log: log,
+  io: {
     saveImage: (filePath: string, dataUrl: string) => {
       const imageBuffer = base64ToBuffer(dataUrl);
       fs.writeFileSync(filePath, imageBuffer);
     },
     saveString: (filePath: string, content: string) => {
       fs.writeFileSync(filePath, content);
+    },
+    readFile(path: string) {
+      return fs.readFileSync(path, 'utf-8');
     },
     encodeFF(content: any) {
       const ffprotocol = 'ff://'; // FF协议
@@ -110,9 +116,16 @@ contextBridge.exposeInMainWorld('contextModules', {
         return null;
       }
     },
-    readFile(path: string) {
-      return fs.readFileSync(path, 'utf-8');
+  },
+  storage: {
+    async get(key: string) {
+      return ipcRenderer.invoke('get-storage-config', { key });
+    },
+    async set(key: string, value: unknown) {
+      await ipcRenderer.invoke('set-storage-config', { key, value });
+    },
+    async delete(key: string) {
+      await ipcRenderer.invoke('delete-storage-config', { key });
     },
   },
-  log: log,
 });

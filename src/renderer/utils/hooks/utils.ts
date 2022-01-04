@@ -14,7 +14,7 @@ import * as Services from '@/services';
 import * as Helpers from '@/helpers';
 import * as Enums from '@/utils/enums';
 
-const { invoke, dialog, ipcRenderer, clipboard, app, saveString, encodeFF, decodeFF, readFile } = window.contextModules.electron;
+const { invoke, ipcRenderer } = window.contextModules.electron;
 
 export function useWorkDayTimeToDo(todo: () => void, delay: number, config?: { immediate: boolean }): void {
   useInterval(

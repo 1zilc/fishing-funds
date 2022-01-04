@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { Badge } from 'antd';
 import { useSelector } from 'react-redux';
 import { useBoolean, useThrottleFn } from 'ahooks';
@@ -40,17 +40,35 @@ const ToolBar: React.FC<ToolBarProps> = () => {
   const [showAppCenterDrawer, { setTrue: openAppCenterDrawer, setFalse: closeAppCenterDrawer, toggle: ToggleAppCenterDrawer }] =
     useBoolean(false);
 
+  const fresh = useCallback(() => {
+    switch (tabsActiveKey) {
+      case Enums.TabKeyType.Funds:
+        freshFunds();
+        break;
+      case Enums.TabKeyType.Zindex:
+        freshZindexs();
+        break;
+      case Enums.TabKeyType.Quotation:
+        freshQuotations();
+        break;
+      case Enums.TabKeyType.Stock:
+        freshStocks();
+        break;
+      case Enums.TabKeyType.Coin:
+        freshCoins();
+        break;
+      default:
+        break;
+    }
+  }, [tabsActiveKey]);
+
   return (
     <>
       <style>{` html { filter: ${lowKeySetting && 'grayscale(90%)'} }`}</style>
       <style>{` html { font-size: ${baseFontSizeSetting}px }`}</style>
       <div className={styles.bar}>
         <AppsIcon style={{ ...iconSize }} onClick={openAppCenterDrawer} />
-        {tabsActiveKey === Enums.TabKeyType.Funds && <RefreshIcon style={{ ...iconSize }} onClick={freshFunds} />}
-        {tabsActiveKey === Enums.TabKeyType.Zindex && <RefreshIcon style={{ ...iconSize }} onClick={freshZindexs} />}
-        {tabsActiveKey === Enums.TabKeyType.Quotation && <RefreshIcon style={{ ...iconSize }} onClick={freshQuotations} />}
-        {tabsActiveKey === Enums.TabKeyType.Stock && <RefreshIcon style={{ ...iconSize }} onClick={freshStocks} />}
-        {tabsActiveKey === Enums.TabKeyType.Coin && <RefreshIcon style={{ ...iconSize }} onClick={freshCoins} />}
+        <RefreshIcon style={{ ...iconSize }} onClick={fresh} />
         <Badge dot={!!updateInfo.version}>
           <SettingIcon style={{ ...iconSize }} onClick={openSettingDrawer} />
         </Badge>
