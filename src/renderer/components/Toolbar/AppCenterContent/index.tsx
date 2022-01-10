@@ -14,6 +14,7 @@ import WeiboIcon from '@/static/icon/weibo.svg';
 import NeteaseIcon from '@/static/icon/netease.svg';
 import FundsIcon from '@/static/icon/funds.svg';
 import TelegramIcon from '@/static/icon/telegram.svg';
+import GithubIcon from '@/static/icon/github.svg';
 
 import CustomDrawer from '@/components/CustomDrawer';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
@@ -210,6 +211,12 @@ const AppCenterContent: React.FC<AppCenterContentProps> = (props) => {
                 icon: <TelegramIcon style={{ ...iconSize }} />,
                 color: '#30A9EE',
                 click: () => setViewerDataDrawer({ title: 'Telegram', url: 'https://web.telegram.org/' }),
+              },
+              {
+                name: 'Github',
+                icon: <GithubIcon style={{ ...iconSize }} />,
+                color: '#24292f',
+                click: () => setViewerDataDrawer({ title: 'Github', url: 'https://github.com/' }),
               },
             ],
           },
