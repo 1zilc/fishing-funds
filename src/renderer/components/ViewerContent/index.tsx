@@ -10,16 +10,28 @@ interface ViewerContentProps {
   onEnter: () => void;
   title: string;
   url: string;
+  phone?: boolean;
 }
 
 const ViewerContent: React.FC<ViewerContentProps> = (props) => {
-  const { title, url } = props;
+  const { title, url, phone } = props;
   const viewRef = useRef<any>(null);
 
   return (
     <CustomDrawerContent title={title} onClose={props.onClose} onEnter={props.onEnter}>
       <div className={styles.content}>
-        {url && <webview ref={viewRef} src={url} style={{ width: '100%', flex: '1' }} />}
+        {url && (
+          <webview
+            ref={viewRef}
+            src={url}
+            style={{ width: '100%', flex: '1' }}
+            useragent={
+              phone
+                ? 'Mozilla/5.0 (iPhone; CPU iPhone OS 10_3_1 like Mac OS X) AppleWebKit/603.1.30 (KHTML, like Gecko) Version/10.0 Mobile/14E304 Safari/602.1'
+                : ''
+            }
+          />
+        )}
         <div className={styles.nav}>
           <ArrowLeftIcon onClick={() => viewRef.current?.goBack()} />
           <RefreshIcon onClick={() => viewRef.current?.reload()} />

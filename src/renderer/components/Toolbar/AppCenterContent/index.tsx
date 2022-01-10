@@ -111,7 +111,7 @@ const AppCenterContent: React.FC<AppCenterContentProps> = (props) => {
     show: showViewerDataDrawer,
     set: setViewerDataDrawer,
     close: closeViewerDataDrawer,
-  } = useDrawer({ title: '', url: '' });
+  } = useDrawer({ title: '', url: '', phone: false });
 
   const apps = useMemo(
     () =>
@@ -194,50 +194,61 @@ const AppCenterContent: React.FC<AppCenterContentProps> = (props) => {
                 name: '新浪微博',
                 icon: <WeiboIcon style={{ ...iconSize }} />,
                 color: '#F7C544',
-                click: () => setViewerDataDrawer({ title: '新浪微博', url: 'https://m.weibo.cn/' }),
+                click: () => setViewerDataDrawer({ title: '新浪微博', url: 'https://m.weibo.cn/', phone: false }),
               },
               {
                 name: '网易云音乐',
                 icon: <NeteaseIcon style={{ ...iconSize }} />,
                 color: '#D8001A',
-                // click: () => setViewerDataDrawer({ title: '网易云音乐', url: 'https://y.music.163.com/m/' }),
-                click: () => {},
+                click: () => setViewerDataDrawer({ title: '网易云音乐', url: 'https://y.music.163.com', phone: true }),
               },
               {
                 name: '天天基金',
                 icon: <FundsIcon style={{ ...iconSize }} />,
                 color: '#EB5328',
-                click: () => setViewerDataDrawer({ title: '天天基金', url: 'https://h5.1234567.com.cn/' }),
+                click: () => setViewerDataDrawer({ title: '天天基金', url: 'https://h5.1234567.com.cn/', phone: false }),
               },
               {
                 name: 'Telegram',
                 icon: <TelegramIcon style={{ ...iconSize }} />,
                 color: '#30A9EE',
-                click: () => setViewerDataDrawer({ title: 'Telegram', url: 'https://web.telegram.org/' }),
+                click: () => setViewerDataDrawer({ title: 'Telegram', url: 'https://web.telegram.org/', phone: false }),
               },
               {
                 name: '淘宝',
                 icon: <TaobaoIcon style={{ ...iconSize }} />,
                 color: '#EC5D2A',
-                click: () => setViewerDataDrawer({ title: 'Github', url: 'https://main.m.taobao.com/' }),
+                click: () => setViewerDataDrawer({ title: 'Github', url: 'https://main.m.taobao.com/', phone: false }),
               },
               {
                 name: 'Github',
                 icon: <GithubIcon style={{ ...iconSize }} />,
                 color: '#24292f',
-                click: () => setViewerDataDrawer({ title: 'Github', url: 'https://github.com/' }),
+                click: () => setViewerDataDrawer({ title: 'Github', url: 'https://github.com/', phone: false }),
               },
               {
                 name: 'bilibili',
                 icon: <BilibiliIcon style={{ ...iconSize }} />,
                 color: '#fb7299',
-                click: () => setViewerDataDrawer({ title: 'bilibili', url: 'https://m.bilibili.com/' }),
+                click: () => setViewerDataDrawer({ title: 'bilibili', url: 'https://m.bilibili.com/', phone: true }),
               },
               {
                 name: 'YouTube',
                 icon: <YoutubeIcon style={{ ...iconSize }} />,
                 color: '#E93223',
-                click: () => setViewerDataDrawer({ title: 'Github', url: 'https://www.youtube.com/' }),
+                click: () => setViewerDataDrawer({ title: 'Github', url: 'https://www.youtube.com/', phone: false }),
+              },
+              {
+                name: 'IT之家',
+                icon: <i style={{ ...iconSize }}>IT</i>,
+                color: '#C1362D',
+                click: () => setViewerDataDrawer({ title: 'IT之家', url: 'https://m.ithome.com/', phone: false }),
+              },
+              {
+                name: '虎牙直播',
+                icon: <i style={{ ...iconSize }}>虎</i>,
+                color: '#E68131',
+                click: () => setViewerDataDrawer({ title: '虎牙直播', url: 'https://m.huya.com/', phone: true }),
               },
             ],
           },
@@ -325,7 +336,7 @@ const AppCenterContent: React.FC<AppCenterContentProps> = (props) => {
           <HoldingContent onClose={closeHoldingDrawer} onEnter={closeHoldingDrawer} />
         </CustomDrawer>
         <CustomDrawer show={showViewerDataDrawer}>
-          <ViewerContent url={viewerData.url} title={viewerData.title} onClose={closeViewerDataDrawer} onEnter={closeViewerDataDrawer} />
+          <ViewerContent {...viewerData} onClose={closeViewerDataDrawer} onEnter={closeViewerDataDrawer} />
         </CustomDrawer>
       </div>
     </CustomDrawerContent>
