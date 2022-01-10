@@ -1,7 +1,7 @@
 ### Component
 
 ```
-npx generate-react-cli component GlobalStyles --path=src/renderer/components
+npx generate-react-cli component Component --path=src/renderer/components
 ```
 
 ### Chart

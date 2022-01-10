@@ -25,9 +25,10 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: var(--base-padding);
+  border-radius: 50%;
   background-color: #fff;
   cursor: pointer;
+  transition: all 0.3s;
 
   svg {
     fill: #fff;
@@ -36,6 +37,11 @@
     font-style: normal;
     text-align: center;
     color: #fff;
+  }
+
+  &:hover {
+    filter: brightness(110%);
+    transform: scale(1.1);
   }
 }
 .name {
@@ -51,4 +57,7 @@
   background-color: var(--primary-color);
   color: #fff;
   cursor: pointer;
+}
+.search {
+  margin-bottom: var(--base-padding);
 }
