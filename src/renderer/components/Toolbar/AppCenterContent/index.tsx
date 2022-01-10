@@ -13,6 +13,7 @@ import PieIcon from '@/static/icon/pie.svg';
 import WeiboIcon from '@/static/icon/weibo.svg';
 import NeteaseIcon from '@/static/icon/netease.svg';
 import FundsIcon from '@/static/icon/funds.svg';
+import TelegramIcon from '@/static/icon/telegram.svg';
 
 import CustomDrawer from '@/components/CustomDrawer';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
@@ -203,6 +204,12 @@ const AppCenterContent: React.FC<AppCenterContentProps> = (props) => {
                 icon: <FundsIcon style={{ ...iconSize }} />,
                 color: '#EB5328',
                 click: () => setViewerDataDrawer({ title: '天天基金', url: 'https://h5.1234567.com.cn/' }),
+              },
+              {
+                name: 'Telegram',
+                icon: <TelegramIcon style={{ ...iconSize }} />,
+                color: '#30A9EE',
+                click: () => setViewerDataDrawer({ title: 'Telegram', url: 'https://web.telegram.org/' }),
               },
             ],
           },
