@@ -15,6 +15,9 @@ import NeteaseIcon from '@/static/icon/netease.svg';
 import FundsIcon from '@/static/icon/funds.svg';
 import TelegramIcon from '@/static/icon/telegram.svg';
 import GithubIcon from '@/static/icon/github.svg';
+import BilibiliIcon from '@/static/icon/bilibili.svg';
+import TaobaoIcon from '@/static/icon/taobao.svg';
+import YoutubeIcon from '@/static/icon/youtube.svg';
 
 import CustomDrawer from '@/components/CustomDrawer';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
@@ -213,10 +216,28 @@ const AppCenterContent: React.FC<AppCenterContentProps> = (props) => {
                 click: () => setViewerDataDrawer({ title: 'Telegram', url: 'https://web.telegram.org/' }),
               },
               {
+                name: '淘宝',
+                icon: <TaobaoIcon style={{ ...iconSize }} />,
+                color: '#EC5D2A',
+                click: () => setViewerDataDrawer({ title: 'Github', url: 'https://main.m.taobao.com/' }),
+              },
+              {
                 name: 'Github',
                 icon: <GithubIcon style={{ ...iconSize }} />,
                 color: '#24292f',
                 click: () => setViewerDataDrawer({ title: 'Github', url: 'https://github.com/' }),
+              },
+              {
+                name: 'bilibili',
+                icon: <BilibiliIcon style={{ ...iconSize }} />,
+                color: '#fb7299',
+                click: () => setViewerDataDrawer({ title: 'bilibili', url: 'https://m.bilibili.com/' }),
+              },
+              {
+                name: 'YouTube',
+                icon: <YoutubeIcon style={{ ...iconSize }} />,
+                color: '#E93223',
+                click: () => setViewerDataDrawer({ title: 'Github', url: 'https://www.youtube.com/' }),
               },
             ],
           },
