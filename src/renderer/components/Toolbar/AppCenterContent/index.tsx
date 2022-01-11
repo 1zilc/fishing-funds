@@ -261,9 +261,8 @@ const AppCenterContent: React.FC<AppCenterContentProps> = (props) => {
               },
               {
                 name: '同花顺',
-                icon: <i style={{ ...iconSize, color: '#222' }}>♠️</i>,
-                color: '#fff',
-                borderColor: '#cfcfcf',
+                icon: <i style={{ ...iconSize, color: '#666' }}>♠️</i>,
+                color: '#fafbfc',
                 click: () => setViewerDataDrawer({ title: '同花顺', url: 'http://m.10jqka.com.cn/', phone: true }),
               },
             ],

@@ -520,6 +520,10 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
                   <label>issues：</label>
                   <a onClick={() => onNavigate('https://github.com/1zilc/fishing-funds/issues/106')}>#106</a>
                 </section>
+                <section>
+                  <label>Telegram：</label>
+                  <a onClick={() => onCopyGroup('https://t.me/fishing_funds')}>https://t.me/fishing_funds</a>
+                </section>
               </div>
             </StandCard>
             <StandCard icon={<WindowIcon />} title="收录网站">
