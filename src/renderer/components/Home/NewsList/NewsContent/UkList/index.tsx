@@ -6,11 +6,11 @@ import ChartCard from '@/components/Card/ChartCard';
 import * as Services from '@/services';
 import styles from './index.module.scss';
 
-interface UkListProps {}
+interface UkListProps {
+  onView: (url: string) => void;
+}
 
-const { shell } = window.contextModules.electron;
-
-const UkList: React.FC<PropsWithChildren<UkListProps>> = () => {
+const UkList: React.FC<PropsWithChildren<UkListProps>> = (props) => {
   const [data, setData] = useState<News.ResponseItem[]>([]);
 
   const { loading, run: runNewsGetUkList } = useRequest(Services.News.GetUkList, {
@@ -45,7 +45,7 @@ const UkList: React.FC<PropsWithChildren<UkListProps>> = () => {
             position: ['bottomCenter'],
           }}
           onRow={(record) => ({
-            onClick: () => shell.openExternal(record.url_unique),
+            onClick: () => props.onView(record.url_m),
           })}
         />
       </div>

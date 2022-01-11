@@ -6,11 +6,11 @@ import ChartCard from '@/components/Card/ChartCard';
 import * as Services from '@/services';
 import styles from './index.module.scss';
 
-interface GoodsListProps {}
+interface GoodsListProps {
+  onView: (url: string) => void;
+}
 
-const { shell } = window.contextModules.electron;
-
-const GoodsList: React.FC<PropsWithChildren<GoodsListProps>> = () => {
+const GoodsList: React.FC<PropsWithChildren<GoodsListProps>> = (props) => {
   const [data, setData] = useState<News.ResponseItem[]>([]);
 
   const { loading, run: runNewsGetLiveList } = useRequest(Services.News.GetLiveList, {
@@ -45,7 +45,7 @@ const GoodsList: React.FC<PropsWithChildren<GoodsListProps>> = () => {
             position: ['bottomCenter'],
           }}
           onRow={(record) => ({
-            onClick: () => shell.openExternal(record.url_unique),
+            onClick: () => props.onView(record.url_m),
           })}
         />
       </div>
