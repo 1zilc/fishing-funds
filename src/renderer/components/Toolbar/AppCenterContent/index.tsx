@@ -197,7 +197,7 @@ const AppCenterContent: React.FC<AppCenterContentProps> = (props) => {
             ],
           },
           {
-            name: '摸鱼专区',
+            name: 'H5专区',
             config: [
               {
                 name: '新浪微博',
