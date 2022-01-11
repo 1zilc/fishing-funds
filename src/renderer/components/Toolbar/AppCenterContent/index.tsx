@@ -51,6 +51,7 @@ interface AppConfig {
   click: () => void;
   icon: React.ReactElement;
   color?: string;
+  borderColor?: string;
 }
 
 function constructApps(appConfigs: AppConfig[]) {
@@ -59,8 +60,16 @@ function constructApps(appConfigs: AppConfig[]) {
       {appConfigs.map((config, index) => {
         const color = config.color || colorHash.hex(config.name);
         return (
-          <div className={styles.appContent} key={index}>
-            <div className={styles.app} style={{ background: color, boxShadow: `0 2px 5px ${color}` }} onClick={config.click}>
+          <div className={styles.appContent} key={config.name}>
+            <div
+              className={styles.app}
+              style={{
+                background: color,
+                boxShadow: `0 2px 5px ${color}`,
+                border: config.borderColor && `1px solid ${config.borderColor}`,
+              }}
+              onClick={config.click}
+            >
               {config.icon}
             </div>
             <div className={styles.name}>{config.name}</div>
@@ -74,7 +83,7 @@ function constructApps(appConfigs: AppConfig[]) {
 function renderApps(groups: { name: string; config: AppConfig[] }[], keyword: string) {
   return groups.map((group) => (
     <StandCard key={group.name} title={group.name}>
-      {constructApps(group.config.filter(({ name }) => name.includes(keyword)))}
+      {constructApps(group.config.filter(({ name }) => name.toLocaleLowerCase().includes(keyword.toLocaleLowerCase())))}
     </StandCard>
   ));
 }
@@ -249,6 +258,13 @@ const AppCenterContent: React.FC<AppCenterContentProps> = (props) => {
                 icon: <i style={{ ...iconSize }}>虎</i>,
                 color: '#E68131',
                 click: () => setViewerDataDrawer({ title: '虎牙直播', url: 'https://m.huya.com/', phone: true }),
+              },
+              {
+                name: '同花顺',
+                icon: <i style={{ ...iconSize, color: '#222' }}>♠️</i>,
+                color: '#fff',
+                borderColor: '#cfcfcf',
+                click: () => setViewerDataDrawer({ title: '同花顺', url: 'http://m.10jqka.com.cn/', phone: true }),
               },
             ],
           },
