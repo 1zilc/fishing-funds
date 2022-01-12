@@ -227,7 +227,7 @@ const AppCenterContent: React.FC<AppCenterContentProps> = (props) => {
                 name: '淘宝',
                 icon: <TaobaoIcon style={{ ...iconSize }} />,
                 color: '#EC5D2A',
-                click: () => setViewerDataDrawer({ title: 'Github', url: 'https://main.m.taobao.com/', phone: false }),
+                click: () => setViewerDataDrawer({ title: '淘宝', url: 'https://main.m.taobao.com/', phone: false }),
               },
               {
                 name: 'Github',
@@ -245,13 +245,19 @@ const AppCenterContent: React.FC<AppCenterContentProps> = (props) => {
                 name: 'YouTube',
                 icon: <YoutubeIcon style={{ ...iconSize }} />,
                 color: '#E93223',
-                click: () => setViewerDataDrawer({ title: 'Github', url: 'https://www.youtube.com/', phone: false }),
+                click: () => setViewerDataDrawer({ title: 'YouTube', url: 'https://www.youtube.com/', phone: false }),
               },
               {
                 name: 'IT之家',
                 icon: <i style={{ ...iconSize }}>IT</i>,
                 color: '#C1362D',
                 click: () => setViewerDataDrawer({ title: 'IT之家', url: 'https://m.ithome.com/', phone: false }),
+              },
+              {
+                name: '掘金',
+                icon: <i style={{ ...iconSize }}>掘</i>,
+                color: '#3B81F7',
+                click: () => setViewerDataDrawer({ title: '掘金', url: 'https://juejin.cn/', phone: true }),
               },
               {
                 name: '虎牙直播',
