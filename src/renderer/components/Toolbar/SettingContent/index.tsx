@@ -27,7 +27,6 @@ import { StoreState } from '@/reducers/types';
 import * as Enums from '@/utils/enums';
 import * as Utils from '@/utils';
 import styles from './index.module.scss';
-import { text } from 'stream/consumers';
 
 export interface SettingContentProps {
   onEnter: () => void;

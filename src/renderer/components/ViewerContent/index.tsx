@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useEffect, useState, useCallback } from 'react';
 import { Progress } from 'antd';
 import { useBoolean, useInterval } from 'ahooks';
 
@@ -16,6 +16,8 @@ interface ViewerContentProps {
   phone?: boolean;
 }
 
+const { clipboard, dialog } = window.contextModules.electron;
+
 // TODO:useragent待随机处理
 const ViewerContent: React.FC<ViewerContentProps> = (props) => {
   const { title, url, phone } = props;
@@ -24,6 +26,18 @@ const ViewerContent: React.FC<ViewerContentProps> = (props) => {
   const [done, { setTrue: setDoneTrue, setFalse: setDoneFalse }] = useBoolean(false);
   const [percent, setPercent] = useState(0);
   const [timer, setTimer] = useState<any>(0);
+
+  const onCopyUrl = useCallback(() => {
+    const url = viewRef.current?.getURL();
+    if (url) {
+      clipboard.writeText(url);
+      dialog.showMessageBox({
+        title: '复制成功',
+        type: 'info',
+        message: `已复制到粘贴板`,
+      });
+    }
+  }, []);
 
   useEffect(() => {
     const newWindow = (e: any) => {
@@ -70,7 +84,7 @@ const ViewerContent: React.FC<ViewerContentProps> = (props) => {
   }, [percent, timer]);
 
   return (
-    <CustomDrawerContent title={title} onClose={props.onClose} onEnter={props.onEnter}>
+    <CustomDrawerContent title={title} enterText="链接" onClose={props.onClose} onEnter={onCopyUrl}>
       <div className={styles.content}>
         {url && (
           <webview
