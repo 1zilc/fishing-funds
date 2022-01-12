@@ -15,7 +15,7 @@ const InvestStyle: React.FC<InvestStyleProps> = ({ code }) => {
   const [estimate, setEstimate] = useState(PictureImage);
   const { run: runGetInverstStyleFromEastmoney } = useRequest(() => Services.Fund.GetInverstStyleFromEastmoney(code), {
     pollingInterval: CONST.DEFAULT.ESTIMATE_FUND_DELAY,
-    throwOnError: true,
+
     onSuccess: setEstimate,
     refreshDeps: [code],
   });

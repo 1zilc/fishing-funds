@@ -6,15 +6,14 @@ import ChartCard from '@/components/Card/ChartCard';
 import * as Services from '@/services';
 import styles from './index.module.scss';
 
-interface ChinaListProps {}
+interface ChinaListProps {
+  onView: (url: string) => void;
+}
 
-const { shell } = window.contextModules.electron;
-
-const ChinaList: React.FC<PropsWithChildren<ChinaListProps>> = () => {
+const ChinaList: React.FC<PropsWithChildren<ChinaListProps>> = (props) => {
   const [data, setData] = useState<News.ResponseItem[]>([]);
 
   const { loading, run: runNewsGetChinaList } = useRequest(Services.News.GetChinaList, {
-    throwOnError: true,
     onSuccess: setData,
   });
 
@@ -46,7 +45,7 @@ const ChinaList: React.FC<PropsWithChildren<ChinaListProps>> = () => {
             position: ['bottomCenter'],
           }}
           onRow={(record) => ({
-            onClick: () => shell.openExternal(record.url_unique),
+            onClick: () => props.onView(record.url_m),
           })}
         />
       </div>

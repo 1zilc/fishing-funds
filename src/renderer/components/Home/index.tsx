@@ -17,6 +17,7 @@ import SortBar from '@/components/SortBar';
 import TabsBar from '@/components/TabsBar';
 import Collect from '@/components/Collect';
 import GroupTab from '@/components/GroupTab';
+import GlobalStyles from '@/components/GlobalStyles';
 import { stockTypesConfig } from '@/components/Home/StockList/AddStockContent';
 import { StoreState } from '@/reducers/types';
 import { useNativeThemeColor, useCurrentWallet } from '@/utils/hooks';
@@ -165,6 +166,7 @@ const Home: React.FC<HomeProps> = () => {
   return (
     <HomeContext.Provider value={{ darkMode, varibleColors }}>
       <div className={classnames(styles.layout)}>
+        <GlobalStyles />
         <LoadingScreen />
         <Header>
           <Wallet />

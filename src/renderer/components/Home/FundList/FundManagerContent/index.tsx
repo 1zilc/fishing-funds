@@ -27,14 +27,13 @@ const FundManagerContent: React.FC<FundManagerContentProps> = (props) => {
   const { manager } = props;
   const ref = useRef(null);
   const position = useScroll(ref, (val) => val.top <= 520);
-  const miniMode = position.top > 40;
+  const miniMode = position && position.top > 40;
   const [managerDetail, setManagerDetail] = useState<ManagerDetail>({
     manageHistoryFunds: [],
     description: '',
   });
 
   useRequest(Services.Fund.GetFundManagerDetailFromEastMoney, {
-    throwOnError: true,
     defaultParams: [manager.id],
     onSuccess: setManagerDetail,
   });

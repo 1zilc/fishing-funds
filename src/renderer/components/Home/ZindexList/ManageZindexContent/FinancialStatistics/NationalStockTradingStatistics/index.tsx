@@ -15,7 +15,6 @@ const NationalStockTradingStatistics: React.FC<NationalStockTradingStatisticsPro
   const { varibleColors, darkMode } = useHomeContext();
 
   const { run: runGetEconomyIndexFromEastmoney } = useRequest(() => Services.Zindex.GetEconomyIndexFromEastmoney(2), {
-    throwOnError: true,
     onSuccess: (result) => {
       try {
         chartInstance?.setOption({

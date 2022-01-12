@@ -35,18 +35,8 @@ const Today: React.FC<PropsWithChildren<TodayProps>> = () => {
   const [fundType, setFundType] = useState(fundTypeList[0]);
   const [data, setData] = useState([]);
   const { currentWalletFundsCodeMap: codeMap } = useCurrentWallet();
-  const {
-    data: detailCode,
-    show: showDetailDrawer,
-    set: setDetailDrawer,
-    close: closeDetailDrawer,
-  } = useDrawer('');
-  const {
-    data: addCode,
-    show: showAddDrawer,
-    set: setAddDrawer,
-    close: closeAddDrawer,
-  } = useDrawer('');
+  const { data: detailCode, show: showDetailDrawer, set: setDetailDrawer, close: closeDetailDrawer } = useDrawer('');
+  const { data: addCode, show: showAddDrawer, set: setAddDrawer, close: closeAddDrawer } = useDrawer('');
 
   const columns = [
     {
@@ -89,14 +79,10 @@ const Today: React.FC<PropsWithChildren<TodayProps>> = () => {
     },
   ];
 
-  const { run: runGetTodayListFromEastmoney, loading } = useRequest(
-    () => Services.Fund.GetTodayListFromEastmoney(fundType.type),
-    {
-      throwOnError: true,
-      onSuccess: setData,
-      refreshDeps: [fundType.type],
-    }
-  );
+  const { run: runGetTodayListFromEastmoney, loading } = useRequest(() => Services.Fund.GetTodayListFromEastmoney(fundType.type), {
+    onSuccess: setData,
+    refreshDeps: [fundType.type],
+  });
 
   return (
     <ChartCard auto onFresh={runGetTodayListFromEastmoney}>
@@ -124,18 +110,10 @@ const Today: React.FC<PropsWithChildren<TodayProps>> = () => {
           })}
         />
         <CustomDrawer show={showDetailDrawer}>
-          <DetailFundContent
-            onEnter={closeDetailDrawer}
-            onClose={closeDetailDrawer}
-            code={detailCode}
-          />
+          <DetailFundContent onEnter={closeDetailDrawer} onClose={closeDetailDrawer} code={detailCode} />
         </CustomDrawer>
         <CustomDrawer show={showAddDrawer}>
-          <AddFundContent
-            defaultCode={addCode}
-            onClose={closeAddDrawer}
-            onEnter={closeAddDrawer}
-          />
+          <AddFundContent defaultCode={addCode} onClose={closeAddDrawer} onEnter={closeAddDrawer} />
         </CustomDrawer>
       </div>
     </ChartCard>

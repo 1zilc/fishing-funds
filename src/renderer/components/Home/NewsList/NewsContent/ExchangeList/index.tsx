@@ -6,15 +6,14 @@ import ChartCard from '@/components/Card/ChartCard';
 import * as Services from '@/services';
 import styles from './index.module.scss';
 
-interface ExchangeListProps {}
+interface ExchangeListProps {
+  onView: (url: string) => void;
+}
 
-const { shell } = window.contextModules.electron;
-
-const ExchangeList: React.FC<PropsWithChildren<ExchangeListProps>> = () => {
+const ExchangeList: React.FC<PropsWithChildren<ExchangeListProps>> = (props) => {
   const [data, setData] = useState<News.ResponseItem[]>([]);
 
   const { loading, run: runNewsGetExchangeList } = useRequest(Services.News.GetExchangeList, {
-    throwOnError: true,
     onSuccess: setData,
   });
 
@@ -46,7 +45,7 @@ const ExchangeList: React.FC<PropsWithChildren<ExchangeListProps>> = () => {
             position: ['bottomCenter'],
           }}
           onRow={(record) => ({
-            onClick: () => shell.openExternal(record.url_unique),
+            onClick: () => props.onView(record.url_m),
           })}
         />
       </div>

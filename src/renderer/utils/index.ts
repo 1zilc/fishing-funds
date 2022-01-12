@@ -6,8 +6,9 @@ import * as Enums from '@/utils/enums';
 import * as CONST from '@/constants';
 import * as Helpers from '@/helpers';
 
-const { invoke, encodeFF, decodeFF } = window.contextModules.electron;
+const { invoke } = window.contextModules.electron;
 const { version, production } = window.contextModules.process;
+const { encodeFF, decodeFF } = window.contextModules.io;
 const log = window.contextModules.log;
 
 export function Yang(num: string | number | undefined) {

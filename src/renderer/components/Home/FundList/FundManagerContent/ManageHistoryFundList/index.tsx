@@ -22,7 +22,7 @@ const ManageHistoryFundList: React.FC<ManageHistoryFundListProps> = ({ manageHis
 
   const { run: runGetFunds } = useRequest(Helpers.Fund.GetFunds, {
     manual: true,
-    throwOnError: true,
+
     onSuccess: (result: Fund.ResponseItem[]) => {
       const manageHistoryFundList = result.filter(Boolean).sort((a, b) => Number(b.gszzl) - Number(a.gszzl));
       setManageHistoryFundList(result.filter(Boolean));
@@ -32,7 +32,7 @@ const ManageHistoryFundList: React.FC<ManageHistoryFundListProps> = ({ manageHis
 
   const { run: runGetFixFunds } = useRequest(Helpers.Fund.GetFixFunds, {
     manual: true,
-    throwOnError: true,
+
     onSuccess: (result) => {
       const fixFunds = Helpers.Fund.MergeFixFunds(manageHistoryFundList, result);
       const cloneFunds = fixFunds.filter(Boolean).sort((a, b) => {

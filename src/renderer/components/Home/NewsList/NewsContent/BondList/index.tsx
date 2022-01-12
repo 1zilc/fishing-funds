@@ -6,15 +6,14 @@ import ChartCard from '@/components/Card/ChartCard';
 import * as Services from '@/services';
 import styles from './index.module.scss';
 
-interface BondListProps {}
+interface BondListProps {
+  onView: (url: string) => void;
+}
 
-const { shell } = window.contextModules.electron;
-
-const BondList: React.FC<PropsWithChildren<BondListProps>> = () => {
+const BondList: React.FC<PropsWithChildren<BondListProps>> = (props) => {
   const [data, setData] = useState<News.ResponseItem[]>([]);
 
   const { loading, run: runNewsGetBondList } = useRequest(Services.News.GetBondList, {
-    throwOnError: true,
     onSuccess: setData,
   });
 
@@ -46,7 +45,7 @@ const BondList: React.FC<PropsWithChildren<BondListProps>> = () => {
             position: ['bottomCenter'],
           }}
           onRow={(record) => ({
-            onClick: () => shell.openExternal(record.url_unique),
+            onClick: () => props.onView(record.url_m),
           })}
         />
       </div>

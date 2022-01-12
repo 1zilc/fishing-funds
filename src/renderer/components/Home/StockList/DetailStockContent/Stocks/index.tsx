@@ -19,7 +19,6 @@ const Stocks: React.FC<StocksProps> = ({ secid }) => {
   const { data: detailSecid, show: showDetailDrawer, set: setDetailDrawer, close: closeDetailDrawer } = useDrawer('');
 
   const { loading, run: runGetIndustryFromEastmoney } = useRequest(() => Services.Stock.GetIndustryFromEastmoney(secid, 2), {
-    throwOnError: true,
     pollingInterval: 1000 * 60,
     onSuccess: (result) => {
       setStockList(result);

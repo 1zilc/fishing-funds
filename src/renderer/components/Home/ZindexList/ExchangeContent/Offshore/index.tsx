@@ -12,7 +12,6 @@ interface OffshoreProps {}
 const Offshore: React.FC<OffshoreProps> = () => {
   const [data, setData] = useState<Exchange.ResponseItem[]>([]);
   const { run: runGetListFromEastmoney } = useRequest(() => Services.Exchange.GetListFromEastmoney('0', 'm:133'), {
-    throwOnError: true,
     onSuccess: setData,
     pollingInterval: 1000 * 60,
   });

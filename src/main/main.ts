@@ -9,6 +9,7 @@
 
 import { app, globalShortcut, ipcMain, nativeTheme, dialog } from 'electron';
 import windowStateKeeper from 'electron-window-state';
+import Store from 'electron-store';
 import { Menubar } from 'menubar';
 import AppUpdater from './autoUpdater';
 import { appIcon, generateWalletIcon } from './icon';
@@ -27,6 +28,7 @@ async function init() {
 }
 
 function main() {
+  const storage = new Store();
   const tray = createTray();
   const mainWindowState = windowStateKeeper({ defaultWidth: 325, defaultHeight: 768 });
   mb = createMenubar({ tray, mainWindowState });
@@ -66,6 +68,15 @@ function main() {
     if (app.isPackaged) {
       appUpdater.checkUpdate('renderer');
     }
+  });
+  ipcMain.handle('get-storage-config', async (event, config) => {
+    return storage.get(config.key);
+  });
+  ipcMain.handle('set-storage-config', async (event, config) => {
+    storage.set(config.key, config.value);
+  });
+  ipcMain.handle('delete-storage-config', async (event, config) => {
+    storage.delete(config.key);
   });
   ipcMain.handle('update-tray-context-menu-wallets', (event, config) => {
     const menus = config.map((item: any) => ({

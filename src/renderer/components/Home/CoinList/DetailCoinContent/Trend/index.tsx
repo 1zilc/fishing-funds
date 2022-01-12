@@ -30,7 +30,6 @@ const Trend: React.FC<PerformanceProps> = ({ code }) => {
   const { darkMode } = useHomeContext();
   const coinUnitSetting = useSelector((state: StoreState) => state.setting.systemSetting.coinUnitSetting);
   const { run: runGetHistoryFromCoingecko } = useRequest(() => Services.Coin.GetHistoryFromCoingecko(code, coinUnitSetting, date.code), {
-    throwOnError: true,
     pollingInterval: CONST.DEFAULT.ESTIMATE_FUND_DELAY,
     onSuccess: (result) => {
       chartInstance?.setOption({

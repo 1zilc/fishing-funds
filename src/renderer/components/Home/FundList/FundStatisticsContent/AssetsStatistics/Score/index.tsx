@@ -31,7 +31,7 @@ const Score: React.FC<ScoreProps> = ({ gssyl = 0 }) => {
 
   const { run: runGetZindexFromEastmoney } = useRequest(() => Services.Zindex.FromEastmoney(indexCode), {
     pollingInterval: autoFreshSetting ? 1000 * 60 * freshDelaySetting : undefined,
-    throwOnError: true,
+
     onSuccess: (result) => {
       if (!result) {
         return;

@@ -38,7 +38,6 @@ const StockWareHouse: React.FC<StockWareHouseProps> = ({ code, stockCodes }) => 
   const { data: stockSecid, show: showDetailStockDrawer, set: setDetailStockDrawer, close: closeDetailStockDrawer } = useDrawer('');
 
   const { run: runGetStockWareHouseFromEastmoney } = useRequest(() => Services.Fund.GetStockWareHouseFromEastmoney(code, stockCodes), {
-    throwOnError: true,
     onSuccess: (result) => {
       chartInstance?.setOption({
         backgroundColor: 'transparent',

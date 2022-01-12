@@ -68,7 +68,6 @@ const MainRank: React.FC<PropsWithChildren<MainRankProps>> = () => {
   ];
 
   const { run: runCoinFromCoinCap, loading } = useRequest(() => Services.Coin.FromCoinCap('', ''), {
-    throwOnError: true,
     onSuccess: setData,
   });
 

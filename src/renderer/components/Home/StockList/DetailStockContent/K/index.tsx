@@ -45,7 +45,6 @@ const K: React.FC<PerformanceProps> = ({ secid = '' }) => {
   const [k, setKType] = useState(kTypeList[0]);
   const { varibleColors, darkMode } = useHomeContext();
   const { run: runGetKFromEastmoney } = useRequest(() => Services.Stock.GetKFromEastmoney(secid, k.code), {
-    throwOnError: true,
     onSuccess: (result) => {
       // 数据意义：开盘(open)，收盘(close)，最低(lowest)，最高(highest)
       const values = result.map((_) => [_.kp, _.sp, _.zd, _.zg]);
