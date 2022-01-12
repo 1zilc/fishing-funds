@@ -43,7 +43,7 @@ const AddStockContent: React.FC<AddStockContentProps> = (props) => {
 
   const { run: runSearch } = useRequest(Services.Stock.SearchFromEastmoney, {
     manual: true,
-
+    throwOnError: true,
     onSuccess: (res) => setGroupList(res.filter(({ Type }) => stockTypesConfig.map(({ code }) => code).includes(Type))),
   });
 

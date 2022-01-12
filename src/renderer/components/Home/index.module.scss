@@ -5,3 +5,9 @@
   background-color: var(--inner-color);
   overflow: hidden;
 }
+
+.lowKey {
+  filter: grayscale(99%);
+  --increase-color: #111;
+  --reduce-color: #111;
+}

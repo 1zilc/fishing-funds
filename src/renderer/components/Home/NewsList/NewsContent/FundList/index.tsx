@@ -6,14 +6,15 @@ import ChartCard from '@/components/Card/ChartCard';
 import * as Services from '@/services';
 import styles from './index.module.scss';
 
-interface FundListProps {
-  onView: (url: string) => void;
-}
+interface FundListProps {}
 
-const FundList: React.FC<PropsWithChildren<FundListProps>> = (props) => {
+const { shell } = window.contextModules.electron;
+
+const FundList: React.FC<PropsWithChildren<FundListProps>> = () => {
   const [data, setData] = useState<News.ResponseItem[]>([]);
 
   const { loading, run: runNewsGetFundList } = useRequest(Services.News.GetFundList, {
+    throwOnError: true,
     onSuccess: setData,
   });
 
@@ -45,7 +46,7 @@ const FundList: React.FC<PropsWithChildren<FundListProps>> = (props) => {
             position: ['bottomCenter'],
           }}
           onRow={(record) => ({
-            onClick: () => props.onView(record.url_m),
+            onClick: () => shell.openExternal(record.url_unique),
           })}
         />
       </div>

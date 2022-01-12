@@ -28,7 +28,6 @@ export function createMenubar({ tray, mainWindowState }: { tray: Tray; mainWindo
         webviewTag: true,
         devTools: !app.isPackaged,
         preload: path.join(__dirname, 'preload.js'),
-        nativeWindowOpen: false,
       },
     },
   });

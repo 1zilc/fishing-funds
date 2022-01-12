@@ -39,6 +39,7 @@ const SecuritiesWareHouse: React.FC<SecuritiesWareHouseProps> = ({ code, securit
   const { run: runGetSecuritiesWareHouseFromEastmoney } = useRequest(
     () => Services.Fund.GetSecuritiesWareHouseFromEastmoney(code, securitiesCodes),
     {
+      throwOnError: true,
       onSuccess: (result) => {
         chartInstance?.setOption({
           backgroundColor: 'transparent',

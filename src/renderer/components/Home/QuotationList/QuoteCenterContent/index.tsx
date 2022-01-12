@@ -60,6 +60,7 @@ const QuoteCenterContent: React.FC<QuoteCenterContentProps> = (props) => {
   });
 
   const { run: runGetQuoteCenterFromEastmoney } = useRequest(Services.Quotation.GetQuoteCenterFromEastmoney, {
+    throwOnError: true,
     onSuccess: setData,
   });
 

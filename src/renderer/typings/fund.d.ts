@@ -110,7 +110,7 @@ declare namespace Fund {
 
   export namespace Manager {
     export interface Info {
-      id: string;
+      id: '30655271';
       pic: 'https://pdf.dfcfw.com/pdf/H8_PNG30655271_1.jpg';
       name: '蔡嵩松';
       star: 1;

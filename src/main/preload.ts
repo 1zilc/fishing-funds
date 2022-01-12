@@ -1,12 +1,12 @@
-import got from 'got';
-import log from 'electron-log';
 import { contextBridge, ipcRenderer, shell, clipboard, nativeImage } from 'electron';
+import got from 'got';
 import { encode, decode } from 'js-base64';
+import log from 'electron-log';
 import * as fs from 'fs';
 import * as CONST from '../renderer/constants';
 import { base64ToBuffer } from './util';
+import { version } from '../../release/app/package.json';
 
-const { version } = require('../../release/app/package.json');
 const HttpProxyAgent = require('http-proxy-agent');
 const HttpsProxyAgent = require('https-proxy-agent');
 
@@ -85,18 +85,12 @@ contextBridge.exposeInMainWorld('contextModules', {
       writeText: clipboard.writeText,
       writeImage: (dataUrl: string) => clipboard.writeImage(nativeImage.createFromDataURL(dataUrl)),
     },
-  },
-  log: log,
-  io: {
     saveImage: (filePath: string, dataUrl: string) => {
       const imageBuffer = base64ToBuffer(dataUrl);
       fs.writeFileSync(filePath, imageBuffer);
     },
     saveString: (filePath: string, content: string) => {
       fs.writeFileSync(filePath, content);
-    },
-    readFile(path: string) {
-      return fs.readFileSync(path, 'utf-8');
     },
     encodeFF(content: any) {
       const ffprotocol = 'ff://'; // FF协议
@@ -116,16 +110,9 @@ contextBridge.exposeInMainWorld('contextModules', {
         return null;
       }
     },
-  },
-  storage: {
-    async get(key: string) {
-      return ipcRenderer.invoke('get-storage-config', { key });
-    },
-    async set(key: string, value: unknown) {
-      await ipcRenderer.invoke('set-storage-config', { key, value });
-    },
-    async delete(key: string) {
-      await ipcRenderer.invoke('delete-storage-config', { key });
+    readFile(path: string) {
+      return fs.readFileSync(path, 'utf-8');
     },
   },
+  log: log,
 });

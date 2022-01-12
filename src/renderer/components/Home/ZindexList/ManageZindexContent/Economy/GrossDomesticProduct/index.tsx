@@ -15,6 +15,7 @@ const GrossDomesticProduct: React.FC<GrossDomesticProductProps> = () => {
   const { varibleColors, darkMode } = useHomeContext();
 
   const { run: runGetEconomyIndexFromEastmoney } = useRequest(() => Services.Zindex.GetEconomyIndexFromEastmoney(20), {
+    throwOnError: true,
     onSuccess: (result) => {
       try {
         chartInstance?.setOption({

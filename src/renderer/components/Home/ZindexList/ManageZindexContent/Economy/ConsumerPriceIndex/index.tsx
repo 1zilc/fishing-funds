@@ -15,6 +15,7 @@ const ConsumerPriceIndex: React.FC<ConsumerPriceIndexProps> = () => {
   const { varibleColors, darkMode } = useHomeContext();
 
   const { run: runGetEconomyIndexFromEastmoney } = useRequest(() => Services.Zindex.GetEconomyIndexFromEastmoney(19), {
+    throwOnError: true,
     onSuccess: (result) => {
       try {
         chartInstance?.setOption({

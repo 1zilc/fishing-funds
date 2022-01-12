@@ -70,7 +70,6 @@
 
 - QQ 群: [732268738](https://download.1zilc.top/ff/screenshots/group1.jpg)
 - issues: [#106](https://github.com/1zilc/fishing-funds/issues/106)
-- Telegram: [https://t.me/fishing_funds](https://t.me/fishing_funds)
 
 ## http 代理
 

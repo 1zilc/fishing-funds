@@ -75,6 +75,7 @@ const SelfRank: React.FC<PropsWithChildren<SelfRankProps>> = () => {
   ];
 
   const { run: runGetSelfRankFromEastmoney, loading } = useRequest(() => Services.Stock.GetSelfRankFromEastmoney(dayType.code), {
+    throwOnError: true,
     onSuccess: setData,
     refreshDeps: [dayType.code],
   });

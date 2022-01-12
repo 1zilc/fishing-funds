@@ -6,14 +6,15 @@ import ChartCard from '@/components/Card/ChartCard';
 import * as Services from '@/services';
 import styles from './index.module.scss';
 
-interface GlobalListProps {
-  onView: (url: string) => void;
-}
+interface GlobalListProps {}
 
-const GlobalList: React.FC<PropsWithChildren<GlobalListProps>> = (props) => {
+const { shell } = window.contextModules.electron;
+
+const GlobalList: React.FC<PropsWithChildren<GlobalListProps>> = () => {
   const [data, setData] = useState<News.ResponseItem[]>([]);
 
   const { loading, run: runNewsGetGlobalList } = useRequest(Services.News.GetGlobalList, {
+    throwOnError: true,
     onSuccess: setData,
   });
 
@@ -45,7 +46,7 @@ const GlobalList: React.FC<PropsWithChildren<GlobalListProps>> = (props) => {
             position: ['bottomCenter'],
           }}
           onRow={(record) => ({
-            onClick: () => props.onView(record.url_m),
+            onClick: () => shell.openExternal(record.url_unique),
           })}
         />
       </div>

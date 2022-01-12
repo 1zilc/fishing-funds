@@ -22,7 +22,7 @@ const devtoolsConfig =
       }
     : {};
 
-const configuration: webpack.Configuration = {
+export default merge(baseConfig, {
   ...devtoolsConfig,
 
   mode: 'production',
@@ -77,6 +77,4 @@ const configuration: webpack.Configuration = {
     __dirname: false,
     __filename: false,
   },
-};
-
-export default merge(baseConfig, configuration);
+});

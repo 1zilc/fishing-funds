@@ -16,8 +16,7 @@ import * as Adapters from '@/utils/adpters';
 import * as Helpers from '@/helpers';
 import * as Enums from '@/utils/enums';
 
-const { invoke, dialog, ipcRenderer, clipboard, app } = window.contextModules.electron;
-const { saveString, encodeFF, decodeFF, readFile } = window.contextModules.io;
+const { invoke, dialog, ipcRenderer, clipboard, app, saveString, encodeFF, decodeFF, readFile } = window.contextModules.electron;
 
 export function useUpdater() {
   const dispatch = useDispatch();

@@ -39,6 +39,7 @@ const CnyMixExchange: React.FC<PropsWithChildren<CnyMixExchangeProps>> = () => {
   ];
 
   const { run: runGetListFromEastmoney, loading } = useRequest(() => Services.Exchange.GetListFromEastmoney('1', 'm:121 t:1'), {
+    throwOnError: true,
     onSuccess: setData,
   });
 

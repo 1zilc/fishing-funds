@@ -4,7 +4,7 @@
   "description": "基金,大盘,股票,虚拟货币状态栏显示小应用,基于Electron开发,支持 MacOS,Windows,Linux客户端,数据源来自天天基金,蚂蚁基金,爱基金,腾讯证券,新浪基金等",
   "scripts": {
     "build": "concurrently \"npm run build:main\" \"npm run build:renderer\"",
-    "build:preload": "yarn tsc ./src/main/preload.ts",
+    "build:preload": "yarn tsc ./src/main/preload.ts --resolveJsonModule",
     "build:main": "cross-env NODE_ENV=production TS_NODE_TRANSPILE_ONLY=true webpack --config ./.erb/configs/webpack.config.main.prod.ts",
     "build:renderer": "cross-env NODE_ENV=production TS_NODE_TRANSPILE_ONLY=true webpack --config ./.erb/configs/webpack.config.renderer.prod.ts",
     "build:icon": "electron-icon-builder --input=./assets/icon.png --output=./icon-build",
@@ -148,8 +148,10 @@
     "@testing-library/jest-dom": "^5.12.0",
     "@testing-library/react": "^12.0.0",
     "@types/color-hash": "^1.0.1",
+    "@types/enzyme": "^3.10.5",
+    "@types/enzyme-adapter-react-16": "^1.0.6",
     "@types/jest": "^27.0.1",
-    "@types/node": "17.0.8",
+    "@types/node": "16.11.7",
     "@types/react": "^17.0.5",
     "@types/react-dom": "^17.0.3",
     "@types/react-test-renderer": "^17.0.1",
@@ -160,7 +162,7 @@
     "@typescript-eslint/parser": "^5.3.1",
     "antd-dayjs-webpack-plugin": "^1.0.6",
     "chalk": "^4.1.1",
-    "concurrently": "^7.0.0",
+    "concurrently": "^6.0.2",
     "cross-env": "^7.0.3",
     "css-loader": "^6.2.0",
     "css-minimizer-webpack-plugin": "^3.0.1",
@@ -170,6 +172,9 @@
     "electron-devtools-installer": "^3.2.0",
     "electron-notarize": "^1.0.0",
     "electron-rebuild": "^3.1.1",
+    "enzyme": "^3.11.0",
+    "enzyme-adapter-react-16": "^1.15.6",
+    "enzyme-to-json": "^3.6.2",
     "eslint": "^7.25.0",
     "eslint-config-airbnb": "^19.0.1",
     "eslint-config-airbnb-typescript": "^15.0.0",
@@ -211,7 +216,7 @@
     "yarn-deduplicate": "^3.1.0"
   },
   "dependencies": {
-    "ahooks": "^3.0.3",
+    "ahooks": "^2.10.5",
     "antd": "^4.11.2",
     "cheerio": "^1.0.0-rc.5",
     "classnames": "^2.2.6",
@@ -223,10 +228,9 @@
     "electron-disable-file-drop": "^1.0.2",
     "electron-icon-builder": "^2.0.1",
     "electron-log": "^4.3.5",
-    "electron-store": "^8.0.1",
     "electron-updater": "^4.3.8",
     "electron-window-state": "^5.0.3",
-    "got": "^11.0.0",
+    "got": "^11.8.1",
     "html2canvas": "^1.2.2",
     "https-proxy-agent": "^5.0.0",
     "iconv-lite": "^0.6.2",
@@ -246,8 +250,9 @@
     "swiper": "^7.0.1"
   },
   "devEngines": {
-    "node": ">=14.x",
-    "npm": ">=7.x"
+    "node": ">=10.x",
+    "npm": ">=6.x",
+    "yarn": ">=1.21.3"
   },
   "browserslist": []
 }

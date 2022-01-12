@@ -15,6 +15,7 @@ const ForeignExchangeAndGold: React.FC<ForeignExchangeAndGoldProps> = () => {
   const { varibleColors, darkMode } = useHomeContext();
 
   const { run: runGetEconomyIndexFromEastmoney } = useRequest(() => Services.Zindex.GetEconomyIndexFromEastmoney(16), {
+    throwOnError: true,
     onSuccess: (result) => {
       try {
         chartInstance?.setOption({

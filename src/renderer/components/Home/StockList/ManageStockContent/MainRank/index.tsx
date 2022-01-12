@@ -74,6 +74,7 @@ const MainRank: React.FC<PropsWithChildren<MainRankProps>> = () => {
   ];
 
   const { loading } = useRequest(() => Services.Stock.GetMainRankFromEastmoney(dayType.code), {
+    throwOnError: true,
     onSuccess: setData,
     refreshDeps: [dayType.code],
   });

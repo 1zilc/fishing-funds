@@ -73,6 +73,7 @@ const Ranting: React.FC<PropsWithChildren<RantingProps>> = () => {
   ];
 
   const { run: runGetFundRatingFromEasemoney, loading } = useRequest(Services.Fund.GetFundRatingFromEasemoney, {
+    throwOnError: true,
     onSuccess: dispatch(setFundRatingMapAction),
     ready: !Object.keys(fundRatingMap),
   });

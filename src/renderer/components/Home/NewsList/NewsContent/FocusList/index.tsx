@@ -6,14 +6,15 @@ import ChartCard from '@/components/Card/ChartCard';
 import * as Services from '@/services';
 import styles from './index.module.scss';
 
-interface FocusListProps {
-  onView: (url: string) => void;
-}
+interface FocusListProps {}
 
-const FocusList: React.FC<PropsWithChildren<FocusListProps>> = (props) => {
+const { shell } = window.contextModules.electron;
+
+const FocusList: React.FC<PropsWithChildren<FocusListProps>> = () => {
   const [data, setData] = useState<News.ResponseItem[]>([]);
 
   const { loading, run: runNewsGetFocusList } = useRequest(Services.News.GetFocusList, {
+    throwOnError: true,
     onSuccess: setData,
   });
 
@@ -45,7 +46,7 @@ const FocusList: React.FC<PropsWithChildren<FocusListProps>> = (props) => {
             position: ['bottomCenter'],
           }}
           onRow={(record) => ({
-            onClick: () => props.onView(record.url_m),
+            onClick: () => shell.openExternal(record.url_unique),
           })}
         />
       </div>

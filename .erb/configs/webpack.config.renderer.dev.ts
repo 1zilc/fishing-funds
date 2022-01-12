@@ -28,7 +28,7 @@ if (!requiredByDLLConfig && !(fs.existsSync(webpackPaths.dllPath) && fs.existsSy
   execSync('npm run postinstall');
 }
 
-const configuration: webpack.Configuration = {
+export default merge(baseConfig, {
   devtool: 'inline-source-map',
 
   mode: 'development',
@@ -164,6 +164,7 @@ const configuration: webpack.Configuration = {
     },
     historyApiFallback: {
       verbose: true,
+      disableDotRule: false,
     },
     onBeforeSetupMiddleware() {
       console.log('Starting Main Process...');
@@ -176,6 +177,4 @@ const configuration: webpack.Configuration = {
         .on('error', (spawnError) => console.error(spawnError));
     },
   },
-};
-
-export default merge(baseConfig, configuration);
+});

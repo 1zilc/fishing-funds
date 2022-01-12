@@ -1,20 +1,18 @@
 .content {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, 50px);
-  justify-content: space-around;
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
 }
 
 .wallet {
+  width: 20%;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 10px;
-  height: 50px;
-  width: 50px;
   box-sizing: border-box;
-
   cursor: pointer;
-  border-radius: 10px;
+  border-radius: var(--base-radius);
 
   img {
     transition: transform 0.3s;

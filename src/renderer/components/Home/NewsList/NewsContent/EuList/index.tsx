@@ -6,14 +6,15 @@ import ChartCard from '@/components/Card/ChartCard';
 import * as Services from '@/services';
 import styles from './index.module.scss';
 
-interface EuListProps {
-  onView: (url: string) => void;
-}
+interface EuListProps {}
 
-const EuList: React.FC<PropsWithChildren<EuListProps>> = (props) => {
+const { shell } = window.contextModules.electron;
+
+const EuList: React.FC<PropsWithChildren<EuListProps>> = () => {
   const [data, setData] = useState<News.ResponseItem[]>([]);
 
   const { loading, run: runNewsGetEuList } = useRequest(Services.News.GetEuList, {
+    throwOnError: true,
     onSuccess: setData,
   });
 
@@ -45,7 +46,7 @@ const EuList: React.FC<PropsWithChildren<EuListProps>> = (props) => {
             position: ['bottomCenter'],
           }}
           onRow={(record) => ({
-            onClick: () => props.onView(record.url_m),
+            onClick: () => shell.openExternal(record.url_unique),
           })}
         />
       </div>

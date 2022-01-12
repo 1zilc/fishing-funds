@@ -7,7 +7,7 @@ import webpackPaths from './webpack.paths';
 import { dependencies as externals } from '../../release/app/package.json';
 import AntdDayjsWebpackPlugin from 'antd-dayjs-webpack-plugin';
 
-const configuration: webpack.Configuration = {
+export default {
   externals: [...Object.keys(externals || {})],
 
   stats: 'errors-only',
@@ -63,5 +63,3 @@ const configuration: webpack.Configuration = {
     new AntdDayjsWebpackPlugin(),
   ],
 };
-
-export default configuration;

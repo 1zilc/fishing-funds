@@ -6,14 +6,15 @@ import ChartCard from '@/components/Card/ChartCard';
 import * as Services from '@/services';
 import styles from './index.module.scss';
 
-interface ListedListProps {
-  onView: (url: string) => void;
-}
+interface ListedListProps {}
 
-const ListedList: React.FC<PropsWithChildren<ListedListProps>> = (props) => {
+const { shell } = window.contextModules.electron;
+
+const ListedList: React.FC<PropsWithChildren<ListedListProps>> = () => {
   const [data, setData] = useState<News.ResponseItem[]>([]);
 
   const { loading, run: runNewsGetListedList } = useRequest(Services.News.GetListedList, {
+    throwOnError: true,
     onSuccess: setData,
   });
 
@@ -45,7 +46,7 @@ const ListedList: React.FC<PropsWithChildren<ListedListProps>> = (props) => {
             position: ['bottomCenter'],
           }}
           onRow={(record) => ({
-            onClick: () => props.onView(record.url_m),
+            onClick: () => shell.openExternal(record.url_unique),
           })}
         />
       </div>

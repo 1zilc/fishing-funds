@@ -15,6 +15,7 @@ const DepositReserveRatio: React.FC<DepositReserveRatioProps> = () => {
   const { varibleColors, darkMode } = useHomeContext();
 
   const { run: runGetEconomyIndexFromEastmoney } = useRequest(() => Services.Zindex.GetEconomyIndexFromEastmoney(23), {
+    throwOnError: true,
     onSuccess: (result) => {
       try {
         chartInstance?.setOption({

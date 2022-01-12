@@ -26,6 +26,7 @@ const Industry: React.FC<IndustryProps> = () => {
   const { run: runGetFundPerformanceFromEastmoney } = useRequest(
     () => Services.Quotation.GetFundFlowFromEastmoney(industryType.code, industryType.type),
     {
+      throwOnError: true,
       onSuccess: (result) => {
         chartInstance?.setOption({
           title: {

@@ -14,6 +14,7 @@ interface MutualQuotaProps {}
 const MutualQuota: React.FC<MutualQuotaProps> = () => {
   const [list, setList] = useState<any[]>([]);
   useRequest(Services.Quotation.GetMutualQuotaFromEastmoney, {
+    throwOnError: true,
     onSuccess: setList,
     pollingInterval: 1000 * 60,
   });

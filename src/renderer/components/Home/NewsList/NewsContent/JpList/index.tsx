@@ -6,14 +6,15 @@ import ChartCard from '@/components/Card/ChartCard';
 import * as Services from '@/services';
 import styles from './index.module.scss';
 
-interface JpListProps {
-  onView: (url: string) => void;
-}
+interface JpListProps {}
 
-const JpList: React.FC<PropsWithChildren<JpListProps>> = (props) => {
+const { shell } = window.contextModules.electron;
+
+const JpList: React.FC<PropsWithChildren<JpListProps>> = () => {
   const [data, setData] = useState<News.ResponseItem[]>([]);
 
   const { loading, run: runNewsGetJpList } = useRequest(Services.News.GetJpList, {
+    throwOnError: true,
     onSuccess: setData,
   });
 
@@ -45,7 +46,7 @@ const JpList: React.FC<PropsWithChildren<JpListProps>> = (props) => {
             position: ['bottomCenter'],
           }}
           onRow={(record) => ({
-            onClick: () => props.onView(record.url_m),
+            onClick: () => shell.openExternal(record.url_unique),
           })}
         />
       </div>

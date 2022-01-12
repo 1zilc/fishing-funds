@@ -16,6 +16,7 @@ const HotTheme: React.FC<HotThemeProps> = () => {
   const { data: stockName, show: showAddStockDrawer, set: setAddStockDrawer, close: closeAddStockDrawer } = useDrawer('');
 
   const { loading, run: runQuotationGetHotThemeFromEastmoney } = useRequest(Services.Quotation.GetHotThemeFromEastmoney, {
+    throwOnError: true,
     onSuccess: setData,
   });
 

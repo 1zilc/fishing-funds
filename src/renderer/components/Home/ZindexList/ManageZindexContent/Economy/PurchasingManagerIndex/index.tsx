@@ -15,6 +15,7 @@ const PurchasingManagerIndex: React.FC<PurchasingManagerIndexProps> = () => {
   const { varibleColors, darkMode } = useHomeContext();
 
   const { run: runGetEconomyIndexFromEastmoney } = useRequest(() => Services.Zindex.GetEconomyIndexFromEastmoney(21), {
+    throwOnError: true,
     onSuccess: (result) => {
       try {
         chartInstance?.setOption({

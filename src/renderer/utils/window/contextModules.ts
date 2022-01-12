@@ -6,11 +6,6 @@ declare global {
   interface Window {
     contextModules: {
       got: GotRequestFunction;
-      process: {
-        production: boolean;
-        electron: string;
-        version: string;
-      };
       electron: {
         shell: Shell;
         ipcRenderer: IpcRenderer;
@@ -26,20 +21,18 @@ declare global {
           getShouldUseDarkColors: () => Promise<boolean>;
           setNativeThemeSource: (theme: string) => Promise<void>;
         };
-      };
-      log: ElectronLog;
-      io: {
         saveImage: (filePath: string, dataUrl: string) => void;
         saveString: (filePath: string, content: string) => void;
         encodeFF: (content: any) => string;
         decodeFF: (content: string) => any;
         readFile: (content: string) => string;
       };
-      storage: {
-        get: <T = unknown>(key: string) => Promise<T>;
-        set: (key: string) => Promise<void>;
-        delete: (key: string) => Promise<void>;
+      process: {
+        production: boolean;
+        electron: string;
+        version: string;
       };
+      log: ElectronLog;
     };
   }
 }

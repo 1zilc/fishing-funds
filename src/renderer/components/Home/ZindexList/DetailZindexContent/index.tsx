@@ -22,6 +22,7 @@ const DetailZindexContent: React.FC<DetailFundContentProps> = (props) => {
   const [zindex, setZindex] = useState<Zindex.ResponseItem | Record<string, any>>({});
 
   useRequest(() => Services.Zindex.FromEastmoney(code), {
+    throwOnError: true,
     pollingInterval: 1000 * 60,
     onSuccess: setZindex,
   });

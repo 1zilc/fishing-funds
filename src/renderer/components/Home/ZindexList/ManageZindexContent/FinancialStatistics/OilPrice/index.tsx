@@ -15,6 +15,7 @@ const OilPrice: React.FC<OilPriceProps> = () => {
   const { varibleColors, darkMode } = useHomeContext();
 
   const { run: runGetOilPriceFromEastmoney } = useRequest(() => Services.Zindex.GetOilPriceFromEastmoney(), {
+    throwOnError: true,
     onSuccess: (result) => {
       try {
         chartInstance?.setOption({

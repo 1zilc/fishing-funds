@@ -158,21 +158,14 @@
   display: flex;
   align-items: center;
   padding: 10px 28px;
-  justify-content: center;
+  justify-content: space-around;
   width: 100%;
-  flex-wrap: wrap;
 
   & > section {
     display: flex;
     font-size: 1rem;
     align-items: center;
     box-sizing: border-box;
-    justify-content: center;
-    width: 50%;
-
-    // &:nth-child(3) {
-    //   width: 100%;
-    // }
 
     label {
       // height: 20px;

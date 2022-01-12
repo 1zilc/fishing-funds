@@ -22,7 +22,7 @@ jobs:
       - name: Setup repo
         uses: actions/checkout@v2
 
-      - name: Install Node.js and NPM
+      - name: Install Node.js, NPM and Yarn
         uses: actions/setup-node@v2
         with:
           node-version: 16

@@ -25,7 +25,7 @@ const devtoolsConfig =
       }
     : {};
 
-const configuration: webpack.Configuration = {
+export default merge(baseConfig, {
   ...devtoolsConfig,
 
   mode: 'production',
@@ -135,6 +135,4 @@ const configuration: webpack.Configuration = {
       isDevelopment: process.env.NODE_ENV !== 'production',
     }),
   ],
-};
-
-export default merge(baseConfig, configuration);
+});

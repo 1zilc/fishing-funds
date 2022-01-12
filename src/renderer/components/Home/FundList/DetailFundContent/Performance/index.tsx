@@ -31,6 +31,7 @@ const Performance: React.FC<PerformanceProps> = ({ code }) => {
   const { run: runGetFundPerformanceFromEastmoney } = useRequest(
     () => Services.Fund.GetFundPerformanceFromEastmoney(code, performanceType.code),
     {
+      throwOnError: true,
       onSuccess: (result) => {
         chartInstance?.setOption({
           title: {

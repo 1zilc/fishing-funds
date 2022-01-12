@@ -32,6 +32,7 @@ const DetailQuotationContent: React.FC<DetailQuotationContentProps> = (props) =>
   const favorited = favoriteQuotationMap[quotation.code];
 
   useRequest(Services.Quotation.GetQuotationDetailFromEastmoney, {
+    throwOnError: true,
     defaultParams: [code],
     onSuccess: setQuotation,
   });
