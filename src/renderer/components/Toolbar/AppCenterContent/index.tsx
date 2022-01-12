@@ -227,7 +227,7 @@ const AppCenterContent: React.FC<AppCenterContentProps> = (props) => {
                 name: '淘宝',
                 icon: <TaobaoIcon style={{ ...iconSize }} />,
                 color: '#EC5D2A',
-                click: () => setViewerDataDrawer({ title: '淘宝', url: 'https://main.m.taobao.com/', phone: false }),
+                click: () => setViewerDataDrawer({ title: '淘宝', url: 'https://main.m.taobao.com/', phone: true }),
               },
               {
                 name: 'Github',
