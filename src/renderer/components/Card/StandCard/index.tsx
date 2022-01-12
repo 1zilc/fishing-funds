@@ -24,7 +24,7 @@ export const StandCard: React.FC<PropsWithChildren<StandCardProps>> = ({
     <aside className={classnames(styles.content, className)} onClick={onClick} onDoubleClick={onDoubleClick}>
       {(icon || title) && (
         <div className={styles.header}>
-          <div className={styles.icon}>{icon}</div>
+          {icon && <div className={styles.icon}>{icon}</div>}
           <div className={styles.title}>{title}</div>
           <div className={styles.extra}>{extra}</div>
         </div>

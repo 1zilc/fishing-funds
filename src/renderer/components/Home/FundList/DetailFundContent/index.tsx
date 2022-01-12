@@ -98,20 +98,17 @@ const DetailFundContent: React.FC<DetailFundContentProps> = (props) => {
   const syl_1n = pingzhongdata.syl_1n || pingzhongdata.syl_6y || pingzhongdata.syl_3y || pingzhongdata.syl_1y;
   const industryTags = useMemo(() => Array.from(new Set(industryData.stocks.map((stock) => stock.INDEXNAME))), [industryData.stocks]);
 
-  useRequest(Services.Fund.GetFixFromEastMoney, {
-    throwOnError: true,
+  useRequest(() => Services.Fund.GetFixFromEastMoney(code), {
     defaultParams: [code],
     onSuccess: setFund,
   });
 
   const { run: runGetFundDetailFromEastmoney } = useRequest(() => Services.Fund.GetFundDetailFromEastmoney(code), {
-    throwOnError: true,
     onSuccess: setPingzhongdata,
     refreshDeps: [code],
   });
 
   const { run: runGetIndustryRateFromEaseMoney } = useRequest(() => Services.Fund.GetIndustryRateFromEaseMoney(code), {
-    throwOnError: true,
     onSuccess: setIndustryData,
     refreshDeps: [code],
   });

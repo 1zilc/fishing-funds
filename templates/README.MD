@@ -1,7 +1,7 @@
 ### Component
 
 ```
-npx generate-react-cli component Component --path=src/renderer/components/Home
+npx generate-react-cli component Component --path=src/renderer/components
 ```
 
 ### Chart

@@ -35,7 +35,6 @@ const GlobalBond: React.FC<PropsWithChildren<GlobalBondProps>> = () => {
   ];
 
   const { run: runGetGlobalBondFromEastmoney, loading } = useRequest(Services.Exchange.GetGlobalBondFromEastmoney, {
-    throwOnError: true,
     onSuccess: setData,
   });
 

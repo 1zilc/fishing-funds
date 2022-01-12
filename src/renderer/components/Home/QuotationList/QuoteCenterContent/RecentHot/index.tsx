@@ -16,7 +16,6 @@ const RecentHot: React.FC<RecentHotProps> = () => {
   const { data: stockName, show: showAddStockDrawer, set: setAddStockDrawer, close: closeAddStockDrawer } = useDrawer('');
 
   const { loading, run: runQuotationGetRecentHotFromEastmoney } = useRequest(Services.Quotation.GetRecentHotFromEastmoney, {
-    throwOnError: true,
     onSuccess: setData,
   });
 

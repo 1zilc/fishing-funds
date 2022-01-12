@@ -103,7 +103,6 @@ const StockRow: React.FC<RowProps> = (props) => {
   const industrys = useSelector((state: StoreState) => state.stock.industryMap[stock.secid]) || [];
 
   useRequest(() => Services.Stock.GetIndustryFromEastmoney(stock.secid, 1), {
-    throwOnError: true,
     onSuccess: (datas) => {
       if (datas.length) {
         dispatch(setIndustryMapAction(stock.secid, datas));

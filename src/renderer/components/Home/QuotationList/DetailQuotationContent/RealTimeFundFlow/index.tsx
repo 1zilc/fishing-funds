@@ -17,7 +17,7 @@ const RealTimeFundFlow: React.FC<RealTimeFundFlowProps> = ({ code = '' }) => {
   const { varibleColors, darkMode } = useHomeContext();
   const { run: runGetRealTimeFundFlowFromEasymoney } = useRequest(() => Services.Quotation.GetRealTimeFundFlowFromEasymoney(code), {
     pollingInterval: 1000 * 60,
-    throwOnError: true,
+
     onSuccess: (result) => {
       const seriesStyle = {
         type: 'line',

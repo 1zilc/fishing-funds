@@ -10,7 +10,7 @@ import Logo from '@/components/Logo';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
 import PayCarousel from '@/components/PayCarousel';
 import Guide from '@/components/Guide';
-import Log from '@/components/SettingContent/Log';
+import Log from '@/components/Toolbar/SettingContent/Log';
 import SettingIcon from '@/static/icon/setting.svg';
 import LinkIcon from '@/static/icon/link.svg';
 import LineCharIcon from '@/static/icon/line-chart.svg';
@@ -519,6 +519,10 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
                 <section>
                   <label>issues：</label>
                   <a onClick={() => onNavigate('https://github.com/1zilc/fishing-funds/issues/106')}>#106</a>
+                </section>
+                <section>
+                  <label>Telegram：</label>
+                  <a onClick={() => onCopyGroup('https://t.me/fishing_funds')}>https://t.me/fishing_funds</a>
                 </section>
               </div>
             </StandCard>

@@ -19,7 +19,6 @@ const Stocks: React.FC<StocksProps> = ({ code }) => {
   const { data: secid, show: showDetailDrawer, set: setDetailDrawer, close: closeDetailDrawer } = useDrawer('');
 
   const { loading, run: runGetStocksFromEasymoney } = useRequest(() => Services.Quotation.GetStocksFromEasymoney(code), {
-    throwOnError: true,
     pollingInterval: 1000 * 60,
     onSuccess: (result) => {
       result.sort((a, b) => b.zdf - a.zdf);

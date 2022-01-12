@@ -24,10 +24,9 @@ const DetailCoinContent: React.FC<DetailCoinContentProps> = (props) => {
   const [coin, setCoin] = useState<Coin.DetailItem | null>(null);
   const ref = useRef(null);
   const position = useScroll(ref, (val) => val.top <= 520);
-  const miniMode = position.top > 40;
+  const miniMode = position && position.top > 40;
 
   const { run: runGetDetailFromCoingecko } = useRequest(Services.Coin.GetDetailFromCoingecko, {
-    throwOnError: true,
     pollingInterval: 1000 * 60,
     defaultParams: [code],
     onSuccess: setCoin,

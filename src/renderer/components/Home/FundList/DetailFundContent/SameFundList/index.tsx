@@ -21,7 +21,7 @@ const SameFundList: React.FC<SameFundListProps> = ({ swithSameType = [] }) => {
   const { currentWalletCode } = useCurrentWallet();
   const { run: runGetFunds } = useRequest(Helpers.Fund.GetFunds, {
     manual: true,
-    throwOnError: true,
+
     onSuccess: (result: Fund.ResponseItem[]) => {
       const sameFunds = result.filter(Boolean).sort((a, b) => Number(b.gszzl) - Number(a.gszzl));
       setSameFunds(sameFunds);
@@ -31,7 +31,7 @@ const SameFundList: React.FC<SameFundListProps> = ({ swithSameType = [] }) => {
 
   const { run: runGetFixFunds } = useRequest(Helpers.Fund.GetFixFunds, {
     manual: true,
-    throwOnError: true,
+
     onSuccess: (result: Fund.FixData[]) => {
       const fixFunds = Helpers.Fund.MergeFixFunds(sameFunds, result);
       const cloneFunds = fixFunds.filter(Boolean).sort((a, b) => {

@@ -32,7 +32,7 @@ const NorthHistory: React.FC<PropsWithChildren<NorthHistoryProps>> = (props) => 
 
   const { loading } = useRequest(Services.Quotation.GetHodingFromEastmoney, {
     defaultParams: [marketCode, reportName],
-    throwOnError: true,
+
     onSuccess: setData,
   });
 

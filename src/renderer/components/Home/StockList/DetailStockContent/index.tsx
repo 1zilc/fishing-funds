@@ -32,14 +32,12 @@ const DetailStockContent: React.FC<DetailStockContentProps> = (props) => {
   const [industrys, setIndustrys] = useState<Stock.IndustryItem[]>([]);
   const { codeMap } = useSelector((state: StoreState) => state.stock.config);
   useRequest(Services.Stock.GetDetailFromEastmoney, {
-    throwOnError: true,
     pollingInterval: 1000 * 60,
     defaultParams: [secid],
     onSuccess: setStock,
   });
 
   useRequest(Services.Stock.GetIndustryFromEastmoney, {
-    throwOnError: true,
     defaultParams: [secid, 3],
     onSuccess: setIndustrys,
   });

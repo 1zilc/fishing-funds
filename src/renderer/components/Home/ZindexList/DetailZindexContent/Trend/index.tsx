@@ -26,7 +26,6 @@ const Trend: React.FC<PerformanceProps> = ({ code, zs = 0 }) => {
   const [trend, setTrendType] = useState(trendTypeList[0]);
   const { darkMode, varibleColors } = useHomeContext();
   const { run: runGetTrendFromEastmoney } = useRequest(() => Services.Zindex.GetTrendFromEastmoney(code, trend.code), {
-    throwOnError: true,
     onSuccess: (result) => {
       chartInstance?.setOption({
         title: {

@@ -15,7 +15,6 @@ const Revenue: React.FC<RevenueProps> = () => {
   const { varibleColors, darkMode } = useHomeContext();
 
   const { run: runGetEconomyIndexFromEastmoney } = useRequest(() => Services.Zindex.GetEconomyIndexFromEastmoney(14), {
-    throwOnError: true,
     onSuccess: (result) => {
       try {
         chartInstance?.setOption({

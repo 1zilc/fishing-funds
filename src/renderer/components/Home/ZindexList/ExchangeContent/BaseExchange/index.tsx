@@ -39,7 +39,6 @@ const BaseExchange: React.FC<PropsWithChildren<BaseExchangeProps>> = () => {
   ];
 
   const { run: runGetListFromEastmoney, loading } = useRequest(() => Services.Exchange.GetListFromEastmoney('0', 'b:MK0300'), {
-    throwOnError: true,
     onSuccess: setData,
   });
 

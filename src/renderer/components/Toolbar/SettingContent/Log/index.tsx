@@ -20,7 +20,6 @@ const Log: React.FC<LogProps> = () => {
   >([]);
 
   const { loading } = useRequest(Services.Log.GetLog, {
-    throwOnError: true,
     onSuccess: setLogs,
   });
 

@@ -26,7 +26,6 @@ const Concept: React.FC<IndustryProps> = () => {
   const { run: runGetFundPerformanceFromEastmoney } = useRequest(
     () => Services.Quotation.GetFundFlowFromEastmoney(conceptType.code, conceptType.type),
     {
-      throwOnError: true,
       onSuccess: (result) => {
         chartInstance?.setOption({
           title: {

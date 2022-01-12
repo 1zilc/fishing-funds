@@ -1,0 +1,27 @@
+.content {
+  display: flex;
+  height: calc(100vh - 48px);
+  flex-direction: column;
+  width: 100%;
+}
+.bottom {
+}
+.nav {
+  background: var(--inner-color);
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  height: 40px;
+
+  svg {
+    fill: var(--inner-text-color);
+    cursor: pointer;
+    transition: all 0.2s;
+
+    &:hover {
+      border-radius: 5px;
+      fill: var(--main-text-color);
+      transform: scale(1.25);
+    }
+  }
+}

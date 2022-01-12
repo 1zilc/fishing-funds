@@ -6,8 +6,14 @@
 .flex {
   display: flex;
 }
+.flex-column {
+  flex-direction: column;
+}
 .f-j-c-c {
   justify-content: center;
+}
+.f-j-c-sa {
+  justify-content: space-around;
 }
 .f-a-i-c {
   align-items: center;
