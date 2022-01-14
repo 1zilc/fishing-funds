@@ -61,6 +61,14 @@ const ToolBar: React.FC<ToolBarProps> = () => {
     }
   }, [tabsActiveKey]);
 
+  const freshAll = useCallback(() => {
+    freshFunds();
+    freshZindexs();
+    freshQuotations();
+    freshStocks();
+    freshCoins();
+  }, []);
+
   return (
     <>
       <div className={styles.bar}>
@@ -71,16 +79,19 @@ const ToolBar: React.FC<ToolBarProps> = () => {
         </Badge>
       </div>
       <CustomDrawer show={showAppCenterDrawer} cached>
-        <AppCenterContent onEnter={closeAppCenterDrawer} onClose={closeAppCenterDrawer} />
+        <AppCenterContent
+          onClose={closeAppCenterDrawer}
+          onEnter={() => {
+            freshAll();
+            closeAppCenterDrawer();
+          }}
+        />
       </CustomDrawer>
       <CustomDrawer show={showSettingDrawer}>
         <SettingContent
           onClose={closeSettingDrawer}
           onEnter={() => {
-            freshFunds();
-            freshZindexs();
-            freshQuotations();
-            freshCoins();
+            freshAll();
             closeSettingDrawer();
           }}
         />
