@@ -8,6 +8,7 @@ import dayjs from 'dayjs';
 import { updateAvaliableAction } from '@/actions/updater';
 import { setFundConfigAction } from '@/actions/fund';
 import { selectWalletAction } from '@/actions/wallet';
+import { setAdjustmentNotificationDateAction, clearAdjustmentNotificationDateAction } from '@/actions/setting';
 import { StoreState } from '@/reducers/types';
 import { useWorkDayTimeToDo, useFixTimeToDo, useAfterMounted, useCurrentWallet, useFreshFunds } from '@/utils/hooks';
 import * as Utils from '@/utils';
@@ -38,7 +39,9 @@ export function useUpdater() {
 }
 
 export function useAdjustmentNotification() {
+  const dispatch = useDispatch();
   const systemSetting = useSelector((state: StoreState) => state.setting.systemSetting);
+  const lastNotificationDate = useSelector((state: StoreState) => state.setting.adjustmentNotificationDate);
   const { adjustmentNotificationSetting, adjustmentNotificationTimeSetting } = systemSetting;
 
   useInterval(
@@ -56,7 +59,6 @@ export function useAdjustmentNotification() {
       const hour = now.get('hour');
       const minute = now.get('minute');
       const currentDate = `${month}-${date}`;
-      const lastNotificationDate = await Utils.GetStorage(CONST.STORAGE.ADJUSTMENT_NOTIFICATION_DATE, '');
       if (isAdjustmentNotificationTime && currentDate !== lastNotificationDate) {
         const notification = new Notification('调仓提醒', {
           body: `当前时间${hour}:${minute} 注意行情走势`,
@@ -64,7 +66,7 @@ export function useAdjustmentNotification() {
         notification.onclick = () => {
           invoke.showCurrentWindow();
         };
-        await Utils.SetStorage(CONST.STORAGE.ADJUSTMENT_NOTIFICATION_DATE, currentDate);
+        dispatch(setAdjustmentNotificationDateAction(currentDate));
       }
     },
     1000 * 50,
@@ -273,6 +275,7 @@ export function useBootStrap() {
 }
 
 export function useMappingLocalToSystemSetting() {
+  const dispatch = useDispatch();
   const systemThemeSetting = useSelector((state: StoreState) => state.setting.systemSetting.systemThemeSetting);
   const autoStartSetting = useSelector((state: StoreState) => state.setting.systemSetting.autoStartSetting);
   const lowKeySetting = useSelector((state: StoreState) => state.setting.systemSetting.lowKeySetting);
@@ -293,7 +296,7 @@ export function useMappingLocalToSystemSetting() {
     }
   }, [lowKeySetting]);
   useAfterMounted(() => {
-    Utils.ClearStorage(CONST.STORAGE.ADJUSTMENT_NOTIFICATION_DATE);
+    dispatch(clearAdjustmentNotificationDateAction());
   }, [adjustmentNotificationTimeSetting]);
 }
 
@@ -373,7 +376,7 @@ export function useAllConfigBackup() {
   useLayoutEffect(() => {
     ipcRenderer.on('backup-all-config-export', async (e, data) => {
       try {
-        const backupConfig = Utils.GenerateBackupConfig();
+        const backupConfig = await Utils.GenerateBackupConfig();
         const { filePath, canceled } = await dialog.showSaveDialog({
           title: '保存',
           defaultPath: `${backupConfig.name}-${backupConfig.timestamp}.${backupConfig.suffix}`,

@@ -40,6 +40,7 @@ declare global {
         set: (key: string, data: unknown) => Promise<void>;
         delete: (key: string) => Promise<void>;
         cover: (data: unknown) => Promise<void>;
+        all: () => Promise<any>;
       };
     };
   }

@@ -81,6 +81,9 @@ function main() {
   ipcMain.handle('cover-storage-config', async (event, config) => {
     storage.set(config.value);
   });
+  ipcMain.handle('all-storage-config', async (event, config) => {
+    return storage.store;
+  });
   ipcMain.handle('update-tray-context-menu-wallets', (event, config) => {
     const menus = config.map((item: any) => ({
       ...item,

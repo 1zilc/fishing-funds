@@ -1,10 +1,8 @@
 import NP from 'number-precision';
 import dayjs from 'dayjs';
 
-import { defaultWallet } from '@/helpers/wallet';
 import * as Enums from '@/utils/enums';
 import * as CONST from '@/constants';
-import * as Helpers from '@/helpers';
 
 const { invoke } = window.contextModules.electron;
 const { version, production } = window.contextModules.process;
@@ -58,8 +56,6 @@ export function DeepCopy<T>(object: T): T {
 }
 
 export async function GetStorage<T = any>(key: string, init: T): Promise<T> {
-  // const json = localStorage.getItem(key);
-  // return json ? JSON.parse(json) : init || json;
   return electronStore.get(key, init);
 }
 
@@ -313,14 +309,8 @@ export function CalcZDHC(list: number[]) {
   }
 }
 
-export function GenerateBackupConfig() {
-  const config = Object.keys(CONST.STORAGE).reduce<Record<string, any>>(async (data, key) => {
-    const content = await GetStorage(key, null);
-    if (content !== undefined && content !== null) {
-      data[key] = content;
-    }
-    return data;
-  }, {});
+export async function GenerateBackupConfig() {
+  const config = await electronStore.all();
   const fileConfig: Backup.Config = {
     name: 'Fishing-Funds-Backup',
     author: '1zilc',

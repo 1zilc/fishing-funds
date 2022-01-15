@@ -130,5 +130,8 @@ contextBridge.exposeInMainWorld('contextModules', {
     async cover(value: unknown) {
       await ipcRenderer.invoke('cover-storage-config', { value });
     },
+    async all() {
+      return ipcRenderer.invoke('all-storage-config');
+    },
   },
 });

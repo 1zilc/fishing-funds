@@ -7,7 +7,7 @@ import Logo from '@/components/Logo';
 import { setRemoteFundsAction, setFundRatingMapAction } from '@/actions/fund';
 import { setZindexConfigAction } from '@/actions/zindex';
 import { SYNC_FAVORITE_QUOTATION_MAP } from '@/actions/quotation';
-import { setSystemSettingAction } from '@/actions/setting';
+import { setSystemSettingAction, setAdjustmentNotificationDateAction } from '@/actions/setting';
 import { setWalletConfigAction, changeEyeStatusAction, selectWalletAction } from '@/actions/wallet';
 import { setStockConfigAction } from '@/actions/stock';
 import { setCoinConfigAction, setRemoteCoinsAction } from '@/actions/coin';
@@ -47,7 +47,11 @@ const LoadingScreen: React.FC<LoadingScreenProps> = () => {
 
     setLoading('加载系统设置...');
     const systemSetting = await Utils.GetStorage(CONST.STORAGE.SYSTEM_SETTING, Helpers.Setting.defalutSystemSetting);
-    dispatch(setSystemSettingAction(systemSetting));
+    const adjustmentNotificationDate = await Utils.GetStorage(CONST.STORAGE.ADJUSTMENT_NOTIFICATION_DATE, '');
+    batch(() => {
+      dispatch(setSystemSettingAction(systemSetting));
+      dispatch(setAdjustmentNotificationDateAction(adjustmentNotificationDate));
+    });
 
     setLoading('加载钱包配置...');
     const walletSetting = await Utils.GetStorage(CONST.STORAGE.WALLET_SETTING, [Helpers.Wallet.defaultWallet]);
