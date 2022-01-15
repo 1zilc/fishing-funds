@@ -30,11 +30,11 @@ const LoadingScreen: React.FC<LoadingScreenProps> = () => {
 
   async function init() {
     setLoading('加载指数配置...');
-    const zindexSetting = await Utils.GetStorage(CONST.STORAGE.ZINDEX_SETTING, []);
+    const zindexSetting = await Utils.GetStorage(CONST.STORAGE.ZINDEX_SETTING, Helpers.Zindex.defaultZindexConfig);
     dispatch(setZindexConfigAction(zindexSetting));
 
     setLoading('加载关注板块配置...');
-    const favoriteQuotationMap = await Utils.GetStorage(CONST.STORAGE.FAVORITE_QUOTATION_MAP, []);
+    const favoriteQuotationMap = await Utils.GetStorage(CONST.STORAGE.FAVORITE_QUOTATION_MAP, {});
     dispatch({ type: SYNC_FAVORITE_QUOTATION_MAP, payload: favoriteQuotationMap });
 
     setLoading('加载股票配置...');
