@@ -56,7 +56,7 @@ export function useAdjustmentNotification() {
       const hour = now.get('hour');
       const minute = now.get('minute');
       const currentDate = `${month}-${date}`;
-      const lastNotificationDate = Utils.GetStorage(CONST.STORAGE.ADJUSTMENT_NOTIFICATION_DATE, '');
+      const lastNotificationDate = await Utils.GetStorage(CONST.STORAGE.ADJUSTMENT_NOTIFICATION_DATE, '');
       if (isAdjustmentNotificationTime && currentDate !== lastNotificationDate) {
         const notification = new Notification('调仓提醒', {
           body: `当前时间${hour}:${minute} 注意行情走势`,
@@ -64,7 +64,7 @@ export function useAdjustmentNotification() {
         notification.onclick = () => {
           invoke.showCurrentWindow();
         };
-        Utils.SetStorage(CONST.STORAGE.ADJUSTMENT_NOTIFICATION_DATE, currentDate);
+        await Utils.SetStorage(CONST.STORAGE.ADJUSTMENT_NOTIFICATION_DATE, currentDate);
       }
     },
     1000 * 50,
@@ -265,14 +265,8 @@ export function useBootStrap() {
   // 第一次刷新所有数据
   useEffect(() => {
     Adapters.ConCurrencyAllAdapter([
-      () =>
-        Adapters.ChokeAllAdapter([
-          runLoadRemoteFunds,
-          runLoadRemoteCoins,
-          runLoadFundRatingMap,
-          runLoadWalletsFunds,
-          runLoadFixWalletsFunds,
-        ]),
+      () => Adapters.ChokeAllAdapter([runLoadRemoteFunds, runLoadRemoteCoins, runLoadFundRatingMap]),
+      () => Adapters.ChokeAllAdapter([runLoadWalletsFunds, runLoadFixWalletsFunds]),
       () => Adapters.ChokeAllAdapter([runLoadZindexs, runLoadQuotations, runLoadStocks, runLoadCoins]),
     ]);
   }, []);
@@ -414,7 +408,7 @@ export function useAllConfigBackup() {
         }
         const encodeBackupConfig = readFile(filePath);
         const backupConfig: Backup.Config = compose(decodeFF, Base64.decode)(encodeBackupConfig);
-        Utils.coverBackupConfig(backupConfig);
+        Utils.CoverBackupConfig(backupConfig);
         await dialog.showMessageBox({
           type: 'info',
           title: `导入成功`,
@@ -439,7 +433,7 @@ export function useAllConfigBackup() {
           buttons: ['确定', '取消'],
         });
         if (response === 0) {
-          Utils.coverBackupConfig(backupConfig);
+          Utils.CoverBackupConfig(backupConfig);
           await dialog.showMessageBox({
             type: 'info',
             title: `恢复成功`,

@@ -70,13 +70,16 @@ function main() {
     }
   });
   ipcMain.handle('get-storage-config', async (event, config) => {
-    return storage.get(config.key);
+    return storage.get(config.key, config.init);
   });
   ipcMain.handle('set-storage-config', async (event, config) => {
     storage.set(config.key, config.value);
   });
   ipcMain.handle('delete-storage-config', async (event, config) => {
     storage.delete(config.key);
+  });
+  ipcMain.handle('cover-storage-config', async (event, config) => {
+    storage.set(config.value);
   });
   ipcMain.handle('update-tray-context-menu-wallets', (event, config) => {
     const menus = config.map((item: any) => ({

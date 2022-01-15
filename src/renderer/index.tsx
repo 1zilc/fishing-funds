@@ -1,4 +1,3 @@
-import React from 'react';
 import { render } from 'react-dom';
 import NP from 'number-precision';
 import { ConfigProvider } from 'antd';
@@ -17,8 +16,6 @@ echarts.registerMap('china', require('@/static/map/china.json'));
 NP.enableBoundaryChecking(false);
 
 Utils.CheckEnvTool();
-Utils.InitSystemSettingStorage();
-Utils.ClearExpiredStorage();
 
 export const store = configureStore();
 

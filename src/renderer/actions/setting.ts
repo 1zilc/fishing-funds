@@ -1,30 +1,21 @@
 import { ThunkAction } from '@/reducers/types';
 import * as Utils from '@/utils';
 import * as CONST from '@/constants';
-import * as Helpers from '@/helpers';
 
 export const SYNC_SETTING = 'SYNC_SETTING';
 
-export function setSystemSettingAction(setting: System.Setting): ThunkAction {
-  return (dispatch, getState) => {
+export function setSystemSettingAction(newSetting: System.Setting): ThunkAction {
+  return async (dispatch, getState) => {
     try {
-      const systemSetting = Helpers.Setting.GetSystemSetting();
+      const {
+        setting: { systemSetting: oldSystemSetting },
+      } = getState();
 
-      Utils.SetStorage(CONST.STORAGE.SYSTEM_SETTING, {
-        ...systemSetting,
-        ...setting,
-      });
+      const systemSetting = { ...oldSystemSetting, ...newSetting };
 
-      dispatch(syncSystemSettingAction());
-    } catch (error) {}
-  };
-}
-
-export function syncSystemSettingAction(): ThunkAction {
-  return (dispatch, getState) => {
-    try {
-      const systemSetting = Helpers.Setting.GetSystemSetting();
       dispatch({ type: SYNC_SETTING, payload: systemSetting });
+
+      Utils.SetStorage(CONST.STORAGE.SYSTEM_SETTING, systemSetting);
     } catch (error) {}
   };
 }

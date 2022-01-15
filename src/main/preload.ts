@@ -117,15 +117,18 @@ contextBridge.exposeInMainWorld('contextModules', {
       }
     },
   },
-  storage: {
-    async get(key: string) {
-      return ipcRenderer.invoke('get-storage-config', { key });
+  electronStore: {
+    async get(key: string, init: unknown) {
+      return ipcRenderer.invoke('get-storage-config', { key, init });
     },
     async set(key: string, value: unknown) {
       await ipcRenderer.invoke('set-storage-config', { key, value });
     },
     async delete(key: string) {
       await ipcRenderer.invoke('delete-storage-config', { key });
+    },
+    async cover(value: unknown) {
+      await ipcRenderer.invoke('cover-storage-config', { value });
     },
   },
 });

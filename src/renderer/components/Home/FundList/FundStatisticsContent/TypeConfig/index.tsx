@@ -14,13 +14,17 @@ interface TypeConfigProps {
 }
 
 const TypeConfig: React.FC<TypeConfigProps> = ({ funds = [] }) => {
+  const remoteFunds = useSelector((state: StoreState) => state.fund.remoteFunds);
   const { ref: chartRef, chartInstance } = useResizeEchart(CONST.DEFAULT.ECHARTS_SCALE);
   const { varibleColors, darkMode } = useHomeContext();
   const { currentWalletCode } = useCurrentWallet();
 
   useRenderEcharts(
     () => {
-      const remoteFundsMap = Helpers.Fund.GetRemoteFundsMap();
+      const remoteFundsMap = remoteFunds.reduce((m, c) => {
+        m[c[0]] = c;
+        return m;
+      }, {} as Record<string, Fund.RemoteFund>);
       const typeMap: Record<string, Fund.ResponseItem[]> = {};
       funds.forEach((fund) => {
         const type = remoteFundsMap[fund.fundcode!]?.[3];
@@ -82,7 +86,7 @@ const TypeConfig: React.FC<TypeConfigProps> = ({ funds = [] }) => {
       });
     },
     chartInstance,
-    [darkMode, funds, currentWalletCode]
+    [darkMode, funds, currentWalletCode, remoteFunds]
   );
 
   return (

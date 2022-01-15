@@ -16,7 +16,7 @@ const stock: Reducer<StockState> = (
   state = {
     stocks: [],
     stocksLoading: false,
-    config: Helpers.Stock.GetStockConfig(),
+    config: { stockConfig: [], codeMap: {} },
     industryMap: {},
   },
   action

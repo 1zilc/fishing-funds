@@ -12,7 +12,7 @@ const quotation: Reducer<QuotationState> = (
   state = {
     quotations: [],
     quotationsLoading: false,
-    favoriteQuotationMap: Helpers.Quotation.GetFavoriteQuotationMap(),
+    favoriteQuotationMap: {},
   },
   action
 ) => {

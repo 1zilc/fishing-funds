@@ -12,7 +12,10 @@ const zindex: Reducer<ZindexState> = (
   state = {
     zindexs: [],
     zindexsLoading: false,
-    config: Helpers.Zindex.GetZindexConfig(),
+    config: {
+      zindexConfig: [],
+      codeMap: {},
+    },
   },
   action
 ) => {

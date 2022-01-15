@@ -16,10 +16,10 @@ export interface WalletState {
 
 const wallet: Reducer<WalletState> = (
   state = {
-    wallets: Helpers.Wallet.GetWalletConfig().walletConfig.map(({ code }) => ({ code, funds: [], updateTime: '' })),
-    config: Helpers.Wallet.GetWalletConfig(),
-    eyeStatus: Helpers.Wallet.GetEyeStatus(),
-    currentWalletCode: Helpers.Wallet.GetCurrentWalletCode(),
+    wallets: [],
+    config: { walletConfig: [], codeMap: {} },
+    eyeStatus: Enums.EyeStatus.Open,
+    currentWalletCode: '',
   },
   action
 ) => {

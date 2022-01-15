@@ -8,7 +8,7 @@ export type SettingState = {
 
 const setting: Reducer<SettingState> = (
   state = {
-    systemSetting: Helpers.Setting.GetSystemSetting(),
+    systemSetting: Helpers.Setting.defalutSystemSetting,
   },
   action
 ) => {

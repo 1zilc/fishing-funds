@@ -17,7 +17,7 @@ const coin: Reducer<CoinState> = (
   state = {
     coins: [],
     coinsLoading: false,
-    config: Helpers.Coin.GetCoinConfig(),
+    config: { coinConfig: [], codeMap: {} },
     remoteCoins: [],
     remoteCoinsLoading: false,
   },

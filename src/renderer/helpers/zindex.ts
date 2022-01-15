@@ -29,7 +29,11 @@ export const defaultZindexConfig = [
 ];
 
 export function GetZindexConfig() {
-  const zindexConfig: Zindex.SettingItem[] = Utils.GetStorage(CONST.STORAGE.ZINDEX_SETTING, defaultZindexConfig);
+  const {
+    zindex: {
+      config: { zindexConfig },
+    },
+  } = store.getState();
   const codeMap = GetCodeMap(zindexConfig);
   return { zindexConfig, codeMap };
 }
@@ -57,8 +61,13 @@ export async function GetZindex(code: string) {
 
 export function SortZindexs(responseZindexs: Zindex.ResponseItem[]) {
   const {
-    zindexSortMode: { type: zindexSortType, order: zindexSortorder },
-  } = Helpers.Sort.GetSortMode();
+    sort: {
+      sortMode: {
+        zindexSortMode: { type: zindexSortType, order: zindexSortorder },
+      },
+    },
+  } = store.getState();
+
   const { codeMap } = GetZindexConfig();
   const sortList = Utils.DeepCopy(responseZindexs);
 

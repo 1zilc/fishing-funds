@@ -47,20 +47,14 @@ export function setCoinConfigAction(coinConfig: Coin.SettingItem[]): ThunkAction
       const {
         coin: { coins },
       } = getState();
-      Utils.SetStorage(CONST.STORAGE.COIN_SETTING, coinConfig);
+      const codeMap = Helpers.Coin.GetCodeMap(coinConfig);
+
       batch(() => {
-        dispatch(syncCoinConfigAction());
+        dispatch({ type: SYNC_COINS_CONFIG, payload: { coinConfig, codeMap } });
         dispatch(syncCoinsStateAction(coins));
       });
-    } catch (error) {}
-  };
-}
 
-export function syncCoinConfigAction(): ThunkAction {
-  return (dispatch, getState) => {
-    try {
-      const config = Helpers.Coin.GetCoinConfig();
-      dispatch({ type: SYNC_COINS_CONFIG, payload: config });
+      Utils.SetStorage(CONST.STORAGE.COIN_SETTING, coinConfig);
     } catch (error) {}
   };
 }
@@ -158,29 +152,28 @@ export function syncCoinsStateAction(coins: (Coin.ResponseItem & Coin.ExtraRow)[
   };
 }
 
-export function setRemoteCoinsAction(remoteCoins: Coin.RemoteCoin[]): ThunkAction {
-  return (dispatch, getState) => {
+export function setRemoteCoinsAction(newRemoteCoins: Coin.RemoteCoin[]): ThunkAction {
+  return async (dispatch, getState) => {
     try {
-      const remoteMap = Utils.GetStorage(CONST.STORAGE.REMOTE_COIN_MAP, {});
-      const newRemoteMap = remoteCoins.reduce((r, c) => {
+      const {
+        coin: { remoteCoins },
+      } = getState();
+
+      const oldRemoteMap = remoteCoins.reduce((r, c) => {
         r[c.code] = c;
         return r;
       }, {} as Record<string, Coin.RemoteCoin>);
 
-      Utils.SetStorage(CONST.STORAGE.REMOTE_COIN_MAP, {
-        ...remoteMap,
-        ...newRemoteMap,
-      });
-      dispatch(syncRemoteCoinsAction());
-    } catch (error) {}
-  };
-}
+      const newRemoteMap = newRemoteCoins.reduce((r, c) => {
+        r[c.code] = c;
+        return r;
+      }, {} as Record<string, Coin.RemoteCoin>);
 
-export function syncRemoteCoinsAction(): ThunkAction {
-  return (dispatch, getState) => {
-    try {
-      const remoteCoins = Helpers.Coin.GetRemoteCoins();
-      dispatch({ type: SET_REMOTE_COINS, payload: remoteCoins });
+      const remoteMap = { ...oldRemoteMap, ...newRemoteMap };
+
+      dispatch({ type: SET_REMOTE_COINS, payload: Object.values(remoteMap) });
+
+      Utils.SetStorage(CONST.STORAGE.REMOTE_COIN_MAP, remoteMap);
     } catch (error) {}
   };
 }

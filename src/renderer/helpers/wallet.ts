@@ -1,6 +1,6 @@
 import dayjs from 'dayjs';
 import { store } from '@/.';
-import { syncWalletStateAction, syncFixWalletStateAction } from '@/actions/wallet';
+import { updateWalletStateAction, syncFixWalletStateAction } from '@/actions/wallet';
 
 import * as CONST from '@/constants';
 import * as Utils from '@/utils';
@@ -23,7 +23,11 @@ export const defaultWallet: Wallet.SettingItem = {
 export const walletIcons = new Array(40).fill('').map((_, index) => require(`@assets/wallet/${index}.png`));
 
 export function GetWalletConfig() {
-  const walletConfig: Wallet.SettingItem[] = Utils.GetStorage(CONST.STORAGE.WALLET_SETTING, [defaultWallet]);
+  const {
+    wallet: {
+      config: { walletConfig },
+    },
+  } = store.getState();
   const codeMap = GetCodeMap(walletConfig);
   return { walletConfig, codeMap };
 }
@@ -42,11 +46,17 @@ export function GetCodeMap(config: Wallet.SettingItem[]) {
 }
 
 export function GetEyeStatus() {
-  return Utils.GetStorage(CONST.STORAGE.EYE_STATUS, Enums.EyeStatus.Open);
+  const {
+    wallet: { eyeStatus },
+  } = store.getState();
+  return eyeStatus;
 }
 
 export function GetCurrentWalletCode() {
-  return Utils.GetStorage(CONST.STORAGE.CURRENT_WALLET_CODE, defaultWallet.code);
+  const {
+    wallet: { currentWalletCode },
+  } = store.getState();
+  return currentWalletCode;
 }
 
 export function GetCurrentWalletState() {
@@ -67,6 +77,7 @@ export function GetWalletState(walletCode: string) {
     }
   );
 }
+
 export async function LoadWalletsFunds() {
   try {
     const { walletConfig } = GetWalletConfig();
@@ -75,7 +86,7 @@ export async function LoadWalletsFunds() {
       const sortFunds = Helpers.Fund.SortFunds(responseFunds, walletCode);
       const now = dayjs().format('MM-DD HH:mm:ss');
       store.dispatch(
-        syncWalletStateAction({
+        updateWalletStateAction({
           code: walletCode,
           funds: sortFunds,
           updateTime: now,

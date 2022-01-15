@@ -12,14 +12,22 @@ export interface CodeCoinMap {
 }
 
 export function GetCoinConfig() {
-  const coinConfig: Coin.SettingItem[] = Utils.GetStorage(CONST.STORAGE.COIN_SETTING, []);
-  const codeMap = coinConfig.reduce((r, c, i) => {
+  const {
+    coin: {
+      config: { coinConfig },
+    },
+  } = store.getState();
+  const codeMap = GetCodeMap(coinConfig);
+  return { coinConfig, codeMap };
+}
+
+export function GetCodeMap(config: Coin.SettingItem[]) {
+  return config.reduce((r, c, i) => {
     r[c.code] = { ...c, originSort: i };
     return r;
   }, {} as CodeCoinMap);
-
-  return { coinConfig, codeMap };
 }
+
 export async function GetCoins(config?: Coin.SettingItem[]) {
   const { coinConfig } = GetCoinConfig();
   const { coinUnitSetting } = Helpers.Setting.GetSystemSetting();
@@ -33,8 +41,13 @@ export async function GetCoin(code: string) {
 
 export function SortCoins(responseCoins: Coin.ResponseItem[]) {
   const {
-    coinSortMode: { type: coinSortType, order: coinSortorder },
-  } = Helpers.Sort.GetSortMode();
+    sort: {
+      sortMode: {
+        coinSortMode: { type: coinSortType, order: coinSortorder },
+      },
+    },
+  } = store.getState();
+
   const { codeMap } = GetCoinConfig();
   const sortList = Utils.DeepCopy(responseCoins);
 
@@ -84,17 +97,13 @@ export async function LoadRemoteCoins() {
   }
 }
 
-export function GetRemoteCoins() {
-  return Object.entries(Utils.GetStorage<Record<string, Coin.RemoteCoin>>(CONST.STORAGE.REMOTE_COIN_MAP, {})).map(
-    ([code, remoteCoin]) => remoteCoin
-  );
-}
-
-export function GetRemoteCoinsMap() {
-  return Utils.GetStorage<Record<string, Coin.RemoteCoin>>(CONST.STORAGE.REMOTE_COIN_MAP, {});
-}
-
 export function GetCurrentCoin(code: string) {
-  const remoteCoinsMap = GetRemoteCoinsMap();
-  return remoteCoinsMap[code];
+  const {
+    coin: { remoteCoins },
+  } = store.getState();
+
+  return remoteCoins.reduce((m, c) => {
+    m[c.code] = c;
+    return m;
+  }, {} as Record<string, Coin.RemoteCoin>)[code];
 }

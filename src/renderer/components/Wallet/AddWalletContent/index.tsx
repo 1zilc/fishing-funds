@@ -4,7 +4,7 @@ import { Input } from 'antd';
 
 import WalletSelection from '@/components/Wallet/WalletSelection';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
-import { addWalletAction } from '@/actions/wallet';
+import { addWalletConfigAction } from '@/actions/wallet';
 import { StoreState } from '@/reducers/types';
 import * as Utils from '@/utils';
 import styles from './index.module.scss';
@@ -34,7 +34,7 @@ const AddWalletContent: React.FC<AddFundContentProps> = (props) => {
       return;
     }
     setFieldNameMessageTip({ show: false, text: '' });
-    dispatch(addWalletAction({ name, iconIndex, code, funds: [] }));
+    dispatch(addWalletConfigAction({ name, iconIndex, code, funds: [] }));
     props.onEnter();
   };
 

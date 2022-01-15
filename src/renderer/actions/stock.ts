@@ -57,25 +57,19 @@ export function deleteStockAction(secid: string): ThunkAction {
 }
 
 export function setStockConfigAction(stockConfig: Stock.SettingItem[]): ThunkAction {
-  return (dispatch, getState) => {
+  return async (dispatch, getState) => {
     try {
       const {
         stock: { stocks },
       } = getState();
-      Utils.SetStorage(CONST.STORAGE.STOCK_SETTING, stockConfig);
+      const codeMap = Helpers.Stock.GetCodeMap(stockConfig);
+
       batch(() => {
-        dispatch(syncStockConfigAction());
+        dispatch({ type: SYNC_STOCK_CONFIG, payload: { stockConfig, codeMap } });
         dispatch(syncStocksStateAction(stocks));
       });
-    } catch (error) {}
-  };
-}
 
-export function syncStockConfigAction(): ThunkAction {
-  return (dispatch, getState) => {
-    try {
-      const config = Helpers.Stock.GetStockConfig();
-      dispatch({ type: SYNC_STOCK_CONFIG, payload: config });
+      Utils.SetStorage(CONST.STORAGE.STOCK_SETTING, stockConfig);
     } catch (error) {}
   };
 }
