@@ -28,7 +28,25 @@ const LoadingScreen: React.FC<LoadingScreenProps> = () => {
   const dispatch = useDispatch();
   const { data: loadingText, show: showLoading, set: setLoading } = useDrawer('加载本地配置中...');
 
+  async function checkLocalStorage() {
+    if (localStorage.length) {
+      const config = Object.keys(CONST.STORAGE).reduce<Record<string, any>>((data, key) => {
+        const content = localStorage.getItem(key);
+        if (content !== undefined && content !== null) {
+          data[key] = JSON.parse(content);
+        }
+        return data;
+      }, {});
+      await Utils.CoverStorage(config);
+      localStorage.clear();
+    } else {
+    }
+  }
+
   async function init() {
+    setLoading('迁移旧版本配置...');
+    await checkLocalStorage();
+
     setLoading('加载指数配置...');
     const zindexSetting = await Utils.GetStorage(CONST.STORAGE.ZINDEX_SETTING, Helpers.Zindex.defaultZindexConfig);
     dispatch(setZindexConfigAction(zindexSetting));

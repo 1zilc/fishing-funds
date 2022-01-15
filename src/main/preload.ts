@@ -12,8 +12,9 @@ const HttpsProxyAgent = require('https-proxy-agent');
 
 contextBridge.exposeInMainWorld('contextModules', {
   got: async (url: string, config = {}) => {
-    const { httpProxyAddressSetting, httpProxySetting, httpProxyWhitelistSetting, httpProxyRuleSetting }: any = JSON.parse(
-      localStorage.getItem(CONST.STORAGE.SYSTEM_SETTING)!
+    const { httpProxyAddressSetting, httpProxySetting, httpProxyWhitelistSetting, httpProxyRuleSetting } = await ipcRenderer.invoke(
+      'get-storage-config',
+      { key: CONST.STORAGE.SYSTEM_SETTING }
     );
     const httpProxyRuleMap = (httpProxyRuleSetting ?? '').split(',').reduce((map: Record<string, boolean>, address: string) => {
       map[address] = true;
