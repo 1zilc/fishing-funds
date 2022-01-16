@@ -30,6 +30,7 @@ const LoadingScreen: React.FC<LoadingScreenProps> = () => {
 
   async function checkLocalStorage() {
     if (localStorage.length) {
+      setLoading('迁移旧版本配置...');
       const config = Object.keys(CONST.STORAGE).reduce<Record<string, any>>((data, key) => {
         const content = localStorage.getItem(key);
         if (content !== undefined && content !== null) {
@@ -44,7 +45,6 @@ const LoadingScreen: React.FC<LoadingScreenProps> = () => {
   }
 
   async function init() {
-    setLoading('迁移旧版本配置...');
     await checkLocalStorage();
 
     setLoading('加载指数配置...');

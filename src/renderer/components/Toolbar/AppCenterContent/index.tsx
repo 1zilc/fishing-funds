@@ -271,6 +271,16 @@ const AppCenterContent: React.FC<AppCenterContentProps> = (props) => {
                 color: '#fafbfc',
                 click: () => setViewerDataDrawer({ title: '同花顺', url: 'http://m.10jqka.com.cn/', phone: true }),
               },
+              {
+                name: '东财人气榜',
+                icon: <i style={{ ...iconSize }}>榜</i>,
+                click: () =>
+                  setViewerDataDrawer({
+                    title: '东财人气榜',
+                    url: 'https://vipmoney.eastmoney.com/collect/stockranking/pages/ranking9_3/list.html',
+                    phone: true,
+                  }),
+              },
             ],
           },
         ],
