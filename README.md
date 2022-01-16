@@ -63,7 +63,7 @@
 ```
 
 - [官网下载](https://ff.1zilc.top)
-- [阿里云网盘下载](https://alist.1zilc.top/home/Fishing%20Funds)
+- [阿里云网盘下载](https://alist.1zilc.top/Fishing%20Funds)
 - [Github 下载](https://github.com/1zilc/fishing-funds/releases)
 - [Homebrew 安装](https://formulae.brew.sh/cask/fishing-funds#default) `brew install --cask fishing-funds`
 
