@@ -110,7 +110,7 @@ function main() {
     mainWindowState.manage(mb.window!);
     // 检查更新
     appUpdater.checkUpdate('renderer');
-    app.dock.hide();
+    app.dock?.hide();
     // 是否打开备份文件
     if (openBackupFilePath) {
       sendMessageToRenderer(mb, 'open-backup-file', openBackupFilePath);
