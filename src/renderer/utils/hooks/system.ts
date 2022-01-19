@@ -25,8 +25,8 @@ const { saveString, encodeFF, decodeFF, readFile } = window.contextModules.io;
 export function useUpdater() {
   const dispatch = useDispatch();
   const { autoCheckUpdateSetting } = useSelector((state: StoreState) => state.setting.systemSetting);
-  // 一个小时检查一次版本
-  useInterval(() => autoCheckUpdateSetting && ipcRenderer.invoke('check-update'), 1000 * 60 * 60);
+  // 6小时检查一次版本
+  useInterval(() => autoCheckUpdateSetting && ipcRenderer.invoke('check-update'), 1000 * 60 * 60 * 6);
 
   useEffect(() => {
     ipcRenderer.on('update-available', (e, data) => {

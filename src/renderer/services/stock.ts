@@ -144,7 +144,6 @@ export async function GetPicTrendFromEastmoney(secid: string) {
         token: Utils.MakeHash(),
       },
     });
-    // const base64Str = rawBody.toString('base64');
     const b64encoded = btoa(String.fromCharCode.apply(null, rawBody));
     return `data:image/png;base64,${b64encoded}`;
   } catch (error) {
