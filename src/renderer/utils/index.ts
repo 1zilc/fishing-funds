@@ -373,3 +373,15 @@ export function GetValueMapColor(value: any = 0) {
   const rgba = ColorRgba(color, colorAlpha);
   return rgba;
 }
+
+export function GbLength(str: string) {
+  let len = 0;
+  for (let i = 0; i < str.length; i++) {
+    if (str.charCodeAt(i) > 127 || str.charCodeAt(i) == 94) {
+      len += 2;
+    } else {
+      len++;
+    }
+  }
+  return len;
+}

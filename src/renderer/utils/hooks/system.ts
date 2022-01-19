@@ -1,21 +1,23 @@
-import { useCallback, useLayoutEffect, useState, useEffect, useRef } from 'react';
+import { useCallback, useLayoutEffect, useState, useEffect, useMemo, useRef } from 'react';
 import { useInterval, useBoolean, useThrottleFn, useSize } from 'ahooks';
 import { useDispatch, useSelector } from 'react-redux';
 import { compose } from 'redux';
 import { Base64 } from 'js-base64';
 import dayjs from 'dayjs';
+import NP from 'number-precision';
 
 import { updateAvaliableAction } from '@/actions/updater';
 import { setFundConfigAction } from '@/actions/fund';
 import { selectWalletAction } from '@/actions/wallet';
 import { setAdjustmentNotificationDateAction, clearAdjustmentNotificationDateAction } from '@/actions/setting';
 import { StoreState } from '@/reducers/types';
-import { useWorkDayTimeToDo, useFixTimeToDo, useAfterMounted, useCurrentWallet, useFreshFunds } from '@/utils/hooks';
+import { useWorkDayTimeToDo, useFixTimeToDo, useAfterMounted, useCurrentWallet, useFreshFunds, useAllCyFunds } from '@/utils/hooks';
 import * as Utils from '@/utils';
 import * as CONST from '@/constants';
 import * as Adapters from '@/utils/adpters';
 import * as Helpers from '@/helpers';
 import * as Enums from '@/utils/enums';
+import { NOTIMP } from 'dns';
 
 const { invoke, dialog, ipcRenderer, clipboard, app } = window.contextModules.electron;
 const { saveString, encodeFF, decodeFF, readFile } = window.contextModules.io;
@@ -303,32 +305,50 @@ export function useMappingLocalToSystemSetting() {
 export function useTrayContent() {
   const { trayContentSetting } = useSelector((state: StoreState) => state.setting.systemSetting);
   const currentWalletCode = useSelector((state: StoreState) => state.wallet.currentWalletCode);
+  const wallets = useSelector((state: StoreState) => state.wallet.wallets);
   const {
     currentWalletState: { funds },
   } = useCurrentWallet();
   const calcResult = Helpers.Fund.CalcFunds(funds, currentWalletCode);
 
+  const allCalcResult = useMemo(() => {
+    const allResult = wallets.reduce(
+      (r, { code, funds }) => {
+        const result = Helpers.Fund.CalcFunds(funds, code);
+        return { zje: r.zje + result.zje, gszje: r.gszje + result.gszje };
+      },
+      { zje: 0, gszje: 0 }
+    );
+    const sygz = NP.minus(allResult.gszje, allResult.zje);
+    return { sygz, gssyl: allResult.zje ? NP.times(NP.divide(sygz, allResult.zje), 100) : 0 };
+  }, [wallets]);
+
   useEffect(() => {
-    let content = '';
-    switch (trayContentSetting) {
-      case Enums.TrayContent.Sy:
-        content = ` ${Utils.Yang(calcResult.sygz.toFixed(2))} ¥`;
-        break;
-      case Enums.TrayContent.Syl:
-        content = ` ${Utils.Yang(calcResult.gssyl.toFixed(2))} %`;
-        break;
-      case Enums.TrayContent.None:
-      default:
-        break;
-    }
-    ipcRenderer.invoke('set-tray-content', content);
-  }, [trayContentSetting, calcResult]);
+    const group = [trayContentSetting].flat();
+    const content = group
+      .map((trayContent: Enums.TrayContent) => {
+        switch (trayContent) {
+          case Enums.TrayContent.Sy:
+            return `${Utils.Yang(calcResult.sygz.toFixed(2))}`;
+          case Enums.TrayContent.Syl:
+            return `${Utils.Yang(calcResult.gssyl.toFixed(2))}%`;
+          case Enums.TrayContent.Zsy:
+            return `${Utils.Yang(allCalcResult.sygz.toFixed(2))}`;
+          case Enums.TrayContent.Zsyl:
+            return `${Utils.Yang(allCalcResult.gssyl.toFixed(2))}%`;
+          default:
+            break;
+        }
+      })
+      .join(' │ ');
+
+    ipcRenderer.invoke('set-tray-content', content ? ` ${content}` : content);
+  }, [trayContentSetting, calcResult, allCalcResult]);
 }
 
 export function useUpdateContextMenuWalletsState() {
   const dispatch = useDispatch();
   const wallets = useSelector((state: StoreState) => state.wallet.wallets);
-  const trayContentSetting = useSelector((state: StoreState) => state.setting.systemSetting.trayContentSetting);
   const currentWalletCode = useSelector((state: StoreState) => state.wallet.currentWalletCode);
   const freshFunds = useFreshFunds(0);
 
@@ -338,18 +358,7 @@ export function useUpdateContextMenuWalletsState() {
       wallets.map((wallet) => {
         const walletConfig = Helpers.Wallet.GetCurrentWalletConfig(wallet.code);
         const calcResult = Helpers.Fund.CalcFunds(wallet.funds, wallet.code);
-        let value = '';
-        switch (trayContentSetting) {
-          case Enums.TrayContent.Sy:
-            value = ` ${Utils.Yang(calcResult.sygz.toFixed(2))} ¥`;
-            break;
-          case Enums.TrayContent.Syl:
-            value = ` ${Utils.Yang(calcResult.gssyl.toFixed(2))} %`;
-            break;
-          case Enums.TrayContent.None:
-          default:
-            break;
-        }
+        const value = `  ${Utils.Yang(calcResult.sygz.toFixed(2))}  ${Utils.Yang(calcResult.gssyl.toFixed(2))}%`;
         return {
           label: `${walletConfig.name}  ${value}`,
           type: currentWalletCode === wallet.code ? 'radio' : 'normal',
@@ -358,7 +367,7 @@ export function useUpdateContextMenuWalletsState() {
         };
       })
     );
-  }, [wallets, trayContentSetting, currentWalletCode]);
+  }, [wallets, currentWalletCode]);
   useLayoutEffect(() => {
     ipcRenderer.on('change-current-wallet-code', (e, code) => {
       try {

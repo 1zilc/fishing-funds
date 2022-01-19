@@ -1,4 +1,4 @@
-import { useCallback, useLayoutEffect, useState, useEffect, useRef } from 'react';
+import { useCallback, useLayoutEffect, useState, useEffect, useRef, useMemo } from 'react';
 import { useInterval, useBoolean, useThrottleFn, useSize } from 'ahooks';
 import { useDispatch, useSelector } from 'react-redux';
 import dayjs from 'dayjs';
@@ -335,4 +335,27 @@ export function useAutoDestroySortableRef() {
     };
   }, []);
   return sortableRef;
+}
+
+/***
+ * statusMap Record<钱包code,booealn>
+ */
+export function useAllCyFunds(statusMap: Record<string, boolean>) {
+  const wallets = useSelector((state: StoreState) => state.wallet.wallets);
+
+  // 持有份额的基金，response数组
+  const funds = useMemo(() => {
+    const allFunds: (Fund.ResponseItem & Fund.FixData)[] = [];
+    const fundCodeMap = new Map();
+    wallets.forEach(({ code, funds }) => {
+      const fundConfig = Helpers.Wallet.GetCurrentWalletConfig(code).funds;
+      const fundCodeMap = Helpers.Fund.GetCodeMap(fundConfig);
+      if (statusMap[code]) {
+        allFunds.push(...funds.filter((fund) => !!fundCodeMap[fund.fundcode!]?.cyfe));
+      }
+    });
+    return allFunds.filter((fund) => !fundCodeMap.has(fund.fundcode!) && fundCodeMap.set(fund.fundcode!, true));
+  }, [statusMap, wallets]);
+
+  return funds;
 }

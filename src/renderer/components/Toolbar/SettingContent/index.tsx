@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import classnames from 'classnames';
 import { useSelector, useDispatch } from 'react-redux';
-import { InputNumber, Radio, Badge, Switch, Slider, TimePicker, Input, Tabs } from 'antd';
+import { InputNumber, Radio, Badge, Switch, Slider, TimePicker, Input, Tabs, Select } from 'antd';
 import dayjs from 'dayjs';
 
 import PureCard from '@/components/Card/PureCard';
@@ -335,7 +335,21 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
                 </section>
                 <section>
                   <label>托盘内容：</label>
-                  <Radio.Group
+                  <Select
+                    mode="multiple"
+                    size="small"
+                    allowClear
+                    style={{ width: '50%' }}
+                    placeholder="无"
+                    value={trayContent}
+                    onChange={setTrayContent}
+                  >
+                    <Select.Option value={Enums.TrayContent.Sy}>选中钱包收益</Select.Option>
+                    <Select.Option value={Enums.TrayContent.Syl}>选中钱包收益率</Select.Option>
+                    <Select.Option value={Enums.TrayContent.Zsy}>所有钱包收益</Select.Option>
+                    <Select.Option value={Enums.TrayContent.Zsyl}>所有钱包收益率</Select.Option>
+                  </Select>
+                  {/* <Radio.Group
                     optionType="button"
                     size="small"
                     buttonStyle="solid"
@@ -346,7 +360,7 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
                     ]}
                     onChange={(e) => setTrayContent(e.target.value)}
                     value={trayContent}
-                  />
+                  /> */}
                 </section>
               </div>
             </StandCard>
