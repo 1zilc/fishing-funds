@@ -349,18 +349,6 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
                     <Select.Option value={Enums.TrayContent.Zsy}>所有钱包收益</Select.Option>
                     <Select.Option value={Enums.TrayContent.Zsyl}>所有钱包收益率</Select.Option>
                   </Select>
-                  {/* <Radio.Group
-                    optionType="button"
-                    size="small"
-                    buttonStyle="solid"
-                    options={[
-                      { label: '收益', value: Enums.TrayContent.Sy },
-                      { label: '收益率', value: Enums.TrayContent.Syl },
-                      { label: '无', value: Enums.TrayContent.None },
-                    ]}
-                    onChange={(e) => setTrayContent(e.target.value)}
-                    value={trayContent}
-                  /> */}
                 </section>
               </div>
             </StandCard>
