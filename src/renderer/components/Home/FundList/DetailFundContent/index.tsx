@@ -4,6 +4,7 @@ import classnames from 'classnames';
 import { Tabs, Rate } from 'antd';
 
 import ChartCard from '@/components/Card/ChartCard';
+import PureCard from '@/components/Card/PureCard';
 import CustomDrawer from '@/components/CustomDrawer';
 import ColorfulTags from '@/components/ColorfulTags';
 import Estimate from '@/components/Home/FundList/DetailFundContent/Estimate';
@@ -99,7 +100,6 @@ const DetailFundContent: React.FC<DetailFundContentProps> = (props) => {
   const industryTags = useMemo(() => Array.from(new Set(industryData.stocks.map((stock) => stock.INDEXNAME))), [industryData.stocks]);
 
   useRequest(() => Services.Fund.GetFixFromEastMoney(code), {
-    defaultParams: [code],
     onSuccess: setFund,
   });
 
@@ -263,10 +263,12 @@ const DetailFundContent: React.FC<DetailFundContentProps> = (props) => {
             </Tabs.TabPane>
           </Tabs>
         </div>
-        <div>
-          <Tabs animated={{ tabPane: true }} tabBarGutter={15} tabBarStyle={{ marginLeft: 15 }}>
+        <div className={styles.container}>
+          <Tabs animated={{ tabPane: true }} tabBarGutter={15}>
             <Tabs.TabPane tab="同类型基金涨幅榜" key={String(0)}>
-              <SameFundList swithSameType={pingzhongdata.swithSameType} />
+              <PureCard>
+                <SameFundList swithSameType={pingzhongdata.swithSameType} />
+              </PureCard>
             </Tabs.TabPane>
           </Tabs>
         </div>

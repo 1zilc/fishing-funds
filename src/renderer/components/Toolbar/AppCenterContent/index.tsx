@@ -22,6 +22,8 @@ import FundsBoxIcon from '@/static/icon/funds-box.svg';
 import BarChartIcon from '@/static/icon/bar-chart.svg';
 import StockIcon from '@/static/icon/stock.svg';
 import CoinIcon from '@/static/icon/coin.svg';
+import CalendarCheckIcon from '@/static/icon/calendar-check.svg';
+import LayoutIcon from '@/static/icon/layout.svg';
 
 import CustomDrawer from '@/components/CustomDrawer';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
@@ -41,6 +43,7 @@ import EconomicDataContent from '@/components/Home/ZindexList/EconomicDataConten
 import FundRankingContent from '@/components/Home/FundList/FundRankingContent';
 import StockRankingContent from '@/components/Home/StockList/StockRankingContent';
 import CoinRankingContent from '@/components/Home/CoinList/CoinRankingContent';
+import EconomicCalendarContent from '@/components/Home/StockList/EconomicCalendarContent';
 import ViewerContent from '@/components/ViewerContent';
 import { useDrawer } from '@/utils/hooks';
 
@@ -113,6 +116,7 @@ const AppCenterContent: React.FC<AppCenterContentProps> = (props) => {
   const [showFundRankingDrawer, { setTrue: openFundRankingDrawer, setFalse: closeFundRankingDrawer }] = useBoolean(false);
   const [showStockRankingDrawer, { setTrue: openStockRankingDrawer, setFalse: closeStockRankingDrawer }] = useBoolean(false);
   const [showCoinRankingDrawer, { setTrue: openCoinRankingDrawer, setFalse: closeCoinRankingDrawer }] = useBoolean(false);
+  const [showEconomicCalendarDrawer, { setTrue: openEconomicCalendarDrawer, setFalse: closeEconomicCalendarDrawer }] = useBoolean(false);
 
   const {
     data: viewerData,
@@ -180,7 +184,7 @@ const AppCenterContent: React.FC<AppCenterContentProps> = (props) => {
               },
               {
                 name: '板块资金流',
-                icon: <ChartBoxIcon style={{ ...iconSize }} />,
+                icon: <LayoutIcon style={{ ...iconSize }} />,
                 click: openFundFlowDrawer,
               },
               {
@@ -212,6 +216,11 @@ const AppCenterContent: React.FC<AppCenterContentProps> = (props) => {
                 name: '货币榜',
                 icon: <CoinIcon style={{ ...iconSize }} />,
                 click: openCoinRankingDrawer,
+              },
+              {
+                name: '财经日历',
+                icon: <CalendarCheckIcon style={{ ...iconSize }} />,
+                click: openEconomicCalendarDrawer,
               },
             ],
           },
@@ -366,6 +375,9 @@ const AppCenterContent: React.FC<AppCenterContentProps> = (props) => {
         </CustomDrawer>
         <CustomDrawer show={showCoinRankingDrawer}>
           <CoinRankingContent onClose={closeCoinRankingDrawer} onEnter={closeCoinRankingDrawer} />
+        </CustomDrawer>
+        <CustomDrawer show={showEconomicCalendarDrawer}>
+          <EconomicCalendarContent onClose={closeEconomicCalendarDrawer} onEnter={closeEconomicCalendarDrawer} />
         </CustomDrawer>
         <CustomDrawer show={showViewerDataDrawer}>
           <ViewerContent {...viewerData} onClose={closeViewerDataDrawer} onEnter={closeViewerDataDrawer} />

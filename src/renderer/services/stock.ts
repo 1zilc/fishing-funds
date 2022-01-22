@@ -811,3 +811,38 @@ export async function GetIndustryFromEastmoney(secid: string, type: 1 | 2 | 3) {
     return [];
   }
 }
+
+export async function GetCloseDayDates() {
+  try {
+    const { body } = await got<{
+      version: string;
+      result: {
+        pages: 1;
+        data: {
+          mkt: string;
+          holiday: string;
+          sdate: string; // 2021/4/2
+          edate: string;
+          xs: '';
+        }[];
+        count: 131;
+      };
+      success: true;
+      message: 'ok';
+      code: 0;
+    }>(`https://datacenter-web.eastmoney.com/api/data/get`, {
+      searchParams: {
+        type: 'RPTA_WEB_ZGXSRL',
+        sty: 'ALL',
+        ps: 200,
+        st: 'sdate',
+        sr: -1,
+        _: Date.now(),
+      },
+      responseType: 'json',
+    });
+    return body.result.data;
+  } catch (error) {
+    return [];
+  }
+}
