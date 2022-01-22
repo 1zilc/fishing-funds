@@ -22,3 +22,6 @@
 .holiday {
   font-size: 10px;
 }
+.titleBar {
+  font-size: calc(10rem / var(--base-font-size));
+}

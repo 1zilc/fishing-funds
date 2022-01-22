@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useRequest } from 'ahooks';
-import { Calendar, Tooltip } from 'antd';
+import { Calendar } from 'antd';
 import classnames from 'classnames';
 import dayjs from 'dayjs';
 
@@ -29,7 +29,7 @@ const ClosedCalendar: React.FC<ClosedCalendarProps> = () => {
   });
   const currentCloseDates = closeDates.filter(({ mkt }) => marketType.name === mkt);
   return (
-    <ChartCard onFresh={runStockGetCloseDayDates}>
+    <ChartCard TitleBar={<div className={styles.titleBar}>仅展示节假日、特殊工作日</div>} onFresh={runStockGetCloseDayDates}>
       <div className={classnames(styles.content)}>
         <Calendar
           fullscreen={false}
