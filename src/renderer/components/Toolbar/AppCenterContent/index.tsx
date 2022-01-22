@@ -18,21 +18,29 @@ import GithubIcon from '@/static/icon/github.svg';
 import BilibiliIcon from '@/static/icon/bilibili.svg';
 import TaobaoIcon from '@/static/icon/taobao.svg';
 import YoutubeIcon from '@/static/icon/youtube.svg';
+import FundsBoxIcon from '@/static/icon/funds-box.svg';
+import BarChartIcon from '@/static/icon/bar-chart.svg';
+import StockIcon from '@/static/icon/stock.svg';
+import CoinIcon from '@/static/icon/coin.svg';
 
 import CustomDrawer from '@/components/CustomDrawer';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
 import StandCard from '@/components/Card/StandCard';
 import ManageFundContent from '@/components/Home/FundList/ManageFundContent';
-import ManageWalletContent from '@/components/Wallet/ManageWalletContent';
+import ManageZindexContent from '@/components/Home/ZindexList/ManageZindexContent';
 import ManageStockContent from '@/components/Home/StockList/ManageStockContent';
 import ManageCoinContent from '@/components/Home/CoinList/ManageCoinContent';
+import ManageWalletContent from '@/components/Wallet/ManageWalletContent';
 import FundStatisticsContent from '@/components/Home/FundList/FundStatisticsContent';
-import ManageZindexContent from '@/components/Home/ZindexList/ManageZindexContent';
-import FundFlowContent from '@/components/Home/QuotationList/FundFlowContent';
 import NewsContent from '@/components/Home/NewsList/NewsContent';
+import HoldingContent from '@/components/Home/QuotationList/HoldingContent';
+import FundFlowContent from '@/components/Home/QuotationList/FundFlowContent';
 import ExchangeContent from '@/components/Home/ZindexList/ExchangeContent';
 import QuoteCenterContent from '@/components/Home/QuotationList/QuoteCenterContent';
-import HoldingContent from '@/components/Home/QuotationList/HoldingContent';
+import EconomicDataContent from '@/components/Home/ZindexList/EconomicDataContent';
+import FundRankingContent from '@/components/Home/FundList/FundRankingContent';
+import StockRankingContent from '@/components/Home/StockList/StockRankingContent';
+import CoinRankingContent from '@/components/Home/CoinList/CoinRankingContent';
 import ViewerContent from '@/components/ViewerContent';
 import { useDrawer } from '@/utils/hooks';
 
@@ -90,30 +98,21 @@ function renderApps(groups: { name: string; config: AppConfig[] }[], keyword: st
 
 const AppCenterContent: React.FC<AppCenterContentProps> = (props) => {
   const [keyword, setKeyword] = useState('');
-  const [showManageFundDrawer, { setTrue: openManageFundDrawer, setFalse: closeManageFundDrawer, toggle: ToggleManageFundDrawer }] =
-    useBoolean(false);
-  const [showManageWalletDrawer, { setTrue: openManageWalletDrawer, setFalse: closeManageWalletDrawer, toggle: ToggleManageWalletDrawer }] =
-    useBoolean(false);
-  const [showManageZindexDrawer, { setTrue: openManageZindexDrawer, setFalse: closeManageZindexDrawer, toggle: ToggleManageZindexDrawer }] =
-    useBoolean(false);
-  const [showManageStockDrawer, { setTrue: openManageStockDrawer, setFalse: closeManageStockDrawer, toggle: ToggleManageStockDrawer }] =
-    useBoolean(false);
-  const [showManageCoinDrawer, { setTrue: openManageCoinDrawer, setFalse: closeManageCoinDrawer, toggle: ToggleManageCoinDrawer }] =
-    useBoolean(false);
-
-  const [
-    showFundsStatisticsDrawer,
-    { setTrue: openFundStatisticsDrawer, setFalse: closeFundStatisticsDrawer, toggle: ToggleFundStatisticsDrawer },
-  ] = useBoolean(false);
-
-  const [showFundFlowDrawer, { setTrue: openFundFlowDrawer, setFalse: closeFundFlowDrawer, toggle: ToggleFundFlowDrawer }] =
-    useBoolean(false);
-  const [showNewsDrawer, { setTrue: openNewsDrawer, setFalse: closeNewsDrawer, toggle: ToggleNewsDrawer }] = useBoolean(false);
-  const [showExchangeDrawer, { setTrue: openExchangeDrawer, setFalse: closeExchangeDrawer, toggle: ToggleExchangeDrawer }] =
-    useBoolean(false);
-  const [showQuoteCenterDrawer, { setTrue: openQuoteCenterDrawer, setFalse: closeQuoteCenterDrawer, toggle: ToggleQuoteCenterDrawer }] =
-    useBoolean(false);
-  const [showHoldingDrawer, { setTrue: openHoldingDrawer, setFalse: closeHoldingDrawer, toggle: ToggleHoldingDrawer }] = useBoolean(false);
+  const [showManageFundDrawer, { setTrue: openManageFundDrawer, setFalse: closeManageFundDrawer }] = useBoolean(false);
+  const [showManageWalletDrawer, { setTrue: openManageWalletDrawer, setFalse: closeManageWalletDrawer }] = useBoolean(false);
+  const [showManageZindexDrawer, { setTrue: openManageZindexDrawer, setFalse: closeManageZindexDrawer }] = useBoolean(false);
+  const [showManageStockDrawer, { setTrue: openManageStockDrawer, setFalse: closeManageStockDrawer }] = useBoolean(false);
+  const [showManageCoinDrawer, { setTrue: openManageCoinDrawer, setFalse: closeManageCoinDrawer }] = useBoolean(false);
+  const [showFundsStatisticsDrawer, { setTrue: openFundStatisticsDrawer, setFalse: closeFundStatisticsDrawer }] = useBoolean(false);
+  const [showNewsDrawer, { setTrue: openNewsDrawer, setFalse: closeNewsDrawer }] = useBoolean(false);
+  const [showHoldingDrawer, { setTrue: openHoldingDrawer, setFalse: closeHoldingDrawer }] = useBoolean(false);
+  const [showFundFlowDrawer, { setTrue: openFundFlowDrawer, setFalse: closeFundFlowDrawer }] = useBoolean(false);
+  const [showExchangeDrawer, { setTrue: openExchangeDrawer, setFalse: closeExchangeDrawer }] = useBoolean(false);
+  const [showQuoteCenterDrawer, { setTrue: openQuoteCenterDrawer, setFalse: closeQuoteCenterDrawer }] = useBoolean(false);
+  const [showEconomicDataDrawer, { setTrue: openEconomicDataDrawer, setFalse: closeEconomicDataDrawer }] = useBoolean(false);
+  const [showFundRankingDrawer, { setTrue: openFundRankingDrawer, setFalse: closeFundRankingDrawer }] = useBoolean(false);
+  const [showStockRankingDrawer, { setTrue: openStockRankingDrawer, setFalse: closeStockRankingDrawer }] = useBoolean(false);
+  const [showCoinRankingDrawer, { setTrue: openCoinRankingDrawer, setFalse: closeCoinRankingDrawer }] = useBoolean(false);
 
   const {
     data: viewerData,
@@ -193,6 +192,26 @@ const AppCenterContent: React.FC<AppCenterContentProps> = (props) => {
                 name: '行情中心',
                 icon: <BubbleIcon style={{ ...iconSize }} />,
                 click: openQuoteCenterDrawer,
+              },
+              {
+                name: '经济数据',
+                icon: <BarChartIcon style={{ ...iconSize }} />,
+                click: openEconomicDataDrawer,
+              },
+              {
+                name: '基金榜',
+                icon: <FundsBoxIcon style={{ ...iconSize }} />,
+                click: openFundRankingDrawer,
+              },
+              {
+                name: '股票榜',
+                icon: <StockIcon style={{ ...iconSize }} />,
+                click: openStockRankingDrawer,
+              },
+              {
+                name: '货币榜',
+                icon: <CoinIcon style={{ ...iconSize }} />,
+                click: openCoinRankingDrawer,
               },
             ],
           },
@@ -304,49 +323,19 @@ const AppCenterContent: React.FC<AppCenterContentProps> = (props) => {
         </div>
         {apps}
         <CustomDrawer show={showManageFundDrawer}>
-          <ManageFundContent
-            onClose={closeManageFundDrawer}
-            onEnter={() => {
-              // freshFunds();
-              closeManageFundDrawer();
-            }}
-          />
+          <ManageFundContent onClose={closeManageFundDrawer} onEnter={closeManageFundDrawer} />
         </CustomDrawer>
         <CustomDrawer show={showManageWalletDrawer}>
-          <ManageWalletContent
-            onClose={closeManageWalletDrawer}
-            onEnter={() => {
-              // freshFunds();
-              closeManageWalletDrawer();
-            }}
-          />
+          <ManageWalletContent onClose={closeManageWalletDrawer} onEnter={closeManageWalletDrawer} />
         </CustomDrawer>
         <CustomDrawer show={showManageZindexDrawer}>
-          <ManageZindexContent
-            onClose={closeManageZindexDrawer}
-            onEnter={() => {
-              // freshZindexs();
-              closeManageZindexDrawer();
-            }}
-          />
+          <ManageZindexContent onClose={closeManageZindexDrawer} onEnter={closeManageZindexDrawer} />
         </CustomDrawer>
         <CustomDrawer show={showManageStockDrawer}>
-          <ManageStockContent
-            onClose={closeManageStockDrawer}
-            onEnter={() => {
-              // freshStocks();
-              closeManageStockDrawer();
-            }}
-          />
+          <ManageStockContent onClose={closeManageStockDrawer} onEnter={closeManageStockDrawer} />
         </CustomDrawer>
         <CustomDrawer show={showManageCoinDrawer}>
-          <ManageCoinContent
-            onClose={closeManageCoinDrawer}
-            onEnter={() => {
-              // freshCoins();
-              closeManageCoinDrawer();
-            }}
-          />
+          <ManageCoinContent onClose={closeManageCoinDrawer} onEnter={closeManageCoinDrawer} />
         </CustomDrawer>
         <CustomDrawer show={showFundFlowDrawer}>
           <FundFlowContent onClose={closeFundFlowDrawer} onEnter={closeFundFlowDrawer} />
@@ -365,6 +354,18 @@ const AppCenterContent: React.FC<AppCenterContentProps> = (props) => {
         </CustomDrawer>
         <CustomDrawer show={showHoldingDrawer}>
           <HoldingContent onClose={closeHoldingDrawer} onEnter={closeHoldingDrawer} />
+        </CustomDrawer>
+        <CustomDrawer show={showEconomicDataDrawer}>
+          <EconomicDataContent onClose={closeEconomicDataDrawer} onEnter={closeEconomicDataDrawer} />
+        </CustomDrawer>
+        <CustomDrawer show={showFundRankingDrawer}>
+          <FundRankingContent onClose={closeFundRankingDrawer} onEnter={closeFundRankingDrawer} />
+        </CustomDrawer>
+        <CustomDrawer show={showStockRankingDrawer}>
+          <StockRankingContent onClose={closeStockRankingDrawer} onEnter={closeStockRankingDrawer} />
+        </CustomDrawer>
+        <CustomDrawer show={showCoinRankingDrawer}>
+          <CoinRankingContent onClose={closeCoinRankingDrawer} onEnter={closeCoinRankingDrawer} />
         </CustomDrawer>
         <CustomDrawer show={showViewerDataDrawer}>
           <ViewerContent {...viewerData} onClose={closeViewerDataDrawer} onEnter={closeViewerDataDrawer} />

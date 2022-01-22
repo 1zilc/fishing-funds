@@ -1,5 +1,6 @@
 .content {
-  border-radius: var(--base-radius);
+  border-top-left-radius: var(--base-radius);
+  border-top-right-radius: var(--base-radius);
   background-color: var(--inner-color);
   box-sizing: border-box;
   min-height: 100vh;
