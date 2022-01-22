@@ -12,10 +12,12 @@ import { configureStore } from '@/store/configureStore';
 import App from '@/App';
 import * as Utils from '@/utils';
 import 'electron-disable-file-drop';
+import 'dayjs/locale/zh-cn';
 import '@/utils/window';
 
 dayjs.extend(isSameOrBefore);
 dayjs.extend(isSameOrAfter);
+dayjs.locale('zh-cn');
 
 echarts.registerMap('china', require('@/static/map/china.json'));
 
