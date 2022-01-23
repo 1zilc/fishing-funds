@@ -210,3 +210,125 @@ export async function GetOilPriceFromEastmoney() {
     return [];
   }
 }
+// 中美国债收益率
+export async function GetTreasuryYieldData() {
+  try {
+    const { body } = await got<{
+      version: '63fa26740fe0adbc234c8c41e0d5894d';
+      result: {
+        pages: 18;
+        data: {
+          SOLAR_DATE: '2022/1/21';
+          EMM00588704: 2.1542;
+          EMM00166462: 2.4295;
+          EMM00166466: 2.71;
+          EMM00166469: 3.282;
+          EMM01276014: 0.5558;
+          EMG00001306: 1.01;
+          EMG00001308: 1.54;
+          EMG00001310: 1.75;
+          EMG00001312: 2.07;
+          EMG01339436: 0.74;
+        }[];
+        count: 8940;
+      };
+      success: true;
+      message: 'ok';
+      code: 0;
+    }>('https://datacenter-web.eastmoney.com/api/data/get', {
+      searchParams: {
+        type: 'RPTA_WEB_TREASURYYIELD',
+        sty: 'ALL',
+        st: 'SOLAR_DATE',
+        sr: -1,
+        p: 1,
+        ps: 99999,
+        _: new Date().getTime(),
+      },
+      responseType: 'json',
+    });
+    return body.result.data.reverse();
+  } catch (error) {
+    return [];
+  }
+}
+// 国家队持股分布
+export async function GetNationalTeamDistributed() {
+  try {
+    const { body } = await got<{
+      version: '63fa26740fe0adbc234c8c41e0d5894d';
+      result: {
+        pages: 18;
+        data: {
+          MARKETCAPRATIO_SUM_0: 0.1704594452;
+          MARKETCAPRATIO_SUM_1: 0.785751110634;
+          MARKETCAPRATIO_SUM_2: 0.043789444166;
+          REPORT_DATE: '2021-09-30 00:00:00';
+        }[];
+        count: 8940;
+      };
+      success: true;
+      message: 'ok';
+      code: 0;
+    }>('https://datacenter-web.eastmoney.com/api/data/v1/get', {
+      searchParams: {
+        reportName: 'RPT_NATIONAL_LATESTSTATS',
+        columns: 'ALL',
+        source: 'WEB',
+        client: 'WEB',
+        quoteColumns: '',
+        _: new Date().getTime(),
+      },
+      responseType: 'json',
+    });
+    return body.result.data[0];
+  } catch (error) {
+    return {
+      MARKETCAPRATIO_SUM_0: 0,
+      MARKETCAPRATIO_SUM_1: 0,
+      MARKETCAPRATIO_SUM_2: 0,
+      REPORT_DATE: '',
+    };
+  }
+}
+// 国家队持股分布
+export async function GetNationalTeamTrend() {
+  try {
+    const { body } = await got<{
+      version: '63fa26740fe0adbc234c8c41e0d5894d';
+      result: {
+        pages: 18;
+        data: {
+          CHANGE_RATE: -6.8464;
+          HOLD_MARKET_CAP: 3500907309564.22;
+          INDEX_NAME: 4866.3826;
+          REPORT_DATE: '2021-09-30 00:00:00';
+          SHARES_RATIO: 0.0403829976;
+          STOCK_NUM: 360;
+          TOTAL_SHARES: 691604221230;
+          TRADE_MARKET: 'all';
+        }[];
+        count: 8940;
+      };
+      success: true;
+      message: 'ok';
+      code: 0;
+    }>('https://datacenter-web.eastmoney.com/api/data/v1/get', {
+      searchParams: {
+        reportName: 'RPT_NATIONAL_MARKET_STATISTICS',
+        columns: 'ALL',
+        quoteColumns: '',
+        source: 'WEB',
+        client: 'WEB',
+        sortColumns: 'REPORT_DATE',
+        sortTypes: -1,
+        filter: `(TRADE_MARKET="all")(REPORT_DATE>'${dayjs().subtract(10, 'year').format('YYYY-MM-DD')}')`,
+        _: new Date().getTime(),
+      },
+      responseType: 'json',
+    });
+    return body.result.data.reverse();
+  } catch (error) {
+    return [];
+  }
+}
