@@ -332,3 +332,67 @@ export async function GetNationalTeamTrend() {
     return [];
   }
 }
+// 国家队持股明细
+export async function GetNationalTeamDetail(columns: string) {
+  try {
+    const { REPORT_DATE: time } = await GetNationalTeamDistributed();
+    const { body } = await got<{
+      version: '63fa26740fe0adbc234c8c41e0d5894d';
+      result: {
+        pages: 18;
+        data: {
+          MARKETCAP_SUM_0: 13069880241.84;
+          MARKETCAP_SUM_1: 855399966269.19;
+          MARKETCAP_SUM_2: null;
+          MARKETCAP_SUM_3: null;
+          MARKETCAP_SUM_4: null;
+          MARKET_CAP_CHANGE: -98921188547.32;
+          MARKET_CAP_SUM: 868469846511.03;
+          NATIONAL_HOLD_TYPE: '1';
+          ORG_NUM: 3;
+          REPORT_DATE: '2021-09-30 00:00:00';
+          SECUCODE: '601939.SH';
+          SECURITY_CODE: '601939';
+          SECURITY_INNER_CODE: '1000001073';
+          SECURITY_NAME_ABBR: '建设银行';
+          SHARESRATIO_SUM_0: 0.87566542;
+          SHARESRATIO_SUM_1: 0.27702055;
+          SHARESRATIO_SUM_2: null;
+          SHARESRATIO_SUM_3: null;
+          SHARESRATIO_SUM_4: null;
+          SHARES_RATIO_CHANGE: 0;
+          SHARES_RATIO_SUM: 1.15268597;
+          TOTALSHARES_SUM_0: 2189259672;
+          TOTALSHARES_SUM_1: 143283076427;
+          TOTALSHARES_SUM_2: null;
+          TOTALSHARES_SUM_3: null;
+          TOTALSHARES_SUM_4: null;
+          TOTAL_SHARES_CHANGE: 0;
+          TOTAL_SHARES_SUM: 145472336099;
+          TRADE_MARKET_CODE: '069001001001';
+        }[];
+        count: 8940;
+      };
+      success: true;
+      message: 'ok';
+      code: 0;
+    }>('https://datacenter-web.eastmoney.com/api/data/v1/get', {
+      searchParams: {
+        reportName: 'RPT_NATIONAL_STATISTICS',
+        columns: 'ALL',
+        quoteColumns: '',
+        source: 'WEB',
+        client: 'WEB',
+        pageSize: 10,
+        sortColumns: columns,
+        sortTypes: -1,
+        filter: `(REPORT_DATE='${time.slice(0, 10)}')`,
+        _: new Date().getTime(),
+      },
+      responseType: 'json',
+    });
+    return body.result.data.reverse();
+  } catch (error) {
+    return [];
+  }
+}
