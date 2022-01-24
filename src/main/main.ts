@@ -28,7 +28,7 @@ async function init() {
 }
 
 function main() {
-  const storage = new Store();
+  const storage = new Store({ encryptionKey: '1zilc' });
   const tray = createTray();
   const mainWindowState = windowStateKeeper({ defaultWidth: 325, defaultHeight: 768 });
   mb = createMenubar({ tray, mainWindowState });
