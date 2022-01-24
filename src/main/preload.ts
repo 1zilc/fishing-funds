@@ -12,8 +12,9 @@ const HttpsProxyAgent = require('https-proxy-agent');
 
 contextBridge.exposeInMainWorld('contextModules', {
   got: async (url: string, config = {}) => {
-    const { httpProxyAddressSetting, httpProxySetting, httpProxyWhitelistSetting, httpProxyRuleSetting }: any = JSON.parse(
-      localStorage.getItem(CONST.STORAGE.SYSTEM_SETTING)!
+    const { httpProxyAddressSetting, httpProxySetting, httpProxyWhitelistSetting, httpProxyRuleSetting } = await ipcRenderer.invoke(
+      'get-storage-config',
+      { key: CONST.STORAGE.SYSTEM_SETTING }
     );
     const httpProxyRuleMap = (httpProxyRuleSetting ?? '').split(',').reduce((map: Record<string, boolean>, address: string) => {
       map[address] = true;
@@ -117,15 +118,21 @@ contextBridge.exposeInMainWorld('contextModules', {
       }
     },
   },
-  storage: {
-    async get(key: string) {
-      return ipcRenderer.invoke('get-storage-config', { key });
+  electronStore: {
+    async get(key: string, init: unknown) {
+      return ipcRenderer.invoke('get-storage-config', { key, init });
     },
     async set(key: string, value: unknown) {
       await ipcRenderer.invoke('set-storage-config', { key, value });
     },
     async delete(key: string) {
       await ipcRenderer.invoke('delete-storage-config', { key });
+    },
+    async cover(value: unknown) {
+      await ipcRenderer.invoke('cover-storage-config', { value });
+    },
+    async all() {
+      return ipcRenderer.invoke('all-storage-config');
     },
   },
 });

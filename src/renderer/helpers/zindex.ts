@@ -18,10 +18,9 @@ export const defaultZindexConfig = [
   // 沪深指数
   { name: '上证指数', code: '1.000001' },
   { name: '深证成指', code: '0.399001' },
+  { name: '科创50', code: '1.000688' },
   { name: '沪深300', code: '1.000300' },
-  { name: '中小板指', code: '0.399005' },
   { name: '创业板指', code: '0.399006' },
-  { name: '上证50', code: '1.000016' },
   // 美洲股市
   { name: '道琼斯', code: '100.DJIA' },
   { name: '标普500', code: '100.SPX' },
@@ -29,7 +28,11 @@ export const defaultZindexConfig = [
 ];
 
 export function GetZindexConfig() {
-  const zindexConfig: Zindex.SettingItem[] = Utils.GetStorage(CONST.STORAGE.ZINDEX_SETTING, defaultZindexConfig);
+  const {
+    zindex: {
+      config: { zindexConfig },
+    },
+  } = store.getState();
   const codeMap = GetCodeMap(zindexConfig);
   return { zindexConfig, codeMap };
 }
@@ -57,8 +60,13 @@ export async function GetZindex(code: string) {
 
 export function SortZindexs(responseZindexs: Zindex.ResponseItem[]) {
   const {
-    zindexSortMode: { type: zindexSortType, order: zindexSortorder },
-  } = Helpers.Sort.GetSortMode();
+    sort: {
+      sortMode: {
+        zindexSortMode: { type: zindexSortType, order: zindexSortorder },
+      },
+    },
+  } = store.getState();
+
   const { codeMap } = GetZindexConfig();
   const sortList = Utils.DeepCopy(responseZindexs);
 

@@ -63,6 +63,7 @@ module.exports = {
       webpack: {
         config: require.resolve('./.erb/configs/webpack.config.eslint.ts'),
       },
+      typescript: {},
     },
     'import/parsers': {
       '@typescript-eslint/parser': ['.ts', '.tsx'],

@@ -12,12 +12,11 @@ export interface GroupTapProps {
 const GroupTap: React.FC<PropsWithChildren<GroupTapProps>> = (props) => {
   const { tabKey } = props;
   const dispatch = useDispatch();
-  const { varibleColors } = useHomeContext();
   const defaultActiveKey = useSelector((state: StoreState) => state.tabs.tabsKeyMap[tabKey]);
 
   const groupBarStyle = {
-    background: varibleColors['--background-color'],
-    borderBottom: `1px solid ${varibleColors['--border-color']}`,
+    background: 'var(--background-color)',
+    borderBottom: `1px solid var(--border-color)`,
     margin: 0,
     paddingLeft: 25,
   };

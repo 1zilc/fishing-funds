@@ -38,19 +38,6 @@ export function GetCodeMap(config: Fund.SettingItem[]) {
   }, {} as CodeFundMap);
 }
 
-export function GetRemoteFundsMap() {
-  return Utils.GetStorage<Record<string, Fund.RemoteFund>>(CONST.STORAGE.REMOTE_FUND_MAP, {});
-}
-
-export function GetRemoteFunds() {
-  return Object.entries(Utils.GetStorage<Record<string, Fund.RemoteFund>>(CONST.STORAGE.REMOTE_FUND_MAP, {})).map(
-    ([code, remoteFund]) => remoteFund
-  );
-}
-export function GetFundsRatingMap() {
-  return Utils.GetStorage<Record<string, Fund.RantingItem>>(CONST.STORAGE.FUND_RATING_MAP, {});
-}
-
 export async function GetFunds(config: Fund.SettingItem[]) {
   const walletCode = Helpers.Wallet.GetCurrentWalletCode();
   const { fundConfig } = GetFundConfig(walletCode);
@@ -223,8 +210,12 @@ export function MergeFixFunds(funds: (Fund.ResponseItem & Fund.FixData)[], fixFu
 export function SortFunds(funds: Fund.ResponseItem[], walletCode: string) {
   const { codeMap } = GetFundConfig(walletCode);
   const {
-    fundSortMode: { type: fundSortType, order: fundSortorder },
-  } = Helpers.Sort.GetSortMode();
+    sort: {
+      sortMode: {
+        fundSortMode: { type: fundSortType, order: fundSortorder },
+      },
+    },
+  } = store.getState();
   const sortList = Utils.DeepCopy(funds);
 
   sortList.sort((a, b) => {

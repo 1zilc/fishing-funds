@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import classnames from 'classnames';
 import { useSelector, useDispatch } from 'react-redux';
-import { InputNumber, Radio, Badge, Switch, Slider, TimePicker, Input, Tabs } from 'antd';
+import { InputNumber, Radio, Badge, Switch, Slider, TimePicker, Input, Tabs, Select } from 'antd';
 import dayjs from 'dayjs';
 
 import PureCard from '@/components/Card/PureCard';
@@ -83,6 +83,10 @@ const recordSiteGroup = Utils.Group(
     {
       url: 'https://snapcraft.io/fishing-funds',
       name: 'SnapStore',
+    },
+    {
+      url: 'https://formulae.brew.sh/cask/fishing-funds#default',
+      name: 'Homebrew',
     },
   ],
   3
@@ -331,18 +335,20 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
                 </section>
                 <section>
                   <label>托盘内容：</label>
-                  <Radio.Group
-                    optionType="button"
+                  <Select
+                    mode="multiple"
                     size="small"
-                    buttonStyle="solid"
-                    options={[
-                      { label: '收益', value: Enums.TrayContent.Sy },
-                      { label: '收益率', value: Enums.TrayContent.Syl },
-                      { label: '无', value: Enums.TrayContent.None },
-                    ]}
-                    onChange={(e) => setTrayContent(e.target.value)}
+                    allowClear
+                    style={{ width: '50%' }}
+                    placeholder="无"
                     value={trayContent}
-                  />
+                    onChange={setTrayContent}
+                  >
+                    <Select.Option value={Enums.TrayContent.Sy}>选中钱包收益</Select.Option>
+                    <Select.Option value={Enums.TrayContent.Syl}>选中钱包收益率</Select.Option>
+                    <Select.Option value={Enums.TrayContent.Zsy}>所有钱包收益</Select.Option>
+                    <Select.Option value={Enums.TrayContent.Zsyl}>所有钱包收益率</Select.Option>
+                  </Select>
                 </section>
               </div>
             </StandCard>

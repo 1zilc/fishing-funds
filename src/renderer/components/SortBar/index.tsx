@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { useScroll, useDebounceFn } from 'ahooks';
+import { useScroll, useDebounceFn, useBoolean } from 'ahooks';
 import { useSelector, useDispatch } from 'react-redux';
 import classsames from 'classnames';
 import { Dropdown, Menu } from 'antd';
@@ -20,6 +20,15 @@ import {
   setCoinSortModeAction,
   troggleCoinSortOrderAction,
 } from '@/actions/sort';
+import CustomDrawer from '@/components/CustomDrawer';
+import CustomDrawerContent from '@/components/CustomDrawer/Content';
+import StandCard from '@/components/Card/StandCard';
+import ManageFundContent from '@/components/Home/FundList/ManageFundContent';
+import ManageWalletContent from '@/components/Wallet/ManageWalletContent';
+import ManageStockContent from '@/components/Home/StockList/ManageStockContent';
+import ManageCoinContent from '@/components/Home/CoinList/ManageCoinContent';
+import FundStatisticsContent from '@/components/Home/FundList/FundStatisticsContent';
+import ManageZindexContent from '@/components/Home/ZindexList/ManageZindexContent';
 import { StoreState } from '@/reducers/types';
 import { toggleAllFundsCollapseAction } from '@/actions/fund';
 import { toggleAllZindexsCollapseAction } from '@/actions/zindex';
@@ -46,6 +55,9 @@ function FundsSortBar() {
     currentWalletState: { funds },
   } = useCurrentWallet();
 
+  const [showManageFundDrawer, { setTrue: openManageFundDrawer, setFalse: closeManageFundDrawer, toggle: ToggleManageFundDrawer }] =
+    useBoolean(false);
+
   const [expandAllFunds, expandSomeFunds] = useMemo(() => {
     return [funds.every((_) => _.collapse), funds.some((_) => _.collapse)];
   }, [funds]);
@@ -59,6 +71,14 @@ function FundsSortBar() {
       </div>
       <div className={styles.name} onClick={toggleFundsCollapse}>
         基金名称
+        <a
+          onClick={(e) => {
+            openManageFundDrawer();
+            e.stopPropagation();
+          }}
+        >
+          管理
+        </a>
       </div>
       <div className={styles.mode}>
         <Dropdown
@@ -88,6 +108,9 @@ function FundsSortBar() {
           })}
         />
       </div>
+      <CustomDrawer show={showManageFundDrawer}>
+        <ManageFundContent onClose={closeManageFundDrawer} onEnter={closeManageFundDrawer} />
+      </CustomDrawer>
     </div>
   );
 }
@@ -103,6 +126,9 @@ function ZindexSortBar() {
 
   const zindexs = useSelector((state: StoreState) => state.zindex.zindexs);
 
+  const [showManageZindexDrawer, { setTrue: openManageZindexDrawer, setFalse: closeManageZindexDrawer, toggle: ToggleManageZindexDrawer }] =
+    useBoolean(false);
+
   const [expandAllZindexs, expandSomeZindexs] = useMemo(() => {
     return [zindexs.every((_) => _.collapse), zindexs.some((_) => _.collapse)];
   }, [zindexs]);
@@ -116,6 +142,14 @@ function ZindexSortBar() {
       </div>
       <div className={styles.name} onClick={toggleZindexsCollapse}>
         指数名称
+        <a
+          onClick={(e) => {
+            openManageZindexDrawer();
+            e.stopPropagation();
+          }}
+        >
+          管理
+        </a>
       </div>
       <div className={styles.mode}>
         <Dropdown
@@ -145,6 +179,9 @@ function ZindexSortBar() {
           })}
         />
       </div>
+      <CustomDrawer show={showManageZindexDrawer}>
+        <ManageZindexContent onClose={closeManageZindexDrawer} onEnter={closeManageZindexDrawer} />
+      </CustomDrawer>
     </div>
   );
 }
@@ -217,6 +254,9 @@ function StockSortBar() {
 
   const stocks = useSelector((state: StoreState) => state.stock.stocks);
 
+  const [showManageStockDrawer, { setTrue: openManageStockDrawer, setFalse: closeManageStockDrawer, toggle: ToggleManageStockDrawer }] =
+    useBoolean(false);
+
   const [expandAllStocks, expandSomeStocks] = useMemo(() => {
     return [stocks.every((_) => _.collapse), stocks.some((_) => _.collapse)];
   }, [stocks]);
@@ -230,6 +270,14 @@ function StockSortBar() {
       </div>
       <div className={styles.name} onClick={toggleStocksCollapse}>
         股票名称
+        <a
+          onClick={(e) => {
+            openManageStockDrawer();
+            e.stopPropagation();
+          }}
+        >
+          管理
+        </a>
       </div>
       <div className={styles.mode}>
         <Dropdown
@@ -259,6 +307,9 @@ function StockSortBar() {
           })}
         />
       </div>
+      <CustomDrawer show={showManageStockDrawer}>
+        <ManageStockContent onClose={closeManageStockDrawer} onEnter={closeManageStockDrawer} />
+      </CustomDrawer>
     </div>
   );
 }
@@ -274,6 +325,9 @@ function CoinSortBar() {
 
   const coins = useSelector((state: StoreState) => state.coin.coins);
 
+  const [showManageCoinDrawer, { setTrue: openManageCoinDrawer, setFalse: closeManageCoinDrawer, toggle: ToggleManageCoinDrawer }] =
+    useBoolean(false);
+
   const [expandAllCoins, expandSomeCoins] = useMemo(() => {
     return [coins.every((_) => _.collapse), coins.some((_) => _.collapse)];
   }, [coins]);
@@ -286,6 +340,14 @@ function CoinSortBar() {
       </div>
       <div className={styles.name} onClick={toggleCoinsCollapse}>
         货币名称
+        <a
+          onClick={(e) => {
+            openManageCoinDrawer();
+            e.stopPropagation();
+          }}
+        >
+          管理
+        </a>
       </div>
       <div className={styles.mode}>
         <Dropdown
@@ -315,6 +377,9 @@ function CoinSortBar() {
           })}
         />
       </div>
+      <CustomDrawer show={showManageCoinDrawer}>
+        <ManageCoinContent onClose={closeManageCoinDrawer} onEnter={closeManageCoinDrawer} />
+      </CustomDrawer>
     </div>
   );
 }

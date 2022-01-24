@@ -12,7 +12,7 @@ export interface FundState {
 const fund: Reducer<FundState> = (
   state = {
     fundsLoading: false,
-    remoteFunds: Helpers.Fund.GetRemoteFunds(),
+    remoteFunds: [],
     remoteFundsLoading: false,
     fundRatingMap: {},
   },

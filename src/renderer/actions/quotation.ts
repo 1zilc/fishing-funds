@@ -10,10 +10,13 @@ export const SYNC_QUOTATIONS = 'SYNC_QUOTATIONS';
 export function syncFavoriteQuotationMapAction(code: string, status: boolean): ThunkAction {
   return async (dispatch, getState) => {
     try {
-      const favoriteQuotationMap = Helpers.Quotation.GetFavoriteQuotationMap();
-      favoriteQuotationMap[code] = status;
-      Utils.SetStorage(CONST.STORAGE.FAVORITE_QUOTATION_MAP, favoriteQuotationMap);
+      const { quotation } = getState();
+
+      const favoriteQuotationMap = { ...quotation.favoriteQuotationMap, [code]: status };
+
       dispatch({ type: SYNC_FAVORITE_QUOTATION_MAP, payload: favoriteQuotationMap });
+
+      Utils.SetStorage(CONST.STORAGE.FAVORITE_QUOTATION_MAP, favoriteQuotationMap);
     } catch (error) {}
   };
 }

@@ -164,7 +164,8 @@ export enum WalletIncomType {
 export enum TrayContent {
   Sy,
   Syl,
-  None,
+  Zsy,
+  Zsyl,
 }
 export enum StockMarketType {
   AB = 1,

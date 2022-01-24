@@ -10,7 +10,7 @@ declare namespace System {
     adjustmentNotificationSetting: boolean; // 调仓提醒
     adjustmentNotificationTimeSetting: string; // 调仓时间
     riskNotificationSetting: boolean; // 风险提醒
-    trayContentSetting: number; // 托盘内容
+    trayContentSetting: number[]; // 托盘内容
 
     coinUnitSetting: string; // 货币单位
 

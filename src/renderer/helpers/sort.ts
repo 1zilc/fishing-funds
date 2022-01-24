@@ -110,27 +110,3 @@ export function GetSortConfig() {
     coinSortModeOptionsMap,
   };
 }
-
-export function GetSortMode() {
-  const fundSortMode: FundSortMode = Utils.GetStorage(CONST.STORAGE.FUND_SORT_MODE, {
-    type: Enums.FundSortType.Custom,
-    order: Enums.SortOrderType.Desc,
-  });
-  const zindexSortMode: ZindexSortMode = Utils.GetStorage(CONST.STORAGE.ZINDEX_SORT_MODE, {
-    type: Enums.ZindexSortType.Custom,
-    order: Enums.SortOrderType.Desc,
-  });
-  const quotationSortMode: QuotationSortType = Utils.GetStorage(CONST.STORAGE.QUOTATION_SORT_MODE, {
-    type: Enums.QuotationSortType.Zdf,
-    order: Enums.SortOrderType.Desc,
-  });
-  const stockSortMode: StockSortType = Utils.GetStorage(CONST.STORAGE.STOCK_SORT_MODE, {
-    type: Enums.StockSortType.Custom,
-    order: Enums.SortOrderType.Desc,
-  });
-  const coinSortMode: CoinSortType = Utils.GetStorage(CONST.STORAGE.COIN_SORT_MODE, {
-    type: Enums.CoinSortType.Price,
-    order: Enums.SortOrderType.Desc,
-  });
-  return { fundSortMode, zindexSortMode, quotationSortMode, stockSortMode, coinSortMode };
-}

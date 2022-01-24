@@ -35,10 +35,12 @@ declare global {
         decodeFF: (content: string) => any;
         readFile: (content: string) => string;
       };
-      storage: {
-        get: <T = unknown>(key: string) => Promise<T>;
-        set: (key: string) => Promise<void>;
+      electronStore: {
+        get: <T = unknown>(key: string, init: T) => Promise<T>;
+        set: (key: string, data: unknown) => Promise<void>;
         delete: (key: string) => Promise<void>;
+        cover: (data: unknown) => Promise<void>;
+        all: () => Promise<any>;
       };
     };
   }

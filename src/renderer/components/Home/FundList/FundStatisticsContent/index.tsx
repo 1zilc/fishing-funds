@@ -16,7 +16,8 @@ import FundWarehouse from '@/components/Home/FundList/FundStatisticsContent/Fund
 import FundOverview from '@/components/Home/FundList/FundStatisticsContent/FundOverview';
 import { walletIcons } from '@/helpers/wallet';
 import { StoreState } from '@/reducers/types';
-import * as Helper from '@/helpers';
+import { useAllCyFunds } from '@/utils/hooks/utils';
+import * as Helpers from '@/helpers';
 import styles from './index.module.scss';
 
 export interface FundStatisticsContentProps {
@@ -26,7 +27,6 @@ export interface FundStatisticsContentProps {
 
 const FundStatisticsContent: React.FC<FundStatisticsContentProps> = (props) => {
   const { walletConfig } = useSelector((state: StoreState) => state.wallet.config);
-  const wallets = useSelector((state: StoreState) => state.wallet.wallets);
   const [statusMap, setStatusMap] = useState<Record<string, boolean>>(
     walletConfig.reduce((r, c) => {
       r[c.code] = true;
@@ -34,18 +34,7 @@ const FundStatisticsContent: React.FC<FundStatisticsContentProps> = (props) => {
     }, {} as Record<string, boolean>)
   );
 
-  const funds = useMemo(() => {
-    const allFunds: (Fund.ResponseItem & Fund.FixData)[] = [];
-    const fundCodeMap = new Map();
-    wallets.forEach(({ code, funds }) => {
-      const fundConfig = Helper.Wallet.GetCurrentWalletConfig(code).funds;
-      const fundCodeMap = Helper.Fund.GetCodeMap(fundConfig);
-      if (statusMap[code]) {
-        allFunds.push(...funds.filter((fund) => !!fundCodeMap[fund.fundcode!]?.cyfe));
-      }
-    });
-    return allFunds.filter((fund) => !fundCodeMap.has(fund.fundcode!) && fundCodeMap.set(fund.fundcode!, true));
-  }, [statusMap, wallets]);
+  const allCyFunds = useAllCyFunds(statusMap);
 
   const codes = useMemo(() => Object.keys(statusMap).filter((key) => statusMap[key]), [statusMap]);
 
@@ -59,7 +48,7 @@ const FundStatisticsContent: React.FC<FundStatisticsContentProps> = (props) => {
   return (
     <CustomDrawerContent title="基金统计" enterText="确定" onEnter={props.onEnter} onClose={props.onClose}>
       <div className={styles.content}>
-        <AssetsStatistics funds={funds} codes={codes} />
+        <AssetsStatistics funds={allCyFunds} codes={codes} />
         <div className={styles.wallets}>
           {walletConfig.map((wallet, index) => (
             <PureCard key={wallet.code} className={styles.wallet}>
@@ -72,39 +61,39 @@ const FundStatisticsContent: React.FC<FundStatisticsContentProps> = (props) => {
         <Tabs animated={{ tabPane: true }} tabBarGutter={15}>
           <Tabs.TabPane tab="持基结构" key={String(0)}>
             <ChartCard>
-              <TypeConfig funds={funds} />
+              <TypeConfig funds={allCyFunds} />
             </ChartCard>
           </Tabs.TabPane>
           <Tabs.TabPane tab="资产结构" key={String(1)}>
             <ChartCard>
-              <AssetsConfig funds={funds} codes={codes} />
+              <AssetsConfig funds={allCyFunds} codes={codes} />
             </ChartCard>
           </Tabs.TabPane>
           <Tabs.TabPane tab="钱包配置" key={String(2)}>
             <ChartCard>
-              <WalletConfig funds={funds} codes={codes} />
+              <WalletConfig funds={allCyFunds} codes={codes} />
             </ChartCard>
           </Tabs.TabPane>
           <Tabs.TabPane tab="钱包收益" key={String(3)}>
             <ChartCard>
-              <WalletIncome funds={funds} codes={codes} />
+              <WalletIncome funds={allCyFunds} codes={codes} />
             </ChartCard>
           </Tabs.TabPane>
         </Tabs>
         <Tabs animated={{ tabPane: true }} tabBarGutter={15}>
           <Tabs.TabPane tab="基金收益概览" key={String(0)}>
             <ChartCard>
-              <FundOverview funds={funds} codes={codes} />
+              <FundOverview funds={allCyFunds} codes={codes} />
             </ChartCard>
           </Tabs.TabPane>
           <Tabs.TabPane tab="基金收益排行" key={String(1)}>
             <ChartCard>
-              <FundRank funds={funds} codes={codes} />
+              <FundRank funds={allCyFunds} codes={codes} />
             </ChartCard>
           </Tabs.TabPane>
           <Tabs.TabPane tab="基金持仓排行" key={String(2)}>
             <ChartCard>
-              <FundWarehouse funds={funds} codes={codes} />
+              <FundWarehouse funds={allCyFunds} codes={codes} />
             </ChartCard>
           </Tabs.TabPane>
         </Tabs>

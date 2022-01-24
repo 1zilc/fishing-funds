@@ -1,3 +1,4 @@
+import { batch } from 'react-redux';
 import { ThunkAction } from '@/reducers/types';
 import * as Utils from '@/utils';
 import * as CONST from '@/constants';
@@ -40,17 +41,17 @@ export function deleteZindexAction(code: string): ThunkAction {
 export function setZindexConfigAction(zindexConfig: Zindex.SettingItem[]): ThunkAction {
   return (dispatch, getState) => {
     try {
-      Utils.SetStorage(CONST.STORAGE.ZINDEX_SETTING, zindexConfig);
-      dispatch(syncZindexConfigAction());
-    } catch (error) {}
-  };
-}
+      const {
+        zindex: { zindexs },
+      } = getState();
+      const codeMap = Helpers.Zindex.GetCodeMap(zindexConfig);
 
-export function syncZindexConfigAction(): ThunkAction {
-  return (dispatch, getState) => {
-    try {
-      const config = Helpers.Zindex.GetZindexConfig();
-      dispatch({ type: SYNC_ZIDNEX_CONFIG, payload: config });
+      batch(() => {
+        dispatch({ type: SYNC_ZIDNEX_CONFIG, payload: { zindexConfig, codeMap } });
+        dispatch(syncZindexsStateAction(zindexs));
+      });
+
+      Utils.SetStorage(CONST.STORAGE.ZINDEX_SETTING, zindexConfig);
     } catch (error) {}
   };
 }
@@ -137,10 +138,12 @@ export function sortZindexsCachedAction(responseZindexs: Zindex.ResponseItem[]):
   };
 }
 
-export function syncZindexsStateAction(zindex: (Zindex.ResponseItem & Zindex.ExtraRow)[]): ThunkAction {
+export function syncZindexsStateAction(zindexs: (Zindex.ResponseItem & Zindex.ExtraRow)[]): ThunkAction {
   return (dispatch, getState) => {
     try {
-      dispatch({ type: SYNC_ZIDNEXS, payload: zindex });
+      const { codeMap } = Helpers.Zindex.GetZindexConfig();
+      const filterZindexs = zindexs.filter(({ code }) => codeMap[code]);
+      dispatch({ type: SYNC_ZIDNEXS, payload: filterZindexs });
     } catch (error) {}
   };
 }

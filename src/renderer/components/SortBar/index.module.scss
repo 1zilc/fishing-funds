@@ -43,9 +43,8 @@
   cursor: pointer;
   flex: 1;
   transition: opacity 0.2s;
-
-  &:hover {
-    opacity: 0.8;
+  a {
+    margin-left: var(--base-padding);
   }
 }
 

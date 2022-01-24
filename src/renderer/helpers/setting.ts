@@ -1,4 +1,5 @@
 import dayjs from 'dayjs';
+import { store } from '@/.';
 import * as Enums from '@/utils/enums';
 import * as Utils from '@/utils';
 import * as CONST from '@/constants';
@@ -14,7 +15,7 @@ export const defalutSystemSetting: System.Setting = {
   adjustmentNotificationSetting: true,
   adjustmentNotificationTimeSetting: dayjs().hour(14).minute(30).format(),
   riskNotificationSetting: true,
-  trayContentSetting: Enums.TrayContent.Sy,
+  trayContentSetting: [Enums.TrayContent.Sy],
 
   coinUnitSetting: Enums.CoinUnitType.Usd,
 
@@ -31,6 +32,8 @@ export const defalutSystemSetting: System.Setting = {
 };
 
 export function GetSystemSetting() {
-  const systemSetting: System.Setting = Utils.GetStorage(CONST.STORAGE.SYSTEM_SETTING, defalutSystemSetting);
-  return { ...defalutSystemSetting, ...systemSetting };
+  const {
+    setting: { systemSetting },
+  } = store.getState();
+  return systemSetting;
 }

@@ -14,8 +14,9 @@ export const SYNC_WALLETS = 'SYNC_WALLETS';
 export function changeEyeStatusAction(status: Enums.EyeStatus): ThunkAction {
   return (dispatch, getState) => {
     try {
-      Utils.SetStorage(CONST.STORAGE.EYE_STATUS, status);
       dispatch({ type: CHANGE_EYE_STATUS, payload: status });
+
+      Utils.SetStorage(CONST.STORAGE.EYE_STATUS, status);
     } catch (error) {}
   };
 }
@@ -40,30 +41,35 @@ export function toggleEyeStatusAction(): ThunkAction {
   };
 }
 
-export function setWalletConfigAction(config: Wallet.SettingItem[]): ThunkAction {
-  return (dispatch, getState) => {
-    try {
-      Utils.SetStorage(CONST.STORAGE.WALLET_SETTING, config);
-      dispatch(syncWalletConfigAction());
-    } catch (error) {}
-  };
-}
-
-export function syncWalletConfigAction(): ThunkAction {
+export function setWalletConfigAction(walletConfig: Wallet.SettingItem[]): ThunkAction {
   return (dispatch, getState) => {
     try {
       const {
         wallet: { wallets },
       } = getState();
-      const config = Helpers.Wallet.GetWalletConfig();
-      const newWallets = wallets.filter((stateItem) => config.codeMap[stateItem.code]);
-      dispatch({ type: SYNC_WALLET_CONFIG, payload: config });
+      const codeMap = Helpers.Wallet.GetCodeMap(walletConfig);
+
+      batch(() => {
+        dispatch({ type: SYNC_WALLET_CONFIG, payload: { walletConfig, codeMap } });
+        dispatch(syncWalletStateAction(wallets));
+      });
+
+      Utils.SetStorage(CONST.STORAGE.WALLET_SETTING, walletConfig);
+    } catch (error) {}
+  };
+}
+
+export function syncWalletStateAction(wallets: Wallet.StateItem[]): ThunkAction {
+  return (dispatch, getState) => {
+    try {
+      const { codeMap } = Helpers.Wallet.GetWalletConfig();
+      const newWallets = wallets.filter((stateItem) => codeMap[stateItem.code]);
       dispatch({ type: SYNC_WALLETS, payload: newWallets });
     } catch (error) {}
   };
 }
 
-export function addWalletAction(wallet: Wallet.SettingItem): ThunkAction {
+export function addWalletConfigAction(wallet: Wallet.SettingItem): ThunkAction {
   return (dispatch, getState) => {
     try {
       const { walletConfig } = Helpers.Wallet.GetWalletConfig();
@@ -72,7 +78,7 @@ export function addWalletAction(wallet: Wallet.SettingItem): ThunkAction {
   };
 }
 
-export function updateWalletAction(wallet: Wallet.SettingItem): ThunkAction {
+export function updateWalletConfigAction(wallet: Wallet.SettingItem): ThunkAction {
   return (dispatch, getState) => {
     try {
       const { walletConfig } = Helpers.Wallet.GetWalletConfig();
@@ -87,7 +93,7 @@ export function updateWalletAction(wallet: Wallet.SettingItem): ThunkAction {
   };
 }
 
-export function deleteWalletAction(code: string): ThunkAction {
+export function deleteWalletConfigAction(code: string): ThunkAction {
   return (dispatch, getState) => {
     try {
       const { walletConfig } = Helpers.Wallet.GetWalletConfig();
@@ -105,16 +111,14 @@ export function deleteWalletAction(code: string): ThunkAction {
 export function selectWalletAction(code: string): ThunkAction {
   return (dispatch, getState) => {
     try {
+      dispatch({ type: CHANGE_CURRENT_WALLET_CODE, payload: code });
+
       Utils.SetStorage(CONST.STORAGE.CURRENT_WALLET_CODE, code);
-      batch(() => {
-        dispatch({ type: CHANGE_CURRENT_WALLET_CODE, payload: code });
-        dispatch(syncWalletConfigAction());
-      });
     } catch (error) {}
   };
 }
 
-export function syncWalletStateAction(state: Wallet.StateItem): ThunkAction {
+export function updateWalletStateAction(state: Wallet.StateItem): ThunkAction {
   return (dispatch, getState) => {
     try {
       const {

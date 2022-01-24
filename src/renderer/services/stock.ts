@@ -144,7 +144,6 @@ export async function GetPicTrendFromEastmoney(secid: string) {
         token: Utils.MakeHash(),
       },
     });
-    // const base64Str = rawBody.toString('base64');
     const b64encoded = btoa(String.fromCharCode.apply(null, rawBody));
     return `data:image/png;base64,${b64encoded}`;
   } catch (error) {
@@ -808,6 +807,86 @@ export async function GetIndustryFromEastmoney(secid: string, type: 1 | 2 | 3) {
       result.shift();
     }
     return result;
+  } catch (error) {
+    return [];
+  }
+}
+
+export async function GetCloseDayDates() {
+  try {
+    const { body } = await got<{
+      version: string;
+      result: {
+        pages: 1;
+        data: {
+          mkt: string;
+          holiday: string;
+          sdate: string; // 2021/4/2
+          edate: string;
+          xs: '';
+        }[];
+        count: 131;
+      };
+      success: true;
+      message: 'ok';
+      code: 0;
+    }>(`https://datacenter-web.eastmoney.com/api/data/get`, {
+      searchParams: {
+        type: 'RPTA_WEB_ZGXSRL',
+        sty: 'ALL',
+        ps: 200,
+        st: 'sdate',
+        sr: -1,
+        _: Date.now(),
+      },
+      responseType: 'json',
+    });
+    return body.result.data;
+  } catch (error) {
+    return [];
+  }
+}
+
+export async function GetMeetingData({ startTime, endTime, code }: { startTime: string; endTime: string; code: string }) {
+  try {
+    const { body } = await got<{
+      version: 'b0ba2c16623998ee2e8c464dd1f32ccd';
+      result: {
+        pages: 1;
+        data: {
+          START_DATE: '2022-01-01 00:00:00';
+          END_DATE: '2022-01-27 00:00:00';
+          FE_CODE: '10849794';
+          FE_NAME: '2022第二十一届南京(全国)春节食品商品交易会';
+          FE_TYPE: '其他会议';
+          CONTENT: '南京为江苏省的政治、经济、文化中心,有着八百万人口的巨大市场消费潜力,她地处华东地区的交通枢纽,对周边省市的市场具有强劲的辐射和带动作用,历来被广大厂家和商家所重视。春节前夕,是众多单位和广大市民在忙碌了一年后消费量巨大、消费集中的时节。从2002年春节前夕举办的“首届南京(全国)春节食品商品交易会”到2021年春节前夕举办的“第二十届南京(全国)春节食品商品交易会”,都给众多单位和广大市民提供了一个集中采购春节食品的场所,同时也为广大厂商提供了一个展示企业风采、寻求产品代理、销售企业产品的好时机。“第二十一届南京(全国)春节食品商品交易会”定在春节前夕的2022年1月1一27日举办。有来自全国各地的名特优新食品、绿色食品、粮油食品、速冻食品、调味品、酒类、饮料、土特产品等一千多家企业参展。由于我们在会前做了大量的宣传、组织工作,因此,二十届交易会期间,展馆内外都是气氛热烈,人潮涌动,单位团购、市民零购踊跃。火爆的销售,令众多前来购物者满载而归,令广大参展企业收到了很好的社会效益和经济效益。为了办好这一年一届的展会,组委会将进一步做好宣传、组织、策划工作,以满足广大企业、市民采购春节食品需求。为参展企业取得更好的社会和经济效益是我们的追求,我们将一如既往,为将“第二十一届南京(全国)春节食品商品交易会”办得更大、更好而不懈努力。展览范围:各种名特优新食品、绿色食品、粮油食品、休闲食品、速冻食品、烘焙食品、肉禽产品、调味品、乳制品、干果炒货、土特产品、农产品等;各种酒类、饮料、茶叶、咖啡等;厨房用品、工艺礼品、床上用品、服饰鞋帽、休闲用品及现代家居用品等。';
+          STD_TYPE_CODE: '1';
+          SPONSOR_NAME: '食品交易会组委会';
+          CITY: '南京';
+        }[];
+        count: 6;
+      };
+      success: true;
+      message: 'ok';
+      code: 0;
+    }>(`https://datacenter-web.eastmoney.com/api/data/get`, {
+      searchParams: {
+        type: 'RPT_CPH_FECALENDAR',
+        p: 1,
+        ps: 50,
+        st: 'START_DATE',
+        sr: 1,
+        filter: `(END_DATE>='${startTime}')(START_DATE<='${endTime}')((STD_TYPE_CODE="${code}"))`,
+        f1: `(END_DATE>='${startTime}')(START_DATE<='${endTime}')`,
+        f2: `(STD_TYPE_CODE="${code}")`,
+        source: 'WEB',
+        client: 'WEB',
+        sty: 'START_DATE,END_DATE,FE_CODE,FE_NAME,FE_TYPE,CONTENT,STD_TYPE_CODE,SPONSOR_NAME,CITY',
+        _: Date.now(),
+      },
+      responseType: 'json',
+    });
+    return body.result.data;
   } catch (error) {
     return [];
   }

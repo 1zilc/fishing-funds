@@ -28,7 +28,7 @@ async function init() {
 }
 
 function main() {
-  const storage = new Store();
+  const storage = new Store({ encryptionKey: '1zilc' });
   const tray = createTray();
   const mainWindowState = windowStateKeeper({ defaultWidth: 325, defaultHeight: 768 });
   mb = createMenubar({ tray, mainWindowState });
@@ -70,13 +70,19 @@ function main() {
     }
   });
   ipcMain.handle('get-storage-config', async (event, config) => {
-    return storage.get(config.key);
+    return storage.get(config.key, config.init);
   });
   ipcMain.handle('set-storage-config', async (event, config) => {
     storage.set(config.key, config.value);
   });
   ipcMain.handle('delete-storage-config', async (event, config) => {
     storage.delete(config.key);
+  });
+  ipcMain.handle('cover-storage-config', async (event, config) => {
+    storage.set(config.value);
+  });
+  ipcMain.handle('all-storage-config', async (event, config) => {
+    return storage.store;
   });
   ipcMain.handle('update-tray-context-menu-wallets', (event, config) => {
     const menus = config.map((item: any) => ({
@@ -104,7 +110,7 @@ function main() {
     mainWindowState.manage(mb.window!);
     // 检查更新
     appUpdater.checkUpdate('renderer');
-    app.dock.hide();
+    app.dock?.hide();
     // 是否打开备份文件
     if (openBackupFilePath) {
       sendMessageToRenderer(mb, 'open-backup-file', openBackupFilePath);

@@ -13,14 +13,23 @@ export interface CodeStockMap {
 }
 
 export function GetStockConfig() {
-  const stockConfig: Stock.SettingItem[] = Utils.GetStorage(CONST.STORAGE.STOCK_SETTING, []);
-  const codeMap = stockConfig.reduce((r, c, i) => {
-    r[c.secid] = { ...c, originSort: i };
-    return r;
-  }, {} as CodeStockMap);
+  const {
+    stock: {
+      config: { stockConfig },
+    },
+  } = store.getState();
+  const codeMap = GetCodeMap(stockConfig);
 
   return { stockConfig, codeMap };
 }
+
+export function GetCodeMap(config: Stock.SettingItem[]) {
+  return config.reduce((r, c, i) => {
+    r[c.secid] = { ...c, originSort: i };
+    return r;
+  }, {} as CodeStockMap);
+}
+
 export async function GetStocks(config?: Stock.SettingItem[]) {
   const { stockConfig } = GetStockConfig();
   const collectors = (config || stockConfig).map(
@@ -37,8 +46,12 @@ export async function GetStock(secid: string) {
 
 export function SortStocks(responseStocks: Stock.ResponseItem[]) {
   const {
-    stockSortMode: { type: stockSortType, order: stockSortorder },
-  } = Helpers.Sort.GetSortMode();
+    sort: {
+      sortMode: {
+        stockSortMode: { type: stockSortType, order: stockSortorder },
+      },
+    },
+  } = store.getState();
   const { codeMap } = GetStockConfig();
   const sortList = Utils.DeepCopy(responseStocks);
 

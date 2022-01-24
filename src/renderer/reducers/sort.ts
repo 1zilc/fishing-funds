@@ -1,6 +1,7 @@
 import { SYNC_SORT_MODE } from '@/actions/sort';
 import { Reducer } from '@/reducers/types';
 import * as Helpers from '@/helpers';
+import * as Enums from '@/utils/enums';
 
 export type SortState = {
   sortMode: {
@@ -14,7 +15,28 @@ export type SortState = {
 
 const sort: Reducer<SortState> = (
   state = {
-    sortMode: Helpers.Sort.GetSortMode(),
+    sortMode: {
+      fundSortMode: {
+        type: Enums.FundSortType.Custom,
+        order: Enums.SortOrderType.Desc,
+      },
+      zindexSortMode: {
+        type: Enums.ZindexSortType.Custom,
+        order: Enums.SortOrderType.Desc,
+      },
+      quotationSortMode: {
+        type: Enums.QuotationSortType.Zdf,
+        order: Enums.SortOrderType.Desc,
+      },
+      stockSortMode: {
+        type: Enums.StockSortType.Custom,
+        order: Enums.SortOrderType.Desc,
+      },
+      coinSortMode: {
+        type: Enums.CoinSortType.Price,
+        order: Enums.SortOrderType.Desc,
+      },
+    },
   },
   action
 ) => {

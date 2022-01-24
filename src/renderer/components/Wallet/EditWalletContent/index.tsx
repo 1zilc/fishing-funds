@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import WalletSelection from '@/components/Wallet/WalletSelection';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
-import { updateWalletAction } from '@/actions/wallet';
+import { updateWalletConfigAction } from '@/actions/wallet';
 import { StoreState } from '@/reducers/types';
 import styles from './index.module.scss';
 
@@ -33,7 +33,7 @@ const EditWalletContent: React.FC<AddFundContentProps> = (props) => {
       return;
     }
     setFieldNameMessageTip({ show: false, text: '' });
-    dispatch(updateWalletAction({ ...props.wallet, name, iconIndex }));
+    dispatch(updateWalletConfigAction({ ...props.wallet, name, iconIndex }));
     props.onEnter();
   }
 

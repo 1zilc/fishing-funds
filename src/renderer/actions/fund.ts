@@ -2,7 +2,7 @@ import { batch } from 'react-redux';
 import dayjs from 'dayjs';
 
 import { ThunkAction } from '@/reducers/types';
-import { setWalletConfigAction, syncWalletStateAction } from '@/actions/wallet';
+import { setWalletConfigAction, updateWalletStateAction } from '@/actions/wallet';
 import * as Utils from '@/utils';
 import * as CONST from '@/constants';
 import * as Helpers from '@/helpers';
@@ -25,62 +25,54 @@ export function setFundConfigAction(config: Fund.SettingItem[], walletCode: stri
 
       batch(() => {
         dispatch(setWalletConfigAction(newWalletConfig));
-        dispatch(syncWalletStateAction(walletState));
+        dispatch(updateWalletStateAction(walletState));
       });
     } catch (error) {}
   };
 }
 
-export function setRemoteFundsAction(remoteFunds: Fund.RemoteFund[]): ThunkAction {
+export function setRemoteFundsAction(newRemoteFunds: Fund.RemoteFund[]): ThunkAction {
   return (dispatch, getState) => {
     try {
-      const remoteMap = Utils.GetStorage(CONST.STORAGE.REMOTE_FUND_MAP, {});
-      const newRemoteMap = remoteFunds.reduce((r, c) => {
+      const {
+        fund: { remoteFunds },
+      } = getState();
+      const oldRemoteMap = remoteFunds.reduce((r, c) => {
         r[c[0]] = c;
         return r;
       }, {} as Record<string, Fund.RemoteFund>);
 
-      Utils.SetStorage(CONST.STORAGE.REMOTE_FUND_MAP, {
-        ...remoteMap,
-        ...newRemoteMap,
-      });
-      dispatch(syncRemoteFundsAction());
+      const newRemoteMap = newRemoteFunds.reduce((r, c) => {
+        r[c[0]] = c;
+        return r;
+      }, {} as Record<string, Fund.RemoteFund>);
+
+      const remoteMap = { ...oldRemoteMap, ...newRemoteMap };
+
+      dispatch({ type: SET_REMOTE_FUNDS, payload: Object.values(remoteMap) });
+
+      Utils.SetStorage(CONST.STORAGE.REMOTE_FUND_MAP, remoteMap);
     } catch (error) {}
   };
 }
 
-export function setFundRatingMapAction(fundRantings: Fund.RantingItem[]): ThunkAction {
+export function setFundRatingMapAction(newFundRantings: Fund.RantingItem[]): ThunkAction {
   return (dispatch, getState) => {
     try {
-      const fundRatingMap = Helpers.Fund.GetFundsRatingMap();
-      const nweFundRantingMap = fundRantings.reduce<Record<string, Fund.RantingItem>>((map, rant) => {
+      const {
+        fund: { fundRatingMap: oldFundRatingMap },
+      } = getState();
+
+      const nweFundRantingMap = newFundRantings.reduce((map, rant) => {
         map[rant.code] = rant;
         return map;
-      }, {});
+      }, {} as Record<string, Fund.RantingItem>);
 
-      Utils.SetStorage(CONST.STORAGE.FUND_RATING_MAP, {
-        ...fundRatingMap,
-        ...nweFundRantingMap,
-      });
-      dispatch(syncFundRatingMapAction());
-    } catch (error) {}
-  };
-}
+      const fundRatingMap = { ...oldFundRatingMap, ...nweFundRantingMap };
 
-export function syncRemoteFundsAction(): ThunkAction {
-  return (dispatch, getState) => {
-    try {
-      const remoteFunds = Helpers.Fund.GetRemoteFunds();
-      dispatch({ type: SET_REMOTE_FUNDS, payload: remoteFunds });
-    } catch (error) {}
-  };
-}
-
-export function syncFundRatingMapAction(): ThunkAction {
-  return (dispatch, getState) => {
-    try {
-      const fundRatingMap = Helpers.Fund.GetFundsRatingMap();
       dispatch({ type: SET_FUND_RATING_MAP, payload: fundRatingMap });
+
+      Utils.SetStorage(CONST.STORAGE.FUND_RATING_MAP, fundRatingMap);
     } catch (error) {}
   };
 }
@@ -148,7 +140,7 @@ export function sortFundsAction(): ThunkAction {
     try {
       const { funds, updateTime, code } = Helpers.Wallet.GetCurrentWalletState();
       const sortFunds = Helpers.Fund.SortFunds(funds, code);
-      dispatch(syncWalletStateAction({ code, funds: sortFunds, updateTime }));
+      dispatch(updateWalletStateAction({ code, funds: sortFunds, updateTime }));
     } catch (error) {}
   };
 }
@@ -179,7 +171,7 @@ export function sortFundsCachedAction(responseFunds: Fund.ResponseItem[], wallet
         }
       });
       const sortFunds = Helpers.Fund.SortFunds(fundsWithChached, code);
-      dispatch(syncWalletStateAction({ code, funds: sortFunds, updateTime: now }));
+      dispatch(updateWalletStateAction({ code, funds: sortFunds, updateTime: now }));
     } catch (error) {}
   };
 }
@@ -194,7 +186,7 @@ export function toggleFundCollapseAction(fund: Fund.ResponseItem & Fund.ExtraRow
           _.collapse = !fund.collapse;
         }
       });
-      dispatch(syncWalletStateAction({ code, funds: cloneFunds, updateTime }));
+      dispatch(updateWalletStateAction({ code, funds: cloneFunds, updateTime }));
     } catch (error) {}
   };
 }
@@ -208,7 +200,7 @@ export function toggleAllFundsCollapseAction(): ThunkAction {
       cloneFunds.forEach((_) => {
         _.collapse = !expandAllFunds;
       });
-      dispatch(syncWalletStateAction({ code, funds: cloneFunds, updateTime }));
+      dispatch(updateWalletStateAction({ code, funds: cloneFunds, updateTime }));
     } catch (error) {}
   };
 }

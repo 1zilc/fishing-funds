@@ -11,14 +11,14 @@ export async function GetQuotations() {
   return Services.Quotation.GetQuotationsFromEastmoney();
 }
 
-export function GetFavoriteQuotationMap() {
-  return Utils.GetStorage(CONST.STORAGE.FAVORITE_QUOTATION_MAP, {} as Record<string, boolean>);
-}
-
 export function SortQuotations(responseQuotations: Quotation.ResponseItem[]) {
   const {
-    quotationSortMode: { type: quotationSortType, order: quotationSortorder },
-  } = Helpers.Sort.GetSortMode();
+    sort: {
+      sortMode: {
+        quotationSortMode: { type: quotationSortType, order: quotationSortorder },
+      },
+    },
+  } = store.getState();
 
   const sortList: Quotation.ResponseItem[] = Utils.DeepCopy(responseQuotations);
 

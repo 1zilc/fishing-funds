@@ -3,7 +3,6 @@ import classnames from 'classnames';
 import { Tabs } from 'antd';
 import { useSelector } from 'react-redux';
 
-import LoadingScreen from '@/components/LoadingScreen';
 import FundList from '@/components/Home/FundList';
 import ZindexList from '@/components/Home/ZindexList';
 import QuotationList from '@/components/Home/QuotationList';
@@ -167,7 +166,6 @@ const Home: React.FC<HomeProps> = () => {
     <HomeContext.Provider value={{ darkMode, varibleColors }}>
       <div className={classnames(styles.layout)}>
         <GlobalStyles />
-        <LoadingScreen />
         <Header>
           <Wallet />
           <SortBar />

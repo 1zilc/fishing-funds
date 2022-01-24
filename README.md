@@ -63,8 +63,9 @@
 ```
 
 - [官网下载](https://ff.1zilc.top)
-- [阿里云网盘下载](https://alist.1zilc.top/home/Fishing%20Funds)
+- [阿里云网盘下载](https://alist.1zilc.top/Fishing%20Funds)
 - [Github 下载](https://github.com/1zilc/fishing-funds/releases)
+- [Homebrew 安装](https://formulae.brew.sh/cask/fishing-funds#default) `brew install --cask fishing-funds`
 
 ## 讨论交流
 
@@ -129,6 +130,7 @@ interface FundSetting {
 - [Electron Apps](https://www.electronjs.org/apps/fishing-funds)
 - [MacWk](https://www.macwk.com/soft/fishing-funds)
 - [Snap Store](https://snapcraft.io/fishing-funds)
+- [Homebrew](https://formulae.brew.sh/cask/fishing-funds#default)
 
 ## 感谢
 
