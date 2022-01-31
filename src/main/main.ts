@@ -34,7 +34,7 @@ function main() {
   mb = createMenubar({ tray, mainWindowState });
   const appUpdater = new AppUpdater({ icon: appIcon, mb });
   let contextMenu = buildContextMenu({ mb, appUpdater }, []);
-  mb.app.commandLine.appendSwitch('disable-backgrounding-occluded-windows', 'true');
+  // mb.app.commandLine.appendSwitch('disable-backgrounding-occluded-windows', 'true');
 
   // ipcMain 主进程相关监听
   ipcMain.handle('show-message-box', async (event, config) => {
@@ -94,6 +94,8 @@ function main() {
   });
   // menubar 相关监听
   mb.on('after-create-window', () => {
+    //
+    mb.window!.setVibrancy('sidebar');
     // 打开开发者工具
     if (!app.isPackaged) {
       mb.window!.webContents.openDevTools({ mode: 'undocked' });

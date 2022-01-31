@@ -16,7 +16,7 @@ body {
   position: relative;
   margin: 0;
   color: var(--main-text-color);
-  background-color: var(--background-color);
+  background-color: initial !important;
   cursor: default;
   user-select: none;
   width: 100% !important;
