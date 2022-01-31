@@ -41,6 +41,7 @@ contextBridge.exposeInMainWorld('contextModules', {
     production: process.env.NODE_ENV === 'production',
     electron: process.versions.electron,
     version: process.env.VERSION || version,
+    platform: process.platform,
   },
   electron: {
     shell: {

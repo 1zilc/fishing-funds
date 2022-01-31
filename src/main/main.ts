@@ -94,8 +94,10 @@ function main() {
   });
   // menubar 相关监听
   mb.on('after-create-window', () => {
-    //
-    mb.window!.setVibrancy('sidebar');
+    // 系统级别高斯模糊
+    if (process.platform === 'darwin') {
+      mb.window!.setVibrancy('sidebar');
+    }
     // 打开开发者工具
     if (!app.isPackaged) {
       mb.window!.webContents.openDevTools({ mode: 'undocked' });

@@ -27,9 +27,12 @@ Utils.CheckEnvTool();
 
 export const store = configureStore();
 
+const { platform } = window.contextModules.process;
+
 render(
   <ConfigProvider locale={zhCN}>
     <Provider store={store}>
+      <style>{` body { background-color: ${platform === 'darwin' ? 'initial' : 'var(--inner-color)'} }`}</style>
       <App />
     </Provider>
   </ConfigProvider>,
