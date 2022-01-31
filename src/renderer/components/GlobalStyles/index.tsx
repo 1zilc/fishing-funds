@@ -1,8 +1,6 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import classnames from 'classnames';
 import { StoreState } from '@/reducers/types';
-import styles from './index.module.scss';
 
 interface GlobalStylesProps {}
 
