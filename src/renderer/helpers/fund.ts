@@ -222,6 +222,7 @@ export function SortFunds(funds: Fund.ResponseItem[], walletCode: string) {
     const calcA = CalcFund(a, walletCode);
     const calcB = CalcFund(b, walletCode);
     const t = fundSortorder === Enums.SortOrderType.Asc ? 1 : -1;
+
     switch (fundSortType) {
       case Enums.FundSortType.Growth:
         return (Number(calcA.gszzl) - Number(calcB.gszzl)) * t;

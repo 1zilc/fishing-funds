@@ -153,6 +153,7 @@ export function updateWalletStateAction(state: Wallet.StateItem): ThunkAction {
       });
 
       state.funds = state.funds.filter(({ fundcode }) => configCodeMap[fundcode!]);
+      state.funds = Helpers.Fund.SortFunds(state.funds, state.code);
 
       cloneWallets.forEach((wallet, index) => {
         if (wallet.code === state.code) {

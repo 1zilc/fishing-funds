@@ -253,7 +253,7 @@ export function useFreshFunds(throttleDelay: number) {
       const isFixTime = Utils.JudgeFixTime(dayjs().valueOf());
       await runLoadFunds(true);
       if (isFixTime) {
-        await runLoadFixFunds();
+        // await runLoadFixFunds();
       }
     },
   });
