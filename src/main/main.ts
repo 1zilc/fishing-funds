@@ -30,7 +30,12 @@ async function init() {
 function main() {
   const storage = new Store({ encryptionKey: '1zilc' });
   const tray = createTray();
-  const mainWindowState = windowStateKeeper({ defaultWidth: 325, defaultHeight: 768 });
+  const mainWindowState = windowStateKeeper({
+    defaultWidth: 325,
+    defaultHeight: 768,
+    maximize: false,
+    fullScreen: false,
+  });
   mb = createMenubar({ tray, mainWindowState });
   const appUpdater = new AppUpdater({ icon: appIcon, mb });
   let contextMenu = buildContextMenu({ mb, appUpdater }, []);
