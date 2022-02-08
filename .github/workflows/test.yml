@@ -47,7 +47,7 @@ jobs:
           disable_web_page_preview: true
           format: markdown
           message: |
-            *bold \*Fishing Funds 有更新了🎉*
+            *Fishing Funds 有更新了🎉*
 
             Repository: ${{ github.repository }}
 
@@ -56,7 +56,7 @@ jobs:
 
             See changes: https://github.com/${{ github.repository }}/commit/${{github.sha}}
 
-            Branch:  ${{ github.ref }}
+            Branch: ${{ github.ref }}
 
             Version: ${{ github.ref_name }}
 
