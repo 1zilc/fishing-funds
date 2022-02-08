@@ -43,18 +43,22 @@ jobs:
         with:
           to: ${{ secrets.TELEGRAM_TO }}
           token: ${{ secrets.TELEGRAM_TOKEN }}
-          document: screenshots/banner.png
+          photo: screenshots/banner.png
           disable_web_page_preview: true
           format: markdown
           message: |
-            **Fishing Funds 有更新了🎉**
+            ### Fishing Funds 有更新了🎉
+
+            Repository: ${{ github.repository }}
 
             ${{ github.actor }} created commit:
             Commit message: ${{ github.event.commits[0].message }}
 
-            Repository: ${{ github.repository }}
-
             See changes: https://github.com/${{ github.repository }}/commit/${{github.sha}}
 
-            Join 👉 [@FishingFunds基金交流群](https://t.me/fishing_funds)
-            Follow 👉 [@FishingFunds更新](https://t.me/fishing_funds_update)
+            Branch:  ${{ github.ref }}
+
+            Version: ${{ github.ref_name }}
+
+            Join 👉 [@FishingFunds基金交流群](t.me/fishing_funds)
+            Follow 👉 [@FishingFunds更新](t.me/fishing_funds_update)
