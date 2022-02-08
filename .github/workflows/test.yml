@@ -22,13 +22,40 @@ jobs:
       - name: Setup repo
         uses: actions/checkout@v2
 
+      - name: Install Node.js and NPM
+        uses: actions/setup-node@v2
+        with:
+          node-version: 16
+
+      - name: Run npm install
+        run: |
+          npm install --force
+
+      - name: Run npm test
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          npm run package
+          npm run lint
+
       - name: Send telegram message after Build
         uses: appleboy/telegram-action@master
         with:
           to: ${{ secrets.TELEGRAM_TO }}
           token: ${{ secrets.TELEGRAM_TOKEN }}
           disable_web_page_preview: true
-          format: markdown
-          message: send photo message
           photo: screenshots/banner.png
-          document: screenshots/banner.png
+          format: markdown
+          message: |
+            *Fishing Funds 有更新了🎉*
+            Version: ${{ github.ref_name }}
+
+            Repository: ${{ github.repository }}
+
+            ${{ github.actor }} created commit:
+            Commit message: ${{ github.event.commits[0].message }}
+
+            See changes: https://github.com/${{ github.repository }}/commit/${{github.sha}}
+
+            Join 👉 [@FishingFunds基金交流群](https://t.me/fishing_funds)
+            Follow 👉 [@FishingFunds更新](https://t.me/fishing_funds_update)
