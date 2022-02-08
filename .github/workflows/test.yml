@@ -45,20 +45,6 @@ jobs:
           token: ${{ secrets.TELEGRAM_TOKEN }}
           disable_web_page_preview: true
           format: markdown
-          message: |
-            <img src="https://download.1zilc.top/ff/banner.png" width="100%"  />
-            *Fishing Funds 有更新了🎉*
-
-            Repository: ${{ github.repository }}
-
-            ${{ github.actor }} created commit:
-            Commit message: ${{ github.event.commits[0].message }}
-
-            See changes: https://github.com/${{ github.repository }}/commit/${{github.sha}}
-
-            Branch: ${{ github.ref }}
-
-            Version: ${{ github.ref_name }}
-
-            Join 👉 [@FishingFunds基金交流群](https://t.me/fishing_funds)
-            Follow 👉 [@FishingFunds更新](https://t.me/fishing_funds_update)
+          message: send photo message
+          photo: https://download.1zilc.top/ff/banner.png
+          document: https://download.1zilc.top/ff/banner.png
