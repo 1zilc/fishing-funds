@@ -35,11 +35,5 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
 
-      - name: Homebrew Cask Bumper
-        uses: EINDEX/bump-homebrew-cask-action@v1.1
-        with:
-          token: ${{ secrets.GH_TOKEN }}
-          package: 'fishing-funds'
-
       - name: Codecov
         uses: codecov/codecov-action@v1.5.2
