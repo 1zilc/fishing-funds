@@ -43,9 +43,12 @@ jobs:
         with:
           to: ${{ secrets.TELEGRAM_TO }}
           token: ${{ secrets.TELEGRAM_TOKEN }}
-          photo: screenshots/banner.png
+          document: screenshots/banner.png
+          disable_web_page_preview: true
+          format: markdown
           message: |
             **Fishing Funds 有更新了🎉**
+
             ${{ github.actor }} created commit:
             Commit message: ${{ github.event.commits[0].message }}
 
