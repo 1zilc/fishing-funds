@@ -46,7 +46,7 @@ jobs:
           disable_web_page_preview: true
           format: markdown
           message: |
-            ![banner](https://download.1zilc.top/ff/banner.png)
+            <img src="https://download.1zilc.top/ff/banner.png" width="100%"  />
             *Fishing Funds 有更新了🎉*
 
             Repository: ${{ github.repository }}
