@@ -16,7 +16,7 @@ jobs:
 
     strategy:
       matrix:
-        os: [macos-latest, windows-latest, ubuntu-latest]
+        os: [ubuntu-latest]
 
     steps:
       - name: Setup repo
@@ -37,3 +37,21 @@ jobs:
         run: |
           npm run package
           npm run lint
+
+      - name: Send telegram message after Build
+        uses: appleboy/telegram-action@master
+        with:
+          to: ${{ secrets.TELEGRAM_TO }}
+          token: ${{ secrets.TELEGRAM_TOKEN }}
+          photo: screenshots/banner.png
+          message: |
+            **Fishing Funds 有更新了🎉**
+            ${{ github.actor }} created commit:
+            Commit message: ${{ github.event.commits[0].message }}
+
+            Repository: ${{ github.repository }}
+
+            See changes: https://github.com/${{ github.repository }}/commit/${{github.sha}}
+
+            Join 👉 [@FishingFunds基金交流群](https://t.me/fishing_funds)
+            Follow 👉 [@FishingFunds更新](https://t.me/fishing_funds_update)
