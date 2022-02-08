@@ -43,10 +43,10 @@ jobs:
         with:
           to: ${{ secrets.TELEGRAM_TO }}
           token: ${{ secrets.TELEGRAM_TOKEN }}
-          photo: screenshots/banner.png
           disable_web_page_preview: true
           format: markdown
           message: |
+            ![banner](https://download.1zilc.top/ff/banner.png)
             *Fishing Funds 有更新了🎉*
 
             Repository: ${{ github.repository }}
