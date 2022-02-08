@@ -43,11 +43,11 @@ jobs:
         with:
           to: ${{ secrets.TELEGRAM_TO }}
           token: ${{ secrets.TELEGRAM_TOKEN }}
-          message_file: screenshots/banner.png
+          photo: screenshots/banner.png
           disable_web_page_preview: true
           format: markdown
           message: |
-            *Fishing Funds 有更新了🎉*
+            *bold \*Fishing Funds 有更新了🎉*
 
             Repository: ${{ github.repository }}
 
