@@ -176,7 +176,7 @@ export function useSyncFixFundSetting() {
 
 export function useSyncFixStockSetting() {
   const dispatch = useDispatch();
-  const [done, { setTrue }] = useBoolean(false);
+  const [done, { setTrue, setFalse }] = useBoolean(true);
   const { stockConfig } = useSelector((state: StoreState) => state.stock.config);
   async function FixStockSetting(stockConfig: Stock.SettingItem[]) {
     try {
@@ -209,9 +209,8 @@ export function useSyncFixStockSetting() {
   useEffect(() => {
     const unTypedStocks = stockConfig.filter(({ type }) => !type);
     if (unTypedStocks.length) {
+      setFalse();
       FixStockSetting(unTypedStocks);
-    } else {
-      setTrue();
     }
   }, [stockConfig]);
 
