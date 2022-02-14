@@ -4,6 +4,7 @@ import { Rate, Tabs } from 'antd';
 import { useScroll, useRequest } from 'ahooks';
 
 import ChartCard from '@/components/Card/ChartCard';
+import PureCard from '@/components/Card/PureCard';
 import Appraise from '@/components/Home/FundList/FundManagerContent/Appraise';
 import Profit from '@/components/Home/FundList/FundManagerContent/Profit';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
@@ -82,11 +83,15 @@ const FundManagerContent: React.FC<FundManagerContentProps> = (props) => {
             </Tabs.TabPane>
           </Tabs>
         </div>
-        <Tabs animated={{ tabPane: true }} tabBarGutter={15} tabBarStyle={{ marginLeft: 15 }}>
-          <Tabs.TabPane tab={`${manager.name || ''}管理过的基金`} key={0}>
-            <ManageHistoryFundList manageHistoryFunds={managerDetail.manageHistoryFunds} />
-          </Tabs.TabPane>
-        </Tabs>
+        <div className={styles.container}>
+          <Tabs animated={{ tabPane: true }} tabBarGutter={15}>
+            <Tabs.TabPane tab={`${manager.name || ''}管理过的基金`} key={0}>
+              <PureCard>
+                <ManageHistoryFundList manageHistoryFunds={managerDetail.manageHistoryFunds} />
+              </PureCard>
+            </Tabs.TabPane>
+          </Tabs>
+        </div>
       </div>
     </CustomDrawerContent>
   );

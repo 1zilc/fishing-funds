@@ -2,6 +2,7 @@
   color: var(--main-text-color);
   overflow-y: scroll;
   height: calc(100vh - 48px);
+  padding: 0 0 var(--base-padding) 0;
 
   &::-webkit-scrollbar {
     width: 0;
