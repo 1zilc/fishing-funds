@@ -822,7 +822,6 @@ export async function GetFundManagerDetailFromEastMoney(code: string) {
 // 查询天天基金QDII基金信息
 export async function GetQDIIFundFromEastMoney(code: string) {
   try {
-    // const { gztime } = (await FromEastmoney('161725'))! as Fund.ResponseItem; // TODO:估值时间暂时使用白酒最后一次开门时间
     const { fixDwjz, fixName, fixDate, fixZzl } = (await GetFixFromEastMoney(code))!;
     return {
       name: fixName,
