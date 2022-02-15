@@ -40,13 +40,8 @@ const QuotationRow: React.FC<RowProps> = (props) => {
         <div className={styles.arrow}>
           {quotation.collapse ? <ArrowUpIcon style={{ ...arrowSize }} /> : <ArrowDownIcon style={{ ...arrowSize }} />}
         </div>
-        <div style={{ flex: 1 }}>
-          <div
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-            }}
-          >
+        <div style={{ flex: 1, width: 0 }}>
+          <div style={{ display: 'flex', alignItems: 'center' }}>
             <span className={styles.quotationName}>{quotation.name}</span>
             {favorited && <span className={styles.favorite}>关注</span>}
           </div>

@@ -74,14 +74,8 @@ const FundRow: React.FC<RowProps> = (props) => {
             {fund.collapse ? <ArrowUpIcon style={{ ...arrowSize }} /> : <ArrowDownIcon style={{ ...arrowSize }} />}
           </div>
         )}
-        <div style={{ flex: 1, marginLeft: 5 }}>
-          <div
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              flexWrap: 'wrap',
-            }}
-          >
+        <div style={{ flex: 1, width: 0 }}>
+          <div style={{ display: 'flex', alignItems: 'center' }}>
             <span className={styles.fundName}>{fund.name}</span>
             {!!calcFundResult.cyfe && <span className={styles.hold}>持有</span>}
             {conciseSetting && isFix && <span className={styles.warn}>净值更新</span>}

@@ -29,7 +29,12 @@
 .stockName {
   font-weight: 600;
   font-size: calc(14rem / var(--base-font-size));
-  margin-bottom: 2px;
+
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  word-break: break-all;
+  max-width: 100%;
 }
 
 .code {
@@ -41,6 +46,7 @@
   font-size: calc(10rem / var(--base-font-size));
   display: flex;
   align-items: center;
+  margin-top: 2px;
 }
 
 .value {
@@ -79,7 +85,6 @@
 }
 
 .arrow {
-  /* border: 1px solid #333; */
   margin-right: 5px;
 
   svg {
@@ -121,7 +126,6 @@
   word-break: keep-all;
   margin-left: 5px;
   transition: 0.3s;
-  margin-bottom: 2px;
 
   &:hover {
     filter: brightness(115%);

@@ -10,7 +10,6 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  width: 100%;
   position: relative;
   overflow: hidden;
   cursor: pointer;
@@ -32,7 +31,12 @@
 .fundName {
   font-weight: 600;
   font-size: calc(14rem / var(--base-font-size));
-  margin-bottom: 2px;
+
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  word-break: break-all;
+  max-width: 100%;
 }
 
 .code {
@@ -44,6 +48,7 @@
   font-size: calc(10rem / var(--base-font-size));
   display: flex;
   align-items: center;
+  margin-top: 2px;
 }
 
 .value {
@@ -75,6 +80,7 @@
   line-height: 24px;
   white-space: pre-wrap;
   font-weight: 600;
+  margin-left: 5px;
   transition: all 0.3s;
 }
 
@@ -91,7 +97,7 @@
 }
 
 .arrow {
-  /* border: 1px solid #333; */
+  margin-right: 5px;
 
   svg {
     cursor: pointer;
@@ -146,5 +152,4 @@
   word-break: keep-all;
   margin-left: 5px;
   transition: 0.3s;
-  margin-bottom: 2px;
 }
