@@ -170,6 +170,26 @@ export function updateWalletStateAction(state: Wallet.StateItem): ThunkAction {
   };
 }
 
+export function setWalletStateAction(state: Wallet.StateItem): ThunkAction {
+  return (dispatch, getState) => {
+    try {
+      const {
+        wallet: { wallets },
+      } = getState();
+
+      const cloneWallets = Utils.DeepCopy(wallets);
+      cloneWallets.forEach((wallet) => {
+        if (wallet.code === state.code) {
+          wallet.funds = state.funds;
+          wallet.updateTime = state.updateTime;
+        }
+      });
+
+      dispatch({ type: SYNC_WALLETS, payload: cloneWallets });
+    } catch (error) {}
+  };
+}
+
 export function syncFixWalletStateAction(state: Wallet.StateItem): ThunkAction {
   return (dispatch, getState) => {
     try {

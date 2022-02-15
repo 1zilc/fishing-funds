@@ -2,7 +2,7 @@ import { batch } from 'react-redux';
 import dayjs from 'dayjs';
 
 import { ThunkAction } from '@/reducers/types';
-import { setWalletConfigAction, updateWalletStateAction } from '@/actions/wallet';
+import { setWalletConfigAction, updateWalletStateAction, setWalletStateAction } from '@/actions/wallet';
 import * as Utils from '@/utils';
 import * as CONST from '@/constants';
 import * as Helpers from '@/helpers';
@@ -140,7 +140,7 @@ export function sortFundsAction(): ThunkAction {
     try {
       const { funds, updateTime, code } = Helpers.Wallet.GetCurrentWalletState();
       const sortFunds = Helpers.Fund.SortFunds(funds, code);
-      dispatch(updateWalletStateAction({ code, funds: sortFunds, updateTime }));
+      dispatch(setWalletStateAction({ code, funds: sortFunds, updateTime }));
     } catch (error) {}
   };
 }
@@ -171,7 +171,7 @@ export function sortFundsCachedAction(responseFunds: Fund.ResponseItem[], wallet
         }
       });
       const sortFunds = Helpers.Fund.SortFunds(fundsWithChached, code);
-      dispatch(updateWalletStateAction({ code, funds: sortFunds, updateTime: now }));
+      dispatch(setWalletStateAction({ code, funds: sortFunds, updateTime: now }));
     } catch (error) {}
   };
 }
@@ -186,7 +186,7 @@ export function toggleFundCollapseAction(fund: Fund.ResponseItem & Fund.ExtraRow
           _.collapse = !fund.collapse;
         }
       });
-      dispatch(updateWalletStateAction({ code, funds: cloneFunds, updateTime }));
+      dispatch(setWalletStateAction({ code, funds: cloneFunds, updateTime }));
     } catch (error) {}
   };
 }
@@ -200,7 +200,7 @@ export function toggleAllFundsCollapseAction(): ThunkAction {
       cloneFunds.forEach((_) => {
         _.collapse = !expandAllFunds;
       });
-      dispatch(updateWalletStateAction({ code, funds: cloneFunds, updateTime }));
+      dispatch(setWalletStateAction({ code, funds: cloneFunds, updateTime }));
     } catch (error) {}
   };
 }
