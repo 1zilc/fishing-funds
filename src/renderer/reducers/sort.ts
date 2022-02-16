@@ -1,4 +1,4 @@
-import { SYNC_SORT_MODE } from '@/actions/sort';
+import { SYNC_SORT_MODE, SYNC_VIEW_MODE } from '@/actions/sort';
 import { Reducer } from '@/reducers/types';
 import * as Helpers from '@/helpers';
 import * as Enums from '@/utils/enums';
@@ -10,6 +10,14 @@ export type SortState = {
     quotationSortMode: Helpers.Sort.QuotationSortType;
     stockSortMode: Helpers.Sort.StockSortType;
     coinSortMode: Helpers.Sort.CoinSortType;
+  };
+  viewMode: {
+    zindexViewMode: {
+      type: Enums.ZindexViewType;
+    };
+    quotationViewMode: {
+      type: Enums.QuotationViewType;
+    };
   };
 };
 
@@ -37,6 +45,14 @@ const sort: Reducer<SortState> = (
         order: Enums.SortOrderType.Desc,
       },
     },
+    viewMode: {
+      zindexViewMode: {
+        type: Enums.ZindexViewType.Grid,
+      },
+      quotationViewMode: {
+        type: Enums.QuotationViewType.List,
+      },
+    },
   },
   action
 ) => {
@@ -45,6 +61,11 @@ const sort: Reducer<SortState> = (
       return {
         ...state,
         sortMode: action.payload,
+      };
+    case SYNC_VIEW_MODE:
+      return {
+        ...state,
+        viewMode: action.payload,
       };
     default:
       return state;

@@ -5,7 +5,7 @@ import StockRow from '@/components/Home/StockList/StockRow';
 import Empty from '@/components/Empty';
 import LoadingBar from '@/components/LoadingBar';
 import DetailStockContent from '@/components/Home/StockList/DetailStockContent';
-import DetailQuotationContent from '@/components/Home/QuotationList/DetailQuotationContent';
+import DetailQuotationContent from '@/components/Home/QuotationView/DetailQuotationContent';
 import CustomDrawer from '@/components/CustomDrawer';
 import { StoreState } from '@/reducers/types';
 import { useDrawer, useSyncFixStockSetting } from '@/utils/hooks';

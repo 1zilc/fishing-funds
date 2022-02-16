@@ -8,6 +8,9 @@ import SortArrowUpIcon from '@/static/icon/sort-arrow-up.svg';
 import SortArrowDownIcon from '@/static/icon/sort-arrow-down.svg';
 import ArrowDownIcon from '@/static/icon/arrow-down.svg';
 import ArrowUpIcon from '@/static/icon/arrow-up.svg';
+import LayoutListIcon from '@/static/icon/layout-list.svg';
+import LayoutGridIcon from '@/static/icon/layout-grid.svg';
+
 import {
   setFundSortModeAction,
   troggleFundSortOrderAction,
@@ -19,16 +22,14 @@ import {
   troggleStockSortOrderAction,
   setCoinSortModeAction,
   troggleCoinSortOrderAction,
+  setZindexViewModeAction,
+  setQuotationViewModeAction,
 } from '@/actions/sort';
 import CustomDrawer from '@/components/CustomDrawer';
-import CustomDrawerContent from '@/components/CustomDrawer/Content';
-import StandCard from '@/components/Card/StandCard';
 import ManageFundContent from '@/components/Home/FundList/ManageFundContent';
-import ManageWalletContent from '@/components/Wallet/ManageWalletContent';
 import ManageStockContent from '@/components/Home/StockList/ManageStockContent';
 import ManageCoinContent from '@/components/Home/CoinList/ManageCoinContent';
-import FundStatisticsContent from '@/components/Home/FundList/FundStatisticsContent';
-import ManageZindexContent from '@/components/Home/ZindexList/ManageZindexContent';
+import ManageZindexContent from '@/components/Home/ZindexView/ManageZindexContent';
 import { StoreState } from '@/reducers/types';
 import { toggleAllFundsCollapseAction } from '@/actions/fund';
 import { toggleAllZindexsCollapseAction } from '@/actions/zindex';
@@ -122,6 +123,10 @@ function ZindexSortBar() {
     zindexSortMode: { type: zindexSortType, order: zindexSortOrder },
   } = useSelector((state: StoreState) => state.sort.sortMode);
 
+  const {
+    zindexViewMode: { type: zindexViewType },
+  } = useSelector((state: StoreState) => state.sort.viewMode);
+
   const { zindexSortModeOptions, zindexSortModeOptionsMap } = Helpers.Sort.GetSortConfig();
 
   const zindexs = useSelector((state: StoreState) => state.zindex.zindexs);
@@ -150,6 +155,14 @@ function ZindexSortBar() {
         >
           管理
         </a>
+      </div>
+      <div className={styles.view}>
+        {zindexViewType === Enums.ZindexViewType.List && (
+          <LayoutListIcon onClick={() => dispatch(setZindexViewModeAction({ type: Enums.ZindexViewType.Grid }))} />
+        )}
+        {zindexViewType === Enums.ZindexViewType.Grid && (
+          <LayoutGridIcon onClick={() => dispatch(setZindexViewModeAction({ type: Enums.ZindexViewType.List }))} />
+        )}
       </div>
       <div className={styles.mode}>
         <Dropdown
@@ -193,6 +206,10 @@ function QuotationSortBar() {
     quotationSortMode: { type: quotationSortType, order: quotationSortOrder },
   } = useSelector((state: StoreState) => state.sort.sortMode);
 
+  const {
+    quotationViewMode: { type: quotationViewType },
+  } = useSelector((state: StoreState) => state.sort.viewMode);
+
   const { quotationSortModeOptions, quotationSortModeOptionsMap } = Helpers.Sort.GetSortConfig();
 
   const quotations = useSelector((state: StoreState) => state.quotation.quotations);
@@ -210,6 +227,14 @@ function QuotationSortBar() {
       </div>
       <div className={styles.name} onClick={toggleQuotationsCollapse}>
         板块名称
+      </div>
+      <div className={styles.view}>
+        {quotationViewType === Enums.QuotationViewType.List && (
+          <LayoutListIcon onClick={() => dispatch(setQuotationViewModeAction({ type: Enums.QuotationViewType.Grid }))} />
+        )}
+        {quotationViewType === Enums.QuotationViewType.Grid && (
+          <LayoutGridIcon onClick={() => dispatch(setQuotationViewModeAction({ type: Enums.QuotationViewType.List }))} />
+        )}
       </div>
       <div className={styles.mode}>
         <Dropdown

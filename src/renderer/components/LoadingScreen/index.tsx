@@ -11,7 +11,7 @@ import { setSystemSettingAction, setAdjustmentNotificationDateAction } from '@/a
 import { setWalletConfigAction, changeEyeStatusAction, selectWalletAction } from '@/actions/wallet';
 import { setStockConfigAction } from '@/actions/stock';
 import { setCoinConfigAction, setRemoteCoinsAction } from '@/actions/coin';
-import { syncSortModeAction } from '@/actions/sort';
+import { syncSortModeAction, syncViewModeAction } from '@/actions/sort';
 import { useDrawer } from '@/utils/hooks';
 import * as CONST from '@/constants';
 import * as Utils from '@/utils';
@@ -103,6 +103,15 @@ const LoadingScreen: React.FC<LoadingScreenProps> = () => {
       order: Enums.SortOrderType.Desc,
     });
     dispatch(syncSortModeAction({ fundSortMode, zindexSortMode, quotationSortMode, stockSortMode, coinSortMode }));
+
+    setLoading('加载视图配置...');
+    const zindexViewMode = await Utils.GetStorage(CONST.STORAGE.ZINDEX_VIEW_MODE, {
+      type: Enums.ZindexViewType.Grid,
+    });
+    const quotationViewMode = await Utils.GetStorage(CONST.STORAGE.QUOTATION_VIEW_MODE, {
+      type: Enums.QuotationViewType.List,
+    });
+    dispatch(syncViewModeAction({ zindexViewMode, quotationViewMode }));
 
     setLoading('加载远程数据缓存...');
     const remoteFundMap = await Utils.GetStorage(CONST.STORAGE.REMOTE_FUND_MAP, {});
