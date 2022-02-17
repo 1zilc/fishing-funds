@@ -10,7 +10,7 @@ jobs:
 
     steps:
       - name: Homebrew Cask Bumper
-        uses: EINDEX/bump-homebrew-cask-action@v1.1
+        uses: macauley/action-homebrew-bump-cask@v1
         with:
-          token: ${{ secrets.GH_TOKEN }}
-          package: 'fishing-funds'
+          token: ${{ secrets.HOMEBREW_GH_TOKEN }}
+          cask: 'fishing-funds'
