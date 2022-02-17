@@ -6,6 +6,8 @@ on:
 
 jobs:
   broadcast_release:
+    runs-on: ubuntu-latest
+
     steps:
       - name: Homebrew Cask Bumper
         uses: EINDEX/bump-homebrew-cask-action@v1.1
