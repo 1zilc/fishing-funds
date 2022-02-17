@@ -10,6 +10,7 @@ declare global {
         production: boolean;
         electron: string;
         version: string;
+        platform: 'aix' | 'darwin' | 'freebsd' | 'linux' | 'openbsd' | 'sunos' | 'win32';
       };
       electron: {
         shell: Shell;

@@ -83,15 +83,8 @@ export async function LoadWalletsFunds() {
     const { walletConfig } = GetWalletConfig();
     const collects = walletConfig.map(({ funds: fundsConfig, code: walletCode }) => async () => {
       const responseFunds = (await Helpers.Fund.GetFunds(fundsConfig)).filter(Utils.NotEmpty);
-      const sortFunds = Helpers.Fund.SortFunds(responseFunds, walletCode);
       const now = dayjs().format('MM-DD HH:mm:ss');
-      store.dispatch(
-        updateWalletStateAction({
-          code: walletCode,
-          funds: sortFunds,
-          updateTime: now,
-        })
-      );
+      store.dispatch(updateWalletStateAction({ code: walletCode, funds: responseFunds, updateTime: now }));
       return responseFunds;
     });
     await Adpters.ChokeAllAdapter<(Fund.ResponseItem | null)[]>(collects, CONST.DEFAULT.LOAD_WALLET_DELAY);

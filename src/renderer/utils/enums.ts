@@ -196,3 +196,12 @@ export enum QuotationType {
   Industry,
   Concept,
 }
+
+export enum ZindexViewType {
+  List,
+  Grid,
+}
+export enum QuotationViewType {
+  List,
+  Grid,
+}

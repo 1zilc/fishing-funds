@@ -30,11 +30,16 @@ async function init() {
 function main() {
   const storage = new Store({ encryptionKey: '1zilc' });
   const tray = createTray();
-  const mainWindowState = windowStateKeeper({ defaultWidth: 325, defaultHeight: 768 });
+  const mainWindowState = windowStateKeeper({
+    defaultWidth: 325,
+    defaultHeight: 768,
+    maximize: false,
+    fullScreen: false,
+  });
   mb = createMenubar({ tray, mainWindowState });
   const appUpdater = new AppUpdater({ icon: appIcon, mb });
   let contextMenu = buildContextMenu({ mb, appUpdater }, []);
-  mb.app.commandLine.appendSwitch('disable-backgrounding-occluded-windows', 'true');
+  // mb.app.commandLine.appendSwitch('disable-backgrounding-occluded-windows', 'true');
 
   // ipcMain 主进程相关监听
   ipcMain.handle('show-message-box', async (event, config) => {
@@ -94,6 +99,10 @@ function main() {
   });
   // menubar 相关监听
   mb.on('after-create-window', () => {
+    // 系统级别高斯模糊
+    if (process.platform === 'darwin') {
+      mb.window!.setVibrancy('sidebar');
+    }
     // 打开开发者工具
     if (!app.isPackaged) {
       mb.window!.webContents.openDevTools({ mode: 'undocked' });

@@ -4,8 +4,8 @@ import { Tabs } from 'antd';
 import { useSelector } from 'react-redux';
 
 import FundList from '@/components/Home/FundList';
-import ZindexList from '@/components/Home/ZindexList';
-import QuotationList from '@/components/Home/QuotationList';
+import ZindexView from '@/components/Home/ZindexView';
+import QuotationView from '@/components/Home/QuotationView';
 import StockList from '@/components/Home/StockList';
 import CoinList from '@/components/Home/CoinList';
 import Toolbar from '@/components/Toolbar';
@@ -17,6 +17,7 @@ import TabsBar from '@/components/TabsBar';
 import Collect from '@/components/Collect';
 import GroupTab from '@/components/GroupTab';
 import GlobalStyles from '@/components/GlobalStyles';
+
 import { stockTypesConfig } from '@/components/Home/StockList/AddStockContent';
 import { StoreState } from '@/reducers/types';
 import { useNativeThemeColor, useCurrentWallet } from '@/utils/hooks';
@@ -69,13 +70,13 @@ const ZindexGroup = () => {
   return (
     <GroupTab tabKey={Enums.TabKeyType.Zindex}>
       <Tabs.TabPane tab="全部" key={String(0)}>
-        <ZindexList filter={() => true} />
+        <ZindexView filter={() => true} />
       </Tabs.TabPane>
       <Tabs.TabPane tab="上涨" key={String(1)}>
-        <ZindexList filter={(zindex) => zindex.zdd >= 0} />
+        <ZindexView filter={(zindex) => zindex.zdd >= 0} />
       </Tabs.TabPane>
       <Tabs.TabPane tab="下跌" key={String(2)}>
-        <ZindexList filter={(zindex) => zindex.zdd < 0} />
+        <ZindexView filter={(zindex) => zindex.zdd < 0} />
       </Tabs.TabPane>
     </GroupTab>
   );
@@ -87,16 +88,16 @@ const QuotationGroup = () => {
   return (
     <GroupTab tabKey={Enums.TabKeyType.Quotation}>
       <Tabs.TabPane tab="行业" key={String(0)}>
-        <QuotationList filter={(quotation) => quotation.type === Enums.QuotationType.Industry} />
+        <QuotationView filter={(quotation) => quotation.type === Enums.QuotationType.Industry} />
       </Tabs.TabPane>
       <Tabs.TabPane tab="概念" key={String(1)}>
-        <QuotationList filter={(quotation) => quotation.type === Enums.QuotationType.Concept} />
+        <QuotationView filter={(quotation) => quotation.type === Enums.QuotationType.Concept} />
       </Tabs.TabPane>
       <Tabs.TabPane tab="地域" key={String(2)}>
-        <QuotationList filter={(quotation) => quotation.type === Enums.QuotationType.Area} />
+        <QuotationView filter={(quotation) => quotation.type === Enums.QuotationType.Area} />
       </Tabs.TabPane>
       <Tabs.TabPane tab="关注" key={String(3)}>
-        <QuotationList filter={(quotaion) => favoriteQuotationMap[quotaion.code]} />
+        <QuotationView filter={(quotaion) => favoriteQuotationMap[quotaion.code]} />
       </Tabs.TabPane>
     </GroupTab>
   );

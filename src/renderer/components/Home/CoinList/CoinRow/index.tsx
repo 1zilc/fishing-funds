@@ -40,13 +40,8 @@ const CoinRow: React.FC<RowProps> = (props) => {
         <div className={styles.arrow}>
           {coin.collapse ? <ArrowUpIcon style={{ ...arrowSize }} /> : <ArrowDownIcon style={{ ...arrowSize }} />}
         </div>
-        <div style={{ flex: 1 }}>
-          <div
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-            }}
-          >
+        <div style={{ flex: 1, width: 0 }}>
+          <div style={{ display: 'flex', alignItems: 'center' }}>
             <span className={styles.zindexName}>{symbol.toUpperCase()}</span>
             <span
               className={styles.coin}

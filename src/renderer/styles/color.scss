@@ -16,22 +16,6 @@
   transition: all 0.3s;
 }
 
-.bg-up {
-  transition: all 0.3s;
-
-  &:hover {
-    background-image: linear-gradient(to right, var(--background-color), var(--increase-bg-color)) !important;
-  }
-}
-
-.bg-down {
-  transition: all 0.3s;
-
-  &:hover {
-    background-image: linear-gradient(to right, var(--background-color), var(--reduce-bg-color)) !important;
-  }
-}
-
 .text-up {
   color: var(--increase-color);
 }
@@ -63,4 +47,14 @@
 }
 .boder-none {
   border-color: var(--reverse-text-color);
+}
+
+.bg-up {
+  background-color: var(--hover-up-color);
+}
+.bg-down {
+  background-color: var(--hover-down-color);
+}
+.bg-none {
+  background-color: var(--background-color);
 }

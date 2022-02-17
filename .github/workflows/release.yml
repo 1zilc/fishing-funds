@@ -1,0 +1,14 @@
+name: Release
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  broadcast_release:
+    steps:
+      - name: Homebrew Cask Bumper
+        uses: EINDEX/bump-homebrew-cask-action@v1.1
+        with:
+          token: ${{ secrets.GH_TOKEN }}
+          package: 'fishing-funds'

@@ -153,6 +153,7 @@ export function updateWalletStateAction(state: Wallet.StateItem): ThunkAction {
       });
 
       state.funds = state.funds.filter(({ fundcode }) => configCodeMap[fundcode!]);
+      state.funds = Helpers.Fund.SortFunds(state.funds, state.code);
 
       cloneWallets.forEach((wallet, index) => {
         if (wallet.code === state.code) {
@@ -163,6 +164,26 @@ export function updateWalletStateAction(state: Wallet.StateItem): ThunkAction {
       if (!walletState) {
         cloneWallets.push(state);
       }
+
+      dispatch({ type: SYNC_WALLETS, payload: cloneWallets });
+    } catch (error) {}
+  };
+}
+
+export function setWalletStateAction(state: Wallet.StateItem): ThunkAction {
+  return (dispatch, getState) => {
+    try {
+      const {
+        wallet: { wallets },
+      } = getState();
+
+      const cloneWallets = Utils.DeepCopy(wallets);
+      cloneWallets.forEach((wallet) => {
+        if (wallet.code === state.code) {
+          wallet.funds = state.funds;
+          wallet.updateTime = state.updateTime;
+        }
+      });
 
       dispatch({ type: SYNC_WALLETS, payload: cloneWallets });
     } catch (error) {}

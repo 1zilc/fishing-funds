@@ -15,7 +15,8 @@ export function createMenubar({ tray, mainWindowState }: { tray: Tray; mainWindo
     // showDockIcon: false,
 
     browserWindow: {
-      backgroundColor: '#fff',
+      // backgroundColor: '#fff',
+      transparent: true,
       width: mainWindowState.width,
       height: mainWindowState.height,
       minHeight: 400,

@@ -11,6 +11,7 @@ import * as Utils from '@/utils';
 import * as CONST from '@/constants';
 
 export const SYNC_SORT_MODE = 'SYNC_SORT_MODE';
+export const SYNC_VIEW_MODE = 'SYNC_VIEW_MODE';
 
 export function setFundSortModeAction(mode: { type?: Enums.FundSortType; order?: Enums.SortOrderType }): ThunkAction {
   return (dispatch, getState) => {
@@ -224,6 +225,49 @@ export function syncSortModeAction(newSortMode: any): ThunkAction {
         sort: { sortMode },
       } = getState();
       dispatch({ type: SYNC_SORT_MODE, payload: { ...sortMode, ...newSortMode } });
+    } catch (error) {}
+  };
+}
+
+export function setZindexViewModeAction(mode: { type: Enums.ZindexViewType }): ThunkAction {
+  return (dispatch, getState) => {
+    try {
+      const {
+        sort: { viewMode },
+      } = getState();
+
+      const zindexViewMode = { ...viewMode.zindexViewMode, ...mode };
+
+      dispatch(syncViewModeAction({ ...viewMode, zindexViewMode }));
+
+      Utils.SetStorage(CONST.STORAGE.ZINDEX_VIEW_MODE, zindexViewMode);
+    } catch (error) {}
+  };
+}
+
+export function setQuotationViewModeAction(mode: { type: Enums.QuotationViewType }): ThunkAction {
+  return (dispatch, getState) => {
+    try {
+      const {
+        sort: { viewMode },
+      } = getState();
+
+      const quotationViewMode = { ...viewMode.quotationViewMode, ...mode };
+
+      dispatch(syncViewModeAction({ ...viewMode, quotationViewMode }));
+
+      Utils.SetStorage(CONST.STORAGE.QUOTATION_VIEW_MODE, quotationViewMode);
+    } catch (error) {}
+  };
+}
+
+export function syncViewModeAction(newViewMode: any): ThunkAction {
+  return (dispatch, getState) => {
+    try {
+      const {
+        sort: { viewMode },
+      } = getState();
+      dispatch({ type: SYNC_VIEW_MODE, payload: { ...viewMode, ...newViewMode } });
     } catch (error) {}
   };
 }

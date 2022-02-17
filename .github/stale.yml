@@ -10,7 +10,7 @@ exemptLabels:
 # Label to use when marking an issue as stale
 staleLabel: wontfix
 # Comment to post when marking an issue as stale. Set to `false` to disable
-markComment: >
+markComment: |
   感谢您的反馈🙏，为了更好的追踪问题和建议，此issue即将关闭，可能由以下原因引起：
   1. 未按照正确的issue模版提交
   2. 已经存在同类型issue，请自行搜索查看
