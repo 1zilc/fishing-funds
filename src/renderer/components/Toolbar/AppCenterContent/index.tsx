@@ -4,7 +4,6 @@ import { useBoolean } from 'ahooks';
 import { Input } from 'antd';
 
 import WalletIcon from '@/static/icon/wallet.svg';
-import ChartBoxIcon from '@/static/icon/chart-box.svg';
 import NewsIcon from '@/static/icon/news.svg';
 import ExchangeIcon from '@/static/icon/exchange.svg';
 import BubbleIcon from '@/static/icon/bubble.svg';

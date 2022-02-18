@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { useScroll, useDebounceFn, useBoolean } from 'ahooks';
+import { useScroll, useDebounceFn, useBoolean, useThrottleFn } from 'ahooks';
 import { useSelector, useDispatch } from 'react-redux';
 import classsames from 'classnames';
 import { Dropdown, Menu } from 'antd';
@@ -36,8 +36,17 @@ import { toggleAllZindexsCollapseAction } from '@/actions/zindex';
 import { toggleAllQuotationsCollapse } from '@/actions/quotation';
 import { toggleAllStocksCollapseAction } from '@/actions/stock';
 import { toggleAllCoinsCollapseAction } from '@/actions/coin';
-import { useCurrentWallet } from '@/utils/hooks';
+import {
+  useScrollToTop,
+  useFreshFunds,
+  useFreshZindexs,
+  useFreshQuotations,
+  useFreshStocks,
+  useFreshCoins,
+  useCurrentWallet,
+} from '@/utils/hooks';
 import * as Enums from '@/utils/enums';
+import * as CONST from '@/constants';
 import * as Helpers from '@/helpers';
 import styles from './index.module.scss';
 
@@ -62,6 +71,8 @@ function FundsSortBar() {
   const [expandAllFunds, expandSomeFunds] = useMemo(() => {
     return [funds.every((_) => _.collapse), funds.some((_) => _.collapse)];
   }, [funds]);
+
+  const freshFunds = useFreshFunds(CONST.DEFAULT.FRESH_BUTTON_THROTTLE_DELAY);
 
   const toggleFundsCollapse = () => dispatch(toggleAllFundsCollapseAction());
 
@@ -110,7 +121,13 @@ function FundsSortBar() {
         />
       </div>
       <CustomDrawer show={showManageFundDrawer}>
-        <ManageFundContent onClose={closeManageFundDrawer} onEnter={closeManageFundDrawer} />
+        <ManageFundContent
+          onClose={closeManageFundDrawer}
+          onEnter={() => {
+            freshFunds();
+            closeManageFundDrawer();
+          }}
+        />
       </CustomDrawer>
     </div>
   );
@@ -137,6 +154,8 @@ function ZindexSortBar() {
   const [expandAllZindexs, expandSomeZindexs] = useMemo(() => {
     return [zindexs.every((_) => _.collapse), zindexs.some((_) => _.collapse)];
   }, [zindexs]);
+
+  const freshZindexs = useFreshZindexs(CONST.DEFAULT.FRESH_BUTTON_THROTTLE_DELAY);
 
   const toggleZindexsCollapse = () => dispatch(toggleAllZindexsCollapseAction());
 
@@ -193,7 +212,13 @@ function ZindexSortBar() {
         />
       </div>
       <CustomDrawer show={showManageZindexDrawer}>
-        <ManageZindexContent onClose={closeManageZindexDrawer} onEnter={closeManageZindexDrawer} />
+        <ManageZindexContent
+          onClose={closeManageZindexDrawer}
+          onEnter={() => {
+            freshZindexs();
+            closeManageZindexDrawer();
+          }}
+        />
       </CustomDrawer>
     </div>
   );
@@ -286,6 +311,8 @@ function StockSortBar() {
     return [stocks.every((_) => _.collapse), stocks.some((_) => _.collapse)];
   }, [stocks]);
 
+  const freshStocks = useFreshStocks(CONST.DEFAULT.FRESH_BUTTON_THROTTLE_DELAY);
+
   const toggleStocksCollapse = () => dispatch(toggleAllStocksCollapseAction());
 
   return (
@@ -333,7 +360,13 @@ function StockSortBar() {
         />
       </div>
       <CustomDrawer show={showManageStockDrawer}>
-        <ManageStockContent onClose={closeManageStockDrawer} onEnter={closeManageStockDrawer} />
+        <ManageStockContent
+          onClose={closeManageStockDrawer}
+          onEnter={() => {
+            freshStocks();
+            closeManageStockDrawer();
+          }}
+        />
       </CustomDrawer>
     </div>
   );
@@ -357,7 +390,10 @@ function CoinSortBar() {
     return [coins.every((_) => _.collapse), coins.some((_) => _.collapse)];
   }, [coins]);
 
+  const freshCoins = useFreshCoins(CONST.DEFAULT.FRESH_BUTTON_THROTTLE_DELAY);
+
   const toggleCoinsCollapse = () => dispatch(toggleAllCoinsCollapseAction());
+
   return (
     <div className={styles.bar}>
       <div className={styles.arrow} onClick={toggleCoinsCollapse}>
@@ -403,7 +439,13 @@ function CoinSortBar() {
         />
       </div>
       <CustomDrawer show={showManageCoinDrawer}>
-        <ManageCoinContent onClose={closeManageCoinDrawer} onEnter={closeManageCoinDrawer} />
+        <ManageCoinContent
+          onClose={closeManageCoinDrawer}
+          onEnter={() => {
+            freshCoins();
+            closeManageCoinDrawer();
+          }}
+        />
       </CustomDrawer>
     </div>
   );
