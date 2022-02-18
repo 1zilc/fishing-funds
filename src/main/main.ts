@@ -117,8 +117,7 @@ function main() {
     });
     // 存储窗口大小
     mainWindowState.manage(mb.window!);
-    // 检查更新
-    appUpdater.checkUpdate('renderer');
+    // 隐藏dock栏
     app.dock?.hide();
     // 是否打开备份文件
     if (openBackupFilePath) {
