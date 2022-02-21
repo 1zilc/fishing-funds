@@ -174,7 +174,7 @@
     "eslint-config-airbnb": "^19.0.1",
     "eslint-config-airbnb-typescript": "^15.0.0",
     "eslint-config-erb": "^3.0.0",
-    "eslint-config-prettier": "8.3.0",
+    "eslint-config-prettier": "8.4.0",
     "eslint-import-resolver-typescript": "^2.5.0",
     "eslint-import-resolver-webpack": "^0.13.0",
     "eslint-plugin-compat": "^4.0.0",
