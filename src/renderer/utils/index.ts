@@ -187,17 +187,7 @@ export function ParseRemoteFunds(code: string) {
 }
 
 export async function UpdateSystemTheme(setting: Enums.SystemThemeType) {
-  switch (setting) {
-    case Enums.SystemThemeType.Light:
-      await invoke.setNativeThemeSource('light');
-      break;
-    case Enums.SystemThemeType.Dark:
-      await invoke.setNativeThemeSource('dark');
-      break;
-    case Enums.SystemThemeType.Auto:
-    default:
-      await invoke.setNativeThemeSource('system');
-  }
+  await invoke.setNativeThemeSource(setting);
 }
 
 export function UnitTransform(value: number) {

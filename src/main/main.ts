@@ -15,7 +15,8 @@ import AppUpdater from './autoUpdater';
 import { appIcon, generateWalletIcon } from './icon';
 import { createTray } from './tray';
 import { createMenubar, buildContextMenu } from './menubar';
-import { lockSingleInstance, checkEnvTool, sendMessageToRenderer } from './util';
+import { lockSingleInstance, checkEnvTool, sendMessageToRenderer, setNativeTheme } from './util';
+import * as Enums from '../renderer/utils/enums';
 
 let mb: Menubar;
 let openBackupFilePath = '';
@@ -39,6 +40,7 @@ function main() {
   mb = createMenubar({ tray, mainWindowState });
   const appUpdater = new AppUpdater({ icon: appIcon, mb });
   let contextMenu = buildContextMenu({ mb, appUpdater }, []);
+  const defaultTheme = storage.get('SYSTEM_SETTING.systemThemeSetting', Enums.SystemThemeType.Auto) as Enums.SystemThemeType;
   // mb.app.commandLine.appendSwitch('disable-backgrounding-occluded-windows', 'true');
 
   // ipcMain 主进程相关监听
@@ -58,7 +60,7 @@ function main() {
     return nativeTheme.shouldUseDarkColors;
   });
   ipcMain.handle('set-native-theme-source', (event, config) => {
-    nativeTheme.themeSource = config;
+    setNativeTheme(config);
   });
   ipcMain.handle('set-login-item-settings', (event, config) => {
     app.setLoginItemSettings(config);
@@ -99,6 +101,8 @@ function main() {
   });
   // menubar 相关监听
   mb.on('after-create-window', () => {
+    // 设置系统色彩偏好
+    setNativeTheme(defaultTheme);
     // 系统级别高斯模糊
     if (process.platform === 'darwin') {
       mb.window!.setVibrancy('sidebar');
@@ -124,9 +128,9 @@ function main() {
       sendMessageToRenderer(mb, 'open-backup-file', openBackupFilePath);
     }
   });
-  mb.on('ready', () => {
-    // mb.window?.setVisibleOnAllWorkspaces(true);
-  });
+  // mb.on('ready', () => {
+  //   // mb.window?.setVisibleOnAllWorkspaces(true);
+  // });
   // new AppUpdater({ icon: nativeIcon, win: mb.window });
 }
 

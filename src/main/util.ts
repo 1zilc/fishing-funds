@@ -1,8 +1,9 @@
 import log from 'electron-log';
 import { Menubar } from 'menubar';
-import { app } from 'electron';
+import { app, nativeTheme } from 'electron';
 import { URL } from 'url';
 import * as path from 'path';
+import * as Enums from '../renderer/utils/enums';
 
 export function resolveHtmlPath(htmlFileName: string) {
   if (process.env.NODE_ENV === 'development') {
@@ -57,4 +58,19 @@ export function base64ToBuffer(dataUrl: string) {
 
 export function sendMessageToRenderer(mb: Menubar, key: string, data?: any) {
   return mb.window?.webContents.send(key, data);
+}
+
+export function setNativeTheme(theme: Enums.SystemThemeType) {
+  switch (theme) {
+    case Enums.SystemThemeType.Dark:
+      nativeTheme.themeSource = 'dark';
+      break;
+    case Enums.SystemThemeType.Light:
+      nativeTheme.themeSource = 'light';
+      break;
+    case Enums.SystemThemeType.Auto:
+    default:
+      nativeTheme.themeSource = 'system';
+      break;
+  }
 }
