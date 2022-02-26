@@ -53,6 +53,7 @@ const ViewerContent: React.FC<ViewerContentProps> = (props) => {
       setLoadingFalse();
       setTimeout(() => {
         setDoneTrue();
+        setPercent(0);
       }, 300);
     };
     viewRef.current?.addEventListener('new-window', newWindow);
