@@ -7,7 +7,7 @@
  * `./src/main.prod.js` using webpack. This gives us some performance wins.
  */
 
-import { app, globalShortcut, ipcMain, nativeTheme, dialog } from 'electron';
+import { app, globalShortcut, ipcMain, nativeTheme, dialog, webContents, shell } from 'electron';
 import windowStateKeeper from 'electron-window-state';
 import Store from 'electron-store';
 import { Menubar } from 'menubar';
@@ -91,6 +91,13 @@ function main() {
   ipcMain.handle('all-storage-config', async (event, config) => {
     return storage.store;
   });
+  ipcMain.handle('registry-webview', (event, config) => {
+    const contents = webContents.fromId(config);
+    contents.setWindowOpenHandler(({ url }) => {
+      sendMessageToRenderer(mb, 'webview-new-window', url);
+      return { action: 'deny' };
+    });
+  });
   ipcMain.handle('update-tray-context-menu-wallets', (event, config) => {
     const menus = config.map((item: any) => ({
       ...item,
@@ -127,6 +134,11 @@ function main() {
     if (openBackupFilePath) {
       sendMessageToRenderer(mb, 'open-backup-file', openBackupFilePath);
     }
+    // 外部打开 _blank连接
+    mb.window?.webContents.setWindowOpenHandler(({ url }) => {
+      shell.openExternal(url);
+      return { action: 'deny' };
+    });
   });
   // mb.on('ready', () => {
   //   // mb.window?.setVisibleOnAllWorkspaces(true);

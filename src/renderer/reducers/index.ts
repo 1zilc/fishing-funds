@@ -9,6 +9,7 @@ import stock from './stock';
 import coin from './coin';
 import setting from './setting';
 import sort from './sort';
+import web from './web';
 
 export default function createRootReducer() {
   return combineReducers({
@@ -22,5 +23,6 @@ export default function createRootReducer() {
     coin,
     setting,
     sort,
+    web,
   });
 }

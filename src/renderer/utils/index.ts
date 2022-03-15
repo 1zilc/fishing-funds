@@ -4,6 +4,7 @@ import dayjs from 'dayjs';
 import * as Enums from '@/utils/enums';
 import * as CONST from '@/constants';
 
+console.log(window.contextModules);
 const { invoke } = window.contextModules.electron;
 const { version, production } = window.contextModules.process;
 const { encodeFF, decodeFF } = window.contextModules.io;

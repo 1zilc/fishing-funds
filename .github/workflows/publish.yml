@@ -14,7 +14,7 @@ on:
 
 jobs:
   build_release:
-    runs-on: macOS-latest # runs a publish on macOS
+    runs-on: macos-latest # runs a publish on macOS
 
     steps:
       - name: Setup repo

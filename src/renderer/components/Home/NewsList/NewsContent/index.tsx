@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { Tabs } from 'antd';
+import { useDispatch } from 'react-redux';
 
 import FocusList from '@/components/Home/NewsList/NewsContent/FocusList';
 import LiveList from '@/components/Home/NewsList/NewsContent/LiveList';
@@ -14,10 +15,8 @@ import UsaList from '@/components/Home/NewsList/NewsContent/UsaList';
 import EuList from '@/components/Home/NewsList/NewsContent/EuList';
 import UkList from '@/components/Home/NewsList/NewsContent/UkList';
 import JpList from '@/components/Home/NewsList/NewsContent/JpList';
-import CustomDrawer from '@/components/CustomDrawer';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
-import ViewerContent from '@/components/ViewerContent';
-import { useDrawer } from '@/utils/hooks';
+import { openWebAction } from '@/actions/web';
 import styles from './index.module.scss';
 
 interface NewsContentProps {
@@ -26,60 +25,58 @@ interface NewsContentProps {
 }
 
 const NewsContent: React.FC<NewsContentProps> = (props) => {
-  const { data: viewerData, show: showViewerDataDrawer, set: setViewerDataDrawer, close: closeViewerDataDrawer } = useDrawer({ url: '' });
+  const dispatch = useDispatch();
+  const onViewWeb = useCallback((url) => dispatch(openWebAction({ title: '新闻详情', phone: true, url })), []);
 
   return (
     <CustomDrawerContent title="新闻动态" enterText="确定" onEnter={props.onEnter} onClose={props.onClose}>
       <div className={styles.content}>
         <Tabs animated={{ tabPane: true }} tabBarGutter={15}>
           <Tabs.TabPane tab="焦点" key={String(0)}>
-            <FocusList onView={(url) => setViewerDataDrawer({ url })} />
+            <FocusList onView={onViewWeb} />
           </Tabs.TabPane>
           <Tabs.TabPane tab="股市直播" key={String(1)}>
-            <LiveList onView={(url) => setViewerDataDrawer({ url })} />
+            <LiveList onView={onViewWeb} />
           </Tabs.TabPane>
           <Tabs.TabPane tab="上市公司" key={String(2)}>
-            <ListedList onView={(url) => setViewerDataDrawer({ url })} />
+            <ListedList onView={onViewWeb} />
           </Tabs.TabPane>
           <Tabs.TabPane tab="全球直播" key={String(3)}>
-            <GlobalList onView={(url) => setViewerDataDrawer({ url })} />
+            <GlobalList onView={onViewWeb} />
           </Tabs.TabPane>
         </Tabs>
         <Tabs animated={{ tabPane: true }} tabBarGutter={15}>
           <Tabs.TabPane tab="商品" key={String(0)}>
-            <GoodsList onView={(url) => setViewerDataDrawer({ url })} />
+            <GoodsList onView={onViewWeb} />
           </Tabs.TabPane>
           <Tabs.TabPane tab="外汇" key={String(1)}>
-            <ExchangeList onView={(url) => setViewerDataDrawer({ url })} />
+            <ExchangeList onView={onViewWeb} />
           </Tabs.TabPane>
           <Tabs.TabPane tab="债券" key={String(2)}>
-            <BondList onView={(url) => setViewerDataDrawer({ url })} />
+            <BondList onView={onViewWeb} />
           </Tabs.TabPane>
           <Tabs.TabPane tab="基金" key={String(3)}>
-            <FundList onView={(url) => setViewerDataDrawer({ url })} />
+            <FundList onView={onViewWeb} />
           </Tabs.TabPane>
         </Tabs>
         <Tabs animated={{ tabPane: true }} tabBarGutter={15}>
           <Tabs.TabPane tab="中国央行" key={String(0)}>
-            <ChinaList onView={(url) => setViewerDataDrawer({ url })} />
+            <ChinaList onView={onViewWeb} />
           </Tabs.TabPane>
           <Tabs.TabPane tab="美联储" key={String(1)}>
-            <UsaList onView={(url) => setViewerDataDrawer({ url })} />
+            <UsaList onView={onViewWeb} />
           </Tabs.TabPane>
           <Tabs.TabPane tab="欧洲" key={String(2)}>
-            <EuList onView={(url) => setViewerDataDrawer({ url })} />
+            <EuList onView={onViewWeb} />
           </Tabs.TabPane>
           <Tabs.TabPane tab="英国" key={String(3)}>
-            <UkList onView={(url) => setViewerDataDrawer({ url })} />
+            <UkList onView={onViewWeb} />
           </Tabs.TabPane>
           <Tabs.TabPane tab="日本" key={String(4)}>
-            <JpList onView={(url) => setViewerDataDrawer({ url })} />
+            <JpList onView={onViewWeb} />
           </Tabs.TabPane>
         </Tabs>
       </div>
-      <CustomDrawer show={showViewerDataDrawer}>
-        <ViewerContent {...viewerData} title="新闻详情" phone onClose={closeViewerDataDrawer} onEnter={closeViewerDataDrawer} />
-      </CustomDrawer>
     </CustomDrawerContent>
   );
 };
