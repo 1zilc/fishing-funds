@@ -125,9 +125,9 @@
 .favorite {
   border-radius: 3px;
   font-size: 8px;
-  border: 1px solid var(--primary-color);
-  color: var(--primary-color);
-  padding: 0 4px;
+  color: var(--tag-text-color);
+  background-color: var(--primary-color);
+  padding: 0 3px;
   text-align: center;
   word-break: keep-all;
   margin-left: 5px;

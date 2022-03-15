@@ -66,7 +66,7 @@
 }
 
 .warn {
-  color: var(--background-color);
+  color: var(--tag-text-color);
   background-color: var(--warn-color);
   font-size: 8px;
   border-radius: 3px;
@@ -143,10 +143,10 @@
   text-decoration: line-through;
 }
 .hold {
+  color: var(--tag-text-color);
   border-radius: 3px;
   font-size: 8px;
   background-color: var(--primary-color);
-  color: var(--background-color);
   padding: 0 3px;
   text-align: center;
   word-break: keep-all;

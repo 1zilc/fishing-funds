@@ -121,11 +121,12 @@
 .tag {
   border-radius: 3px;
   font-size: 8px;
-  padding: 0 4px;
+  padding: 0 3px;
   text-align: center;
   word-break: keep-all;
   margin-left: 5px;
   transition: 0.3s;
+  color: var(--tag-text-color);
 
   &:hover {
     filter: brightness(115%);
