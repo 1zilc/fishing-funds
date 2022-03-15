@@ -128,7 +128,26 @@
   "bugs": {
     "url": "https://github.com/1zilc/fishing-funds/issues"
   },
-  "keywords": ["funds", "electron", "boilerplate", "react", "typescript", "ts", "sass", "webpack", "hot", "reload"],
+  "keywords": [
+    "electron",
+    "react",
+    "redux",
+    "macos",
+    "linux",
+    "homebrew",
+    "menubar",
+    "typescript",
+    "bitcoin",
+    "stock",
+    "cryptocurrency",
+    "alipay",
+    "wechat",
+    "chinese",
+    "antd",
+    "echarts",
+    "funds",
+    "snapcraft"
+  ],
   "homepage": "https://github.com/1zilc",
   "jest": {
     "testURL": "http://localhost/",
