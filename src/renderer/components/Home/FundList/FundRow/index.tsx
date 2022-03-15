@@ -80,14 +80,13 @@ const FundRow: React.FC<RowProps> = (props) => {
           <div style={{ display: 'flex', alignItems: 'center' }}>
             <span className={styles.fundName}>{fund.name}</span>
             {!!calcFundResult.cyfe && <span className={styles.hold}>持有</span>}
-            {conciseSetting && isFix && <span className={styles.warn}>净值更新</span>}
+            {isFix && <span className={styles.warn}>更新</span>}
           </div>
           {!conciseSetting && (
             <div className={styles.rowBar}>
               <div>
                 <span className={styles.code}>{fund.fundcode}</span>
                 <span>{isFix ? calcFundResult.fixDate : calcFundResult.gztime?.slice(5)}</span>
-                {isFix && <span className={styles.warn}>净值更新</span>}
                 {eyeStatus === Enums.EyeStatus.Open && (
                   <span className={classnames(Utils.GetValueColor(calcFundResult.jrsygz).textClass, styles.worth)}>
                     {Utils.Yang(calcFundResult.jrsygz.toFixed(2))}
