@@ -229,6 +229,22 @@ export function syncSortModeAction(newSortMode: any): ThunkAction {
   };
 }
 
+export function setFundViewModeAction(mode: { type: Enums.FundViewType }): ThunkAction {
+  return (dispatch, getState) => {
+    try {
+      const {
+        sort: { viewMode },
+      } = getState();
+
+      const fundViewMode = { ...viewMode.fundViewMode, ...mode };
+
+      dispatch(syncViewModeAction({ ...viewMode, fundViewMode }));
+
+      Utils.SetStorage(CONST.STORAGE.FUND_VIEW_MODE, fundViewMode);
+    } catch (error) {}
+  };
+}
+
 export function setZindexViewModeAction(mode: { type: Enums.ZindexViewType }): ThunkAction {
   return (dispatch, getState) => {
     try {
@@ -257,6 +273,36 @@ export function setQuotationViewModeAction(mode: { type: Enums.QuotationViewType
       dispatch(syncViewModeAction({ ...viewMode, quotationViewMode }));
 
       Utils.SetStorage(CONST.STORAGE.QUOTATION_VIEW_MODE, quotationViewMode);
+    } catch (error) {}
+  };
+}
+export function setStockViewModeAction(mode: { type: Enums.StockViewType }): ThunkAction {
+  return (dispatch, getState) => {
+    try {
+      const {
+        sort: { viewMode },
+      } = getState();
+
+      const stockViewMode = { ...viewMode.stockViewMode, ...mode };
+
+      dispatch(syncViewModeAction({ ...viewMode, stockViewMode }));
+
+      Utils.SetStorage(CONST.STORAGE.STOCK_VIEW_MODE, stockViewMode);
+    } catch (error) {}
+  };
+}
+export function setCoinViewModeAction(mode: { type: Enums.CoinViewType }): ThunkAction {
+  return (dispatch, getState) => {
+    try {
+      const {
+        sort: { viewMode },
+      } = getState();
+
+      const coinViewMode = { ...viewMode.coinViewMode, ...mode };
+
+      dispatch(syncViewModeAction({ ...viewMode, coinViewMode }));
+
+      Utils.SetStorage(CONST.STORAGE.COIN_VIEW_MODE, coinViewMode);
     } catch (error) {}
   };
 }

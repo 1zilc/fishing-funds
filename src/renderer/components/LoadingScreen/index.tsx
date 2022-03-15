@@ -105,13 +105,22 @@ const LoadingScreen: React.FC<LoadingScreenProps> = () => {
     dispatch(syncSortModeAction({ fundSortMode, zindexSortMode, quotationSortMode, stockSortMode, coinSortMode }));
 
     setLoading('加载视图配置...');
+    const fundViewMode = await Utils.GetStorage(CONST.STORAGE.FUND_VIEW_MODE, {
+      type: Enums.FundViewType.List,
+    });
     const zindexViewMode = await Utils.GetStorage(CONST.STORAGE.ZINDEX_VIEW_MODE, {
       type: Enums.ZindexViewType.Grid,
     });
     const quotationViewMode = await Utils.GetStorage(CONST.STORAGE.QUOTATION_VIEW_MODE, {
       type: Enums.QuotationViewType.List,
     });
-    dispatch(syncViewModeAction({ zindexViewMode, quotationViewMode }));
+    const stockViewMode = await Utils.GetStorage(CONST.STORAGE.STOCK_VIEW_MODE, {
+      type: Enums.StockViewType.List,
+    });
+    const coinViewMode = await Utils.GetStorage(CONST.STORAGE.COIN_VIEW_MODE, {
+      type: Enums.CoinViewType.List,
+    });
+    dispatch(syncViewModeAction({ fundViewMode, zindexViewMode, quotationViewMode, stockViewMode, coinViewMode }));
 
     setLoading('加载远程数据缓存...');
     const remoteFundMap = await Utils.GetStorage(CONST.STORAGE.REMOTE_FUND_MAP, {});

@@ -197,11 +197,23 @@ export enum QuotationType {
   Concept,
 }
 
+export enum FundViewType {
+  List,
+  Grid,
+}
 export enum ZindexViewType {
   List,
   Grid,
 }
 export enum QuotationViewType {
+  List,
+  Grid,
+}
+export enum StockViewType {
+  List,
+  Grid,
+}
+export enum CoinViewType {
   List,
   Grid,
 }

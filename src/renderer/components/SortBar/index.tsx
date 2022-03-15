@@ -22,8 +22,11 @@ import {
   troggleStockSortOrderAction,
   setCoinSortModeAction,
   troggleCoinSortOrderAction,
+  setFundViewModeAction,
   setZindexViewModeAction,
   setQuotationViewModeAction,
+  setStockViewModeAction,
+  setCoinViewModeAction,
 } from '@/actions/sort';
 import CustomDrawer from '@/components/CustomDrawer';
 import ManageFundContent from '@/components/Home/FundList/ManageFundContent';
@@ -59,6 +62,10 @@ function FundsSortBar() {
     fundSortMode: { type: fundSortType, order: fundSortOrder },
   } = useSelector((state: StoreState) => state.sort.sortMode);
 
+  const {
+    fundViewMode: { type: fundViewType },
+  } = useSelector((state: StoreState) => state.sort.viewMode);
+
   const { fundSortModeOptions, fundSortModeOptionsMap } = Helpers.Sort.GetSortConfig();
 
   const {
@@ -91,6 +98,14 @@ function FundsSortBar() {
         >
           管理
         </a>
+      </div>
+      <div className={styles.view}>
+        {fundViewType === Enums.FundViewType.List && (
+          <LayoutListIcon onClick={() => dispatch(setFundViewModeAction({ type: Enums.FundViewType.Grid }))} />
+        )}
+        {fundViewType === Enums.FundViewType.Grid && (
+          <LayoutGridIcon onClick={() => dispatch(setFundViewModeAction({ type: Enums.FundViewType.List }))} />
+        )}
       </div>
       <div className={styles.mode}>
         <Dropdown
@@ -300,6 +315,10 @@ function StockSortBar() {
     stockSortMode: { type: stockSortType, order: stockSortOrder },
   } = useSelector((state: StoreState) => state.sort.sortMode);
 
+  const {
+    stockViewMode: { type: stockViewType },
+  } = useSelector((state: StoreState) => state.sort.viewMode);
+
   const { stockSortModeOptions, stockSortModeOptionsMap } = Helpers.Sort.GetSortConfig();
 
   const stocks = useSelector((state: StoreState) => state.stock.stocks);
@@ -330,6 +349,14 @@ function StockSortBar() {
         >
           管理
         </a>
+      </div>
+      <div className={styles.view}>
+        {stockViewType === Enums.StockViewType.List && (
+          <LayoutListIcon onClick={() => dispatch(setStockViewModeAction({ type: Enums.StockViewType.Grid }))} />
+        )}
+        {stockViewType === Enums.StockViewType.Grid && (
+          <LayoutGridIcon onClick={() => dispatch(setStockViewModeAction({ type: Enums.StockViewType.List }))} />
+        )}
       </div>
       <div className={styles.mode}>
         <Dropdown
@@ -379,6 +406,10 @@ function CoinSortBar() {
     coinSortMode: { type: coinSortType, order: coinSortOrder },
   } = useSelector((state: StoreState) => state.sort.sortMode);
 
+  const {
+    coinViewMode: { type: coinViewType },
+  } = useSelector((state: StoreState) => state.sort.viewMode);
+
   const { coinSortModeOptions, coinSortModeOptionsMap } = Helpers.Sort.GetSortConfig();
 
   const coins = useSelector((state: StoreState) => state.coin.coins);
@@ -409,6 +440,14 @@ function CoinSortBar() {
         >
           管理
         </a>
+      </div>
+      <div className={styles.view}>
+        {coinViewType === Enums.CoinViewType.List && (
+          <LayoutListIcon onClick={() => dispatch(setCoinViewModeAction({ type: Enums.CoinViewType.Grid }))} />
+        )}
+        {coinViewType === Enums.CoinViewType.Grid && (
+          <LayoutGridIcon onClick={() => dispatch(setCoinViewModeAction({ type: Enums.CoinViewType.List }))} />
+        )}
       </div>
       <div className={styles.mode}>
         <Dropdown

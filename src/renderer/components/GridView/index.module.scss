@@ -23,6 +23,14 @@
   color: var(--main-text-color);
   justify-content: space-between;
   font-weight: 500;
+
+  & > div:first-child {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    word-break: break-all;
+    flex: 1;
+  }
 }
 .value {
   font-size: 1.2rem;
