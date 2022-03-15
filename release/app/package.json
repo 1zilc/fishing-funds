@@ -15,14 +15,5 @@
     "postinstall": "npm run electron-rebuild && npm run link-modules"
   },
   "license": "(ISC OR GPL-3.0)",
-  "dependencies": {},
-  "bugs": {
-    "url": "https://github.com/1zilc/fishing-funds/issues/new/choose",
-    "email": "dywzzjx@163.com"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/1zilc"
-  },
-  "homepage": "https://ff.1zilc.top"
+  "dependencies": {}
 }
