@@ -1,6 +1,6 @@
 {
   "name": "fishing-funds",
-  "version": "5.6.0",
+  "version": "5.7.0",
   "productName": "Fishing Funds",
   "description": "基金,大盘,股票,虚拟货币状态栏显示小应用,基于Electron开发,支持 MacOS,Windows,Linux客户端,数据源来自天天基金,蚂蚁基金,爱基金,腾讯证券,新浪基金等",
   "main": "./dist/main/main.js",
@@ -15,14 +15,7 @@
     "postinstall": "npm run electron-rebuild && npm run link-modules"
   },
   "license": "(ISC OR GPL-3.0)",
-  "dependencies": {},
-  "bugs": {
-    "url": "https://github.com/1zilc/fishing-funds/issues/new/choose",
-    "email": "dywzzjx@163.com"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/1zilc"
-  },
-  "homepage": "https://ff.1zilc.top"
+  "dependencies": {
+    "install": "^0.13.0"
+  }
 }

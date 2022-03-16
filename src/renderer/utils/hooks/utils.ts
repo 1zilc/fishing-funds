@@ -259,6 +259,30 @@ export function useFreshFunds(throttleDelay: number) {
   return freshFunds;
 }
 
+export function useFreshZindexs(throttleDelay: number) {
+  const { run: runLoadZindexs } = useThrottleFn(Helpers.Zindex.LoadZindexs, { wait: throttleDelay });
+  const freshZindexs = useScrollToTop({ after: () => runLoadZindexs(true) });
+  return freshZindexs;
+}
+
+export function useFreshQuotations(throttleDelay: number) {
+  const { run: runLoadQuotations } = useThrottleFn(Helpers.Quotation.LoadQuotations, { wait: throttleDelay });
+  const freshQuotations = useScrollToTop({ after: () => runLoadQuotations(true) });
+  return freshQuotations;
+}
+
+export function useFreshStocks(throttleDelay: number) {
+  const { run: runLoadStocks } = useThrottleFn(Helpers.Stock.LoadStocks, { wait: throttleDelay });
+  const freshStocks = useScrollToTop({ after: () => runLoadStocks(true) });
+  return freshStocks;
+}
+
+export function useFreshCoins(throttleDelay: number) {
+  const { run: runLoadCoins } = useThrottleFn(Helpers.Coin.LoadCoins, { wait: throttleDelay });
+  const freshCoins = useScrollToTop({ after: () => runLoadCoins(true) });
+  return freshCoins;
+}
+
 export function useDrawer<T>(initialData: T) {
   const [drawer, setDrawer] = useState({
     data: initialData,

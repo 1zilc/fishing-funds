@@ -128,7 +128,7 @@ const StockRow: React.FC<RowProps> = (props) => {
             {industrys.map((industry) => {
               const color = colorHash.hex(industry.name);
               return (
-                <span key={industry.code} className={styles.tag} style={{ color, border: `1px solid ${color}` }}>
+                <span key={industry.code} className={styles.tag} style={{ backgroundColor: color }}>
                   {industry.name}
                 </span>
               );

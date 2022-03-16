@@ -12,11 +12,20 @@ export type SortState = {
     coinSortMode: Helpers.Sort.CoinSortType;
   };
   viewMode: {
+    fundViewMode: {
+      type: Enums.FundViewType;
+    };
     zindexViewMode: {
       type: Enums.ZindexViewType;
     };
     quotationViewMode: {
       type: Enums.QuotationViewType;
+    };
+    stockViewMode: {
+      type: Enums.StockViewType;
+    };
+    coinViewMode: {
+      type: Enums.CoinViewType;
     };
   };
 };
@@ -46,11 +55,20 @@ const sort: Reducer<SortState> = (
       },
     },
     viewMode: {
+      fundViewMode: {
+        type: Enums.FundViewType.List,
+      },
       zindexViewMode: {
         type: Enums.ZindexViewType.Grid,
       },
       quotationViewMode: {
         type: Enums.QuotationViewType.List,
+      },
+      stockViewMode: {
+        type: Enums.StockViewType.List,
+      },
+      coinViewMode: {
+        type: Enums.CoinViewType.List,
       },
     },
   },

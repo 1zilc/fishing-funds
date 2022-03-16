@@ -238,7 +238,7 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
           },
           'card-body'
         )}
-        onClick={() => isUpdateAvaliable && shell.openExternal('https://ff.1zilc.top/#download')}
+        onClick={() => isUpdateAvaliable && onNavigate('https://ff.1zilc.top/#download')}
       >
         <Logo />
         <Badge count={isUpdateAvaliable ? `v${updateInfo.version} 可更新` : 0} style={{ fontSize: 8 }} size="small">
@@ -527,7 +527,7 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
                 </section>
                 <section>
                   <label>Telegram：</label>
-                  <a onClick={() => onCopyGroup('https://t.me/fishing_funds')}>https://t.me/fishing_funds</a>
+                  <a onClick={() => onNavigate('https://t.me/fishing_funds')}>t.me/fishing_funds</a>
                 </section>
               </div>
             </StandCard>
@@ -537,7 +537,7 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
                   <div key={index} className={styles.link}>
                     {links.map((link) => (
                       <React.Fragment key={link.name}>
-                        <a onClick={(e) => shell.openExternal(link.url)}>{link.name}</a>
+                        <a onClick={(e) => onNavigate(link.url)}>{link.name}</a>
                         <i />
                       </React.Fragment>
                     ))}

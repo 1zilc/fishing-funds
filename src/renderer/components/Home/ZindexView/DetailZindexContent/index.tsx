@@ -57,7 +57,7 @@ const DetailZindexContent: React.FC<DetailFundContentProps> = (props) => {
           </div>
           <div className={styles.detail}>
             <div className={classnames(styles.detailItem, 'text-left')}>
-              <div className={classnames(Utils.GetValueColor(zindex.jk - zindex.zs).textClass)}>{Utils.Yang(zindex.jk)}</div>
+              <div className={classnames(Utils.GetValueColor(zindex.jk - zindex.zs).textClass)}>{zindex.jk}</div>
               <div className={styles.detailItemLabel}>今开</div>
             </div>
             <div className={classnames(styles.detailItem, 'text-center')}>

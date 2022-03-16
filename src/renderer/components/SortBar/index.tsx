@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { useScroll, useDebounceFn, useBoolean } from 'ahooks';
+import { useScroll, useDebounceFn, useBoolean, useThrottleFn } from 'ahooks';
 import { useSelector, useDispatch } from 'react-redux';
 import classsames from 'classnames';
 import { Dropdown, Menu } from 'antd';
@@ -22,8 +22,11 @@ import {
   troggleStockSortOrderAction,
   setCoinSortModeAction,
   troggleCoinSortOrderAction,
+  setFundViewModeAction,
   setZindexViewModeAction,
   setQuotationViewModeAction,
+  setStockViewModeAction,
+  setCoinViewModeAction,
 } from '@/actions/sort';
 import CustomDrawer from '@/components/CustomDrawer';
 import ManageFundContent from '@/components/Home/FundList/ManageFundContent';
@@ -36,8 +39,17 @@ import { toggleAllZindexsCollapseAction } from '@/actions/zindex';
 import { toggleAllQuotationsCollapse } from '@/actions/quotation';
 import { toggleAllStocksCollapseAction } from '@/actions/stock';
 import { toggleAllCoinsCollapseAction } from '@/actions/coin';
-import { useCurrentWallet } from '@/utils/hooks';
+import {
+  useScrollToTop,
+  useFreshFunds,
+  useFreshZindexs,
+  useFreshQuotations,
+  useFreshStocks,
+  useFreshCoins,
+  useCurrentWallet,
+} from '@/utils/hooks';
 import * as Enums from '@/utils/enums';
+import * as CONST from '@/constants';
 import * as Helpers from '@/helpers';
 import styles from './index.module.scss';
 
@@ -49,6 +61,10 @@ function FundsSortBar() {
   const {
     fundSortMode: { type: fundSortType, order: fundSortOrder },
   } = useSelector((state: StoreState) => state.sort.sortMode);
+
+  const {
+    fundViewMode: { type: fundViewType },
+  } = useSelector((state: StoreState) => state.sort.viewMode);
 
   const { fundSortModeOptions, fundSortModeOptionsMap } = Helpers.Sort.GetSortConfig();
 
@@ -62,6 +78,8 @@ function FundsSortBar() {
   const [expandAllFunds, expandSomeFunds] = useMemo(() => {
     return [funds.every((_) => _.collapse), funds.some((_) => _.collapse)];
   }, [funds]);
+
+  const freshFunds = useFreshFunds(CONST.DEFAULT.FRESH_BUTTON_THROTTLE_DELAY);
 
   const toggleFundsCollapse = () => dispatch(toggleAllFundsCollapseAction());
 
@@ -80,6 +98,14 @@ function FundsSortBar() {
         >
           管理
         </a>
+      </div>
+      <div className={styles.view}>
+        {fundViewType === Enums.FundViewType.List && (
+          <LayoutListIcon onClick={() => dispatch(setFundViewModeAction({ type: Enums.FundViewType.Grid }))} />
+        )}
+        {fundViewType === Enums.FundViewType.Grid && (
+          <LayoutGridIcon onClick={() => dispatch(setFundViewModeAction({ type: Enums.FundViewType.List }))} />
+        )}
       </div>
       <div className={styles.mode}>
         <Dropdown
@@ -110,7 +136,13 @@ function FundsSortBar() {
         />
       </div>
       <CustomDrawer show={showManageFundDrawer}>
-        <ManageFundContent onClose={closeManageFundDrawer} onEnter={closeManageFundDrawer} />
+        <ManageFundContent
+          onClose={closeManageFundDrawer}
+          onEnter={() => {
+            freshFunds();
+            closeManageFundDrawer();
+          }}
+        />
       </CustomDrawer>
     </div>
   );
@@ -137,6 +169,8 @@ function ZindexSortBar() {
   const [expandAllZindexs, expandSomeZindexs] = useMemo(() => {
     return [zindexs.every((_) => _.collapse), zindexs.some((_) => _.collapse)];
   }, [zindexs]);
+
+  const freshZindexs = useFreshZindexs(CONST.DEFAULT.FRESH_BUTTON_THROTTLE_DELAY);
 
   const toggleZindexsCollapse = () => dispatch(toggleAllZindexsCollapseAction());
 
@@ -193,7 +227,13 @@ function ZindexSortBar() {
         />
       </div>
       <CustomDrawer show={showManageZindexDrawer}>
-        <ManageZindexContent onClose={closeManageZindexDrawer} onEnter={closeManageZindexDrawer} />
+        <ManageZindexContent
+          onClose={closeManageZindexDrawer}
+          onEnter={() => {
+            freshZindexs();
+            closeManageZindexDrawer();
+          }}
+        />
       </CustomDrawer>
     </div>
   );
@@ -275,6 +315,10 @@ function StockSortBar() {
     stockSortMode: { type: stockSortType, order: stockSortOrder },
   } = useSelector((state: StoreState) => state.sort.sortMode);
 
+  const {
+    stockViewMode: { type: stockViewType },
+  } = useSelector((state: StoreState) => state.sort.viewMode);
+
   const { stockSortModeOptions, stockSortModeOptionsMap } = Helpers.Sort.GetSortConfig();
 
   const stocks = useSelector((state: StoreState) => state.stock.stocks);
@@ -285,6 +329,8 @@ function StockSortBar() {
   const [expandAllStocks, expandSomeStocks] = useMemo(() => {
     return [stocks.every((_) => _.collapse), stocks.some((_) => _.collapse)];
   }, [stocks]);
+
+  const freshStocks = useFreshStocks(CONST.DEFAULT.FRESH_BUTTON_THROTTLE_DELAY);
 
   const toggleStocksCollapse = () => dispatch(toggleAllStocksCollapseAction());
 
@@ -303,6 +349,14 @@ function StockSortBar() {
         >
           管理
         </a>
+      </div>
+      <div className={styles.view}>
+        {stockViewType === Enums.StockViewType.List && (
+          <LayoutListIcon onClick={() => dispatch(setStockViewModeAction({ type: Enums.StockViewType.Grid }))} />
+        )}
+        {stockViewType === Enums.StockViewType.Grid && (
+          <LayoutGridIcon onClick={() => dispatch(setStockViewModeAction({ type: Enums.StockViewType.List }))} />
+        )}
       </div>
       <div className={styles.mode}>
         <Dropdown
@@ -333,7 +387,13 @@ function StockSortBar() {
         />
       </div>
       <CustomDrawer show={showManageStockDrawer}>
-        <ManageStockContent onClose={closeManageStockDrawer} onEnter={closeManageStockDrawer} />
+        <ManageStockContent
+          onClose={closeManageStockDrawer}
+          onEnter={() => {
+            freshStocks();
+            closeManageStockDrawer();
+          }}
+        />
       </CustomDrawer>
     </div>
   );
@@ -346,6 +406,10 @@ function CoinSortBar() {
     coinSortMode: { type: coinSortType, order: coinSortOrder },
   } = useSelector((state: StoreState) => state.sort.sortMode);
 
+  const {
+    coinViewMode: { type: coinViewType },
+  } = useSelector((state: StoreState) => state.sort.viewMode);
+
   const { coinSortModeOptions, coinSortModeOptionsMap } = Helpers.Sort.GetSortConfig();
 
   const coins = useSelector((state: StoreState) => state.coin.coins);
@@ -357,7 +421,10 @@ function CoinSortBar() {
     return [coins.every((_) => _.collapse), coins.some((_) => _.collapse)];
   }, [coins]);
 
+  const freshCoins = useFreshCoins(CONST.DEFAULT.FRESH_BUTTON_THROTTLE_DELAY);
+
   const toggleCoinsCollapse = () => dispatch(toggleAllCoinsCollapseAction());
+
   return (
     <div className={styles.bar}>
       <div className={styles.arrow} onClick={toggleCoinsCollapse}>
@@ -373,6 +440,14 @@ function CoinSortBar() {
         >
           管理
         </a>
+      </div>
+      <div className={styles.view}>
+        {coinViewType === Enums.CoinViewType.List && (
+          <LayoutListIcon onClick={() => dispatch(setCoinViewModeAction({ type: Enums.CoinViewType.Grid }))} />
+        )}
+        {coinViewType === Enums.CoinViewType.Grid && (
+          <LayoutGridIcon onClick={() => dispatch(setCoinViewModeAction({ type: Enums.CoinViewType.List }))} />
+        )}
       </div>
       <div className={styles.mode}>
         <Dropdown
@@ -403,7 +478,13 @@ function CoinSortBar() {
         />
       </div>
       <CustomDrawer show={showManageCoinDrawer}>
-        <ManageCoinContent onClose={closeManageCoinDrawer} onEnter={closeManageCoinDrawer} />
+        <ManageCoinContent
+          onClose={closeManageCoinDrawer}
+          onEnter={() => {
+            freshCoins();
+            closeManageCoinDrawer();
+          }}
+        />
       </CustomDrawer>
     </div>
   );

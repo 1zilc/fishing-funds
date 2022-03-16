@@ -24,12 +24,9 @@ export function createMenubar({ tray, mainWindowState }: { tray: Tray; mainWindo
       maxHeight: 1000,
       maxWidth: 600,
       webPreferences: {
-        contextIsolation: true,
-        nodeIntegration: false,
         webviewTag: true,
         devTools: !app.isPackaged,
         preload: path.join(__dirname, 'preload.js'),
-        nativeWindowOpen: false,
       },
     },
   });

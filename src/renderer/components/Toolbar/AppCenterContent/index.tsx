@@ -1,10 +1,10 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useCallback } from 'react';
 import ColorHash from 'color-hash';
 import { useBoolean } from 'ahooks';
 import { Input } from 'antd';
+import { useDispatch } from 'react-redux';
 
 import WalletIcon from '@/static/icon/wallet.svg';
-import ChartBoxIcon from '@/static/icon/chart-box.svg';
 import NewsIcon from '@/static/icon/news.svg';
 import ExchangeIcon from '@/static/icon/exchange.svg';
 import BubbleIcon from '@/static/icon/bubble.svg';
@@ -44,8 +44,7 @@ import FundRankingContent from '@/components/Home/FundList/FundRankingContent';
 import StockRankingContent from '@/components/Home/StockList/StockRankingContent';
 import CoinRankingContent from '@/components/Home/CoinList/CoinRankingContent';
 import EconomicCalendarContent from '@/components/Home/StockList/EconomicCalendarContent';
-import ViewerContent from '@/components/ViewerContent';
-import { useDrawer } from '@/utils/hooks';
+import { openWebAction } from '@/actions/web';
 
 import styles from './index.module.scss';
 
@@ -100,6 +99,7 @@ function renderApps(groups: { name: string; config: AppConfig[] }[], keyword: st
 }
 
 const AppCenterContent: React.FC<AppCenterContentProps> = (props) => {
+  const dispatch = useDispatch();
   const [keyword, setKeyword] = useState('');
   const [showManageFundDrawer, { setTrue: openManageFundDrawer, setFalse: closeManageFundDrawer }] = useBoolean(false);
   const [showManageWalletDrawer, { setTrue: openManageWalletDrawer, setFalse: closeManageWalletDrawer }] = useBoolean(false);
@@ -118,12 +118,7 @@ const AppCenterContent: React.FC<AppCenterContentProps> = (props) => {
   const [showCoinRankingDrawer, { setTrue: openCoinRankingDrawer, setFalse: closeCoinRankingDrawer }] = useBoolean(false);
   const [showEconomicCalendarDrawer, { setTrue: openEconomicCalendarDrawer, setFalse: closeEconomicCalendarDrawer }] = useBoolean(false);
 
-  const {
-    data: viewerData,
-    show: showViewerDataDrawer,
-    set: setViewerDataDrawer,
-    close: closeViewerDataDrawer,
-  } = useDrawer({ title: '', url: '', phone: false });
+  const onViewWeb = useCallback((args) => dispatch(openWebAction(args)), []);
 
   const apps = useMemo(
     () =>
@@ -231,79 +226,79 @@ const AppCenterContent: React.FC<AppCenterContentProps> = (props) => {
                 name: '新浪微博',
                 icon: <WeiboIcon style={{ ...iconSize }} />,
                 color: '#F7C544',
-                click: () => setViewerDataDrawer({ title: '新浪微博', url: 'https://m.weibo.cn/', phone: false }),
+                click: () => onViewWeb({ title: '新浪微博', url: 'https://m.weibo.cn/', phone: false }),
               },
               {
                 name: '网易云音乐',
                 icon: <NeteaseIcon style={{ ...iconSize }} />,
                 color: '#D8001A',
-                click: () => setViewerDataDrawer({ title: '网易云音乐', url: 'https://y.music.163.com', phone: true }),
+                click: () => onViewWeb({ title: '网易云音乐', url: 'https://y.music.163.com', phone: true }),
               },
               {
                 name: '天天基金',
                 icon: <FundsIcon style={{ ...iconSize }} />,
                 color: '#EB5328',
-                click: () => setViewerDataDrawer({ title: '天天基金', url: 'https://h5.1234567.com.cn/', phone: false }),
+                click: () => onViewWeb({ title: '天天基金', url: 'https://h5.1234567.com.cn/', phone: false }),
               },
               {
                 name: 'Telegram',
                 icon: <TelegramIcon style={{ ...iconSize }} />,
                 color: '#30A9EE',
-                click: () => setViewerDataDrawer({ title: 'Telegram', url: 'https://web.telegram.org/', phone: false }),
+                click: () => onViewWeb({ title: 'Telegram', url: 'https://web.telegram.org/', phone: false }),
               },
               {
                 name: '淘宝',
                 icon: <TaobaoIcon style={{ ...iconSize }} />,
                 color: '#EC5D2A',
-                click: () => setViewerDataDrawer({ title: '淘宝', url: 'https://main.m.taobao.com/', phone: true }),
+                click: () => onViewWeb({ title: '淘宝', url: 'https://main.m.taobao.com/', phone: true }),
               },
               {
                 name: 'Github',
                 icon: <GithubIcon style={{ ...iconSize }} />,
                 color: '#24292f',
-                click: () => setViewerDataDrawer({ title: 'Github', url: 'https://github.com/', phone: false }),
+                click: () => onViewWeb({ title: 'Github', url: 'https://github.com/', phone: false }),
               },
               {
                 name: 'bilibili',
                 icon: <BilibiliIcon style={{ ...iconSize }} />,
                 color: '#fb7299',
-                click: () => setViewerDataDrawer({ title: 'bilibili', url: 'https://m.bilibili.com/', phone: true }),
+                click: () => onViewWeb({ title: 'bilibili', url: 'https://m.bilibili.com/', phone: true }),
               },
               {
                 name: 'YouTube',
                 icon: <YoutubeIcon style={{ ...iconSize }} />,
                 color: '#E93223',
-                click: () => setViewerDataDrawer({ title: 'YouTube', url: 'https://www.youtube.com/', phone: false }),
+                click: () => onViewWeb({ title: 'YouTube', url: 'https://www.youtube.com/', phone: false }),
               },
               {
                 name: 'IT之家',
                 icon: <i style={{ ...iconSize }}>IT</i>,
                 color: '#C1362D',
-                click: () => setViewerDataDrawer({ title: 'IT之家', url: 'https://m.ithome.com/', phone: false }),
+                click: () => onViewWeb({ title: 'IT之家', url: 'https://m.ithome.com/', phone: false }),
               },
               {
                 name: '掘金',
                 icon: <i style={{ ...iconSize }}>掘</i>,
                 color: '#3B81F7',
-                click: () => setViewerDataDrawer({ title: '掘金', url: 'https://juejin.cn/', phone: true }),
+                click: () => onViewWeb({ title: '掘金', url: 'https://juejin.cn/', phone: true }),
               },
               {
                 name: '虎牙直播',
                 icon: <i style={{ ...iconSize }}>虎</i>,
                 color: '#E68131',
-                click: () => setViewerDataDrawer({ title: '虎牙直播', url: 'https://m.huya.com/', phone: true }),
+                click: () => onViewWeb({ title: '虎牙直播', url: 'https://m.huya.com/', phone: true }),
               },
               {
                 name: '同花顺',
                 icon: <i style={{ ...iconSize, color: '#666' }}>♠️</i>,
                 color: '#fafbfc',
-                click: () => setViewerDataDrawer({ title: '同花顺', url: 'http://m.10jqka.com.cn/', phone: true }),
+                click: () => onViewWeb({ title: '同花顺', url: 'http://m.10jqka.com.cn/', phone: true }),
               },
               {
                 name: '东财人气榜',
                 icon: <i style={{ ...iconSize }}>榜</i>,
                 click: () =>
-                  setViewerDataDrawer({
+                  onViewWeb({
                     title: '东财人气榜',
                     url: 'https://vipmoney.eastmoney.com/collect/stockranking/pages/ranking9_3/list.html',
                     phone: true,
@@ -378,9 +373,6 @@ const AppCenterContent: React.FC<AppCenterContentProps> = (props) => {
         </CustomDrawer>
         <CustomDrawer show={showEconomicCalendarDrawer}>
           <EconomicCalendarContent onClose={closeEconomicCalendarDrawer} onEnter={closeEconomicCalendarDrawer} />
-        </CustomDrawer>
-        <CustomDrawer show={showViewerDataDrawer}>
-          <ViewerContent {...viewerData} onClose={closeViewerDataDrawer} onEnter={closeViewerDataDrawer} />
         </CustomDrawer>
       </div>
     </CustomDrawerContent>

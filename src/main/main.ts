@@ -7,7 +7,7 @@
  * `./src/main.prod.js` using webpack. This gives us some performance wins.
  */
 
-import { app, globalShortcut, ipcMain, nativeTheme, dialog } from 'electron';
+import { app, globalShortcut, ipcMain, nativeTheme, dialog, webContents, shell } from 'electron';
 import windowStateKeeper from 'electron-window-state';
 import Store from 'electron-store';
 import { Menubar } from 'menubar';
@@ -15,7 +15,8 @@ import AppUpdater from './autoUpdater';
 import { appIcon, generateWalletIcon } from './icon';
 import { createTray } from './tray';
 import { createMenubar, buildContextMenu } from './menubar';
-import { lockSingleInstance, checkEnvTool, sendMessageToRenderer } from './util';
+import { lockSingleInstance, checkEnvTool, sendMessageToRenderer, setNativeTheme } from './util';
+import * as Enums from '../renderer/utils/enums';
 
 let mb: Menubar;
 let openBackupFilePath = '';
@@ -39,6 +40,7 @@ function main() {
   mb = createMenubar({ tray, mainWindowState });
   const appUpdater = new AppUpdater({ icon: appIcon, mb });
   let contextMenu = buildContextMenu({ mb, appUpdater }, []);
+  const defaultTheme = storage.get('SYSTEM_SETTING.systemThemeSetting', Enums.SystemThemeType.Auto) as Enums.SystemThemeType;
   // mb.app.commandLine.appendSwitch('disable-backgrounding-occluded-windows', 'true');
 
   // ipcMain 主进程相关监听
@@ -58,7 +60,7 @@ function main() {
     return nativeTheme.shouldUseDarkColors;
   });
   ipcMain.handle('set-native-theme-source', (event, config) => {
-    nativeTheme.themeSource = config;
+    setNativeTheme(config);
   });
   ipcMain.handle('set-login-item-settings', (event, config) => {
     app.setLoginItemSettings(config);
@@ -89,6 +91,13 @@ function main() {
   ipcMain.handle('all-storage-config', async (event, config) => {
     return storage.store;
   });
+  ipcMain.handle('registry-webview', (event, config) => {
+    const contents = webContents.fromId(config);
+    contents.setWindowOpenHandler(({ url }) => {
+      sendMessageToRenderer(mb, 'webview-new-window', url);
+      return { action: 'deny' };
+    });
+  });
   ipcMain.handle('update-tray-context-menu-wallets', (event, config) => {
     const menus = config.map((item: any) => ({
       ...item,
@@ -99,6 +108,8 @@ function main() {
   });
   // menubar 相关监听
   mb.on('after-create-window', () => {
+    // 设置系统色彩偏好
+    setNativeTheme(defaultTheme);
     // 系统级别高斯模糊
     if (process.platform === 'darwin') {
       mb.window!.setVibrancy('sidebar');
@@ -117,17 +128,21 @@ function main() {
     });
     // 存储窗口大小
     mainWindowState.manage(mb.window!);
-    // 检查更新
-    appUpdater.checkUpdate('renderer');
+    // 隐藏dock栏
     app.dock?.hide();
     // 是否打开备份文件
     if (openBackupFilePath) {
       sendMessageToRenderer(mb, 'open-backup-file', openBackupFilePath);
     }
+    // 外部打开 _blank连接
+    mb.window?.webContents.setWindowOpenHandler(({ url }) => {
+      shell.openExternal(url);
+      return { action: 'deny' };
+    });
   });
-  mb.on('ready', () => {
-    // mb.window?.setVisibleOnAllWorkspaces(true);
-  });
+  // mb.on('ready', () => {
+  //   // mb.window?.setVisibleOnAllWorkspaces(true);
+  // });
   // new AppUpdater({ icon: nativeIcon, win: mb.window });
 }
 

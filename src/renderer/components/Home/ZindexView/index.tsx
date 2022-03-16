@@ -28,7 +28,7 @@ const ZindexView: React.FC<ZindexViewProps> = (props) => {
   const view = useMemo(() => {
     switch (zindexViewMode.type) {
       case Enums.ZindexViewType.Grid:
-        return <GridView list={list.map((item) => ({ ...item, value: item.zs }))} onDetail={setDetailDrawer} />;
+        return <GridView list={list.map((item) => ({ ...item, value: item.zsz }))} onDetail={setDetailDrawer} />;
       case Enums.ZindexViewType.List:
       default:
         return list.map((zindex) => <ZindexRow key={zindex.code} zindex={zindex} onDetail={setDetailDrawer} />);

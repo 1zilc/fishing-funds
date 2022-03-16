@@ -60,6 +60,7 @@ contextBridge.exposeInMainWorld('contextModules', {
           'update-available',
           'open-backup-file',
           'change-current-wallet-code',
+          'webview-new-window',
         ];
         if (validChannels.includes(channel)) {
           return ipcRenderer.on(channel, (event, ...args) => func(event, ...args));

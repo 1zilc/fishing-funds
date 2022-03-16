@@ -3,6 +3,7 @@ import NP from 'number-precision';
 import { ConfigProvider } from 'antd';
 import zhCN from 'antd/lib/locale/zh_CN';
 import * as echarts from 'echarts';
+import chinaMap from '@/static/map/china.json';
 import dayjs from 'dayjs';
 import isSameOrBefore from 'dayjs/plugin/isSameOrBefore';
 import isSameOrAfter from 'dayjs/plugin/isSameOrAfter';
@@ -19,7 +20,7 @@ dayjs.extend(isSameOrBefore);
 dayjs.extend(isSameOrAfter);
 dayjs.locale('zh-cn');
 
-echarts.registerMap('china', require('@/static/map/china.json'));
+echarts.registerMap('china', chinaMap as any);
 
 NP.enableBoundaryChecking(false);
 

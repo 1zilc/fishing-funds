@@ -12,6 +12,7 @@ import { StoreState } from '@/reducers/types';
 import { useCurrentWallet } from '@/utils/hooks';
 import * as Utils from '@/utils';
 import * as Helpers from '@/helpers';
+import * as Enums from '@/utils/enums';
 import styles from './index.module.scss';
 
 export interface RowProps {
@@ -30,6 +31,7 @@ const FundRow: React.FC<RowProps> = (props) => {
   const { fund, readOnly } = props;
   const dispatch = useDispatch();
   const { conciseSetting } = useSelector((state: StoreState) => state.setting.systemSetting);
+  const eyeStatus = useSelector((state: StoreState) => state.wallet.eyeStatus);
   const { currentWalletCode } = useCurrentWallet();
   const calcFundResult = useMemo(() => Helpers.Fund.CalcFund(fund, currentWalletCode), [fund, currentWalletCode]);
   const { isFix } = calcFundResult;
@@ -78,14 +80,18 @@ const FundRow: React.FC<RowProps> = (props) => {
           <div style={{ display: 'flex', alignItems: 'center' }}>
             <span className={styles.fundName}>{fund.name}</span>
             {!!calcFundResult.cyfe && <span className={styles.hold}>持有</span>}
-            {conciseSetting && isFix && <span className={styles.warn}>净值更新</span>}
+            {isFix && <span className={styles.warn}>更新</span>}
           </div>
           {!conciseSetting && (
             <div className={styles.rowBar}>
               <div>
                 <span className={styles.code}>{fund.fundcode}</span>
                 <span>{isFix ? calcFundResult.fixDate : calcFundResult.gztime?.slice(5)}</span>
-                {isFix && <span className={styles.warn}>净值更新</span>}
+                {eyeStatus === Enums.EyeStatus.Open && (
+                  <span className={classnames(Utils.GetValueColor(calcFundResult.jrsygz).textClass, styles.worth)}>
+                    {Utils.Yang(calcFundResult.jrsygz.toFixed(2))}
+                  </span>
+                )}
               </div>
             </div>
           )}

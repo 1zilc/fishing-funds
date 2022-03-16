@@ -4,6 +4,7 @@ import dayjs from 'dayjs';
 import * as Enums from '@/utils/enums';
 import * as CONST from '@/constants';
 
+console.log(window.contextModules);
 const { invoke } = window.contextModules.electron;
 const { version, production } = window.contextModules.process;
 const { encodeFF, decodeFF } = window.contextModules.io;
@@ -120,8 +121,7 @@ export function JudgeAdjustmentNotificationTime(timestamp: number, adjustmentNot
   };
 }
 
-// TODO: 类型推断有问题
-export function getVariblesColor(varibles: string[]) {
+export function getVariblesColor(varibles: typeof CONST.VARIBLES) {
   return varibles.reduce<Record<string, string>>((colorMap, varible) => {
     const color = window.getComputedStyle(document.body).getPropertyValue(varible);
     colorMap[varible] = color || '';
@@ -187,17 +187,7 @@ export function ParseRemoteFunds(code: string) {
 }
 
 export async function UpdateSystemTheme(setting: Enums.SystemThemeType) {
-  switch (setting) {
-    case Enums.SystemThemeType.Light:
-      await invoke.setNativeThemeSource('light');
-      break;
-    case Enums.SystemThemeType.Dark:
-      await invoke.setNativeThemeSource('dark');
-      break;
-    case Enums.SystemThemeType.Auto:
-    default:
-      await invoke.setNativeThemeSource('system');
-  }
+  await invoke.setNativeThemeSource(setting);
 }
 
 export function UnitTransform(value: number) {

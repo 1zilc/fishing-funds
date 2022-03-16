@@ -11,6 +11,7 @@ import { StockState } from './stock';
 import { CoinState } from './coin';
 import { SettingState } from './setting';
 import { SortState } from './sort';
+import { WebState } from './web';
 
 export type StoreState = {
   wallet: WalletState;
@@ -23,6 +24,7 @@ export type StoreState = {
   setting: SettingState;
   sort: SortState;
   coin: CoinState;
+  web: WebState;
 };
 
 export type GetState = () => StoreState;

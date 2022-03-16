@@ -16,7 +16,8 @@ export interface ChartCardProps {
   TitleBar?: ReactNode;
 }
 
-const { clipboard, dialog, saveImage } = window.contextModules.electron;
+const { clipboard, dialog } = window.contextModules.electron;
+const { saveImage } = window.contextModules.io;
 
 const size = {
   heigh: 12,

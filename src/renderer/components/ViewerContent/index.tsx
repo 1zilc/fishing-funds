@@ -1,26 +1,27 @@
 import React, { useRef, useEffect, useState, useCallback } from 'react';
 import { Progress } from 'antd';
-import { useBoolean, useInterval } from 'ahooks';
+import { useBoolean } from 'ahooks';
+import { useSelector, useDispatch } from 'react-redux';
 
 import ArrowLeftIcon from '@/static/icon/arrow-left.svg';
 import ArrowRightIcon from '@/static/icon/arrow-right.svg';
 import RefreshIcon from '@/static/icon/refresh.svg';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
+import CustomDrawer from '@/components/CustomDrawer';
+import { StoreState } from '@/reducers/types';
+import { closeWebAction } from '@/actions/web';
 import styles from './index.module.scss';
 
-interface ViewerContentProps {
-  onClose: () => void;
-  onEnter: () => void;
-  title: string;
-  url: string;
-  phone?: boolean;
-}
+interface ViewerContentProps {}
 
-const { clipboard, dialog } = window.contextModules.electron;
+const { clipboard, dialog, ipcRenderer } = window.contextModules.electron;
 
-// TODO:useragent待随机处理
-const ViewerContent: React.FC<ViewerContentProps> = (props) => {
-  const { title, url, phone } = props;
+const defaultAgent =
+  'Mozilla/5.0 (iPhone; CPU iPhone OS 10_3_1 like Mac OS X) AppleWebKit/603.1.30 (KHTML, like Gecko) Version/10.0 Mobile/14E304 Safari/602.1';
+
+const Content = () => {
+  const dispatch = useDispatch();
+  const { url, phone, show, title } = useSelector((state: StoreState) => state.web);
   const viewRef = useRef<any>(null);
   const [loading, { setTrue: setLoadingTrue, setFalse: setLoadingFalse }] = useBoolean(false);
   const [done, { setTrue: setDoneTrue, setFalse: setDoneFalse }] = useBoolean(false);
@@ -40,11 +41,6 @@ const ViewerContent: React.FC<ViewerContentProps> = (props) => {
   }, []);
 
   useEffect(() => {
-    const newWindow = (e: any) => {
-      if (e.url) {
-        viewRef.current?.loadURL(e.url);
-      }
-    };
     const didStartLoading = () => {
       setDoneFalse();
       setLoadingTrue();
@@ -53,15 +49,26 @@ const ViewerContent: React.FC<ViewerContentProps> = (props) => {
       setLoadingFalse();
       setTimeout(() => {
         setDoneTrue();
+        setPercent(0);
       }, 300);
     };
-    viewRef.current?.addEventListener('new-window', newWindow);
+    const domReady = () => {
+      const targetId = viewRef.current?.getWebContentsId();
+      ipcRenderer.invoke('registry-webview', targetId);
+    };
+
+    viewRef.current?.addEventListener('dom-ready', domReady);
     viewRef.current?.addEventListener('did-start-loading', didStartLoading);
     viewRef.current?.addEventListener('did-stop-loading', didStopLoading);
+    ipcRenderer.on('webview-new-window', (e, data) => {
+      viewRef.current?.loadURL(data);
+    });
+
     return () => {
-      viewRef.current?.removeEventListener('new-window', newWindow);
+      viewRef.current?.removeEventListener('dom-ready', domReady);
       viewRef.current?.removeEventListener('did-start-loading', didStartLoading);
       viewRef.current?.removeEventListener('did-stop-loading', didStopLoading);
+      ipcRenderer.removeAllListeners('webview-new-window');
     };
   }, []);
 
@@ -83,24 +90,26 @@ const ViewerContent: React.FC<ViewerContentProps> = (props) => {
     }
   }, [percent, timer]);
 
+  useEffect(() => {
+    if (!show) {
+      setLoadingFalse();
+      setDoneFalse();
+      setPercent(0);
+    }
+  }, [show]);
+
   return (
-    <CustomDrawerContent title={title} enterText="链接" onClose={props.onClose} onEnter={onCopyUrl}>
+    <CustomDrawerContent title={title} enterText="链接" onClose={() => dispatch(closeWebAction())} onEnter={onCopyUrl}>
       <div className={styles.content}>
         {url && (
           <webview
             ref={viewRef}
             src={url}
             style={{ width: '100%', flex: '1' }}
-            useragent={
-              phone
-                ? 'Mozilla/5.0 (iPhone; CPU iPhone OS 10_3_1 like Mac OS X) AppleWebKit/603.1.30 (KHTML, like Gecko) Version/10.0 Mobile/14E304 Safari/602.1'
-                : undefined
-            }
-            allowpopups
-            webpreferences="nativeWindowOpen = no"
+            useragent={phone ? defaultAgent : undefined}
+            allowpopups="true"
           />
         )}
-
         <div>
           <Progress
             percent={percent}
@@ -118,6 +127,16 @@ const ViewerContent: React.FC<ViewerContentProps> = (props) => {
         </div>
       </div>
     </CustomDrawerContent>
+  );
+};
+// TODO:useragent待随机处理
+const ViewerContent: React.FC<ViewerContentProps> = () => {
+  const { show } = useSelector((state: StoreState) => state.web);
+
+  return (
+    <CustomDrawer show={show} zIndex={1001}>
+      <Content />
+    </CustomDrawer>
   );
 };
 
