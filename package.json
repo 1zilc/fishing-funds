@@ -245,6 +245,7 @@
     "connected-react-router": "^6.8.0",
     "dayjs": "^1.10.4",
     "echarts": "^5.0.2",
+    "electron-builder": "^23.0.2",
     "electron-debug": "^3.2.0",
     "electron-disable-file-drop": "^1.0.2",
     "electron-icon-builder": "^2.0.1",

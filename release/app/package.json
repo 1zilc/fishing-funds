@@ -15,5 +15,7 @@
     "postinstall": "npm run electron-rebuild && npm run link-modules"
   },
   "license": "(ISC OR GPL-3.0)",
-  "dependencies": {}
+  "dependencies": {
+    "install": "^0.13.0"
+  }
 }
