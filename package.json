@@ -12,7 +12,7 @@
     "lint": "cross-env NODE_ENV=development eslint . --cache --ext .ts,.tsx --fix",
     "package": "ts-node ./.erb/scripts/clean.js dist && npm run build && electron-builder build --publish never",
     "package-mac": "ts-node ./.erb/scripts/clean.js dist && npm run build && electron-builder build --mac -p never",
-    "package-linux": "ts-node ./.erb/scripts/clean.js dist && npm run build && electron-builder build --linux -p always",
+    "package-linux": "ts-node ./.erb/scripts/clean.js dist && npm run build && electron-builder build --linux -p never",
     "package-win": "ts-node ./.erb/scripts/clean.js dist && npm run build && electron-builder build --win --x64 -p never",
     "package-all": "ts-node ./.erb/scripts/clean.js dist && npm run build && electron-builder build -mwl -p never",
     "release-all": "ts-node ./.erb/scripts/clean.js dist && npm run build && electron-builder build -mwl -p always",
