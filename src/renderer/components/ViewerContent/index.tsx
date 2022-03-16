@@ -19,10 +19,9 @@ const { clipboard, dialog, ipcRenderer } = window.contextModules.electron;
 const defaultAgent =
   'Mozilla/5.0 (iPhone; CPU iPhone OS 10_3_1 like Mac OS X) AppleWebKit/603.1.30 (KHTML, like Gecko) Version/10.0 Mobile/14E304 Safari/602.1';
 
-// TODO:useragent待随机处理
-const ViewerContent: React.FC<ViewerContentProps> = () => {
+const Content = () => {
   const dispatch = useDispatch();
-  const { title, url, phone, show } = useSelector((state: StoreState) => state.web);
+  const { url, phone, show, title } = useSelector((state: StoreState) => state.web);
   const viewRef = useRef<any>(null);
   const [loading, { setTrue: setLoadingTrue, setFalse: setLoadingFalse }] = useBoolean(false);
   const [done, { setTrue: setDoneTrue, setFalse: setDoneFalse }] = useBoolean(false);
@@ -100,35 +99,43 @@ const ViewerContent: React.FC<ViewerContentProps> = () => {
   }, [show]);
 
   return (
-    <CustomDrawer show={show} zIndex={1001}>
-      <CustomDrawerContent title={title} enterText="链接" onClose={() => dispatch(closeWebAction())} onEnter={onCopyUrl}>
-        <div className={styles.content}>
-          {url && (
-            <webview
-              ref={viewRef}
-              src={url}
-              style={{ width: '100%', flex: '1' }}
-              useragent={phone ? defaultAgent : undefined}
-              allowpopups="true"
-            />
-          )}
-          <div>
-            <Progress
-              percent={percent}
-              status={loading ? 'active' : 'success'}
-              strokeWidth={2}
-              trailColor="transparent"
-              showInfo={false}
-              strokeColor={done ? 'transparent' : 'var(--primary-color)'}
-            />
-            <div className={styles.nav}>
-              <ArrowLeftIcon onClick={() => viewRef.current?.goBack()} />
-              <RefreshIcon onClick={() => viewRef.current?.reload()} />
-              <ArrowRightIcon onClick={() => viewRef.current?.goForward()} />
-            </div>
+    <CustomDrawerContent title={title} enterText="链接" onClose={() => dispatch(closeWebAction())} onEnter={onCopyUrl}>
+      <div className={styles.content}>
+        {url && (
+          <webview
+            ref={viewRef}
+            src={url}
+            style={{ width: '100%', flex: '1' }}
+            useragent={phone ? defaultAgent : undefined}
+            allowpopups="true"
+          />
+        )}
+        <div>
+          <Progress
+            percent={percent}
+            status={loading ? 'active' : 'success'}
+            strokeWidth={2}
+            trailColor="transparent"
+            showInfo={false}
+            strokeColor={done ? 'transparent' : 'var(--primary-color)'}
+          />
+          <div className={styles.nav}>
+            <ArrowLeftIcon onClick={() => viewRef.current?.goBack()} />
+            <RefreshIcon onClick={() => viewRef.current?.reload()} />
+            <ArrowRightIcon onClick={() => viewRef.current?.goForward()} />
           </div>
         </div>
-      </CustomDrawerContent>
+      </div>
+    </CustomDrawerContent>
+  );
+};
+// TODO:useragent待随机处理
+const ViewerContent: React.FC<ViewerContentProps> = () => {
+  const { show } = useSelector((state: StoreState) => state.web);
+
+  return (
+    <CustomDrawer show={show} zIndex={1001}>
+      <Content />
     </CustomDrawer>
   );
 };
