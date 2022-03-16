@@ -33,6 +33,7 @@ jobs:
       - run: npm run postinstall
       - run: npm run release-all
         env:
+          USE_HARD_LINKS: false
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
 
       - name: Codecov
