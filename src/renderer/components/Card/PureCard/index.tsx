@@ -1,5 +1,5 @@
 import React, { PropsWithChildren } from 'react';
-import classnames from 'classnames';
+import clsx from 'clsx';
 import styles from './index.module.scss';
 
 export interface PureCardProps {
@@ -10,7 +10,7 @@ export interface PureCardProps {
 
 export const PureCard: React.FC<PropsWithChildren<PureCardProps>> = ({ onClick, onDoubleClick, className = {}, children }) => {
   return (
-    <aside className={classnames(styles.content, className)} onClick={onClick} onDoubleClick={onDoubleClick}>
+    <aside className={clsx(styles.content, className)} onClick={onClick} onDoubleClick={onDoubleClick}>
       {children}
     </aside>
   );

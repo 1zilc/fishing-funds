@@ -1,5 +1,5 @@
 import React, { useState, useRef, useCallback } from 'react';
-import classnames from 'classnames';
+import clsx from 'clsx';
 import { useScroll, useRequest } from 'ahooks';
 import { Tabs } from 'antd';
 
@@ -39,9 +39,9 @@ const DetailCoinContent: React.FC<DetailCoinContentProps> = (props) => {
   return (
     <CustomDrawerContent title="货币详情" enterText="确定" onClose={props.onClose} onEnter={props.onEnter}>
       <div className={styles.content} ref={ref}>
-        <div className={classnames(styles.avatarContent)} style={{ backgroundImage: `url(${coin?.image.large})` }}>
+        <div className={clsx(styles.avatarContent)} style={{ backgroundImage: `url(${coin?.image.large})` }}>
           <div
-            className={classnames(styles.avatar, {
+            className={clsx(styles.avatar, {
               [styles.avatarMiniMode]: miniMode,
             })}
           >
@@ -61,26 +61,26 @@ const DetailCoinContent: React.FC<DetailCoinContentProps> = (props) => {
             </div>
           </div>
           <div className={styles.detail}>
-            <div className={classnames(styles.detailItem, 'text-left')}>
+            <div className={clsx(styles.detailItem, 'text-left')}>
               <div>{coin?.country_origin || '无'}</div>
               <div className={styles.detailItemLabel}>起源国家</div>
             </div>
-            <div className={classnames(styles.detailItem, 'text-center')}>
+            <div className={clsx(styles.detailItem, 'text-center')}>
               <div>{coin?.hashing_algorithm || '无'}</div>
               <div className={styles.detailItemLabel}>hash算法</div>
             </div>
-            <div className={classnames(styles.detailItem, 'text-right')}>
+            <div className={clsx(styles.detailItem, 'text-right')}>
               <div>{coin?.block_time_in_minutes}分钟</div>
               <div className={styles.detailItemLabel}>区块时间</div>
             </div>
           </div>
           <div className={styles.detail}>
-            <div className={classnames(styles.detailItem, 'text-left')}>
+            <div className={clsx(styles.detailItem, 'text-left')}>
               <div>{coin?.public_interest_score || '无'}</div>
               <div className={styles.detailItemLabel}>趣味得分</div>
             </div>
-            <div className={classnames(styles.detailItem, 'text-center')}> </div>
-            <div className={classnames(styles.detailItem, 'text-right')}> </div>
+            <div className={clsx(styles.detailItem, 'text-center')}> </div>
+            <div className={clsx(styles.detailItem, 'text-right')}> </div>
           </div>
         </div>
         <div className={styles.container}>

@@ -1,6 +1,6 @@
 import React, { PropsWithChildren, createContext, useContext } from 'react';
 import { useScroll } from 'ahooks';
-import classnames from 'classnames';
+import clsx from 'clsx';
 import styles from './index.module.scss';
 
 export interface HeaderContextType {
@@ -26,9 +26,9 @@ const Header: React.FC<PropsWithChildren<Record<string, unknown>>> = (props) => 
         miniMode,
       }}
     >
-      <div className={classnames(styles.layout)}>
+      <div className={clsx(styles.layout)}>
         <div
-          className={classnames(styles.content, {
+          className={clsx(styles.content, {
             [styles.miniMode]: miniMode,
           })}
         >

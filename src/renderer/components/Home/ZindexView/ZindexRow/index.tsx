@@ -1,5 +1,5 @@
 import React from 'react';
-import classnames from 'classnames';
+import clsx from 'clsx';
 import { useDispatch, useSelector } from 'react-redux';
 
 import ArrowDownIcon from '@/static/icon/arrow-down.svg';
@@ -33,7 +33,7 @@ const ZindexRow: React.FC<RowProps> = (props) => {
   return (
     <>
       <div
-        className={classnames(styles.row)}
+        className={clsx(styles.row)}
         onClick={() => {
           dispatch(toggleZindexCollapseAction(zindex));
         }}
@@ -54,15 +54,15 @@ const ZindexRow: React.FC<RowProps> = (props) => {
             </div>
           )}
         </div>
-        <div className={classnames(styles.value)}>
-          <div className={classnames(styles.zsz, Utils.GetValueColor(zindex.zdf).textClass)}>
+        <div className={clsx(styles.value)}>
+          <div className={clsx(styles.zsz, Utils.GetValueColor(zindex.zdf).textClass)}>
             {zindex.zsz}
             <ArrowLine value={zindex.zdf} />
           </div>
           {!conciseSetting && (
             <div className={styles.zd}>
-              <div className={classnames(styles.zdd, Utils.GetValueColor(zindex.zdd).textClass)}>{Utils.Yang(zindex.zdd)}</div>
-              <div className={classnames(styles.zdf, Utils.GetValueColor(zindex.zdf).textClass)}>{Utils.Yang(zindex.zdf)} %</div>
+              <div className={clsx(styles.zdd, Utils.GetValueColor(zindex.zdd).textClass)}>{Utils.Yang(zindex.zdd)}</div>
+              <div className={clsx(styles.zdf, Utils.GetValueColor(zindex.zdf).textClass)}>{Utils.Yang(zindex.zdf)} %</div>
             </div>
           )}
         </div>
@@ -72,18 +72,18 @@ const ZindexRow: React.FC<RowProps> = (props) => {
           {conciseSetting && (
             <section>
               <span>涨跌点：</span>
-              <span className={classnames(Utils.GetValueColor(zindex.zdd).textClass)}>{Utils.Yang(zindex.zdd)}</span>
+              <span className={clsx(Utils.GetValueColor(zindex.zdd).textClass)}>{Utils.Yang(zindex.zdd)}</span>
             </section>
           )}
           {conciseSetting && (
             <section>
               <span>涨跌幅：</span>
-              <span className={classnames(Utils.GetValueColor(zindex.zdf).textClass)}>{Utils.Yang(zindex.zdf)} %</span>
+              <span className={clsx(Utils.GetValueColor(zindex.zdf).textClass)}>{Utils.Yang(zindex.zdf)} %</span>
             </section>
           )}
           <section>
             <span>今开：</span>
-            <span className={classnames(Utils.GetValueColor(zindex.jk - zindex.zs).textClass)}>{zindex.jk}</span>
+            <span className={clsx(Utils.GetValueColor(zindex.jk - zindex.zs).textClass)}>{zindex.jk}</span>
           </section>
           <section>
             <span>昨收：</span>
@@ -91,11 +91,11 @@ const ZindexRow: React.FC<RowProps> = (props) => {
           </section>
           <section>
             <span>最高：</span>
-            <span className={classnames(Utils.GetValueColor(zindex.zg - zindex.zs).textClass)}>{zindex.zg}</span>
+            <span className={clsx(Utils.GetValueColor(zindex.zg - zindex.zs).textClass)}>{zindex.zg}</span>
           </section>
           <section>
             <span>最低：</span>
-            <span className={classnames(Utils.GetValueColor(zindex.zd - zindex.zs).textClass)}>{zindex.zd}</span>
+            <span className={clsx(Utils.GetValueColor(zindex.zd - zindex.zs).textClass)}>{zindex.zd}</span>
           </section>
           <section>
             <span>换手：</span>

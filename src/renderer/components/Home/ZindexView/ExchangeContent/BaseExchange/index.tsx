@@ -1,6 +1,6 @@
 import React, { PropsWithChildren, useState, useEffect } from 'react';
 import { Table } from 'antd';
-import classnames from 'classnames';
+import clsx from 'clsx';
 import { useRequest } from 'ahooks';
 
 import ChartCard from '@/components/Card/ChartCard';
@@ -24,7 +24,7 @@ const BaseExchange: React.FC<PropsWithChildren<BaseExchangeProps>> = () => {
       title: '最新价',
       dataIndex: 'zxj',
       render: (text: string, record: Exchange.ResponseItem) => (
-        <span className={classnames(Utils.GetValueColor(record.zxj - record.zs).textClass)}>{text}</span>
+        <span className={clsx(Utils.GetValueColor(record.zxj - record.zs).textClass)}>{text}</span>
       ),
       sorter: (a: any, b: any) => Number(a.zxj) - Number(b.zxj),
     },
@@ -32,7 +32,7 @@ const BaseExchange: React.FC<PropsWithChildren<BaseExchangeProps>> = () => {
       title: '涨跌幅',
       dataIndex: 'zdf',
       render: (text: string, record: Exchange.ResponseItem) => (
-        <span className={classnames(Utils.GetValueColor(record.zdf).textClass)}>{text}%</span>
+        <span className={clsx(Utils.GetValueColor(record.zdf).textClass)}>{text}%</span>
       ),
       sorter: (a: any, b: any) => Number(a.zdf) - Number(b.zdf),
     },

@@ -1,6 +1,6 @@
 import React, { PropsWithChildren, useState, useEffect } from 'react';
 import { Table } from 'antd';
-import classnames from 'classnames';
+import clsx from 'clsx';
 import { useRequest } from 'ahooks';
 
 import ChartCard from '@/components/Card/ChartCard';
@@ -23,13 +23,13 @@ const GlobalBond: React.FC<PropsWithChildren<GlobalBondProps>> = () => {
     {
       title: '最新价',
       dataIndex: 'price',
-      render: (text: string, record: any) => <span className={classnames(Utils.GetValueColor(record.percent).textClass)}>{text}</span>,
+      render: (text: string, record: any) => <span className={clsx(Utils.GetValueColor(record.percent).textClass)}>{text}</span>,
       sorter: (a: any, b: any) => Number(a.price) - Number(b.price),
     },
     {
       title: '涨跌幅',
       dataIndex: 'percent',
-      render: (text: string, record: any) => <span className={classnames(Utils.GetValueColor(record.percent).textClass)}>{text}%</span>,
+      render: (text: string, record: any) => <span className={clsx(Utils.GetValueColor(record.percent).textClass)}>{text}%</span>,
       sorter: (a: any, b: any) => Number(a.percent) - Number(b.percent),
     },
   ];

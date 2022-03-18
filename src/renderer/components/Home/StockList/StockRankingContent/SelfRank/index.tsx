@@ -2,7 +2,7 @@ import React, { PropsWithChildren, useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Table, Divider } from 'antd';
 import { useRequest } from 'ahooks';
-import classnames from 'classnames';
+import clsx from 'clsx';
 
 import CustomDrawer from '@/components/CustomDrawer';
 import DetailStockContent from '@/components/Home/StockList/DetailStockContent';

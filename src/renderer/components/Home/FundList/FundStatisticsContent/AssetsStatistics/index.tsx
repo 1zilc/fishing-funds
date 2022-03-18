@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import NP from 'number-precision';
-import classnames from 'classnames';
+import clsx from 'clsx';
 import { useSelector, useDispatch } from 'react-redux';
 
 import PureCard from '@/components/Card/PureCard';
@@ -92,7 +92,7 @@ const AssetsStatistics: React.FC<AssetsStatisticsProps> = ({ funds, codes }) => 
             <div>
               收益(今)：
               <span
-                className={classnames({
+                className={clsx({
                   [Utils.GetValueColor(displaySygz).textClass]: eyeOpen,
                 })}
               >
@@ -102,7 +102,7 @@ const AssetsStatistics: React.FC<AssetsStatisticsProps> = ({ funds, codes }) => 
             <div>
               收益率(今)：
               <span
-                className={classnames({
+                className={clsx({
                   [Utils.GetValueColor(displayGssyl).textClass]: eyeOpen,
                 })}
               >
@@ -115,7 +115,7 @@ const AssetsStatistics: React.FC<AssetsStatisticsProps> = ({ funds, codes }) => 
             <div>
               持有收益：
               <span
-                className={classnames({
+                className={clsx({
                   [Utils.GetValueColor(displayCysy).textClass]: eyeOpen,
                 })}
               >
@@ -125,7 +125,7 @@ const AssetsStatistics: React.FC<AssetsStatisticsProps> = ({ funds, codes }) => 
             <div>
               持有收益率：
               <span
-                className={classnames({
+                className={clsx({
                   [Utils.GetValueColor(displayCysyl).textClass]: eyeOpen,
                 })}
               >

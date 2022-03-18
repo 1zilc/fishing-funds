@@ -1,6 +1,6 @@
 import React, { PropsWithChildren, useLayoutEffect, useRef, useState } from 'react';
 
-import classnames from 'classnames';
+import clsx from 'clsx';
 import styles from './index.module.scss';
 
 interface CollapseProps {
@@ -18,7 +18,7 @@ const Collapse: React.FC<PropsWithChildren<CollapseProps>> = (props) => {
 
   return (
     <div
-      className={classnames(styles.content)}
+      className={clsx(styles.content)}
       style={{
         maxHeight: props.isOpened ? max : 0,
         ...props.style,

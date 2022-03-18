@@ -1,6 +1,6 @@
 import React from 'react';
 import { Table } from 'antd';
-import classnames from 'classnames';
+import clsx from 'clsx';
 
 import PureCard from '@/components/Card/PureCard';
 import CustomDrawer from '@/components/CustomDrawer';
@@ -38,9 +38,9 @@ const Recommend: React.FC<RecommendProps> = (props) => {
           <div className={styles.name}>
             <h3>{t.Name}</h3>
             {Number(t.Chg) > 0 ? (
-              <span className={classnames(styles.tag, 'text-up', 'boder-up')}>{t.Chg}% ↗</span>
+              <span className={clsx(styles.tag, 'text-up', 'boder-up')}>{t.Chg}% ↗</span>
             ) : Number(t.Chg) < 0 ? (
-              <span className={classnames(styles.tag, 'text-down', 'boder-down')}>{t.Chg}% ↘</span>
+              <span className={clsx(styles.tag, 'text-down', 'boder-down')}>{t.Chg}% ↘</span>
             ) : (
               <></>
             )}

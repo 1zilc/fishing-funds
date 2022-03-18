@@ -1,5 +1,5 @@
 import React from 'react';
-import classnames from 'classnames';
+import clsx from 'clsx';
 import { Spin } from 'antd';
 
 import styles from './index.module.scss';
@@ -10,7 +10,7 @@ export interface LoadingBarProps {
 const LoadingBar: React.FC<LoadingBarProps> = ({ show }) => {
   return (
     <div
-      className={classnames(styles.content, {
+      className={clsx(styles.content, {
         [styles.disable]: !show,
       })}
     >

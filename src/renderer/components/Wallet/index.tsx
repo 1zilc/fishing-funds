@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import classnames from 'classnames';
+import clsx from 'clsx';
 import { useDispatch, useSelector } from 'react-redux';
 import { Dropdown, Menu } from 'antd';
 
@@ -47,7 +47,7 @@ const Wallet: React.FC<WalletProps> = () => {
   }
 
   return (
-    <div className={classnames(styles.content, { [styles.miniMode]: miniMode })}>
+    <div className={clsx(styles.content, { [styles.miniMode]: miniMode })}>
       <Dropdown
         placement="bottomRight"
         overlay={

@@ -1,5 +1,5 @@
 import React from 'react';
-import classnames from 'classnames';
+import clsx from 'clsx';
 import { walletIcons } from '@/helpers/wallet';
 import styles from './index.module.scss';
 
@@ -20,7 +20,7 @@ export const WalletSelection: React.FC<WalletSelectionProps> = (props) => {
       {walletIcons.map((iconUrl, index) => (
         <div
           key={index}
-          className={classnames(
+          className={clsx(
             styles.wallet,
             {
               [styles.selected]: index === walletIndex,

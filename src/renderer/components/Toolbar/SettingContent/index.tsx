@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import classnames from 'classnames';
+import clsx from 'clsx';
 import { useSelector, useDispatch } from 'react-redux';
 import { InputNumber, Radio, Badge, Switch, Slider, TimePicker, Input, Tabs, Select } from 'antd';
 import dayjs from 'dayjs';
@@ -231,7 +231,7 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
     <CustomDrawerContent title="设置" enterText="保存" onClose={props.onClose} onEnter={onSave}>
       <style>{` html { font-size: ${baseFontSize}px }`}</style>
       <PureCard
-        className={classnames(
+        className={clsx(
           styles.logo,
           {
             clickable: isUpdateAvaliable,
@@ -257,7 +257,7 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
                 </div>
               }
             >
-              <div className={classnames(styles.setting, 'card-body')}>
+              <div className={clsx(styles.setting, 'card-body')}>
                 <Radio.Group value={fundapiType} onChange={(e) => setFundApiType(e.target.value)}>
                   {APIOptions.map((api) => (
                     <Radio key={api.code} className={styles.radio} value={api.code}>
@@ -268,7 +268,7 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
               </div>
             </StandCard>
             <StandCard icon={<TShirtIcon />} title="外观设置">
-              <div className={classnames(styles.setting, 'card-body')}>
+              <div className={clsx(styles.setting, 'card-body')}>
                 <section>
                   <label>简洁模式：</label>
                   <Switch size="small" checked={concise} onChange={setConcise} />
@@ -313,7 +313,7 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
                 </div>
               }
             >
-              <div className={classnames(styles.setting, 'card-body')}>
+              <div className={clsx(styles.setting, 'card-body')}>
                 <section>
                   <label>调仓提醒：</label>
                   <Switch size="small" checked={adjustmentNotification} onChange={setAdjustmentNotification} />
@@ -361,7 +361,7 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
                 </div>
               }
             >
-              <div className={classnames(styles.setting, 'card-body')}>
+              <div className={clsx(styles.setting, 'card-body')}>
                 <Radio.Group value={coinUnit} onChange={(e) => setCoinUnit(e.target.value)}>
                   <Radio className={styles.radio} value={Enums.CoinUnitType.Usd}>
                     USD ($)
@@ -391,7 +391,7 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
                 </div>
               }
             >
-              <div className={classnames(styles.setting, 'card-body')}>
+              <div className={clsx(styles.setting, 'card-body')}>
                 <section>
                   <label>http代理：</label>
                   <Switch size="small" checked={httpProxy} onChange={setHttpProxy} />
@@ -434,7 +434,7 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
                 </div>
               }
             >
-              <div className={classnames(styles.setting, 'card-body')}>
+              <div className={clsx(styles.setting, 'card-body')}>
                 <section>
                   <label>开机自启：</label>
                   <Switch size="small" checked={autoStart} onChange={setAutoStart} />
@@ -497,8 +497,8 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
                 </div>
               }
             >
-              <div className={classnames('card-body')}>
-                <div className={classnames(styles.describe)}>
+              <div className={clsx('card-body')}>
+                <div className={clsx(styles.describe)}>
                   Fishing Funds
                   是一款个人开发小软件，开源后深受大家的喜爱，接受了大量宝贵的改进建议，感谢大家的反馈，作者利用空闲时间开发不易，您的支持可以给本项目的开发和完善提供巨大的动力，感谢对本软件的喜爱和认可
                   :)
@@ -516,7 +516,7 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
               </div>
             </StandCard>
             <StandCard icon={<GroupIcon />} title="讨论交流">
-              <div className={classnames(styles.group, 'card-body')}>
+              <div className={clsx(styles.group, 'card-body')}>
                 <section>
                   <label>QQ群：</label>
                   <a onClick={() => onCopyGroup('732268738')}>732268738</a>
@@ -532,7 +532,7 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
               </div>
             </StandCard>
             <StandCard icon={<WindowIcon />} title="收录网站">
-              <div className={classnames('card-body')}>
+              <div className={clsx('card-body')}>
                 {recordSiteGroup.map((links, index) => (
                   <div key={index} className={styles.link}>
                     {links.map((link) => (

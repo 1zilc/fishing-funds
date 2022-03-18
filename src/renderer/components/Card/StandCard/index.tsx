@@ -1,5 +1,5 @@
 import React, { PropsWithChildren, ReactNode } from 'react';
-import classnames from 'classnames';
+import clsx from 'clsx';
 import styles from './index.module.scss';
 
 export interface StandCardProps {
@@ -21,7 +21,7 @@ export const StandCard: React.FC<PropsWithChildren<StandCardProps>> = ({
   children,
 }) => {
   return (
-    <aside className={classnames(styles.content, className)} onClick={onClick} onDoubleClick={onDoubleClick}>
+    <aside className={clsx(styles.content, className)} onClick={onClick} onDoubleClick={onDoubleClick}>
       {(icon || title) && (
         <div className={styles.header}>
           {icon && <div className={styles.icon}>{icon}</div>}

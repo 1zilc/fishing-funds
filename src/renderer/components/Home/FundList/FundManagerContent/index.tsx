@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import classnames from 'classnames';
+import clsx from 'clsx';
 import { Rate, Tabs } from 'antd';
 import { useScroll, useRequest } from 'ahooks';
 
@@ -42,9 +42,9 @@ const FundManagerContent: React.FC<FundManagerContentProps> = (props) => {
   return (
     <CustomDrawerContent title="基金经理" onClose={props.onClose} onEnter={props.onEnter}>
       <div className={styles.content} ref={ref}>
-        <div className={classnames(styles.avatarContent)} style={{ backgroundImage: `url(${manager.pic})` }}>
+        <div className={clsx(styles.avatarContent)} style={{ backgroundImage: `url(${manager.pic})` }}>
           <div
-            className={classnames(styles.avatar, {
+            className={clsx(styles.avatar, {
               [styles.avatarMiniMode]: miniMode,
             })}
           >

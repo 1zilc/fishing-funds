@@ -1,5 +1,5 @@
 import React from 'react';
-import classnames from 'classnames';
+import clsx from 'clsx';
 import styles from './index.module.scss';
 
 interface MemoNoteProps {
@@ -8,7 +8,7 @@ interface MemoNoteProps {
 
 const MemoNote: React.FC<MemoNoteProps> = (props) => {
   const { text } = props;
-  return <div className={classnames(styles.content)}>{text}</div>;
+  return <div className={clsx(styles.content)}>{text}</div>;
 };
 
 export default MemoNote;

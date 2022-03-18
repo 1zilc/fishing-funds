@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { useBoolean, useRequest } from 'ahooks';
-import classnames from 'classnames';
+import clsx from 'clsx';
 import { Tabs, Rate } from 'antd';
 
 import ChartCard from '@/components/Card/ChartCard';
@@ -64,10 +64,10 @@ export const ContinuousTag: React.FC<{ values: number[] }> = ({ values = [] }) =
   const maxDay = Math.max(maxDownDay, maxUpDay);
 
   if (up && maxDay >= 3) {
-    return <span className={classnames(styles.continuous, 'text-up', 'boder-up')}>{maxUpDay}天 ↗</span>;
+    return <span className={clsx(styles.continuous, 'text-up', 'boder-up')}>{maxUpDay}天 ↗</span>;
   }
   if (down && maxDay >= 3) {
-    return <span className={classnames(styles.continuous, 'text-down', 'boder-down')}>{maxDownDay}天 ↘</span>;
+    return <span className={clsx(styles.continuous, 'text-down', 'boder-down')}>{maxDownDay}天 ↘</span>;
   }
   return <></>;
 };
@@ -144,14 +144,14 @@ const DetailFundContent: React.FC<DetailFundContentProps> = (props) => {
           </div>
           <div className={styles.detail}>
             <div className={styles.detailItem}>
-              <div className={classnames(styles.syl_1n, Utils.GetValueColor(syl_1n).textClass)}>{Utils.Yang(syl_1n)}%</div>
+              <div className={clsx(styles.syl_1n, Utils.GetValueColor(syl_1n).textClass)}>{Utils.Yang(syl_1n)}%</div>
               <div className={styles.detailItemLabel}>近一年涨跌幅</div>
             </div>
-            <div className={classnames(styles.detailItem, 'text-center')}>
-              <div className={classnames(Utils.GetValueColor(fund?.fixZzl).textClass)}>{Utils.Yang(fund?.fixZzl)}%</div>
+            <div className={clsx(styles.detailItem, 'text-center')}>
+              <div className={clsx(Utils.GetValueColor(fund?.fixZzl).textClass)}>{Utils.Yang(fund?.fixZzl)}%</div>
               <div className={styles.detailItemLabel}>日涨跌幅</div>
             </div>
-            <div className={classnames(styles.detailItem, 'text-center')}>
+            <div className={clsx(styles.detailItem, 'text-center')}>
               <div>{fund?.fixDwjz}</div>
               <div className={styles.detailItemLabel}>净值 {fund?.fixDate}</div>
             </div>

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import classnames from 'classnames';
+import clsx from 'clsx';
 import { useDispatch, useSelector } from 'react-redux';
 import { useRequest } from 'ahooks';
 import { Tabs } from 'antd';
@@ -42,7 +42,7 @@ const DetailQuotationContent: React.FC<DetailQuotationContentProps> = (props) =>
         <div className={styles.container}>
           <h3 className={styles.titleRow}>
             <span className="copify">{quotation?.name}</span>
-            <span className={classnames(Utils.GetValueColor(quotation.zdd).textClass)}>{quotation?.zxj}</span>
+            <span className={clsx(Utils.GetValueColor(quotation.zdd).textClass)}>{quotation?.zxj}</span>
           </h3>
           <div className={styles.subTitleRow}>
             <div>
@@ -60,20 +60,20 @@ const DetailQuotationContent: React.FC<DetailQuotationContentProps> = (props) =>
 
             <div>
               <span className={styles.detailItemLabel}>最新价：</span>
-              <span className={classnames(Utils.GetValueColor(quotation.zdd).textClass)}>{Utils.Yang(quotation?.zdd)}</span>
+              <span className={clsx(Utils.GetValueColor(quotation.zdd).textClass)}>{Utils.Yang(quotation?.zdd)}</span>
             </div>
           </div>
           <div className={styles.detail}>
             <div className={styles.detailItem}>
-              <div className={classnames(styles.zdf, Utils.GetValueColor(quotation.zdd).textClass)}>{Utils.Yang(quotation.zdf)}%</div>
+              <div className={clsx(styles.zdf, Utils.GetValueColor(quotation.zdd).textClass)}>{Utils.Yang(quotation.zdf)}%</div>
               <div className={styles.detailItemLabel}>涨跌幅</div>
             </div>
-            <div className={classnames(styles.detailItem, 'text-center')}>
-              <div className={classnames('text-up')}>{quotation.szjs}</div>
+            <div className={clsx(styles.detailItem, 'text-center')}>
+              <div className={clsx('text-up')}>{quotation.szjs}</div>
               <div className={styles.detailItemLabel}>上涨家数</div>
             </div>
-            <div className={classnames(styles.detailItem, 'text-center')}>
-              <div className={classnames('text-down')}>{quotation?.xdjs}</div>
+            <div className={clsx(styles.detailItem, 'text-center')}>
+              <div className={clsx('text-down')}>{quotation?.xdjs}</div>
               <div className={styles.detailItemLabel}>下跌家数</div>
             </div>
           </div>

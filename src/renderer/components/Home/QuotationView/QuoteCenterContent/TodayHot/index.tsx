@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useRequest } from 'ahooks';
-import classnames from 'classnames';
+import clsx from 'clsx';
 import PureCard from '@/components/Card/PureCard';
 import CustomDrawer from '@/components/CustomDrawer';
 import AddStockContent from '@/components/Home/StockList/AddStockContent';
@@ -28,7 +28,7 @@ const TodayHot: React.FC<TodayHotProps> = () => {
   });
 
   return (
-    <div className={classnames(styles.content)}>
+    <div className={clsx(styles.content)}>
       {hots.map((hot) => (
         <PureCard key={hot.name}>
           <div className={styles.card}>
@@ -39,9 +39,9 @@ const TodayHot: React.FC<TodayHotProps> = () => {
               <div className={styles.title}>
                 <h3>{hot.name}</h3>
                 {Number(hot.zdf) > 0 ? (
-                  <span className={classnames(styles.tag, 'text-up', 'boder-up')}>{hot.zdf}% ↗</span>
+                  <span className={clsx(styles.tag, 'text-up', 'boder-up')}>{hot.zdf}% ↗</span>
                 ) : Number(hot.zdf) < 0 ? (
-                  <span className={classnames(styles.tag, 'text-down', 'boder-down')}>{hot.zdf}% ↘</span>
+                  <span className={clsx(styles.tag, 'text-down', 'boder-down')}>{hot.zdf}% ↘</span>
                 ) : (
                   <></>
                 )}

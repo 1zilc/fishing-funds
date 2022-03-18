@@ -1,5 +1,5 @@
 import React from 'react';
-import classnames from 'classnames';
+import clsx from 'clsx';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { SwiperOptions } from 'swiper/types/swiper-options';
 import SwiperCore, { Autoplay, EffectCoverflow, Pagination } from 'swiper';
@@ -40,14 +40,14 @@ const PayCarousel: React.FC<PayCarouselProps> = () => {
       <Swiper {...config} style={{ padding: '0 10px 20px' }}>
         <SwiperSlide>
           <StandCard icon={<AliPayIcon className={styles.alipay} />} title="支付宝">
-            <div className={classnames(styles.pay, 'card-body')}>
+            <div className={clsx(styles.pay, 'card-body')}>
               <img src={alipayQRcodeImage} />
             </div>
           </StandCard>
         </SwiperSlide>
         <SwiperSlide>
           <StandCard icon={<WechatPayIcon className={styles.wechat} />} title="微信">
-            <div className={classnames(styles.pay, 'card-body')}>
+            <div className={clsx(styles.pay, 'card-body')}>
               <img src={wechatQRcodeImage} />
             </div>
           </StandCard>

@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { ReactSortable } from 'react-sortablejs';
-import classnames from 'classnames';
+import clsx from 'clsx';
 
 import PureCard from '@/components/Card/PureCard';
 import AddIcon from '@/static/icon/add.svg';
@@ -64,7 +64,7 @@ const Optional: React.FC<OptionalProps> = () => {
           {sortZindexConfig.map((zindex) => {
             const [market, code] = zindex.code.split('.');
             return (
-              <PureCard key={zindex.code} className={classnames(styles.row, 'hoverable')}>
+              <PureCard key={zindex.code} className={clsx(styles.row, 'hoverable')}>
                 <RemoveIcon
                   className={styles.remove}
                   onClick={(e) => {

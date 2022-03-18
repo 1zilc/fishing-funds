@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import classnames from 'classnames';
+import clsx from 'clsx';
 import ColorHash from 'color-hash';
 import { useRequest } from 'ahooks';
 import { useDispatch, useSelector } from 'react-redux';
@@ -113,7 +113,7 @@ const StockRow: React.FC<RowProps> = (props) => {
 
   return (
     <>
-      <div className={classnames(styles.row)} onClick={() => dispatch(toggleStockCollapseAction(stock))}>
+      <div className={clsx(styles.row)} onClick={() => dispatch(toggleStockCollapseAction(stock))}>
         <div className={styles.arrow}>
           {stock.collapse ? <ArrowUpIcon style={{ ...arrowSize }} /> : <ArrowDownIcon style={{ ...arrowSize }} />}
         </div>
@@ -143,16 +143,16 @@ const StockRow: React.FC<RowProps> = (props) => {
             </div>
           )}
         </div>
-        <div className={classnames(styles.value)}>
-          <div className={classnames(styles.zx, Utils.GetValueColor(stock.zdf).textClass)}>
+        <div className={clsx(styles.value)}>
+          <div className={clsx(styles.zx, Utils.GetValueColor(stock.zdf).textClass)}>
             <TrendChart trends={stock.trends} zs={stock.zs} />
             {/* {stock.zx} */}
             {/* <ArrowLine value={stock.zdf} /> */}
           </div>
           {!conciseSetting && (
             <div className={styles.zd}>
-              <div className={classnames(styles.zdd)}>{stock.zx}</div>
-              <div className={classnames(styles.zdf, Utils.GetValueColor(stock.zdf).textClass)}>{Utils.Yang(stock.zdf)} %</div>
+              <div className={clsx(styles.zdd)}>{stock.zx}</div>
+              <div className={clsx(styles.zdf, Utils.GetValueColor(stock.zdf).textClass)}>{Utils.Yang(stock.zdf)} %</div>
             </div>
           )}
         </div>
@@ -162,13 +162,13 @@ const StockRow: React.FC<RowProps> = (props) => {
           {conciseSetting && (
             <section>
               <span>涨跌点：</span>
-              <span className={classnames(Utils.GetValueColor(stock.zdd).textClass)}>{Utils.Yang(stock.zdd)}</span>
+              <span className={clsx(Utils.GetValueColor(stock.zdd).textClass)}>{Utils.Yang(stock.zdd)}</span>
             </section>
           )}
           {conciseSetting && (
             <section>
               <span>涨跌幅：</span>
-              <span className={classnames(Utils.GetValueColor(stock.zdf).textClass)}>{Utils.Yang(stock.zdf)} %</span>
+              <span className={clsx(Utils.GetValueColor(stock.zdf).textClass)}>{Utils.Yang(stock.zdf)} %</span>
             </section>
           )}
           <section>

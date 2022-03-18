@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Row, Col } from 'antd';
-import classnames from 'classnames';
+import clsx from 'clsx';
 
 import { useHomeContext } from '@/components/Home';
 import styles from './index.module.scss';
@@ -36,7 +36,7 @@ const TypeSelection: React.FC<TypeSelectionProps> = ({
         {types.map((item) => (
           <Col key={item.type} span={colspan} flex={flex ? colspan : undefined} style={{ textAlign: 'center' }}>
             <span
-              className={classnames(styles.selection, {
+              className={clsx(styles.selection, {
                 [styles.active]: activeType === item.type,
               })}
               onClick={() => onSelected(item)}

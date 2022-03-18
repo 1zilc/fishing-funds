@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useRequest } from 'ahooks';
 import { useSelector } from 'react-redux';
-import classnames from 'classnames';
+import clsx from 'clsx';
 
 import ChartCard from '@/components/Card/ChartCard';
 import { useHomeContext } from '@/components/Home';
@@ -135,7 +135,7 @@ const Score: React.FC<ScoreProps> = ({ gssyl = 0 }) => {
       TitleBar={
         <div className={styles.row}>
           评分指标-沪深300(今)：
-          <span className={classnames(Utils.GetValueColor(HS).textClass)}>{HS}%</span>
+          <span className={clsx(Utils.GetValueColor(HS).textClass)}>{HS}%</span>
         </div>
       }
     >

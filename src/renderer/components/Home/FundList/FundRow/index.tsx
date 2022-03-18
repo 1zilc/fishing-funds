@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import classnames from 'classnames';
+import clsx from 'clsx';
 import { useDispatch, useSelector } from 'react-redux';
 
 import EditIcon from '@/static/icon/edit.svg';
@@ -70,7 +70,7 @@ const FundRow: React.FC<RowProps> = (props) => {
 
   return (
     <>
-      <div className={classnames(styles.row)} onClick={onRowClick}>
+      <div className={clsx(styles.row)} onClick={onRowClick}>
         {!readOnly && (
           <div className={styles.arrow}>
             {fund.collapse ? <ArrowUpIcon style={{ ...arrowSize }} /> : <ArrowDownIcon style={{ ...arrowSize }} />}
@@ -88,7 +88,7 @@ const FundRow: React.FC<RowProps> = (props) => {
                 <span className={styles.code}>{fund.fundcode}</span>
                 <span>{isFix ? calcFundResult.fixDate : calcFundResult.gztime?.slice(5)}</span>
                 {eyeStatus === Enums.EyeStatus.Open && (
-                  <span className={classnames(Utils.GetValueColor(calcFundResult.jrsygz).textClass, styles.worth)}>
+                  <span className={clsx(Utils.GetValueColor(calcFundResult.jrsygz).textClass, styles.worth)}>
                     {Utils.Yang(calcFundResult.jrsygz.toFixed(2))}
                   </span>
                 )}
@@ -97,11 +97,11 @@ const FundRow: React.FC<RowProps> = (props) => {
           )}
         </div>
         {conciseSetting ? (
-          <div className={classnames(styles.conciseValue, Utils.GetValueColor(calcFundResult.gszzl).textClass)}>
+          <div className={clsx(styles.conciseValue, Utils.GetValueColor(calcFundResult.gszzl).textClass)}>
             {calcFundResult.gszzl === '' ? `  0.00 %` : `${Utils.Yang(calcFundResult.gszzl)} %`}
           </div>
         ) : (
-          <div className={classnames(styles.value, Utils.GetValueColor(calcFundResult.gszzl).blockClass)}>
+          <div className={clsx(styles.value, Utils.GetValueColor(calcFundResult.gszzl).blockClass)}>
             {calcFundResult.gszzl === '' ? `  0.00 %` : `${Utils.Yang(calcFundResult.gszzl)} %`}
           </div>
         )}
@@ -128,19 +128,19 @@ const FundRow: React.FC<RowProps> = (props) => {
           </section>
           <section>
             <span>持有收益率：</span>
-            <span className={classnames(Utils.GetValueColor(calcFundResult.cysyl).textClass)}>
+            <span className={clsx(Utils.GetValueColor(calcFundResult.cysyl).textClass)}>
               {calcFundResult.cysyl !== undefined ? `${Utils.Yang(calcFundResult.cysyl.toFixed(2))}%` : '暂无'}
             </span>
           </section>
           <section>
             <span>{isFix ? '今日收益：' : '估算收益：'}</span>
-            <span className={classnames(Utils.GetValueColor(calcFundResult.jrsygz).textClass)}>
+            <span className={clsx(Utils.GetValueColor(calcFundResult.jrsygz).textClass)}>
               ¥ {Utils.Yang(calcFundResult.jrsygz.toFixed(2))}
             </span>
           </section>
           <section>
             <span>持有收益：</span>
-            <span className={classnames(Utils.GetValueColor(calcFundResult.cysy).textClass)}>
+            <span className={clsx(Utils.GetValueColor(calcFundResult.cysy).textClass)}>
               {calcFundResult.cysy !== undefined ? `¥ ${Utils.Yang(calcFundResult.cysy.toFixed(2))}` : '暂无'}
             </span>
           </section>

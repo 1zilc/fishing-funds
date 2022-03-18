@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { Spin } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, batch } from 'react-redux';
-import classnames from 'classnames';
+import clsx from 'clsx';
 import Logo from '@/components/Logo';
 import { setRemoteFundsAction, setFundRatingMapAction } from '@/actions/fund';
 import { setZindexConfigAction } from '@/actions/zindex';
@@ -141,7 +141,7 @@ const LoadingScreen: React.FC<LoadingScreenProps> = () => {
   }, []);
 
   return (
-    <div className={classnames(styles.content)}>
+    <div className={clsx(styles.content)}>
       <Logo />
       <p>Fishing Funds</p>
       <Spin spinning={showLoading} size="small" tip={loadingText} style={{ color: 'var(--main-text-color)' }} />

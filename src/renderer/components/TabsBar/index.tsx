@@ -1,5 +1,5 @@
 import React from 'react';
-import classnemes from 'classnames';
+import classnemes from 'clsx';
 import { useSelector, useDispatch } from 'react-redux';
 import { StoreState } from '@/reducers/types';
 import { setTabActiveKeyAction } from '@/actions/tabs';

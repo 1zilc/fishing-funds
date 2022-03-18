@@ -1,7 +1,7 @@
 import React, { useMemo, useRef, useLayoutEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { ReactSortable } from 'react-sortablejs';
-import classnames from 'classnames';
+import clsx from 'clsx';
 
 import PureCard from '@/components/Card/PureCard';
 import AddIcon from '@/static/icon/add.svg';
@@ -121,7 +121,7 @@ const Optional: React.FC<OptionalProps> = () => {
           >
             {sortFundConfig.map((fund) => {
               return (
-                <PureCard key={fund.code} className={classnames(styles.row, 'hoverable')}>
+                <PureCard key={fund.code} className={clsx(styles.row, 'hoverable')}>
                   <RemoveIcon className={styles.remove} onClick={() => onRemoveFund(fund)} />
                   <div className={styles.inner}>
                     <div className={styles.name}>

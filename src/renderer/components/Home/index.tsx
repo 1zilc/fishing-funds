@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState } from 'react';
-import classnames from 'classnames';
+import clsx from 'clsx';
 import { Tabs } from 'antd';
 import { useSelector } from 'react-redux';
 
@@ -166,7 +166,7 @@ const Home: React.FC<HomeProps> = () => {
 
   return (
     <HomeContext.Provider value={{ darkMode, varibleColors }}>
-      <div className={classnames(styles.layout)}>
+      <div className={clsx(styles.layout)}>
         <GlobalStyles />
         <Header>
           <Wallet />

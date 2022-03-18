@@ -1,5 +1,5 @@
 import React from 'react';
-import classnames from 'classnames';
+import clsx from 'clsx';
 import ColorHash from 'color-hash';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -36,7 +36,7 @@ const CoinRow: React.FC<RowProps> = (props) => {
 
   return (
     <>
-      <div className={classnames(styles.row)} onClick={() => dispatch(toggleCoinCollapseAction(coin))}>
+      <div className={clsx(styles.row)} onClick={() => dispatch(toggleCoinCollapseAction(coin))}>
         <div className={styles.arrow}>
           {coin.collapse ? <ArrowUpIcon style={{ ...arrowSize }} /> : <ArrowDownIcon style={{ ...arrowSize }} />}
         </div>
@@ -60,14 +60,14 @@ const CoinRow: React.FC<RowProps> = (props) => {
             </div>
           )}
         </div>
-        <div className={classnames(styles.value)}>
-          <div className={classnames(styles.zx, Utils.GetValueColor(coin.change24h).textClass)}>
+        <div className={clsx(styles.value)}>
+          <div className={clsx(styles.zx, Utils.GetValueColor(coin.change24h).textClass)}>
             {coin.price}
             <ArrowLine value={coin.change24h} />
           </div>
           {!conciseSetting && (
             <div className={styles.zd}>
-              <div className={classnames(styles.zdf, Utils.GetValueColor(coin.change24h).textClass)}>{Utils.Yang(coin.change24h)} %</div>
+              <div className={clsx(styles.zdf, Utils.GetValueColor(coin.change24h).textClass)}>{Utils.Yang(coin.change24h)} %</div>
             </div>
           )}
         </div>
@@ -85,7 +85,7 @@ const CoinRow: React.FC<RowProps> = (props) => {
           {conciseSetting && (
             <section>
               <span>24H涨跌幅：</span>
-              <span className={classnames(Utils.GetValueColor(coin.change24h).textClass)}>{Utils.Yang(coin.change24h)} %</span>
+              <span className={clsx(Utils.GetValueColor(coin.change24h).textClass)}>{Utils.Yang(coin.change24h)} %</span>
             </section>
           )}
           <div className={styles.view}>

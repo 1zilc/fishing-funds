@@ -1,5 +1,5 @@
 import React from 'react';
-import classnames from 'classnames';
+import clsx from 'clsx';
 import { useDispatch, useSelector } from 'react-redux';
 import NP from 'number-precision';
 
@@ -36,7 +36,7 @@ const QuotationRow: React.FC<RowProps> = (props) => {
 
   return (
     <>
-      <div className={classnames(styles.row)} onClick={() => dispatch(toggleQuotationCollapse(quotation))}>
+      <div className={clsx(styles.row)} onClick={() => dispatch(toggleQuotationCollapse(quotation))}>
         <div className={styles.arrow}>
           {quotation.collapse ? <ArrowUpIcon style={{ ...arrowSize }} /> : <ArrowDownIcon style={{ ...arrowSize }} />}
         </div>
@@ -50,28 +50,28 @@ const QuotationRow: React.FC<RowProps> = (props) => {
               {quotation.zdf < 0 ? (
                 <>
                   <span className={styles.code}>{quotation.ldgpName}</span>
-                  <span className={classnames(Utils.GetValueColor(quotation.ldgpZdf).textClass)}>领跌</span>
-                  <span className={classnames(Utils.GetValueColor(quotation.ldgpZdf).textClass)}>{Utils.Yang(quotation.ldgpZdf)} %</span>
+                  <span className={clsx(Utils.GetValueColor(quotation.ldgpZdf).textClass)}>领跌</span>
+                  <span className={clsx(Utils.GetValueColor(quotation.ldgpZdf).textClass)}>{Utils.Yang(quotation.ldgpZdf)} %</span>
                 </>
               ) : (
                 <>
                   <span className={styles.code}>{quotation.lzgpName}</span>
-                  <span className={classnames(Utils.GetValueColor(quotation.lzgpZdf).textClass)}>领涨</span>
-                  <span className={classnames(Utils.GetValueColor(quotation.lzgpZdf).textClass)}>{Utils.Yang(quotation.lzgpZdf)} %</span>
+                  <span className={clsx(Utils.GetValueColor(quotation.lzgpZdf).textClass)}>领涨</span>
+                  <span className={clsx(Utils.GetValueColor(quotation.lzgpZdf).textClass)}>{Utils.Yang(quotation.lzgpZdf)} %</span>
                 </>
               )}
             </div>
           )}
         </div>
-        <div className={classnames(styles.value)}>
-          <div className={classnames(styles.zxj, Utils.GetValueColor(quotation.zdf).textClass)}>
+        <div className={clsx(styles.value)}>
+          <div className={clsx(styles.zxj, Utils.GetValueColor(quotation.zdf).textClass)}>
             {quotation.zxj}
             <ArrowLine value={quotation.zdf} />
           </div>
           {!conciseSetting && (
             <div className={styles.zd}>
-              <div className={classnames(styles.zdd, Utils.GetValueColor(quotation.zdf).textClass)}>{Utils.Yang(quotation.zdd)}</div>
-              <div className={classnames(styles.zdf, Utils.GetValueColor(quotation.zdf).textClass)}>{Utils.Yang(quotation.zdf)} %</div>
+              <div className={clsx(styles.zdd, Utils.GetValueColor(quotation.zdf).textClass)}>{Utils.Yang(quotation.zdd)}</div>
+              <div className={clsx(styles.zdf, Utils.GetValueColor(quotation.zdf).textClass)}>{Utils.Yang(quotation.zdf)} %</div>
             </div>
           )}
         </div>
@@ -85,7 +85,7 @@ const QuotationRow: React.FC<RowProps> = (props) => {
 
           <section>
             <span>涨跌额：</span>
-            <span className={classnames(Utils.GetValueColor(quotation.zdf).textClass)}>
+            <span className={clsx(Utils.GetValueColor(quotation.zdf).textClass)}>
               {Utils.Yang(NP.divide(quotation.zde, 10 ** 8).toFixed(2))}亿
             </span>
           </section>
@@ -99,11 +99,11 @@ const QuotationRow: React.FC<RowProps> = (props) => {
           </section>
           <section>
             <a onClick={() => props.onStockDetail(`${quotation.lzgpMarket}.${quotation.lzgpCode}`)}>{quotation.lzgpName}：</a>
-            <span className={classnames(Utils.GetValueColor(quotation.lzgpZdf).textClass)}>{Utils.Yang(quotation.lzgpZdf)} %</span>
+            <span className={clsx(Utils.GetValueColor(quotation.lzgpZdf).textClass)}>{Utils.Yang(quotation.lzgpZdf)} %</span>
           </section>
           <section>
             <a onClick={() => props.onStockDetail(`${quotation.ldgpMarket}.${quotation.ldgpCode}`)}>{quotation.ldgpName}：</a>
-            <span className={classnames(Utils.GetValueColor(quotation.ldgpZdf).textClass)}>{Utils.Yang(quotation.ldgpZdf)} %</span>
+            <span className={clsx(Utils.GetValueColor(quotation.ldgpZdf).textClass)}>{Utils.Yang(quotation.ldgpZdf)} %</span>
           </section>
           <section>
             <span>换手率：</span>
@@ -112,7 +112,7 @@ const QuotationRow: React.FC<RowProps> = (props) => {
           {conciseSetting && (
             <section>
               <span>涨跌幅：</span>
-              <span className={classnames(Utils.GetValueColor(quotation.zdf).textClass)}>{Utils.Yang(quotation.zdf)} %</span>
+              <span className={clsx(Utils.GetValueColor(quotation.zdf).textClass)}>{Utils.Yang(quotation.zdf)} %</span>
             </section>
           )}
           <section>

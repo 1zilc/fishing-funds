@@ -1,5 +1,5 @@
 import React from 'react';
-import classnames from 'classnames';
+import clsx from 'clsx';
 import ConsumerPriceIndex from '@/components/Home/ZindexView/EconomicDataContent/Economy/ConsumerPriceIndex';
 import ProducerPriceIndex from '@/components/Home/ZindexView/EconomicDataContent/Economy/ProducerPriceIndex';
 import GrossDomesticProduct from '@/components/Home/ZindexView/EconomicDataContent/Economy/GrossDomesticProduct';
@@ -11,7 +11,7 @@ interface EconomyProps {}
 
 const Economy: React.FC<EconomyProps> = () => {
   return (
-    <div className={classnames(styles.content)}>
+    <div className={clsx(styles.content)}>
       <ConsumerPriceIndex />
       <ProducerPriceIndex />
       <GrossDomesticProduct />

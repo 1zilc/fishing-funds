@@ -1,5 +1,5 @@
 import React from 'react';
-import classnames from 'classnames';
+import clsx from 'clsx';
 import { useDispatch, useSelector } from 'react-redux';
 
 import StandCard from '@/components/Card/StandCard';
@@ -79,7 +79,7 @@ const WalletRow: React.FC<WalletRowProps> = (props) => {
     <StandCard
       icon={
         <img
-          className={classnames(styles.icon, {
+          className={clsx(styles.icon, {
             [styles.readonly]: readonly,
           })}
           src={walletIcons[wallet.iconIndex]}
@@ -109,14 +109,14 @@ const WalletRow: React.FC<WalletRowProps> = (props) => {
           <div className={styles.time}>{updateTime}</div>
         </div>
       }
-      className={classnames({
+      className={clsx({
         selected,
         hoverable: !readonly,
       })}
       onClick={() => !readonly && props.onClick && props.onClick(wallet)}
       onDoubleClick={() => !readonly && props.onDoubleClick && props.onDoubleClick(wallet)}
     >
-      <div className={classnames(styles.row, { [styles.readonly]: readonly }, 'card-body')}>
+      <div className={clsx(styles.row, { [styles.readonly]: readonly }, 'card-body')}>
         <div className={styles.rowInfo}>
           <div style={{ textAlign: 'center' }}>
             <div>持有金额</div>

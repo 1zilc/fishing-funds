@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { useScroll, useDebounceFn, useBoolean, useThrottleFn } from 'ahooks';
 import { useSelector, useDispatch } from 'react-redux';
-import classsames from 'classnames';
+import classsames from 'clsx';
 import { Dropdown, Menu } from 'antd';
 
 import SortArrowUpIcon from '@/static/icon/sort-arrow-up.svg';
