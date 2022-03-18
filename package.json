@@ -194,6 +194,7 @@
     "electron-devtools-installer": "^3.2.0",
     "electron-notarize": "^1.0.0",
     "electron-rebuild": "^3.1.1",
+    "esbuild-loader": "^2.18.0",
     "eslint": "^8.9.0",
     "eslint-config-airbnb": "^19.0.1",
     "eslint-config-airbnb-typescript": "^15.0.0",
