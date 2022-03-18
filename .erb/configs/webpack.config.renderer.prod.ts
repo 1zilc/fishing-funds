@@ -8,7 +8,6 @@ import HtmlWebpackPlugin from 'html-webpack-plugin';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
 import { merge } from 'webpack-merge';
-import TerserPlugin from 'terser-webpack-plugin';
 import { ESBuildMinifyPlugin } from 'esbuild-loader';
 import baseConfig from './webpack.config.base';
 import webpackPaths from './webpack.paths';

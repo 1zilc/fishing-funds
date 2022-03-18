@@ -158,6 +158,8 @@ const configuration: webpack.Configuration = {
     __filename: false,
   },
 
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
   devServer: {
     port,
     compress: true,
