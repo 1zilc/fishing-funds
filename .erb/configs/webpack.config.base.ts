@@ -28,7 +28,8 @@ const configuration: webpack.Configuration = {
         exclude: /node_modules/,
         loader: 'esbuild-loader',
         options: {
-          loader: 'tsx', // Or 'ts' if you don't need tsx
+          loader: 'tsx',
+          target: 'es2021',
         },
       },
     ],
