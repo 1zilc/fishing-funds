@@ -262,14 +262,7 @@ const AppCenterContent: React.FC<AppCenterContentProps> = (props) => {
     <CustomDrawerContent title="功能中心" enterText="确定" onEnter={props.onEnter} onClose={props.onClose}>
       <div className={styles.content}>
         <div className={styles.search}>
-          <Search
-            value={keyword}
-            onChange={(e) => setKeyword(e.target.value)}
-            type="text"
-            placeholder="功能名称"
-            enterButton
-            size="small"
-          />
+          <Search value={keyword} onChange={(e) => setKeyword(e.target.value)} type="text" placeholder="功能名称或者网址" enterButton />
         </div>
         {apps}
         <CustomDrawer show={showManageFundDrawer}>

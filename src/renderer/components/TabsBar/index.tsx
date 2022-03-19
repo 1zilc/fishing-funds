@@ -32,6 +32,10 @@ const tabs = [
     key: Enums.TabKeyType.Coin,
     name: '货币',
   },
+  // {
+  //   key: Enums.TabKeyType.News,
+  //   name: '资讯',
+  // },
 ];
 const TabsBar: React.FC<TabsBarProps> = () => {
   const dispatch = useDispatch();

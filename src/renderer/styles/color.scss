@@ -1,19 +1,19 @@
 .block-up {
   background-color: var(--increase-color);
   box-shadow: 0 2px 5px var(--increase-color);
-  transition: all 0.3s;
+  transition: background 0.3s;
 }
 
 .block-down {
   background-color: var(--reduce-color);
   box-shadow: 0 2px 5px var(--reduce-color);
-  transition: all 0.3s;
+  transition: background 0.3s;
 }
 
 .block-none {
   background-color: var(--reverse-text-color);
   box-shadow: 0 2px 5px var(--reverse-text-color);
-  transition: all 0.3s;
+  transition: background 0.3s;
 }
 
 .text-up {

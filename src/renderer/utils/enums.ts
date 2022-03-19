@@ -77,6 +77,7 @@ export enum TabKeyType {
   Quotation,
   Stock,
   Coin,
+  News,
 }
 
 // 持仓类型

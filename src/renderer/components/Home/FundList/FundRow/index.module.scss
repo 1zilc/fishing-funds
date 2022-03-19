@@ -62,7 +62,6 @@
   margin-left: 5px;
   text-align: center;
   white-space: pre-wrap;
-  transition: all 0.3s;
 }
 
 .warn {
@@ -73,7 +72,6 @@
   padding: 0px 3px;
   margin-left: 5px;
   white-space: nowrap;
-  transition: 0.3s;
 }
 .conciseValue {
   font-size: calc(20rem / var(--base-font-size));
@@ -81,7 +79,6 @@
   white-space: pre-wrap;
   font-weight: 600;
   margin-left: 5px;
-  transition: all 0.3s;
 }
 
 .remove {
