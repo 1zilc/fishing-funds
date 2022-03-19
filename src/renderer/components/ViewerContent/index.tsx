@@ -3,6 +3,8 @@ import { Progress } from 'antd';
 import { useBoolean } from 'ahooks';
 import { useSelector, useDispatch } from 'react-redux';
 
+import StarIcon from '@/static/icon/star.svg';
+import CopyIcon from '@/static/icon/copy.svg';
 import ArrowLeftIcon from '@/static/icon/arrow-left.svg';
 import ArrowRightIcon from '@/static/icon/arrow-right.svg';
 import RefreshIcon from '@/static/icon/refresh.svg';
@@ -14,7 +16,7 @@ import styles from './index.module.scss';
 
 interface ViewerContentProps {}
 
-const { clipboard, dialog, ipcRenderer } = window.contextModules.electron;
+const { clipboard, dialog, ipcRenderer, shell } = window.contextModules.electron;
 
 const defaultAgent =
   'Mozilla/5.0 (iPhone; CPU iPhone OS 10_3_1 like Mac OS X) AppleWebKit/603.1.30 (KHTML, like Gecko) Version/10.0 Mobile/14E304 Safari/602.1';
@@ -37,6 +39,13 @@ const Content = () => {
         type: 'info',
         message: `已复制到粘贴板`,
       });
+    }
+  }, []);
+
+  const onVisit = useCallback(() => {
+    const url = viewRef.current?.getURL();
+    if (url) {
+      shell.openExternal(url);
     }
   }, []);
 
@@ -99,7 +108,7 @@ const Content = () => {
   }, [show]);
 
   return (
-    <CustomDrawerContent title={title} enterText="链接" onClose={() => dispatch(closeWebAction())} onEnter={onCopyUrl}>
+    <CustomDrawerContent title={title} enterText="跳转" onClose={() => dispatch(closeWebAction())} onEnter={onVisit}>
       <div className={styles.content}>
         {url && (
           <webview
@@ -120,9 +129,11 @@ const Content = () => {
             strokeColor={done ? 'transparent' : 'var(--primary-color)'}
           />
           <div className={styles.nav}>
+            <CopyIcon onClick={onCopyUrl} />
             <ArrowLeftIcon onClick={() => viewRef.current?.goBack()} />
             <RefreshIcon onClick={() => viewRef.current?.reload()} />
             <ArrowRightIcon onClick={() => viewRef.current?.goForward()} />
+            <StarIcon onClick={() => viewRef.current?.goForward()} />
           </div>
         </div>
       </div>

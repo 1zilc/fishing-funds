@@ -17,6 +17,8 @@
     fill: var(--inner-text-color);
     cursor: pointer;
     transition: all 0.2s;
+    height: 18px;
+    width: 18px;
 
     &:hover {
       border-radius: 5px;
