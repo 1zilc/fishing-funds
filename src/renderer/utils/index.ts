@@ -128,7 +128,7 @@ export function getVariblesColor(varibles: typeof CONST.VARIBLES) {
   }, {});
 }
 
-export function parsepingzhongdata(code: string) {
+export function Parsepingzhongdata(code: string) {
   try {
     return eval(`(() => {
       ${code}
@@ -374,4 +374,13 @@ export function GbLength(str: string) {
     }
   }
   return len;
+}
+
+export function CheckUrlValid(value: string) {
+  const domainReg = new RegExp('((http|https)://)(www.)?[a-zA-Z0-9@:%._\\+~#?&//=]{2,256}\\.[a-z]{2,6}\\b([-a-zA-Z0-9@:%._\\+~#?&//=]*)');
+  const valid = domainReg.test(`http://${value}`) || domainReg.test(`https://${value}`) || domainReg.test(value);
+  return {
+    valid,
+    url: value.startsWith('http://') ? value : `http://${value}`,
+  };
 }

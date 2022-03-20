@@ -2,7 +2,6 @@ import React, { useState, useMemo, useCallback } from 'react';
 import ColorHash from 'color-hash';
 import { useBoolean } from 'ahooks';
 import { Input } from 'antd';
-import { useDispatch } from 'react-redux';
 
 import WalletIcon from '@/static/icon/wallet.svg';
 import NewsIcon from '@/static/icon/news.svg';
@@ -11,12 +10,7 @@ import BubbleIcon from '@/static/icon/bubble.svg';
 import OrderIcon from '@/static/icon/order.svg';
 import PieIcon from '@/static/icon/pie.svg';
 import WeiboIcon from '@/static/icon/weibo.svg';
-import NeteaseIcon from '@/static/icon/netease.svg';
-import FundsIcon from '@/static/icon/funds.svg';
 import TelegramIcon from '@/static/icon/telegram.svg';
-import GithubIcon from '@/static/icon/github.svg';
-import BilibiliIcon from '@/static/icon/bilibili.svg';
-import TaobaoIcon from '@/static/icon/taobao.svg';
 import YoutubeIcon from '@/static/icon/youtube.svg';
 import FundsBoxIcon from '@/static/icon/funds-box.svg';
 import BarChartIcon from '@/static/icon/bar-chart.svg';
@@ -44,10 +38,10 @@ import FundRankingContent from '@/components/Home/FundList/FundRankingContent';
 import StockRankingContent from '@/components/Home/StockList/StockRankingContent';
 import CoinRankingContent from '@/components/Home/CoinList/CoinRankingContent';
 import EconomicCalendarContent from '@/components/Home/StockList/EconomicCalendarContent';
-import { openWebAction } from '@/actions/web';
-
+import QuickSearch from '@/components/Toolbar/AppCenterContent/QuickSearch';
+import * as Utils from '@/utils';
+import { useOpenWebView } from '@/utils/hooks';
 import styles from './index.module.scss';
-import { GetValueColor } from '@/utils';
 
 const { Search } = Input;
 const iconSize = { height: 18, width: 18 };
@@ -57,6 +51,7 @@ interface AppCenterContentProps {
   onClose: () => void;
   onEnter: () => void;
 }
+
 interface AppConfig {
   name: string;
   click: () => void;
@@ -100,7 +95,6 @@ function renderApps(groups: { name: string; config: AppConfig[] }[], keyword: st
 }
 
 const AppCenterContent: React.FC<AppCenterContentProps> = (props) => {
-  const dispatch = useDispatch();
   const [keyword, setKeyword] = useState('');
   const [showManageFundDrawer, { setTrue: openManageFundDrawer, setFalse: closeManageFundDrawer }] = useBoolean(false);
   const [showManageWalletDrawer, { setTrue: openManageWalletDrawer, setFalse: closeManageWalletDrawer }] = useBoolean(false);
@@ -119,11 +113,12 @@ const AppCenterContent: React.FC<AppCenterContentProps> = (props) => {
   const [showCoinRankingDrawer, { setTrue: openCoinRankingDrawer, setFalse: closeCoinRankingDrawer }] = useBoolean(false);
   const [showEconomicCalendarDrawer, { setTrue: openEconomicCalendarDrawer, setFalse: closeEconomicCalendarDrawer }] = useBoolean(false);
 
-  const onViewWeb = useCallback((args) => dispatch(openWebAction(args)), []);
+  const openWebView = useOpenWebView();
 
   const onSearch = useCallback((value: string) => {
-    if (value.startsWith('http://') || value.startsWith('https://')) {
-      onViewWeb({ title: '', url: value });
+    const { valid, url } = Utils.CheckUrlValid(value);
+    if (valid) {
+      openWebView({ title: '', url });
     }
   }, []);
 
@@ -233,25 +228,25 @@ const AppCenterContent: React.FC<AppCenterContentProps> = (props) => {
                 name: '新浪微博',
                 icon: <WeiboIcon style={{ ...iconSize }} />,
                 color: '#F7C544',
-                click: () => onViewWeb({ title: '新浪微博', url: 'https://m.weibo.cn/', phone: false }),
+                click: () => openWebView({ title: '新浪微博', url: 'https://m.weibo.cn/', phone: false }),
               },
               {
                 name: 'Telegram',
                 icon: <TelegramIcon style={{ ...iconSize }} />,
                 color: '#30A9EE',
-                click: () => onViewWeb({ title: 'Telegram', url: 'https://web.telegram.org/', phone: false }),
+                click: () => openWebView({ title: 'Telegram', url: 'https://web.telegram.org/', phone: false }),
               },
               {
                 name: 'YouTube',
                 icon: <YoutubeIcon style={{ ...iconSize }} />,
                 color: '#E93223',
-                click: () => onViewWeb({ title: 'YouTube', url: 'https://www.youtube.com/', phone: false }),
+                click: () => openWebView({ title: 'YouTube', url: 'https://www.youtube.com/', phone: false }),
               },
               {
                 name: '东财人气榜',
                 icon: <i style={{ ...iconSize }}>榜</i>,
                 click: () =>
-                  onViewWeb({
+                  openWebView({
                     title: '东财人气榜',
                     url: 'https://vipmoney.eastmoney.com/collect/stockranking/pages/ranking9_3/list.html',
                     phone: true,
@@ -279,6 +274,7 @@ const AppCenterContent: React.FC<AppCenterContentProps> = (props) => {
             onSearch={onSearch}
           />
         </div>
+        <QuickSearch value={keyword} />
         {apps}
         <CustomDrawer show={showManageFundDrawer}>
           <ManageFundContent onClose={closeManageFundDrawer} onEnter={closeManageFundDrawer} />

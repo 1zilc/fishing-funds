@@ -1,6 +1,5 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 import { Tabs } from 'antd';
-import { useDispatch } from 'react-redux';
 
 import FocusList from '@/components/Home/NewsList/NewsContent/FocusList';
 import LiveList from '@/components/Home/NewsList/NewsContent/LiveList';
@@ -16,7 +15,7 @@ import EuList from '@/components/Home/NewsList/NewsContent/EuList';
 import UkList from '@/components/Home/NewsList/NewsContent/UkList';
 import JpList from '@/components/Home/NewsList/NewsContent/JpList';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
-import { openWebAction } from '@/actions/web';
+import { useOpenWebView } from '@/utils/hooks';
 import styles from './index.module.scss';
 
 interface NewsContentProps {
@@ -25,55 +24,54 @@ interface NewsContentProps {
 }
 
 const NewsContent: React.FC<NewsContentProps> = (props) => {
-  const dispatch = useDispatch();
-  const onViewWeb = useCallback((url) => dispatch(openWebAction({ title: '新闻详情', phone: true, url })), []);
+  const openWebView = useOpenWebView({ title: '新闻详情', phone: true });
 
   return (
     <CustomDrawerContent title="新闻动态" enterText="确定" onEnter={props.onEnter} onClose={props.onClose}>
       <div className={styles.content}>
         <Tabs animated={{ tabPane: true }} tabBarGutter={15}>
           <Tabs.TabPane tab="焦点" key={String(0)}>
-            <FocusList onView={onViewWeb} />
+            <FocusList onView={openWebView} />
           </Tabs.TabPane>
           <Tabs.TabPane tab="股市直播" key={String(1)}>
-            <LiveList onView={onViewWeb} />
+            <LiveList onView={openWebView} />
           </Tabs.TabPane>
           <Tabs.TabPane tab="上市公司" key={String(2)}>
-            <ListedList onView={onViewWeb} />
+            <ListedList onView={openWebView} />
           </Tabs.TabPane>
           <Tabs.TabPane tab="全球直播" key={String(3)}>
-            <GlobalList onView={onViewWeb} />
+            <GlobalList onView={openWebView} />
           </Tabs.TabPane>
         </Tabs>
         <Tabs animated={{ tabPane: true }} tabBarGutter={15}>
           <Tabs.TabPane tab="商品" key={String(0)}>
-            <GoodsList onView={onViewWeb} />
+            <GoodsList onView={openWebView} />
           </Tabs.TabPane>
           <Tabs.TabPane tab="外汇" key={String(1)}>
-            <ExchangeList onView={onViewWeb} />
+            <ExchangeList onView={openWebView} />
           </Tabs.TabPane>
           <Tabs.TabPane tab="债券" key={String(2)}>
-            <BondList onView={onViewWeb} />
+            <BondList onView={openWebView} />
           </Tabs.TabPane>
           <Tabs.TabPane tab="基金" key={String(3)}>
-            <FundList onView={onViewWeb} />
+            <FundList onView={openWebView} />
           </Tabs.TabPane>
         </Tabs>
         <Tabs animated={{ tabPane: true }} tabBarGutter={15}>
           <Tabs.TabPane tab="中国央行" key={String(0)}>
-            <ChinaList onView={onViewWeb} />
+            <ChinaList onView={openWebView} />
           </Tabs.TabPane>
           <Tabs.TabPane tab="美联储" key={String(1)}>
-            <UsaList onView={onViewWeb} />
+            <UsaList onView={openWebView} />
           </Tabs.TabPane>
           <Tabs.TabPane tab="欧洲" key={String(2)}>
-            <EuList onView={onViewWeb} />
+            <EuList onView={openWebView} />
           </Tabs.TabPane>
           <Tabs.TabPane tab="英国" key={String(3)}>
-            <UkList onView={onViewWeb} />
+            <UkList onView={openWebView} />
           </Tabs.TabPane>
           <Tabs.TabPane tab="日本" key={String(4)}>
-            <JpList onView={onViewWeb} />
+            <JpList onView={openWebView} />
           </Tabs.TabPane>
         </Tabs>
       </div>

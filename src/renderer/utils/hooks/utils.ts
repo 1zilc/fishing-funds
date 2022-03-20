@@ -6,6 +6,7 @@ import * as echarts from 'echarts';
 
 import { updateStockAction } from '@/actions/stock';
 import { updateFundAction } from '@/actions/fund';
+import { openWebAction } from '@/actions/web';
 import { StoreState } from '@/reducers/types';
 import * as Utils from '@/utils';
 import * as CONST from '@/constants';
@@ -381,4 +382,13 @@ export function useAllCyFunds(statusMap: Record<string, boolean>) {
   }, [statusMap, wallets]);
 
   return funds;
+}
+
+export function useOpenWebView(params: any = {}) {
+  const dispatch = useDispatch();
+  const openWebView = useCallback((args) => {
+    const obj = typeof args === 'string' ? { url: args } : args;
+    dispatch(openWebAction({ ...params, ...obj }));
+  }, []);
+  return openWebView;
 }

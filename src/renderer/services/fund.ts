@@ -695,7 +695,7 @@ export async function GetSecuritiesWareHouseFromEastmoney(code: string, securiti
 export async function GetFundDetailFromEastmoney(code: string) {
   try {
     const { body } = await got(`http://fund.eastmoney.com/pingzhongdata/${code}.js`, {});
-    const response: Fund.PingzhongData = Utils.parsepingzhongdata(body);
+    const response: Fund.PingzhongData = Utils.Parsepingzhongdata(body);
     return response;
   } catch (error) {
     return {};

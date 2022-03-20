@@ -45,6 +45,12 @@
   background-color: var(--selected-color) !important;
 }
 
+.brightness {
+  &:hover {
+    filter: brightness(115%);
+  }
+}
+
 .copify {
   -webkit-user-select: text;
 }
