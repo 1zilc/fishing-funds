@@ -106,6 +106,7 @@ function main() {
     }));
     contextMenu = buildContextMenu({ mb, appUpdater }, menus);
   });
+
   // menubar 相关监听
   mb.on('after-create-window', () => {
     // 设置系统色彩偏好
@@ -113,10 +114,6 @@ function main() {
     // 系统级别高斯模糊
     if (process.platform === 'darwin') {
       mb.window!.setVibrancy('sidebar');
-    }
-    // 打开开发者工具
-    if (!app.isPackaged) {
-      mb.window!.webContents.openDevTools({ mode: 'undocked' });
     }
     // 右键菜单
     tray.on('right-click', () => {
@@ -134,12 +131,24 @@ function main() {
     if (openBackupFilePath) {
       sendMessageToRenderer(mb, 'open-backup-file', openBackupFilePath);
     }
+
     // 外部打开 _blank连接
     mb.window?.webContents.setWindowOpenHandler(({ url }) => {
       shell.openExternal(url);
       return { action: 'deny' };
     });
   });
+
+  // 打开开发者工具
+  mb.window?.webContents.on('did-frame-finish-load', () => {
+    if (!app.isPackaged) {
+      mb.window?.webContents.once('devtools-opened', () => {
+        mb.window?.focus();
+      });
+      mb.window?.webContents.openDevTools({ mode: 'undocked' });
+    }
+  });
+
   // mb.on('ready', () => {
   //   // mb.window?.setVisibleOnAllWorkspaces(true);
   // });

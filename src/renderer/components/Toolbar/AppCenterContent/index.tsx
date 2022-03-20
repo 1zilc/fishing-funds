@@ -47,6 +47,7 @@ import EconomicCalendarContent from '@/components/Home/StockList/EconomicCalenda
 import { openWebAction } from '@/actions/web';
 
 import styles from './index.module.scss';
+import { GetValueColor } from '@/utils';
 
 const { Search } = Input;
 const iconSize = { height: 18, width: 18 };
@@ -119,6 +120,12 @@ const AppCenterContent: React.FC<AppCenterContentProps> = (props) => {
   const [showEconomicCalendarDrawer, { setTrue: openEconomicCalendarDrawer, setFalse: closeEconomicCalendarDrawer }] = useBoolean(false);
 
   const onViewWeb = useCallback((args) => dispatch(openWebAction(args)), []);
+
+  const onSearch = useCallback((value: string) => {
+    if (value.startsWith('http://') || value.startsWith('https://')) {
+      onViewWeb({ title: '', url: value });
+    }
+  }, []);
 
   const apps = useMemo(
     () =>
@@ -262,7 +269,15 @@ const AppCenterContent: React.FC<AppCenterContentProps> = (props) => {
     <CustomDrawerContent title="功能中心" enterText="确定" onEnter={props.onEnter} onClose={props.onClose}>
       <div className={styles.content}>
         <div className={styles.search}>
-          <Search value={keyword} onChange={(e) => setKeyword(e.target.value)} type="text" placeholder="功能名称或者网址" enterButton />
+          <Search
+            value={keyword}
+            onChange={(e) => setKeyword(e.target.value)}
+            type="text"
+            placeholder="功能名称或者网址"
+            enterButton
+            size="small"
+            onSearch={onSearch}
+          />
         </div>
         {apps}
         <CustomDrawer show={showManageFundDrawer}>

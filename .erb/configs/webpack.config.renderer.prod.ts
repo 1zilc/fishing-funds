@@ -93,7 +93,6 @@ const configuration: webpack.Configuration = {
     minimize: true,
     minimizer: [
       new ESBuildMinifyPlugin({
-        target: 'es2021',
         css: true,
       }),
     ],

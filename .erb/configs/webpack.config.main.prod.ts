@@ -40,11 +40,7 @@ const configuration: webpack.Configuration = {
   },
 
   optimization: {
-    minimizer: [
-      new ESBuildMinifyPlugin({
-        target: 'es2021',
-      }),
-    ],
+    minimizer: [new ESBuildMinifyPlugin()],
   },
 
   plugins: [
