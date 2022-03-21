@@ -38,8 +38,12 @@ const configuration: webpack.Configuration = {
     publicPath: './',
     filename: 'renderer.js',
     library: {
-      type: 'umd',
+      type: 'module',
     },
+  },
+
+  experiments: {
+    outputModule: true,
   },
 
   module: {
@@ -135,6 +139,7 @@ const configuration: webpack.Configuration = {
       },
       isBrowser: false,
       isDevelopment: process.env.NODE_ENV !== 'production',
+      scriptLoading: 'module',
     }),
   ],
 };
