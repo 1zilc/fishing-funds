@@ -28,6 +28,7 @@ const Content = () => {
   const [loading, { setTrue: setLoadingTrue, setFalse: setLoadingFalse }] = useBoolean(false);
   const [done, { setTrue: setDoneTrue, setFalse: setDoneFalse }] = useBoolean(false);
   const [percent, setPercent] = useState(0);
+  const [webTitle, setWebTitle] = useState(title);
   const [timer, setTimer] = useState<any>(0);
 
   const onCopyUrl = useCallback(() => {
@@ -64,6 +65,7 @@ const Content = () => {
     const domReady = () => {
       const targetId = viewRef.current?.getWebContentsId();
       ipcRenderer.invoke('registry-webview', targetId);
+      setWebTitle(viewRef.current.getTitle());
     };
 
     viewRef.current?.addEventListener('dom-ready', domReady);
@@ -108,7 +110,7 @@ const Content = () => {
   }, [show]);
 
   return (
-    <CustomDrawerContent title={title} enterText="跳转" onClose={() => dispatch(closeWebAction())} onEnter={onVisit}>
+    <CustomDrawerContent title={webTitle} enterText="跳转" onClose={() => dispatch(closeWebAction())} onEnter={onVisit}>
       <div className={styles.content}>
         {url && (
           <webview

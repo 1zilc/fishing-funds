@@ -24,6 +24,13 @@
 
   h3 {
     color: var(--main-text-color);
+    flex: 1;
+    text-align: center;
+    margin: 0 calc(var(--base-padding) * 2);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-break: keep-all;
+    white-space: nowrap;
   }
 
   .close {
