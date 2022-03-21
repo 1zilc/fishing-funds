@@ -94,6 +94,8 @@ function renderApps(groups: { name: string; config: AppConfig[] }[], keyword: st
   ));
 }
 
+const searchPlaceholders = ['直达任意网站链接', '搜索股票、基金、板块名称或代码', '检索功能模块名称', '全网搜索一下,例如 "天天基金"'];
+
 const AppCenterContent: React.FC<AppCenterContentProps> = (props) => {
   const [keyword, setKeyword] = useState('');
   const [showManageFundDrawer, { setTrue: openManageFundDrawer, setFalse: closeManageFundDrawer }] = useBoolean(false);
@@ -268,7 +270,7 @@ const AppCenterContent: React.FC<AppCenterContentProps> = (props) => {
             value={keyword}
             onChange={(e) => setKeyword(e.target.value)}
             type="text"
-            placeholder="功能名称或者网址"
+            placeholder={searchPlaceholders[Math.floor(Math.random() * searchPlaceholders.length)]}
             enterButton
             size="small"
             onSearch={onSearch}

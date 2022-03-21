@@ -36,7 +36,9 @@ const CoinList: React.FC<CoinListProps> = (props) => {
               name: Helpers.Coin.GetCurrentCoin(item.code).symbol,
               value: Number(item.price),
               zdf: Number(item.change24h),
-              zdd: Number(Number(Number(item.change24h) * Number(item.price) * 0.01).toFixed(2)),
+              zdd: Number(
+                Number(Number(item.change24h) * Number(item.price) * 0.01).toFixed(item.price?.toString().split('.')[1]?.length ?? 0)
+              ),
             }))}
             onDetail={setDetailDrawer}
           />
