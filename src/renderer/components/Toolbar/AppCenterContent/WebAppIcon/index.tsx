@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import { useBoolean } from 'ahooks';
 import ColorHash from 'color-hash';
 import * as Enums from '@/utils/enums';

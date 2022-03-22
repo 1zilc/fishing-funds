@@ -72,7 +72,7 @@ const ToolBar: React.FC<ToolBarProps> = () => {
           <SettingIcon style={{ ...iconSize }} onClick={openSettingDrawer} />
         </Badge>
       </div>
-      <CustomDrawer show={showAppCenterDrawer} cached>
+      <CustomDrawer show={showAppCenterDrawer}>
         <AppCenterContent
           onClose={closeAppCenterDrawer}
           onEnter={() => {

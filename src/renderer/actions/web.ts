@@ -27,7 +27,7 @@ export function setWebAction(data: { show: boolean; phone?: boolean; title: stri
 export function closeWebAction(): ThunkAction {
   return (dispatch, getState) => {
     try {
-      dispatch(setWebAction({ url: '', title: '', phone: false, show: false }));
+      dispatch(setWebAction({ url: '', title: '', show: false }));
     } catch (error) {}
   };
 }

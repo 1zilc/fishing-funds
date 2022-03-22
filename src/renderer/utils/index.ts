@@ -381,6 +381,6 @@ export function CheckUrlValid(value: string) {
   const valid = domainReg.test(`http://${value}`) || domainReg.test(`https://${value}`) || domainReg.test(value);
   return {
     valid,
-    url: value.startsWith('http://') ? value : `http://${value}`,
+    url: value.startsWith('http://') || value.startsWith('https://') ? value : `http://${value}`,
   };
 }

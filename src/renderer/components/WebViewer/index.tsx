@@ -29,7 +29,7 @@ const defaultAgent =
 const Content = () => {
   const dispatch = useDispatch();
   const { url, phone, show, title } = useSelector((state: StoreState) => state.web.view);
-  const { webConfig, codeMap } = useSelector((state: StoreState) => state.web.config);
+  const { codeMap } = useSelector((state: StoreState) => state.web.config);
   const viewRef = useRef<any>(null);
   const [loading, { setTrue: setLoadingTrue, setFalse: setLoadingFalse }] = useBoolean(false);
   const [done, { setTrue: setDoneTrue, setFalse: setDoneFalse }] = useBoolean(false);

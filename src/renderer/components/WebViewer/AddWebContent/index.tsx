@@ -25,7 +25,7 @@ const AddWebContent: React.FC<AddWebContentProps> = (props) => {
 
   function onEnter() {
     props.onEnter({
-      title,
+      title: title || '未命名',
       url,
       iconType,
       color: colorHash.hex(title),
