@@ -298,6 +298,9 @@ export function useDrawer<T>(initialData: T) {
     close: () => {
       setDrawer({ show: false, data: initialData });
     },
+    open: () => {
+      setDrawer((_) => ({ ..._, show: true }));
+    },
   };
 }
 

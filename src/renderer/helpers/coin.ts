@@ -3,13 +3,8 @@ import { store } from '@/.';
 import { sortCoinsCachedAction, setRemoteCoinsAction, SET_COINS_LOADING, SET_REMOTE_COINS_LOADING } from '@/actions/coin';
 import * as Services from '@/services';
 import * as Utils from '@/utils';
-import * as CONST from '@/constants';
 import * as Enums from '@/utils/enums';
 import * as Helpers from '@/helpers';
-
-export interface CodeCoinMap {
-  [index: string]: Coin.SettingItem & { originSort: number };
-}
 
 export function GetCoinConfig() {
   const {
@@ -25,7 +20,7 @@ export function GetCodeMap(config: Coin.SettingItem[]) {
   return config.reduce((r, c, i) => {
     r[c.code] = { ...c, originSort: i };
     return r;
-  }, {} as CodeCoinMap);
+  }, {} as Coin.CodeMap);
 }
 
 export async function GetCoins(config?: Coin.SettingItem[]) {

@@ -25,4 +25,5 @@ export default {
   REMOTE_FUND_MAP: 'REMOTE_FUND_MAP', // 远程基金库code -> map
   FUND_RATING_MAP: 'FUND_RATING_MAP', // 基金评级code -> map
   REMOTE_COIN_MAP: 'REMOTE_COIN_MAP', // 远程货币code -> map
+  WEB_SETTING: 'WEB_SETTING', // 网站配置
 };

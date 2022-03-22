@@ -12,6 +12,7 @@ import { setWalletConfigAction, changeEyeStatusAction, selectWalletAction } from
 import { setStockConfigAction } from '@/actions/stock';
 import { setCoinConfigAction, setRemoteCoinsAction } from '@/actions/coin';
 import { syncSortModeAction, syncViewModeAction } from '@/actions/sort';
+import { setWebConfigAction } from '@/actions/web';
 import { useDrawer } from '@/utils/hooks';
 import * as CONST from '@/constants';
 import * as Utils from '@/utils';
@@ -62,6 +63,10 @@ const LoadingScreen: React.FC<LoadingScreenProps> = () => {
     setLoading('加载货币配置...');
     const coinSetting = await Utils.GetStorage(CONST.STORAGE.COIN_SETTING, []);
     dispatch(setCoinConfigAction(coinSetting));
+
+    setLoading('加载web配置...');
+    const webSetting = await Utils.GetStorage(CONST.STORAGE.WEB_SETTING, Helpers.Web.defaultWebConfig);
+    dispatch(setWebConfigAction(webSetting));
 
     setLoading('加载系统设置...');
     const systemSetting = await Utils.GetStorage(CONST.STORAGE.SYSTEM_SETTING, Helpers.Setting.defalutSystemSetting);
@@ -131,6 +136,7 @@ const LoadingScreen: React.FC<LoadingScreenProps> = () => {
       dispatch(setFundRatingMapAction(Object.values(fundRatingMap)));
       dispatch(setRemoteCoinsAction(Object.values(remoteCoinMap)));
     });
+
     setLoading('加载完毕');
 
     navigate('/home');

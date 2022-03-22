@@ -7,7 +7,7 @@ export interface StockState {
   stocksLoading: boolean;
   config: {
     stockConfig: Stock.SettingItem[];
-    codeMap: Helpers.Stock.CodeStockMap;
+    codeMap: Stock.CodeMap;
   };
   industryMap: Record<string, Stock.IndustryItem[]>;
 }

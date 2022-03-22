@@ -218,3 +218,8 @@ export enum CoinViewType {
   List,
   Grid,
 }
+export enum WebIconType {
+  First,
+  Favicon,
+  Svg,
+}

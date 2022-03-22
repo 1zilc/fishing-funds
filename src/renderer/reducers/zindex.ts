@@ -5,7 +5,7 @@ import * as Helpers from '@/helpers';
 export interface ZindexState {
   zindexs: (Zindex.ResponseItem & Zindex.ExtraRow)[];
   zindexsLoading: boolean;
-  config: { zindexConfig: Zindex.SettingItem[]; codeMap: Helpers.Zindex.CodeZindexMap };
+  config: { zindexConfig: Zindex.SettingItem[]; codeMap: Zindex.CodeMap };
 }
 
 const zindex: Reducer<ZindexState> = (

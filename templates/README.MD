@@ -13,5 +13,5 @@ npx generate-react-cli component Chart --type=chart --path=src/renderer/componen
 ### Content
 
 ```
-npx generate-react-cli component Content --type=content --path=src/renderer/components/Home
+npx generate-react-cli component Content --type=content --path=src/renderer/components
 ```

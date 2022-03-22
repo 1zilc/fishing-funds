@@ -5,13 +5,18 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import StarIcon from '@/static/icon/star.svg';
 import CopyIcon from '@/static/icon/copy.svg';
+import StarFillIcon from '@/static/icon/star-fill.svg';
 import ArrowLeftIcon from '@/static/icon/arrow-left.svg';
 import ArrowRightIcon from '@/static/icon/arrow-right.svg';
 import RefreshIcon from '@/static/icon/refresh.svg';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
 import CustomDrawer from '@/components/CustomDrawer';
+import AddWebContent from '@/components/WebViewer/AddWebContent';
 import { StoreState } from '@/reducers/types';
-import { closeWebAction } from '@/actions/web';
+import { closeWebAction, addWebAction, deleteWebAction } from '@/actions/web';
+import { useDrawer } from '@/utils/hooks';
+import * as CONST from '@/constants';
+import * as Enums from '@/utils/enums';
 import styles from './index.module.scss';
 
 interface ViewerContentProps {}
@@ -23,13 +28,26 @@ const defaultAgent =
 
 const Content = () => {
   const dispatch = useDispatch();
-  const { url, phone, show, title } = useSelector((state: StoreState) => state.web);
+  const { url, phone, show, title } = useSelector((state: StoreState) => state.web.view);
+  const { webConfig, codeMap } = useSelector((state: StoreState) => state.web.config);
   const viewRef = useRef<any>(null);
   const [loading, { setTrue: setLoadingTrue, setFalse: setLoadingFalse }] = useBoolean(false);
   const [done, { setTrue: setDoneTrue, setFalse: setDoneFalse }] = useBoolean(false);
   const [percent, setPercent] = useState(0);
   const [webTitle, setWebTitle] = useState(title);
   const [timer, setTimer] = useState<any>(0);
+  const [favicons, setFavicons] = useState<string[]>([]);
+
+  const {
+    data: webDetail,
+    show: showAddWebContent,
+    open: openAddWebContent,
+    close: closeAddWebContent,
+  } = useDrawer({
+    title: webTitle,
+    url: url,
+    iconType: Enums.WebIconType.First,
+  });
 
   const onCopyUrl = useCallback(() => {
     const url = viewRef.current?.getURL();
@@ -50,6 +68,15 @@ const Content = () => {
     }
   }, []);
 
+  const onAddWeb = useCallback((web: Web.SettingItem) => {
+    dispatch(addWebAction(web));
+    closeAddWebContent();
+  }, []);
+
+  const onRemoveWeb = useCallback(() => {
+    dispatch(deleteWebAction(url));
+  }, []);
+
   useEffect(() => {
     const didStartLoading = () => {
       setDoneFalse();
@@ -59,18 +86,24 @@ const Content = () => {
       setLoadingFalse();
       setTimeout(() => {
         setDoneTrue();
-        setPercent(0);
-      }, 300);
+        setTimeout(() => {
+          setPercent(0);
+        }, 100);
+      }, 200);
     };
     const domReady = () => {
       const targetId = viewRef.current?.getWebContentsId();
       ipcRenderer.invoke('registry-webview', targetId);
-      setWebTitle(viewRef.current.getTitle());
+      setWebTitle((_) => _ || viewRef.current.getTitle());
+    };
+    const pageFaviconUpdated = (e: any) => {
+      setFavicons(e.favicons);
     };
 
     viewRef.current?.addEventListener('dom-ready', domReady);
     viewRef.current?.addEventListener('did-start-loading', didStartLoading);
     viewRef.current?.addEventListener('did-stop-loading', didStopLoading);
+    viewRef.current?.addEventListener('page-favicon-updated', pageFaviconUpdated);
     ipcRenderer.on('webview-new-window', (e, data) => {
       viewRef.current?.loadURL(data);
     });
@@ -79,6 +112,7 @@ const Content = () => {
       viewRef.current?.removeEventListener('dom-ready', domReady);
       viewRef.current?.removeEventListener('did-start-loading', didStartLoading);
       viewRef.current?.removeEventListener('did-stop-loading', didStopLoading);
+      viewRef.current?.removeEventListener('page-favicon-updated', pageFaviconUpdated);
       ipcRenderer.removeAllListeners('webview-new-window');
     };
   }, []);
@@ -135,22 +169,25 @@ const Content = () => {
             <ArrowLeftIcon onClick={() => viewRef.current?.goBack()} />
             <RefreshIcon onClick={() => viewRef.current?.reload()} />
             <ArrowRightIcon onClick={() => viewRef.current?.goForward()} />
-            <StarIcon onClick={() => viewRef.current?.goForward()} />
+            {codeMap[url] ? <StarFillIcon onClick={onRemoveWeb} /> : <StarIcon onClick={openAddWebContent} />}
           </div>
         </div>
       </div>
+      <CustomDrawer show={showAddWebContent} zIndex={CONST.DEFAULT.DRAWER_ZINDEX_TOP}>
+        <AddWebContent web={{ ...webDetail, title: webTitle }} onClose={closeAddWebContent} onEnter={onAddWeb} favicons={favicons} />
+      </CustomDrawer>
     </CustomDrawerContent>
   );
 };
 // TODO:useragent待随机处理
-const ViewerContent: React.FC<ViewerContentProps> = () => {
-  const { show } = useSelector((state: StoreState) => state.web);
+const WebViewer: React.FC<ViewerContentProps> = () => {
+  const { show } = useSelector((state: StoreState) => state.web.view);
 
   return (
-    <CustomDrawer show={show} zIndex={1001}>
+    <CustomDrawer show={show} zIndex={CONST.DEFAULT.DRAWER_ZINDEX_HEIGHT}>
       <Content />
     </CustomDrawer>
   );
 };
 
-export default ViewerContent;
+export default WebViewer;

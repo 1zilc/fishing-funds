@@ -14,15 +14,7 @@ import * as Services from '@/services';
 import * as Enums from '@/utils/enums';
 import * as Utils from '@/utils';
 import * as Adapter from '@/utils/adpters';
-import * as CONST from '@/constants';
 import * as Helpers from '@/helpers';
-
-export interface CodeFundMap {
-  [index: string]: Fund.SettingItem & Fund.OriginRow;
-}
-export interface CodeRemoteFundMap {
-  [index: string]: Fund.RemoteFund;
-}
 
 export function GetFundConfig(walletCode: string) {
   const wallet = Helpers.Wallet.GetCurrentWalletConfig(walletCode);
@@ -35,7 +27,7 @@ export function GetCodeMap(config: Fund.SettingItem[]) {
   return config.reduce((r, c, i) => {
     r[c.code] = { ...c, originSort: i };
     return r;
-  }, {} as CodeFundMap);
+  }, {} as Fund.CodeMap);
 }
 
 export async function GetFunds(config: Fund.SettingItem[]) {

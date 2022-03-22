@@ -4,13 +4,7 @@ import { sortStocksCachedAction, SET_STOCKS_LOADING } from '@/actions/stock';
 import * as Adapter from '@/utils/adpters';
 import * as Services from '@/services';
 import * as Utils from '@/utils';
-import * as CONST from '@/constants';
 import * as Enums from '@/utils/enums';
-import * as Helpers from '@/helpers';
-
-export interface CodeStockMap {
-  [index: string]: Stock.SettingItem & { originSort: number };
-}
 
 export function GetStockConfig() {
   const {
@@ -27,7 +21,7 @@ export function GetCodeMap(config: Stock.SettingItem[]) {
   return config.reduce((r, c, i) => {
     r[c.secid] = { ...c, originSort: i };
     return r;
-  }, {} as CodeStockMap);
+  }, {} as Stock.CodeMap);
 }
 
 export async function GetStocks(config?: Stock.SettingItem[]) {

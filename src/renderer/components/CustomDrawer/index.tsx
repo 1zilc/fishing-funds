@@ -1,5 +1,6 @@
 import React, { PropsWithChildren, useState } from 'react';
 import { Drawer } from 'antd';
+import * as CONST from '@/constants';
 
 export interface CustomDrawerProps {
   show: boolean;
@@ -20,6 +21,7 @@ const CustomDrawer: React.FC<PropsWithChildren<CustomDrawerProps>> = ({ show, ch
       afterVisibleChange={setDrawerOpened}
       bodyStyle={{ padding: 0 }}
       push={false}
+      zIndex={CONST.DEFAULT.DRAWER_ZINDEX_DEFAULT}
       {...config}
     >
       {(cached || show || drawerOpened) && children}

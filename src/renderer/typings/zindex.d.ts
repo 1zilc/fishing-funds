@@ -3,6 +3,9 @@ declare namespace Zindex {
     code: string;
     name?: string;
   }
+  export interface CodeMap {
+    [index: string]: Zindex.SettingItem & { originSort: number };
+  }
 
   export interface ResponseItem {
     name: string; // 名称 '诺安混合'

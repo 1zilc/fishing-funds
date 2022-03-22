@@ -10,10 +10,6 @@ import * as Helpers from '@/helpers';
 
 const { got } = window.contextModules;
 
-export interface CodeZindexMap {
-  [index: string]: Zindex.SettingItem & { originSort: number };
-}
-
 export const defaultZindexConfig = [
   // 沪深指数
   { name: '上证指数', code: '1.000001' },
@@ -41,7 +37,7 @@ export function GetCodeMap(config: Zindex.SettingItem[]) {
   return config.reduce((r, c, i) => {
     r[c.code] = { ...c, originSort: i };
     return r;
-  }, {} as CodeZindexMap);
+  }, {} as Zindex.CodeMap);
 }
 
 export async function GetZindexs() {

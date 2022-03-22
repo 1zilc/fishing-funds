@@ -17,7 +17,7 @@ import TabsBar from '@/components/TabsBar';
 import Collect from '@/components/Collect';
 import GroupTab from '@/components/GroupTab';
 import GlobalStyles from '@/components/GlobalStyles';
-import ViewerContent from '@/components/ViewerContent';
+import WebViewer from '@/components/WebViewer';
 
 import { stockTypesConfig } from '@/components/Home/StockList/AddStockContent';
 import { StoreState } from '@/reducers/types';
@@ -177,7 +177,7 @@ const Home: React.FC<HomeProps> = () => {
           <Toolbar />
           <TabsBar />
         </Footer>
-        <ViewerContent />
+        <WebViewer />
         <Collect title="home" />
       </div>
     </HomeContext.Provider>
