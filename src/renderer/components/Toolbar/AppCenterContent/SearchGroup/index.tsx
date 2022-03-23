@@ -3,6 +3,7 @@ import { useDebounceFn, useRequest } from 'ahooks';
 import clsx from 'clsx';
 import StockSearch from '@/components/Toolbar/AppCenterContent/StockSearch';
 import ZindexSearch from '@/components/Toolbar/AppCenterContent/ZindexSearch';
+import FundSearch from '@/components/Toolbar/AppCenterContent/FundSearch';
 import * as Services from '@/services';
 import styles from './index.module.scss';
 
@@ -26,12 +27,13 @@ const SearchGroup: React.FC<SearchGroupProps> = (props) => {
     if (!value) {
       setGroupList([]);
     } else {
-      onSearch(keyword);
+      onSearch(value);
     }
   }, [keyword]);
 
   return (
     <div className={clsx(styles.content)}>
+      <FundSearch groupList={groupList} />
       <StockSearch groupList={groupList} />
       <ZindexSearch groupList={groupList} />
     </div>

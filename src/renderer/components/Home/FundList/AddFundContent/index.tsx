@@ -188,7 +188,7 @@ const AddFundContent: React.FC<AddFundContentProps> = (props) => {
       </div>
       {(name || code) &&
         fundList.map(([code, pinyin, name, type, quanpin]) => (
-          <div key={code} className={styles.fund} onClick={() => setDetailDrawer(code)}>
+          <div key={`${code}${name}`} className={styles.fund} onClick={() => setDetailDrawer(code)}>
             <div>
               <div className={styles.name}>
                 <span className={styles.nameText}>{name}</span>

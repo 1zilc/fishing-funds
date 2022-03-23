@@ -76,11 +76,16 @@ function constructApps(appConfigs: AppConfig[]) {
 }
 
 function renderApps(groups: { title: string; config: AppConfig[] }[], keyword: string) {
-  return groups.map((group) => (
-    <StandCard key={group.title} title={group.title}>
-      {constructApps(group.config.filter(({ title }) => title.toLocaleLowerCase().includes(keyword.toLocaleLowerCase())))}
-    </StandCard>
-  ));
+  return groups.map((group) => {
+    const list = group.config.filter(({ title }) => title.toLocaleLowerCase().includes(keyword.toLocaleLowerCase()));
+    return list.length ? (
+      <StandCard key={group.title} title={group.title}>
+        {constructApps(list)}
+      </StandCard>
+    ) : (
+      <></>
+    );
+  });
 }
 
 const searchPlaceholders = ['直达任意网站链接', '搜索股票、基金、板块名称或代码', '检索功能模块名称', '全网搜索一下,例如 "天天基金"'];
@@ -257,8 +262,8 @@ const AppCenterContent: React.FC<AppCenterContentProps> = (props) => {
           />
         </div>
         <QuickSearch value={keyword} />
-        <SearchGroup keyword={keyword} />
         {apps}
+        <SearchGroup keyword={keyword} />
         <CustomDrawer show={showManageFundDrawer}>
           <ManageFundContent onClose={closeManageFundDrawer} onEnter={closeManageFundDrawer} />
         </CustomDrawer>
