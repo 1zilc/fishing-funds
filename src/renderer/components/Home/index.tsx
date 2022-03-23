@@ -18,8 +18,7 @@ import Collect from '@/components/Collect';
 import GroupTab from '@/components/GroupTab';
 import GlobalStyles from '@/components/GlobalStyles';
 import WebViewer from '@/components/WebViewer';
-
-import { stockTypesConfig } from '@/components/Home/StockList/AddStockContent';
+import { stockTypesConfig } from '@/components/Toolbar/AppCenterContent/StockSearch';
 import { StoreState } from '@/reducers/types';
 import { useNativeThemeColor, useCurrentWallet } from '@/utils/hooks';
 import * as Enums from '@/utils/enums';

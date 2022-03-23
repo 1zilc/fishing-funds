@@ -1,7 +1,7 @@
 ### Component
 
 ```
-npx generate-react-cli component StockSearch --path=src/renderer/components/Toolbar/AppCenterContent
+npx generate-react-cli component SearchGroup --path=src/renderer/components/Toolbar/AppCenterContent
 ```
 
 ### Chart

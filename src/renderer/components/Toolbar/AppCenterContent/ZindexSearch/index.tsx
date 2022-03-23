@@ -9,11 +9,24 @@ import { addZindexAction } from '@/actions/zindex';
 import { StoreState } from '@/reducers/types';
 import { useDrawer } from '@/utils/hooks';
 import * as Helpers from '@/helpers';
+import * as Enums from '@/utils/enums';
 import styles from './index.module.scss';
 
 interface ZindexSearchProps {
   groupList: Stock.SearchResult[];
 }
+
+export const zindexTypesConfig = [
+  // { name: 'AB股', code: Enums.StockMarketType.AB },
+  { name: '指数', code: Enums.StockMarketType.Zindex },
+  // { name: '板块', code:  Enums.StockMarketType.Quotation },
+  // { name: '港股', code: Enums.StockMarketType.HK },
+  // { name: '美股', code: Enums.StockMarketType.US },
+  // { name: '英股', code: Enums.StockMarketType.UK },
+  // { name: '三板', code: Enums.StockMarketType.XSB },
+  // { name: '基金', code:  Enums.StockMarketType.Fund },
+  // { name: '债券', code: Enums.StockMarketType.Bond },
+];
 
 const ZindexSearch: React.FC<ZindexSearchProps> = (props) => {
   const { groupList } = props;
@@ -35,11 +48,13 @@ const ZindexSearch: React.FC<ZindexSearchProps> = (props) => {
     }
   }, []);
 
-  return (
+  const list = groupList.filter(({ Type }) => zindexTypesConfig.map(({ code }) => code).includes(Type));
+
+  return list.length ? (
     <div className={clsx(styles.content)}>
-      <Tabs animated={{ tabPane: true }} tabBarGutter={15} tabBarStyle={{ marginLeft: 15 }}>
-        {groupList.map(({ Datas, Name, Type }) => (
-          <Tabs.TabPane tab={Name} key={String(Type)}>
+      <Tabs animated={{ tabPane: true }} tabBarGutter={15} destroyInactiveTabPane>
+        {list.map(({ Datas, Name, Type }) => (
+          <Tabs.TabPane className={styles.tab} tab={Name} key={String(Type)}>
             {Datas.map(({ Name, Code, MktNum }) => {
               const secid = `${MktNum}.${Code}`;
               return (
@@ -75,6 +90,8 @@ const ZindexSearch: React.FC<ZindexSearchProps> = (props) => {
         <DetailZindexContent onEnter={closeDetailDrawer} onClose={closeDetailDrawer} code={detailSecid} />
       </CustomDrawer>
     </div>
+  ) : (
+    <></>
   );
 };
 

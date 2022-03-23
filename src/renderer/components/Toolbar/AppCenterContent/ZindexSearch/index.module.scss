@@ -1,22 +1,23 @@
 .content {
   display: block;
 }
+
 .none {
   font-size: 1rem;
   color: #d65746;
+}
+.tab {
+  border-radius: 10px;
+  background-color: var(--background-color);
+  margin-bottom: var(--base-padding);
 }
 
 .stock {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: var(--base-padding) 15px;
+  padding: var(--base-padding);
   cursor: pointer;
-  transition: background 0.3s;
-
-  &:hover {
-    background-color: var(--hover-color);
-  }
 }
 
 .added {

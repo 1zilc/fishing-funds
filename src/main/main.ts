@@ -140,14 +140,9 @@ function main() {
   });
 
   // 打开开发者工具
-  mb.window?.webContents.on('did-frame-finish-load', () => {
-    if (!app.isPackaged) {
-      mb.window?.webContents.once('devtools-opened', () => {
-        mb.window?.focus();
-      });
-      mb.window?.webContents.openDevTools({ mode: 'undocked' });
-    }
-  });
+  if (!app.isPackaged) {
+    mb.window?.webContents.openDevTools({ mode: 'undocked' });
+  }
 
   // mb.on('ready', () => {
   //   // mb.window?.setVisibleOnAllWorkspaces(true);

@@ -37,6 +37,7 @@ import CoinRankingContent from '@/components/Home/CoinList/CoinRankingContent';
 import EconomicCalendarContent from '@/components/Home/StockList/EconomicCalendarContent';
 import QuickSearch from '@/components/Toolbar/AppCenterContent/QuickSearch';
 import WebAppIcon from '@/components/Toolbar/AppCenterContent/WebAppIcon';
+import SearchGroup from '@/components/Toolbar/AppCenterContent/SearchGroup';
 import { StoreState } from '@/reducers/types';
 import * as Enums from '@/utils/enums';
 import * as Utils from '@/utils';
@@ -256,6 +257,7 @@ const AppCenterContent: React.FC<AppCenterContentProps> = (props) => {
           />
         </div>
         <QuickSearch value={keyword} />
+        <SearchGroup keyword={keyword} />
         {apps}
         <CustomDrawer show={showManageFundDrawer}>
           <ManageFundContent onClose={closeManageFundDrawer} onEnter={closeManageFundDrawer} />

@@ -28,7 +28,7 @@ const StockList: React.FC<StockListProps> = (props) => {
   const view = useMemo(() => {
     switch (stockViewMode.type) {
       case Enums.StockViewType.Grid:
-        return <GridView list={list.map((item) => ({ ...item, value: item.zx }))} onDetail={setDetailDrawer} />;
+        return <GridView list={list.map((item) => ({ ...item, value: item.zx, code: item.secid }))} onDetail={setDetailDrawer} />;
       case Enums.StockViewType.List:
       default:
         return list.map((stock) => <StockRow key={stock.secid} stock={stock} onDetail={setDetailDrawer} />);

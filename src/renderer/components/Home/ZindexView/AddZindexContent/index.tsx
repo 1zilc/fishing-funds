@@ -4,7 +4,7 @@ import { Input } from 'antd';
 
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
 import Empty from '@/components/Empty';
-import ZindexSearch from '@/components/Toolbar/AppCenterContent/ZindexSearch';
+import ZindexSearch, { zindexTypesConfig } from '@/components/Toolbar/AppCenterContent/ZindexSearch';
 import * as Services from '@/services';
 import * as Enums from '@/utils/enums';
 import styles from './index.module.scss';
@@ -16,18 +16,6 @@ export interface AddZindexContentProps {
 }
 
 const { Search } = Input;
-
-export const zindexTypesConfig = [
-  // { name: 'AB股', code: Enums.StockMarketType.AB },
-  { name: '指数', code: Enums.StockMarketType.Zindex },
-  // { name: '板块', code:  Enums.StockMarketType.Quotation },
-  // { name: '港股', code: Enums.StockMarketType.HK },
-  // { name: '美股', code: Enums.StockMarketType.US },
-  // { name: '英股', code: Enums.StockMarketType.UK },
-  // { name: '三板', code: Enums.StockMarketType.XSB },
-  // { name: '基金', code:  Enums.StockMarketType.Fund },
-  // { name: '债券', code: Enums.StockMarketType.Bond },
-];
 
 const AddZindexContent: React.FC<AddZindexContentProps> = (props) => {
   const { defaultName } = props;
@@ -60,8 +48,8 @@ const AddZindexContent: React.FC<AddZindexContentProps> = (props) => {
           <label>关键字：</label>
           <Search defaultValue={defaultName} type="text" placeholder="指数代码或名称关键字" enterButton onSearch={onSearch} size="small" />
         </section>
+        {groupList.length ? <ZindexSearch groupList={groupList} /> : <Empty text="暂无相关数据~" />}
       </div>
-      {groupList.length ? <ZindexSearch groupList={groupList} /> : <Empty text="暂无相关数据~" />}
     </CustomDrawerContent>
   );
 };
