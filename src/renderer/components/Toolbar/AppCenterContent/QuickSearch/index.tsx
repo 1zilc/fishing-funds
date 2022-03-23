@@ -45,12 +45,23 @@ const QuickSearch: React.FC<QuickSearchProps> = (props) => {
       url: `https://www.baidu.com/s?wd=${value}`,
       hidden: !value,
     },
+    {
+      name: '东方财富',
+      url: `https://so.eastmoney.com/web/s?keyword=${value}`,
+      hidden: !value,
+      color: '#f50',
+    },
+    {
+      name: '同花顺',
+      url: `http://www.iwencai.com/stockpick/search?w=${value}`,
+      hidden: !value,
+    },
   ].filter(({ hidden }) => !hidden);
 
   return searchWebsites.length ? (
     <div className={styles.content}>
       {searchWebsites.map((site) => {
-        const color = colorHash.hex(site.name);
+        const color = site.color || colorHash.hex(site.name);
         return (
           <div
             key={site.name}
