@@ -15,6 +15,7 @@ const SearchGroup: React.FC<SearchGroupProps> = (props) => {
   const [groupList, setGroupList] = useState<Stock.SearchResult[]>([]);
   const { run: runSearch } = useRequest(Services.Stock.SearchFromEastmoney, {
     manual: true,
+    ready: !!keyword,
     onSuccess: setGroupList,
   });
 
@@ -25,7 +26,7 @@ const SearchGroup: React.FC<SearchGroupProps> = (props) => {
     if (!value) {
       setGroupList([]);
     } else {
-      onSearch(value);
+      onSearch(keyword);
     }
   }, [keyword]);
 
