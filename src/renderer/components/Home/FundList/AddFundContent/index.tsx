@@ -206,6 +206,7 @@ const AddFundContent: React.FC<AddFundContentProps> = (props) => {
                 onClick={(e) => {
                   setCode(code);
                   setName(name);
+                  setFundlist([]);
                   e.stopPropagation();
                 }}
               >

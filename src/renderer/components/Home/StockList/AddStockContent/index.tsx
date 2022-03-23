@@ -1,16 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
 import { useDebounceFn, useRequest } from 'ahooks';
-import { Input, Tabs, message } from 'antd';
+import { Input } from 'antd';
 
-import DetailStockContent from '@/components/Home/StockList/DetailStockContent';
-import CustomDrawer from '@/components/CustomDrawer';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
+import StockSearch from '@/components/Toolbar/AppCenterContent/StockSearch';
 import Empty from '@/components/Empty';
-import { addStockAction } from '@/actions/stock';
-import { StoreState } from '@/reducers/types';
-import { useDrawer } from '@/utils/hooks';
-import * as Helpers from '@/helpers';
 import * as Services from '@/services';
 import * as Enums from '@/utils/enums';
 import styles from './index.module.scss';
@@ -37,43 +31,20 @@ export const stockTypesConfig = [
 
 const AddStockContent: React.FC<AddStockContentProps> = (props) => {
   const { defaultName } = props;
-  const dispatch = useDispatch();
   const [groupList, setGroupList] = useState<Stock.SearchResult[]>([]);
-  const { codeMap } = useSelector((state: StoreState) => state.stock.config);
 
   const { run: runSearch } = useRequest(Services.Stock.SearchFromEastmoney, {
     manual: true,
-
     onSuccess: (res) => setGroupList(res.filter(({ Type }) => stockTypesConfig.map(({ code }) => code).includes(Type))),
   });
-
-  const { data: detailData, show: showDetailDrawer, set: setDetailDrawer, close: closeDetailDrawer } = useDrawer({ secid: '', type: 0 });
-
-  async function onAdd(secid: string, type: number) {
-    const stock = await Helpers.Stock.GetStock(secid);
-    if (stock) {
-      dispatch(
-        addStockAction({
-          market: stock.market!,
-          code: stock.code!,
-          secid: stock.secid,
-          name: stock.name!,
-          type,
-        })
-      );
-      props.onEnter();
-    } else {
-      message.error('添加股票失败，未找到或数据出错~');
-    }
-  }
 
   const { run: onSearch } = useDebounceFn((_value: string) => {
     const value = _value.trim();
     if (!value) {
       setGroupList([]);
-      return;
+    } else {
+      runSearch(value);
     }
-    runSearch(value);
   });
 
   useEffect(() => {
@@ -90,47 +61,7 @@ const AddStockContent: React.FC<AddStockContentProps> = (props) => {
           <Search defaultValue={defaultName} type="text" placeholder="股票代码或名称关键字" enterButton onSearch={onSearch} size="small" />
         </section>
       </div>
-      {groupList.length ? (
-        <Tabs animated={{ tabPane: true }} tabBarGutter={15} tabBarStyle={{ marginLeft: 15 }}>
-          {groupList.map(({ Datas, Name, Type }) => (
-            <Tabs.TabPane tab={Name} key={String(Type)}>
-              {Datas.map(({ Name, Code, MktNum }) => {
-                const secid = `${MktNum}.${Code}`;
-                return (
-                  <div key={secid} className={styles.stock} onClick={() => setDetailDrawer({ secid, type: Type })}>
-                    <div>
-                      <div className={styles.name}>
-                        <span className={styles.nameText}>{Name}</span>
-                      </div>
-                      <div className={styles.code}>{Code}</div>
-                    </div>
-                    {codeMap[secid] ? (
-                      <button className={styles.added} disabled>
-                        已添加
-                      </button>
-                    ) : (
-                      <button
-                        className={styles.select}
-                        onClick={(e) => {
-                          onAdd(secid, Type);
-                          e.stopPropagation();
-                        }}
-                      >
-                        自选
-                      </button>
-                    )}
-                  </div>
-                );
-              })}
-            </Tabs.TabPane>
-          ))}
-        </Tabs>
-      ) : (
-        <Empty text="暂无相关数据~" />
-      )}
-      <CustomDrawer show={showDetailDrawer}>
-        <DetailStockContent onEnter={closeDetailDrawer} onClose={closeDetailDrawer} secid={detailData.secid} type={detailData.type} />
-      </CustomDrawer>
+      {groupList.length ? <StockSearch groupList={groupList} /> : <Empty text="暂无相关数据~" />}
     </CustomDrawerContent>
   );
 };
