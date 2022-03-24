@@ -59,6 +59,7 @@ interface AppConfig {
   icon?: React.ReactElement;
   color?: string;
   favicon?: string;
+  url?: string;
 }
 
 function constructApps(appConfigs: AppConfig[]) {
@@ -66,7 +67,7 @@ function constructApps(appConfigs: AppConfig[]) {
     <div className={styles.apps}>
       {appConfigs.map((config) => {
         return (
-          <div className={styles.appContent} key={config.title}>
+          <div className={styles.appContent} key={`${config.title}${config.url}`}>
             <WebAppIcon title={config.title} onClick={config.click} iconType={config.iconType} svg={config.icon} favicon={config.favicon} />
           </div>
         );
@@ -230,6 +231,16 @@ const AppCenterContent: React.FC<AppCenterContentProps> = (props) => {
               },
             ],
           },
+        ],
+        keyword
+      ),
+    [keyword]
+  );
+
+  const h5s = useMemo(
+    () =>
+      renderApps(
+        [
           {
             title: 'H5专区',
             config: webConfig.map((web) => ({
@@ -237,6 +248,7 @@ const AppCenterContent: React.FC<AppCenterContentProps> = (props) => {
               favicon: web.icon,
               color: web.color,
               iconType: web.iconType,
+              url: web.url,
               click: () => openWebView({ title: web.title, url: web.url }),
             })),
           },
@@ -263,6 +275,7 @@ const AppCenterContent: React.FC<AppCenterContentProps> = (props) => {
         </div>
         <QuickSearch value={keyword} />
         {apps}
+        {h5s}
         <SearchGroup keyword={keyword} />
         <CustomDrawer show={showManageFundDrawer}>
           <ManageFundContent onClose={closeManageFundDrawer} onEnter={closeManageFundDrawer} />
