@@ -4,6 +4,7 @@ import * as Utils from '@/utils';
 import * as CONST from '@/constants';
 
 export const SET_WEB_URL = 'SET_WEB_URL';
+export const SET_WEB_PHONE = 'SET_WEB_PHONE';
 export const SET_WEB = 'SET_WEB';
 export const SYNC_WEB_CONFIG = 'SYNC_WEB_CONFIG';
 
@@ -11,6 +12,13 @@ export function setWebUrlAction(url: string): ThunkAction {
   return (dispatch, getState) => {
     try {
       dispatch({ type: SET_WEB_URL, payload: url });
+    } catch (error) {}
+  };
+}
+export function setWebPhoneAction(phone: boolean): ThunkAction {
+  return (dispatch, getState) => {
+    try {
+      dispatch({ type: SET_WEB_PHONE, payload: phone });
     } catch (error) {}
   };
 }

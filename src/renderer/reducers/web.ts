@@ -1,5 +1,5 @@
 import { Reducer } from '@/reducers/types';
-import { SET_WEB_URL, SET_WEB, SYNC_WEB_CONFIG } from '@/actions/web';
+import { SET_WEB_URL, SET_WEB, SYNC_WEB_CONFIG, SET_WEB_PHONE } from '@/actions/web';
 
 export interface WebState {
   view: {
@@ -31,6 +31,14 @@ const web: Reducer<WebState> = (
         view: {
           ...state.view,
           url: action.payload,
+        },
+      };
+    case SET_WEB_PHONE:
+      return {
+        ...state,
+        view: {
+          ...state.view,
+          phone: action.payload,
         },
       };
     case SET_WEB:

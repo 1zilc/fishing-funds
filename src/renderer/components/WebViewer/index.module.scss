@@ -27,3 +27,13 @@
     }
   }
 }
+.menuItem {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+
+  label {
+    font-weight: 500;
+    margin-right: var(--base-padding);
+  }
+}

@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState, useCallback } from 'react';
-import { Progress } from 'antd';
+import { Menu, Dropdown, Progress, Switch } from 'antd';
 import { useBoolean } from 'ahooks';
 import { useSelector, useDispatch } from 'react-redux';
 
@@ -9,12 +9,14 @@ import StarFillIcon from '@/static/icon/star-fill.svg';
 import ArrowLeftIcon from '@/static/icon/arrow-left.svg';
 import ArrowRightIcon from '@/static/icon/arrow-right.svg';
 import RefreshIcon from '@/static/icon/refresh.svg';
+import ToolsIcon from '@/static/icon/tools.svg';
+import RestartIcon from '@/static/icon/restart.svg';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
 import CustomDrawer from '@/components/CustomDrawer';
 import AddWebContent from '@/components/WebViewer/AddWebContent';
 import Empty from '@/components/Empty';
 import { StoreState } from '@/reducers/types';
-import { closeWebAction, addWebAction, deleteWebAction } from '@/actions/web';
+import { closeWebAction, addWebAction, deleteWebAction, setWebPhoneAction } from '@/actions/web';
 import { useDrawer } from '@/utils/hooks';
 import * as CONST from '@/constants';
 import * as Enums from '@/utils/enums';
@@ -77,6 +79,8 @@ const Content = () => {
   const onRemoveWeb = useCallback(() => {
     dispatch(deleteWebAction(url));
   }, []);
+
+  const onPhoneChange = useCallback((phone) => dispatch(setWebPhoneAction(phone)), []);
 
   useEffect(() => {
     const didStartLoading = () => {
@@ -170,7 +174,23 @@ const Content = () => {
             strokeColor={done ? 'transparent' : 'var(--primary-color)'}
           />
           <div className={styles.nav}>
-            <CopyIcon onClick={onCopyUrl} />
+            <Dropdown
+              overlay={
+                <Menu>
+                  <Menu.Item className={styles.menuItem} onClick={onCopyUrl}>
+                    <label>复制链接</label>
+                    <CopyIcon />
+                  </Menu.Item>
+                  <Menu.Item className={styles.menuItem}>
+                    <label>移动端标识</label>
+                    <Switch checked={!!phone} onChange={onPhoneChange} size="small" />
+                  </Menu.Item>
+                </Menu>
+              }
+              placement="topLeft"
+            >
+              <ToolsIcon />
+            </Dropdown>
             <ArrowLeftIcon onClick={() => viewRef.current?.goBack()} />
             <RefreshIcon onClick={() => viewRef.current?.reload()} />
             <ArrowRightIcon onClick={() => viewRef.current?.goForward()} />
