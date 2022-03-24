@@ -138,7 +138,6 @@ function main() {
       return { action: 'deny' };
     });
   });
-
   // 打开开发者工具
   if (!app.isPackaged) {
     mb.window?.webContents.openDevTools({ mode: 'undocked' });

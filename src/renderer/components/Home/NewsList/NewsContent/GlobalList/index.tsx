@@ -45,7 +45,7 @@ const GlobalList: React.FC<PropsWithChildren<GlobalListProps>> = (props) => {
             position: ['bottomCenter'],
           }}
           onRow={(record) => ({
-            onClick: () => props.onView(record.url_m),
+            onClick: () => props.onView(record.url_unique),
           })}
         />
       </div>

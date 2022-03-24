@@ -12,6 +12,7 @@ import RefreshIcon from '@/static/icon/refresh.svg';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
 import CustomDrawer from '@/components/CustomDrawer';
 import AddWebContent from '@/components/WebViewer/AddWebContent';
+import Empty from '@/components/Empty';
 import { StoreState } from '@/reducers/types';
 import { closeWebAction, addWebAction, deleteWebAction } from '@/actions/web';
 import { useDrawer } from '@/utils/hooks';
@@ -91,11 +92,13 @@ const Content = () => {
         }, 100);
       }, 200);
     };
+
     const domReady = () => {
       const targetId = viewRef.current?.getWebContentsId();
       ipcRenderer.invoke('registry-webview', targetId);
       setWebTitle((_) => _ || viewRef.current.getTitle());
     };
+
     const pageFaviconUpdated = (e: any) => {
       setFavicons(e.favicons);
     };
@@ -146,7 +149,7 @@ const Content = () => {
   return (
     <CustomDrawerContent title={webTitle} enterText="跳转" onClose={() => dispatch(closeWebAction())} onEnter={onVisit}>
       <div className={styles.content}>
-        {url && (
+        {url ? (
           <webview
             ref={viewRef}
             src={url}
@@ -154,6 +157,8 @@ const Content = () => {
             useragent={phone ? defaultAgent : undefined}
             allowpopups="true"
           />
+        ) : (
+          <Empty text="404 Not Found" />
         )}
         <div>
           <Progress
