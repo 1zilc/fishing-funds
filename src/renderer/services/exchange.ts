@@ -1,8 +1,8 @@
-const { got } = window.contextModules;
+import request from '@/utils/request';
 
 export async function GetListFromEastmoney(po: string, fs: string) {
   try {
-    const { body } = await got<{
+    const { body } = await request<{
       rc: 0;
       rt: 6;
       svr: 181240773;
@@ -78,7 +78,7 @@ export async function GetListFromEastmoney(po: string, fs: string) {
 
 export async function GetGlobalBondFromEastmoney() {
   try {
-    const { body: script } = await got('http://quote.eastmoney.com/center/api/qqzq.js', {
+    const { body: script } = await request('http://quote.eastmoney.com/center/api/qqzq.js', {
       searchParams: {
         _: new Date().getTime(),
       },

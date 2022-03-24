@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
 import NP from 'number-precision';
+import request from '@/utils/request';
 
-const { got } = window.contextModules;
 /**
  *
  * @param code 指数代码: 000001
@@ -9,7 +9,7 @@ const { got } = window.contextModules;
  */
 export async function FromEastmoney(code: string) {
   try {
-    const { body: data } = await got<{
+    const { body: data } = await request<{
       rc: 0;
       rt: 4;
       svr: 182481189;
@@ -62,7 +62,7 @@ export async function FromEastmoney(code: string) {
 
 export async function GetTrendFromEastmoney(code: string, ndays: number) {
   try {
-    const { body } = await got<{
+    const { body } = await request<{
       rc: 0;
       rt: 10;
       svr: 2887136043;
@@ -108,7 +108,7 @@ export async function GetTrendFromEastmoney(code: string, ndays: number) {
 
 export async function GetKFromEastmoney(code: string, year: number) {
   try {
-    const { body } = await got<{
+    const { body } = await request<{
       rc: 0;
       rt: 17;
       svr: 181734976;
@@ -156,7 +156,7 @@ export async function GetKFromEastmoney(code: string, year: number) {
 // 中国 居民消费价格指数(CPI)等指数
 export async function GetEconomyIndexFromEastmoney(market: number) {
   try {
-    const { body } = await got<string>('https://datainterface.eastmoney.com/EM_DataCenter/JS.aspx', {
+    const { body } = await request<string>('https://datainterface.eastmoney.com/EM_DataCenter/JS.aspx', {
       searchParams: {
         type: 'GJZB',
         sty: 'ZGZB',
@@ -178,7 +178,7 @@ export async function GetEconomyIndexFromEastmoney(market: number) {
 // 油价
 export async function GetOilPriceFromEastmoney() {
   try {
-    const { body } = await got<{
+    const { body } = await request<{
       version: '63fa26740fe0adbc234c8c41e0d5894d';
       result: {
         pages: 18;
@@ -213,7 +213,7 @@ export async function GetOilPriceFromEastmoney() {
 // 中美国债收益率
 export async function GetTreasuryYieldData() {
   try {
-    const { body } = await got<{
+    const { body } = await request<{
       version: '63fa26740fe0adbc234c8c41e0d5894d';
       result: {
         pages: 18;
@@ -255,7 +255,7 @@ export async function GetTreasuryYieldData() {
 // 国家队持股分布
 export async function GetNationalTeamDistributed() {
   try {
-    const { body } = await got<{
+    const { body } = await request<{
       version: '63fa26740fe0adbc234c8c41e0d5894d';
       result: {
         pages: 18;
@@ -294,7 +294,7 @@ export async function GetNationalTeamDistributed() {
 // 国家队持股分布
 export async function GetNationalTeamTrend() {
   try {
-    const { body } = await got<{
+    const { body } = await request<{
       version: '63fa26740fe0adbc234c8c41e0d5894d';
       result: {
         pages: 18;
@@ -336,7 +336,7 @@ export async function GetNationalTeamTrend() {
 export async function GetNationalTeamDetail(columns: string) {
   try {
     const { REPORT_DATE: time } = await GetNationalTeamDistributed();
-    const { body } = await got<{
+    const { body } = await request<{
       version: '63fa26740fe0adbc234c8c41e0d5894d';
       result: {
         pages: 18;

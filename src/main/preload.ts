@@ -3,40 +3,25 @@ import log from 'electron-log';
 import { contextBridge, ipcRenderer, shell, clipboard, nativeImage } from 'electron';
 import { encode, decode } from 'js-base64';
 import * as fs from 'fs';
-import * as CONST from '../renderer/constants';
 import { base64ToBuffer } from './util';
 
 const { version } = require('../../release/app/package.json');
-const HttpProxyAgent = require('http-proxy-agent');
-const HttpsProxyAgent = require('https-proxy-agent');
+
+const httpProxyAgent = require('http-proxy-agent');
+const httpsProxyAgent = require('https-proxy-agent');
 
 contextBridge.exposeInMainWorld('contextModules', {
-  got: async (url: string, config = {}) => {
-    const { httpProxyAddressSetting, httpProxySetting, httpProxyWhitelistSetting, httpProxyRuleSetting } = await ipcRenderer.invoke(
-      'get-storage-config',
-      { key: CONST.STORAGE.SYSTEM_SETTING }
-    );
-    const httpProxyRuleMap = (httpProxyRuleSetting ?? '').split(',').reduce((map: Record<string, boolean>, address: string) => {
-      map[address] = true;
-      return map;
-    }, {});
-
-    const { host } = new URL(url);
-    const agent = Object.fromEntries(
-      httpProxySetting && httpProxyWhitelistSetting !== !!httpProxyRuleMap[host]
-        ? [
-            ['http', HttpProxyAgent(httpProxyAddressSetting)],
-            ['https', HttpsProxyAgent(httpProxyAddressSetting)],
-          ]
-        : []
-    );
+  requestProxy: async (url: string, config: any, proxy?: { http: string; https: string }) => {
     return got(url, {
       ...config,
-      retry: 3,
-      timeout: 7000,
-      agent,
+      agent: proxy && {
+        http: httpProxyAgent(proxy.http),
+        https: httpsProxyAgent(proxy.https),
+      },
     });
   },
+  httpProxyAgent,
+  httpsProxyAgent,
   process: {
     production: process.env.NODE_ENV === 'production',
     electron: process.versions.electron,
@@ -136,5 +121,9 @@ contextBridge.exposeInMainWorld('contextModules', {
     async all() {
       return ipcRenderer.invoke('all-storage-config');
     },
+  },
+  base64: {
+    encode,
+    decode,
   },
 });

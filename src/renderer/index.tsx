@@ -15,6 +15,7 @@ import * as Utils from '@/utils';
 import 'electron-disable-file-drop';
 import 'dayjs/locale/zh-cn';
 import '@/utils/window';
+import '@/utils/request';
 
 dayjs.extend(isSameOrBefore);
 dayjs.extend(isSameOrAfter);

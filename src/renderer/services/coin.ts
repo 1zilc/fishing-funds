@@ -1,16 +1,14 @@
 import NP from 'number-precision';
 import dayjs from 'dayjs';
+import request from '@/utils/request';
 import * as Utils from '@/utils';
-import { helper } from 'echarts';
-
-const { got } = window.contextModules;
 
 // CoinCap
 export async function FromCoinCap(keyword: string, codes = '') {
   try {
     const {
       body: { data, timestamp },
-    } = await got<{
+    } = await request<{
       data: [
         {
           id: 'tokenclub';
@@ -62,7 +60,7 @@ export async function GetFromCoinCap(code: string) {
   try {
     const {
       body: { data },
-    } = await got<{
+    } = await request<{
       data: {
         id: 'bitcoin';
         rank: '1';
@@ -105,7 +103,7 @@ export async function GetHistoryFromCoinCap(code: string, interval: string) {
   try {
     const {
       body: { data },
-    } = await got<{
+    } = await request<{
       data: {
         priceUsd: '10250.7246875711059188';
         time: 1565913600000;
@@ -131,7 +129,7 @@ export async function GetHistoryFromCoinCap(code: string, interval: string) {
 // Coingecko
 export async function FromCoingecko(codes: string, currency: string) {
   try {
-    const { body } = await got<
+    const { body } = await request<
       Record<
         string,
         {
@@ -176,7 +174,7 @@ export async function FromCoingecko(codes: string, currency: string) {
 
 export async function GetDetailFromCoingecko(code: string) {
   try {
-    const { body } = await got<Coin.DetailItem>(`https://api.coingecko.com/api/v3/coins/${code}`, {
+    const { body } = await request<Coin.DetailItem>(`https://api.coingecko.com/api/v3/coins/${code}`, {
       searchParams: {
         localization: false,
         tickers: false,
@@ -195,7 +193,7 @@ export async function GetDetailFromCoingecko(code: string) {
 
 export async function GetRemoteCoinsFromCoingecko() {
   try {
-    const { body } = await got<
+    const { body } = await request<
       {
         id: string;
         symbol: string;
@@ -216,7 +214,7 @@ export async function GetRemoteCoinsFromCoingecko() {
 
 export async function GetKFromCoingecko(code: string, currency: string, days: number) {
   try {
-    const { body } = await got<[1597795200000, 85083.78, 85083.78, 82712.82, 82712.82][]>(
+    const { body } = await request<[1597795200000, 85083.78, 85083.78, 82712.82, 82712.82][]>(
       `https://api.coingecko.com/api/v3/coins/${code}/ohlc`,
       {
         searchParams: {
@@ -240,7 +238,7 @@ export async function GetKFromCoingecko(code: string, currency: string, days: nu
 
 export async function GetHistoryFromCoingecko(code: string, currency: string, days: number) {
   try {
-    const { body } = await got<{
+    const { body } = await request<{
       prices: [1629106772337, 47108.05433394351][];
       market_caps: [1629106772337, 47108.05433394351][];
       total_volumes: [1629106772337, 47108.05433394351][];

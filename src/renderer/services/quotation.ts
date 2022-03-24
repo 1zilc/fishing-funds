@@ -1,10 +1,9 @@
 import NP from 'number-precision';
-
-const { got } = window.contextModules;
+import request from '@/utils/request';
 
 export async function GetQuotationsFromEastmoney() {
   try {
-    const { body: data } = await got<{
+    const { body: data } = await request<{
       rc: 0;
       rt: 6;
       svr: 2887254391;
@@ -89,7 +88,7 @@ export async function GetQuotationDetailFromEastmoney(code: string) {
   try {
     const {
       body: { data },
-    } = await got<{
+    } = await request<{
       rc: 0;
       rt: 4;
       svr: 181735162;
@@ -143,7 +142,7 @@ export async function GetRealTimeFundFlowFromEasymoney(code: string) {
   try {
     const {
       body: { data },
-    } = await got('http://push2.eastmoney.com/api/qt/stock/fflow/kline/get', {
+    } = await request('http://push2.eastmoney.com/api/qt/stock/fflow/kline/get', {
       searchParams: {
         lmt: 0,
         klt: 1,
@@ -176,7 +175,7 @@ export async function GetStocksFromEasymoney(code: string) {
   try {
     const {
       body: { data },
-    } = await got<{
+    } = await request<{
       rc: 0;
       rt: 6;
       svr: 182996357;
@@ -243,7 +242,7 @@ export async function GetTransactionFromEasymoney(code: string) {
   try {
     const {
       body: { data },
-    } = await got<{
+    } = await request<{
       rc: 0;
       rt: 11;
       svr: 182995396;
@@ -328,7 +327,7 @@ export async function GetAfterTimeFundFlowFromEasymoney(code: string) {
   try {
     const {
       body: { data },
-    } = await got<{
+    } = await request<{
       rc: 0;
       rt: 22;
       svr: 2887122959;
@@ -379,7 +378,7 @@ export async function GetAfterTimeFundFlowFromEasymoney(code: string) {
  */
 export async function GetFundFlowFromEastmoney(code: string, type: string) {
   try {
-    const { body: data } = await got<{
+    const { body: data } = await request<{
       rc: 0;
       rt: 6;
       svr: 2887254391;
@@ -423,7 +422,7 @@ export async function GetFundFlowFromEastmoney(code: string, type: string) {
 
 export async function GetFlowFromEastmoney(fields1: string, code: 'n2s' | 's2n') {
   try {
-    const { body } = await got<{
+    const { body } = await request<{
       rc: 0;
       rt: 14;
       svr: 2887257311;
@@ -467,7 +466,7 @@ export async function GetFlowFromEastmoney(fields1: string, code: 'n2s' | 's2n')
 
 export async function GetNorthDayFromEastmoney(fields1: string, fields2: string) {
   try {
-    const { body } = await got<{
+    const { body } = await request<{
       rc: 0;
       rt: 14;
       svr: 2887257311;
@@ -505,7 +504,7 @@ export async function GetNorthDayFromEastmoney(fields1: string, fields2: string)
 
 export async function GetSouthDayFromEastmoney(fields1: string, fields2: string) {
   try {
-    const { body } = await got<{
+    const { body } = await request<{
       rc: 0;
       rt: 14;
       svr: 2887257311;
@@ -545,7 +544,7 @@ export async function GetFundsFromEastmoney(code: string) {
   try {
     const {
       body: { Data },
-    } = await got<{
+    } = await request<{
       Data: [
         {
           FCODE: '168501';
@@ -598,7 +597,7 @@ export async function GetFundsFromEastmoney(code: string) {
 
 export async function GetQuoteCenterFromEastmoney() {
   try {
-    const { body } = await got<{
+    const { body } = await request<{
       re: true;
       message: '';
       result: {
@@ -677,7 +676,7 @@ export async function GetQuoteCenterFromEastmoney() {
 
 export async function GetHodingFromEastmoney(marketCode: string, reportName: string) {
   try {
-    const { body } = await got<{
+    const { body } = await request<{
       version: 'a81c1cb169f170d8033693dfe021910a';
       result: {
         pages: 5;
@@ -741,7 +740,7 @@ export async function GetHodingFromEastmoney(marketCode: string, reportName: str
 
 export async function GetMutualQuotaFromEastmoney() {
   try {
-    const { body } = await got<{
+    const { body } = await request<{
       version: 'f5a499e30bac57207cc9f491db6bdfdd';
       result: {
         pages: 1;
@@ -813,7 +812,7 @@ export async function GetMutualQuotaFromEastmoney() {
 
 export async function GetTodayHotFromEastmoney() {
   try {
-    const { body } = await got<{
+    const { body } = await request<{
       re: true;
       message: '';
       result: {
@@ -869,7 +868,7 @@ export async function GetTodayHotFromEastmoney() {
 
 export async function GetHotThemeFromEastmoney() {
   try {
-    const { body } = await got<{
+    const { body } = await request<{
       re: true;
       message: '';
       result: {
@@ -906,7 +905,7 @@ export async function GetHotThemeFromEastmoney() {
 
 export async function GetRecentHotFromEastmoney() {
   try {
-    const { body } = await got<{
+    const { body } = await request<{
       re: true;
       message: '';
       result: {

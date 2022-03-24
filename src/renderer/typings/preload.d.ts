@@ -1,11 +1,11 @@
-import { GotRequestFunction } from 'got/dist/source';
+import { GotRequestFunction, CancelableRequest, Response } from 'got/dist/source';
 import { Shell, Dialog, App, IpcRenderer, Clipboard } from 'electron';
 import { ElectronLog } from 'electron-log';
 
 declare global {
   interface Window {
     contextModules: {
-      got: GotRequestFunction;
+      requestProxy: <T>(url: string, config: any, proxy?: { http: string; https: string }) => CancelableRequest<Response<T>>;
       process: {
         production: boolean;
         electron: string;
@@ -42,6 +42,10 @@ declare global {
         delete: (key: string) => Promise<void>;
         cover: (data: unknown) => Promise<void>;
         all: () => Promise<any>;
+      };
+      base64: {
+        encode: (src: string, urlsafe?: boolean | undefined) => string;
+        decode: (src: string) => string;
       };
     };
   }

@@ -1,11 +1,11 @@
-const { got } = window.contextModules;
+import request from '@/utils/request';
 
 /**
  * 淘宝接口拿当前时间
  */
 export async function GetCurrentDateTimeFromTaobao() {
   try {
-    const res = await got<{
+    const res = await request<{
       api: string; // 'mtop.common.getTimestamp'
       v: string; // '*'
       ret: string[]; // ['SUCCESS::接口调用成功']
@@ -26,7 +26,7 @@ export async function GetCurrentDateTimeFromTaobao() {
  */
 export async function GetCurrentDateTimeFromSuning() {
   try {
-    const res = await got<{
+    const res = await request<{
       api: 'time';
       code: '1';
       currentTime: string; //  1592663735507
@@ -45,7 +45,7 @@ export async function GetCurrentDateTimeFromSuning() {
  */
 export async function GetCurrentDateTimeFromJd() {
   try {
-    const res = await got<{
+    const res = await request<{
       serverTime: string; // 1592663800521
     }>('https://a.jd.com//ajax/queryServerData.html', {
       responseType: 'json',
