@@ -1,5 +1,6 @@
 import React from 'react';
-import { SearchOutlined, GlobalOutlined } from '@ant-design/icons';
+import SearchIcon from '@/static/icon/search.svg';
+import GlobalIcon from '@/static/icon/global.svg';
 import clsx from 'clsx';
 import {} from 'antd';
 import ColorHash from 'color-hash';
@@ -73,7 +74,7 @@ const QuickSearch: React.FC<QuickSearchProps> = (props) => {
             onClick={() => openWebView(site.url)}
           >
             <span>{site.name}</span>
-            {site.name === '访问' ? <GlobalOutlined /> : <SearchOutlined />}
+            {site.name === '访问' ? <GlobalIcon /> : <SearchIcon />}
           </div>
         );
       })}

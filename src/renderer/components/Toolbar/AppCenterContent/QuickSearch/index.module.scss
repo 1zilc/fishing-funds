@@ -21,4 +21,9 @@
   &:last-child {
     margin-right: 0;
   }
+  svg {
+    fill: var(--tag-text-color);
+    height: 14px;
+    width: 14px;
+  }
 }
