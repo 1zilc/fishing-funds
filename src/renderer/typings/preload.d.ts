@@ -1,4 +1,4 @@
-import { GotRequestFunction, CancelableRequest, Response } from 'got/dist/source';
+import { CancelableRequest, Response } from 'got/dist/source';
 import { Shell, Dialog, App, IpcRenderer, Clipboard } from 'electron';
 import { ElectronLog } from 'electron-log';
 
@@ -46,6 +46,7 @@ declare global {
       base64: {
         encode: (src: string, urlsafe?: boolean | undefined) => string;
         decode: (src: string) => string;
+        fromUint8Array: (u8a: Uint8Array, urlsafe?: boolean | undefined) => string;
       };
     };
   }

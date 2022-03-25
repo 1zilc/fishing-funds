@@ -1,7 +1,7 @@
 import got from 'got';
 import log from 'electron-log';
 import { contextBridge, ipcRenderer, shell, clipboard, nativeImage } from 'electron';
-import { encode, decode } from 'js-base64';
+import { encode, decode, fromUint8Array } from 'js-base64';
 import * as fs from 'fs';
 import { base64ToBuffer } from './util';
 
@@ -125,5 +125,6 @@ contextBridge.exposeInMainWorld('contextModules', {
   base64: {
     encode,
     decode,
+    fromUint8Array,
   },
 });

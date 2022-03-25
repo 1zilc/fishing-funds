@@ -138,14 +138,14 @@ export async function GetTrendFromEastmoney(secid: string) {
 
 export async function GetPicTrendFromEastmoney(secid: string) {
   try {
-    const { rawBody }: any = await request('http://webquotepic.eastmoney.com/GetPic.aspx', {
+    const { rawBody } = await request('http://webquotepic.eastmoney.com/GetPic.aspx', {
       searchParams: {
         nid: secid,
         imageType: 'GNR',
         token: Utils.MakeHash(),
       },
     });
-    const b64encoded = base64.encode(String.fromCharCode.apply(null, rawBody));
+    const b64encoded = base64.fromUint8Array(rawBody);
     return `data:image/png;base64,${b64encoded}`;
   } catch (error) {
     return null;

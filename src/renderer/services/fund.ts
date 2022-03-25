@@ -583,7 +583,7 @@ export async function FromFund10jqka(code: string) {
 export async function GetEstimatedFromEastmoney(code: string) {
   try {
     const { rawBody }: any = await request(`http://j4.dfcfw.com/charts/pic6/${code}.png`, {});
-    const b64encoded = base64.encode(String.fromCharCode.apply(null, rawBody));
+    const b64encoded = base64.fromUint8Array(rawBody);
     return `data:image/png;base64,${b64encoded}`;
   } catch (error) {
     return null;
@@ -594,7 +594,7 @@ export async function GetEstimatedFromEastmoney(code: string) {
 export async function GetInverstStyleFromEastmoney(code: string) {
   try {
     const { rawBody }: any = await request(`http://j3.dfcfw.com/images/InvestStyle/${code}.png`, {});
-    const b64encoded = base64.encode(String.fromCharCode.apply(null, rawBody));
+    const b64encoded = base64.fromUint8Array(rawBody);
     return `data:image/png;base64,${b64encoded}`;
   } catch (error) {
     return null;
