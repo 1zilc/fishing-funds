@@ -1,5 +1,5 @@
 import { batch } from 'react-redux';
-import { store } from '@/.';
+import store from '@/store';
 import { SET_QUOTATIONS_LOADING, sortQuotationsCachedAction } from '@/actions/quotation';
 import * as Services from '@/services';
 import * as Utils from '@/utils';

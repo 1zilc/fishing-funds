@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import { store } from '@/.';
+import store from '@/store';
 import { updateWalletStateAction, syncFixWalletStateAction } from '@/actions/wallet';
 
 import * as CONST from '@/constants';

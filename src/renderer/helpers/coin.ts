@@ -1,5 +1,5 @@
 import { batch } from 'react-redux';
-import { store } from '@/.';
+import store from '@/store';
 import { sortCoinsCachedAction, setRemoteCoinsAction, SET_COINS_LOADING, SET_REMOTE_COINS_LOADING } from '@/actions/coin';
 import * as Services from '@/services';
 import * as Utils from '@/utils';

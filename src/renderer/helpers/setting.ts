@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import { store } from '@/.';
+import store from '@/store';
 import * as Enums from '@/utils/enums';
 import * as Utils from '@/utils';
 import * as CONST from '@/constants';

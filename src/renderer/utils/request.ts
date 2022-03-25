@@ -1,4 +1,4 @@
-import { store } from '@/.';
+import store from '@/store';
 
 const { requestProxy } = window.contextModules;
 

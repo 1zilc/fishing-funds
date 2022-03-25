@@ -1,7 +1,7 @@
 import NP from 'number-precision';
 import dayjs from 'dayjs';
 import { batch } from 'react-redux';
-import { store } from '@/.';
+import store from '@/store';
 import {
   SET_FUNDS_LOADING,
   sortFundsCachedAction,

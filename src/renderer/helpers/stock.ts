@@ -1,5 +1,5 @@
 import { batch } from 'react-redux';
-import { store } from '@/.';
+import store from '@/store';
 import { sortStocksCachedAction, SET_STOCKS_LOADING } from '@/actions/stock';
 import * as Adapter from '@/utils/adpters';
 import * as Services from '@/services';

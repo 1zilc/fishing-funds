@@ -1,5 +1,5 @@
 import { batch } from 'react-redux';
-import { store } from '@/.';
+import store from '@/store';
 import { sortZindexsCachedAction, SET_ZINDEXS_LOADING } from '@/actions/zindex';
 import * as Adapter from '@/utils/adpters';
 import * as Services from '@/services';
