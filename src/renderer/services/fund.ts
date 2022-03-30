@@ -120,14 +120,13 @@ export async function FromTencent(code: string) {
 // 新浪基金
 export async function FromSina(code: string) {
   try {
-    const { body } = await request(`https://hq.sinajs.cn/list=fu_${code}`, {
-      responseType: 'text',
+    const { rawBody } = await request(`https://hq.sinajs.cn/list=fu_${code}`, {
       headers: {
-        Referrer: 'http://finance.sina.com.cn/',
+        Referer: 'http://finance.sina.com.cn/',
       },
     });
 
-    const utf8String = iconv.decode(Buffer.from(body), 'GB18030');
+    const utf8String = iconv.decode(rawBody, 'GB18030');
     const [w, contnet] = utf8String.split('=');
     const data = contnet.replace(/(")|(;)|(\s)/g, '');
     if (!data) {
@@ -427,7 +426,7 @@ export async function FromFund123(code: string) {
         _csrf: csrf,
       },
       headers: {
-        cookie: cookies,
+        cookie: cookies?.join(''),
         'content-type': 'application/json',
       },
       body: JSON.stringify({

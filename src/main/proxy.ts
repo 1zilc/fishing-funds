@@ -5,10 +5,6 @@ import { Agent } from 'http';
 
 type ConnectionType = 'DIRECT' | 'SOCKS' | 'SOCKS5' | 'PROXY' | 'HTTPS';
 
-interface ProxyConfig {
-  host: string;
-  port: number | string;
-}
 class Proxy {
   private host: string;
 

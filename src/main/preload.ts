@@ -13,7 +13,6 @@ contextBridge.exposeInMainWorld('contextModules', {
     const proxyConent = await ipcRenderer.invoke('resolve-proxy', url);
     const { httpAgent, httpsAgent } = new Proxy(proxyConent, url);
 
-    console.log(httpAgent, httpsAgent);
     return got(url, {
       ...config,
       retry: 2,
