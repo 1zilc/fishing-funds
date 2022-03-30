@@ -4,11 +4,8 @@ import { sortZindexsCachedAction, SET_ZINDEXS_LOADING } from '@/actions/zindex';
 import * as Adapter from '@/utils/adpters';
 import * as Services from '@/services';
 import * as Utils from '@/utils';
-import * as CONST from '@/constants';
 import * as Enums from '@/utils/enums';
 import * as Helpers from '@/helpers';
-
-const { got } = window.contextModules;
 
 export const defaultZindexConfig = [
   // 沪深指数
@@ -84,47 +81,6 @@ export function SortZindexs(responseZindexs: Zindex.ResponseItem[]) {
   });
 
   return sortList;
-}
-
-export async function GetRemoteZindexConfig() {
-  const cb = 'parsezindex';
-  const now = new Date().getTime();
-  const fields = '12,13,14';
-  const { body: b1 } = await got(
-    `http://32.push2.eastmoney.com/api/qt/clist/get?pn=1&pz=50&po=1&np=1&ut=bd1d9ddb04089700cf9c27f6f7426281&fltt=2&invt=2&fid=&fs=b:MK0010`,
-    {
-      searchParams: {
-        cb,
-        fields,
-        _: now,
-      },
-    }
-  );
-  const a1 = eval(b1);
-  const { body: b2 } = await got(
-    `http://32.push2.eastmoney.com/api/qt/clist/get?pn=1&pz=5&po=1&np=1&ut=bd1d9ddb04089700cf9c27f6f7426281&fltt=2&invt=2&fid=f3&fs=m:1+t:1`,
-    {
-      searchParams: {
-        cb,
-        fields,
-        _: now,
-      },
-    }
-  );
-  const a2 = eval(b2);
-  const { body: b3 } = await got(
-    `http://32.push2.eastmoney.com/api/qt/clist/get?&pn=1&pz=5&po=1&np=1&ut=bd1d9ddb04089700cf9c27f6f7426281&fltt=2&invt=2&fid=f3&fs=m:0+t:5`,
-    {
-      searchParams: {
-        cb,
-        fields,
-        _: now,
-      },
-    }
-  );
-  const a3 = eval(b3);
-  const result = [...a1, ...a2, ...a3];
-  return result;
 }
 
 export async function LoadZindexs(loading: boolean) {

@@ -145,7 +145,7 @@ export async function GetPicTrendFromEastmoney(secid: string) {
         token: Utils.MakeHash(),
       },
     });
-    const b64encoded = base64.fromUint8Array(rawBody);
+    const b64encoded = base64.fromUint8Array(new Uint8Array(rawBody));
     return `data:image/png;base64,${b64encoded}`;
   } catch (error) {
     return null;
@@ -748,7 +748,7 @@ export async function GetUSCompany(secid: string) {
 export async function GetXSBCompany(secid: string) {
   try {
     const [mk, code] = secid.split('.');
-    const { body: html } = await request(`http:xinsanban.eastmoney.com/F10/CompanyInfo/Introduction/${code}.html`);
+    const { body: html } = await request<string>(`http:xinsanban.eastmoney.com/F10/CompanyInfo/Introduction/${code}.html`);
     const $ = cheerio.load(html);
     const gsjs = $("span:contains('公司简介')").next().text();
     const sshy = $("span:contains('行业分类')").next().text();

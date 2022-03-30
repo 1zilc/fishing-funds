@@ -79,6 +79,7 @@ export async function GetListFromEastmoney(po: string, fs: string) {
 export async function GetGlobalBondFromEastmoney() {
   try {
     const { body: script } = await request('http://quote.eastmoney.com/center/api/qqzq.js', {
+      responseType: 'text',
       searchParams: {
         _: new Date().getTime(),
       },

@@ -98,6 +98,9 @@ function main() {
       return { action: 'deny' };
     });
   });
+  ipcMain.handle('resolve-proxy', (event, url) => {
+    return mb.window?.webContents.session.resolveProxy(url);
+  });
   ipcMain.handle('update-tray-context-menu-wallets', (event, config) => {
     const menus = config.map((item: any) => ({
       ...item,

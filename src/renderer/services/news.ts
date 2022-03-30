@@ -4,6 +4,7 @@ import request from '@/utils/request';
 export async function GetLiveList() {
   try {
     const { body: script } = await request(`https://newsapi.eastmoney.com/kuaixun/v1/getlist_zhiboall_ajaxResult_70_1_.html`, {
+      responseType: 'text',
       searchParams: {
         _: Date.now(),
       },
@@ -22,6 +23,7 @@ export async function GetLiveList() {
 export async function GetFocusList() {
   try {
     const { body: script } = await request(`https://newsapi.eastmoney.com/kuaixun/v1/getlist_101_ajaxResult_50_1_.html`, {
+      responseType: 'text',
       searchParams: {
         _: Date.now(),
       },
@@ -40,6 +42,7 @@ export async function GetFocusList() {
 export async function GetListedList() {
   try {
     const { body: script } = await request(`https://newsapi.eastmoney.com/kuaixun/v1/getlist_103_ajaxResult_50_1_.html`, {
+      responseType: 'text',
       searchParams: {
         _: Date.now(),
       },
@@ -58,6 +61,7 @@ export async function GetListedList() {
 export async function GetGlobalList() {
   try {
     const { body: script } = await request(`https://newsapi.eastmoney.com/kuaixun/v1/getlist_102_ajaxResult_50_1_.html`, {
+      responseType: 'text',
       searchParams: {
         _: Date.now(),
       },
@@ -76,6 +80,7 @@ export async function GetGlobalList() {
 export async function GetGoodsList() {
   try {
     const { body: script } = await request(`https://newsapi.eastmoney.com/kuaixun/v1/getlist_106_ajaxResult_50_1_.html`, {
+      responseType: 'text',
       searchParams: {
         _: Date.now(),
       },
@@ -94,6 +99,7 @@ export async function GetGoodsList() {
 export async function GetExchangeList() {
   try {
     const { body: script } = await request(`https://newsapi.eastmoney.com/kuaixun/v1/getlist_107_ajaxResult_50_1_.html`, {
+      responseType: 'text',
       searchParams: {
         _: Date.now(),
       },
@@ -112,6 +118,7 @@ export async function GetExchangeList() {
 export async function GetBondList() {
   try {
     const { body: script } = await request(`https://newsapi.eastmoney.com/kuaixun/v1/getlist_108_ajaxResult_50_1_.html`, {
+      responseType: 'text',
       searchParams: {
         _: Date.now(),
       },
@@ -130,6 +137,7 @@ export async function GetBondList() {
 export async function GetFundList() {
   try {
     const { body: script } = await request(`https://newsapi.eastmoney.com/kuaixun/v1/getlist_109_ajaxResult_50_1_.html`, {
+      responseType: 'text',
       searchParams: {
         _: Date.now(),
       },
@@ -148,6 +156,7 @@ export async function GetFundList() {
 export async function GetChinaList() {
   try {
     const { body: script } = await request(`https://newsapi.eastmoney.com/kuaixun/v1/getlist_118_ajaxResult_50_1_.html`, {
+      responseType: 'text',
       searchParams: {
         _: Date.now(),
       },
@@ -166,6 +175,7 @@ export async function GetChinaList() {
 export async function GetUsaList() {
   try {
     const { body: script } = await request(`https://newsapi.eastmoney.com/kuaixun/v1/getlist_119_ajaxResult_50_1_.html`, {
+      responseType: 'text',
       searchParams: {
         _: Date.now(),
       },
@@ -184,6 +194,7 @@ export async function GetUsaList() {
 export async function GetEuList() {
   try {
     const { body: script } = await request(`https://newsapi.eastmoney.com/kuaixun/v1/getlist_120_ajaxResult_50_1_.html`, {
+      responseType: 'text',
       searchParams: {
         _: Date.now(),
       },
@@ -202,6 +213,7 @@ export async function GetEuList() {
 export async function GetUkList() {
   try {
     const { body: script } = await request(`https://newsapi.eastmoney.com/kuaixun/v1/getlist_121_ajaxResult_50_1_.html`, {
+      responseType: 'text',
       searchParams: {
         _: Date.now(),
       },
@@ -220,6 +232,7 @@ export async function GetUkList() {
 export async function GetJpList() {
   try {
     const { body: script } = await request(`https://newsapi.eastmoney.com/kuaixun/v1/getlist_122_ajaxResult_50_1_.html`, {
+      responseType: 'text',
       searchParams: {
         _: Date.now(),
       },

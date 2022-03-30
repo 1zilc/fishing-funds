@@ -1,11 +1,11 @@
-import { CancelableRequest, Response } from 'got/dist/source';
+import { GotRequestFunction } from 'got';
 import { Shell, Dialog, App, IpcRenderer, Clipboard } from 'electron';
 import { ElectronLog } from 'electron-log';
 
 declare global {
   interface Window {
     contextModules: {
-      requestProxy: <T>(url: string, config: any, proxy?: { http: string; https: string }) => CancelableRequest<Response<T>>;
+      got: GotRequestFunction;
       process: {
         production: boolean;
         electron: string;

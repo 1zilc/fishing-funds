@@ -156,7 +156,8 @@ export async function GetKFromEastmoney(code: string, year: number) {
 // 中国 居民消费价格指数(CPI)等指数
 export async function GetEconomyIndexFromEastmoney(market: number) {
   try {
-    const { body } = await request<string>('https://datainterface.eastmoney.com/EM_DataCenter/JS.aspx', {
+    const { body } = await request('https://datainterface.eastmoney.com/EM_DataCenter/JS.aspx', {
+      responseType: 'text',
       searchParams: {
         type: 'GJZB',
         sty: 'ZGZB',
@@ -395,4 +396,48 @@ export async function GetNationalTeamDetail(columns: string) {
   } catch (error) {
     return [];
   }
+}
+
+export async function GetRemoteZindexConfig() {
+  const cb = 'parsezindex';
+  const now = new Date().getTime();
+  const fields = '12,13,14';
+  const { body: b1 } = await request(
+    `http://32.push2.eastmoney.com/api/qt/clist/get?pn=1&pz=50&po=1&np=1&ut=bd1d9ddb04089700cf9c27f6f7426281&fltt=2&invt=2&fid=&fs=b:MK0010`,
+    {
+      responseType: 'text',
+      searchParams: {
+        cb,
+        fields,
+        _: now,
+      },
+    }
+  );
+  const a1 = eval(b1);
+  const { body: b2 } = await request(
+    `http://32.push2.eastmoney.com/api/qt/clist/get?pn=1&pz=5&po=1&np=1&ut=bd1d9ddb04089700cf9c27f6f7426281&fltt=2&invt=2&fid=f3&fs=m:1+t:1`,
+    {
+      responseType: 'text',
+      searchParams: {
+        cb,
+        fields,
+        _: now,
+      },
+    }
+  );
+  const a2 = eval(b2);
+  const { body: b3 } = await request(
+    `http://32.push2.eastmoney.com/api/qt/clist/get?&pn=1&pz=5&po=1&np=1&ut=bd1d9ddb04089700cf9c27f6f7426281&fltt=2&invt=2&fid=f3&fs=m:0+t:5`,
+    {
+      responseType: 'text',
+      searchParams: {
+        cb,
+        fields,
+        _: now,
+      },
+    }
+  );
+  const a3 = eval(b3);
+  const result = [...a1, ...a2, ...a3];
+  return result;
 }

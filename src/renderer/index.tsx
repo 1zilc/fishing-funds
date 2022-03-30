@@ -1,4 +1,4 @@
-import { createRoot } from 'react-dom/client';
+import { render } from 'react-dom';
 import NP from 'number-precision';
 import { ConfigProvider } from 'antd';
 import zhCN from 'antd/lib/locale/zh_CN';
@@ -28,11 +28,12 @@ Utils.CheckEnvTool();
 
 const { platform } = window.contextModules.process;
 
-createRoot(document.getElementById('root')!).render(
+render(
   <ConfigProvider locale={zhCN}>
     <Provider store={store}>
       <style>{` body { background-color: ${platform === 'darwin' ? 'initial' : 'var(--inner-color)'} }`}</style>
       <App />
     </Provider>
-  </ConfigProvider>
+  </ConfigProvider>,
+  document.getElementById('root')
 );

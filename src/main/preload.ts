@@ -4,24 +4,26 @@ import { contextBridge, ipcRenderer, shell, clipboard, nativeImage } from 'elect
 import { encode, decode, fromUint8Array } from 'js-base64';
 import * as fs from 'fs';
 import { base64ToBuffer } from './util';
+import Proxy from './proxy';
 
 const { version } = require('../../release/app/package.json');
 
-const httpProxyAgent = require('http-proxy-agent');
-const httpsProxyAgent = require('https-proxy-agent');
-
 contextBridge.exposeInMainWorld('contextModules', {
-  requestProxy: async (url: string, config: any, proxy?: { http: string; https: string }) => {
+  got: async (url: string, config: any) => {
+    const proxyConent = await ipcRenderer.invoke('resolve-proxy', url);
+    const { httpAgent, httpsAgent } = new Proxy(proxyConent, url);
+
+    console.log(httpAgent, httpsAgent);
     return got(url, {
       ...config,
-      agent: proxy && {
-        http: httpProxyAgent(proxy.http),
-        https: httpsProxyAgent(proxy.https),
+      retry: 2,
+      timeout: 10000,
+      agent: {
+        http: httpAgent,
+        https: httpsAgent,
       },
     });
   },
-  httpProxyAgent,
-  httpsProxyAgent,
   process: {
     production: process.env.NODE_ENV === 'production',
     electron: process.versions.electron,
