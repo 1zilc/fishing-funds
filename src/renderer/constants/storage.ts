@@ -1,8 +1,4 @@
 export default {
-  FUND_API_TYPE: 'FUND_API_TYPE', // 数据源请求类型 2.7.0已废除
-  WALLET_INDEX: 'WALLET_INDEX', // 钱包icon索引 2.8.0已废除
-  FUND_SETTING: 'FUND_SETTING', // 基金配置 2.8.0已废除
-
   ZINDEX_SETTING: 'ZINDEX_SETTING', // 指数配置
   FAVORITE_QUOTATION_MAP: 'FAVORITE_QUOTATION_MAP', // 关注板块map
   STOCK_SETTING: 'STOCK_SETTING', // 股票配置

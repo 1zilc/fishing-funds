@@ -148,10 +148,6 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
     riskNotificationSetting,
     trayContentSetting,
     coinUnitSetting,
-    httpProxySetting,
-    httpProxyWhitelistSetting,
-    httpProxyAddressSetting,
-    httpProxyRuleSetting,
     autoStartSetting,
     autoFreshSetting,
     freshDelaySetting,
@@ -175,11 +171,6 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
   const [trayContent, setTrayContent] = useState(trayContentSetting);
   // 货币单位
   const [coinUnit, setCoinUnit] = useState(coinUnitSetting);
-  // 代理设置
-  const [httpProxy, setHttpProxy] = useState(httpProxySetting);
-  const [httpProxyWhitelist, setHttpProxyWhitelist] = useState(httpProxyWhitelistSetting);
-  const [httpProxyAddress, setHttpProxyAddress] = useState(httpProxyAddressSetting);
-  const [httpProxyRule, setHttpProxyRule] = useState(httpProxyRuleSetting);
   // 通用设置
   const [autoStart, setAutoStart] = useState(autoStartSetting);
   const [autoFresh, setAutoFresh] = useState(autoFreshSetting);
@@ -200,10 +191,6 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
         riskNotificationSetting: riskNotification,
         trayContentSetting: trayContent,
         coinUnitSetting: coinUnit,
-        httpProxySetting: httpProxy,
-        httpProxyWhitelistSetting: httpProxyWhitelist,
-        httpProxyAddressSetting: httpProxyAddress,
-        httpProxyRuleSetting: httpProxyRule,
         autoStartSetting: autoStart,
         autoFreshSetting: autoFresh,
         freshDelaySetting: freshDelay || defalutSystemSetting.freshDelaySetting,
@@ -373,50 +360,6 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
                     BTC (฿)
                   </Radio>
                 </Radio.Group>
-              </div>
-            </StandCard>
-            <StandCard
-              icon={<GlobalIcon />}
-              title="代理设置"
-              extra={
-                <div className={styles.guide}>
-                  <Guide
-                    list={[
-                      { name: 'http代理', text: '由于众所周知的原因，部分接口需开启代理访问' },
-                      { name: '白名单模式', text: '默认关闭，开启后代理规则中的域名将不走代理，其余接口全部代理' },
-                      { name: '代理地址', text: '例如http://127.0.0.1:1087' },
-                      { name: '代理规则', text: `需要走代理的域名，使用英文逗号分隔，主要用于货币接口，无特殊原因不建议手动修改` },
-                    ]}
-                  />
-                </div>
-              }
-            >
-              <div className={clsx(styles.setting, 'card-body')}>
-                <section>
-                  <label>http代理：</label>
-                  <Switch size="small" checked={httpProxy} onChange={setHttpProxy} />
-                </section>
-                <section>
-                  <label>白名单模式：</label>
-                  <Switch size="small" checked={httpProxyWhitelist} onChange={setHttpProxyWhitelist} disabled={!httpProxy} />
-                </section>
-                <section>
-                  <label>代理地址：</label>
-                  <Input
-                    size="small"
-                    value={httpProxyAddress}
-                    onChange={(e) => setHttpProxyAddress(e.target.value)}
-                    disabled={!httpProxy}
-                  />
-                </section>
-                <section>
-                  <label>代理规则：</label>
-                  <Input.TextArea
-                    value={httpProxyRule}
-                    onChange={(e) => setHttpProxyRule(e.target.value)}
-                    disabled={!httpProxy}
-                  ></Input.TextArea>
-                </section>
               </div>
             </StandCard>
             <StandCard

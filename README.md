@@ -74,15 +74,13 @@
 - issues: [#106](https://github.com/1zilc/fishing-funds/issues/106)
 - Telegram: [https://t.me/fishing_funds](https://t.me/fishing_funds)
 
-## http 代理
+## 系统代理
 
-由于众所周知的原因，部分接口无法访问，Fishing Funds 支持代理访问
+由于众所周知的原因，部分货币接口无法访问，Fishing Funds ~~支持 http 代理访问~~ 已适配系统代理访问
 
-| 选项         | 说明                                                         |
-| ------------ | ------------------------------------------------------------ |
-| 默认代理地址 | 例如 `http://127.0.0.1:1087`                                 |
-| 默认代理规则 | 默认为 `api.coingecko.com,api.coincap.io`，不建议修改        |
-| 白名单模式   | 默认关闭，开启后代理规则中的域名将不走代理，其余接口全部代理 |
+- [x] http 代理
+- [x] https 代理
+- [x] socks 代理
 
 ## 导入导出
 
