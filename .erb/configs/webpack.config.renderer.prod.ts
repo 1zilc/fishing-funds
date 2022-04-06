@@ -36,7 +36,7 @@ const configuration: webpack.Configuration = {
   output: {
     path: webpackPaths.distRendererPath,
     publicPath: './',
-    filename: '[name].js',
+    filename: 'renderer.js',
     chunkFilename: '[name].bundle.js',
     library: {
       type: 'module',
