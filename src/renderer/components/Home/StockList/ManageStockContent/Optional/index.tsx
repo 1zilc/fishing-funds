@@ -9,11 +9,12 @@ import MenuIcon from '@/static/icon/menu.svg';
 import RemoveIcon from '@/static/icon/remove.svg';
 import CustomDrawer from '@/components/CustomDrawer';
 import Empty from '@/components/Empty';
-import AddStockContent from '@/components/Home/StockList/AddStockContent';
 import { deleteStockAction, setStockConfigAction } from '@/actions/stock';
 import { useDrawer, useAutoDestroySortableRef } from '@/utils/hooks';
 import { StoreState } from '@/reducers/types';
 import styles from './index.module.scss';
+
+const AddStockContent = React.lazy(() => import('@/components/Home/StockList/AddStockContent'));
 
 export interface OptionalProps {}
 

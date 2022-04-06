@@ -4,11 +4,11 @@ import clsx from 'clsx';
 
 import PureCard from '@/components/Card/PureCard';
 import CustomDrawer from '@/components/CustomDrawer';
-import AddStockContent from '@/components/Home/StockList/AddStockContent';
 import { useDrawer } from '@/utils/hooks';
 import * as Utils from '@/utils';
 import styles from './index.module.scss';
 
+const AddStockContent = React.lazy(() => import('@/components/Home/StockList/AddStockContent'));
 interface RecommendProps {
   ThemeList: {
     Code: string;

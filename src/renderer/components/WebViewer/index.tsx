@@ -10,10 +10,8 @@ import ArrowLeftIcon from '@/static/icon/arrow-left.svg';
 import ArrowRightIcon from '@/static/icon/arrow-right.svg';
 import RefreshIcon from '@/static/icon/refresh.svg';
 import ToolsIcon from '@/static/icon/tools.svg';
-import RestartIcon from '@/static/icon/restart.svg';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
 import CustomDrawer from '@/components/CustomDrawer';
-import AddWebContent from '@/components/WebViewer/AddWebContent';
 import Empty from '@/components/Empty';
 import { StoreState } from '@/reducers/types';
 import { closeWebAction, addWebAction, deleteWebAction, setWebPhoneAction } from '@/actions/web';
@@ -21,6 +19,8 @@ import { useDrawer } from '@/utils/hooks';
 import * as CONST from '@/constants';
 import * as Enums from '@/utils/enums';
 import styles from './index.module.scss';
+
+const AddWebContent = React.lazy(() => import('@/components/WebViewer/AddWebContent'));
 
 interface ViewerContentProps {}
 

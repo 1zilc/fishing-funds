@@ -3,7 +3,6 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useDebounceFn } from 'ahooks';
 import { Input, InputNumber, message } from 'antd';
 
-import DetailFundContent from '@/components/Home/FundList/DetailFundContent';
 import CustomDrawer from '@/components/CustomDrawer';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
 import { addFundAction } from '@/actions/fund';
@@ -13,6 +12,7 @@ import * as Enums from '@/utils/enums';
 import * as Helpers from '@/helpers';
 import styles from './index.module.scss';
 
+const DetailFundContent = React.lazy(() => import('@/components/Home/FundList/DetailFundContent'));
 export interface AddFundContentProps {
   defaultCode?: string;
   onEnter: () => void;

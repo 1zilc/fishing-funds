@@ -4,12 +4,13 @@ import { useSelector } from 'react-redux';
 
 import Empty from '@/components/Empty';
 import FundRow from '@/components/Home/FundList/FundRow';
-import DetailFundContent from '@/components/Home/FundList/DetailFundContent';
 import CustomDrawer from '@/components/CustomDrawer';
 import { StoreState } from '@/reducers/types';
 import { useFixTimeToDo, useDrawer, useCurrentWallet } from '@/utils/hooks';
 import * as Helpers from '@/helpers';
 import styles from './index.module.scss';
+
+const DetailFundContent = React.lazy(() => import('@/components/Home/FundList/DetailFundContent'));
 
 export interface ManageHistoryFundListProps {
   manageHistoryFunds?: Fund.Manager.ManageHistoryFund[];

@@ -23,17 +23,18 @@ import SimilarProportion from '@/components/Home/FundList/DetailFundContent/Simi
 import PerformanceEvaluation from '@/components/Home/FundList/DetailFundContent/PerformanceEvaluation';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
 import SameFundList from '@/components/Home/FundList/DetailFundContent/SameFundList';
-import FundManagerContent from '@/components/Home/FundList/FundManagerContent';
 import IndustryLayout from '@/components/Home/FundList/DetailFundContent/IndustryLayout';
 import WarehouseEvent from '@/components/Home/FundList/DetailFundContent/WarehouseEvent';
 import Origin from '@/components/Home/FundList/DetailFundContent/Origin';
-import AddFundContent from '@/components/Home/FundList/AddFundContent';
 
 import { useFundRating, useCurrentWallet, useDrawer } from '@/utils/hooks';
 import * as Services from '@/services';
 import * as Utils from '@/utils';
 import * as Enums from '@/utils/enums';
 import styles from './index.module.scss';
+
+const FundManagerContent = React.lazy(() => import('@/components/Home/FundList/FundManagerContent'));
+const AddFundContent = React.lazy(() => import('@/components/Home/FundList/AddFundContent'));
 
 export interface DetailFundContentProps {
   onEnter: () => void;

@@ -4,8 +4,6 @@ import { useSelector } from 'react-redux';
 import FundRow from '@/components/Home/FundList/FundRow';
 import Empty from '@/components/Empty';
 import LoadingBar from '@/components/LoadingBar';
-import EditFundContent from '@/components/Home/FundList/EditFundContent';
-import DetailFundContent from '@/components/Home/FundList/DetailFundContent';
 import CustomDrawer from '@/components/CustomDrawer';
 import GridView from '@/components/GridView';
 import { StoreState } from '@/reducers/types';
@@ -13,6 +11,9 @@ import { useDrawer, useFreshFunds, useCurrentWallet } from '@/utils/hooks';
 import * as Enums from '@/utils/enums';
 import * as Helpers from '@/helpers';
 import styles from './index.module.scss';
+
+const EditFundContent = React.lazy(() => import('@/components/Home/FundList/EditFundContent'));
+const DetailFundContent = React.lazy(() => import('@/components/Home/FundList/DetailFundContent'));
 
 interface FundListProps {
   filter: (fund: Fund.ResponseItem & Fund.ExtraRow & Fund.FixData) => boolean;

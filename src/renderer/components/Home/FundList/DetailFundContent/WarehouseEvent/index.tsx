@@ -4,11 +4,12 @@ import { useRequest } from 'ahooks';
 
 import ChartCard from '@/components/Card/ChartCard';
 import CustomDrawer from '@/components/CustomDrawer';
-import DetailStockContent from '@/components/Home/StockList/DetailStockContent';
 import { useDrawer, useCurrentWallet } from '@/utils/hooks';
 import * as Services from '@/services';
 import * as Utils from '@/utils';
 import styles from './index.module.scss';
+
+const DetailStockContent = React.lazy(() => import('@/components/Home/StockList/DetailStockContent'));
 
 interface WarehouseEventProps {
   stocks: any[];

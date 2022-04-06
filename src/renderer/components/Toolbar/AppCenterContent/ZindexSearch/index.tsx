@@ -3,7 +3,6 @@ import clsx from 'clsx';
 import { useSelector, useDispatch } from 'react-redux';
 import { Input, Tabs, message } from 'antd';
 
-import DetailZindexContent from '@/components/Home/ZindexView/DetailZindexContent';
 import CustomDrawer from '@/components/CustomDrawer';
 import { addZindexAction } from '@/actions/zindex';
 import { StoreState } from '@/reducers/types';
@@ -11,6 +10,8 @@ import { useDrawer } from '@/utils/hooks';
 import * as Helpers from '@/helpers';
 import * as Enums from '@/utils/enums';
 import styles from './index.module.scss';
+
+const DetailZindexContent = React.lazy(() => import('@/components/Home/ZindexView/DetailZindexContent'));
 
 interface ZindexSearchProps {
   groupList: Stock.SearchResult[];

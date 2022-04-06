@@ -9,11 +9,12 @@ import MenuIcon from '@/static/icon/menu.svg';
 import RemoveIcon from '@/static/icon/remove.svg';
 import CustomDrawer from '@/components/CustomDrawer';
 import Empty from '@/components/Empty';
-import AddZindexContent from '@/components/Home/ZindexView/AddZindexContent';
 import { deleteZindexAction, setZindexConfigAction } from '@/actions/zindex';
 import { useDrawer, useAutoDestroySortableRef } from '@/utils/hooks';
 import { StoreState } from '@/reducers/types';
 import styles from './index.module.scss';
+
+const AddZindexContent = React.lazy(() => import('@/components/Home/ZindexView/AddZindexContent'));
 
 export interface OptionalProps {}
 

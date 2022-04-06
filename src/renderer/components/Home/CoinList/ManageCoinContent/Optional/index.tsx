@@ -9,11 +9,12 @@ import MenuIcon from '@/static/icon/menu.svg';
 import RemoveIcon from '@/static/icon/remove.svg';
 import CustomDrawer from '@/components/CustomDrawer';
 import Empty from '@/components/Empty';
-import AddCoinContent from '@/components/Home/CoinList/AddCoinContent';
 import { deleteCoinAction, setCoinConfigAction } from '@/actions/coin';
 import { useDrawer, useAutoDestroySortableRef } from '@/utils/hooks';
 import { StoreState } from '@/reducers/types';
 import styles from './index.module.scss';
+
+const AddCoinContent = React.lazy(() => import('@/components/Home/CoinList/AddCoinContent'));
 
 export interface OptionalProps {}
 

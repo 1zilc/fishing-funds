@@ -2,7 +2,6 @@ import React, { useState, useCallback } from 'react';
 import { useRequest } from 'ahooks';
 import { Table } from 'antd';
 
-import DetailStockContent from '@/components/Home/StockList/DetailStockContent';
 import ChartCard from '@/components/Card/ChartCard';
 import CustomDrawer from '@/components/CustomDrawer';
 import { useDrawer } from '@/utils/hooks';
@@ -10,6 +9,7 @@ import * as Services from '@/services';
 import * as Utils from '@/utils';
 import styles from './index.module.scss';
 
+const DetailStockContent = React.lazy(() => import('@/components/Home/StockList/DetailStockContent'));
 export interface StocksProps {
   secid: string;
 }

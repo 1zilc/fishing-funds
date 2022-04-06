@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { useScroll, useDebounceFn, useBoolean, useThrottleFn } from 'ahooks';
+import { useScroll, useDebounceFn, useBoolean } from 'ahooks';
 import { useSelector, useDispatch } from 'react-redux';
 import classsames from 'clsx';
 import { Dropdown, Menu } from 'antd';
@@ -29,10 +29,7 @@ import {
   setCoinViewModeAction,
 } from '@/actions/sort';
 import CustomDrawer from '@/components/CustomDrawer';
-import ManageFundContent from '@/components/Home/FundList/ManageFundContent';
-import ManageStockContent from '@/components/Home/StockList/ManageStockContent';
-import ManageCoinContent from '@/components/Home/CoinList/ManageCoinContent';
-import ManageZindexContent from '@/components/Home/ZindexView/ManageZindexContent';
+
 import { StoreState } from '@/reducers/types';
 import { toggleAllFundsCollapseAction } from '@/actions/fund';
 import { toggleAllZindexsCollapseAction } from '@/actions/zindex';
@@ -52,6 +49,11 @@ import * as Enums from '@/utils/enums';
 import * as CONST from '@/constants';
 import * as Helpers from '@/helpers';
 import styles from './index.module.scss';
+
+const ManageFundContent = React.lazy(() => import('@/components/Home/FundList/ManageFundContent'));
+const ManageStockContent = React.lazy(() => import('@/components/Home/StockList/ManageStockContent'));
+const ManageCoinContent = React.lazy(() => import('@/components/Home/CoinList/ManageCoinContent'));
+const ManageZindexContent = React.lazy(() => import('@/components/Home/ZindexView/ManageZindexContent'));
 
 export interface SortBarProps {}
 

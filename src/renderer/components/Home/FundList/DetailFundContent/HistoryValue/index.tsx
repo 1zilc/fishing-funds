@@ -4,11 +4,12 @@ import { Table } from 'antd';
 import dayjs from 'dayjs';
 import weekday from 'dayjs/plugin/weekday';
 import CustomDrawer from '@/components/CustomDrawer';
-import FundHistoryValueContent from '@/components/Home/FundList/FundHistoryValueContent';
 import * as Utils from '@/utils';
 import styles from './index.module.scss';
 
 dayjs.extend(weekday);
+
+const FundHistoryValueContent = React.lazy(() => import('@/components/Home/FundList/FundHistoryValueContent'));
 export interface HistoryValueProps {
   data?: { x: number; y: number; equityReturn: number; unitMoney: 0 }[];
 }

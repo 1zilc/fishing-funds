@@ -5,14 +5,15 @@ import { ReactSortable } from 'react-sortablejs';
 import AddIcon from '@/static/icon/add.svg';
 import Empty from '@/components/Empty';
 import CustomDrawer from '@/components/CustomDrawer';
-import AddWalletContent from '@/components/Wallet/AddWalletContent';
 import WalletRow from '@/components/Wallet/WalletRow';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
-import EditWalletContent from '@/components/Wallet/EditWalletContent';
 import { StoreState } from '@/reducers/types';
 import { useDrawer, useAutoDestroySortableRef } from '@/utils/hooks';
 import { setWalletConfigAction, selectWalletAction } from '@/actions/wallet';
 import styles from './index.module.scss';
+
+const AddWalletContent = React.lazy(() => import('@/components/Wallet/AddWalletContent'));
+const EditWalletContent = React.lazy(() => import('@/components/Wallet/EditWalletContent'));
 
 export interface ManageWalletContentProps {
   onEnter: () => void;

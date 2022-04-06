@@ -3,9 +3,10 @@ import { useBoolean } from 'ahooks';
 import { Table } from 'antd';
 
 import CustomDrawer from '@/components/CustomDrawer';
-import FundHistoryValueContent from '@/components/Home/FundList/FundHistoryValueContent';
 import * as Utils from '@/utils';
 import styles from './index.module.scss';
+
+const FundHistoryValueContent = React.lazy(() => import('@/components/Home/FundList/FundHistoryValueContent'));
 
 export interface HistoryPerformanceProps {
   syl_1n?: string;

@@ -4,13 +4,14 @@ import { useSelector } from 'react-redux';
 import ZindexRow from '@/components/Home/ZindexView/ZindexRow';
 import Empty from '@/components/Empty';
 import LoadingBar from '@/components/LoadingBar';
-import DetailZindexContent from '@/components/Home/ZindexView/DetailZindexContent';
 import CustomDrawer from '@/components/CustomDrawer';
 import GridView from '@/components/GridView';
 import { StoreState } from '@/reducers/types';
 import { useDrawer } from '@/utils/hooks';
 import * as Enums from '@/utils/enums';
 import styles from './index.module.scss';
+
+const DetailZindexContent = React.lazy(() => import('@/components/Home/ZindexView/DetailZindexContent'));
 
 interface ZindexViewProps {
   filter: (zindex: Zindex.ResponseItem & Zindex.ExtraRow) => boolean;

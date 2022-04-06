@@ -4,7 +4,6 @@ import { useSelector } from 'react-redux';
 import CoinRow from '@/components/Home/CoinList/CoinRow';
 import Empty from '@/components/Empty';
 import LoadingBar from '@/components/LoadingBar';
-import DetailCoinContent from '@/components/Home/CoinList/DetailCoinContent';
 import CustomDrawer from '@/components/CustomDrawer';
 import GridView from '@/components/GridView';
 import { StoreState } from '@/reducers/types';
@@ -12,6 +11,8 @@ import { useDrawer } from '@/utils/hooks';
 import * as Enums from '@/utils/enums';
 import * as Helpers from '@/helpers';
 import styles from './index.module.scss';
+
+const DetailCoinContent = React.lazy(() => import('@/components/Home/CoinList/DetailCoinContent'));
 
 interface CoinListProps {
   filter: (coin: Coin.ResponseItem & Coin.ExtraRow) => boolean;

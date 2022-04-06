@@ -3,11 +3,12 @@ import { useRequest } from 'ahooks';
 import clsx from 'clsx';
 import PureCard from '@/components/Card/PureCard';
 import CustomDrawer from '@/components/CustomDrawer';
-import AddStockContent from '@/components/Home/StockList/AddStockContent';
 import Avatar from '@/components/Avatar';
 import { useDrawer } from '@/utils/hooks';
 import * as Services from '@/services';
 import styles from './index.module.scss';
+
+const AddStockContent = React.lazy(() => import('@/components/Home/StockList/AddStockContent'));
 
 interface TodayHotProps {}
 

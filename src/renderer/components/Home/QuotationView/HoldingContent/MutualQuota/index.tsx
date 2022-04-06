@@ -2,12 +2,13 @@ import React, { useState } from 'react';
 import clsx from 'clsx';
 import { useRequest } from 'ahooks';
 import StandCard from '@/components/Card/StandCard';
-import AddZindexContent from '@/components/Home/ZindexView/AddZindexContent';
 import CustomDrawer from '@/components/CustomDrawer';
 import { useDrawer } from '@/utils/hooks';
 import * as Services from '@/services';
 import * as Utils from '@/utils';
 import styles from './index.module.scss';
+
+const AddZindexContent = React.lazy(() => import('@/components/Home/ZindexView/AddZindexContent'));
 
 interface MutualQuotaProps {}
 

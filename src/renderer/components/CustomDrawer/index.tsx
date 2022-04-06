@@ -1,5 +1,6 @@
-import React, { PropsWithChildren, useState } from 'react';
+import React, { PropsWithChildren, useState, Suspense } from 'react';
 import { Drawer } from 'antd';
+import SkeletonContent from '@/components/CustomDrawer/SkeletonContent';
 import * as CONST from '@/constants';
 
 export interface CustomDrawerProps {
@@ -9,6 +10,7 @@ export interface CustomDrawerProps {
 }
 const CustomDrawer: React.FC<PropsWithChildren<CustomDrawerProps>> = ({ show, children, cached, ...config }) => {
   const [drawerOpened, setDrawerOpened] = useState(show);
+
   return (
     <Drawer
       visible={show}
@@ -24,7 +26,7 @@ const CustomDrawer: React.FC<PropsWithChildren<CustomDrawerProps>> = ({ show, ch
       zIndex={CONST.DEFAULT.DRAWER_ZINDEX_DEFAULT}
       {...config}
     >
-      {(cached || show || drawerOpened) && children}
+      <Suspense fallback={<SkeletonContent />}>{(cached || show || drawerOpened) && children}</Suspense>
     </Drawer>
   );
 };

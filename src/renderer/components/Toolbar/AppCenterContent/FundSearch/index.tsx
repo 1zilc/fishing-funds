@@ -2,14 +2,14 @@ import React from 'react';
 import clsx from 'clsx';
 import { Tabs } from 'antd';
 
-import AddFundContent from '@/components/Home/FundList/AddFundContent';
-import DetailFundContent from '@/components/Home/FundList/DetailFundContent';
 import CustomDrawer from '@/components/CustomDrawer';
 import { useDrawer, useCurrentWallet } from '@/utils/hooks';
 import * as Enums from '@/utils/enums';
 
 import styles from './index.module.scss';
 
+const AddFundContent = React.lazy(() => import('@/components/Home/FundList/AddFundContent'));
+const DetailFundContent = React.lazy(() => import('@/components/Home/FundList/DetailFundContent'));
 interface FundSearchProps {
   groupList: Stock.SearchResult[];
 }

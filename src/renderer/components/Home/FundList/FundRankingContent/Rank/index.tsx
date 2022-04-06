@@ -4,13 +4,14 @@ import { useRequest } from 'ahooks';
 
 import ChartCard from '@/components/Card/ChartCard';
 import CustomDrawer from '@/components/CustomDrawer';
-import AddFundContent from '@/components/Home/FundList/AddFundContent';
-import DetailFundContent from '@/components/Home/FundList/DetailFundContent';
 import TypeSelection from '@/components/TypeSelection';
 import { useDrawer, useCurrentWallet } from '@/utils/hooks';
 import * as Services from '@/services';
 import * as Utils from '@/utils';
 import styles from './index.module.scss';
+
+const AddFundContent = React.lazy(() => import('@/components/Home/FundList/AddFundContent'));
+const DetailFundContent = React.lazy(() => import('@/components/Home/FundList/DetailFundContent'));
 
 interface RankProps {}
 

@@ -3,7 +3,6 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useDebounceFn } from 'ahooks';
 import { Input, message } from 'antd';
 
-import DetailCoinContent from '@/components/Home/CoinList/DetailCoinContent';
 import CustomDrawer from '@/components/CustomDrawer';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
 import Empty from '@/components/Empty';
@@ -12,6 +11,8 @@ import { StoreState } from '@/reducers/types';
 import { useDrawer } from '@/utils/hooks';
 import * as Helpers from '@/helpers';
 import styles from './index.module.scss';
+
+const DetailCoinContent = React.lazy(() => import('@/components/Home/CoinList/DetailCoinContent'));
 
 export interface AddCoinContentProps {
   defaultName?: string;

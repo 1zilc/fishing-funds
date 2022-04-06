@@ -3,7 +3,6 @@ import clsx from 'clsx';
 import { useSelector, useDispatch } from 'react-redux';
 import { Tabs, message } from 'antd';
 
-import DetailStockContent from '@/components/Home/StockList/DetailStockContent';
 import CustomDrawer from '@/components/CustomDrawer';
 import { addStockAction } from '@/actions/stock';
 import { StoreState } from '@/reducers/types';
@@ -12,6 +11,8 @@ import * as Helpers from '@/helpers';
 import * as Enums from '@/utils/enums';
 
 import styles from './index.module.scss';
+
+const DetailStockContent = React.lazy(() => import('@/components/Home/StockList/DetailStockContent'));
 
 interface StockSearchProps {
   groupList: Stock.SearchResult[];

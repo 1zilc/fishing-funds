@@ -7,13 +7,14 @@ import RefreshIcon from '@/static/icon/refresh.svg';
 import SettingIcon from '@/static/icon/setting.svg';
 import AppsIcon from '@/static/icon/apps.svg';
 import CustomDrawer from '@/components/CustomDrawer';
-import SettingContent from '@/components/Toolbar/SettingContent';
-import AppCenterContent from '@/components/Toolbar/AppCenterContent';
 import { StoreState } from '@/reducers/types';
 import { useFreshFunds, useFreshZindexs, useFreshQuotations, useFreshStocks, useFreshCoins } from '@/utils/hooks';
 import * as Enums from '@/utils/enums';
 import * as CONST from '@/constants';
 import styles from './index.module.scss';
+
+const AppCenterContent = React.lazy(() => import('@/components/Toolbar/AppCenterContent'));
+const SettingContent = React.lazy(() => import('@/components/Toolbar/SettingContent'));
 
 export interface ToolBarProps {}
 
@@ -64,14 +65,12 @@ const ToolBar: React.FC<ToolBarProps> = () => {
   }, []);
 
   return (
-    <>
-      <div className={styles.bar}>
-        <AppsIcon style={{ ...iconSize }} onClick={openAppCenterDrawer} />
-        <RefreshIcon style={{ ...iconSize }} onClick={fresh} />
-        <Badge dot={!!updateInfo.version}>
-          <SettingIcon style={{ ...iconSize }} onClick={openSettingDrawer} />
-        </Badge>
-      </div>
+    <div className={styles.bar}>
+      <AppsIcon style={{ ...iconSize }} onClick={openAppCenterDrawer} />
+      <RefreshIcon style={{ ...iconSize }} onClick={fresh} />
+      <Badge dot={!!updateInfo.version}>
+        <SettingIcon style={{ ...iconSize }} onClick={openSettingDrawer} />
+      </Badge>
       <CustomDrawer show={showAppCenterDrawer}>
         <AppCenterContent
           onClose={closeAppCenterDrawer}
@@ -90,7 +89,7 @@ const ToolBar: React.FC<ToolBarProps> = () => {
           }}
         />
       </CustomDrawer>
-    </>
+    </div>
   );
 };
 

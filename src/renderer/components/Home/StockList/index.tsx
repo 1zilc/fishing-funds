@@ -4,13 +4,14 @@ import { useSelector } from 'react-redux';
 import StockRow from '@/components/Home/StockList/StockRow';
 import Empty from '@/components/Empty';
 import LoadingBar from '@/components/LoadingBar';
-import DetailStockContent from '@/components/Home/StockList/DetailStockContent';
 import CustomDrawer from '@/components/CustomDrawer';
 import GridView from '@/components/GridView';
 import { StoreState } from '@/reducers/types';
 import { useDrawer, useSyncFixStockSetting } from '@/utils/hooks';
 import * as Enums from '@/utils/enums';
 import styles from './index.module.scss';
+
+const DetailStockContent = React.lazy(() => import('@/components/Home/StockList/DetailStockContent'));
 
 interface StockListProps {
   filter: (stock: Stock.ResponseItem & Stock.ExtraRow) => boolean;

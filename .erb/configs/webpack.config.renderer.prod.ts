@@ -36,7 +36,8 @@ const configuration: webpack.Configuration = {
   output: {
     path: webpackPaths.distRendererPath,
     publicPath: './',
-    filename: 'renderer.js',
+    filename: '[name].js',
+    chunkFilename: '[name].bundle.js',
     library: {
       type: 'module',
     },
@@ -94,6 +95,9 @@ const configuration: webpack.Configuration = {
   },
 
   optimization: {
+    splitChunks: {
+      chunks: 'all',
+    },
     minimize: true,
     minimizer: [
       new ESBuildMinifyPlugin({
@@ -122,7 +126,7 @@ const configuration: webpack.Configuration = {
     }),
 
     new MiniCssExtractPlugin({
-      filename: 'style.css',
+      filename: '[name].css',
     }),
 
     new BundleAnalyzerPlugin({

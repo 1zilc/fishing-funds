@@ -13,12 +13,13 @@ import BellsLineIcon from '@/static/icon/bells-line.svg';
 import BellsFillIcon from '@/static/icon/bells-fill.svg';
 import CustomDrawer from '@/components/CustomDrawer';
 import Empty from '@/components/Empty';
-import AddFundContent from '@/components/Home/FundList/AddFundContent';
-import EditFundContent from '@/components/Home/FundList/EditFundContent';
 import { deleteFundAction, setFundConfigAction, updateFundAction } from '@/actions/fund';
 import { useSyncFixFundSetting, useDrawer, useCurrentWallet, useAutoDestroySortableRef } from '@/utils/hooks';
 
 import styles from './index.module.scss';
+
+const AddFundContent = React.lazy(() => import('@/components/Home/FundList/AddFundContent'));
+const EditFundContent = React.lazy(() => import('@/components/Home/FundList/EditFundContent'));
 
 export interface OptionalProps {}
 

@@ -5,14 +5,15 @@ import { useRequest } from 'ahooks';
 import clsx from 'clsx';
 
 import CustomDrawer from '@/components/CustomDrawer';
-import DetailStockContent from '@/components/Home/StockList/DetailStockContent';
-import AddStockContent from '@/components/Home/StockList/AddStockContent';
 import TypeSelection from '@/components/TypeSelection';
 import { useDrawer } from '@/utils/hooks';
 import { StoreState } from '@/reducers/types';
 import * as Services from '@/services';
 import * as Utils from '@/utils';
 import styles from './index.module.scss';
+
+const DetailStockContent = React.lazy(() => import('@/components/Home/StockList/DetailStockContent'));
+const AddStockContent = React.lazy(() => import('@/components/Home/StockList/AddStockContent'));
 
 interface MainRankProps {}
 

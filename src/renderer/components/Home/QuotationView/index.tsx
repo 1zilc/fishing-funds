@@ -5,13 +5,14 @@ import QuotationRow from '@/components/Home/QuotationView/QuotationRow';
 import Empty from '@/components/Empty';
 import LoadingBar from '@/components/LoadingBar';
 import CustomDrawer from '@/components/CustomDrawer';
-import DetailQuotationContent from '@/components/Home/QuotationView/DetailQuotationContent';
-import DetailStockContent from '@/components/Home/StockList/DetailStockContent';
 import GridView from '@/components/GridView';
 import { StoreState } from '@/reducers/types';
 import { useDrawer } from '@/utils/hooks';
 import * as Enums from '@/utils/enums';
 import styles from './index.module.scss';
+
+const DetailQuotationContent = React.lazy(() => import('@/components/Home/QuotationView/DetailQuotationContent'));
+const DetailStockContent = React.lazy(() => import('@/components/Home/StockList/DetailStockContent'));
 
 interface QuotationViewProps {
   filter: (quotation: Quotation.ResponseItem & Quotation.ExtraRow) => boolean;

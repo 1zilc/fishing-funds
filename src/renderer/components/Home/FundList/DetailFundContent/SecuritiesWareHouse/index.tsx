@@ -5,13 +5,13 @@ import { useRequest } from 'ahooks';
 import { useHomeContext } from '@/components/Home';
 import ChartCard from '@/components/Card/ChartCard';
 import CustomDrawer from '@/components/CustomDrawer';
-import DetailStockContent from '@/components/Home/StockList/DetailStockContent';
-import { useResizeEchart, useRenderEcharts, useDrawer } from '@/utils/hooks';
+import { useResizeEchart, useDrawer } from '@/utils/hooks';
 import * as CONST from '@/constants';
 import * as Services from '@/services';
 import * as Utils from '@/utils';
 import styles from './index.module.scss';
 
+const DetailStockContent = React.lazy(() => import('@/components/Home/StockList/DetailStockContent'));
 export interface SecuritiesWareHouseProps {
   code: string;
   securitiesCodes: string;

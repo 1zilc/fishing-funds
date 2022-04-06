@@ -6,14 +6,15 @@ import clsx from 'clsx';
 
 import ChartCard from '@/components/Card/ChartCard';
 import CustomDrawer from '@/components/CustomDrawer';
-import DetailCoinContent from '@/components/Home/CoinList/DetailCoinContent';
-import AddCoinContent from '@/components/Home/CoinList/AddCoinContent';
 import TypeSelection from '@/components/TypeSelection';
 import { useDrawer } from '@/utils/hooks';
 import { StoreState } from '@/reducers/types';
 import * as Services from '@/services';
 import * as Utils from '@/utils';
 import styles from './index.module.scss';
+
+const DetailCoinContent = React.lazy(() => import('@/components/Home/CoinList/DetailCoinContent'));
+const AddCoinContent = React.lazy(() => import('@/components/Home/CoinList/AddCoinContent'));
 
 interface MainRankProps {}
 

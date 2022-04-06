@@ -4,13 +4,13 @@ import { Table } from 'antd';
 import { useRequest } from 'ahooks';
 
 import CustomDrawer from '@/components/CustomDrawer';
-import DetailQuotationContent from '@/components/Home/QuotationView/DetailQuotationContent';
-import AddStockContent from '@/components/Home/StockList/AddStockContent';
 import { useDrawer } from '@/utils/hooks';
 import * as Services from '@/services';
 import * as Utils from '@/utils';
 import styles from './index.module.scss';
 
+const DetailQuotationContent = React.lazy(() => import('@/components/Home/QuotationView/DetailQuotationContent'));
+const AddStockContent = React.lazy(() => import('@/components/Home/StockList/AddStockContent'));
 interface NorthHistoryProps {
   marketCode: string;
   reportName: string;
