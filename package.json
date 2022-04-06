@@ -197,7 +197,7 @@
     "esbuild-loader": "^2.18.0",
     "eslint": "^8.9.0",
     "eslint-config-airbnb": "^19.0.1",
-    "eslint-config-airbnb-typescript": "^15.0.0",
+    "eslint-config-airbnb-typescript": "^17.0.0",
     "eslint-config-erb": "^3.0.0",
     "eslint-config-prettier": "8.5.0",
     "eslint-import-resolver-typescript": "^2.5.0",
