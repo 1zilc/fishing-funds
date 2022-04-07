@@ -173,7 +173,7 @@
     "@testing-library/react": "^13.0.0",
     "@types/color-hash": "^1.0.1",
     "@types/jest": "^27.0.1",
-    "@types/node": "17.0.21",
+    "@types/node": "17.0.23",
     "@types/react": "^17.0.5",
     "@types/react-dom": "^17.0.3",
     "@types/react-test-renderer": "^17.0.1",
