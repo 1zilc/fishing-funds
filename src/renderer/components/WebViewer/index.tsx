@@ -44,7 +44,7 @@ const Content = () => {
   const {
     data: webDetail,
     show: showAddWebContent,
-    open: openAddWebContent,
+    set: setAddWebContent,
     close: closeAddWebContent,
   } = useDrawer({
     title: webTitle,
@@ -71,6 +71,17 @@ const Content = () => {
     }
   }, []);
 
+  const onSetWeb = useCallback(() => {
+    const url = viewRef.current?.getURL();
+    if (url) {
+      setAddWebContent({
+        title: webTitle,
+        iconType: Enums.WebIconType.First,
+        url,
+      });
+    }
+  }, [webTitle]);
+
   const onAddWeb = useCallback((web: Web.SettingItem) => {
     dispatch(addWebAction(web));
     closeAddWebContent();
@@ -89,6 +100,7 @@ const Content = () => {
     };
     const didStopLoading = () => {
       setLoadingFalse();
+      setWebTitle(viewRef.current.getTitle());
       setTimeout(() => {
         setDoneTrue();
         setTimeout(() => {
@@ -194,7 +206,7 @@ const Content = () => {
             <ArrowLeftIcon onClick={() => viewRef.current?.goBack()} />
             <RefreshIcon onClick={() => viewRef.current?.reload()} />
             <ArrowRightIcon onClick={() => viewRef.current?.goForward()} />
-            {codeMap[url] ? <StarFillIcon onClick={onRemoveWeb} /> : <StarIcon onClick={openAddWebContent} />}
+            {codeMap[url] ? <StarFillIcon onClick={onRemoveWeb} /> : <StarIcon onClick={onSetWeb} />}
           </div>
         </div>
       </div>

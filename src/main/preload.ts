@@ -24,8 +24,6 @@ contextBridge.exposeInMainWorld('contextModules', {
         http: httpAgent,
         https: httpsAgent,
       },
-    }).catch((e) => {
-      console.log(e);
     });
   },
   process: {
