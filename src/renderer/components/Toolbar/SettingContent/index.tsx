@@ -88,6 +88,10 @@ const recordSiteGroup = Utils.Group(
       url: 'https://formulae.brew.sh/cask/fishing-funds#default',
       name: 'Homebrew',
     },
+    {
+      url: 'https://github.com/jaywcjlove/awesome-mac',
+      name: 'Awesome Mac',
+    },
   ],
   3
 );

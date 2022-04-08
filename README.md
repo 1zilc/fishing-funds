@@ -130,6 +130,7 @@ interface FundSetting {
 - [MacWk](https://www.macwk.com/soft/fishing-funds)
 - [Snap Store](https://snapcraft.io/fishing-funds)
 - [Homebrew](https://formulae.brew.sh/cask/fishing-funds#default)
+- [Awesome Mac](https://github.com/jaywcjlove/awesome-mac)
 
 ## 感谢
 
