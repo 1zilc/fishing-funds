@@ -248,7 +248,7 @@
     "electron-icon-builder": "^2.0.1",
     "electron-log": "^4.3.5",
     "electron-store": "^8.0.1",
-    "electron-updater": "^4.3.8",
+    "electron-updater": "^5.0.1",
     "electron-window-state": "^5.0.3",
     "got": "^12.0.3",
     "html2canvas": "^1.2.2",
