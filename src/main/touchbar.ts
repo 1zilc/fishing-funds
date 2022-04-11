@@ -69,7 +69,7 @@ export default class TouchBarManager {
 
   updateTouchBar() {
     const touchbar = new TouchBar({
-      items: [...this.zindexItems, ...this.walletItems, ...this.tabItems],
+      items: ([] as Item[]).concat(this.zindexItems, this.walletItems, this.tabItems),
     });
     this.mb.window?.setTouchBar(touchbar);
   }
