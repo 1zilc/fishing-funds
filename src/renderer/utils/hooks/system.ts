@@ -471,3 +471,46 @@ export function useAllConfigBackup() {
     };
   }, []);
 }
+
+export function useZindexTouchBar() {
+  const zindexs = useSelector((state: StoreState) => state.zindex.zindexs);
+  useEffect(() => {
+    ipcRenderer.invoke(
+      'update-touchbar-zindex',
+      zindexs.map((zindex) => ({
+        label: `${zindex.name} ${zindex.zdf}%`,
+        backgroundColor: Utils.GetValueColor(zindex.zdf).color,
+      }))
+    );
+  }, [zindexs]);
+}
+
+export function useWalletTouchBar() {
+  const wallets = useSelector((state: StoreState) => state.wallet.wallets);
+  const currentWalletCode = useSelector((state: StoreState) => state.wallet.currentWalletCode);
+
+  useEffect(() => {
+    ipcRenderer.invoke(
+      'update-touchbar-wallet',
+      wallets.map((wallet) => {
+        const walletConfig = Helpers.Wallet.GetCurrentWalletConfig(wallet.code);
+        const calcResult = Helpers.Fund.CalcFunds(wallet.funds, wallet.code);
+        const value = Utils.Yang(calcResult.gssyl.toFixed(2));
+
+        return {
+          id: wallet.code,
+          label: `${walletConfig.name} ${value}%`,
+          iconIndex: walletConfig.iconIndex,
+          backgroundColor: walletConfig.code === currentWalletCode ? Utils.getVariblesColor(CONST.VARIBLES)['--primary-color'] : undefined,
+        };
+      })
+    );
+  }, [wallets, currentWalletCode]);
+}
+
+export function useUpdateActiveTabKey() {
+  const activeKey = useSelector((state: StoreState) => state.tabs.activeKey);
+  useEffect(() => {
+    ipcRenderer.invoke('update-active-tab-key', activeKey);
+  }, [activeKey]);
+}

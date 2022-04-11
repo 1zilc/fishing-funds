@@ -5,7 +5,7 @@ import { Agent } from 'http';
 
 type ConnectionType = 'DIRECT' | 'SOCKS' | 'SOCKS5' | 'PROXY' | 'HTTPS';
 
-class Proxy {
+export default class Proxy {
   private host: string;
 
   private port: string;
@@ -64,4 +64,3 @@ class Proxy {
     }
   }
 }
-export default Proxy;

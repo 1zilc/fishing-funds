@@ -10,6 +10,9 @@ import {
   useTrayContent,
   useUpdateContextMenuWalletsState,
   useAllConfigBackup,
+  useZindexTouchBar,
+  useWalletTouchBar,
+  useUpdateActiveTabKey,
 } from '@/utils/hooks';
 
 const HomePage = () => {
@@ -21,6 +24,9 @@ const HomePage = () => {
   useTrayContent();
   useMappingLocalToSystemSetting();
   useUpdateContextMenuWalletsState();
+  useUpdateActiveTabKey();
+  useZindexTouchBar();
+  useWalletTouchBar();
   useBootStrap();
 
   return <Home />;

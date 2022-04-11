@@ -123,7 +123,7 @@ export function JudgeAdjustmentNotificationTime(timestamp: number, adjustmentNot
 export function getVariblesColor(varibles: typeof CONST.VARIBLES) {
   return varibles.reduce<Record<string, string>>((colorMap, varible) => {
     const color = window.getComputedStyle(document.body).getPropertyValue(varible);
-    colorMap[varible] = color || '';
+    colorMap[varible] = (color || '').trim();
     return colorMap;
   }, {});
 }

@@ -7,7 +7,7 @@
  * `./src/main.prod.js` using webpack. This gives us some performance wins.
  */
 
-import { app, globalShortcut, ipcMain, nativeTheme, dialog, webContents, shell } from 'electron';
+import { app, globalShortcut, ipcMain, nativeTheme, dialog, webContents, shell, TouchBar } from 'electron';
 import windowStateKeeper from 'electron-window-state';
 import Store from 'electron-store';
 import { Menubar } from 'menubar';
@@ -15,6 +15,7 @@ import AppUpdater from './autoUpdater';
 import { appIcon, generateWalletIcon } from './icon';
 import { createTray } from './tray';
 import { createMenubar, buildContextMenu } from './menubar';
+import TouchBarManager from './touchbar';
 import { lockSingleInstance, checkEnvTool, sendMessageToRenderer, setNativeTheme } from './util';
 import * as Enums from '../renderer/utils/enums';
 
@@ -31,6 +32,7 @@ async function init() {
 function main() {
   const storage = new Store({ encryptionKey: '1zilc' });
   const tray = createTray();
+
   const mainWindowState = windowStateKeeper({
     defaultWidth: 325,
     defaultHeight: 768,
@@ -39,6 +41,7 @@ function main() {
   });
   mb = createMenubar({ tray, mainWindowState });
   const appUpdater = new AppUpdater({ icon: appIcon, mb });
+  const touchBarManager = new TouchBarManager([], mb);
   let contextMenu = buildContextMenu({ mb, appUpdater }, []);
   const defaultTheme = storage.get('SYSTEM_SETTING.systemThemeSetting', Enums.SystemThemeType.Auto) as Enums.SystemThemeType;
   // mb.app.commandLine.appendSwitch('disable-backgrounding-occluded-windows', 'true');
@@ -109,14 +112,23 @@ function main() {
     }));
     contextMenu = buildContextMenu({ mb, appUpdater }, menus);
   });
-
+  // touchbar 相关监听
+  ipcMain.handle('update-touchbar-zindex', (event, config) => {
+    touchBarManager.updateZindexItems(config);
+  });
+  ipcMain.handle('update-touchbar-wallet', (event, config) => {
+    touchBarManager.updateWalletItems(config);
+  });
+  ipcMain.handle('update-active-tab-key', (event, key) => {
+    touchBarManager.updateItems(key);
+  });
   // menubar 相关监听
   mb.on('after-create-window', () => {
     // 设置系统色彩偏好
     setNativeTheme(defaultTheme);
     // 系统级别高斯模糊
     if (process.platform === 'darwin') {
-      mb.window!.setVibrancy('sidebar');
+      mb.window?.setVibrancy('sidebar');
     }
     // 右键菜单
     tray.on('right-click', () => {
@@ -134,7 +146,6 @@ function main() {
     if (openBackupFilePath) {
       sendMessageToRenderer(mb, 'open-backup-file', openBackupFilePath);
     }
-
     // 外部打开 _blank连接
     mb.window?.webContents.setWindowOpenHandler(({ url }) => {
       shell.openExternal(url);
