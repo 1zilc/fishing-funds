@@ -119,8 +119,8 @@ function main() {
   ipcMain.handle('update-touchbar-wallet', (event, config) => {
     touchBarManager.updateWalletItems(config);
   });
-  ipcMain.handle('update-active-tab-key', (event, key) => {
-    touchBarManager.updateItems(key);
+  ipcMain.handle('update-touchbar-tab', (event, config) => {
+    touchBarManager.updateTabItems(config);
   });
   // menubar 相关监听
   mb.on('after-create-window', () => {

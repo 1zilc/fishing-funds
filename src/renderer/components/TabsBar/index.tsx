@@ -11,7 +11,7 @@ export interface Tab {
   key: Enums.TabKeyType;
   name: string;
 }
-const tabs = [
+export const tabs = [
   {
     key: Enums.TabKeyType.Funds,
     name: '基金',

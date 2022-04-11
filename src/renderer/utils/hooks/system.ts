@@ -6,8 +6,10 @@ import { Base64 } from 'js-base64';
 import dayjs from 'dayjs';
 import NP from 'number-precision';
 
+import { tabs } from '@/components/TabsBar';
 import { updateAvaliableAction } from '@/actions/updater';
 import { setFundConfigAction } from '@/actions/fund';
+import { setTabActiveKeyAction } from '@/actions/tabs';
 import { selectWalletAction } from '@/actions/wallet';
 import { setAdjustmentNotificationDateAction, clearAdjustmentNotificationDateAction } from '@/actions/setting';
 import { StoreState } from '@/reducers/types';
@@ -17,7 +19,6 @@ import * as CONST from '@/constants';
 import * as Adapters from '@/utils/adpters';
 import * as Helpers from '@/helpers';
 import * as Enums from '@/utils/enums';
-import { NOTIMP } from 'dns';
 
 const { invoke, dialog, ipcRenderer, clipboard, app } = window.contextModules.electron;
 const { saveString, encodeFF, decodeFF, readFile } = window.contextModules.io;
@@ -477,40 +478,55 @@ export function useZindexTouchBar() {
   useEffect(() => {
     ipcRenderer.invoke(
       'update-touchbar-zindex',
-      zindexs.map((zindex) => ({
-        label: `${zindex.name} ${zindex.zdf}%`,
-        backgroundColor: Utils.GetValueColor(zindex.zdf).color,
-      }))
+      zindexs
+        .filter(({ code }) => code === '1.000001') // 只显示上证指数
+        .map((zindex) => ({
+          label: `${zindex.name} ${zindex.zsz}`,
+          backgroundColor: Utils.GetValueColor(zindex.zdf).color,
+        }))
     );
   }, [zindexs]);
 }
 
 export function useWalletTouchBar() {
-  const wallets = useSelector((state: StoreState) => state.wallet.wallets);
-  const currentWalletCode = useSelector((state: StoreState) => state.wallet.currentWalletCode);
+  const wallet = useCurrentWallet();
+
+  useEffect(() => {
+    const { currentWalletCode, currentWalletState } = wallet;
+    const walletConfig = Helpers.Wallet.GetCurrentWalletConfig(currentWalletCode);
+    const calcResult = Helpers.Fund.CalcFunds(currentWalletState.funds, currentWalletCode);
+    const value = Utils.Yang(calcResult.gssyl.toFixed(2));
+
+    ipcRenderer.invoke('update-touchbar-wallet', [
+      {
+        id: currentWalletCode,
+        label: `${value}%`, // 只显示当前钱包
+        iconIndex: walletConfig.iconIndex,
+      },
+    ]);
+  }, [wallet]);
+}
+
+export function useTabTouchBar() {
+  const dispatch = useDispatch();
+  const activeKey = useSelector((state: StoreState) => state.tabs.activeKey);
 
   useEffect(() => {
     ipcRenderer.invoke(
-      'update-touchbar-wallet',
-      wallets.map((wallet) => {
-        const walletConfig = Helpers.Wallet.GetCurrentWalletConfig(wallet.code);
-        const calcResult = Helpers.Fund.CalcFunds(wallet.funds, wallet.code);
-        const value = Utils.Yang(calcResult.gssyl.toFixed(2));
-
-        return {
-          id: wallet.code,
-          label: `${walletConfig.name} ${value}%`,
-          iconIndex: walletConfig.iconIndex,
-          backgroundColor: walletConfig.code === currentWalletCode ? Utils.getVariblesColor(CONST.VARIBLES)['--primary-color'] : undefined,
-        };
-      })
+      'update-touchbar-tab',
+      tabs.map((tab) => ({
+        label: tab.name,
+        selected: tab.key === activeKey,
+      }))
     );
-  }, [wallets, currentWalletCode]);
-}
-
-export function useUpdateActiveTabKey() {
-  const activeKey = useSelector((state: StoreState) => state.tabs.activeKey);
-  useEffect(() => {
-    ipcRenderer.invoke('update-active-tab-key', activeKey);
   }, [activeKey]);
+
+  useLayoutEffect(() => {
+    ipcRenderer.on('change-tab-active-key', (e, key) => {
+      dispatch(setTabActiveKeyAction(key));
+    });
+    return () => {
+      ipcRenderer.removeAllListeners('change-tab-active-key');
+    };
+  }, []);
 }

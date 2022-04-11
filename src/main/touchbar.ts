@@ -4,7 +4,7 @@ import { generateWalletIcon } from './icon';
 import { sendMessageToRenderer } from './util';
 import * as Enums from '../renderer/utils/enums';
 
-const { TouchBarButton, TouchBarGroup } = TouchBar;
+const { TouchBarButton, TouchBarSegmentedControl } = TouchBar;
 
 type Item =
   | Electron.TouchBarButton
@@ -22,11 +22,11 @@ export default class TouchBarManager {
 
   mb: Menubar;
 
-  itemType: Enums.TabKeyType = Enums.TabKeyType.Funds;
-
   walletItems: Item[] = [];
 
   zindexItems: Electron.TouchBarButton[] = [];
+
+  tabItems: Electron.TouchBarSegmentedControl[] = [];
 
   constructor(items: Item[], mb: Menubar) {
     this.items = items;
@@ -35,9 +35,7 @@ export default class TouchBarManager {
 
   updateZindexItems(configs: Electron.TouchBarButtonConstructorOptions[]) {
     this.zindexItems = configs.map((config) => new TouchBarButton(config));
-    if (this.itemType === Enums.TabKeyType.Zindex) {
-      this.updateTouchBar();
-    }
+    this.updateTouchBar();
   }
 
   updateWalletItems(configs: (Electron.TouchBarButtonConstructorOptions & { iconIndex: number; id: string })[]) {
@@ -51,33 +49,28 @@ export default class TouchBarManager {
           backgroundColor: config.backgroundColor,
         })
     );
-    if (
-      this.itemType === Enums.TabKeyType.Funds ||
-      this.itemType === Enums.TabKeyType.Stock ||
-      this.itemType === Enums.TabKeyType.Quotation ||
-      this.itemType === Enums.TabKeyType.Coin
-    ) {
-      this.updateTouchBar();
-    }
+    this.updateTouchBar();
   }
 
-  constructItems() {
-    switch (this.itemType) {
-      case Enums.TabKeyType.Zindex:
-        return this.zindexItems;
-      default:
-        return this.walletItems;
-    }
-  }
-
-  updateItems(type: Enums.TabKeyType) {
-    this.itemType = type;
+  updateTabItems(configs: (Electron.TouchBarButtonConstructorOptions & { key: Enums.TabKeyType; selected: boolean })[]) {
+    const selectedIndex = configs.findIndex(({ selected }) => selected);
+    this.tabItems = [
+      new TouchBarSegmentedControl({
+        segmentStyle: 'automatic',
+        segments: configs.map((config) => ({ label: config.label })),
+        change: (selectedIndex) => {
+          sendMessageToRenderer(this.mb, 'change-tab-active-key', selectedIndex);
+        },
+        selectedIndex,
+      }),
+    ];
     this.updateTouchBar();
   }
 
   updateTouchBar() {
-    const items = this.constructItems();
-    const touchbar = new TouchBar({ items });
+    const touchbar = new TouchBar({
+      items: [...this.zindexItems, ...this.walletItems, ...this.tabItems],
+    });
     this.mb.window?.setTouchBar(touchbar);
   }
 }
