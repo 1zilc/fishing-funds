@@ -275,6 +275,9 @@
     "node": ">=14.x",
     "npm": ">=7.x"
   },
+  "electronmon": {
+    "patterns": ["!src/renderer/**"]
+  },
   "browserslist": [],
   "__npminstall_done": false
 }
