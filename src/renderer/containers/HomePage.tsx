@@ -6,13 +6,9 @@ import {
   useRiskNotification,
   useFundsClipboard,
   useBootStrap,
-  useMappingLocalToSystemSetting,
   useTrayContent,
-  useUpdateContextMenuWalletsState,
   useAllConfigBackup,
-  useZindexTouchBar,
-  useWalletTouchBar,
-  useTabTouchBar,
+  useMappingLocalToSystemSetting,
 } from '@/utils/hooks';
 
 const HomePage = () => {
@@ -23,10 +19,6 @@ const HomePage = () => {
   useAllConfigBackup();
   useTrayContent();
   useMappingLocalToSystemSetting();
-  useUpdateContextMenuWalletsState();
-  useTabTouchBar();
-  useZindexTouchBar();
-  useWalletTouchBar();
   useBootStrap();
 
   return <Home />;

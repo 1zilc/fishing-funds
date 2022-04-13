@@ -7,7 +7,7 @@ import LoadingBar from '@/components/LoadingBar';
 import CustomDrawer from '@/components/CustomDrawer';
 import GridView from '@/components/GridView';
 import { StoreState } from '@/reducers/types';
-import { useDrawer } from '@/utils/hooks';
+import { useDrawer, useZindexTouchBar } from '@/utils/hooks';
 import * as Enums from '@/utils/enums';
 import styles from './index.module.scss';
 
@@ -35,6 +35,8 @@ const ZindexView: React.FC<ZindexViewProps> = (props) => {
         return list.map((zindex) => <ZindexRow key={zindex.code} zindex={zindex} onDetail={setDetailDrawer} />);
     }
   }, [list, zindexViewMode]);
+
+  useZindexTouchBar();
 
   return (
     <div className={styles.container}>

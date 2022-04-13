@@ -122,6 +122,9 @@ function main() {
   ipcMain.handle('update-touchbar-tab', (event, config) => {
     touchBarManager.updateTabItems(config);
   });
+  ipcMain.handle('update-touchbar-eye-status', (event, config) => {
+    touchBarManager.updateEysStatusItems(config);
+  });
   // menubar 相关监听
   mb.on('after-create-window', () => {
     // 设置系统色彩偏好

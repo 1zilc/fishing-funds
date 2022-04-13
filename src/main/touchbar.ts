@@ -1,6 +1,6 @@
 import { TouchBar } from 'electron';
 import { Menubar } from 'menubar';
-import { generateWalletIcon } from './icon';
+import { generateWalletIcon, generateIcon } from './icon';
 import { sendMessageToRenderer } from './util';
 import * as Enums from '../renderer/utils/enums';
 
@@ -27,6 +27,8 @@ export default class TouchBarManager {
   zindexItems: Electron.TouchBarButton[] = [];
 
   tabItems: Electron.TouchBarSegmentedControl[] = [];
+
+  eyeStatusItems: Electron.TouchBarButton[] = [];
 
   constructor(items: Item[], mb: Menubar) {
     this.items = items;
@@ -67,9 +69,19 @@ export default class TouchBarManager {
     this.updateTouchBar();
   }
 
+  updateEysStatusItems(status: Enums.EyeStatus) {
+    this.eyeStatusItems = [
+      new TouchBarButton({
+        icon: status === Enums.EyeStatus.Open ? generateIcon('touchbar/eye-open.png') : generateIcon('touchbar/eye-close.png'),
+        click: () => sendMessageToRenderer(this.mb, 'change-eye-status'),
+      }),
+    ];
+    this.updateTouchBar();
+  }
+
   updateTouchBar() {
     const touchbar = new TouchBar({
-      items: ([] as Item[]).concat(this.zindexItems, this.walletItems, this.tabItems),
+      items: ([] as Item[]).concat(this.zindexItems, this.walletItems, this.tabItems, this.eyeStatusItems),
     });
     this.mb.window?.setTouchBar(touchbar);
   }

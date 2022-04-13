@@ -10,7 +10,7 @@ import { tabs } from '@/components/TabsBar';
 import { updateAvaliableAction } from '@/actions/updater';
 import { setFundConfigAction } from '@/actions/fund';
 import { setTabActiveKeyAction } from '@/actions/tabs';
-import { selectWalletAction } from '@/actions/wallet';
+import { selectWalletAction, toggleEyeStatusAction } from '@/actions/wallet';
 import { setAdjustmentNotificationDateAction, clearAdjustmentNotificationDateAction } from '@/actions/setting';
 import { StoreState } from '@/reducers/types';
 import { useWorkDayTimeToDo, useFixTimeToDo, useAfterMounted, useCurrentWallet, useFreshFunds, useAllCyFunds } from '@/utils/hooks';
@@ -527,6 +527,24 @@ export function useTabTouchBar() {
     });
     return () => {
       ipcRenderer.removeAllListeners('change-tab-active-key');
+    };
+  }, []);
+}
+
+export function useEysStatusTouchBar() {
+  const dispatch = useDispatch();
+  const eyeStatus = useSelector((state: StoreState) => state.wallet.eyeStatus);
+
+  useEffect(() => {
+    ipcRenderer.invoke('update-touchbar-eye-status', eyeStatus);
+  }, [eyeStatus]);
+
+  useLayoutEffect(() => {
+    ipcRenderer.on('change-eye-status', (e, key) => {
+      dispatch(toggleEyeStatusAction());
+    });
+    return () => {
+      ipcRenderer.removeAllListeners('change-eye-status');
     };
   }, []);
 }

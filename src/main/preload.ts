@@ -51,6 +51,7 @@ contextBridge.exposeInMainWorld('contextModules', {
           'change-current-wallet-code',
           'webview-new-window',
           'change-tab-active-key',
+          'change-eye-status',
         ];
         if (validChannels.includes(channel)) {
           return ipcRenderer.on(channel, (event, ...args) => func(event, ...args));
