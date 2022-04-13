@@ -8,7 +8,7 @@ import Eye from '@/components/Eye';
 import { useHeaderContext } from '@/components/Header';
 import { StoreState } from '@/reducers/types';
 import { selectWalletAction, toggleEyeStatusAction } from '@/actions/wallet';
-import { useCurrentWallet, useFreshFunds, useWalletTouchBar, useUpdateContextMenuWalletsState, useEysStatusTouchBar } from '@/utils/hooks';
+import { useCurrentWallet, useFreshFunds } from '@/utils/hooks';
 import { walletIcons } from '@/helpers/wallet';
 import * as Enums from '@/utils/enums';
 import * as Utils from '@/utils';
@@ -45,10 +45,6 @@ const Wallet: React.FC<WalletProps> = () => {
     dispatch(selectWalletAction(code));
     freshFunds();
   }
-
-  useWalletTouchBar();
-  useUpdateContextMenuWalletsState();
-  useEysStatusTouchBar();
 
   return (
     <div className={clsx(styles.content, { [styles.miniMode]: miniMode })}>

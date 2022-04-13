@@ -8,7 +8,9 @@ import {
   useBootStrap,
   useTrayContent,
   useAllConfigBackup,
+  useTouchBar,
   useMappingLocalToSystemSetting,
+  useUpdateContextMenuWalletsState,
 } from '@/utils/hooks';
 
 const HomePage = () => {
@@ -18,7 +20,9 @@ const HomePage = () => {
   useFundsClipboard();
   useAllConfigBackup();
   useTrayContent();
+  useUpdateContextMenuWalletsState();
   useMappingLocalToSystemSetting();
+  useTouchBar();
   useBootStrap();
 
   return <Home />;

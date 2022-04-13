@@ -473,8 +473,13 @@ export function useAllConfigBackup() {
   }, []);
 }
 
-export function useZindexTouchBar() {
+export function useTouchBar() {
+  const dispatch = useDispatch();
   const zindexs = useSelector((state: StoreState) => state.zindex.zindexs);
+  const wallet = useCurrentWallet();
+  const activeKey = useSelector((state: StoreState) => state.tabs.activeKey);
+  const eyeStatus = useSelector((state: StoreState) => state.wallet.eyeStatus);
+
   useEffect(() => {
     ipcRenderer.invoke(
       'update-touchbar-zindex',
@@ -486,10 +491,6 @@ export function useZindexTouchBar() {
         }))
     );
   }, [zindexs]);
-}
-
-export function useWalletTouchBar() {
-  const wallet = useCurrentWallet();
 
   useEffect(() => {
     const { currentWalletCode, currentWalletState } = wallet;
@@ -505,11 +506,6 @@ export function useWalletTouchBar() {
       },
     ]);
   }, [wallet]);
-}
-
-export function useTabTouchBar() {
-  const dispatch = useDispatch();
-  const activeKey = useSelector((state: StoreState) => state.tabs.activeKey);
 
   useEffect(() => {
     ipcRenderer.invoke(
@@ -521,29 +517,19 @@ export function useTabTouchBar() {
     );
   }, [activeKey]);
 
-  useLayoutEffect(() => {
-    ipcRenderer.on('change-tab-active-key', (e, key) => {
-      dispatch(setTabActiveKeyAction(key));
-    });
-    return () => {
-      ipcRenderer.removeAllListeners('change-tab-active-key');
-    };
-  }, []);
-}
-
-export function useEysStatusTouchBar() {
-  const dispatch = useDispatch();
-  const eyeStatus = useSelector((state: StoreState) => state.wallet.eyeStatus);
-
   useEffect(() => {
     ipcRenderer.invoke('update-touchbar-eye-status', eyeStatus);
   }, [eyeStatus]);
 
   useLayoutEffect(() => {
+    ipcRenderer.on('change-tab-active-key', (e, key) => {
+      dispatch(setTabActiveKeyAction(key));
+    });
     ipcRenderer.on('change-eye-status', (e, key) => {
       dispatch(toggleEyeStatusAction());
     });
     return () => {
+      ipcRenderer.removeAllListeners('change-tab-active-key');
       ipcRenderer.removeAllListeners('change-eye-status');
     };
   }, []);
