@@ -1,4 +1,4 @@
-import React, { useMemo, useRef, useLayoutEffect } from 'react';
+import React, { useMemo } from 'react';
 import { useDispatch } from 'react-redux';
 import { ReactSortable } from 'react-sortablejs';
 import clsx from 'clsx';

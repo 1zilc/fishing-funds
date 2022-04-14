@@ -146,7 +146,7 @@ export function useRiskNotification() {
 export function useFundsClipboard() {
   const dispatch = useDispatch();
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     ipcRenderer.on('clipboard-funds-import', async (e, data) => {
       try {
         const limit = 1024;
@@ -287,10 +287,10 @@ export function useMappingLocalToSystemSetting() {
   const adjustmentNotificationTimeSetting = useSelector(
     (state: StoreState) => state.setting.systemSetting.adjustmentNotificationTimeSetting
   );
-  useLayoutEffect(() => {
+  useEffect(() => {
     Utils.UpdateSystemTheme(systemThemeSetting);
   }, [systemThemeSetting]);
-  useLayoutEffect(() => {
+  useEffect(() => {
     app.setLoginItemSettings({ openAtLogin: autoStartSetting });
   }, [autoStartSetting]);
   useLayoutEffect(() => {
@@ -371,7 +371,7 @@ export function useUpdateContextMenuWalletsState() {
       })
     );
   }, [wallets, currentWalletCode]);
-  useLayoutEffect(() => {
+  useEffect(() => {
     ipcRenderer.on('change-current-wallet-code', (e, code) => {
       try {
         dispatch(selectWalletAction(code));
@@ -385,7 +385,7 @@ export function useUpdateContextMenuWalletsState() {
 }
 
 export function useAllConfigBackup() {
-  useLayoutEffect(() => {
+  useEffect(() => {
     ipcRenderer.on('backup-all-config-export', async (e, data) => {
       try {
         const backupConfig = await Utils.GenerateBackupConfig();
@@ -521,7 +521,7 @@ export function useTouchBar() {
     ipcRenderer.invoke('update-touchbar-eye-status', eyeStatus);
   }, [eyeStatus]);
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     ipcRenderer.on('change-tab-active-key', (e, key) => {
       dispatch(setTabActiveKeyAction(key));
     });

@@ -82,7 +82,7 @@ export function useNativeTheme() {
     await invoke.getShouldUseDarkColors().then(setDarkMode);
   }
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     ipcRenderer.on('nativeTheme-updated', (e, data) => {
       setDarkMode(!!data?.darkMode);
     });
