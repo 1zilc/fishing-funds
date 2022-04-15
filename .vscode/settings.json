@@ -4,6 +4,13 @@
     ".prettierrc": "jsonc",
     ".eslintignore": "ignore"
   },
+  
+  "eslint.validate": [
+    "javascript",
+    "javascriptreact",
+    "html",
+    "typescriptreact"
+  ],
 
   "files.exclude": {
     "**/src/**/*.js": false
