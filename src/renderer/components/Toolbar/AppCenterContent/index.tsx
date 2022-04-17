@@ -15,7 +15,8 @@ import StockIcon from '@/static/icon/stock.svg';
 import CoinIcon from '@/static/icon/coin.svg';
 import CalendarCheckIcon from '@/static/icon/calendar-check.svg';
 import LayoutIcon from '@/static/icon/layout.svg';
-import GoldIcon from '@/static/icon/gold.svg';
+import FundsIcon from '@/static/icon/funds.svg';
+import CalculatorIcon from '@/static/icon/calculator.svg';
 
 import CustomDrawer from '@/components/CustomDrawer';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
@@ -168,6 +169,12 @@ const AppCenterContent: React.FC<AppCenterContentProps> = (props) => {
                 icon: <PieIcon style={{ ...iconSize }} />,
                 click: openFundStatisticsDrawer,
               },
+              {
+                title: '货币计算器',
+                iconType: Enums.WebIconType.Svg,
+                icon: <CalculatorIcon style={{ ...iconSize }} />,
+                click: openFundStatisticsDrawer,
+              },
             ],
           },
           {
@@ -182,7 +189,7 @@ const AppCenterContent: React.FC<AppCenterContentProps> = (props) => {
               {
                 title: '沪深港通股',
                 iconType: Enums.WebIconType.Svg,
-                icon: <OrderIcon style={{ ...iconSize }} />,
+                icon: <FundsIcon style={{ ...iconSize }} />,
                 click: openHoldingDrawer,
               },
               {
@@ -224,7 +231,7 @@ const AppCenterContent: React.FC<AppCenterContentProps> = (props) => {
               {
                 title: '货币榜',
                 iconType: Enums.WebIconType.Svg,
-                icon: <CoinIcon style={{ ...iconSize }} />,
+                icon: <OrderIcon style={{ ...iconSize }} />,
                 click: openCoinRankingDrawer,
               },
               {
@@ -236,7 +243,7 @@ const AppCenterContent: React.FC<AppCenterContentProps> = (props) => {
               {
                 title: '黄金市场',
                 iconType: Enums.WebIconType.Svg,
-                icon: <GoldIcon style={{ ...iconSize }} />,
+                icon: <CoinIcon style={{ ...iconSize }} />,
                 click: openGoldMarketDrawer,
               },
             ],
