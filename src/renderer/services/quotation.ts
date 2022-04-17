@@ -938,3 +938,48 @@ export async function GetRecentHotFromEastmoney() {
     return [];
   }
 }
+// 金价
+export async function GetGoldTrendsFromEastmoney(secid: string) {
+  try {
+    const { body: data } = await request<{
+      rc: 0;
+      rt: 10;
+      svr: 2887263685;
+      lt: 1;
+      full: 1;
+      data: {
+        code: 'aum';
+        market: 113;
+        type: 5;
+        status: 0;
+        name: '沪金主力';
+        decimal: 2;
+        preSettlement: 404.8;
+        preClose: 405.82;
+        beticks: '75600|75600|313200|75600|95400|291600|296100|297000|300600|307800|313200';
+        trendsTotal: 556;
+        time: 1650047400;
+        kind: 16;
+        prePrice: 404.8;
+        trends: '2022-04-15 21:00,405.82,405.82,405.82,405.82,0,0.00,405.820'[];
+      };
+    }>(' http://push2.eastmoney.com/api/qt/stock/trends2/get', {
+      searchParams: {
+        secid,
+        fields1: 'f1,f2,f3,f4,f5,f6,f7,f8,f9,f10,f11,f12,f13',
+        fields2: 'f51,f52,f53,f54,f55,f56,f57,f58',
+        iscr: 0,
+      },
+      responseType: 'json',
+    });
+
+    const result = data.data?.trends?.map((item) => {
+      const [time, x, price] = item.split(',');
+      return [time, price];
+    });
+
+    return result || [];
+  } catch (error) {
+    return [];
+  }
+}

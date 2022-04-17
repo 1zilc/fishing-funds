@@ -15,6 +15,7 @@ import StockIcon from '@/static/icon/stock.svg';
 import CoinIcon from '@/static/icon/coin.svg';
 import CalendarCheckIcon from '@/static/icon/calendar-check.svg';
 import LayoutIcon from '@/static/icon/layout.svg';
+import GoldIcon from '@/static/icon/gold.svg';
 
 import CustomDrawer from '@/components/CustomDrawer';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
@@ -44,6 +45,7 @@ const FundRankingContent = React.lazy(() => import('@/components/Home/FundView/F
 const StockRankingContent = React.lazy(() => import('@/components/Home/StockView/StockRankingContent'));
 const CoinRankingContent = React.lazy(() => import('@/components/Home/CoinView/CoinRankingContent'));
 const EconomicCalendarContent = React.lazy(() => import('@/components/Home/StockView/EconomicCalendarContent'));
+const GoldMarketContent = React.lazy(() => import('@/components/Home/QuotationView/GoldMarketContent'));
 
 const { Search } = Input;
 const iconSize = { height: 18, width: 18 };
@@ -111,6 +113,7 @@ const AppCenterContent: React.FC<AppCenterContentProps> = (props) => {
   const [showStockRankingDrawer, { setTrue: openStockRankingDrawer, setFalse: closeStockRankingDrawer }] = useBoolean(false);
   const [showCoinRankingDrawer, { setTrue: openCoinRankingDrawer, setFalse: closeCoinRankingDrawer }] = useBoolean(false);
   const [showEconomicCalendarDrawer, { setTrue: openEconomicCalendarDrawer, setFalse: closeEconomicCalendarDrawer }] = useBoolean(false);
+  const [showGoldMarketDrawer, { setTrue: openGoldMarketDrawer, setFalse: closeGoldMarketDrawer }] = useBoolean(false);
 
   const openWebView = useOpenWebView();
 
@@ -230,6 +233,12 @@ const AppCenterContent: React.FC<AppCenterContentProps> = (props) => {
                 icon: <CalendarCheckIcon style={{ ...iconSize }} />,
                 click: openEconomicCalendarDrawer,
               },
+              {
+                title: '黄金市场',
+                iconType: Enums.WebIconType.Svg,
+                icon: <GoldIcon style={{ ...iconSize }} />,
+                click: openGoldMarketDrawer,
+              },
             ],
           },
         ],
@@ -325,6 +334,9 @@ const AppCenterContent: React.FC<AppCenterContentProps> = (props) => {
         </CustomDrawer>
         <CustomDrawer show={showEconomicCalendarDrawer}>
           <EconomicCalendarContent onClose={closeEconomicCalendarDrawer} onEnter={closeEconomicCalendarDrawer} />
+        </CustomDrawer>
+        <CustomDrawer show={showGoldMarketDrawer}>
+          <GoldMarketContent onClose={closeGoldMarketDrawer} onEnter={closeGoldMarketDrawer} />
         </CustomDrawer>
       </div>
     </CustomDrawerContent>
