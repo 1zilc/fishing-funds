@@ -12,7 +12,7 @@ import * as Enums from '@/utils/enums';
 import styles from './index.module.scss';
 
 const DetailQuotationContent = React.lazy(() => import('@/components/Home/QuotationView/DetailQuotationContent'));
-const DetailStockContent = React.lazy(() => import('@/components/Home/StockList/DetailStockContent'));
+const DetailStockContent = React.lazy(() => import('@/components/Home/StockView/DetailStockContent'));
 
 interface QuotationViewProps {
   filter: (quotation: Quotation.ResponseItem & Quotation.ExtraRow) => boolean;

@@ -636,7 +636,7 @@ export async function GetQuoteCenterFromEastmoney() {
                 TopName: '';
                 IsImportant: '0';
                 Reason: '中央会议重点提及污染防治，环保“十四五”规划编制进入关键阶段';
-                StockList: [
+                StockView: [
                   {
                     Code: '600008';
                     Name: '首创环保';

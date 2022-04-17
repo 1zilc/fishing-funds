@@ -12,7 +12,7 @@ import * as Enums from '@/utils/enums';
 
 import styles from './index.module.scss';
 
-const DetailStockContent = React.lazy(() => import('@/components/Home/StockList/DetailStockContent'));
+const DetailStockContent = React.lazy(() => import('@/components/Home/StockView/DetailStockContent'));
 
 interface StockSearchProps {
   groupList: Stock.SearchResult[];

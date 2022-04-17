@@ -10,7 +10,7 @@ interface FundListProps {
   onView: (url: string) => void;
 }
 
-const FundList: React.FC<PropsWithChildren<FundListProps>> = (props) => {
+const FundView: React.FC<PropsWithChildren<FundListProps>> = (props) => {
   const [data, setData] = useState<News.ResponseItem[]>([]);
 
   const { loading, run: runNewsGetFundList } = useRequest(Services.News.GetFundList, {
@@ -53,4 +53,4 @@ const FundList: React.FC<PropsWithChildren<FundListProps>> = (props) => {
   );
 };
 
-export default FundList;
+export default FundView;

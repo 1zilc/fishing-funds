@@ -10,7 +10,7 @@ import * as Utils from '@/utils';
 import styles from './index.module.scss';
 
 const DetailQuotationContent = React.lazy(() => import('@/components/Home/QuotationView/DetailQuotationContent'));
-const AddStockContent = React.lazy(() => import('@/components/Home/StockList/AddStockContent'));
+const AddStockContent = React.lazy(() => import('@/components/Home/StockView/AddStockContent'));
 interface NorthHistoryProps {
   marketCode: string;
   reportName: string;

@@ -3,11 +3,11 @@ import clsx from 'clsx';
 import { Tabs } from 'antd';
 import { useSelector } from 'react-redux';
 
-import FundList from '@/components/Home/FundList';
+import FundView from '@/components/Home/FundView';
 import ZindexView from '@/components/Home/ZindexView';
 import QuotationView from '@/components/Home/QuotationView';
-import StockList from '@/components/Home/StockList';
-import CoinList from '@/components/Home/CoinList';
+import StockView from '@/components/Home/StockView';
+import CoinView from '@/components/Home/CoinView';
 import Toolbar from '@/components/Toolbar';
 import Wallet from '@/components/Wallet/index';
 import Header from '@/components/Header';
@@ -49,16 +49,16 @@ const FundGroup = () => {
   return (
     <GroupTab tabKey={Enums.TabKeyType.Funds}>
       <Tabs.TabPane tab="全部" key={String(0)}>
-        <FundList filter={() => true} />
+        <FundView filter={() => true} />
       </Tabs.TabPane>
       <Tabs.TabPane tab="持有" key={String(1)}>
-        <FundList filter={(fund) => !!fundCodeMap[fund.fundcode!]?.cyfe} />
+        <FundView filter={(fund) => !!fundCodeMap[fund.fundcode!]?.cyfe} />
       </Tabs.TabPane>
       <Tabs.TabPane tab="自选" key={String(2)}>
-        <FundList filter={(fund) => !fundCodeMap[fund.fundcode!]?.cyfe} />
+        <FundView filter={(fund) => !fundCodeMap[fund.fundcode!]?.cyfe} />
       </Tabs.TabPane>
       <Tabs.TabPane tab="净值更新" key={String(3)}>
-        <FundList filter={(fund) => !!Helpers.Fund.CalcFund(fund, currentWalletCode).isFix} />
+        <FundView filter={(fund) => !!Helpers.Fund.CalcFund(fund, currentWalletCode).isFix} />
       </Tabs.TabPane>
     </GroupTab>
   );
@@ -109,11 +109,11 @@ const StockGroup = () => {
   return (
     <GroupTab tabKey={Enums.TabKeyType.Stock}>
       <Tabs.TabPane tab="全部" key={String(-1)}>
-        <StockList filter={() => true} />
+        <StockView filter={() => true} />
       </Tabs.TabPane>
       {stockTypesConfig.map((type) => (
         <Tabs.TabPane tab={type.name.slice(0, 2)} key={String(type.code)}>
-          <StockList filter={(stock) => stockCodeMap[stock.secid].type === type.code} />
+          <StockView filter={(stock) => stockCodeMap[stock.secid].type === type.code} />
         </Tabs.TabPane>
       ))}
     </GroupTab>
@@ -124,13 +124,13 @@ const CoinGroup = () => {
   return (
     <GroupTab tabKey={Enums.TabKeyType.Coin}>
       <Tabs.TabPane tab="全部" key={String(0)}>
-        <CoinList filter={() => true} />
+        <CoinView filter={() => true} />
       </Tabs.TabPane>
       <Tabs.TabPane tab="上涨" key={String(1)}>
-        <CoinList filter={(coin) => Number(coin.change24h) >= 0} />
+        <CoinView filter={(coin) => Number(coin.change24h) >= 0} />
       </Tabs.TabPane>
       <Tabs.TabPane tab="下跌" key={String(2)}>
-        <CoinList filter={(coin) => Number(coin.change24h) < 0} />
+        <CoinView filter={(coin) => Number(coin.change24h) < 0} />
       </Tabs.TabPane>
     </GroupTab>
   );

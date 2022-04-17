@@ -8,7 +8,7 @@ import { useDrawer } from '@/utils/hooks';
 import * as Utils from '@/utils';
 import styles from './index.module.scss';
 
-const AddStockContent = React.lazy(() => import('@/components/Home/StockList/AddStockContent'));
+const AddStockContent = React.lazy(() => import('@/components/Home/StockView/AddStockContent'));
 interface RecommendProps {
   ThemeList: {
     Code: string;
@@ -18,7 +18,7 @@ interface RecommendProps {
     TopName: '';
     IsImportant: '0';
     Reason: string;
-    StockList: {
+    StockView: {
       Code: string;
       Name: string;
       Market: string;
@@ -65,7 +65,7 @@ const Recommend: React.FC<RecommendProps> = (props) => {
                   sorter: (a: any, b: any) => a.Chg - b.Chg,
                 },
               ]}
-              dataSource={t.StockList || []}
+              dataSource={t.StockView || []}
               pagination={{
                 defaultPageSize: 5,
                 hideOnSinglePage: true,

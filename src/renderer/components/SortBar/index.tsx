@@ -50,9 +50,9 @@ import * as CONST from '@/constants';
 import * as Helpers from '@/helpers';
 import styles from './index.module.scss';
 
-const ManageFundContent = React.lazy(() => import('@/components/Home/FundList/ManageFundContent'));
-const ManageStockContent = React.lazy(() => import('@/components/Home/StockList/ManageStockContent'));
-const ManageCoinContent = React.lazy(() => import('@/components/Home/CoinList/ManageCoinContent'));
+const ManageFundContent = React.lazy(() => import('@/components/Home/FundView/ManageFundContent'));
+const ManageStockContent = React.lazy(() => import('@/components/Home/StockView/ManageStockContent'));
+const ManageCoinContent = React.lazy(() => import('@/components/Home/CoinView/ManageCoinContent'));
 const ManageZindexContent = React.lazy(() => import('@/components/Home/ZindexView/ManageZindexContent'));
 
 export interface SortBarProps {}

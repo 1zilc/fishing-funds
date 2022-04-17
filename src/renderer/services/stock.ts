@@ -3,7 +3,7 @@ import cheerio from 'cheerio';
 import NP from 'number-precision';
 import request from '@/utils/request';
 import * as Utils from '@/utils';
-import { defaultCompany } from '@/components/Home/StockList/DetailStockContent/Company';
+import { defaultCompany } from '@/components/Home/StockView/DetailStockContent/Company';
 
 const { base64 } = window.contextModules;
 

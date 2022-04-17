@@ -8,8 +8,8 @@ import * as Enums from '@/utils/enums';
 
 import styles from './index.module.scss';
 
-const AddFundContent = React.lazy(() => import('@/components/Home/FundList/AddFundContent'));
-const DetailFundContent = React.lazy(() => import('@/components/Home/FundList/DetailFundContent'));
+const AddFundContent = React.lazy(() => import('@/components/Home/FundView/AddFundContent'));
+const DetailFundContent = React.lazy(() => import('@/components/Home/FundView/DetailFundContent'));
 interface FundSearchProps {
   groupList: Stock.SearchResult[];
 }

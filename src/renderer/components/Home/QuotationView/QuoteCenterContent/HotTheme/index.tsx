@@ -8,7 +8,7 @@ import * as Services from '@/services';
 import * as Utils from '@/utils';
 import styles from './index.module.scss';
 
-const AddStockContent = React.lazy(() => import('@/components/Home/StockList/AddStockContent'));
+const AddStockContent = React.lazy(() => import('@/components/Home/StockView/AddStockContent'));
 
 interface HotThemeProps {}
 

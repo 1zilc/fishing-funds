@@ -9,8 +9,8 @@ import * as Services from '@/services';
 import * as Utils from '@/utils';
 import styles from './index.module.scss';
 
-const AddFundContent = React.lazy(() => import('@/components/Home/FundList/AddFundContent'));
-const DetailFundContent = React.lazy(() => import('@/components/Home/FundList/DetailFundContent'));
+const AddFundContent = React.lazy(() => import('@/components/Home/FundView/AddFundContent'));
+const DetailFundContent = React.lazy(() => import('@/components/Home/FundView/DetailFundContent'));
 interface FundsProps {
   code: string;
 }
