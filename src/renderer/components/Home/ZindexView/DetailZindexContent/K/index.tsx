@@ -8,9 +8,10 @@ import TypeSelection from '@/components/TypeSelection';
 import { useResizeEchart, useRenderEcharts } from '@/utils/hooks';
 import * as CONST from '@/constants';
 import * as Services from '@/services';
+import * as Utils from '@/utils';
 import styles from './index.module.scss';
 
-export interface PerformanceProps {
+export interface KProps {
   code: string;
 }
 
@@ -22,23 +23,7 @@ const yearTypeList = [
   { name: '最大', type: 5, code: 50 },
 ];
 
-function calculateMA(dayCount: any, values: any[]) {
-  const result = [];
-  for (let i = 0, len = values.length; i < len; i++) {
-    if (i < dayCount) {
-      result.push('-');
-      continue;
-    }
-    let sum = 0;
-    for (let j = 0; j < dayCount; j++) {
-      sum += values[i - j][1];
-    }
-    result.push(NP.divide(sum, dayCount).toFixed(2));
-  }
-  return result;
-}
-
-const K: React.FC<PerformanceProps> = ({ code = '' }) => {
+const K: React.FC<KProps> = ({ code = '' }) => {
   const { ref: chartRef, chartInstance } = useResizeEchart(CONST.DEFAULT.ECHARTS_SCALE);
   const [year, setYearType] = useState(yearTypeList[0]);
   const { varibleColors, darkMode } = useHomeContext();
@@ -116,7 +101,7 @@ const K: React.FC<PerformanceProps> = ({ code = '' }) => {
           {
             name: 'MA5',
             type: 'line',
-            data: calculateMA(5, values),
+            data: Utils.CalculateMA(5, values),
             smooth: true,
             showSymbol: false,
             symbol: 'none',
@@ -127,7 +112,7 @@ const K: React.FC<PerformanceProps> = ({ code = '' }) => {
           {
             name: 'MA10',
             type: 'line',
-            data: calculateMA(10, values),
+            data: Utils.CalculateMA(10, values),
             smooth: true,
             showSymbol: false,
             symbol: 'none',
@@ -138,7 +123,7 @@ const K: React.FC<PerformanceProps> = ({ code = '' }) => {
           {
             name: 'MA20',
             type: 'line',
-            data: calculateMA(20, values),
+            data: Utils.CalculateMA(20, values),
             smooth: true,
             showSymbol: false,
             symbol: 'none',
@@ -149,7 +134,7 @@ const K: React.FC<PerformanceProps> = ({ code = '' }) => {
           {
             name: 'MA30',
             type: 'line',
-            data: calculateMA(30, values),
+            data: Utils.CalculateMA(30, values),
             smooth: true,
             showSymbol: false,
             symbol: 'none',

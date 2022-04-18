@@ -384,3 +384,19 @@ export function CheckUrlValid(value: string) {
     url: value.startsWith('http://') || value.startsWith('https://') ? value : `http://${value}`,
   };
 }
+
+export function CalculateMA(dayCount: any, values: any[]) {
+  const result = [];
+  for (let i = 0, len = values.length; i < len; i++) {
+    if (i < dayCount) {
+      result.push('-');
+      continue;
+    }
+    let sum = 0;
+    for (let j = 0; j < dayCount; j++) {
+      sum += values[i - j][1];
+    }
+    result.push(NP.divide(sum, dayCount).toFixed(2));
+  }
+  return result;
+}
