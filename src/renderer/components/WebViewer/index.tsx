@@ -1,6 +1,6 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { Menu, Dropdown, Progress, Switch } from 'antd';
-import { useBoolean, useMemoizedFn } from 'ahooks';
+import { useBoolean, useMemoizedFn, useEventListener } from 'ahooks';
 import { useSelector, useDispatch } from 'react-redux';
 
 import StarIcon from '@/static/icon/star.svg';
@@ -93,12 +93,26 @@ const Content = () => {
 
   const onPhoneChange = useMemoizedFn((phone) => dispatch(setWebPhoneAction(phone)));
 
-  useEffect(() => {
-    const didStartLoading = () => {
+  useEventListener(
+    'dom-ready',
+    () => {
+      const targetId = viewRef.current?.getWebContentsId();
+      ipcRenderer.invoke('registry-webview', targetId);
+      setWebTitle((_) => _ || viewRef.current.getTitle());
+    },
+    { target: viewRef }
+  );
+  useEventListener(
+    'did-start-loading',
+    () => {
       setDoneFalse();
       setLoadingTrue();
-    };
-    const didStopLoading = () => {
+    },
+    { target: viewRef }
+  );
+  useEventListener(
+    'did-stop-loading',
+    () => {
       setLoadingFalse();
       setWebTitle(viewRef.current.getTitle());
       setTimeout(() => {
@@ -107,31 +121,22 @@ const Content = () => {
           setPercent(0);
         }, 100);
       }, 200);
-    };
-
-    const domReady = () => {
-      const targetId = viewRef.current?.getWebContentsId();
-      ipcRenderer.invoke('registry-webview', targetId);
-      setWebTitle((_) => _ || viewRef.current.getTitle());
-    };
-
-    const pageFaviconUpdated = (e: any) => {
+    },
+    { target: viewRef }
+  );
+  useEventListener(
+    'page-favicon-updated',
+    (e) => {
       setFavicons(e.favicons);
-    };
+    },
+    { target: viewRef }
+  );
 
-    viewRef.current?.addEventListener('dom-ready', domReady);
-    viewRef.current?.addEventListener('did-start-loading', didStartLoading);
-    viewRef.current?.addEventListener('did-stop-loading', didStopLoading);
-    viewRef.current?.addEventListener('page-favicon-updated', pageFaviconUpdated);
+  useEffect(() => {
     ipcRenderer.on('webview-new-window', (e, data) => {
       viewRef.current?.loadURL(data);
     });
-
     return () => {
-      viewRef.current?.removeEventListener('dom-ready', domReady);
-      viewRef.current?.removeEventListener('did-start-loading', didStartLoading);
-      viewRef.current?.removeEventListener('did-stop-loading', didStopLoading);
-      viewRef.current?.removeEventListener('page-favicon-updated', pageFaviconUpdated);
       ipcRenderer.removeAllListeners('webview-new-window');
     };
   }, []);
