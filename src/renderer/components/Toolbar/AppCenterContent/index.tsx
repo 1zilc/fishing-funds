@@ -47,6 +47,7 @@ const StockRankingContent = React.lazy(() => import('@/components/Home/StockView
 const CoinRankingContent = React.lazy(() => import('@/components/Home/CoinView/CoinRankingContent'));
 const EconomicCalendarContent = React.lazy(() => import('@/components/Home/StockView/EconomicCalendarContent'));
 const GoldMarketContent = React.lazy(() => import('@/components/Home/QuotationView/GoldMarketContent'));
+const Calculator = React.lazy(() => import('@/components/Home/CoinView/Calculator'));
 
 const { Search } = Input;
 const iconSize = { height: 18, width: 18 };
@@ -93,7 +94,7 @@ function renderApps(groups: { title: string; config: AppConfig[] }[], keyword: s
   });
 }
 
-const searchPlaceholders = ['直达任意网站链接', '搜索股票、基金、板块名称或代码', '检索功能模块名称', '全网搜索一下,例如 "天天基金"'];
+const searchPlaceholders = ['输入网站地址', '搜索股票、基金、板块名称或代码', '检索功能模块名称', '全网搜索一下,例如 "天天基金"'];
 
 const AppCenterContent: React.FC<AppCenterContentProps> = (props) => {
   const [keyword, setKeyword] = useState('');
@@ -115,6 +116,7 @@ const AppCenterContent: React.FC<AppCenterContentProps> = (props) => {
   const [showCoinRankingDrawer, { setTrue: openCoinRankingDrawer, setFalse: closeCoinRankingDrawer }] = useBoolean(false);
   const [showEconomicCalendarDrawer, { setTrue: openEconomicCalendarDrawer, setFalse: closeEconomicCalendarDrawer }] = useBoolean(false);
   const [showGoldMarketDrawer, { setTrue: openGoldMarketDrawer, setFalse: closeGoldMarketDrawer }] = useBoolean(false);
+  const [showCalculatorDrawer, { setTrue: openCalculatorDrawer, setFalse: closeCalculatorDrawer }] = useBoolean(false);
 
   const openWebView = useOpenWebView();
 
@@ -173,7 +175,7 @@ const AppCenterContent: React.FC<AppCenterContentProps> = (props) => {
                 title: '货币计算器',
                 iconType: Enums.WebIconType.Svg,
                 icon: <CalculatorIcon style={{ ...iconSize }} />,
-                click: openFundStatisticsDrawer,
+                click: openCalculatorDrawer,
               },
             ],
           },
@@ -344,6 +346,9 @@ const AppCenterContent: React.FC<AppCenterContentProps> = (props) => {
         </CustomDrawer>
         <CustomDrawer show={showGoldMarketDrawer}>
           <GoldMarketContent onClose={closeGoldMarketDrawer} onEnter={closeGoldMarketDrawer} />
+        </CustomDrawer>
+        <CustomDrawer show={showCalculatorDrawer}>
+          <Calculator onClose={closeCalculatorDrawer} onEnter={closeCalculatorDrawer} />
         </CustomDrawer>
       </div>
     </CustomDrawerContent>
