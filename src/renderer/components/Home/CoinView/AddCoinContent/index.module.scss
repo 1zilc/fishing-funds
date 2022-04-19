@@ -56,16 +56,6 @@
   }
 }
 
-.tag {
-  padding: 2px 3px;
-  border-radius: 3px;
-  color: var(--main-text-color);
-  border: 1px solid var(--main-text-color);
-  font-size: calc(10rem / var(--base-font-size));
-
-  white-space: nowrap;
-}
-
 .code {
   font-size: calc(10rem / var(--base-font-size));
 }

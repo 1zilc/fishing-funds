@@ -26,14 +26,13 @@ const DetailCoinContent: React.FC<DetailCoinContentProps> = (props) => {
   const position = useScroll(ref, (val) => val.top <= 520);
   const miniMode = position && position.top > 40;
 
-  const { run: runGetDetailFromCoingecko } = useRequest(Services.Coin.GetDetailFromCoingecko, {
+  const { run: runGetDetailFromCoingecko } = useRequest(() => Services.Coin.GetDetailFromCoingecko(code), {
     pollingInterval: 1000 * 60,
-    defaultParams: [code],
     onSuccess: setCoin,
   });
 
   const freshDetail = useCallback(() => {
-    runGetDetailFromCoingecko(code);
+    runGetDetailFromCoingecko();
   }, [code]);
 
   return (
@@ -106,6 +105,15 @@ const DetailCoinContent: React.FC<DetailCoinContentProps> = (props) => {
           <Tabs animated={{ tabPane: true }} tabBarGutter={15}>
             <Tabs.TabPane tab="K线" key={String(0)}>
               <K code={code} />
+            </Tabs.TabPane>
+          </Tabs>
+        </div>
+        <div className={styles.container}>
+          <Tabs animated={{ tabPane: true }} tabBarGutter={15}>
+            <Tabs.TabPane tab="货币描述" key={String(0)}>
+              <ChartCard onFresh={runGetDetailFromCoingecko}>
+                <div dangerouslySetInnerHTML={{ __html: coin?.description?.en?.replace(/<a/g, '<a target="_blank"') || '暂无信息' }}></div>
+              </ChartCard>
             </Tabs.TabPane>
           </Tabs>
         </div>

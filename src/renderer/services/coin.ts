@@ -161,6 +161,7 @@ export async function FromCoingecko(codes: string, currency: string) {
     });
     return Object.entries(body).map(([code, data]) => ({
       code,
+      ...data,
       price: data[`${currency}`],
       marketCap: Utils.UnitTransform(data[`${currency}_market_cap`]),
       vol24h: Utils.UnitTransform(data[`${currency}_24h_vol`]),
