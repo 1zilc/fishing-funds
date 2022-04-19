@@ -1,6 +1,6 @@
-import React, { useRef, useEffect, useState, useCallback } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { Menu, Dropdown, Progress, Switch } from 'antd';
-import { useBoolean } from 'ahooks';
+import { useBoolean, useMemoizedFn } from 'ahooks';
 import { useSelector, useDispatch } from 'react-redux';
 
 import StarIcon from '@/static/icon/star.svg';
@@ -52,7 +52,7 @@ const Content = () => {
     iconType: Enums.WebIconType.First,
   });
 
-  const onCopyUrl = useCallback(() => {
+  const onCopyUrl = useMemoizedFn(() => {
     const url = viewRef.current?.getURL();
     if (url) {
       clipboard.writeText(url);
@@ -62,16 +62,16 @@ const Content = () => {
         message: `已复制到粘贴板`,
       });
     }
-  }, []);
+  });
 
-  const onVisit = useCallback(() => {
+  const onVisit = useMemoizedFn(() => {
     const url = viewRef.current?.getURL();
     if (url) {
       shell.openExternal(url);
     }
-  }, []);
+  });
 
-  const onSetWeb = useCallback(() => {
+  const onSetWeb = useMemoizedFn(() => {
     const url = viewRef.current?.getURL();
     if (url) {
       setAddWebContent({
@@ -80,18 +80,18 @@ const Content = () => {
         url,
       });
     }
-  }, [webTitle]);
+  });
 
-  const onAddWeb = useCallback((web: Web.SettingItem) => {
+  const onAddWeb = useMemoizedFn((web: Web.SettingItem) => {
     dispatch(addWebAction(web));
     closeAddWebContent();
-  }, []);
+  });
 
-  const onRemoveWeb = useCallback(() => {
+  const onRemoveWeb = useMemoizedFn(() => {
     dispatch(deleteWebAction(url));
-  }, []);
+  });
 
-  const onPhoneChange = useCallback((phone) => dispatch(setWebPhoneAction(phone)), []);
+  const onPhoneChange = useMemoizedFn((phone) => dispatch(setWebPhoneAction(phone)));
 
   useEffect(() => {
     const didStartLoading = () => {

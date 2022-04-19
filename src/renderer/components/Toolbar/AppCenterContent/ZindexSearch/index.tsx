@@ -1,7 +1,8 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 import clsx from 'clsx';
 import { useSelector, useDispatch } from 'react-redux';
 import { Input, Tabs, message } from 'antd';
+import { useMemoizedFn } from 'ahooks';
 
 import CustomDrawer from '@/components/CustomDrawer';
 import { addZindexAction } from '@/actions/zindex';
@@ -35,7 +36,7 @@ const ZindexSearch: React.FC<ZindexSearchProps> = (props) => {
   const { codeMap } = useSelector((state: StoreState) => state.zindex.config);
   const { data: detailSecid, show: showDetailDrawer, set: setDetailDrawer, close: closeDetailDrawer } = useDrawer('');
 
-  const onAdd = useCallback(async (secid: string) => {
+  const onAdd = useMemoizedFn(async (secid: string) => {
     const zindex = await Helpers.Zindex.GetZindex(secid);
     if (zindex) {
       dispatch(
@@ -47,7 +48,7 @@ const ZindexSearch: React.FC<ZindexSearchProps> = (props) => {
     } else {
       message.error('添加指数失败，未找到或数据出错~');
     }
-  }, []);
+  });
 
   const list = groupList.filter(({ Type }) => zindexTypesConfig.map(({ code }) => code).includes(Type));
 

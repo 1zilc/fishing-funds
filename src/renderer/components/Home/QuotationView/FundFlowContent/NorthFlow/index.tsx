@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 import { useRequest } from 'ahooks';
 
 import { useHomeContext } from '@/components/Home';

@@ -1,7 +1,7 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 import { Badge } from 'antd';
 import { useSelector } from 'react-redux';
-import { useBoolean } from 'ahooks';
+import { useBoolean, useMemoizedFn } from 'ahooks';
 
 import RefreshIcon from '@/static/icon/refresh.svg';
 import SettingIcon from '@/static/icon/setting.svg';
@@ -34,7 +34,7 @@ const ToolBar: React.FC<ToolBarProps> = () => {
   const [showAppCenterDrawer, { setTrue: openAppCenterDrawer, setFalse: closeAppCenterDrawer, toggle: ToggleAppCenterDrawer }] =
     useBoolean(false);
 
-  const fresh = useCallback(() => {
+  const fresh = useMemoizedFn(() => {
     switch (tabsActiveKey) {
       case Enums.TabKeyType.Funds:
         freshFunds();
@@ -54,15 +54,15 @@ const ToolBar: React.FC<ToolBarProps> = () => {
       default:
         break;
     }
-  }, [tabsActiveKey]);
+  });
 
-  const freshAll = useCallback(() => {
+  const freshAll = useMemoizedFn(() => {
     freshFunds();
     freshZindexs();
     freshQuotations();
     freshStocks();
     freshCoins();
-  }, []);
+  });
 
   return (
     <div className={styles.bar}>

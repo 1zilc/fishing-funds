@@ -1,4 +1,4 @@
-import React, { useState, useRef, useCallback } from 'react';
+import React, { useState, useRef } from 'react';
 import clsx from 'clsx';
 import { useScroll, useRequest } from 'ahooks';
 import { Tabs } from 'antd';
@@ -30,10 +30,6 @@ const DetailCoinContent: React.FC<DetailCoinContentProps> = (props) => {
     pollingInterval: 1000 * 60,
     onSuccess: setCoin,
   });
-
-  const freshDetail = useCallback(() => {
-    runGetDetailFromCoingecko();
-  }, [code]);
 
   return (
     <CustomDrawerContent title="货币详情" enterText="确定" onClose={props.onClose} onEnter={props.onEnter}>
@@ -88,14 +84,14 @@ const DetailCoinContent: React.FC<DetailCoinContentProps> = (props) => {
               <Trend code={code} />
             </Tabs.TabPane>
             <Tabs.TabPane tab="货币评估" key={String(1)}>
-              <ChartCard onFresh={freshDetail}>
+              <ChartCard onFresh={runGetDetailFromCoingecko}>
                 <Appraise
                   data={[coin?.coingecko_score || 0, coin?.developer_score || 0, coin?.community_score || 0, coin?.liquidity_score || 0]}
                 />
               </ChartCard>
             </Tabs.TabPane>
             <Tabs.TabPane tab="大众趋势" key={String(2)}>
-              <ChartCard onFresh={freshDetail}>
+              <ChartCard onFresh={runGetDetailFromCoingecko}>
                 <Sentiment up={coin?.sentiment_votes_up_percentage} down={coin?.sentiment_votes_down_percentage} />
               </ChartCard>
             </Tabs.TabPane>

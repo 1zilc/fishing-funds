@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState } from 'react';
 import { useRequest } from 'ahooks';
 
 import ChartCard from '@/components/Card/ChartCard';
@@ -12,10 +12,9 @@ export interface EstimateProps {
   secid: string;
 }
 const Estimate: React.FC<EstimateProps> = ({ secid }) => {
-  const [estimate, setEstimate] = useState(PictureImage);
+  const [estimate, setEstimate] = useState<string | null>('');
   const { run: runGetPicTrendFromEastmoney } = useRequest(() => Services.Stock.GetPicTrendFromEastmoney(secid), {
     pollingInterval: CONST.DEFAULT.ESTIMATE_FUND_DELAY,
-
     onSuccess: setEstimate,
     refreshDeps: [secid],
   });
@@ -23,7 +22,13 @@ const Estimate: React.FC<EstimateProps> = ({ secid }) => {
   return (
     <ChartCard onFresh={runGetPicTrendFromEastmoney}>
       <div className={styles.estimate}>
-        <img src={estimate || PictureFailedImage} />
+        {estimate === '' ? (
+          <PictureImage />
+        ) : estimate === null ? (
+          <PictureFailedImage />
+        ) : (
+          <img src={estimate} onError={() => setEstimate(null)} />
+        )}
       </div>
     </ChartCard>
   );

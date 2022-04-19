@@ -1,6 +1,5 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState } from 'react';
 import { useRequest } from 'ahooks';
-import NP from 'number-precision';
 
 import ChartCard from '@/components/Card/ChartCard';
 import { useHomeContext } from '@/components/Home';

@@ -1,5 +1,5 @@
-import { useCallback, useLayoutEffect, useState, useEffect, useRef, useMemo } from 'react';
-import { useInterval, useBoolean, useThrottleFn, useSize } from 'ahooks';
+import { useLayoutEffect, useState, useEffect, useRef, useMemo } from 'react';
+import { useInterval, useBoolean, useThrottleFn, useSize, useMemoizedFn } from 'ahooks';
 import { useDispatch, useSelector } from 'react-redux';
 import dayjs from 'dayjs';
 import * as echarts from 'echarts';
@@ -45,19 +45,16 @@ export function useFixTimeToDo(todo: () => void, delay: number, config?: { immed
   );
 }
 
-export function useScrollToTop(
-  config: {
-    before?: () => void | Promise<void>;
-    after?: () => void | Promise<void>;
-    option?: {
-      behavior?: ScrollBehavior;
-      left?: number;
-      top?: number;
-    };
-  },
-  dep: any[] = []
-) {
-  return useCallback(async () => {
+export function useScrollToTop(config: {
+  before?: () => void | Promise<void>;
+  after?: () => void | Promise<void>;
+  option?: {
+    behavior?: ScrollBehavior;
+    left?: number;
+    top?: number;
+  };
+}) {
+  return useMemoizedFn(async () => {
     const { before, after, option } = config;
     if (before) {
       await before();
@@ -70,7 +67,7 @@ export function useScrollToTop(
     if (after) {
       await after();
     }
-  }, dep);
+  });
 }
 
 export function useNativeTheme() {
@@ -389,9 +386,9 @@ export function useAllCyFunds(statusMap: Record<string, boolean>) {
 
 export function useOpenWebView(params: any = {}) {
   const dispatch = useDispatch();
-  const openWebView = useCallback((args) => {
+  const openWebView = useMemoizedFn((args) => {
     const obj = typeof args === 'string' ? { url: args } : args;
     dispatch(openWebAction({ ...params, ...obj }));
-  }, []);
+  });
   return openWebView;
 }

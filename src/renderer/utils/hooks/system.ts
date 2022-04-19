@@ -1,4 +1,4 @@
-import { useCallback, useLayoutEffect, useState, useEffect, useMemo, useRef } from 'react';
+import { useLayoutEffect, useState, useEffect, useMemo, useRef } from 'react';
 import { useInterval, useBoolean, useThrottleFn, useSize } from 'ahooks';
 import { useDispatch, useSelector } from 'react-redux';
 import { compose } from 'redux';

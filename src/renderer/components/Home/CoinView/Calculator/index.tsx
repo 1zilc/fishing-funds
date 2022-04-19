@@ -1,7 +1,7 @@
-import React, { useState, useMemo, useEffect, useCallback } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Select, Input } from 'antd';
 import { useSelector } from 'react-redux';
-import { useDebounceFn, useRequest } from 'ahooks';
+import { useDebounceFn, useRequest, useMemoizedFn } from 'ahooks';
 import * as NP from 'number-precision';
 
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
@@ -56,13 +56,10 @@ const Calculator: React.FC<CalculatorProps> = (props) => {
     ready: !!coin?.id,
   });
 
-  const onSelect = useCallback(
-    async (code) => {
-      const coin = await Helpers.Coin.GetCoin(code);
-      setCoin(coin);
-    },
-    [coins]
-  );
+  const onSelect = useMemoizedFn(async (code) => {
+    const coin = await Helpers.Coin.GetCoin(code);
+    setCoin(coin);
+  });
 
   const result = useMemo(() => {
     try {

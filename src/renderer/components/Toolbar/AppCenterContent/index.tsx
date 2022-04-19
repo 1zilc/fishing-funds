@@ -1,5 +1,5 @@
-import React, { useState, useMemo, useCallback } from 'react';
-import { useBoolean } from 'ahooks';
+import React, { useState, useMemo } from 'react';
+import { useBoolean, useMemoizedFn } from 'ahooks';
 import { Input } from 'antd';
 import { useSelector } from 'react-redux';
 
@@ -120,12 +120,12 @@ const AppCenterContent: React.FC<AppCenterContentProps> = (props) => {
 
   const openWebView = useOpenWebView();
 
-  const onSearch = useCallback((value: string) => {
+  const onSearch = useMemoizedFn((value: string) => {
     const { valid, url } = Utils.CheckUrlValid(value);
     if (valid) {
       openWebView({ title: '', url });
     }
-  }, []);
+  });
 
   const apps = useMemo(
     () =>

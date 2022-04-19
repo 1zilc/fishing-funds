@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState } from 'react';
 import { useRequest } from 'ahooks';
 
 import ChartCard from '@/components/Card/ChartCard';
@@ -12,10 +12,9 @@ export interface InvestStyleProps {
   code: string;
 }
 const InvestStyle: React.FC<InvestStyleProps> = ({ code }) => {
-  const [estimate, setEstimate] = useState(PictureImage);
+  const [estimate, setEstimate] = useState<string | null>('');
   const { run: runGetInverstStyleFromEastmoney } = useRequest(() => Services.Fund.GetInverstStyleFromEastmoney(code), {
     pollingInterval: CONST.DEFAULT.ESTIMATE_FUND_DELAY,
-
     onSuccess: setEstimate,
     refreshDeps: [code],
   });
@@ -23,7 +22,13 @@ const InvestStyle: React.FC<InvestStyleProps> = ({ code }) => {
   return (
     <ChartCard onFresh={runGetInverstStyleFromEastmoney}>
       <div className={styles.estimate}>
-        <img src={estimate || PictureFailedImage} />
+        {estimate === '' ? (
+          <PictureImage />
+        ) : estimate === null ? (
+          <PictureFailedImage />
+        ) : (
+          <img src={estimate} onError={() => setEstimate(null)} />
+        )}
       </div>
     </ChartCard>
   );
