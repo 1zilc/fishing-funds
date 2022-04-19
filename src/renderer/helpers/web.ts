@@ -30,6 +30,12 @@ export const defaultWebConfig = [
     iconType: Enums.WebIconType.First,
     color: '#b16ce0',
   },
+  {
+    title: '虎牙直播',
+    url: 'https://m.huya.com/',
+    iconType: Enums.WebIconType.Favicon,
+    icon: 'https://diy-assets.msstatic.com/mobile/favicon.ico',
+  },
 ];
 
 export function GetWebConfig() {
