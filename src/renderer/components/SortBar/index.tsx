@@ -54,6 +54,7 @@ const ManageFundContent = React.lazy(() => import('@/components/Home/FundView/Ma
 const ManageStockContent = React.lazy(() => import('@/components/Home/StockView/ManageStockContent'));
 const ManageCoinContent = React.lazy(() => import('@/components/Home/CoinView/ManageCoinContent'));
 const ManageZindexContent = React.lazy(() => import('@/components/Home/ZindexView/ManageZindexContent'));
+const FundFlowContent = React.lazy(() => import('@/components/Home/QuotationView/FundFlowContent'));
 
 export interface SortBarProps {}
 
@@ -252,6 +253,8 @@ function QuotationSortBar() {
     quotationViewMode: { type: quotationViewType },
   } = useSelector((state: StoreState) => state.sort.viewMode);
 
+  const [showFundFlowDrawer, { setTrue: openFundFlowDrawer, setFalse: closeFundFlowDrawer }] = useBoolean(false);
+
   const { quotationSortModeOptions, quotationSortModeOptionsMap } = Helpers.Sort.GetSortConfig();
 
   const quotations = useSelector((state: StoreState) => state.quotation.quotations);
@@ -269,6 +272,14 @@ function QuotationSortBar() {
       </div>
       <div className={styles.name} onClick={toggleQuotationsCollapse}>
         板块名称
+        <a
+          onClick={(e) => {
+            openFundFlowDrawer();
+            e.stopPropagation();
+          }}
+        >
+          详情
+        </a>
       </div>
       <div className={styles.view}>
         {quotationViewType === Enums.QuotationViewType.List && (
@@ -306,6 +317,9 @@ function QuotationSortBar() {
           })}
         />
       </div>
+      <CustomDrawer show={showFundFlowDrawer}>
+        <FundFlowContent onClose={closeFundFlowDrawer} onEnter={closeFundFlowDrawer} />
+      </CustomDrawer>
     </div>
   );
 }
