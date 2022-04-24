@@ -40,8 +40,16 @@ const Wallet: React.FC<WalletProps> = () => {
     };
   }, [funds, eyeStatus, currentWalletCode]);
 
-  async function onSelectWallet(wallet: Wallet.SettingItem) {
-    const { code } = wallet;
+  const walletMenuItems = useMemo(
+    () =>
+      walletConfig.map((config) => ({
+        key: config.code,
+        label: config.name,
+      })),
+    [walletConfig]
+  );
+
+  async function onSelectWallet(code: string) {
     dispatch(selectWalletAction(code));
     freshFunds();
   }
@@ -50,15 +58,7 @@ const Wallet: React.FC<WalletProps> = () => {
     <div className={clsx(styles.content, { [styles.miniMode]: miniMode })}>
       <Dropdown
         placement="bottomRight"
-        overlay={
-          <Menu selectedKeys={[currentWalletCode]}>
-            {walletConfig.map((wallet) => (
-              <Menu.Item key={wallet.code} onClick={() => onSelectWallet(wallet)}>
-                {wallet.name}
-              </Menu.Item>
-            ))}
-          </Menu>
-        }
+        overlay={<Menu selectedKeys={[currentWalletCode]} items={walletMenuItems} onClick={({ key }) => onSelectWallet(key)} />}
       >
         <div className={styles.walletIcon}>
           <img src={walletIcons[currentWalletConfig.iconIndex || 0]} />

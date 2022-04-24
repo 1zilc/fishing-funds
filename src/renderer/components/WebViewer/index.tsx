@@ -38,7 +38,7 @@ const Content = () => {
   const [done, { setTrue: setDoneTrue, setFalse: setDoneFalse }] = useBoolean(false);
   const [percent, setPercent] = useState(0);
   const [webTitle, setWebTitle] = useState(title);
-  const [timer, setTimer] = useState<any>(0);
+  const [timer, setTimer] = useState<number>(0);
   const [favicons, setFavicons] = useState<string[]>([]);
 
   const {
@@ -193,16 +193,16 @@ const Content = () => {
           <div className={styles.nav}>
             <Dropdown
               overlay={
-                <Menu>
-                  <Menu.Item className={styles.menuItem} onClick={onCopyUrl}>
+                <div className={styles.menu}>
+                  <div className={styles.menuItem} onClick={onCopyUrl}>
                     <label>复制链接</label>
                     <CopyIcon />
-                  </Menu.Item>
-                  <Menu.Item className={styles.menuItem}>
+                  </div>
+                  <div className={styles.menuItem}>
                     <label>移动端标识</label>
                     <Switch checked={!!phone} onChange={onPhoneChange} size="small" />
-                  </Menu.Item>
-                </Menu>
+                  </div>
+                </div>
               }
               placement="topLeft"
             >

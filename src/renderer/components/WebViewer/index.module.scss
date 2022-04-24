@@ -27,10 +27,20 @@
     }
   }
 }
+.menu {
+  background-color: var(--background-color);
+  border-radius: 2px;
+  border: 1px solid var(--border-color);
+}
 .menuItem {
   display: flex;
   align-items: center;
+  padding: 5px;
   cursor: pointer;
+
+  &:hover {
+    background-color: var(--hover-color);
+  }
 
   label {
     font-weight: 500;

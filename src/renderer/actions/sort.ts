@@ -96,7 +96,7 @@ export function setCoinSortModeAction(mode: { type?: Enums.CoinSortType; order?:
         sort: { sortMode },
       } = getState();
 
-      const coinSortMode = { ...sortMode.coinSortMode, ...sortMode };
+      const coinSortMode = { ...sortMode.coinSortMode, ...mode };
 
       batch(() => {
         dispatch(syncSortModeAction({ ...sortMode, coinSortMode }));
