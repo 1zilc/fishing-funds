@@ -108,7 +108,7 @@ export function useNativeThemeColor(varibles: string[]) {
 }
 
 export function useResizeEchart(scale = 1, unlimited?: boolean) {
-  const chartRef = useRef<HTMLDivElement | null>(null);
+  const chartRef = useRef<HTMLDivElement>(null);
   const chartInstanceRef = useRef<echarts.ECharts>();
   const size = useSize(chartRef);
   useEffect(() => {
@@ -306,7 +306,7 @@ export function useAfterMounted(fn: any, dep: any[] = []) {
   useEffect(() => {
     setTrue();
   }, []);
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (flag) {
       fn();
     }

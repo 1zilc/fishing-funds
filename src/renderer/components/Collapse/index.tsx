@@ -10,17 +10,12 @@ interface CollapseProps {
 
 const Collapse: React.FC<PropsWithChildren<CollapseProps>> = (props) => {
   const contentRef = useRef<HTMLDivElement>(null);
-  const [max, setMax] = useState(contentRef.current?.clientHeight);
-
-  useLayoutEffect(() => {
-    setMax(contentRef.current?.clientHeight);
-  }, [contentRef.current?.clientHeight]);
 
   return (
     <div
       className={clsx(styles.content)}
       style={{
-        maxHeight: props.isOpened ? max : 0,
+        maxHeight: props.isOpened ? contentRef.current?.clientHeight : 0,
         ...props.style,
       }}
     >
