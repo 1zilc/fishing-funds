@@ -1,6 +1,5 @@
 import React from 'react';
 import clsx from 'clsx';
-import { useDispatch, useSelector } from 'react-redux';
 
 import StandCard from '@/components/Card/StandCard';
 import RemoveIcon from '@/static/icon/remove.svg';
@@ -8,7 +7,8 @@ import CheckboxIcon from '@/static/icon/checkbox.svg';
 import EditIcon from '@/static/icon/edit.svg';
 import { deleteWalletConfigAction } from '@/actions/wallet';
 import { walletIcons } from '@/helpers/wallet';
-import { StoreState } from '@/reducers/types';
+
+import { useAppDispatch, useAppSelector } from '@/utils/hooks';
 import * as Utils from '@/utils';
 import * as Enums from '@/utils/enums';
 import * as Helpers from '@/helpers';
@@ -28,10 +28,10 @@ const { dialog } = window.contextModules.electron;
 
 const WalletRow: React.FC<WalletRowProps> = (props) => {
   const { wallet, selected, readonly } = props;
-  const dispatch = useDispatch();
-  const wallets = useSelector((state: StoreState) => state.wallet.wallets);
-  const { walletConfig } = useSelector((state: StoreState) => state.wallet.config);
-  const eyeStatus = useSelector((state: StoreState) => state.wallet.eyeStatus);
+  const dispatch = useAppDispatch();
+  const wallets = useAppSelector((state) => state.wallet.wallets);
+  const { walletConfig } = useAppSelector((state) => state.wallet.config);
+  const eyeStatus = useAppSelector((state) => state.wallet.eyeStatus);
 
   const onRemoveClick = async (wallet: Wallet.SettingItem) => {
     if (walletConfig.length === 1) {

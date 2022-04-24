@@ -1,12 +1,12 @@
 import React, { PropsWithChildren, useState } from 'react';
-import { useSelector } from 'react-redux';
+
 import { Table } from 'antd';
 import { useRequest } from 'ahooks';
 
 import CustomDrawer from '@/components/CustomDrawer';
 import TypeSelection from '@/components/TypeSelection';
-import { useDrawer } from '@/utils/hooks';
-import { StoreState } from '@/reducers/types';
+import { useDrawer, useAppSelector } from '@/utils/hooks';
+
 import * as Services from '@/services';
 import * as Utils from '@/utils';
 import styles from './index.module.scss';
@@ -30,7 +30,7 @@ const RenderColorCol = ({ value }: { value: string }) => {
 const SelfRank: React.FC<PropsWithChildren<SelfRankProps>> = () => {
   const [dayType, setDayType] = useState(dayTypeList[0]);
   const [data, setData] = useState([]);
-  const { codeMap } = useSelector((state: StoreState) => state.stock.config);
+  const { codeMap } = useAppSelector((state) => state.stock.config);
 
   const { data: detailSecid, show: showDetailDrawer, set: setDetailDrawer, close: closeDetailDrawer } = useDrawer('');
 

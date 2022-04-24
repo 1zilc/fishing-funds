@@ -1,13 +1,13 @@
-import { useLayoutEffect, useState, useEffect, useRef, useMemo } from 'react';
+import { useLayoutEffect, useState, useEffect, useRef, useMemo, useTransition } from 'react';
 import { useInterval, useBoolean, useThrottleFn, useSize, useMemoizedFn } from 'ahooks';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector, TypedUseSelectorHook } from 'react-redux';
 import dayjs from 'dayjs';
 import * as echarts from 'echarts';
 
 import { updateStockAction } from '@/actions/stock';
 import { updateFundAction } from '@/actions/fund';
 import { openWebAction } from '@/actions/web';
-import { StoreState } from '@/reducers/types';
+import { StoreState, Dispatch } from '@/reducers/types';
 import * as Utils from '@/utils';
 import * as CONST from '@/constants';
 import * as Adapters from '@/utils/adpters';
@@ -16,6 +16,10 @@ import * as Helpers from '@/helpers';
 import * as Enums from '@/utils/enums';
 
 const { invoke, ipcRenderer } = window.contextModules.electron;
+
+export const useAppDispatch = () => useDispatch<Dispatch>();
+
+export const useAppSelector: TypedUseSelectorHook<StoreState> = useSelector;
 
 export function useWorkDayTimeToDo(todo: () => void, delay: number, config?: { immediate: boolean }): void {
   useInterval(
@@ -72,7 +76,7 @@ export function useScrollToTop(config: {
 
 export function useNativeTheme() {
   const [darkMode, setDarkMode] = useState(false);
-  const systemSetting = useSelector((state: StoreState) => state.setting.systemSetting);
+  const systemSetting = useAppSelector((state) => state.setting.systemSetting);
   const { systemThemeSetting } = systemSetting;
   async function syncSystemTheme() {
     await Utils.UpdateSystemTheme(systemThemeSetting);
@@ -97,7 +101,7 @@ export function useNativeTheme() {
 
 export function useNativeThemeColor(varibles: string[]) {
   const { darkMode } = useNativeTheme();
-  const lowKeySetting = useSelector((state: StoreState) => state.setting.systemSetting.lowKeySetting);
+  const lowKeySetting = useAppSelector((state) => state.setting.systemSetting.lowKeySetting);
   const [colors, setColors] = useState<any>({});
 
   useEffect(() => {
@@ -140,7 +144,7 @@ export function useRenderEcharts(callback: () => void, instance?: echarts.EChart
 }
 
 export function useSyncFixFundSetting() {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const [done, { setTrue }] = useBoolean(false);
   const { currentWalletFundsConfig: fundConfig } = useCurrentWallet();
 
@@ -174,9 +178,9 @@ export function useSyncFixFundSetting() {
 }
 
 export function useSyncFixStockSetting() {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const [done, { setTrue, setFalse }] = useBoolean(true);
-  const { stockConfig } = useSelector((state: StoreState) => state.stock.config);
+  const { stockConfig } = useAppSelector((state) => state.stock.config);
   async function FixStockSetting(stockConfig: Stock.SettingItem[]) {
     try {
       const collectors = stockConfig.map(
@@ -217,9 +221,9 @@ export function useSyncFixStockSetting() {
 }
 
 export function useCurrentWallet() {
-  const { walletConfig } = useSelector((state: StoreState) => state.wallet.config);
-  const wallets = useSelector((state: StoreState) => state.wallet.wallets);
-  const currentWalletCode = useSelector((state: StoreState) => state.wallet.currentWalletCode);
+  const { walletConfig } = useAppSelector((state) => state.wallet.config);
+  const wallets = useAppSelector((state) => state.wallet.wallets);
+  const currentWalletCode = useAppSelector((state) => state.wallet.currentWalletCode);
   const currentWalletConfig = walletConfig.find(({ code }) => currentWalletCode === code)!;
   const currentWalletState = wallets.find(({ code }) => currentWalletCode === code) || {
     funds: [],
@@ -315,7 +319,7 @@ export function useAfterMounted(fn: any, dep: any[] = []) {
 }
 
 export function useFundRating(code: string) {
-  const fundRatingMap = useSelector((state: StoreState) => state.fund.fundRatingMap);
+  const fundRatingMap = useAppSelector((state) => state.fund.fundRatingMap);
   const fundRating = fundRatingMap[code];
   let star = 0;
   if (fundRating) {
@@ -366,7 +370,7 @@ export function useAutoDestroySortableRef() {
  * statusMap Record<钱包code,booealn>
  */
 export function useAllCyFunds(statusMap: Record<string, boolean>) {
-  const wallets = useSelector((state: StoreState) => state.wallet.wallets);
+  const wallets = useAppSelector((state) => state.wallet.wallets);
 
   // 持有份额的基金，response数组
   const funds = useMemo(() => {
@@ -386,7 +390,7 @@ export function useAllCyFunds(statusMap: Record<string, boolean>) {
 }
 
 export function useOpenWebView(params: any = {}) {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const openWebView = useMemoizedFn((args) => {
     const obj = typeof args === 'string' ? { url: args } : args;
     dispatch(openWebAction({ ...params, ...obj }));

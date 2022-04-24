@@ -1,5 +1,5 @@
 import React, { PropsWithChildren, useState, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+
 import { Table, Divider } from 'antd';
 import { useRequest } from 'ahooks';
 import clsx from 'clsx';
@@ -7,8 +7,8 @@ import clsx from 'clsx';
 import ChartCard from '@/components/Card/ChartCard';
 import CustomDrawer from '@/components/CustomDrawer';
 import TypeSelection from '@/components/TypeSelection';
-import { useDrawer } from '@/utils/hooks';
-import { StoreState } from '@/reducers/types';
+import { useDrawer, useAppSelector } from '@/utils/hooks';
+
 import * as Services from '@/services';
 import * as Utils from '@/utils';
 import styles from './index.module.scss';
@@ -24,7 +24,7 @@ const RenderColorCol = ({ value }: { value: string }) => {
 
 const MainRank: React.FC<PropsWithChildren<MainRankProps>> = () => {
   const [data, setData] = useState<Coin.ResponseItem[]>([]);
-  const { codeMap } = useSelector((state: StoreState) => state.coin.config);
+  const { codeMap } = useAppSelector((state) => state.coin.config);
 
   const { data: detailCode, show: showDetailDrawer, set: setDetailDrawer, close: closeDetailDrawer } = useDrawer('');
 

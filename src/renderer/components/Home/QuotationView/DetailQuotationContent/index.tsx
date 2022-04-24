@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import clsx from 'clsx';
-import { useDispatch, useSelector } from 'react-redux';
+
 import { useRequest } from 'ahooks';
 import { Tabs } from 'antd';
 
@@ -11,7 +11,8 @@ import Funds from '@/components/Home/QuotationView/DetailQuotationContent/Funds'
 import RealTimeTransaction from '@/components/Home/QuotationView/DetailQuotationContent/RealTimeTransaction';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
 import { syncFavoriteQuotationMapAction } from '@/actions/quotation';
-import { StoreState } from '@/reducers/types';
+
+import { useAppDispatch, useAppSelector } from '@/utils/hooks';
 import * as Services from '@/services';
 import * as Utils from '@/utils';
 import * as Enums from '@/utils/enums';
@@ -25,10 +26,10 @@ export interface DetailQuotationContentProps {
 
 const DetailQuotationContent: React.FC<DetailQuotationContentProps> = (props) => {
   const { code } = props;
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const [quotation, setQuotation] = useState<Quotation.DetailData | Record<string, any>>({});
-  const favoriteQuotationMap = useSelector((state: StoreState) => state.quotation.favoriteQuotationMap);
-  const { conciseSetting } = useSelector((state: StoreState) => state.setting.systemSetting);
+  const favoriteQuotationMap = useAppSelector((state) => state.quotation.favoriteQuotationMap);
+  const { conciseSetting } = useAppSelector((state) => state.setting.systemSetting);
   const favorited = favoriteQuotationMap[quotation.code];
 
   useRequest(Services.Quotation.GetQuotationDetailFromEastmoney, {

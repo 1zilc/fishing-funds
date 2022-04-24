@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
 import { useRequest } from 'ahooks';
-import { useSelector } from 'react-redux';
 
 import { useHomeContext } from '@/components/Home';
 import TypeSelection from '@/components/TypeSelection';
 import ChartCard from '@/components/Card/ChartCard';
-import { useResizeEchart } from '@/utils/hooks';
-import { StoreState } from '@/reducers/types';
+import { useResizeEchart, useAppSelector } from '@/utils/hooks';
+
 import * as CONST from '@/constants';
 import * as Services from '@/services';
 import styles from './index.module.scss';
@@ -28,7 +27,7 @@ const Trend: React.FC<PerformanceProps> = ({ code }) => {
   const { ref: chartRef, chartInstance } = useResizeEchart(CONST.DEFAULT.ECHARTS_SCALE);
   const [date, setDateType] = useState(dateTypeList[2]);
   const { darkMode } = useHomeContext();
-  const coinUnitSetting = useSelector((state: StoreState) => state.setting.systemSetting.coinUnitSetting);
+  const coinUnitSetting = useAppSelector((state) => state.setting.systemSetting.coinUnitSetting);
   const { run: runGetHistoryFromCoingecko } = useRequest(() => Services.Coin.GetHistoryFromCoingecko(code, coinUnitSetting, date.code), {
     pollingInterval: CONST.DEFAULT.ESTIMATE_FUND_DELAY,
     onSuccess: (result) => {

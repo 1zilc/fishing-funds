@@ -1,13 +1,12 @@
 import React, { useMemo } from 'react';
-import { useSelector } from 'react-redux';
 
 import StockRow from '@/components/Home/StockView/StockRow';
 import Empty from '@/components/Empty';
 import LoadingBar from '@/components/LoadingBar';
 import CustomDrawer from '@/components/CustomDrawer';
 import GridView from '@/components/GridView';
-import { StoreState } from '@/reducers/types';
-import { useDrawer, useSyncFixStockSetting } from '@/utils/hooks';
+
+import { useDrawer, useSyncFixStockSetting, useAppSelector } from '@/utils/hooks';
 import * as Enums from '@/utils/enums';
 import styles from './index.module.scss';
 
@@ -18,9 +17,9 @@ interface StockListProps {
 }
 
 const StockView: React.FC<StockListProps> = (props) => {
-  const stocks = useSelector((state: StoreState) => state.stock.stocks);
-  const stocksLoading = useSelector((state: StoreState) => state.stock.stocksLoading);
-  const stockViewMode = useSelector((state: StoreState) => state.sort.viewMode.stockViewMode);
+  const stocks = useAppSelector((state) => state.stock.stocks);
+  const stocksLoading = useAppSelector((state) => state.stock.stocksLoading);
+  const stockViewMode = useAppSelector((state) => state.sort.viewMode.stockViewMode);
 
   const { data: detailStockSecid, show: showDetailDrawer, set: setDetailDrawer, close: closeDetailDrawer } = useDrawer('');
 

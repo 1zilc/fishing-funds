@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { useRequest } from 'ahooks';
-import { useSelector } from 'react-redux';
+
 import clsx from 'clsx';
 
 import ChartCard from '@/components/Card/ChartCard';
 import { useHomeContext } from '@/components/Home';
-import { useResizeEchart, useRenderEcharts } from '@/utils/hooks';
-import { StoreState } from '@/reducers/types';
+import { useResizeEchart, useAppSelector } from '@/utils/hooks';
+
 import * as Enums from '@/utils/enums';
 import * as Services from '@/services';
 import * as Utils from '@/utils';
@@ -24,8 +24,8 @@ const indexCode = '1.000300';
 const Score: React.FC<ScoreProps> = ({ gssyl = 0 }) => {
   const { ref: chartRef, chartInstance } = useResizeEchart(0.48);
   const { varibleColors, darkMode } = useHomeContext();
-  const { freshDelaySetting, autoFreshSetting } = useSelector((state: StoreState) => state.setting.systemSetting);
-  const eyeStatus = useSelector((state: StoreState) => state.wallet.eyeStatus);
+  const { freshDelaySetting, autoFreshSetting } = useAppSelector((state) => state.setting.systemSetting);
+  const eyeStatus = useAppSelector((state) => state.wallet.eyeStatus);
   const eyeOpen = eyeStatus === Enums.EyeStatus.Open;
   const [HS, setHS] = useState('');
 

@@ -1,13 +1,13 @@
 import React from 'react';
 import clsx from 'clsx';
-import { useSelector, useDispatch } from 'react-redux';
+
 import { Input, Tabs, message } from 'antd';
 import { useMemoizedFn } from 'ahooks';
 
 import CustomDrawer from '@/components/CustomDrawer';
 import { addZindexAction } from '@/actions/zindex';
-import { StoreState } from '@/reducers/types';
-import { useDrawer } from '@/utils/hooks';
+
+import { useDrawer, useAppDispatch, useAppSelector } from '@/utils/hooks';
 import * as Helpers from '@/helpers';
 import * as Enums from '@/utils/enums';
 import styles from './index.module.scss';
@@ -32,8 +32,8 @@ export const zindexTypesConfig = [
 
 const ZindexSearch: React.FC<ZindexSearchProps> = (props) => {
   const { groupList } = props;
-  const dispatch = useDispatch();
-  const { codeMap } = useSelector((state: StoreState) => state.zindex.config);
+  const dispatch = useAppDispatch();
+  const { codeMap } = useAppSelector((state) => state.zindex.config);
   const { data: detailSecid, show: showDetailDrawer, set: setDetailDrawer, close: closeDetailDrawer } = useDrawer('');
 
   const onAdd = useMemoizedFn(async (secid: string) => {

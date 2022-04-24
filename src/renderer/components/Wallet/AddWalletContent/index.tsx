@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+
 import { Input } from 'antd';
 
 import WalletSelection from '@/components/Wallet/WalletSelection';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
 import { addWalletConfigAction } from '@/actions/wallet';
-import { StoreState } from '@/reducers/types';
+
+import { useAppDispatch, useAppSelector } from '@/utils/hooks';
 import * as Utils from '@/utils';
 import styles from './index.module.scss';
 
@@ -15,8 +16,8 @@ export interface AddFundContentProps {
 }
 
 const AddWalletContent: React.FC<AddFundContentProps> = (props) => {
-  const dispatch = useDispatch();
-  const { walletConfig } = useSelector((state: StoreState) => state.wallet.config);
+  const dispatch = useAppDispatch();
+  const { walletConfig } = useAppSelector((state) => state.wallet.config);
   const [name, setName] = useState('');
   const [iconIndex, setIconIndex] = useState(0);
   const [fieldNameMessageTip, setFieldNameMessageTip] = useState<Field.MessageTip>({ show: false, text: '' });

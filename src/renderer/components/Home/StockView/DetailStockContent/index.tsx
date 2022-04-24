@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import clsx from 'clsx';
-import { useDispatch, useSelector } from 'react-redux';
+
 import { useRequest } from 'ahooks';
 import { message, Tabs } from 'antd';
 
@@ -12,7 +12,7 @@ import Company from '@/components/Home/StockView/DetailStockContent/Company';
 import Stocks from '@/components/Home/StockView/DetailStockContent/Stocks';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
 import { addStockAction } from '@/actions/stock';
-import { StoreState } from '@/reducers/types';
+import { useAppDispatch, useAppSelector } from '@/utils/hooks';
 import * as Services from '@/services';
 import * as Utils from '@/utils';
 
@@ -27,10 +27,10 @@ export interface DetailStockContentProps {
 
 const DetailStockContent: React.FC<DetailStockContentProps> = (props) => {
   const { secid, type } = props;
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const [stock, setStock] = useState<Stock.DetailItem | Record<string, any>>({});
   const [industrys, setIndustrys] = useState<Stock.IndustryItem[]>([]);
-  const { codeMap } = useSelector((state: StoreState) => state.stock.config);
+  const { codeMap } = useAppSelector((state) => state.stock.config);
   useRequest(Services.Stock.GetDetailFromEastmoney, {
     pollingInterval: 1000 * 60,
     defaultParams: [secid],

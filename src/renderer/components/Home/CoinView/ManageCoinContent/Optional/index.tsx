@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+
 import { ReactSortable } from 'react-sortablejs';
 import clsx from 'clsx';
 
@@ -10,8 +10,8 @@ import RemoveIcon from '@/static/icon/remove.svg';
 import CustomDrawer from '@/components/CustomDrawer';
 import Empty from '@/components/Empty';
 import { deleteCoinAction, setCoinConfigAction } from '@/actions/coin';
-import { useDrawer, useAutoDestroySortableRef } from '@/utils/hooks';
-import { StoreState } from '@/reducers/types';
+import { useDrawer, useAutoDestroySortableRef, useAppDispatch, useAppSelector } from '@/utils/hooks';
+
 import styles from './index.module.scss';
 
 const AddCoinContent = React.lazy(() => import('@/components/Home/CoinView/AddCoinContent'));
@@ -21,9 +21,9 @@ export interface OptionalProps {}
 const { dialog } = window.contextModules.electron;
 
 const Optional: React.FC<OptionalProps> = () => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const sortableRef = useAutoDestroySortableRef();
-  const { codeMap, coinConfig } = useSelector((state: StoreState) => state.coin.config);
+  const { codeMap, coinConfig } = useAppSelector((state) => state.coin.config);
   const { show: showAddDrawer, set: setAddDrawer, close: closeAddDrawer } = useDrawer(null);
   const sortCoinConfig = useMemo(() => coinConfig.map((_) => ({ ..._, id: _.code })), [coinConfig]);
 

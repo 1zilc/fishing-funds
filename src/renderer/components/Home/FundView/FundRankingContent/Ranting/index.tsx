@@ -1,13 +1,13 @@
 import React, { PropsWithChildren, useMemo } from 'react';
 import { Table } from 'antd';
-import { useSelector, useDispatch } from 'react-redux';
+
 import { useRequest } from 'ahooks';
 
 import ChartCard from '@/components/Card/ChartCard';
 import CustomDrawer from '@/components/CustomDrawer';
-import { useDrawer, useCurrentWallet } from '@/utils/hooks';
+import { useDrawer, useCurrentWallet, useAppDispatch, useAppSelector } from '@/utils/hooks';
 import { setFundRatingMapAction } from '@/actions/fund';
-import { StoreState } from '@/reducers/types';
+
 import * as Services from '@/services';
 import styles from './index.module.scss';
 
@@ -17,11 +17,11 @@ const DetailFundContent = React.lazy(() => import('@/components/Home/FundView/De
 interface RantingProps {}
 
 const Ranting: React.FC<PropsWithChildren<RantingProps>> = () => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const { currentWalletFundsCodeMap: codeMap } = useCurrentWallet();
   const { data: detailCode, show: showDetailDrawer, set: setDetailDrawer, close: closeDetailDrawer } = useDrawer('');
   const { data: addCode, show: showAddDrawer, set: setAddDrawer, close: closeAddDrawer } = useDrawer('');
-  const fundRatingMap = useSelector((state: StoreState) => state.fund.fundRatingMap);
+  const fundRatingMap = useAppSelector((state) => state.fund.fundRatingMap);
   const fundRating = useMemo(() => Object.values(fundRatingMap).sort((a, b) => (a.total > b.total ? -1 : 1)), [fundRatingMap]);
   const columns = [
     {

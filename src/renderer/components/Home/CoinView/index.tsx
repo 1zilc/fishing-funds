@@ -1,13 +1,12 @@
 import React, { useMemo } from 'react';
-import { useSelector } from 'react-redux';
 
 import CoinRow from '@/components/Home/CoinView/CoinRow';
 import Empty from '@/components/Empty';
 import LoadingBar from '@/components/LoadingBar';
 import CustomDrawer from '@/components/CustomDrawer';
 import GridView from '@/components/GridView';
-import { StoreState } from '@/reducers/types';
-import { useDrawer } from '@/utils/hooks';
+
+import { useDrawer, useAppSelector } from '@/utils/hooks';
 import * as Enums from '@/utils/enums';
 import * as Helpers from '@/helpers';
 import styles from './index.module.scss';
@@ -19,9 +18,9 @@ interface CoinListProps {
 }
 
 const CoinView: React.FC<CoinListProps> = (props) => {
-  const coins = useSelector((state: StoreState) => state.coin.coins);
-  const coinsLoading = useSelector((state: StoreState) => state.coin.coinsLoading);
-  const coinViewMode = useSelector((state: StoreState) => state.sort.viewMode.coinViewMode);
+  const coins = useAppSelector((state) => state.coin.coins);
+  const coinsLoading = useAppSelector((state) => state.coin.coinsLoading);
+  const coinViewMode = useAppSelector((state) => state.sort.viewMode.coinViewMode);
 
   const { data: detailCoinCode, show: showDetailDrawer, set: setDetailDrawer, close: closeDetailDrawer } = useDrawer('');
 

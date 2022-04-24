@@ -1,13 +1,13 @@
 import React from 'react';
 import clsx from 'clsx';
-import { useDispatch, useSelector } from 'react-redux';
 
 import ArrowDownIcon from '@/static/icon/arrow-down.svg';
 import ArrowUpIcon from '@/static/icon/arrow-up.svg';
 import Collapse from '@/components/Collapse';
 import ArrowLine from '@/components/ArrowLine';
-import { StoreState } from '@/reducers/types';
+
 import { toggleZindexCollapseAction } from '@/actions/zindex';
+import { useAppDispatch, useAppSelector } from '@/utils/hooks';
 import * as Utils from '@/utils';
 import styles from './index.module.scss';
 
@@ -23,8 +23,8 @@ const arrowSize = {
 
 const ZindexRow: React.FC<RowProps> = (props) => {
   const { zindex } = props;
-  const dispatch = useDispatch();
-  const { conciseSetting } = useSelector((state: StoreState) => state.setting.systemSetting);
+  const dispatch = useAppDispatch();
+  const { conciseSetting } = useAppSelector((state) => state.setting.systemSetting);
 
   const onDetailClick = () => {
     props.onDetail(zindex.code);

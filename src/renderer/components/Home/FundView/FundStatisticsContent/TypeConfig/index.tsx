@@ -1,9 +1,8 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
 
 import { useHomeContext } from '@/components/Home';
-import { useResizeEchart, useRenderEcharts, useCurrentWallet } from '@/utils/hooks';
-import { StoreState } from '@/reducers/types';
+import { useResizeEchart, useRenderEcharts, useCurrentWallet, useAppSelector } from '@/utils/hooks';
+
 import * as CONST from '@/constants';
 import * as Utils from '@/utils';
 import * as Helpers from '@/helpers';
@@ -14,7 +13,7 @@ interface TypeConfigProps {
 }
 
 const TypeConfig: React.FC<TypeConfigProps> = ({ funds = [] }) => {
-  const remoteFunds = useSelector((state: StoreState) => state.fund.remoteFunds);
+  const remoteFunds = useAppSelector((state) => state.fund.remoteFunds);
   const { ref: chartRef, chartInstance } = useResizeEchart(CONST.DEFAULT.ECHARTS_SCALE);
   const { varibleColors, darkMode } = useHomeContext();
   const { currentWalletCode } = useCurrentWallet();

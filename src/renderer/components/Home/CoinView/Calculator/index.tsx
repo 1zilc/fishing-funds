@@ -1,6 +1,5 @@
 import React, { useState, useMemo } from 'react';
 import { Select, Input } from 'antd';
-import { useSelector } from 'react-redux';
 import { useDebounceFn, useRequest, useMemoizedFn } from 'ahooks';
 import * as NP from 'number-precision';
 
@@ -9,8 +8,8 @@ import CustomDrawer from '@/components/CustomDrawer';
 import WebAppIcon from '@/components/Toolbar/AppCenterContent/WebAppIcon';
 import PureCard from '@/components/Card/PureCard';
 import ChartCard from '@/components/Card/ChartCard';
-import { StoreState } from '@/reducers/types';
-import { useDrawer } from '@/utils/hooks';
+
+import { useDrawer, useAppSelector } from '@/utils/hooks';
 import * as Helpers from '@/helpers';
 import * as Enums from '@/utils/enums';
 import * as Services from '@/services';
@@ -25,8 +24,8 @@ interface CalculatorProps {
 const { Option } = Select;
 
 const Calculator: React.FC<CalculatorProps> = (props) => {
-  const { remoteCoins, coinsLoading } = useSelector((state: StoreState) => state.coin);
-  const coinsState = useSelector((state: StoreState) => state.coin.coins);
+  const { remoteCoins, coinsLoading } = useAppSelector((state) => state.coin);
+  const coinsState = useAppSelector((state) => state.coin.coins);
   const [coin, setCoin] = useState<Coin.DetailItem | null>(null);
   const [num, setNum] = useState(1);
   const [coins, setCoins] = useState<Coin.RemoteCoin[]>(remoteCoins);

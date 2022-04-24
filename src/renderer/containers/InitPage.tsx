@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useDispatch, batch } from 'react-redux';
+import { batch } from 'react-redux';
 import LoadingScreen from '@/components/LoadingScreen';
 import { setRemoteFundsAction, setFundRatingMapAction } from '@/actions/fund';
 import { setZindexConfigAction } from '@/actions/zindex';
@@ -11,7 +11,7 @@ import { setStockConfigAction } from '@/actions/stock';
 import { setCoinConfigAction, setRemoteCoinsAction } from '@/actions/coin';
 import { syncSortModeAction, syncViewModeAction } from '@/actions/sort';
 import { setWebConfigAction } from '@/actions/web';
-import { useDrawer } from '@/utils/hooks';
+import { useDrawer, useAppDispatch } from '@/utils/hooks';
 import * as CONST from '@/constants';
 import * as Utils from '@/utils';
 import * as Helpers from '@/helpers';
@@ -19,7 +19,7 @@ import * as Enums from '@/utils/enums';
 
 const InitPage = () => {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const { data: loadingText, show: showLoading, set: setLoading } = useDrawer('加载本地配置中...');
 
   async function checkLocalStorage() {

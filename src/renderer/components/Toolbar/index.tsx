@@ -1,14 +1,14 @@
 import React from 'react';
 import { Badge } from 'antd';
-import { useSelector } from 'react-redux';
+
 import { useBoolean, useMemoizedFn } from 'ahooks';
 
 import RefreshIcon from '@/static/icon/refresh.svg';
 import SettingIcon from '@/static/icon/setting.svg';
 import AppsIcon from '@/static/icon/apps.svg';
 import CustomDrawer from '@/components/CustomDrawer';
-import { StoreState } from '@/reducers/types';
-import { useFreshFunds, useFreshZindexs, useFreshQuotations, useFreshStocks, useFreshCoins } from '@/utils/hooks';
+
+import { useFreshFunds, useFreshZindexs, useFreshQuotations, useFreshStocks, useFreshCoins, useAppSelector } from '@/utils/hooks';
 import * as Enums from '@/utils/enums';
 import * as CONST from '@/constants';
 import styles from './index.module.scss';
@@ -21,8 +21,8 @@ export interface ToolBarProps {}
 const iconSize = { height: 18, width: 18 };
 
 const ToolBar: React.FC<ToolBarProps> = () => {
-  const updateInfo = useSelector((state: StoreState) => state.updater.updateInfo);
-  const tabsActiveKey = useSelector((state: StoreState) => state.tabs.activeKey);
+  const updateInfo = useAppSelector((state) => state.updater.updateInfo);
+  const tabsActiveKey = useAppSelector((state) => state.tabs.activeKey);
 
   const freshFunds = useFreshFunds(CONST.DEFAULT.FRESH_BUTTON_THROTTLE_DELAY);
   const freshZindexs = useFreshZindexs(CONST.DEFAULT.FRESH_BUTTON_THROTTLE_DELAY);

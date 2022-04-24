@@ -2,15 +2,14 @@ import React, { useState } from 'react';
 import clsx from 'clsx';
 import ColorHash from 'color-hash';
 import { useRequest } from 'ahooks';
-import { useDispatch, useSelector } from 'react-redux';
 
 import ArrowDownIcon from '@/static/icon/arrow-down.svg';
 import ArrowUpIcon from '@/static/icon/arrow-up.svg';
 import { useHomeContext } from '@/components/Home';
 import Collapse from '@/components/Collapse';
-import { StoreState } from '@/reducers/types';
+
 import { toggleStockCollapseAction, setIndustryMapAction } from '@/actions/stock';
-import { useResizeEchart, useRenderEcharts } from '@/utils/hooks';
+import { useResizeEchart, useRenderEcharts, useAppDispatch, useAppSelector } from '@/utils/hooks';
 import * as Services from '@/services';
 import * as Utils from '@/utils';
 import styles from './index.module.scss';
@@ -97,9 +96,9 @@ const TrendChart: React.FC<{
 
 const StockRow: React.FC<RowProps> = (props) => {
   const { stock } = props;
-  const dispatch = useDispatch();
-  const { conciseSetting } = useSelector((state: StoreState) => state.setting.systemSetting);
-  const industrys = useSelector((state: StoreState) => state.stock.industryMap[stock.secid]) || [];
+  const dispatch = useAppDispatch();
+  const { conciseSetting } = useAppSelector((state) => state.setting.systemSetting);
+  const industrys = useAppSelector((state) => state.stock.industryMap[stock.secid]) || [];
 
   useRequest(() => Services.Stock.GetIndustryFromEastmoney(stock.secid, 1), {
     onSuccess: (datas) => {

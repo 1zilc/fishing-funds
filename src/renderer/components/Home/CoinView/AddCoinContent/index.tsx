@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
 import { useDebounceFn } from 'ahooks';
 import { Input, message } from 'antd';
 
@@ -7,8 +6,8 @@ import CustomDrawer from '@/components/CustomDrawer';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
 import Empty from '@/components/Empty';
 import { addCoinAction } from '@/actions/coin';
-import { StoreState } from '@/reducers/types';
-import { useDrawer } from '@/utils/hooks';
+
+import { useDrawer, useAppDispatch, useAppSelector } from '@/utils/hooks';
 import * as Helpers from '@/helpers';
 import styles from './index.module.scss';
 
@@ -24,10 +23,10 @@ const { Search } = Input;
 
 const AddCoinContent: React.FC<AddCoinContentProps> = (props) => {
   const { defaultName } = props;
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const [coins, setCoins] = useState<Coin.RemoteCoin[]>([]);
-  const { codeMap } = useSelector((state: StoreState) => state.coin.config);
-  const remoteCoins = useSelector((state: StoreState) => state.coin.remoteCoins);
+  const { codeMap } = useAppSelector((state) => state.coin.config);
+  const remoteCoins = useAppSelector((state) => state.coin.remoteCoins);
   const { data: detailCode, show: showDetailDrawer, set: setDetailDrawer, close: closeDetailDrawer } = useDrawer('');
 
   async function onAdd(code: string) {

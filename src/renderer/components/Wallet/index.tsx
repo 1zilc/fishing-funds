@@ -1,14 +1,14 @@
 import React, { useMemo } from 'react';
 import clsx from 'clsx';
-import { useDispatch, useSelector } from 'react-redux';
+
 import { Dropdown, Menu } from 'antd';
 
 import ConsumptionIcon from '@/static/icon/consumption.svg';
 import Eye from '@/components/Eye';
 import { useHeaderContext } from '@/components/Header';
-import { StoreState } from '@/reducers/types';
+
 import { selectWalletAction, toggleEyeStatusAction } from '@/actions/wallet';
-import { useCurrentWallet, useFreshFunds } from '@/utils/hooks';
+import { useCurrentWallet, useFreshFunds, useAppDispatch, useAppSelector } from '@/utils/hooks';
 import { walletIcons } from '@/helpers/wallet';
 import * as Enums from '@/utils/enums';
 import * as Utils from '@/utils';
@@ -19,11 +19,11 @@ import styles from './index.module.scss';
 export interface WalletProps {}
 
 const Wallet: React.FC<WalletProps> = () => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const { miniMode } = useHeaderContext();
-  const eyeStatus = useSelector((state: StoreState) => state.wallet.eyeStatus);
-  const currentWalletCode = useSelector((state: StoreState) => state.wallet.currentWalletCode);
-  const { walletConfig } = useSelector((state: StoreState) => state.wallet.config);
+  const eyeStatus = useAppSelector((state) => state.wallet.eyeStatus);
+  const currentWalletCode = useAppSelector((state) => state.wallet.currentWalletCode);
+  const { walletConfig } = useAppSelector((state) => state.wallet.config);
   const { currentWalletConfig, currentWalletState } = useCurrentWallet();
   const freshFunds = useFreshFunds(CONST.DEFAULT.FRESH_BUTTON_THROTTLE_DELAY);
 

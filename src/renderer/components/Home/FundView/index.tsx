@@ -1,13 +1,12 @@
 import React, { useMemo } from 'react';
-import { useSelector } from 'react-redux';
 
 import FundRow from '@/components/Home/FundView/FundRow';
 import Empty from '@/components/Empty';
 import LoadingBar from '@/components/LoadingBar';
 import CustomDrawer from '@/components/CustomDrawer';
 import GridView from '@/components/GridView';
-import { StoreState } from '@/reducers/types';
-import { useDrawer, useFreshFunds, useCurrentWallet } from '@/utils/hooks';
+
+import { useDrawer, useFreshFunds, useCurrentWallet, useAppSelector } from '@/utils/hooks';
 import * as Enums from '@/utils/enums';
 import * as Helpers from '@/helpers';
 import styles from './index.module.scss';
@@ -24,8 +23,8 @@ const FundView: React.FC<FundListProps> = (props) => {
     currentWalletState: { funds },
     currentWalletCode,
   } = useCurrentWallet();
-  const fundsLoading = useSelector((state: StoreState) => state.fund.fundsLoading);
-  const fundViewMode = useSelector((state: StoreState) => state.sort.viewMode.fundViewMode);
+  const fundsLoading = useAppSelector((state) => state.fund.fundsLoading);
+  const fundViewMode = useAppSelector((state) => state.sort.viewMode.fundViewMode);
 
   const {
     data: editData,

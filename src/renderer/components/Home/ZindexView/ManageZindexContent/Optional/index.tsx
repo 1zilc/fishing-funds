@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+
 import { ReactSortable } from 'react-sortablejs';
 import clsx from 'clsx';
 
@@ -10,8 +10,8 @@ import RemoveIcon from '@/static/icon/remove.svg';
 import CustomDrawer from '@/components/CustomDrawer';
 import Empty from '@/components/Empty';
 import { deleteZindexAction, setZindexConfigAction } from '@/actions/zindex';
-import { useDrawer, useAutoDestroySortableRef } from '@/utils/hooks';
-import { StoreState } from '@/reducers/types';
+import { useDrawer, useAutoDestroySortableRef, useAppDispatch, useAppSelector } from '@/utils/hooks';
+
 import styles from './index.module.scss';
 
 const AddZindexContent = React.lazy(() => import('@/components/Home/ZindexView/AddZindexContent'));
@@ -21,9 +21,9 @@ export interface OptionalProps {}
 const { dialog } = window.contextModules.electron;
 
 const Optional: React.FC<OptionalProps> = () => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const sortableRef = useAutoDestroySortableRef();
-  const { codeMap, zindexConfig } = useSelector((state: StoreState) => state.zindex.config);
+  const { codeMap, zindexConfig } = useAppSelector((state) => state.zindex.config);
   const { show: showAddDrawer, set: setAddDrawer, close: closeAddDrawer } = useDrawer(null);
   const sortZindexConfig = useMemo(() => zindexConfig.map((_) => ({ ..._, id: _.code })), [zindexConfig]);
 

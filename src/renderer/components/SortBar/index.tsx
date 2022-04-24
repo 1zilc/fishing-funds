@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { useScroll, useDebounceFn, useBoolean } from 'ahooks';
-import { useSelector, useDispatch } from 'react-redux';
+
 import classsames from 'clsx';
 import { Dropdown, Menu } from 'antd';
 
@@ -30,7 +30,6 @@ import {
 } from '@/actions/sort';
 import CustomDrawer from '@/components/CustomDrawer';
 
-import { StoreState } from '@/reducers/types';
 import { toggleAllFundsCollapseAction } from '@/actions/fund';
 import { toggleAllZindexsCollapseAction } from '@/actions/zindex';
 import { toggleAllQuotationsCollapse } from '@/actions/quotation';
@@ -44,6 +43,8 @@ import {
   useFreshStocks,
   useFreshCoins,
   useCurrentWallet,
+  useAppDispatch,
+  useAppSelector,
 } from '@/utils/hooks';
 import * as Enums from '@/utils/enums';
 import * as CONST from '@/constants';
@@ -59,15 +60,15 @@ const FundFlowContent = React.lazy(() => import('@/components/Home/QuotationView
 export interface SortBarProps {}
 
 function FundsSortBar() {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const {
     fundSortMode: { type: fundSortType, order: fundSortOrder },
-  } = useSelector((state: StoreState) => state.sort.sortMode);
+  } = useAppSelector((state) => state.sort.sortMode);
 
   const {
     fundViewMode: { type: fundViewType },
-  } = useSelector((state: StoreState) => state.sort.viewMode);
+  } = useAppSelector((state) => state.sort.viewMode);
 
   const { fundSortModeOptions, fundSortModeOptionsMap } = Helpers.Sort.GetSortConfig();
 
@@ -150,19 +151,19 @@ function FundsSortBar() {
 }
 
 function ZindexSortBar() {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const {
     zindexSortMode: { type: zindexSortType, order: zindexSortOrder },
-  } = useSelector((state: StoreState) => state.sort.sortMode);
+  } = useAppSelector((state) => state.sort.sortMode);
 
   const {
     zindexViewMode: { type: zindexViewType },
-  } = useSelector((state: StoreState) => state.sort.viewMode);
+  } = useAppSelector((state) => state.sort.viewMode);
 
   const { zindexSortModeOptions, zindexSortModeOptionsMap } = Helpers.Sort.GetSortConfig();
 
-  const zindexs = useSelector((state: StoreState) => state.zindex.zindexs);
+  const zindexs = useAppSelector((state) => state.zindex.zindexs);
 
   const [showManageZindexDrawer, { setTrue: openManageZindexDrawer, setFalse: closeManageZindexDrawer, toggle: ToggleManageZindexDrawer }] =
     useBoolean(false);
@@ -239,21 +240,21 @@ function ZindexSortBar() {
 }
 
 function QuotationSortBar() {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const {
     quotationSortMode: { type: quotationSortType, order: quotationSortOrder },
-  } = useSelector((state: StoreState) => state.sort.sortMode);
+  } = useAppSelector((state) => state.sort.sortMode);
 
   const {
     quotationViewMode: { type: quotationViewType },
-  } = useSelector((state: StoreState) => state.sort.viewMode);
+  } = useAppSelector((state) => state.sort.viewMode);
 
   const [showFundFlowDrawer, { setTrue: openFundFlowDrawer, setFalse: closeFundFlowDrawer }] = useBoolean(false);
 
   const { quotationSortModeOptions, quotationSortModeOptionsMap } = Helpers.Sort.GetSortConfig();
 
-  const quotations = useSelector((state: StoreState) => state.quotation.quotations);
+  const quotations = useAppSelector((state) => state.quotation.quotations);
 
   const [expandAllQuotations, expandSomeQuotations] = useMemo(() => {
     return [quotations.every((_) => _.collapse), quotations.some((_) => _.collapse)];
@@ -319,19 +320,19 @@ function QuotationSortBar() {
 }
 
 function StockSortBar() {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const {
     stockSortMode: { type: stockSortType, order: stockSortOrder },
-  } = useSelector((state: StoreState) => state.sort.sortMode);
+  } = useAppSelector((state) => state.sort.sortMode);
 
   const {
     stockViewMode: { type: stockViewType },
-  } = useSelector((state: StoreState) => state.sort.viewMode);
+  } = useAppSelector((state) => state.sort.viewMode);
 
   const { stockSortModeOptions, stockSortModeOptionsMap } = Helpers.Sort.GetSortConfig();
 
-  const stocks = useSelector((state: StoreState) => state.stock.stocks);
+  const stocks = useAppSelector((state) => state.stock.stocks);
 
   const [showManageStockDrawer, { setTrue: openManageStockDrawer, setFalse: closeManageStockDrawer, toggle: ToggleManageStockDrawer }] =
     useBoolean(false);
@@ -408,19 +409,19 @@ function StockSortBar() {
 }
 
 function CoinSortBar() {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const {
     coinSortMode: { type: coinSortType, order: coinSortOrder },
-  } = useSelector((state: StoreState) => state.sort.sortMode);
+  } = useAppSelector((state) => state.sort.sortMode);
 
   const {
     coinViewMode: { type: coinViewType },
-  } = useSelector((state: StoreState) => state.sort.viewMode);
+  } = useAppSelector((state) => state.sort.viewMode);
 
   const { coinSortModeOptions, coinSortModeOptionsMap } = Helpers.Sort.GetSortConfig();
 
-  const coins = useSelector((state: StoreState) => state.coin.coins);
+  const coins = useAppSelector((state) => state.coin.coins);
 
   const [showManageCoinDrawer, { setTrue: openManageCoinDrawer, setFalse: closeManageCoinDrawer, toggle: ToggleManageCoinDrawer }] =
     useBoolean(false);
@@ -501,7 +502,7 @@ const SortBar: React.FC<SortBarProps> = () => {
   const { run: debounceSetVisible } = useDebounceFn(() => setVisible(true), {
     wait: 200,
   });
-  const tabsActiveKey = useSelector((state: StoreState) => state.tabs.activeKey);
+  const tabsActiveKey = useAppSelector((state) => state.tabs.activeKey);
 
   useScroll(document, () => {
     setVisible(false);

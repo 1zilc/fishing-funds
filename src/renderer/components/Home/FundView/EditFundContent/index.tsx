@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useDispatch } from 'react-redux';
 import { InputNumber, Input } from 'antd';
 
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
 import { updateFundAction } from '@/actions/fund';
+import { useAppDispatch } from '@/utils/hooks';
 import styles from './index.module.scss';
 
 export interface EditFundContentProps {
@@ -15,7 +15,7 @@ export interface EditFundContentProps {
 
 const EditFundContent: React.FC<EditFundContentProps> = (props) => {
   const { fund } = props;
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const [cyfe, setCyfe] = useState<any>(fund.cyfe);
   const [cbj, setCbj] = useState<any>(fund.cbj);
   const [zdfRange, setZdfRange] = useState<any>(fund.zdfRange);

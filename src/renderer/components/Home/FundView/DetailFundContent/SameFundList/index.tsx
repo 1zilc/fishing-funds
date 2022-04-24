@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useRequest } from 'ahooks';
-import { useSelector } from 'react-redux';
 
 import Empty from '@/components/Empty';
 import FundRow from '@/components/Home/FundView/FundRow';
 import CustomDrawer from '@/components/CustomDrawer';
-import { useFixTimeToDo, useDrawer, useCurrentWallet } from '@/utils/hooks';
-import { StoreState } from '@/reducers/types';
+import { useFixTimeToDo, useDrawer, useCurrentWallet, useAppSelector } from '@/utils/hooks';
+
 import * as Helpers from '@/helpers';
 import styles from './index.module.scss';
 
@@ -16,7 +15,7 @@ export interface SameFundListProps {
   swithSameType: string[][];
 }
 const SameFundList: React.FC<SameFundListProps> = ({ swithSameType = [] }) => {
-  const { autoFreshSetting, freshDelaySetting } = useSelector((state: StoreState) => state.setting.systemSetting);
+  const { autoFreshSetting, freshDelaySetting } = useAppSelector((state) => state.setting.systemSetting);
   const [sameFunds, setSameFunds] = useState<(Fund.ResponseItem & Fund.ExtraRow)[]>([]);
   const { data: detailFundCode, show: showDetailDrawer, set: setDetailDrawer, close: closeDetailDrawer } = useDrawer('');
   const { currentWalletCode } = useCurrentWallet();

@@ -1,14 +1,14 @@
 import React from 'react';
 import clsx from 'clsx';
 import ColorHash from 'color-hash';
-import { useDispatch, useSelector } from 'react-redux';
 
 import ArrowDownIcon from '@/static/icon/arrow-down.svg';
 import ArrowUpIcon from '@/static/icon/arrow-up.svg';
 import ArrowLine from '@/components/ArrowLine';
 import Collapse from '@/components/Collapse';
-import { StoreState } from '@/reducers/types';
+
 import { toggleCoinCollapseAction } from '@/actions/coin';
+import { useAppDispatch, useAppSelector } from '@/utils/hooks';
 import * as Utils from '@/utils';
 import * as Helpers from '@/helpers';
 import styles from './index.module.scss';
@@ -26,8 +26,8 @@ const colorHash = new ColorHash();
 
 const CoinRow: React.FC<RowProps> = (props) => {
   const { coin } = props;
-  const dispatch = useDispatch();
-  const { conciseSetting } = useSelector((state: StoreState) => state.setting.systemSetting);
+  const dispatch = useAppDispatch();
+  const { conciseSetting } = useAppSelector((state) => state.setting.systemSetting);
   const coinColor = colorHash.hex(coin.code);
   const { symbol } = Helpers.Coin.GetCurrentCoin(coin.code);
   const onDetailClick = () => {

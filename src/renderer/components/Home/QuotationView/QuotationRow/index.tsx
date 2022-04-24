@@ -1,14 +1,15 @@
 import React from 'react';
 import clsx from 'clsx';
-import { useDispatch, useSelector } from 'react-redux';
+
 import NP from 'number-precision';
 
 import ArrowDownIcon from '@/static/icon/arrow-down.svg';
 import ArrowUpIcon from '@/static/icon/arrow-up.svg';
 import ArrowLine from '@/components/ArrowLine';
 import Collapse from '@/components/Collapse';
-import { StoreState } from '@/reducers/types';
+
 import { syncFavoriteQuotationMapAction, toggleQuotationCollapse } from '@/actions/quotation';
+import { useAppDispatch, useAppSelector } from '@/utils/hooks';
 import * as Utils from '@/utils';
 import styles from './index.module.scss';
 
@@ -25,9 +26,9 @@ const arrowSize = {
 
 const QuotationRow: React.FC<RowProps> = (props) => {
   const { quotation } = props;
-  const dispatch = useDispatch();
-  const favoriteQuotationMap = useSelector((state: StoreState) => state.quotation.favoriteQuotationMap);
-  const { conciseSetting } = useSelector((state: StoreState) => state.setting.systemSetting);
+  const dispatch = useAppDispatch();
+  const favoriteQuotationMap = useAppSelector((state) => state.quotation.favoriteQuotationMap);
+  const { conciseSetting } = useAppSelector((state) => state.setting.systemSetting);
   const favorited = favoriteQuotationMap[quotation.code];
 
   function onDetailClick() {

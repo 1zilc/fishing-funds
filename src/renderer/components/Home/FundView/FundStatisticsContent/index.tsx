@@ -1,6 +1,5 @@
 import React, { useState, useMemo } from 'react';
 import { Tabs } from 'antd';
-import { useSelector } from 'react-redux';
 
 import Eye from '@/components/Eye';
 import ChartCard from '@/components/Card/ChartCard';
@@ -15,8 +14,8 @@ import AssetsConfig from '@/components/Home/FundView/FundStatisticsContent/Asset
 import FundWarehouse from '@/components/Home/FundView/FundStatisticsContent/FundWarehouse';
 import FundOverview from '@/components/Home/FundView/FundStatisticsContent/FundOverview';
 import { walletIcons } from '@/helpers/wallet';
-import { StoreState } from '@/reducers/types';
-import { useAllCyFunds } from '@/utils/hooks/utils';
+
+import { useAllCyFunds, useAppSelector } from '@/utils/hooks/utils';
 import * as Helpers from '@/helpers';
 import styles from './index.module.scss';
 
@@ -26,7 +25,7 @@ export interface FundStatisticsContentProps {
 }
 
 const FundStatisticsContent: React.FC<FundStatisticsContentProps> = (props) => {
-  const { walletConfig } = useSelector((state: StoreState) => state.wallet.config);
+  const { walletConfig } = useAppSelector((state) => state.wallet.config);
   const [statusMap, setStatusMap] = useState<Record<string, boolean>>(
     walletConfig.reduce((r, c) => {
       r[c.code] = true;

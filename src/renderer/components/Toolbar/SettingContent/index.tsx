@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import clsx from 'clsx';
-import { useSelector, useDispatch } from 'react-redux';
+
 import { InputNumber, Radio, Badge, Switch, Slider, TimePicker, Input, Tabs, Select } from 'antd';
 import dayjs from 'dayjs';
 
@@ -23,7 +23,8 @@ import WindowIcon from '@/static/icon/window.svg';
 import CalendarIcon from '@/static/icon/calendar.svg';
 import { defalutSystemSetting } from '@/helpers/setting';
 import { setSystemSettingAction } from '@/actions/setting';
-import { StoreState } from '@/reducers/types';
+
+import { useAppDispatch, useAppSelector } from '@/utils/hooks';
 import * as Enums from '@/utils/enums';
 import * as Utils from '@/utils';
 import styles from './index.module.scss';
@@ -140,7 +141,7 @@ export const APIOptions = [
 ];
 
 const SettingContent: React.FC<SettingContentProps> = (props) => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const {
     fundApiTypeSetting,
     conciseSetting,
@@ -157,8 +158,8 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
     freshDelaySetting,
     autoCheckUpdateSetting,
     timestampSetting,
-  } = useSelector((state: StoreState) => state.setting.systemSetting);
-  const updateInfo = useSelector((state: StoreState) => state.updater.updateInfo);
+  } = useAppSelector((state) => state.setting.systemSetting);
+  const updateInfo = useAppSelector((state) => state.updater.updateInfo);
   const isUpdateAvaliable = !!updateInfo.version;
 
   // 数据来源

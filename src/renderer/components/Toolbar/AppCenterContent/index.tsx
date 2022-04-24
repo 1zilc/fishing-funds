@@ -1,7 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { useBoolean, useMemoizedFn } from 'ahooks';
 import { Input } from 'antd';
-import { useSelector } from 'react-redux';
 
 import WalletIcon from '@/static/icon/wallet.svg';
 import NewsIcon from '@/static/icon/news.svg';
@@ -24,10 +23,10 @@ import StandCard from '@/components/Card/StandCard';
 import QuickSearch from '@/components/Toolbar/AppCenterContent/QuickSearch';
 import WebAppIcon from '@/components/Toolbar/AppCenterContent/WebAppIcon';
 import SearchGroup from '@/components/Toolbar/AppCenterContent/SearchGroup';
-import { StoreState } from '@/reducers/types';
+
 import * as Enums from '@/utils/enums';
 import * as Utils from '@/utils';
-import { useOpenWebView } from '@/utils/hooks';
+import { useOpenWebView, useAppSelector } from '@/utils/hooks';
 import styles from './index.module.scss';
 
 const ManageFundContent = React.lazy(() => import('@/components/Home/FundView/ManageFundContent'));
@@ -98,7 +97,7 @@ const searchPlaceholders = ['输入网站地址', '搜索股票、基金、板�
 
 const AppCenterContent: React.FC<AppCenterContentProps> = (props) => {
   const [keyword, setKeyword] = useState('');
-  const { webConfig } = useSelector((state: StoreState) => state.web.config);
+  const { webConfig } = useAppSelector((state) => state.web.config);
   const [showManageFundDrawer, { setTrue: openManageFundDrawer, setFalse: closeManageFundDrawer }] = useBoolean(false);
   const [showManageWalletDrawer, { setTrue: openManageWalletDrawer, setFalse: closeManageWalletDrawer }] = useBoolean(false);
   const [showManageZindexDrawer, { setTrue: openManageZindexDrawer, setFalse: closeManageZindexDrawer }] = useBoolean(false);

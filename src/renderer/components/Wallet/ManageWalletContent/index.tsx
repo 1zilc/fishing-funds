@@ -1,5 +1,5 @@
-import React, { useEffect, useState, useMemo } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import React, { useMemo } from 'react';
+
 import { ReactSortable } from 'react-sortablejs';
 
 import AddIcon from '@/static/icon/add.svg';
@@ -7,8 +7,8 @@ import Empty from '@/components/Empty';
 import CustomDrawer from '@/components/CustomDrawer';
 import WalletRow from '@/components/Wallet/WalletRow';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
-import { StoreState } from '@/reducers/types';
-import { useDrawer, useAutoDestroySortableRef } from '@/utils/hooks';
+
+import { useDrawer, useAutoDestroySortableRef, useAppDispatch, useAppSelector } from '@/utils/hooks';
 import { setWalletConfigAction, selectWalletAction } from '@/actions/wallet';
 import styles from './index.module.scss';
 
@@ -21,10 +21,10 @@ export interface ManageWalletContentProps {
 }
 
 const ManageWalletContent: React.FC<ManageWalletContentProps> = (props) => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const sortableRef = useAutoDestroySortableRef();
-  const currentWalletCode = useSelector((state: StoreState) => state.wallet.currentWalletCode);
-  const { codeMap, walletConfig } = useSelector((state: StoreState) => state.wallet.config);
+  const currentWalletCode = useAppSelector((state) => state.wallet.currentWalletCode);
+  const { codeMap, walletConfig } = useAppSelector((state) => state.wallet.config);
   const { show: showAddDrawer, set: setAddDrawer, close: closeAddDrawer } = useDrawer(null);
   const sortWalletConfig = useMemo(() => walletConfig.map((_) => ({ ..._, id: _.code })), [walletConfig]);
 

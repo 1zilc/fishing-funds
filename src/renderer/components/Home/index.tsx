@@ -1,7 +1,6 @@
 import React, { createContext, useContext, useState } from 'react';
 import clsx from 'clsx';
 import { Tabs } from 'antd';
-import { useSelector } from 'react-redux';
 
 import FundView from '@/components/Home/FundView';
 import ZindexView from '@/components/Home/ZindexView';
@@ -19,8 +18,8 @@ import GroupTab from '@/components/GroupTab';
 import GlobalStyles from '@/components/GlobalStyles';
 import WebViewer from '@/components/WebViewer';
 import { stockTypesConfig } from '@/components/Toolbar/AppCenterContent/StockSearch';
-import { StoreState } from '@/reducers/types';
-import { useNativeThemeColor, useCurrentWallet } from '@/utils/hooks';
+
+import { useNativeThemeColor, useCurrentWallet, useAppSelector } from '@/utils/hooks';
 import * as Enums from '@/utils/enums';
 import * as CONST from '@/constants';
 import * as Helpers from '@/helpers';
@@ -65,7 +64,7 @@ const FundGroup = () => {
 };
 
 const ZindexGroup = () => {
-  // const { codeMap: zindexCodeMap } = useSelector((state: StoreState) => state.zindex.config);
+  // const { codeMap: zindexCodeMap } = useAppSelector((state) => state.zindex.config);
 
   return (
     <GroupTab tabKey={Enums.TabKeyType.Zindex}>
@@ -83,7 +82,7 @@ const ZindexGroup = () => {
 };
 
 const QuotationGroup = () => {
-  const favoriteQuotationMap = useSelector((state: StoreState) => state.quotation.favoriteQuotationMap);
+  const favoriteQuotationMap = useAppSelector((state) => state.quotation.favoriteQuotationMap);
 
   return (
     <GroupTab tabKey={Enums.TabKeyType.Quotation}>
@@ -104,7 +103,7 @@ const QuotationGroup = () => {
 };
 
 const StockGroup = () => {
-  const { codeMap: stockCodeMap } = useSelector((state: StoreState) => state.stock.config);
+  const { codeMap: stockCodeMap } = useAppSelector((state) => state.stock.config);
 
   return (
     <GroupTab tabKey={Enums.TabKeyType.Stock}>
@@ -137,7 +136,7 @@ const CoinGroup = () => {
 };
 
 const Body = () => {
-  const tabsActiveKey = useSelector((state: StoreState) => state.tabs.activeKey);
+  const tabsActiveKey = useAppSelector((state) => state.tabs.activeKey);
 
   return (
     <Tabs renderTabBar={() => <></>} activeKey={String(tabsActiveKey)} animated={{ tabPane: true, inkBar: false }} destroyInactiveTabPane>

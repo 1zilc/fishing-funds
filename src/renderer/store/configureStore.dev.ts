@@ -1,4 +1,5 @@
-import { createStore, applyMiddleware, compose } from 'redux';
+import { configureStore as createStore } from '@reduxjs/toolkit';
+import { applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
 import { routerActions } from 'connected-react-router';
 import { createLogger } from 'redux-logger';
@@ -59,7 +60,9 @@ const configureStore = (initialState?: StoreState) => {
   const enhancer = composeEnhancers(...enhancers);
 
   // Create Store
-  const store = createStore(rootReducer, enhancer);
+  const store = createStore({
+    reducer: rootReducer,
+  });
 
   if (module.hot) {
     module.hot.accept(

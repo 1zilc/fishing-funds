@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+
 import { useDebounceFn } from 'ahooks';
 import { Input, InputNumber, message } from 'antd';
 
 import CustomDrawer from '@/components/CustomDrawer';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
 import { addFundAction } from '@/actions/fund';
-import { StoreState } from '@/reducers/types';
-import { useDrawer, useCurrentWallet } from '@/utils/hooks';
+
+import { useDrawer, useCurrentWallet, useAppDispatch, useAppSelector } from '@/utils/hooks';
 import * as Enums from '@/utils/enums';
 import * as Helpers from '@/helpers';
 import styles from './index.module.scss';
@@ -21,7 +21,7 @@ export interface AddFundContentProps {
 
 const AddFundContent: React.FC<AddFundContentProps> = (props) => {
   const { defaultCode } = props;
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const [name, setName] = useState<string>('');
   const [code, setCode] = useState<string>('');
@@ -31,7 +31,7 @@ const AddFundContent: React.FC<AddFundContentProps> = (props) => {
   const [jzNotice, setJzNotice] = useState<any>();
   const [memo, setMemo] = useState<any>();
   const [fundList, setFundlist] = useState<Fund.RemoteFund[]>([]);
-  const remoteFunds = useSelector((state: StoreState) => state.fund.remoteFunds);
+  const remoteFunds = useAppSelector((state) => state.fund.remoteFunds);
   const { currentWalletFundsCodeMap: codeMap } = useCurrentWallet();
   const { data: detailCode, show: showDetailDrawer, set: setDetailDrawer, close: closeDetailDrawer } = useDrawer('');
 

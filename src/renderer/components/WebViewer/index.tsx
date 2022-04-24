@@ -1,7 +1,6 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { Menu, Dropdown, Progress, Switch } from 'antd';
 import { useBoolean, useMemoizedFn, useEventListener } from 'ahooks';
-import { useSelector, useDispatch } from 'react-redux';
 
 import StarIcon from '@/static/icon/star.svg';
 import CopyIcon from '@/static/icon/copy.svg';
@@ -13,9 +12,9 @@ import ToolsIcon from '@/static/icon/tools.svg';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
 import CustomDrawer from '@/components/CustomDrawer';
 import Empty from '@/components/Empty';
-import { StoreState } from '@/reducers/types';
+
 import { closeWebAction, addWebAction, deleteWebAction, setWebPhoneAction } from '@/actions/web';
-import { useDrawer } from '@/utils/hooks';
+import { useDrawer, useAppDispatch, useAppSelector } from '@/utils/hooks';
 import * as CONST from '@/constants';
 import * as Enums from '@/utils/enums';
 import styles from './index.module.scss';
@@ -30,9 +29,9 @@ const defaultAgent =
   'Mozilla/5.0 (iPhone; CPU iPhone OS 10_3_1 like Mac OS X) AppleWebKit/603.1.30 (KHTML, like Gecko) Version/10.0 Mobile/14E304 Safari/602.1';
 
 const Content = () => {
-  const dispatch = useDispatch();
-  const { url, phone, show, title } = useSelector((state: StoreState) => state.web.view);
-  const { codeMap } = useSelector((state: StoreState) => state.web.config);
+  const dispatch = useAppDispatch();
+  const { url, phone, show, title } = useAppSelector((state) => state.web.view);
+  const { codeMap } = useAppSelector((state) => state.web.config);
   const viewRef = useRef<any>(null);
   const [loading, { setTrue: setLoadingTrue, setFalse: setLoadingFalse }] = useBoolean(false);
   const [done, { setTrue: setDoneTrue, setFalse: setDoneFalse }] = useBoolean(false);
@@ -223,7 +222,7 @@ const Content = () => {
 };
 // TODO:useragent待随机处理
 const WebViewer: React.FC<ViewerContentProps> = () => {
-  const { show } = useSelector((state: StoreState) => state.web.view);
+  const { show } = useAppSelector((state) => state.web.view);
 
   return (
     <CustomDrawer show={show} zIndex={CONST.DEFAULT.DRAWER_ZINDEX_HEIGHT}>

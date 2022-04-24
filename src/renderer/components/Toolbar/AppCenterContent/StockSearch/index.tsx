@@ -1,13 +1,13 @@
 import React from 'react';
 import clsx from 'clsx';
-import { useSelector, useDispatch } from 'react-redux';
+
 import { Tabs, message } from 'antd';
 import { useMemoizedFn } from 'ahooks';
 
 import CustomDrawer from '@/components/CustomDrawer';
 import { addStockAction } from '@/actions/stock';
-import { StoreState } from '@/reducers/types';
-import { useDrawer } from '@/utils/hooks';
+
+import { useDrawer, useAppDispatch, useAppSelector } from '@/utils/hooks';
 import * as Helpers from '@/helpers';
 import * as Enums from '@/utils/enums';
 
@@ -33,8 +33,8 @@ export const stockTypesConfig = [
 
 const StockSearch: React.FC<StockSearchProps> = (props) => {
   const { groupList } = props;
-  const dispatch = useDispatch();
-  const { codeMap } = useSelector((state: StoreState) => state.stock.config);
+  const dispatch = useAppDispatch();
+  const { codeMap } = useAppSelector((state) => state.stock.config);
   const { data: detailData, show: showDetailDrawer, set: setDetailDrawer, close: closeDetailDrawer } = useDrawer({ secid: '', type: 0 });
 
   const onAdd = useMemoizedFn(async (secid: string, type: number) => {

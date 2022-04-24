@@ -1,6 +1,5 @@
-import { useLayoutEffect, useState, useEffect, useMemo, useRef } from 'react';
-import { useInterval, useBoolean, useThrottleFn, useSize } from 'ahooks';
-import { useDispatch, useSelector } from 'react-redux';
+import { useLayoutEffect, useState, useEffect, useMemo } from 'react';
+import { useInterval } from 'ahooks';
 import { compose } from 'redux';
 import { Base64 } from 'js-base64';
 import dayjs from 'dayjs';
@@ -12,8 +11,16 @@ import { setFundConfigAction } from '@/actions/fund';
 import { setTabActiveKeyAction } from '@/actions/tabs';
 import { selectWalletAction, toggleEyeStatusAction } from '@/actions/wallet';
 import { setAdjustmentNotificationDateAction, clearAdjustmentNotificationDateAction } from '@/actions/setting';
-import { StoreState } from '@/reducers/types';
-import { useWorkDayTimeToDo, useFixTimeToDo, useAfterMounted, useCurrentWallet, useFreshFunds, useAllCyFunds } from '@/utils/hooks';
+
+import {
+  useWorkDayTimeToDo,
+  useFixTimeToDo,
+  useAfterMounted,
+  useCurrentWallet,
+  useFreshFunds,
+  useAppDispatch,
+  useAppSelector,
+} from '@/utils/hooks';
 import * as Utils from '@/utils';
 import * as CONST from '@/constants';
 import * as Adapters from '@/utils/adpters';
@@ -24,8 +31,8 @@ const { invoke, dialog, ipcRenderer, clipboard, app } = window.contextModules.el
 const { saveString, encodeFF, decodeFF, readFile } = window.contextModules.io;
 
 export function useUpdater() {
-  const dispatch = useDispatch();
-  const { autoCheckUpdateSetting } = useSelector((state: StoreState) => state.setting.systemSetting);
+  const dispatch = useAppDispatch();
+  const { autoCheckUpdateSetting } = useAppSelector((state) => state.setting.systemSetting);
   // 2小时检查一次版本
   useInterval(() => autoCheckUpdateSetting && ipcRenderer.invoke('check-update'), 1000 * 60 * 60 * 2, {
     immediate: true,
@@ -44,9 +51,9 @@ export function useUpdater() {
 }
 
 export function useAdjustmentNotification() {
-  const dispatch = useDispatch();
-  const systemSetting = useSelector((state: StoreState) => state.setting.systemSetting);
-  const lastNotificationDate = useSelector((state: StoreState) => state.setting.adjustmentNotificationDate);
+  const dispatch = useAppDispatch();
+  const systemSetting = useAppSelector((state) => state.setting.systemSetting);
+  const lastNotificationDate = useAppSelector((state) => state.setting.adjustmentNotificationDate);
   const { adjustmentNotificationSetting, adjustmentNotificationTimeSetting } = systemSetting;
 
   useInterval(
@@ -84,8 +91,8 @@ export function useAdjustmentNotification() {
 export function useRiskNotification() {
   const [zdfRangeMap, setZdfRangeMap] = useState<Record<string, boolean>>({});
   const [jzNoticeMap, setJzNoticeMap] = useState<Record<string, boolean>>({});
-  const systemSetting = useSelector((state: StoreState) => state.setting.systemSetting);
-  const wallets = useSelector((state: StoreState) => state.wallet.wallets);
+  const systemSetting = useAppSelector((state) => state.setting.systemSetting);
+  const wallets = useAppSelector((state) => state.wallet.wallets);
   const { riskNotificationSetting } = systemSetting;
 
   useInterval(
@@ -144,7 +151,7 @@ export function useRiskNotification() {
 }
 
 export function useFundsClipboard() {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     ipcRenderer.on('clipboard-funds-import', async (e, data) => {
@@ -227,7 +234,7 @@ export function useFundsClipboard() {
 }
 
 export function useBootStrap() {
-  const { freshDelaySetting, autoFreshSetting } = useSelector((state: StoreState) => state.setting.systemSetting);
+  const { freshDelaySetting, autoFreshSetting } = useAppSelector((state) => state.setting.systemSetting);
   const runLoadRemoteFunds = () => Helpers.Fund.LoadRemoteFunds();
   const runLoadFundRatingMap = () => Helpers.Fund.LoadFundRatingMap();
   const runLoadRemoteCoins = () => Helpers.Coin.LoadRemoteCoins();
@@ -280,13 +287,11 @@ export function useBootStrap() {
 }
 
 export function useMappingLocalToSystemSetting() {
-  const dispatch = useDispatch();
-  const systemThemeSetting = useSelector((state: StoreState) => state.setting.systemSetting.systemThemeSetting);
-  const autoStartSetting = useSelector((state: StoreState) => state.setting.systemSetting.autoStartSetting);
-  const lowKeySetting = useSelector((state: StoreState) => state.setting.systemSetting.lowKeySetting);
-  const adjustmentNotificationTimeSetting = useSelector(
-    (state: StoreState) => state.setting.systemSetting.adjustmentNotificationTimeSetting
-  );
+  const dispatch = useAppDispatch();
+  const systemThemeSetting = useAppSelector((state) => state.setting.systemSetting.systemThemeSetting);
+  const autoStartSetting = useAppSelector((state) => state.setting.systemSetting.autoStartSetting);
+  const lowKeySetting = useAppSelector((state) => state.setting.systemSetting.lowKeySetting);
+  const adjustmentNotificationTimeSetting = useAppSelector((state) => state.setting.systemSetting.adjustmentNotificationTimeSetting);
   useEffect(() => {
     Utils.UpdateSystemTheme(systemThemeSetting);
   }, [systemThemeSetting]);
@@ -306,9 +311,9 @@ export function useMappingLocalToSystemSetting() {
 }
 
 export function useTrayContent() {
-  const { trayContentSetting } = useSelector((state: StoreState) => state.setting.systemSetting);
-  const currentWalletCode = useSelector((state: StoreState) => state.wallet.currentWalletCode);
-  const wallets = useSelector((state: StoreState) => state.wallet.wallets);
+  const { trayContentSetting } = useAppSelector((state) => state.setting.systemSetting);
+  const currentWalletCode = useAppSelector((state) => state.wallet.currentWalletCode);
+  const wallets = useAppSelector((state) => state.wallet.wallets);
   const {
     currentWalletState: { funds },
   } = useCurrentWallet();
@@ -350,9 +355,9 @@ export function useTrayContent() {
 }
 
 export function useUpdateContextMenuWalletsState() {
-  const dispatch = useDispatch();
-  const wallets = useSelector((state: StoreState) => state.wallet.wallets);
-  const currentWalletCode = useSelector((state: StoreState) => state.wallet.currentWalletCode);
+  const dispatch = useAppDispatch();
+  const wallets = useAppSelector((state) => state.wallet.wallets);
+  const currentWalletCode = useAppSelector((state) => state.wallet.currentWalletCode);
   const freshFunds = useFreshFunds(0);
 
   useEffect(() => {
@@ -474,11 +479,11 @@ export function useAllConfigBackup() {
 }
 
 export function useTouchBar() {
-  const dispatch = useDispatch();
-  const zindexs = useSelector((state: StoreState) => state.zindex.zindexs);
+  const dispatch = useAppDispatch();
+  const zindexs = useAppSelector((state) => state.zindex.zindexs);
   const wallet = useCurrentWallet();
-  const activeKey = useSelector((state: StoreState) => state.tabs.activeKey);
-  const eyeStatus = useSelector((state: StoreState) => state.wallet.eyeStatus);
+  const activeKey = useAppSelector((state) => state.tabs.activeKey);
+  const eyeStatus = useAppSelector((state) => state.wallet.eyeStatus);
 
   useEffect(() => {
     ipcRenderer.invoke(

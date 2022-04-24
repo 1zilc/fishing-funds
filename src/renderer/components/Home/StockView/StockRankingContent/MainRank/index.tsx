@@ -1,5 +1,5 @@
 import React, { PropsWithChildren, useState, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+
 import { Table, Divider } from 'antd';
 import { useRequest } from 'ahooks';
 import clsx from 'clsx';
@@ -7,7 +7,7 @@ import clsx from 'clsx';
 import CustomDrawer from '@/components/CustomDrawer';
 import TypeSelection from '@/components/TypeSelection';
 import { useDrawer } from '@/utils/hooks';
-import { StoreState } from '@/reducers/types';
+
 import * as Services from '@/services';
 import * as Utils from '@/utils';
 import styles from './index.module.scss';
@@ -29,8 +29,8 @@ const RenderColorCol = ({ value }: { value: string }) => {
 
 const MainRank: React.FC<PropsWithChildren<MainRankProps>> = () => {
   const [dayType, setDayType] = useState(dayTypeList[0]);
-  const [data, setData] = useState([]);
-  const { codeMap, stockConfig } = useSelector((state: StoreState) => state.stock.config);
+  const [data, setData] = useState<any[]>([]);
+  const { codeMap, stockConfig } = useAppSelector((state) => state.stock.config);
 
   const { data: detailSecid, show: showDetailDrawer, set: setDetailDrawer, close: closeDetailDrawer } = useDrawer('');
 

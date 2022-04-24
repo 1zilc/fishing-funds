@@ -1,5 +1,4 @@
 import React, { useMemo } from 'react';
-import { useDispatch } from 'react-redux';
 import { ReactSortable } from 'react-sortablejs';
 import clsx from 'clsx';
 
@@ -14,8 +13,7 @@ import BellsFillIcon from '@/static/icon/bells-fill.svg';
 import CustomDrawer from '@/components/CustomDrawer';
 import Empty from '@/components/Empty';
 import { deleteFundAction, setFundConfigAction, updateFundAction } from '@/actions/fund';
-import { useSyncFixFundSetting, useDrawer, useCurrentWallet, useAutoDestroySortableRef } from '@/utils/hooks';
-
+import { useSyncFixFundSetting, useDrawer, useCurrentWallet, useAutoDestroySortableRef, useAppDispatch } from '@/utils/hooks';
 import styles from './index.module.scss';
 
 const AddFundContent = React.lazy(() => import('@/components/Home/FundView/AddFundContent'));
@@ -26,7 +24,7 @@ export interface OptionalProps {}
 const { dialog, clipboard } = window.contextModules.electron;
 
 const Optional: React.FC<OptionalProps> = () => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const sortableRef = useAutoDestroySortableRef();
   const { show: showAddDrawer, set: setAddDrawer, close: closeAddDrawer } = useDrawer(null);
   const { currentWalletFundsConfig: fundConfig, currentWalletFundsCodeMap: codeMap, currentWalletCode } = useCurrentWallet();

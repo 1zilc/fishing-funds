@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import ChartCard from '@/components/Card/ChartCard';
-import { useSelector } from 'react-redux';
+import { useAppSelector } from '@/utils/hooks';
 
-import { StoreState } from '@/reducers/types';
 import * as Services from '@/services';
 import * as Enums from '@/utils/enums';
 import styles from './index.module.scss';
@@ -21,7 +20,7 @@ export interface CompanyProps {
 
 const Company: React.FC<CompanyProps> = ({ secid }) => {
   const [company, setCompany] = useState<Stock.Company>(defaultCompany);
-  const { codeMap } = useSelector((state: StoreState) => state.stock.config);
+  const { codeMap } = useAppSelector((state) => state.stock.config);
   const stock = codeMap[secid];
 
   async function getCompany(type: Enums.StockMarketType) {

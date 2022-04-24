@@ -1,6 +1,5 @@
 import React, { useMemo } from 'react';
 import clsx from 'clsx';
-import { useDispatch, useSelector } from 'react-redux';
 
 import EditIcon from '@/static/icon/edit.svg';
 import ArrowDownIcon from '@/static/icon/arrow-down.svg';
@@ -8,8 +7,7 @@ import ArrowUpIcon from '@/static/icon/arrow-up.svg';
 import Collapse from '@/components/Collapse';
 import MemoNote from '@/components/MemoNote';
 import { toggleFundCollapseAction } from '@/actions/fund';
-import { StoreState } from '@/reducers/types';
-import { useCurrentWallet } from '@/utils/hooks';
+import { useCurrentWallet, useAppDispatch, useAppSelector } from '@/utils/hooks';
 import * as Utils from '@/utils';
 import * as Helpers from '@/helpers';
 import * as Enums from '@/utils/enums';
@@ -29,9 +27,9 @@ const arrowSize = {
 
 const FundRow: React.FC<RowProps> = (props) => {
   const { fund, readOnly } = props;
-  const dispatch = useDispatch();
-  const { conciseSetting } = useSelector((state: StoreState) => state.setting.systemSetting);
-  const eyeStatus = useSelector((state: StoreState) => state.wallet.eyeStatus);
+  const dispatch = useAppDispatch();
+  const { conciseSetting } = useAppSelector((state) => state.setting.systemSetting);
+  const eyeStatus = useAppSelector((state) => state.wallet.eyeStatus);
   const { currentWalletCode } = useCurrentWallet();
   const calcFundResult = useMemo(() => Helpers.Fund.CalcFund(fund, currentWalletCode), [fund, currentWalletCode]);
   const { isFix } = calcFundResult;
