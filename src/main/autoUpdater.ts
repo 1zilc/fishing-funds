@@ -1,4 +1,4 @@
-import { NativeImage, BrowserWindow, dialog, shell } from 'electron';
+import { NativeImage, dialog, shell, app } from 'electron';
 import { Menubar } from 'menubar';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
@@ -10,6 +10,11 @@ export default class AppUpdater {
   constructor(conf: { icon?: NativeImage; mb: Menubar }) {
     autoUpdater.autoDownload = false;
     log.transports.file.level = 'info';
+    // Object.defineProperty(app, 'isPackaged', {
+    //   get() {
+    //     return true;
+    //   },
+    // });
     // (autoUpdater as any).currentVersion = '1.0.0';
     autoUpdater.logger = log;
     autoUpdater.setFeedURL('https://download.1zilc.top');

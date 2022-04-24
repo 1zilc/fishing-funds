@@ -75,9 +75,7 @@ function main() {
     tray.setTitle(config);
   });
   ipcMain.handle('check-update', (event) => {
-    if (app.isPackaged) {
-      appUpdater.checkUpdate('renderer');
-    }
+    appUpdater.checkUpdate('renderer');
   });
   ipcMain.handle('get-storage-config', async (event, config) => {
     return storage.get(config.key, config.init);
