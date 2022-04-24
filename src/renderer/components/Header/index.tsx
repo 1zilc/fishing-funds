@@ -1,4 +1,4 @@
-import React, { PropsWithChildren, createContext, useContext } from 'react';
+import React, { PropsWithChildren, createContext, useContext, useDeferredValue } from 'react';
 import { useScroll } from 'ahooks';
 import clsx from 'clsx';
 import styles from './index.module.scss';
@@ -18,7 +18,7 @@ export function useHeaderContext() {
 
 const Header: React.FC<PropsWithChildren<Record<string, unknown>>> = (props) => {
   const position = useScroll(document, (val) => val.top <= 520);
-  const miniMode = !!(position && position.top > 40);
+  const miniMode = useDeferredValue(!!(position && position.top > 40));
 
   return (
     <HeaderContext.Provider

@@ -123,10 +123,11 @@ export function useResizeEchart(scale = 1, unlimited?: boolean) {
 
   useEffect(() => {
     if (size?.width) {
-      const height = size?.width * scale;
+      const height = size.width * scale;
       chartInstanceRef.current?.resize({ height: unlimited ? height : height > 200 ? 200 : height });
     }
   }, [size?.width, unlimited]);
+
   return { ref: chartRef, chartInstance: chartInstanceRef.current };
 }
 
