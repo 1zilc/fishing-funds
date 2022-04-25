@@ -1,17 +1,12 @@
 import { batch } from 'react-redux';
 
-import { ThunkAction } from '@/reducers/types';
+import { TypedThunk } from '@/store';
+import { syncCoins, syncCoinsConfig, setRemoteCoins } from '@/store/features/coin';
 import * as Utils from '@/utils';
 import * as CONST from '@/constants';
 import * as Helpers from '@/helpers';
 
-export const SET_COINS_LOADING = 'SET_COINS_LOADING';
-export const SYNC_COINS = 'SYNC_COINS';
-export const SYNC_COINS_CONFIG = 'SYNC_COINS_CONFIG';
-export const SET_REMOTE_COINS_LOADING = 'SET_REMOTE_COINS_LOADING';
-export const SET_REMOTE_COINS = 'SET_REMOTE_COINS';
-
-export function addCoinAction(coin: Coin.SettingItem): ThunkAction {
+export function addCoinAction(coin: Coin.SettingItem): TypedThunk {
   return (dispatch, getState) => {
     try {
       const { coinConfig } = Helpers.Coin.GetCoinConfig();
@@ -25,7 +20,7 @@ export function addCoinAction(coin: Coin.SettingItem): ThunkAction {
   };
 }
 
-export function deleteCoinAction(code: string): ThunkAction {
+export function deleteCoinAction(code: string): TypedThunk {
   return (dispatch, getState) => {
     try {
       const { coinConfig } = Helpers.Coin.GetCoinConfig();
@@ -41,25 +36,24 @@ export function deleteCoinAction(code: string): ThunkAction {
   };
 }
 
-export function setCoinConfigAction(coinConfig: Coin.SettingItem[]): ThunkAction {
-  return (dispatch, getState) => {
+export function setCoinConfigAction(coinConfig: Coin.SettingItem[]): TypedThunk {
+  return async (dispatch, getState) => {
     try {
       const {
         coin: { coins },
       } = getState();
       const codeMap = Helpers.Coin.GetCodeMap(coinConfig);
+      await Utils.SetStorage(CONST.STORAGE.COIN_SETTING, coinConfig);
 
       batch(() => {
-        dispatch({ type: SYNC_COINS_CONFIG, payload: { coinConfig, codeMap } });
+        dispatch(syncCoinsConfig({ coinConfig, codeMap }));
         dispatch(syncCoinsStateAction(coins));
       });
-
-      Utils.SetStorage(CONST.STORAGE.COIN_SETTING, coinConfig);
     } catch (error) {}
   };
 }
 
-export function sortCoinsAction(): ThunkAction {
+export function sortCoinsAction(): TypedThunk {
   return (dispatch, getState) => {
     try {
       const {
@@ -71,7 +65,7 @@ export function sortCoinsAction(): ThunkAction {
   };
 }
 
-export function sortCoinsCachedAction(responseCoins: Coin.ResponseItem[]): ThunkAction {
+export function sortCoinsCachedAction(responseCoins: Coin.ResponseItem[]): TypedThunk {
   return (dispatch, getState) => {
     try {
       const {
@@ -107,7 +101,7 @@ export function sortCoinsCachedAction(responseCoins: Coin.ResponseItem[]): Thunk
   };
 }
 
-export function toggleCoinCollapseAction(coin: Coin.ResponseItem & Coin.ExtraRow): ThunkAction {
+export function toggleCoinCollapseAction(coin: Coin.ResponseItem & Coin.ExtraRow): TypedThunk {
   return (dispatch, getState) => {
     try {
       const {
@@ -126,7 +120,7 @@ export function toggleCoinCollapseAction(coin: Coin.ResponseItem & Coin.ExtraRow
   };
 }
 
-export function toggleAllCoinsCollapseAction(): ThunkAction {
+export function toggleAllCoinsCollapseAction(): TypedThunk {
   return async (dispatch, getState) => {
     try {
       const {
@@ -142,17 +136,17 @@ export function toggleAllCoinsCollapseAction(): ThunkAction {
   };
 }
 
-export function syncCoinsStateAction(coins: (Coin.ResponseItem & Coin.ExtraRow)[]): ThunkAction {
+export function syncCoinsStateAction(coins: (Coin.ResponseItem & Coin.ExtraRow)[]): TypedThunk {
   return (dispatch, getState) => {
     try {
       const { codeMap } = Helpers.Coin.GetCoinConfig();
       const filterCoins = coins.filter(({ code }) => codeMap[code]);
-      dispatch({ type: SYNC_COINS, payload: filterCoins });
+      dispatch(syncCoins(filterCoins));
     } catch (error) {}
   };
 }
 
-export function setRemoteCoinsAction(newRemoteCoins: Coin.RemoteCoin[]): ThunkAction {
+export function setRemoteCoinsAction(newRemoteCoins: Coin.RemoteCoin[]): TypedThunk {
   return async (dispatch, getState) => {
     try {
       const {
@@ -171,9 +165,9 @@ export function setRemoteCoinsAction(newRemoteCoins: Coin.RemoteCoin[]): ThunkAc
 
       const remoteMap = { ...oldRemoteMap, ...newRemoteMap };
 
-      dispatch({ type: SET_REMOTE_COINS, payload: Object.values(remoteMap) });
+      await Utils.SetStorage(CONST.STORAGE.REMOTE_COIN_MAP, remoteMap);
 
-      Utils.SetStorage(CONST.STORAGE.REMOTE_COIN_MAP, remoteMap);
+      dispatch(setRemoteCoins(Object.values(remoteMap)));
     } catch (error) {}
   };
 }

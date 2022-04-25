@@ -1,7 +1,7 @@
 import React from 'react';
 import classnemes from 'clsx';
 
-import { setTabActiveKeyAction } from '@/actions/tabs';
+import { setTabsActiveKeyAction } from '@/store/features/tabs';
 import { useAppDispatch, useAppSelector } from '@/utils/hooks';
 import * as Enums from '@/utils/enums';
 import styles from './index.module.scss';
@@ -50,7 +50,7 @@ const TabsBar: React.FC<TabsBarProps> = () => {
               className={classnemes(styles.tab, {
                 [styles.active]: tabsActiveKey === tab.key,
               })}
-              onClick={() => dispatch(setTabActiveKeyAction(tab.key))}
+              onClick={() => dispatch(setTabsActiveKeyAction(tab.key))}
             >
               {tab.name}
             </div>

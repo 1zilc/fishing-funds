@@ -1,6 +1,7 @@
 import { batch } from 'react-redux';
 import store from '@/store';
-import { SET_QUOTATIONS_LOADING, sortQuotationsCachedAction } from '@/actions/quotation';
+import { sortQuotationsCachedAction } from '@/actions/quotation';
+import { setQuotationsLoading } from '@/store/features/quotation';
 import * as Services from '@/services';
 import * as Utils from '@/utils';
 import * as CONST from '@/constants';
@@ -48,15 +49,15 @@ export function SortQuotations(responseQuotations: Quotation.ResponseItem[]) {
   return sortList;
 }
 
-export async function LoadQuotations(loading?: boolean) {
+export async function LoadQuotations(loading: boolean) {
   try {
-    store.dispatch({ type: SET_QUOTATIONS_LOADING, payload: loading && true });
+    store.dispatch(setQuotationsLoading(loading));
     const responseQuotations = await GetQuotations();
     batch(() => {
       store.dispatch(sortQuotationsCachedAction(responseQuotations));
-      store.dispatch({ type: SET_QUOTATIONS_LOADING, payload: false });
+      store.dispatch(setQuotationsLoading(false));
     });
   } catch (error) {
-    store.dispatch({ type: SET_QUOTATIONS_LOADING, payload: false });
+    store.dispatch(setQuotationsLoading(false));
   }
 }

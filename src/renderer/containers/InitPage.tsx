@@ -4,14 +4,14 @@ import { batch } from 'react-redux';
 import LoadingScreen from '@/components/LoadingScreen';
 import { setRemoteFundsAction, setFundRatingMapAction } from '@/actions/fund';
 import { setZindexConfigAction } from '@/actions/zindex';
-import { SYNC_FAVORITE_QUOTATION_MAP } from '@/actions/quotation';
 import { setSystemSettingAction, setAdjustmentNotificationDateAction } from '@/actions/setting';
 import { setWalletConfigAction, changeEyeStatusAction, selectWalletAction } from '@/actions/wallet';
 import { setStockConfigAction } from '@/actions/stock';
-import { setCoinConfigAction, setRemoteCoinsAction } from '@/actions/coin';
+import { setCoinConfigAction, setRemoteCoinsAction, deleteCoinAction } from '@/actions/coin';
 import { syncSortModeAction, syncViewModeAction } from '@/actions/sort';
 import { setWebConfigAction } from '@/actions/web';
 import { useDrawer, useAppDispatch } from '@/utils/hooks';
+import { syncFavoriteQuotationMap } from '@/store/features/quotation';
 import * as CONST from '@/constants';
 import * as Utils from '@/utils';
 import * as Helpers from '@/helpers';
@@ -47,7 +47,7 @@ const InitPage = () => {
 
     setLoading('加载关注板块配置...');
     const favoriteQuotationMap = await Utils.GetStorage(CONST.STORAGE.FAVORITE_QUOTATION_MAP, {});
-    dispatch({ type: SYNC_FAVORITE_QUOTATION_MAP, payload: favoriteQuotationMap });
+    dispatch(syncFavoriteQuotationMap(favoriteQuotationMap));
 
     setLoading('加载股票配置...');
     const stockSetting = await Utils.GetStorage(CONST.STORAGE.STOCK_SETTING, []);

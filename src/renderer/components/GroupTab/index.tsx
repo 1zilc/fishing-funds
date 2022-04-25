@@ -1,7 +1,7 @@
 import React, { PropsWithChildren } from 'react';
 import { Tabs } from 'antd';
 
-import { setTabskeyMapAction } from '@/actions/tabs';
+import { setTabsKeyMapAction } from '@/store/features/tabs';
 import { useAppDispatch, useAppSelector } from '@/utils/hooks';
 import * as Enums from '@/utils/enums';
 
@@ -28,7 +28,7 @@ const GroupTap: React.FC<PropsWithChildren<GroupTapProps>> = (props) => {
       tabBarGutter={15}
       tabBarStyle={groupBarStyle}
       destroyInactiveTabPane
-      onChange={(e) => dispatch(setTabskeyMapAction(tabKey, Number(e)))}
+      onChange={(e) => dispatch(setTabsKeyMapAction({ key: tabKey, activeKey: Number(e) }))}
     >
       {props.children}
     </Tabs>

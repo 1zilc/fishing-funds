@@ -1,52 +1,48 @@
-import { ThunkAction } from '@/reducers/types';
+import { TypedThunk } from '@/store';
+import { setWebUrl, setWebPhone, setWeb, syncWebConfig } from '@/store/features/web';
 import * as Helpers from '@/helpers';
 import * as Utils from '@/utils';
 import * as CONST from '@/constants';
 
-export const SET_WEB_URL = 'SET_WEB_URL';
-export const SET_WEB_PHONE = 'SET_WEB_PHONE';
-export const SET_WEB = 'SET_WEB';
-export const SYNC_WEB_CONFIG = 'SYNC_WEB_CONFIG';
-
-export function setWebUrlAction(url: string): ThunkAction {
+export function setWebUrlAction(url: string): TypedThunk {
   return (dispatch, getState) => {
     try {
-      dispatch({ type: SET_WEB_URL, payload: url });
+      dispatch(setWebUrl(url));
     } catch (error) {}
   };
 }
-export function setWebPhoneAction(phone: boolean): ThunkAction {
+export function setWebPhoneAction(phone: boolean): TypedThunk {
   return (dispatch, getState) => {
     try {
-      dispatch({ type: SET_WEB_PHONE, payload: phone });
+      dispatch(setWebPhone(phone));
     } catch (error) {}
   };
 }
-export function setWebAction(data: { show: boolean; phone?: boolean; title: string; url: string }): ThunkAction {
+export function setWebAction(data: { show: boolean; phone?: boolean; title: string; url: string }): TypedThunk {
   return (dispatch, getState) => {
     try {
       const {
         web: { view },
       } = getState();
-      dispatch({ type: SET_WEB, payload: { ...view, ...data } });
+      dispatch(setWeb({ ...view, ...data }));
     } catch (error) {}
   };
 }
-export function closeWebAction(): ThunkAction {
+export function closeWebAction(): TypedThunk {
   return (dispatch, getState) => {
     try {
       dispatch(setWebAction({ url: '', title: '', show: false }));
     } catch (error) {}
   };
 }
-export function openWebAction(data: { phone?: boolean; title: string; url: string }): ThunkAction {
+export function openWebAction(data: { phone?: boolean; title: string; url: string }): TypedThunk {
   return (dispatch, getState) => {
     try {
       dispatch(setWebAction({ ...data, show: true }));
     } catch (error) {}
   };
 }
-export function addWebAction(web: Web.SettingItem): ThunkAction {
+export function addWebAction(web: Web.SettingItem): TypedThunk {
   return (dispatch, getState) => {
     try {
       const { webConfig } = Helpers.Web.GetWebConfig();
@@ -60,7 +56,7 @@ export function addWebAction(web: Web.SettingItem): ThunkAction {
   };
 }
 
-export function updateWebAction(web: Web.SettingItem): ThunkAction {
+export function updateWebAction(web: Web.SettingItem): TypedThunk {
   return (dispatch, getState) => {
     try {
       const { webConfig } = Helpers.Web.GetWebConfig();
@@ -78,7 +74,7 @@ export function updateWebAction(web: Web.SettingItem): ThunkAction {
   };
 }
 
-export function deleteWebAction(url: string): ThunkAction {
+export function deleteWebAction(url: string): TypedThunk {
   return (dispatch, getState) => {
     try {
       const { webConfig } = Helpers.Web.GetWebConfig();
@@ -94,12 +90,12 @@ export function deleteWebAction(url: string): ThunkAction {
   };
 }
 
-export function setWebConfigAction(webConfig: Web.SettingItem[]): ThunkAction {
+export function setWebConfigAction(webConfig: Web.SettingItem[]): TypedThunk {
   return async (dispatch, getState) => {
     try {
       const codeMap = Helpers.Web.GetCodeMap(webConfig);
-      dispatch({ type: SYNC_WEB_CONFIG, payload: { webConfig, codeMap } });
-      Utils.SetStorage(CONST.STORAGE.WEB_SETTING, webConfig);
+      await Utils.SetStorage(CONST.STORAGE.WEB_SETTING, webConfig);
+      dispatch(syncWebConfig({ webConfig, codeMap }));
     } catch (error) {}
   };
 }

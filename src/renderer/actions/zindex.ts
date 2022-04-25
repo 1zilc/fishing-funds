@@ -1,14 +1,11 @@
 import { batch } from 'react-redux';
-import { ThunkAction } from '@/reducers/types';
+import { TypedThunk } from '@/store';
+import { syncZindexes, syncZindexesConfig } from '@/store/features/zindex';
 import * as Utils from '@/utils';
 import * as CONST from '@/constants';
 import * as Helpers from '@/helpers';
 
-export const SET_ZINDEXS_LOADING = 'SET_ZINDEXS_LOADING';
-export const SYNC_ZIDNEX_CONFIG = 'SYNC_ZIDNEX_CONFIG';
-export const SYNC_ZIDNEXS = 'SYNC_ZIDNEXS';
-
-export function addZindexAction(zindex: Zindex.SettingItem): ThunkAction {
+export function addZindexAction(zindex: Zindex.SettingItem): TypedThunk {
   return (dispatch, getState) => {
     try {
       const { zindexConfig } = Helpers.Zindex.GetZindexConfig();
@@ -22,7 +19,7 @@ export function addZindexAction(zindex: Zindex.SettingItem): ThunkAction {
   };
 }
 
-export function deleteZindexAction(code: string): ThunkAction {
+export function deleteZindexAction(code: string): TypedThunk {
   return (dispatch, getState) => {
     try {
       const { zindexConfig } = Helpers.Zindex.GetZindexConfig();
@@ -38,7 +35,7 @@ export function deleteZindexAction(code: string): ThunkAction {
   };
 }
 
-export function setZindexConfigAction(zindexConfig: Zindex.SettingItem[]): ThunkAction {
+export function setZindexConfigAction(zindexConfig: Zindex.SettingItem[]): TypedThunk {
   return (dispatch, getState) => {
     try {
       const {
@@ -47,7 +44,7 @@ export function setZindexConfigAction(zindexConfig: Zindex.SettingItem[]): Thunk
       const codeMap = Helpers.Zindex.GetCodeMap(zindexConfig);
 
       batch(() => {
-        dispatch({ type: SYNC_ZIDNEX_CONFIG, payload: { zindexConfig, codeMap } });
+        dispatch(syncZindexesConfig({ zindexConfig, codeMap }));
         dispatch(syncZindexsStateAction(zindexs));
       });
 
@@ -56,7 +53,7 @@ export function setZindexConfigAction(zindexConfig: Zindex.SettingItem[]): Thunk
   };
 }
 
-export function toggleZindexCollapseAction(zindex: Zindex.ResponseItem & Zindex.ExtraRow): ThunkAction {
+export function toggleZindexCollapseAction(zindex: Zindex.ResponseItem & Zindex.ExtraRow): TypedThunk {
   return (dispatch, getState) => {
     try {
       const {
@@ -74,7 +71,7 @@ export function toggleZindexCollapseAction(zindex: Zindex.ResponseItem & Zindex.
   };
 }
 
-export function toggleAllZindexsCollapseAction(): ThunkAction {
+export function toggleAllZindexsCollapseAction(): TypedThunk {
   return (dispatch, getState) => {
     try {
       const {
@@ -90,7 +87,7 @@ export function toggleAllZindexsCollapseAction(): ThunkAction {
   };
 }
 
-export function sortZindexsAction(): ThunkAction {
+export function sortZindexsAction(): TypedThunk {
   return (dispatch, getState) => {
     try {
       const {
@@ -102,7 +99,7 @@ export function sortZindexsAction(): ThunkAction {
   };
 }
 
-export function sortZindexsCachedAction(responseZindexs: Zindex.ResponseItem[]): ThunkAction {
+export function sortZindexsCachedAction(responseZindexs: Zindex.ResponseItem[]): TypedThunk {
   return (dispatch, getState) => {
     try {
       const {
@@ -138,12 +135,12 @@ export function sortZindexsCachedAction(responseZindexs: Zindex.ResponseItem[]):
   };
 }
 
-export function syncZindexsStateAction(zindexs: (Zindex.ResponseItem & Zindex.ExtraRow)[]): ThunkAction {
+export function syncZindexsStateAction(zindexs: (Zindex.ResponseItem & Zindex.ExtraRow)[]): TypedThunk {
   return (dispatch, getState) => {
     try {
       const { codeMap } = Helpers.Zindex.GetZindexConfig();
       const filterZindexs = zindexs.filter(({ code }) => codeMap[code]);
-      dispatch({ type: SYNC_ZIDNEXS, payload: filterZindexs });
+      dispatch(syncZindexes(filterZindexs));
     } catch (error) {}
   };
 }

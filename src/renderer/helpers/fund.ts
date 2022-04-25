@@ -2,14 +2,9 @@ import NP from 'number-precision';
 import dayjs from 'dayjs';
 import { batch } from 'react-redux';
 import store from '@/store';
-import {
-  SET_FUNDS_LOADING,
-  sortFundsCachedAction,
-  SET_REMOTE_FUNDS_LOADING,
-  setRemoteFundsAction,
-  setFundRatingMapAction,
-} from '@/actions/fund';
+import { sortFundsCachedAction, setRemoteFundsAction, setFundRatingMapAction } from '@/actions/fund';
 import { syncFixWalletStateAction } from '@/actions/wallet';
+import { setFundsLoading, setRemoteFundsLoading } from '@/store/features/fund';
 import * as Services from '@/services';
 import * as Enums from '@/utils/enums';
 import * as Utils from '@/utils';
@@ -243,14 +238,15 @@ export async function LoadFunds(loading: boolean) {
   try {
     const currentWalletCode = Helpers.Wallet.GetCurrentWalletCode();
     const { fundConfig } = GetFundConfig(currentWalletCode);
-    store.dispatch({ type: SET_FUNDS_LOADING, payload: loading && true });
+    store.dispatch(setFundsLoading(loading));
     const responseFunds = (await GetFunds(fundConfig)).filter(Utils.NotEmpty);
+
     batch(() => {
       store.dispatch(sortFundsCachedAction(responseFunds, currentWalletCode));
-      store.dispatch({ type: SET_FUNDS_LOADING, payload: false });
+      store.dispatch(setFundsLoading(false));
     });
   } catch (error) {
-    store.dispatch({ type: SET_FUNDS_LOADING, payload: false });
+    store.dispatch(setFundsLoading(false));
   }
 }
 
@@ -265,14 +261,14 @@ export async function LoadFixFunds() {
 
 export async function LoadRemoteFunds() {
   try {
-    store.dispatch({ type: SET_REMOTE_FUNDS_LOADING, payload: true });
+    store.dispatch(setRemoteFundsLoading(true));
     const remoteFunds = await Services.Fund.GetRemoteFundsFromEastmoney();
     batch(() => {
       store.dispatch(setRemoteFundsAction(remoteFunds));
-      store.dispatch({ type: SET_REMOTE_FUNDS_LOADING, payload: false });
+      store.dispatch(setRemoteFundsLoading(false));
     });
   } catch (error) {
-    store.dispatch({ type: SET_REMOTE_FUNDS_LOADING, payload: false });
+    store.dispatch(setRemoteFundsLoading(false));
   }
 }
 

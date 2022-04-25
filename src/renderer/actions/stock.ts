@@ -1,16 +1,12 @@
 import { batch } from 'react-redux';
 
-import { ThunkAction } from '@/reducers/types';
+import { TypedThunk } from '@/store';
+import { syncStocks, syncStocksConfig, setIndustryMap } from '@/store/features/stock';
 import * as Utils from '@/utils';
 import * as CONST from '@/constants';
 import * as Helpers from '@/helpers';
 
-export const SET_STOCKS_LOADING = 'SET_STOCKS_LOADING';
-export const SYNC_STOCKS = 'SYNC_STOCKS';
-export const SYNC_STOCK_CONFIG = 'SYNC_STOCK_CONFIG';
-export const SET_INDUSTRY_MAP = 'SET_INDUSTRY_MAP';
-
-export function addStockAction(stock: Stock.SettingItem): ThunkAction {
+export function addStockAction(stock: Stock.SettingItem): TypedThunk {
   return (dispatch, getState) => {
     try {
       const { stockConfig } = Helpers.Stock.GetStockConfig();
@@ -24,7 +20,7 @@ export function addStockAction(stock: Stock.SettingItem): ThunkAction {
   };
 }
 
-export function updateStockAction(stock: { secid: string; type?: number }): ThunkAction {
+export function updateStockAction(stock: { secid: string; type?: number }): TypedThunk {
   return (dispatch, getState) => {
     try {
       const { stockConfig } = Helpers.Stock.GetStockConfig();
@@ -40,7 +36,7 @@ export function updateStockAction(stock: { secid: string; type?: number }): Thun
   };
 }
 
-export function deleteStockAction(secid: string): ThunkAction {
+export function deleteStockAction(secid: string): TypedThunk {
   return (dispatch, getState) => {
     try {
       const { stockConfig } = Helpers.Stock.GetStockConfig();
@@ -56,25 +52,23 @@ export function deleteStockAction(secid: string): ThunkAction {
   };
 }
 
-export function setStockConfigAction(stockConfig: Stock.SettingItem[]): ThunkAction {
+export function setStockConfigAction(stockConfig: Stock.SettingItem[]): TypedThunk {
   return async (dispatch, getState) => {
     try {
       const {
         stock: { stocks },
       } = getState();
       const codeMap = Helpers.Stock.GetCodeMap(stockConfig);
-
+      await Utils.SetStorage(CONST.STORAGE.STOCK_SETTING, stockConfig);
       batch(() => {
-        dispatch({ type: SYNC_STOCK_CONFIG, payload: { stockConfig, codeMap } });
+        dispatch(syncStocksConfig({ stockConfig, codeMap }));
         dispatch(syncStocksStateAction(stocks));
       });
-
-      Utils.SetStorage(CONST.STORAGE.STOCK_SETTING, stockConfig);
     } catch (error) {}
   };
 }
 
-export function sortStocksAction(): ThunkAction {
+export function sortStocksAction(): TypedThunk {
   return (dispatch, getState) => {
     try {
       const {
@@ -86,7 +80,7 @@ export function sortStocksAction(): ThunkAction {
   };
 }
 
-export function sortStocksCachedAction(responseStocks: Stock.ResponseItem[]): ThunkAction {
+export function sortStocksCachedAction(responseStocks: Stock.ResponseItem[]): TypedThunk {
   return (dispatch, getState) => {
     try {
       const {
@@ -122,7 +116,7 @@ export function sortStocksCachedAction(responseStocks: Stock.ResponseItem[]): Th
   };
 }
 
-export function toggleStockCollapseAction(stock: Stock.ResponseItem & Stock.ExtraRow): ThunkAction {
+export function toggleStockCollapseAction(stock: Stock.ResponseItem & Stock.ExtraRow): TypedThunk {
   return (dispatch, getState) => {
     try {
       const {
@@ -141,7 +135,7 @@ export function toggleStockCollapseAction(stock: Stock.ResponseItem & Stock.Extr
   };
 }
 
-export function toggleAllStocksCollapseAction(): ThunkAction {
+export function toggleAllStocksCollapseAction(): TypedThunk {
   return async (dispatch, getState) => {
     try {
       const {
@@ -157,23 +151,23 @@ export function toggleAllStocksCollapseAction(): ThunkAction {
   };
 }
 
-export function syncStocksStateAction(stocks: (Stock.ResponseItem & Stock.ExtraRow)[]): ThunkAction {
+export function syncStocksStateAction(stocks: (Stock.ResponseItem & Stock.ExtraRow)[]): TypedThunk {
   return (dispatch, getState) => {
     try {
       const { codeMap } = Helpers.Stock.GetStockConfig();
       const filterStocks = stocks.filter(({ secid }) => codeMap[secid]);
-      dispatch({ type: SYNC_STOCKS, payload: filterStocks });
+      dispatch(syncStocks(filterStocks));
     } catch (error) {}
   };
 }
 
-export function setIndustryMapAction(secid: string, industrys: Stock.IndustryItem[]): ThunkAction {
+export function setIndustryMapAction(secid: string, industrys: Stock.IndustryItem[]): TypedThunk {
   return (dispatch, getState) => {
     try {
       const {
         stock: { industryMap },
       } = getState();
-      dispatch({ type: SET_INDUSTRY_MAP, payload: { ...industryMap, [secid]: industrys } });
+      dispatch(setIndustryMap({ ...industryMap, [secid]: industrys }));
     } catch (error) {}
   };
 }

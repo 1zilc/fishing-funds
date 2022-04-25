@@ -7,7 +7,7 @@ import * as echarts from 'echarts';
 import { updateStockAction } from '@/actions/stock';
 import { updateFundAction } from '@/actions/fund';
 import { openWebAction } from '@/actions/web';
-import { StoreState, Dispatch } from '@/reducers/types';
+import { TypedDispatch, StoreState } from '@/store';
 import * as Utils from '@/utils';
 import * as CONST from '@/constants';
 import * as Adapters from '@/utils/adpters';
@@ -17,7 +17,7 @@ import * as Enums from '@/utils/enums';
 
 const { invoke, ipcRenderer } = window.contextModules.electron;
 
-export const useAppDispatch = () => useDispatch<Dispatch>();
+export const useAppDispatch = () => useDispatch<TypedDispatch>();
 
 export const useAppSelector: TypedUseSelectorHook<StoreState> = useSelector;
 
@@ -232,7 +232,6 @@ export function useCurrentWallet() {
   };
   const currentWalletFundsCodeMap = Helpers.Fund.GetCodeMap(currentWalletConfig.funds);
   const currentWalletFundsConfig = currentWalletConfig.funds;
-  currentWalletState.funds = currentWalletState.funds.filter(({ fundcode }) => currentWalletFundsCodeMap[fundcode!]);
 
   return {
     currentWalletFundsConfig, // 当前钱包基金配置

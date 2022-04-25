@@ -1,27 +1,23 @@
-import { ThunkAction } from '@/reducers/types';
+import { TypedThunk } from '@/store';
+import { syncFavoriteQuotationMap, syncQuotations } from '@/store/features/quotation';
 import * as Utils from '@/utils';
 import * as CONST from '@/constants';
 import * as Helpers from '@/helpers';
 
-export const SET_QUOTATIONS_LOADING = 'SET_QUOTATIONS_LOADING';
-export const SYNC_FAVORITE_QUOTATION_MAP = 'SYNC_FAVORITE_QUOTATION_MAP';
-export const SYNC_QUOTATIONS = 'SYNC_QUOTATIONS';
-
-export function syncFavoriteQuotationMapAction(code: string, status: boolean): ThunkAction {
+export function syncFavoriteQuotationMapAction(code: string, status: boolean): TypedThunk {
   return async (dispatch, getState) => {
     try {
       const { quotation } = getState();
-
       const favoriteQuotationMap = { ...quotation.favoriteQuotationMap, [code]: status };
 
-      dispatch({ type: SYNC_FAVORITE_QUOTATION_MAP, payload: favoriteQuotationMap });
+      await Utils.SetStorage(CONST.STORAGE.FAVORITE_QUOTATION_MAP, favoriteQuotationMap);
 
-      Utils.SetStorage(CONST.STORAGE.FAVORITE_QUOTATION_MAP, favoriteQuotationMap);
+      dispatch(syncFavoriteQuotationMap(favoriteQuotationMap));
     } catch (error) {}
   };
 }
 
-export function sortQuotationsCachedAction(responseQuotations: Quotation.ResponseItem[]): ThunkAction {
+export function sortQuotationsCachedAction(responseQuotations: Quotation.ResponseItem[]): TypedThunk {
   return (dispatch, getState) => {
     try {
       const {
@@ -42,7 +38,7 @@ export function sortQuotationsCachedAction(responseQuotations: Quotation.Respons
   };
 }
 
-export function toggleQuotationCollapse(quotation: Quotation.ResponseItem & Quotation.ExtraRow): ThunkAction {
+export function toggleQuotationCollapse(quotation: Quotation.ResponseItem & Quotation.ExtraRow): TypedThunk {
   return (dispatch, getState) => {
     try {
       const {
@@ -59,7 +55,7 @@ export function toggleQuotationCollapse(quotation: Quotation.ResponseItem & Quot
   };
 }
 
-export function toggleAllQuotationsCollapse(): ThunkAction {
+export function toggleAllQuotationsCollapse(): TypedThunk {
   return (dispatch, getState) => {
     try {
       const {
@@ -75,7 +71,7 @@ export function toggleAllQuotationsCollapse(): ThunkAction {
   };
 }
 
-export function sortQuotationsAction(): ThunkAction {
+export function sortQuotationsAction(): TypedThunk {
   return (dispatch, getState) => {
     try {
       const {
@@ -87,10 +83,10 @@ export function sortQuotationsAction(): ThunkAction {
   };
 }
 
-export function syncQuotationsStateAction(quotations: Quotation.ResponseItem[]): ThunkAction {
+export function syncQuotationsStateAction(quotations: Quotation.ResponseItem[]): TypedThunk {
   return (dispatch, getState) => {
     try {
-      dispatch({ type: SYNC_QUOTATIONS, payload: quotations });
+      dispatch(syncQuotations(quotations));
     } catch (error) {}
   };
 }

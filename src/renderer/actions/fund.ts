@@ -1,19 +1,14 @@
 import { batch } from 'react-redux';
 import dayjs from 'dayjs';
 
-import { ThunkAction } from '@/reducers/types';
+import { TypedThunk } from '@/store';
+import { setRemoteFunds, setFundRatingMap } from '@/store/features/fund';
 import { setWalletConfigAction, updateWalletStateAction, setWalletStateAction } from '@/actions/wallet';
 import * as Utils from '@/utils';
 import * as CONST from '@/constants';
 import * as Helpers from '@/helpers';
 
-export const SET_REMOTE_FUNDS = 'SET_REMOTE_FUNDS';
-export const SET_FUND_RATING_MAP = 'SET_FUND_RATING_MAP';
-export const SET_REMOTE_FUNDS_LOADING = 'SET_REMOTE_FUNDS_LOADING';
-export const SET_FUNDS = 'SET_FUNDS';
-export const SET_FUNDS_LOADING = 'SET_FUNDS_LOADING';
-
-export function setFundConfigAction(config: Fund.SettingItem[], walletCode: string): ThunkAction {
+export function setFundConfigAction(config: Fund.SettingItem[], walletCode: string): TypedThunk {
   return (dispatch, getState) => {
     try {
       const { walletConfig } = Helpers.Wallet.GetWalletConfig();
@@ -31,8 +26,8 @@ export function setFundConfigAction(config: Fund.SettingItem[], walletCode: stri
   };
 }
 
-export function setRemoteFundsAction(newRemoteFunds: Fund.RemoteFund[]): ThunkAction {
-  return (dispatch, getState) => {
+export function setRemoteFundsAction(newRemoteFunds: Fund.RemoteFund[]): TypedThunk {
+  return async (dispatch, getState) => {
     try {
       const {
         fund: { remoteFunds },
@@ -49,15 +44,15 @@ export function setRemoteFundsAction(newRemoteFunds: Fund.RemoteFund[]): ThunkAc
 
       const remoteMap = { ...oldRemoteMap, ...newRemoteMap };
 
-      dispatch({ type: SET_REMOTE_FUNDS, payload: Object.values(remoteMap) });
+      await Utils.SetStorage(CONST.STORAGE.REMOTE_FUND_MAP, remoteMap);
 
-      Utils.SetStorage(CONST.STORAGE.REMOTE_FUND_MAP, remoteMap);
+      dispatch(setRemoteFunds(Object.values(remoteMap)));
     } catch (error) {}
   };
 }
 
-export function setFundRatingMapAction(newFundRantings: Fund.RantingItem[]): ThunkAction {
-  return (dispatch, getState) => {
+export function setFundRatingMapAction(newFundRantings: Fund.RantingItem[]): TypedThunk {
+  return async (dispatch, getState) => {
     try {
       const {
         fund: { fundRatingMap: oldFundRatingMap },
@@ -69,15 +64,14 @@ export function setFundRatingMapAction(newFundRantings: Fund.RantingItem[]): Thu
       }, {} as Record<string, Fund.RantingItem>);
 
       const fundRatingMap = { ...oldFundRatingMap, ...nweFundRantingMap };
+      await Utils.SetStorage(CONST.STORAGE.FUND_RATING_MAP, fundRatingMap);
 
-      dispatch({ type: SET_FUND_RATING_MAP, payload: fundRatingMap });
-
-      Utils.SetStorage(CONST.STORAGE.FUND_RATING_MAP, fundRatingMap);
+      dispatch(setFundRatingMap(fundRatingMap));
     } catch (error) {}
   };
 }
 
-export function addFundAction(fund: Fund.SettingItem): ThunkAction {
+export function addFundAction(fund: Fund.SettingItem): TypedThunk {
   return (dispatch, getState) => {
     try {
       const currentWalletCode = Helpers.Wallet.GetCurrentWalletCode();
@@ -100,7 +94,7 @@ export function updateFundAction(fund: {
   zdfRange?: number;
   jzNotice?: number;
   memo?: string;
-}): ThunkAction {
+}): TypedThunk {
   return (dispatch, getState) => {
     try {
       const currentWalletCode = Helpers.Wallet.GetCurrentWalletCode();
@@ -119,7 +113,7 @@ export function updateFundAction(fund: {
   };
 }
 
-export function deleteFundAction(code: string): ThunkAction {
+export function deleteFundAction(code: string): TypedThunk {
   return (dispatch, getState) => {
     try {
       const currentWalletCode = Helpers.Wallet.GetCurrentWalletCode();
@@ -135,7 +129,7 @@ export function deleteFundAction(code: string): ThunkAction {
   };
 }
 
-export function sortFundsAction(): ThunkAction {
+export function sortFundsAction(): TypedThunk {
   return (dispatch, getState) => {
     try {
       const { funds, updateTime, code } = Helpers.Wallet.GetCurrentWalletState();
@@ -145,7 +139,7 @@ export function sortFundsAction(): ThunkAction {
   };
 }
 
-export function sortFundsCachedAction(responseFunds: Fund.ResponseItem[], walletCode: string): ThunkAction {
+export function sortFundsCachedAction(responseFunds: Fund.ResponseItem[], walletCode: string): TypedThunk {
   return (dispatch, getState) => {
     try {
       const { fundConfig } = Helpers.Fund.GetFundConfig(walletCode);
@@ -176,7 +170,7 @@ export function sortFundsCachedAction(responseFunds: Fund.ResponseItem[], wallet
   };
 }
 
-export function toggleFundCollapseAction(fund: Fund.ResponseItem & Fund.ExtraRow): ThunkAction {
+export function toggleFundCollapseAction(fund: Fund.ResponseItem & Fund.ExtraRow): TypedThunk {
   return (dispatch, getState) => {
     try {
       const { funds, updateTime, code } = Helpers.Wallet.GetCurrentWalletState();
@@ -191,7 +185,7 @@ export function toggleFundCollapseAction(fund: Fund.ResponseItem & Fund.ExtraRow
   };
 }
 
-export function toggleAllFundsCollapseAction(): ThunkAction {
+export function toggleAllFundsCollapseAction(): TypedThunk {
   return (dispatch, getState) => {
     try {
       const { funds, updateTime, code } = Helpers.Wallet.GetCurrentWalletState();

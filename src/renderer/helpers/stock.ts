@@ -1,6 +1,7 @@
 import { batch } from 'react-redux';
 import store from '@/store';
-import { sortStocksCachedAction, SET_STOCKS_LOADING } from '@/actions/stock';
+import { sortStocksCachedAction } from '@/actions/stock';
+import { setStocksLoading } from '@/store/features/stock';
 import * as Adapter from '@/utils/adpters';
 import * as Services from '@/services';
 import * as Utils from '@/utils';
@@ -71,13 +72,13 @@ export function SortStocks(responseStocks: Stock.ResponseItem[]) {
 
 export async function LoadStocks(loading: boolean) {
   try {
-    store.dispatch({ type: SET_STOCKS_LOADING, payload: loading && true });
+    store.dispatch(setStocksLoading(loading));
     const responseStocks = (await GetStocks()).filter(Utils.NotEmpty) as Stock.ResponseItem[];
     batch(() => {
       store.dispatch(sortStocksCachedAction(responseStocks));
-      store.dispatch({ type: SET_STOCKS_LOADING, payload: false });
+      store.dispatch(setStocksLoading(false));
     });
   } catch (error) {
-    store.dispatch({ type: SET_STOCKS_LOADING, payload: false });
+    store.dispatch(setStocksLoading(false));
   }
 }

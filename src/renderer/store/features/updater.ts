@@ -1,5 +1,4 @@
-import { Reducer } from '@/reducers/types';
-import { UPDATE_AVALIABLE } from '@/actions/updater';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 export interface UpdaderState {
   updateInfo: {
@@ -13,28 +12,28 @@ export interface UpdaderState {
   };
 }
 
-const uptader: Reducer<UpdaderState> = (
-  state = {
-    updateInfo: {
-      files: [],
-      path: '',
-      releaseDate: '',
-      releaseName: '',
-      releaseNotes: '',
-      sha512: '',
-      version: '',
+const initialState = {
+  updateInfo: {
+    files: [],
+    path: '',
+    releaseDate: '',
+    releaseName: '',
+    releaseNotes: '',
+    sha512: '',
+    version: '',
+  },
+} as UpdaderState;
+
+const uptaderSlice = createSlice({
+  name: 'uptader',
+  initialState,
+  reducers: {
+    updateAvaliableAction(state, action) {
+      state.updateInfo = action.payload;
     },
   },
-  action
-) => {
-  switch (action.type) {
-    case UPDATE_AVALIABLE:
-      return {
-        ...state,
-        updateInfo: action.payload,
-      };
-    default:
-      return state;
-  }
-};
-export default uptader;
+});
+
+export const { updateAvaliableAction } = uptaderSlice.actions;
+
+export default uptaderSlice.reducer;

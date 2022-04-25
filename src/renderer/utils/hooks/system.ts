@@ -6,9 +6,9 @@ import dayjs from 'dayjs';
 import NP from 'number-precision';
 
 import { tabs } from '@/components/TabsBar';
-import { updateAvaliableAction } from '@/actions/updater';
+import { updateAvaliableAction } from '@/store/features/updater';
 import { setFundConfigAction } from '@/actions/fund';
-import { setTabActiveKeyAction } from '@/actions/tabs';
+import { setTabsActiveKeyAction } from '@/store/features/tabs';
 import { selectWalletAction, toggleEyeStatusAction } from '@/actions/wallet';
 import { setAdjustmentNotificationDateAction, clearAdjustmentNotificationDateAction } from '@/actions/setting';
 
@@ -528,7 +528,7 @@ export function useTouchBar() {
 
   useEffect(() => {
     ipcRenderer.on('change-tab-active-key', (e, key) => {
-      dispatch(setTabActiveKeyAction(key));
+      dispatch(setTabsActiveKeyAction(key));
     });
     ipcRenderer.on('change-eye-status', (e, key) => {
       dispatch(toggleEyeStatusAction());

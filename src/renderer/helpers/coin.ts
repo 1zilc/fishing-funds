@@ -1,6 +1,7 @@
 import { batch } from 'react-redux';
 import store from '@/store';
-import { sortCoinsCachedAction, setRemoteCoinsAction, SET_COINS_LOADING, SET_REMOTE_COINS_LOADING } from '@/actions/coin';
+import { setCoinsLoading, setRemoteCoinsLoading } from '@/store/features/coin';
+import { sortCoinsCachedAction, setRemoteCoinsAction } from '@/actions/coin';
 import * as Services from '@/services';
 import * as Utils from '@/utils';
 import * as Enums from '@/utils/enums';
@@ -68,27 +69,27 @@ export function SortCoins(responseCoins: Coin.ResponseItem[]) {
 
 export async function LoadCoins(loading: boolean) {
   try {
-    store.dispatch({ type: SET_COINS_LOADING, payload: loading && true });
+    store.dispatch(setCoinsLoading(loading));
     const responseCoins = (await GetCoins()).filter(Utils.NotEmpty) as Coin.ResponseItem[];
     batch(() => {
       store.dispatch(sortCoinsCachedAction(responseCoins));
-      store.dispatch({ type: SET_COINS_LOADING, payload: false });
+      store.dispatch(setCoinsLoading(false));
     });
   } catch (error) {
-    store.dispatch({ type: SET_COINS_LOADING, payload: false });
+    store.dispatch(setCoinsLoading(false));
   }
 }
 
 export async function LoadRemoteCoins() {
   try {
-    store.dispatch({ type: SET_REMOTE_COINS_LOADING, payload: true });
+    store.dispatch(setRemoteCoinsLoading(true));
     const remoteCoins = await Services.Coin.GetRemoteCoinsFromCoingecko();
     batch(() => {
       store.dispatch(setRemoteCoinsAction(remoteCoins));
-      store.dispatch({ type: SET_REMOTE_COINS_LOADING, payload: false });
+      store.dispatch(setRemoteCoinsLoading(false));
     });
   } catch (error) {
-    store.dispatch({ type: SET_REMOTE_COINS_LOADING, payload: false });
+    store.dispatch(setRemoteCoinsLoading(false));
   }
 }
 

@@ -1,27 +1,22 @@
 import { batch } from 'react-redux';
 
-import { ThunkAction } from '@/reducers/types';
+import { TypedThunk } from '@/store';
+import { changeEyeStatus, changeCurrentWalletCode, syncWallets, syncWalletsConfig } from '@/store/features/wallet';
 import * as Enums from '@/utils/enums';
 import * as CONST from '@/constants';
 import * as Utils from '@/utils';
 import * as Helpers from '@/helpers';
 
-export const CHANGE_EYE_STATUS = 'CHANGE_EYE_STATUS';
-export const CHANGE_CURRENT_WALLET_CODE = 'CHANGE_CURRENT_WALLET_CODE';
-export const SYNC_WALLET_CONFIG = 'SYNC_WALLET_CONFIG';
-export const SYNC_WALLETS = 'SYNC_WALLETS';
-
-export function changeEyeStatusAction(status: Enums.EyeStatus): ThunkAction {
-  return (dispatch, getState) => {
+export function changeEyeStatusAction(status: Enums.EyeStatus): TypedThunk {
+  return async (dispatch, getState) => {
     try {
-      dispatch({ type: CHANGE_EYE_STATUS, payload: status });
-
-      Utils.SetStorage(CONST.STORAGE.EYE_STATUS, status);
+      await Utils.SetStorage(CONST.STORAGE.EYE_STATUS, status);
+      dispatch(changeEyeStatus(status));
     } catch (error) {}
   };
 }
 
-export function toggleEyeStatusAction(): ThunkAction {
+export function toggleEyeStatusAction(): TypedThunk {
   return (dispatch, getState) => {
     try {
       const {
@@ -41,35 +36,33 @@ export function toggleEyeStatusAction(): ThunkAction {
   };
 }
 
-export function setWalletConfigAction(walletConfig: Wallet.SettingItem[]): ThunkAction {
-  return (dispatch, getState) => {
+export function setWalletConfigAction(walletConfig: Wallet.SettingItem[]): TypedThunk {
+  return async (dispatch, getState) => {
     try {
       const {
         wallet: { wallets },
       } = getState();
       const codeMap = Helpers.Wallet.GetCodeMap(walletConfig);
-
+      await Utils.SetStorage(CONST.STORAGE.WALLET_SETTING, walletConfig);
       batch(() => {
-        dispatch({ type: SYNC_WALLET_CONFIG, payload: { walletConfig, codeMap } });
+        dispatch(syncWalletsConfig({ walletConfig, codeMap }));
         dispatch(syncWalletStateAction(wallets));
       });
-
-      Utils.SetStorage(CONST.STORAGE.WALLET_SETTING, walletConfig);
     } catch (error) {}
   };
 }
 
-export function syncWalletStateAction(wallets: Wallet.StateItem[]): ThunkAction {
+export function syncWalletStateAction(wallets: Wallet.StateItem[]): TypedThunk {
   return (dispatch, getState) => {
     try {
       const { codeMap } = Helpers.Wallet.GetWalletConfig();
       const newWallets = wallets.filter((stateItem) => codeMap[stateItem.code]);
-      dispatch({ type: SYNC_WALLETS, payload: newWallets });
+      dispatch(syncWallets(newWallets));
     } catch (error) {}
   };
 }
 
-export function addWalletConfigAction(wallet: Wallet.SettingItem): ThunkAction {
+export function addWalletConfigAction(wallet: Wallet.SettingItem): TypedThunk {
   return (dispatch, getState) => {
     try {
       const { walletConfig } = Helpers.Wallet.GetWalletConfig();
@@ -78,7 +71,7 @@ export function addWalletConfigAction(wallet: Wallet.SettingItem): ThunkAction {
   };
 }
 
-export function updateWalletConfigAction(wallet: Wallet.SettingItem): ThunkAction {
+export function updateWalletConfigAction(wallet: Wallet.SettingItem): TypedThunk {
   return (dispatch, getState) => {
     try {
       const { walletConfig } = Helpers.Wallet.GetWalletConfig();
@@ -93,7 +86,7 @@ export function updateWalletConfigAction(wallet: Wallet.SettingItem): ThunkActio
   };
 }
 
-export function deleteWalletConfigAction(code: string): ThunkAction {
+export function deleteWalletConfigAction(code: string): TypedThunk {
   return (dispatch, getState) => {
     try {
       const { walletConfig } = Helpers.Wallet.GetWalletConfig();
@@ -108,17 +101,16 @@ export function deleteWalletConfigAction(code: string): ThunkAction {
   };
 }
 
-export function selectWalletAction(code: string): ThunkAction {
-  return (dispatch, getState) => {
+export function selectWalletAction(code: string): TypedThunk {
+  return async (dispatch, getState) => {
     try {
-      dispatch({ type: CHANGE_CURRENT_WALLET_CODE, payload: code });
-
-      Utils.SetStorage(CONST.STORAGE.CURRENT_WALLET_CODE, code);
+      await Utils.SetStorage(CONST.STORAGE.CURRENT_WALLET_CODE, code);
+      dispatch(changeCurrentWalletCode(code));
     } catch (error) {}
   };
 }
 
-export function updateWalletStateAction(state: Wallet.StateItem): ThunkAction {
+export function updateWalletStateAction(state: Wallet.StateItem): TypedThunk {
   return (dispatch, getState) => {
     try {
       const {
@@ -165,12 +157,12 @@ export function updateWalletStateAction(state: Wallet.StateItem): ThunkAction {
         cloneWallets.push(state);
       }
 
-      dispatch({ type: SYNC_WALLETS, payload: cloneWallets });
+      dispatch(syncWallets(cloneWallets));
     } catch (error) {}
   };
 }
 
-export function setWalletStateAction(state: Wallet.StateItem): ThunkAction {
+export function setWalletStateAction(state: Wallet.StateItem): TypedThunk {
   return (dispatch, getState) => {
     try {
       const {
@@ -185,12 +177,12 @@ export function setWalletStateAction(state: Wallet.StateItem): ThunkAction {
         }
       });
 
-      dispatch({ type: SYNC_WALLETS, payload: cloneWallets });
+      dispatch(syncWallets(cloneWallets));
     } catch (error) {}
   };
 }
 
-export function syncFixWalletStateAction(state: Wallet.StateItem): ThunkAction {
+export function syncFixWalletStateAction(state: Wallet.StateItem): TypedThunk {
   return (dispatch, getState) => {
     try {
       const {
@@ -207,7 +199,7 @@ export function syncFixWalletStateAction(state: Wallet.StateItem): ThunkAction {
         }
       });
 
-      dispatch({ type: SYNC_WALLETS, payload: cloneWallets });
+      dispatch(syncWallets(cloneWallets));
     } catch (error) {}
   };
 }

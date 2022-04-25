@@ -1,6 +1,7 @@
 import { batch } from 'react-redux';
 import store from '@/store';
-import { sortZindexsCachedAction, SET_ZINDEXS_LOADING } from '@/actions/zindex';
+import { setZindexesLoading } from '@/store/features/zindex';
+import { sortZindexsCachedAction } from '@/actions/zindex';
 import * as Adapter from '@/utils/adpters';
 import * as Services from '@/services';
 import * as Utils from '@/utils';
@@ -85,13 +86,13 @@ export function SortZindexs(responseZindexs: Zindex.ResponseItem[]) {
 
 export async function LoadZindexs(loading: boolean) {
   try {
-    store.dispatch({ type: SET_ZINDEXS_LOADING, payload: loading && true });
+    store.dispatch(setZindexesLoading(loading));
     const responseZindexs = (await Helpers.Zindex.GetZindexs()).filter(Utils.NotEmpty);
     batch(() => {
       store.dispatch(sortZindexsCachedAction(responseZindexs));
-      store.dispatch({ type: SET_ZINDEXS_LOADING, payload: false });
+      store.dispatch(setZindexesLoading(false));
     });
   } catch (error) {
-    store.dispatch({ type: SET_ZINDEXS_LOADING, payload: false });
+    store.dispatch(setZindexesLoading(false));
   }
 }
