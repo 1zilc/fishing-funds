@@ -2,7 +2,7 @@ import React from 'react';
 
 import { useHomeContext } from '@/components/Home';
 import ChartCard from '@/components/Card/ChartCard';
-import { useResizeEchart, useRenderEcharts } from '@/utils/hooks';
+import { useResizeEchart, useRenderEcharts, useAppSelector } from '@/utils/hooks';
 
 import * as CONST from '@/constants';
 import * as Enums from '@/utils/enums';

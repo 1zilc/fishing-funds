@@ -6,7 +6,7 @@ import clsx from 'clsx';
 
 import CustomDrawer from '@/components/CustomDrawer';
 import TypeSelection from '@/components/TypeSelection';
-import { useDrawer } from '@/utils/hooks';
+import { useDrawer, useAppSelector } from '@/utils/hooks';
 
 import * as Services from '@/services';
 import * as Utils from '@/utils';

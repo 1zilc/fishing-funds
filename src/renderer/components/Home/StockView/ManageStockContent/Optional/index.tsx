@@ -10,7 +10,7 @@ import RemoveIcon from '@/static/icon/remove.svg';
 import CustomDrawer from '@/components/CustomDrawer';
 import Empty from '@/components/Empty';
 import { deleteStockAction, setStockConfigAction } from '@/actions/stock';
-import { useDrawer, useAutoDestroySortableRef, useAppDispatch } from '@/utils/hooks';
+import { useDrawer, useAutoDestroySortableRef, useAppDispatch, useAppSelector } from '@/utils/hooks';
 
 import styles from './index.module.scss';
 
