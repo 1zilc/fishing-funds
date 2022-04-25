@@ -11,18 +11,16 @@ import setting from './setting';
 import sort from './sort';
 import web from './web';
 
-export default function createRootReducer() {
-  return combineReducers({
-    wallet,
-    tabs,
-    updater,
-    fund,
-    zindex,
-    quotation,
-    stock,
-    coin,
-    setting,
-    sort,
-    web,
-  });
-}
+export default {
+  wallet,
+  tabs,
+  updater,
+  fund,
+  zindex,
+  quotation,
+  stock,
+  coin,
+  setting,
+  sort,
+  web,
+};

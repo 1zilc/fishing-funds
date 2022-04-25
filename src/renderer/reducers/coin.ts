@@ -7,7 +7,7 @@ export interface CoinState {
   coinsLoading: boolean;
   config: {
     coinConfig: Coin.SettingItem[];
-    codeMap: Helpers.Coin.CodeCoinMap;
+    codeMap: Coin.CodeMap;
   };
   remoteCoins: Coin.RemoteCoin[];
   remoteCoinsLoading: boolean;
