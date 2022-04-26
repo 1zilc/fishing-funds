@@ -4,12 +4,11 @@ import { useDispatch, useSelector, TypedUseSelectorHook, batch } from 'react-red
 import dayjs from 'dayjs';
 import * as echarts from 'echarts';
 
-import { sortCoinsCachedAction, setRemoteCoinsAction } from '@/actions/coin';
 import { updateStockAction } from '@/actions/stock';
 import { updateFundAction } from '@/actions/fund';
 import { openWebAction } from '@/actions/web';
 import { TypedDispatch, StoreState } from '@/store';
-import { setCoinsLoading, setRemoteCoinsLoading } from '@/store/features/coin';
+import { setCoinsLoading, setRemoteCoinsLoading, sortCoinsCachedAction, setRemoteCoinsAction } from '@/store/features/coin';
 import * as Utils from '@/utils';
 import * as CONST from '@/constants';
 import * as Adapters from '@/utils/adpters';

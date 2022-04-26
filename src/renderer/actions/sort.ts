@@ -5,7 +5,7 @@ import { sortFundsAction } from '@/actions/fund';
 import { sortZindexsAction } from '@/actions/zindex';
 import { sortQuotationsAction } from '@/actions/quotation';
 import { sortStocksAction } from '@/actions/stock';
-import { sortCoinsAction } from '@/actions/coin';
+import { sortCoinsAction } from '@/store/features/coin';
 import { syncSortMode, syncViewMode } from '@/store/features/sort';
 import * as Enums from '@/utils/enums';
 import * as Utils from '@/utils';

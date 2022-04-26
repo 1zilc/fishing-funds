@@ -5,7 +5,7 @@ import { Input, message } from 'antd';
 import CustomDrawer from '@/components/CustomDrawer';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
 import Empty from '@/components/Empty';
-import { addCoinAction } from '@/actions/coin';
+import { addCoinAction } from '@/store/features/coin';
 
 import { useDrawer, useAppDispatch, useAppSelector } from '@/utils/hooks';
 import * as Helpers from '@/helpers';

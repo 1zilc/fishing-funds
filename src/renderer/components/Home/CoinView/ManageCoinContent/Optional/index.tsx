@@ -9,7 +9,7 @@ import MenuIcon from '@/static/icon/menu.svg';
 import RemoveIcon from '@/static/icon/remove.svg';
 import CustomDrawer from '@/components/CustomDrawer';
 import Empty from '@/components/Empty';
-import { deleteCoinAction, setCoinConfigAction } from '@/actions/coin';
+import { deleteCoinAction, setCoinConfigAction } from '@/store/features/coin';
 import { useDrawer, useAutoDestroySortableRef, useAppDispatch, useAppSelector } from '@/utils/hooks';
 
 import styles from './index.module.scss';
