@@ -7,7 +7,7 @@ import ArrowUpIcon from '@/static/icon/arrow-up.svg';
 import Collapse from '@/components/Collapse';
 import MemoNote from '@/components/MemoNote';
 import { toggleFundCollapseAction } from '@/store/features/wallet';
-import { useCurrentWallet, useAppDispatch, useAppSelector } from '@/utils/hooks';
+import { useAppDispatch, useAppSelector } from '@/utils/hooks';
 import * as Utils from '@/utils';
 import * as Helpers from '@/helpers';
 import * as Enums from '@/utils/enums';

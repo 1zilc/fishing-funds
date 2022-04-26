@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { TypedThunk } from '@/store';
 import * as Utils from '@/utils';
 import * as CONST from '@/constants';
-import * as Helpers from '@/helpers';
+// import * as Helpers from '@/helpers';
 
 export type SettingState = {
   systemSetting: System.Setting;
@@ -10,7 +10,7 @@ export type SettingState = {
 };
 
 const initialState = {
-  systemSetting: Helpers.Setting.defalutSystemSetting,
+  systemSetting: {},
   adjustmentNotificationDate: '',
 } as SettingState;
 

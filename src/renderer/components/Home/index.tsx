@@ -43,7 +43,7 @@ export function useHomeContext() {
 }
 
 const FundGroup = () => {
-  const { currentWalletFundsCodeMap: fundCodeMap, currentWalletCode } = useCurrentWallet();
+  const { currentWalletFundsCodeMap: fundCodeMap } = useCurrentWallet();
 
   return (
     <GroupTab tabKey={Enums.TabKeyType.Funds}>
@@ -57,7 +57,7 @@ const FundGroup = () => {
         <FundView filter={(fund) => !fundCodeMap[fund.fundcode!]?.cyfe} />
       </Tabs.TabPane>
       <Tabs.TabPane tab="净值更新" key={String(3)}>
-        <FundView filter={(fund) => !!Helpers.Fund.CalcFund(fund, currentWalletCode).isFix} />
+        <FundView filter={(fund) => !!Helpers.Fund.CalcFund(fund, fundCodeMap).isFix} />
       </Tabs.TabPane>
     </GroupTab>
   );

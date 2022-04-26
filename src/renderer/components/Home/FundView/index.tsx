@@ -19,12 +19,10 @@ interface FundListProps {
 }
 
 const FundView: React.FC<FundListProps> = (props) => {
-  const {
-    currentWalletState: { funds },
-    currentWalletCode,
-  } = useCurrentWallet();
   const fundsLoading = useAppSelector((state) => state.fund.fundsLoading);
   const fundViewMode = useAppSelector((state) => state.sort.viewMode.fundViewMode);
+  const { funds } = useAppSelector((state) => state.wallet.currentWallet);
+  const fundConfigCodeMap = useAppSelector((state) => state.wallet.fundConfigCodeMap);
 
   const {
     data: editData,
@@ -45,7 +43,7 @@ const FundView: React.FC<FundListProps> = (props) => {
         return (
           <GridView
             list={list.map((fund) => {
-              const calcFundResult = Helpers.Fund.CalcFund(fund, currentWalletCode);
+              const calcFundResult = Helpers.Fund.CalcFund(fund, fundConfigCodeMap);
               return {
                 name: calcFundResult.name!,
                 value: Number(Number(calcFundResult.gszz || 0).toFixed(2)),
@@ -68,7 +66,7 @@ const FundView: React.FC<FundListProps> = (props) => {
           />
         ));
     }
-  }, [list, fundViewMode]);
+  }, [list, fundViewMode, fundConfigCodeMap]);
 
   function enterEditDrawer() {
     freshFunds();
