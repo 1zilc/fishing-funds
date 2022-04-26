@@ -5,7 +5,9 @@ import dayjs from 'dayjs';
 import * as echarts from 'echarts';
 
 import { updateStockAction } from '@/actions/stock';
+import { sortQuotationsCachedAction } from '@/store/features/quotation';
 import { updateFundAction, sortFundsCachedAction, setRemoteFundsAction, setFundRatingMapAction } from '@/store/features/fund';
+import { setQuotationsLoading } from '@/store/features/quotation';
 import { openWebAction } from '@/actions/web';
 import { syncFixWalletStateAction, updateWalletStateAction } from '@/store/features/wallet';
 import { TypedDispatch, StoreState } from '@/store';
@@ -393,9 +395,29 @@ export function useFreshZindexs(throttleDelay: number) {
 }
 
 export function useFreshQuotations(throttleDelay: number) {
-  const { run: runLoadQuotations } = useThrottleFn(Helpers.Quotation.LoadQuotations, { wait: throttleDelay });
-  const freshQuotations = useScrollToTop({ after: () => runLoadQuotations(true) });
+  const loadQuotations = useLoadQuotations(true);
+  const { run: runLoadQuotations } = useThrottleFn(loadQuotations, { wait: throttleDelay });
+  const freshQuotations = useScrollToTop({ after: () => runLoadQuotations() });
   return freshQuotations;
+}
+
+export function useLoadQuotations(loading: boolean) {
+  const dispatch = useAppDispatch();
+
+  const load = useMemoizedFn(async () => {
+    try {
+      dispatch(setQuotationsLoading(loading));
+      const responseQuotations = await Helpers.Quotation.GetQuotations();
+      batch(() => {
+        dispatch(sortQuotationsCachedAction(responseQuotations));
+        dispatch(setQuotationsLoading(false));
+      });
+    } catch (error) {
+      dispatch(setQuotationsLoading(false));
+    }
+  });
+
+  return load;
 }
 
 export function useFreshStocks(throttleDelay: number) {

@@ -31,7 +31,7 @@ import {
 import CustomDrawer from '@/components/CustomDrawer';
 
 import { toggleAllZindexsCollapseAction } from '@/actions/zindex';
-import { toggleAllQuotationsCollapse } from '@/actions/quotation';
+import { toggleAllQuotationsCollapseAction } from '@/store/features/quotation';
 import { toggleAllStocksCollapseAction } from '@/actions/stock';
 import { toggleAllCoinsCollapseAction } from '@/store/features/coin';
 import { toggleAllFundsCollapseAction } from '@/store/features/wallet';
@@ -260,7 +260,7 @@ function QuotationSortBar() {
     return [quotations.every((_) => _.collapse), quotations.some((_) => _.collapse)];
   }, [quotations]);
 
-  const toggleQuotationsCollapse = () => dispatch(toggleAllQuotationsCollapse());
+  const toggleQuotationsCollapse = () => dispatch(toggleAllQuotationsCollapseAction());
 
   return (
     <div className={styles.bar}>

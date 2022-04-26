@@ -8,7 +8,7 @@ import ArrowUpIcon from '@/static/icon/arrow-up.svg';
 import ArrowLine from '@/components/ArrowLine';
 import Collapse from '@/components/Collapse';
 
-import { syncFavoriteQuotationMapAction, toggleQuotationCollapse } from '@/actions/quotation';
+import { syncFavoriteQuotationMapAction, toggleQuotationCollapseAction } from '@/store/features/quotation';
 import { useAppDispatch, useAppSelector } from '@/utils/hooks';
 import * as Utils from '@/utils';
 import styles from './index.module.scss';
@@ -37,7 +37,7 @@ const QuotationRow: React.FC<RowProps> = (props) => {
 
   return (
     <>
-      <div className={clsx(styles.row)} onClick={() => dispatch(toggleQuotationCollapse(quotation))}>
+      <div className={clsx(styles.row)} onClick={() => dispatch(toggleQuotationCollapseAction(quotation))}>
         <div className={styles.arrow}>
           {quotation.collapse ? <ArrowUpIcon style={{ ...arrowSize }} /> : <ArrowDownIcon style={{ ...arrowSize }} />}
         </div>

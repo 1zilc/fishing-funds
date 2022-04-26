@@ -3,7 +3,7 @@ import { batch } from 'react-redux';
 import { TypedThunk } from '@/store';
 import { sortFundsAction } from '@/store/features/fund';
 import { sortZindexsAction } from '@/actions/zindex';
-import { sortQuotationsAction } from '@/actions/quotation';
+import { sortQuotationsAction } from '@/store/features/quotation';
 import { sortStocksAction } from '@/actions/stock';
 import { sortCoinsAction } from '@/store/features/coin';
 import { syncSortMode, syncViewMode } from '@/store/features/sort';

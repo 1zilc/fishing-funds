@@ -10,7 +10,7 @@ import Stocks from '@/components/Home/QuotationView/DetailQuotationContent/Stock
 import Funds from '@/components/Home/QuotationView/DetailQuotationContent/Funds';
 import RealTimeTransaction from '@/components/Home/QuotationView/DetailQuotationContent/RealTimeTransaction';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
-import { syncFavoriteQuotationMapAction } from '@/actions/quotation';
+import { syncFavoriteQuotationMapAction } from '@/store/features/quotation';
 
 import { useAppDispatch, useAppSelector } from '@/utils/hooks';
 import * as Services from '@/services';

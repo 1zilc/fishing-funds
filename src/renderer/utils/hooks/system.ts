@@ -26,6 +26,7 @@ import {
   useLoadFundRatingMap,
   useLoadWalletsFunds,
   useLoadFixWalletsFunds,
+  useLoadQuotations,
 } from '@/utils/hooks';
 import * as Utils from '@/utils';
 import * as CONST from '@/constants';
@@ -256,7 +257,7 @@ export function useBootStrap() {
   const runLoadWalletsFunds = useLoadWalletsFunds();
   const runLoadFixWalletsFunds = useLoadFixWalletsFunds();
   const runLoadZindexs = () => Helpers.Zindex.LoadZindexs(false);
-  const runLoadQuotations = () => Helpers.Quotation.LoadQuotations(false);
+  const runLoadQuotations = useLoadQuotations(false);
   const runLoadStocks = () => Helpers.Stock.LoadStocks(false);
   const runLoadCoins = useLoadCoins(false);
 
