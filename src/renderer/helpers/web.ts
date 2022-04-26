@@ -1,4 +1,3 @@
-import store from '@/store';
 import * as Enums from '@/utils/enums';
 
 export const defaultWebConfig = [
@@ -33,21 +32,3 @@ export const defaultWebConfig = [
     icon: 'https://diy-assets.msstatic.com/mobile/favicon.ico',
   },
 ];
-
-export function GetWebConfig() {
-  const {
-    web: {
-      config: { webConfig },
-    },
-  } = store.getState();
-  const codeMap = GetCodeMap(webConfig);
-
-  return { webConfig, codeMap };
-}
-
-export function GetCodeMap(config: Web.SettingItem[]) {
-  return config.reduce((r, c, i) => {
-    r[c.url] = c;
-    return r;
-  }, {} as Web.CodeMap);
-}

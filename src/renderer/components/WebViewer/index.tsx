@@ -13,7 +13,7 @@ import CustomDrawerContent from '@/components/CustomDrawer/Content';
 import CustomDrawer from '@/components/CustomDrawer';
 import Empty from '@/components/Empty';
 
-import { closeWebAction, addWebAction, deleteWebAction, setWebPhoneAction } from '@/actions/web';
+import { closeWebAction, addWebAction, deleteWebAction, setWebPhoneAction } from '@/store/features/web';
 import { useDrawer, useAppDispatch, useAppSelector } from '@/utils/hooks';
 import * as CONST from '@/constants';
 import * as Enums from '@/utils/enums';

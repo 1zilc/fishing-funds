@@ -5,14 +5,22 @@ import dayjs from 'dayjs';
 import * as echarts from 'echarts';
 
 import { updateStockAction } from '@/actions/stock';
+import { sortZindexsCachedAction } from '@/store/features/zindex';
 import { sortQuotationsCachedAction } from '@/store/features/quotation';
-import { updateFundAction, sortFundsCachedAction, setRemoteFundsAction, setFundRatingMapAction } from '@/store/features/fund';
+import {
+  updateFundAction,
+  sortFundsCachedAction,
+  setRemoteFundsAction,
+  setFundRatingMapAction,
+  setFundsLoading,
+  setRemoteFundsLoading,
+} from '@/store/features/fund';
 import { setQuotationsLoading } from '@/store/features/quotation';
-import { openWebAction } from '@/actions/web';
+import { openWebAction } from '@/store/features/web';
 import { syncFixWalletStateAction, updateWalletStateAction } from '@/store/features/wallet';
 import { TypedDispatch, StoreState } from '@/store';
 import { setCoinsLoading, setRemoteCoinsLoading, sortCoinsCachedAction, setRemoteCoinsAction } from '@/store/features/coin';
-import { setFundsLoading, setRemoteFundsLoading } from '@/store/features/fund';
+import { setZindexesLoading } from '@/store/features/zindex';
 import * as Utils from '@/utils';
 import * as CONST from '@/constants';
 import * as Adapters from '@/utils/adpters';
@@ -389,9 +397,29 @@ export function useLoadFixWalletsFunds() {
 }
 
 export function useFreshZindexs(throttleDelay: number) {
-  const { run: runLoadZindexs } = useThrottleFn(Helpers.Zindex.LoadZindexs, { wait: throttleDelay });
-  const freshZindexs = useScrollToTop({ after: () => runLoadZindexs(true) });
+  const loadZindexs = useLoadZindexs(true);
+  const { run: runLoadZindexs } = useThrottleFn(loadZindexs, { wait: throttleDelay });
+  const freshZindexs = useScrollToTop({ after: () => runLoadZindexs() });
   return freshZindexs;
+}
+
+export function useLoadZindexs(loading: boolean) {
+  const dispatch = useAppDispatch();
+  const zindexConfig = useAppSelector((state) => state.zindex.config.zindexConfig);
+  const load = useMemoizedFn(async () => {
+    try {
+      dispatch(setZindexesLoading(loading));
+      const responseZindexs = await Helpers.Zindex.GetZindexs(zindexConfig);
+      batch(() => {
+        dispatch(sortZindexsCachedAction(responseZindexs));
+        dispatch(setZindexesLoading(false));
+      });
+    } catch (error) {
+      dispatch(setZindexesLoading(false));
+    }
+  });
+
+  return load;
 }
 
 export function useFreshQuotations(throttleDelay: number) {

@@ -10,7 +10,7 @@ import { updateAvaliableAction } from '@/store/features/updater';
 import { setFundConfigAction } from '@/store/features/fund';
 import { setTabsActiveKeyAction } from '@/store/features/tabs';
 import { selectWalletAction, toggleEyeStatusAction } from '@/store/features/wallet';
-import { setAdjustmentNotificationDateAction, clearAdjustmentNotificationDateAction } from '@/actions/setting';
+import { setAdjustmentNotificationDateAction, clearAdjustmentNotificationDateAction } from '@/store/features/setting';
 
 import {
   useWorkDayTimeToDo,
@@ -27,6 +27,7 @@ import {
   useLoadWalletsFunds,
   useLoadFixWalletsFunds,
   useLoadQuotations,
+  useLoadZindexs,
 } from '@/utils/hooks';
 import * as Utils from '@/utils';
 import * as CONST from '@/constants';
@@ -256,7 +257,7 @@ export function useBootStrap() {
   const runLoadRemoteCoins = useLoadRemoteCoins();
   const runLoadWalletsFunds = useLoadWalletsFunds();
   const runLoadFixWalletsFunds = useLoadFixWalletsFunds();
-  const runLoadZindexs = () => Helpers.Zindex.LoadZindexs(false);
+  const runLoadZindexs = useLoadZindexs(false);
   const runLoadQuotations = useLoadQuotations(false);
   const runLoadStocks = () => Helpers.Stock.LoadStocks(false);
   const runLoadCoins = useLoadCoins(false);

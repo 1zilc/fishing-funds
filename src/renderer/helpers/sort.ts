@@ -1,6 +1,5 @@
 import * as Enums from '@/utils/enums';
 import * as Utils from '@/utils';
-import * as CONST from '@/constants';
 
 export interface FundSortMode {
   type: Enums.FundSortType;
@@ -72,30 +71,11 @@ export const coinSortModeOptions: Option.EnumsOption<Enums.CoinSortType>[] = [
 ];
 
 export function GetSortConfig() {
-  const fundSortModeOptionsMap = fundSortModeOptions.reduce((r, c) => {
-    r[c.key] = c;
-    return r;
-  }, {} as Record<Enums.FundSortType, Option.EnumsOption<Enums.FundSortType>>);
-
-  const zindexSortModeOptionsMap = zindexSortModeOptions.reduce((r, c) => {
-    r[c.key] = c;
-    return r;
-  }, {} as Record<Enums.ZindexSortType, Option.EnumsOption<Enums.ZindexSortType>>);
-
-  const quotationSortModeOptionsMap = quotationSortModeOptions.reduce((r, c) => {
-    r[c.key] = c;
-    return r;
-  }, {} as Record<Enums.QuotationSortType, Option.EnumsOption<Enums.QuotationSortType>>);
-
-  const stockSortModeOptionsMap = stockSortModeOptions.reduce((r, c) => {
-    r[c.key] = c;
-    return r;
-  }, {} as Record<Enums.StockSortType, Option.EnumsOption<Enums.StockSortType>>);
-
-  const coinSortModeOptionsMap = coinSortModeOptions.reduce((r, c) => {
-    r[c.key] = c;
-    return r;
-  }, {} as Record<Enums.CoinSortType, Option.EnumsOption<Enums.CoinSortType>>);
+  const fundSortModeOptionsMap = Utils.GetCodeMap(fundSortModeOptions, 'key');
+  const zindexSortModeOptionsMap = Utils.GetCodeMap(zindexSortModeOptions, 'key');
+  const quotationSortModeOptionsMap = Utils.GetCodeMap(quotationSortModeOptions, 'key');
+  const stockSortModeOptionsMap = Utils.GetCodeMap(stockSortModeOptions, 'key');
+  const coinSortModeOptionsMap = Utils.GetCodeMap(coinSortModeOptions, 'key');
 
   return {
     fundSortModeOptions,

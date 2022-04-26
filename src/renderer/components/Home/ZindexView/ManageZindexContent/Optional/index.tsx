@@ -9,7 +9,7 @@ import MenuIcon from '@/static/icon/menu.svg';
 import RemoveIcon from '@/static/icon/remove.svg';
 import CustomDrawer from '@/components/CustomDrawer';
 import Empty from '@/components/Empty';
-import { deleteZindexAction, setZindexConfigAction } from '@/actions/zindex';
+import { deleteZindexAction, setZindexConfigAction } from '@/store/features/zindex';
 import { useDrawer, useAutoDestroySortableRef, useAppDispatch, useAppSelector } from '@/utils/hooks';
 
 import styles from './index.module.scss';

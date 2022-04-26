@@ -5,7 +5,7 @@ import { Input, Tabs, message } from 'antd';
 import { useMemoizedFn } from 'ahooks';
 
 import CustomDrawer from '@/components/CustomDrawer';
-import { addZindexAction } from '@/actions/zindex';
+import { addZindexAction } from '@/store/features/zindex';
 
 import { useDrawer, useAppDispatch, useAppSelector } from '@/utils/hooks';
 import * as Helpers from '@/helpers';

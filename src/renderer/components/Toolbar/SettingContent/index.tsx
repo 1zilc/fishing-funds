@@ -22,7 +22,7 @@ import BitCoinIcon from '@/static/icon/bit-coin.svg';
 import WindowIcon from '@/static/icon/window.svg';
 import CalendarIcon from '@/static/icon/calendar.svg';
 import { defalutSystemSetting } from '@/helpers/setting';
-import { setSystemSettingAction } from '@/actions/setting';
+import { setSystemSettingAction } from '@/store/features/setting';
 
 import { useAppDispatch, useAppSelector } from '@/utils/hooks';
 import * as Enums from '@/utils/enums';

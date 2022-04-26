@@ -27,10 +27,10 @@ import {
   setQuotationViewModeAction,
   setStockViewModeAction,
   setCoinViewModeAction,
-} from '@/actions/sort';
+} from '@/store/features/sort';
 import CustomDrawer from '@/components/CustomDrawer';
 
-import { toggleAllZindexsCollapseAction } from '@/actions/zindex';
+import { toggleAllZindexsCollapseAction } from '@/store/features/zindex';
 import { toggleAllQuotationsCollapseAction } from '@/store/features/quotation';
 import { toggleAllStocksCollapseAction } from '@/actions/stock';
 import { toggleAllCoinsCollapseAction } from '@/store/features/coin';
