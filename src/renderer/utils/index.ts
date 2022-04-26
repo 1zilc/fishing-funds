@@ -400,3 +400,13 @@ export function CalculateMA(dayCount: any, values: any[]) {
   }
   return result;
 }
+
+export function GetCodeMap<T extends Record<string, any>>(list: T[], key: keyof T) {
+  type extraData = {
+    originSort: number;
+  };
+  return list.reduce((r, c, i) => {
+    r[c[key]] = { ...c, originSort: i };
+    return r;
+  }, {} as Record<string, T & extraData>);
+}

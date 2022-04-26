@@ -7,7 +7,7 @@ import ArrowUpIcon from '@/static/icon/arrow-up.svg';
 import ArrowLine from '@/components/ArrowLine';
 import Collapse from '@/components/Collapse';
 
-import { toggleCoinCollapseAction } from '@/actions/coin';
+import { toggleCoinCollapseAction } from '@/store/features/coin';
 import { useAppDispatch, useAppSelector } from '@/utils/hooks';
 import * as Utils from '@/utils';
 import * as Helpers from '@/helpers';
@@ -28,8 +28,9 @@ const CoinRow: React.FC<RowProps> = (props) => {
   const { coin } = props;
   const dispatch = useAppDispatch();
   const { conciseSetting } = useAppSelector((state) => state.setting.systemSetting);
+  const remoteCoinsMap = useAppSelector((state) => state.coin.remoteCoinsMap);
   const coinColor = colorHash.hex(coin.code);
-  const { symbol } = Helpers.Coin.GetCurrentCoin(coin.code);
+  const { symbol } = remoteCoinsMap[coin.code];
   const onDetailClick = () => {
     props.onDetail(coin.code);
   };

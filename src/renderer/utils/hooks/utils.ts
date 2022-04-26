@@ -1,13 +1,15 @@
 import { useLayoutEffect, useState, useEffect, useRef, useMemo, useTransition } from 'react';
 import { useInterval, useBoolean, useThrottleFn, useSize, useMemoizedFn } from 'ahooks';
-import { useDispatch, useSelector, TypedUseSelectorHook } from 'react-redux';
+import { useDispatch, useSelector, TypedUseSelectorHook, batch } from 'react-redux';
 import dayjs from 'dayjs';
 import * as echarts from 'echarts';
 
+import { sortCoinsCachedAction, setRemoteCoinsAction } from '@/actions/coin';
 import { updateStockAction } from '@/actions/stock';
 import { updateFundAction } from '@/actions/fund';
 import { openWebAction } from '@/actions/web';
 import { TypedDispatch, StoreState } from '@/store';
+import { setCoinsLoading, setRemoteCoinsLoading } from '@/store/features/coin';
 import * as Utils from '@/utils';
 import * as CONST from '@/constants';
 import * as Adapters from '@/utils/adpters';
@@ -280,9 +282,48 @@ export function useFreshStocks(throttleDelay: number) {
 }
 
 export function useFreshCoins(throttleDelay: number) {
-  const { run: runLoadCoins } = useThrottleFn(Helpers.Coin.LoadCoins, { wait: throttleDelay });
-  const freshCoins = useScrollToTop({ after: () => runLoadCoins(true) });
+  const loadCoins = useLoadCoins(true);
+  const { run: runLoadCoins } = useThrottleFn(loadCoins, { wait: throttleDelay });
+  const freshCoins = useScrollToTop({ after: () => runLoadCoins() });
   return freshCoins;
+}
+
+export function useLoadCoins(showLoading: boolean) {
+  const dispatch = useAppDispatch();
+  const config = useAppSelector((state) => state.coin.config.coinConfig);
+  const coinUnitSetting = useAppSelector((state) => state.setting.systemSetting.coinUnitSetting);
+
+  const load = useMemoizedFn(async () => {
+    try {
+      dispatch(setCoinsLoading(showLoading));
+      const responseCoins = await Helpers.Coin.GetCoins(config, coinUnitSetting);
+      batch(() => {
+        dispatch(sortCoinsCachedAction(responseCoins));
+        dispatch(setCoinsLoading(false));
+      });
+    } catch (error) {
+      dispatch(setCoinsLoading(false));
+    }
+  });
+
+  return load;
+}
+
+export function useLoadRemoteCoins() {
+  const dispatch = useAppDispatch();
+  const load = useMemoizedFn(async () => {
+    try {
+      dispatch(setRemoteCoinsLoading(true));
+      const remoteCoins = await Services.Coin.GetRemoteCoinsFromCoingecko();
+      batch(() => {
+        dispatch(setRemoteCoinsAction(remoteCoins));
+        dispatch(setRemoteCoinsLoading(false));
+      });
+    } catch (error) {
+      dispatch(setRemoteCoinsLoading(false));
+    }
+  });
+  return load;
 }
 
 export function useDrawer<T>(initialData: T) {

@@ -34,7 +34,7 @@ import { toggleAllFundsCollapseAction } from '@/actions/fund';
 import { toggleAllZindexsCollapseAction } from '@/actions/zindex';
 import { toggleAllQuotationsCollapse } from '@/actions/quotation';
 import { toggleAllStocksCollapseAction } from '@/actions/stock';
-import { toggleAllCoinsCollapseAction } from '@/actions/coin';
+import { toggleAllCoinsCollapseAction } from '@/store/features/coin';
 import {
   useScrollToTop,
   useFreshFunds,

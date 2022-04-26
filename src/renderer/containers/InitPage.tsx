@@ -7,7 +7,7 @@ import { setZindexConfigAction } from '@/actions/zindex';
 import { setSystemSettingAction, setAdjustmentNotificationDateAction } from '@/actions/setting';
 import { setWalletConfigAction, changeEyeStatusAction, selectWalletAction } from '@/actions/wallet';
 import { setStockConfigAction } from '@/actions/stock';
-import { setCoinConfigAction, setRemoteCoinsAction, deleteCoinAction } from '@/actions/coin';
+import { setCoinConfigAction, setRemoteCoinsAction } from '@/actions/coin';
 import { syncSortModeAction, syncViewModeAction } from '@/actions/sort';
 import { setWebConfigAction } from '@/actions/web';
 import { useDrawer, useAppDispatch } from '@/utils/hooks';

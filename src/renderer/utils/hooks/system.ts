@@ -20,6 +20,8 @@ import {
   useFreshFunds,
   useAppDispatch,
   useAppSelector,
+  useLoadCoins,
+  useLoadRemoteCoins,
 } from '@/utils/hooks';
 import * as Utils from '@/utils';
 import * as CONST from '@/constants';
@@ -237,13 +239,13 @@ export function useBootStrap() {
   const { freshDelaySetting, autoFreshSetting } = useAppSelector((state) => state.setting.systemSetting);
   const runLoadRemoteFunds = () => Helpers.Fund.LoadRemoteFunds();
   const runLoadFundRatingMap = () => Helpers.Fund.LoadFundRatingMap();
-  const runLoadRemoteCoins = () => Helpers.Coin.LoadRemoteCoins();
+  const runLoadRemoteCoins = useLoadRemoteCoins();
   const runLoadWalletsFunds = () => Helpers.Wallet.LoadWalletsFunds();
   const runLoadFixWalletsFunds = () => Helpers.Wallet.loadFixWalletsFunds();
   const runLoadZindexs = () => Helpers.Zindex.LoadZindexs(false);
   const runLoadQuotations = () => Helpers.Quotation.LoadQuotations(false);
   const runLoadStocks = () => Helpers.Stock.LoadStocks(false);
-  const runLoadCoins = () => Helpers.Coin.LoadCoins(false);
+  const runLoadCoins = useLoadCoins(false);
 
   // 间隔时间刷新远程基金数据,远程货币数据,基金评级
   useInterval(() => {

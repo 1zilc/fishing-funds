@@ -27,6 +27,7 @@ const AddCoinContent: React.FC<AddCoinContentProps> = (props) => {
   const [coins, setCoins] = useState<Coin.RemoteCoin[]>([]);
   const { codeMap } = useAppSelector((state) => state.coin.config);
   const remoteCoins = useAppSelector((state) => state.coin.remoteCoins);
+  const remoteCoinsMap = useAppSelector((state) => state.coin.remoteCoinsMap);
   const { data: detailCode, show: showDetailDrawer, set: setDetailDrawer, close: closeDetailDrawer } = useDrawer('');
 
   async function onAdd(code: string) {
@@ -77,7 +78,7 @@ const AddCoinContent: React.FC<AddCoinContentProps> = (props) => {
       </div>
       {coins.length ? (
         coins.map(({ code }) => {
-          const { symbol } = Helpers.Coin.GetCurrentCoin(code);
+          const { symbol } = remoteCoinsMap[code];
           return (
             <div key={code} className={styles.stock} onClick={() => setDetailDrawer(code)}>
               <div>

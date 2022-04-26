@@ -26,6 +26,7 @@ const { Option } = Select;
 const Calculator: React.FC<CalculatorProps> = (props) => {
   const { remoteCoins, coinsLoading } = useAppSelector((state) => state.coin);
   const coinsState = useAppSelector((state) => state.coin.coins);
+  const remoteCoinsMap = useAppSelector((state) => state.coin.remoteCoinsMap);
   const [coin, setCoin] = useState<Coin.DetailItem | null>(null);
   const [num, setNum] = useState(1);
   const [coins, setCoins] = useState<Coin.RemoteCoin[]>(remoteCoins);
@@ -137,7 +138,7 @@ const Calculator: React.FC<CalculatorProps> = (props) => {
         {coinsState.length && (
           <ChartCard TitleBar={<div className={styles.titleBar}>自选货币</div>}>
             {coinsState.map(({ code }) => {
-              const { symbol } = Helpers.Coin.GetCurrentCoin(code);
+              const { symbol } = remoteCoinsMap[code];
               return (
                 <div key={code} className={styles.stock}>
                   <div>

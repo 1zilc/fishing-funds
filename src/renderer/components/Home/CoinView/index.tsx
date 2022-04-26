@@ -19,6 +19,7 @@ interface CoinListProps {
 
 const CoinView: React.FC<CoinListProps> = (props) => {
   const coins = useAppSelector((state) => state.coin.coins);
+  const remoteCoinsMap = useAppSelector((state) => state.coin.remoteCoinsMap);
   const coinsLoading = useAppSelector((state) => state.coin.coinsLoading);
   const coinViewMode = useAppSelector((state) => state.sort.viewMode.coinViewMode);
 
@@ -33,7 +34,7 @@ const CoinView: React.FC<CoinListProps> = (props) => {
           <GridView
             list={list.map((item) => ({
               ...item,
-              name: Helpers.Coin.GetCurrentCoin(item.code).symbol,
+              name: remoteCoinsMap[item.code]?.symbol,
               value: Number(item.price),
               zdf: Number(item.change24h),
               zdd: Number(
