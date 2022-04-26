@@ -13,7 +13,7 @@ export async function FromEastmoney(secid: string) {
     const responseTrends = await GetTrendFromEastmoney(secid);
     const responseDetail = await GetDetailFromEastmoney(secid);
 
-    if (!responseTrends || !Object.keys(responseDetail).length) {
+    if (!responseTrends || !Object.keys(responseDetail || {}).length) {
       return null;
     }
 
@@ -323,7 +323,7 @@ export async function GetDetailFromEastmoney(secid: string) {
       time: dayjs.unix(data.f86).format('MM-DD HH:mm'),
     };
   } catch (error) {
-    return {};
+    return null;
   }
 }
 

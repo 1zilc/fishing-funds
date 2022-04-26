@@ -28,6 +28,7 @@ import {
   useLoadFixWalletsFunds,
   useLoadQuotations,
   useLoadZindexs,
+  useLoadStocks,
 } from '@/utils/hooks';
 import * as Utils from '@/utils';
 import * as CONST from '@/constants';
@@ -259,7 +260,7 @@ export function useBootStrap() {
   const runLoadFixWalletsFunds = useLoadFixWalletsFunds();
   const runLoadZindexs = useLoadZindexs(false);
   const runLoadQuotations = useLoadQuotations(false);
-  const runLoadStocks = () => Helpers.Stock.LoadStocks(false);
+  const runLoadStocks = useLoadStocks(false);
   const runLoadCoins = useLoadCoins(false);
 
   // 间隔时间刷新远程基金数据,远程货币数据,基金评级

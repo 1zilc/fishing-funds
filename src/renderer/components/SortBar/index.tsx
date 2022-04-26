@@ -32,7 +32,7 @@ import CustomDrawer from '@/components/CustomDrawer';
 
 import { toggleAllZindexsCollapseAction } from '@/store/features/zindex';
 import { toggleAllQuotationsCollapseAction } from '@/store/features/quotation';
-import { toggleAllStocksCollapseAction } from '@/actions/stock';
+import { toggleAllStocksCollapseAction } from '@/store/features/stock';
 import { toggleAllCoinsCollapseAction } from '@/store/features/coin';
 import { toggleAllFundsCollapseAction } from '@/store/features/wallet';
 import {

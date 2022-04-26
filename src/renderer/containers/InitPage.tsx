@@ -6,7 +6,7 @@ import { setRemoteFundsAction, setFundRatingMapAction } from '@/store/features/f
 import { setZindexConfigAction } from '@/store/features/zindex';
 import { setSystemSettingAction, setAdjustmentNotificationDateAction } from '@/store/features/setting';
 import { setWalletConfigAction, changeEyeStatusAction, selectWalletAction } from '@/store/features/wallet';
-import { setStockConfigAction } from '@/actions/stock';
+import { setStockConfigAction } from '@/store/features/stock';
 import { setCoinConfigAction, setRemoteCoinsAction } from '@/store/features/coin';
 import { syncSortModeAction, syncViewModeAction } from '@/store/features/sort';
 import { setWebConfigAction } from '@/store/features/web';

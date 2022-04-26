@@ -4,9 +4,6 @@ import { useDispatch, useSelector, TypedUseSelectorHook, batch } from 'react-red
 import dayjs from 'dayjs';
 import * as echarts from 'echarts';
 
-import { updateStockAction } from '@/actions/stock';
-import { sortZindexsCachedAction } from '@/store/features/zindex';
-import { sortQuotationsCachedAction } from '@/store/features/quotation';
 import {
   updateFundAction,
   sortFundsCachedAction,
@@ -18,9 +15,12 @@ import {
 import { setQuotationsLoading } from '@/store/features/quotation';
 import { openWebAction } from '@/store/features/web';
 import { syncFixWalletStateAction, updateWalletStateAction } from '@/store/features/wallet';
-import { TypedDispatch, StoreState } from '@/store';
 import { setCoinsLoading, setRemoteCoinsLoading, sortCoinsCachedAction, setRemoteCoinsAction } from '@/store/features/coin';
-import { setZindexesLoading } from '@/store/features/zindex';
+import { updateStockAction, sortStocksCachedAction } from '@/store/features/stock';
+import { setZindexesLoading, sortZindexsCachedAction } from '@/store/features/zindex';
+import { sortQuotationsCachedAction } from '@/store/features/quotation';
+import { setStocksLoading } from '@/store/features/stock';
+import { TypedDispatch, StoreState } from '@/store';
 import * as Utils from '@/utils';
 import * as CONST from '@/constants';
 import * as Adapters from '@/utils/adpters';
@@ -449,9 +449,30 @@ export function useLoadQuotations(loading: boolean) {
 }
 
 export function useFreshStocks(throttleDelay: number) {
-  const { run: runLoadStocks } = useThrottleFn(Helpers.Stock.LoadStocks, { wait: throttleDelay });
+  const loadStocks = useLoadStocks(true);
+  const { run: runLoadStocks } = useThrottleFn(loadStocks, { wait: throttleDelay });
   const freshStocks = useScrollToTop({ after: () => runLoadStocks(true) });
   return freshStocks;
+}
+
+export function useLoadStocks(loading: boolean) {
+  const dispatch = useAppDispatch();
+  const stockConfig = useAppSelector((state) => state.stock.config.stockConfig);
+
+  const load = useMemoizedFn(async () => {
+    try {
+      dispatch(setStocksLoading(loading));
+      const responseStocks = await Helpers.Stock.GetStocks(stockConfig);
+      batch(() => {
+        dispatch(sortStocksCachedAction(responseStocks));
+        dispatch(setStocksLoading(false));
+      });
+    } catch (error) {
+      dispatch(setStocksLoading(false));
+    }
+  });
+
+  return load;
 }
 
 export function useFreshCoins(throttleDelay: number) {

@@ -5,7 +5,7 @@ import { TypedThunk } from '@/store';
 import { sortFundsAction } from '@/store/features/fund';
 import { sortZindexsAction } from '@/store/features/zindex';
 import { sortQuotationsAction } from '@/store/features/quotation';
-import { sortStocksAction } from '@/actions/stock';
+import { sortStocksAction } from '@/store/features/stock';
 import { sortCoinsAction } from '@/store/features/coin';
 import * as Enums from '@/utils/enums';
 import * as Utils from '@/utils';

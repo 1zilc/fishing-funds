@@ -123,7 +123,7 @@ export function sortZindexsAction(): TypedThunk {
         },
       } = getState();
 
-      const sortList = Utils.DeepCopy(zindexs);
+      const sortList = zindexs.slice();
 
       sortList.sort((a, b) => {
         const t = zindexSortorder === Enums.SortOrderType.Asc ? 1 : -1;

@@ -11,7 +11,7 @@ import K from '@/components/Home/StockView/DetailStockContent/K';
 import Company from '@/components/Home/StockView/DetailStockContent/Company';
 import Stocks from '@/components/Home/StockView/DetailStockContent/Stocks';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
-import { addStockAction } from '@/actions/stock';
+import { addStockAction } from '@/store/features/stock';
 import { useAppDispatch, useAppSelector } from '@/utils/hooks';
 import * as Services from '@/services';
 import * as Utils from '@/utils';

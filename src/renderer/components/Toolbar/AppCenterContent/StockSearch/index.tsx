@@ -5,7 +5,7 @@ import { Tabs, message } from 'antd';
 import { useMemoizedFn } from 'ahooks';
 
 import CustomDrawer from '@/components/CustomDrawer';
-import { addStockAction } from '@/actions/stock';
+import { addStockAction } from '@/store/features/stock';
 
 import { useDrawer, useAppDispatch, useAppSelector } from '@/utils/hooks';
 import * as Helpers from '@/helpers';

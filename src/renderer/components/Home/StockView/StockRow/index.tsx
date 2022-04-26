@@ -8,7 +8,7 @@ import ArrowUpIcon from '@/static/icon/arrow-up.svg';
 import { useHomeContext } from '@/components/Home';
 import Collapse from '@/components/Collapse';
 
-import { toggleStockCollapseAction, setIndustryMapAction } from '@/actions/stock';
+import { toggleStockCollapseAction, setIndustryMapAction } from '@/store/features/stock';
 import { useResizeEchart, useRenderEcharts, useAppDispatch, useAppSelector } from '@/utils/hooks';
 import * as Services from '@/services';
 import * as Utils from '@/utils';
