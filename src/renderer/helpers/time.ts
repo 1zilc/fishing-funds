@@ -1,10 +1,8 @@
 import * as Adapter from '@/utils/adpters';
 import * as Services from '@/services';
-import * as Helpers from '@/helpers';
 import * as Enums from '@/utils/enums';
 
-export async function GetCurrentHours() {
-  const { timestampSetting } = Helpers.Setting.GetSystemSetting();
+export async function GetCurrentHours(timestampSetting: Enums.TimestampType) {
   const now = Date.now().toString();
   try {
     const collectors = [

@@ -1,7 +1,7 @@
 import { batch } from 'react-redux';
 
 import { TypedThunk } from '@/store';
-import { sortFundsAction } from '@/actions/fund';
+import { sortFundsAction } from '@/store/features/fund';
 import { sortZindexsAction } from '@/actions/zindex';
 import { sortQuotationsAction } from '@/actions/quotation';
 import { sortStocksAction } from '@/actions/stock';

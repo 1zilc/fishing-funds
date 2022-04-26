@@ -1,5 +1,5 @@
 import { useLayoutEffect, useState, useEffect, useMemo } from 'react';
-import { useInterval } from 'ahooks';
+import { useInterval, useMemoizedFn } from 'ahooks';
 import { compose } from 'redux';
 import { Base64 } from 'js-base64';
 import dayjs from 'dayjs';
@@ -7,9 +7,9 @@ import NP from 'number-precision';
 
 import { tabs } from '@/components/TabsBar';
 import { updateAvaliableAction } from '@/store/features/updater';
-import { setFundConfigAction } from '@/actions/fund';
+import { setFundConfigAction } from '@/store/features/fund';
 import { setTabsActiveKeyAction } from '@/store/features/tabs';
-import { selectWalletAction, toggleEyeStatusAction } from '@/actions/wallet';
+import { selectWalletAction, toggleEyeStatusAction } from '@/store/features/wallet';
 import { setAdjustmentNotificationDateAction, clearAdjustmentNotificationDateAction } from '@/actions/setting';
 
 import {
@@ -22,12 +22,17 @@ import {
   useAppSelector,
   useLoadCoins,
   useLoadRemoteCoins,
+  useLoadRemoteFunds,
+  useLoadFundRatingMap,
+  useLoadWalletsFunds,
+  useLoadFixWalletsFunds,
 } from '@/utils/hooks';
 import * as Utils from '@/utils';
 import * as CONST from '@/constants';
 import * as Adapters from '@/utils/adpters';
 import * as Helpers from '@/helpers';
 import * as Enums from '@/utils/enums';
+import { useLoadFunds } from './utils';
 
 const { invoke, dialog, ipcRenderer, clipboard, app } = window.contextModules.electron;
 const { saveString, encodeFF, decodeFF, readFile } = window.contextModules.io;
@@ -54,16 +59,17 @@ export function useUpdater() {
 
 export function useAdjustmentNotification() {
   const dispatch = useAppDispatch();
-  const systemSetting = useAppSelector((state) => state.setting.systemSetting);
+  const { adjustmentNotificationSetting, adjustmentNotificationTimeSetting, timestampSetting } = useAppSelector(
+    (state) => state.setting.systemSetting
+  );
   const lastNotificationDate = useAppSelector((state) => state.setting.adjustmentNotificationDate);
-  const { adjustmentNotificationSetting, adjustmentNotificationTimeSetting } = systemSetting;
 
   useInterval(
     async () => {
       if (!adjustmentNotificationSetting) {
         return;
       }
-      const timestamp = await Helpers.Time.GetCurrentHours();
+      const timestamp = await Helpers.Time.GetCurrentHours(timestampSetting);
       const { isAdjustmentNotificationTime, now } = Utils.JudgeAdjustmentNotificationTime(
         Number(timestamp),
         adjustmentNotificationTimeSetting
@@ -95,6 +101,7 @@ export function useRiskNotification() {
   const [jzNoticeMap, setJzNoticeMap] = useState<Record<string, boolean>>({});
   const systemSetting = useAppSelector((state) => state.setting.systemSetting);
   const wallets = useAppSelector((state) => state.wallet.wallets);
+  const walletsConfig = useAppSelector((state) => state.wallet.config.walletConfig);
   const { riskNotificationSetting } = systemSetting;
 
   useInterval(
@@ -106,8 +113,8 @@ export function useRiskNotification() {
       }
       try {
         wallets.forEach((wallet) => {
-          const { codeMap } = Helpers.Fund.GetFundConfig(wallet.code);
-          const walletConfig = Helpers.Wallet.GetCurrentWalletConfig(wallet.code);
+          const { codeMap } = Helpers.Fund.GetFundConfig(wallet.code, walletsConfig);
+          const walletConfig = Helpers.Wallet.GetCurrentWalletConfig(wallet.code, walletsConfig);
           wallet.funds?.forEach((fund) => {
             const zdfRange = codeMap[fund.fundcode!]?.zdfRange;
             const jzNotice = codeMap[fund.fundcode!]?.jzNotice;
@@ -154,80 +161,86 @@ export function useRiskNotification() {
 
 export function useFundsClipboard() {
   const dispatch = useAppDispatch();
+  const currentWalletCode = useAppSelector((state) => state.wallet.currentWalletCode);
+  const walletsConfig = useAppSelector((state) => state.wallet.config.walletConfig);
+  const fundConfig = useAppSelector((state) => state.wallet.fundConfig);
+  const fundApiTypeSetting = useAppSelector((state) => state.setting.systemSetting.fundApiTypeSetting);
+  const loadFunds = useLoadFunds(true);
+
+  const onClipboardFundsImport = useMemoizedFn(async (e: Electron.IpcRendererEvent, data) => {
+    try {
+      const limit = 1024;
+      const text = clipboard.readText();
+      const json: any[] = JSON.parse(text);
+      if (json.length > limit) {
+        dialog.showMessageBox({
+          type: 'info',
+          title: `超过最大限制`,
+          message: `最大${limit}个`,
+        });
+        return;
+      }
+      const { codeMap: oldCodeMap } = Helpers.Fund.GetFundConfig(currentWalletCode, walletsConfig);
+      const jsonFundConfig = json
+        .map((fund) => ({
+          name: '',
+          cyfe: Number(fund.cyfe) < 0 ? 0 : Number(fund.cyfe) || 0,
+          code: fund.code && String(fund.code),
+          cbj: Utils.NotEmpty(fund.cbj) ? (Number(fund.cbj) < 0 ? undefined : Number(fund.cbj)) : undefined,
+        }))
+        .filter(({ code }) => code);
+      const jsonCodeMap = Utils.GetCodeMap(jsonFundConfig, 'code');
+      // 去重复
+      const fundConfigSet = Object.entries(jsonCodeMap).map(([code, fund]) => fund);
+      const responseFunds = await Helpers.Fund.GetFunds(fundConfigSet, fundApiTypeSetting);
+      const newFundConfig = responseFunds.map((fund) => ({
+        name: fund!.name!,
+        code: fund!.fundcode!,
+        cyfe: jsonCodeMap[fund!.fundcode!].cyfe,
+        cbj: jsonCodeMap[fund!.fundcode!].cbj,
+      }));
+      const newCodeMap = Utils.GetCodeMap(newFundConfig, 'code');
+      const allCodeMap = {
+        ...oldCodeMap,
+        ...newCodeMap,
+      };
+      const allFundConfig = Object.entries(allCodeMap).map(([code, fund]) => fund);
+      dispatch(setFundConfigAction(allFundConfig, currentWalletCode));
+      loadFunds();
+      dialog.showMessageBox({
+        type: 'info',
+        title: `导入完成`,
+        message: `更新：${newFundConfig.length}个，总共：${json.length}个`,
+      });
+    } catch (error) {
+      dialog.showMessageBox({
+        type: 'info',
+        title: `解析失败`,
+        message: `请检查JSON格式`,
+      });
+    }
+  });
+
+  const onClipboardFundsCopy = useMemoizedFn(async (e: Electron.IpcRendererEvent, data) => {
+    try {
+      clipboard.writeText(JSON.stringify(fundConfig));
+      dialog.showMessageBox({
+        title: `复制成功`,
+        type: 'info',
+        message: `已复制${fundConfig.length}支基金配置到粘贴板`,
+      });
+    } catch (error) {
+      dialog.showMessageBox({
+        type: 'info',
+        title: `复制失败`,
+        message: `基金JSON复制失败`,
+      });
+    }
+  });
 
   useEffect(() => {
-    ipcRenderer.on('clipboard-funds-import', async (e, data) => {
-      try {
-        const limit = 1024;
-        const text = clipboard.readText();
-        const json: any[] = JSON.parse(text);
-        const currentWalletCode = Helpers.Wallet.GetCurrentWalletCode();
-        if (json.length > limit) {
-          dialog.showMessageBox({
-            type: 'info',
-            title: `超过最大限制`,
-            message: `最大${limit}个`,
-          });
-          return;
-        }
-        const { codeMap: oldCodeMap } = Helpers.Fund.GetFundConfig(currentWalletCode);
-        const jsonFundConfig = json
-          .map((fund) => ({
-            name: '',
-            cyfe: Number(fund.cyfe) < 0 ? 0 : Number(fund.cyfe) || 0,
-            code: fund.code && String(fund.code),
-            cbj: Utils.NotEmpty(fund.cbj) ? (Number(fund.cbj) < 0 ? undefined : Number(fund.cbj)) : undefined,
-          }))
-          .filter(({ code }) => code);
-        const jsonCodeMap = Helpers.Fund.GetCodeMap(jsonFundConfig);
-        // 去重复
-        const fundConfigSet = Object.entries(jsonCodeMap).map(([code, fund]) => fund);
-        const responseFunds = (await Helpers.Fund.GetFunds(fundConfigSet)).filter(Utils.NotEmpty);
-        const newFundConfig = responseFunds.map((fund) => ({
-          name: fund!.name!,
-          code: fund!.fundcode!,
-          cyfe: jsonCodeMap[fund!.fundcode!].cyfe,
-          cbj: jsonCodeMap[fund!.fundcode!].cbj,
-        }));
-        const newCodeMap = Helpers.Fund.GetCodeMap(newFundConfig);
-        const allCodeMap = {
-          ...oldCodeMap,
-          ...newCodeMap,
-        };
-        const allFundConfig = Object.entries(allCodeMap).map(([code, fund]) => fund);
-        dispatch(setFundConfigAction(allFundConfig, currentWalletCode));
-        Helpers.Fund.LoadFunds(true);
-        dialog.showMessageBox({
-          type: 'info',
-          title: `导入完成`,
-          message: `更新：${newFundConfig.length}个，总共：${json.length}个`,
-        });
-      } catch (error) {
-        dialog.showMessageBox({
-          type: 'info',
-          title: `解析失败`,
-          message: `请检查JSON格式`,
-        });
-      }
-    });
-    ipcRenderer.on('clipboard-funds-copy', (e, data) => {
-      try {
-        const currentWalletCode = Helpers.Wallet.GetCurrentWalletCode();
-        const { fundConfig } = Helpers.Fund.GetFundConfig(currentWalletCode);
-        clipboard.writeText(JSON.stringify(fundConfig));
-        dialog.showMessageBox({
-          title: `复制成功`,
-          type: 'info',
-          message: `已复制${fundConfig.length}支基金配置到粘贴板`,
-        });
-      } catch (error) {
-        dialog.showMessageBox({
-          type: 'info',
-          title: `复制失败`,
-          message: `基金JSON复制失败`,
-        });
-      }
-    });
+    ipcRenderer.on('clipboard-funds-import', onClipboardFundsImport);
+    ipcRenderer.on('clipboard-funds-copy', onClipboardFundsCopy);
     return () => {
       ipcRenderer.removeAllListeners('clipboard-funds-import');
       ipcRenderer.removeAllListeners('clipboard-funds-copy');
@@ -237,11 +250,11 @@ export function useFundsClipboard() {
 
 export function useBootStrap() {
   const { freshDelaySetting, autoFreshSetting } = useAppSelector((state) => state.setting.systemSetting);
-  const runLoadRemoteFunds = () => Helpers.Fund.LoadRemoteFunds();
-  const runLoadFundRatingMap = () => Helpers.Fund.LoadFundRatingMap();
+  const runLoadRemoteFunds = useLoadRemoteFunds();
+  const runLoadFundRatingMap = useLoadFundRatingMap();
   const runLoadRemoteCoins = useLoadRemoteCoins();
-  const runLoadWalletsFunds = () => Helpers.Wallet.LoadWalletsFunds();
-  const runLoadFixWalletsFunds = () => Helpers.Wallet.loadFixWalletsFunds();
+  const runLoadWalletsFunds = useLoadWalletsFunds();
+  const runLoadFixWalletsFunds = useLoadFixWalletsFunds();
   const runLoadZindexs = () => Helpers.Zindex.LoadZindexs(false);
   const runLoadQuotations = () => Helpers.Quotation.LoadQuotations(false);
   const runLoadStocks = () => Helpers.Stock.LoadStocks(false);
@@ -315,16 +328,19 @@ export function useMappingLocalToSystemSetting() {
 export function useTrayContent() {
   const { trayContentSetting } = useAppSelector((state) => state.setting.systemSetting);
   const currentWalletCode = useAppSelector((state) => state.wallet.currentWalletCode);
+  const fundConfigCodeMap = useAppSelector((state) => state.wallet.fundConfigCodeMap);
+  const walletsConfig = useAppSelector((state) => state.wallet.config.walletConfig);
   const wallets = useAppSelector((state) => state.wallet.wallets);
   const {
     currentWalletState: { funds },
   } = useCurrentWallet();
-  const calcResult = Helpers.Fund.CalcFunds(funds, currentWalletCode);
+  const calcResult = Helpers.Fund.CalcFunds(funds, fundConfigCodeMap);
 
   const allCalcResult = useMemo(() => {
     const allResult = wallets.reduce(
       (r, { code, funds }) => {
-        const result = Helpers.Fund.CalcFunds(funds, code);
+        const { codeMap } = Helpers.Fund.GetFundConfig(code, walletsConfig);
+        const result = Helpers.Fund.CalcFunds(funds, codeMap);
         return { zje: r.zje + result.zje, gszje: r.gszje + result.gszje };
       },
       { zje: 0, gszje: 0 }
@@ -360,14 +376,16 @@ export function useUpdateContextMenuWalletsState() {
   const dispatch = useAppDispatch();
   const wallets = useAppSelector((state) => state.wallet.wallets);
   const currentWalletCode = useAppSelector((state) => state.wallet.currentWalletCode);
+  const walletsConfig = useAppSelector((state) => state.wallet.config.walletConfig);
   const freshFunds = useFreshFunds(0);
 
   useEffect(() => {
     ipcRenderer.invoke(
       'update-tray-context-menu-wallets',
       wallets.map((wallet) => {
-        const walletConfig = Helpers.Wallet.GetCurrentWalletConfig(wallet.code);
-        const calcResult = Helpers.Fund.CalcFunds(wallet.funds, wallet.code);
+        const walletConfig = Helpers.Wallet.GetCurrentWalletConfig(wallet.code, walletsConfig);
+        const { codeMap } = Helpers.Fund.GetFundConfig(wallet.code, walletsConfig);
+        const calcResult = Helpers.Fund.CalcFunds(wallet.funds, codeMap);
         const value = `  ${Utils.Yang(calcResult.sygz.toFixed(2))}  ${Utils.Yang(calcResult.gssyl.toFixed(2))}%`;
         return {
           label: `${walletConfig.name}  ${value}`,
@@ -377,7 +395,7 @@ export function useUpdateContextMenuWalletsState() {
         };
       })
     );
-  }, [wallets, currentWalletCode]);
+  }, [wallets, currentWalletCode, walletsConfig]);
   useEffect(() => {
     ipcRenderer.on('change-current-wallet-code', (e, code) => {
       try {
@@ -483,9 +501,12 @@ export function useAllConfigBackup() {
 export function useTouchBar() {
   const dispatch = useAppDispatch();
   const zindexs = useAppSelector((state) => state.zindex.zindexs);
-  const wallet = useCurrentWallet();
   const activeKey = useAppSelector((state) => state.tabs.activeKey);
   const eyeStatus = useAppSelector((state) => state.wallet.eyeStatus);
+  const currentWallet = useAppSelector((state) => state.wallet.currentWallet);
+  const currentWalletCode = useAppSelector((state) => state.wallet.currentWalletCode);
+  const walletsConfig = useAppSelector((state) => state.wallet.config.walletConfig);
+  const fundConfigCodeMap = useAppSelector((state) => state.wallet.fundConfigCodeMap);
 
   useEffect(() => {
     ipcRenderer.invoke(
@@ -500,9 +521,8 @@ export function useTouchBar() {
   }, [zindexs]);
 
   useEffect(() => {
-    const { currentWalletCode, currentWalletState } = wallet;
-    const walletConfig = Helpers.Wallet.GetCurrentWalletConfig(currentWalletCode);
-    const calcResult = Helpers.Fund.CalcFunds(currentWalletState.funds, currentWalletCode);
+    const walletConfig = Helpers.Wallet.GetCurrentWalletConfig(currentWalletCode, walletsConfig);
+    const calcResult = Helpers.Fund.CalcFunds(currentWallet.funds, fundConfigCodeMap);
     const value = Utils.Yang(calcResult.gssyl.toFixed(2));
 
     ipcRenderer.invoke('update-touchbar-wallet', [
@@ -512,7 +532,7 @@ export function useTouchBar() {
         iconIndex: walletConfig.iconIndex,
       },
     ]);
-  }, [wallet]);
+  }, [currentWallet, currentWalletCode, walletsConfig, fundConfigCodeMap]);
 
   useEffect(() => {
     ipcRenderer.invoke(

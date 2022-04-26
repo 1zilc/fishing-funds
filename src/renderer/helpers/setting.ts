@@ -1,8 +1,5 @@
 import dayjs from 'dayjs';
-import store from '@/store';
 import * as Enums from '@/utils/enums';
-import * as Utils from '@/utils';
-import * as CONST from '@/constants';
 
 export const defalutSystemSetting: System.Setting = {
   fundApiTypeSetting: Enums.FundApiType.Eastmoney,
@@ -25,10 +22,3 @@ export const defalutSystemSetting: System.Setting = {
   autoCheckUpdateSetting: true,
   timestampSetting: Enums.TimestampType.Network,
 };
-
-export function GetSystemSetting() {
-  const {
-    setting: { systemSetting },
-  } = store.getState();
-  return systemSetting;
-}

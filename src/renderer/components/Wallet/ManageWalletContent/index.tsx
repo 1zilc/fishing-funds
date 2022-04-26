@@ -9,7 +9,7 @@ import WalletRow from '@/components/Wallet/WalletRow';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
 
 import { useDrawer, useAutoDestroySortableRef, useAppDispatch, useAppSelector } from '@/utils/hooks';
-import { setWalletConfigAction, selectWalletAction } from '@/actions/wallet';
+import { setWalletConfigAction, selectWalletAction } from '@/store/features/wallet';
 import styles from './index.module.scss';
 
 const AddWalletContent = React.lazy(() => import('@/components/Wallet/AddWalletContent'));

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 import { useHomeContext } from '@/components/Home';
-import { useResizeEchart, useRenderEcharts, useCurrentWallet } from '@/utils/hooks';
+import { useResizeEchart, useRenderEcharts, useCurrentWallet, useAppSelector } from '@/utils/hooks';
 import TypeSelection from '@/components/TypeSelection';
 import * as CONST from '@/constants';
 import * as Enums from '@/utils/enums';
@@ -25,10 +25,12 @@ const FundRank: React.FC<FundRankProps> = ({ funds = [], codes = [] }) => {
   const { ref: chartRef, chartInstance } = useResizeEchart(Math.max(CONST.DEFAULT.ECHARTS_SCALE, funds.length / 12), true);
   const [rankType, setRankType] = useState(rankTypeList[0]);
   const { varibleColors, darkMode } = useHomeContext();
-  const { currentWalletCode } = useCurrentWallet();
+  const fundConfigCodeMap = useAppSelector((state) => state.wallet.fundConfigCodeMap);
+  const walletsConfig = useAppSelector((state) => state.wallet.config.walletConfig);
 
   useRenderEcharts(
     () => {
+      const codeMaps = Helpers.Fund.GetFundConfigMaps(codes, walletsConfig);
       chartInstance?.setOption({
         tooltip: {
           trigger: 'axis',
@@ -82,10 +84,10 @@ const FundRank: React.FC<FundRankProps> = ({ funds = [], codes = [] }) => {
             },
             data: funds
               .sort((a, b) => {
-                const calcA = Helpers.Fund.CalcFund(a, currentWalletCode);
-                const calcB = Helpers.Fund.CalcFund(b, currentWalletCode);
-                const calcWalletsA = Helpers.Fund.CalcWalletsFund(a, codes);
-                const calcWalletsB = Helpers.Fund.CalcWalletsFund(b, codes);
+                const calcA = Helpers.Fund.CalcFund(a, fundConfigCodeMap);
+                const calcB = Helpers.Fund.CalcFund(b, fundConfigCodeMap);
+                const calcWalletsA = Helpers.Fund.CalcWalletsFund(a, codeMaps);
+                const calcWalletsB = Helpers.Fund.CalcWalletsFund(b, codeMaps);
                 if (rankType.type === Enums.FundRankType.Sy) {
                   return calcWalletsA.jrsygz - calcWalletsB.jrsygz;
                 } else if (rankType.type === Enums.FundRankType.Syl) {
@@ -97,8 +99,8 @@ const FundRank: React.FC<FundRankProps> = ({ funds = [], codes = [] }) => {
                 }
               })
               .map((fund) => {
-                const calcFundResult = Helpers.Fund.CalcFund(fund, currentWalletCode);
-                const calcWalletsFundResult = Helpers.Fund.CalcWalletsFund(fund, codes);
+                const calcFundResult = Helpers.Fund.CalcFund(fund, fundConfigCodeMap);
+                const calcWalletsFundResult = Helpers.Fund.CalcWalletsFund(fund, codeMaps);
                 const value =
                   rankType.type === Enums.FundRankType.Sy
                     ? calcWalletsFundResult.jrsygz
@@ -125,7 +127,7 @@ const FundRank: React.FC<FundRankProps> = ({ funds = [], codes = [] }) => {
       });
     },
     chartInstance,
-    [darkMode, funds, rankType, codes, currentWalletCode]
+    [darkMode, funds, rankType, codes, fundConfigCodeMap, walletsConfig]
   );
 
   return (

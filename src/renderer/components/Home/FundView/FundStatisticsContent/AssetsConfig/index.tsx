@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { useHomeContext } from '@/components/Home';
-import { useResizeEchart, useRenderEcharts } from '@/utils/hooks';
+import { useResizeEchart, useRenderEcharts, useAppSelector } from '@/utils/hooks';
 import * as CONST from '@/constants';
 import * as Helpers from '@/helpers';
 
@@ -13,6 +13,7 @@ export interface AssetsConfigProps {
 const AssetsConfig: React.FC<AssetsConfigProps> = ({ funds, codes }) => {
   const { ref: chartRef, chartInstance } = useResizeEchart(CONST.DEFAULT.ECHARTS_SCALE);
   const { varibleColors, darkMode } = useHomeContext();
+  const walletsConfig = useAppSelector((state) => state.wallet.config.walletConfig);
 
   useRenderEcharts(
     () => {
@@ -38,8 +39,9 @@ const AssetsConfig: React.FC<AssetsConfigProps> = ({ funds, codes }) => {
             radius: '64%',
             center: ['50%', '50%'],
             data: codes.map((code) => {
-              const { zje } = Helpers.Fund.CalcFunds(funds, code);
-              const { name } = Helpers.Wallet.GetCurrentWalletConfig(code);
+              const { codeMap } = Helpers.Fund.GetFundConfig(code, walletsConfig);
+              const { zje } = Helpers.Fund.CalcFunds(funds, codeMap);
+              const { name } = Helpers.Wallet.GetCurrentWalletConfig(code, walletsConfig);
               return {
                 value: zje.toFixed(2),
                 name,
@@ -69,7 +71,7 @@ const AssetsConfig: React.FC<AssetsConfigProps> = ({ funds, codes }) => {
       });
     },
     chartInstance,
-    [darkMode, codes, funds]
+    [darkMode, codes, funds, walletsConfig]
   );
 
   return (

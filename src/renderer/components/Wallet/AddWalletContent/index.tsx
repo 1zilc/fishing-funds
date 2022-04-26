@@ -4,7 +4,7 @@ import { Input } from 'antd';
 
 import WalletSelection from '@/components/Wallet/WalletSelection';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
-import { addWalletConfigAction } from '@/actions/wallet';
+import { addWalletConfigAction } from '@/store/features/wallet';
 
 import { useAppDispatch, useAppSelector } from '@/utils/hooks';
 import * as Utils from '@/utils';

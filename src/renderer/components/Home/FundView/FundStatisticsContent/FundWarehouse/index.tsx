@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 import { useHomeContext } from '@/components/Home';
-import { useResizeEchart, useRenderEcharts, useCurrentWallet } from '@/utils/hooks';
+import { useResizeEchart, useRenderEcharts, useAppSelector } from '@/utils/hooks';
 import * as CONST from '@/constants';
 import * as Helpers from '@/helpers';
 import styles from './index.module.scss';
@@ -14,10 +14,11 @@ interface FundWarehouseProps {
 const FundRank: React.FC<FundWarehouseProps> = ({ funds = [], codes = [] }) => {
   const { ref: chartRef, chartInstance } = useResizeEchart(Math.max(CONST.DEFAULT.ECHARTS_SCALE, funds.length / 12), true);
   const { varibleColors, darkMode } = useHomeContext();
-  const { currentWalletCode } = useCurrentWallet();
+  const walletsConfig = useAppSelector((state) => state.wallet.config.walletConfig);
 
   useRenderEcharts(
     () => {
+      const codeMaps = Helpers.Fund.GetFundConfigMaps(codes, walletsConfig);
       chartInstance?.setOption({
         tooltip: {
           trigger: 'axis',
@@ -69,12 +70,12 @@ const FundRank: React.FC<FundWarehouseProps> = ({ funds = [], codes = [] }) => {
             },
             data: funds
               .sort((a, b) => {
-                const calcWalletsA = Helpers.Fund.CalcWalletsFund(a, codes);
-                const calcWalletsB = Helpers.Fund.CalcWalletsFund(b, codes);
+                const calcWalletsA = Helpers.Fund.CalcWalletsFund(a, codeMaps);
+                const calcWalletsB = Helpers.Fund.CalcWalletsFund(b, codeMaps);
                 return calcWalletsA.cyje - calcWalletsB.cyje;
               })
               .map((fund) => {
-                const calcWalletsFundResult = Helpers.Fund.CalcWalletsFund(fund, codes);
+                const calcWalletsFundResult = Helpers.Fund.CalcWalletsFund(fund, codeMaps);
                 return {
                   name: fund.name,
                   value: calcWalletsFundResult.cyje.toFixed(2),
@@ -88,7 +89,7 @@ const FundRank: React.FC<FundWarehouseProps> = ({ funds = [], codes = [] }) => {
       });
     },
     chartInstance,
-    [darkMode, funds, codes, currentWalletCode]
+    [darkMode, funds, codes]
   );
 
   return (

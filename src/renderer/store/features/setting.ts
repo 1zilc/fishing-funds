@@ -1,8 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import * as Helpers from '@/helpers';
 
-console.log(Helpers);
-
 export type SettingState = {
   systemSetting: System.Setting;
   adjustmentNotificationDate: string;

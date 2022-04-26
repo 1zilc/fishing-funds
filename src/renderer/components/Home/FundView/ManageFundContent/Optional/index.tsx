@@ -12,7 +12,7 @@ import BellsLineIcon from '@/static/icon/bells-line.svg';
 import BellsFillIcon from '@/static/icon/bells-fill.svg';
 import CustomDrawer from '@/components/CustomDrawer';
 import Empty from '@/components/Empty';
-import { deleteFundAction, setFundConfigAction, updateFundAction } from '@/actions/fund';
+import { deleteFundAction, setFundConfigAction, updateFundAction } from '@/store/features/fund';
 import { useSyncFixFundSetting, useDrawer, useCurrentWallet, useAutoDestroySortableRef, useAppDispatch } from '@/utils/hooks';
 
 import styles from './index.module.scss';

@@ -14,9 +14,9 @@ interface TypeConfigProps {
 
 const TypeConfig: React.FC<TypeConfigProps> = ({ funds = [] }) => {
   const remoteFunds = useAppSelector((state) => state.fund.remoteFunds);
+  const fundConfigCodeMap = useAppSelector((state) => state.wallet.fundConfigCodeMap);
   const { ref: chartRef, chartInstance } = useResizeEchart(CONST.DEFAULT.ECHARTS_SCALE);
   const { varibleColors, darkMode } = useHomeContext();
-  const { currentWalletCode } = useCurrentWallet();
 
   useRenderEcharts(
     () => {
@@ -40,7 +40,7 @@ const TypeConfig: React.FC<TypeConfigProps> = ({ funds = [] }) => {
           data: Object.entries(typeMap).map(([type, funds]) => ({
             name: type,
             children: funds.map((fund) => {
-              const calcFundResult = Helpers.Fund.CalcFund(fund, currentWalletCode);
+              const calcFundResult = Helpers.Fund.CalcFund(fund, fundConfigCodeMap);
               return {
                 name: calcFundResult.name,
                 value: 1,
@@ -85,7 +85,7 @@ const TypeConfig: React.FC<TypeConfigProps> = ({ funds = [] }) => {
       });
     },
     chartInstance,
-    [darkMode, funds, currentWalletCode, remoteFunds]
+    [darkMode, funds, fundConfigCodeMap, remoteFunds]
   );
 
   return (

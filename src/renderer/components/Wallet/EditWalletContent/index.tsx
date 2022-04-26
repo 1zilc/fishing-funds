@@ -3,7 +3,7 @@ import { Input } from 'antd';
 
 import WalletSelection from '@/components/Wallet/WalletSelection';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
-import { updateWalletConfigAction } from '@/actions/wallet';
+import { updateWalletConfigAction } from '@/store/features/wallet';
 import { useAppDispatch, useAppSelector } from '@/utils/hooks';
 
 import styles from './index.module.scss';

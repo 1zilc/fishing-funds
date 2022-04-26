@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { useHomeContext } from '@/components/Home';
-import { useResizeEchart, useRenderEcharts } from '@/utils/hooks';
+import { useResizeEchart, useRenderEcharts, useAppSelector, useFundConfigMap } from '@/utils/hooks';
 import * as CONST from '@/constants';
 import * as Utils from '@/utils';
 import * as Helpers from '@/helpers';
@@ -16,6 +16,7 @@ const FundOverview: React.FC<FundOverviewProps> = (props) => {
   const { funds, codes } = props;
   const { ref: chartRef, chartInstance } = useResizeEchart(CONST.DEFAULT.ECHARTS_SCALE);
   const { varibleColors, darkMode } = useHomeContext();
+  const fundConfigMap = useFundConfigMap(codes);
 
   useRenderEcharts(
     () => {
@@ -33,7 +34,7 @@ const FundOverview: React.FC<FundOverviewProps> = (props) => {
             type: 'treemap',
             breadcrumb: { show: false },
             data: funds.map((fund) => {
-              const calcWalletsFundResult = Helpers.Fund.CalcWalletsFund(fund, codes);
+              const calcWalletsFundResult = Helpers.Fund.CalcWalletsFund(fund, fundConfigMap);
               return {
                 name: fund.name,
                 value: [calcWalletsFundResult.cyje, fund.gszzl || 0],
@@ -47,7 +48,7 @@ const FundOverview: React.FC<FundOverviewProps> = (props) => {
       });
     },
     chartInstance,
-    [varibleColors, darkMode, codes]
+    [varibleColors, darkMode, codes, fundConfigMap]
   );
 
   return (

@@ -6,8 +6,8 @@ import PureCard from '@/components/Card/PureCard';
 import Score from '@/components/Home/FundView/FundStatisticsContent/AssetsStatistics/Score';
 import Eye from '@/components/Eye';
 
-import { toggleEyeStatusAction } from '@/actions/wallet';
-import { useAppDispatch, useAppSelector } from '@/utils/hooks';
+import { toggleEyeStatusAction } from '@/store/features/wallet';
+import { useAppDispatch, useAppSelector, useFundConfigMap } from '@/utils/hooks';
 import * as Enums from '@/utils/enums';
 import * as Utils from '@/utils';
 import * as Helpers from '@/helpers';
@@ -21,11 +21,14 @@ interface AssetsStatisticsProps {
 const AssetsStatistics: React.FC<AssetsStatisticsProps> = ({ funds, codes }) => {
   const dispatch = useAppDispatch();
   const eyeStatus = useAppSelector((state) => state.wallet.eyeStatus);
+  const currentWallet = useAppSelector((state) => state.wallet.currentWallet);
+  const walletsConfig = useAppSelector((state) => state.wallet.config.walletConfig);
+  const fundConfigMap = useFundConfigMap(codes);
   const eyeOpen = eyeStatus === Enums.EyeStatus.Open;
   // 盈利钱包数
   const winWalletCount = codes.reduce((result, code) => {
-    const funds = Helpers.Wallet.GetWalletState(code).funds || [];
-    const { sygz } = Helpers.Fund.CalcFunds(funds, code);
+    const { codeMap } = Helpers.Fund.GetFundConfig(code, walletsConfig);
+    const { sygz } = Helpers.Fund.CalcFunds(currentWallet.funds, codeMap);
     return result + (sygz > 0 ? 1 : 0);
   }, 0);
   // 盈利基金数
@@ -33,7 +36,7 @@ const AssetsStatistics: React.FC<AssetsStatisticsProps> = ({ funds, codes }) => 
   // 总资产
   const { cyje, jrsygz, cysy, cbje } = funds.reduce(
     (result, fund) => {
-      const { cyje, jrsygz, cysy, cbje } = Helpers.Fund.CalcWalletsFund(fund, codes);
+      const { cyje, jrsygz, cysy, cbje } = Helpers.Fund.CalcWalletsFund(fund, fundConfigMap);
       result.cyje += cyje;
       result.jrsygz += jrsygz;
       result.cysy += cysy;

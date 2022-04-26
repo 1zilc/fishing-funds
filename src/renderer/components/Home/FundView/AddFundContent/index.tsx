@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 
-import { useDebounceFn } from 'ahooks';
+import { useDebounceFn, useMemoizedFn } from 'ahooks';
 import { Input, InputNumber, message } from 'antd';
 
 import CustomDrawer from '@/components/CustomDrawer';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
-import { addFundAction } from '@/actions/fund';
+import { addFundAction } from '@/store/features/fund';
 
 import { useDrawer, useCurrentWallet, useAppDispatch, useAppSelector } from '@/utils/hooks';
 import * as Enums from '@/utils/enums';
@@ -22,6 +22,7 @@ export interface AddFundContentProps {
 const AddFundContent: React.FC<AddFundContentProps> = (props) => {
   const { defaultCode } = props;
   const dispatch = useAppDispatch();
+  const fundApiTypeSetting = useAppSelector((state) => state.setting.systemSetting.fundApiTypeSetting);
 
   const [name, setName] = useState<string>('');
   const [code, setCode] = useState<string>('');
@@ -36,7 +37,7 @@ const AddFundContent: React.FC<AddFundContentProps> = (props) => {
   const { data: detailCode, show: showDetailDrawer, set: setDetailDrawer, close: closeDetailDrawer } = useDrawer('');
 
   async function onAdd() {
-    const fund = await Helpers.Fund.GetFund(code);
+    const fund = await Helpers.Fund.GetFund(code, fundApiTypeSetting);
     if (fund) {
       dispatch(
         addFundAction({

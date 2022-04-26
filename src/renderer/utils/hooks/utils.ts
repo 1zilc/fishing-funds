@@ -5,10 +5,12 @@ import dayjs from 'dayjs';
 import * as echarts from 'echarts';
 
 import { updateStockAction } from '@/actions/stock';
-import { updateFundAction } from '@/actions/fund';
+import { updateFundAction, sortFundsCachedAction, setRemoteFundsAction, setFundRatingMapAction } from '@/store/features/fund';
 import { openWebAction } from '@/actions/web';
+import { syncFixWalletStateAction, updateWalletStateAction } from '@/store/features/wallet';
 import { TypedDispatch, StoreState } from '@/store';
 import { setCoinsLoading, setRemoteCoinsLoading, sortCoinsCachedAction, setRemoteCoinsAction } from '@/store/features/coin';
+import { setFundsLoading, setRemoteFundsLoading } from '@/store/features/fund';
 import * as Utils from '@/utils';
 import * as CONST from '@/constants';
 import * as Adapters from '@/utils/adpters';
@@ -23,9 +25,10 @@ export const useAppDispatch = () => useDispatch<TypedDispatch>();
 export const useAppSelector: TypedUseSelectorHook<StoreState> = useSelector;
 
 export function useWorkDayTimeToDo(todo: () => void, delay: number, config?: { immediate: boolean }): void {
+  const { timestampSetting } = useAppSelector((state) => state.setting.systemSetting);
   useInterval(
     async () => {
-      const timestamp = await Helpers.Time.GetCurrentHours();
+      const timestamp = await Helpers.Time.GetCurrentHours(timestampSetting);
       const isWorkDayTime = Utils.JudgeWorkDayTime(Number(timestamp));
       if (isWorkDayTime) {
         todo();
@@ -37,9 +40,10 @@ export function useWorkDayTimeToDo(todo: () => void, delay: number, config?: { i
 }
 
 export function useFixTimeToDo(todo: () => void, delay: number, config?: { immediate: boolean }): void {
+  const { timestampSetting } = useAppSelector((state) => state.setting.systemSetting);
   useInterval(
     async () => {
-      const timestamp = await Helpers.Time.GetCurrentHours();
+      const timestamp = await Helpers.Time.GetCurrentHours(timestampSetting);
       const isFixTime = Utils.JudgeFixTime(Number(timestamp));
       if (isFixTime) {
         todo();
@@ -148,10 +152,11 @@ export function useSyncFixFundSetting() {
   const dispatch = useAppDispatch();
   const [done, { setTrue }] = useBoolean(false);
   const { currentWalletFundsConfig: fundConfig } = useCurrentWallet();
+  const fundApiTypeSetting = useAppSelector((state) => state.setting.systemSetting.fundApiTypeSetting);
 
   async function FixFundSetting(fundConfig: Fund.SettingItem[]) {
     try {
-      const responseFunds = await Helpers.Fund.GetFunds(fundConfig);
+      const responseFunds = await Helpers.Fund.GetFunds(fundConfig, fundApiTypeSetting);
       responseFunds.filter(Boolean).forEach((responseFund) => {
         dispatch(
           updateFundAction({
@@ -225,41 +230,160 @@ export function useCurrentWallet() {
   const { walletConfig } = useAppSelector((state) => state.wallet.config);
   const wallets = useAppSelector((state) => state.wallet.wallets);
   const currentWalletCode = useAppSelector((state) => state.wallet.currentWalletCode);
-  const currentWalletConfig = walletConfig.find(({ code }) => currentWalletCode === code)!;
-  const currentWalletState = wallets.find(({ code }) => currentWalletCode === code) || {
-    funds: [],
-    updateTime: '',
-    code: currentWalletCode,
-  };
-  const currentWalletFundsCodeMap = Helpers.Fund.GetCodeMap(currentWalletConfig.funds);
+  const fundConfig = useAppSelector((state) => state.wallet.fundConfig);
+  const fundConfigCodeMap = useAppSelector((state) => state.wallet.fundConfigCodeMap);
+  const currentWalletConfig = Helpers.Wallet.GetCurrentWalletConfig(currentWalletCode, walletConfig);
+  const currentWalletState = Helpers.Wallet.GetCurrentWalletState(currentWalletCode, wallets);
   const currentWalletFundsConfig = currentWalletConfig.funds;
+  const currentWalletFundsCodeMap = Utils.GetCodeMap(currentWalletConfig.funds, 'code');
 
   return {
     currentWalletFundsConfig, // 当前钱包基金配置
     currentWalletFundsCodeMap, // 当前钱包基金配置 codemap
     currentWalletConfig, // 当前钱包配置
+    fundConfig,
     currentWalletCode, // 当前钱包 code
     currentWalletState, // 当前钱包状态
+    fundConfigCodeMap,
   };
 }
 
 export function useFreshFunds(throttleDelay: number) {
-  const { run: runLoadFunds } = useThrottleFn(Helpers.Fund.LoadFunds, {
+  const loadFunds = useLoadFunds(true);
+  const loadFixFunds = useLoadFixFunds();
+  const { run: runLoadFunds } = useThrottleFn(loadFunds, {
     wait: throttleDelay,
   });
-  const { run: runLoadFixFunds } = useThrottleFn(Helpers.Fund.LoadFixFunds, {
+  const { run: runLoadFixFunds } = useThrottleFn(loadFixFunds, {
     wait: throttleDelay,
   });
   const freshFunds = useScrollToTop({
     after: async () => {
       const isFixTime = Utils.JudgeFixTime(dayjs().valueOf());
-      await runLoadFunds(true);
+      await runLoadFunds();
       if (isFixTime) {
         await runLoadFixFunds();
       }
     },
   });
   return freshFunds;
+}
+
+export function useLoadFunds(loading: boolean) {
+  const dispatch = useAppDispatch();
+  const currentWalletCode = useAppSelector((state) => state.wallet.currentWalletCode);
+  const fundConfig = useAppSelector((state) => state.wallet.fundConfig);
+  const fundApiTypeSetting = useAppSelector((state) => state.setting.systemSetting.fundApiTypeSetting);
+
+  const load = useMemoizedFn(async () => {
+    try {
+      dispatch(setFundsLoading(loading));
+      const responseFunds = await Helpers.Fund.GetFunds(fundConfig, fundApiTypeSetting);
+      batch(() => {
+        dispatch(sortFundsCachedAction(responseFunds, currentWalletCode));
+        dispatch(setFundsLoading(false));
+      });
+    } catch (error) {
+      dispatch(setFundsLoading(false));
+    }
+  });
+  return load;
+}
+
+export function useLoadFixFunds() {
+  const dispatch = useAppDispatch();
+  const { currentWalletState } = useCurrentWallet();
+
+  const load = useMemoizedFn(async () => {
+    try {
+      const { funds, code } = currentWalletState;
+      const fixFunds = (await Helpers.Fund.GetFixFunds(funds)).filter(Utils.NotEmpty);
+      const now = dayjs().format('MM-DD HH:mm:ss');
+      dispatch(syncFixWalletStateAction({ code, funds: fixFunds, updateTime: now }));
+    } catch (error) {}
+  });
+
+  return load;
+}
+
+export function useLoadRemoteFunds() {
+  const dispatch = useAppDispatch();
+
+  const load = useMemoizedFn(async () => {
+    try {
+      dispatch(setRemoteFundsLoading(true));
+      const remoteFunds = await Services.Fund.GetRemoteFundsFromEastmoney();
+      batch(() => {
+        dispatch(setRemoteFundsAction(remoteFunds));
+        dispatch(setRemoteFundsLoading(false));
+      });
+    } catch (error) {
+      dispatch(setRemoteFundsLoading(false));
+    }
+  });
+
+  return load;
+}
+
+export function useLoadFundRatingMap() {
+  const dispatch = useAppDispatch();
+
+  const load = useMemoizedFn(async () => {
+    try {
+      const remoteRantings = await Services.Fund.GetFundRatingFromEasemoney();
+      dispatch(setFundRatingMapAction(remoteRantings));
+    } catch (error) {}
+  });
+
+  return load;
+}
+
+export function useLoadWalletsFunds() {
+  const dispatch = useAppDispatch();
+  const { walletConfig } = useAppSelector((state) => state.wallet.config);
+  const fundApiTypeSetting = useAppSelector((state) => state.setting.systemSetting.fundApiTypeSetting);
+
+  const load = useMemoizedFn(async () => {
+    try {
+      const collects = walletConfig.map(({ funds: fundsConfig, code: walletCode }) => async () => {
+        const responseFunds = await Helpers.Fund.GetFunds(fundsConfig, fundApiTypeSetting);
+        const now = dayjs().format('MM-DD HH:mm:ss');
+        dispatch(updateWalletStateAction({ code: walletCode, funds: responseFunds, updateTime: now }));
+        return responseFunds;
+      });
+      await Adapters.ChokeAllAdapter<(Fund.ResponseItem | null)[]>(collects, CONST.DEFAULT.LOAD_WALLET_DELAY);
+    } catch (error) {}
+  });
+
+  return load;
+}
+
+export function useLoadFixWalletsFunds() {
+  const dispatch = useAppDispatch();
+  const wallets = useAppSelector((state) => state.wallet.wallets);
+  const load = useMemoizedFn(async () => {
+    try {
+      const fixCollects = wallets.map((wallet) => {
+        const collectors = (wallet.funds || [])
+          .filter(({ fixDate, gztime }) => !fixDate || fixDate !== gztime?.slice(5, 10))
+          .map(
+            ({ fundcode }) =>
+              () =>
+                Services.Fund.GetFixFromEastMoney(fundcode!)
+          );
+        return async () => {
+          const fixFunds = await Adapters.ChokeGroupAdapter<Fund.FixData>(collectors, 5, 100);
+          const now = dayjs().format('MM-DD HH:mm:ss');
+          dispatch(syncFixWalletStateAction({ code: wallet.code, funds: fixFunds.filter(Utils.NotEmpty), updateTime: now }));
+          return fixFunds;
+        };
+      });
+
+      await Adapters.ChokeAllAdapter<(Fund.FixData | null)[]>(fixCollects, CONST.DEFAULT.LOAD_WALLET_DELAY);
+    } catch (error) {}
+  });
+
+  return load;
 }
 
 export function useFreshZindexs(throttleDelay: number) {
@@ -359,6 +483,7 @@ export function useAfterMounted(fn: any, dep: any[] = []) {
 
 export function useFundRating(code: string) {
   const fundRatingMap = useAppSelector((state) => state.fund.fundRatingMap);
+  const loadFundRatingMap = useLoadFundRatingMap();
   const fundRating = fundRatingMap[code];
   let star = 0;
   if (fundRating) {
@@ -384,8 +509,8 @@ export function useFundRating(code: string) {
   }
 
   useEffect(() => {
-    if (!Object.keys(fundRatingMap)) {
-      Helpers.Fund.LoadFundRatingMap();
+    if (!Object.keys(fundRatingMap).length) {
+      loadFundRatingMap();
     }
   }, [fundRatingMap]);
 
@@ -410,14 +535,15 @@ export function useAutoDestroySortableRef() {
  */
 export function useAllCyFunds(statusMap: Record<string, boolean>) {
   const wallets = useAppSelector((state) => state.wallet.wallets);
+  const walletsConfig = useAppSelector((state) => state.wallet.config.walletConfig);
 
   // 持有份额的基金，response数组
   const funds = useMemo(() => {
     const allFunds: (Fund.ResponseItem & Fund.FixData)[] = [];
     const fundCodeMap = new Map();
     wallets.forEach(({ code, funds }) => {
-      const fundConfig = Helpers.Wallet.GetCurrentWalletConfig(code).funds;
-      const fundCodeMap = Helpers.Fund.GetCodeMap(fundConfig);
+      const { fundConfig } = Helpers.Fund.GetFundConfig(code, walletsConfig);
+      const fundCodeMap = Utils.GetCodeMap(fundConfig, 'code');
       if (statusMap[code]) {
         allFunds.push(...funds.filter((fund) => !!fundCodeMap[fund.fundcode!]?.cyfe));
       }
@@ -435,4 +561,10 @@ export function useOpenWebView(params: any = {}) {
     dispatch(openWebAction({ ...params, ...obj }));
   });
   return openWebView;
+}
+
+export function useFundConfigMap(codes: string[]) {
+  const walletsConfig = useAppSelector((state) => state.wallet.config.walletConfig);
+  const codeMaps = useMemo(() => Helpers.Fund.GetFundConfigMaps(codes, walletsConfig), [codes, walletsConfig]);
+  return codeMaps;
 }

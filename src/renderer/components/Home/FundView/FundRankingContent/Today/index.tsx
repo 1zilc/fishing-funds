@@ -34,7 +34,7 @@ const RenderColorCol = ({ value }: { value: string }) => {
 
 const Today: React.FC<PropsWithChildren<TodayProps>> = () => {
   const [fundType, setFundType] = useState(fundTypeList[0]);
-  const [data, setData] = useState([]);
+  const [data, setData] = useState<any[]>([]);
   const { currentWalletFundsCodeMap: codeMap } = useCurrentWallet();
   const { data: detailCode, show: showDetailDrawer, set: setDetailDrawer, close: closeDetailDrawer } = useDrawer('');
   const { data: addCode, show: showAddDrawer, set: setAddDrawer, close: closeAddDrawer } = useDrawer('');

@@ -7,7 +7,7 @@ import ConsumptionIcon from '@/static/icon/consumption.svg';
 import Eye from '@/components/Eye';
 import { useHeaderContext } from '@/components/Header';
 
-import { selectWalletAction, toggleEyeStatusAction } from '@/actions/wallet';
+import { selectWalletAction, toggleEyeStatusAction } from '@/store/features/wallet';
 import { useCurrentWallet, useFreshFunds, useAppDispatch, useAppSelector } from '@/utils/hooks';
 import { walletIcons } from '@/helpers/wallet';
 import * as Enums from '@/utils/enums';
@@ -22,15 +22,15 @@ const Wallet: React.FC<WalletProps> = () => {
   const dispatch = useAppDispatch();
   const { miniMode } = useHeaderContext();
   const eyeStatus = useAppSelector((state) => state.wallet.eyeStatus);
-  const currentWalletCode = useAppSelector((state) => state.wallet.currentWalletCode);
+  const fundConfigCodeMap = useAppSelector((state) => state.wallet.fundConfigCodeMap);
   const { walletConfig } = useAppSelector((state) => state.wallet.config);
-  const { currentWalletConfig, currentWalletState } = useCurrentWallet();
+  const { currentWalletConfig, currentWalletState, currentWalletCode } = useCurrentWallet();
   const freshFunds = useFreshFunds(CONST.DEFAULT.FRESH_BUTTON_THROTTLE_DELAY);
 
   const { funds, updateTime } = currentWalletState;
 
   const { displayZje, displaySygz } = useMemo(() => {
-    const { zje, sygz } = Helpers.Fund.CalcFunds(funds, currentWalletCode);
+    const { zje, sygz } = Helpers.Fund.CalcFunds(funds, fundConfigCodeMap);
     const eyeOpen = eyeStatus === Enums.EyeStatus.Open;
     const displayZje = eyeOpen ? zje.toFixed(2) : Utils.Encrypt(zje.toFixed(2));
     const displaySygz = eyeOpen ? Utils.Yang(sygz.toFixed(2)) : Utils.Encrypt(Utils.Yang(sygz.toFixed(2)));
@@ -38,7 +38,7 @@ const Wallet: React.FC<WalletProps> = () => {
       displayZje,
       displaySygz,
     };
-  }, [funds, eyeStatus, currentWalletCode]);
+  }, [funds, eyeStatus, fundConfigCodeMap]);
 
   const walletMenuItems = useMemo(
     () =>

@@ -5,7 +5,7 @@ import StandCard from '@/components/Card/StandCard';
 import RemoveIcon from '@/static/icon/remove.svg';
 import CheckboxIcon from '@/static/icon/checkbox.svg';
 import EditIcon from '@/static/icon/edit.svg';
-import { deleteWalletConfigAction } from '@/actions/wallet';
+import { deleteWalletConfigAction } from '@/store/features/wallet';
 import { walletIcons } from '@/helpers/wallet';
 
 import { useAppDispatch, useAppSelector } from '@/utils/hooks';
@@ -32,6 +32,7 @@ const WalletRow: React.FC<WalletRowProps> = (props) => {
   const wallets = useAppSelector((state) => state.wallet.wallets);
   const { walletConfig } = useAppSelector((state) => state.wallet.config);
   const eyeStatus = useAppSelector((state) => state.wallet.eyeStatus);
+  const walletsConfig = useAppSelector((state) => state.wallet.config.walletConfig);
 
   const onRemoveClick = async (wallet: Wallet.SettingItem) => {
     if (walletConfig.length === 1) {
@@ -66,8 +67,8 @@ const WalletRow: React.FC<WalletRowProps> = (props) => {
     updateTime: '还没有刷新过哦~',
   };
   const { funds, updateTime } = walletState;
-
-  const { zje, sygz, gssyl, cysy, cysyl } = Helpers.Fund.CalcFunds(funds, wallet.code);
+  const { codeMap } = Helpers.Fund.GetFundConfig(wallet.code, walletsConfig);
+  const { zje, sygz, gssyl, cysy, cysyl } = Helpers.Fund.CalcFunds(funds, codeMap);
   const eyeOpen = eyeStatus === Enums.EyeStatus.Open;
   const displayZje = eyeOpen ? zje.toFixed(2) : Utils.Encrypt(zje.toFixed(2));
   const displaySygz = eyeOpen ? Utils.Yang(sygz.toFixed(2)) : Utils.Encrypt(Utils.Yang(sygz.toFixed(2)));

@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { InputNumber, Input } from 'antd';
 
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
-import { updateFundAction } from '@/actions/fund';
+import { updateFundAction } from '@/store/features/fund';
 import { useAppDispatch } from '@/utils/hooks';
 import styles from './index.module.scss';
 

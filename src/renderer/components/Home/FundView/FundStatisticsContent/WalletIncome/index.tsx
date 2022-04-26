@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 import { useHomeContext } from '@/components/Home';
-import { useResizeEchart, useRenderEcharts } from '@/utils/hooks';
+import { useResizeEchart, useRenderEcharts, useAppSelector } from '@/utils/hooks';
 import TypeSelection from '@/components/TypeSelection';
 import * as CONST from '@/constants';
 import * as Enums from '@/utils/enums';
@@ -23,8 +23,8 @@ const incomeTypeList = [
 const WalletIncome: React.FC<WalletIncomeProps> = ({ funds = [], codes = [] }) => {
   const { ref: chartRef, chartInstance } = useResizeEchart(CONST.DEFAULT.ECHARTS_SCALE);
   const [incomeType, setIncomeType] = useState(incomeTypeList[0]);
-
   const { darkMode } = useHomeContext();
+  const walletsConfig = useAppSelector((state) => state.wallet.config.walletConfig);
 
   useRenderEcharts(
     () => {
@@ -48,7 +48,7 @@ const WalletIncome: React.FC<WalletIncomeProps> = ({ funds = [], codes = [] }) =
         },
         xAxis: {
           type: 'category',
-          data: codes.map((code) => Helpers.Wallet.GetCurrentWalletConfig(code).name),
+          data: codes.map((code) => Helpers.Wallet.GetCurrentWalletConfig(code, walletsConfig).name),
           axisLabel: {
             fontSize: 10,
           },
@@ -69,7 +69,8 @@ const WalletIncome: React.FC<WalletIncomeProps> = ({ funds = [], codes = [] }) =
               focus: 'series',
             },
             data: codes.map((code) => {
-              const { sygz, gssyl, cysy, cysyl } = Helpers.Fund.CalcFunds(funds, code);
+              const { codeMap } = Helpers.Fund.GetFundConfig(code, walletsConfig);
+              const { sygz, gssyl, cysy, cysyl } = Helpers.Fund.CalcFunds(funds, codeMap);
               const values = {
                 [Enums.WalletIncomType.Jrsy]: sygz.toFixed(2),
                 [Enums.WalletIncomType.Jrsyl]: gssyl.toFixed(2),
@@ -90,7 +91,7 @@ const WalletIncome: React.FC<WalletIncomeProps> = ({ funds = [], codes = [] }) =
       });
     },
     chartInstance,
-    [darkMode, funds, codes, incomeType]
+    [darkMode, funds, codes, incomeType, walletsConfig]
   );
 
   return (

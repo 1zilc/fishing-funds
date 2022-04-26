@@ -15,11 +15,11 @@ export interface SameFundListProps {
   swithSameType: string[][];
 }
 const SameFundList: React.FC<SameFundListProps> = ({ swithSameType = [] }) => {
-  const { autoFreshSetting, freshDelaySetting } = useAppSelector((state) => state.setting.systemSetting);
+  const { autoFreshSetting, freshDelaySetting, fundApiTypeSetting } = useAppSelector((state) => state.setting.systemSetting);
+  const fundConfigCodeMap = useAppSelector((state) => state.wallet.fundConfigCodeMap);
   const [sameFunds, setSameFunds] = useState<(Fund.ResponseItem & Fund.ExtraRow)[]>([]);
   const { data: detailFundCode, show: showDetailDrawer, set: setDetailDrawer, close: closeDetailDrawer } = useDrawer('');
-  const { currentWalletCode } = useCurrentWallet();
-  const { run: runGetFunds } = useRequest(Helpers.Fund.GetFunds, {
+  const { run: runGetFunds } = useRequest((config: Fund.SettingItem[]) => Helpers.Fund.GetFunds(config, fundApiTypeSetting), {
     manual: true,
 
     onSuccess: (result: Fund.ResponseItem[]) => {
@@ -35,8 +35,8 @@ const SameFundList: React.FC<SameFundListProps> = ({ swithSameType = [] }) => {
     onSuccess: (result: Fund.FixData[]) => {
       const fixFunds = Helpers.Fund.MergeFixFunds(sameFunds, result);
       const cloneFunds = fixFunds.filter(Boolean).sort((a, b) => {
-        const calcA = Helpers.Fund.CalcFund(a, currentWalletCode);
-        const calcB = Helpers.Fund.CalcFund(b, currentWalletCode);
+        const calcA = Helpers.Fund.CalcFund(a, fundConfigCodeMap);
+        const calcB = Helpers.Fund.CalcFund(b, fundConfigCodeMap);
         return Number(calcB.gszzl) - Number(calcA.gszzl);
       });
       setSameFunds(cloneFunds);

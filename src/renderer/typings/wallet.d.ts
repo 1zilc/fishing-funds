@@ -10,6 +10,9 @@ declare namespace Wallet {
     funds: (Fund.ResponseItem & Fund.FixData & Fund.ExtraRow)[];
     updateTime: string;
   }
+  export interface CodeMap {
+    [index: string]: Wallet.SettingItem & Wallet.OriginRow;
+  }
   export interface OriginRow {
     originSort: number;
   }

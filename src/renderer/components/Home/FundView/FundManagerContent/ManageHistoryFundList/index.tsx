@@ -15,12 +15,12 @@ export interface ManageHistoryFundListProps {
   manageHistoryFunds?: Fund.Manager.ManageHistoryFund[];
 }
 const ManageHistoryFundList: React.FC<ManageHistoryFundListProps> = ({ manageHistoryFunds = [] }) => {
-  const { autoFreshSetting, freshDelaySetting } = useAppSelector((state) => state.setting.systemSetting);
+  const { autoFreshSetting, freshDelaySetting, fundApiTypeSetting } = useAppSelector((state) => state.setting.systemSetting);
+  const fundConfigCodeMap = useAppSelector((state) => state.wallet.fundConfigCodeMap);
   const [manageHistoryFundList, setManageHistoryFundList] = useState<(Fund.ResponseItem & Fund.ExtraRow)[]>([]);
-  const { currentWalletCode } = useCurrentWallet();
   const { data: detailFundCode, show: showDetailDrawer, set: setDetailDrawer, close: closeDetailDrawer } = useDrawer('');
 
-  const { run: runGetFunds } = useRequest(Helpers.Fund.GetFunds, {
+  const { run: runGetFunds } = useRequest((config: Fund.SettingItem[]) => Helpers.Fund.GetFunds(config, fundApiTypeSetting), {
     manual: true,
 
     onSuccess: (result: Fund.ResponseItem[]) => {
@@ -36,8 +36,8 @@ const ManageHistoryFundList: React.FC<ManageHistoryFundListProps> = ({ manageHis
     onSuccess: (result) => {
       const fixFunds = Helpers.Fund.MergeFixFunds(manageHistoryFundList, result);
       const cloneFunds = fixFunds.filter(Boolean).sort((a, b) => {
-        const calcA = Helpers.Fund.CalcFund(a, currentWalletCode);
-        const calcB = Helpers.Fund.CalcFund(b, currentWalletCode);
+        const calcA = Helpers.Fund.CalcFund(a, fundConfigCodeMap);
+        const calcB = Helpers.Fund.CalcFund(b, fundConfigCodeMap);
         return Number(calcB.gszzl) - Number(calcA.gszzl);
       });
       setManageHistoryFundList(cloneFunds);

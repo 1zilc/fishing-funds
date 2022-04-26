@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 import { useHomeContext } from '@/components/Home';
-import { useResizeEchart, useRenderEcharts } from '@/utils/hooks';
+import { useResizeEchart, useRenderEcharts, useAppSelector } from '@/utils/hooks';
 import * as CONST from '@/constants';
 import * as Helpers from '@/helpers';
 
@@ -13,10 +13,11 @@ interface WalletConfigProps {
 const WalletConfig: React.FC<WalletConfigProps> = ({ funds, codes }) => {
   const { ref: chartRef, chartInstance } = useResizeEchart(CONST.DEFAULT.ECHARTS_SCALE);
   const { varibleColors, darkMode } = useHomeContext();
+  const walletsConfig = useAppSelector((state) => state.wallet.config.walletConfig);
 
   useRenderEcharts(
     () => {
-      const walletsName = codes.map((code) => Helpers.Wallet.GetCurrentWalletConfig(code).name);
+      const walletsName = codes.map((code) => Helpers.Wallet.GetCurrentWalletConfig(code, walletsConfig).name);
       chartInstance?.setOption(
         {
           tooltip: {
@@ -74,7 +75,8 @@ const WalletConfig: React.FC<WalletConfigProps> = ({ funds, codes }) => {
               },
               stack: walletsName.join(','),
               data: codes.map((code) => {
-                const calcFundResult = Helpers.Fund.CalcFund(fund, code);
+                const { codeMap } = Helpers.Fund.GetFundConfig(code, walletsConfig);
+                const calcFundResult = Helpers.Fund.CalcFund(fund, codeMap);
                 return calcFundResult.cyje.toFixed(2);
               }),
             };
@@ -85,7 +87,7 @@ const WalletConfig: React.FC<WalletConfigProps> = ({ funds, codes }) => {
       );
     },
     chartInstance,
-    [darkMode, funds, codes]
+    [darkMode, funds, codes, walletsConfig]
   );
 
   return (

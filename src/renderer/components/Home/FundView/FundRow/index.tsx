@@ -6,7 +6,7 @@ import ArrowDownIcon from '@/static/icon/arrow-down.svg';
 import ArrowUpIcon from '@/static/icon/arrow-up.svg';
 import Collapse from '@/components/Collapse';
 import MemoNote from '@/components/MemoNote';
-import { toggleFundCollapseAction } from '@/actions/fund';
+import { toggleFundCollapseAction } from '@/store/features/wallet';
 import { useCurrentWallet, useAppDispatch, useAppSelector } from '@/utils/hooks';
 import * as Utils from '@/utils';
 import * as Helpers from '@/helpers';
@@ -29,9 +29,9 @@ const FundRow: React.FC<RowProps> = (props) => {
   const { fund, readOnly } = props;
   const dispatch = useAppDispatch();
   const { conciseSetting } = useAppSelector((state) => state.setting.systemSetting);
+  const fundConfigCodeMap = useAppSelector((state) => state.wallet.fundConfigCodeMap);
   const eyeStatus = useAppSelector((state) => state.wallet.eyeStatus);
-  const { currentWalletCode } = useCurrentWallet();
-  const calcFundResult = useMemo(() => Helpers.Fund.CalcFund(fund, currentWalletCode), [fund, currentWalletCode]);
+  const calcFundResult = useMemo(() => Helpers.Fund.CalcFund(fund, fundConfigCodeMap), [fund, fundConfigCodeMap]);
   const { isFix } = calcFundResult;
 
   function onRowClick() {
@@ -49,7 +49,6 @@ const FundRow: React.FC<RowProps> = (props) => {
   }
 
   function onEditClick(focus: 'cbj' | 'cyfe') {
-    const { codeMap } = Helpers.Fund.GetFundConfig(currentWalletCode);
     if (props.onEdit) {
       props.onEdit(
         {
@@ -57,9 +56,9 @@ const FundRow: React.FC<RowProps> = (props) => {
           code: fund.fundcode!,
           cyfe: Number(calcFundResult.cyfe),
           cbj: calcFundResult.cbj,
-          zdfRange: codeMap[fund.fundcode!]?.zdfRange,
-          jzNotice: codeMap[fund.fundcode!]?.jzNotice,
-          memo: codeMap[fund.fundcode!]?.memo,
+          zdfRange: fundConfigCodeMap[fund.fundcode!]?.zdfRange,
+          jzNotice: fundConfigCodeMap[fund.fundcode!]?.jzNotice,
+          memo: fundConfigCodeMap[fund.fundcode!]?.memo,
         },
         focus
       );

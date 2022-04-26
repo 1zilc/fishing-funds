@@ -30,11 +30,11 @@ import {
 } from '@/actions/sort';
 import CustomDrawer from '@/components/CustomDrawer';
 
-import { toggleAllFundsCollapseAction } from '@/actions/fund';
 import { toggleAllZindexsCollapseAction } from '@/actions/zindex';
 import { toggleAllQuotationsCollapse } from '@/actions/quotation';
 import { toggleAllStocksCollapseAction } from '@/actions/stock';
 import { toggleAllCoinsCollapseAction } from '@/store/features/coin';
+import { toggleAllFundsCollapseAction } from '@/store/features/wallet';
 import {
   useScrollToTop,
   useFreshFunds,

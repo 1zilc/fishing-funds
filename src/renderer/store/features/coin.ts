@@ -86,9 +86,7 @@ export function addCoinAction(coin: Coin.SettingItem): TypedThunk {
       if (!exist) {
         dispatch(setCoinConfigAction(coinConfig.concat(coin)));
       }
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
 }
 
@@ -100,11 +98,12 @@ export function deleteCoinAction(code: string): TypedThunk {
           config: { coinConfig },
         },
       } = getState();
+      const cloneCoinConfig = coinConfig.slice();
 
-      coinConfig.forEach((item, index) => {
+      cloneCoinConfig.forEach((item, index) => {
         if (code === item.code) {
-          coinConfig.splice(index, 1);
-          dispatch(setCoinConfigAction(coinConfig));
+          cloneCoinConfig.splice(index, 1);
+          dispatch(setCoinConfigAction(cloneCoinConfig));
         }
       });
     } catch (error) {}
@@ -144,7 +143,7 @@ export function sortCoinsAction(): TypedThunk {
         },
       } = getState();
       const codeMap = Utils.GetCodeMap(coinConfig, 'code');
-      const sortList = Utils.DeepCopy(coins);
+      const sortList = coins.slice();
 
       sortList.sort((a, b) => {
         const t = order === Enums.SortOrderType.Asc ? 1 : -1;

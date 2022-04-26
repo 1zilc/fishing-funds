@@ -7,5 +7,6 @@ export async function GetCoin(code: string) {
 }
 export async function GetCoins(config: Coin.SettingItem[], unit: Enums.CoinUnitType) {
   const ids = config.map(({ code }) => code).join(',');
-  return (await Services.Coin.FromCoingecko(ids, unit)).filter(Utils.NotEmpty);
+  const list = await Services.Coin.FromCoingecko(ids, unit);
+  return list.filter(Utils.NotEmpty);
 }
