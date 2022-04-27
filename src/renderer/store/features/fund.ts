@@ -206,7 +206,7 @@ export function sortFundsCachedAction(responseFunds: Fund.ResponseItem[], wallet
   return (dispatch, getState) => {
     try {
       const {
-        wallet: { fundConfig, fundConfigCodeMap, currentWalletCode },
+        wallet: { fundConfig, fundConfigCodeMap },
       } = getState();
       const now = dayjs().format('MM-DD HH:mm:ss');
       const fundsWithChached = responseFunds.map((_) => ({
@@ -223,7 +223,7 @@ export function sortFundsCachedAction(responseFunds: Fund.ResponseItem[], wallet
       });
 
       batch(() => {
-        dispatch(setWalletStateAction({ code: currentWalletCode, funds: fundsWithChached, updateTime: now }));
+        dispatch(setWalletStateAction({ code: walletCode, funds: fundsWithChached, updateTime: now }));
         dispatch(sortFundsAction());
       });
     } catch (error) {}
