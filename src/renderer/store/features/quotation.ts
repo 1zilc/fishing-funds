@@ -11,23 +11,23 @@ export interface QuotationState {
   favoriteQuotationMap: Record<string, boolean>;
 }
 
-const initialState = {
+const initialState: QuotationState = {
   quotations: [],
   quotationsLoading: false,
   favoriteQuotationMap: {},
-} as QuotationState;
+};
 
 const quotationlice = createSlice({
   name: 'quotation',
   initialState,
   reducers: {
-    syncQuotations(state, action) {
+    syncQuotationsAction(state, action: PayloadAction<(Quotation.ResponseItem & Quotation.ExtraRow)[]>) {
       state.quotations = action.payload;
     },
-    setQuotationsLoading(state, action: PayloadAction<boolean>) {
+    setQuotationsLoadingAction(state, action: PayloadAction<boolean>) {
       state.quotationsLoading = action.payload;
     },
-    syncFavoriteQuotationMap(state, action) {
+    syncFavoriteQuotationMapAction(state, action: PayloadAction<Record<string, boolean>>) {
       state.favoriteQuotationMap = action.payload;
     },
     toggleQuotationCollapseAction(state, { payload }: PayloadAction<Quotation.ResponseItem & Quotation.ExtraRow>) {
@@ -47,20 +47,20 @@ const quotationlice = createSlice({
 });
 
 export const {
-  syncQuotations,
-  setQuotationsLoading,
-  syncFavoriteQuotationMap,
+  syncQuotationsAction,
+  setQuotationsLoadingAction,
+  syncFavoriteQuotationMapAction,
   toggleQuotationCollapseAction,
   toggleAllQuotationsCollapseAction,
 } = quotationlice.actions;
 
-export function syncFavoriteQuotationMapAction(code: string, status: boolean): TypedThunk {
+export function setFavoriteQuotationMapAction(code: string, status: boolean): TypedThunk {
   return (dispatch, getState) => {
     try {
       const { quotation } = getState();
       const favoriteQuotationMap = { ...quotation.favoriteQuotationMap, [code]: status };
 
-      dispatch(syncFavoriteQuotationMap(favoriteQuotationMap));
+      dispatch(syncFavoriteQuotationMapAction(favoriteQuotationMap));
       Utils.SetStorage(CONST.STORAGE.FAVORITE_QUOTATION_MAP, favoriteQuotationMap);
     } catch (error) {}
   };
@@ -132,7 +132,7 @@ export function sortQuotationsAction(): TypedThunk {
 export function syncQuotationsStateAction(quotations: Quotation.ResponseItem[]): TypedThunk {
   return (dispatch, getState) => {
     try {
-      dispatch(syncQuotations(quotations));
+      dispatch(syncQuotationsAction(quotations));
     } catch (error) {}
   };
 }

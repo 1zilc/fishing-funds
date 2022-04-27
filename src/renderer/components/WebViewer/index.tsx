@@ -13,7 +13,7 @@ import CustomDrawerContent from '@/components/CustomDrawer/Content';
 import CustomDrawer from '@/components/CustomDrawer';
 import Empty from '@/components/Empty';
 
-import { closeWebAction, addWebAction, deleteWebAction, setWebPhoneAction } from '@/store/features/web';
+import { closeWebAction, addWebAction, deleteWebAction, syncWebPhoneAction } from '@/store/features/web';
 import { useDrawer, useAppDispatch, useAppSelector, useIpcRendererListener } from '@/utils/hooks';
 import * as CONST from '@/constants';
 import * as Enums from '@/utils/enums';
@@ -90,7 +90,7 @@ const Content = () => {
     dispatch(deleteWebAction(url));
   });
 
-  const onPhoneChange = useMemoizedFn((phone) => dispatch(setWebPhoneAction(phone)));
+  const onPhoneChange = useMemoizedFn((phone) => dispatch(syncWebPhoneAction(phone)));
 
   useEventListener(
     'dom-ready',

@@ -49,7 +49,7 @@ const walletSlice = createSlice({
     changeEyeStatus(state, action: PayloadAction<Enums.EyeStatus>) {
       state.eyeStatus = action.payload;
     },
-    changeCurrentWalletCode(state, { payload }: PayloadAction<string>) {
+    changeCurrentWalletCodeAction(state, { payload }: PayloadAction<string>) {
       const wallet = Helpers.Wallet.GetCurrentWalletState(payload, state.wallets);
       const { codeMap, fundConfig } = Helpers.Fund.GetFundConfig(payload, state.config.walletConfig);
       state.currentWalletCode = payload;
@@ -57,12 +57,12 @@ const walletSlice = createSlice({
       state.fundConfigCodeMap = codeMap;
       state.currentWallet = wallet;
     },
-    syncWallets(state, { payload }: PayloadAction<Wallet.StateItem[]>) {
+    syncWalletsAction(state, { payload }: PayloadAction<Wallet.StateItem[]>) {
       const wallet = Helpers.Wallet.GetCurrentWalletState(state.currentWalletCode, payload);
       state.wallets = payload;
       state.currentWallet = wallet;
     },
-    syncWalletsConfig(state, { payload }: PayloadAction<{ walletConfig: Wallet.SettingItem[]; codeMap: Wallet.CodeMap }>) {
+    syncWalletsConfigAction(state, { payload }: PayloadAction<{ walletConfig: Wallet.SettingItem[]; codeMap: Wallet.CodeMap }>) {
       const { codeMap, fundConfig } = Helpers.Fund.GetFundConfig(state.currentWalletCode, payload.walletConfig);
       state.config = payload;
       state.fundConfig = fundConfig;
@@ -86,9 +86,9 @@ const walletSlice = createSlice({
 
 export const {
   changeEyeStatus,
-  changeCurrentWalletCode,
-  syncWallets,
-  syncWalletsConfig,
+  changeCurrentWalletCodeAction,
+  syncWalletsAction,
+  syncWalletsConfigAction,
   toggleFundCollapseAction,
   toggleAllFundsCollapseAction,
 } = walletSlice.actions;
@@ -96,8 +96,8 @@ export const {
 export function changeEyeStatusAction(status: Enums.EyeStatus): TypedThunk {
   return (dispatch, getState) => {
     try {
-      Utils.SetStorage(CONST.STORAGE.EYE_STATUS, status);
       dispatch(changeEyeStatus(status));
+      Utils.SetStorage(CONST.STORAGE.EYE_STATUS, status);
     } catch (error) {}
   };
 }
@@ -131,7 +131,7 @@ export function setWalletConfigAction(walletConfig: Wallet.SettingItem[]): Typed
       const codeMap = Utils.GetCodeMap(walletConfig, 'code');
 
       batch(() => {
-        dispatch(syncWalletsConfig({ walletConfig, codeMap }));
+        dispatch(syncWalletsConfigAction({ walletConfig, codeMap }));
         dispatch(syncWalletStateAction(wallets));
       });
       Utils.SetStorage(CONST.STORAGE.WALLET_SETTING, walletConfig);
@@ -148,7 +148,7 @@ export function syncWalletStateAction(wallets: Wallet.StateItem[]): TypedThunk {
         },
       } = getState();
       const newWallets = wallets.filter((stateItem) => codeMap[stateItem.code]);
-      dispatch(syncWallets(newWallets));
+      dispatch(syncWalletsAction(newWallets));
     } catch (error) {}
   };
 }
@@ -208,7 +208,7 @@ export function deleteWalletConfigAction(code: string): TypedThunk {
 export function selectWalletAction(code: string): TypedThunk {
   return (dispatch, getState) => {
     try {
-      dispatch(changeCurrentWalletCode(code));
+      dispatch(changeCurrentWalletCodeAction(code));
       Utils.SetStorage(CONST.STORAGE.CURRENT_WALLET_CODE, code);
     } catch (error) {}
   };
@@ -254,7 +254,7 @@ export function updateWalletStateAction(state: Wallet.StateItem): TypedThunk {
       }
 
       batch(() => {
-        dispatch(syncWallets(cloneWallets));
+        dispatch(syncWalletsAction(cloneWallets));
         dispatch(sortFundsAction());
       });
     } catch (error) {}
@@ -276,7 +276,7 @@ export function setWalletStateAction(state: Wallet.StateItem): TypedThunk {
         }
       });
 
-      dispatch(syncWallets(cloneWallets));
+      dispatch(syncWalletsAction(cloneWallets));
     } catch (error) {}
   };
 }
@@ -298,7 +298,7 @@ export function syncFixWalletStateAction(state: Wallet.StateItem): TypedThunk {
       });
 
       batch(() => {
-        dispatch(syncWallets(cloneWallets));
+        dispatch(syncWalletsAction(cloneWallets));
         dispatch(sortFundsAction());
       });
     } catch (error) {}

@@ -16,33 +16,33 @@ export interface FundState {
   fundRatingMap: Record<string, Fund.RantingItem>;
 }
 
-const initialState = {
+const initialState: FundState = {
   fundsLoading: false,
   remoteFunds: [],
   remoteFundsLoading: false,
   fundRatingMap: {},
-} as FundState;
+};
 
 const fundSlice = createSlice({
   name: 'fund',
   initialState,
   reducers: {
-    setRemoteFunds(state, action) {
+    syncRemoteFundsAction(state, action) {
       state.remoteFunds = action.payload;
     },
-    setFundsLoading(state, action: PayloadAction<boolean>) {
+    setFundsLoadingAction(state, action: PayloadAction<boolean>) {
       state.fundsLoading = action.payload;
     },
-    setRemoteFundsLoading(state, action: PayloadAction<boolean>) {
+    setRemoteFundsLoadingAction(state, action: PayloadAction<boolean>) {
       state.remoteFundsLoading = action.payload;
     },
-    setFundRatingMap(state, action) {
+    syncFundRatingMapAction(state, action) {
       state.fundRatingMap = action.payload;
     },
   },
 });
 
-export const { setRemoteFunds, setFundsLoading, setRemoteFundsLoading, setFundRatingMap } = fundSlice.actions;
+export const { syncRemoteFundsAction, setFundsLoadingAction, setRemoteFundsLoadingAction, syncFundRatingMapAction } = fundSlice.actions;
 
 export function setFundConfigAction(config: Fund.SettingItem[], walletCode: string): TypedThunk {
   return (dispatch, getState) => {
@@ -76,7 +76,7 @@ export function setRemoteFundsAction(newRemoteFunds: Fund.RemoteFund[]): TypedTh
       const newRemoteMap = Utils.GetCodeMap(newRemoteFunds, 0);
       const remoteMap = { ...oldRemoteMap, ...newRemoteMap };
 
-      dispatch(setRemoteFunds(Object.values(remoteMap)));
+      dispatch(syncRemoteFundsAction(Object.values(remoteMap)));
       Utils.SetStorage(CONST.STORAGE.REMOTE_FUND_MAP, remoteMap);
     } catch (error) {}
   };
@@ -93,7 +93,7 @@ export function setFundRatingMapAction(newFundRantings: Fund.RantingItem[]): Typ
       const fundRatingMap = { ...oldFundRatingMap, ...nweFundRantingMap };
       Utils.SetStorage(CONST.STORAGE.FUND_RATING_MAP, fundRatingMap);
 
-      dispatch(setFundRatingMap(fundRatingMap));
+      dispatch(syncFundRatingMapAction(fundRatingMap));
     } catch (error) {}
   };
 }

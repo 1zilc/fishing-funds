@@ -24,26 +24,26 @@ export const defaultZindexConfig = [
   { name: '纳斯达克', code: '100.NDX' },
 ];
 
-const initialState = {
+const initialState: ZindexState = {
   zindexs: [],
   zindexsLoading: false,
   config: {
     zindexConfig: [],
     codeMap: {},
   },
-} as ZindexState;
+};
 
 const zindexSlice = createSlice({
   name: 'zindex',
   initialState,
   reducers: {
-    setZindexesLoading(state, action: PayloadAction<boolean>) {
+    setZindexesLoadingAction(state, action: PayloadAction<boolean>) {
       state.zindexsLoading = action.payload;
     },
-    syncZindexes(state, action) {
+    syncZindexesAction(state, action: PayloadAction<(Zindex.ResponseItem & Zindex.ExtraRow)[]>) {
       state.zindexs = action.payload;
     },
-    syncZindexesConfig(state, action) {
+    syncZindexesConfigAction(state, action) {
       state.config = action.payload;
     },
     toggleZindexCollapseAction(state, { payload }: PayloadAction<Zindex.ResponseItem & Zindex.ExtraRow>) {
@@ -62,8 +62,13 @@ const zindexSlice = createSlice({
   },
 });
 
-export const { setZindexesLoading, syncZindexes, syncZindexesConfig, toggleZindexCollapseAction, toggleAllZindexsCollapseAction } =
-  zindexSlice.actions;
+export const {
+  setZindexesLoadingAction,
+  syncZindexesAction,
+  syncZindexesConfigAction,
+  toggleZindexCollapseAction,
+  toggleAllZindexsCollapseAction,
+} = zindexSlice.actions;
 
 export function addZindexAction(zindex: Zindex.SettingItem): TypedThunk {
   return (dispatch, getState) => {
@@ -112,7 +117,7 @@ export function setZindexConfigAction(zindexConfig: Zindex.SettingItem[]): Typed
       const codeMap = Utils.GetCodeMap(zindexConfig, 'code');
 
       batch(() => {
-        dispatch(syncZindexesConfig({ zindexConfig, codeMap }));
+        dispatch(syncZindexesConfigAction({ zindexConfig, codeMap }));
         dispatch(syncZindexsStateAction(zindexs));
       });
       Utils.SetStorage(CONST.STORAGE.ZINDEX_SETTING, zindexConfig);
@@ -200,7 +205,7 @@ export function syncZindexsStateAction(zindexs: (Zindex.ResponseItem & Zindex.Ex
         },
       } = getState();
       const filterZindexs = zindexs.filter(({ code }) => codeMap[code]);
-      dispatch(syncZindexes(filterZindexs));
+      dispatch(syncZindexesAction(filterZindexs));
     } catch (error) {}
   };
 }

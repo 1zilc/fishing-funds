@@ -6,7 +6,7 @@ export interface TabsState {
   tabsKeyMap: Record<Enums.TabKeyType, number>;
 }
 
-const initialState = {
+const initialState: TabsState = {
   activeKey: Enums.TabKeyType.Funds,
   tabsKeyMap: {
     [Enums.TabKeyType.Funds]: 0,
@@ -15,7 +15,7 @@ const initialState = {
     [Enums.TabKeyType.Stock]: 0,
     [Enums.TabKeyType.Coin]: 0,
   },
-} as TabsState;
+};
 
 const tabsSlice = createSlice({
   name: 'tabs',

@@ -9,17 +9,17 @@ import {
   sortFundsCachedAction,
   setRemoteFundsAction,
   setFundRatingMapAction,
-  setFundsLoading,
-  setRemoteFundsLoading,
+  setFundsLoadingAction,
+  setRemoteFundsLoadingAction,
 } from '@/store/features/fund';
-import { setQuotationsLoading } from '@/store/features/quotation';
+import { setQuotationsLoadingAction } from '@/store/features/quotation';
 import { openWebAction } from '@/store/features/web';
 import { syncFixWalletStateAction, updateWalletStateAction } from '@/store/features/wallet';
-import { setCoinsLoading, setRemoteCoinsLoading, sortCoinsCachedAction, setRemoteCoinsAction } from '@/store/features/coin';
+import { setCoinsLoadingAction, setRemoteCoinsLoadingAction, sortCoinsCachedAction, setRemoteCoinsAction } from '@/store/features/coin';
 import { updateStockAction, sortStocksCachedAction } from '@/store/features/stock';
-import { setZindexesLoading, sortZindexsCachedAction } from '@/store/features/zindex';
+import { setZindexesLoadingAction, sortZindexsCachedAction } from '@/store/features/zindex';
 import { sortQuotationsCachedAction } from '@/store/features/quotation';
-import { setStocksLoading } from '@/store/features/stock';
+import { setStocksLoadingAction } from '@/store/features/stock';
 import { TypedDispatch, StoreState } from '@/store';
 import * as Utils from '@/utils';
 import * as CONST from '@/constants';
@@ -263,14 +263,14 @@ export function useLoadFunds(loading: boolean) {
 
   const load = useMemoizedFn(async () => {
     try {
-      dispatch(setFundsLoading(loading));
+      dispatch(setFundsLoadingAction(loading));
       const responseFunds = await Helpers.Fund.GetFunds(fundConfig, fundApiTypeSetting);
       batch(() => {
         dispatch(sortFundsCachedAction(responseFunds, currentWalletCode));
-        dispatch(setFundsLoading(false));
+        dispatch(setFundsLoadingAction(false));
       });
     } catch (error) {
-      dispatch(setFundsLoading(false));
+      dispatch(setFundsLoadingAction(false));
     }
   });
   return load;
@@ -297,14 +297,14 @@ export function useLoadRemoteFunds() {
 
   const load = useMemoizedFn(async () => {
     try {
-      dispatch(setRemoteFundsLoading(true));
+      dispatch(setRemoteFundsLoadingAction(true));
       const remoteFunds = await Services.Fund.GetRemoteFundsFromEastmoney();
       batch(() => {
         dispatch(setRemoteFundsAction(remoteFunds));
-        dispatch(setRemoteFundsLoading(false));
+        dispatch(setRemoteFundsLoadingAction(false));
       });
     } catch (error) {
-      dispatch(setRemoteFundsLoading(false));
+      dispatch(setRemoteFundsLoadingAction(false));
     }
   });
 
@@ -384,14 +384,14 @@ export function useLoadZindexs(loading: boolean) {
   const zindexConfig = useAppSelector((state) => state.zindex.config.zindexConfig);
   const load = useMemoizedFn(async () => {
     try {
-      dispatch(setZindexesLoading(loading));
+      dispatch(setZindexesLoadingAction(loading));
       const responseZindexs = await Helpers.Zindex.GetZindexs(zindexConfig);
       batch(() => {
         dispatch(sortZindexsCachedAction(responseZindexs));
-        dispatch(setZindexesLoading(false));
+        dispatch(setZindexesLoadingAction(false));
       });
     } catch (error) {
-      dispatch(setZindexesLoading(false));
+      dispatch(setZindexesLoadingAction(false));
     }
   });
 
@@ -410,14 +410,14 @@ export function useLoadQuotations(loading: boolean) {
 
   const load = useMemoizedFn(async () => {
     try {
-      dispatch(setQuotationsLoading(loading));
+      dispatch(setQuotationsLoadingAction(loading));
       const responseQuotations = await Helpers.Quotation.GetQuotations();
       batch(() => {
         dispatch(sortQuotationsCachedAction(responseQuotations));
-        dispatch(setQuotationsLoading(false));
+        dispatch(setQuotationsLoadingAction(false));
       });
     } catch (error) {
-      dispatch(setQuotationsLoading(false));
+      dispatch(setQuotationsLoadingAction(false));
     }
   });
 
@@ -437,14 +437,14 @@ export function useLoadStocks(loading: boolean) {
 
   const load = useMemoizedFn(async () => {
     try {
-      dispatch(setStocksLoading(loading));
+      dispatch(setStocksLoadingAction(loading));
       const responseStocks = await Helpers.Stock.GetStocks(stockConfig);
       batch(() => {
         dispatch(sortStocksCachedAction(responseStocks));
-        dispatch(setStocksLoading(false));
+        dispatch(setStocksLoadingAction(false));
       });
     } catch (error) {
-      dispatch(setStocksLoading(false));
+      dispatch(setStocksLoadingAction(false));
     }
   });
 
@@ -465,14 +465,14 @@ export function useLoadCoins(showLoading: boolean) {
 
   const load = useMemoizedFn(async () => {
     try {
-      dispatch(setCoinsLoading(showLoading));
+      dispatch(setCoinsLoadingAction(showLoading));
       const responseCoins = await Helpers.Coin.GetCoins(config, coinUnitSetting);
       batch(() => {
         dispatch(sortCoinsCachedAction(responseCoins));
-        dispatch(setCoinsLoading(false));
+        dispatch(setCoinsLoadingAction(false));
       });
     } catch (error) {
-      dispatch(setCoinsLoading(false));
+      dispatch(setCoinsLoadingAction(false));
     }
   });
 
@@ -483,14 +483,14 @@ export function useLoadRemoteCoins() {
   const dispatch = useAppDispatch();
   const load = useMemoizedFn(async () => {
     try {
-      dispatch(setRemoteCoinsLoading(true));
+      dispatch(setRemoteCoinsLoadingAction(true));
       const remoteCoins = await Services.Coin.GetRemoteCoinsFromCoingecko();
       batch(() => {
         dispatch(setRemoteCoinsAction(remoteCoins));
-        dispatch(setRemoteCoinsLoading(false));
+        dispatch(setRemoteCoinsLoadingAction(false));
       });
     } catch (error) {
-      dispatch(setRemoteCoinsLoading(false));
+      dispatch(setRemoteCoinsLoadingAction(false));
     }
   });
   return load;

@@ -15,33 +15,33 @@ export interface StockState {
   industryMap: Record<string, Stock.IndustryItem[]>;
 }
 
-const initialState = {
+const initialState: StockState = {
   stocks: [],
   stocksLoading: false,
   config: { stockConfig: [], codeMap: {} },
   industryMap: {},
-} as StockState;
+};
 
 const stockSlice = createSlice({
   name: 'stock',
   initialState,
   reducers: {
-    setStocksLoading(state, action: PayloadAction<boolean>) {
+    setStocksLoadingAction(state, action: PayloadAction<boolean>) {
       state.stocksLoading = action.payload;
     },
-    syncStocks(state, action) {
+    syncStocksAction(state, action) {
       state.stocks = action.payload;
     },
-    syncStocksConfig(state, action) {
+    syncStocksConfigAction(state, action) {
       state.config = action.payload;
     },
-    setIndustryMap(state, action) {
+    syncIndustryMapAction(state, action) {
       state.industryMap = action.payload;
     },
   },
 });
 
-export const { setStocksLoading, syncStocks, syncStocksConfig, setIndustryMap } = stockSlice.actions;
+export const { setStocksLoadingAction, syncStocksAction, syncStocksConfigAction, syncIndustryMapAction } = stockSlice.actions;
 export function addStockAction(stock: Stock.SettingItem): TypedThunk {
   return (dispatch, getState) => {
     try {
@@ -109,7 +109,7 @@ export function setStockConfigAction(stockConfig: Stock.SettingItem[]): TypedThu
       const codeMap = Utils.GetCodeMap(stockConfig, 'secid');
 
       batch(() => {
-        dispatch(syncStocksConfig({ stockConfig, codeMap }));
+        dispatch(syncStocksConfigAction({ stockConfig, codeMap }));
         dispatch(syncStocksStateAction(stocks));
       });
       Utils.SetStorage(CONST.STORAGE.STOCK_SETTING, stockConfig);
@@ -232,7 +232,7 @@ export function syncStocksStateAction(stocks: (Stock.ResponseItem & Stock.ExtraR
         },
       } = getState();
       const filterStocks = stocks.filter(({ secid }) => codeMap[secid]);
-      dispatch(syncStocks(filterStocks));
+      dispatch(syncStocksAction(filterStocks));
     } catch (error) {}
   };
 }
@@ -243,7 +243,7 @@ export function setIndustryMapAction(secid: string, industrys: Stock.IndustryIte
       const {
         stock: { industryMap },
       } = getState();
-      dispatch(setIndustryMap({ ...industryMap, [secid]: industrys }));
+      dispatch(syncIndustryMapAction({ ...industryMap, [secid]: industrys }));
     } catch (error) {}
   };
 }

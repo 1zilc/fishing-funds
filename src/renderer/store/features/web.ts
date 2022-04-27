@@ -47,7 +47,7 @@ export const defaultWebConfig = [
   },
 ];
 
-const initialState = {
+const initialState: WebState = {
   view: {
     show: false,
     phone: true,
@@ -55,43 +55,36 @@ const initialState = {
     url: '',
   },
   config: { webConfig: [], codeMap: {} },
-} as WebState;
+};
 
 const webSlice = createSlice({
   name: 'web',
   initialState,
   reducers: {
-    setWebUrl(state, action: PayloadAction<string>) {
+    syncWebUrlAction(state, action: PayloadAction<string>) {
       state.view.url = action.payload;
     },
-    setWebPhone(state, action: PayloadAction<boolean>) {
+    syncWebPhoneAction(state, action: PayloadAction<boolean>) {
       state.view.phone = action.payload;
     },
-    setWeb(state, action) {
+    syncWebAction(state, action) {
       state.view = action.payload;
     },
-    syncWebConfig(state, action) {
+    syncWebConfigAction(state, action) {
       state.config = action.payload;
     },
   },
 });
 
-export const { setWebUrl, setWebPhone, setWeb, syncWebConfig } = webSlice.actions;
+export const { syncWebUrlAction, syncWebPhoneAction, syncWebAction, syncWebConfigAction } = webSlice.actions;
 
-export function setWebPhoneAction(phone: boolean): TypedThunk {
-  return (dispatch, getState) => {
-    try {
-      dispatch(setWebPhone(phone));
-    } catch (error) {}
-  };
-}
 export function setWebAction(data: { show: boolean; phone?: boolean; title: string; url: string }): TypedThunk {
   return (dispatch, getState) => {
     try {
       const {
         web: { view },
       } = getState();
-      dispatch(setWeb({ ...view, ...data }));
+      dispatch(syncWebAction({ ...view, ...data }));
     } catch (error) {}
   };
 }
@@ -174,7 +167,7 @@ export function setWebConfigAction(webConfig: Web.SettingItem[]): TypedThunk {
     try {
       const codeMap = Utils.GetCodeMap(webConfig, 'url');
 
-      dispatch(syncWebConfig({ webConfig, codeMap }));
+      dispatch(syncWebConfigAction({ webConfig, codeMap }));
       Utils.SetStorage(CONST.STORAGE.WEB_SETTING, webConfig);
     } catch (error) {}
   };

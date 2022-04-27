@@ -8,10 +8,10 @@ import { setSystemSettingAction, setAdjustmentNotificationDateAction, defaultSys
 import { setWalletConfigAction, changeEyeStatusAction, selectWalletAction, defaultWallet } from '@/store/features/wallet';
 import { setStockConfigAction } from '@/store/features/stock';
 import { setCoinConfigAction, setRemoteCoinsAction } from '@/store/features/coin';
-import { syncSortModeAction, syncViewModeAction } from '@/store/features/sort';
+import { syncSortModeAction, setViewModeAction } from '@/store/features/sort';
 import { setWebConfigAction, defaultWebConfig } from '@/store/features/web';
 import { useDrawer, useAppDispatch } from '@/utils/hooks';
-import { syncFavoriteQuotationMap } from '@/store/features/quotation';
+import { syncFavoriteQuotationMapAction } from '@/store/features/quotation';
 import * as CONST from '@/constants';
 import * as Utils from '@/utils';
 import * as Enums from '@/utils/enums';
@@ -46,7 +46,7 @@ const InitPage = () => {
 
     setLoading('加载关注板块配置...');
     const favoriteQuotationMap = await Utils.GetStorage(CONST.STORAGE.FAVORITE_QUOTATION_MAP, {});
-    dispatch(syncFavoriteQuotationMap(favoriteQuotationMap));
+    dispatch(syncFavoriteQuotationMapAction(favoriteQuotationMap));
 
     setLoading('加载股票配置...');
     const stockSetting = await Utils.GetStorage(CONST.STORAGE.STOCK_SETTING, []);
@@ -117,7 +117,7 @@ const InitPage = () => {
     const coinViewMode = await Utils.GetStorage(CONST.STORAGE.COIN_VIEW_MODE, {
       type: Enums.CoinViewType.List,
     });
-    dispatch(syncViewModeAction({ fundViewMode, zindexViewMode, quotationViewMode, stockViewMode, coinViewMode }));
+    dispatch(setViewModeAction({ fundViewMode, zindexViewMode, quotationViewMode, stockViewMode, coinViewMode }));
 
     setLoading('加载远程数据缓存...');
     const remoteFundMap = await Utils.GetStorage(CONST.STORAGE.REMOTE_FUND_MAP, {});

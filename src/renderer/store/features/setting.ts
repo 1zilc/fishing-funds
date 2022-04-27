@@ -32,24 +32,24 @@ export const defaultSystemSetting: System.Setting = {
   timestampSetting: Enums.TimestampType.Network,
 };
 
-const initialState = {
+const initialState: SettingState = {
   systemSetting: defaultSystemSetting,
   adjustmentNotificationDate: '',
-} as SettingState;
+};
 
 const settingSlice = createSlice({
   name: 'setting',
   initialState,
   reducers: {
-    syncSetting(state, action) {
+    syncSettingAction(state, action) {
       state.systemSetting = action.payload;
     },
-    updateAdjustmentNotificationDate(state, action: PayloadAction<string>) {
+    updateAdjustmentNotificationDateAction(state, action: PayloadAction<string>) {
       state.adjustmentNotificationDate = action.payload;
     },
   },
 });
-export const { syncSetting, updateAdjustmentNotificationDate } = settingSlice.actions;
+export const { syncSettingAction, updateAdjustmentNotificationDateAction } = settingSlice.actions;
 
 export function setSystemSettingAction(newSetting: System.Setting): TypedThunk {
   return (dispatch, getState) => {
@@ -60,7 +60,7 @@ export function setSystemSettingAction(newSetting: System.Setting): TypedThunk {
 
       const systemSetting = { ...oldSystemSetting, ...newSetting };
 
-      dispatch(syncSetting(systemSetting));
+      dispatch(syncSettingAction(systemSetting));
       Utils.SetStorage(CONST.STORAGE.SYSTEM_SETTING, systemSetting);
     } catch (error) {}
   };
@@ -69,7 +69,7 @@ export function setSystemSettingAction(newSetting: System.Setting): TypedThunk {
 export function setAdjustmentNotificationDateAction(date: string): TypedThunk {
   return (dispatch, getState) => {
     try {
-      dispatch(updateAdjustmentNotificationDate(date));
+      dispatch(updateAdjustmentNotificationDateAction(date));
       Utils.SetStorage(CONST.STORAGE.ADJUSTMENT_NOTIFICATION_DATE, date);
     } catch (error) {}
   };
@@ -78,7 +78,7 @@ export function setAdjustmentNotificationDateAction(date: string): TypedThunk {
 export function clearAdjustmentNotificationDateAction(): TypedThunk {
   return (dispatch, getState) => {
     try {
-      dispatch(updateAdjustmentNotificationDate(''));
+      dispatch(updateAdjustmentNotificationDateAction(''));
       Utils.ClearStorage(CONST.STORAGE.ADJUSTMENT_NOTIFICATION_DATE);
     } catch (error) {}
   };

@@ -30,20 +30,20 @@ const coinSlice = createSlice({
   name: 'coin',
   initialState,
   reducers: {
-    setCoinsLoading(state, action: PayloadAction<boolean>) {
+    setCoinsLoadingAction(state, action: PayloadAction<boolean>) {
       state.coinsLoading = action.payload;
     },
-    syncCoins(state, action) {
+    syncCoinsAction(state, action) {
       state.coins = action.payload;
     },
-    syncCoinsConfig(state, action) {
+    syncCoinsConfigAction(state, action) {
       state.config = action.payload;
     },
-    setRemoteCoins(state, { payload }: PayloadAction<Coin.RemoteCoin[]>) {
+    syncRemoteCoinsAction(state, { payload }: PayloadAction<Coin.RemoteCoin[]>) {
       state.remoteCoins = payload;
       state.remoteCoinsMap = Utils.GetCodeMap(payload, 'code');
     },
-    setRemoteCoinsLoading(state, action: PayloadAction<boolean>) {
+    setRemoteCoinsLoadingAction(state, action: PayloadAction<boolean>) {
       state.remoteCoinsLoading = action.payload;
     },
     toggleCoinCollapseAction(state, { payload }: PayloadAction<Coin.ResponseItem & Coin.ExtraRow>) {
@@ -65,11 +65,11 @@ const coinSlice = createSlice({
 });
 
 export const {
-  setCoinsLoading,
-  syncCoins,
-  syncCoinsConfig,
-  setRemoteCoins,
-  setRemoteCoinsLoading,
+  setCoinsLoadingAction,
+  syncCoinsAction,
+  syncCoinsConfigAction,
+  syncRemoteCoinsAction,
+  setRemoteCoinsLoadingAction,
   toggleCoinCollapseAction,
   toggleAllCoinsCollapseAction,
 } = coinSlice.actions;
@@ -120,7 +120,7 @@ export function setCoinConfigAction(coinConfig: Coin.SettingItem[]): TypedThunk 
       const codeMap = Utils.GetCodeMap(coinConfig, 'code');
 
       batch(() => {
-        dispatch(syncCoinsConfig({ coinConfig, codeMap }));
+        dispatch(syncCoinsConfigAction({ coinConfig, codeMap }));
         dispatch(syncCoinsStateAction(coins));
       });
 
@@ -209,7 +209,7 @@ export function syncCoinsStateAction(coins: (Coin.ResponseItem & Coin.ExtraRow)[
         },
       } = getState();
       const filterCoins = coins.filter(({ code }) => codeMap[code]);
-      dispatch(syncCoins(filterCoins));
+      dispatch(syncCoinsAction(filterCoins));
     } catch (error) {}
   };
 }
@@ -225,7 +225,7 @@ export function setRemoteCoinsAction(newRemoteCoins: Coin.RemoteCoin[]): TypedTh
       const newRemoteMap = Utils.GetCodeMap(newRemoteCoins, 'code');
       const remoteMap = { ...oldRemoteMap, ...newRemoteMap };
 
-      dispatch(setRemoteCoins(Object.values(remoteMap)));
+      dispatch(syncRemoteCoinsAction(Object.values(remoteMap)));
       Utils.SetStorage(CONST.STORAGE.REMOTE_COIN_MAP, remoteMap);
     } catch (error) {}
   };

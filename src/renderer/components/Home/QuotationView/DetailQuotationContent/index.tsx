@@ -10,7 +10,7 @@ import Stocks from '@/components/Home/QuotationView/DetailQuotationContent/Stock
 import Funds from '@/components/Home/QuotationView/DetailQuotationContent/Funds';
 import RealTimeTransaction from '@/components/Home/QuotationView/DetailQuotationContent/RealTimeTransaction';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
-import { syncFavoriteQuotationMapAction } from '@/store/features/quotation';
+import { setFavoriteQuotationMapAction } from '@/store/features/quotation';
 
 import { useAppDispatch, useAppSelector } from '@/utils/hooks';
 import * as Services from '@/services';
@@ -49,11 +49,11 @@ const DetailQuotationContent: React.FC<DetailQuotationContentProps> = (props) =>
             <div>
               <span className="copify">{quotation?.code}</span>
               {favorited ? (
-                <a className={styles.selfAdd} onClick={() => dispatch(syncFavoriteQuotationMapAction(quotation.code, false))}>
+                <a className={styles.selfAdd} onClick={() => dispatch(setFavoriteQuotationMapAction(quotation.code, false))}>
                   已关注
                 </a>
               ) : (
-                <a className={styles.selfAdd} onClick={() => dispatch(syncFavoriteQuotationMapAction(quotation.code, true))}>
+                <a className={styles.selfAdd} onClick={() => dispatch(setFavoriteQuotationMapAction(quotation.code, true))}>
                   未关注
                 </a>
               )}

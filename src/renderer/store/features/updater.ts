@@ -12,7 +12,7 @@ export interface UpdaderState {
   };
 }
 
-const initialState = {
+const initialState: UpdaderState = {
   updateInfo: {
     files: [],
     path: '',
@@ -22,7 +22,7 @@ const initialState = {
     sha512: '',
     version: '',
   },
-} as UpdaderState;
+};
 
 const uptaderSlice = createSlice({
   name: 'uptader',
