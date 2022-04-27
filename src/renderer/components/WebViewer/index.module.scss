@@ -37,6 +37,11 @@
   align-items: center;
   padding: 5px;
   cursor: pointer;
+  color: var(--main-text-color);
+
+  svg {
+    fill: var(--svg-icon-color);
+  }
 
   &:hover {
     background-color: var(--hover-color);
