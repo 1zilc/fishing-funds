@@ -111,19 +111,20 @@ export function deleteCoinAction(code: string): TypedThunk {
 }
 
 export function setCoinConfigAction(coinConfig: Coin.SettingItem[]): TypedThunk {
-  return async (dispatch, getState) => {
+  return (dispatch, getState) => {
     try {
       const {
         coin: { coins },
       } = getState();
 
       const codeMap = Utils.GetCodeMap(coinConfig, 'code');
-      await Utils.SetStorage(CONST.STORAGE.COIN_SETTING, coinConfig);
 
       batch(() => {
         dispatch(syncCoinsConfig({ coinConfig, codeMap }));
         dispatch(syncCoinsStateAction(coins));
       });
+
+      Utils.SetStorage(CONST.STORAGE.COIN_SETTING, coinConfig);
     } catch (error) {}
   };
 }
@@ -214,7 +215,7 @@ export function syncCoinsStateAction(coins: (Coin.ResponseItem & Coin.ExtraRow)[
 }
 
 export function setRemoteCoinsAction(newRemoteCoins: Coin.RemoteCoin[]): TypedThunk {
-  return async (dispatch, getState) => {
+  return (dispatch, getState) => {
     try {
       const {
         coin: { remoteCoins },
@@ -224,9 +225,8 @@ export function setRemoteCoinsAction(newRemoteCoins: Coin.RemoteCoin[]): TypedTh
       const newRemoteMap = Utils.GetCodeMap(newRemoteCoins, 'code');
       const remoteMap = { ...oldRemoteMap, ...newRemoteMap };
 
-      await Utils.SetStorage(CONST.STORAGE.REMOTE_COIN_MAP, remoteMap);
-
       dispatch(setRemoteCoins(Object.values(remoteMap)));
+      Utils.SetStorage(CONST.STORAGE.REMOTE_COIN_MAP, remoteMap);
     } catch (error) {}
   };
 }

@@ -18,7 +18,7 @@ const { production } = window.contextModules.process;
 const middleware: Middleware[] = [];
 
 if (!production) {
-  middleware.push(logger);
+  // middleware.push(logger);
 }
 
 const store = configureStore({

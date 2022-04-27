@@ -170,11 +170,12 @@ export function deleteWebAction(url: string): TypedThunk {
 }
 
 export function setWebConfigAction(webConfig: Web.SettingItem[]): TypedThunk {
-  return async (dispatch, getState) => {
+  return (dispatch, getState) => {
     try {
       const codeMap = Utils.GetCodeMap(webConfig, 'url');
-      await Utils.SetStorage(CONST.STORAGE.WEB_SETTING, webConfig);
+
       dispatch(syncWebConfig({ webConfig, codeMap }));
+      Utils.SetStorage(CONST.STORAGE.WEB_SETTING, webConfig);
     } catch (error) {}
   };
 }

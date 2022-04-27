@@ -94,9 +94,9 @@ export const {
 } = walletSlice.actions;
 
 export function changeEyeStatusAction(status: Enums.EyeStatus): TypedThunk {
-  return async (dispatch, getState) => {
+  return (dispatch, getState) => {
     try {
-      await Utils.SetStorage(CONST.STORAGE.EYE_STATUS, status);
+      Utils.SetStorage(CONST.STORAGE.EYE_STATUS, status);
       dispatch(changeEyeStatus(status));
     } catch (error) {}
   };
@@ -123,17 +123,18 @@ export function toggleEyeStatusAction(): TypedThunk {
 }
 
 export function setWalletConfigAction(walletConfig: Wallet.SettingItem[]): TypedThunk {
-  return async (dispatch, getState) => {
+  return (dispatch, getState) => {
     try {
       const {
         wallet: { wallets },
       } = getState();
       const codeMap = Utils.GetCodeMap(walletConfig, 'code');
-      await Utils.SetStorage(CONST.STORAGE.WALLET_SETTING, walletConfig);
+
       batch(() => {
         dispatch(syncWalletsConfig({ walletConfig, codeMap }));
         dispatch(syncWalletStateAction(wallets));
       });
+      Utils.SetStorage(CONST.STORAGE.WALLET_SETTING, walletConfig);
     } catch (error) {}
   };
 }
@@ -205,10 +206,10 @@ export function deleteWalletConfigAction(code: string): TypedThunk {
 }
 
 export function selectWalletAction(code: string): TypedThunk {
-  return async (dispatch, getState) => {
+  return (dispatch, getState) => {
     try {
-      await Utils.SetStorage(CONST.STORAGE.CURRENT_WALLET_CODE, code);
       dispatch(changeCurrentWalletCode(code));
+      Utils.SetStorage(CONST.STORAGE.CURRENT_WALLET_CODE, code);
     } catch (error) {}
   };
 }
@@ -225,8 +226,8 @@ export function updateWalletStateAction(state: Wallet.StateItem): TypedThunk {
       const cloneWallets = Utils.DeepCopy(wallets);
       const currentWalletConfig = codeMap[state.code];
       const { codeMap: configCodeMap } = Helpers.Fund.GetFundConfig(state.code, walletConfig);
-      const walletState = cloneWallets.find(({ code }) => code === state.code);
-      const stateCodeToMap = Utils.GetCodeMap(walletState?.funds || [], 'fundcode');
+      const walletState = Helpers.Wallet.GetCurrentWalletState(state.code, cloneWallets);
+      const stateCodeToMap = Utils.GetCodeMap(walletState.funds, 'fundcode');
       state.funds = state.funds.map((_) => ({
         ...(stateCodeToMap[_.fundcode!] || {}),
         ..._,
@@ -248,7 +249,7 @@ export function updateWalletStateAction(state: Wallet.StateItem): TypedThunk {
         }
       });
 
-      if (!walletState) {
+      if (!walletState.code) {
         cloneWallets.push(state);
       }
 
@@ -284,10 +285,10 @@ export function syncFixWalletStateAction(state: Wallet.StateItem): TypedThunk {
   return (dispatch, getState) => {
     try {
       const {
-        wallet: { wallets, currentWallet },
+        wallet: { wallets },
       } = getState();
       const cloneWallets = Utils.DeepCopy(wallets);
-      const { funds } = currentWallet;
+      const { funds } = Helpers.Wallet.GetCurrentWalletState(state.code, wallets);
       const mergefixFunds = Helpers.Fund.MergeFixFunds(funds, state.funds);
 
       cloneWallets.forEach((wallet, index) => {

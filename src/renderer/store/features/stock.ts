@@ -101,17 +101,18 @@ export function deleteStockAction(secid: string): TypedThunk {
 }
 
 export function setStockConfigAction(stockConfig: Stock.SettingItem[]): TypedThunk {
-  return async (dispatch, getState) => {
+  return (dispatch, getState) => {
     try {
       const {
         stock: { stocks },
       } = getState();
       const codeMap = Utils.GetCodeMap(stockConfig, 'secid');
-      await Utils.SetStorage(CONST.STORAGE.STOCK_SETTING, stockConfig);
+
       batch(() => {
         dispatch(syncStocksConfig({ stockConfig, codeMap }));
         dispatch(syncStocksStateAction(stocks));
       });
+      Utils.SetStorage(CONST.STORAGE.STOCK_SETTING, stockConfig);
     } catch (error) {}
   };
 }
@@ -207,7 +208,7 @@ export function toggleStockCollapseAction(stock: Stock.ResponseItem & Stock.Extr
 }
 
 export function toggleAllStocksCollapseAction(): TypedThunk {
-  return async (dispatch, getState) => {
+  return (dispatch, getState) => {
     try {
       const {
         stock: { stocks },

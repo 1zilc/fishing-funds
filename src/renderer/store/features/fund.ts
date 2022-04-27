@@ -67,7 +67,7 @@ export function setFundConfigAction(config: Fund.SettingItem[], walletCode: stri
 }
 
 export function setRemoteFundsAction(newRemoteFunds: Fund.RemoteFund[]): TypedThunk {
-  return async (dispatch, getState) => {
+  return (dispatch, getState) => {
     try {
       const {
         fund: { remoteFunds },
@@ -75,15 +75,15 @@ export function setRemoteFundsAction(newRemoteFunds: Fund.RemoteFund[]): TypedTh
       const oldRemoteMap = Utils.GetCodeMap(remoteFunds, 0);
       const newRemoteMap = Utils.GetCodeMap(newRemoteFunds, 0);
       const remoteMap = { ...oldRemoteMap, ...newRemoteMap };
-      await Utils.SetStorage(CONST.STORAGE.REMOTE_FUND_MAP, remoteMap);
 
       dispatch(setRemoteFunds(Object.values(remoteMap)));
+      Utils.SetStorage(CONST.STORAGE.REMOTE_FUND_MAP, remoteMap);
     } catch (error) {}
   };
 }
 
 export function setFundRatingMapAction(newFundRantings: Fund.RantingItem[]): TypedThunk {
-  return async (dispatch, getState) => {
+  return (dispatch, getState) => {
     try {
       const {
         fund: { fundRatingMap: oldFundRatingMap },
@@ -91,7 +91,7 @@ export function setFundRatingMapAction(newFundRantings: Fund.RantingItem[]): Typ
 
       const nweFundRantingMap = Utils.GetCodeMap(newFundRantings, 'code');
       const fundRatingMap = { ...oldFundRatingMap, ...nweFundRantingMap };
-      await Utils.SetStorage(CONST.STORAGE.FUND_RATING_MAP, fundRatingMap);
+      Utils.SetStorage(CONST.STORAGE.FUND_RATING_MAP, fundRatingMap);
 
       dispatch(setFundRatingMap(fundRatingMap));
     } catch (error) {}

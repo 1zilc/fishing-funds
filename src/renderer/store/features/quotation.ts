@@ -55,14 +55,13 @@ export const {
 } = quotationlice.actions;
 
 export function syncFavoriteQuotationMapAction(code: string, status: boolean): TypedThunk {
-  return async (dispatch, getState) => {
+  return (dispatch, getState) => {
     try {
       const { quotation } = getState();
       const favoriteQuotationMap = { ...quotation.favoriteQuotationMap, [code]: status };
 
-      await Utils.SetStorage(CONST.STORAGE.FAVORITE_QUOTATION_MAP, favoriteQuotationMap);
-
       dispatch(syncFavoriteQuotationMap(favoriteQuotationMap));
+      Utils.SetStorage(CONST.STORAGE.FAVORITE_QUOTATION_MAP, favoriteQuotationMap);
     } catch (error) {}
   };
 }

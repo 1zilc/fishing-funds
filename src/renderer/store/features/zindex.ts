@@ -115,7 +115,6 @@ export function setZindexConfigAction(zindexConfig: Zindex.SettingItem[]): Typed
         dispatch(syncZindexesConfig({ zindexConfig, codeMap }));
         dispatch(syncZindexsStateAction(zindexs));
       });
-
       Utils.SetStorage(CONST.STORAGE.ZINDEX_SETTING, zindexConfig);
     } catch (error) {}
   };

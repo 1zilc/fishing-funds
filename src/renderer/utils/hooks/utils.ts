@@ -234,28 +234,6 @@ export function useSyncFixStockSetting() {
   return { done };
 }
 
-export function useCurrentWallet() {
-  const { walletConfig } = useAppSelector((state) => state.wallet.config);
-  const wallets = useAppSelector((state) => state.wallet.wallets);
-  const currentWalletCode = useAppSelector((state) => state.wallet.currentWalletCode);
-  const fundConfig = useAppSelector((state) => state.wallet.fundConfig);
-  const fundConfigCodeMap = useAppSelector((state) => state.wallet.fundConfigCodeMap);
-  const currentWalletConfig = Helpers.Wallet.GetCurrentWalletConfig(currentWalletCode, walletConfig);
-  const currentWalletState = Helpers.Wallet.GetCurrentWalletState(currentWalletCode, wallets);
-  const currentWalletFundsConfig = currentWalletConfig.funds;
-  const currentWalletFundsCodeMap = Utils.GetCodeMap(currentWalletConfig.funds, 'code');
-
-  return {
-    currentWalletFundsConfig, // 当前钱包基金配置
-    currentWalletFundsCodeMap, // 当前钱包基金配置 codemap
-    currentWalletConfig, // 当前钱包配置
-    fundConfig,
-    currentWalletCode, // 当前钱包 code
-    currentWalletState, // 当前钱包状态
-    fundConfigCodeMap,
-  };
-}
-
 export function useFreshFunds(throttleDelay: number) {
   const loadFunds = useLoadFunds(true);
   const loadFixFunds = useLoadFixFunds();

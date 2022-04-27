@@ -1,18 +1,15 @@
 import React, { useMemo } from 'react';
 import clsx from 'clsx';
-
 import { Dropdown, Menu } from 'antd';
 
 import ConsumptionIcon from '@/static/icon/consumption.svg';
 import Eye from '@/components/Eye';
 import { useHeaderContext } from '@/components/Header';
-
 import { selectWalletAction, toggleEyeStatusAction } from '@/store/features/wallet';
-import { useCurrentWallet, useFreshFunds, useAppDispatch, useAppSelector } from '@/utils/hooks';
+import { useAppDispatch, useAppSelector } from '@/utils/hooks';
 import { walletIcons } from '@/helpers/wallet';
 import * as Enums from '@/utils/enums';
 import * as Utils from '@/utils';
-import * as CONST from '@/constants';
 import * as Helpers from '@/helpers';
 import styles from './index.module.scss';
 
@@ -24,10 +21,10 @@ const Wallet: React.FC<WalletProps> = () => {
   const eyeStatus = useAppSelector((state) => state.wallet.eyeStatus);
   const fundConfigCodeMap = useAppSelector((state) => state.wallet.fundConfigCodeMap);
   const { walletConfig } = useAppSelector((state) => state.wallet.config);
-  const { currentWalletConfig, currentWalletState, currentWalletCode } = useCurrentWallet();
-  const freshFunds = useFreshFunds(CONST.DEFAULT.FRESH_BUTTON_THROTTLE_DELAY);
-
-  const { funds, updateTime } = currentWalletState;
+  const currentWalletCode = useAppSelector((state) => state.wallet.currentWalletCode);
+  const { funds, updateTime } = useAppSelector((state) => state.wallet.currentWallet);
+  const walletConfigCodeMap = useAppSelector((state) => state.wallet.config.codeMap);
+  const currentWalletConfig = walletConfigCodeMap[currentWalletCode];
 
   const { displayZje, displaySygz } = useMemo(() => {
     const { zje, sygz } = Helpers.Fund.CalcFunds(funds, fundConfigCodeMap);
@@ -49,16 +46,13 @@ const Wallet: React.FC<WalletProps> = () => {
     [walletConfig]
   );
 
-  async function onSelectWallet(code: string) {
-    dispatch(selectWalletAction(code));
-    freshFunds();
-  }
-
   return (
     <div className={clsx(styles.content, { [styles.miniMode]: miniMode })}>
       <Dropdown
         placement="bottomRight"
-        overlay={<Menu selectedKeys={[currentWalletCode]} items={walletMenuItems} onClick={({ key }) => onSelectWallet(key)} />}
+        overlay={
+          <Menu selectedKeys={[currentWalletCode]} items={walletMenuItems} onClick={({ key }) => dispatch(selectWalletAction(key))} />
+        }
       >
         <div className={styles.walletIcon}>
           <img src={walletIcons[currentWalletConfig.iconIndex || 0]} />
