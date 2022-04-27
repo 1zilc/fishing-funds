@@ -21,8 +21,7 @@ import NotificationIcon from '@/static/icon/notification.svg';
 import BitCoinIcon from '@/static/icon/bit-coin.svg';
 import WindowIcon from '@/static/icon/window.svg';
 import CalendarIcon from '@/static/icon/calendar.svg';
-import { defalutSystemSetting } from '@/helpers/setting';
-import { setSystemSettingAction } from '@/store/features/setting';
+import { setSystemSettingAction, defaultSystemSetting } from '@/store/features/setting';
 
 import { useAppDispatch, useAppSelector } from '@/utils/hooks';
 import * as Enums from '@/utils/enums';
@@ -192,13 +191,13 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
         baseFontSizeSetting: baseFontSize,
         systemThemeSetting: systemTheme,
         adjustmentNotificationSetting: adjustmentNotification,
-        adjustmentNotificationTimeSetting: adjustmentNotificationTime || defalutSystemSetting.adjustmentNotificationTimeSetting,
+        adjustmentNotificationTimeSetting: adjustmentNotificationTime || defaultSystemSetting.adjustmentNotificationTimeSetting,
         riskNotificationSetting: riskNotification,
         trayContentSetting: trayContent,
         coinUnitSetting: coinUnit,
         autoStartSetting: autoStart,
         autoFreshSetting: autoFresh,
-        freshDelaySetting: freshDelay || defalutSystemSetting.freshDelaySetting,
+        freshDelaySetting: freshDelay || defaultSystemSetting.freshDelaySetting,
         autoCheckUpdateSetting: autoCheckUpdate,
         timestampSetting: timestamp,
       })

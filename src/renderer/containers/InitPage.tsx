@@ -3,18 +3,17 @@ import { useNavigate } from 'react-router-dom';
 import { batch } from 'react-redux';
 import LoadingScreen from '@/components/LoadingScreen';
 import { setRemoteFundsAction, setFundRatingMapAction } from '@/store/features/fund';
-import { setZindexConfigAction } from '@/store/features/zindex';
-import { setSystemSettingAction, setAdjustmentNotificationDateAction } from '@/store/features/setting';
-import { setWalletConfigAction, changeEyeStatusAction, selectWalletAction } from '@/store/features/wallet';
+import { setZindexConfigAction, defaultZindexConfig } from '@/store/features/zindex';
+import { setSystemSettingAction, setAdjustmentNotificationDateAction, defaultSystemSetting } from '@/store/features/setting';
+import { setWalletConfigAction, changeEyeStatusAction, selectWalletAction, defaultWallet } from '@/store/features/wallet';
 import { setStockConfigAction } from '@/store/features/stock';
 import { setCoinConfigAction, setRemoteCoinsAction } from '@/store/features/coin';
 import { syncSortModeAction, syncViewModeAction } from '@/store/features/sort';
-import { setWebConfigAction } from '@/store/features/web';
+import { setWebConfigAction, defaultWebConfig } from '@/store/features/web';
 import { useDrawer, useAppDispatch } from '@/utils/hooks';
 import { syncFavoriteQuotationMap } from '@/store/features/quotation';
 import * as CONST from '@/constants';
 import * as Utils from '@/utils';
-import * as Helpers from '@/helpers';
 import * as Enums from '@/utils/enums';
 
 const InitPage = () => {
@@ -42,7 +41,7 @@ const InitPage = () => {
     await checkLocalStorage();
 
     setLoading('加载指数配置...');
-    const zindexSetting = await Utils.GetStorage(CONST.STORAGE.ZINDEX_SETTING, Helpers.Zindex.defaultZindexConfig);
+    const zindexSetting = await Utils.GetStorage(CONST.STORAGE.ZINDEX_SETTING, defaultZindexConfig);
     dispatch(setZindexConfigAction(zindexSetting));
 
     setLoading('加载关注板块配置...');
@@ -58,11 +57,11 @@ const InitPage = () => {
     dispatch(setCoinConfigAction(coinSetting));
 
     setLoading('加载web配置...');
-    const webSetting = await Utils.GetStorage(CONST.STORAGE.WEB_SETTING, Helpers.Web.defaultWebConfig);
+    const webSetting = await Utils.GetStorage(CONST.STORAGE.WEB_SETTING, defaultWebConfig);
     dispatch(setWebConfigAction(webSetting));
 
     setLoading('加载系统设置...');
-    const systemSetting = await Utils.GetStorage(CONST.STORAGE.SYSTEM_SETTING, Helpers.Setting.defalutSystemSetting);
+    const systemSetting = await Utils.GetStorage(CONST.STORAGE.SYSTEM_SETTING, defaultSystemSetting);
     const adjustmentNotificationDate = await Utils.GetStorage(CONST.STORAGE.ADJUSTMENT_NOTIFICATION_DATE, '');
     batch(() => {
       dispatch(setSystemSettingAction(systemSetting));
@@ -70,9 +69,9 @@ const InitPage = () => {
     });
 
     setLoading('加载钱包配置...');
-    const walletSetting = await Utils.GetStorage(CONST.STORAGE.WALLET_SETTING, [Helpers.Wallet.defaultWallet]);
+    const walletSetting = await Utils.GetStorage(CONST.STORAGE.WALLET_SETTING, [defaultWallet]);
     const eyeStatus = await Utils.GetStorage(CONST.STORAGE.EYE_STATUS, Enums.EyeStatus.Open);
-    const currentWalletCode = await Utils.GetStorage(CONST.STORAGE.CURRENT_WALLET_CODE, Helpers.Wallet.defaultWallet.code);
+    const currentWalletCode = await Utils.GetStorage(CONST.STORAGE.CURRENT_WALLET_CODE, defaultWallet.code);
     batch(() => {
       dispatch(setWalletConfigAction(walletSetting));
       dispatch(changeEyeStatusAction(eyeStatus));

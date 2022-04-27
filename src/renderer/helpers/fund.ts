@@ -1,4 +1,5 @@
 import NP from 'number-precision';
+import { defaultWallet } from '@/store/features/wallet';
 import * as Services from '@/services';
 import * as Enums from '@/utils/enums';
 import * as Utils from '@/utils';
@@ -6,7 +7,7 @@ import * as Adapter from '@/utils/adpters';
 import * as Helpers from '@/helpers';
 
 export function GetFundConfig(walletCode: string, walletsConfig: Wallet.SettingItem[]) {
-  const walletConfig = walletsConfig.find(({ code }) => code === walletCode) || Helpers.Wallet.defaultWallet;
+  const walletConfig = walletsConfig.find(({ code }) => code === walletCode) || defaultWallet;
   const fundConfig = walletConfig.funds;
   const codeMap = Utils.GetCodeMap(fundConfig, 'code');
   return { fundConfig, codeMap };

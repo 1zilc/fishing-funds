@@ -21,6 +21,13 @@ export interface WalletState {
   fundConfigCodeMap: Fund.CodeMap;
 }
 
+export const defaultWallet: Wallet.SettingItem = {
+  name: '默认钱包',
+  iconIndex: 0,
+  code: '-1',
+  funds: [],
+};
+
 const initialState: WalletState = {
   wallets: [],
   config: { walletConfig: [], codeMap: {} },

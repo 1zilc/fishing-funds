@@ -1,16 +1,39 @@
+import dayjs from 'dayjs';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { TypedThunk } from '@/store';
 import * as Utils from '@/utils';
 import * as CONST from '@/constants';
-// import * as Helpers from '@/helpers';
+import * as Enums from '@/utils/enums';
 
 export type SettingState = {
   systemSetting: System.Setting;
   adjustmentNotificationDate: string;
 };
 
+export const defaultSystemSetting: System.Setting = {
+  fundApiTypeSetting: Enums.FundApiType.Eastmoney,
+
+  conciseSetting: false,
+  lowKeySetting: false,
+  baseFontSizeSetting: 12,
+  systemThemeSetting: Enums.SystemThemeType.Auto,
+
+  adjustmentNotificationSetting: true,
+  adjustmentNotificationTimeSetting: dayjs().hour(14).minute(30).format(),
+  riskNotificationSetting: true,
+  trayContentSetting: [Enums.TrayContent.Sy],
+
+  coinUnitSetting: Enums.CoinUnitType.Usd,
+
+  autoStartSetting: true,
+  autoFreshSetting: true,
+  freshDelaySetting: 1,
+  autoCheckUpdateSetting: true,
+  timestampSetting: Enums.TimestampType.Network,
+};
+
 const initialState = {
-  systemSetting: {},
+  systemSetting: defaultSystemSetting,
   adjustmentNotificationDate: '',
 } as SettingState;
 

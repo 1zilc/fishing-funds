@@ -1,9 +1,4 @@
-export const defaultWallet: Wallet.SettingItem = {
-  name: '默认钱包',
-  iconIndex: 0,
-  code: '-1',
-  funds: [],
-};
+import { defaultWallet } from '@/store/features/wallet';
 
 export const walletIcons = new Array(40).fill('').map((_, index) => require(`@assets/wallet/${index}.png`));
 
