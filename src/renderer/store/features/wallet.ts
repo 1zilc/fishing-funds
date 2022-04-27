@@ -226,21 +226,12 @@ export function updateWalletStateAction(state: Wallet.StateItem): TypedThunk {
       const currentWalletConfig = codeMap[state.code];
       const { codeMap: configCodeMap } = Helpers.Fund.GetFundConfig(state.code, walletConfig);
       const walletState = cloneWallets.find(({ code }) => code === state.code);
-      const stateCodeToMap = (walletState?.funds || []).reduce((map, fund) => {
-        map[fund.fundcode!] = fund;
-        return map;
-      }, {} as Record<string, Fund.ResponseItem & Fund.FixData>);
-
+      const stateCodeToMap = Utils.GetCodeMap(walletState?.funds || [], 'fundcode');
       state.funds = state.funds.map((_) => ({
         ...(stateCodeToMap[_.fundcode!] || {}),
         ..._,
       }));
-
-      const itemFundsCodeToMap = state.funds.reduce((map, fund) => {
-        map[fund.fundcode!] = fund;
-        return map;
-      }, {} as Record<string, Fund.ResponseItem & Fund.FixData>);
-
+      const itemFundsCodeToMap = Utils.GetCodeMap(state.funds, 'fundcode');
       currentWalletConfig.funds.forEach((fund) => {
         const responseFund = itemFundsCodeToMap[fund.code];
         const stateFund = stateCodeToMap[fund.code];

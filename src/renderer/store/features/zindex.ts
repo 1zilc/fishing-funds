@@ -170,21 +170,12 @@ export function sortZindexsCachedAction(responseZindexs: Zindex.ResponseItem[]):
         },
       } = getState();
 
-      const zindexsCodeToMap = zindexs.reduce((map, zindex) => {
-        map[zindex.code] = zindex;
-        return map;
-      }, {} as any);
-
+      const zindexsCodeToMap = Utils.GetCodeMap(zindexs, 'code');
       const zindexsWithCollapseChached = responseZindexs.map((_) => ({
         ...(zindexsCodeToMap[_.code] || {}),
         ..._,
       }));
-
-      const zindexWithChachedCodeToMap = zindexsWithCollapseChached.reduce((map, zindex) => {
-        map[zindex.code] = zindex;
-        return map;
-      }, {} as any);
-
+      const zindexWithChachedCodeToMap = Utils.GetCodeMap(zindexsWithCollapseChached, 'code');
       zindexConfig.forEach((zindex) => {
         const responseZindex = zindexWithChachedCodeToMap[zindex.code];
         const stateZindex = zindexsCodeToMap[zindex.code];

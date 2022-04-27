@@ -20,10 +20,7 @@ const TypeConfig: React.FC<TypeConfigProps> = ({ funds = [] }) => {
 
   useRenderEcharts(
     () => {
-      const remoteFundsMap = remoteFunds.reduce((m, c) => {
-        m[c[0]] = c;
-        return m;
-      }, {} as Record<string, Fund.RemoteFund>);
+      const remoteFundsMap = Utils.GetCodeMap(remoteFunds, 0);
       const typeMap: Record<string, Fund.ResponseItem[]> = {};
       funds.forEach((fund) => {
         const type = remoteFundsMap[fund.fundcode!]?.[3];

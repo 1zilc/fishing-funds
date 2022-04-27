@@ -167,12 +167,9 @@ export async function GetFixFunds(funds: (Fund.ResponseItem & Fund.FixData)[]) {
   return list.filter(Utils.NotEmpty);
 }
 
-export function MergeFixFunds(funds: (Fund.ResponseItem & Fund.FixData)[], fixFunds: (Fund.FixData | null)[]) {
+export function MergeFixFunds(funds: (Fund.ResponseItem & Fund.FixData)[], fixFunds: Fund.FixData[]) {
   const cloneFunds = Utils.DeepCopy(funds);
-  const fixFundMap = fixFunds.filter(Utils.NotEmpty).reduce((map, fund) => {
-    map[fund.code!] = fund;
-    return map;
-  }, {} as { [index: string]: Fund.FixData });
+  const fixFundMap = Utils.GetCodeMap(fixFunds, 'code');
 
   cloneFunds.forEach((fund) => {
     const fixFund = fixFundMap[fund.fundcode!];

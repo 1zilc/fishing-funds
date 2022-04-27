@@ -166,22 +166,12 @@ export function sortStocksCachedAction(responseStocks: Stock.ResponseItem[]): Ty
           config: { stockConfig },
         },
       } = getState();
-
-      const stocksCodeToMap = stocks.reduce((map, stock) => {
-        map[stock.secid] = stock;
-        return map;
-      }, {} as any);
-
+      const stocksCodeToMap = Utils.GetCodeMap(stocks, 'secid');
       const stocksWithChached = responseStocks.filter(Boolean).map((_) => ({
         ...(stocksCodeToMap[_.secid] || {}),
         ..._,
       }));
-
-      const stocksWithChachedCodeToMap = stocksWithChached.reduce((map, stock) => {
-        map[stock.secid] = stock;
-        return map;
-      }, {} as any);
-
+      const stocksWithChachedCodeToMap = Utils.GetCodeMap(stocksWithChached, 'secid');
       stockConfig.forEach((stock) => {
         const responseStock = stocksWithChachedCodeToMap[stock.secid];
         const stateStock = stocksCodeToMap[stock.secid];
