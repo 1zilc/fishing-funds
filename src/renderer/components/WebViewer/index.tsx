@@ -14,7 +14,7 @@ import CustomDrawer from '@/components/CustomDrawer';
 import Empty from '@/components/Empty';
 
 import { closeWebAction, addWebAction, deleteWebAction, setWebPhoneAction } from '@/store/features/web';
-import { useDrawer, useAppDispatch, useAppSelector } from '@/utils/hooks';
+import { useDrawer, useAppDispatch, useAppSelector, useIpcRendererListener } from '@/utils/hooks';
 import * as CONST from '@/constants';
 import * as Enums from '@/utils/enums';
 import styles from './index.module.scss';
@@ -37,7 +37,7 @@ const Content = () => {
   const [done, { setTrue: setDoneTrue, setFalse: setDoneFalse }] = useBoolean(false);
   const [percent, setPercent] = useState(0);
   const [webTitle, setWebTitle] = useState(title);
-  const [timer, setTimer] = useState<number>(0);
+  const [timer, setTimer] = useState<any>(0);
   const [favicons, setFavicons] = useState<string[]>([]);
 
   const {
@@ -131,14 +131,9 @@ const Content = () => {
     { target: viewRef }
   );
 
-  useEffect(() => {
-    ipcRenderer.on('webview-new-window', (e, data) => {
-      viewRef.current?.loadURL(data);
-    });
-    return () => {
-      ipcRenderer.removeAllListeners('webview-new-window');
-    };
-  }, []);
+  useIpcRendererListener('webview-new-window', (e, data) => {
+    viewRef.current?.loadURL(data);
+  });
 
   useEffect(() => {
     if (loading) {

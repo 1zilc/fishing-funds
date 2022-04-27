@@ -39,6 +39,7 @@ contextBridge.exposeInMainWorld('contextModules', {
     ipcRenderer: {
       invoke: ipcRenderer.invoke,
       removeAllListeners: ipcRenderer.removeAllListeners,
+      removeListener: ipcRenderer.removeListener,
       on(channel: string, func: any) {
         const validChannels = [
           'nativeTheme-updated',

@@ -28,6 +28,7 @@ import {
   useLoadQuotations,
   useLoadZindexs,
   useLoadStocks,
+  useIpcRendererListener,
 } from '@/utils/hooks';
 import * as Utils from '@/utils';
 import * as CONST from '@/constants';
@@ -47,16 +48,11 @@ export function useUpdater() {
     immediate: true,
   });
 
-  useEffect(() => {
-    ipcRenderer.on('update-available', (e, data) => {
-      if (autoCheckUpdateSetting) {
-        dispatch(updateAvaliableAction(data));
-      }
-    });
-    return () => {
-      ipcRenderer.removeAllListeners('update-available');
-    };
-  }, [autoCheckUpdateSetting]);
+  useIpcRendererListener('update-available', (e, data) => {
+    if (autoCheckUpdateSetting) {
+      dispatch(updateAvaliableAction(data));
+    }
+  });
 }
 
 export function useAdjustmentNotification() {
@@ -169,7 +165,7 @@ export function useFundsClipboard() {
   const fundApiTypeSetting = useAppSelector((state) => state.setting.systemSetting.fundApiTypeSetting);
   const loadFunds = useLoadFunds(true);
 
-  const onClipboardFundsImport = useMemoizedFn(async (e: Electron.IpcRendererEvent, data) => {
+  useIpcRendererListener('clipboard-funds-import', async (e: Electron.IpcRendererEvent, data) => {
     try {
       const limit = 1024;
       const text = clipboard.readText();
@@ -223,7 +219,7 @@ export function useFundsClipboard() {
     }
   });
 
-  const onClipboardFundsCopy = useMemoizedFn(async (e: Electron.IpcRendererEvent, data) => {
+  useIpcRendererListener('clipboard-funds-copy', async (e: Electron.IpcRendererEvent, data) => {
     try {
       clipboard.writeText(JSON.stringify(fundConfig));
       dialog.showMessageBox({
@@ -239,15 +235,6 @@ export function useFundsClipboard() {
       });
     }
   });
-
-  useEffect(() => {
-    ipcRenderer.on('clipboard-funds-import', onClipboardFundsImport);
-    ipcRenderer.on('clipboard-funds-copy', onClipboardFundsCopy);
-    return () => {
-      ipcRenderer.removeAllListeners('clipboard-funds-import');
-      ipcRenderer.removeAllListeners('clipboard-funds-copy');
-    };
-  }, []);
 }
 
 export function useBootStrap() {
@@ -395,106 +382,94 @@ export function useUpdateContextMenuWalletsState() {
       })
     );
   }, [wallets, currentWalletCode, walletsConfig]);
-  useEffect(() => {
-    ipcRenderer.on('change-current-wallet-code', (e, code) => {
-      try {
-        dispatch(selectWalletAction(code));
-        freshFunds();
-      } catch (error) {}
-    });
-    return () => {
-      ipcRenderer.removeAllListeners('change-current-wallet-code');
-    };
-  }, []);
+
+  useIpcRendererListener('change-current-wallet-code', (e, code) => {
+    try {
+      dispatch(selectWalletAction(code));
+      freshFunds();
+    } catch (error) {}
+  });
 }
 
 export function useAllConfigBackup() {
-  useEffect(() => {
-    ipcRenderer.on('backup-all-config-export', async (e, data) => {
-      try {
-        const backupConfig = await Utils.GenerateBackupConfig();
-        const { filePath, canceled } = await dialog.showSaveDialog({
-          title: '保存',
-          defaultPath: `${backupConfig.name}-${backupConfig.timestamp}.${backupConfig.suffix}`,
-        });
-        if (canceled) {
-          return;
-        }
-        const encodeBackupConfig = compose(Base64.encode, encodeFF)(backupConfig);
-        saveString(filePath!, encodeBackupConfig);
-        dialog.showMessageBox({
-          type: 'info',
-          title: `导出成功`,
-          message: `已导出全局配置文件至${filePath}`,
-        });
-      } catch (error) {
-        dialog.showMessageBox({
-          type: 'info',
-          title: `导出失败`,
-          message: `导出全局配置文件失败`,
-        });
+  useIpcRendererListener('backup-all-config-export', async (e, code) => {
+    try {
+      const backupConfig = await Utils.GenerateBackupConfig();
+      const { filePath, canceled } = await dialog.showSaveDialog({
+        title: '保存',
+        defaultPath: `${backupConfig.name}-${backupConfig.timestamp}.${backupConfig.suffix}`,
+      });
+      if (canceled) {
+        return;
       }
-    });
-    ipcRenderer.on('backup-all-config-import', async (e, data) => {
-      try {
-        const { filePaths, canceled } = await dialog.showOpenDialog({
-          title: '选择备份文件',
-          filters: [{ name: 'Fishing Funds', extensions: ['ff'] }],
-        });
-        const filePath = filePaths[0];
-        if (canceled || !filePath) {
-          return;
-        }
-        const encodeBackupConfig = readFile(filePath);
-        const backupConfig: Backup.Config = compose(decodeFF, Base64.decode)(encodeBackupConfig);
+      const encodeBackupConfig = compose(Base64.encode, encodeFF)(backupConfig);
+      saveString(filePath!, encodeBackupConfig);
+      dialog.showMessageBox({
+        type: 'info',
+        title: `导出成功`,
+        message: `已导出全局配置文件至${filePath}`,
+      });
+    } catch (error) {
+      dialog.showMessageBox({
+        type: 'info',
+        title: `导出失败`,
+        message: `导出全局配置文件失败`,
+      });
+    }
+  });
+  useIpcRendererListener('backup-all-config-import', async (e, code) => {
+    try {
+      const { filePaths, canceled } = await dialog.showOpenDialog({
+        title: '选择备份文件',
+        filters: [{ name: 'Fishing Funds', extensions: ['ff'] }],
+      });
+      const filePath = filePaths[0];
+      if (canceled || !filePath) {
+        return;
+      }
+      const encodeBackupConfig = readFile(filePath);
+      const backupConfig: Backup.Config = compose(decodeFF, Base64.decode)(encodeBackupConfig);
+      Utils.CoverBackupConfig(backupConfig);
+      await dialog.showMessageBox({
+        type: 'info',
+        title: `导入成功`,
+        message: `导入全局配置成功, 请重新启动Fishing Funds`,
+      });
+      app.quit();
+    } catch (error) {
+      dialog.showMessageBox({
+        type: 'info',
+        title: `导入失败`,
+        message: `导入全局配置文件失败`,
+      });
+    }
+  });
+  useIpcRendererListener('open-backup-file', async (e, filePath) => {
+    try {
+      const encodeBackupConfig = readFile(filePath);
+      const backupConfig: Backup.Config = compose(decodeFF, Base64.decode)(encodeBackupConfig);
+      const { response } = await dialog.showMessageBox({
+        title: `确认从备份文件恢复`,
+        message: `备份时间：${dayjs(backupConfig.timestamp).format('YYYY-MM-DD HH:mm:ss')} ，当前数据将被覆盖，请谨慎操作`,
+        buttons: ['确定', '取消'],
+      });
+      if (response === 0) {
         Utils.CoverBackupConfig(backupConfig);
         await dialog.showMessageBox({
           type: 'info',
-          title: `导入成功`,
-          message: `导入全局配置成功, 请重新启动Fishing Funds`,
+          title: `恢复成功`,
+          message: `恢复备份成功, 请重新启动Fishing Funds`,
         });
         app.quit();
-      } catch (error) {
-        dialog.showMessageBox({
-          type: 'info',
-          title: `导入失败`,
-          message: `导入全局配置文件失败`,
-        });
       }
-    });
-    ipcRenderer.on('open-backup-file', async (e, filePath) => {
-      try {
-        const encodeBackupConfig = readFile(filePath);
-        const backupConfig: Backup.Config = compose(decodeFF, Base64.decode)(encodeBackupConfig);
-        const { response } = await dialog.showMessageBox({
-          title: `确认从备份文件恢复`,
-          message: `备份时间：${dayjs(backupConfig.timestamp).format('YYYY-MM-DD HH:mm:ss')} ，当前数据将被覆盖，请谨慎操作`,
-          buttons: ['确定', '取消'],
-        });
-        if (response === 0) {
-          Utils.CoverBackupConfig(backupConfig);
-          await dialog.showMessageBox({
-            type: 'info',
-            title: `恢复成功`,
-            message: `恢复备份成功, 请重新启动Fishing Funds`,
-          });
-          app.quit();
-        }
-      } catch (error) {
-        dialog.showMessageBox({
-          type: 'info',
-          title: `恢复失败`,
-          message: `恢复备份文件失败`,
-        });
-      }
-    });
-
-    return () => {
-      ipcRenderer.removeAllListeners('backup-all-config-export');
-      ipcRenderer.removeAllListeners('backup-all-config-import');
-      ipcRenderer.removeAllListeners('open-backup-file');
-    };
-  }, []);
+    } catch (error) {
+      dialog.showMessageBox({
+        type: 'info',
+        title: `恢复失败`,
+        message: `恢复备份文件失败`,
+      });
+    }
+  });
 }
 
 export function useTouchBar() {
@@ -547,16 +522,10 @@ export function useTouchBar() {
     ipcRenderer.invoke('update-touchbar-eye-status', eyeStatus);
   }, [eyeStatus]);
 
-  useEffect(() => {
-    ipcRenderer.on('change-tab-active-key', (e, key) => {
-      dispatch(setTabsActiveKeyAction(key));
-    });
-    ipcRenderer.on('change-eye-status', (e, key) => {
-      dispatch(toggleEyeStatusAction());
-    });
-    return () => {
-      ipcRenderer.removeAllListeners('change-tab-active-key');
-      ipcRenderer.removeAllListeners('change-eye-status');
-    };
-  }, []);
+  useIpcRendererListener('change-tab-active-key', (e, key) => {
+    dispatch(setTabsActiveKeyAction(key));
+  });
+  useIpcRendererListener('change-eye-status', (e, key) => {
+    dispatch(toggleEyeStatusAction());
+  });
 }

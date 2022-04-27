@@ -93,19 +93,15 @@ export function useNativeTheme() {
   const [darkMode, setDarkMode] = useState(false);
   const systemSetting = useAppSelector((state) => state.setting.systemSetting);
   const { systemThemeSetting } = systemSetting;
+
   async function syncSystemTheme() {
     await Utils.UpdateSystemTheme(systemThemeSetting);
     await invoke.getShouldUseDarkColors().then(setDarkMode);
   }
 
-  useEffect(() => {
-    ipcRenderer.on('nativeTheme-updated', (e, data) => {
-      setDarkMode(!!data?.darkMode);
-    });
-    return () => {
-      ipcRenderer.removeAllListeners('nativeTheme-updated');
-    };
-  }, []);
+  useIpcRendererListener('nativeTheme-updated', (e, data) => {
+    setDarkMode(!!data?.darkMode);
+  });
 
   useEffect(() => {
     syncSystemTheme();
@@ -640,4 +636,15 @@ export function useFundConfigMap(codes: string[]) {
   const walletsConfig = useAppSelector((state) => state.wallet.config.walletConfig);
   const codeMaps = useMemo(() => Helpers.Fund.GetFundConfigMaps(codes, walletsConfig), [codes, walletsConfig]);
   return codeMaps;
+}
+
+export function useIpcRendererListener(channel: string, listener: (event: Electron.IpcRendererEvent, ...args: any[]) => void) {
+  const callback = useMemoizedFn(listener);
+
+  useEffect(() => {
+    ipcRenderer.on(channel, callback);
+    return () => {
+      ipcRenderer.removeListener(channel, callback);
+    };
+  }, []);
 }
