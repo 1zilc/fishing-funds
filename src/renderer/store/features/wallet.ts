@@ -74,11 +74,21 @@ const walletSlice = createSlice({
           items.collapse = !items.collapse;
         }
       });
+      state.wallets.forEach((item, index) => {
+        if (item.code === state.currentWalletCode) {
+          state.wallets[index] = state.currentWallet;
+        }
+      });
     },
     toggleAllFundsCollapseAction(state) {
       const expandAll = state.currentWallet.funds.every((item) => item.collapse);
       state.currentWallet.funds.forEach((item) => {
         item.collapse = !expandAll;
+      });
+      state.wallets.forEach((item, index) => {
+        if (item.code === state.currentWalletCode) {
+          state.wallets[index] = state.currentWallet;
+        }
       });
     },
   },
