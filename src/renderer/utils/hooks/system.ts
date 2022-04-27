@@ -333,7 +333,7 @@ export function useTrayContent() {
     );
     const sygz = NP.minus(allResult.gszje, allResult.zje);
     return { sygz, gssyl: allResult.zje ? NP.times(NP.divide(sygz, allResult.zje), 100) : 0 };
-  }, [wallets]);
+  }, [wallets, walletsConfig]);
 
   useEffect(() => {
     const group = [trayContentSetting].flat();

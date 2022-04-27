@@ -206,17 +206,21 @@ export function sortFundsCachedAction(responseFunds: Fund.ResponseItem[], wallet
   return (dispatch, getState) => {
     try {
       const {
-        wallet: { fundConfig, fundConfigCodeMap },
+        wallet: {
+          fundConfig,
+          currentWallet: { funds },
+        },
       } = getState();
       const now = dayjs().format('MM-DD HH:mm:ss');
+      const fundsCodeToMap = Utils.GetCodeMap(funds, 'fundcode');
       const fundsWithChached = responseFunds.map((_) => ({
-        ...(fundConfigCodeMap[_.fundcode!] || {}),
+        ...(fundsCodeToMap[_.fundcode!] || {}),
         ..._,
       }));
       const fundsWithChachedCodeToMap = Utils.GetCodeMap(fundsWithChached, 'fundcode');
       fundConfig.forEach((fund) => {
         const responseFund = fundsWithChachedCodeToMap[fund.code];
-        const stateFund = fundConfigCodeMap[fund.code];
+        const stateFund = fundsCodeToMap[fund.code];
         if (!responseFund && stateFund) {
           fundsWithChached.push(stateFund);
         }
