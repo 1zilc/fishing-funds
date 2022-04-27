@@ -42,6 +42,7 @@ const Wallet: React.FC<WalletProps> = () => {
       walletConfig.map((config) => ({
         key: config.code,
         label: config.name,
+        icon: <img className={styles.menuIcon} src={walletIcons[config.iconIndex] || 0} />,
       })),
     [walletConfig]
   );
