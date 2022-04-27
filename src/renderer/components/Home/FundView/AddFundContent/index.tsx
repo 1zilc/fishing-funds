@@ -7,7 +7,7 @@ import CustomDrawer from '@/components/CustomDrawer';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
 import { addFundAction } from '@/store/features/fund';
 
-import { useDrawer, useCurrentWallet, useAppDispatch, useAppSelector } from '@/utils/hooks';
+import { useDrawer, useAppDispatch, useAppSelector } from '@/utils/hooks';
 import * as Enums from '@/utils/enums';
 import * as Helpers from '@/helpers';
 import styles from './index.module.scss';
@@ -33,7 +33,7 @@ const AddFundContent: React.FC<AddFundContentProps> = (props) => {
   const [memo, setMemo] = useState<any>();
   const [fundList, setFundlist] = useState<Fund.RemoteFund[]>([]);
   const remoteFunds = useAppSelector((state) => state.fund.remoteFunds);
-  const { currentWalletFundsCodeMap: codeMap } = useCurrentWallet();
+  const codeMap = useAppSelector((state) => state.wallet.fundConfigCodeMap);
   const { data: detailCode, show: showDetailDrawer, set: setDetailDrawer, close: closeDetailDrawer } = useDrawer('');
 
   async function onAdd() {

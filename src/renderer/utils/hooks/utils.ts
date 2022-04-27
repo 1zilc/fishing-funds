@@ -1,4 +1,4 @@
-import { useLayoutEffect, useState, useEffect, useRef, useMemo, useTransition } from 'react';
+import { useLayoutEffect, useState, useEffect, useRef, useMemo, useDeferredValue } from 'react';
 import { useInterval, useBoolean, useThrottleFn, useSize, useMemoizedFn } from 'ahooks';
 import { useDispatch, useSelector, TypedUseSelectorHook, batch } from 'react-redux';
 import dayjs from 'dayjs';
@@ -130,6 +130,8 @@ export function useResizeEchart(scale = 1, unlimited?: boolean) {
   const chartRef = useRef<HTMLDivElement>(null);
   const chartInstanceRef = useRef<echarts.ECharts>();
   const size = useSize(chartRef);
+  const chartWidth = useDeferredValue(size?.width);
+
   useEffect(() => {
     const instance = echarts.init(chartRef.current!, undefined, {
       renderer: 'svg',
@@ -141,11 +143,11 @@ export function useResizeEchart(scale = 1, unlimited?: boolean) {
   }, []);
 
   useEffect(() => {
-    if (size?.width) {
-      const height = size.width * scale;
+    if (chartWidth) {
+      const height = chartWidth * scale;
       chartInstanceRef.current?.resize({ height: unlimited ? height : height > 200 ? 200 : height });
     }
-  }, [size?.width, unlimited]);
+  }, [chartWidth, unlimited]);
 
   return { ref: chartRef, chartInstance: chartInstanceRef.current };
 }
@@ -161,7 +163,7 @@ export function useRenderEcharts(callback: () => void, instance?: echarts.EChart
 export function useSyncFixFundSetting() {
   const dispatch = useAppDispatch();
   const [done, { setTrue }] = useBoolean(false);
-  const { currentWalletFundsConfig: fundConfig } = useCurrentWallet();
+  const fundConfig = useAppSelector((state) => state.wallet.fundConfig);
   const fundApiTypeSetting = useAppSelector((state) => state.setting.systemSetting.fundApiTypeSetting);
 
   async function FixFundSetting(fundConfig: Fund.SettingItem[]) {
@@ -302,11 +304,11 @@ export function useLoadFunds(loading: boolean) {
 
 export function useLoadFixFunds() {
   const dispatch = useAppDispatch();
-  const { currentWalletState } = useCurrentWallet();
+  const currentWallet = useAppSelector((state) => state.wallet.currentWallet);
 
   const load = useMemoizedFn(async () => {
     try {
-      const { funds, code } = currentWalletState;
+      const { funds, code } = currentWallet;
       const fixFunds = (await Helpers.Fund.GetFixFunds(funds)).filter(Utils.NotEmpty);
       const now = dayjs().format('MM-DD HH:mm:ss');
       dispatch(syncFixWalletStateAction({ code, funds: fixFunds, updateTime: now }));

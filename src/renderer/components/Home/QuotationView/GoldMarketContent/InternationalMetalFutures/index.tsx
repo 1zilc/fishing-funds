@@ -4,7 +4,7 @@ import { useRequest } from 'ahooks';
 
 import ChartCard from '@/components/Card/ChartCard';
 import CustomDrawer from '@/components/CustomDrawer';
-import { useDrawer, useCurrentWallet } from '@/utils/hooks';
+import { useDrawer } from '@/utils/hooks';
 import * as Services from '@/services';
 import * as Utils from '@/utils';
 import styles from './index.module.scss';
@@ -19,7 +19,6 @@ const RenderColorCol = ({ value }: { value: string }) => {
 
 const InternationalMetalFutures: React.FC<PropsWithChildren<InternationalMetalFuturesProps>> = () => {
   const [data, setData] = useState<any[]>([]);
-  const { currentWalletFundsCodeMap: codeMap } = useCurrentWallet();
   const { data: detailCode, show: showDetailDrawer, set: setDetailDrawer, close: closeDetailDrawer } = useDrawer('');
 
   const columns = [

@@ -1,3 +1,1 @@
-const { got } = window.contextModules;
-
-export default got;
+export default window.contextModules.got;

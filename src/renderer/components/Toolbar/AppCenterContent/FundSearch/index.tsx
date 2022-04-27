@@ -3,7 +3,7 @@ import clsx from 'clsx';
 import { Tabs } from 'antd';
 
 import CustomDrawer from '@/components/CustomDrawer';
-import { useDrawer, useCurrentWallet } from '@/utils/hooks';
+import { useDrawer, useAppSelector } from '@/utils/hooks';
 import * as Enums from '@/utils/enums';
 
 import styles from './index.module.scss';
@@ -28,7 +28,7 @@ export const fundTypesConfig = [
 
 const FundSearch: React.FC<FundSearchProps> = (props) => {
   const { groupList } = props;
-  const { currentWalletFundsCodeMap: codeMap } = useCurrentWallet();
+  const codeMap = useAppSelector((state) => state.wallet.fundConfigCodeMap);
   const { data: addCode, show: showAddDrawer, set: setAddDrawer, close: closeAddDrawer } = useDrawer('');
   const { data: fundCode, show: showDetailDrawer, set: setDetailDrawer, close: closeDetailDrawer } = useDrawer('');
 

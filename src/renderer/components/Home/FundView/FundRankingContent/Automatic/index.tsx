@@ -1,11 +1,11 @@
-import React, { PropsWithChildren, useState, useEffect } from 'react';
+import React, { PropsWithChildren, useState } from 'react';
 import { Table } from 'antd';
 import { useRequest } from 'ahooks';
 
 import ChartCard from '@/components/Card/ChartCard';
 import CustomDrawer from '@/components/CustomDrawer';
 import TypeSelection from '@/components/TypeSelection';
-import { useDrawer, useCurrentWallet } from '@/utils/hooks';
+import { useDrawer, useAppSelector } from '@/utils/hooks';
 import * as Services from '@/services';
 import * as Utils from '@/utils';
 import styles from './index.module.scss';
@@ -32,7 +32,7 @@ const RenderColorCol = ({ value }: { value: string }) => {
 const Automatic: React.FC<PropsWithChildren<AutomaticProps>> = () => {
   const [fundType, setFundType] = useState(fundTypeList[0]);
   const [data, setData] = useState<any[]>([]);
-  const { currentWalletFundsCodeMap: codeMap } = useCurrentWallet();
+  const codeMap = useAppSelector((state) => state.wallet.fundConfigCodeMap);
   const { data: detailCode, show: showDetailDrawer, set: setDetailDrawer, close: closeDetailDrawer } = useDrawer('');
   const { data: addCode, show: showAddDrawer, set: setAddDrawer, close: closeAddDrawer } = useDrawer('');
 

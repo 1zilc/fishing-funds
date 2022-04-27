@@ -35,17 +35,7 @@ import { toggleAllQuotationsCollapseAction } from '@/store/features/quotation';
 import { toggleAllStocksCollapseAction } from '@/store/features/stock';
 import { toggleAllCoinsCollapseAction } from '@/store/features/coin';
 import { toggleAllFundsCollapseAction } from '@/store/features/wallet';
-import {
-  useScrollToTop,
-  useFreshFunds,
-  useFreshZindexs,
-  useFreshQuotations,
-  useFreshStocks,
-  useFreshCoins,
-  useCurrentWallet,
-  useAppDispatch,
-  useAppSelector,
-} from '@/utils/hooks';
+import { useFreshFunds, useFreshZindexs, useFreshStocks, useFreshCoins, useAppDispatch, useAppSelector } from '@/utils/hooks';
 import * as Enums from '@/utils/enums';
 import * as CONST from '@/constants';
 import * as Helpers from '@/helpers';
@@ -70,11 +60,9 @@ function FundsSortBar() {
     fundViewMode: { type: fundViewType },
   } = useAppSelector((state) => state.sort.viewMode);
 
-  const { fundSortModeOptions, fundSortModeOptionsMap } = Helpers.Sort.GetSortConfig();
+  const { funds } = useAppSelector((state) => state.wallet.currentWallet);
 
-  const {
-    currentWalletState: { funds },
-  } = useCurrentWallet();
+  const { fundSortModeOptions, fundSortModeOptionsMap } = Helpers.Sort.GetSortConfig();
 
   const [showManageFundDrawer, { setTrue: openManageFundDrawer, setFalse: closeManageFundDrawer, toggle: ToggleManageFundDrawer }] =
     useBoolean(false);

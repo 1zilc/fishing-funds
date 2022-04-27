@@ -16,7 +16,6 @@ import {
   useWorkDayTimeToDo,
   useFixTimeToDo,
   useAfterMounted,
-  useCurrentWallet,
   useFreshFunds,
   useAppDispatch,
   useAppSelector,
@@ -330,13 +329,10 @@ export function useMappingLocalToSystemSetting() {
 
 export function useTrayContent() {
   const { trayContentSetting } = useAppSelector((state) => state.setting.systemSetting);
-  const currentWalletCode = useAppSelector((state) => state.wallet.currentWalletCode);
   const fundConfigCodeMap = useAppSelector((state) => state.wallet.fundConfigCodeMap);
   const walletsConfig = useAppSelector((state) => state.wallet.config.walletConfig);
   const wallets = useAppSelector((state) => state.wallet.wallets);
-  const {
-    currentWalletState: { funds },
-  } = useCurrentWallet();
+  const { funds } = useAppSelector((state) => state.wallet.currentWallet);
   const calcResult = Helpers.Fund.CalcFunds(funds, fundConfigCodeMap);
 
   const allCalcResult = useMemo(() => {

@@ -4,7 +4,7 @@ import { useRequest } from 'ahooks';
 
 import ChartCard from '@/components/Card/ChartCard';
 import CustomDrawer from '@/components/CustomDrawer';
-import { useDrawer, useCurrentWallet } from '@/utils/hooks';
+import { useDrawer, useAppSelector } from '@/utils/hooks';
 import * as Services from '@/services';
 import * as Utils from '@/utils';
 import styles from './index.module.scss';
@@ -20,8 +20,8 @@ const RenderColorCol = ({ value }: { value: string }) => {
 };
 
 const Funds: React.FC<PropsWithChildren<FundsProps>> = ({ code }) => {
-  const [data, setData] = useState([]);
-  const { currentWalletFundsCodeMap: codeMap } = useCurrentWallet();
+  const [data, setData] = useState<any[]>([]);
+  const codeMap = useAppSelector((state) => state.wallet.fundConfigCodeMap);
   const { data: detailCode, show: showDetailDrawer, set: setDetailDrawer, close: closeDetailDrawer } = useDrawer('');
   const { data: addCode, show: showAddDrawer, set: setAddDrawer, close: closeAddDrawer } = useDrawer('');
 

@@ -6,7 +6,7 @@ import LoadingBar from '@/components/LoadingBar';
 import CustomDrawer from '@/components/CustomDrawer';
 import GridView from '@/components/GridView';
 
-import { useDrawer, useFreshFunds, useCurrentWallet, useAppSelector } from '@/utils/hooks';
+import { useDrawer, useFreshFunds, useAppSelector } from '@/utils/hooks';
 import * as Enums from '@/utils/enums';
 import * as Helpers from '@/helpers';
 import styles from './index.module.scss';

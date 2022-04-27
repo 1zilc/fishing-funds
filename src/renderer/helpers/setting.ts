@@ -1,24 +1,2 @@
 import dayjs from 'dayjs';
 import * as Enums from '@/utils/enums';
-
-export const defalutSystemSetting: System.Setting = {
-  fundApiTypeSetting: Enums.FundApiType.Eastmoney,
-
-  conciseSetting: false,
-  lowKeySetting: false,
-  baseFontSizeSetting: 12,
-  systemThemeSetting: Enums.SystemThemeType.Auto,
-
-  adjustmentNotificationSetting: true,
-  adjustmentNotificationTimeSetting: dayjs().hour(14).minute(30).format(),
-  riskNotificationSetting: true,
-  trayContentSetting: [Enums.TrayContent.Sy],
-
-  coinUnitSetting: Enums.CoinUnitType.Usd,
-
-  autoStartSetting: true,
-  autoFreshSetting: true,
-  freshDelaySetting: 1,
-  autoCheckUpdateSetting: true,
-  timestampSetting: Enums.TimestampType.Network,
-};

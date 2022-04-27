@@ -4,7 +4,7 @@ import { useRequest } from 'ahooks';
 import Empty from '@/components/Empty';
 import FundRow from '@/components/Home/FundView/FundRow';
 import CustomDrawer from '@/components/CustomDrawer';
-import { useFixTimeToDo, useDrawer, useCurrentWallet, useAppSelector } from '@/utils/hooks';
+import { useFixTimeToDo, useDrawer, useAppSelector } from '@/utils/hooks';
 
 import * as Helpers from '@/helpers';
 import styles from './index.module.scss';

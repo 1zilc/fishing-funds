@@ -5,7 +5,7 @@ import { useRequest } from 'ahooks';
 
 import ChartCard from '@/components/Card/ChartCard';
 import CustomDrawer from '@/components/CustomDrawer';
-import { useDrawer, useCurrentWallet, useAppDispatch, useAppSelector } from '@/utils/hooks';
+import { useDrawer, useAppDispatch, useAppSelector } from '@/utils/hooks';
 import { setFundRatingMapAction } from '@/store/features/fund';
 
 import * as Services from '@/services';
@@ -18,7 +18,7 @@ interface RantingProps {}
 
 const Ranting: React.FC<PropsWithChildren<RantingProps>> = () => {
   const dispatch = useAppDispatch();
-  const { currentWalletFundsCodeMap: codeMap } = useCurrentWallet();
+  const codeMap = useAppSelector((state) => state.wallet.fundConfigCodeMap);
   const { data: detailCode, show: showDetailDrawer, set: setDetailDrawer, close: closeDetailDrawer } = useDrawer('');
   const { data: addCode, show: showAddDrawer, set: setAddDrawer, close: closeAddDrawer } = useDrawer('');
   const fundRatingMap = useAppSelector((state) => state.fund.fundRatingMap);

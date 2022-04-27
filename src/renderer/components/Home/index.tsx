@@ -19,7 +19,7 @@ import GlobalStyles from '@/components/GlobalStyles';
 import WebViewer from '@/components/WebViewer';
 import { stockTypesConfig } from '@/components/Toolbar/AppCenterContent/StockSearch';
 
-import { useNativeThemeColor, useCurrentWallet, useAppSelector } from '@/utils/hooks';
+import { useNativeThemeColor, useAppSelector } from '@/utils/hooks';
 import * as Enums from '@/utils/enums';
 import * as CONST from '@/constants';
 import * as Helpers from '@/helpers';
@@ -43,7 +43,7 @@ export function useHomeContext() {
 }
 
 const FundGroup = () => {
-  const { currentWalletFundsCodeMap: fundCodeMap } = useCurrentWallet();
+  const codeMap = useAppSelector((state) => state.wallet.fundConfigCodeMap);
 
   return (
     <GroupTab tabKey={Enums.TabKeyType.Funds}>
@@ -51,13 +51,13 @@ const FundGroup = () => {
         <FundView filter={() => true} />
       </Tabs.TabPane>
       <Tabs.TabPane tab="持有" key={String(1)}>
-        <FundView filter={(fund) => !!fundCodeMap[fund.fundcode!]?.cyfe} />
+        <FundView filter={(fund) => !!codeMap[fund.fundcode!]?.cyfe} />
       </Tabs.TabPane>
       <Tabs.TabPane tab="自选" key={String(2)}>
-        <FundView filter={(fund) => !fundCodeMap[fund.fundcode!]?.cyfe} />
+        <FundView filter={(fund) => !codeMap[fund.fundcode!]?.cyfe} />
       </Tabs.TabPane>
       <Tabs.TabPane tab="净值更新" key={String(3)}>
-        <FundView filter={(fund) => !!Helpers.Fund.CalcFund(fund, fundCodeMap).isFix} />
+        <FundView filter={(fund) => !!Helpers.Fund.CalcFund(fund, codeMap).isFix} />
       </Tabs.TabPane>
     </GroupTab>
   );

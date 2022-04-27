@@ -27,7 +27,7 @@ import IndustryLayout from '@/components/Home/FundView/DetailFundContent/Industr
 import WarehouseEvent from '@/components/Home/FundView/DetailFundContent/WarehouseEvent';
 import Origin from '@/components/Home/FundView/DetailFundContent/Origin';
 
-import { useFundRating, useCurrentWallet, useDrawer } from '@/utils/hooks';
+import { useFundRating, useDrawer, useAppSelector } from '@/utils/hooks';
 import * as Services from '@/services';
 import * as Utils from '@/utils';
 import * as Enums from '@/utils/enums';
@@ -89,11 +89,11 @@ export const TypeTag: React.FC<{ type?: string }> = ({ type }) => {
 
 const DetailFundContent: React.FC<DetailFundContentProps> = (props) => {
   const { code } = props;
-  const [fund, setFund] = useState<Fund.FixData | Record<string, any>>({});
+  const [fund, setFund] = useState<Fund.FixData | Record<string, any> | null>({});
   const [pingzhongdata, setPingzhongdata] = useState<Fund.PingzhongData | Record<string, any>>({});
   const [industryData, setIndustryData] = useState({ stocks: [] as any[], expansion: '' });
   const { star: fundStar, type: fundType } = useFundRating(code);
-  const { currentWalletFundsCodeMap: codeMap } = useCurrentWallet();
+  const codeMap = useAppSelector((state) => state.wallet.fundConfigCodeMap);
   const { data: addCode, show: showAddDrawer, set: setAddDrawer, close: closeAddDrawer } = useDrawer(code);
   const [showManagerDrawer, { setTrue: openManagerDrawer, setFalse: closeManagerDrawer, toggle: ToggleManagerDrawer }] = useBoolean(false);
   const rateInSimilarPersent = pingzhongdata.Data_rateInSimilarPersent || [];

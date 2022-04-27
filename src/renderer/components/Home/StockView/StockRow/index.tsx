@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import clsx from 'clsx';
 import ColorHash from 'color-hash';
 import { useRequest } from 'ahooks';

@@ -13,7 +13,7 @@ import BellsFillIcon from '@/static/icon/bells-fill.svg';
 import CustomDrawer from '@/components/CustomDrawer';
 import Empty from '@/components/Empty';
 import { deleteFundAction, setFundConfigAction, updateFundAction } from '@/store/features/fund';
-import { useSyncFixFundSetting, useDrawer, useCurrentWallet, useAutoDestroySortableRef, useAppDispatch } from '@/utils/hooks';
+import { useSyncFixFundSetting, useDrawer, useAppSelector, useAutoDestroySortableRef, useAppDispatch } from '@/utils/hooks';
 import styles from './index.module.scss';
 
 const AddFundContent = React.lazy(() => import('@/components/Home/FundView/AddFundContent'));
@@ -27,7 +27,9 @@ const Optional: React.FC<OptionalProps> = () => {
   const dispatch = useAppDispatch();
   const sortableRef = useAutoDestroySortableRef();
   const { show: showAddDrawer, set: setAddDrawer, close: closeAddDrawer } = useDrawer(null);
-  const { currentWalletFundsConfig: fundConfig, currentWalletFundsCodeMap: codeMap, currentWalletCode } = useCurrentWallet();
+  const codeMap = useAppSelector((state) => state.wallet.fundConfigCodeMap);
+  const currentWalletCode = useAppSelector((state) => state.wallet.currentWalletCode);
+  const fundConfig = useAppSelector((state) => state.wallet.fundConfig);
 
   const {
     data: editData,
