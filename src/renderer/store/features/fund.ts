@@ -27,7 +27,7 @@ const fundSlice = createSlice({
   name: 'fund',
   initialState,
   reducers: {
-    syncRemoteFundsAction(state, action) {
+    syncRemoteFundsAction(state, action: PayloadAction<Fund.RemoteFund[]>) {
       state.remoteFunds = action.payload;
     },
     setFundsLoadingAction(state, action: PayloadAction<boolean>) {
@@ -75,7 +75,6 @@ export function setRemoteFundsAction(newRemoteFunds: Fund.RemoteFund[]): TypedTh
       const oldRemoteMap = Utils.GetCodeMap(remoteFunds, 0);
       const newRemoteMap = Utils.GetCodeMap(newRemoteFunds, 0);
       const remoteMap = { ...oldRemoteMap, ...newRemoteMap };
-
       dispatch(syncRemoteFundsAction(Object.values(remoteMap)));
       Utils.SetStorage(CONST.STORAGE.REMOTE_FUND_MAP, remoteMap);
     } catch (error) {}

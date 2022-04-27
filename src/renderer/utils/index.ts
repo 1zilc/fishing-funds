@@ -406,7 +406,11 @@ export function GetCodeMap<T extends Record<string, any>>(list: T[], key: keyof 
     originSort: number;
   };
   return list.reduce((r, c, i) => {
-    r[c[key]] = { ...c, originSort: i };
+    if (Array.isArray(c)) {
+      r[c[key]] = c as any;
+    } else {
+      r[c[key]] = { ...c, originSort: i };
+    }
     return r;
   }, {} as Record<string, T & extraData>);
 }

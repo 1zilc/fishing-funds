@@ -263,7 +263,7 @@ function QuotationSortBar() {
             e.stopPropagation();
           }}
         >
-          详情
+          资金流
         </a>
       </div>
       <div className={styles.view}>
