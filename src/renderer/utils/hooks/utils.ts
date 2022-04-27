@@ -129,8 +129,8 @@ export function useNativeThemeColor(varibles: string[]) {
 export function useResizeEchart(scale = 1, unlimited?: boolean) {
   const chartRef = useRef<HTMLDivElement>(null);
   const chartInstanceRef = useRef<echarts.ECharts>();
-  const size = useSize(chartRef);
-  const chartWidth = useDeferredValue(size?.width);
+  const chartWidth = useSize(chartRef)?.width;
+  // const chartWidth = useDeferredValue(size?.width);
 
   useEffect(() => {
     const instance = echarts.init(chartRef.current!, undefined, {
