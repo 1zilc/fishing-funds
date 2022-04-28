@@ -15,7 +15,6 @@ import SettingIcon from '@/static/icon/setting.svg';
 import LinkIcon from '@/static/icon/link.svg';
 import LineCharIcon from '@/static/icon/line-chart.svg';
 import TShirtIcon from '@/static/icon/t-shirt.svg';
-import GlobalIcon from '@/static/icon/global.svg';
 import GroupIcon from '@/static/icon/group.svg';
 import NotificationIcon from '@/static/icon/notification.svg';
 import BitCoinIcon from '@/static/icon/bit-coin.svg';

@@ -16,6 +16,7 @@ import CalendarCheckIcon from '@/static/icon/calendar-check.svg';
 import LayoutIcon from '@/static/icon/layout.svg';
 import FundsIcon from '@/static/icon/funds.svg';
 import CalculatorIcon from '@/static/icon/calculator.svg';
+import GlobalFillIcon from '@/static/icon/global-fill.svg';
 
 import CustomDrawer from '@/components/CustomDrawer';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
@@ -34,6 +35,7 @@ const ManageZindexContent = React.lazy(() => import('@/components/Home/ZindexVie
 const ManageStockContent = React.lazy(() => import('@/components/Home/StockView/ManageStockContent'));
 const ManageCoinContent = React.lazy(() => import('@/components/Home/CoinView/ManageCoinContent'));
 const ManageWalletContent = React.lazy(() => import('@/components/Wallet/ManageWalletContent'));
+const ManageWebContent = React.lazy(() => import('@/components/WebViewer/ManageWebContent'));
 const FundStatisticsContent = React.lazy(() => import('@/components/Home/FundView/FundStatisticsContent'));
 const NewsContent = React.lazy(() => import('@/components/Home/NewsList/NewsContent'));
 const HoldingContent = React.lazy(() => import('@/components/Home/QuotationView/HoldingContent'));
@@ -103,6 +105,7 @@ const AppCenterContent: React.FC<AppCenterContentProps> = (props) => {
   const [showManageZindexDrawer, { setTrue: openManageZindexDrawer, setFalse: closeManageZindexDrawer }] = useBoolean(false);
   const [showManageStockDrawer, { setTrue: openManageStockDrawer, setFalse: closeManageStockDrawer }] = useBoolean(false);
   const [showManageCoinDrawer, { setTrue: openManageCoinDrawer, setFalse: closeManageCoinDrawer }] = useBoolean(false);
+  const [showManageWebDrawer, { setTrue: openManageWebDrawer, setFalse: closeManageWebDrawer }] = useBoolean(false);
   const [showFundsStatisticsDrawer, { setTrue: openFundStatisticsDrawer, setFalse: closeFundStatisticsDrawer }] = useBoolean(false);
   const [showNewsDrawer, { setTrue: openNewsDrawer, setFalse: closeNewsDrawer }] = useBoolean(false);
   const [showHoldingDrawer, { setTrue: openHoldingDrawer, setFalse: closeHoldingDrawer }] = useBoolean(false);
@@ -158,6 +161,12 @@ const AppCenterContent: React.FC<AppCenterContentProps> = (props) => {
                 iconType: Enums.WebIconType.Svg,
                 icon: <WalletIcon style={{ ...iconSize }} />,
                 click: openManageWalletDrawer,
+              },
+              {
+                title: 'H5管理',
+                iconType: Enums.WebIconType.Svg,
+                icon: <GlobalFillIcon style={{ ...iconSize }} />,
+                click: openManageWebDrawer,
               },
             ],
           },
@@ -309,6 +318,9 @@ const AppCenterContent: React.FC<AppCenterContentProps> = (props) => {
         </CustomDrawer>
         <CustomDrawer show={showManageCoinDrawer}>
           <ManageCoinContent onClose={closeManageCoinDrawer} onEnter={closeManageCoinDrawer} />
+        </CustomDrawer>
+        <CustomDrawer show={showManageWebDrawer}>
+          <ManageWebContent onClose={closeManageWebDrawer} onEnter={closeManageWebDrawer} />
         </CustomDrawer>
         <CustomDrawer show={showFundFlowDrawer}>
           <FundFlowContent onClose={closeFundFlowDrawer} onEnter={closeFundFlowDrawer} />

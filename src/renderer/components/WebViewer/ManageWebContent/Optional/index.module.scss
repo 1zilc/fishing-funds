@@ -16,20 +16,6 @@
   .menu {
     justify-self: flex-end;
     fill: var(--svg-icon-color);
-    height: 16px;
-    width: 16px;
-    margin-left: var(--base-padding);
-
-    &:hover {
-      cursor: pointer;
-    }
-  }
-  .function {
-    justify-self: flex-end;
-    fill: var(--svg-icon-color);
-    height: 12px;
-    width: 12px;
-    margin-left: var(--base-padding);
 
     &:hover {
       cursor: pointer;
@@ -65,18 +51,16 @@
 }
 
 .editor {
-  margin-left: var(--base-padding);
+  margin-left: 10px;
   cursor: pointer;
   height: 12px;
   width: 12px;
   fill: var(--svg-icon-color);
 }
 
-.cbj,
 .cyfe {
   display: flex;
   align-items: center;
-  font-size: calc(11rem / var(--base-font-size));
 }
 
 .add {
@@ -101,8 +85,8 @@
 
   svg {
     fill: var(--primary-text-color);
-    height: 24px;
-    width: 24px;
+    height: 16px;
+    width: 16px;
   }
 }
 .wallet {
@@ -131,4 +115,7 @@
   width: 12px;
   top: 50%;
   transform: translateY(-50%);
+}
+.search {
+  margin-bottom: var(--base-padding);
 }
