@@ -265,7 +265,7 @@ export function updateWalletStateAction(state: Wallet.StateItem): TypedThunk {
 
       batch(() => {
         dispatch(syncWalletsAction(cloneWallets));
-        dispatch(sortFundsAction());
+        dispatch(sortFundsAction(state.code));
       });
     } catch (error) {}
   };
@@ -309,7 +309,7 @@ export function syncFixWalletStateAction(state: Wallet.StateItem): TypedThunk {
 
       batch(() => {
         dispatch(syncWalletsAction(cloneWallets));
-        dispatch(sortFundsAction());
+        dispatch(sortFundsAction(state.code));
       });
     } catch (error) {}
   };

@@ -156,18 +156,22 @@ export function deleteFundAction(code: string): TypedThunk {
   };
 }
 
-export function sortFundsAction(): TypedThunk {
+export function sortFundsAction(walletCode: string): TypedThunk {
   return (dispatch, getState) => {
     try {
       const {
-        wallet: { currentWallet, fundConfigCodeMap: codeMap },
+        wallet: {
+          wallets,
+          config: { walletConfig },
+        },
         sort: {
           sortMode: {
             fundSortMode: { type: fundSortType, order: fundSortorder },
           },
         },
       } = getState();
-      const { funds, updateTime, code } = currentWallet;
+      const { funds, updateTime, code } = Helpers.Wallet.GetCurrentWalletState(walletCode, wallets);
+      const { codeMap } = Helpers.Fund.GetFundConfig(walletCode, walletConfig);
       const sortList = funds.slice();
 
       sortList.sort((a, b) => {
@@ -228,7 +232,7 @@ export function sortFundsCachedAction(responseFunds: Fund.ResponseItem[], wallet
 
       batch(() => {
         dispatch(setWalletStateAction({ code: walletCode, funds: fundsWithChached, updateTime: now }));
-        dispatch(sortFundsAction());
+        dispatch(sortFundsAction(walletCode));
       });
     } catch (error) {}
   };

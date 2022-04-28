@@ -101,13 +101,14 @@ export function setFundSortModeAction(mode: { type?: Enums.FundSortType; order?:
     try {
       const {
         sort: { sortMode },
+        wallet: { currentWalletCode },
       } = getState();
 
       const fundSortMode = { ...sortMode.fundSortMode, ...mode };
 
       batch(() => {
         dispatch(setSortModeAction({ ...sortMode, fundSortMode }));
-        dispatch(sortFundsAction());
+        dispatch(sortFundsAction(currentWalletCode));
       });
       Utils.SetStorage(CONST.STORAGE.FUND_SORT_MODE, fundSortMode);
     } catch (error) {}
@@ -184,6 +185,7 @@ export function troggleFundSortOrderAction(): TypedThunk {
     try {
       const {
         sort: { sortMode },
+        wallet: { currentWalletCode },
       } = getState();
 
       const fundSortMode = {
@@ -193,7 +195,7 @@ export function troggleFundSortOrderAction(): TypedThunk {
 
       batch(() => {
         dispatch(setSortModeAction({ ...sortMode, fundSortMode }));
-        dispatch(sortFundsAction());
+        dispatch(sortFundsAction(currentWalletCode));
       });
       Utils.SetStorage(CONST.STORAGE.FUND_SORT_MODE, fundSortMode);
     } catch (error) {}
