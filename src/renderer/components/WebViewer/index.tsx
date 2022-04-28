@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState } from 'react';
-import { Menu, Dropdown, Progress, Switch } from 'antd';
+import { Dropdown, Progress, Switch } from 'antd';
 import { useBoolean, useMemoizedFn, useEventListener } from 'ahooks';
 
 import StarIcon from '@/static/icon/star.svg';
@@ -13,7 +13,7 @@ import CustomDrawerContent from '@/components/CustomDrawer/Content';
 import CustomDrawer from '@/components/CustomDrawer';
 import Empty from '@/components/Empty';
 
-import { closeWebAction, addWebAction, deleteWebAction, syncWebPhoneAction } from '@/store/features/web';
+import { closeWebAction, addWebAction, deleteWebAction, syncWebPhoneAction, syncWebUrlAction } from '@/store/features/web';
 import { useDrawer, useAppDispatch, useAppSelector, useIpcRendererListener } from '@/utils/hooks';
 import * as CONST from '@/constants';
 import * as Enums from '@/utils/enums';
@@ -30,13 +30,15 @@ const defaultAgent =
 
 const Content = () => {
   const dispatch = useAppDispatch();
-  const { url, phone, show, title } = useAppSelector((state) => state.web.view);
-  const { codeMap } = useAppSelector((state) => state.web.config);
   const viewRef = useRef<any>(null);
+  const { codeMap } = useAppSelector((state) => state.web.config);
+  const { url, phone, show, title } = useAppSelector((state) => state.web.view);
+  const [currentUrl, setCurrentUrl] = useState(url);
+  const [currentTitle, setCurrentTitle] = useState(title);
+
   const [loading, { setTrue: setLoadingTrue, setFalse: setLoadingFalse }] = useBoolean(false);
   const [done, { setTrue: setDoneTrue, setFalse: setDoneFalse }] = useBoolean(false);
   const [percent, setPercent] = useState(0);
-  const [webTitle, setWebTitle] = useState(title);
   const [timer, setTimer] = useState<any>(0);
   const [favicons, setFavicons] = useState<string[]>([]);
 
@@ -46,8 +48,8 @@ const Content = () => {
     set: setAddWebContent,
     close: closeAddWebContent,
   } = useDrawer({
-    title: webTitle,
-    url: url,
+    title: currentTitle,
+    url: currentUrl,
     iconType: Enums.WebIconType.First,
   });
 
@@ -74,7 +76,7 @@ const Content = () => {
     const url = viewRef.current?.getURL();
     if (url) {
       setAddWebContent({
-        title: webTitle,
+        title: currentTitle,
         iconType: Enums.WebIconType.First,
         url,
       });
@@ -87,7 +89,7 @@ const Content = () => {
   });
 
   const onRemoveWeb = useMemoizedFn(() => {
-    dispatch(deleteWebAction(url));
+    dispatch(deleteWebAction(currentUrl));
   });
 
   const onPhoneChange = useMemoizedFn((phone) => dispatch(syncWebPhoneAction(phone)));
@@ -96,11 +98,12 @@ const Content = () => {
     'dom-ready',
     () => {
       const targetId = viewRef.current?.getWebContentsId();
+      setCurrentTitle((_) => _ || viewRef.current.getTitle());
       ipcRenderer.invoke('registry-webview', targetId);
-      setWebTitle((_) => _ || viewRef.current.getTitle());
     },
     { target: viewRef }
   );
+
   useEventListener(
     'did-start-loading',
     () => {
@@ -110,10 +113,17 @@ const Content = () => {
     { target: viewRef }
   );
   useEventListener(
+    'did-finish-load',
+    () => {
+      setCurrentTitle(viewRef.current.getTitle());
+      setCurrentUrl(viewRef.current.getURL());
+    },
+    { target: viewRef }
+  );
+  useEventListener(
     'did-stop-loading',
     () => {
       setLoadingFalse();
-      setWebTitle(viewRef.current.getTitle());
       setTimeout(() => {
         setDoneTrue();
         setTimeout(() => {
@@ -162,7 +172,7 @@ const Content = () => {
   }, [show]);
 
   return (
-    <CustomDrawerContent title={webTitle} enterText="跳转" onClose={() => dispatch(closeWebAction())} onEnter={onVisit}>
+    <CustomDrawerContent title={currentTitle} enterText="跳转" onClose={() => dispatch(closeWebAction())} onEnter={onVisit}>
       <div className={styles.content}>
         {url ? (
           <webview
@@ -205,12 +215,12 @@ const Content = () => {
             <ArrowLeftIcon onClick={() => viewRef.current?.goBack()} />
             <RefreshIcon onClick={() => viewRef.current?.reload()} />
             <ArrowRightIcon onClick={() => viewRef.current?.goForward()} />
-            {codeMap[url] ? <StarFillIcon onClick={onRemoveWeb} /> : <StarIcon onClick={onSetWeb} />}
+            {codeMap[currentUrl] ? <StarFillIcon onClick={onRemoveWeb} /> : <StarIcon onClick={onSetWeb} />}
           </div>
         </div>
       </div>
       <CustomDrawer show={showAddWebContent} zIndex={CONST.DEFAULT.DRAWER_ZINDEX_TOP}>
-        <AddWebContent web={{ ...webDetail, title: webTitle }} onClose={closeAddWebContent} onEnter={onAddWeb} favicons={favicons} />
+        <AddWebContent web={{ ...webDetail, title: currentTitle }} onClose={closeAddWebContent} onEnter={onAddWeb} favicons={favicons} />
       </CustomDrawer>
     </CustomDrawerContent>
   );

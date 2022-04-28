@@ -23,7 +23,7 @@ export const defaultWebConfig = [
   },
   {
     title: 'Telegram',
-    url: 'https://web.telegram.org/',
+    url: 'https://web.telegram.org/k/',
     iconType: Enums.WebIconType.Favicon,
     icon: 'https://web.telegram.org/k/assets/img/favicon.ico',
   },
