@@ -211,10 +211,11 @@ export function sortFundsCachedAction(responseFunds: Fund.ResponseItem[], wallet
       const {
         wallet: {
           config: { walletConfig },
-          currentWallet: { funds },
+          wallets,
         },
       } = getState();
       const { fundConfig } = Helpers.Fund.GetFundConfig(walletCode, walletConfig);
+      const { funds } = Helpers.Wallet.GetCurrentWalletState(walletCode, wallets);
       const now = dayjs().format('MM-DD HH:mm:ss');
       const fundsCodeToMap = Utils.GetCodeMap(funds, 'fundcode');
       const fundsWithChached = responseFunds.map((_) => ({
