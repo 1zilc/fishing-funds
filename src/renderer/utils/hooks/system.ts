@@ -485,12 +485,10 @@ export function useTouchBar() {
   useEffect(() => {
     ipcRenderer.invoke(
       'update-touchbar-zindex',
-      zindexs
-        .filter(({ code }) => code === '1.000001') // 只显示上证指数
-        .map((zindex) => ({
-          label: `${zindex.name} ${zindex.zsz}`,
-          backgroundColor: Utils.GetValueColor(zindex.zdf).color,
-        }))
+      zindexs.slice(0, 1).map((zindex) => ({
+        label: `${zindex.name} ${zindex.zsz}`,
+        backgroundColor: Utils.GetValueColor(zindex.zdf).color,
+      }))
     );
   }, [zindexs]);
 
