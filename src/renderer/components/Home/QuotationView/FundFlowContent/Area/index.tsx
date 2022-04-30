@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useRequest } from 'ahooks';
 
-import { useHomeContext } from '@/components/Home';
 import ChartCard from '@/components/Card/ChartCard';
 import TypeSelection from '@/components/TypeSelection';
 import { useResizeEchart } from '@/utils/hooks';
@@ -21,7 +20,6 @@ const areaTypeList = [
 const Area: React.FC<IndustryProps> = () => {
   const { ref: chartRef, chartInstance } = useResizeEchart(CONST.DEFAULT.ECHARTS_SCALE);
   const [areaType, setAreaType] = useState(areaTypeList[0]);
-  const { varibleColors, darkMode } = useHomeContext();
 
   const { run: runGetFundPerformanceFromEastmoney } = useRequest(
     () => Services.Quotation.GetFundFlowFromEastmoney(areaType.code, areaType.type),
@@ -83,7 +81,7 @@ const Area: React.FC<IndustryProps> = () => {
           ],
         });
       },
-      refreshDeps: [darkMode, areaType.code, areaType.type],
+      refreshDeps: [areaType.code, areaType.type],
       ready: !!chartInstance,
     }
   );

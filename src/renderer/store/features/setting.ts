@@ -8,6 +8,7 @@ import * as Enums from '@/utils/enums';
 export type SettingState = {
   systemSetting: System.Setting;
   adjustmentNotificationDate: string;
+  darkMode: boolean;
 };
 
 export const defaultSystemSetting: System.Setting = {
@@ -35,6 +36,7 @@ export const defaultSystemSetting: System.Setting = {
 const initialState: SettingState = {
   systemSetting: defaultSystemSetting,
   adjustmentNotificationDate: '',
+  darkMode: false,
 };
 
 const settingSlice = createSlice({
@@ -47,9 +49,12 @@ const settingSlice = createSlice({
     updateAdjustmentNotificationDateAction(state, action: PayloadAction<string>) {
       state.adjustmentNotificationDate = action.payload;
     },
+    syncDarkMode(state, action: PayloadAction<boolean>) {
+      state.darkMode = action.payload;
+    },
   },
 });
-export const { syncSettingAction, updateAdjustmentNotificationDateAction } = settingSlice.actions;
+export const { syncSettingAction, updateAdjustmentNotificationDateAction, syncDarkMode } = settingSlice.actions;
 
 export function setSystemSettingAction(newSetting: System.Setting): TypedThunk {
   return (dispatch, getState) => {

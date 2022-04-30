@@ -4,8 +4,8 @@ import { useRequest } from 'ahooks';
 import clsx from 'clsx';
 
 import ChartCard from '@/components/Card/ChartCard';
-import { useHomeContext } from '@/components/Home';
-import { useResizeEchart, useAppSelector } from '@/utils/hooks';
+
+import { useResizeEchart, useAppSelector, useNativeThemeColor } from '@/utils/hooks';
 
 import * as Enums from '@/utils/enums';
 import * as Services from '@/services';
@@ -23,7 +23,7 @@ const indexCode = '1.000300';
 
 const Score: React.FC<ScoreProps> = ({ gssyl = 0 }) => {
   const { ref: chartRef, chartInstance } = useResizeEchart(0.48);
-  const { varibleColors, darkMode } = useHomeContext();
+  const { varibleColors } = useNativeThemeColor();
   const { freshDelaySetting, autoFreshSetting } = useAppSelector((state) => state.setting.systemSetting);
   const eyeStatus = useAppSelector((state) => state.wallet.eyeStatus);
   const eyeOpen = eyeStatus === Enums.EyeStatus.Open;
@@ -125,7 +125,7 @@ const Score: React.FC<ScoreProps> = ({ gssyl = 0 }) => {
       });
       setHS(String(indexNumber));
     },
-    refreshDeps: [darkMode, gssyl],
+    refreshDeps: [gssyl],
   });
 
   return (

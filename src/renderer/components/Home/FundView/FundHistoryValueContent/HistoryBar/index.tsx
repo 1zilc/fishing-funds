@@ -1,7 +1,6 @@
 import React from 'react';
 import dayjs from 'dayjs';
 
-import { useHomeContext } from '@/components/Home';
 import { useResizeEchart, useRenderEcharts } from '@/utils/hooks';
 import * as CONST from '@/constants';
 import * as Utils from '@/utils';
@@ -13,7 +12,6 @@ interface HistoryBarProps {
 
 const HistoryBar: React.FC<HistoryBarProps> = ({ data = [] }) => {
   const { ref: chartRef, chartInstance } = useResizeEchart(CONST.DEFAULT.ECHARTS_SCALE);
-  const { varibleColors, darkMode } = useHomeContext();
 
   useRenderEcharts(
     () => {
@@ -72,7 +70,7 @@ const HistoryBar: React.FC<HistoryBarProps> = ({ data = [] }) => {
       });
     },
     chartInstance,
-    [darkMode, data]
+    [data]
   );
 
   return (

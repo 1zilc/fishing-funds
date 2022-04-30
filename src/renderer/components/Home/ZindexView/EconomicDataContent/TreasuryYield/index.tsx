@@ -2,8 +2,8 @@ import React from 'react';
 import { useRequest } from 'ahooks';
 
 import ChartCard from '@/components/Card/ChartCard';
-import { useHomeContext } from '@/components/Home';
-import { useResizeEchart, useRenderEcharts } from '@/utils/hooks';
+
+import { useResizeEchart, useRenderEcharts, useNativeThemeColor } from '@/utils/hooks';
 import * as CONST from '@/constants';
 import * as Services from '@/services';
 import styles from './index.module.scss';
@@ -12,7 +12,7 @@ interface TreasuryYieldProps {}
 
 const TreasuryYield: React.FC<TreasuryYieldProps> = () => {
   const { ref: chartRef, chartInstance } = useResizeEchart(CONST.DEFAULT.ECHARTS_SCALE);
-  const { varibleColors, darkMode } = useHomeContext();
+  const { varibleColors } = useNativeThemeColor();
 
   const { run: runZindexGetTreasuryYieldData } = useRequest(Services.Zindex.GetTreasuryYieldData, {
     onSuccess: (result) => {
@@ -75,7 +75,7 @@ const TreasuryYield: React.FC<TreasuryYieldProps> = () => {
         ],
       });
     },
-    refreshDeps: [darkMode],
+    refreshDeps: [varibleColors],
     ready: !!chartInstance,
   });
 

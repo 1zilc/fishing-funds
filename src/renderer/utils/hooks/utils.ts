@@ -16,10 +16,10 @@ import { setQuotationsLoadingAction } from '@/store/features/quotation';
 import { openWebAction } from '@/store/features/web';
 import { syncFixWalletStateAction, updateWalletStateAction } from '@/store/features/wallet';
 import { setCoinsLoadingAction, setRemoteCoinsLoadingAction, sortCoinsCachedAction, setRemoteCoinsAction } from '@/store/features/coin';
-import { updateStockAction, sortStocksCachedAction } from '@/store/features/stock';
+import { updateStockAction, sortStocksCachedAction, setStocksLoadingAction } from '@/store/features/stock';
 import { setZindexesLoadingAction, sortZindexsCachedAction } from '@/store/features/zindex';
 import { sortQuotationsCachedAction } from '@/store/features/quotation';
-import { setStocksLoadingAction } from '@/store/features/stock';
+import { syncDarkMode } from '@/store/features/setting';
 import { TypedDispatch, StoreState } from '@/store';
 import * as Utils from '@/utils';
 import * as CONST from '@/constants';
@@ -89,37 +89,12 @@ export function useScrollToTop(config: {
   });
 }
 
-export function useNativeTheme() {
-  const [darkMode, setDarkMode] = useState(false);
-  const systemSetting = useAppSelector((state) => state.setting.systemSetting);
-  const { systemThemeSetting } = systemSetting;
+export function useNativeThemeColor() {
+  const darkMode = useAppSelector((state) => state.setting.darkMode);
 
-  async function syncSystemTheme() {
-    await Utils.UpdateSystemTheme(systemThemeSetting);
-    await invoke.getShouldUseDarkColors().then(setDarkMode);
-  }
+  const varibleColors = useMemo(() => Utils.GetVariblesColor(CONST.VARIBLES), [darkMode]);
 
-  useIpcRendererListener('nativeTheme-updated', (e, data) => {
-    setDarkMode(!!data?.darkMode);
-  });
-
-  useEffect(() => {
-    syncSystemTheme();
-  }, [systemThemeSetting]);
-
-  return { darkMode };
-}
-
-export function useNativeThemeColor(varibles: string[]) {
-  const { darkMode } = useNativeTheme();
-  const lowKeySetting = useAppSelector((state) => state.setting.systemSetting.lowKeySetting);
-  const [colors, setColors] = useState<any>({});
-
-  useEffect(() => {
-    setColors(Utils.getVariblesColor(varibles));
-  }, [darkMode, lowKeySetting]);
-
-  return { darkMode, colors };
+  return { darkMode, varibleColors };
 }
 
 export function useResizeEchart(scale = 1, unlimited?: boolean) {
@@ -149,11 +124,12 @@ export function useResizeEchart(scale = 1, unlimited?: boolean) {
 }
 
 export function useRenderEcharts(callback: () => void, instance?: echarts.ECharts, dep: any[] = []) {
+  const { darkMode, varibleColors } = useNativeThemeColor();
   useEffect(() => {
     if (instance) {
       callback();
     }
-  }, [instance, ...dep]);
+  }, [instance, darkMode, varibleColors, ...dep]);
 }
 
 export function useSyncFixFundSetting() {

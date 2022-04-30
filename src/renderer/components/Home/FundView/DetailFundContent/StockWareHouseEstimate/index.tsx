@@ -1,6 +1,5 @@
 import React from 'react';
 
-import { useHomeContext } from '@/components/Home';
 import { useResizeEchart, useRenderEcharts } from '@/utils/hooks';
 import * as CONST from '@/constants';
 import styles from './index.module.scss';
@@ -11,7 +10,6 @@ export interface StockWareHouseEstimateProps {
 
 const StockWareHouseEstimate: React.FC<StockWareHouseEstimateProps> = ({ fundSharesPositions }) => {
   const { ref: chartRef, chartInstance } = useResizeEchart(CONST.DEFAULT.ECHARTS_SCALE);
-  const { darkMode } = useHomeContext();
 
   useRenderEcharts(
     () => {
@@ -61,7 +59,7 @@ const StockWareHouseEstimate: React.FC<StockWareHouseEstimateProps> = ({ fundSha
       });
     },
     chartInstance,
-    [darkMode, fundSharesPositions]
+    [fundSharesPositions]
   );
 
   return (

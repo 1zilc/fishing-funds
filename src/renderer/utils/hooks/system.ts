@@ -10,7 +10,7 @@ import { updateAvaliableAction } from '@/store/features/updater';
 import { setFundConfigAction } from '@/store/features/fund';
 import { setTabsActiveKeyAction } from '@/store/features/tabs';
 import { selectWalletAction, toggleEyeStatusAction } from '@/store/features/wallet';
-import { setAdjustmentNotificationDateAction, clearAdjustmentNotificationDateAction } from '@/store/features/setting';
+import { setAdjustmentNotificationDateAction, clearAdjustmentNotificationDateAction, syncDarkMode } from '@/store/features/setting';
 
 import {
   useWorkDayTimeToDo,
@@ -296,6 +296,11 @@ export function useMappingLocalToSystemSetting() {
   const autoStartSetting = useAppSelector((state) => state.setting.systemSetting.autoStartSetting);
   const lowKeySetting = useAppSelector((state) => state.setting.systemSetting.lowKeySetting);
   const adjustmentNotificationTimeSetting = useAppSelector((state) => state.setting.systemSetting.adjustmentNotificationTimeSetting);
+
+  useIpcRendererListener('nativeTheme-updated', (e, data) => {
+    syncDarkMode(!!data?.darkMode);
+  });
+
   useEffect(() => {
     Utils.UpdateSystemTheme(systemThemeSetting);
   }, [systemThemeSetting]);

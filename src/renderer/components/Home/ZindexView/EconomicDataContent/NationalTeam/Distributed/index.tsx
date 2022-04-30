@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import { useRequest } from 'ahooks';
 
-import { useHomeContext } from '@/components/Home';
 import ChartCard from '@/components/Card/ChartCard';
-import { useResizeEchart } from '@/utils/hooks';
+import { useNativeThemeColor, useResizeEchart } from '@/utils/hooks';
 import * as Services from '@/services';
 import styles from './index.module.scss';
 
@@ -11,7 +10,7 @@ interface DistributedProps {}
 
 const Distributed: React.FC<DistributedProps> = () => {
   const { ref: chartRef, chartInstance } = useResizeEchart(0.4);
-  const { varibleColors, darkMode } = useHomeContext();
+  const { varibleColors } = useNativeThemeColor();
   const [time, setTime] = useState('');
 
   const { run: runZindexGetNationalTeamDistributed } = useRequest(Services.Zindex.GetNationalTeamDistributed, {
@@ -74,7 +73,7 @@ const Distributed: React.FC<DistributedProps> = () => {
       });
       setTime(result.REPORT_DATE.slice(0, 10));
     },
-    refreshDeps: [darkMode],
+    refreshDeps: [varibleColors],
     ready: !!chartInstance,
   });
 

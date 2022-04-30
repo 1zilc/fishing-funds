@@ -1,9 +1,8 @@
 import React from 'react';
 import { useRequest } from 'ahooks';
 
-import { useHomeContext } from '@/components/Home';
 import ChartCard from '@/components/Card/ChartCard';
-import { useResizeEchart, useRenderEcharts } from '@/utils/hooks';
+import { useResizeEchart, useRenderEcharts, useNativeThemeColor } from '@/utils/hooks';
 import * as CONST from '@/constants';
 import * as Services from '@/services';
 import styles from './index.module.scss';
@@ -12,7 +11,7 @@ interface ConsumerPriceIndexProps {}
 
 const ConsumerPriceIndex: React.FC<ConsumerPriceIndexProps> = () => {
   const { ref: chartRef, chartInstance } = useResizeEchart(0.4);
-  const { varibleColors, darkMode } = useHomeContext();
+  const { varibleColors } = useNativeThemeColor();
 
   const { run: runGetEconomyIndexFromEastmoney } = useRequest(() => Services.Zindex.GetEconomyIndexFromEastmoney(19), {
     onSuccess: (result) => {
@@ -79,7 +78,7 @@ const ConsumerPriceIndex: React.FC<ConsumerPriceIndexProps> = () => {
         });
       } catch {}
     },
-    refreshDeps: [darkMode],
+    refreshDeps: [varibleColors],
     ready: !!chartInstance,
   });
 

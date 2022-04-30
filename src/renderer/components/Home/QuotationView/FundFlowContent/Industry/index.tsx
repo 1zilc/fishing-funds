@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useRequest } from 'ahooks';
 
-import { useHomeContext } from '@/components/Home';
 import ChartCard from '@/components/Card/ChartCard';
 import TypeSelection from '@/components/TypeSelection';
 import { useResizeEchart } from '@/utils/hooks';
@@ -21,7 +20,6 @@ const industryTypeList = [
 const Industry: React.FC<IndustryProps> = () => {
   const { ref: chartRef, chartInstance } = useResizeEchart(CONST.DEFAULT.ECHARTS_SCALE);
   const [industryType, setIndustryType] = useState(industryTypeList[0]);
-  const { varibleColors, darkMode } = useHomeContext();
 
   const { run: runGetFundPerformanceFromEastmoney } = useRequest(
     () => Services.Quotation.GetFundFlowFromEastmoney(industryType.code, industryType.type),
@@ -83,7 +81,7 @@ const Industry: React.FC<IndustryProps> = () => {
           ],
         });
       },
-      refreshDeps: [darkMode, industryType.code, industryType.type],
+      refreshDeps: [industryType.code, industryType.type],
       ready: !!chartInstance,
     }
   );

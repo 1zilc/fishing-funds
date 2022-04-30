@@ -1,7 +1,6 @@
 import React from 'react';
 
-import { useHomeContext } from '@/components/Home';
-import { useResizeEchart, useRenderEcharts, useAppSelector } from '@/utils/hooks';
+import { useResizeEchart, useRenderEcharts, useAppSelector, useNativeThemeColor } from '@/utils/hooks';
 import * as CONST from '@/constants';
 import * as Utils from '@/utils';
 import * as Enums from '@/utils/enums';
@@ -11,7 +10,7 @@ interface GeographyProps {}
 
 const Geography: React.FC<GeographyProps> = () => {
   const { ref: chartRef, chartInstance } = useResizeEchart(CONST.DEFAULT.ECHARTS_SCALE);
-  const { varibleColors, darkMode } = useHomeContext();
+  const { varibleColors } = useNativeThemeColor();
   const quotations = useAppSelector((state) => state.quotation.quotations);
 
   useRenderEcharts(
@@ -52,7 +51,7 @@ const Geography: React.FC<GeographyProps> = () => {
       });
     },
     chartInstance,
-    [varibleColors, darkMode]
+    [varibleColors]
   );
 
   return (

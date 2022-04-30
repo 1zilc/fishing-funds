@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 
-import { useHomeContext } from '@/components/Home';
 import { useResizeEchart, useRenderEcharts, useAppSelector } from '@/utils/hooks';
 import * as CONST from '@/constants';
 import * as Helpers from '@/helpers';
@@ -13,7 +12,6 @@ interface FundWarehouseProps {
 
 const FundRank: React.FC<FundWarehouseProps> = ({ funds = [], codes = [] }) => {
   const { ref: chartRef, chartInstance } = useResizeEchart(Math.max(CONST.DEFAULT.ECHARTS_SCALE, funds.length / 12), true);
-  const { varibleColors, darkMode } = useHomeContext();
   const walletsConfig = useAppSelector((state) => state.wallet.config.walletConfig);
 
   useRenderEcharts(
@@ -89,7 +87,7 @@ const FundRank: React.FC<FundWarehouseProps> = ({ funds = [], codes = [] }) => {
       });
     },
     chartInstance,
-    [darkMode, funds, codes]
+    [funds, codes]
   );
 
   return (

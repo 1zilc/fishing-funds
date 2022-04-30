@@ -1,9 +1,8 @@
 import React from 'react';
 import { useRequest } from 'ahooks';
 
-import { useHomeContext } from '@/components/Home';
 import ChartCard from '@/components/Card/ChartCard';
-import { useResizeEchart, useRenderEcharts } from '@/utils/hooks';
+import { useResizeEchart, useRenderEcharts, useNativeThemeColor } from '@/utils/hooks';
 import * as CONST from '@/constants';
 import * as Services from '@/services';
 import * as Enums from '@/utils/enums';
@@ -18,7 +17,7 @@ const code = 's2n';
 const NorthFlow: React.FC<NorthFlowProps> = () => {
   const { ref: chartRef, chartInstance } = useResizeEchart(CONST.DEFAULT.ECHARTS_SCALE);
 
-  const { varibleColors, darkMode } = useHomeContext();
+  const { varibleColors } = useNativeThemeColor();
   const { run: runGetFlowFromEastmoney } = useRequest(() => Services.Quotation.GetFlowFromEastmoney(fields1, code), {
     pollingInterval: 1000 * 60,
     onSuccess: (result) => {
@@ -93,7 +92,7 @@ const NorthFlow: React.FC<NorthFlowProps> = () => {
         ],
       });
     },
-    refreshDeps: [darkMode, code],
+    refreshDeps: [code],
     ready: !!chartInstance,
   });
 

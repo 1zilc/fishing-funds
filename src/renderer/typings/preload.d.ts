@@ -24,7 +24,6 @@ declare global {
         };
         invoke: {
           showCurrentWindow: () => void;
-          getShouldUseDarkColors: () => Promise<boolean>;
           setNativeThemeSource: (theme: number) => Promise<void>;
         };
       };

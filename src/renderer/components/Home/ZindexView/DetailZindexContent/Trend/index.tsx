@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useRequest } from 'ahooks';
 
 import ChartCard from '@/components/Card/ChartCard';
-import { useHomeContext } from '@/components/Home';
+
 import TypeSelection from '@/components/TypeSelection';
 import { useResizeEchart, useRenderEcharts } from '@/utils/hooks';
 import * as CONST from '@/constants';
@@ -24,7 +24,6 @@ const trendTypeList = [
 const Trend: React.FC<PerformanceProps> = ({ code, zs = 0 }) => {
   const { ref: chartRef, chartInstance } = useResizeEchart(CONST.DEFAULT.ECHARTS_SCALE);
   const [trend, setTrendType] = useState(trendTypeList[0]);
-  const { darkMode, varibleColors } = useHomeContext();
   const { run: runGetTrendFromEastmoney } = useRequest(() => Services.Zindex.GetTrendFromEastmoney(code, trend.code), {
     onSuccess: (result) => {
       chartInstance?.setOption({
@@ -102,7 +101,7 @@ const Trend: React.FC<PerformanceProps> = ({ code, zs = 0 }) => {
         ],
       });
     },
-    refreshDeps: [darkMode, code, trend.code, zs],
+    refreshDeps: [code, trend.code, zs],
     ready: !!chartInstance,
   });
 

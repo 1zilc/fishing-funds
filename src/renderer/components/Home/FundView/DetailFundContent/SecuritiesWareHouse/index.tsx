@@ -2,10 +2,9 @@ import React from 'react';
 import { renderToString } from 'react-dom/server';
 import { useRequest } from 'ahooks';
 
-import { useHomeContext } from '@/components/Home';
 import ChartCard from '@/components/Card/ChartCard';
 import CustomDrawer from '@/components/CustomDrawer';
-import { useResizeEchart, useDrawer } from '@/utils/hooks';
+import { useResizeEchart, useDrawer, useNativeThemeColor } from '@/utils/hooks';
 import * as CONST from '@/constants';
 import * as Services from '@/services';
 import * as Utils from '@/utils';
@@ -34,7 +33,7 @@ const Tooltip: React.FC<TooltipProps> = (props) => {
 
 const SecuritiesWareHouse: React.FC<SecuritiesWareHouseProps> = ({ code, securitiesCodes }) => {
   const { ref: chartRef, chartInstance } = useResizeEchart(CONST.DEFAULT.ECHARTS_SCALE);
-  const { varibleColors, darkMode } = useHomeContext();
+  const { varibleColors } = useNativeThemeColor();
   const { data: stockSecid, show: showDetailStockDrawer, set: setDetailStockDrawer, close: closeDetailStockDrawer } = useDrawer('');
   const { run: runGetSecuritiesWareHouseFromEastmoney } = useRequest(
     () => Services.Fund.GetSecuritiesWareHouseFromEastmoney(code, securitiesCodes),
@@ -101,7 +100,7 @@ const SecuritiesWareHouse: React.FC<SecuritiesWareHouseProps> = ({ code, securit
           setDetailStockDrawer(secid);
         });
       },
-      refreshDeps: [darkMode, code, securitiesCodes],
+      refreshDeps: [code, securitiesCodes],
       ready: !!chartInstance,
     }
   );

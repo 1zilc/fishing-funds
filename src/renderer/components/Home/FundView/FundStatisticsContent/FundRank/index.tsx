@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 
-import { useHomeContext } from '@/components/Home';
 import { useResizeEchart, useRenderEcharts, useAppSelector } from '@/utils/hooks';
 import TypeSelection from '@/components/TypeSelection';
 import * as CONST from '@/constants';
@@ -24,7 +23,6 @@ const rankTypeList = [
 const FundRank: React.FC<FundRankProps> = ({ funds = [], codes = [] }) => {
   const { ref: chartRef, chartInstance } = useResizeEchart(Math.max(CONST.DEFAULT.ECHARTS_SCALE, funds.length / 12), true);
   const [rankType, setRankType] = useState(rankTypeList[0]);
-  const { varibleColors, darkMode } = useHomeContext();
   const fundConfigCodeMap = useAppSelector((state) => state.wallet.fundConfigCodeMap);
   const walletsConfig = useAppSelector((state) => state.wallet.config.walletConfig);
 
@@ -127,7 +125,7 @@ const FundRank: React.FC<FundRankProps> = ({ funds = [], codes = [] }) => {
       });
     },
     chartInstance,
-    [darkMode, funds, rankType, codes, fundConfigCodeMap, walletsConfig]
+    [funds, rankType, codes, fundConfigCodeMap, walletsConfig]
   );
 
   return (

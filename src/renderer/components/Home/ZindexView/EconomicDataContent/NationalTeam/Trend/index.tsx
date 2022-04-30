@@ -3,8 +3,8 @@ import { useRequest } from 'ahooks';
 
 import ChartCard from '@/components/Card/ChartCard';
 import TypeSelection from '@/components/TypeSelection';
-import { useHomeContext } from '@/components/Home';
-import { useResizeEchart } from '@/utils/hooks';
+
+import { useNativeThemeColor, useResizeEchart } from '@/utils/hooks';
 import * as CONST from '@/constants';
 import * as Services from '@/services';
 import styles from './index.module.scss';
@@ -19,7 +19,7 @@ const trendTypeList = [
 
 const Trend: React.FC<TrendProps> = () => {
   const { ref: chartRef, chartInstance } = useResizeEchart(CONST.DEFAULT.ECHARTS_SCALE);
-  const { varibleColors, darkMode } = useHomeContext();
+  const { varibleColors } = useNativeThemeColor();
   const [trendType, setTrendType] = useState(trendTypeList[0]);
 
   const { run: runZindexGetNationalTeamTrend } = useRequest(Services.Zindex.GetNationalTeamTrend, {
@@ -100,7 +100,7 @@ const Trend: React.FC<TrendProps> = () => {
         ],
       });
     },
-    refreshDeps: [darkMode, trendType],
+    refreshDeps: [trendType],
     ready: !!chartInstance,
   });
 

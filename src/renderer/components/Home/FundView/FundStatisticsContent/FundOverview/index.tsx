@@ -1,7 +1,6 @@
 import React from 'react';
 
-import { useHomeContext } from '@/components/Home';
-import { useResizeEchart, useRenderEcharts, useAppSelector, useFundConfigMap } from '@/utils/hooks';
+import { useResizeEchart, useRenderEcharts, useFundConfigMap } from '@/utils/hooks';
 import * as CONST from '@/constants';
 import * as Utils from '@/utils';
 import * as Helpers from '@/helpers';
@@ -15,7 +14,6 @@ interface FundOverviewProps {
 const FundOverview: React.FC<FundOverviewProps> = (props) => {
   const { funds, codes } = props;
   const { ref: chartRef, chartInstance } = useResizeEchart(CONST.DEFAULT.ECHARTS_SCALE);
-  const { varibleColors, darkMode } = useHomeContext();
   const fundConfigMap = useFundConfigMap(codes);
 
   useRenderEcharts(
@@ -48,7 +46,7 @@ const FundOverview: React.FC<FundOverviewProps> = (props) => {
       });
     },
     chartInstance,
-    [varibleColors, darkMode, codes, fundConfigMap]
+    [codes, fundConfigMap]
   );
 
   return (

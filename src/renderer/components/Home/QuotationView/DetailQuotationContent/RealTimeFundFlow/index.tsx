@@ -2,8 +2,8 @@ import React from 'react';
 import { useRequest } from 'ahooks';
 
 import ChartCard from '@/components/Card/ChartCard';
-import { useHomeContext } from '@/components/Home';
-import { useResizeEchart, useRenderEcharts } from '@/utils/hooks';
+
+import { useResizeEchart, useRenderEcharts, useNativeThemeColor } from '@/utils/hooks';
 import * as CONST from '@/constants';
 import * as Services from '@/services';
 import styles from './index.module.scss';
@@ -14,7 +14,7 @@ export interface RealTimeFundFlowProps {
 
 const RealTimeFundFlow: React.FC<RealTimeFundFlowProps> = ({ code = '' }) => {
   const { ref: chartRef, chartInstance } = useResizeEchart(CONST.DEFAULT.ECHARTS_SCALE);
-  const { varibleColors, darkMode } = useHomeContext();
+  const { varibleColors } = useNativeThemeColor();
   const { run: runGetRealTimeFundFlowFromEasymoney } = useRequest(() => Services.Quotation.GetRealTimeFundFlowFromEasymoney(code), {
     pollingInterval: 1000 * 60,
 
@@ -91,7 +91,7 @@ const RealTimeFundFlow: React.FC<RealTimeFundFlowProps> = ({ code = '' }) => {
         ],
       });
     },
-    refreshDeps: [darkMode, code],
+    refreshDeps: [code],
     ready: !!chartInstance,
   });
 

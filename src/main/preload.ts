@@ -68,7 +68,6 @@ contextBridge.exposeInMainWorld('contextModules', {
     },
     invoke: {
       showCurrentWindow: () => ipcRenderer.invoke('show-current-window'),
-      getShouldUseDarkColors: () => ipcRenderer.invoke('get-should-use-dark-colors'),
       setNativeThemeSource: (config: any) => ipcRenderer.invoke('set-native-theme-source', config),
     },
     app: {

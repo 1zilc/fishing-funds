@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
 import { useRequest } from 'ahooks';
 
-import { useHomeContext } from '@/components/Home';
 import ChartCard from '@/components/Card/ChartCard';
 import TypeSelection from '@/components/TypeSelection';
-import { useResizeEchart } from '@/utils/hooks';
+import { useNativeThemeColor, useResizeEchart } from '@/utils/hooks';
 import * as CONST from '@/constants';
 import * as Services from '@/services';
 import styles from './index.module.scss';
@@ -19,7 +18,7 @@ const detailTypeList = [
 
 const Details: React.FC<DetailsProps> = () => {
   const { ref: chartRef, chartInstance } = useResizeEchart(Math.max(CONST.DEFAULT.ECHARTS_SCALE, 15 / 12), true);
-  const { darkMode, varibleColors } = useHomeContext();
+  const { varibleColors } = useNativeThemeColor();
   const [detailType, setDetailType] = useState(detailTypeList[0]);
 
   const { run: runZindexGetNationalTeamDetail } = useRequest(() => Services.Zindex.GetNationalTeamDetail(detailType.code), {
@@ -145,7 +144,7 @@ const Details: React.FC<DetailsProps> = () => {
         ].slice((detailType.type - 1) * 3, detailType.type * 3),
       });
     },
-    refreshDeps: [darkMode, varibleColors, detailType],
+    refreshDeps: [varibleColors, detailType],
     ready: !!chartInstance,
   });
 

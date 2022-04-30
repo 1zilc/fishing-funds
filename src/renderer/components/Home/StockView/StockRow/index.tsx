@@ -5,7 +5,7 @@ import { useRequest } from 'ahooks';
 
 import ArrowDownIcon from '@/static/icon/arrow-down.svg';
 import ArrowUpIcon from '@/static/icon/arrow-up.svg';
-import { useHomeContext } from '@/components/Home';
+
 import Collapse from '@/components/Collapse';
 
 import { toggleStockCollapseAction, setIndustryMapAction } from '@/store/features/stock';
@@ -30,7 +30,6 @@ const TrendChart: React.FC<{
   zs: number;
 }> = ({ trends = [], zs = 0 }) => {
   const { ref: chartRef, chartInstance } = useResizeEchart(0.24);
-  const { darkMode } = useHomeContext();
 
   useRenderEcharts(
     () => {
@@ -89,7 +88,7 @@ const TrendChart: React.FC<{
       });
     },
     chartInstance,
-    [darkMode, zs, trends]
+    [zs, trends]
   );
   return <div ref={chartRef} style={{ width: 72 }} />;
 };

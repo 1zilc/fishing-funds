@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useRequest } from 'ahooks';
 
-import { useHomeContext } from '@/components/Home';
 import ChartCard from '@/components/Card/ChartCard';
 import { useResizeEchart, useRenderEcharts } from '@/utils/hooks';
 import * as Services from '@/services';
@@ -15,7 +14,7 @@ interface GoldTrendsProps {
 
 const GoldTrends: React.FC<GoldTrendsProps> = (props) => {
   const { ref: chartRef, chartInstance } = useResizeEchart(CONST.DEFAULT.ECHARTS_SCALE);
-  const { darkMode } = useHomeContext();
+
   const [data, setData] = useState<string[][]>([]);
 
   const { run: runGetAumFromEastmoney } = useRequest(() => Services.Quotation.GetGoldTrendsFromEastmoney(props.secid), {
@@ -76,7 +75,7 @@ const GoldTrends: React.FC<GoldTrendsProps> = (props) => {
       });
     },
     chartInstance,
-    [darkMode, data]
+    [data]
   );
 
   return (

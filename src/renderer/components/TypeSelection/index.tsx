@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { Row, Col } from 'antd';
 import clsx from 'clsx';
 
-import { useHomeContext } from '@/components/Home';
 import styles from './index.module.scss';
 
 export interface TypeOption {
@@ -28,11 +27,9 @@ const TypeSelection: React.FC<TypeSelectionProps> = ({
   colspan = Math.ceil(24 / types.length),
   flex,
 }) => {
-  const { varibleColors } = useHomeContext();
-  const padding = varibleColors['--base-padding'];
   return (
     <div className={styles.selections} style={style}>
-      <Row gutter={[padding, padding]}>
+      <Row gutter={[10, 10]}>
         {types.map((item) => (
           <Col key={item.type} span={colspan} flex={flex ? colspan : undefined} style={{ textAlign: 'center' }}>
             <span

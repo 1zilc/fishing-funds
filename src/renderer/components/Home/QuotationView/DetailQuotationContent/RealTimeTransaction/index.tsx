@@ -1,9 +1,8 @@
 import React from 'react';
 import { useRequest } from 'ahooks';
 
-import { useHomeContext } from '@/components/Home';
 import ChartCard from '@/components/Card/ChartCard';
-import { useResizeEchart, useRenderEcharts } from '@/utils/hooks';
+import { useResizeEchart, useRenderEcharts, useNativeThemeColor } from '@/utils/hooks';
 import * as CONST from '@/constants';
 import * as Services from '@/services';
 import styles from './index.module.scss';
@@ -14,7 +13,7 @@ export interface RealTimeTransactionProps {
 
 const RealTimeTransaction: React.FC<RealTimeTransactionProps> = ({ code = '' }) => {
   const { ref: chartRef, chartInstance } = useResizeEchart(CONST.DEFAULT.ECHARTS_SCALE);
-  const { varibleColors, darkMode } = useHomeContext();
+  const { varibleColors, darkMode } = useNativeThemeColor();
 
   const { run: runGetTransactionFromEasymoney } = useRequest(() => Services.Quotation.GetTransactionFromEasymoney(code), {
     pollingInterval: 1000 * 60,
@@ -114,7 +113,7 @@ const RealTimeTransaction: React.FC<RealTimeTransactionProps> = ({ code = '' }) 
         ],
       });
     },
-    refreshDeps: [darkMode, code],
+    refreshDeps: [varibleColors, darkMode, code],
     ready: !!chartInstance,
   });
 

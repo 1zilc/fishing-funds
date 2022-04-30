@@ -120,7 +120,7 @@ export function JudgeAdjustmentNotificationTime(timestamp: number, adjustmentNot
   };
 }
 
-export function getVariblesColor(varibles: typeof CONST.VARIBLES) {
+export function GetVariblesColor(varibles: typeof CONST.VARIBLES) {
   return varibles.reduce<Record<string, string>>((colorMap, varible) => {
     const color = window.getComputedStyle(document.body).getPropertyValue(varible);
     colorMap[varible] = (color || '').trim();
@@ -261,7 +261,7 @@ export function MakeMap(list: (string | number)[]) {
 
 export function GetValueColor(number?: number | string) {
   const value = Number(number);
-  const varibleColors = getVariblesColor(CONST.VARIBLES);
+  const varibleColors = GetVariblesColor(CONST.VARIBLES);
   return {
     color:
       value > 0 ? varibleColors['--increase-color'] : value < 0 ? varibleColors['--reduce-color'] : varibleColors['--reverse-text-color'],

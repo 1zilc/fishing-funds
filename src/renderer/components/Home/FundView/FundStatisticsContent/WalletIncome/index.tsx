@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 
-import { useHomeContext } from '@/components/Home';
 import { useResizeEchart, useRenderEcharts, useAppSelector } from '@/utils/hooks';
 import TypeSelection from '@/components/TypeSelection';
 import * as CONST from '@/constants';
@@ -23,7 +22,7 @@ const incomeTypeList = [
 const WalletIncome: React.FC<WalletIncomeProps> = ({ funds = [], codes = [] }) => {
   const { ref: chartRef, chartInstance } = useResizeEchart(CONST.DEFAULT.ECHARTS_SCALE);
   const [incomeType, setIncomeType] = useState(incomeTypeList[0]);
-  const { darkMode } = useHomeContext();
+
   const walletsConfig = useAppSelector((state) => state.wallet.config.walletConfig);
 
   useRenderEcharts(
@@ -91,7 +90,7 @@ const WalletIncome: React.FC<WalletIncomeProps> = ({ funds = [], codes = [] }) =
       });
     },
     chartInstance,
-    [darkMode, funds, codes, incomeType, walletsConfig]
+    [funds, codes, incomeType, walletsConfig]
   );
 
   return (

@@ -1,11 +1,7 @@
-import React, { useState } from 'react';
-import { useRequest } from 'ahooks';
+import React from 'react';
 
-import { useHomeContext } from '@/components/Home';
-import { useResizeEchart, useRenderEcharts } from '@/utils/hooks';
+import { useResizeEchart, useRenderEcharts, useNativeThemeColor } from '@/utils/hooks';
 import * as CONST from '@/constants';
-import * as Services from '@/services';
-import * as Utils from '@/utils';
 import styles from './index.module.scss';
 
 interface IndustryLayoutProps {
@@ -14,7 +10,7 @@ interface IndustryLayoutProps {
 
 const IndustryLayout: React.FC<IndustryLayoutProps> = ({ stocks }) => {
   const { ref: chartRef, chartInstance } = useResizeEchart(CONST.DEFAULT.ECHARTS_SCALE);
-  const { varibleColors, darkMode } = useHomeContext();
+  const { varibleColors } = useNativeThemeColor();
 
   useRenderEcharts(
     () => {
@@ -45,7 +41,7 @@ const IndustryLayout: React.FC<IndustryLayoutProps> = ({ stocks }) => {
       });
     },
     chartInstance,
-    [varibleColors, darkMode, stocks]
+    [stocks]
   );
 
   return (

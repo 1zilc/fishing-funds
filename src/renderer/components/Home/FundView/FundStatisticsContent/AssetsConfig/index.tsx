@@ -1,7 +1,6 @@
 import React from 'react';
 
-import { useHomeContext } from '@/components/Home';
-import { useResizeEchart, useRenderEcharts, useAppSelector } from '@/utils/hooks';
+import { useResizeEchart, useRenderEcharts, useAppSelector, useNativeThemeColor } from '@/utils/hooks';
 import * as CONST from '@/constants';
 import * as Helpers from '@/helpers';
 
@@ -12,7 +11,7 @@ export interface AssetsConfigProps {
 
 const AssetsConfig: React.FC<AssetsConfigProps> = ({ funds, codes }) => {
   const { ref: chartRef, chartInstance } = useResizeEchart(CONST.DEFAULT.ECHARTS_SCALE);
-  const { varibleColors, darkMode } = useHomeContext();
+  const { varibleColors } = useNativeThemeColor();
   const walletsConfig = useAppSelector((state) => state.wallet.config.walletConfig);
 
   useRenderEcharts(
@@ -71,7 +70,7 @@ const AssetsConfig: React.FC<AssetsConfigProps> = ({ funds, codes }) => {
       });
     },
     chartInstance,
-    [darkMode, codes, funds, walletsConfig]
+    [codes, funds, walletsConfig]
   );
 
   return (

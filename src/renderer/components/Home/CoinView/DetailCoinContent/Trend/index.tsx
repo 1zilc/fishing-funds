@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useRequest } from 'ahooks';
 
-import { useHomeContext } from '@/components/Home';
 import TypeSelection from '@/components/TypeSelection';
 import ChartCard from '@/components/Card/ChartCard';
 import { useResizeEchart, useAppSelector } from '@/utils/hooks';
@@ -26,7 +25,6 @@ const dateTypeList = [
 const Trend: React.FC<PerformanceProps> = ({ code }) => {
   const { ref: chartRef, chartInstance } = useResizeEchart(CONST.DEFAULT.ECHARTS_SCALE);
   const [date, setDateType] = useState(dateTypeList[2]);
-  const { darkMode } = useHomeContext();
   const coinUnitSetting = useAppSelector((state) => state.setting.systemSetting.coinUnitSetting);
   const { run: runGetHistoryFromCoingecko } = useRequest(() => Services.Coin.GetHistoryFromCoingecko(code, coinUnitSetting, date.code), {
     pollingInterval: CONST.DEFAULT.ESTIMATE_FUND_DELAY,
@@ -99,7 +97,7 @@ const Trend: React.FC<PerformanceProps> = ({ code }) => {
         ],
       });
     },
-    refreshDeps: [darkMode, code, coinUnitSetting, date.code],
+    refreshDeps: [code, coinUnitSetting, date.code],
     ready: !!chartInstance,
   });
 

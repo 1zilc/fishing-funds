@@ -19,28 +19,12 @@ import GlobalStyles from '@/components/GlobalStyles';
 import WebViewer from '@/components/WebViewer';
 import { stockTypesConfig } from '@/components/Toolbar/AppCenterContent/StockSearch';
 
-import { useNativeThemeColor, useAppSelector } from '@/utils/hooks';
+import { useAppSelector } from '@/utils/hooks';
 import * as Enums from '@/utils/enums';
-import * as CONST from '@/constants';
 import * as Helpers from '@/helpers';
 import styles from './index.module.scss';
 
 export interface HomeProps {}
-
-// 由于 darkModeListener 花销过大，需使用全局单一监听即可
-
-export const HomeContext = createContext<{
-  varibleColors: any;
-  darkMode: boolean;
-}>({
-  varibleColors: {},
-  darkMode: false,
-});
-
-export function useHomeContext() {
-  const context = useContext(HomeContext);
-  return context;
-}
 
 const FundGroup = () => {
   const codeMap = useAppSelector((state) => state.wallet.fundConfigCodeMap);
@@ -160,25 +144,21 @@ const Body = () => {
 };
 
 const Home: React.FC<HomeProps> = () => {
-  const { colors: varibleColors, darkMode } = useNativeThemeColor(CONST.VARIBLES);
-
   return (
-    <HomeContext.Provider value={{ darkMode, varibleColors }}>
-      <div className={clsx(styles.layout)}>
-        <GlobalStyles />
-        <Header>
-          <Wallet />
-          <SortBar />
-        </Header>
-        <Body />
-        <Footer>
-          <Toolbar />
-          <TabsBar />
-        </Footer>
-        <WebViewer />
-        <Collect title="home" />
-      </div>
-    </HomeContext.Provider>
+    <div className={clsx(styles.layout)}>
+      <GlobalStyles />
+      <Header>
+        <Wallet />
+        <SortBar />
+      </Header>
+      <Body />
+      <Footer>
+        <Toolbar />
+        <TabsBar />
+      </Footer>
+      <WebViewer />
+      <Collect title="home" />
+    </div>
   );
 };
 

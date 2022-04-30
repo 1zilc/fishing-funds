@@ -1,6 +1,5 @@
 import React from 'react';
 
-import { useHomeContext } from '@/components/Home';
 import { useResizeEchart, useRenderEcharts } from '@/utils/hooks';
 import * as CONST from '@/constants';
 import styles from './index.module.scss';
@@ -20,7 +19,6 @@ const PerformanceEvaluation: React.FC<PerformanceEvaluationProps> = ({
   },
 }) => {
   const { ref: chartRef, chartInstance } = useResizeEchart(CONST.DEFAULT.ECHARTS_SCALE);
-  const { darkMode } = useHomeContext();
 
   useRenderEcharts(
     () => {
@@ -91,7 +89,7 @@ const PerformanceEvaluation: React.FC<PerformanceEvaluationProps> = ({
       });
     },
     chartInstance,
-    [darkMode, Data_performanceEvaluation]
+    [Data_performanceEvaluation]
   );
 
   return (

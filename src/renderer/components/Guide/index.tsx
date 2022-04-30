@@ -1,6 +1,6 @@
 import React from 'react';
 import { Tooltip, Button } from 'antd';
-import { useHomeContext } from '@/components/Home';
+import { useNativeThemeColor } from '@/utils/hooks';
 import QuestionIcon from '@/static/icon/question.svg';
 import styles from './index.module.scss';
 
@@ -12,7 +12,7 @@ const iconSize = { height: 16, width: 16 };
 
 const Guide: React.FC<GuideProps> = (props) => {
   const { list } = props;
-  const { varibleColors, darkMode } = useHomeContext();
+  const { varibleColors } = useNativeThemeColor();
 
   return (
     <Tooltip

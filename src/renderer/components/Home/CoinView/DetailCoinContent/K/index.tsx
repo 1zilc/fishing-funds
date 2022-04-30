@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import { useRequest } from 'ahooks';
 
 import ChartCard from '@/components/Card/ChartCard';
-import { useHomeContext } from '@/components/Home';
+
 import TypeSelection from '@/components/TypeSelection';
-import { useResizeEchart, useAppSelector } from '@/utils/hooks';
+import { useResizeEchart, useAppSelector, useNativeThemeColor } from '@/utils/hooks';
 
 import * as CONST from '@/constants';
 import * as Services from '@/services';
@@ -27,7 +27,7 @@ const K: React.FC<PerformanceProps> = ({ code = '' }) => {
   const { ref: chartRef, chartInstance } = useResizeEchart(CONST.DEFAULT.ECHARTS_SCALE);
   const coinUnitSetting = useAppSelector((state) => state.setting.systemSetting.coinUnitSetting);
   const [date, setDateType] = useState(dateTypeList[2]);
-  const { varibleColors, darkMode } = useHomeContext();
+  const { varibleColors } = useNativeThemeColor();
   const { run: runGetKFromCoingecko } = useRequest(() => Services.Coin.GetKFromCoingecko(code, coinUnitSetting, date.code), {
     onSuccess: (result) => {
       // 数据意义：开盘(open)，收盘(close)，最低(lowest)，最高(highest)
@@ -102,7 +102,7 @@ const K: React.FC<PerformanceProps> = ({ code = '' }) => {
         ],
       });
     },
-    refreshDeps: [darkMode, code, coinUnitSetting, date.code],
+    refreshDeps: [varibleColors, code, coinUnitSetting, date.code],
     ready: !!chartInstance,
   });
 

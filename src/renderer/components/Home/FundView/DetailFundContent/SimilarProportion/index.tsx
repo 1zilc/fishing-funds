@@ -1,7 +1,6 @@
 import React from 'react';
 
-import { useHomeContext } from '@/components/Home';
-import { useResizeEchart, useRenderEcharts } from '@/utils/hooks';
+import { useResizeEchart, useRenderEcharts, useNativeThemeColor } from '@/utils/hooks';
 import * as CONST from '@/constants';
 import styles from './index.module.scss';
 
@@ -11,7 +10,7 @@ interface SimilarProportionProps {
 
 const SimilarProportion: React.FC<SimilarProportionProps> = ({ rateInSimilarPersent = [] }) => {
   const { ref: chartRef, chartInstance } = useResizeEchart(CONST.DEFAULT.ECHARTS_SCALE);
-  const { varibleColors, darkMode } = useHomeContext();
+  const { varibleColors } = useNativeThemeColor();
 
   useRenderEcharts(
     () => {
@@ -73,7 +72,7 @@ const SimilarProportion: React.FC<SimilarProportionProps> = ({ rateInSimilarPers
       });
     },
     chartInstance,
-    [darkMode, rateInSimilarPersent]
+    [rateInSimilarPersent]
   );
 
   return (

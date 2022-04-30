@@ -1,6 +1,4 @@
 import React from 'react';
-
-import { useHomeContext } from '@/components/Home';
 import { useResizeEchart, useRenderEcharts } from '@/utils/hooks';
 import * as CONST from '@/constants';
 import styles from './index.module.scss';
@@ -10,7 +8,6 @@ export interface AppraiseProps {
 }
 const Appraise: React.FC<AppraiseProps> = ({ data }) => {
   const { ref: chartRef, chartInstance } = useResizeEchart(CONST.DEFAULT.ECHARTS_SCALE);
-  const { darkMode } = useHomeContext();
 
   useRenderEcharts(
     () => {
@@ -85,7 +82,7 @@ const Appraise: React.FC<AppraiseProps> = ({ data }) => {
       });
     },
     chartInstance,
-    [darkMode, data]
+    [data]
   );
 
   return (

@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
 import { useRequest } from 'ahooks';
 
-import { useHomeContext } from '@/components/Home';
 import ChartCard from '@/components/Card/ChartCard';
 import TypeSelection from '@/components/TypeSelection';
-import { useResizeEchart, useRenderEcharts } from '@/utils/hooks';
+import { useResizeEchart, useNativeThemeColor } from '@/utils/hooks';
 import * as CONST from '@/constants';
 import * as Services from '@/services';
 import * as Enums from '@/utils/enums';
@@ -26,7 +25,7 @@ const performanceTypeList = [
 const Performance: React.FC<PerformanceProps> = ({ code }) => {
   const { ref: chartRef, chartInstance } = useResizeEchart(CONST.DEFAULT.ECHARTS_SCALE);
   const [performanceType, setPerformanceType] = useState(performanceTypeList[2]);
-  const { varibleColors, darkMode } = useHomeContext();
+  const { varibleColors } = useNativeThemeColor();
   const [ZDHC, setZDHC] = useState('');
   const { run: runGetFundPerformanceFromEastmoney } = useRequest(
     () => Services.Fund.GetFundPerformanceFromEastmoney(code, performanceType.code),
@@ -102,7 +101,7 @@ const Performance: React.FC<PerformanceProps> = ({ code }) => {
           setZDHC('--');
         }
       },
-      refreshDeps: [darkMode, code, performanceType.code],
+      refreshDeps: [varibleColors, code, performanceType.code],
       ready: !!chartInstance,
     }
   );

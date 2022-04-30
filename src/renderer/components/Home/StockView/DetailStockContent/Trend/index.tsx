@@ -1,7 +1,6 @@
 import React from 'react';
 import { useRequest } from 'ahooks';
 
-import { useHomeContext } from '@/components/Home';
 import ChartCard from '@/components/Card/ChartCard';
 import { useResizeEchart, useRenderEcharts } from '@/utils/hooks';
 import * as CONST from '@/constants';
@@ -16,7 +15,6 @@ export interface PerformanceProps {
 const Trend: React.FC<PerformanceProps> = ({ secid, zs = 0 }) => {
   const { ref: chartRef, chartInstance } = useResizeEchart(CONST.DEFAULT.ECHARTS_SCALE);
 
-  const { darkMode } = useHomeContext();
   const { run: runGetTrendFromEastmoney } = useRequest(() => Services.Stock.GetTrendFromEastmoney(secid), {
     pollingInterval: CONST.DEFAULT.ESTIMATE_FUND_DELAY,
     onSuccess: ({ trends }) => {
@@ -90,7 +88,7 @@ const Trend: React.FC<PerformanceProps> = ({ secid, zs = 0 }) => {
         ],
       });
     },
-    refreshDeps: [darkMode, secid, zs],
+    refreshDeps: [secid, zs],
     ready: !!chartInstance,
   });
 
