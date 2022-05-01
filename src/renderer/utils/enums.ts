@@ -211,8 +211,9 @@ export enum QuotationViewType {
   Grid,
 }
 export enum StockViewType {
-  List,
+  Chart,
   Grid,
+  List,
 }
 export enum CoinViewType {
   List,

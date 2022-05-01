@@ -60,12 +60,15 @@
 }
 
 .zx {
+  font-size: calc(20rem / var(--base-font-size));
+  line-height: 24px;
   height: 24px;
   width: 100%;
   position: relative;
   display: flex;
   align-items: center;
   justify-content: flex-end;
+  font-weight: 600;
 }
 
 .zd {

@@ -10,6 +10,7 @@ import ArrowDownIcon from '@/static/icon/arrow-down.svg';
 import ArrowUpIcon from '@/static/icon/arrow-up.svg';
 import LayoutListIcon from '@/static/icon/layout-list.svg';
 import LayoutGridIcon from '@/static/icon/layout-grid.svg';
+import LineCharIcon from '@/static/icon/line-chart.svg';
 
 import {
   setFundSortModeAction,
@@ -354,7 +355,10 @@ function StockSortBar() {
           <LayoutListIcon onClick={() => dispatch(setStockViewModeAction({ type: Enums.StockViewType.Grid }))} />
         )}
         {stockViewType === Enums.StockViewType.Grid && (
-          <LayoutGridIcon onClick={() => dispatch(setStockViewModeAction({ type: Enums.StockViewType.List }))} />
+          <LayoutGridIcon onClick={() => dispatch(setStockViewModeAction({ type: Enums.StockViewType.Chart }))} />
+        )}
+        {stockViewType === Enums.StockViewType.Chart && (
+          <LineCharIcon onClick={() => dispatch(setStockViewModeAction({ type: Enums.StockViewType.List }))} />
         )}
       </div>
       <div className={styles.mode}>
