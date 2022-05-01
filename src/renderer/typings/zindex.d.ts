@@ -22,6 +22,13 @@ declare namespace Zindex {
     zf: number; // 振幅
     time: string; // 时间
     code: string; // 1.000001
+    trends: TrendItem[]; // 趋势
+  }
+
+  export interface TrendItem {
+    time: string;
+    price: number;
+    cjl: number;
   }
 
   export interface ExtraRow {

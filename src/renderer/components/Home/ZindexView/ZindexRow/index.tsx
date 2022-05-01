@@ -7,8 +7,9 @@ import Collapse from '@/components/Collapse';
 import ArrowLine from '@/components/ArrowLine';
 
 import { toggleZindexCollapseAction } from '@/store/features/zindex';
-import { useAppDispatch, useAppSelector } from '@/utils/hooks';
+import { useAppDispatch, useAppSelector, useRenderEcharts, useResizeEchart } from '@/utils/hooks';
 import * as Utils from '@/utils';
+import * as Enums from '@/utils/enums';
 import styles from './index.module.scss';
 
 export interface RowProps {
@@ -21,10 +22,84 @@ const arrowSize = {
   height: 12,
 };
 
+const TrendChart: React.FC<{
+  trends: Zindex.TrendItem[];
+  zs: number;
+}> = ({ trends = [], zs = 0 }) => {
+  const { ref: chartRef, chartInstance } = useResizeEchart(0.24);
+
+  useRenderEcharts(
+    ({ varibleColors }) => {
+      const { color } = Utils.GetValueColor(Number(trends[trends.length - 1]?.price) - zs);
+      chartInstance?.setOption({
+        title: {
+          text: '',
+        },
+        tooltip: {
+          show: false,
+        },
+        grid: {
+          left: 0,
+          right: 0,
+          bottom: 2,
+          top: 2,
+        },
+        xAxis: {
+          type: 'category',
+          data: trends.map(({ time }) => time),
+          boundaryGap: false,
+          show: false,
+        },
+        yAxis: {
+          type: 'value',
+          show: false,
+          scale: true,
+          splitLine: {
+            lineStyle: {
+              color: varibleColors['--border-color'],
+            },
+          },
+          min: (value: any) => Math.min(value.min, zs),
+          max: (value: any) => Math.max(value.max, zs),
+        },
+        series: [
+          {
+            data: trends.map(({ time, price }) => [time, price]),
+            type: 'line',
+            name: '价格',
+            showSymbol: false,
+            symbol: 'none',
+            smooth: true,
+            silent: true,
+            lineStyle: { width: 2, color },
+            markLine: {
+              symbol: 'none',
+              label: {
+                show: false,
+              },
+              data: [
+                {
+                  name: '昨收',
+                  yAxis: zs,
+                  itemStyle: { color },
+                },
+              ],
+            },
+          },
+        ],
+      });
+    },
+    chartInstance,
+    [zs, trends]
+  );
+  return <div ref={chartRef} style={{ width: 72 }} />;
+};
+
 const ZindexRow: React.FC<RowProps> = (props) => {
   const { zindex } = props;
   const dispatch = useAppDispatch();
   const { conciseSetting } = useAppSelector((state) => state.setting.systemSetting);
+  const zindexViewMode = useAppSelector((state) => state.sort.viewMode.zindexViewMode);
 
   const onDetailClick = () => {
     props.onDetail(zindex.code);
@@ -56,12 +131,22 @@ const ZindexRow: React.FC<RowProps> = (props) => {
         </div>
         <div className={clsx(styles.value)}>
           <div className={clsx(styles.zsz, Utils.GetValueColor(zindex.zdf).textClass)}>
-            {zindex.zsz}
-            <ArrowLine value={zindex.zdf} />
+            {zindexViewMode.type === Enums.ZindexViewType.Chart ? (
+              <TrendChart trends={zindex.trends} zs={zindex.zs} />
+            ) : (
+              <>
+                {zindex.zsz}
+                <ArrowLine value={zindex.zdf} />
+              </>
+            )}
           </div>
           {!conciseSetting && (
             <div className={styles.zd}>
-              <div className={clsx(styles.zdd, Utils.GetValueColor(zindex.zdd).textClass)}>{Utils.Yang(zindex.zdd)}</div>
+              {zindexViewMode.type === Enums.ZindexViewType.Chart ? (
+                <div className={clsx(styles.zdd)}>{zindex.zsz}</div>
+              ) : (
+                <div className={clsx(styles.zdd, Utils.GetValueColor(zindex.zdd).textClass)}>{Utils.Yang(zindex.zdd)}</div>
+              )}
               <div className={clsx(styles.zdf, Utils.GetValueColor(zindex.zdf).textClass)}>{Utils.Yang(zindex.zdf)} %</div>
             </div>
           )}

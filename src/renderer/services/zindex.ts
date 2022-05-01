@@ -1,13 +1,14 @@
 import dayjs from 'dayjs';
 import NP from 'number-precision';
 import request from '@/utils/request';
+import { number } from 'echarts';
 
 /**
  *
- * @param code 指数代码: 000001
+ * @param secid 指数代码: 000001
  * 从天天基金获取指数行情
  */
-export async function FromEastmoney(code: string) {
+export async function FromEastmoney(secid: string) {
   try {
     const { body: data } = await request<{
       rc: 0;
@@ -33,11 +34,13 @@ export async function FromEastmoney(code: string) {
     }>('http://push2.eastmoney.com/api/qt/stock/get?=', {
       searchParams: {
         fields: 'f43,f44,f45,f46,f57,f58,f60,f86,f107,f168,f169,f170,f171',
-        secid: code, // 1.000001
+        secid, // 1.000001
         _: new Date().getTime(),
       },
       responseType: 'json',
     });
+
+    const trends = await GetTrendFromEastmoney(secid, 1);
 
     return {
       zsz: NP.divide(data.data.f43, 100),
@@ -54,6 +57,7 @@ export async function FromEastmoney(code: string) {
       type: data.data.f107,
       code: `${data.data.f107}.${data.data.f57}`,
       time: dayjs.unix(data.data.f86).format('MM-DD HH:mm'),
+      trends,
     };
   } catch (error) {
     return null;
@@ -97,8 +101,8 @@ export async function GetTrendFromEastmoney(code: string, ndays: number) {
       const [time, price, cjl] = _.split(',');
       return {
         time,
-        price,
-        cjl,
+        price: Number(price),
+        cjl: Number(cjl),
       };
     });
   } catch (error) {

@@ -4,7 +4,7 @@ import { batch } from 'react-redux';
 import LoadingScreen from '@/components/LoadingScreen';
 import { setRemoteFundsAction, setFundRatingMapAction } from '@/store/features/fund';
 import { setZindexConfigAction, defaultZindexConfig } from '@/store/features/zindex';
-import { setSystemSettingAction, setAdjustmentNotificationDateAction, defaultSystemSetting } from '@/store/features/setting';
+import { setSystemSettingAction, setAdjustmentNotificationDateAction, defaultSystemSetting, syncDarkMode } from '@/store/features/setting';
 import { setWalletConfigAction, changeEyeStatusAction, selectWalletAction, defaultWallet } from '@/store/features/wallet';
 import { setStockConfigAction } from '@/store/features/stock';
 import { setCoinConfigAction, setRemoteCoinsAction } from '@/store/features/coin';
@@ -15,6 +15,8 @@ import { syncFavoriteQuotationMapAction } from '@/store/features/quotation';
 import * as CONST from '@/constants';
 import * as Utils from '@/utils';
 import * as Enums from '@/utils/enums';
+
+const { ipcRenderer } = window.contextModules.electron;
 
 const InitPage = () => {
   const navigate = useNavigate();
@@ -63,9 +65,12 @@ const InitPage = () => {
     setLoading('加载系统设置...');
     const systemSetting = await Utils.GetStorage(CONST.STORAGE.SYSTEM_SETTING, defaultSystemSetting);
     const adjustmentNotificationDate = await Utils.GetStorage(CONST.STORAGE.ADJUSTMENT_NOTIFICATION_DATE, '');
+    const darkMode = await ipcRenderer.invoke('get-should-use-dark-colors');
+
     batch(() => {
       dispatch(setSystemSettingAction(systemSetting));
       dispatch(setAdjustmentNotificationDateAction(adjustmentNotificationDate));
+      dispatch(syncDarkMode(darkMode));
     });
 
     setLoading('加载钱包配置...');

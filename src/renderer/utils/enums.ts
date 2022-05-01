@@ -205,6 +205,7 @@ export enum FundViewType {
 export enum ZindexViewType {
   List,
   Grid,
+  Chart,
 }
 export enum QuotationViewType {
   List,

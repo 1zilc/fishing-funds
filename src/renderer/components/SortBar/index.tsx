@@ -186,7 +186,10 @@ function ZindexSortBar() {
           <LayoutListIcon onClick={() => dispatch(setZindexViewModeAction({ type: Enums.ZindexViewType.Grid }))} />
         )}
         {zindexViewType === Enums.ZindexViewType.Grid && (
-          <LayoutGridIcon onClick={() => dispatch(setZindexViewModeAction({ type: Enums.ZindexViewType.List }))} />
+          <LayoutGridIcon onClick={() => dispatch(setZindexViewModeAction({ type: Enums.ZindexViewType.Chart }))} />
+        )}
+        {zindexViewType === Enums.ZindexViewType.Chart && (
+          <LineCharIcon onClick={() => dispatch(setZindexViewModeAction({ type: Enums.ZindexViewType.List }))} />
         )}
       </div>
       <div className={styles.mode}>
