@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { useResizeEchart, useRenderEcharts, useNativeThemeColor } from '@/utils/hooks';
+import { useResizeEchart, useRenderEcharts } from '@/utils/hooks';
 import * as CONST from '@/constants';
 import styles from './index.module.scss';
 
@@ -10,7 +10,6 @@ interface IndustryLayoutProps {
 
 const IndustryLayout: React.FC<IndustryLayoutProps> = ({ stocks }) => {
   const { ref: chartRef, chartInstance } = useResizeEchart(CONST.DEFAULT.ECHARTS_SCALE);
-  const { varibleColors } = useNativeThemeColor();
 
   useRenderEcharts(
     () => {

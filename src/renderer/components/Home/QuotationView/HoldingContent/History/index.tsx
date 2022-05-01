@@ -20,7 +20,6 @@ const { shell } = window.contextModules.electron;
 
 const NorthHistory: React.FC<PropsWithChildren<NorthHistoryProps>> = (props) => {
   const { marketCode, reportName } = props;
-  const [data, setData] = useState<any[]>([]);
   const {
     data: quodationCode,
     show: showDetailQuodationDrawer,
@@ -30,10 +29,8 @@ const NorthHistory: React.FC<PropsWithChildren<NorthHistoryProps>> = (props) => 
 
   const { data: stockName, show: showAddStockDrawer, set: setAddStockDrawer, close: closeAddStockDrawer } = useDrawer('');
 
-  const { loading } = useRequest(Services.Quotation.GetHodingFromEastmoney, {
+  const { data = [], loading } = useRequest(Services.Quotation.GetHodingFromEastmoney, {
     defaultParams: [marketCode, reportName],
-
-    onSuccess: setData,
   });
 
   return (

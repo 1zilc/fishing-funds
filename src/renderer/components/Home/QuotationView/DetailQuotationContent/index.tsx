@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import clsx from 'clsx';
 
 import { useRequest } from 'ahooks';
@@ -27,15 +27,16 @@ export interface DetailQuotationContentProps {
 const DetailQuotationContent: React.FC<DetailQuotationContentProps> = (props) => {
   const { code } = props;
   const dispatch = useAppDispatch();
-  const [quotation, setQuotation] = useState<Quotation.DetailData | Record<string, any>>({});
   const favoriteQuotationMap = useAppSelector((state) => state.quotation.favoriteQuotationMap);
-  const { conciseSetting } = useAppSelector((state) => state.setting.systemSetting);
-  const favorited = favoriteQuotationMap[quotation.code];
 
-  useRequest(Services.Quotation.GetQuotationDetailFromEastmoney, {
-    defaultParams: [code],
-    onSuccess: setQuotation,
-  });
+  const { data: quotation = {} as Quotation.DetailData | Record<string, any> } = useRequest(
+    Services.Quotation.GetQuotationDetailFromEastmoney,
+    {
+      defaultParams: [code],
+    }
+  );
+
+  const favorited = favoriteQuotationMap[quotation.code];
 
   return (
     <CustomDrawerContent title="板块详情" enterText="确定" onClose={props.onClose} onEnter={props.onEnter}>

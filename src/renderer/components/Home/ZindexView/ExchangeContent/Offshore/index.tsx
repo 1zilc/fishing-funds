@@ -10,9 +10,7 @@ import styles from './index.module.scss';
 interface OffshoreProps {}
 
 const Offshore: React.FC<OffshoreProps> = () => {
-  const [data, setData] = useState<Exchange.ResponseItem[]>([]);
-  const { run: runGetListFromEastmoney } = useRequest(() => Services.Exchange.GetListFromEastmoney('0', 'm:133'), {
-    onSuccess: setData,
+  const { data = [], run: runGetListFromEastmoney } = useRequest(() => Services.Exchange.GetListFromEastmoney('0', 'm:133'), {
     pollingInterval: 1000 * 60,
   });
 

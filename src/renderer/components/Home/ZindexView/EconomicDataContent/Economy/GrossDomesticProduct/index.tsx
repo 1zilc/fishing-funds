@@ -2,8 +2,7 @@ import React from 'react';
 import { useRequest } from 'ahooks';
 
 import ChartCard from '@/components/Card/ChartCard';
-import { useResizeEchart, useRenderEcharts, useNativeThemeColor } from '@/utils/hooks';
-import * as CONST from '@/constants';
+import { useResizeEchart, useRenderEcharts } from '@/utils/hooks';
 import * as Services from '@/services';
 import styles from './index.module.scss';
 
@@ -11,10 +10,13 @@ interface GrossDomesticProductProps {}
 
 const GrossDomesticProduct: React.FC<GrossDomesticProductProps> = () => {
   const { ref: chartRef, chartInstance } = useResizeEchart(0.4);
-  const { varibleColors } = useNativeThemeColor();
 
-  const { run: runGetEconomyIndexFromEastmoney } = useRequest(() => Services.Zindex.GetEconomyIndexFromEastmoney(20), {
-    onSuccess: (result) => {
+  const { data: result = [], run: runGetEconomyIndexFromEastmoney } = useRequest(() => Services.Zindex.GetEconomyIndexFromEastmoney(20), {
+    ready: !!chartInstance,
+  });
+
+  useRenderEcharts(
+    ({ varibleColors }) => {
       try {
         chartInstance?.setOption({
           title: {
@@ -126,9 +128,9 @@ const GrossDomesticProduct: React.FC<GrossDomesticProductProps> = () => {
         });
       } catch {}
     },
-    refreshDeps: [varibleColors],
-    ready: !!chartInstance,
-  });
+    chartInstance,
+    [result]
+  );
 
   return (
     <ChartCard auto onFresh={runGetEconomyIndexFromEastmoney} TitleBar={<div className={styles.title}>国内生产总值(GDP)</div>}>

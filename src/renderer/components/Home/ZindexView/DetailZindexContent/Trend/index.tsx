@@ -2,9 +2,8 @@ import React, { useState } from 'react';
 import { useRequest } from 'ahooks';
 
 import ChartCard from '@/components/Card/ChartCard';
-
 import TypeSelection from '@/components/TypeSelection';
-import { useResizeEchart, useRenderEcharts, useNativeThemeColor } from '@/utils/hooks';
+import { useResizeEchart, useRenderEcharts } from '@/utils/hooks';
 import * as CONST from '@/constants';
 import * as Services from '@/services';
 import * as Utils from '@/utils';
@@ -24,9 +23,13 @@ const trendTypeList = [
 const Trend: React.FC<PerformanceProps> = ({ code, zs = 0 }) => {
   const { ref: chartRef, chartInstance } = useResizeEchart(CONST.DEFAULT.ECHARTS_SCALE);
   const [trend, setTrendType] = useState(trendTypeList[0]);
-  const { varibleColors } = useNativeThemeColor();
-  const { run: runGetTrendFromEastmoney } = useRequest(() => Services.Zindex.GetTrendFromEastmoney(code, trend.code), {
-    onSuccess: (result) => {
+  const { data: result = [], run: runGetTrendFromEastmoney } = useRequest(() => Services.Zindex.GetTrendFromEastmoney(code, trend.code), {
+    refreshDeps: [code, trend.code, zs],
+    ready: !!chartInstance,
+  });
+
+  useRenderEcharts(
+    ({ varibleColors }) => {
       chartInstance?.setOption({
         title: {
           text: '',
@@ -107,9 +110,9 @@ const Trend: React.FC<PerformanceProps> = ({ code, zs = 0 }) => {
         ],
       });
     },
-    refreshDeps: [varibleColors, code, trend.code, zs],
-    ready: !!chartInstance,
-  });
+    chartInstance,
+    [result]
+  );
 
   return (
     <ChartCard onFresh={runGetTrendFromEastmoney}>

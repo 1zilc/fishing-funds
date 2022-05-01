@@ -29,11 +29,8 @@ const RenderColorCol = ({ value }: { value: string }) => {
 
 const MainRank: React.FC<PropsWithChildren<MainRankProps>> = () => {
   const [dayType, setDayType] = useState(dayTypeList[0]);
-  const [data, setData] = useState<any[]>([]);
   const { codeMap, stockConfig } = useAppSelector((state) => state.stock.config);
-
   const { data: detailSecid, show: showDetailDrawer, set: setDetailDrawer, close: closeDetailDrawer } = useDrawer('');
-
   const { data: addName, show: showAddDrawer, set: setAddDrawer, close: closeAddDrawer } = useDrawer('');
 
   const columns = [
@@ -74,8 +71,7 @@ const MainRank: React.FC<PropsWithChildren<MainRankProps>> = () => {
     },
   ];
 
-  const { loading } = useRequest(() => Services.Stock.GetMainRankFromEastmoney(dayType.code), {
-    onSuccess: setData,
+  const { data = [], loading } = useRequest(() => Services.Stock.GetMainRankFromEastmoney(dayType.code), {
     refreshDeps: [dayType.code],
   });
 

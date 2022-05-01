@@ -18,7 +18,6 @@ const RenderColorCol = ({ value }: { value: string }) => {
 };
 
 const InternationalMetalFutures: React.FC<PropsWithChildren<InternationalMetalFuturesProps>> = () => {
-  const [data, setData] = useState<any[]>([]);
   const { data: detailCode, show: showDetailDrawer, set: setDetailDrawer, close: closeDetailDrawer } = useDrawer('');
 
   const columns = [
@@ -40,12 +39,11 @@ const InternationalMetalFutures: React.FC<PropsWithChildren<InternationalMetalFu
     },
   ];
 
-  const { run: runGetInternationalMetalFuturesFromEastmoney, loading } = useRequest(
-    () => Services.Quotation.GetInternationalMetalFuturesFromEastmoney(),
-    {
-      onSuccess: setData,
-    }
-  );
+  const {
+    data = [],
+    run: runGetInternationalMetalFuturesFromEastmoney,
+    loading,
+  } = useRequest(() => Services.Quotation.GetInternationalMetalFuturesFromEastmoney());
 
   return (
     <ChartCard auto onFresh={runGetInternationalMetalFuturesFromEastmoney}>

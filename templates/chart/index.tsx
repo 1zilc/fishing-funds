@@ -1,6 +1,7 @@
 import React from 'react';
+import { useRequest } from 'ahooks';
 
-import { useResizeEchart, useRenderEcharts, useNativeThemColor } from '@/utils/hooks';
+import { useResizeEchart, useRenderEcharts } from '@/utils/hooks';
 import * as CONST from '@/constants';
 import styles from './index.module.scss';
 
@@ -8,14 +9,16 @@ interface TemplateNameProps {}
 
 const TemplateName: React.FC<TemplateNameProps> = () => {
   const { ref: chartRef, chartInstance } = useResizeEchart(CONST.DEFAULT.ECHARTS_SCALE);
-  const { varibleColors } = useNativeThemColor();
 
+  const { data: result, run } = useRequest(() => {}, {
+    ready: !!chartInstance,
+  });
   useRenderEcharts(
     () => {
       chartInstance?.setOption({});
     },
     chartInstance,
-    [varibleColors]
+    [result]
   );
 
   return (

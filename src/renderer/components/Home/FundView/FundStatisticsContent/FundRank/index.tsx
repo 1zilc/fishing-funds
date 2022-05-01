@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import { useResizeEchart, useRenderEcharts, useAppSelector, useNativeThemeColor } from '@/utils/hooks';
+import { useResizeEchart, useRenderEcharts, useAppSelector } from '@/utils/hooks';
 import TypeSelection from '@/components/TypeSelection';
 import * as CONST from '@/constants';
 import * as Enums from '@/utils/enums';
@@ -25,10 +25,9 @@ const FundRank: React.FC<FundRankProps> = ({ funds = [], codes = [] }) => {
   const [rankType, setRankType] = useState(rankTypeList[0]);
   const fundConfigCodeMap = useAppSelector((state) => state.wallet.fundConfigCodeMap);
   const walletsConfig = useAppSelector((state) => state.wallet.config.walletConfig);
-  const { varibleColors } = useNativeThemeColor();
 
   useRenderEcharts(
-    () => {
+    ({ varibleColors }) => {
       const codeMaps = Helpers.Fund.GetFundConfigMaps(codes, walletsConfig);
       chartInstance?.setOption({
         tooltip: {

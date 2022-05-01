@@ -23,10 +23,7 @@ interface ClosedCalendarProps {}
 
 const ClosedCalendar: React.FC<ClosedCalendarProps> = () => {
   const [marketType, setMarketType] = useState(marketTypeList[0]);
-  const [closeDates, setCloseDates] = useState<{ mkt: string; holiday: string; sdate: string; edate: string; xs: string }[]>([]);
-  const { run: runStockGetCloseDayDates } = useRequest(Services.Stock.GetCloseDayDates, {
-    onSuccess: setCloseDates,
-  });
+  const { data: closeDates = [], run: runStockGetCloseDayDates } = useRequest(Services.Stock.GetCloseDayDates);
   const currentCloseDates = closeDates.filter(({ mkt }) => marketType.name === mkt);
   return (
     <ChartCard TitleBar={<div className={styles.titleBar}>仅展示节假日、特殊工作日</div>} onFresh={runStockGetCloseDayDates}>

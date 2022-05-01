@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useRequest } from 'ahooks';
 
 import ChartCard from '@/components/Card/ChartCard';
-import { useResizeEchart, useRenderEcharts, useNativeThemeColor } from '@/utils/hooks';
+import { useResizeEchart, useRenderEcharts } from '@/utils/hooks';
 import * as Services from '@/services';
 import * as CONST from '@/constants';
 import styles from './index.module.scss';
@@ -15,16 +15,12 @@ interface GoldTrendsProps {
 const GoldTrends: React.FC<GoldTrendsProps> = (props) => {
   const { ref: chartRef, chartInstance } = useResizeEchart(CONST.DEFAULT.ECHARTS_SCALE);
 
-  const [data, setData] = useState<string[][]>([]);
-  const { varibleColors } = useNativeThemeColor();
-
-  const { run: runGetAumFromEastmoney } = useRequest(() => Services.Quotation.GetGoldTrendsFromEastmoney(props.secid), {
-    onSuccess: setData,
+  const { data: result = [], run: runGetAumFromEastmoney } = useRequest(() => Services.Quotation.GetGoldTrendsFromEastmoney(props.secid), {
     ready: !!chartInstance,
   });
 
   useRenderEcharts(
-    () => {
+    ({ varibleColors }) => {
       chartInstance?.setOption({
         title: {
           show: false,
@@ -73,13 +69,13 @@ const GoldTrends: React.FC<GoldTrendsProps> = (props) => {
             lineStyle: {
               width: 1,
             },
-            data: data,
+            data: result,
           },
         ],
       });
     },
     chartInstance,
-    [data]
+    [result]
   );
 
   return (

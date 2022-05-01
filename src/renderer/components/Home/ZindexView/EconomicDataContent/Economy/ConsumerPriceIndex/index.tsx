@@ -2,7 +2,7 @@ import React from 'react';
 import { useRequest } from 'ahooks';
 
 import ChartCard from '@/components/Card/ChartCard';
-import { useResizeEchart, useRenderEcharts, useNativeThemeColor } from '@/utils/hooks';
+import { useResizeEchart, useRenderEcharts } from '@/utils/hooks';
 import * as CONST from '@/constants';
 import * as Services from '@/services';
 import styles from './index.module.scss';
@@ -11,10 +11,13 @@ interface ConsumerPriceIndexProps {}
 
 const ConsumerPriceIndex: React.FC<ConsumerPriceIndexProps> = () => {
   const { ref: chartRef, chartInstance } = useResizeEchart(0.4);
-  const { varibleColors } = useNativeThemeColor();
 
-  const { run: runGetEconomyIndexFromEastmoney } = useRequest(() => Services.Zindex.GetEconomyIndexFromEastmoney(19), {
-    onSuccess: (result) => {
+  const { data: result = [], run: runGetEconomyIndexFromEastmoney } = useRequest(() => Services.Zindex.GetEconomyIndexFromEastmoney(19), {
+    ready: !!chartInstance,
+  });
+
+  useRenderEcharts(
+    ({ varibleColors }) => {
       try {
         chartInstance?.setOption({
           title: {
@@ -83,9 +86,9 @@ const ConsumerPriceIndex: React.FC<ConsumerPriceIndexProps> = () => {
         });
       } catch {}
     },
-    refreshDeps: [varibleColors],
-    ready: !!chartInstance,
-  });
+    chartInstance,
+    [result]
+  );
 
   return (
     <ChartCard auto onFresh={runGetEconomyIndexFromEastmoney} TitleBar={<div className={styles.title}>居民消费价格指数(CPI)</div>}>

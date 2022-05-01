@@ -3,7 +3,7 @@ import { useRequest } from 'ahooks';
 
 import ChartCard from '@/components/Card/ChartCard';
 import TypeSelection from '@/components/TypeSelection';
-import { useResizeEchart, useNativeThemeColor } from '@/utils/hooks';
+import { useResizeEchart, useRenderEcharts } from '@/utils/hooks';
 import * as CONST from '@/constants';
 import * as Services from '@/services';
 import * as Enums from '@/utils/enums';
@@ -25,90 +25,94 @@ const performanceTypeList = [
 const Performance: React.FC<PerformanceProps> = ({ code }) => {
   const { ref: chartRef, chartInstance } = useResizeEchart(CONST.DEFAULT.ECHARTS_SCALE);
   const [performanceType, setPerformanceType] = useState(performanceTypeList[2]);
-  const { varibleColors } = useNativeThemeColor();
   const [ZDHC, setZDHC] = useState('');
-  const { run: runGetFundPerformanceFromEastmoney } = useRequest(
+  const { data: result = [], run: runGetFundPerformanceFromEastmoney } = useRequest(
     () => Services.Fund.GetFundPerformanceFromEastmoney(code, performanceType.code),
     {
-      onSuccess: (result) => {
-        chartInstance?.setOption({
-          title: {
-            text: '',
-          },
-          tooltip: {
-            trigger: 'axis',
-            position: 'inside',
-          },
-          legend: {
-            data: result?.map(({ name }) => name) || [],
-            textStyle: {
-              color: varibleColors['--main-text-color'],
-              fontSize: 10,
-            },
-          },
-          grid: {
-            left: 0,
-            right: 0,
-            bottom: 0,
-            containLabel: true,
-          },
-          xAxis: {
-            type: 'time',
-            boundaryGap: false,
-            axisLabel: {
-              fontSize: 10,
-            },
-          },
-          yAxis: {
-            type: 'value',
-            axisLabel: {
-              formatter: `{value}%`,
-              fontSize: 10,
-            },
-            splitLine: {
-              lineStyle: {
-                color: varibleColors['--border-color'],
-              },
-            },
-          },
-          dataZoom: [
-            {
-              type: 'inside',
-              minValueSpan: 3600 * 24 * 1000 * 7,
-            },
-          ],
-          series:
-            result?.map((_, i) => ({
-              ..._,
-              type: 'line',
-              showSymbol: false,
-              symbol: 'none',
-              lineStyle: {
-                width: 1,
-              },
-              markPoint: i === 0 && {
-                symbol: 'pin',
-                symbolSize: 30,
-                label: {
-                  formatter: '{c}%',
-                },
-                data: [
-                  { type: 'max', label: { fontSize: 10 } },
-                  { type: 'min', label: { fontSize: 10 } },
-                ],
-              },
-            })) || [],
-        });
-        try {
-          const values = result?.[0]?.data.map(([time, rate]: any) => 1 + (1 * rate) / 100);
-          setZDHC(Utils.CalcZDHC(values));
-        } catch (error) {
-          setZDHC('--');
-        }
-      },
-      refreshDeps: [varibleColors, code, performanceType.code],
+      refreshDeps: [code, performanceType.code],
       ready: !!chartInstance,
     }
+  );
+
+  useRenderEcharts(
+    ({ varibleColors }) => {
+      chartInstance?.setOption({
+        title: {
+          text: '',
+        },
+        tooltip: {
+          trigger: 'axis',
+          position: 'inside',
+        },
+        legend: {
+          data: result?.map(({ name }) => name) || [],
+          textStyle: {
+            color: varibleColors['--main-text-color'],
+            fontSize: 10,
+          },
+        },
+        grid: {
+          left: 0,
+          right: 0,
+          bottom: 0,
+          containLabel: true,
+        },
+        xAxis: {
+          type: 'time',
+          boundaryGap: false,
+          axisLabel: {
+            fontSize: 10,
+          },
+        },
+        yAxis: {
+          type: 'value',
+          axisLabel: {
+            formatter: `{value}%`,
+            fontSize: 10,
+          },
+          splitLine: {
+            lineStyle: {
+              color: varibleColors['--border-color'],
+            },
+          },
+        },
+        dataZoom: [
+          {
+            type: 'inside',
+            minValueSpan: 3600 * 24 * 1000 * 7,
+          },
+        ],
+        series:
+          result?.map((_, i) => ({
+            ..._,
+            type: 'line',
+            showSymbol: false,
+            symbol: 'none',
+            lineStyle: {
+              width: 1,
+            },
+            markPoint: i === 0 && {
+              symbol: 'pin',
+              symbolSize: 30,
+              label: {
+                formatter: '{c}%',
+              },
+              data: [
+                { type: 'max', label: { fontSize: 10 } },
+                { type: 'min', label: { fontSize: 10 } },
+              ],
+            },
+          })) || [],
+      });
+      try {
+        const values = result?.[0]?.data.map(([time, rate]: any) => 1 + (1 * rate) / 100);
+        setZDHC(Utils.CalcZDHC(values));
+      } catch (error) {
+        setZDHC('--');
+      }
+    },
+    chartInstance,
+    [result]
   );
 
   return (

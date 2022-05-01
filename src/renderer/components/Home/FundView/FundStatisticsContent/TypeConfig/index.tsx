@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { useResizeEchart, useRenderEcharts, useAppSelector, useNativeThemeColor } from '@/utils/hooks';
+import { useResizeEchart, useRenderEcharts, useAppSelector } from '@/utils/hooks';
 
 import * as CONST from '@/constants';
 import * as Utils from '@/utils';
@@ -15,10 +15,9 @@ const TypeConfig: React.FC<TypeConfigProps> = ({ funds = [] }) => {
   const remoteFunds = useAppSelector((state) => state.fund.remoteFunds);
   const fundConfigCodeMap = useAppSelector((state) => state.wallet.fundConfigCodeMap);
   const { ref: chartRef, chartInstance } = useResizeEchart(CONST.DEFAULT.ECHARTS_SCALE);
-  const { varibleColors } = useNativeThemeColor();
 
   useRenderEcharts(
-    () => {
+    ({ varibleColors }) => {
       const remoteFundsMap = Utils.GetCodeMap(remoteFunds, 0);
       const typeMap: Record<string, Fund.ResponseItem[]> = {};
       funds.forEach((fund) => {

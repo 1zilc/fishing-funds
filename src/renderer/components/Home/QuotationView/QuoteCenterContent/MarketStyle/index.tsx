@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { useResizeEchart, useRenderEcharts, useNativeThemeColor } from '@/utils/hooks';
+import { useResizeEchart, useRenderEcharts } from '@/utils/hooks';
 import * as CONST from '@/constants';
 import * as Utils from '@/utils';
 import styles from './index.module.scss';
@@ -21,10 +21,9 @@ interface MarketStyleProps {
 const MarketStyle: React.FC<MarketStyleProps> = (props) => {
   const { ThemeList = [] } = props;
   const { ref: chartRef, chartInstance } = useResizeEchart(CONST.DEFAULT.ECHARTS_SCALE);
-  const { varibleColors } = useNativeThemeColor();
 
   useRenderEcharts(
-    () => {
+    ({ varibleColors }) => {
       chartInstance?.setOption({
         color: [varibleColors['--primary-color'], varibleColors['--warn-color']],
         tooltip: {

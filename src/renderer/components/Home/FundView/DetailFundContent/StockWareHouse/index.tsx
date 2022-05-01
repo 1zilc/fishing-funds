@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { renderToString } from 'react-dom/server';
 import { useRequest } from 'ahooks';
 
 import ChartCard from '@/components/Card/ChartCard';
 import CustomDrawer from '@/components/CustomDrawer';
-import { useResizeEchart, useNativeThemeColor, useDrawer } from '@/utils/hooks';
+import { useResizeEchart, useDrawer, useRenderEcharts } from '@/utils/hooks';
 import * as CONST from '@/constants';
 import * as Services from '@/services';
 import * as Utils from '@/utils';
@@ -34,11 +34,18 @@ const Tooltip: React.FC<TooltipProps> = (props) => {
 
 const StockWareHouse: React.FC<StockWareHouseProps> = ({ code, stockCodes }) => {
   const { ref: chartRef, chartInstance } = useResizeEchart(CONST.DEFAULT.ECHARTS_SCALE);
-  const { varibleColors } = useNativeThemeColor();
   const { data: stockSecid, show: showDetailStockDrawer, set: setDetailStockDrawer, close: closeDetailStockDrawer } = useDrawer('');
 
-  const { run: runGetStockWareHouseFromEastmoney } = useRequest(() => Services.Fund.GetStockWareHouseFromEastmoney(code, stockCodes), {
-    onSuccess: (result) => {
+  const { data: result = [], run: runGetStockWareHouseFromEastmoney } = useRequest(
+    () => Services.Fund.GetStockWareHouseFromEastmoney(code, stockCodes),
+    {
+      refreshDeps: [code, stockCodes],
+      ready: !!chartInstance,
+    }
+  );
+
+  useRenderEcharts(
+    ({ varibleColors }) => {
       chartInstance?.setOption({
         backgroundColor: 'transparent',
         title: {
@@ -101,9 +108,9 @@ const StockWareHouse: React.FC<StockWareHouseProps> = ({ code, stockCodes }) => 
         setDetailStockDrawer(secid);
       });
     },
-    refreshDeps: [varibleColors, code, stockCodes],
-    ready: !!chartInstance,
-  });
+    chartInstance,
+    [result]
+  );
 
   return (
     <ChartCard onFresh={runGetStockWareHouseFromEastmoney}>

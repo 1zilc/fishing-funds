@@ -11,8 +11,6 @@ import styles from './index.module.scss';
 interface BaseExchangeProps {}
 
 const BaseExchange: React.FC<PropsWithChildren<BaseExchangeProps>> = () => {
-  const [data, setData] = useState<Exchange.ResponseItem[]>([]);
-
   const columns = [
     {
       title: '名称',
@@ -38,9 +36,7 @@ const BaseExchange: React.FC<PropsWithChildren<BaseExchangeProps>> = () => {
     },
   ];
 
-  const { run: runGetListFromEastmoney, loading } = useRequest(() => Services.Exchange.GetListFromEastmoney('0', 'b:MK0300'), {
-    onSuccess: setData,
-  });
+  const { data = [], run: runGetListFromEastmoney, loading } = useRequest(() => Services.Exchange.GetListFromEastmoney('0', 'b:MK0300'));
 
   return (
     <ChartCard auto onFresh={runGetListFromEastmoney}>

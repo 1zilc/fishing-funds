@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import clsx from 'clsx';
 import { useRequest } from 'ahooks';
 import StandCard from '@/components/Card/StandCard';
@@ -13,9 +13,7 @@ const AddZindexContent = React.lazy(() => import('@/components/Home/ZindexView/A
 interface MutualQuotaProps {}
 
 const MutualQuota: React.FC<MutualQuotaProps> = () => {
-  const [list, setList] = useState<any[]>([]);
-  useRequest(Services.Quotation.GetMutualQuotaFromEastmoney, {
-    onSuccess: setList,
+  const { data: list = [] } = useRequest(Services.Quotation.GetMutualQuotaFromEastmoney, {
     pollingInterval: 1000 * 60,
   });
 

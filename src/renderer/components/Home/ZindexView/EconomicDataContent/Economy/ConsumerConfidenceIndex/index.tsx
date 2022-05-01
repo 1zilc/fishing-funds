@@ -2,7 +2,7 @@ import React from 'react';
 import { useRequest } from 'ahooks';
 
 import ChartCard from '@/components/Card/ChartCard';
-import { useResizeEchart, useRenderEcharts, useNativeThemeColor } from '@/utils/hooks';
+import { useResizeEchart, useRenderEcharts } from '@/utils/hooks';
 import * as CONST from '@/constants';
 import * as Services from '@/services';
 import styles from './index.module.scss';
@@ -11,10 +11,13 @@ interface ConsumerConfidenceIndexProps {}
 
 const ConsumerConfidenceIndex: React.FC<ConsumerConfidenceIndexProps> = () => {
   const { ref: chartRef, chartInstance } = useResizeEchart(0.4);
-  const { varibleColors } = useNativeThemeColor();
 
-  const { run: runGetEconomyIndexFromEastmoney } = useRequest(() => Services.Zindex.GetEconomyIndexFromEastmoney(4), {
-    onSuccess: (result) => {
+  const { data: result = [], run: runGetEconomyIndexFromEastmoney } = useRequest(() => Services.Zindex.GetEconomyIndexFromEastmoney(4), {
+    ready: !!chartInstance,
+  });
+
+  useRenderEcharts(
+    ({ varibleColors }) => {
       try {
         chartInstance?.setOption({
           title: {
@@ -84,9 +87,9 @@ const ConsumerConfidenceIndex: React.FC<ConsumerConfidenceIndexProps> = () => {
         });
       } catch {}
     },
-    refreshDeps: [varibleColors],
-    ready: !!chartInstance,
-  });
+    chartInstance,
+    [result]
+  );
 
   return (
     <ChartCard auto onFresh={runGetEconomyIndexFromEastmoney} TitleBar={<div className={styles.title}>消费者信心指数</div>}>

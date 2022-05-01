@@ -11,17 +11,7 @@ interface LogProps {}
 const { version } = window.contextModules.process;
 
 const Log: React.FC<LogProps> = () => {
-  const [logs, setLogs] = useState<
-    {
-      date: string;
-      version: string;
-      contents: string[];
-    }[]
-  >([]);
-
-  const { loading } = useRequest(Services.Log.GetLog, {
-    onSuccess: setLogs,
-  });
+  const { data: logs = [], loading } = useRequest(Services.Log.GetLog);
 
   return (
     <Spin spinning={loading}>

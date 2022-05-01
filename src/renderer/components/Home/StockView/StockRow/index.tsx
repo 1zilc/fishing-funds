@@ -9,7 +9,7 @@ import ArrowUpIcon from '@/static/icon/arrow-up.svg';
 import Collapse from '@/components/Collapse';
 
 import { toggleStockCollapseAction, setIndustryMapAction } from '@/store/features/stock';
-import { useResizeEchart, useRenderEcharts, useAppDispatch, useAppSelector, useNativeThemeColor } from '@/utils/hooks';
+import { useResizeEchart, useRenderEcharts, useAppDispatch, useAppSelector } from '@/utils/hooks';
 import * as Services from '@/services';
 import * as Utils from '@/utils';
 import styles from './index.module.scss';
@@ -30,10 +30,9 @@ const TrendChart: React.FC<{
   zs: number;
 }> = ({ trends = [], zs = 0 }) => {
   const { ref: chartRef, chartInstance } = useResizeEchart(0.24);
-  const { varibleColors } = useNativeThemeColor();
 
   useRenderEcharts(
-    () => {
+    ({ varibleColors }) => {
       const { color } = Utils.GetValueColor(Number(trends[trends.length - 1]?.last) - zs);
       chartInstance?.setOption({
         title: {

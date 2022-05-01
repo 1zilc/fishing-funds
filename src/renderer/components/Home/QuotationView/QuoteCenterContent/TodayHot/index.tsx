@@ -13,20 +13,9 @@ const AddStockContent = React.lazy(() => import('@/components/Home/StockView/Add
 interface TodayHotProps {}
 
 const TodayHot: React.FC<TodayHotProps> = () => {
-  const [hots, setHots] = useState<
-    {
-      zdf: string;
-      name: string;
-      reason: string;
-      stockName: string;
-      stockCode: string;
-    }[]
-  >([]);
   const { data: stockName, show: showAddStockDrawer, set: setAddStockDrawer, close: closeAddStockDrawer } = useDrawer('');
 
-  useRequest(Services.Quotation.GetTodayHotFromEastmoney, {
-    onSuccess: setHots,
-  });
+  const { data: hots = [] } = useRequest(Services.Quotation.GetTodayHotFromEastmoney);
 
   return (
     <div className={clsx(styles.content)}>

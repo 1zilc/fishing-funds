@@ -35,7 +35,7 @@ import * as CONST from '@/constants';
 import * as Adapters from '@/utils/adpters';
 import * as Helpers from '@/helpers';
 import * as Enums from '@/utils/enums';
-import { useLoadFunds, useNativeThemeColor } from './utils';
+import { useLoadFunds } from './utils';
 
 const { invoke, dialog, ipcRenderer, clipboard, app } = window.contextModules.electron;
 const { saveString, encodeFF, decodeFF, readFile } = window.contextModules.io;
@@ -489,7 +489,7 @@ export function useTouchBar() {
   const currentWalletCode = useAppSelector((state) => state.wallet.currentWalletCode);
   const walletsConfig = useAppSelector((state) => state.wallet.config.walletConfig);
   const fundConfigCodeMap = useAppSelector((state) => state.wallet.fundConfigCodeMap);
-  const { varibleColors } = useNativeThemeColor();
+  const varibleColors = useAppSelector((state) => state.setting.varibleColors);
 
   useEffect(() => {
     ipcRenderer.invoke(

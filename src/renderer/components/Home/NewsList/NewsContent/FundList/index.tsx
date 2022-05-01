@@ -11,11 +11,7 @@ interface FundListProps {
 }
 
 const FundView: React.FC<PropsWithChildren<FundListProps>> = (props) => {
-  const [data, setData] = useState<News.ResponseItem[]>([]);
-
-  const { loading, run: runNewsGetFundList } = useRequest(Services.News.GetFundList, {
-    onSuccess: setData,
-  });
+  const { data = [], loading, run: runNewsGetFundList } = useRequest(Services.News.GetFundList);
 
   return (
     <ChartCard auto onFresh={runNewsGetFundList}>

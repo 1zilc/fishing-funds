@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import { useResizeEchart, useRenderEcharts, useAppSelector, useNativeThemeColor } from '@/utils/hooks';
+import { useResizeEchart, useRenderEcharts, useAppSelector } from '@/utils/hooks';
 import * as CONST from '@/constants';
 import * as Helpers from '@/helpers';
 
@@ -11,11 +11,10 @@ interface WalletConfigProps {
 
 const WalletConfig: React.FC<WalletConfigProps> = ({ funds, codes }) => {
   const { ref: chartRef, chartInstance } = useResizeEchart(CONST.DEFAULT.ECHARTS_SCALE);
-  const { varibleColors } = useNativeThemeColor();
   const walletsConfig = useAppSelector((state) => state.wallet.config.walletConfig);
 
   useRenderEcharts(
-    () => {
+    ({ varibleColors }) => {
       const walletsName = codes.map((code) => Helpers.Wallet.GetCurrentWalletConfig(code, walletsConfig).name);
       chartInstance?.setOption(
         {

@@ -1,4 +1,4 @@
-import React, { PropsWithChildren, useState } from 'react';
+import React, { PropsWithChildren } from 'react';
 import dayjs from 'dayjs';
 import { Table } from 'antd';
 import { useRequest } from 'ahooks';
@@ -11,11 +11,7 @@ interface ChinaListProps {
 }
 
 const ChinaList: React.FC<PropsWithChildren<ChinaListProps>> = (props) => {
-  const [data, setData] = useState<News.ResponseItem[]>([]);
-
-  const { loading, run: runNewsGetChinaList } = useRequest(Services.News.GetChinaList, {
-    onSuccess: setData,
-  });
+  const { data = [], loading, run: runNewsGetChinaList } = useRequest(Services.News.GetChinaList);
 
   return (
     <ChartCard auto onFresh={runNewsGetChinaList}>

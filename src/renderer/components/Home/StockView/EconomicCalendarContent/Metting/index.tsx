@@ -14,18 +14,17 @@ const today = dayjs();
 
 const Metting: React.FC<PropsWithChildren<MettingProps>> = (props) => {
   const { code } = props;
-  const [data, setData] = useState<any[]>([]);
 
-  const { loading, run: runStockGetMeetingData } = useRequest(
-    () =>
-      Services.Stock.GetMeetingData({
-        code,
-        startTime: today.format('YYYY-MM-DD'),
-        endTime: today.add(1, 'month').format('YYYY-MM-DD'),
-      }),
-    {
-      onSuccess: setData,
-    }
+  const {
+    data = [],
+    loading,
+    run: runStockGetMeetingData,
+  } = useRequest(() =>
+    Services.Stock.GetMeetingData({
+      code,
+      startTime: today.format('YYYY-MM-DD'),
+      endTime: today.add(1, 'month').format('YYYY-MM-DD'),
+    })
   );
 
   return (

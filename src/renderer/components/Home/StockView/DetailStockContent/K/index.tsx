@@ -1,11 +1,9 @@
 import React, { useState } from 'react';
 import { useRequest } from 'ahooks';
-import NP from 'number-precision';
 
 import ChartCard from '@/components/Card/ChartCard';
-
 import TypeSelection from '@/components/TypeSelection';
-import { useResizeEchart, useRenderEcharts, useNativeThemeColor } from '@/utils/hooks';
+import { useResizeEchart, useRenderEcharts } from '@/utils/hooks';
 import * as CONST from '@/constants';
 import * as Services from '@/services';
 import * as Utils from '@/utils';
@@ -28,9 +26,13 @@ const kTypeList = [
 const K: React.FC<PerformanceProps> = ({ secid = '' }) => {
   const { ref: chartRef, chartInstance } = useResizeEchart(CONST.DEFAULT.ECHARTS_SCALE);
   const [k, setKType] = useState(kTypeList[0]);
-  const { varibleColors } = useNativeThemeColor();
-  const { run: runGetKFromEastmoney } = useRequest(() => Services.Stock.GetKFromEastmoney(secid, k.code), {
-    onSuccess: (result) => {
+  const { data: result = [], run: runGetKFromEastmoney } = useRequest(() => Services.Stock.GetKFromEastmoney(secid, k.code), {
+    refreshDeps: [secid, k.code],
+    ready: !!chartInstance,
+  });
+
+  useRenderEcharts(
+    ({ varibleColors }) => {
       // 数据意义：开盘(open)，收盘(close)，最低(lowest)，最高(highest)
       const values = result.map((_) => [_.kp, _.sp, _.zd, _.zg]);
       chartInstance?.setOption({
@@ -152,9 +154,9 @@ const K: React.FC<PerformanceProps> = ({ secid = '' }) => {
         ],
       });
     },
-    refreshDeps: [varibleColors, secid, k.code],
-    ready: !!chartInstance,
-  });
+    chartInstance,
+    [result]
+  );
 
   return (
     <ChartCard onFresh={runGetKFromEastmoney}>

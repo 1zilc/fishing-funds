@@ -18,7 +18,6 @@ const RenderColorCol = ({ value }: { value: string }) => {
 };
 
 const ShanghaiGoldFutures: React.FC<PropsWithChildren<ShanghaiGoldFuturesProps>> = () => {
-  const [data, setData] = useState<any[]>([]);
   const { data: detailCode, show: showDetailDrawer, set: setDetailDrawer, close: closeDetailDrawer } = useDrawer('');
 
   const columns = [
@@ -40,12 +39,11 @@ const ShanghaiGoldFutures: React.FC<PropsWithChildren<ShanghaiGoldFuturesProps>>
     },
   ];
 
-  const { run: runGetShanghaiGoldFuturesFromEastmoney, loading } = useRequest(
-    () => Services.Quotation.GetShanghaiGoldFuturesFromEastmoney(),
-    {
-      onSuccess: setData,
-    }
-  );
+  const {
+    data = [],
+    run: runGetShanghaiGoldFuturesFromEastmoney,
+    loading,
+  } = useRequest(Services.Quotation.GetShanghaiGoldFuturesFromEastmoney);
 
   return (
     <ChartCard auto onFresh={runGetShanghaiGoldFuturesFromEastmoney}>

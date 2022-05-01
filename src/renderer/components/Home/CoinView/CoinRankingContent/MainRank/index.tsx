@@ -1,12 +1,10 @@
-import React, { PropsWithChildren, useState, useEffect } from 'react';
+import React, { PropsWithChildren } from 'react';
 
-import { Table, Divider } from 'antd';
+import { Table } from 'antd';
 import { useRequest } from 'ahooks';
-import clsx from 'clsx';
 
 import ChartCard from '@/components/Card/ChartCard';
 import CustomDrawer from '@/components/CustomDrawer';
-import TypeSelection from '@/components/TypeSelection';
 import { useDrawer, useAppSelector } from '@/utils/hooks';
 
 import * as Services from '@/services';
@@ -23,11 +21,8 @@ const RenderColorCol = ({ value }: { value: string }) => {
 };
 
 const MainRank: React.FC<PropsWithChildren<MainRankProps>> = () => {
-  const [data, setData] = useState<Coin.ResponseItem[]>([]);
   const { codeMap } = useAppSelector((state) => state.coin.config);
-
   const { data: detailCode, show: showDetailDrawer, set: setDetailDrawer, close: closeDetailDrawer } = useDrawer('');
-
   const { data: addName, show: showAddDrawer, set: setAddDrawer, close: closeAddDrawer } = useDrawer('');
 
   const columns = [
@@ -68,9 +63,7 @@ const MainRank: React.FC<PropsWithChildren<MainRankProps>> = () => {
     },
   ];
 
-  const { run: runCoinFromCoinCap, loading } = useRequest(() => Services.Coin.FromCoinCap('', ''), {
-    onSuccess: setData,
-  });
+  const { data = [], run: runCoinFromCoinCap, loading } = useRequest(() => Services.Coin.FromCoinCap('', ''));
 
   return (
     <ChartCard auto onFresh={runCoinFromCoinCap}>

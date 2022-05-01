@@ -3,7 +3,7 @@ import { useRequest } from 'ahooks';
 
 import ChartCard from '@/components/Card/ChartCard';
 
-import { useResizeEchart, useRenderEcharts, useNativeThemeColor } from '@/utils/hooks';
+import { useResizeEchart, useRenderEcharts } from '@/utils/hooks';
 import * as CONST from '@/constants';
 import * as Services from '@/services';
 import styles from './index.module.scss';
@@ -12,10 +12,13 @@ interface TreasuryYieldProps {}
 
 const TreasuryYield: React.FC<TreasuryYieldProps> = () => {
   const { ref: chartRef, chartInstance } = useResizeEchart(CONST.DEFAULT.ECHARTS_SCALE);
-  const { varibleColors } = useNativeThemeColor();
 
-  const { run: runZindexGetTreasuryYieldData } = useRequest(Services.Zindex.GetTreasuryYieldData, {
-    onSuccess: (result) => {
+  const { data: result = [], run: runZindexGetTreasuryYieldData } = useRequest(Services.Zindex.GetTreasuryYieldData, {
+    ready: !!chartInstance,
+  });
+
+  useRenderEcharts(
+    ({ varibleColors }) => {
       chartInstance?.setOption({
         title: {
           text: '',
@@ -80,9 +83,9 @@ const TreasuryYield: React.FC<TreasuryYieldProps> = () => {
         ],
       });
     },
-    refreshDeps: [varibleColors],
-    ready: !!chartInstance,
-  });
+    chartInstance,
+    [result]
+  );
 
   return (
     <ChartCard onFresh={runZindexGetTreasuryYieldData}>

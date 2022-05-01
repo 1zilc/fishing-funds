@@ -2,8 +2,7 @@ import React from 'react';
 import { useRequest } from 'ahooks';
 
 import ChartCard from '@/components/Card/ChartCard';
-import { useResizeEchart, useRenderEcharts, useNativeThemeColor } from '@/utils/hooks';
-import * as CONST from '@/constants';
+import { useResizeEchart, useRenderEcharts } from '@/utils/hooks';
 import * as Services from '@/services';
 import styles from './index.module.scss';
 
@@ -11,10 +10,12 @@ interface OilPriceProps {}
 
 const OilPrice: React.FC<OilPriceProps> = () => {
   const { ref: chartRef, chartInstance } = useResizeEchart(0.4);
-  const { varibleColors } = useNativeThemeColor();
+  const { data: result = [], run: runGetOilPriceFromEastmoney } = useRequest(() => Services.Zindex.GetOilPriceFromEastmoney(), {
+    ready: !!chartInstance,
+  });
 
-  const { run: runGetOilPriceFromEastmoney } = useRequest(() => Services.Zindex.GetOilPriceFromEastmoney(), {
-    onSuccess: (result) => {
+  useRenderEcharts(
+    ({ varibleColors }) => {
       try {
         chartInstance?.setOption({
           title: {
@@ -101,10 +102,9 @@ const OilPrice: React.FC<OilPriceProps> = () => {
         });
       } catch {}
     },
-    refreshDeps: [varibleColors],
-    ready: !!chartInstance,
-  });
-
+    chartInstance,
+    [result]
+  );
   return (
     <ChartCard auto onFresh={runGetOilPriceFromEastmoney} TitleBar={<div className={styles.title}>油价</div>}>
       <div className={styles.content}>

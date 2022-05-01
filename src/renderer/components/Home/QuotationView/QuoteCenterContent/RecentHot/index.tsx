@@ -13,12 +13,9 @@ const AddStockContent = React.lazy(() => import('@/components/Home/StockView/Add
 interface RecentHotProps {}
 
 const RecentHot: React.FC<RecentHotProps> = () => {
-  const [data, setData] = useState<any[]>([]);
   const { data: stockName, show: showAddStockDrawer, set: setAddStockDrawer, close: closeAddStockDrawer } = useDrawer('');
 
-  const { loading, run: runQuotationGetRecentHotFromEastmoney } = useRequest(Services.Quotation.GetRecentHotFromEastmoney, {
-    onSuccess: setData,
-  });
+  const { data = [], loading, run: runQuotationGetRecentHotFromEastmoney } = useRequest(Services.Quotation.GetRecentHotFromEastmoney);
 
   return (
     <ChartCard auto onFresh={runQuotationGetRecentHotFromEastmoney}>

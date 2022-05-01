@@ -29,7 +29,6 @@ const RenderColorCol = ({ value }: { value: string }) => {
 
 const SelfRank: React.FC<PropsWithChildren<SelfRankProps>> = () => {
   const [dayType, setDayType] = useState(dayTypeList[0]);
-  const [data, setData] = useState([]);
   const { codeMap } = useAppSelector((state) => state.stock.config);
 
   const { data: detailSecid, show: showDetailDrawer, set: setDetailDrawer, close: closeDetailDrawer } = useDrawer('');
@@ -74,8 +73,11 @@ const SelfRank: React.FC<PropsWithChildren<SelfRankProps>> = () => {
     },
   ];
 
-  const { run: runGetSelfRankFromEastmoney, loading } = useRequest(() => Services.Stock.GetSelfRankFromEastmoney(dayType.code), {
-    onSuccess: setData,
+  const {
+    data = [],
+    run: runGetSelfRankFromEastmoney,
+    loading,
+  } = useRequest(() => Services.Stock.GetSelfRankFromEastmoney(dayType.code), {
     refreshDeps: [dayType.code],
   });
 

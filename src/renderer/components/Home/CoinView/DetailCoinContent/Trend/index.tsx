@@ -3,7 +3,7 @@ import { useRequest } from 'ahooks';
 
 import TypeSelection from '@/components/TypeSelection';
 import ChartCard from '@/components/Card/ChartCard';
-import { useResizeEchart, useAppSelector, useNativeThemeColor } from '@/utils/hooks';
+import { useResizeEchart, useAppSelector, useRenderEcharts } from '@/utils/hooks';
 
 import * as CONST from '@/constants';
 import * as Services from '@/services';
@@ -25,11 +25,19 @@ const dateTypeList = [
 const Trend: React.FC<PerformanceProps> = ({ code }) => {
   const { ref: chartRef, chartInstance } = useResizeEchart(CONST.DEFAULT.ECHARTS_SCALE);
   const [date, setDateType] = useState(dateTypeList[2]);
-  const { varibleColors } = useNativeThemeColor();
   const coinUnitSetting = useAppSelector((state) => state.setting.systemSetting.coinUnitSetting);
-  const { run: runGetHistoryFromCoingecko } = useRequest(() => Services.Coin.GetHistoryFromCoingecko(code, coinUnitSetting, date.code), {
-    pollingInterval: CONST.DEFAULT.ESTIMATE_FUND_DELAY,
-    onSuccess: (result) => {
+
+  const { data: result = { prices: [], vol24h: [] }, run: runGetHistoryFromCoingecko } = useRequest(
+    () => Services.Coin.GetHistoryFromCoingecko(code, coinUnitSetting, date.code),
+    {
+      pollingInterval: CONST.DEFAULT.ESTIMATE_FUND_DELAY,
+      refreshDeps: [code, coinUnitSetting, date.code],
+      ready: !!chartInstance,
+    }
+  );
+
+  useRenderEcharts(
+    ({ varibleColors }) => {
       chartInstance?.setOption({
         title: {
           text: '',
@@ -108,9 +116,9 @@ const Trend: React.FC<PerformanceProps> = ({ code }) => {
         ],
       });
     },
-    refreshDeps: [varibleColors, code, coinUnitSetting, date.code],
-    ready: !!chartInstance,
-  });
+    chartInstance,
+    [result]
+  );
 
   return (
     <ChartCard onFresh={runGetHistoryFromCoingecko}>

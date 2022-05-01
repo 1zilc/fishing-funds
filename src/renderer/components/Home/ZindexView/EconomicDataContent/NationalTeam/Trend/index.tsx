@@ -4,7 +4,7 @@ import { useRequest } from 'ahooks';
 import ChartCard from '@/components/Card/ChartCard';
 import TypeSelection from '@/components/TypeSelection';
 
-import { useNativeThemeColor, useResizeEchart } from '@/utils/hooks';
+import { useRenderEcharts, useResizeEchart } from '@/utils/hooks';
 import * as CONST from '@/constants';
 import * as Services from '@/services';
 import styles from './index.module.scss';
@@ -19,11 +19,15 @@ const trendTypeList = [
 
 const Trend: React.FC<TrendProps> = () => {
   const { ref: chartRef, chartInstance } = useResizeEchart(CONST.DEFAULT.ECHARTS_SCALE);
-  const { varibleColors } = useNativeThemeColor();
   const [trendType, setTrendType] = useState(trendTypeList[0]);
 
-  const { run: runZindexGetNationalTeamTrend } = useRequest(Services.Zindex.GetNationalTeamTrend, {
-    onSuccess: (result) => {
+  const { data: result = [], run: runZindexGetNationalTeamTrend } = useRequest(Services.Zindex.GetNationalTeamTrend, {
+    refreshDeps: [trendType],
+    ready: !!chartInstance,
+  });
+
+  useRenderEcharts(
+    ({ varibleColors }) => {
       chartInstance?.setOption({
         title: {
           text: '',
@@ -110,9 +114,9 @@ const Trend: React.FC<TrendProps> = () => {
         ],
       });
     },
-    refreshDeps: [varibleColors, trendType],
-    ready: !!chartInstance,
-  });
+    chartInstance,
+    [result]
+  );
 
   return (
     <ChartCard auto onFresh={runZindexGetNationalTeamTrend} TitleBar={<div className={styles.title}>持股走势</div>}>

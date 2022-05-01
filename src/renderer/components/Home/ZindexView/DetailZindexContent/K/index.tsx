@@ -2,9 +2,8 @@ import React, { useState } from 'react';
 import { useRequest } from 'ahooks';
 
 import ChartCard from '@/components/Card/ChartCard';
-
 import TypeSelection from '@/components/TypeSelection';
-import { useResizeEchart, useRenderEcharts, useNativeThemeColor } from '@/utils/hooks';
+import { useResizeEchart, useRenderEcharts } from '@/utils/hooks';
 import * as CONST from '@/constants';
 import * as Services from '@/services';
 import * as Utils from '@/utils';
@@ -25,9 +24,13 @@ const yearTypeList = [
 const K: React.FC<KProps> = ({ code = '' }) => {
   const { ref: chartRef, chartInstance } = useResizeEchart(CONST.DEFAULT.ECHARTS_SCALE);
   const [year, setYearType] = useState(yearTypeList[0]);
-  const { varibleColors } = useNativeThemeColor();
-  const { run: runGetKFromEastmoney } = useRequest(() => Services.Zindex.GetKFromEastmoney(code, year.code), {
-    onSuccess: (result) => {
+  const { data: result = [], run: runGetKFromEastmoney } = useRequest(() => Services.Zindex.GetKFromEastmoney(code, year.code), {
+    refreshDeps: [code, year.code],
+    ready: !!chartInstance,
+  });
+
+  useRenderEcharts(
+    ({ varibleColors }) => {
       // 数据意义：开盘(open)，收盘(close)，最低(lowest)，最高(highest)
       const values = result.map((_) => [_.kp, _.sp, _.zd, _.zg]);
       chartInstance?.setOption({
@@ -149,9 +152,9 @@ const K: React.FC<KProps> = ({ code = '' }) => {
         ],
       });
     },
-    refreshDeps: [varibleColors, code, year.code],
-    ready: !!chartInstance,
-  });
+    chartInstance,
+    [result]
+  );
 
   return (
     <ChartCard onFresh={runGetKFromEastmoney}>

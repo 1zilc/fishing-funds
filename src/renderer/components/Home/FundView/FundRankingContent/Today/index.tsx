@@ -34,7 +34,6 @@ const RenderColorCol = ({ value }: { value: string }) => {
 
 const Today: React.FC<PropsWithChildren<TodayProps>> = () => {
   const [fundType, setFundType] = useState(fundTypeList[0]);
-  const [data, setData] = useState<any[]>([]);
   const codeMap = useAppSelector((state) => state.wallet.fundConfigCodeMap);
   const { data: detailCode, show: showDetailDrawer, set: setDetailDrawer, close: closeDetailDrawer } = useDrawer('');
   const { data: addCode, show: showAddDrawer, set: setAddDrawer, close: closeAddDrawer } = useDrawer('');
@@ -80,8 +79,11 @@ const Today: React.FC<PropsWithChildren<TodayProps>> = () => {
     },
   ];
 
-  const { run: runGetTodayListFromEastmoney, loading } = useRequest(() => Services.Fund.GetTodayListFromEastmoney(fundType.type), {
-    onSuccess: setData,
+  const {
+    data = [],
+    run: runGetTodayListFromEastmoney,
+    loading,
+  } = useRequest(() => Services.Fund.GetTodayListFromEastmoney(fundType.type), {
     refreshDeps: [fundType.type],
   });
 

@@ -2,10 +2,9 @@ import React from 'react';
 import { useRequest } from 'ahooks';
 
 import ChartCard from '@/components/Card/ChartCard';
-import { useResizeEchart, useRenderEcharts, useNativeThemeColor } from '@/utils/hooks';
+import { useResizeEchart, useRenderEcharts } from '@/utils/hooks';
 import * as CONST from '@/constants';
 import * as Services from '@/services';
-import * as Enums from '@/utils/enums';
 
 import styles from './index.module.scss';
 
@@ -17,10 +16,13 @@ const code = 's2n';
 const NorthFlow: React.FC<NorthFlowProps> = () => {
   const { ref: chartRef, chartInstance } = useResizeEchart(CONST.DEFAULT.ECHARTS_SCALE);
 
-  const { varibleColors } = useNativeThemeColor();
-  const { run: runGetFlowFromEastmoney } = useRequest(() => Services.Quotation.GetFlowFromEastmoney(fields1, code), {
+  const { data: result = [], run: runGetFlowFromEastmoney } = useRequest(() => Services.Quotation.GetFlowFromEastmoney(fields1, code), {
     pollingInterval: 1000 * 60,
-    onSuccess: (result) => {
+    refreshDeps: [code],
+    ready: !!chartInstance,
+  });
+  useRenderEcharts(
+    ({ varibleColors }) => {
       chartInstance?.setOption({
         title: {
           text: '',
@@ -97,9 +99,9 @@ const NorthFlow: React.FC<NorthFlowProps> = () => {
         ],
       });
     },
-    refreshDeps: [varibleColors, code],
-    ready: !!chartInstance,
-  });
+    chartInstance,
+    [result]
+  );
 
   return (
     <ChartCard onFresh={runGetFlowFromEastmoney}>

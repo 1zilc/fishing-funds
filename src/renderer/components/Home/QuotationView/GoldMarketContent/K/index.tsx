@@ -1,10 +1,8 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useRequest } from 'ahooks';
-import NP from 'number-precision';
 
 import ChartCard from '@/components/Card/ChartCard';
-
-import { useResizeEchart, useRenderEcharts, useNativeThemeColor } from '@/utils/hooks';
+import { useResizeEchart, useRenderEcharts } from '@/utils/hooks';
 import * as CONST from '@/constants';
 import * as Services from '@/services';
 import * as Utils from '@/utils';
@@ -14,13 +12,14 @@ export interface KProps {}
 
 const K: React.FC<KProps> = () => {
   const { ref: chartRef, chartInstance } = useResizeEchart(CONST.DEFAULT.ECHARTS_SCALE);
-  const { varibleColors } = useNativeThemeColor();
 
-  const { run: runGetKFromEastmoney } = useRequest(() => Services.Quotation.GetGoldKFromEastmoney(), {
-    onSuccess: (result) => {
+  const { data: result = [], run: runGetKFromEastmoney } = useRequest(() => Services.Quotation.GetGoldKFromEastmoney(), {
+    ready: !!chartInstance,
+  });
+  useRenderEcharts(
+    ({ varibleColors }) => {
       // 数据意义：开盘(open)，收盘(close)，最低(lowest)，最高(highest)
       const values = result.map(([time, ...values]) => values);
-
       chartInstance?.setOption({
         title: {
           text: '',
@@ -120,9 +119,9 @@ const K: React.FC<KProps> = () => {
         ],
       });
     },
-    refreshDeps: [varibleColors, varibleColors],
-    ready: !!chartInstance,
-  });
+    chartInstance,
+    [result]
+  );
 
   return (
     <ChartCard onFresh={runGetKFromEastmoney}>

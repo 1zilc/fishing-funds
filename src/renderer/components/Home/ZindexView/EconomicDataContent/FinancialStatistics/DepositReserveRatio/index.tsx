@@ -2,8 +2,7 @@ import React from 'react';
 import { useRequest } from 'ahooks';
 
 import ChartCard from '@/components/Card/ChartCard';
-import { useResizeEchart, useRenderEcharts, useNativeThemeColor } from '@/utils/hooks';
-import * as CONST from '@/constants';
+import { useResizeEchart, useRenderEcharts } from '@/utils/hooks';
 import * as Services from '@/services';
 import styles from './index.module.scss';
 
@@ -11,10 +10,13 @@ interface DepositReserveRatioProps {}
 
 const DepositReserveRatio: React.FC<DepositReserveRatioProps> = () => {
   const { ref: chartRef, chartInstance } = useResizeEchart(0.4);
-  const { varibleColors } = useNativeThemeColor();
 
-  const { run: runGetEconomyIndexFromEastmoney } = useRequest(() => Services.Zindex.GetEconomyIndexFromEastmoney(23), {
-    onSuccess: (result) => {
+  const { data: result = [], run: runGetEconomyIndexFromEastmoney } = useRequest(() => Services.Zindex.GetEconomyIndexFromEastmoney(23), {
+    ready: !!chartInstance,
+  });
+
+  useRenderEcharts(
+    ({ varibleColors }) => {
       try {
         chartInstance?.setOption({
           title: {
@@ -77,9 +79,9 @@ const DepositReserveRatio: React.FC<DepositReserveRatioProps> = () => {
         });
       } catch {}
     },
-    refreshDeps: [varibleColors],
-    ready: !!chartInstance,
-  });
+    chartInstance,
+    [result]
+  );
 
   return (
     <ChartCard auto onFresh={runGetEconomyIndexFromEastmoney} TitleBar={<div className={styles.title}>存款准备金率</div>}>

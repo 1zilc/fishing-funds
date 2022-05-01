@@ -5,7 +5,7 @@ import clsx from 'clsx';
 
 import ChartCard from '@/components/Card/ChartCard';
 
-import { useResizeEchart, useAppSelector, useNativeThemeColor } from '@/utils/hooks';
+import { useResizeEchart, useAppSelector, useRenderEcharts } from '@/utils/hooks';
 
 import * as Enums from '@/utils/enums';
 import * as Services from '@/services';
@@ -23,16 +23,15 @@ const indexCode = '1.000300';
 
 const Score: React.FC<ScoreProps> = ({ gssyl = 0 }) => {
   const { ref: chartRef, chartInstance } = useResizeEchart(0.48);
-  const { varibleColors } = useNativeThemeColor();
   const { freshDelaySetting, autoFreshSetting } = useAppSelector((state) => state.setting.systemSetting);
-  const eyeStatus = useAppSelector((state) => state.wallet.eyeStatus);
-  const eyeOpen = eyeStatus === Enums.EyeStatus.Open;
   const [HS, setHS] = useState('');
 
-  const { run: runGetZindexFromEastmoney } = useRequest(() => Services.Zindex.FromEastmoney(indexCode), {
+  const { data: result, run: runGetZindexFromEastmoney } = useRequest(() => Services.Zindex.FromEastmoney(indexCode), {
     pollingInterval: autoFreshSetting ? 1000 * 60 * freshDelaySetting : undefined,
+  });
 
-    onSuccess: (result) => {
+  useRenderEcharts(
+    ({ varibleColors }) => {
       if (!result) {
         return;
       }
@@ -125,8 +124,9 @@ const Score: React.FC<ScoreProps> = ({ gssyl = 0 }) => {
       });
       setHS(String(indexNumber));
     },
-    refreshDeps: [varibleColors, gssyl],
-  });
+    chartInstance,
+    [result, gssyl]
+  );
 
   return (
     <ChartCard

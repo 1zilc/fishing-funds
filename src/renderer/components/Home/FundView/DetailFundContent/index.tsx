@@ -89,30 +89,28 @@ export const TypeTag: React.FC<{ type?: string }> = ({ type }) => {
 
 const DetailFundContent: React.FC<DetailFundContentProps> = (props) => {
   const { code } = props;
-  const [fund, setFund] = useState<Fund.FixData | Record<string, any> | null>({});
-  const [pingzhongdata, setPingzhongdata] = useState<Fund.PingzhongData | Record<string, any>>({});
-  const [industryData, setIndustryData] = useState({ stocks: [] as any[], expansion: '' });
   const { star: fundStar, type: fundType } = useFundRating(code);
   const codeMap = useAppSelector((state) => state.wallet.fundConfigCodeMap);
   const { data: addCode, show: showAddDrawer, set: setAddDrawer, close: closeAddDrawer } = useDrawer(code);
   const [showManagerDrawer, { setTrue: openManagerDrawer, setFalse: closeManagerDrawer, toggle: ToggleManagerDrawer }] = useBoolean(false);
+
+  const { data: fund = {} } = useRequest(() => Services.Fund.GetFixFromEastMoney(code));
+  const { data: pingzhongdata = {} as Fund.PingzhongData | Record<string, any>, run: runGetFundDetailFromEastmoney } = useRequest(
+    () => Services.Fund.GetFundDetailFromEastmoney(code),
+    {
+      refreshDeps: [code],
+    }
+  );
+  const { data: industryData = { stocks: [], expansion: '' }, run: runGetIndustryRateFromEaseMoney } = useRequest(
+    () => Services.Fund.GetIndustryRateFromEaseMoney(code),
+    {
+      refreshDeps: [code],
+    }
+  );
+
   const rateInSimilarPersent = pingzhongdata.Data_rateInSimilarPersent || [];
   const syl_1n = pingzhongdata.syl_1n || pingzhongdata.syl_6y || pingzhongdata.syl_3y || pingzhongdata.syl_1y;
   const industryTags = useMemo(() => Array.from(new Set(industryData.stocks.map((stock) => stock.INDEXNAME))), [industryData.stocks]);
-
-  useRequest(() => Services.Fund.GetFixFromEastMoney(code), {
-    onSuccess: setFund,
-  });
-
-  const { run: runGetFundDetailFromEastmoney } = useRequest(() => Services.Fund.GetFundDetailFromEastmoney(code), {
-    onSuccess: setPingzhongdata,
-    refreshDeps: [code],
-  });
-
-  const { run: runGetIndustryRateFromEaseMoney } = useRequest(() => Services.Fund.GetIndustryRateFromEaseMoney(code), {
-    onSuccess: setIndustryData,
-    refreshDeps: [code],
-  });
 
   return (
     <CustomDrawerContent title="基金详情" enterText="确定" onClose={props.onClose} onEnter={props.onEnter}>

@@ -20,7 +20,6 @@ const RenderColorCol = ({ value }: { value: string }) => {
 };
 
 const Funds: React.FC<PropsWithChildren<FundsProps>> = ({ code }) => {
-  const [data, setData] = useState<any[]>([]);
   const codeMap = useAppSelector((state) => state.wallet.fundConfigCodeMap);
   const { data: detailCode, show: showDetailDrawer, set: setDetailDrawer, close: closeDetailDrawer } = useDrawer('');
   const { data: addCode, show: showAddDrawer, set: setAddDrawer, close: closeAddDrawer } = useDrawer('');
@@ -69,8 +68,11 @@ const Funds: React.FC<PropsWithChildren<FundsProps>> = ({ code }) => {
     },
   ];
 
-  const { run: runGetFundsFromEasymoney, loading } = useRequest(() => Services.Quotation.GetFundsFromEastmoney(code), {
-    onSuccess: setData,
+  const {
+    data = [],
+    run: runGetFundsFromEasymoney,
+    loading,
+  } = useRequest(() => Services.Quotation.GetFundsFromEastmoney(code), {
     refreshDeps: [code],
   });
 

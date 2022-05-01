@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import { useResizeEchart, useRenderEcharts, useAppSelector, useNativeThemeColor } from '@/utils/hooks';
+import { useResizeEchart, useRenderEcharts, useAppSelector } from '@/utils/hooks';
 import * as CONST from '@/constants';
 import * as Helpers from '@/helpers';
 import styles from './index.module.scss';
@@ -13,10 +13,9 @@ interface FundWarehouseProps {
 const FundRank: React.FC<FundWarehouseProps> = ({ funds = [], codes = [] }) => {
   const { ref: chartRef, chartInstance } = useResizeEchart(Math.max(CONST.DEFAULT.ECHARTS_SCALE, funds.length / 12), true);
   const walletsConfig = useAppSelector((state) => state.wallet.config.walletConfig);
-  const { varibleColors } = useNativeThemeColor();
 
   useRenderEcharts(
-    () => {
+    ({ varibleColors }) => {
       const codeMaps = Helpers.Fund.GetFundConfigMaps(codes, walletsConfig);
       chartInstance?.setOption({
         tooltip: {

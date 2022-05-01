@@ -1,4 +1,4 @@
-import React, { PropsWithChildren, useState, useEffect } from 'react';
+import React, { PropsWithChildren } from 'react';
 import { Table } from 'antd';
 import { useRequest } from 'ahooks';
 
@@ -18,7 +18,6 @@ const RenderColorCol = ({ value }: { value: string }) => {
 };
 
 const InternationalMetalGoods: React.FC<PropsWithChildren<InternationalMetalGoodsProps>> = () => {
-  const [data, setData] = useState<any[]>([]);
   const { data: detailCode, show: showDetailDrawer, set: setDetailDrawer, close: closeDetailDrawer } = useDrawer('');
 
   const columns = [
@@ -40,12 +39,11 @@ const InternationalMetalGoods: React.FC<PropsWithChildren<InternationalMetalGood
     },
   ];
 
-  const { run: runGetInternationalMetalGoodsFromEastmoney, loading } = useRequest(
-    () => Services.Quotation.GetInternationalMetalGoodsFromEastmoney(),
-    {
-      onSuccess: setData,
-    }
-  );
+  const {
+    data = [],
+    run: runGetInternationalMetalGoodsFromEastmoney,
+    loading,
+  } = useRequest(Services.Quotation.GetInternationalMetalGoodsFromEastmoney);
 
   return (
     <ChartCard auto onFresh={runGetInternationalMetalGoodsFromEastmoney}>

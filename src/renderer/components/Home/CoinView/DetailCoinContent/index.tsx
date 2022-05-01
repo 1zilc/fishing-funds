@@ -21,14 +21,12 @@ export interface DetailCoinContentProps {
 
 const DetailCoinContent: React.FC<DetailCoinContentProps> = (props) => {
   const { code } = props;
-  const [coin, setCoin] = useState<Coin.DetailItem | null>(null);
   const ref = useRef(null);
   const position = useScroll(ref, (val) => val.top <= 520);
   const miniMode = position && position.top > 40;
 
-  const { run: runGetDetailFromCoingecko } = useRequest(() => Services.Coin.GetDetailFromCoingecko(code), {
+  const { data: coin, run: runGetDetailFromCoingecko } = useRequest(() => Services.Coin.GetDetailFromCoingecko(code), {
     pollingInterval: 1000 * 60,
-    onSuccess: setCoin,
   });
 
   return (

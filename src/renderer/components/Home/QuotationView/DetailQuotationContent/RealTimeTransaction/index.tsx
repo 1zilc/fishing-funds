@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useRequest } from 'ahooks';
 
 import ChartCard from '@/components/Card/ChartCard';
-import { useResizeEchart, useRenderEcharts, useNativeThemeColor } from '@/utils/hooks';
+import { useResizeEchart, useRenderEcharts } from '@/utils/hooks';
 import * as CONST from '@/constants';
 import * as Services from '@/services';
 import styles from './index.module.scss';
@@ -13,11 +13,17 @@ export interface RealTimeTransactionProps {
 
 const RealTimeTransaction: React.FC<RealTimeTransactionProps> = ({ code = '' }) => {
   const { ref: chartRef, chartInstance } = useResizeEchart(CONST.DEFAULT.ECHARTS_SCALE);
-  const { varibleColors, darkMode } = useNativeThemeColor();
 
-  const { run: runGetTransactionFromEasymoney } = useRequest(() => Services.Quotation.GetTransactionFromEasymoney(code), {
-    pollingInterval: 1000 * 60,
-    onSuccess: (result) => {
+  const { data: result = {}, run: runGetTransactionFromEasymoney } = useRequest(
+    () => Services.Quotation.GetTransactionFromEasymoney(code),
+    {
+      pollingInterval: 1000 * 60,
+      refreshDeps: [code],
+      ready: !!chartInstance,
+    }
+  );
+  useRenderEcharts(
+    ({ varibleColors, darkMode }) => {
       chartInstance?.setOption({
         backgroundColor: 'transparent',
         title: {
@@ -113,9 +119,9 @@ const RealTimeTransaction: React.FC<RealTimeTransactionProps> = ({ code = '' }) 
         ],
       });
     },
-    refreshDeps: [varibleColors, darkMode, code],
-    ready: !!chartInstance,
-  });
+    chartInstance,
+    [result]
+  );
 
   return (
     <ChartCard auto onFresh={runGetTransactionFromEasymoney}>

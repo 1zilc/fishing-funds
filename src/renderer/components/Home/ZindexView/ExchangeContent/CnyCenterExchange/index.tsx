@@ -11,8 +11,6 @@ import styles from './index.module.scss';
 interface CnyCenterExchangeProps {}
 
 const CnyCenterExchange: React.FC<PropsWithChildren<CnyCenterExchangeProps>> = () => {
-  const [data, setData] = useState<Exchange.ResponseItem[]>([]);
-
   const columns = [
     {
       title: '名称',
@@ -38,9 +36,7 @@ const CnyCenterExchange: React.FC<PropsWithChildren<CnyCenterExchangeProps>> = (
     },
   ];
 
-  const { run: runGetListFromEastmoney, loading } = useRequest(() => Services.Exchange.GetListFromEastmoney('1', 'm:120'), {
-    onSuccess: setData,
-  });
+  const { data = [], run: runGetListFromEastmoney, loading } = useRequest(() => Services.Exchange.GetListFromEastmoney('1', 'm:120'));
 
   return (
     <ChartCard auto onFresh={runGetListFromEastmoney}>

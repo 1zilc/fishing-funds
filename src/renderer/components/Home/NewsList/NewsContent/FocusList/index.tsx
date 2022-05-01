@@ -11,11 +11,7 @@ interface FocusListProps {
 }
 
 const FocusList: React.FC<PropsWithChildren<FocusListProps>> = (props) => {
-  const [data, setData] = useState<News.ResponseItem[]>([]);
-
-  const { loading, run: runNewsGetFocusList } = useRequest(Services.News.GetFocusList, {
-    onSuccess: setData,
-  });
+  const { data = [], loading, run: runNewsGetFocusList } = useRequest(Services.News.GetFocusList);
 
   return (
     <ChartCard auto onFresh={runNewsGetFocusList}>

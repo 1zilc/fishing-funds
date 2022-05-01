@@ -26,7 +26,6 @@ import * as CONST from '@/constants';
 import * as Adapters from '@/utils/adpters';
 import * as Services from '@/services';
 import * as Helpers from '@/helpers';
-import * as Enums from '@/utils/enums';
 
 const { invoke, ipcRenderer } = window.contextModules.electron;
 
@@ -89,13 +88,6 @@ export function useScrollToTop(config: {
   });
 }
 
-export function useNativeThemeColor() {
-  const darkMode = useAppSelector((state) => state.setting.darkMode);
-  const varibleColors = useAppSelector((state) => state.setting.varibleColors);
-
-  return { darkMode, varibleColors };
-}
-
 export function useResizeEchart(scale = 1, unlimited?: boolean) {
   const chartRef = useRef<HTMLDivElement>(null);
   const chartInstanceRef = useRef<echarts.ECharts>();
@@ -122,11 +114,16 @@ export function useResizeEchart(scale = 1, unlimited?: boolean) {
   return { ref: chartRef, chartInstance: chartInstanceRef.current };
 }
 
-export function useRenderEcharts(callback: () => void, instance?: echarts.ECharts, dep: any[] = []) {
-  const { darkMode, varibleColors } = useNativeThemeColor();
+export function useRenderEcharts(
+  callback: (data: { darkMode: boolean; varibleColors: Record<keyof typeof CONST.VARIBLES, string> }) => void,
+  instance?: echarts.ECharts,
+  dep: any[] = []
+) {
+  const varibleColors = useAppSelector((state) => state.setting.varibleColors);
+  const darkMode = useAppSelector((state) => state.setting.darkMode);
   useEffect(() => {
     if (instance) {
-      callback();
+      callback({ darkMode, varibleColors });
     }
   }, [instance, darkMode, varibleColors, ...dep]);
 }

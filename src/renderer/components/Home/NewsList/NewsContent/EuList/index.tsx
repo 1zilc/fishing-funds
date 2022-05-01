@@ -1,4 +1,4 @@
-import React, { PropsWithChildren, useState } from 'react';
+import React, { PropsWithChildren } from 'react';
 import dayjs from 'dayjs';
 import { Table } from 'antd';
 import { useRequest } from 'ahooks';
@@ -11,11 +11,7 @@ interface EuListProps {
 }
 
 const EuList: React.FC<PropsWithChildren<EuListProps>> = (props) => {
-  const [data, setData] = useState<News.ResponseItem[]>([]);
-
-  const { loading, run: runNewsGetEuList } = useRequest(Services.News.GetEuList, {
-    onSuccess: setData,
-  });
+  const { data = [], loading, run: runNewsGetEuList } = useRequest(Services.News.GetEuList);
 
   return (
     <ChartCard auto onFresh={runNewsGetEuList}>

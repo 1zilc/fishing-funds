@@ -15,14 +15,14 @@ export interface StocksProps {
 }
 
 const Stocks: React.FC<StocksProps> = ({ secid }) => {
-  const [stockList, setStockList] = useState<Stock.IndustryItem[]>([]);
   const { data: detailSecid, show: showDetailDrawer, set: setDetailDrawer, close: closeDetailDrawer } = useDrawer('');
 
-  const { loading, run: runGetIndustryFromEastmoney } = useRequest(() => Services.Stock.GetIndustryFromEastmoney(secid, 2), {
+  const {
+    data: stockList = [],
+    loading,
+    run: runGetIndustryFromEastmoney,
+  } = useRequest(() => Services.Stock.GetIndustryFromEastmoney(secid, 2), {
     pollingInterval: 1000 * 60,
-    onSuccess: (result) => {
-      setStockList(result);
-    },
     refreshDeps: [secid],
   });
 

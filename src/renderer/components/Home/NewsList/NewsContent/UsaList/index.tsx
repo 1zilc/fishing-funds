@@ -11,11 +11,7 @@ interface UsaListProps {
 }
 
 const UsaList: React.FC<PropsWithChildren<UsaListProps>> = (props) => {
-  const [data, setData] = useState<News.ResponseItem[]>([]);
-
-  const { loading, run: runNewsGetUsaList } = useRequest(Services.News.GetUsaList, {
-    onSuccess: setData,
-  });
+  const { data = [], loading, run: runNewsGetUsaList } = useRequest(Services.News.GetUsaList);
 
   return (
     <ChartCard auto onFresh={runNewsGetUsaList}>

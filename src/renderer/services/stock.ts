@@ -855,8 +855,8 @@ export async function GetMeetingData({ startTime, endTime, code }: { startTime: 
       result: {
         pages: 1;
         data: {
-          START_DATE: '2022-01-01 00:00:00';
-          END_DATE: '2022-01-27 00:00:00';
+          START_DATE: string;
+          END_DATE: string;
           FE_CODE: '10849794';
           FE_NAME: '2022第二十一届南京(全国)春节食品商品交易会';
           FE_TYPE: '其他会议';

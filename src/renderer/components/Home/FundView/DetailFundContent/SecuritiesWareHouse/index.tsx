@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { renderToString } from 'react-dom/server';
 import { useRequest } from 'ahooks';
 
 import ChartCard from '@/components/Card/ChartCard';
 import CustomDrawer from '@/components/CustomDrawer';
-import { useResizeEchart, useDrawer, useNativeThemeColor } from '@/utils/hooks';
+import { useResizeEchart, useDrawer, useRenderEcharts } from '@/utils/hooks';
 import * as CONST from '@/constants';
 import * as Services from '@/services';
 import * as Utils from '@/utils';
@@ -33,76 +33,80 @@ const Tooltip: React.FC<TooltipProps> = (props) => {
 
 const SecuritiesWareHouse: React.FC<SecuritiesWareHouseProps> = ({ code, securitiesCodes }) => {
   const { ref: chartRef, chartInstance } = useResizeEchart(CONST.DEFAULT.ECHARTS_SCALE);
-  const { varibleColors } = useNativeThemeColor();
   const { data: stockSecid, show: showDetailStockDrawer, set: setDetailStockDrawer, close: closeDetailStockDrawer } = useDrawer('');
-  const { run: runGetSecuritiesWareHouseFromEastmoney } = useRequest(
+  const { data: result = [], run: runGetSecuritiesWareHouseFromEastmoney } = useRequest(
     () => Services.Fund.GetSecuritiesWareHouseFromEastmoney(code, securitiesCodes),
     {
-      onSuccess: (result) => {
-        chartInstance?.setOption({
-          backgroundColor: 'transparent',
-          title: {
-            show: false,
-          },
-          grid: {
-            left: 0,
-            right: 5,
-            bottom: 0,
-            containLabel: true,
-          },
-          tooltip: {
-            trigger: 'item',
-            formatter: (params: any) => renderToString(<Tooltip item={params.data.item} />),
-          },
-          series: [
-            {
-              name: '持仓占比',
-              type: 'pie',
-              radius: '64%',
-              center: ['50%', '50%'],
-              data: result.map((item) => {
-                return {
-                  value: item.ccb,
-                  name: item.name,
-                  itemStyle: {
-                    color: Utils.GetValueColor(item.zdf).color,
-                  },
-                  item,
-                };
-              }),
-              roseType: 'radius',
-              label: {
-                color: varibleColors['--main-text-color'],
-              },
-              labelLine: {
-                lineStyle: {
-                  color: varibleColors['--main-text-color'],
-                },
-                smooth: 0.2,
-                length: 10,
-                length2: 20,
-              },
-              itemStyle: {
-                borderRadius: 10,
-                borderColor: varibleColors['--background-color'],
-                borderWidth: 1,
-              },
-              animationType: 'scale',
-              animationEasing: 'elasticOut',
-              animationDelay: () => Math.random() * 200,
-            },
-          ],
-        });
-        chartInstance?.off('click');
-        chartInstance?.on('click', (params: any) => {
-          const { market, code } = params.data.item;
-          const secid = `${market}.${code}`;
-          setDetailStockDrawer(secid);
-        });
-      },
-      refreshDeps: [varibleColors, code, securitiesCodes],
+      refreshDeps: [code, securitiesCodes],
       ready: !!chartInstance,
     }
+  );
+
+  useRenderEcharts(
+    ({ varibleColors }) => {
+      chartInstance?.setOption({
+        backgroundColor: 'transparent',
+        title: {
+          show: false,
+        },
+        grid: {
+          left: 0,
+          right: 5,
+          bottom: 0,
+          containLabel: true,
+        },
+        tooltip: {
+          trigger: 'item',
+          formatter: (params: any) => renderToString(<Tooltip item={params.data.item} />),
+        },
+        series: [
+          {
+            name: '持仓占比',
+            type: 'pie',
+            radius: '64%',
+            center: ['50%', '50%'],
+            data: result.map((item) => {
+              return {
+                value: item.ccb,
+                name: item.name,
+                itemStyle: {
+                  color: Utils.GetValueColor(item.zdf).color,
+                },
+                item,
+              };
+            }),
+            roseType: 'radius',
+            label: {
+              color: varibleColors['--main-text-color'],
+            },
+            labelLine: {
+              lineStyle: {
+                color: varibleColors['--main-text-color'],
+              },
+              smooth: 0.2,
+              length: 10,
+              length2: 20,
+            },
+            itemStyle: {
+              borderRadius: 10,
+              borderColor: varibleColors['--background-color'],
+              borderWidth: 1,
+            },
+            animationType: 'scale',
+            animationEasing: 'elasticOut',
+            animationDelay: () => Math.random() * 200,
+          },
+        ],
+      });
+      chartInstance?.off('click');
+      chartInstance?.on('click', (params: any) => {
+        const { market, code } = params.data.item;
+        const secid = `${market}.${code}`;
+        setDetailStockDrawer(secid);
+      });
+    },
+    chartInstance,
+    [result]
   );
 
   return (

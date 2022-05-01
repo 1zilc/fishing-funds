@@ -31,7 +31,6 @@ const RenderColorCol = ({ value }: { value: string }) => {
 
 const Automatic: React.FC<PropsWithChildren<AutomaticProps>> = () => {
   const [fundType, setFundType] = useState(fundTypeList[0]);
-  const [data, setData] = useState<any[]>([]);
   const codeMap = useAppSelector((state) => state.wallet.fundConfigCodeMap);
   const { data: detailCode, show: showDetailDrawer, set: setDetailDrawer, close: closeDetailDrawer } = useDrawer('');
   const { data: addCode, show: showAddDrawer, set: setAddDrawer, close: closeAddDrawer } = useDrawer('');
@@ -92,8 +91,11 @@ const Automatic: React.FC<PropsWithChildren<AutomaticProps>> = () => {
     },
   ];
 
-  const { run: runGetAutomaticPlanFromEastmoney, loading } = useRequest(() => Services.Fund.GetAutomaticPlanFromEastmoney(fundType.type), {
-    onSuccess: setData,
+  const {
+    data = [],
+    run: runGetAutomaticPlanFromEastmoney,
+    loading,
+  } = useRequest(() => Services.Fund.GetAutomaticPlanFromEastmoney(fundType.type), {
     refreshDeps: [fundType.type],
   });
 

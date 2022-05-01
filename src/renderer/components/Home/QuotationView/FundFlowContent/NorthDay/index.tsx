@@ -3,10 +3,9 @@ import { useRequest } from 'ahooks';
 
 import ChartCard from '@/components/Card/ChartCard';
 import TypeSelection from '@/components/TypeSelection';
-import { useResizeEchart, useRenderEcharts, useNativeThemeColor } from '@/utils/hooks';
+import { useResizeEchart, useRenderEcharts } from '@/utils/hooks';
 import * as CONST from '@/constants';
 import * as Services from '@/services';
-import * as Enums from '@/utils/enums';
 
 import styles from './index.module.scss';
 
@@ -23,10 +22,17 @@ const dayTypeList = [
 const NorthDay: React.FC<NorthDayProps> = () => {
   const { ref: chartRef, chartInstance } = useResizeEchart(CONST.DEFAULT.ECHARTS_SCALE);
   const [dayType, setDayType] = useState(dayTypeList[0]);
-  const { varibleColors } = useNativeThemeColor();
-  const { run: runGetNorthDayFromEastmoney } = useRequest(() => Services.Quotation.GetNorthDayFromEastmoney(fields1, dayType.code), {
-    pollingInterval: 1000 * 60,
-    onSuccess: (result) => {
+  const { data: result = { s2n: [], hk2sh: [], hk2sz: [] }, run: runGetNorthDayFromEastmoney } = useRequest(
+    () => Services.Quotation.GetNorthDayFromEastmoney(fields1, dayType.code),
+    {
+      pollingInterval: 1000 * 60,
+      refreshDeps: [dayType.code],
+      ready: !!chartInstance,
+    }
+  );
+
+  useRenderEcharts(
+    ({ varibleColors }) => {
       chartInstance?.setOption({
         title: {
           text: '',
@@ -107,9 +113,9 @@ const NorthDay: React.FC<NorthDayProps> = () => {
         ],
       });
     },
-    refreshDeps: [varibleColors, dayType.code],
-    ready: !!chartInstance,
-  });
+    chartInstance,
+    [result]
+  );
 
   return (
     <ChartCard onFresh={runGetNorthDayFromEastmoney}>

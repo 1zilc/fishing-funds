@@ -11,8 +11,6 @@ import styles from './index.module.scss';
 interface GlobalBondProps {}
 
 const GlobalBond: React.FC<PropsWithChildren<GlobalBondProps>> = () => {
-  const [data, setData] = useState<any[]>([]);
-
   const columns = [
     {
       title: '名称',
@@ -34,9 +32,7 @@ const GlobalBond: React.FC<PropsWithChildren<GlobalBondProps>> = () => {
     },
   ];
 
-  const { run: runGetGlobalBondFromEastmoney, loading } = useRequest(Services.Exchange.GetGlobalBondFromEastmoney, {
-    onSuccess: setData,
-  });
+  const { data = [], run: runGetGlobalBondFromEastmoney, loading } = useRequest(Services.Exchange.GetGlobalBondFromEastmoney);
 
   return (
     <ChartCard auto onFresh={runGetGlobalBondFromEastmoney}>

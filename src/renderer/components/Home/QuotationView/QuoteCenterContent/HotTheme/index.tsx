@@ -13,12 +13,9 @@ const AddStockContent = React.lazy(() => import('@/components/Home/StockView/Add
 interface HotThemeProps {}
 
 const HotTheme: React.FC<HotThemeProps> = () => {
-  const [data, setData] = useState<any[]>([]);
   const { data: stockName, show: showAddStockDrawer, set: setAddStockDrawer, close: closeAddStockDrawer } = useDrawer('');
 
-  const { loading, run: runQuotationGetHotThemeFromEastmoney } = useRequest(Services.Quotation.GetHotThemeFromEastmoney, {
-    onSuccess: setData,
-  });
+  const { data = [], loading, run: runQuotationGetHotThemeFromEastmoney } = useRequest(Services.Quotation.GetHotThemeFromEastmoney);
 
   return (
     <ChartCard auto onFresh={runQuotationGetHotThemeFromEastmoney}>

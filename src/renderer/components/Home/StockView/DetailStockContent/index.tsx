@@ -29,17 +29,16 @@ const DetailStockContent: React.FC<DetailStockContentProps> = (props) => {
   const { secid, type } = props;
   const dispatch = useAppDispatch();
   const [stock, setStock] = useState<Stock.DetailItem | Record<string, any>>({});
-  const [industrys, setIndustrys] = useState<Stock.IndustryItem[]>([]);
   const { codeMap } = useAppSelector((state) => state.stock.config);
+
   useRequest(Services.Stock.GetDetailFromEastmoney, {
     pollingInterval: 1000 * 60,
     defaultParams: [secid],
     onSuccess: setStock,
   });
 
-  useRequest(Services.Stock.GetIndustryFromEastmoney, {
+  const { data: industrys = [] } = useRequest(Services.Stock.GetIndustryFromEastmoney, {
     defaultParams: [secid, 3],
-    onSuccess: setIndustrys,
   });
 
   async function onAdd() {

@@ -3,7 +3,7 @@ import { useRequest } from 'ahooks';
 
 import ChartCard from '@/components/Card/ChartCard';
 import TypeSelection from '@/components/TypeSelection';
-import { useNativeThemeColor, useResizeEchart } from '@/utils/hooks';
+import { useRenderEcharts, useResizeEchart } from '@/utils/hooks';
 import * as CONST from '@/constants';
 import * as Services from '@/services';
 import * as Utils from '@/utils';
@@ -20,76 +20,80 @@ const areaTypeList = [
 const Area: React.FC<IndustryProps> = () => {
   const { ref: chartRef, chartInstance } = useResizeEchart(CONST.DEFAULT.ECHARTS_SCALE);
   const [areaType, setAreaType] = useState(areaTypeList[0]);
-  const { varibleColors } = useNativeThemeColor();
 
-  const { run: runGetFundPerformanceFromEastmoney } = useRequest(
+  const { data: result = [], run: runGetFundPerformanceFromEastmoney } = useRequest(
     () => Services.Quotation.GetFundFlowFromEastmoney(areaType.code, areaType.type),
     {
-      onSuccess: (result) => {
-        chartInstance?.setOption({
-          title: {
-            show: false,
-          },
-          tooltip: {
-            trigger: 'axis',
-            axisPointer: {
-              type: 'shadow', // 默认为直线，可选为：'line' | 'shadow'
-            },
-          },
-          grid: {
-            top: '3%',
-            left: 0,
-            right: 0,
-            bottom: 0,
-            containLabel: true,
-          },
-          xAxis: {
-            type: 'category',
-            axisLabel: {
-              fontSize: 10,
-              interval: 0,
-              formatter: (value: string) => value.split('').join('\n'),
-            },
-            data: result.map(({ name }) => name) || [],
-          },
-          yAxis: {
-            type: 'value',
-            axisLabel: {
-              formatter: `{value}亿`,
-              fontSize: 10,
-            },
-            splitLine: {
-              lineStyle: {
-                color: varibleColors['--border-color'],
-              },
-            },
-          },
-          series: [
-            {
-              type: 'bar',
-              data: result.map(({ value }) => {
-                return {
-                  value,
-                  itemStyle: {
-                    color: Utils.GetValueColor(value).color,
-                  },
-                };
-              }),
-            },
-          ],
-          dataZoom: [
-            {
-              type: 'inside',
-              start: 0,
-              end: 40,
-              maxValueSpan: 50,
-            },
-          ],
-        });
-      },
-      refreshDeps: [varibleColors, areaType.code, areaType.type],
+      refreshDeps: [areaType.code, areaType.type],
       ready: !!chartInstance,
     }
+  );
+
+  useRenderEcharts(
+    ({ varibleColors }) => {
+      chartInstance?.setOption({
+        title: {
+          show: false,
+        },
+        tooltip: {
+          trigger: 'axis',
+          axisPointer: {
+            type: 'shadow', // 默认为直线，可选为：'line' | 'shadow'
+          },
+        },
+        grid: {
+          top: '3%',
+          left: 0,
+          right: 0,
+          bottom: 0,
+          containLabel: true,
+        },
+        xAxis: {
+          type: 'category',
+          axisLabel: {
+            fontSize: 10,
+            interval: 0,
+            formatter: (value: string) => value.split('').join('\n'),
+          },
+          data: result.map(({ name }) => name) || [],
+        },
+        yAxis: {
+          type: 'value',
+          axisLabel: {
+            formatter: `{value}亿`,
+            fontSize: 10,
+          },
+          splitLine: {
+            lineStyle: {
+              color: varibleColors['--border-color'],
+            },
+          },
+        },
+        series: [
+          {
+            type: 'bar',
+            data: result.map(({ value }) => {
+              return {
+                value,
+                itemStyle: {
+                  color: Utils.GetValueColor(value).color,
+                },
+              };
+            }),
+          },
+        ],
+        dataZoom: [
+          {
+            type: 'inside',
+            start: 0,
+            end: 40,
+            maxValueSpan: 50,
+          },
+        ],
+      });
+    },
+    chartInstance,
+    [result]
   );
 
   return (

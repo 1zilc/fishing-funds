@@ -2,8 +2,7 @@ import React from 'react';
 import { useRequest } from 'ahooks';
 
 import ChartCard from '@/components/Card/ChartCard';
-import { useResizeEchart, useAppSelector, useNativeThemeColor } from '@/utils/hooks';
-import * as CONST from '@/constants';
+import { useResizeEchart, useRenderEcharts } from '@/utils/hooks';
 import * as Services from '@/services';
 import styles from './index.module.scss';
 
@@ -11,10 +10,12 @@ interface ForeignExchangeAndGoldProps {}
 
 const ForeignExchangeAndGold: React.FC<ForeignExchangeAndGoldProps> = () => {
   const { ref: chartRef, chartInstance } = useResizeEchart(0.4);
-  const { varibleColors } = useNativeThemeColor();
+  const { data: result = [], run: runGetEconomyIndexFromEastmoney } = useRequest(() => Services.Zindex.GetEconomyIndexFromEastmoney(16), {
+    ready: !!chartInstance,
+  });
 
-  const { run: runGetEconomyIndexFromEastmoney } = useRequest(() => Services.Zindex.GetEconomyIndexFromEastmoney(16), {
-    onSuccess: (result) => {
+  useRenderEcharts(
+    ({ varibleColors }) => {
       try {
         chartInstance?.setOption({
           title: {
@@ -93,9 +94,9 @@ const ForeignExchangeAndGold: React.FC<ForeignExchangeAndGoldProps> = () => {
         });
       } catch {}
     },
-    refreshDeps: [varibleColors],
-    ready: !!chartInstance,
-  });
+    chartInstance,
+    [result]
+  );
 
   return (
     <ChartCard auto onFresh={runGetEconomyIndexFromEastmoney} TitleBar={<div className={styles.title}>外汇和黄金储备</div>}>

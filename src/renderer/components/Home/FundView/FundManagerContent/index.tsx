@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef } from 'react';
 import clsx from 'clsx';
 import { Rate, Tabs } from 'antd';
 import { useScroll, useRequest } from 'ahooks';
@@ -29,14 +29,14 @@ const FundManagerContent: React.FC<FundManagerContentProps> = (props) => {
   const ref = useRef(null);
   const position = useScroll(ref, (val) => val.top <= 520);
   const miniMode = position && position.top > 40;
-  const [managerDetail, setManagerDetail] = useState<ManagerDetail>({
-    manageHistoryFunds: [],
-    description: '',
-  });
 
-  useRequest(Services.Fund.GetFundManagerDetailFromEastMoney, {
+  const {
+    data: managerDetail = {
+      manageHistoryFunds: [],
+      description: '',
+    },
+  } = useRequest(Services.Fund.GetFundManagerDetailFromEastMoney, {
     defaultParams: [manager.id],
-    onSuccess: setManagerDetail,
   });
 
   return (

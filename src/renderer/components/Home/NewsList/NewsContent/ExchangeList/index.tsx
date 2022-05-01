@@ -1,4 +1,4 @@
-import React, { PropsWithChildren, useState } from 'react';
+import React, { PropsWithChildren } from 'react';
 import dayjs from 'dayjs';
 import { Table } from 'antd';
 import { useRequest } from 'ahooks';
@@ -11,11 +11,7 @@ interface ExchangeListProps {
 }
 
 const ExchangeList: React.FC<PropsWithChildren<ExchangeListProps>> = (props) => {
-  const [data, setData] = useState<News.ResponseItem[]>([]);
-
-  const { loading, run: runNewsGetExchangeList } = useRequest(Services.News.GetExchangeList, {
-    onSuccess: setData,
-  });
+  const { data = [], loading, run: runNewsGetExchangeList } = useRequest(Services.News.GetExchangeList);
 
   return (
     <ChartCard auto onFresh={runNewsGetExchangeList}>
