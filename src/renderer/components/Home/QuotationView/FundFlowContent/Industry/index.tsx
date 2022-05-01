@@ -3,7 +3,7 @@ import { useRequest } from 'ahooks';
 
 import ChartCard from '@/components/Card/ChartCard';
 import TypeSelection from '@/components/TypeSelection';
-import { useResizeEchart } from '@/utils/hooks';
+import { useNativeThemeColor, useResizeEchart } from '@/utils/hooks';
 import * as CONST from '@/constants';
 import * as Services from '@/services';
 import * as Utils from '@/utils';
@@ -20,6 +20,7 @@ const industryTypeList = [
 const Industry: React.FC<IndustryProps> = () => {
   const { ref: chartRef, chartInstance } = useResizeEchart(CONST.DEFAULT.ECHARTS_SCALE);
   const [industryType, setIndustryType] = useState(industryTypeList[0]);
+  const { varibleColors } = useNativeThemeColor();
 
   const { run: runGetFundPerformanceFromEastmoney } = useRequest(
     () => Services.Quotation.GetFundFlowFromEastmoney(industryType.code, industryType.type),
@@ -56,6 +57,11 @@ const Industry: React.FC<IndustryProps> = () => {
             axisLabel: {
               formatter: `{value}亿`,
               fontSize: 10,
+            },
+            splitLine: {
+              lineStyle: {
+                color: varibleColors['--border-color'],
+              },
             },
           },
           series: [

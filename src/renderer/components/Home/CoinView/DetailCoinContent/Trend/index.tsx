@@ -3,7 +3,7 @@ import { useRequest } from 'ahooks';
 
 import TypeSelection from '@/components/TypeSelection';
 import ChartCard from '@/components/Card/ChartCard';
-import { useResizeEchart, useAppSelector } from '@/utils/hooks';
+import { useResizeEchart, useAppSelector, useNativeThemeColor } from '@/utils/hooks';
 
 import * as CONST from '@/constants';
 import * as Services from '@/services';
@@ -25,6 +25,7 @@ const dateTypeList = [
 const Trend: React.FC<PerformanceProps> = ({ code }) => {
   const { ref: chartRef, chartInstance } = useResizeEchart(CONST.DEFAULT.ECHARTS_SCALE);
   const [date, setDateType] = useState(dateTypeList[2]);
+  const { varibleColors } = useNativeThemeColor();
   const coinUnitSetting = useAppSelector((state) => state.setting.systemSetting.coinUnitSetting);
   const { run: runGetHistoryFromCoingecko } = useRequest(() => Services.Coin.GetHistoryFromCoingecko(code, coinUnitSetting, date.code), {
     pollingInterval: CONST.DEFAULT.ESTIMATE_FUND_DELAY,
@@ -59,6 +60,11 @@ const Trend: React.FC<PerformanceProps> = ({ code }) => {
               fontSize: 10,
             },
             scale: true,
+            splitLine: {
+              lineStyle: {
+                color: varibleColors['--border-color'],
+              },
+            },
           },
           {
             type: 'value',
@@ -66,6 +72,11 @@ const Trend: React.FC<PerformanceProps> = ({ code }) => {
               fontSize: 10,
             },
             scale: true,
+            splitLine: {
+              lineStyle: {
+                color: varibleColors['--border-color'],
+              },
+            },
           },
         ],
         series: [

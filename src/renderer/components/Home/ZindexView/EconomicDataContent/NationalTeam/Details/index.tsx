@@ -51,6 +51,11 @@ const Details: React.FC<DetailsProps> = () => {
             fontSize: 10,
             formatter: detailType.type === 3 ? `{value}%` : `{value}亿`,
           },
+          splitLine: {
+            lineStyle: {
+              color: varibleColors['--border-color'],
+            },
+          },
         },
         yAxis: {
           type: 'category',

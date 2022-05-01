@@ -51,6 +51,11 @@ const ConsumerPriceIndex: React.FC<ConsumerPriceIndexProps> = () => {
             axisLabel: {
               fontSize: 10,
             },
+            splitLine: {
+              lineStyle: {
+                color: varibleColors['--border-color'],
+              },
+            },
           },
           series: [
             {

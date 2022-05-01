@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useRequest } from 'ahooks';
 
 import ChartCard from '@/components/Card/ChartCard';
-import { useResizeEchart, useRenderEcharts } from '@/utils/hooks';
+import { useResizeEchart, useRenderEcharts, useNativeThemeColor } from '@/utils/hooks';
 import * as Services from '@/services';
 import * as CONST from '@/constants';
 import styles from './index.module.scss';
@@ -16,6 +16,7 @@ const GoldTrends: React.FC<GoldTrendsProps> = (props) => {
   const { ref: chartRef, chartInstance } = useResizeEchart(CONST.DEFAULT.ECHARTS_SCALE);
 
   const [data, setData] = useState<string[][]>([]);
+  const { varibleColors } = useNativeThemeColor();
 
   const { run: runGetAumFromEastmoney } = useRequest(() => Services.Quotation.GetGoldTrendsFromEastmoney(props.secid), {
     onSuccess: setData,
@@ -49,13 +50,16 @@ const GoldTrends: React.FC<GoldTrendsProps> = (props) => {
             boundaryGap: false,
           },
         ],
-        yAxis: [
-          {
-            scale: true,
-            type: 'value',
+        yAxis: {
+          scale: true,
+          type: 'value',
+          splitLine: {
+            lineStyle: {
+              color: varibleColors['--border-color'],
+            },
           },
-        ],
-        series: [
+        },
+        seies: [
           {
             name: '价格',
             type: 'line',

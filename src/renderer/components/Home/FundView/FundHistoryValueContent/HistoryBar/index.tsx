@@ -1,7 +1,7 @@
 import React from 'react';
 import dayjs from 'dayjs';
 
-import { useResizeEchart, useRenderEcharts } from '@/utils/hooks';
+import { useResizeEchart, useRenderEcharts, useNativeThemeColor } from '@/utils/hooks';
 import * as CONST from '@/constants';
 import * as Utils from '@/utils';
 import styles from './index.module.scss';
@@ -12,6 +12,7 @@ interface HistoryBarProps {
 
 const HistoryBar: React.FC<HistoryBarProps> = ({ data = [] }) => {
   const { ref: chartRef, chartInstance } = useResizeEchart(CONST.DEFAULT.ECHARTS_SCALE);
+  const { varibleColors } = useNativeThemeColor();
 
   useRenderEcharts(
     () => {
@@ -44,6 +45,11 @@ const HistoryBar: React.FC<HistoryBarProps> = ({ data = [] }) => {
           axisLabel: {
             formatter: `{value}%`,
             fontSize: 10,
+          },
+          splitLine: {
+            lineStyle: {
+              color: varibleColors['--border-color'],
+            },
           },
         },
         series: [

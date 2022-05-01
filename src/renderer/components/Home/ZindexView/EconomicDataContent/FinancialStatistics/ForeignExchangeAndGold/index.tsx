@@ -53,6 +53,11 @@ const ForeignExchangeAndGold: React.FC<ForeignExchangeAndGoldProps> = () => {
                 fontSize: 10,
                 formatter: `{value}亿美元`,
               },
+              splitLine: {
+                lineStyle: {
+                  color: varibleColors['--border-color'],
+                },
+              },
             },
             {
               type: 'value',
@@ -60,6 +65,11 @@ const ForeignExchangeAndGold: React.FC<ForeignExchangeAndGoldProps> = () => {
               axisLabel: {
                 fontSize: 10,
                 formatter: `{value}万盎司`,
+              },
+              splitLine: {
+                lineStyle: {
+                  color: varibleColors['--border-color'],
+                },
               },
             },
           ],

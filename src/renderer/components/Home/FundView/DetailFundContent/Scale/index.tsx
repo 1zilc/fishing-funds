@@ -79,6 +79,11 @@ const Scale: React.FC<ScaleProps> = ({
             fontSize: 10,
             formatter: `{value}亿`,
           },
+          splitLine: {
+            lineStyle: {
+              color: varibleColors['--border-color'],
+            },
+          },
         },
         series: [
           {

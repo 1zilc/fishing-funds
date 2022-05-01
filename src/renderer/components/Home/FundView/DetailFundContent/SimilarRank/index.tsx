@@ -49,6 +49,11 @@ const SimilarRank: React.FC<SimilarRankProps> = ({ rateInSimilarType = [] }) => 
           axisLabel: {
             fontSize: 10,
           },
+          splitLine: {
+            lineStyle: {
+              color: varibleColors['--border-color'],
+            },
+          },
         },
         series: [
           {

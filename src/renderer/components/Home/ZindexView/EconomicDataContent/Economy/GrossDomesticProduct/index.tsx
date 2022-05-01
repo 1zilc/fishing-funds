@@ -52,12 +52,22 @@ const GrossDomesticProduct: React.FC<GrossDomesticProductProps> = () => {
               axisLabel: {
                 fontSize: 10,
               },
+              splitLine: {
+                lineStyle: {
+                  color: varibleColors['--border-color'],
+                },
+              },
             },
             {
               type: 'value',
               axisLabel: {
                 fontSize: 10,
                 formatter: `{value}%`,
+              },
+              splitLine: {
+                lineStyle: {
+                  color: varibleColors['--border-color'],
+                },
               },
             },
           ],

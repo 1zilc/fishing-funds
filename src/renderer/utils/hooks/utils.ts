@@ -91,8 +91,7 @@ export function useScrollToTop(config: {
 
 export function useNativeThemeColor() {
   const darkMode = useAppSelector((state) => state.setting.darkMode);
-
-  const varibleColors = useMemo(() => Utils.GetVariblesColor(CONST.VARIBLES), [darkMode]);
+  const varibleColors = useAppSelector((state) => state.setting.varibleColors);
 
   return { darkMode, varibleColors };
 }

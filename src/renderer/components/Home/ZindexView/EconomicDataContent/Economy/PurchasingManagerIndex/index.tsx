@@ -52,6 +52,11 @@ const PurchasingManagerIndex: React.FC<PurchasingManagerIndexProps> = () => {
               fontSize: 10,
               formatter: `{value}%`,
             },
+            splitLine: {
+              lineStyle: {
+                color: varibleColors['--border-color'],
+              },
+            },
           },
           series: [
             {

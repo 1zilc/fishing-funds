@@ -61,9 +61,19 @@ const Trend: React.FC<TrendProps> = () => {
               formatter: `{value}${trendType.code === 1 ? '亿' : trendType.code === 2 ? '万亿' : ''}`,
               fontSize: 10,
             },
+            splitLine: {
+              lineStyle: {
+                color: varibleColors['--border-color'],
+              },
+            },
           },
           {
             type: 'value',
+            splitLine: {
+              lineStyle: {
+                color: varibleColors['--border-color'],
+              },
+            },
           },
         ],
         series: [

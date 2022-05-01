@@ -52,6 +52,11 @@ const DepositReserveRatio: React.FC<DepositReserveRatioProps> = () => {
               fontSize: 10,
               formatter: `{value}%`,
             },
+            splitLine: {
+              lineStyle: {
+                color: varibleColors['--border-color'],
+              },
+            },
           },
           series: [
             {

@@ -52,6 +52,11 @@ const Revenue: React.FC<RevenueProps> = () => {
               fontSize: 10,
               formatter: `{value}亿`,
             },
+            splitLine: {
+              lineStyle: {
+                color: varibleColors['--border-color'],
+              },
+            },
           },
           series: [
             {

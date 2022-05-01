@@ -2,7 +2,7 @@ import React from 'react';
 import { useRequest } from 'ahooks';
 
 import ChartCard from '@/components/Card/ChartCard';
-import { useResizeEchart, useRenderEcharts } from '@/utils/hooks';
+import { useResizeEchart, useRenderEcharts, useNativeThemeColor } from '@/utils/hooks';
 import * as CONST from '@/constants';
 import * as Services from '@/services';
 import * as Utils from '@/utils';
@@ -14,7 +14,7 @@ export interface PerformanceProps {
 }
 const Trend: React.FC<PerformanceProps> = ({ secid, zs = 0 }) => {
   const { ref: chartRef, chartInstance } = useResizeEchart(CONST.DEFAULT.ECHARTS_SCALE);
-
+  const { varibleColors } = useNativeThemeColor();
   const { run: runGetTrendFromEastmoney } = useRequest(() => Services.Stock.GetTrendFromEastmoney(secid), {
     pollingInterval: CONST.DEFAULT.ESTIMATE_FUND_DELAY,
     onSuccess: ({ trends }) => {
@@ -46,6 +46,11 @@ const Trend: React.FC<PerformanceProps> = ({ secid, zs = 0 }) => {
           axisLabel: {
             formatter: `{value}`,
             fontSize: 10,
+          },
+          splitLine: {
+            lineStyle: {
+              color: varibleColors['--border-color'],
+            },
           },
           scale: true,
           min: (value: any) => Math.min(value.min, zs),

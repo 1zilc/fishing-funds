@@ -9,6 +9,7 @@ export type SettingState = {
   systemSetting: System.Setting;
   adjustmentNotificationDate: string;
   darkMode: boolean;
+  varibleColors: Record<keyof typeof CONST.VARIBLES, string>;
 };
 
 export const defaultSystemSetting: System.Setting = {
@@ -37,6 +38,7 @@ const initialState: SettingState = {
   systemSetting: defaultSystemSetting,
   adjustmentNotificationDate: '',
   darkMode: false,
+  varibleColors: Utils.GetVariblesColor(),
 };
 
 const settingSlice = createSlice({
@@ -51,6 +53,7 @@ const settingSlice = createSlice({
     },
     syncDarkMode(state, action: PayloadAction<boolean>) {
       state.darkMode = action.payload;
+      state.varibleColors = Utils.GetVariblesColor();
     },
   },
 });

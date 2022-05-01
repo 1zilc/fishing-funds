@@ -50,6 +50,11 @@ const SimilarProportion: React.FC<SimilarProportionProps> = ({ rateInSimilarPers
             formatter: `{value}%`,
             fontSize: 10,
           },
+          splitLine: {
+            lineStyle: {
+              color: varibleColors['--border-color'],
+            },
+          },
         },
         series: [
           {

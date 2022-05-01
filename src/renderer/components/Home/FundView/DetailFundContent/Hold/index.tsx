@@ -56,16 +56,19 @@ const Hold: React.FC<HoldProps> = ({
             data: Data_holderStructure.categories || [],
           },
         ],
-        yAxis: [
-          {
-            type: 'value',
-            max: 100,
-            axisLabel: {
-              formatter: `{value}%`,
-              fontSize: 10,
+        yAxis: {
+          type: 'value',
+          max: 100,
+          axisLabel: {
+            formatter: `{value}%`,
+            fontSize: 10,
+          },
+          splitLine: {
+            lineStyle: {
+              color: varibleColors['--border-color'],
             },
           },
-        ],
+        },
         series: Data_holderStructure.series.map((item) => ({
           name: item.name,
           type: 'line',

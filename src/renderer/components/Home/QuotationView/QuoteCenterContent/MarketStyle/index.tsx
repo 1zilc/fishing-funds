@@ -47,11 +47,21 @@ const MarketStyle: React.FC<MarketStyleProps> = (props) => {
             name: '涨跌幅',
             position: 'left',
             axisLabel: { formatter: '{value}%' },
+            splitLine: {
+              lineStyle: {
+                color: varibleColors['--border-color'],
+              },
+            },
           },
           {
             type: 'value',
             name: '热度',
             position: 'right',
+            splitLine: {
+              lineStyle: {
+                color: varibleColors['--border-color'],
+              },
+            },
           },
         ],
         series: [

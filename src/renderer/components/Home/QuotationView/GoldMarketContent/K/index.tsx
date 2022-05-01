@@ -51,6 +51,11 @@ const K: React.FC<KProps> = () => {
         },
         yAxis: {
           scale: true,
+          splitLine: {
+            lineStyle: {
+              color: varibleColors['--border-color'],
+            },
+          },
         },
         dataZoom: [
           {

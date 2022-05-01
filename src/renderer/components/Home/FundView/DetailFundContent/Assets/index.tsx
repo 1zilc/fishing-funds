@@ -56,12 +56,22 @@ const Assets: React.FC<AssetsProps> = ({ Data_assetAllocation = {} }) => {
             axisLabel: {
               formatter: '{value}%',
             },
+            splitLine: {
+              lineStyle: {
+                color: varibleColors['--border-color'],
+              },
+            },
           },
           {
             position: 'right',
             type: 'value',
             axisLabel: {
               formatter: '{value}亿',
+            },
+            splitLine: {
+              lineStyle: {
+                color: varibleColors['--border-color'],
+              },
             },
           },
         ],

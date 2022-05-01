@@ -4,7 +4,7 @@ import { useRequest } from 'ahooks';
 import ChartCard from '@/components/Card/ChartCard';
 
 import TypeSelection from '@/components/TypeSelection';
-import { useResizeEchart, useRenderEcharts } from '@/utils/hooks';
+import { useResizeEchart, useRenderEcharts, useNativeThemeColor } from '@/utils/hooks';
 import * as CONST from '@/constants';
 import * as Services from '@/services';
 import * as Utils from '@/utils';
@@ -24,6 +24,7 @@ const trendTypeList = [
 const Trend: React.FC<PerformanceProps> = ({ code, zs = 0 }) => {
   const { ref: chartRef, chartInstance } = useResizeEchart(CONST.DEFAULT.ECHARTS_SCALE);
   const [trend, setTrendType] = useState(trendTypeList[0]);
+  const { varibleColors } = useNativeThemeColor();
   const { run: runGetTrendFromEastmoney } = useRequest(() => Services.Zindex.GetTrendFromEastmoney(code, trend.code), {
     onSuccess: (result) => {
       chartInstance?.setOption({
@@ -56,6 +57,11 @@ const Trend: React.FC<PerformanceProps> = ({ code, zs = 0 }) => {
             fontSize: 10,
           },
           scale: true,
+          splitLine: {
+            lineStyle: {
+              color: varibleColors['--border-color'],
+            },
+          },
           min: (value: any) => Math.min(value.min, zs),
           max: (value: any) => Math.max(value.max, zs),
         },

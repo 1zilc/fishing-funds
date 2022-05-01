@@ -50,6 +50,11 @@ const TreasuryYield: React.FC<TreasuryYieldProps> = () => {
             formatter: `{value}%`,
             fontSize: 10,
           },
+          splitLine: {
+            lineStyle: {
+              color: varibleColors['--border-color'],
+            },
+          },
         },
         series: [
           {

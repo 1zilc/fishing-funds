@@ -62,6 +62,11 @@ const K: React.FC<PerformanceProps> = ({ code = '' }) => {
         },
         yAxis: {
           scale: true,
+          splitLine: {
+            lineStyle: {
+              color: varibleColors['--border-color'],
+            },
+          },
         },
         dataZoom: [
           {

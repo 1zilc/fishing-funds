@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { useResizeEchart, useRenderEcharts } from '@/utils/hooks';
+import { useResizeEchart, useRenderEcharts, useNativeThemeColor } from '@/utils/hooks';
 import * as CONST from '@/constants';
 import styles from './index.module.scss';
 
@@ -9,6 +9,7 @@ export interface StockWareHouseEstimateProps {
 }
 
 const StockWareHouseEstimate: React.FC<StockWareHouseEstimateProps> = ({ fundSharesPositions }) => {
+  const { varibleColors } = useNativeThemeColor();
   const { ref: chartRef, chartInstance } = useResizeEchart(CONST.DEFAULT.ECHARTS_SCALE);
 
   useRenderEcharts(
@@ -45,6 +46,11 @@ const StockWareHouseEstimate: React.FC<StockWareHouseEstimateProps> = ({ fundSha
             fontSize: 10,
           },
           scale: true,
+          splitLine: {
+            lineStyle: {
+              color: varibleColors['--border-color'],
+            },
+          },
         },
         series: [
           {

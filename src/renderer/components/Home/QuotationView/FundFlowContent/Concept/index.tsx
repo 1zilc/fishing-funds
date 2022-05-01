@@ -20,6 +20,7 @@ const conceptTypeList = [
 const Concept: React.FC<IndustryProps> = () => {
   const { ref: chartRef, chartInstance } = useResizeEchart(CONST.DEFAULT.ECHARTS_SCALE);
   const [conceptType, setConceptType] = useState(conceptTypeList[0]);
+  const { varibleColors } = useNativeThemeColor();
 
   const { run: runGetFundPerformanceFromEastmoney } = useRequest(
     () => Services.Quotation.GetFundFlowFromEastmoney(conceptType.code, conceptType.type),
@@ -56,6 +57,11 @@ const Concept: React.FC<IndustryProps> = () => {
             axisLabel: {
               formatter: `{value}亿`,
               fontSize: 10,
+            },
+            splitLine: {
+              lineStyle: {
+                color: varibleColors['--border-color'],
+              },
             },
           },
           series: [

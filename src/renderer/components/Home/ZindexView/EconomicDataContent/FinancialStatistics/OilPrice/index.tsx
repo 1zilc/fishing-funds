@@ -53,6 +53,11 @@ const OilPrice: React.FC<OilPriceProps> = () => {
                 fontSize: 10,
                 formatter: `{value}美元/桶`,
               },
+              splitLine: {
+                lineStyle: {
+                  color: varibleColors['--border-color'],
+                },
+              },
             },
             {
               type: 'value',
@@ -60,6 +65,11 @@ const OilPrice: React.FC<OilPriceProps> = () => {
               axisLabel: {
                 fontSize: 10,
                 formatter: `{value}元/吨`,
+              },
+              splitLine: {
+                lineStyle: {
+                  color: varibleColors['--border-color'],
+                },
               },
             },
           ],

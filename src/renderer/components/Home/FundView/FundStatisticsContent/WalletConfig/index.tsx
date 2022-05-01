@@ -64,6 +64,11 @@ const WalletConfig: React.FC<WalletConfigProps> = ({ funds, codes }) => {
               formatter: `{value}元`,
               fontSize: 10,
             },
+            splitLine: {
+              lineStyle: {
+                color: varibleColors['--border-color'],
+              },
+            },
           },
           series: funds.map((fund) => {
             return {

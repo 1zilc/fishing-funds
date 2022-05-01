@@ -52,6 +52,11 @@ const NationalStockTradingStatistics: React.FC<NationalStockTradingStatisticsPro
               fontSize: 10,
               formatter: `{value}亿`,
             },
+            splitLine: {
+              lineStyle: {
+                color: varibleColors['--border-color'],
+              },
+            },
           },
           series: [
             {

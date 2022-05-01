@@ -65,6 +65,11 @@ const Performance: React.FC<PerformanceProps> = ({ code }) => {
               formatter: `{value}%`,
               fontSize: 10,
             },
+            splitLine: {
+              lineStyle: {
+                color: varibleColors['--border-color'],
+              },
+            },
           },
           dataZoom: [
             {

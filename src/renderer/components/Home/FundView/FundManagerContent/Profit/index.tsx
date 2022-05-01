@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { useResizeEchart, useRenderEcharts } from '@/utils/hooks';
+import { useResizeEchart, useRenderEcharts, useNativeThemeColor } from '@/utils/hooks';
 import * as CONST from '@/constants';
 import styles from './index.module.scss';
 
@@ -10,6 +10,7 @@ export interface ProfitProps {
 
 const Profit: React.FC<ProfitProps> = ({ profit }) => {
   const { ref: chartRef, chartInstance } = useResizeEchart(CONST.DEFAULT.ECHARTS_SCALE);
+  const { varibleColors } = useNativeThemeColor();
 
   useRenderEcharts(
     () => {
@@ -26,6 +27,11 @@ const Profit: React.FC<ProfitProps> = ({ profit }) => {
           axisLabel: {
             formatter: `{value}%`,
             fontSize: 10,
+          },
+          splitLine: {
+            lineStyle: {
+              color: varibleColors['--border-color'],
+            },
           },
         },
         grid: {
