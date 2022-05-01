@@ -55,7 +55,7 @@ contextBridge.exposeInMainWorld('contextModules', {
           'change-eye-status',
         ];
         if (validChannels.includes(channel)) {
-          return ipcRenderer.on(channel, (event, ...args) => func(event, ...args));
+          return ipcRenderer.on(channel, func);
         } else {
           return null;
         }

@@ -15,4 +15,5 @@ export default {
   '--base-font-size': '--base-font-color',
   '--base-padding': '--base-color',
   '--warn-color': '--warn-color',
+  '--inner-text-color': '--inner-text-color',
 };

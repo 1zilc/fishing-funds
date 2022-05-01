@@ -108,7 +108,7 @@ const Trend: React.FC<PerformanceProps> = ({ code }) => {
         ],
       });
     },
-    refreshDeps: [code, coinUnitSetting, date.code],
+    refreshDeps: [varibleColors, code, coinUnitSetting, date.code],
     ready: !!chartInstance,
   });
 

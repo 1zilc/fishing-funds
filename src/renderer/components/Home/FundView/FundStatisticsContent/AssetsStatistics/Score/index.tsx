@@ -125,7 +125,7 @@ const Score: React.FC<ScoreProps> = ({ gssyl = 0 }) => {
       });
       setHS(String(indexNumber));
     },
-    refreshDeps: [gssyl],
+    refreshDeps: [varibleColors, gssyl],
   });
 
   return (

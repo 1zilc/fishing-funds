@@ -96,7 +96,7 @@ const RealTimeFundFlow: React.FC<RealTimeFundFlowProps> = ({ code = '' }) => {
         ],
       });
     },
-    refreshDeps: [code],
+    refreshDeps: [varibleColors, code],
     ready: !!chartInstance,
   });
 

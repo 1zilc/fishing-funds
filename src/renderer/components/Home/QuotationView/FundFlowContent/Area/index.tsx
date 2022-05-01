@@ -87,7 +87,7 @@ const Area: React.FC<IndustryProps> = () => {
           ],
         });
       },
-      refreshDeps: [areaType.code, areaType.type],
+      refreshDeps: [varibleColors, areaType.code, areaType.type],
       ready: !!chartInstance,
     }
   );

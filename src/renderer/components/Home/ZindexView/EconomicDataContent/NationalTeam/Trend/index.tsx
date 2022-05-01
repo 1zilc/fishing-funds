@@ -110,7 +110,7 @@ const Trend: React.FC<TrendProps> = () => {
         ],
       });
     },
-    refreshDeps: [trendType],
+    refreshDeps: [varibleColors, trendType],
     ready: !!chartInstance,
   });
 

@@ -87,7 +87,7 @@ const Industry: React.FC<IndustryProps> = () => {
           ],
         });
       },
-      refreshDeps: [industryType.code, industryType.type],
+      refreshDeps: [varibleColors, industryType.code, industryType.type],
       ready: !!chartInstance,
     }
   );

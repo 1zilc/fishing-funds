@@ -4,7 +4,7 @@ import { useRequest } from 'ahooks';
 import ChartCard from '@/components/Card/ChartCard';
 
 import TypeSelection from '@/components/TypeSelection';
-import { useResizeEchart, useAppSelector, useNativeThemeColor } from '@/utils/hooks';
+import { useResizeEchart, useAppSelector, useNativeThemeColor, useRenderEcharts } from '@/utils/hooks';
 
 import * as CONST from '@/constants';
 import * as Services from '@/services';
@@ -28,6 +28,7 @@ const K: React.FC<PerformanceProps> = ({ code = '' }) => {
   const coinUnitSetting = useAppSelector((state) => state.setting.systemSetting.coinUnitSetting);
   const [date, setDateType] = useState(dateTypeList[2]);
   const { varibleColors } = useNativeThemeColor();
+
   const { run: runGetKFromCoingecko } = useRequest(() => Services.Coin.GetKFromCoingecko(code, coinUnitSetting, date.code), {
     onSuccess: (result) => {
       // 数据意义：开盘(open)，收盘(close)，最低(lowest)，最高(highest)

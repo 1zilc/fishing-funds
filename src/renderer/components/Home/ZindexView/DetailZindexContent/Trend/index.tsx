@@ -107,7 +107,7 @@ const Trend: React.FC<PerformanceProps> = ({ code, zs = 0 }) => {
         ],
       });
     },
-    refreshDeps: [code, trend.code, zs],
+    refreshDeps: [varibleColors, code, trend.code, zs],
     ready: !!chartInstance,
   });
 

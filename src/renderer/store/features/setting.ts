@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction, ThunkAction } from '@reduxjs/toolkit';
 import { TypedThunk } from '@/store';
 import * as Utils from '@/utils';
 import * as CONST from '@/constants';

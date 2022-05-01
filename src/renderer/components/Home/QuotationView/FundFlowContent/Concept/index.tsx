@@ -87,7 +87,7 @@ const Concept: React.FC<IndustryProps> = () => {
           ],
         });
       },
-      refreshDeps: [conceptType.code, conceptType.type],
+      refreshDeps: [varibleColors, conceptType.code, conceptType.type],
       ready: !!chartInstance,
     }
   );

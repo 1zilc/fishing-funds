@@ -149,7 +149,7 @@ const K: React.FC<KProps> = ({ code = '' }) => {
         ],
       });
     },
-    refreshDeps: [code, year.code],
+    refreshDeps: [varibleColors, code, year.code],
     ready: !!chartInstance,
   });
 

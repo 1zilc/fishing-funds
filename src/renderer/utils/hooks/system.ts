@@ -298,7 +298,10 @@ export function useMappingLocalToSystemSetting() {
   const adjustmentNotificationTimeSetting = useAppSelector((state) => state.setting.systemSetting.adjustmentNotificationTimeSetting);
 
   useIpcRendererListener('nativeTheme-updated', (e, data) => {
-    syncDarkMode(!!data?.darkMode);
+    requestIdleCallback(() => {
+      // TODO: 暂时不清楚，为什么第一时间无法取最新的 property color
+      dispatch(syncDarkMode(!!data?.darkMode));
+    });
   });
 
   useEffect(() => {

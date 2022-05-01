@@ -100,7 +100,7 @@ const SecuritiesWareHouse: React.FC<SecuritiesWareHouseProps> = ({ code, securit
           setDetailStockDrawer(secid);
         });
       },
-      refreshDeps: [code, securitiesCodes],
+      refreshDeps: [varibleColors, code, securitiesCodes],
       ready: !!chartInstance,
     }
   );

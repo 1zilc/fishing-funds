@@ -97,7 +97,7 @@ const NorthFlow: React.FC<NorthFlowProps> = () => {
         ],
       });
     },
-    refreshDeps: [code],
+    refreshDeps: [varibleColors, code],
     ready: !!chartInstance,
   });
 

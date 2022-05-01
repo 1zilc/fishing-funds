@@ -97,7 +97,7 @@ const SouthFlow: React.FC<SouthFlowProps> = () => {
         ],
       });
     },
-    refreshDeps: [code],
+    refreshDeps: [varibleColors, code],
     ready: !!chartInstance,
   });
 

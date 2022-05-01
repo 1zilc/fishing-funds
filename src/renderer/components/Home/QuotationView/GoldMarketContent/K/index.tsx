@@ -15,10 +15,10 @@ export interface KProps {}
 const K: React.FC<KProps> = () => {
   const { ref: chartRef, chartInstance } = useResizeEchart(CONST.DEFAULT.ECHARTS_SCALE);
   const { varibleColors } = useNativeThemeColor();
+
   const { run: runGetKFromEastmoney } = useRequest(() => Services.Quotation.GetGoldKFromEastmoney(), {
     onSuccess: (result) => {
       // 数据意义：开盘(open)，收盘(close)，最低(lowest)，最高(highest)
-
       const values = result.map(([time, ...values]) => values);
 
       chartInstance?.setOption({
@@ -33,7 +33,7 @@ const K: React.FC<KProps> = () => {
           },
         },
         legend: {
-          data: ['日K', 'MA5', 'MA10', 'MA20', 'MA30'],
+          data: ['日K', 'MA5', 'MA10'],
           textStyle: {
             color: varibleColors['--main-text-color'],
             fontSize: 10,
@@ -49,14 +49,16 @@ const K: React.FC<KProps> = () => {
           type: 'category',
           data: result.map(([time]) => time),
         },
-        yAxis: {
-          scale: true,
-          splitLine: {
-            lineStyle: {
-              color: varibleColors['--border-color'],
+        yAxis: [
+          {
+            scale: true,
+            splitLine: {
+              lineStyle: {
+                color: varibleColors['--border-color'],
+              },
             },
           },
-        },
+        ],
         dataZoom: [
           {
             type: 'inside',
@@ -118,7 +120,7 @@ const K: React.FC<KProps> = () => {
         ],
       });
     },
-    refreshDeps: [varibleColors],
+    refreshDeps: [varibleColors, varibleColors],
     ready: !!chartInstance,
   });
 

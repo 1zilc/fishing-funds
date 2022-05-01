@@ -108,7 +108,7 @@ const SouthDay: React.FC<SouthDayProps> = () => {
         ],
       });
     },
-    refreshDeps: [dayType.code],
+    refreshDeps: [varibleColors, dayType.code],
     ready: !!chartInstance,
   });
 

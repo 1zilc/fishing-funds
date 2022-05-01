@@ -102,7 +102,7 @@ const AfterTimeFundFlow: React.FC<AfterTimeFundFlowProps> = ({ code = '' }) => {
         ],
       });
     },
-    refreshDeps: [code],
+    refreshDeps: [varibleColors, code],
     ready: !!chartInstance,
   });
 

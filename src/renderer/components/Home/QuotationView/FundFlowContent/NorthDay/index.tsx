@@ -107,7 +107,7 @@ const NorthDay: React.FC<NorthDayProps> = () => {
         ],
       });
     },
-    refreshDeps: [dayType.code],
+    refreshDeps: [varibleColors, dayType.code],
     ready: !!chartInstance,
   });
 

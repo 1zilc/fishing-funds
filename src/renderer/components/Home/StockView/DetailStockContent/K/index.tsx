@@ -152,7 +152,7 @@ const K: React.FC<PerformanceProps> = ({ secid = '' }) => {
         ],
       });
     },
-    refreshDeps: [secid, k.code],
+    refreshDeps: [varibleColors, secid, k.code],
     ready: !!chartInstance,
   });
 
