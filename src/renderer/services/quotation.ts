@@ -975,7 +975,7 @@ export async function GetGoldTrendsFromEastmoney(secid: string) {
 
     const result = data.data?.trends?.map((item) => {
       const [time, x, price] = item.split(',');
-      return [time, price];
+      return [time, Number(price)];
     });
 
     return result || [];

@@ -55,11 +55,10 @@ const GoldTrends: React.FC<GoldTrendsProps> = (props) => {
             },
           },
         },
-        seies: [
+        series: [
           {
             name: '价格',
             type: 'line',
-            stack: '',
             areaStyle: {},
             emphasis: {
               focus: 'series',
