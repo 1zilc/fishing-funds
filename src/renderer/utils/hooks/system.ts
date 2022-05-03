@@ -376,17 +376,16 @@ export function useUpdateContextMenuWalletsState() {
   useEffect(() => {
     ipcRenderer.invoke(
       'update-tray-context-menu-wallets',
-      walletsConfig.map((wallet) => {
-        const walletConfig = Helpers.Wallet.GetCurrentWalletConfig(wallet.code, walletsConfig);
-        const { codeMap } = Helpers.Fund.GetFundConfig(wallet.code, walletsConfig);
-        const { funds } = Helpers.Wallet.GetCurrentWalletState(wallet.code, wallets);
+      walletsConfig.map((walletConfig) => {
+        const { codeMap } = Helpers.Fund.GetFundConfig(walletConfig.code, walletsConfig);
+        const { funds } = Helpers.Wallet.GetCurrentWalletState(walletConfig.code, wallets);
         const calcResult = Helpers.Fund.CalcFunds(funds, codeMap);
         const value = `  ${Utils.Yang(calcResult.sygz.toFixed(2))}  ${Utils.Yang(calcResult.gssyl.toFixed(2))}%`;
         return {
           label: `${walletConfig.name}  ${value}`,
-          type: currentWalletCode === wallet.code ? 'radio' : 'normal',
+          type: currentWalletCode === walletConfig.code ? 'radio' : 'normal',
           iconIndex: walletConfig.iconIndex,
-          id: wallet.code,
+          id: walletConfig.code,
         };
       })
     );
