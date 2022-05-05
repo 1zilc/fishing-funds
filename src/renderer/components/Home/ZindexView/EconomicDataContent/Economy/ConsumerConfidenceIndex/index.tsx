@@ -1,7 +1,6 @@
 import React from 'react';
 import { useRequest } from 'ahooks';
 
-import { useHomeContext } from '@/components/Home';
 import ChartCard from '@/components/Card/ChartCard';
 import { useResizeEchart, useRenderEcharts } from '@/utils/hooks';
 import * as CONST from '@/constants';
@@ -12,10 +11,13 @@ interface ConsumerConfidenceIndexProps {}
 
 const ConsumerConfidenceIndex: React.FC<ConsumerConfidenceIndexProps> = () => {
   const { ref: chartRef, chartInstance } = useResizeEchart(0.4);
-  const { varibleColors, darkMode } = useHomeContext();
 
-  const { run: runGetEconomyIndexFromEastmoney } = useRequest(() => Services.Zindex.GetEconomyIndexFromEastmoney(4), {
-    onSuccess: (result) => {
+  const { data: result = [], run: runGetEconomyIndexFromEastmoney } = useRequest(() => Services.Zindex.GetEconomyIndexFromEastmoney(4), {
+    ready: !!chartInstance,
+  });
+
+  useRenderEcharts(
+    ({ varibleColors }) => {
       try {
         chartInstance?.setOption({
           title: {
@@ -53,6 +55,11 @@ const ConsumerConfidenceIndex: React.FC<ConsumerConfidenceIndexProps> = () => {
               fontSize: 10,
               formatter: `{value}%`,
             },
+            splitLine: {
+              lineStyle: {
+                color: varibleColors['--border-color'],
+              },
+            },
           },
           series: [
             {
@@ -80,9 +87,9 @@ const ConsumerConfidenceIndex: React.FC<ConsumerConfidenceIndexProps> = () => {
         });
       } catch {}
     },
-    refreshDeps: [darkMode],
-    ready: !!chartInstance,
-  });
+    chartInstance,
+    [result]
+  );
 
   return (
     <ChartCard auto onFresh={runGetEconomyIndexFromEastmoney} TitleBar={<div className={styles.title}>消费者信心指数</div>}>

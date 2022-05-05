@@ -3,21 +3,19 @@ import { Table } from 'antd';
 import { useRequest } from 'ahooks';
 import ChartCard from '@/components/Card/ChartCard';
 import CustomDrawer from '@/components/CustomDrawer';
-import AddStockContent from '@/components/Home/StockList/AddStockContent';
 import { useDrawer } from '@/utils/hooks';
 import * as Services from '@/services';
 import * as Utils from '@/utils';
 import styles from './index.module.scss';
 
+const AddStockContent = React.lazy(() => import('@/components/Home/StockView/AddStockContent'));
+
 interface RecentHotProps {}
 
 const RecentHot: React.FC<RecentHotProps> = () => {
-  const [data, setData] = useState<any[]>([]);
   const { data: stockName, show: showAddStockDrawer, set: setAddStockDrawer, close: closeAddStockDrawer } = useDrawer('');
 
-  const { loading, run: runQuotationGetRecentHotFromEastmoney } = useRequest(Services.Quotation.GetRecentHotFromEastmoney, {
-    onSuccess: setData,
-  });
+  const { data = [], loading, run: runQuotationGetRecentHotFromEastmoney } = useRequest(Services.Quotation.GetRecentHotFromEastmoney);
 
   return (
     <ChartCard auto onFresh={runQuotationGetRecentHotFromEastmoney}>

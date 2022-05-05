@@ -4,6 +4,9 @@ declare namespace Coin {
     name: string;
     symbol: string;
   }
+  export interface CodeMap {
+    [index: string]: Coin.SettingItem & { originSort: number };
+  }
 
   export interface ResponseItem {
     code: string;

@@ -1,18 +1,19 @@
-import React, { useEffect, useState, useMemo } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import React, { useMemo } from 'react';
+
 import { ReactSortable } from 'react-sortablejs';
 
 import AddIcon from '@/static/icon/add.svg';
 import Empty from '@/components/Empty';
 import CustomDrawer from '@/components/CustomDrawer';
-import AddWalletContent from '@/components/Wallet/AddWalletContent';
 import WalletRow from '@/components/Wallet/WalletRow';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
-import EditWalletContent from '@/components/Wallet/EditWalletContent';
-import { StoreState } from '@/reducers/types';
-import { useDrawer, useAutoDestroySortableRef } from '@/utils/hooks';
-import { setWalletConfigAction, selectWalletAction } from '@/actions/wallet';
+
+import { useDrawer, useAutoDestroySortableRef, useAppDispatch, useAppSelector } from '@/utils/hooks';
+import { setWalletConfigAction, selectWalletAction } from '@/store/features/wallet';
 import styles from './index.module.scss';
+
+const AddWalletContent = React.lazy(() => import('@/components/Wallet/AddWalletContent'));
+const EditWalletContent = React.lazy(() => import('@/components/Wallet/EditWalletContent'));
 
 export interface ManageWalletContentProps {
   onEnter: () => void;
@@ -20,10 +21,10 @@ export interface ManageWalletContentProps {
 }
 
 const ManageWalletContent: React.FC<ManageWalletContentProps> = (props) => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const sortableRef = useAutoDestroySortableRef();
-  const currentWalletCode = useSelector((state: StoreState) => state.wallet.currentWalletCode);
-  const { codeMap, walletConfig } = useSelector((state: StoreState) => state.wallet.config);
+  const currentWalletCode = useAppSelector((state) => state.wallet.currentWalletCode);
+  const { codeMap, walletConfig } = useAppSelector((state) => state.wallet.config);
   const { show: showAddDrawer, set: setAddDrawer, close: closeAddDrawer } = useDrawer(null);
   const sortWalletConfig = useMemo(() => walletConfig.map((_) => ({ ..._, id: _.code })), [walletConfig]);
 

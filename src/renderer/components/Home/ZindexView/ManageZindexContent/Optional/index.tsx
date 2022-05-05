@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+
 import { ReactSortable } from 'react-sortablejs';
-import classnames from 'classnames';
+import clsx from 'clsx';
 
 import PureCard from '@/components/Card/PureCard';
 import AddIcon from '@/static/icon/add.svg';
@@ -9,20 +9,21 @@ import MenuIcon from '@/static/icon/menu.svg';
 import RemoveIcon from '@/static/icon/remove.svg';
 import CustomDrawer from '@/components/CustomDrawer';
 import Empty from '@/components/Empty';
-import AddZindexContent from '@/components/Home/ZindexView/AddZindexContent';
-import { deleteZindexAction, setZindexConfigAction } from '@/actions/zindex';
-import { useDrawer, useAutoDestroySortableRef } from '@/utils/hooks';
-import { StoreState } from '@/reducers/types';
+import { deleteZindexAction, setZindexConfigAction } from '@/store/features/zindex';
+import { useDrawer, useAutoDestroySortableRef, useAppDispatch, useAppSelector } from '@/utils/hooks';
+
 import styles from './index.module.scss';
+
+const AddZindexContent = React.lazy(() => import('@/components/Home/ZindexView/AddZindexContent'));
 
 export interface OptionalProps {}
 
 const { dialog } = window.contextModules.electron;
 
 const Optional: React.FC<OptionalProps> = () => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const sortableRef = useAutoDestroySortableRef();
-  const { codeMap, zindexConfig } = useSelector((state: StoreState) => state.zindex.config);
+  const { codeMap, zindexConfig } = useAppSelector((state) => state.zindex.config);
   const { show: showAddDrawer, set: setAddDrawer, close: closeAddDrawer } = useDrawer(null);
   const sortZindexConfig = useMemo(() => zindexConfig.map((_) => ({ ..._, id: _.code })), [zindexConfig]);
 
@@ -64,7 +65,7 @@ const Optional: React.FC<OptionalProps> = () => {
           {sortZindexConfig.map((zindex) => {
             const [market, code] = zindex.code.split('.');
             return (
-              <PureCard key={zindex.code} className={classnames(styles.row, 'hoverable')}>
+              <PureCard key={zindex.code} className={clsx(styles.row, 'hoverable')}>
                 <RemoveIcon
                   className={styles.remove}
                   onClick={(e) => {

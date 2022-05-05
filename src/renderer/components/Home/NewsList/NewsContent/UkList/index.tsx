@@ -1,4 +1,4 @@
-import React, { PropsWithChildren, useState } from 'react';
+import React, { PropsWithChildren } from 'react';
 import dayjs from 'dayjs';
 import { Table } from 'antd';
 import { useRequest } from 'ahooks';
@@ -11,11 +11,7 @@ interface UkListProps {
 }
 
 const UkList: React.FC<PropsWithChildren<UkListProps>> = (props) => {
-  const [data, setData] = useState<News.ResponseItem[]>([]);
-
-  const { loading, run: runNewsGetUkList } = useRequest(Services.News.GetUkList, {
-    onSuccess: setData,
-  });
+  const { data = [], loading, run: runNewsGetUkList } = useRequest(Services.News.GetUkList);
 
   return (
     <ChartCard auto onFresh={runNewsGetUkList}>
@@ -45,7 +41,7 @@ const UkList: React.FC<PropsWithChildren<UkListProps>> = (props) => {
             position: ['bottomCenter'],
           }}
           onRow={(record) => ({
-            onClick: () => props.onView(record.url_m),
+            onClick: () => props.onView(record.url_unique),
           })}
         />
       </div>

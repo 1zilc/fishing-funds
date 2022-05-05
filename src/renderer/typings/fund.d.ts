@@ -8,6 +8,10 @@ declare namespace Fund {
     jzNotice?: number;
     memo?: string;
   }
+  export interface CodeMap {
+    [index: string]: Fund.SettingItem & Fund.OriginRow;
+  }
+
   export interface ResponseItem {
     name?: string; // 名称 '诺安混合'
     fundcode?: string; // 代码 '320007'
@@ -106,6 +110,10 @@ declare namespace Fund {
     2: string; // name
     3: string; // type
     4: string; // quanpin
+  }
+
+  export interface CodeRemoteFundMap {
+    [index: string]: Fund.RemoteFund;
   }
 
   export namespace Manager {

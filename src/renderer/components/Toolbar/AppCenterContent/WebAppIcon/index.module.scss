@@ -1,0 +1,62 @@
+.content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  .app {
+    height: 40px;
+    width: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background-color: #fff;
+    transition: all 0.3s;
+    box-sizing: border-box;
+    cursor: pointer;
+
+    svg {
+      fill: #fff;
+    }
+
+    i {
+      font-style: normal;
+      text-align: center;
+      font-weight: 500;
+      color: #fff;
+      font-size: 14px;
+      line-height: 18px;
+    }
+
+    &:hover {
+      filter: brightness(110%);
+      transform: scale(1.1);
+    }
+  }
+
+  img {
+    transition: all 0.3s;
+    height: 40px;
+    width: 40px;
+    // border-radius: 50%;
+    display: block;
+    cursor: pointer;
+
+    &:hover {
+      filter: brightness(110%);
+      transform: scale(1.1);
+    }
+  }
+}
+
+.name {
+  text-align: center;
+  max-width: 60px;
+  color: var(--main-text-color);
+  font-size: 10px;
+  padding-top: 5px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  word-break: break-all;
+}

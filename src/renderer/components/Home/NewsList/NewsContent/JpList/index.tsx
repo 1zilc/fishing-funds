@@ -11,11 +11,7 @@ interface JpListProps {
 }
 
 const JpList: React.FC<PropsWithChildren<JpListProps>> = (props) => {
-  const [data, setData] = useState<News.ResponseItem[]>([]);
-
-  const { loading, run: runNewsGetJpList } = useRequest(Services.News.GetJpList, {
-    onSuccess: setData,
-  });
+  const { data = [], loading, run: runNewsGetJpList } = useRequest(Services.News.GetJpList);
 
   return (
     <ChartCard auto onFresh={runNewsGetJpList}>
@@ -45,7 +41,7 @@ const JpList: React.FC<PropsWithChildren<JpListProps>> = (props) => {
             position: ['bottomCenter'],
           }}
           onRow={(record) => ({
-            onClick: () => props.onView(record.url_m),
+            onClick: () => props.onView(record.url_unique),
           })}
         />
       </div>

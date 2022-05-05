@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import classnames from 'classnames';
-import { useDispatch, useSelector } from 'react-redux';
+import React from 'react';
+import clsx from 'clsx';
+
 import { useRequest } from 'ahooks';
 import { Tabs } from 'antd';
 
@@ -10,8 +10,9 @@ import Stocks from '@/components/Home/QuotationView/DetailQuotationContent/Stock
 import Funds from '@/components/Home/QuotationView/DetailQuotationContent/Funds';
 import RealTimeTransaction from '@/components/Home/QuotationView/DetailQuotationContent/RealTimeTransaction';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
-import { syncFavoriteQuotationMapAction } from '@/actions/quotation';
-import { StoreState } from '@/reducers/types';
+import { setFavoriteQuotationMapAction } from '@/store/features/quotation';
+
+import { useAppDispatch, useAppSelector } from '@/utils/hooks';
 import * as Services from '@/services';
 import * as Utils from '@/utils';
 import * as Enums from '@/utils/enums';
@@ -25,16 +26,17 @@ export interface DetailQuotationContentProps {
 
 const DetailQuotationContent: React.FC<DetailQuotationContentProps> = (props) => {
   const { code } = props;
-  const dispatch = useDispatch();
-  const [quotation, setQuotation] = useState<Quotation.DetailData | Record<string, any>>({});
-  const favoriteQuotationMap = useSelector((state: StoreState) => state.quotation.favoriteQuotationMap);
-  const { conciseSetting } = useSelector((state: StoreState) => state.setting.systemSetting);
-  const favorited = favoriteQuotationMap[quotation.code];
+  const dispatch = useAppDispatch();
+  const favoriteQuotationMap = useAppSelector((state) => state.quotation.favoriteQuotationMap);
 
-  useRequest(Services.Quotation.GetQuotationDetailFromEastmoney, {
-    defaultParams: [code],
-    onSuccess: setQuotation,
-  });
+  const { data: quotation = {} as Quotation.DetailData | Record<string, any> } = useRequest(
+    Services.Quotation.GetQuotationDetailFromEastmoney,
+    {
+      defaultParams: [code],
+    }
+  );
+
+  const favorited = favoriteQuotationMap[quotation.code];
 
   return (
     <CustomDrawerContent title="板块详情" enterText="确定" onClose={props.onClose} onEnter={props.onEnter}>
@@ -42,17 +44,17 @@ const DetailQuotationContent: React.FC<DetailQuotationContentProps> = (props) =>
         <div className={styles.container}>
           <h3 className={styles.titleRow}>
             <span className="copify">{quotation?.name}</span>
-            <span className={classnames(Utils.GetValueColor(quotation.zdd).textClass)}>{quotation?.zxj}</span>
+            <span className={clsx(Utils.GetValueColor(quotation.zdd).textClass)}>{quotation?.zxj}</span>
           </h3>
           <div className={styles.subTitleRow}>
             <div>
               <span className="copify">{quotation?.code}</span>
               {favorited ? (
-                <a className={styles.selfAdd} onClick={() => dispatch(syncFavoriteQuotationMapAction(quotation.code, false))}>
+                <a className={styles.selfAdd} onClick={() => dispatch(setFavoriteQuotationMapAction(quotation.code, false))}>
                   已关注
                 </a>
               ) : (
-                <a className={styles.selfAdd} onClick={() => dispatch(syncFavoriteQuotationMapAction(quotation.code, true))}>
+                <a className={styles.selfAdd} onClick={() => dispatch(setFavoriteQuotationMapAction(quotation.code, true))}>
                   未关注
                 </a>
               )}
@@ -60,20 +62,20 @@ const DetailQuotationContent: React.FC<DetailQuotationContentProps> = (props) =>
 
             <div>
               <span className={styles.detailItemLabel}>最新价：</span>
-              <span className={classnames(Utils.GetValueColor(quotation.zdd).textClass)}>{Utils.Yang(quotation?.zdd)}</span>
+              <span className={clsx(Utils.GetValueColor(quotation.zdd).textClass)}>{Utils.Yang(quotation?.zdd)}</span>
             </div>
           </div>
           <div className={styles.detail}>
             <div className={styles.detailItem}>
-              <div className={classnames(styles.zdf, Utils.GetValueColor(quotation.zdd).textClass)}>{Utils.Yang(quotation.zdf)}%</div>
+              <div className={clsx(styles.zdf, Utils.GetValueColor(quotation.zdd).textClass)}>{Utils.Yang(quotation.zdf)}%</div>
               <div className={styles.detailItemLabel}>涨跌幅</div>
             </div>
-            <div className={classnames(styles.detailItem, 'text-center')}>
-              <div className={classnames('text-up')}>{quotation.szjs}</div>
+            <div className={clsx(styles.detailItem, 'text-center')}>
+              <div className={clsx('text-up')}>{quotation.szjs}</div>
               <div className={styles.detailItemLabel}>上涨家数</div>
             </div>
-            <div className={classnames(styles.detailItem, 'text-center')}>
-              <div className={classnames('text-down')}>{quotation?.xdjs}</div>
+            <div className={clsx(styles.detailItem, 'text-center')}>
+              <div className={clsx('text-down')}>{quotation?.xdjs}</div>
               <div className={styles.detailItemLabel}>下跌家数</div>
             </div>
           </div>

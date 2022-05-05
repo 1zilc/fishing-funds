@@ -26,11 +26,10 @@ const configuration: webpack.Configuration = {
       {
         test: /\.[jt]sx?$/,
         exclude: /node_modules/,
-        use: {
-          loader: 'ts-loader',
-          options: {
-            happyPackMode: true,
-          },
+        loader: 'esbuild-loader',
+        options: {
+          loader: 'tsx',
+          target: 'es2021',
         },
       },
     ],

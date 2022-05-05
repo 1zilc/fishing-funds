@@ -1,13 +1,11 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState } from 'react';
 import { useRequest } from 'ahooks';
 
-import { useHomeContext } from '@/components/Home';
 import ChartCard from '@/components/Card/ChartCard';
 import TypeSelection from '@/components/TypeSelection';
 import { useResizeEchart, useRenderEcharts } from '@/utils/hooks';
 import * as CONST from '@/constants';
 import * as Services from '@/services';
-import * as Enums from '@/utils/enums';
 
 import styles from './index.module.scss';
 
@@ -24,11 +22,17 @@ const dayTypeList = [
 const NorthDay: React.FC<NorthDayProps> = () => {
   const { ref: chartRef, chartInstance } = useResizeEchart(CONST.DEFAULT.ECHARTS_SCALE);
   const [dayType, setDayType] = useState(dayTypeList[0]);
+  const { data: result = { s2n: [], hk2sh: [], hk2sz: [] }, run: runGetNorthDayFromEastmoney } = useRequest(
+    () => Services.Quotation.GetNorthDayFromEastmoney(fields1, dayType.code),
+    {
+      pollingInterval: 1000 * 60,
+      refreshDeps: [dayType.code],
+      ready: !!chartInstance,
+    }
+  );
 
-  const { varibleColors, darkMode } = useHomeContext();
-  const { run: runGetNorthDayFromEastmoney } = useRequest(() => Services.Quotation.GetNorthDayFromEastmoney(fields1, dayType.code), {
-    pollingInterval: 1000 * 60,
-    onSuccess: (result) => {
+  useRenderEcharts(
+    ({ varibleColors }) => {
       chartInstance?.setOption({
         title: {
           text: '',
@@ -63,6 +67,11 @@ const NorthDay: React.FC<NorthDayProps> = () => {
           axisLabel: {
             formatter: `{value}亿`,
             fontSize: 10,
+          },
+          splitLine: {
+            lineStyle: {
+              color: varibleColors['--border-color'],
+            },
           },
         },
         dataZoom: [
@@ -104,9 +113,9 @@ const NorthDay: React.FC<NorthDayProps> = () => {
         ],
       });
     },
-    refreshDeps: [darkMode, dayType.code],
-    ready: !!chartInstance,
-  });
+    chartInstance,
+    [result]
+  );
 
   return (
     <ChartCard onFresh={runGetNorthDayFromEastmoney}>

@@ -11,11 +11,7 @@ interface BondListProps {
 }
 
 const BondList: React.FC<PropsWithChildren<BondListProps>> = (props) => {
-  const [data, setData] = useState<News.ResponseItem[]>([]);
-
-  const { loading, run: runNewsGetBondList } = useRequest(Services.News.GetBondList, {
-    onSuccess: setData,
-  });
+  const { data = [], loading, run: runNewsGetBondList } = useRequest(Services.News.GetBondList);
 
   return (
     <ChartCard auto onFresh={runNewsGetBondList}>
@@ -45,7 +41,7 @@ const BondList: React.FC<PropsWithChildren<BondListProps>> = (props) => {
             position: ['bottomCenter'],
           }}
           onRow={(record) => ({
-            onClick: () => props.onView(record.url_m),
+            onClick: () => props.onView(record.url_unique),
           })}
         />
       </div>

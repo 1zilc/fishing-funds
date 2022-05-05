@@ -1,6 +1,5 @@
 import React from 'react';
 
-import { useHomeContext } from '@/components/Home';
 import { useResizeEchart, useRenderEcharts } from '@/utils/hooks';
 import * as CONST from '@/constants';
 import * as Utils from '@/utils';
@@ -22,10 +21,9 @@ interface MarketStyleProps {
 const MarketStyle: React.FC<MarketStyleProps> = (props) => {
   const { ThemeList = [] } = props;
   const { ref: chartRef, chartInstance } = useResizeEchart(CONST.DEFAULT.ECHARTS_SCALE);
-  const { varibleColors, darkMode } = useHomeContext();
 
   useRenderEcharts(
-    () => {
+    ({ varibleColors }) => {
       chartInstance?.setOption({
         color: [varibleColors['--primary-color'], varibleColors['--warn-color']],
         tooltip: {
@@ -48,11 +46,21 @@ const MarketStyle: React.FC<MarketStyleProps> = (props) => {
             name: '涨跌幅',
             position: 'left',
             axisLabel: { formatter: '{value}%' },
+            splitLine: {
+              lineStyle: {
+                color: varibleColors['--border-color'],
+              },
+            },
           },
           {
             type: 'value',
             name: '热度',
             position: 'right',
+            splitLine: {
+              lineStyle: {
+                color: varibleColors['--border-color'],
+              },
+            },
           },
         ],
         series: [
@@ -76,7 +84,7 @@ const MarketStyle: React.FC<MarketStyleProps> = (props) => {
       });
     },
     chartInstance,
-    [darkMode, varibleColors, ThemeList]
+    [ThemeList]
   );
 
   return (

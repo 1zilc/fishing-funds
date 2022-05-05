@@ -6,6 +6,11 @@ declare namespace Stock {
     name: string;
     type: number;
   }
+
+  export interface CodeMap {
+    [index: string]: Stock.SettingItem & { originSort: number };
+  }
+
   export interface DetailItem {
     code: string;
     name: string;

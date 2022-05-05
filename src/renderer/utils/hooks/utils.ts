@@ -1,25 +1,43 @@
-import { useCallback, useLayoutEffect, useState, useEffect, useRef, useMemo } from 'react';
-import { useInterval, useBoolean, useThrottleFn, useSize } from 'ahooks';
-import { useDispatch, useSelector } from 'react-redux';
+import { useLayoutEffect, useState, useEffect, useRef, useMemo, useDeferredValue } from 'react';
+import { useInterval, useBoolean, useThrottleFn, useSize, useMemoizedFn } from 'ahooks';
+import { useDispatch, useSelector, TypedUseSelectorHook, batch } from 'react-redux';
 import dayjs from 'dayjs';
 import * as echarts from 'echarts';
 
-import { updateStockAction } from '@/actions/stock';
-import { updateFundAction } from '@/actions/fund';
-import { StoreState } from '@/reducers/types';
+import {
+  updateFundAction,
+  sortFundsCachedAction,
+  setRemoteFundsAction,
+  setFundRatingMapAction,
+  setFundsLoadingAction,
+  setRemoteFundsLoadingAction,
+} from '@/store/features/fund';
+import { setQuotationsLoadingAction } from '@/store/features/quotation';
+import { openWebAction } from '@/store/features/web';
+import { syncFixWalletStateAction, updateWalletStateAction } from '@/store/features/wallet';
+import { setCoinsLoadingAction, setRemoteCoinsLoadingAction, sortCoinsCachedAction, setRemoteCoinsAction } from '@/store/features/coin';
+import { updateStockAction, sortStocksCachedAction, setStocksLoadingAction } from '@/store/features/stock';
+import { setZindexesLoadingAction, sortZindexsCachedAction } from '@/store/features/zindex';
+import { sortQuotationsCachedAction } from '@/store/features/quotation';
+import { syncDarkMode } from '@/store/features/setting';
+import { TypedDispatch, StoreState } from '@/store';
 import * as Utils from '@/utils';
 import * as CONST from '@/constants';
 import * as Adapters from '@/utils/adpters';
 import * as Services from '@/services';
 import * as Helpers from '@/helpers';
-import * as Enums from '@/utils/enums';
 
 const { invoke, ipcRenderer } = window.contextModules.electron;
 
+export const useAppDispatch = () => useDispatch<TypedDispatch>();
+
+export const useAppSelector: TypedUseSelectorHook<StoreState> = useSelector;
+
 export function useWorkDayTimeToDo(todo: () => void, delay: number, config?: { immediate: boolean }): void {
+  const { timestampSetting } = useAppSelector((state) => state.setting.systemSetting);
   useInterval(
     async () => {
-      const timestamp = await Helpers.Time.GetCurrentHours();
+      const timestamp = await Helpers.Time.GetCurrentHours(timestampSetting);
       const isWorkDayTime = Utils.JudgeWorkDayTime(Number(timestamp));
       if (isWorkDayTime) {
         todo();
@@ -31,9 +49,10 @@ export function useWorkDayTimeToDo(todo: () => void, delay: number, config?: { i
 }
 
 export function useFixTimeToDo(todo: () => void, delay: number, config?: { immediate: boolean }): void {
+  const { timestampSetting } = useAppSelector((state) => state.setting.systemSetting);
   useInterval(
     async () => {
-      const timestamp = await Helpers.Time.GetCurrentHours();
+      const timestamp = await Helpers.Time.GetCurrentHours(timestampSetting);
       const isFixTime = Utils.JudgeFixTime(Number(timestamp));
       if (isFixTime) {
         todo();
@@ -44,19 +63,16 @@ export function useFixTimeToDo(todo: () => void, delay: number, config?: { immed
   );
 }
 
-export function useScrollToTop(
-  config: {
-    before?: () => void | Promise<void>;
-    after?: () => void | Promise<void>;
-    option?: {
-      behavior?: ScrollBehavior;
-      left?: number;
-      top?: number;
-    };
-  },
-  dep: any[] = []
-) {
-  return useCallback(async () => {
+export function useScrollToTop(config: {
+  before?: () => void | Promise<void>;
+  after?: () => void | Promise<void>;
+  option?: {
+    behavior?: ScrollBehavior;
+    left?: number;
+    top?: number;
+  };
+}) {
+  return useMemoizedFn(async () => {
     const { before, after, option } = config;
     if (before) {
       await before();
@@ -69,85 +85,58 @@ export function useScrollToTop(
     if (after) {
       await after();
     }
-  }, dep);
-}
-
-export function useNativeTheme() {
-  const [darkMode, setDarkMode] = useState(false);
-  const systemSetting = useSelector((state: StoreState) => state.setting.systemSetting);
-  const { systemThemeSetting } = systemSetting;
-  async function syncSystemTheme() {
-    await Utils.UpdateSystemTheme(systemThemeSetting);
-    await invoke.getShouldUseDarkColors().then(setDarkMode);
-  }
-
-  useLayoutEffect(() => {
-    ipcRenderer.on('nativeTheme-updated', (e, data) => {
-      setDarkMode(!!data?.darkMode);
-    });
-    return () => {
-      ipcRenderer.removeAllListeners('nativeTheme-updated');
-    };
-  }, []);
-
-  useEffect(() => {
-    syncSystemTheme();
-  }, [systemThemeSetting]);
-
-  return { darkMode };
-}
-
-export function useNativeThemeColor(varibles: string[]) {
-  const { darkMode } = useNativeTheme();
-  const lowKeySetting = useSelector((state: StoreState) => state.setting.systemSetting.lowKeySetting);
-  const [colors, setColors] = useState<any>({});
-
-  useEffect(() => {
-    setColors(Utils.getVariblesColor(varibles));
-  }, [darkMode, lowKeySetting]);
-
-  return { darkMode, colors };
+  });
 }
 
 export function useResizeEchart(scale = 1, unlimited?: boolean) {
   const chartRef = useRef<HTMLDivElement>(null);
-  const [chartInstance, setChartInstance] = useState<echarts.ECharts | null>(null);
-  const size = useSize(chartRef);
+  const chartInstanceRef = useRef<echarts.ECharts>();
+  const chartWidth = useSize(chartRef)?.width;
+  // const chartWidth = useDeferredValue(size?.width);
+
   useEffect(() => {
     const instance = echarts.init(chartRef.current!, undefined, {
       renderer: 'svg',
     });
-    setChartInstance(instance);
+    chartInstanceRef.current = instance;
     return () => {
       instance.dispose();
     };
   }, []);
 
   useEffect(() => {
-    if (size?.width) {
-      const height = size?.width * scale;
-      chartInstance?.resize({ height: unlimited ? height : height > 200 ? 200 : height });
+    if (chartWidth) {
+      const height = chartWidth * scale;
+      chartInstanceRef.current?.resize({ height: unlimited ? height : height > 200 ? 200 : height });
     }
-  }, [size?.width, unlimited]);
-  return { ref: chartRef, chartInstance, setChartInstance };
+  }, [chartWidth, unlimited]);
+
+  return { ref: chartRef, chartInstance: chartInstanceRef.current };
 }
 
-export function useRenderEcharts(callback: () => void, instance: echarts.ECharts | null, dep: any[] = []) {
+export function useRenderEcharts(
+  callback: (data: { darkMode: boolean; varibleColors: Record<keyof typeof CONST.VARIBLES, string> }) => void,
+  instance?: echarts.ECharts,
+  dep: any[] = []
+) {
+  const varibleColors = useAppSelector((state) => state.setting.varibleColors);
+  const darkMode = useAppSelector((state) => state.setting.darkMode);
   useEffect(() => {
     if (instance) {
-      callback();
+      callback({ darkMode, varibleColors });
     }
-  }, [instance, ...dep]);
+  }, [instance, darkMode, varibleColors, ...dep]);
 }
 
 export function useSyncFixFundSetting() {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const [done, { setTrue }] = useBoolean(false);
-  const { currentWalletFundsConfig: fundConfig } = useCurrentWallet();
+  const fundConfig = useAppSelector((state) => state.wallet.fundConfig);
+  const fundApiTypeSetting = useAppSelector((state) => state.setting.systemSetting.fundApiTypeSetting);
 
   async function FixFundSetting(fundConfig: Fund.SettingItem[]) {
     try {
-      const responseFunds = await Helpers.Fund.GetFunds(fundConfig);
+      const responseFunds = await Helpers.Fund.GetFunds(fundConfig, fundApiTypeSetting);
       responseFunds.filter(Boolean).forEach((responseFund) => {
         dispatch(
           updateFundAction({
@@ -175,9 +164,9 @@ export function useSyncFixFundSetting() {
 }
 
 export function useSyncFixStockSetting() {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const [done, { setTrue, setFalse }] = useBoolean(true);
-  const { stockConfig } = useSelector((state: StoreState) => state.stock.config);
+  const { stockConfig } = useAppSelector((state) => state.stock.config);
   async function FixStockSetting(stockConfig: Stock.SettingItem[]) {
     try {
       const collectors = stockConfig.map(
@@ -217,40 +206,19 @@ export function useSyncFixStockSetting() {
   return { done };
 }
 
-export function useCurrentWallet() {
-  const { walletConfig } = useSelector((state: StoreState) => state.wallet.config);
-  const wallets = useSelector((state: StoreState) => state.wallet.wallets);
-  const currentWalletCode = useSelector((state: StoreState) => state.wallet.currentWalletCode);
-  const currentWalletConfig = walletConfig.find(({ code }) => currentWalletCode === code)!;
-  const currentWalletState = wallets.find(({ code }) => currentWalletCode === code) || {
-    funds: [],
-    updateTime: '',
-    code: currentWalletCode,
-  };
-  const currentWalletFundsCodeMap = Helpers.Fund.GetCodeMap(currentWalletConfig.funds);
-  const currentWalletFundsConfig = currentWalletConfig.funds;
-  currentWalletState.funds = currentWalletState.funds.filter(({ fundcode }) => currentWalletFundsCodeMap[fundcode!]);
-
-  return {
-    currentWalletFundsConfig, // 当前钱包基金配置
-    currentWalletFundsCodeMap, // 当前钱包基金配置 codemap
-    currentWalletConfig, // 当前钱包配置
-    currentWalletCode, // 当前钱包 code
-    currentWalletState, // 当前钱包状态
-  };
-}
-
 export function useFreshFunds(throttleDelay: number) {
-  const { run: runLoadFunds } = useThrottleFn(Helpers.Fund.LoadFunds, {
+  const loadFunds = useLoadFunds(true);
+  const loadFixFunds = useLoadFixFunds();
+  const { run: runLoadFunds } = useThrottleFn(loadFunds, {
     wait: throttleDelay,
   });
-  const { run: runLoadFixFunds } = useThrottleFn(Helpers.Fund.LoadFixFunds, {
+  const { run: runLoadFixFunds } = useThrottleFn(loadFixFunds, {
     wait: throttleDelay,
   });
   const freshFunds = useScrollToTop({
     after: async () => {
       const isFixTime = Utils.JudgeFixTime(dayjs().valueOf());
-      await runLoadFunds(true);
+      await runLoadFunds();
       if (isFixTime) {
         await runLoadFixFunds();
       }
@@ -259,28 +227,245 @@ export function useFreshFunds(throttleDelay: number) {
   return freshFunds;
 }
 
+export function useLoadFunds(loading: boolean) {
+  const dispatch = useAppDispatch();
+  const currentWalletCode = useAppSelector((state) => state.wallet.currentWalletCode);
+  const fundConfig = useAppSelector((state) => state.wallet.fundConfig);
+  const fundApiTypeSetting = useAppSelector((state) => state.setting.systemSetting.fundApiTypeSetting);
+
+  const load = useMemoizedFn(async () => {
+    try {
+      dispatch(setFundsLoadingAction(loading));
+      const responseFunds = await Helpers.Fund.GetFunds(fundConfig, fundApiTypeSetting);
+      batch(() => {
+        dispatch(sortFundsCachedAction(responseFunds, currentWalletCode));
+        dispatch(setFundsLoadingAction(false));
+      });
+    } catch (error) {
+      dispatch(setFundsLoadingAction(false));
+    }
+  });
+  return load;
+}
+
+export function useLoadFixFunds() {
+  const dispatch = useAppDispatch();
+  const currentWallet = useAppSelector((state) => state.wallet.currentWallet);
+
+  const load = useMemoizedFn(async () => {
+    try {
+      const { funds, code } = currentWallet;
+      const fixFunds = (await Helpers.Fund.GetFixFunds(funds)).filter(Utils.NotEmpty);
+      const now = dayjs().format('MM-DD HH:mm:ss');
+      dispatch(syncFixWalletStateAction({ code, funds: fixFunds, updateTime: now }));
+    } catch (error) {}
+  });
+
+  return load;
+}
+
+export function useLoadRemoteFunds() {
+  const dispatch = useAppDispatch();
+
+  const load = useMemoizedFn(async () => {
+    try {
+      dispatch(setRemoteFundsLoadingAction(true));
+      const remoteFunds = await Services.Fund.GetRemoteFundsFromEastmoney();
+      batch(() => {
+        dispatch(setRemoteFundsAction(remoteFunds));
+        dispatch(setRemoteFundsLoadingAction(false));
+      });
+    } catch (error) {
+      dispatch(setRemoteFundsLoadingAction(false));
+    }
+  });
+
+  return load;
+}
+
+export function useLoadFundRatingMap() {
+  const dispatch = useAppDispatch();
+
+  const load = useMemoizedFn(async () => {
+    try {
+      const remoteRantings = await Services.Fund.GetFundRatingFromEasemoney();
+      dispatch(setFundRatingMapAction(remoteRantings));
+    } catch (error) {}
+  });
+
+  return load;
+}
+
+export function useLoadWalletsFunds() {
+  const dispatch = useAppDispatch();
+  const { walletConfig } = useAppSelector((state) => state.wallet.config);
+  const fundApiTypeSetting = useAppSelector((state) => state.setting.systemSetting.fundApiTypeSetting);
+
+  const load = useMemoizedFn(async () => {
+    try {
+      const collects = walletConfig.map(({ funds: fundsConfig, code: walletCode }) => async () => {
+        const responseFunds = await Helpers.Fund.GetFunds(fundsConfig, fundApiTypeSetting);
+        const now = dayjs().format('MM-DD HH:mm:ss');
+        dispatch(updateWalletStateAction({ code: walletCode, funds: responseFunds, updateTime: now }));
+        return responseFunds;
+      });
+      await Adapters.ChokeAllAdapter<(Fund.ResponseItem | null)[]>(collects, CONST.DEFAULT.LOAD_WALLET_DELAY);
+    } catch (error) {}
+  });
+
+  return load;
+}
+
+export function useLoadFixWalletsFunds() {
+  const dispatch = useAppDispatch();
+  const wallets = useAppSelector((state) => state.wallet.wallets);
+  const load = useMemoizedFn(async () => {
+    try {
+      const fixCollects = wallets.map((wallet) => {
+        const collectors = (wallet.funds || [])
+          .filter(({ fixDate, gztime }) => !fixDate || fixDate !== gztime?.slice(5, 10))
+          .map(
+            ({ fundcode }) =>
+              () =>
+                Services.Fund.GetFixFromEastMoney(fundcode!)
+          );
+        return async () => {
+          const fixFunds = await Adapters.ChokeGroupAdapter<Fund.FixData>(collectors, 5, 100);
+          const now = dayjs().format('MM-DD HH:mm:ss');
+          dispatch(syncFixWalletStateAction({ code: wallet.code, funds: fixFunds.filter(Utils.NotEmpty), updateTime: now }));
+          return fixFunds;
+        };
+      });
+
+      await Adapters.ChokeAllAdapter<(Fund.FixData | null)[]>(fixCollects, CONST.DEFAULT.LOAD_WALLET_DELAY);
+    } catch (error) {}
+  });
+
+  return load;
+}
+
 export function useFreshZindexs(throttleDelay: number) {
-  const { run: runLoadZindexs } = useThrottleFn(Helpers.Zindex.LoadZindexs, { wait: throttleDelay });
-  const freshZindexs = useScrollToTop({ after: () => runLoadZindexs(true) });
+  const loadZindexs = useLoadZindexs(true);
+  const { run: runLoadZindexs } = useThrottleFn(loadZindexs, { wait: throttleDelay });
+  const freshZindexs = useScrollToTop({ after: () => runLoadZindexs() });
   return freshZindexs;
 }
 
+export function useLoadZindexs(loading: boolean) {
+  const dispatch = useAppDispatch();
+  const zindexConfig = useAppSelector((state) => state.zindex.config.zindexConfig);
+  const load = useMemoizedFn(async () => {
+    try {
+      dispatch(setZindexesLoadingAction(loading));
+      const responseZindexs = await Helpers.Zindex.GetZindexs(zindexConfig);
+      batch(() => {
+        dispatch(sortZindexsCachedAction(responseZindexs));
+        dispatch(setZindexesLoadingAction(false));
+      });
+    } catch (error) {
+      dispatch(setZindexesLoadingAction(false));
+    }
+  });
+
+  return load;
+}
+
 export function useFreshQuotations(throttleDelay: number) {
-  const { run: runLoadQuotations } = useThrottleFn(Helpers.Quotation.LoadQuotations, { wait: throttleDelay });
-  const freshQuotations = useScrollToTop({ after: () => runLoadQuotations(true) });
+  const loadQuotations = useLoadQuotations(true);
+  const { run: runLoadQuotations } = useThrottleFn(loadQuotations, { wait: throttleDelay });
+  const freshQuotations = useScrollToTop({ after: () => runLoadQuotations() });
   return freshQuotations;
 }
 
+export function useLoadQuotations(loading: boolean) {
+  const dispatch = useAppDispatch();
+
+  const load = useMemoizedFn(async () => {
+    try {
+      dispatch(setQuotationsLoadingAction(loading));
+      const responseQuotations = await Helpers.Quotation.GetQuotations();
+      batch(() => {
+        dispatch(sortQuotationsCachedAction(responseQuotations));
+        dispatch(setQuotationsLoadingAction(false));
+      });
+    } catch (error) {
+      dispatch(setQuotationsLoadingAction(false));
+    }
+  });
+
+  return load;
+}
+
 export function useFreshStocks(throttleDelay: number) {
-  const { run: runLoadStocks } = useThrottleFn(Helpers.Stock.LoadStocks, { wait: throttleDelay });
+  const loadStocks = useLoadStocks(true);
+  const { run: runLoadStocks } = useThrottleFn(loadStocks, { wait: throttleDelay });
   const freshStocks = useScrollToTop({ after: () => runLoadStocks(true) });
   return freshStocks;
 }
 
+export function useLoadStocks(loading: boolean) {
+  const dispatch = useAppDispatch();
+  const stockConfig = useAppSelector((state) => state.stock.config.stockConfig);
+
+  const load = useMemoizedFn(async () => {
+    try {
+      dispatch(setStocksLoadingAction(loading));
+      const responseStocks = await Helpers.Stock.GetStocks(stockConfig);
+      batch(() => {
+        dispatch(sortStocksCachedAction(responseStocks));
+        dispatch(setStocksLoadingAction(false));
+      });
+    } catch (error) {
+      dispatch(setStocksLoadingAction(false));
+    }
+  });
+
+  return load;
+}
+
 export function useFreshCoins(throttleDelay: number) {
-  const { run: runLoadCoins } = useThrottleFn(Helpers.Coin.LoadCoins, { wait: throttleDelay });
-  const freshCoins = useScrollToTop({ after: () => runLoadCoins(true) });
+  const loadCoins = useLoadCoins(true);
+  const { run: runLoadCoins } = useThrottleFn(loadCoins, { wait: throttleDelay });
+  const freshCoins = useScrollToTop({ after: () => runLoadCoins() });
   return freshCoins;
+}
+
+export function useLoadCoins(showLoading: boolean) {
+  const dispatch = useAppDispatch();
+  const config = useAppSelector((state) => state.coin.config.coinConfig);
+  const coinUnitSetting = useAppSelector((state) => state.setting.systemSetting.coinUnitSetting);
+
+  const load = useMemoizedFn(async () => {
+    try {
+      dispatch(setCoinsLoadingAction(showLoading));
+      const responseCoins = await Helpers.Coin.GetCoins(config, coinUnitSetting);
+      batch(() => {
+        dispatch(sortCoinsCachedAction(responseCoins));
+        dispatch(setCoinsLoadingAction(false));
+      });
+    } catch (error) {
+      dispatch(setCoinsLoadingAction(false));
+    }
+  });
+
+  return load;
+}
+
+export function useLoadRemoteCoins() {
+  const dispatch = useAppDispatch();
+  const load = useMemoizedFn(async () => {
+    try {
+      dispatch(setRemoteCoinsLoadingAction(true));
+      const remoteCoins = await Services.Coin.GetRemoteCoinsFromCoingecko();
+      batch(() => {
+        dispatch(setRemoteCoinsAction(remoteCoins));
+        dispatch(setRemoteCoinsLoadingAction(false));
+      });
+    } catch (error) {
+      dispatch(setRemoteCoinsLoadingAction(false));
+    }
+  });
+  return load;
 }
 
 export function useDrawer<T>(initialData: T) {
@@ -297,6 +482,9 @@ export function useDrawer<T>(initialData: T) {
     close: () => {
       setDrawer({ show: false, data: initialData });
     },
+    open: () => {
+      setDrawer((_) => ({ ..._, show: true }));
+    },
   };
 }
 
@@ -305,7 +493,7 @@ export function useAfterMounted(fn: any, dep: any[] = []) {
   useEffect(() => {
     setTrue();
   }, []);
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (flag) {
       fn();
     }
@@ -313,7 +501,8 @@ export function useAfterMounted(fn: any, dep: any[] = []) {
 }
 
 export function useFundRating(code: string) {
-  const fundRatingMap = useSelector((state: StoreState) => state.fund.fundRatingMap);
+  const fundRatingMap = useAppSelector((state) => state.fund.fundRatingMap);
+  const loadFundRatingMap = useLoadFundRatingMap();
   const fundRating = fundRatingMap[code];
   let star = 0;
   if (fundRating) {
@@ -339,8 +528,8 @@ export function useFundRating(code: string) {
   }
 
   useEffect(() => {
-    if (!Object.keys(fundRatingMap)) {
-      Helpers.Fund.LoadFundRatingMap();
+    if (!Object.keys(fundRatingMap).length) {
+      loadFundRatingMap();
     }
   }, [fundRatingMap]);
 
@@ -364,15 +553,16 @@ export function useAutoDestroySortableRef() {
  * statusMap Record<钱包code,booealn>
  */
 export function useAllCyFunds(statusMap: Record<string, boolean>) {
-  const wallets = useSelector((state: StoreState) => state.wallet.wallets);
+  const wallets = useAppSelector((state) => state.wallet.wallets);
+  const walletsConfig = useAppSelector((state) => state.wallet.config.walletConfig);
 
   // 持有份额的基金，response数组
   const funds = useMemo(() => {
     const allFunds: (Fund.ResponseItem & Fund.FixData)[] = [];
     const fundCodeMap = new Map();
     wallets.forEach(({ code, funds }) => {
-      const fundConfig = Helpers.Wallet.GetCurrentWalletConfig(code).funds;
-      const fundCodeMap = Helpers.Fund.GetCodeMap(fundConfig);
+      const { fundConfig } = Helpers.Fund.GetFundConfig(code, walletsConfig);
+      const fundCodeMap = Utils.GetCodeMap(fundConfig, 'code');
       if (statusMap[code]) {
         allFunds.push(...funds.filter((fund) => !!fundCodeMap[fund.fundcode!]?.cyfe));
       }
@@ -381,4 +571,30 @@ export function useAllCyFunds(statusMap: Record<string, boolean>) {
   }, [statusMap, wallets]);
 
   return funds;
+}
+
+export function useOpenWebView(params: any = {}) {
+  const dispatch = useAppDispatch();
+  const openWebView = useMemoizedFn((args) => {
+    const obj = typeof args === 'string' ? { url: args } : args;
+    dispatch(openWebAction({ ...params, ...obj }));
+  });
+  return openWebView;
+}
+
+export function useFundConfigMap(codes: string[]) {
+  const walletsConfig = useAppSelector((state) => state.wallet.config.walletConfig);
+  const codeMaps = useMemo(() => Helpers.Fund.GetFundConfigMaps(codes, walletsConfig), [codes, walletsConfig]);
+  return codeMaps;
+}
+
+export function useIpcRendererListener(channel: string, listener: (event: Electron.IpcRendererEvent, ...args: any[]) => void) {
+  const callback = useMemoizedFn(listener);
+
+  useEffect(() => {
+    ipcRenderer.on(channel, callback);
+    return () => {
+      ipcRenderer.removeListener(channel, callback);
+    };
+  }, []);
 }

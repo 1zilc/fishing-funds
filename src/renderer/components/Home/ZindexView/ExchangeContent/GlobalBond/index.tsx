@@ -1,6 +1,6 @@
 import React, { PropsWithChildren, useState, useEffect } from 'react';
 import { Table } from 'antd';
-import classnames from 'classnames';
+import clsx from 'clsx';
 import { useRequest } from 'ahooks';
 
 import ChartCard from '@/components/Card/ChartCard';
@@ -11,8 +11,6 @@ import styles from './index.module.scss';
 interface GlobalBondProps {}
 
 const GlobalBond: React.FC<PropsWithChildren<GlobalBondProps>> = () => {
-  const [data, setData] = useState<any[]>([]);
-
   const columns = [
     {
       title: '名称',
@@ -23,20 +21,18 @@ const GlobalBond: React.FC<PropsWithChildren<GlobalBondProps>> = () => {
     {
       title: '最新价',
       dataIndex: 'price',
-      render: (text: string, record: any) => <span className={classnames(Utils.GetValueColor(record.percent).textClass)}>{text}</span>,
+      render: (text: string, record: any) => <span className={clsx(Utils.GetValueColor(record.percent).textClass)}>{text}</span>,
       sorter: (a: any, b: any) => Number(a.price) - Number(b.price),
     },
     {
       title: '涨跌幅',
       dataIndex: 'percent',
-      render: (text: string, record: any) => <span className={classnames(Utils.GetValueColor(record.percent).textClass)}>{text}%</span>,
+      render: (text: string, record: any) => <span className={clsx(Utils.GetValueColor(record.percent).textClass)}>{text}%</span>,
       sorter: (a: any, b: any) => Number(a.percent) - Number(b.percent),
     },
   ];
 
-  const { run: runGetGlobalBondFromEastmoney, loading } = useRequest(Services.Exchange.GetGlobalBondFromEastmoney, {
-    onSuccess: setData,
-  });
+  const { data = [], run: runGetGlobalBondFromEastmoney, loading } = useRequest(Services.Exchange.GetGlobalBondFromEastmoney);
 
   return (
     <ChartCard auto onFresh={runGetGlobalBondFromEastmoney}>

@@ -1,7 +1,6 @@
-import React, { useCallback } from 'react';
+import React, { useState } from 'react';
 import { useRequest } from 'ahooks';
 
-import { useHomeContext } from '@/components/Home';
 import ChartCard from '@/components/Card/ChartCard';
 import { useResizeEchart, useRenderEcharts } from '@/utils/hooks';
 import * as CONST from '@/constants';
@@ -14,11 +13,17 @@ export interface RealTimeTransactionProps {
 
 const RealTimeTransaction: React.FC<RealTimeTransactionProps> = ({ code = '' }) => {
   const { ref: chartRef, chartInstance } = useResizeEchart(CONST.DEFAULT.ECHARTS_SCALE);
-  const { varibleColors, darkMode } = useHomeContext();
 
-  const { run: runGetTransactionFromEasymoney } = useRequest(() => Services.Quotation.GetTransactionFromEasymoney(code), {
-    pollingInterval: 1000 * 60,
-    onSuccess: (result) => {
+  const { data: result = {}, run: runGetTransactionFromEasymoney } = useRequest(
+    () => Services.Quotation.GetTransactionFromEasymoney(code),
+    {
+      pollingInterval: 1000 * 60,
+      refreshDeps: [code],
+      ready: !!chartInstance,
+    }
+  );
+  useRenderEcharts(
+    ({ varibleColors, darkMode }) => {
       chartInstance?.setOption({
         backgroundColor: 'transparent',
         title: {
@@ -114,9 +119,9 @@ const RealTimeTransaction: React.FC<RealTimeTransactionProps> = ({ code = '' }) 
         ],
       });
     },
-    refreshDeps: [darkMode, code],
-    ready: !!chartInstance,
-  });
+    chartInstance,
+    [result]
+  );
 
   return (
     <ChartCard auto onFresh={runGetTransactionFromEasymoney}>

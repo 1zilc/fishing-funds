@@ -1,9 +1,9 @@
-const { got } = window.contextModules;
+import request from '@/utils/request';
 
 // 获取更新内容
 export async function GetLog() {
   try {
-    const { body } = await got<
+    const { body } = await request<
       {
         date: string;
         version: string;

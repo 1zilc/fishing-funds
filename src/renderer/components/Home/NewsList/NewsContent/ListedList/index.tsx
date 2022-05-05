@@ -1,4 +1,4 @@
-import React, { PropsWithChildren, useState } from 'react';
+import React, { PropsWithChildren } from 'react';
 import dayjs from 'dayjs';
 import { Table } from 'antd';
 import { useRequest } from 'ahooks';
@@ -11,11 +11,7 @@ interface ListedListProps {
 }
 
 const ListedList: React.FC<PropsWithChildren<ListedListProps>> = (props) => {
-  const [data, setData] = useState<News.ResponseItem[]>([]);
-
-  const { loading, run: runNewsGetListedList } = useRequest(Services.News.GetListedList, {
-    onSuccess: setData,
-  });
+  const { data = [], loading, run: runNewsGetListedList } = useRequest(Services.News.GetListedList);
 
   return (
     <ChartCard auto onFresh={runNewsGetListedList}>
@@ -45,7 +41,7 @@ const ListedList: React.FC<PropsWithChildren<ListedListProps>> = (props) => {
             position: ['bottomCenter'],
           }}
           onRow={(record) => ({
-            onClick: () => props.onView(record.url_m),
+            onClick: () => props.onView(record.url_unique),
           })}
         />
       </div>

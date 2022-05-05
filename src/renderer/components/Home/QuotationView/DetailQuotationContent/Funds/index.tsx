@@ -4,13 +4,13 @@ import { useRequest } from 'ahooks';
 
 import ChartCard from '@/components/Card/ChartCard';
 import CustomDrawer from '@/components/CustomDrawer';
-import AddFundContent from '@/components/Home/FundList/AddFundContent';
-import DetailFundContent from '@/components/Home/FundList/DetailFundContent';
-import { useDrawer, useCurrentWallet } from '@/utils/hooks';
+import { useDrawer, useAppSelector } from '@/utils/hooks';
 import * as Services from '@/services';
 import * as Utils from '@/utils';
 import styles from './index.module.scss';
 
+const AddFundContent = React.lazy(() => import('@/components/Home/FundView/AddFundContent'));
+const DetailFundContent = React.lazy(() => import('@/components/Home/FundView/DetailFundContent'));
 interface FundsProps {
   code: string;
 }
@@ -20,8 +20,7 @@ const RenderColorCol = ({ value }: { value: string }) => {
 };
 
 const Funds: React.FC<PropsWithChildren<FundsProps>> = ({ code }) => {
-  const [data, setData] = useState([]);
-  const { currentWalletFundsCodeMap: codeMap } = useCurrentWallet();
+  const codeMap = useAppSelector((state) => state.wallet.fundConfigCodeMap);
   const { data: detailCode, show: showDetailDrawer, set: setDetailDrawer, close: closeDetailDrawer } = useDrawer('');
   const { data: addCode, show: showAddDrawer, set: setAddDrawer, close: closeAddDrawer } = useDrawer('');
 
@@ -69,8 +68,11 @@ const Funds: React.FC<PropsWithChildren<FundsProps>> = ({ code }) => {
     },
   ];
 
-  const { run: runGetFundsFromEasymoney, loading } = useRequest(() => Services.Quotation.GetFundsFromEastmoney(code), {
-    onSuccess: setData,
+  const {
+    data = [],
+    run: runGetFundsFromEasymoney,
+    loading,
+  } = useRequest(() => Services.Quotation.GetFundsFromEastmoney(code), {
     refreshDeps: [code],
   });
 

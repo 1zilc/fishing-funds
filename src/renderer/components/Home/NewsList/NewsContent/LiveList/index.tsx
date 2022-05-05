@@ -11,11 +11,7 @@ interface LiveListProps {
 }
 
 const LiveList: React.FC<PropsWithChildren<LiveListProps>> = (props) => {
-  const [data, setData] = useState<News.ResponseItem[]>([]);
-
-  const { loading, run: runNewsGetLiveList } = useRequest(Services.News.GetLiveList, {
-    onSuccess: setData,
-  });
+  const { data = [], loading, run: runNewsGetLiveList } = useRequest(Services.News.GetLiveList);
 
   return (
     <ChartCard auto onFresh={runNewsGetLiveList}>
@@ -45,7 +41,7 @@ const LiveList: React.FC<PropsWithChildren<LiveListProps>> = (props) => {
             position: ['bottomCenter'],
           }}
           onRow={(record) => ({
-            onClick: () => props.onView(record.url_m),
+            onClick: () => props.onView(record.url_unique),
           })}
         />
       </div>

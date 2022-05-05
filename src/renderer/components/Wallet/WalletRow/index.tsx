@@ -1,14 +1,14 @@
 import React from 'react';
-import classnames from 'classnames';
-import { useDispatch, useSelector } from 'react-redux';
+import clsx from 'clsx';
 
 import StandCard from '@/components/Card/StandCard';
 import RemoveIcon from '@/static/icon/remove.svg';
 import CheckboxIcon from '@/static/icon/checkbox.svg';
 import EditIcon from '@/static/icon/edit.svg';
-import { deleteWalletConfigAction } from '@/actions/wallet';
+import { deleteWalletConfigAction } from '@/store/features/wallet';
 import { walletIcons } from '@/helpers/wallet';
-import { StoreState } from '@/reducers/types';
+
+import { useAppDispatch, useAppSelector } from '@/utils/hooks';
 import * as Utils from '@/utils';
 import * as Enums from '@/utils/enums';
 import * as Helpers from '@/helpers';
@@ -28,10 +28,11 @@ const { dialog } = window.contextModules.electron;
 
 const WalletRow: React.FC<WalletRowProps> = (props) => {
   const { wallet, selected, readonly } = props;
-  const dispatch = useDispatch();
-  const wallets = useSelector((state: StoreState) => state.wallet.wallets);
-  const { walletConfig } = useSelector((state: StoreState) => state.wallet.config);
-  const eyeStatus = useSelector((state: StoreState) => state.wallet.eyeStatus);
+  const dispatch = useAppDispatch();
+  const wallets = useAppSelector((state) => state.wallet.wallets);
+  const { walletConfig } = useAppSelector((state) => state.wallet.config);
+  const eyeStatus = useAppSelector((state) => state.wallet.eyeStatus);
+  const walletsConfig = useAppSelector((state) => state.wallet.config.walletConfig);
 
   const onRemoveClick = async (wallet: Wallet.SettingItem) => {
     if (walletConfig.length === 1) {
@@ -66,8 +67,8 @@ const WalletRow: React.FC<WalletRowProps> = (props) => {
     updateTime: '还没有刷新过哦~',
   };
   const { funds, updateTime } = walletState;
-
-  const { zje, sygz, gssyl, cysy, cysyl } = Helpers.Fund.CalcFunds(funds, wallet.code);
+  const { codeMap } = Helpers.Fund.GetFundConfig(wallet.code, walletsConfig);
+  const { zje, sygz, gssyl, cysy, cysyl } = Helpers.Fund.CalcFunds(funds, codeMap);
   const eyeOpen = eyeStatus === Enums.EyeStatus.Open;
   const displayZje = eyeOpen ? zje.toFixed(2) : Utils.Encrypt(zje.toFixed(2));
   const displaySygz = eyeOpen ? Utils.Yang(sygz.toFixed(2)) : Utils.Encrypt(Utils.Yang(sygz.toFixed(2)));
@@ -79,7 +80,7 @@ const WalletRow: React.FC<WalletRowProps> = (props) => {
     <StandCard
       icon={
         <img
-          className={classnames(styles.icon, {
+          className={clsx(styles.icon, {
             [styles.readonly]: readonly,
           })}
           src={walletIcons[wallet.iconIndex]}
@@ -109,14 +110,14 @@ const WalletRow: React.FC<WalletRowProps> = (props) => {
           <div className={styles.time}>{updateTime}</div>
         </div>
       }
-      className={classnames({
+      className={clsx({
         selected,
         hoverable: !readonly,
       })}
       onClick={() => !readonly && props.onClick && props.onClick(wallet)}
       onDoubleClick={() => !readonly && props.onDoubleClick && props.onDoubleClick(wallet)}
     >
-      <div className={classnames(styles.row, { [styles.readonly]: readonly }, 'card-body')}>
+      <div className={clsx(styles.row, { [styles.readonly]: readonly }, 'card-body')}>
         <div className={styles.rowInfo}>
           <div style={{ textAlign: 'center' }}>
             <div>持有金额</div>

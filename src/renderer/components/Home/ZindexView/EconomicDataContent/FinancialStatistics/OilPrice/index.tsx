@@ -1,10 +1,8 @@
 import React from 'react';
 import { useRequest } from 'ahooks';
 
-import { useHomeContext } from '@/components/Home';
 import ChartCard from '@/components/Card/ChartCard';
 import { useResizeEchart, useRenderEcharts } from '@/utils/hooks';
-import * as CONST from '@/constants';
 import * as Services from '@/services';
 import styles from './index.module.scss';
 
@@ -12,10 +10,12 @@ interface OilPriceProps {}
 
 const OilPrice: React.FC<OilPriceProps> = () => {
   const { ref: chartRef, chartInstance } = useResizeEchart(0.4);
-  const { varibleColors, darkMode } = useHomeContext();
+  const { data: result = [], run: runGetOilPriceFromEastmoney } = useRequest(() => Services.Zindex.GetOilPriceFromEastmoney(), {
+    ready: !!chartInstance,
+  });
 
-  const { run: runGetOilPriceFromEastmoney } = useRequest(() => Services.Zindex.GetOilPriceFromEastmoney(), {
-    onSuccess: (result) => {
+  useRenderEcharts(
+    ({ varibleColors }) => {
       try {
         chartInstance?.setOption({
           title: {
@@ -54,6 +54,11 @@ const OilPrice: React.FC<OilPriceProps> = () => {
                 fontSize: 10,
                 formatter: `{value}美元/桶`,
               },
+              splitLine: {
+                lineStyle: {
+                  color: varibleColors['--border-color'],
+                },
+              },
             },
             {
               type: 'value',
@@ -61,6 +66,11 @@ const OilPrice: React.FC<OilPriceProps> = () => {
               axisLabel: {
                 fontSize: 10,
                 formatter: `{value}元/吨`,
+              },
+              splitLine: {
+                lineStyle: {
+                  color: varibleColors['--border-color'],
+                },
               },
             },
           ],
@@ -92,10 +102,9 @@ const OilPrice: React.FC<OilPriceProps> = () => {
         });
       } catch {}
     },
-    refreshDeps: [darkMode],
-    ready: !!chartInstance,
-  });
-
+    chartInstance,
+    [result]
+  );
   return (
     <ChartCard auto onFresh={runGetOilPriceFromEastmoney} TitleBar={<div className={styles.title}>油价</div>}>
       <div className={styles.content}>

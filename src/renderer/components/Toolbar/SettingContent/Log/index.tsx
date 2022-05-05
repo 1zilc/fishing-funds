@@ -1,4 +1,4 @@
-import classnames from 'classnames';
+import clsx from 'clsx';
 import React, { useState } from 'react';
 import { Timeline, Spin } from 'antd';
 import { useRequest } from 'ahooks';
@@ -11,28 +11,18 @@ interface LogProps {}
 const { version } = window.contextModules.process;
 
 const Log: React.FC<LogProps> = () => {
-  const [logs, setLogs] = useState<
-    {
-      date: string;
-      version: string;
-      contents: string[];
-    }[]
-  >([]);
-
-  const { loading } = useRequest(Services.Log.GetLog, {
-    onSuccess: setLogs,
-  });
+  const { data: logs = [], loading } = useRequest(Services.Log.GetLog);
 
   return (
     <Spin spinning={loading}>
-      <div className={classnames(styles.content)}>
+      <div className={clsx(styles.content)}>
         <Timeline>
           {logs.map((log) => (
             <Timeline.Item
               key={log.version}
               color={log.version.slice(1) === version ? 'blue' : log.version.slice(1) > version ? 'green' : 'gray'}
             >
-              <div className={classnames(styles.item, styles.title)}>
+              <div className={clsx(styles.item, styles.title)}>
                 <div>{log.version}</div>
                 <div>{log.date}</div>
               </div>

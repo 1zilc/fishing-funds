@@ -1,10 +1,11 @@
 import dayjs from 'dayjs';
 import cheerio from 'cheerio';
 import NP from 'number-precision';
+import request from '@/utils/request';
 import * as Utils from '@/utils';
-import { defaultCompany } from '@/components/Home/StockList/DetailStockContent/Company';
+import { defaultCompany } from '@/components/Home/StockView/DetailStockContent/Company';
 
-const { got } = window.contextModules;
+const { base64 } = window.contextModules;
 
 // 天天基金获取股票
 export async function FromEastmoney(secid: string) {
@@ -12,7 +13,7 @@ export async function FromEastmoney(secid: string) {
     const responseTrends = await GetTrendFromEastmoney(secid);
     const responseDetail = await GetDetailFromEastmoney(secid);
 
-    if (!responseTrends || !Object.keys(responseDetail).length) {
+    if (!responseTrends || !Object.keys(responseDetail || {}).length) {
       return null;
     }
 
@@ -43,7 +44,7 @@ export async function SearchFromEastmoney(keyword: string) {
   try {
     const {
       body: { Data },
-    } = await got<{
+    } = await request<{
       Data: {
         Type: number; // 7,
         Name: string; // "三板",
@@ -82,7 +83,7 @@ export async function GetTrendFromEastmoney(secid: string) {
   try {
     const {
       body: { data },
-    } = await got<{
+    } = await request<{
       rc: 0;
       rt: 10;
       svr: 182482649;
@@ -137,14 +138,14 @@ export async function GetTrendFromEastmoney(secid: string) {
 
 export async function GetPicTrendFromEastmoney(secid: string) {
   try {
-    const { rawBody }: any = await got('http://webquotepic.eastmoney.com/GetPic.aspx', {
+    const { rawBody } = await request('http://webquotepic.eastmoney.com/GetPic.aspx', {
       searchParams: {
         nid: secid,
         imageType: 'GNR',
         token: Utils.MakeHash(),
       },
     });
-    const b64encoded = btoa(String.fromCharCode.apply(null, rawBody));
+    const b64encoded = base64.fromUint8Array(new Uint8Array(rawBody));
     return `data:image/png;base64,${b64encoded}`;
   } catch (error) {
     return null;
@@ -156,7 +157,7 @@ export async function GetDetailFromEastmoney(secid: string) {
   try {
     const {
       body: { data },
-    } = await got<{
+    } = await request<{
       rc: 0;
       rt: 4;
       svr: 182481210;
@@ -322,13 +323,13 @@ export async function GetDetailFromEastmoney(secid: string) {
       time: dayjs.unix(data.f86).format('MM-DD HH:mm'),
     };
   } catch (error) {
-    return {};
+    return null;
   }
 }
 
 export async function GetKFromEastmoney(secid: string, code: number) {
   try {
-    const { body } = await got<{
+    const { body } = await request<{
       rc: 0;
       rt: 17;
       svr: 182481222;
@@ -376,7 +377,7 @@ export async function GetKFromEastmoney(secid: string, code: number) {
 
 export async function GetSelfRankFromEastmoney(code: string) {
   try {
-    const { body } = await got<{
+    const { body } = await request<{
       rc: 0;
       rt: 6;
       svr: 182482210;
@@ -439,7 +440,7 @@ export async function GetSelfRankFromEastmoney(code: string) {
 
 export async function GetMainRankFromEastmoney(code: string) {
   try {
-    const { body } = await got<{
+    const { body } = await request<{
       rc: 0;
       rt: 6;
       svr: 182482210;
@@ -502,7 +503,7 @@ export async function GetMainRankFromEastmoney(code: string) {
 export async function GetABCompany(secid: string) {
   try {
     const [mk, code] = secid.split('.');
-    const { body } = await got<{
+    const { body } = await request<{
       jbzl: {
         gsmc: '贵州茅台酒股份有限公司';
         ywmc: 'Kweichow Moutai Co.,Ltd.';
@@ -587,7 +588,7 @@ export async function GetABCompany(secid: string) {
 export async function GetHKCompany(secid: string) {
   try {
     const [mk, code] = secid.split('.');
-    const { body } = await got<{
+    const { body } = await request<{
       zqzl: {
         zqdm: '01810.HK';
         zqjc: '小米集团-W';
@@ -641,7 +642,7 @@ export async function GetHKCompany(secid: string) {
 export async function GetUSCompany(secid: string) {
   try {
     const [mk, code] = secid.split('.');
-    const { body } = await got<{
+    const { body } = await request<{
       data: {
         zqzl: [
           {
@@ -747,7 +748,7 @@ export async function GetUSCompany(secid: string) {
 export async function GetXSBCompany(secid: string) {
   try {
     const [mk, code] = secid.split('.');
-    const { body: html } = await got(`http:xinsanban.eastmoney.com/F10/CompanyInfo/Introduction/${code}.html`);
+    const { body: html } = await request<string>(`http:xinsanban.eastmoney.com/F10/CompanyInfo/Introduction/${code}.html`);
     const $ = cheerio.load(html);
     const gsjs = $("span:contains('公司简介')").next().text();
     const sshy = $("span:contains('行业分类')").next().text();
@@ -772,7 +773,7 @@ export async function GetXSBCompany(secid: string) {
 // 1 主要 2 同类 3 所属板块
 export async function GetIndustryFromEastmoney(secid: string, type: 1 | 2 | 3) {
   try {
-    const { body } = await got<{
+    const { body } = await request<{
       rc: 0;
       rt: 18;
       svr: 182994846;
@@ -814,7 +815,7 @@ export async function GetIndustryFromEastmoney(secid: string, type: 1 | 2 | 3) {
 
 export async function GetCloseDayDates() {
   try {
-    const { body } = await got<{
+    const { body } = await request<{
       version: string;
       result: {
         pages: 1;
@@ -849,13 +850,13 @@ export async function GetCloseDayDates() {
 
 export async function GetMeetingData({ startTime, endTime, code }: { startTime: string; endTime: string; code: string }) {
   try {
-    const { body } = await got<{
+    const { body } = await request<{
       version: 'b0ba2c16623998ee2e8c464dd1f32ccd';
       result: {
         pages: 1;
         data: {
-          START_DATE: '2022-01-01 00:00:00';
-          END_DATE: '2022-01-27 00:00:00';
+          START_DATE: string;
+          END_DATE: string;
           FE_CODE: '10849794';
           FE_NAME: '2022第二十一届南京(全国)春节食品商品交易会';
           FE_TYPE: '其他会议';

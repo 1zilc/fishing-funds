@@ -1,14 +1,14 @@
 import React from 'react';
 import { Table } from 'antd';
-import classnames from 'classnames';
+import clsx from 'clsx';
 
 import PureCard from '@/components/Card/PureCard';
 import CustomDrawer from '@/components/CustomDrawer';
-import AddStockContent from '@/components/Home/StockList/AddStockContent';
 import { useDrawer } from '@/utils/hooks';
 import * as Utils from '@/utils';
 import styles from './index.module.scss';
 
+const AddStockContent = React.lazy(() => import('@/components/Home/StockView/AddStockContent'));
 interface RecommendProps {
   ThemeList: {
     Code: string;
@@ -38,9 +38,9 @@ const Recommend: React.FC<RecommendProps> = (props) => {
           <div className={styles.name}>
             <h3>{t.Name}</h3>
             {Number(t.Chg) > 0 ? (
-              <span className={classnames(styles.tag, 'text-up', 'boder-up')}>{t.Chg}% ↗</span>
+              <span className={clsx(styles.tag, 'text-up', 'boder-up')}>{t.Chg}% ↗</span>
             ) : Number(t.Chg) < 0 ? (
-              <span className={classnames(styles.tag, 'text-down', 'boder-down')}>{t.Chg}% ↘</span>
+              <span className={clsx(styles.tag, 'text-down', 'boder-down')}>{t.Chg}% ↘</span>
             ) : (
               <></>
             )}

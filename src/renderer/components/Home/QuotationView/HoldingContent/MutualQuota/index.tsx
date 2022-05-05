@@ -1,34 +1,33 @@
-import React, { useState } from 'react';
-import classnames from 'classnames';
+import React from 'react';
+import clsx from 'clsx';
 import { useRequest } from 'ahooks';
 import StandCard from '@/components/Card/StandCard';
-import AddZindexContent from '@/components/Home/ZindexView/AddZindexContent';
 import CustomDrawer from '@/components/CustomDrawer';
 import { useDrawer } from '@/utils/hooks';
 import * as Services from '@/services';
 import * as Utils from '@/utils';
 import styles from './index.module.scss';
 
+const AddZindexContent = React.lazy(() => import('@/components/Home/ZindexView/AddZindexContent'));
+
 interface MutualQuotaProps {}
 
 const MutualQuota: React.FC<MutualQuotaProps> = () => {
-  const [list, setList] = useState<any[]>([]);
-  useRequest(Services.Quotation.GetMutualQuotaFromEastmoney, {
-    onSuccess: setList,
+  const { data: list = [] } = useRequest(Services.Quotation.GetMutualQuotaFromEastmoney, {
     pollingInterval: 1000 * 60,
   });
 
   const { data: zindexName, show: showAddZindexDrawer, set: setAddZindexDrawer, close: closeAddZindexDrawer } = useDrawer('');
 
   return (
-    <div className={classnames(styles.content)}>
+    <div className={clsx(styles.content)}>
       {list.map((item) => {
         const color = Utils.GetValueColor(item.indexZdf);
         return (
           <StandCard
             key={item.quota}
             title={item.direction}
-            icon={<span className={classnames(styles.tag, color.textClass)}>{color.string}</span>}
+            icon={<span className={clsx(styles.tag, color.textClass)}>{color.string}</span>}
           >
             <div className={styles.card}>
               <div

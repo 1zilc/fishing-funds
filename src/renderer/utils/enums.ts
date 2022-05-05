@@ -77,6 +77,7 @@ export enum TabKeyType {
   Quotation,
   Stock,
   Coin,
+  // News,
 }
 
 // 持仓类型
@@ -204,16 +205,23 @@ export enum FundViewType {
 export enum ZindexViewType {
   List,
   Grid,
+  Chart,
 }
 export enum QuotationViewType {
   List,
   Grid,
 }
 export enum StockViewType {
-  List,
+  Chart,
   Grid,
+  List,
 }
 export enum CoinViewType {
   List,
   Grid,
+}
+export enum WebIconType {
+  First,
+  Favicon,
+  Svg,
 }

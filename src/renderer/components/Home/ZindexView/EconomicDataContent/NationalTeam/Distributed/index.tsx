@@ -1,9 +1,8 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useRequest } from 'ahooks';
 
-import { useHomeContext } from '@/components/Home';
 import ChartCard from '@/components/Card/ChartCard';
-import { useResizeEchart } from '@/utils/hooks';
+import { useRenderEcharts, useResizeEchart } from '@/utils/hooks';
 import * as Services from '@/services';
 import styles from './index.module.scss';
 
@@ -11,11 +10,21 @@ interface DistributedProps {}
 
 const Distributed: React.FC<DistributedProps> = () => {
   const { ref: chartRef, chartInstance } = useResizeEchart(0.4);
-  const { varibleColors, darkMode } = useHomeContext();
-  const [time, setTime] = useState('');
 
-  const { run: runZindexGetNationalTeamDistributed } = useRequest(Services.Zindex.GetNationalTeamDistributed, {
-    onSuccess: (result) => {
+  const {
+    data: result = {
+      MARKETCAPRATIO_SUM_0: 0,
+      MARKETCAPRATIO_SUM_1: 0,
+      MARKETCAPRATIO_SUM_2: 0,
+      REPORT_DATE: '',
+    },
+    run: runZindexGetNationalTeamDistributed,
+  } = useRequest(Services.Zindex.GetNationalTeamDistributed, {
+    ready: !!chartInstance,
+  });
+
+  useRenderEcharts(
+    ({ varibleColors }) => {
       chartInstance?.setOption({
         backgroundColor: 'transparent',
         title: {
@@ -72,14 +81,17 @@ const Distributed: React.FC<DistributedProps> = () => {
           },
         ],
       });
-      setTime(result.REPORT_DATE.slice(0, 10));
     },
-    refreshDeps: [darkMode],
-    ready: !!chartInstance,
-  });
+    chartInstance,
+    [result]
+  );
 
   return (
-    <ChartCard auto onFresh={runZindexGetNationalTeamDistributed} TitleBar={<div className={styles.title}>{time}</div>}>
+    <ChartCard
+      auto
+      onFresh={runZindexGetNationalTeamDistributed}
+      TitleBar={<div className={styles.title}>{result.REPORT_DATE.slice(0, 10)}</div>}
+    >
       <div className={styles.content}>
         <div ref={chartRef} style={{ width: '100%' }} />
       </div>

@@ -1,6 +1,6 @@
 import React from 'react';
+import { useRequest } from 'ahooks';
 
-import { useHomeContext } from '@/components/Home';
 import { useResizeEchart, useRenderEcharts } from '@/utils/hooks';
 import * as CONST from '@/constants';
 import styles from './index.module.scss';
@@ -9,14 +9,16 @@ interface TemplateNameProps {}
 
 const TemplateName: React.FC<TemplateNameProps> = () => {
   const { ref: chartRef, chartInstance } = useResizeEchart(CONST.DEFAULT.ECHARTS_SCALE);
-  const { varibleColors, darkMode } = useHomeContext();
 
+  const { data: result, run } = useRequest(() => {}, {
+    ready: !!chartInstance,
+  });
   useRenderEcharts(
     () => {
       chartInstance?.setOption({});
     },
     chartInstance,
-    [darkMode]
+    [result]
   );
 
   return (

@@ -1,15 +1,16 @@
 import dayjs from 'dayjs';
 import NP from 'number-precision';
+import request from '@/utils/request';
+import { number } from 'echarts';
 
-const { got } = window.contextModules;
 /**
  *
- * @param code 指数代码: 000001
+ * @param secid 指数代码: 000001
  * 从天天基金获取指数行情
  */
-export async function FromEastmoney(code: string) {
+export async function FromEastmoney(secid: string) {
   try {
-    const { body: data } = await got<{
+    const { body: data } = await request<{
       rc: 0;
       rt: 4;
       svr: 182481189;
@@ -33,11 +34,13 @@ export async function FromEastmoney(code: string) {
     }>('http://push2.eastmoney.com/api/qt/stock/get?=', {
       searchParams: {
         fields: 'f43,f44,f45,f46,f57,f58,f60,f86,f107,f168,f169,f170,f171',
-        secid: code, // 1.000001
+        secid, // 1.000001
         _: new Date().getTime(),
       },
       responseType: 'json',
     });
+
+    const trends = await GetTrendFromEastmoney(secid, 1);
 
     return {
       zsz: NP.divide(data.data.f43, 100),
@@ -54,6 +57,7 @@ export async function FromEastmoney(code: string) {
       type: data.data.f107,
       code: `${data.data.f107}.${data.data.f57}`,
       time: dayjs.unix(data.data.f86).format('MM-DD HH:mm'),
+      trends,
     };
   } catch (error) {
     return null;
@@ -62,7 +66,7 @@ export async function FromEastmoney(code: string) {
 
 export async function GetTrendFromEastmoney(code: string, ndays: number) {
   try {
-    const { body } = await got<{
+    const { body } = await request<{
       rc: 0;
       rt: 10;
       svr: 2887136043;
@@ -97,8 +101,8 @@ export async function GetTrendFromEastmoney(code: string, ndays: number) {
       const [time, price, cjl] = _.split(',');
       return {
         time,
-        price,
-        cjl,
+        price: Number(price),
+        cjl: Number(cjl),
       };
     });
   } catch (error) {
@@ -108,7 +112,7 @@ export async function GetTrendFromEastmoney(code: string, ndays: number) {
 
 export async function GetKFromEastmoney(code: string, year: number) {
   try {
-    const { body } = await got<{
+    const { body } = await request<{
       rc: 0;
       rt: 17;
       svr: 181734976;
@@ -156,7 +160,8 @@ export async function GetKFromEastmoney(code: string, year: number) {
 // 中国 居民消费价格指数(CPI)等指数
 export async function GetEconomyIndexFromEastmoney(market: number) {
   try {
-    const { body } = await got<string>('https://datainterface.eastmoney.com/EM_DataCenter/JS.aspx', {
+    const { body } = await request('https://datainterface.eastmoney.com/EM_DataCenter/JS.aspx', {
+      responseType: 'text',
       searchParams: {
         type: 'GJZB',
         sty: 'ZGZB',
@@ -178,7 +183,7 @@ export async function GetEconomyIndexFromEastmoney(market: number) {
 // 油价
 export async function GetOilPriceFromEastmoney() {
   try {
-    const { body } = await got<{
+    const { body } = await request<{
       version: '63fa26740fe0adbc234c8c41e0d5894d';
       result: {
         pages: 18;
@@ -213,7 +218,7 @@ export async function GetOilPriceFromEastmoney() {
 // 中美国债收益率
 export async function GetTreasuryYieldData() {
   try {
-    const { body } = await got<{
+    const { body } = await request<{
       version: '63fa26740fe0adbc234c8c41e0d5894d';
       result: {
         pages: 18;
@@ -255,7 +260,7 @@ export async function GetTreasuryYieldData() {
 // 国家队持股分布
 export async function GetNationalTeamDistributed() {
   try {
-    const { body } = await got<{
+    const { body } = await request<{
       version: '63fa26740fe0adbc234c8c41e0d5894d';
       result: {
         pages: 18;
@@ -294,7 +299,7 @@ export async function GetNationalTeamDistributed() {
 // 国家队持股分布
 export async function GetNationalTeamTrend() {
   try {
-    const { body } = await got<{
+    const { body } = await request<{
       version: '63fa26740fe0adbc234c8c41e0d5894d';
       result: {
         pages: 18;
@@ -336,7 +341,7 @@ export async function GetNationalTeamTrend() {
 export async function GetNationalTeamDetail(columns: string) {
   try {
     const { REPORT_DATE: time } = await GetNationalTeamDistributed();
-    const { body } = await got<{
+    const { body } = await request<{
       version: '63fa26740fe0adbc234c8c41e0d5894d';
       result: {
         pages: 18;
@@ -395,4 +400,48 @@ export async function GetNationalTeamDetail(columns: string) {
   } catch (error) {
     return [];
   }
+}
+
+export async function GetRemoteZindexConfig() {
+  const cb = 'parsezindex';
+  const now = new Date().getTime();
+  const fields = '12,13,14';
+  const { body: b1 } = await request(
+    `http://32.push2.eastmoney.com/api/qt/clist/get?pn=1&pz=50&po=1&np=1&ut=bd1d9ddb04089700cf9c27f6f7426281&fltt=2&invt=2&fid=&fs=b:MK0010`,
+    {
+      responseType: 'text',
+      searchParams: {
+        cb,
+        fields,
+        _: now,
+      },
+    }
+  );
+  const a1 = eval(b1);
+  const { body: b2 } = await request(
+    `http://32.push2.eastmoney.com/api/qt/clist/get?pn=1&pz=5&po=1&np=1&ut=bd1d9ddb04089700cf9c27f6f7426281&fltt=2&invt=2&fid=f3&fs=m:1+t:1`,
+    {
+      responseType: 'text',
+      searchParams: {
+        cb,
+        fields,
+        _: now,
+      },
+    }
+  );
+  const a2 = eval(b2);
+  const { body: b3 } = await request(
+    `http://32.push2.eastmoney.com/api/qt/clist/get?&pn=1&pz=5&po=1&np=1&ut=bd1d9ddb04089700cf9c27f6f7426281&fltt=2&invt=2&fid=f3&fs=m:0+t:5`,
+    {
+      responseType: 'text',
+      searchParams: {
+        cb,
+        fields,
+        _: now,
+      },
+    }
+  );
+  const a3 = eval(b3);
+  const result = [...a1, ...a2, ...a3];
+  return result;
 }

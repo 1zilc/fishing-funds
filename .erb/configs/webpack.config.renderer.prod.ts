@@ -7,9 +7,8 @@ import webpack from 'webpack';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
-import CssMinimizerPlugin from 'css-minimizer-webpack-plugin';
 import { merge } from 'webpack-merge';
-import TerserPlugin from 'terser-webpack-plugin';
+import { ESBuildMinifyPlugin } from 'esbuild-loader';
 import baseConfig from './webpack.config.base';
 import webpackPaths from './webpack.paths';
 import checkNodeEnv from '../scripts/check-node-env';
@@ -37,10 +36,15 @@ const configuration: webpack.Configuration = {
   output: {
     path: webpackPaths.distRendererPath,
     publicPath: './',
-    filename: 'renderer.js',
+    filename: '[name].js',
+    chunkFilename: '[name].bundle.js',
     library: {
-      type: 'umd',
+      type: 'module',
     },
+  },
+
+  experiments: {
+    outputModule: true,
   },
 
   module: {
@@ -91,12 +95,14 @@ const configuration: webpack.Configuration = {
   },
 
   optimization: {
+    splitChunks: {
+      chunks: 'all',
+    },
     minimize: true,
     minimizer: [
-      new TerserPlugin({
-        parallel: true,
+      new ESBuildMinifyPlugin({
+        css: true,
       }),
-      new CssMinimizerPlugin(),
     ],
   },
 
@@ -115,8 +121,12 @@ const configuration: webpack.Configuration = {
       DEBUG_PROD: false,
     }),
 
+    new webpack.ProvidePlugin({
+      React: 'react',
+    }),
+
     new MiniCssExtractPlugin({
-      filename: 'style.css',
+      filename: '[name].css',
     }),
 
     new BundleAnalyzerPlugin({
@@ -133,6 +143,7 @@ const configuration: webpack.Configuration = {
       },
       isBrowser: false,
       isDevelopment: process.env.NODE_ENV !== 'production',
+      scriptLoading: 'module',
     }),
   ],
 };

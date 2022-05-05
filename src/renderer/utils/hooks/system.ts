@@ -1,59 +1,73 @@
-import { useCallback, useLayoutEffect, useState, useEffect, useMemo, useRef } from 'react';
-import { useInterval, useBoolean, useThrottleFn, useSize } from 'ahooks';
-import { useDispatch, useSelector } from 'react-redux';
+import { useLayoutEffect, useState, useEffect, useMemo } from 'react';
+import { useInterval, useMemoizedFn } from 'ahooks';
 import { compose } from 'redux';
 import { Base64 } from 'js-base64';
 import dayjs from 'dayjs';
 import NP from 'number-precision';
 
-import { updateAvaliableAction } from '@/actions/updater';
-import { setFundConfigAction } from '@/actions/fund';
-import { selectWalletAction } from '@/actions/wallet';
-import { setAdjustmentNotificationDateAction, clearAdjustmentNotificationDateAction } from '@/actions/setting';
-import { StoreState } from '@/reducers/types';
-import { useWorkDayTimeToDo, useFixTimeToDo, useAfterMounted, useCurrentWallet, useFreshFunds, useAllCyFunds } from '@/utils/hooks';
+import { tabs } from '@/components/TabsBar';
+import { updateAvaliableAction } from '@/store/features/updater';
+import { setFundConfigAction } from '@/store/features/fund';
+import { setTabsActiveKeyAction } from '@/store/features/tabs';
+import { selectWalletAction, toggleEyeStatusAction } from '@/store/features/wallet';
+import { setAdjustmentNotificationDateAction, clearAdjustmentNotificationDateAction, syncDarkMode } from '@/store/features/setting';
+
+import {
+  useWorkDayTimeToDo,
+  useFixTimeToDo,
+  useAfterMounted,
+  useFreshFunds,
+  useAppDispatch,
+  useAppSelector,
+  useLoadCoins,
+  useLoadRemoteCoins,
+  useLoadRemoteFunds,
+  useLoadFundRatingMap,
+  useLoadWalletsFunds,
+  useLoadFixWalletsFunds,
+  useLoadQuotations,
+  useLoadZindexs,
+  useLoadStocks,
+  useIpcRendererListener,
+} from '@/utils/hooks';
 import * as Utils from '@/utils';
 import * as CONST from '@/constants';
 import * as Adapters from '@/utils/adpters';
 import * as Helpers from '@/helpers';
 import * as Enums from '@/utils/enums';
-import { NOTIMP } from 'dns';
+import { useLoadFunds } from './utils';
 
 const { invoke, dialog, ipcRenderer, clipboard, app } = window.contextModules.electron;
 const { saveString, encodeFF, decodeFF, readFile } = window.contextModules.io;
 
 export function useUpdater() {
-  const dispatch = useDispatch();
-  const { autoCheckUpdateSetting } = useSelector((state: StoreState) => state.setting.systemSetting);
+  const dispatch = useAppDispatch();
+  const { autoCheckUpdateSetting } = useAppSelector((state) => state.setting.systemSetting);
   // 2小时检查一次版本
   useInterval(() => autoCheckUpdateSetting && ipcRenderer.invoke('check-update'), 1000 * 60 * 60 * 2, {
     immediate: true,
   });
 
-  useEffect(() => {
-    ipcRenderer.on('update-available', (e, data) => {
-      if (autoCheckUpdateSetting) {
-        dispatch(updateAvaliableAction(data));
-      }
-    });
-    return () => {
-      ipcRenderer.removeAllListeners('update-available');
-    };
-  }, [autoCheckUpdateSetting]);
+  useIpcRendererListener('update-available', (e, data) => {
+    if (autoCheckUpdateSetting) {
+      dispatch(updateAvaliableAction(data));
+    }
+  });
 }
 
 export function useAdjustmentNotification() {
-  const dispatch = useDispatch();
-  const systemSetting = useSelector((state: StoreState) => state.setting.systemSetting);
-  const lastNotificationDate = useSelector((state: StoreState) => state.setting.adjustmentNotificationDate);
-  const { adjustmentNotificationSetting, adjustmentNotificationTimeSetting } = systemSetting;
+  const dispatch = useAppDispatch();
+  const { adjustmentNotificationSetting, adjustmentNotificationTimeSetting, timestampSetting } = useAppSelector(
+    (state) => state.setting.systemSetting
+  );
+  const lastNotificationDate = useAppSelector((state) => state.setting.adjustmentNotificationDate);
 
   useInterval(
     async () => {
       if (!adjustmentNotificationSetting) {
         return;
       }
-      const timestamp = await Helpers.Time.GetCurrentHours();
+      const timestamp = await Helpers.Time.GetCurrentHours(timestampSetting);
       const { isAdjustmentNotificationTime, now } = Utils.JudgeAdjustmentNotificationTime(
         Number(timestamp),
         adjustmentNotificationTimeSetting
@@ -83,8 +97,9 @@ export function useAdjustmentNotification() {
 export function useRiskNotification() {
   const [zdfRangeMap, setZdfRangeMap] = useState<Record<string, boolean>>({});
   const [jzNoticeMap, setJzNoticeMap] = useState<Record<string, boolean>>({});
-  const systemSetting = useSelector((state: StoreState) => state.setting.systemSetting);
-  const wallets = useSelector((state: StoreState) => state.wallet.wallets);
+  const systemSetting = useAppSelector((state) => state.setting.systemSetting);
+  const wallets = useAppSelector((state) => state.wallet.wallets);
+  const walletsConfig = useAppSelector((state) => state.wallet.config.walletConfig);
   const { riskNotificationSetting } = systemSetting;
 
   useInterval(
@@ -96,8 +111,8 @@ export function useRiskNotification() {
       }
       try {
         wallets.forEach((wallet) => {
-          const { codeMap } = Helpers.Fund.GetFundConfig(wallet.code);
-          const walletConfig = Helpers.Wallet.GetCurrentWalletConfig(wallet.code);
+          const { codeMap } = Helpers.Fund.GetFundConfig(wallet.code, walletsConfig);
+          const walletConfig = Helpers.Wallet.GetCurrentWalletConfig(wallet.code, walletsConfig);
           wallet.funds?.forEach((fund) => {
             const zdfRange = codeMap[fund.fundcode!]?.zdfRange;
             const jzNotice = codeMap[fund.fundcode!]?.jzNotice;
@@ -143,99 +158,96 @@ export function useRiskNotification() {
 }
 
 export function useFundsClipboard() {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
+  const currentWalletCode = useAppSelector((state) => state.wallet.currentWalletCode);
+  const walletsConfig = useAppSelector((state) => state.wallet.config.walletConfig);
+  const fundConfig = useAppSelector((state) => state.wallet.fundConfig);
+  const fundApiTypeSetting = useAppSelector((state) => state.setting.systemSetting.fundApiTypeSetting);
+  const loadFunds = useLoadFunds(true);
 
-  useLayoutEffect(() => {
-    ipcRenderer.on('clipboard-funds-import', async (e, data) => {
-      try {
-        const limit = 1024;
-        const text = clipboard.readText();
-        const json: any[] = JSON.parse(text);
-        const currentWalletCode = Helpers.Wallet.GetCurrentWalletCode();
-        if (json.length > limit) {
-          dialog.showMessageBox({
-            type: 'info',
-            title: `超过最大限制`,
-            message: `最大${limit}个`,
-          });
-          return;
-        }
-        const { codeMap: oldCodeMap } = Helpers.Fund.GetFundConfig(currentWalletCode);
-        const jsonFundConfig = json
-          .map((fund) => ({
-            name: '',
-            cyfe: Number(fund.cyfe) < 0 ? 0 : Number(fund.cyfe) || 0,
-            code: fund.code && String(fund.code),
-            cbj: Utils.NotEmpty(fund.cbj) ? (Number(fund.cbj) < 0 ? undefined : Number(fund.cbj)) : undefined,
-          }))
-          .filter(({ code }) => code);
-        const jsonCodeMap = Helpers.Fund.GetCodeMap(jsonFundConfig);
-        // 去重复
-        const fundConfigSet = Object.entries(jsonCodeMap).map(([code, fund]) => fund);
-        const responseFunds = (await Helpers.Fund.GetFunds(fundConfigSet)).filter(Utils.NotEmpty);
-        const newFundConfig = responseFunds.map((fund) => ({
-          name: fund!.name!,
-          code: fund!.fundcode!,
-          cyfe: jsonCodeMap[fund!.fundcode!].cyfe,
-          cbj: jsonCodeMap[fund!.fundcode!].cbj,
-        }));
-        const newCodeMap = Helpers.Fund.GetCodeMap(newFundConfig);
-        const allCodeMap = {
-          ...oldCodeMap,
-          ...newCodeMap,
-        };
-        const allFundConfig = Object.entries(allCodeMap).map(([code, fund]) => fund);
-        dispatch(setFundConfigAction(allFundConfig, currentWalletCode));
-        Helpers.Fund.LoadFunds(true);
+  useIpcRendererListener('clipboard-funds-import', async (e: Electron.IpcRendererEvent, data) => {
+    try {
+      const limit = 1024;
+      const text = clipboard.readText();
+      const json: any[] = JSON.parse(text);
+      if (json.length > limit) {
         dialog.showMessageBox({
           type: 'info',
-          title: `导入完成`,
-          message: `更新：${newFundConfig.length}个，总共：${json.length}个`,
+          title: `超过最大限制`,
+          message: `最大${limit}个`,
         });
-      } catch (error) {
-        dialog.showMessageBox({
-          type: 'info',
-          title: `解析失败`,
-          message: `请检查JSON格式`,
-        });
+        return;
       }
-    });
-    ipcRenderer.on('clipboard-funds-copy', (e, data) => {
-      try {
-        const currentWalletCode = Helpers.Wallet.GetCurrentWalletCode();
-        const { fundConfig } = Helpers.Fund.GetFundConfig(currentWalletCode);
-        clipboard.writeText(JSON.stringify(fundConfig));
-        dialog.showMessageBox({
-          title: `复制成功`,
-          type: 'info',
-          message: `已复制${fundConfig.length}支基金配置到粘贴板`,
-        });
-      } catch (error) {
-        dialog.showMessageBox({
-          type: 'info',
-          title: `复制失败`,
-          message: `基金JSON复制失败`,
-        });
-      }
-    });
-    return () => {
-      ipcRenderer.removeAllListeners('clipboard-funds-import');
-      ipcRenderer.removeAllListeners('clipboard-funds-copy');
-    };
-  }, []);
+      const { codeMap: oldCodeMap } = Helpers.Fund.GetFundConfig(currentWalletCode, walletsConfig);
+      const jsonFundConfig = json
+        .map((fund) => ({
+          name: '',
+          cyfe: Number(fund.cyfe) < 0 ? 0 : Number(fund.cyfe) || 0,
+          code: fund.code && String(fund.code),
+          cbj: Utils.NotEmpty(fund.cbj) ? (Number(fund.cbj) < 0 ? undefined : Number(fund.cbj)) : undefined,
+        }))
+        .filter(({ code }) => code);
+      const jsonCodeMap = Utils.GetCodeMap(jsonFundConfig, 'code');
+      // 去重复
+      const fundConfigSet = Object.entries(jsonCodeMap).map(([code, fund]) => fund);
+      const responseFunds = await Helpers.Fund.GetFunds(fundConfigSet, fundApiTypeSetting);
+      const newFundConfig = responseFunds.map((fund) => ({
+        name: fund!.name!,
+        code: fund!.fundcode!,
+        cyfe: jsonCodeMap[fund!.fundcode!].cyfe,
+        cbj: jsonCodeMap[fund!.fundcode!].cbj,
+      }));
+      const newCodeMap = Utils.GetCodeMap(newFundConfig, 'code');
+      const allCodeMap = {
+        ...oldCodeMap,
+        ...newCodeMap,
+      };
+      const allFundConfig = Object.entries(allCodeMap).map(([code, fund]) => fund);
+      dispatch(setFundConfigAction(allFundConfig, currentWalletCode));
+      loadFunds();
+      dialog.showMessageBox({
+        type: 'info',
+        title: `导入完成`,
+        message: `更新：${newFundConfig.length}个，总共：${json.length}个`,
+      });
+    } catch (error) {
+      dialog.showMessageBox({
+        type: 'info',
+        title: `解析失败`,
+        message: `请检查JSON格式`,
+      });
+    }
+  });
+
+  useIpcRendererListener('clipboard-funds-copy', async (e: Electron.IpcRendererEvent, data) => {
+    try {
+      clipboard.writeText(JSON.stringify(fundConfig));
+      dialog.showMessageBox({
+        title: `复制成功`,
+        type: 'info',
+        message: `已复制${fundConfig.length}支基金配置到粘贴板`,
+      });
+    } catch (error) {
+      dialog.showMessageBox({
+        type: 'info',
+        title: `复制失败`,
+        message: `基金JSON复制失败`,
+      });
+    }
+  });
 }
 
 export function useBootStrap() {
-  const { freshDelaySetting, autoFreshSetting } = useSelector((state: StoreState) => state.setting.systemSetting);
-  const runLoadRemoteFunds = () => Helpers.Fund.LoadRemoteFunds();
-  const runLoadFundRatingMap = () => Helpers.Fund.LoadFundRatingMap();
-  const runLoadRemoteCoins = () => Helpers.Coin.LoadRemoteCoins();
-  const runLoadWalletsFunds = () => Helpers.Wallet.LoadWalletsFunds();
-  const runLoadFixWalletsFunds = () => Helpers.Wallet.loadFixWalletsFunds();
-  const runLoadZindexs = () => Helpers.Zindex.LoadZindexs(false);
-  const runLoadQuotations = () => Helpers.Quotation.LoadQuotations(false);
-  const runLoadStocks = () => Helpers.Stock.LoadStocks(false);
-  const runLoadCoins = () => Helpers.Coin.LoadCoins(false);
+  const { freshDelaySetting, autoFreshSetting } = useAppSelector((state) => state.setting.systemSetting);
+  const runLoadRemoteFunds = useLoadRemoteFunds();
+  const runLoadFundRatingMap = useLoadFundRatingMap();
+  const runLoadRemoteCoins = useLoadRemoteCoins();
+  const runLoadWalletsFunds = useLoadWalletsFunds();
+  const runLoadFixWalletsFunds = useLoadFixWalletsFunds();
+  const runLoadZindexs = useLoadZindexs(false);
+  const runLoadQuotations = useLoadQuotations(false);
+  const runLoadStocks = useLoadStocks(false);
+  const runLoadCoins = useLoadCoins(false);
 
   // 间隔时间刷新远程基金数据,远程货币数据,基金评级
   useInterval(() => {
@@ -279,17 +291,23 @@ export function useBootStrap() {
 }
 
 export function useMappingLocalToSystemSetting() {
-  const dispatch = useDispatch();
-  const systemThemeSetting = useSelector((state: StoreState) => state.setting.systemSetting.systemThemeSetting);
-  const autoStartSetting = useSelector((state: StoreState) => state.setting.systemSetting.autoStartSetting);
-  const lowKeySetting = useSelector((state: StoreState) => state.setting.systemSetting.lowKeySetting);
-  const adjustmentNotificationTimeSetting = useSelector(
-    (state: StoreState) => state.setting.systemSetting.adjustmentNotificationTimeSetting
-  );
-  useLayoutEffect(() => {
+  const dispatch = useAppDispatch();
+  const systemThemeSetting = useAppSelector((state) => state.setting.systemSetting.systemThemeSetting);
+  const autoStartSetting = useAppSelector((state) => state.setting.systemSetting.autoStartSetting);
+  const lowKeySetting = useAppSelector((state) => state.setting.systemSetting.lowKeySetting);
+  const adjustmentNotificationTimeSetting = useAppSelector((state) => state.setting.systemSetting.adjustmentNotificationTimeSetting);
+
+  useIpcRendererListener('nativeTheme-updated', (e, data) => {
+    requestIdleCallback(() => {
+      // TODO: 暂时不清楚，为什么第一时间无法取最新的 property color
+      dispatch(syncDarkMode(!!data?.darkMode));
+    });
+  });
+
+  useEffect(() => {
     Utils.UpdateSystemTheme(systemThemeSetting);
   }, [systemThemeSetting]);
-  useLayoutEffect(() => {
+  useEffect(() => {
     app.setLoginItemSettings({ openAtLogin: autoStartSetting });
   }, [autoStartSetting]);
   useLayoutEffect(() => {
@@ -305,25 +323,25 @@ export function useMappingLocalToSystemSetting() {
 }
 
 export function useTrayContent() {
-  const { trayContentSetting } = useSelector((state: StoreState) => state.setting.systemSetting);
-  const currentWalletCode = useSelector((state: StoreState) => state.wallet.currentWalletCode);
-  const wallets = useSelector((state: StoreState) => state.wallet.wallets);
-  const {
-    currentWalletState: { funds },
-  } = useCurrentWallet();
-  const calcResult = Helpers.Fund.CalcFunds(funds, currentWalletCode);
+  const { trayContentSetting } = useAppSelector((state) => state.setting.systemSetting);
+  const fundConfigCodeMap = useAppSelector((state) => state.wallet.fundConfigCodeMap);
+  const walletsConfig = useAppSelector((state) => state.wallet.config.walletConfig);
+  const wallets = useAppSelector((state) => state.wallet.wallets);
+  const { funds } = useAppSelector((state) => state.wallet.currentWallet);
+  const calcResult = Helpers.Fund.CalcFunds(funds, fundConfigCodeMap);
 
   const allCalcResult = useMemo(() => {
     const allResult = wallets.reduce(
       (r, { code, funds }) => {
-        const result = Helpers.Fund.CalcFunds(funds, code);
+        const { codeMap } = Helpers.Fund.GetFundConfig(code, walletsConfig);
+        const result = Helpers.Fund.CalcFunds(funds, codeMap);
         return { zje: r.zje + result.zje, gszje: r.gszje + result.gszje };
       },
       { zje: 0, gszje: 0 }
     );
     const sygz = NP.minus(allResult.gszje, allResult.zje);
     return { sygz, gssyl: allResult.zje ? NP.times(NP.divide(sygz, allResult.zje), 100) : 0 };
-  }, [wallets]);
+  }, [wallets, walletsConfig]);
 
   useEffect(() => {
     const group = [trayContentSetting].flat();
@@ -349,125 +367,172 @@ export function useTrayContent() {
 }
 
 export function useUpdateContextMenuWalletsState() {
-  const dispatch = useDispatch();
-  const wallets = useSelector((state: StoreState) => state.wallet.wallets);
-  const currentWalletCode = useSelector((state: StoreState) => state.wallet.currentWalletCode);
+  const dispatch = useAppDispatch();
+  const wallets = useAppSelector((state) => state.wallet.wallets);
+  const currentWalletCode = useAppSelector((state) => state.wallet.currentWalletCode);
+  const walletsConfig = useAppSelector((state) => state.wallet.config.walletConfig);
   const freshFunds = useFreshFunds(0);
 
   useEffect(() => {
     ipcRenderer.invoke(
       'update-tray-context-menu-wallets',
-      wallets.map((wallet) => {
-        const walletConfig = Helpers.Wallet.GetCurrentWalletConfig(wallet.code);
-        const calcResult = Helpers.Fund.CalcFunds(wallet.funds, wallet.code);
+      walletsConfig.map((walletConfig) => {
+        const { codeMap } = Helpers.Fund.GetFundConfig(walletConfig.code, walletsConfig);
+        const { funds } = Helpers.Wallet.GetCurrentWalletState(walletConfig.code, wallets);
+        const calcResult = Helpers.Fund.CalcFunds(funds, codeMap);
         const value = `  ${Utils.Yang(calcResult.sygz.toFixed(2))}  ${Utils.Yang(calcResult.gssyl.toFixed(2))}%`;
         return {
           label: `${walletConfig.name}  ${value}`,
-          type: currentWalletCode === wallet.code ? 'radio' : 'normal',
+          type: currentWalletCode === walletConfig.code ? 'radio' : 'normal',
           iconIndex: walletConfig.iconIndex,
-          id: wallet.code,
+          id: walletConfig.code,
         };
       })
     );
-  }, [wallets, currentWalletCode]);
-  useLayoutEffect(() => {
-    ipcRenderer.on('change-current-wallet-code', (e, code) => {
-      try {
-        dispatch(selectWalletAction(code));
-        freshFunds();
-      } catch (error) {}
-    });
-    return () => {
-      ipcRenderer.removeAllListeners('change-current-wallet-code');
-    };
-  }, []);
+  }, [wallets, currentWalletCode, walletsConfig]);
+
+  useIpcRendererListener('change-current-wallet-code', (e, code) => {
+    try {
+      dispatch(selectWalletAction(code));
+      freshFunds();
+    } catch (error) {}
+  });
 }
 
 export function useAllConfigBackup() {
-  useLayoutEffect(() => {
-    ipcRenderer.on('backup-all-config-export', async (e, data) => {
-      try {
-        const backupConfig = await Utils.GenerateBackupConfig();
-        const { filePath, canceled } = await dialog.showSaveDialog({
-          title: '保存',
-          defaultPath: `${backupConfig.name}-${backupConfig.timestamp}.${backupConfig.suffix}`,
-        });
-        if (canceled) {
-          return;
-        }
-        const encodeBackupConfig = compose(Base64.encode, encodeFF)(backupConfig);
-        saveString(filePath!, encodeBackupConfig);
-        dialog.showMessageBox({
-          type: 'info',
-          title: `导出成功`,
-          message: `已导出全局配置文件至${filePath}`,
-        });
-      } catch (error) {
-        dialog.showMessageBox({
-          type: 'info',
-          title: `导出失败`,
-          message: `导出全局配置文件失败`,
-        });
+  useIpcRendererListener('backup-all-config-export', async (e, code) => {
+    try {
+      const backupConfig = await Utils.GenerateBackupConfig();
+      const { filePath, canceled } = await dialog.showSaveDialog({
+        title: '保存',
+        defaultPath: `${backupConfig.name}-${backupConfig.timestamp}.${backupConfig.suffix}`,
+      });
+      if (canceled) {
+        return;
       }
-    });
-    ipcRenderer.on('backup-all-config-import', async (e, data) => {
-      try {
-        const { filePaths, canceled } = await dialog.showOpenDialog({
-          title: '选择备份文件',
-          filters: [{ name: 'Fishing Funds', extensions: ['ff'] }],
-        });
-        const filePath = filePaths[0];
-        if (canceled || !filePath) {
-          return;
-        }
-        const encodeBackupConfig = readFile(filePath);
-        const backupConfig: Backup.Config = compose(decodeFF, Base64.decode)(encodeBackupConfig);
+      const encodeBackupConfig = compose(Base64.encode, encodeFF)(backupConfig);
+      saveString(filePath!, encodeBackupConfig);
+      dialog.showMessageBox({
+        type: 'info',
+        title: `导出成功`,
+        message: `已导出全局配置文件至${filePath}`,
+      });
+    } catch (error) {
+      dialog.showMessageBox({
+        type: 'info',
+        title: `导出失败`,
+        message: `导出全局配置文件失败`,
+      });
+    }
+  });
+  useIpcRendererListener('backup-all-config-import', async (e, code) => {
+    try {
+      const { filePaths, canceled } = await dialog.showOpenDialog({
+        title: '选择备份文件',
+        filters: [{ name: 'Fishing Funds', extensions: ['ff'] }],
+      });
+      const filePath = filePaths[0];
+      if (canceled || !filePath) {
+        return;
+      }
+      const encodeBackupConfig = readFile(filePath);
+      const backupConfig: Backup.Config = compose(decodeFF, Base64.decode)(encodeBackupConfig);
+      Utils.CoverBackupConfig(backupConfig);
+      await dialog.showMessageBox({
+        type: 'info',
+        title: `导入成功`,
+        message: `导入全局配置成功, 请重新启动Fishing Funds`,
+      });
+      app.quit();
+    } catch (error) {
+      dialog.showMessageBox({
+        type: 'info',
+        title: `导入失败`,
+        message: `导入全局配置文件失败`,
+      });
+    }
+  });
+  useIpcRendererListener('open-backup-file', async (e, filePath) => {
+    try {
+      const encodeBackupConfig = readFile(filePath);
+      const backupConfig: Backup.Config = compose(decodeFF, Base64.decode)(encodeBackupConfig);
+      const { response } = await dialog.showMessageBox({
+        title: `确认从备份文件恢复`,
+        message: `备份时间：${dayjs(backupConfig.timestamp).format('YYYY-MM-DD HH:mm:ss')} ，当前数据将被覆盖，请谨慎操作`,
+        buttons: ['确定', '取消'],
+      });
+      if (response === 0) {
         Utils.CoverBackupConfig(backupConfig);
         await dialog.showMessageBox({
           type: 'info',
-          title: `导入成功`,
-          message: `导入全局配置成功, 请重新启动Fishing Funds`,
+          title: `恢复成功`,
+          message: `恢复备份成功, 请重新启动Fishing Funds`,
         });
         app.quit();
-      } catch (error) {
-        dialog.showMessageBox({
-          type: 'info',
-          title: `导入失败`,
-          message: `导入全局配置文件失败`,
-        });
       }
-    });
-    ipcRenderer.on('open-backup-file', async (e, filePath) => {
-      try {
-        const encodeBackupConfig = readFile(filePath);
-        const backupConfig: Backup.Config = compose(decodeFF, Base64.decode)(encodeBackupConfig);
-        const { response } = await dialog.showMessageBox({
-          title: `确认从备份文件恢复`,
-          message: `备份时间：${dayjs(backupConfig.timestamp).format('YYYY-MM-DD HH:mm:ss')} ，当前数据将被覆盖，请谨慎操作`,
-          buttons: ['确定', '取消'],
-        });
-        if (response === 0) {
-          Utils.CoverBackupConfig(backupConfig);
-          await dialog.showMessageBox({
-            type: 'info',
-            title: `恢复成功`,
-            message: `恢复备份成功, 请重新启动Fishing Funds`,
-          });
-          app.quit();
-        }
-      } catch (error) {
-        dialog.showMessageBox({
-          type: 'info',
-          title: `恢复失败`,
-          message: `恢复备份文件失败`,
-        });
-      }
-    });
+    } catch (error) {
+      dialog.showMessageBox({
+        type: 'info',
+        title: `恢复失败`,
+        message: `恢复备份文件失败`,
+      });
+    }
+  });
+}
 
-    return () => {
-      ipcRenderer.removeAllListeners('backup-all-config-export');
-      ipcRenderer.removeAllListeners('backup-all-config-import');
-      ipcRenderer.removeAllListeners('open-backup-file');
-    };
-  }, []);
+export function useTouchBar() {
+  const dispatch = useAppDispatch();
+  const zindexs = useAppSelector((state) => state.zindex.zindexs);
+  const activeKey = useAppSelector((state) => state.tabs.activeKey);
+  const eyeStatus = useAppSelector((state) => state.wallet.eyeStatus);
+  const currentWallet = useAppSelector((state) => state.wallet.currentWallet);
+  const currentWalletCode = useAppSelector((state) => state.wallet.currentWalletCode);
+  const walletsConfig = useAppSelector((state) => state.wallet.config.walletConfig);
+  const fundConfigCodeMap = useAppSelector((state) => state.wallet.fundConfigCodeMap);
+  const varibleColors = useAppSelector((state) => state.setting.varibleColors);
+
+  useEffect(() => {
+    ipcRenderer.invoke(
+      'update-touchbar-zindex',
+      zindexs.slice(0, 1).map((zindex) => ({
+        label: `${zindex.name} ${zindex.zsz}`,
+        backgroundColor: Utils.GetValueColor(zindex.zdf).color,
+      }))
+    );
+  }, [varibleColors, zindexs]);
+
+  useEffect(() => {
+    const walletConfig = Helpers.Wallet.GetCurrentWalletConfig(currentWalletCode, walletsConfig);
+    const calcResult = Helpers.Fund.CalcFunds(currentWallet.funds, fundConfigCodeMap);
+    const value = Utils.Yang(calcResult.gssyl.toFixed(2));
+
+    ipcRenderer.invoke('update-touchbar-wallet', [
+      {
+        id: currentWalletCode,
+        label: `${value}%`, // 只显示当前钱包
+        iconIndex: walletConfig.iconIndex,
+      },
+    ]);
+  }, [currentWallet, currentWalletCode, walletsConfig, fundConfigCodeMap]);
+
+  useEffect(() => {
+    ipcRenderer.invoke(
+      'update-touchbar-tab',
+      tabs.map((tab) => ({
+        label: tab.name,
+        selected: tab.key === activeKey,
+      }))
+    );
+  }, [activeKey]);
+
+  useEffect(() => {
+    ipcRenderer.invoke('update-touchbar-eye-status', eyeStatus);
+  }, [eyeStatus]);
+
+  useIpcRendererListener('change-tab-active-key', (e, key) => {
+    dispatch(setTabsActiveKeyAction(key));
+  });
+  useIpcRendererListener('change-eye-status', (e, key) => {
+    dispatch(toggleEyeStatusAction());
+  });
 }

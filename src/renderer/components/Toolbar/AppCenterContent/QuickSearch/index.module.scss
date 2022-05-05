@@ -1,0 +1,29 @@
+.content {
+  display: flex;
+  flex-wrap: wrap;
+}
+.item {
+  text-align: center;
+  border-radius: 10px;
+  padding: 2px 10px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: nowrap;
+  margin-right: 10px;
+  margin-bottom: var(--base-padding);
+  color: var(--tag-text-color);
+  span {
+    word-break: keep-all;
+    margin-right: 5px;
+  }
+  &:last-child {
+    margin-right: 0;
+  }
+  svg {
+    fill: var(--tag-text-color);
+    height: 14px;
+    width: 14px;
+  }
+}

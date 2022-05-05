@@ -1,6 +1,6 @@
 import React, { PropsWithChildren, useState, useEffect } from 'react';
 import { Table } from 'antd';
-import classnames from 'classnames';
+import clsx from 'clsx';
 import { useRequest } from 'ahooks';
 
 import ChartCard from '@/components/Card/ChartCard';
@@ -11,8 +11,6 @@ import styles from './index.module.scss';
 interface BaseExchangeProps {}
 
 const BaseExchange: React.FC<PropsWithChildren<BaseExchangeProps>> = () => {
-  const [data, setData] = useState<Exchange.ResponseItem[]>([]);
-
   const columns = [
     {
       title: '名称',
@@ -24,7 +22,7 @@ const BaseExchange: React.FC<PropsWithChildren<BaseExchangeProps>> = () => {
       title: '最新价',
       dataIndex: 'zxj',
       render: (text: string, record: Exchange.ResponseItem) => (
-        <span className={classnames(Utils.GetValueColor(record.zxj - record.zs).textClass)}>{text}</span>
+        <span className={clsx(Utils.GetValueColor(record.zxj - record.zs).textClass)}>{text}</span>
       ),
       sorter: (a: any, b: any) => Number(a.zxj) - Number(b.zxj),
     },
@@ -32,15 +30,13 @@ const BaseExchange: React.FC<PropsWithChildren<BaseExchangeProps>> = () => {
       title: '涨跌幅',
       dataIndex: 'zdf',
       render: (text: string, record: Exchange.ResponseItem) => (
-        <span className={classnames(Utils.GetValueColor(record.zdf).textClass)}>{text}%</span>
+        <span className={clsx(Utils.GetValueColor(record.zdf).textClass)}>{text}%</span>
       ),
       sorter: (a: any, b: any) => Number(a.zdf) - Number(b.zdf),
     },
   ];
 
-  const { run: runGetListFromEastmoney, loading } = useRequest(() => Services.Exchange.GetListFromEastmoney('0', 'b:MK0300'), {
-    onSuccess: setData,
-  });
+  const { data = [], run: runGetListFromEastmoney, loading } = useRequest(() => Services.Exchange.GetListFromEastmoney('0', 'b:MK0300'));
 
   return (
     <ChartCard auto onFresh={runGetListFromEastmoney}>

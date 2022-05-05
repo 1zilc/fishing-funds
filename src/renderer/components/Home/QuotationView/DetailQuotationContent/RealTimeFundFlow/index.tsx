@@ -1,8 +1,8 @@
-import React, { useCallback } from 'react';
+import React, { useState } from 'react';
 import { useRequest } from 'ahooks';
 
 import ChartCard from '@/components/Card/ChartCard';
-import { useHomeContext } from '@/components/Home';
+
 import { useResizeEchart, useRenderEcharts } from '@/utils/hooks';
 import * as CONST from '@/constants';
 import * as Services from '@/services';
@@ -14,11 +14,17 @@ export interface RealTimeFundFlowProps {
 
 const RealTimeFundFlow: React.FC<RealTimeFundFlowProps> = ({ code = '' }) => {
   const { ref: chartRef, chartInstance } = useResizeEchart(CONST.DEFAULT.ECHARTS_SCALE);
-  const { varibleColors, darkMode } = useHomeContext();
-  const { run: runGetRealTimeFundFlowFromEasymoney } = useRequest(() => Services.Quotation.GetRealTimeFundFlowFromEasymoney(code), {
-    pollingInterval: 1000 * 60,
+  const { data: result = [], run: runGetRealTimeFundFlowFromEasymoney } = useRequest(
+    () => Services.Quotation.GetRealTimeFundFlowFromEasymoney(code),
+    {
+      pollingInterval: 1000 * 60,
+      refreshDeps: [code],
+      ready: !!chartInstance,
+    }
+  );
 
-    onSuccess: (result) => {
+  useRenderEcharts(
+    ({ varibleColors }) => {
       const seriesStyle = {
         type: 'line',
         showSymbol: false,
@@ -61,6 +67,11 @@ const RealTimeFundFlow: React.FC<RealTimeFundFlowProps> = ({ code = '' }) => {
             formatter: `{value}亿`,
             fontSize: 10,
           },
+          splitLine: {
+            lineStyle: {
+              color: varibleColors['--border-color'],
+            },
+          },
         },
         series: [
           {
@@ -91,9 +102,9 @@ const RealTimeFundFlow: React.FC<RealTimeFundFlowProps> = ({ code = '' }) => {
         ],
       });
     },
-    refreshDeps: [darkMode, code],
-    ready: !!chartInstance,
-  });
+    chartInstance,
+    [result]
+  );
 
   return (
     <ChartCard onFresh={runGetRealTimeFundFlowFromEasymoney}>

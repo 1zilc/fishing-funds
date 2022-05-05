@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import classnames from 'classnames';
-import { useSelector, useDispatch } from 'react-redux';
+import clsx from 'clsx';
+
 import { InputNumber, Radio, Badge, Switch, Slider, TimePicker, Input, Tabs, Select } from 'antd';
 import dayjs from 'dayjs';
 
@@ -15,15 +15,14 @@ import SettingIcon from '@/static/icon/setting.svg';
 import LinkIcon from '@/static/icon/link.svg';
 import LineCharIcon from '@/static/icon/line-chart.svg';
 import TShirtIcon from '@/static/icon/t-shirt.svg';
-import GlobalIcon from '@/static/icon/global.svg';
 import GroupIcon from '@/static/icon/group.svg';
 import NotificationIcon from '@/static/icon/notification.svg';
 import BitCoinIcon from '@/static/icon/bit-coin.svg';
 import WindowIcon from '@/static/icon/window.svg';
 import CalendarIcon from '@/static/icon/calendar.svg';
-import { defalutSystemSetting } from '@/helpers/setting';
-import { setSystemSettingAction } from '@/actions/setting';
-import { StoreState } from '@/reducers/types';
+import { setSystemSettingAction, defaultSystemSetting } from '@/store/features/setting';
+
+import { useAppDispatch, useAppSelector } from '@/utils/hooks';
 import * as Enums from '@/utils/enums';
 import * as Utils from '@/utils';
 import styles from './index.module.scss';
@@ -88,6 +87,10 @@ const recordSiteGroup = Utils.Group(
       url: 'https://formulae.brew.sh/cask/fishing-funds#default',
       name: 'Homebrew',
     },
+    {
+      url: 'https://github.com/jaywcjlove/awesome-mac',
+      name: 'Awesome Mac',
+    },
   ],
   3
 );
@@ -136,7 +139,7 @@ export const APIOptions = [
 ];
 
 const SettingContent: React.FC<SettingContentProps> = (props) => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const {
     fundApiTypeSetting,
     conciseSetting,
@@ -148,17 +151,13 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
     riskNotificationSetting,
     trayContentSetting,
     coinUnitSetting,
-    httpProxySetting,
-    httpProxyWhitelistSetting,
-    httpProxyAddressSetting,
-    httpProxyRuleSetting,
     autoStartSetting,
     autoFreshSetting,
     freshDelaySetting,
     autoCheckUpdateSetting,
     timestampSetting,
-  } = useSelector((state: StoreState) => state.setting.systemSetting);
-  const updateInfo = useSelector((state: StoreState) => state.updater.updateInfo);
+  } = useAppSelector((state) => state.setting.systemSetting);
+  const updateInfo = useAppSelector((state) => state.updater.updateInfo);
   const isUpdateAvaliable = !!updateInfo.version;
 
   // 数据来源
@@ -175,11 +174,6 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
   const [trayContent, setTrayContent] = useState(trayContentSetting);
   // 货币单位
   const [coinUnit, setCoinUnit] = useState(coinUnitSetting);
-  // 代理设置
-  const [httpProxy, setHttpProxy] = useState(httpProxySetting);
-  const [httpProxyWhitelist, setHttpProxyWhitelist] = useState(httpProxyWhitelistSetting);
-  const [httpProxyAddress, setHttpProxyAddress] = useState(httpProxyAddressSetting);
-  const [httpProxyRule, setHttpProxyRule] = useState(httpProxyRuleSetting);
   // 通用设置
   const [autoStart, setAutoStart] = useState(autoStartSetting);
   const [autoFresh, setAutoFresh] = useState(autoFreshSetting);
@@ -196,17 +190,13 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
         baseFontSizeSetting: baseFontSize,
         systemThemeSetting: systemTheme,
         adjustmentNotificationSetting: adjustmentNotification,
-        adjustmentNotificationTimeSetting: adjustmentNotificationTime || defalutSystemSetting.adjustmentNotificationTimeSetting,
+        adjustmentNotificationTimeSetting: adjustmentNotificationTime || defaultSystemSetting.adjustmentNotificationTimeSetting,
         riskNotificationSetting: riskNotification,
         trayContentSetting: trayContent,
         coinUnitSetting: coinUnit,
-        httpProxySetting: httpProxy,
-        httpProxyWhitelistSetting: httpProxyWhitelist,
-        httpProxyAddressSetting: httpProxyAddress,
-        httpProxyRuleSetting: httpProxyRule,
         autoStartSetting: autoStart,
         autoFreshSetting: autoFresh,
-        freshDelaySetting: freshDelay || defalutSystemSetting.freshDelaySetting,
+        freshDelaySetting: freshDelay || defaultSystemSetting.freshDelaySetting,
         autoCheckUpdateSetting: autoCheckUpdate,
         timestampSetting: timestamp,
       })
@@ -231,7 +221,7 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
     <CustomDrawerContent title="设置" enterText="保存" onClose={props.onClose} onEnter={onSave}>
       <style>{` html { font-size: ${baseFontSize}px }`}</style>
       <PureCard
-        className={classnames(
+        className={clsx(
           styles.logo,
           {
             clickable: isUpdateAvaliable,
@@ -257,7 +247,7 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
                 </div>
               }
             >
-              <div className={classnames(styles.setting, 'card-body')}>
+              <div className={clsx(styles.setting, 'card-body')}>
                 <Radio.Group value={fundapiType} onChange={(e) => setFundApiType(e.target.value)}>
                   {APIOptions.map((api) => (
                     <Radio key={api.code} className={styles.radio} value={api.code}>
@@ -268,7 +258,7 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
               </div>
             </StandCard>
             <StandCard icon={<TShirtIcon />} title="外观设置">
-              <div className={classnames(styles.setting, 'card-body')}>
+              <div className={clsx(styles.setting, 'card-body')}>
                 <section>
                   <label>简洁模式：</label>
                   <Switch size="small" checked={concise} onChange={setConcise} />
@@ -313,7 +303,7 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
                 </div>
               }
             >
-              <div className={classnames(styles.setting, 'card-body')}>
+              <div className={clsx(styles.setting, 'card-body')}>
                 <section>
                   <label>调仓提醒：</label>
                   <Switch size="small" checked={adjustmentNotification} onChange={setAdjustmentNotification} />
@@ -361,7 +351,7 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
                 </div>
               }
             >
-              <div className={classnames(styles.setting, 'card-body')}>
+              <div className={clsx(styles.setting, 'card-body')}>
                 <Radio.Group value={coinUnit} onChange={(e) => setCoinUnit(e.target.value)}>
                   <Radio className={styles.radio} value={Enums.CoinUnitType.Usd}>
                     USD ($)
@@ -373,50 +363,6 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
                     BTC (฿)
                   </Radio>
                 </Radio.Group>
-              </div>
-            </StandCard>
-            <StandCard
-              icon={<GlobalIcon />}
-              title="代理设置"
-              extra={
-                <div className={styles.guide}>
-                  <Guide
-                    list={[
-                      { name: 'http代理', text: '由于众所周知的原因，部分接口需开启代理访问' },
-                      { name: '白名单模式', text: '默认关闭，开启后代理规则中的域名将不走代理，其余接口全部代理' },
-                      { name: '代理地址', text: '例如http://127.0.0.1:1087' },
-                      { name: '代理规则', text: `需要走代理的域名，使用英文逗号分隔，主要用于货币接口，无特殊原因不建议手动修改` },
-                    ]}
-                  />
-                </div>
-              }
-            >
-              <div className={classnames(styles.setting, 'card-body')}>
-                <section>
-                  <label>http代理：</label>
-                  <Switch size="small" checked={httpProxy} onChange={setHttpProxy} />
-                </section>
-                <section>
-                  <label>白名单模式：</label>
-                  <Switch size="small" checked={httpProxyWhitelist} onChange={setHttpProxyWhitelist} disabled={!httpProxy} />
-                </section>
-                <section>
-                  <label>代理地址：</label>
-                  <Input
-                    size="small"
-                    value={httpProxyAddress}
-                    onChange={(e) => setHttpProxyAddress(e.target.value)}
-                    disabled={!httpProxy}
-                  />
-                </section>
-                <section>
-                  <label>代理规则：</label>
-                  <Input.TextArea
-                    value={httpProxyRule}
-                    onChange={(e) => setHttpProxyRule(e.target.value)}
-                    disabled={!httpProxy}
-                  ></Input.TextArea>
-                </section>
               </div>
             </StandCard>
             <StandCard
@@ -434,7 +380,7 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
                 </div>
               }
             >
-              <div className={classnames(styles.setting, 'card-body')}>
+              <div className={clsx(styles.setting, 'card-body')}>
                 <section>
                   <label>开机自启：</label>
                   <Switch size="small" checked={autoStart} onChange={setAutoStart} />
@@ -497,8 +443,8 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
                 </div>
               }
             >
-              <div className={classnames('card-body')}>
-                <div className={classnames(styles.describe)}>
+              <div className={clsx('card-body')}>
+                <div className={clsx(styles.describe)}>
                   Fishing Funds
                   是一款个人开发小软件，开源后深受大家的喜爱，接受了大量宝贵的改进建议，感谢大家的反馈，作者利用空闲时间开发不易，您的支持可以给本项目的开发和完善提供巨大的动力，感谢对本软件的喜爱和认可
                   :)
@@ -516,7 +462,7 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
               </div>
             </StandCard>
             <StandCard icon={<GroupIcon />} title="讨论交流">
-              <div className={classnames(styles.group, 'card-body')}>
+              <div className={clsx(styles.group, 'card-body')}>
                 <section>
                   <label>QQ群：</label>
                   <a onClick={() => onCopyGroup('732268738')}>732268738</a>
@@ -532,7 +478,7 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
               </div>
             </StandCard>
             <StandCard icon={<WindowIcon />} title="收录网站">
-              <div className={classnames('card-body')}>
+              <div className={clsx('card-body')}>
                 {recordSiteGroup.map((links, index) => (
                   <div key={index} className={styles.link}>
                     {links.map((link) => (

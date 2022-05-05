@@ -1,7 +1,6 @@
-import React, { useCallback } from 'react';
+import React, { useState } from 'react';
 import { useRequest } from 'ahooks';
 
-import { useHomeContext } from '@/components/Home';
 import ChartCard from '@/components/Card/ChartCard';
 import { useResizeEchart, useRenderEcharts } from '@/utils/hooks';
 import * as CONST from '@/constants';
@@ -14,10 +13,17 @@ export interface AfterTimeFundFlowProps {
 
 const AfterTimeFundFlow: React.FC<AfterTimeFundFlowProps> = ({ code = '' }) => {
   const { ref: chartRef, chartInstance } = useResizeEchart(CONST.DEFAULT.ECHARTS_SCALE);
-  const { varibleColors, darkMode } = useHomeContext();
-  const { run: runGetAfterTimeFundFlowFromEasymoney } = useRequest(() => Services.Quotation.GetAfterTimeFundFlowFromEasymoney(code), {
-    pollingInterval: 1000 * 60,
-    onSuccess: (result) => {
+  const { data: result = [], run: runGetAfterTimeFundFlowFromEasymoney } = useRequest(
+    () => Services.Quotation.GetAfterTimeFundFlowFromEasymoney(code),
+    {
+      pollingInterval: 1000 * 60,
+      refreshDeps: [code],
+      ready: !!chartInstance,
+    }
+  );
+
+  useRenderEcharts(
+    ({ varibleColors }) => {
       const seriesStyle = {
         type: 'line',
         showSymbol: false,
@@ -60,6 +66,11 @@ const AfterTimeFundFlow: React.FC<AfterTimeFundFlowProps> = ({ code = '' }) => {
             formatter: `{value}亿`,
             fontSize: 10,
           },
+          splitLine: {
+            lineStyle: {
+              color: varibleColors['--border-color'],
+            },
+          },
         },
         dataZoom: [
           {
@@ -98,9 +109,9 @@ const AfterTimeFundFlow: React.FC<AfterTimeFundFlowProps> = ({ code = '' }) => {
         ],
       });
     },
-    refreshDeps: [darkMode, code],
-    ready: !!chartInstance,
-  });
+    chartInstance,
+    [result]
+  );
 
   return (
     <ChartCard auto onFresh={runGetAfterTimeFundFlowFromEasymoney}>

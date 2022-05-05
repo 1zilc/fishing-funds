@@ -57,12 +57,12 @@
   justify-content: center;
   width: 150px;
   text-align: center;
-  transition: all 0.3s;
 }
 
 .zsz {
   font-size: calc(20rem / var(--base-font-size));
   line-height: 24px;
+  height: 24px;
   display: flex;
   align-items: center;
   justify-content: flex-end;

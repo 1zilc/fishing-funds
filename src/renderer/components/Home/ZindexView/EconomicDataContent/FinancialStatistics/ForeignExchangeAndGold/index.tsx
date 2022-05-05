@@ -1,10 +1,8 @@
 import React from 'react';
 import { useRequest } from 'ahooks';
 
-import { useHomeContext } from '@/components/Home';
 import ChartCard from '@/components/Card/ChartCard';
 import { useResizeEchart, useRenderEcharts } from '@/utils/hooks';
-import * as CONST from '@/constants';
 import * as Services from '@/services';
 import styles from './index.module.scss';
 
@@ -12,10 +10,12 @@ interface ForeignExchangeAndGoldProps {}
 
 const ForeignExchangeAndGold: React.FC<ForeignExchangeAndGoldProps> = () => {
   const { ref: chartRef, chartInstance } = useResizeEchart(0.4);
-  const { varibleColors, darkMode } = useHomeContext();
+  const { data: result = [], run: runGetEconomyIndexFromEastmoney } = useRequest(() => Services.Zindex.GetEconomyIndexFromEastmoney(16), {
+    ready: !!chartInstance,
+  });
 
-  const { run: runGetEconomyIndexFromEastmoney } = useRequest(() => Services.Zindex.GetEconomyIndexFromEastmoney(16), {
-    onSuccess: (result) => {
+  useRenderEcharts(
+    ({ varibleColors }) => {
       try {
         chartInstance?.setOption({
           title: {
@@ -54,6 +54,11 @@ const ForeignExchangeAndGold: React.FC<ForeignExchangeAndGoldProps> = () => {
                 fontSize: 10,
                 formatter: `{value}亿美元`,
               },
+              splitLine: {
+                lineStyle: {
+                  color: varibleColors['--border-color'],
+                },
+              },
             },
             {
               type: 'value',
@@ -61,6 +66,11 @@ const ForeignExchangeAndGold: React.FC<ForeignExchangeAndGoldProps> = () => {
               axisLabel: {
                 fontSize: 10,
                 formatter: `{value}万盎司`,
+              },
+              splitLine: {
+                lineStyle: {
+                  color: varibleColors['--border-color'],
+                },
               },
             },
           ],
@@ -84,9 +94,9 @@ const ForeignExchangeAndGold: React.FC<ForeignExchangeAndGoldProps> = () => {
         });
       } catch {}
     },
-    refreshDeps: [darkMode],
-    ready: !!chartInstance,
-  });
+    chartInstance,
+    [result]
+  );
 
   return (
     <ChartCard auto onFresh={runGetEconomyIndexFromEastmoney} TitleBar={<div className={styles.title}>外汇和黄金储备</div>}>

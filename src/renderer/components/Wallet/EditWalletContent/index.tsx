@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { Input } from 'antd';
-import { useDispatch, useSelector } from 'react-redux';
 
 import WalletSelection from '@/components/Wallet/WalletSelection';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
-import { updateWalletConfigAction } from '@/actions/wallet';
-import { StoreState } from '@/reducers/types';
+import { updateWalletConfigAction } from '@/store/features/wallet';
+import { useAppDispatch, useAppSelector } from '@/utils/hooks';
+
 import styles from './index.module.scss';
 
 export interface AddFundContentProps {
@@ -16,11 +16,11 @@ export interface AddFundContentProps {
 
 const EditWalletContent: React.FC<AddFundContentProps> = (props) => {
   const { wallet } = props;
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const [name, setName] = useState<string>(wallet.name);
   const [iconIndex, setIconIndex] = useState<number>(wallet.iconIndex);
   const [fieldNameMessageTip, setFieldNameMessageTip] = useState<Field.MessageTip>({ show: false, text: '' });
-  const { walletConfig } = useSelector((state: StoreState) => state.wallet.config);
+  const { walletConfig } = useAppSelector((state) => state.wallet.config);
 
   async function onSave() {
     const repeatName = walletConfig.some((_wallet) => _wallet.name === name && wallet.code !== _wallet.code);

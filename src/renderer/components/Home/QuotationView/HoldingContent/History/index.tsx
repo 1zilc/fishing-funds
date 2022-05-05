@@ -4,13 +4,13 @@ import { Table } from 'antd';
 import { useRequest } from 'ahooks';
 
 import CustomDrawer from '@/components/CustomDrawer';
-import DetailQuotationContent from '@/components/Home/QuotationView/DetailQuotationContent';
-import AddStockContent from '@/components/Home/StockList/AddStockContent';
 import { useDrawer } from '@/utils/hooks';
 import * as Services from '@/services';
 import * as Utils from '@/utils';
 import styles from './index.module.scss';
 
+const DetailQuotationContent = React.lazy(() => import('@/components/Home/QuotationView/DetailQuotationContent'));
+const AddStockContent = React.lazy(() => import('@/components/Home/StockView/AddStockContent'));
 interface NorthHistoryProps {
   marketCode: string;
   reportName: string;
@@ -20,7 +20,6 @@ const { shell } = window.contextModules.electron;
 
 const NorthHistory: React.FC<PropsWithChildren<NorthHistoryProps>> = (props) => {
   const { marketCode, reportName } = props;
-  const [data, setData] = useState<any[]>([]);
   const {
     data: quodationCode,
     show: showDetailQuodationDrawer,
@@ -30,10 +29,8 @@ const NorthHistory: React.FC<PropsWithChildren<NorthHistoryProps>> = (props) => 
 
   const { data: stockName, show: showAddStockDrawer, set: setAddStockDrawer, close: closeAddStockDrawer } = useDrawer('');
 
-  const { loading } = useRequest(Services.Quotation.GetHodingFromEastmoney, {
+  const { data = [], loading } = useRequest(Services.Quotation.GetHodingFromEastmoney, {
     defaultParams: [marketCode, reportName],
-
-    onSuccess: setData,
   });
 
   return (

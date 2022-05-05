@@ -36,16 +36,17 @@ export function lockSingleInstance() {
 }
 
 export async function checkEnvTool() {
+  const isDebug = process.env.NODE_ENV === 'development' || process.env.DEBUG_PROD === 'true';
   if (process.env.NODE_ENV === 'production') {
     const sourceMapSupport = require('source-map-support');
     Object.assign(console, log.functions);
     sourceMapSupport.install();
   }
 
-  if (process.env.NODE_ENV === 'development' || process.env.DEBUG_PROD === 'true') {
+  if (isDebug) {
     require('electron-debug')();
   }
-  if (process.env.NODE_ENV === 'development' || process.env.DEBUG_PROD === 'true') {
+  if (isDebug) {
     await installExtensions();
   }
 }

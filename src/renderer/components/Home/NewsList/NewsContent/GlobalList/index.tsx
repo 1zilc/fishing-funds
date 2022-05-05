@@ -1,4 +1,4 @@
-import React, { PropsWithChildren, useState } from 'react';
+import React, { PropsWithChildren } from 'react';
 import dayjs from 'dayjs';
 import { Table } from 'antd';
 import { useRequest } from 'ahooks';
@@ -11,11 +11,7 @@ interface GlobalListProps {
 }
 
 const GlobalList: React.FC<PropsWithChildren<GlobalListProps>> = (props) => {
-  const [data, setData] = useState<News.ResponseItem[]>([]);
-
-  const { loading, run: runNewsGetGlobalList } = useRequest(Services.News.GetGlobalList, {
-    onSuccess: setData,
-  });
+  const { data = [], loading, run: runNewsGetGlobalList } = useRequest(Services.News.GetGlobalList);
 
   return (
     <ChartCard auto onFresh={runNewsGetGlobalList}>
@@ -45,7 +41,7 @@ const GlobalList: React.FC<PropsWithChildren<GlobalListProps>> = (props) => {
             position: ['bottomCenter'],
           }}
           onRow={(record) => ({
-            onClick: () => props.onView(record.url_m),
+            onClick: () => props.onView(record.url_unique),
           })}
         />
       </div>

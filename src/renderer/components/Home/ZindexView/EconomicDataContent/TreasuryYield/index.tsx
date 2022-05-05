@@ -2,7 +2,7 @@ import React from 'react';
 import { useRequest } from 'ahooks';
 
 import ChartCard from '@/components/Card/ChartCard';
-import { useHomeContext } from '@/components/Home';
+
 import { useResizeEchart, useRenderEcharts } from '@/utils/hooks';
 import * as CONST from '@/constants';
 import * as Services from '@/services';
@@ -12,10 +12,13 @@ interface TreasuryYieldProps {}
 
 const TreasuryYield: React.FC<TreasuryYieldProps> = () => {
   const { ref: chartRef, chartInstance } = useResizeEchart(CONST.DEFAULT.ECHARTS_SCALE);
-  const { varibleColors, darkMode } = useHomeContext();
 
-  const { run: runZindexGetTreasuryYieldData } = useRequest(Services.Zindex.GetTreasuryYieldData, {
-    onSuccess: (result) => {
+  const { data: result = [], run: runZindexGetTreasuryYieldData } = useRequest(Services.Zindex.GetTreasuryYieldData, {
+    ready: !!chartInstance,
+  });
+
+  useRenderEcharts(
+    ({ varibleColors }) => {
       chartInstance?.setOption({
         title: {
           text: '',
@@ -50,6 +53,11 @@ const TreasuryYield: React.FC<TreasuryYieldProps> = () => {
             formatter: `{value}%`,
             fontSize: 10,
           },
+          splitLine: {
+            lineStyle: {
+              color: varibleColors['--border-color'],
+            },
+          },
         },
         series: [
           {
@@ -75,9 +83,9 @@ const TreasuryYield: React.FC<TreasuryYieldProps> = () => {
         ],
       });
     },
-    refreshDeps: [darkMode],
-    ready: !!chartInstance,
-  });
+    chartInstance,
+    [result]
+  );
 
   return (
     <ChartCard onFresh={runZindexGetTreasuryYieldData}>

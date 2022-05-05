@@ -1,10 +1,9 @@
 import NP from 'number-precision';
-
-const { got } = window.contextModules;
+import request from '@/utils/request';
 
 export async function GetQuotationsFromEastmoney() {
   try {
-    const { body: data } = await got<{
+    const { body: data } = await request<{
       rc: 0;
       rt: 6;
       svr: 2887254391;
@@ -89,7 +88,7 @@ export async function GetQuotationDetailFromEastmoney(code: string) {
   try {
     const {
       body: { data },
-    } = await got<{
+    } = await request<{
       rc: 0;
       rt: 4;
       svr: 181735162;
@@ -143,7 +142,7 @@ export async function GetRealTimeFundFlowFromEasymoney(code: string) {
   try {
     const {
       body: { data },
-    } = await got('http://push2.eastmoney.com/api/qt/stock/fflow/kline/get', {
+    } = await request('http://push2.eastmoney.com/api/qt/stock/fflow/kline/get', {
       searchParams: {
         lmt: 0,
         klt: 1,
@@ -176,7 +175,7 @@ export async function GetStocksFromEasymoney(code: string) {
   try {
     const {
       body: { data },
-    } = await got<{
+    } = await request<{
       rc: 0;
       rt: 6;
       svr: 182996357;
@@ -243,7 +242,7 @@ export async function GetTransactionFromEasymoney(code: string) {
   try {
     const {
       body: { data },
-    } = await got<{
+    } = await request<{
       rc: 0;
       rt: 11;
       svr: 182995396;
@@ -328,7 +327,7 @@ export async function GetAfterTimeFundFlowFromEasymoney(code: string) {
   try {
     const {
       body: { data },
-    } = await got<{
+    } = await request<{
       rc: 0;
       rt: 22;
       svr: 2887122959;
@@ -379,7 +378,7 @@ export async function GetAfterTimeFundFlowFromEasymoney(code: string) {
  */
 export async function GetFundFlowFromEastmoney(code: string, type: string) {
   try {
-    const { body: data } = await got<{
+    const { body: data } = await request<{
       rc: 0;
       rt: 6;
       svr: 2887254391;
@@ -423,7 +422,7 @@ export async function GetFundFlowFromEastmoney(code: string, type: string) {
 
 export async function GetFlowFromEastmoney(fields1: string, code: 'n2s' | 's2n') {
   try {
-    const { body } = await got<{
+    const { body } = await request<{
       rc: 0;
       rt: 14;
       svr: 2887257311;
@@ -467,7 +466,7 @@ export async function GetFlowFromEastmoney(fields1: string, code: 'n2s' | 's2n')
 
 export async function GetNorthDayFromEastmoney(fields1: string, fields2: string) {
   try {
-    const { body } = await got<{
+    const { body } = await request<{
       rc: 0;
       rt: 14;
       svr: 2887257311;
@@ -505,7 +504,7 @@ export async function GetNorthDayFromEastmoney(fields1: string, fields2: string)
 
 export async function GetSouthDayFromEastmoney(fields1: string, fields2: string) {
   try {
-    const { body } = await got<{
+    const { body } = await request<{
       rc: 0;
       rt: 14;
       svr: 2887257311;
@@ -545,7 +544,7 @@ export async function GetFundsFromEastmoney(code: string) {
   try {
     const {
       body: { Data },
-    } = await got<{
+    } = await request<{
       Data: [
         {
           FCODE: '168501';
@@ -598,7 +597,7 @@ export async function GetFundsFromEastmoney(code: string) {
 
 export async function GetQuoteCenterFromEastmoney() {
   try {
-    const { body } = await got<{
+    const { body } = await request<{
       re: true;
       message: '';
       result: {
@@ -677,7 +676,7 @@ export async function GetQuoteCenterFromEastmoney() {
 
 export async function GetHodingFromEastmoney(marketCode: string, reportName: string) {
   try {
-    const { body } = await got<{
+    const { body } = await request<{
       version: 'a81c1cb169f170d8033693dfe021910a';
       result: {
         pages: 5;
@@ -741,7 +740,7 @@ export async function GetHodingFromEastmoney(marketCode: string, reportName: str
 
 export async function GetMutualQuotaFromEastmoney() {
   try {
-    const { body } = await got<{
+    const { body } = await request<{
       version: 'f5a499e30bac57207cc9f491db6bdfdd';
       result: {
         pages: 1;
@@ -813,7 +812,7 @@ export async function GetMutualQuotaFromEastmoney() {
 
 export async function GetTodayHotFromEastmoney() {
   try {
-    const { body } = await got<{
+    const { body } = await request<{
       re: true;
       message: '';
       result: {
@@ -869,7 +868,7 @@ export async function GetTodayHotFromEastmoney() {
 
 export async function GetHotThemeFromEastmoney() {
   try {
-    const { body } = await got<{
+    const { body } = await request<{
       re: true;
       message: '';
       result: {
@@ -906,7 +905,7 @@ export async function GetHotThemeFromEastmoney() {
 
 export async function GetRecentHotFromEastmoney() {
   try {
-    const { body } = await got<{
+    const { body } = await request<{
       re: true;
       message: '';
       result: {
@@ -935,6 +934,398 @@ export async function GetRecentHotFromEastmoney() {
     });
 
     return result;
+  } catch (error) {
+    return [];
+  }
+}
+// 金价
+export async function GetGoldTrendsFromEastmoney(secid: string) {
+  try {
+    const { body: data } = await request<{
+      rc: 0;
+      rt: 10;
+      svr: 2887263685;
+      lt: 1;
+      full: 1;
+      data: {
+        code: 'aum';
+        market: 113;
+        type: 5;
+        status: 0;
+        name: '沪金主力';
+        decimal: 2;
+        preSettlement: 404.8;
+        preClose: 405.82;
+        beticks: '75600|75600|313200|75600|95400|291600|296100|297000|300600|307800|313200';
+        trendsTotal: 556;
+        time: 1650047400;
+        kind: 16;
+        prePrice: 404.8;
+        trends: '2022-04-15 21:00,405.82,405.82,405.82,405.82,0,0.00,405.820'[];
+      };
+    }>('http://push2.eastmoney.com/api/qt/stock/trends2/get', {
+      searchParams: {
+        secid,
+        fields1: 'f1,f2,f3,f4,f5,f6,f7,f8,f9,f10,f11,f12,f13',
+        fields2: 'f51,f52,f53,f54,f55,f56,f57,f58',
+        iscr: 0,
+      },
+      responseType: 'json',
+    });
+
+    const result = data.data?.trends?.map((item) => {
+      const [time, x, price] = item.split(',');
+      return [time, Number(price)];
+    });
+
+    return result || [];
+  } catch (error) {
+    return [];
+  }
+}
+export async function GetGoldKFromEastmoney() {
+  try {
+    const { body: data } = await request<{
+      rc: 0;
+      rt: 10;
+      svr: 2887263685;
+      lt: 1;
+      full: 1;
+      data: {
+        code: 'GC00Y';
+        decimal: 1;
+        dktotal: 2744;
+        market: 101;
+        name: 'COMEX黄金';
+        klines: '2022-01-26,1848.0,1818.8,1850.2,1814.1,262456,0.0,1.95,-1.82,-33.7,0.00'[];
+      };
+    }>('http://push2his.eastmoney.com/api/qt/stock/kline/get', {
+      searchParams: {
+        secid: '101.GC00Y',
+        fields1: 'f1,f2,f3,f4,f5',
+        fields2: 'f51,f52,f53,f54,f55,f56,f57,f58,f59,f60,f61',
+        lmt: 58,
+        klt: 101,
+        fqt: 1,
+        end: 30000101,
+      },
+      responseType: 'json',
+    });
+
+    const result = data.data?.klines?.map((item) => {
+      const [time, k, s, g, d] = item.split(',');
+      return [time, Number(k), Number(s), Number(d), Number(g)];
+    });
+
+    return result || [];
+  } catch (error) {
+    return [];
+  }
+}
+export async function GetInternationalMetalFuturesFromEastmoney() {
+  try {
+    const { body: data } = await request<{
+      rc: 0;
+      rt: 6;
+      svr: 182996800;
+      lt: 1;
+      full: 1;
+      data: {
+        total: 8;
+        diff: {
+          f1: 4;
+          f2: 26.0625;
+          f3: 1.41;
+          f4: 0.3625;
+          f5: 102;
+          f6: '-';
+          f7: 1.75;
+          f8: '-';
+          f9: '-';
+          f10: '-';
+          f11: -0.05;
+          f12: 'QI00Y';
+          f13: 101;
+          f14: '迷你白银';
+          f15: 26.2125;
+          f16: 25.7625;
+          f17: 25.7625;
+          f18: 25.7;
+          f20: '-';
+          f21: '-';
+          f22: -0.05;
+          f23: '-';
+          f24: 1.16;
+          f25: 1.16;
+          f28: 25.7;
+          f62: '-';
+          f115: '-';
+          f124: 1650266643;
+          f128: '-';
+          f140: '-';
+          f141: '-';
+          f133: '-';
+          f136: '-';
+          f152: 2;
+        }[];
+      };
+    }>('http://62.push2.eastmoney.com/api/qt/clist/get', {
+      searchParams: {
+        pn: 1,
+        pz: 20,
+        po: 1,
+        np: 1,
+        fltt: 2,
+        invt: 2,
+        fid: 'f3',
+        fs: 'i:111.JAGC,i:101.QI00Y,i:111.JPAC,i:101.HG00Y,i:111.JAUC,i:111.JPLC,i:102.PL00Y,i:101.QO00Y,i:101.MGC00Y,i:101.GC00Y,i:101.SI00Y,i:102.PA00Y',
+        fields:
+          'f1,f2,f3,f4,f5,f6,f7,f8,f9,f10,f12,f13,f14,f15,f16,f17,f18,f20,f21,f23,f24,f25,f22,f28,f11,f62,f128,f136,f115,f152,f133,f124',
+        _: 1650267224149,
+      },
+      responseType: 'json',
+    });
+
+    const result = data.data?.diff?.map((item) => {
+      return {
+        name: item.f14,
+        zxj: item.f2,
+        zdf: item.f3,
+      };
+    });
+
+    return result || [];
+  } catch (error) {
+    return [];
+  }
+}
+export async function GetInternationalMetalGoodsFromEastmoney() {
+  try {
+    const { body: data } = await request<{
+      rc: 0;
+      rt: 6;
+      svr: 182996800;
+      lt: 1;
+      full: 1;
+      data: {
+        total: 8;
+        diff: {
+          f1: 4;
+          f2: 26.0625;
+          f3: 1.41;
+          f4: 0.3625;
+          f5: 102;
+          f6: '-';
+          f7: 1.75;
+          f8: '-';
+          f9: '-';
+          f10: '-';
+          f11: -0.05;
+          f12: 'QI00Y';
+          f13: 101;
+          f14: '迷你白银';
+          f15: 26.2125;
+          f16: 25.7625;
+          f17: 25.7625;
+          f18: 25.7;
+          f20: '-';
+          f21: '-';
+          f22: -0.05;
+          f23: '-';
+          f24: 1.16;
+          f25: 1.16;
+          f28: 25.7;
+          f62: '-';
+          f115: '-';
+          f124: 1650266643;
+          f128: '-';
+          f140: '-';
+          f141: '-';
+          f133: '-';
+          f136: '-';
+          f152: 2;
+        }[];
+      };
+    }>('http://62.push2.eastmoney.com/api/qt/clist/get', {
+      searchParams: {
+        pn: 1,
+        pz: 20,
+        po: 1,
+        np: 1,
+        fltt: 2,
+        invt: 2,
+        fid: 'f3',
+        fs: 'm:122,m:123',
+        fields:
+          'f1,f2,f3,f4,f5,f6,f7,f8,f9,f10,f12,f13,f14,f15,f16,f17,f18,f20,f21,f23,f24,f25,f22,f28,f11,f62,f128,f136,f115,f152,f133,f124',
+        _: 1650267224149,
+      },
+      responseType: 'json',
+    });
+
+    const result = data.data?.diff?.map((item) => {
+      return {
+        name: item.f14,
+        zxj: item.f2,
+        zdf: item.f3,
+      };
+    });
+
+    return result || [];
+  } catch (error) {
+    return [];
+  }
+}
+export async function GetShanghaiGoldFuturesFromEastmoney() {
+  try {
+    const { body: data } = await request<{
+      rc: 0;
+      rt: 6;
+      svr: 182996800;
+      lt: 1;
+      full: 1;
+      data: {
+        total: 8;
+        diff: {
+          f1: 4;
+          f2: 26.0625;
+          f3: 1.41;
+          f4: 0.3625;
+          f5: 102;
+          f6: '-';
+          f7: 1.75;
+          f8: '-';
+          f9: '-';
+          f10: '-';
+          f11: -0.05;
+          f12: 'QI00Y';
+          f13: 101;
+          f14: '迷你白银';
+          f15: 26.2125;
+          f16: 25.7625;
+          f17: 25.7625;
+          f18: 25.7;
+          f20: '-';
+          f21: '-';
+          f22: -0.05;
+          f23: '-';
+          f24: 1.16;
+          f25: 1.16;
+          f28: 25.7;
+          f62: '-';
+          f115: '-';
+          f124: 1650266643;
+          f128: '-';
+          f140: '-';
+          f141: '-';
+          f133: '-';
+          f136: '-';
+          f152: 2;
+        }[];
+      };
+    }>('http://62.push2.eastmoney.com/api/qt/clist/get', {
+      searchParams: {
+        pn: 1,
+        pz: 20,
+        po: 1,
+        np: 1,
+        fltt: 2,
+        invt: 2,
+        fid: 'f3',
+        fs: 'm:113 t:5',
+        fields:
+          'f1,f2,f3,f4,f5,f6,f7,f8,f9,f10,f12,f13,f14,f15,f16,f17,f18,f20,f21,f23,f24,f25,f22,f28,f11,f62,f128,f136,f115,f152,f133,f124',
+        _: 1650267224149,
+      },
+      responseType: 'json',
+    });
+
+    const result = data.data?.diff?.map((item) => {
+      return {
+        name: item.f14,
+        zxj: item.f2,
+        zdf: item.f3,
+      };
+    });
+
+    return result || [];
+  } catch (error) {
+    return [];
+  }
+}
+export async function GetShanghaiGoldGoodsFromEastmoney() {
+  try {
+    const { body: data } = await request<{
+      rc: 0;
+      rt: 6;
+      svr: 182996800;
+      lt: 1;
+      full: 1;
+      data: {
+        total: 8;
+        diff: {
+          f1: 4;
+          f2: 26.0625;
+          f3: 1.41;
+          f4: 0.3625;
+          f5: 102;
+          f6: '-';
+          f7: 1.75;
+          f8: '-';
+          f9: '-';
+          f10: '-';
+          f11: -0.05;
+          f12: 'QI00Y';
+          f13: 101;
+          f14: '迷你白银';
+          f15: 26.2125;
+          f16: 25.7625;
+          f17: 25.7625;
+          f18: 25.7;
+          f20: '-';
+          f21: '-';
+          f22: -0.05;
+          f23: '-';
+          f24: 1.16;
+          f25: 1.16;
+          f28: 25.7;
+          f62: '-';
+          f115: '-';
+          f124: 1650266643;
+          f128: '-';
+          f140: '-';
+          f141: '-';
+          f133: '-';
+          f136: '-';
+          f152: 2;
+        }[];
+      };
+    }>('http://62.push2.eastmoney.com/api/qt/clist/get', {
+      searchParams: {
+        pn: 1,
+        pz: 20,
+        po: 1,
+        np: 1,
+        fltt: 2,
+        invt: 2,
+        fid: 'f3',
+        fs: 'm:118',
+        fields:
+          'f1,f2,f3,f4,f5,f6,f7,f8,f9,f10,f12,f13,f14,f15,f16,f17,f18,f20,f21,f23,f24,f25,f22,f28,f11,f62,f128,f136,f115,f152,f133,f124',
+        _: 1650267224149,
+      },
+      responseType: 'json',
+    });
+
+    const result = data.data?.diff?.map((item) => {
+      return {
+        name: item.f14,
+        zxj: item.f2,
+        zdf: item.f3,
+      };
+    });
+
+    return result || [];
   } catch (error) {
     return [];
   }

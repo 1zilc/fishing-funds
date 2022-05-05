@@ -1,10 +1,8 @@
 import React from 'react';
 import { useRequest } from 'ahooks';
 
-import { useHomeContext } from '@/components/Home';
 import ChartCard from '@/components/Card/ChartCard';
 import { useResizeEchart, useRenderEcharts } from '@/utils/hooks';
-import * as CONST from '@/constants';
 import * as Services from '@/services';
 import styles from './index.module.scss';
 
@@ -12,10 +10,13 @@ interface NationalStockTradingStatisticsProps {}
 
 const NationalStockTradingStatistics: React.FC<NationalStockTradingStatisticsProps> = () => {
   const { ref: chartRef, chartInstance } = useResizeEchart(0.4);
-  const { varibleColors, darkMode } = useHomeContext();
 
-  const { run: runGetEconomyIndexFromEastmoney } = useRequest(() => Services.Zindex.GetEconomyIndexFromEastmoney(2), {
-    onSuccess: (result) => {
+  const { data: result = [], run: runGetEconomyIndexFromEastmoney } = useRequest(() => Services.Zindex.GetEconomyIndexFromEastmoney(2), {
+    ready: !!chartInstance,
+  });
+
+  useRenderEcharts(
+    ({ varibleColors }) => {
       try {
         chartInstance?.setOption({
           title: {
@@ -53,6 +54,11 @@ const NationalStockTradingStatistics: React.FC<NationalStockTradingStatisticsPro
               fontSize: 10,
               formatter: `{value}亿`,
             },
+            splitLine: {
+              lineStyle: {
+                color: varibleColors['--border-color'],
+              },
+            },
           },
           series: [
             {
@@ -73,9 +79,9 @@ const NationalStockTradingStatistics: React.FC<NationalStockTradingStatisticsPro
         });
       } catch {}
     },
-    refreshDeps: [darkMode],
-    ready: !!chartInstance,
-  });
+    chartInstance,
+    [result]
+  );
 
   return (
     <ChartCard auto onFresh={runGetEconomyIndexFromEastmoney} TitleBar={<div className={styles.title}>全国股票交易统计</div>}>

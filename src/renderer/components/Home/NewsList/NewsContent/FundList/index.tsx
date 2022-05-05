@@ -10,12 +10,8 @@ interface FundListProps {
   onView: (url: string) => void;
 }
 
-const FundList: React.FC<PropsWithChildren<FundListProps>> = (props) => {
-  const [data, setData] = useState<News.ResponseItem[]>([]);
-
-  const { loading, run: runNewsGetFundList } = useRequest(Services.News.GetFundList, {
-    onSuccess: setData,
-  });
+const FundView: React.FC<PropsWithChildren<FundListProps>> = (props) => {
+  const { data = [], loading, run: runNewsGetFundList } = useRequest(Services.News.GetFundList);
 
   return (
     <ChartCard auto onFresh={runNewsGetFundList}>
@@ -45,7 +41,7 @@ const FundList: React.FC<PropsWithChildren<FundListProps>> = (props) => {
             position: ['bottomCenter'],
           }}
           onRow={(record) => ({
-            onClick: () => props.onView(record.url_m),
+            onClick: () => props.onView(record.url_unique),
           })}
         />
       </div>
@@ -53,4 +49,4 @@ const FundList: React.FC<PropsWithChildren<FundListProps>> = (props) => {
   );
 };
 
-export default FundList;
+export default FundView;

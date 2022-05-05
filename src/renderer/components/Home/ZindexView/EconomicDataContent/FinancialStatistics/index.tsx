@@ -1,5 +1,5 @@
 import React from 'react';
-import classnames from 'classnames';
+import clsx from 'clsx';
 import NationalStockTradingStatistics from '@/components/Home/ZindexView/EconomicDataContent/FinancialStatistics/NationalStockTradingStatistics';
 import Revenue from '@/components/Home/ZindexView/EconomicDataContent/FinancialStatistics/Revenue';
 import DepositReserveRatio from '@/components/Home/ZindexView/EconomicDataContent/FinancialStatistics/DepositReserveRatio';
@@ -11,7 +11,7 @@ interface FinancialStatisticsProps {}
 
 const FinancialStatistics: React.FC<FinancialStatisticsProps> = () => {
   return (
-    <div className={classnames(styles.content)}>
+    <div className={clsx(styles.content)}>
       <Revenue />
       <NationalStockTradingStatistics />
       <ForeignExchangeAndGold />

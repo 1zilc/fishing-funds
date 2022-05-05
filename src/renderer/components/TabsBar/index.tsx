@@ -1,8 +1,8 @@
 import React from 'react';
-import classnemes from 'classnames';
-import { useSelector, useDispatch } from 'react-redux';
-import { StoreState } from '@/reducers/types';
-import { setTabActiveKeyAction } from '@/actions/tabs';
+import classnemes from 'clsx';
+
+import { setTabsActiveKeyAction } from '@/store/features/tabs';
+import { useAppDispatch, useAppSelector } from '@/utils/hooks';
 import * as Enums from '@/utils/enums';
 import styles from './index.module.scss';
 
@@ -11,7 +11,7 @@ export interface Tab {
   key: Enums.TabKeyType;
   name: string;
 }
-const tabs = [
+export const tabs = [
   {
     key: Enums.TabKeyType.Funds,
     name: '基金',
@@ -32,10 +32,14 @@ const tabs = [
     key: Enums.TabKeyType.Coin,
     name: '货币',
   },
+  // {
+  //   key: Enums.TabKeyType.News,
+  //   name: '资讯',
+  // },
 ];
 const TabsBar: React.FC<TabsBarProps> = () => {
-  const dispatch = useDispatch();
-  const tabsActiveKey = useSelector((state: StoreState) => state.tabs.activeKey);
+  const dispatch = useAppDispatch();
+  const tabsActiveKey = useAppSelector((state) => state.tabs.activeKey);
 
   return (
     <div className={styles.layout}>
@@ -46,7 +50,7 @@ const TabsBar: React.FC<TabsBarProps> = () => {
               className={classnemes(styles.tab, {
                 [styles.active]: tabsActiveKey === tab.key,
               })}
-              onClick={() => dispatch(setTabActiveKeyAction(tab.key))}
+              onClick={() => dispatch(setTabsActiveKeyAction(tab.key))}
             >
               {tab.name}
             </div>

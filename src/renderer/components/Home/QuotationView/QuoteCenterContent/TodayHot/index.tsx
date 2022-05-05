@@ -1,34 +1,24 @@
 import React, { useState } from 'react';
 import { useRequest } from 'ahooks';
-import classnames from 'classnames';
+import clsx from 'clsx';
 import PureCard from '@/components/Card/PureCard';
 import CustomDrawer from '@/components/CustomDrawer';
-import AddStockContent from '@/components/Home/StockList/AddStockContent';
 import Avatar from '@/components/Avatar';
 import { useDrawer } from '@/utils/hooks';
 import * as Services from '@/services';
 import styles from './index.module.scss';
 
+const AddStockContent = React.lazy(() => import('@/components/Home/StockView/AddStockContent'));
+
 interface TodayHotProps {}
 
 const TodayHot: React.FC<TodayHotProps> = () => {
-  const [hots, setHots] = useState<
-    {
-      zdf: string;
-      name: string;
-      reason: string;
-      stockName: string;
-      stockCode: string;
-    }[]
-  >([]);
   const { data: stockName, show: showAddStockDrawer, set: setAddStockDrawer, close: closeAddStockDrawer } = useDrawer('');
 
-  useRequest(Services.Quotation.GetTodayHotFromEastmoney, {
-    onSuccess: setHots,
-  });
+  const { data: hots = [] } = useRequest(Services.Quotation.GetTodayHotFromEastmoney);
 
   return (
-    <div className={classnames(styles.content)}>
+    <div className={clsx(styles.content)}>
       {hots.map((hot) => (
         <PureCard key={hot.name}>
           <div className={styles.card}>
@@ -39,9 +29,9 @@ const TodayHot: React.FC<TodayHotProps> = () => {
               <div className={styles.title}>
                 <h3>{hot.name}</h3>
                 {Number(hot.zdf) > 0 ? (
-                  <span className={classnames(styles.tag, 'text-up', 'boder-up')}>{hot.zdf}% ↗</span>
+                  <span className={clsx(styles.tag, 'text-up', 'boder-up')}>{hot.zdf}% ↗</span>
                 ) : Number(hot.zdf) < 0 ? (
-                  <span className={classnames(styles.tag, 'text-down', 'boder-down')}>{hot.zdf}% ↘</span>
+                  <span className={clsx(styles.tag, 'text-down', 'boder-down')}>{hot.zdf}% ↘</span>
                 ) : (
                   <></>
                 )}

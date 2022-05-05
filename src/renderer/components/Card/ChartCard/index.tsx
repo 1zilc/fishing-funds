@@ -1,6 +1,6 @@
 import React, { PropsWithChildren, ReactNode, useRef } from 'react';
 import html2canvas from 'html2canvas';
-import classnames from 'classnames';
+import clsx from 'clsx';
 import DownloadIcon from '@/static/icon/download.svg';
 import CopyIcon from '@/static/icon/copy.svg';
 import RefreshIcon from '@/static/icon/refresh.svg';
@@ -78,7 +78,7 @@ export const ChartCard: React.FC<PropsWithChildren<ChartCardProps>> = ({
   }
   return (
     <aside
-      className={classnames(styles.content, className, {
+      className={clsx(styles.content, className, {
         [styles.autoSize]: auto,
       })}
       onClick={onClick}

@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from 'react';
-import { useScroll, useDebounceFn, useBoolean, useThrottleFn } from 'ahooks';
-import { useSelector, useDispatch } from 'react-redux';
-import classsames from 'classnames';
+import { useScroll, useDebounceFn, useBoolean } from 'ahooks';
+
+import classsames from 'clsx';
 import { Dropdown, Menu } from 'antd';
 
 import SortArrowUpIcon from '@/static/icon/sort-arrow-up.svg';
@@ -10,6 +10,7 @@ import ArrowDownIcon from '@/static/icon/arrow-down.svg';
 import ArrowUpIcon from '@/static/icon/arrow-up.svg';
 import LayoutListIcon from '@/static/icon/layout-list.svg';
 import LayoutGridIcon from '@/static/icon/layout-grid.svg';
+import LineCharIcon from '@/static/icon/line-chart.svg';
 
 import {
   setFundSortModeAction,
@@ -27,50 +28,42 @@ import {
   setQuotationViewModeAction,
   setStockViewModeAction,
   setCoinViewModeAction,
-} from '@/actions/sort';
+} from '@/store/features/sort';
 import CustomDrawer from '@/components/CustomDrawer';
-import ManageFundContent from '@/components/Home/FundList/ManageFundContent';
-import ManageStockContent from '@/components/Home/StockList/ManageStockContent';
-import ManageCoinContent from '@/components/Home/CoinList/ManageCoinContent';
-import ManageZindexContent from '@/components/Home/ZindexView/ManageZindexContent';
-import { StoreState } from '@/reducers/types';
-import { toggleAllFundsCollapseAction } from '@/actions/fund';
-import { toggleAllZindexsCollapseAction } from '@/actions/zindex';
-import { toggleAllQuotationsCollapse } from '@/actions/quotation';
-import { toggleAllStocksCollapseAction } from '@/actions/stock';
-import { toggleAllCoinsCollapseAction } from '@/actions/coin';
-import {
-  useScrollToTop,
-  useFreshFunds,
-  useFreshZindexs,
-  useFreshQuotations,
-  useFreshStocks,
-  useFreshCoins,
-  useCurrentWallet,
-} from '@/utils/hooks';
+
+import { toggleAllZindexsCollapseAction } from '@/store/features/zindex';
+import { toggleAllQuotationsCollapseAction } from '@/store/features/quotation';
+import { toggleAllStocksCollapseAction } from '@/store/features/stock';
+import { toggleAllCoinsCollapseAction } from '@/store/features/coin';
+import { toggleAllFundsCollapseAction } from '@/store/features/wallet';
+import { useFreshFunds, useFreshZindexs, useFreshStocks, useFreshCoins, useAppDispatch, useAppSelector } from '@/utils/hooks';
 import * as Enums from '@/utils/enums';
 import * as CONST from '@/constants';
 import * as Helpers from '@/helpers';
 import styles from './index.module.scss';
 
+const ManageFundContent = React.lazy(() => import('@/components/Home/FundView/ManageFundContent'));
+const ManageStockContent = React.lazy(() => import('@/components/Home/StockView/ManageStockContent'));
+const ManageCoinContent = React.lazy(() => import('@/components/Home/CoinView/ManageCoinContent'));
+const ManageZindexContent = React.lazy(() => import('@/components/Home/ZindexView/ManageZindexContent'));
+const FundFlowContent = React.lazy(() => import('@/components/Home/QuotationView/FundFlowContent'));
+
 export interface SortBarProps {}
 
 function FundsSortBar() {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const {
     fundSortMode: { type: fundSortType, order: fundSortOrder },
-  } = useSelector((state: StoreState) => state.sort.sortMode);
+  } = useAppSelector((state) => state.sort.sortMode);
 
   const {
     fundViewMode: { type: fundViewType },
-  } = useSelector((state: StoreState) => state.sort.viewMode);
+  } = useAppSelector((state) => state.sort.viewMode);
+
+  const { funds } = useAppSelector((state) => state.wallet.currentWallet);
 
   const { fundSortModeOptions, fundSortModeOptionsMap } = Helpers.Sort.GetSortConfig();
-
-  const {
-    currentWalletState: { funds },
-  } = useCurrentWallet();
 
   const [showManageFundDrawer, { setTrue: openManageFundDrawer, setFalse: closeManageFundDrawer, toggle: ToggleManageFundDrawer }] =
     useBoolean(false);
@@ -111,16 +104,14 @@ function FundsSortBar() {
         <Dropdown
           placement="bottomRight"
           overlay={
-            <Menu selectedKeys={[String(fundSortModeOptionsMap[fundSortType].key)]}>
-              {fundSortModeOptions.map(({ key, value }) => (
-                <Menu.Item key={String(key)} onClick={() => dispatch(setFundSortModeAction({ type: key }))}>
-                  {value}
-                </Menu.Item>
-              ))}
-            </Menu>
+            <Menu
+              selectedKeys={[String(fundSortModeOptionsMap[fundSortType].key)]}
+              onClick={({ key }) => dispatch(setFundSortModeAction({ type: Number(key) as Enums.FundSortType }))}
+              items={fundSortModeOptions}
+            />
           }
         >
-          <a>{fundSortModeOptionsMap[fundSortType].value}</a>
+          <a>{fundSortModeOptionsMap[fundSortType].label}</a>
         </Dropdown>
       </div>
       <div className={styles.sort} onClick={() => dispatch(troggleFundSortOrderAction())}>
@@ -149,19 +140,19 @@ function FundsSortBar() {
 }
 
 function ZindexSortBar() {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const {
     zindexSortMode: { type: zindexSortType, order: zindexSortOrder },
-  } = useSelector((state: StoreState) => state.sort.sortMode);
+  } = useAppSelector((state) => state.sort.sortMode);
 
   const {
     zindexViewMode: { type: zindexViewType },
-  } = useSelector((state: StoreState) => state.sort.viewMode);
+  } = useAppSelector((state) => state.sort.viewMode);
 
   const { zindexSortModeOptions, zindexSortModeOptionsMap } = Helpers.Sort.GetSortConfig();
 
-  const zindexs = useSelector((state: StoreState) => state.zindex.zindexs);
+  const zindexs = useAppSelector((state) => state.zindex.zindexs);
 
   const [showManageZindexDrawer, { setTrue: openManageZindexDrawer, setFalse: closeManageZindexDrawer, toggle: ToggleManageZindexDrawer }] =
     useBoolean(false);
@@ -195,23 +186,24 @@ function ZindexSortBar() {
           <LayoutListIcon onClick={() => dispatch(setZindexViewModeAction({ type: Enums.ZindexViewType.Grid }))} />
         )}
         {zindexViewType === Enums.ZindexViewType.Grid && (
-          <LayoutGridIcon onClick={() => dispatch(setZindexViewModeAction({ type: Enums.ZindexViewType.List }))} />
+          <LayoutGridIcon onClick={() => dispatch(setZindexViewModeAction({ type: Enums.ZindexViewType.Chart }))} />
+        )}
+        {zindexViewType === Enums.ZindexViewType.Chart && (
+          <LineCharIcon onClick={() => dispatch(setZindexViewModeAction({ type: Enums.ZindexViewType.List }))} />
         )}
       </div>
       <div className={styles.mode}>
         <Dropdown
           placement="bottomRight"
           overlay={
-            <Menu selectedKeys={[String(zindexSortModeOptionsMap[zindexSortType].key)]}>
-              {zindexSortModeOptions.map(({ key, value }) => (
-                <Menu.Item key={String(key)} onClick={() => dispatch(setZindexSortModeAction({ type: key }))}>
-                  {value}
-                </Menu.Item>
-              ))}
-            </Menu>
+            <Menu
+              selectedKeys={[String(zindexSortModeOptionsMap[zindexSortType].key)]}
+              onClick={({ key }) => dispatch(setZindexSortModeAction({ type: Number(key) as Enums.ZindexSortType }))}
+              items={zindexSortModeOptions}
+            />
           }
         >
-          <a>{zindexSortModeOptionsMap[zindexSortType].value}</a>
+          <a>{zindexSortModeOptionsMap[zindexSortType].label}</a>
         </Dropdown>
       </div>
       <div className={styles.sort} onClick={() => dispatch(troggleZindexSortOrderAction())}>
@@ -240,25 +232,27 @@ function ZindexSortBar() {
 }
 
 function QuotationSortBar() {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const {
     quotationSortMode: { type: quotationSortType, order: quotationSortOrder },
-  } = useSelector((state: StoreState) => state.sort.sortMode);
+  } = useAppSelector((state) => state.sort.sortMode);
 
   const {
     quotationViewMode: { type: quotationViewType },
-  } = useSelector((state: StoreState) => state.sort.viewMode);
+  } = useAppSelector((state) => state.sort.viewMode);
+
+  const [showFundFlowDrawer, { setTrue: openFundFlowDrawer, setFalse: closeFundFlowDrawer }] = useBoolean(false);
 
   const { quotationSortModeOptions, quotationSortModeOptionsMap } = Helpers.Sort.GetSortConfig();
 
-  const quotations = useSelector((state: StoreState) => state.quotation.quotations);
+  const quotations = useAppSelector((state) => state.quotation.quotations);
 
   const [expandAllQuotations, expandSomeQuotations] = useMemo(() => {
     return [quotations.every((_) => _.collapse), quotations.some((_) => _.collapse)];
   }, [quotations]);
 
-  const toggleQuotationsCollapse = () => dispatch(toggleAllQuotationsCollapse());
+  const toggleQuotationsCollapse = () => dispatch(toggleAllQuotationsCollapseAction());
 
   return (
     <div className={styles.bar}>
@@ -267,6 +261,14 @@ function QuotationSortBar() {
       </div>
       <div className={styles.name} onClick={toggleQuotationsCollapse}>
         板块名称
+        <a
+          onClick={(e) => {
+            openFundFlowDrawer();
+            e.stopPropagation();
+          }}
+        >
+          资金流
+        </a>
       </div>
       <div className={styles.view}>
         {quotationViewType === Enums.QuotationViewType.List && (
@@ -280,16 +282,14 @@ function QuotationSortBar() {
         <Dropdown
           placement="bottomRight"
           overlay={
-            <Menu selectedKeys={[String(quotationSortModeOptionsMap[quotationSortType].key)]}>
-              {quotationSortModeOptions.map(({ key, value }) => (
-                <Menu.Item key={String(key)} onClick={() => dispatch(setQuotationSortModeAction({ type: key }))}>
-                  {value}
-                </Menu.Item>
-              ))}
-            </Menu>
+            <Menu
+              selectedKeys={[String(quotationSortModeOptionsMap[quotationSortType].key)]}
+              onClick={({ key }) => dispatch(setQuotationSortModeAction({ type: Number(key) as Enums.QuotationSortType }))}
+              items={quotationSortModeOptions}
+            />
           }
         >
-          <a>{quotationSortModeOptionsMap[quotationSortType].value}</a>
+          <a>{quotationSortModeOptionsMap[quotationSortType].label}</a>
         </Dropdown>
       </div>
       <div className={styles.sort} onClick={() => dispatch(troggleQuotationSortOrderAction())}>
@@ -304,24 +304,27 @@ function QuotationSortBar() {
           })}
         />
       </div>
+      <CustomDrawer show={showFundFlowDrawer}>
+        <FundFlowContent onClose={closeFundFlowDrawer} onEnter={closeFundFlowDrawer} />
+      </CustomDrawer>
     </div>
   );
 }
 
 function StockSortBar() {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const {
     stockSortMode: { type: stockSortType, order: stockSortOrder },
-  } = useSelector((state: StoreState) => state.sort.sortMode);
+  } = useAppSelector((state) => state.sort.sortMode);
 
   const {
     stockViewMode: { type: stockViewType },
-  } = useSelector((state: StoreState) => state.sort.viewMode);
+  } = useAppSelector((state) => state.sort.viewMode);
 
   const { stockSortModeOptions, stockSortModeOptionsMap } = Helpers.Sort.GetSortConfig();
 
-  const stocks = useSelector((state: StoreState) => state.stock.stocks);
+  const stocks = useAppSelector((state) => state.stock.stocks);
 
   const [showManageStockDrawer, { setTrue: openManageStockDrawer, setFalse: closeManageStockDrawer, toggle: ToggleManageStockDrawer }] =
     useBoolean(false);
@@ -355,23 +358,24 @@ function StockSortBar() {
           <LayoutListIcon onClick={() => dispatch(setStockViewModeAction({ type: Enums.StockViewType.Grid }))} />
         )}
         {stockViewType === Enums.StockViewType.Grid && (
-          <LayoutGridIcon onClick={() => dispatch(setStockViewModeAction({ type: Enums.StockViewType.List }))} />
+          <LayoutGridIcon onClick={() => dispatch(setStockViewModeAction({ type: Enums.StockViewType.Chart }))} />
+        )}
+        {stockViewType === Enums.StockViewType.Chart && (
+          <LineCharIcon onClick={() => dispatch(setStockViewModeAction({ type: Enums.StockViewType.List }))} />
         )}
       </div>
       <div className={styles.mode}>
         <Dropdown
           placement="bottomRight"
           overlay={
-            <Menu selectedKeys={[String(stockSortModeOptionsMap[stockSortType].key)]}>
-              {stockSortModeOptions.map(({ key, value }) => (
-                <Menu.Item key={String(key)} onClick={() => dispatch(setStockSortModeAction({ type: key }))}>
-                  {value}
-                </Menu.Item>
-              ))}
-            </Menu>
+            <Menu
+              selectedKeys={[String(stockSortModeOptionsMap[stockSortType].key)]}
+              onClick={({ key }) => dispatch(setStockSortModeAction({ type: Number(key) as Enums.StockSortType }))}
+              items={stockSortModeOptions}
+            />
           }
         >
-          <a>{stockSortModeOptionsMap[stockSortType].value}</a>
+          <a>{stockSortModeOptionsMap[stockSortType].label}</a>
         </Dropdown>
       </div>
       <div className={styles.sort} onClick={() => dispatch(troggleStockSortOrderAction())}>
@@ -400,19 +404,19 @@ function StockSortBar() {
 }
 
 function CoinSortBar() {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const {
     coinSortMode: { type: coinSortType, order: coinSortOrder },
-  } = useSelector((state: StoreState) => state.sort.sortMode);
+  } = useAppSelector((state) => state.sort.sortMode);
 
   const {
     coinViewMode: { type: coinViewType },
-  } = useSelector((state: StoreState) => state.sort.viewMode);
+  } = useAppSelector((state) => state.sort.viewMode);
 
   const { coinSortModeOptions, coinSortModeOptionsMap } = Helpers.Sort.GetSortConfig();
 
-  const coins = useSelector((state: StoreState) => state.coin.coins);
+  const coins = useAppSelector((state) => state.coin.coins);
 
   const [showManageCoinDrawer, { setTrue: openManageCoinDrawer, setFalse: closeManageCoinDrawer, toggle: ToggleManageCoinDrawer }] =
     useBoolean(false);
@@ -453,16 +457,14 @@ function CoinSortBar() {
         <Dropdown
           placement="bottomRight"
           overlay={
-            <Menu selectedKeys={[String(coinSortModeOptionsMap[coinSortType].key)]}>
-              {coinSortModeOptions.map(({ key, value }) => (
-                <Menu.Item key={String(key)} onClick={() => dispatch(setCoinSortModeAction({ type: key }))}>
-                  {value}
-                </Menu.Item>
-              ))}
-            </Menu>
+            <Menu
+              selectedKeys={[String(coinSortModeOptionsMap[coinSortType].key)]}
+              onClick={({ key }) => dispatch(setCoinSortModeAction({ type: Number(key) as Enums.CoinSortType }))}
+              items={coinSortModeOptions}
+            />
           }
         >
-          <a>{coinSortModeOptionsMap[coinSortType].value}</a>
+          <a>{coinSortModeOptionsMap[coinSortType].label}</a>
         </Dropdown>
       </div>
       <div className={styles.sort} onClick={() => dispatch(troggleCoinSortOrderAction())}>
@@ -495,7 +497,7 @@ const SortBar: React.FC<SortBarProps> = () => {
   const { run: debounceSetVisible } = useDebounceFn(() => setVisible(true), {
     wait: 200,
   });
-  const tabsActiveKey = useSelector((state: StoreState) => state.tabs.activeKey);
+  const tabsActiveKey = useAppSelector((state) => state.tabs.activeKey);
 
   useScroll(document, () => {
     setVisible(false);

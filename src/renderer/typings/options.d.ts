@@ -5,6 +5,6 @@ declare namespace Option {
   }
   export interface EnumsOption<T> {
     key: T;
-    value: string;
+    label: string;
   }
 }

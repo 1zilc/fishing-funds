@@ -1,6 +1,6 @@
 import React from 'react';
-import ArrowDownLineIcon from '@/static/icon/arrow-down-line.svg';
-import ArrowUpLineIcon from '@/static/icon/arrow-up-line.svg';
+import ArrowDownLineIcon from '@/static/icon/arrow-down-s.svg';
+import ArrowUpLineIcon from '@/static/icon/arrow-up-s.svg';
 import SubtractLineIcon from '@/static/icon/subtract-line.svg';
 
 export interface ArrowLineProps {

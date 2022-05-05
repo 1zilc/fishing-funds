@@ -19,49 +19,48 @@ interface QuoteCenterContentProps {
 }
 
 const QuoteCenterContent: React.FC<QuoteCenterContentProps> = (props) => {
-  const [data, setData] = useState({
-    TopText: {
-      PositionInd: 0,
-      Title: '',
-      Content: '',
-    },
-    MarketStyle: [] as {
-      Category: '权重';
-      ThemeList: {
-        Code: string;
-        Name: string;
-        IsImportant: string;
-        TopCode: string;
-        TopName: string;
-        DayType: 1;
-        Chg: string;
-        HotRate: number;
-      }[];
-    }[],
-    Recommend: [] as {
-      Title: string;
-      DefaultText: string;
-      ThemeList: {
-        Code: string;
-        Name: string;
-        Chg: string;
-        TopCode: '';
-        TopName: '';
-        IsImportant: '0';
-        Reason: string;
-        StockList: {
+  const {
+    data = {
+      TopText: {
+        PositionInd: 0,
+        Title: '',
+        Content: '',
+      },
+      MarketStyle: [] as {
+        Category: '权重';
+        ThemeList: {
           Code: string;
           Name: string;
-          Market: string;
+          IsImportant: string;
+          TopCode: string;
+          TopName: string;
+          DayType: 1;
           Chg: string;
+          HotRate: number;
         }[];
-      }[];
-    }[],
-  });
-
-  const { run: runGetQuoteCenterFromEastmoney } = useRequest(Services.Quotation.GetQuoteCenterFromEastmoney, {
-    onSuccess: setData,
-  });
+      }[],
+      Recommend: [] as {
+        Title: string;
+        DefaultText: string;
+        ThemeList: {
+          Code: string;
+          Name: string;
+          Chg: string;
+          TopCode: '';
+          TopName: '';
+          IsImportant: '0';
+          Reason: string;
+          StockList: {
+            Code: string;
+            Name: string;
+            Market: string;
+            Chg: string;
+          }[];
+        }[];
+      }[],
+    },
+    run: runGetQuoteCenterFromEastmoney,
+  } = useRequest(Services.Quotation.GetQuoteCenterFromEastmoney);
 
   return (
     <CustomDrawerContent title="行情中心" enterText="确定" onClose={props.onClose} onEnter={props.onEnter}>

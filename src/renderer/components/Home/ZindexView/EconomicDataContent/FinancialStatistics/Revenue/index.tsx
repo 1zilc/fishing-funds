@@ -1,10 +1,8 @@
 import React from 'react';
 import { useRequest } from 'ahooks';
 
-import { useHomeContext } from '@/components/Home';
 import ChartCard from '@/components/Card/ChartCard';
 import { useResizeEchart, useRenderEcharts } from '@/utils/hooks';
-import * as CONST from '@/constants';
 import * as Services from '@/services';
 import styles from './index.module.scss';
 
@@ -12,10 +10,13 @@ interface RevenueProps {}
 
 const Revenue: React.FC<RevenueProps> = () => {
   const { ref: chartRef, chartInstance } = useResizeEchart(0.4);
-  const { varibleColors, darkMode } = useHomeContext();
 
-  const { run: runGetEconomyIndexFromEastmoney } = useRequest(() => Services.Zindex.GetEconomyIndexFromEastmoney(14), {
-    onSuccess: (result) => {
+  const { data: result = [], run: runGetEconomyIndexFromEastmoney } = useRequest(() => Services.Zindex.GetEconomyIndexFromEastmoney(14), {
+    ready: !!chartInstance,
+  });
+
+  useRenderEcharts(
+    ({ varibleColors }) => {
       try {
         chartInstance?.setOption({
           title: {
@@ -53,6 +54,11 @@ const Revenue: React.FC<RevenueProps> = () => {
               fontSize: 10,
               formatter: `{value}亿`,
             },
+            splitLine: {
+              lineStyle: {
+                color: varibleColors['--border-color'],
+              },
+            },
           },
           series: [
             {
@@ -66,9 +72,9 @@ const Revenue: React.FC<RevenueProps> = () => {
         });
       } catch {}
     },
-    refreshDeps: [darkMode],
-    ready: !!chartInstance,
-  });
+    chartInstance,
+    [result]
+  );
 
   return (
     <ChartCard auto onFresh={runGetEconomyIndexFromEastmoney} TitleBar={<div className={styles.title}>财政收入</div>}>

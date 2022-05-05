@@ -1,7 +1,7 @@
 ### Component
 
 ```
-npx generate-react-cli component GridView --path=src/renderer/components
+npx generate-react-cli component SearchGroup --path=src/renderer/components/Toolbar/AppCenterContent
 ```
 
 ### Chart
@@ -13,5 +13,5 @@ npx generate-react-cli component Chart --type=chart --path=src/renderer/componen
 ### Content
 
 ```
-npx generate-react-cli component Content --type=content --path=src/renderer/components/Home
+npx generate-react-cli component Content --type=content --path=src/renderer/components
 ```

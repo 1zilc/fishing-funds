@@ -1,40 +1,29 @@
 import got from 'got';
 import log from 'electron-log';
 import { contextBridge, ipcRenderer, shell, clipboard, nativeImage } from 'electron';
-import { encode, decode } from 'js-base64';
+import { encode, decode, fromUint8Array } from 'js-base64';
 import * as fs from 'fs';
-import * as CONST from '../renderer/constants';
 import { base64ToBuffer } from './util';
+import Proxy from './proxy';
 
 const { version } = require('../../release/app/package.json');
-const HttpProxyAgent = require('http-proxy-agent');
-const HttpsProxyAgent = require('https-proxy-agent');
 
 contextBridge.exposeInMainWorld('contextModules', {
-  got: async (url: string, config = {}) => {
-    const { httpProxyAddressSetting, httpProxySetting, httpProxyWhitelistSetting, httpProxyRuleSetting } = await ipcRenderer.invoke(
-      'get-storage-config',
-      { key: CONST.STORAGE.SYSTEM_SETTING }
-    );
-    const httpProxyRuleMap = (httpProxyRuleSetting ?? '').split(',').reduce((map: Record<string, boolean>, address: string) => {
-      map[address] = true;
-      return map;
-    }, {});
-
-    const { host } = new URL(url);
-    const agent = Object.fromEntries(
-      httpProxySetting && httpProxyWhitelistSetting !== !!httpProxyRuleMap[host]
-        ? [
-            ['http', HttpProxyAgent(httpProxyAddressSetting)],
-            ['https', HttpsProxyAgent(httpProxyAddressSetting)],
-          ]
-        : []
-    );
+  got: async (url: string, config: any) => {
+    const proxyConent = await ipcRenderer.invoke('resolve-proxy', url);
+    const { httpAgent, httpsAgent } = new Proxy(proxyConent, url);
     return got(url, {
       ...config,
-      retry: 3,
-      timeout: 7000,
-      agent,
+      retry: {
+        limit: 2,
+      },
+      timeout: {
+        request: 10000,
+      },
+      agent: {
+        http: httpAgent,
+        https: httpsAgent,
+      },
     });
   },
   process: {
@@ -50,6 +39,7 @@ contextBridge.exposeInMainWorld('contextModules', {
     ipcRenderer: {
       invoke: ipcRenderer.invoke,
       removeAllListeners: ipcRenderer.removeAllListeners,
+      removeListener: ipcRenderer.removeListener,
       on(channel: string, func: any) {
         const validChannels = [
           'nativeTheme-updated',
@@ -61,9 +51,11 @@ contextBridge.exposeInMainWorld('contextModules', {
           'open-backup-file',
           'change-current-wallet-code',
           'webview-new-window',
+          'change-tab-active-key',
+          'change-eye-status',
         ];
         if (validChannels.includes(channel)) {
-          return ipcRenderer.on(channel, (event, ...args) => func(event, ...args));
+          return ipcRenderer.on(channel, func);
         } else {
           return null;
         }
@@ -76,7 +68,6 @@ contextBridge.exposeInMainWorld('contextModules', {
     },
     invoke: {
       showCurrentWindow: () => ipcRenderer.invoke('show-current-window'),
-      getShouldUseDarkColors: () => ipcRenderer.invoke('get-should-use-dark-colors'),
       setNativeThemeSource: (config: any) => ipcRenderer.invoke('set-native-theme-source', config),
     },
     app: {
@@ -136,5 +127,10 @@ contextBridge.exposeInMainWorld('contextModules', {
     async all() {
       return ipcRenderer.invoke('all-storage-config');
     },
+  },
+  base64: {
+    encode,
+    decode,
+    fromUint8Array,
   },
 });

@@ -1,8 +1,6 @@
-import React, { useState, useMemo, useCallback } from 'react';
-import ColorHash from 'color-hash';
-import { useBoolean } from 'ahooks';
+import React, { useState, useMemo } from 'react';
+import { useBoolean, useMemoizedFn } from 'ahooks';
 import { Input } from 'antd';
-import { useDispatch } from 'react-redux';
 
 import WalletIcon from '@/static/icon/wallet.svg';
 import NewsIcon from '@/static/icon/news.svg';
@@ -10,79 +8,73 @@ import ExchangeIcon from '@/static/icon/exchange.svg';
 import BubbleIcon from '@/static/icon/bubble.svg';
 import OrderIcon from '@/static/icon/order.svg';
 import PieIcon from '@/static/icon/pie.svg';
-import WeiboIcon from '@/static/icon/weibo.svg';
-import NeteaseIcon from '@/static/icon/netease.svg';
-import FundsIcon from '@/static/icon/funds.svg';
-import TelegramIcon from '@/static/icon/telegram.svg';
-import GithubIcon from '@/static/icon/github.svg';
-import BilibiliIcon from '@/static/icon/bilibili.svg';
-import TaobaoIcon from '@/static/icon/taobao.svg';
-import YoutubeIcon from '@/static/icon/youtube.svg';
 import FundsBoxIcon from '@/static/icon/funds-box.svg';
 import BarChartIcon from '@/static/icon/bar-chart.svg';
 import StockIcon from '@/static/icon/stock.svg';
 import CoinIcon from '@/static/icon/coin.svg';
 import CalendarCheckIcon from '@/static/icon/calendar-check.svg';
 import LayoutIcon from '@/static/icon/layout.svg';
+import FundsIcon from '@/static/icon/funds.svg';
+import CalculatorIcon from '@/static/icon/calculator.svg';
+import GlobalFillIcon from '@/static/icon/global-fill.svg';
 
 import CustomDrawer from '@/components/CustomDrawer';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
 import StandCard from '@/components/Card/StandCard';
-import ManageFundContent from '@/components/Home/FundList/ManageFundContent';
-import ManageZindexContent from '@/components/Home/ZindexView/ManageZindexContent';
-import ManageStockContent from '@/components/Home/StockList/ManageStockContent';
-import ManageCoinContent from '@/components/Home/CoinList/ManageCoinContent';
-import ManageWalletContent from '@/components/Wallet/ManageWalletContent';
-import FundStatisticsContent from '@/components/Home/FundList/FundStatisticsContent';
-import NewsContent from '@/components/Home/NewsList/NewsContent';
-import HoldingContent from '@/components/Home/QuotationView/HoldingContent';
-import FundFlowContent from '@/components/Home/QuotationView/FundFlowContent';
-import ExchangeContent from '@/components/Home/ZindexView/ExchangeContent';
-import QuoteCenterContent from '@/components/Home/QuotationView/QuoteCenterContent';
-import EconomicDataContent from '@/components/Home/ZindexView/EconomicDataContent';
-import FundRankingContent from '@/components/Home/FundList/FundRankingContent';
-import StockRankingContent from '@/components/Home/StockList/StockRankingContent';
-import CoinRankingContent from '@/components/Home/CoinList/CoinRankingContent';
-import EconomicCalendarContent from '@/components/Home/StockList/EconomicCalendarContent';
-import { openWebAction } from '@/actions/web';
+import QuickSearch from '@/components/Toolbar/AppCenterContent/QuickSearch';
+import WebAppIcon from '@/components/Toolbar/AppCenterContent/WebAppIcon';
+import SearchGroup from '@/components/Toolbar/AppCenterContent/SearchGroup';
 
+import * as Enums from '@/utils/enums';
+import * as Utils from '@/utils';
+import { useOpenWebView, useAppSelector } from '@/utils/hooks';
 import styles from './index.module.scss';
+
+const ManageFundContent = React.lazy(() => import('@/components/Home/FundView/ManageFundContent'));
+const ManageZindexContent = React.lazy(() => import('@/components/Home/ZindexView/ManageZindexContent'));
+const ManageStockContent = React.lazy(() => import('@/components/Home/StockView/ManageStockContent'));
+const ManageCoinContent = React.lazy(() => import('@/components/Home/CoinView/ManageCoinContent'));
+const ManageWalletContent = React.lazy(() => import('@/components/Wallet/ManageWalletContent'));
+const ManageWebContent = React.lazy(() => import('@/components/WebViewer/ManageWebContent'));
+const FundStatisticsContent = React.lazy(() => import('@/components/Home/FundView/FundStatisticsContent'));
+const NewsContent = React.lazy(() => import('@/components/Home/NewsList/NewsContent'));
+const HoldingContent = React.lazy(() => import('@/components/Home/QuotationView/HoldingContent'));
+const FundFlowContent = React.lazy(() => import('@/components/Home/QuotationView/FundFlowContent'));
+const ExchangeContent = React.lazy(() => import('@/components/Home/ZindexView/ExchangeContent'));
+const QuoteCenterContent = React.lazy(() => import('@/components/Home/QuotationView/QuoteCenterContent'));
+const EconomicDataContent = React.lazy(() => import('@/components/Home/ZindexView/EconomicDataContent'));
+const FundRankingContent = React.lazy(() => import('@/components/Home/FundView/FundRankingContent'));
+const StockRankingContent = React.lazy(() => import('@/components/Home/StockView/StockRankingContent'));
+const CoinRankingContent = React.lazy(() => import('@/components/Home/CoinView/CoinRankingContent'));
+const EconomicCalendarContent = React.lazy(() => import('@/components/Home/StockView/EconomicCalendarContent'));
+const GoldMarketContent = React.lazy(() => import('@/components/Home/QuotationView/GoldMarketContent'));
+const Calculator = React.lazy(() => import('@/components/Home/CoinView/Calculator'));
 
 const { Search } = Input;
 const iconSize = { height: 18, width: 18 };
-const colorHash = new ColorHash();
 
 interface AppCenterContentProps {
   onClose: () => void;
   onEnter: () => void;
 }
+
 interface AppConfig {
-  name: string;
+  title: string;
   click: () => void;
-  icon: React.ReactElement;
+  iconType?: Enums.WebIconType;
+  icon?: React.ReactElement;
   color?: string;
-  borderColor?: string;
+  favicon?: string;
+  url?: string;
 }
 
 function constructApps(appConfigs: AppConfig[]) {
   return (
     <div className={styles.apps}>
-      {appConfigs.map((config, index) => {
-        const color = config.color || colorHash.hex(config.name);
+      {appConfigs.map((config) => {
         return (
-          <div className={styles.appContent} key={config.name}>
-            <div
-              className={styles.app}
-              style={{
-                background: color,
-                boxShadow: `0 2px 5px ${color}`,
-                border: config.borderColor && `1px solid ${config.borderColor}`,
-              }}
-              onClick={config.click}
-            >
-              {config.icon}
-            </div>
-            <div className={styles.name}>{config.name}</div>
+          <div className={styles.appContent} key={`${config.title}${config.url}`}>
+            <WebAppIcon title={config.title} onClick={config.click} iconType={config.iconType} svg={config.icon} favicon={config.favicon} />
           </div>
         );
       })}
@@ -90,22 +82,30 @@ function constructApps(appConfigs: AppConfig[]) {
   );
 }
 
-function renderApps(groups: { name: string; config: AppConfig[] }[], keyword: string) {
-  return groups.map((group) => (
-    <StandCard key={group.name} title={group.name}>
-      {constructApps(group.config.filter(({ name }) => name.toLocaleLowerCase().includes(keyword.toLocaleLowerCase())))}
-    </StandCard>
-  ));
+function renderApps(groups: { title: string; config: AppConfig[] }[], keyword: string) {
+  return groups.map((group) => {
+    const list = group.config.filter(({ title }) => title.toLocaleLowerCase().includes(keyword.toLocaleLowerCase()));
+    return list.length ? (
+      <StandCard key={group.title} title={group.title}>
+        {constructApps(list)}
+      </StandCard>
+    ) : (
+      <></>
+    );
+  });
 }
 
+const searchPlaceholders = ['输入网站地址', '搜索股票、基金、板块名称或代码', '检索功能模块名称', '全网搜索一下,例如 "天天基金"'];
+
 const AppCenterContent: React.FC<AppCenterContentProps> = (props) => {
-  const dispatch = useDispatch();
   const [keyword, setKeyword] = useState('');
+  const { webConfig } = useAppSelector((state) => state.web.config);
   const [showManageFundDrawer, { setTrue: openManageFundDrawer, setFalse: closeManageFundDrawer }] = useBoolean(false);
   const [showManageWalletDrawer, { setTrue: openManageWalletDrawer, setFalse: closeManageWalletDrawer }] = useBoolean(false);
   const [showManageZindexDrawer, { setTrue: openManageZindexDrawer, setFalse: closeManageZindexDrawer }] = useBoolean(false);
   const [showManageStockDrawer, { setTrue: openManageStockDrawer, setFalse: closeManageStockDrawer }] = useBoolean(false);
   const [showManageCoinDrawer, { setTrue: openManageCoinDrawer, setFalse: closeManageCoinDrawer }] = useBoolean(false);
+  const [showManageWebDrawer, { setTrue: openManageWebDrawer, setFalse: closeManageWebDrawer }] = useBoolean(false);
   const [showFundsStatisticsDrawer, { setTrue: openFundStatisticsDrawer, setFalse: closeFundStatisticsDrawer }] = useBoolean(false);
   const [showNewsDrawer, { setTrue: openNewsDrawer, setFalse: closeNewsDrawer }] = useBoolean(false);
   const [showHoldingDrawer, { setTrue: openHoldingDrawer, setFalse: closeHoldingDrawer }] = useBoolean(false);
@@ -117,192 +117,144 @@ const AppCenterContent: React.FC<AppCenterContentProps> = (props) => {
   const [showStockRankingDrawer, { setTrue: openStockRankingDrawer, setFalse: closeStockRankingDrawer }] = useBoolean(false);
   const [showCoinRankingDrawer, { setTrue: openCoinRankingDrawer, setFalse: closeCoinRankingDrawer }] = useBoolean(false);
   const [showEconomicCalendarDrawer, { setTrue: openEconomicCalendarDrawer, setFalse: closeEconomicCalendarDrawer }] = useBoolean(false);
+  const [showGoldMarketDrawer, { setTrue: openGoldMarketDrawer, setFalse: closeGoldMarketDrawer }] = useBoolean(false);
+  const [showCalculatorDrawer, { setTrue: openCalculatorDrawer, setFalse: closeCalculatorDrawer }] = useBoolean(false);
 
-  const onViewWeb = useCallback((args) => dispatch(openWebAction(args)), []);
+  const openWebView = useOpenWebView();
+
+  const onSearch = useMemoizedFn((value: string) => {
+    const { valid, url } = Utils.CheckUrlValid(value);
+    if (valid) {
+      openWebView({ title: '', url });
+    }
+  });
 
   const apps = useMemo(
     () =>
       renderApps(
         [
           {
-            name: '数据管理',
+            title: '数据管理',
             config: [
               {
-                name: '基金管理',
-                icon: <i style={{ ...iconSize }}>基</i>,
+                title: '基金管理',
+                iconType: Enums.WebIconType.First,
                 click: openManageFundDrawer,
               },
               {
-                name: '指数管理',
-                icon: <i style={{ ...iconSize }}>指</i>,
+                title: '指数管理',
+                iconType: Enums.WebIconType.First,
                 click: openManageZindexDrawer,
               },
               {
-                name: '股票管理',
-                icon: <i style={{ ...iconSize }}>股</i>,
+                title: '股票管理',
+                iconType: Enums.WebIconType.First,
                 click: openManageStockDrawer,
               },
               {
-                name: '货币管理',
-                icon: <i style={{ ...iconSize }}>币</i>,
+                title: '货币管理',
+                iconType: Enums.WebIconType.First,
                 click: openManageCoinDrawer,
               },
               {
-                name: '钱包管理',
+                title: '钱包管理',
+                iconType: Enums.WebIconType.Svg,
                 icon: <WalletIcon style={{ ...iconSize }} />,
                 click: openManageWalletDrawer,
               },
-            ],
-          },
-          {
-            name: '特色功能',
-            config: [
               {
-                name: '基金统计',
-                icon: <PieIcon style={{ ...iconSize }} />,
-                click: openFundStatisticsDrawer,
+                title: 'H5管理',
+                iconType: Enums.WebIconType.Svg,
+                icon: <GlobalFillIcon style={{ ...iconSize }} />,
+                click: openManageWebDrawer,
               },
             ],
           },
           {
-            name: '拓展功能',
+            title: '特色功能',
             config: [
               {
-                name: '新闻动态',
+                title: '基金统计',
+                iconType: Enums.WebIconType.Svg,
+                icon: <PieIcon style={{ ...iconSize }} />,
+                click: openFundStatisticsDrawer,
+              },
+              {
+                title: '货币计算器',
+                iconType: Enums.WebIconType.Svg,
+                icon: <CalculatorIcon style={{ ...iconSize }} />,
+                click: openCalculatorDrawer,
+              },
+            ],
+          },
+          {
+            title: '拓展功能',
+            config: [
+              {
+                title: '新闻动态',
+                iconType: Enums.WebIconType.Svg,
                 icon: <NewsIcon style={{ ...iconSize }} />,
                 click: openNewsDrawer,
               },
               {
-                name: '沪深港通股',
-                icon: <OrderIcon style={{ ...iconSize }} />,
+                title: '沪深港通股',
+                iconType: Enums.WebIconType.Svg,
+                icon: <FundsIcon style={{ ...iconSize }} />,
                 click: openHoldingDrawer,
               },
               {
-                name: '板块资金流',
+                title: '板块资金流',
+                iconType: Enums.WebIconType.Svg,
                 icon: <LayoutIcon style={{ ...iconSize }} />,
                 click: openFundFlowDrawer,
               },
               {
-                name: '外汇债券',
+                title: '外汇债券',
+                iconType: Enums.WebIconType.Svg,
                 icon: <ExchangeIcon style={{ ...iconSize }} />,
                 click: openExchangeDrawer,
               },
               {
-                name: '行情中心',
+                title: '行情中心',
+                iconType: Enums.WebIconType.Svg,
                 icon: <BubbleIcon style={{ ...iconSize }} />,
                 click: openQuoteCenterDrawer,
               },
               {
-                name: '经济数据',
+                title: '经济数据',
+                iconType: Enums.WebIconType.Svg,
                 icon: <BarChartIcon style={{ ...iconSize }} />,
                 click: openEconomicDataDrawer,
               },
               {
-                name: '基金榜',
+                title: '基金榜',
+                iconType: Enums.WebIconType.Svg,
                 icon: <FundsBoxIcon style={{ ...iconSize }} />,
                 click: openFundRankingDrawer,
               },
               {
-                name: '股票榜',
+                title: '股票榜',
+                iconType: Enums.WebIconType.Svg,
                 icon: <StockIcon style={{ ...iconSize }} />,
                 click: openStockRankingDrawer,
               },
               {
-                name: '货币榜',
-                icon: <CoinIcon style={{ ...iconSize }} />,
+                title: '货币榜',
+                iconType: Enums.WebIconType.Svg,
+                icon: <OrderIcon style={{ ...iconSize }} />,
                 click: openCoinRankingDrawer,
               },
               {
-                name: '财经日历',
+                title: '财经日历',
+                iconType: Enums.WebIconType.Svg,
                 icon: <CalendarCheckIcon style={{ ...iconSize }} />,
                 click: openEconomicCalendarDrawer,
               },
-            ],
-          },
-          {
-            name: 'H5专区',
-            config: [
               {
-                name: '新浪微博',
-                icon: <WeiboIcon style={{ ...iconSize }} />,
-                color: '#F7C544',
-                click: () => onViewWeb({ title: '新浪微博', url: 'https://m.weibo.cn/', phone: false }),
-              },
-              {
-                name: '网易云音乐',
-                icon: <NeteaseIcon style={{ ...iconSize }} />,
-                color: '#D8001A',
-                click: () => onViewWeb({ title: '网易云音乐', url: 'https://y.music.163.com', phone: true }),
-              },
-              {
-                name: '天天基金',
-                icon: <FundsIcon style={{ ...iconSize }} />,
-                color: '#EB5328',
-                click: () => onViewWeb({ title: '天天基金', url: 'https://h5.1234567.com.cn/', phone: false }),
-              },
-              {
-                name: 'Telegram',
-                icon: <TelegramIcon style={{ ...iconSize }} />,
-                color: '#30A9EE',
-                click: () => onViewWeb({ title: 'Telegram', url: 'https://web.telegram.org/', phone: false }),
-              },
-              {
-                name: '淘宝',
-                icon: <TaobaoIcon style={{ ...iconSize }} />,
-                color: '#EC5D2A',
-                click: () => onViewWeb({ title: '淘宝', url: 'https://main.m.taobao.com/', phone: true }),
-              },
-              {
-                name: 'Github',
-                icon: <GithubIcon style={{ ...iconSize }} />,
-                color: '#24292f',
-                click: () => onViewWeb({ title: 'Github', url: 'https://github.com/', phone: false }),
-              },
-              {
-                name: 'bilibili',
-                icon: <BilibiliIcon style={{ ...iconSize }} />,
-                color: '#fb7299',
-                click: () => onViewWeb({ title: 'bilibili', url: 'https://m.bilibili.com/', phone: true }),
-              },
-              {
-                name: 'YouTube',
-                icon: <YoutubeIcon style={{ ...iconSize }} />,
-                color: '#E93223',
-                click: () => onViewWeb({ title: 'YouTube', url: 'https://www.youtube.com/', phone: false }),
-              },
-              {
-                name: 'IT之家',
-                icon: <i style={{ ...iconSize }}>IT</i>,
-                color: '#C1362D',
-                click: () => onViewWeb({ title: 'IT之家', url: 'https://m.ithome.com/', phone: false }),
-              },
-              {
-                name: '掘金',
-                icon: <i style={{ ...iconSize }}>掘</i>,
-                color: '#3B81F7',
-                click: () => onViewWeb({ title: '掘金', url: 'https://juejin.cn/', phone: true }),
-              },
-              {
-                name: '虎牙直播',
-                icon: <i style={{ ...iconSize }}>虎</i>,
-                color: '#E68131',
-                click: () => onViewWeb({ title: '虎牙直播', url: 'https://m.huya.com/', phone: true }),
-              },
-              {
-                name: '同花顺',
-                icon: <i style={{ ...iconSize, color: '#666' }}>♠️</i>,
-                color: '#fafbfc',
-                click: () => onViewWeb({ title: '同花顺', url: 'http://m.10jqka.com.cn/', phone: true }),
-              },
-              {
-                name: '东财人气榜',
-                icon: <i style={{ ...iconSize }}>榜</i>,
-                click: () =>
-                  onViewWeb({
-                    title: '东财人气榜',
-                    url: 'https://vipmoney.eastmoney.com/collect/stockranking/pages/ranking9_3/list.html',
-                    phone: true,
-                  }),
+                title: '黄金市场',
+                iconType: Enums.WebIconType.Svg,
+                icon: <CoinIcon style={{ ...iconSize }} />,
+                click: openGoldMarketDrawer,
               },
             ],
           },
@@ -310,6 +262,27 @@ const AppCenterContent: React.FC<AppCenterContentProps> = (props) => {
         keyword
       ),
     [keyword]
+  );
+
+  const h5s = useMemo(
+    () =>
+      renderApps(
+        [
+          {
+            title: 'H5专区',
+            config: webConfig.map((web) => ({
+              title: web.title,
+              favicon: web.icon,
+              color: web.color,
+              iconType: web.iconType,
+              url: web.url,
+              click: () => openWebView({ title: web.title, url: web.url }),
+            })),
+          },
+        ],
+        keyword
+      ),
+    [keyword, webConfig]
   );
 
   return (
@@ -320,12 +293,17 @@ const AppCenterContent: React.FC<AppCenterContentProps> = (props) => {
             value={keyword}
             onChange={(e) => setKeyword(e.target.value)}
             type="text"
-            placeholder="功能名称"
-            enterButton
+            placeholder={searchPlaceholders[Math.floor(Math.random() * searchPlaceholders.length)]}
             size="small"
+            onSearch={onSearch}
+            enterButton
+            allowClear
           />
         </div>
+        <QuickSearch value={keyword} />
         {apps}
+        {h5s}
+        <SearchGroup keyword={keyword} />
         <CustomDrawer show={showManageFundDrawer}>
           <ManageFundContent onClose={closeManageFundDrawer} onEnter={closeManageFundDrawer} />
         </CustomDrawer>
@@ -340,6 +318,9 @@ const AppCenterContent: React.FC<AppCenterContentProps> = (props) => {
         </CustomDrawer>
         <CustomDrawer show={showManageCoinDrawer}>
           <ManageCoinContent onClose={closeManageCoinDrawer} onEnter={closeManageCoinDrawer} />
+        </CustomDrawer>
+        <CustomDrawer show={showManageWebDrawer}>
+          <ManageWebContent onClose={closeManageWebDrawer} onEnter={closeManageWebDrawer} />
         </CustomDrawer>
         <CustomDrawer show={showFundFlowDrawer}>
           <FundFlowContent onClose={closeFundFlowDrawer} onEnter={closeFundFlowDrawer} />
@@ -373,6 +354,12 @@ const AppCenterContent: React.FC<AppCenterContentProps> = (props) => {
         </CustomDrawer>
         <CustomDrawer show={showEconomicCalendarDrawer}>
           <EconomicCalendarContent onClose={closeEconomicCalendarDrawer} onEnter={closeEconomicCalendarDrawer} />
+        </CustomDrawer>
+        <CustomDrawer show={showGoldMarketDrawer}>
+          <GoldMarketContent onClose={closeGoldMarketDrawer} onEnter={closeGoldMarketDrawer} />
+        </CustomDrawer>
+        <CustomDrawer show={showCalculatorDrawer}>
+          <Calculator onClose={closeCalculatorDrawer} onEnter={closeCalculatorDrawer} />
         </CustomDrawer>
       </div>
     </CustomDrawerContent>

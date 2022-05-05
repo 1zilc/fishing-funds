@@ -1,5 +1,5 @@
 import React from 'react';
-import classnames from 'classnames';
+import clsx from 'clsx';
 
 import EyeIcon from '@/static/icon/eye.svg';
 import EyeCloseIcon from '@/static/icon/eye-close.svg';
@@ -22,9 +22,9 @@ const Eye: React.FC<EyeProps> = (props) => {
   return (
     <>
       {status ? (
-        <EyeIcon className={classnames(styles.eye, classNames)} style={style} onClick={toggle} />
+        <EyeIcon className={clsx(styles.eye, classNames)} style={style} onClick={toggle} />
       ) : (
-        <EyeCloseIcon className={classnames(styles.eye, classNames)} style={style} onClick={toggle} />
+        <EyeCloseIcon className={clsx(styles.eye, classNames)} style={style} onClick={toggle} />
       )}
     </>
   );

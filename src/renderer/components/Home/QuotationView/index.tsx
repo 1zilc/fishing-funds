@@ -1,26 +1,26 @@
 import React, { useMemo } from 'react';
-import { useSelector } from 'react-redux';
 
 import QuotationRow from '@/components/Home/QuotationView/QuotationRow';
 import Empty from '@/components/Empty';
 import LoadingBar from '@/components/LoadingBar';
 import CustomDrawer from '@/components/CustomDrawer';
-import DetailQuotationContent from '@/components/Home/QuotationView/DetailQuotationContent';
-import DetailStockContent from '@/components/Home/StockList/DetailStockContent';
 import GridView from '@/components/GridView';
-import { StoreState } from '@/reducers/types';
-import { useDrawer } from '@/utils/hooks';
+
+import { useDrawer, useAppSelector } from '@/utils/hooks';
 import * as Enums from '@/utils/enums';
 import styles from './index.module.scss';
+
+const DetailQuotationContent = React.lazy(() => import('@/components/Home/QuotationView/DetailQuotationContent'));
+const DetailStockContent = React.lazy(() => import('@/components/Home/StockView/DetailStockContent'));
 
 interface QuotationViewProps {
   filter: (quotation: Quotation.ResponseItem & Quotation.ExtraRow) => boolean;
 }
 
 const QuotationView: React.FC<QuotationViewProps> = (props) => {
-  const quotations = useSelector((state: StoreState) => state.quotation.quotations);
-  const quotationsLoading = useSelector((state: StoreState) => state.quotation.quotationsLoading);
-  const quotationViewMode = useSelector((state: StoreState) => state.sort.viewMode.quotationViewMode);
+  const quotations = useAppSelector((state) => state.quotation.quotations);
+  const quotationsLoading = useAppSelector((state) => state.quotation.quotationsLoading);
+  const quotationViewMode = useAppSelector((state) => state.sort.viewMode.quotationViewMode);
   const {
     data: quodationCode,
     show: showDetailQuodationDrawer,

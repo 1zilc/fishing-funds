@@ -1,12 +1,10 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 import { useRequest } from 'ahooks';
 
-import { useHomeContext } from '@/components/Home';
 import ChartCard from '@/components/Card/ChartCard';
-import { useResizeEchart, useRenderEcharts } from '@/utils/hooks';
+import { useRenderEcharts, useResizeEchart } from '@/utils/hooks';
 import * as CONST from '@/constants';
 import * as Services from '@/services';
-import * as Enums from '@/utils/enums';
 
 import styles from './index.module.scss';
 
@@ -18,10 +16,14 @@ const code = 'n2s';
 const SouthFlow: React.FC<SouthFlowProps> = () => {
   const { ref: chartRef, chartInstance } = useResizeEchart(CONST.DEFAULT.ECHARTS_SCALE);
 
-  const { varibleColors, darkMode } = useHomeContext();
-  const { run: runGetFlowFromEastmoney } = useRequest(() => Services.Quotation.GetFlowFromEastmoney(fields1, code), {
+  const { data: result = [], run: runGetFlowFromEastmoney } = useRequest(() => Services.Quotation.GetFlowFromEastmoney(fields1, code), {
     pollingInterval: 1000 * 60,
-    onSuccess: (result) => {
+    refreshDeps: [code],
+    ready: !!chartInstance,
+  });
+
+  useRenderEcharts(
+    ({ varibleColors }) => {
       chartInstance?.setOption({
         title: {
           text: '',
@@ -58,6 +60,11 @@ const SouthFlow: React.FC<SouthFlowProps> = () => {
             formatter: `{value}亿`,
             fontSize: 10,
           },
+          splitLine: {
+            lineStyle: {
+              color: varibleColors['--border-color'],
+            },
+          },
         },
         series: [
           {
@@ -93,9 +100,9 @@ const SouthFlow: React.FC<SouthFlowProps> = () => {
         ],
       });
     },
-    refreshDeps: [darkMode, code],
-    ready: !!chartInstance,
-  });
+    chartInstance,
+    [result]
+  );
 
   return (
     <ChartCard onFresh={runGetFlowFromEastmoney}>

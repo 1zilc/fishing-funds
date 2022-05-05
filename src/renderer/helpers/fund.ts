@@ -1,76 +1,55 @@
 import NP from 'number-precision';
-import dayjs from 'dayjs';
-import { batch } from 'react-redux';
-import { store } from '@/.';
-import {
-  SET_FUNDS_LOADING,
-  sortFundsCachedAction,
-  SET_REMOTE_FUNDS_LOADING,
-  setRemoteFundsAction,
-  setFundRatingMapAction,
-} from '@/actions/fund';
-import { syncFixWalletStateAction } from '@/actions/wallet';
+import { defaultWallet } from '@/store/features/wallet';
 import * as Services from '@/services';
 import * as Enums from '@/utils/enums';
 import * as Utils from '@/utils';
 import * as Adapter from '@/utils/adpters';
-import * as CONST from '@/constants';
 import * as Helpers from '@/helpers';
 
-export interface CodeFundMap {
-  [index: string]: Fund.SettingItem & Fund.OriginRow;
-}
-export interface CodeRemoteFundMap {
-  [index: string]: Fund.RemoteFund;
-}
-
-export function GetFundConfig(walletCode: string) {
-  const wallet = Helpers.Wallet.GetCurrentWalletConfig(walletCode);
-  const fundConfig = wallet.funds;
-  const codeMap = GetCodeMap(fundConfig);
+export function GetFundConfig(walletCode: string, walletsConfig: Wallet.SettingItem[]) {
+  const walletConfig = walletsConfig.find(({ code }) => code === walletCode) || defaultWallet;
+  const fundConfig = walletConfig.funds;
+  const codeMap = Utils.GetCodeMap(fundConfig, 'code');
   return { fundConfig, codeMap };
 }
 
-export function GetCodeMap(config: Fund.SettingItem[]) {
-  return config.reduce((r, c, i) => {
-    r[c.code] = { ...c, originSort: i };
-    return r;
-  }, {} as CodeFundMap);
+export function GetFundConfigMaps(codes: string[], walletsConfig: Wallet.SettingItem[]) {
+  return codes.map((code) => GetFundConfig(code, walletsConfig).codeMap);
 }
 
-export async function GetFunds(config: Fund.SettingItem[]) {
-  const walletCode = Helpers.Wallet.GetCurrentWalletCode();
-  const { fundConfig } = GetFundConfig(walletCode);
-  const { fundApiTypeSetting } = Helpers.Setting.GetSystemSetting();
-  const collectors = (config || fundConfig).map(
+export async function GetFunds(config: Fund.SettingItem[], fundApiTypeSetting: Enums.FundApiType) {
+  const collectors = config.map(
     ({ code }) =>
       () =>
-        GetFund(code)
+        GetFund(code, fundApiTypeSetting)
   );
-  switch (fundApiTypeSetting) {
-    case Enums.FundApiType.Dayfund:
-      return Adapter.ChokeGroupAdapter<Fund.ResponseItem>(collectors, 1, 100);
-    case Enums.FundApiType.Tencent:
-      return Adapter.ChokeGroupAdapter<Fund.ResponseItem>(collectors, 3, 300);
-    case Enums.FundApiType.Sina:
-      return Adapter.ChokeGroupAdapter<Fund.ResponseItem>(collectors, 3, 300);
-    case Enums.FundApiType.Howbuy:
-      return Adapter.ChokeGroupAdapter<Fund.ResponseItem>(collectors, 3, 300);
-    case Enums.FundApiType.Etf:
-      return Adapter.ChokeGroupAdapter<Fund.ResponseItem>(collectors, 3, 300);
-    case Enums.FundApiType.Ant:
-      return Adapter.ChokeGroupAdapter<Fund.ResponseItem>(collectors, 4, 400);
-    case Enums.FundApiType.Fund10jqka:
-      return Adapter.ChokeGroupAdapter<Fund.ResponseItem>(collectors, 5, 500);
-    case Enums.FundApiType.Eastmoney:
-    default:
-      return Adapter.ChokeGroupAdapter<Fund.ResponseItem>(collectors, 5, 500);
-  }
+  const load = () => {
+    switch (fundApiTypeSetting) {
+      case Enums.FundApiType.Dayfund:
+        return Adapter.ChokeGroupAdapter<Fund.ResponseItem>(collectors, 1, 100);
+      case Enums.FundApiType.Tencent:
+        return Adapter.ChokeGroupAdapter<Fund.ResponseItem>(collectors, 3, 300);
+      case Enums.FundApiType.Sina:
+        return Adapter.ChokeGroupAdapter<Fund.ResponseItem>(collectors, 3, 300);
+      case Enums.FundApiType.Howbuy:
+        return Adapter.ChokeGroupAdapter<Fund.ResponseItem>(collectors, 3, 300);
+      case Enums.FundApiType.Etf:
+        return Adapter.ChokeGroupAdapter<Fund.ResponseItem>(collectors, 3, 300);
+      case Enums.FundApiType.Ant:
+        return Adapter.ChokeGroupAdapter<Fund.ResponseItem>(collectors, 4, 400);
+      case Enums.FundApiType.Fund10jqka:
+        return Adapter.ChokeGroupAdapter<Fund.ResponseItem>(collectors, 5, 500);
+      case Enums.FundApiType.Eastmoney:
+      default:
+        return Adapter.ChokeGroupAdapter<Fund.ResponseItem>(collectors, 5, 500);
+    }
+  };
+  const list = await load();
+
+  return list.filter(Utils.NotEmpty);
 }
 
-export async function GetFund(code: string) {
-  const { fundApiTypeSetting } = Helpers.Setting.GetSystemSetting();
-
+export async function GetFund(code: string, fundApiTypeSetting: Enums.FundApiType) {
   switch (fundApiTypeSetting) {
     case Enums.FundApiType.Dayfund:
       return Services.Fund.FromDayFund(code);
@@ -93,8 +72,7 @@ export async function GetFund(code: string) {
   }
 }
 
-export function CalcFund(fund: Fund.ResponseItem & Fund.FixData, walletCode: string) {
-  const { codeMap } = GetFundConfig(walletCode);
+export function CalcFund(fund: Fund.ResponseItem & Fund.FixData, codeMap: Fund.CodeMap) {
   const gzrq = fund.gztime?.slice(5, 10);
   const jzrq = fund.jzrq?.slice(5);
   const isFix = fund.fixDate && fund.fixDate === gzrq;
@@ -136,11 +114,10 @@ export function CalcFund(fund: Fund.ResponseItem & Fund.FixData, walletCode: str
   };
 }
 
-export function CalcFunds(funds: Fund.ResponseItem[] = [], code: string) {
-  const { codeMap } = GetFundConfig(code);
+export function CalcFunds(funds: Fund.ResponseItem[] = [], codeMap: Fund.CodeMap) {
   const [zje, gszje, sygz, cysy, cbje] = funds.reduce(
     ([a, b, c, d, e], fund) => {
-      const calcFundResult = CalcFund(fund, code);
+      const calcFundResult = CalcFund(fund, codeMap);
       const { bjz, gsz, cysy, cbje } = calcFundResult; // 比较值（估算值 - 持有净值）
       const cyfe = codeMap[fund.fundcode!]?.cyfe || 0; // 持有份额
       const jrsygz = NP.times(cyfe, bjz); // 今日收益估值（持有份额 * 比较值）
@@ -161,10 +138,10 @@ export function CalcFunds(funds: Fund.ResponseItem[] = [], code: string) {
   return { zje, gszje, sygz, gssyl, cysy, cysyl };
 }
 
-export function CalcWalletsFund(fund: Fund.ResponseItem & Fund.FixData, codes: string[]) {
-  const { cyfe, jrsygz, cyje, cysy, cbje } = codes.reduce(
-    (r, code) => {
-      const calcFundResult = CalcFund(fund, code);
+export function CalcWalletsFund(fund: Fund.ResponseItem & Fund.FixData, codeMaps: Fund.CodeMap[]) {
+  const { cyfe, jrsygz, cyje, cysy, cbje } = codeMaps.reduce(
+    (r, codeMap) => {
+      const calcFundResult = CalcFund(fund, codeMap);
       r.cyfe += calcFundResult.cyfe;
       r.jrsygz += calcFundResult.jrsygz;
       r.cyje += calcFundResult.cyje;
@@ -186,15 +163,13 @@ export async function GetFixFunds(funds: (Fund.ResponseItem & Fund.FixData)[]) {
         () =>
           Services.Fund.GetFixFromEastMoney(fundcode!)
     );
-  return Adapter.ChokeGroupAdapter<Fund.FixData>(collectors, 3, 500);
+  const list = await Adapter.ChokeGroupAdapter<Fund.FixData>(collectors, 3, 500);
+  return list.filter(Utils.NotEmpty);
 }
 
-export function MergeFixFunds(funds: (Fund.ResponseItem & Fund.FixData)[], fixFunds: (Fund.FixData | null)[]) {
+export function MergeFixFunds(funds: (Fund.ResponseItem & Fund.FixData)[], fixFunds: Fund.FixData[]) {
   const cloneFunds = Utils.DeepCopy(funds);
-  const fixFundMap = fixFunds.filter(Utils.NotEmpty).reduce((map, fund) => {
-    map[fund.code!] = fund;
-    return map;
-  }, {} as { [index: string]: Fund.FixData });
+  const fixFundMap = Utils.GetCodeMap(fixFunds, 'code');
 
   cloneFunds.forEach((fund) => {
     const fixFund = fixFundMap[fund.fundcode!];
@@ -205,88 +180,4 @@ export function MergeFixFunds(funds: (Fund.ResponseItem & Fund.FixData)[], fixFu
     }
   });
   return cloneFunds;
-}
-
-export function SortFunds(funds: Fund.ResponseItem[], walletCode: string) {
-  const { codeMap } = GetFundConfig(walletCode);
-  const {
-    sort: {
-      sortMode: {
-        fundSortMode: { type: fundSortType, order: fundSortorder },
-      },
-    },
-  } = store.getState();
-  const sortList = Utils.DeepCopy(funds);
-
-  sortList.sort((a, b) => {
-    const calcA = CalcFund(a, walletCode);
-    const calcB = CalcFund(b, walletCode);
-    const t = fundSortorder === Enums.SortOrderType.Asc ? 1 : -1;
-
-    switch (fundSortType) {
-      case Enums.FundSortType.Growth:
-        return (Number(calcA.gszzl) - Number(calcB.gszzl)) * t;
-      case Enums.FundSortType.Cost:
-        return (Number(calcA.cbje || 0) - Number(calcB.cbje || 0)) * t;
-      case Enums.FundSortType.Money:
-        return (Number(calcA.jrsygz) - Number(calcB.jrsygz)) * t;
-      case Enums.FundSortType.Estimate:
-        return (Number(calcA.gszz) - Number(calcB.gszz)) * t;
-      case Enums.FundSortType.Income:
-        return (Number(calcA.cysy || 0) - Number(calcB.cysy || 0)) * t;
-      case Enums.FundSortType.IncomeRate:
-        return (Number(calcA.cysyl) - Number(calcB.cysyl || 0)) * t;
-      case Enums.FundSortType.Name:
-        return calcA.name!.localeCompare(calcB.name!, 'zh') * t;
-      case Enums.FundSortType.Custom:
-      default:
-        return (codeMap[b.fundcode!]?.originSort - codeMap[a.fundcode!]?.originSort) * t;
-    }
-  });
-
-  return sortList;
-}
-
-export async function LoadFunds(loading: boolean) {
-  try {
-    const currentWalletCode = Helpers.Wallet.GetCurrentWalletCode();
-    const { fundConfig } = GetFundConfig(currentWalletCode);
-    store.dispatch({ type: SET_FUNDS_LOADING, payload: loading && true });
-    const responseFunds = (await GetFunds(fundConfig)).filter(Utils.NotEmpty);
-    batch(() => {
-      store.dispatch(sortFundsCachedAction(responseFunds, currentWalletCode));
-      store.dispatch({ type: SET_FUNDS_LOADING, payload: false });
-    });
-  } catch (error) {
-    store.dispatch({ type: SET_FUNDS_LOADING, payload: false });
-  }
-}
-
-export async function LoadFixFunds() {
-  try {
-    const { funds, code } = Helpers.Wallet.GetCurrentWalletState();
-    const fixFunds = (await GetFixFunds(funds)).filter(Utils.NotEmpty);
-    const now = dayjs().format('MM-DD HH:mm:ss');
-    store.dispatch(syncFixWalletStateAction({ code, funds: fixFunds, updateTime: now }));
-  } catch (error) {}
-}
-
-export async function LoadRemoteFunds() {
-  try {
-    store.dispatch({ type: SET_REMOTE_FUNDS_LOADING, payload: true });
-    const remoteFunds = await Services.Fund.GetRemoteFundsFromEastmoney();
-    batch(() => {
-      store.dispatch(setRemoteFundsAction(remoteFunds));
-      store.dispatch({ type: SET_REMOTE_FUNDS_LOADING, payload: false });
-    });
-  } catch (error) {
-    store.dispatch({ type: SET_REMOTE_FUNDS_LOADING, payload: false });
-  }
-}
-
-export async function LoadFundRatingMap() {
-  try {
-    const remoteRantings = await Services.Fund.GetFundRatingFromEasemoney();
-    store.dispatch(setFundRatingMapAction(remoteRantings));
-  } catch (error) {}
 }

@@ -120,15 +120,15 @@ export function JudgeAdjustmentNotificationTime(timestamp: number, adjustmentNot
   };
 }
 
-export function getVariblesColor(varibles: typeof CONST.VARIBLES) {
-  return varibles.reduce<Record<string, string>>((colorMap, varible) => {
+export function GetVariblesColor(): Record<keyof typeof CONST.VARIBLES, string> {
+  return Object.keys(CONST.VARIBLES).reduce<Record<string, string>>((colorMap, varible) => {
     const color = window.getComputedStyle(document.body).getPropertyValue(varible);
-    colorMap[varible] = color || '';
+    colorMap[varible] = (color || '').trim();
     return colorMap;
   }, {});
 }
 
-export function parsepingzhongdata(code: string) {
+export function Parsepingzhongdata(code: string) {
   try {
     return eval(`(() => {
       ${code}
@@ -261,7 +261,7 @@ export function MakeMap(list: (string | number)[]) {
 
 export function GetValueColor(number?: number | string) {
   const value = Number(number);
-  const varibleColors = getVariblesColor(CONST.VARIBLES);
+  const varibleColors = GetVariblesColor();
   return {
     color:
       value > 0 ? varibleColors['--increase-color'] : value < 0 ? varibleColors['--reduce-color'] : varibleColors['--reverse-text-color'],
@@ -374,4 +374,43 @@ export function GbLength(str: string) {
     }
   }
   return len;
+}
+
+export function CheckUrlValid(value: string) {
+  const domainReg = new RegExp('((http|https)://)(www.)?[a-zA-Z0-9@:%._\\+~#?&//=]{2,256}\\.[a-z]{2,6}\\b([-a-zA-Z0-9@:%._\\+~#?&//=]*)');
+  const valid = domainReg.test(`http://${value}`) || domainReg.test(`https://${value}`) || domainReg.test(value);
+  return {
+    valid,
+    url: value.startsWith('http://') || value.startsWith('https://') ? value : `http://${value}`,
+  };
+}
+
+export function CalculateMA(dayCount: any, values: any[]) {
+  const result = [];
+  for (let i = 0, len = values.length; i < len; i++) {
+    if (i < dayCount) {
+      result.push('-');
+      continue;
+    }
+    let sum = 0;
+    for (let j = 0; j < dayCount; j++) {
+      sum += values[i - j][1];
+    }
+    result.push(NP.divide(sum, dayCount).toFixed(2));
+  }
+  return result;
+}
+
+export function GetCodeMap<T extends Record<string, any>>(list: T[], key: keyof T) {
+  type extraData = {
+    originSort: number;
+  };
+  return list.reduce((r, c, i) => {
+    if (Array.isArray(c)) {
+      r[c[key]] = c as any;
+    } else {
+      r[c[key]] = { ...c, originSort: i };
+    }
+    return r;
+  }, {} as Record<string, T & extraData>);
 }

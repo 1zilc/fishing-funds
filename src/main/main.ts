@@ -7,7 +7,7 @@
  * `./src/main.prod.js` using webpack. This gives us some performance wins.
  */
 
-import { app, globalShortcut, ipcMain, nativeTheme, dialog, webContents, shell } from 'electron';
+import { app, globalShortcut, ipcMain, nativeTheme, dialog, webContents, shell, TouchBar } from 'electron';
 import windowStateKeeper from 'electron-window-state';
 import Store from 'electron-store';
 import { Menubar } from 'menubar';
@@ -15,6 +15,7 @@ import AppUpdater from './autoUpdater';
 import { appIcon, generateWalletIcon } from './icon';
 import { createTray } from './tray';
 import { createMenubar, buildContextMenu } from './menubar';
+import TouchBarManager from './touchbar';
 import { lockSingleInstance, checkEnvTool, sendMessageToRenderer, setNativeTheme } from './util';
 import * as Enums from '../renderer/utils/enums';
 
@@ -31,6 +32,7 @@ async function init() {
 function main() {
   const storage = new Store({ encryptionKey: '1zilc' });
   const tray = createTray();
+
   const mainWindowState = windowStateKeeper({
     defaultWidth: 325,
     defaultHeight: 768,
@@ -39,6 +41,7 @@ function main() {
   });
   mb = createMenubar({ tray, mainWindowState });
   const appUpdater = new AppUpdater({ icon: appIcon, mb });
+  const touchBarManager = new TouchBarManager([], mb);
   let contextMenu = buildContextMenu({ mb, appUpdater }, []);
   const defaultTheme = storage.get('SYSTEM_SETTING.systemThemeSetting', Enums.SystemThemeType.Auto) as Enums.SystemThemeType;
   // mb.app.commandLine.appendSwitch('disable-backgrounding-occluded-windows', 'true');
@@ -72,9 +75,7 @@ function main() {
     tray.setTitle(config);
   });
   ipcMain.handle('check-update', (event) => {
-    if (app.isPackaged) {
-      appUpdater.checkUpdate('renderer');
-    }
+    appUpdater.checkUpdate('renderer');
   });
   ipcMain.handle('get-storage-config', async (event, config) => {
     return storage.get(config.key, config.init);
@@ -98,6 +99,9 @@ function main() {
       return { action: 'deny' };
     });
   });
+  ipcMain.handle('resolve-proxy', (event, url) => {
+    return mb.window?.webContents.session.resolveProxy(url);
+  });
   ipcMain.handle('update-tray-context-menu-wallets', (event, config) => {
     const menus = config.map((item: any) => ({
       ...item,
@@ -106,17 +110,26 @@ function main() {
     }));
     contextMenu = buildContextMenu({ mb, appUpdater }, menus);
   });
+  // touchbar 相关监听
+  ipcMain.handle('update-touchbar-zindex', (event, config) => {
+    touchBarManager.updateZindexItems(config);
+  });
+  ipcMain.handle('update-touchbar-wallet', (event, config) => {
+    touchBarManager.updateWalletItems(config);
+  });
+  ipcMain.handle('update-touchbar-tab', (event, config) => {
+    touchBarManager.updateTabItems(config);
+  });
+  ipcMain.handle('update-touchbar-eye-status', (event, config) => {
+    touchBarManager.updateEysStatusItems(config);
+  });
   // menubar 相关监听
   mb.on('after-create-window', () => {
     // 设置系统色彩偏好
     setNativeTheme(defaultTheme);
     // 系统级别高斯模糊
     if (process.platform === 'darwin') {
-      mb.window!.setVibrancy('sidebar');
-    }
-    // 打开开发者工具
-    if (!app.isPackaged) {
-      mb.window!.webContents.openDevTools({ mode: 'undocked' });
+      mb.window?.setVibrancy('sidebar');
     }
     // 右键菜单
     tray.on('right-click', () => {
@@ -140,6 +153,11 @@ function main() {
       return { action: 'deny' };
     });
   });
+  // 打开开发者工具
+  if (!app.isPackaged) {
+    mb.window?.webContents.openDevTools({ mode: 'undocked' });
+  }
+
   // mb.on('ready', () => {
   //   // mb.window?.setVisibleOnAllWorkspaces(true);
   // });
