@@ -18,7 +18,7 @@ interface RecommendProps {
     TopName: '';
     IsImportant: '0';
     Reason: string;
-    StockView: {
+    StockList: {
       Code: string;
       Name: string;
       Market: string;
@@ -65,7 +65,7 @@ const Recommend: React.FC<RecommendProps> = (props) => {
                   sorter: (a: any, b: any) => a.Chg - b.Chg,
                 },
               ]}
-              dataSource={t.StockView || []}
+              dataSource={t.StockList || []}
               pagination={{
                 defaultPageSize: 5,
                 hideOnSinglePage: true,

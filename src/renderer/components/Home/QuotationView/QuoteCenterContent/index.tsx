@@ -50,7 +50,7 @@ const QuoteCenterContent: React.FC<QuoteCenterContentProps> = (props) => {
           TopName: '';
           IsImportant: '0';
           Reason: string;
-          StockView: {
+          StockList: {
             Code: string;
             Name: string;
             Market: string;
