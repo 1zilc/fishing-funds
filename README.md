@@ -77,16 +77,13 @@
 ## 系统代理
 
 - 由于众所周知的原因，部分货币接口无法访问，Fishing Funds 已适配系统代理访问
-- 自行将以下货币接口加入自己的代理软件规则中
+- 支持 http 代理、https 代理、socks 代理
+- 自行将以下货币接口加入自己的代理软件规则中，并重启 Fishing Funds
 
 ```
 api.coingecko.com
 api.coincap.io
 ```
-
-- 支持协议
-
-http 代理、https 代理、socks 代理
 
 ## 导入导出
 
