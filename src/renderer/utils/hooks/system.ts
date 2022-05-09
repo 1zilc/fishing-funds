@@ -204,12 +204,12 @@ export function useFundsClipboard() {
       };
       const allFundConfig = Object.entries(allCodeMap).map(([code, fund]) => fund);
       dispatch(setFundConfigAction(allFundConfig, currentWalletCode));
-      loadFunds();
       dialog.showMessageBox({
         type: 'info',
         title: `导入完成`,
         message: `更新：${newFundConfig.length}个，总共：${json.length}个`,
       });
+      loadFunds();
     } catch (error) {
       dialog.showMessageBox({
         type: 'info',
