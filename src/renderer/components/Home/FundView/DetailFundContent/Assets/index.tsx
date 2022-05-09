@@ -78,7 +78,7 @@ const Assets: React.FC<AssetsProps> = ({ Data_assetAllocation = {} }) => {
           Data_assetAllocation?.series?.map((item) => ({
             name: item.name,
             type: item.type || 'bar',
-            barGap: 2,
+            barGap: 0,
             yAxisIndex: item.type ? 1 : 0,
             data: item.data,
           })) || [],

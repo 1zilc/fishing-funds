@@ -10,7 +10,7 @@ interface OilPriceProps {}
 
 const OilPrice: React.FC<OilPriceProps> = () => {
   const { ref: chartRef, chartInstance } = useResizeEchart(0.4);
-  const { data: result = [], run: runGetOilPriceFromEastmoney } = useRequest(() => Services.Zindex.GetOilPriceFromEastmoney(), {
+  const { data: result = [], run: runGetOilPriceFromEastmoney } = useRequest(Services.Zindex.GetOilPriceFromEastmoney, {
     ready: !!chartInstance,
   });
 
@@ -80,7 +80,7 @@ const OilPrice: React.FC<OilPriceProps> = () => {
               name: 'NYMEX原油',
               showSymbol: false,
               lineStyle: { width: 1 },
-              data: result.map((item) => [item.date, item.close]),
+              data: result.map((item) => [item.DATE, item.CLOSE]),
             },
             {
               type: 'line',
@@ -88,7 +88,7 @@ const OilPrice: React.FC<OilPriceProps> = () => {
               showSymbol: false,
               yAxisIndex: 1,
               lineStyle: { width: 1 },
-              data: result.map((item) => [item.date, item.qy]),
+              data: result.map((item) => [item.DATE, item.QY]),
             },
             {
               type: 'line',
@@ -96,7 +96,7 @@ const OilPrice: React.FC<OilPriceProps> = () => {
               showSymbol: false,
               yAxisIndex: 1,
               lineStyle: { width: 1 },
-              data: result.map((item) => [item.date, item.cy]),
+              data: result.map((item) => [item.DATE, item.CY]),
             },
           ],
         });
