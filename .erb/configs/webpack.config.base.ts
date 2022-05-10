@@ -29,7 +29,7 @@ const configuration: webpack.Configuration = {
         loader: 'esbuild-loader',
         options: {
           loader: 'tsx',
-          target: 'es2021',
+          target: 'esnext',
         },
       },
     ],
