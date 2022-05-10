@@ -10,6 +10,7 @@ import baseConfig from './webpack.config.base';
 import webpackPaths from './webpack.paths';
 import checkNodeEnv from '../scripts/check-node-env';
 import ReactRefreshWebpackPlugin from '@pmmmwh/react-refresh-webpack-plugin';
+import { MFSU, esbuildLoader } from '@umijs/mfsu';
 
 // When an ESLint server is running, we can't set the NODE_ENV so we'll check if it's
 // at the dev webpack config is not accidentally run in a production environment
@@ -29,6 +30,13 @@ if (!requiredByDLLConfig && !(fs.existsSync(webpackPaths.dllPath) && fs.existsSy
   execSync('npm run postinstall');
 }
 
+// [mfsu] 1. init instance
+const mfsu = new MFSU({
+  implementor: webpack,
+  buildDepWithESBuild: true,
+  depBuildConfig: undefined,
+});
+
 const configuration: webpack.Configuration = {
   devtool: 'inline-source-map',
 
@@ -36,11 +44,7 @@ const configuration: webpack.Configuration = {
 
   target: ['web', 'electron-renderer'],
 
-  entry: [
-    `webpack-dev-server/client?http://localhost:${port}/dist`,
-    'webpack/hot/only-dev-server',
-    path.join(webpackPaths.srcRendererPath, 'index.tsx'),
-  ],
+  entry: path.join(webpackPaths.srcRendererPath, 'index.tsx'),
 
   output: {
     path: webpackPaths.distRendererPath,
@@ -58,6 +62,19 @@ const configuration: webpack.Configuration = {
 
   module: {
     rules: [
+      {
+        test: /\.[jt]sx?$/,
+        exclude: /node_modules/,
+        loader: esbuildLoader,
+        options: {
+          handler: [
+            // [mfsu] 3. add mfsu esbuild loader handlers
+            ...mfsu.getEsbuildLoaderHandler(),
+          ],
+          loader: 'tsx',
+          target: 'esnext',
+        },
+      },
       {
         test: /\.s?css$/,
         use: [
@@ -178,6 +195,9 @@ const configuration: webpack.Configuration = {
     },
     setupMiddlewares(middlewares) {
       console.log('Starting preload.js builder...');
+      middlewares.unshift(...mfsu.getMiddlewares());
+
+      console.log('Starting preload.js builder...');
       const preloadProcess = spawn('npm', ['run', 'start:preload'], {
         shell: true,
         stdio: 'inherit',
@@ -195,9 +215,17 @@ const configuration: webpack.Configuration = {
           process.exit(code!);
         })
         .on('error', (spawnError) => console.error(spawnError));
+
       return middlewares;
     },
   },
 };
 
-export default merge(baseConfig, configuration);
+// [mfsu] 4. inject mfsu webpack config
+const getConfig = async () => {
+  const config = merge(baseConfig, configuration);
+  await mfsu.setWebpackConfig({ config } as any);
+  return config;
+};
+
+export default getConfig();
