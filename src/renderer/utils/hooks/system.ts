@@ -15,7 +15,7 @@ import { setAdjustmentNotificationDateAction, clearAdjustmentNotificationDateAct
 import {
   useWorkDayTimeToDo,
   useFixTimeToDo,
-  useAfterMounted,
+  useAfterMountedEffect,
   useFreshFunds,
   useAppDispatch,
   useAppSelector,
@@ -317,7 +317,7 @@ export function useMappingLocalToSystemSetting() {
       document.body.classList.remove('lowKey');
     }
   }, [lowKeySetting]);
-  useAfterMounted(() => {
+  useAfterMountedEffect(() => {
     dispatch(clearAdjustmentNotificationDateAction());
   }, [adjustmentNotificationTimeSetting]);
 }

@@ -1,4 +1,4 @@
-import { useLayoutEffect, useState, useEffect, useRef, useMemo, useDeferredValue } from 'react';
+import React, { useLayoutEffect, useState, useEffect, useRef, useMemo, useDeferredValue } from 'react';
 import { useInterval, useBoolean, useThrottleFn, useSize, useMemoizedFn } from 'ahooks';
 import { useDispatch, useSelector, TypedUseSelectorHook, batch } from 'react-redux';
 import dayjs from 'dayjs';
@@ -104,11 +104,13 @@ export function useResizeEchart(scale = 1, unlimited?: boolean) {
     };
   }, []);
 
-  useEffect(() => {
-    if (chartWidth) {
-      const height = chartWidth * scale;
-      chartInstanceRef.current?.resize({ height: unlimited ? height : height > 200 ? 200 : height });
-    }
+  useAfterMountedEffect(() => {
+    React.startTransition(() => {
+      if (chartWidth) {
+        const height = chartWidth * scale;
+        chartInstanceRef.current?.resize({ height: unlimited ? height : height > 200 ? 200 : height });
+      }
+    });
   }, [chartWidth, unlimited]);
 
   return { ref: chartRef, chartInstance: chartInstanceRef.current };
@@ -488,16 +490,16 @@ export function useDrawer<T>(initialData: T) {
   };
 }
 
-export function useAfterMounted(fn: any, dep: any[] = []) {
-  const [flag, { setTrue }] = useBoolean(false);
+export function useAfterMountedEffect(fn: any, dep: any[] = []) {
+  const flagRef = useRef(false);
   useEffect(() => {
-    setTrue();
+    flagRef.current = true;
   }, []);
   useEffect(() => {
-    if (flag) {
+    if (flagRef.current) {
       fn();
     }
-  }, [flag, ...dep]);
+  }, dep);
 }
 
 export function useFundRating(code: string) {
