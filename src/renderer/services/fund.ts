@@ -16,7 +16,7 @@ export async function FromEastmoney(code: string) {
     if (body.startsWith('jsonpgz')) {
       const fund: Fund.ResponseItem = eval(body);
       if (fund === undefined) {
-        return await GetQDIIFundFromEastMoney(code);
+        return await GetQDIIFundHourFromEastMoney(code);
       } else {
         return fund;
       }
@@ -24,7 +24,7 @@ export async function FromEastmoney(code: string) {
       return null;
     }
   } catch (error) {
-    return await GetQDIIFundFromEastMoney(code);
+    return await GetQDIIFundHourFromEastMoney(code);
   }
 }
 
@@ -841,16 +841,15 @@ export async function GetFundManagerDetailFromEastMoney(code: string) {
 export async function GetQDIIFundFromEastMoney(code: string) {
   try {
     const { fixDwjz, fixName, fixDate, fixZzl } = (await GetFixFromEastMoney(code))!;
-    const hourData = await GetQDIIFundHourFromEastMoney(code);
 
     return {
       name: fixName,
       dwjz: fixDwjz,
       fundcode: code,
-      gztime: hourData?.gztime || `${new Date().getFullYear()}-暂无估值`,
+      gztime: `${new Date().getFullYear()}-暂无估值`,
       jzrq: `${new Date().getFullYear()}-${fixDate}`,
-      gsz: hourData?.gsz || fixDwjz,
-      gszzl: hourData?.gszzl || '',
+      gsz: fixDwjz,
+      gszzl: '',
     };
   } catch (error) {
     return null;
@@ -868,7 +867,7 @@ export async function GetQDIIFundHourFromEastMoney(code: string) {
       full: 1;
       dlmkts: '';
       data: {
-        f43: 866;
+        f43: 866 | '-';
         f44: 870;
         f45: 863;
         f46: 868;
@@ -891,7 +890,7 @@ export async function GetQDIIFundHourFromEastMoney(code: string) {
         f167: '-';
         f168: 731;
         f169: -12;
-        f170: -137;
+        f170: -137 | '-';
         f171: 80;
         f191: 4011;
         f192: 92410;
@@ -933,10 +932,12 @@ export async function GetQDIIFundHourFromEastMoney(code: string) {
 
     return {
       name: body.data.f58,
+      dwjz: NP.divide(Number(body.data.f60), 1000).toFixed(4),
       fundcode: code,
       gztime: dayjs(body.data.f86 * 1000).format('YYYY-MM-DD HH:mm'),
-      gsz: NP.divide(Number(body.data.f43), 1000).toString(),
-      gszzl: NP.divide(Number(body.data.f170), 1000).toFixed(2),
+      jzrq: `${new Date().getFullYear()}-昨收`,
+      gsz: NP.divide(Number(body.data.f43 === '-' ? body.data.f60 : body.data.f43), 1000).toString(), // 未开盘用昨收做估值
+      gszzl: NP.divide(Number(body.data.f170 === '-' ? 0 : body.data.f170), 100).toFixed(2), // 未开盘，增长率为0
     };
   } catch (error) {
     return null;
