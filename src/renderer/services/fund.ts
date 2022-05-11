@@ -16,7 +16,7 @@ export async function FromEastmoney(code: string) {
     if (body.startsWith('jsonpgz')) {
       const fund: Fund.ResponseItem = eval(body);
       if (fund === undefined) {
-        return await GetQDIIFundHourFromEastMoney(code);
+        return await GetEtfFundHourFromEastMoney(code);
       } else {
         return fund;
       }
@@ -24,7 +24,7 @@ export async function FromEastmoney(code: string) {
       return null;
     }
   } catch (error) {
-    return await GetQDIIFundHourFromEastMoney(code);
+    return await GetEtfFundHourFromEastMoney(code);
   }
 }
 
@@ -841,7 +841,6 @@ export async function GetFundManagerDetailFromEastMoney(code: string) {
 export async function GetQDIIFundFromEastMoney(code: string) {
   try {
     const { fixDwjz, fixName, fixDate, fixZzl } = (await GetFixFromEastMoney(code))!;
-
     return {
       name: fixName,
       dwjz: fixDwjz,
@@ -857,7 +856,7 @@ export async function GetQDIIFundFromEastMoney(code: string) {
 }
 
 // 时分查询QDII,查询ETF最新估值
-export async function GetQDIIFundHourFromEastMoney(code: string) {
+export async function GetEtfFundHourFromEastMoney(code: string) {
   try {
     const { body } = await request<{
       rc: 0;
@@ -930,17 +929,21 @@ export async function GetQDIIFundHourFromEastMoney(code: string) {
       responseType: 'json',
     });
 
-    return {
-      name: body.data.f58,
-      dwjz: NP.divide(Number(body.data.f60), 1000).toFixed(4),
-      fundcode: code,
-      gztime: dayjs(body.data.f86 * 1000).format('YYYY-MM-DD HH:mm'),
-      jzrq: `${new Date().getFullYear()}-昨收`,
-      gsz: NP.divide(Number(body.data.f43 === '-' ? body.data.f60 : body.data.f43), 1000).toString(), // 未开盘用昨收做估值
-      gszzl: NP.divide(Number(body.data.f170 === '-' ? 0 : body.data.f170), 100).toFixed(2), // 未开盘，增长率为0
-    };
+    if (body.data.f58.toLocaleLowerCase().includes('etf')) {
+      return {
+        name: body.data.f58,
+        dwjz: NP.divide(Number(body.data.f60), 1000).toFixed(4),
+        fundcode: code,
+        gztime: dayjs(body.data.f86 * 1000).format('YYYY-MM-DD HH:mm'),
+        jzrq: `${new Date().getFullYear()}-昨收`,
+        gsz: NP.divide(Number(body.data.f43 === '-' ? body.data.f60 : body.data.f43), 1000).toString(), // 未开盘用昨收做估值
+        gszzl: NP.divide(Number(body.data.f170 === '-' ? 0 : body.data.f170), 100).toFixed(2), // 未开盘，增长率为0
+      };
+    } else {
+      throw Error('不是ETF基金');
+    }
   } catch (error) {
-    return null;
+    return await GetQDIIFundFromEastMoney(code);
   }
 }
 
