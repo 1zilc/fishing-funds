@@ -11,6 +11,7 @@ import ArrowUpIcon from '@/static/icon/arrow-up.svg';
 import LayoutListIcon from '@/static/icon/layout-list.svg';
 import LayoutGridIcon from '@/static/icon/layout-grid.svg';
 import LineCharIcon from '@/static/icon/line-chart.svg';
+import SearchIcon from '@/static/icon/search.svg';
 
 import {
   setFundSortModeAction,
@@ -43,9 +44,13 @@ import * as Helpers from '@/helpers';
 import styles from './index.module.scss';
 
 const ManageFundContent = React.lazy(() => import('@/components/Home/FundView/ManageFundContent'));
+const AddFundContent = React.lazy(() => import('@/components/Home/FundView/AddFundContent'));
 const ManageStockContent = React.lazy(() => import('@/components/Home/StockView/ManageStockContent'));
+const AddStockContent = React.lazy(() => import('@/components/Home/StockView/AddStockContent'));
 const ManageCoinContent = React.lazy(() => import('@/components/Home/CoinView/ManageCoinContent'));
+const AddCoinContent = React.lazy(() => import('@/components/Home/CoinView/AddCoinContent'));
 const ManageZindexContent = React.lazy(() => import('@/components/Home/ZindexView/ManageZindexContent'));
+const AddZindexContent = React.lazy(() => import('@/components/Home/ZindexView/AddZindexContent'));
 const FundFlowContent = React.lazy(() => import('@/components/Home/QuotationView/FundFlowContent'));
 
 export interface SortBarProps {}
@@ -67,6 +72,7 @@ function FundsSortBar() {
 
   const [showManageFundDrawer, { setTrue: openManageFundDrawer, setFalse: closeManageFundDrawer, toggle: ToggleManageFundDrawer }] =
     useBoolean(false);
+  const [showAddFundDrawer, { setTrue: openAddFundDrawer, setFalse: closeAddFundDrawer, toggle: ToggleAddFundDrawer }] = useBoolean(false);
 
   const [expandAllFunds, expandSomeFunds] = useMemo(() => {
     return [funds.every((_) => _.collapse), funds.some((_) => _.collapse)];
@@ -91,6 +97,14 @@ function FundsSortBar() {
         >
           管理
         </a>
+        <div className={styles.view}>
+          <SearchIcon
+            onClick={(e) => {
+              openAddFundDrawer();
+              e.stopPropagation();
+            }}
+          />
+        </div>
       </div>
       <div className={styles.view}>
         {fundViewType === Enums.FundViewType.List && (
@@ -135,6 +149,15 @@ function FundsSortBar() {
           }}
         />
       </CustomDrawer>
+      <CustomDrawer show={showAddFundDrawer}>
+        <AddFundContent
+          onClose={closeAddFundDrawer}
+          onEnter={() => {
+            freshFunds();
+            closeAddFundDrawer();
+          }}
+        />
+      </CustomDrawer>
     </div>
   );
 }
@@ -155,6 +178,8 @@ function ZindexSortBar() {
   const zindexs = useAppSelector((state) => state.zindex.zindexs);
 
   const [showManageZindexDrawer, { setTrue: openManageZindexDrawer, setFalse: closeManageZindexDrawer, toggle: ToggleManageZindexDrawer }] =
+    useBoolean(false);
+  const [showAddZindexDrawer, { setTrue: openAddZindexDrawer, setFalse: closeAddZindexDrawer, toggle: ToggleAddZindexDrawer }] =
     useBoolean(false);
 
   const [expandAllZindexs, expandSomeZindexs] = useMemo(() => {
@@ -180,6 +205,14 @@ function ZindexSortBar() {
         >
           管理
         </a>
+        <div className={styles.view}>
+          <SearchIcon
+            onClick={(e) => {
+              openAddZindexDrawer();
+              e.stopPropagation();
+            }}
+          />
+        </div>
       </div>
       <div className={styles.view}>
         {zindexViewType === Enums.ZindexViewType.List && (
@@ -224,6 +257,15 @@ function ZindexSortBar() {
           onEnter={() => {
             freshZindexs();
             closeManageZindexDrawer();
+          }}
+        />
+      </CustomDrawer>
+      <CustomDrawer show={showAddZindexDrawer}>
+        <AddZindexContent
+          onClose={closeAddZindexDrawer}
+          onEnter={() => {
+            freshZindexs();
+            closeAddZindexDrawer();
           }}
         />
       </CustomDrawer>
@@ -328,6 +370,8 @@ function StockSortBar() {
 
   const [showManageStockDrawer, { setTrue: openManageStockDrawer, setFalse: closeManageStockDrawer, toggle: ToggleManageStockDrawer }] =
     useBoolean(false);
+  const [showAddStockDrawer, { setTrue: openAddStockDrawer, setFalse: closeAddStockDrawer, toggle: ToggleAddStockDrawer }] =
+    useBoolean(false);
 
   const [expandAllStocks, expandSomeStocks] = useMemo(() => {
     return [stocks.every((_) => _.collapse), stocks.some((_) => _.collapse)];
@@ -352,6 +396,14 @@ function StockSortBar() {
         >
           管理
         </a>
+        <div className={styles.view}>
+          <SearchIcon
+            onClick={(e) => {
+              openAddStockDrawer();
+              e.stopPropagation();
+            }}
+          />
+        </div>
       </div>
       <div className={styles.view}>
         {stockViewType === Enums.StockViewType.List && (
@@ -399,6 +451,15 @@ function StockSortBar() {
           }}
         />
       </CustomDrawer>
+      <CustomDrawer show={showAddStockDrawer}>
+        <AddStockContent
+          onClose={closeAddStockDrawer}
+          onEnter={() => {
+            freshStocks();
+            closeAddStockDrawer();
+          }}
+        />
+      </CustomDrawer>
     </div>
   );
 }
@@ -420,6 +481,7 @@ function CoinSortBar() {
 
   const [showManageCoinDrawer, { setTrue: openManageCoinDrawer, setFalse: closeManageCoinDrawer, toggle: ToggleManageCoinDrawer }] =
     useBoolean(false);
+  const [showAddCoinDrawer, { setTrue: openAddCoinDrawer, setFalse: closeAddCoinDrawer, toggle: ToggleAddCoinDrawer }] = useBoolean(false);
 
   const [expandAllCoins, expandSomeCoins] = useMemo(() => {
     return [coins.every((_) => _.collapse), coins.some((_) => _.collapse)];
@@ -444,6 +506,14 @@ function CoinSortBar() {
         >
           管理
         </a>
+        <div className={styles.view}>
+          <SearchIcon
+            onClick={(e) => {
+              openAddCoinDrawer();
+              e.stopPropagation();
+            }}
+          />
+        </div>
       </div>
       <div className={styles.view}>
         {coinViewType === Enums.CoinViewType.List && (
@@ -485,6 +555,15 @@ function CoinSortBar() {
           onEnter={() => {
             freshCoins();
             closeManageCoinDrawer();
+          }}
+        />
+      </CustomDrawer>
+      <CustomDrawer show={showAddCoinDrawer}>
+        <AddCoinContent
+          onClose={closeAddCoinDrawer}
+          onEnter={() => {
+            freshCoins();
+            closeAddCoinDrawer();
           }}
         />
       </CustomDrawer>

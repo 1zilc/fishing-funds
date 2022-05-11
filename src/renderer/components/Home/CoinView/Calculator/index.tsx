@@ -135,7 +135,7 @@ const Calculator: React.FC<CalculatorProps> = (props) => {
             ></Input>
           </div>
         </PureCard>
-        {coinsState.length && (
+        {!!coinsState.length && (
           <ChartCard TitleBar={<div className={styles.titleBar}>自选货币</div>}>
             {coinsState.map(({ code }) => {
               const { symbol } = remoteCoinsMap[code];

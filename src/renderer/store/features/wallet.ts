@@ -233,39 +233,43 @@ export function updateWalletStateAction(state: Wallet.StateItem): TypedThunk {
           config: { codeMap, walletConfig },
         },
       } = getState();
+      const cloneState = Utils.DeepCopy(state);
       const cloneWallets = Utils.DeepCopy(wallets);
-      const currentWalletConfig = codeMap[state.code];
-      const { codeMap: configCodeMap } = Helpers.Fund.GetFundConfig(state.code, walletConfig);
-      const walletState = Helpers.Wallet.GetCurrentWalletState(state.code, cloneWallets);
-      const stateCodeToMap = Utils.GetCodeMap(walletState.funds, 'fundcode');
-      state.funds = state.funds.map((_) => ({
-        ...(stateCodeToMap[_.fundcode!] || {}),
+      const currentWalletConfig = codeMap[cloneState.code];
+      const { codeMap: configCodeMap } = Helpers.Fund.GetFundConfig(cloneState.code, walletConfig);
+      const walletState = Helpers.Wallet.GetCurrentWalletState(cloneState.code, cloneWallets);
+      const fundsStateCodeToMap = Utils.GetCodeMap(walletState.funds, 'fundcode');
+      const walletsStateCodeToMap = Utils.GetCodeMap(cloneWallets, 'code');
+
+      cloneState.funds = cloneState.funds.map((_) => ({
+        ...(fundsStateCodeToMap[_.fundcode!] || {}),
         ..._,
       }));
-      const itemFundsCodeToMap = Utils.GetCodeMap(state.funds, 'fundcode');
+      const itemFundsCodeToMap = Utils.GetCodeMap(cloneState.funds, 'fundcode');
+
       currentWalletConfig.funds.forEach((fund) => {
         const responseFund = itemFundsCodeToMap[fund.code];
-        const stateFund = stateCodeToMap[fund.code];
+        const stateFund = fundsStateCodeToMap[fund.code];
         if (!responseFund && stateFund) {
-          state.funds.push(stateFund);
+          cloneState.funds.push(stateFund);
         }
       });
 
-      state.funds = state.funds.filter(({ fundcode }) => configCodeMap[fundcode!]);
+      cloneState.funds = cloneState.funds.filter(({ fundcode }) => configCodeMap[fundcode!]);
 
       cloneWallets.forEach((wallet, index) => {
-        if (wallet.code === state.code) {
-          cloneWallets[index] = state;
+        if (wallet.code === cloneState.code) {
+          cloneWallets[index] = cloneState;
         }
       });
 
-      if (!walletState.code) {
-        cloneWallets.push(state);
+      if (!walletsStateCodeToMap[cloneState.code]) {
+        cloneWallets.push(cloneState);
       }
 
       batch(() => {
         dispatch(syncWalletsAction(cloneWallets));
-        dispatch(sortFundsAction(state.code));
+        dispatch(sortFundsAction(cloneState.code));
       });
     } catch (error) {}
   };

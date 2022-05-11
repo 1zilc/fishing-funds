@@ -188,10 +188,10 @@ export async function GetOilPriceFromEastmoney() {
       result: {
         pages: 18;
         data: {
-          close: 52.31;
-          date: '2019/8/7';
-          qy: 7595.0;
-          cy: 6615.0;
+          CLOSE: 108.61;
+          DATE: '2022-05-05 00:00:00';
+          QY: 9775;
+          CY: 8710;
         }[];
         count: 8940;
       };

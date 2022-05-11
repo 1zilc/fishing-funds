@@ -16,7 +16,7 @@ export async function FromEastmoney(code: string) {
     if (body.startsWith('jsonpgz')) {
       const fund: Fund.ResponseItem = eval(body);
       if (fund === undefined) {
-        return await GetQDIIFundFromEastMoney(code);
+        return await GetEtfFundHourFromEastMoney(code);
       } else {
         return fund;
       }
@@ -24,7 +24,7 @@ export async function FromEastmoney(code: string) {
       return null;
     }
   } catch (error) {
-    return await GetQDIIFundFromEastMoney(code);
+    return await GetEtfFundHourFromEastMoney(code);
   }
 }
 
@@ -852,6 +852,98 @@ export async function GetQDIIFundFromEastMoney(code: string) {
     };
   } catch (error) {
     return null;
+  }
+}
+
+// 时分查询QDII,查询ETF最新估值
+export async function GetEtfFundHourFromEastMoney(code: string) {
+  try {
+    const { body } = await request<{
+      rc: 0;
+      rt: 4;
+      svr: 182482208;
+      lt: 1;
+      full: 1;
+      dlmkts: '';
+      data: {
+        f43: 866 | '-';
+        f44: 870;
+        f45: 863;
+        f46: 868;
+        f47: 3355871;
+        f48: 290470752.0;
+        f49: 1667897;
+        f50: 61;
+        f51: 966;
+        f52: 790;
+        f57: '513100';
+        f58: '纳指ETF';
+        f59: 3;
+        f60: 878;
+        f71: 866;
+        f86: 1652083195;
+        f107: 1;
+        f108: '-';
+        f152: 2;
+        f161: 1687975;
+        f167: '-';
+        f168: 731;
+        f169: -12;
+        f170: -137 | '-';
+        f171: 80;
+        f191: 4011;
+        f192: 92410;
+        f292: 5;
+        f452: -10;
+        f31: 871;
+        f32: 2373;
+        f33: 870;
+        f34: 12014;
+        f35: 869;
+        f36: 7106;
+        f37: 868;
+        f38: 16336;
+        f39: 867;
+        f40: 31152;
+        f19: 866;
+        f20: 4209;
+        f17: 865;
+        f18: 84511;
+        f15: 864;
+        f16: 18576;
+        f13: 863;
+        f14: 33862;
+        f11: 862;
+        f12: 20233;
+      };
+    }>('http://push2.eastmoney.com/api/qt/stock/get', {
+      searchParams: {
+        invt: 2,
+        fltt: 1,
+        fields:
+          'f58,f107,f57,f43,f59,f169,f170,f152,f46,f60,f44,f45,f47,f48,f19,f17,f531,f15,f13,f11,f20,f18,f16,f14,f12,f39,f37,f35,f33,f31,f40,f38,f36,f34,f32,f211,f212,f213,f214,f215,f210,f209,f208,f207,f206,f161,f49,f171,f50,f86,f168,f108,f167,f71,f292,f51,f52,f191,f192,f452',
+        secid: `${code.startsWith('51') ? 1 : 0}.${code}`,
+        wbp2u: '|0|0|0|web',
+        _: new Date().getTime(),
+      },
+      responseType: 'json',
+    });
+
+    if (body.data.f58.toLocaleLowerCase().includes('etf')) {
+      return {
+        name: body.data.f58,
+        dwjz: NP.divide(Number(body.data.f60), 1000).toFixed(4),
+        fundcode: code,
+        gztime: dayjs(body.data.f86 * 1000).format('YYYY-MM-DD HH:mm'),
+        jzrq: `${new Date().getFullYear()}-昨收`,
+        gsz: NP.divide(Number(body.data.f43 === '-' ? body.data.f60 : body.data.f43), 1000).toString(), // 未开盘用昨收做估值
+        gszzl: NP.divide(Number(body.data.f170 === '-' ? 0 : body.data.f170), 100).toFixed(2), // 未开盘，增长率为0
+      };
+    } else {
+      throw Error('不是ETF基金');
+    }
+  } catch (error) {
+    return await GetQDIIFundFromEastMoney(code);
   }
 }
 
