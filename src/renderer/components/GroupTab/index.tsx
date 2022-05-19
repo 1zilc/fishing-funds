@@ -1,6 +1,6 @@
-import React, { PropsWithChildren } from 'react';
-import { Tabs } from 'antd';
-
+import React, { PropsWithChildren, Suspense } from 'react';
+import { Tabs, TabPaneProps } from 'antd';
+import Empty from '@/components/Empty';
 import { setTabsKeyMapAction } from '@/store/features/tabs';
 import { useAppDispatch, useAppSelector } from '@/utils/hooks';
 import * as Enums from '@/utils/enums';
@@ -8,17 +8,22 @@ import * as Enums from '@/utils/enums';
 export interface GroupTapProps {
   tabKey: Enums.TabKeyType;
 }
-const GroupTap: React.FC<PropsWithChildren<GroupTapProps>> = (props) => {
+
+interface GroupTapType extends React.FC<PropsWithChildren<GroupTapProps>> {
+  TabPane: React.FC<PropsWithChildren<TabPaneProps>>;
+}
+
+const groupBarStyle = {
+  background: 'var(--background-color)',
+  borderBottom: `1px solid var(--border-color)`,
+  margin: 0,
+  paddingLeft: 25,
+};
+
+const GroupTap: GroupTapType = (props) => {
   const { tabKey } = props;
   const dispatch = useAppDispatch();
   const defaultActiveKey = useAppSelector((state) => state.tabs.tabsKeyMap[tabKey]);
-
-  const groupBarStyle = {
-    background: 'var(--background-color)',
-    borderBottom: `1px solid var(--border-color)`,
-    margin: 0,
-    paddingLeft: 25,
-  };
 
   return (
     <Tabs
@@ -34,4 +39,13 @@ const GroupTap: React.FC<PropsWithChildren<GroupTapProps>> = (props) => {
     </Tabs>
   );
 };
+
+GroupTap.TabPane = (props) => {
+  return (
+    <Tabs.TabPane {...props}>
+      <Suspense fallback={<Empty text="加载中..." />}>{props.children}</Suspense>
+    </Tabs.TabPane>
+  );
+};
+
 export default GroupTap;
