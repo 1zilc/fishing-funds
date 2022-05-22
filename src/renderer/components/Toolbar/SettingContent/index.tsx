@@ -91,6 +91,14 @@ const recordSiteGroup = Utils.Group(
       url: 'https://github.com/jaywcjlove/awesome-mac',
       name: 'Awesome Mac',
     },
+    {
+      url: 'https://github.com/jaywcjlove/awesome-mac',
+      name: 'Awesome Mac',
+    },
+    {
+      url: 'https://github.com/microsoft/winget-pkgs',
+      name: 'WinGet',
+    },
   ],
   3
 );
