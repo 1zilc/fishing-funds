@@ -28,13 +28,11 @@ export interface DetailStockContentProps {
 const DetailStockContent: React.FC<DetailStockContentProps> = (props) => {
   const { secid, type } = props;
   const dispatch = useAppDispatch();
-  const [stock, setStock] = useState<Stock.DetailItem | Record<string, any>>({});
   const { codeMap } = useAppSelector((state) => state.stock.config);
 
-  useRequest(Services.Stock.GetDetailFromEastmoney, {
+  const { data: stock = {} as any } = useRequest(Services.Stock.GetDetailFromEastmoney, {
     pollingInterval: 1000 * 60,
     defaultParams: [secid],
-    onSuccess: setStock,
   });
 
   const { data: industrys = [] } = useRequest(Services.Stock.GetIndustryFromEastmoney, {
