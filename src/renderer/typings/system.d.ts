@@ -14,6 +14,10 @@ declare namespace System {
 
     coinUnitSetting: import('@/utils/enums').CoinUnitType; // 货币单位
 
+    proxyTypeSetting: import('@/utils/enums').ProxyType; // 代理类型
+    proxyHostSetting: string; // 主机域名
+    proxyPortSetting: string; // 主机端口
+
     autoStartSetting: boolean; // 自动启动
     autoFreshSetting: boolean; // 自动刷新
     freshDelaySetting: number; // 刷新时间间隔

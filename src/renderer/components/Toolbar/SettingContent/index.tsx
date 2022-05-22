@@ -20,6 +20,7 @@ import NotificationIcon from '@/static/icon/notification.svg';
 import BitCoinIcon from '@/static/icon/bit-coin.svg';
 import WindowIcon from '@/static/icon/window.svg';
 import CalendarIcon from '@/static/icon/calendar.svg';
+import GlobalIcon from '@/static/icon/global.svg';
 import { setSystemSettingAction, defaultSystemSetting } from '@/store/features/setting';
 
 import { useAppDispatch, useAppSelector } from '@/utils/hooks';
@@ -159,6 +160,9 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
     riskNotificationSetting,
     trayContentSetting,
     coinUnitSetting,
+    proxyTypeSetting,
+    proxyHostSetting,
+    proxyPortSetting,
     autoStartSetting,
     autoFreshSetting,
     freshDelaySetting,
@@ -182,12 +186,18 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
   const [trayContent, setTrayContent] = useState(trayContentSetting);
   // 货币单位
   const [coinUnit, setCoinUnit] = useState(coinUnitSetting);
+  // 代理设置
+  const [proxyType, setProxyType] = useState(proxyTypeSetting);
+  const [proxyHost, setProxyHost] = useState(proxyHostSetting);
+  const [proxyPort, setProxyPort] = useState(proxyPortSetting);
   // 通用设置
   const [autoStart, setAutoStart] = useState(autoStartSetting);
   const [autoFresh, setAutoFresh] = useState(autoFreshSetting);
   const [freshDelay, setFreshDelay] = useState(freshDelaySetting);
   const [autoCheckUpdate, setAutoCheckUpdate] = useState(autoCheckUpdateSetting);
   const [timestamp, setTimestamp] = useState(timestampSetting);
+
+  const proxyModeEnable = proxyType === Enums.ProxyType.Http || proxyType === Enums.ProxyType.Socks;
 
   function onSave() {
     dispatch(
@@ -202,6 +212,9 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
         riskNotificationSetting: riskNotification,
         trayContentSetting: trayContent,
         coinUnitSetting: coinUnit,
+        proxyTypeSetting: proxyType,
+        proxyHostSetting: proxyHost,
+        proxyPortSetting: proxyPort,
         autoStartSetting: autoStart,
         autoFreshSetting: autoFresh,
         freshDelaySetting: freshDelay || defaultSystemSetting.freshDelaySetting,
@@ -371,6 +384,49 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
                     BTC (฿)
                   </Radio>
                 </Radio.Group>
+              </div>
+            </StandCard>
+            <StandCard
+              icon={<GlobalIcon />}
+              title="代理设置"
+              extra={
+                <div className={styles.guide}>
+                  <Guide
+                    list={[
+                      { name: 'http代理', text: '由于众所周知的原因，部分接口需开启代理访问' },
+                      { name: '白名单模式', text: '默认关闭，开启后代理规则中的域名将不走代理，其余接口全部代理' },
+                      { name: '代理地址', text: '例如http://127.0.0.1:1087' },
+                      { name: '代理规则', text: `需要走代理的域名，使用英文逗号分隔，主要用于货币接口，无特殊原因不建议手动修改` },
+                    ]}
+                  />
+                </div>
+              }
+            >
+              <div className={clsx(styles.setting, 'card-body')}>
+                <section>
+                  <label>代理模式：</label>
+                  <Radio.Group
+                    optionType="button"
+                    size="small"
+                    buttonStyle="solid"
+                    options={[
+                      { label: '无', value: Enums.ProxyType.None },
+                      { label: '系统', value: Enums.ProxyType.System },
+                      { label: 'http', value: Enums.ProxyType.Http },
+                      { label: 'socks', value: Enums.ProxyType.Socks },
+                    ]}
+                    onChange={(e) => setProxyType(e.target.value)}
+                    value={proxyType}
+                  />
+                </section>
+                <section>
+                  <label>代理地址：</label>
+                  <Input size="small" value={proxyHost} onChange={(e) => setProxyHost(e.target.value)} disabled={!proxyModeEnable} />
+                </section>
+                <section>
+                  <label>代理端口：</label>
+                  <Input size="small" value={proxyPort} onChange={(e) => setProxyPort(e.target.value)} disabled={!proxyModeEnable} />
+                </section>
               </div>
             </StandCard>
             <StandCard

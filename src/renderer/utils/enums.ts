@@ -225,3 +225,9 @@ export enum WebIconType {
   Favicon,
   Svg,
 }
+export enum ProxyType {
+  None,
+  System,
+  Http,
+  Socks,
+}
