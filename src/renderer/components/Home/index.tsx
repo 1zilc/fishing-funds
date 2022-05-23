@@ -1,12 +1,6 @@
-import React, { createContext, useContext, useState } from 'react';
+import React from 'react';
 import clsx from 'clsx';
 import { Tabs } from 'antd';
-
-import FundView from '@/components/Home/FundView';
-import ZindexView from '@/components/Home/ZindexView';
-import QuotationView from '@/components/Home/QuotationView';
-import StockView from '@/components/Home/StockView';
-import CoinView from '@/components/Home/CoinView';
 import Toolbar from '@/components/Toolbar';
 import Wallet from '@/components/Wallet/index';
 import Header from '@/components/Header';
@@ -24,6 +18,12 @@ import * as Enums from '@/utils/enums';
 import * as Helpers from '@/helpers';
 import styles from './index.module.scss';
 
+const FundView = React.lazy(() => import('@/components/Home/FundView'));
+const ZindexView = React.lazy(() => import('@/components/Home/ZindexView'));
+const QuotationView = React.lazy(() => import('@/components/Home/QuotationView'));
+const StockView = React.lazy(() => import('@/components/Home/StockView'));
+const CoinView = React.lazy(() => import('@/components/Home/CoinView'));
+
 export interface HomeProps {}
 
 const FundGroup = () => {
@@ -34,15 +34,15 @@ const FundGroup = () => {
       <Tabs.TabPane tab="全部" key={String(0)}>
         <FundView filter={() => true} />
       </Tabs.TabPane>
-      <Tabs.TabPane tab="持有" key={String(1)}>
+      <GroupTab.TabPane tab="持有" key={String(1)}>
         <FundView filter={(fund) => !!codeMap[fund.fundcode!]?.cyfe} />
-      </Tabs.TabPane>
-      <Tabs.TabPane tab="自选" key={String(2)}>
+      </GroupTab.TabPane>
+      <GroupTab.TabPane tab="自选" key={String(2)}>
         <FundView filter={(fund) => !codeMap[fund.fundcode!]?.cyfe} />
-      </Tabs.TabPane>
-      <Tabs.TabPane tab="净值更新" key={String(3)}>
+      </GroupTab.TabPane>
+      <GroupTab.TabPane tab="净值更新" key={String(3)}>
         <FundView filter={(fund) => !!Helpers.Fund.CalcFund(fund, codeMap).isFix} />
-      </Tabs.TabPane>
+      </GroupTab.TabPane>
     </GroupTab>
   );
 };
@@ -52,15 +52,15 @@ const ZindexGroup = () => {
 
   return (
     <GroupTab tabKey={Enums.TabKeyType.Zindex}>
-      <Tabs.TabPane tab="全部" key={String(0)}>
+      <GroupTab.TabPane tab="全部" key={String(0)}>
         <ZindexView filter={() => true} />
-      </Tabs.TabPane>
-      <Tabs.TabPane tab="上涨" key={String(1)}>
+      </GroupTab.TabPane>
+      <GroupTab.TabPane tab="上涨" key={String(1)}>
         <ZindexView filter={(zindex) => zindex.zdd >= 0} />
-      </Tabs.TabPane>
-      <Tabs.TabPane tab="下跌" key={String(2)}>
+      </GroupTab.TabPane>
+      <GroupTab.TabPane tab="下跌" key={String(2)}>
         <ZindexView filter={(zindex) => zindex.zdd < 0} />
-      </Tabs.TabPane>
+      </GroupTab.TabPane>
     </GroupTab>
   );
 };
@@ -70,18 +70,18 @@ const QuotationGroup = () => {
 
   return (
     <GroupTab tabKey={Enums.TabKeyType.Quotation}>
-      <Tabs.TabPane tab="行业" key={String(0)}>
+      <GroupTab.TabPane tab="行业" key={String(0)}>
         <QuotationView filter={(quotation) => quotation.type === Enums.QuotationType.Industry} />
-      </Tabs.TabPane>
-      <Tabs.TabPane tab="概念" key={String(1)}>
+      </GroupTab.TabPane>
+      <GroupTab.TabPane tab="概念" key={String(1)}>
         <QuotationView filter={(quotation) => quotation.type === Enums.QuotationType.Concept} />
-      </Tabs.TabPane>
-      <Tabs.TabPane tab="地域" key={String(2)}>
+      </GroupTab.TabPane>
+      <GroupTab.TabPane tab="地域" key={String(2)}>
         <QuotationView filter={(quotation) => quotation.type === Enums.QuotationType.Area} />
-      </Tabs.TabPane>
-      <Tabs.TabPane tab="关注" key={String(3)}>
+      </GroupTab.TabPane>
+      <GroupTab.TabPane tab="关注" key={String(3)}>
         <QuotationView filter={(quotaion) => favoriteQuotationMap[quotaion.code]} />
-      </Tabs.TabPane>
+      </GroupTab.TabPane>
     </GroupTab>
   );
 };
@@ -91,13 +91,13 @@ const StockGroup = () => {
 
   return (
     <GroupTab tabKey={Enums.TabKeyType.Stock}>
-      <Tabs.TabPane tab="全部" key={String(-1)}>
+      <GroupTab.TabPane tab="全部" key={String(-1)}>
         <StockView filter={() => true} />
-      </Tabs.TabPane>
+      </GroupTab.TabPane>
       {stockTypesConfig.map((type) => (
-        <Tabs.TabPane tab={type.name.slice(0, 2)} key={String(type.code)}>
+        <GroupTab.TabPane tab={type.name.slice(0, 2)} key={String(type.code)}>
           <StockView filter={(stock) => stockCodeMap[stock.secid].type === type.code} />
-        </Tabs.TabPane>
+        </GroupTab.TabPane>
       ))}
     </GroupTab>
   );
@@ -106,15 +106,15 @@ const StockGroup = () => {
 const CoinGroup = () => {
   return (
     <GroupTab tabKey={Enums.TabKeyType.Coin}>
-      <Tabs.TabPane tab="全部" key={String(0)}>
+      <GroupTab.TabPane tab="全部" key={String(0)}>
         <CoinView filter={() => true} />
-      </Tabs.TabPane>
-      <Tabs.TabPane tab="上涨" key={String(1)}>
+      </GroupTab.TabPane>
+      <GroupTab.TabPane tab="上涨" key={String(1)}>
         <CoinView filter={(coin) => Number(coin.change24h) >= 0} />
-      </Tabs.TabPane>
-      <Tabs.TabPane tab="下跌" key={String(2)}>
+      </GroupTab.TabPane>
+      <GroupTab.TabPane tab="下跌" key={String(2)}>
         <CoinView filter={(coin) => Number(coin.change24h) < 0} />
-      </Tabs.TabPane>
+      </GroupTab.TabPane>
     </GroupTab>
   );
 };

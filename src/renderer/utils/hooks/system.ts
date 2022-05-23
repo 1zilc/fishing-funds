@@ -292,10 +292,15 @@ export function useBootStrap() {
 
 export function useMappingLocalToSystemSetting() {
   const dispatch = useAppDispatch();
-  const systemThemeSetting = useAppSelector((state) => state.setting.systemSetting.systemThemeSetting);
-  const autoStartSetting = useAppSelector((state) => state.setting.systemSetting.autoStartSetting);
-  const lowKeySetting = useAppSelector((state) => state.setting.systemSetting.lowKeySetting);
-  const adjustmentNotificationTimeSetting = useAppSelector((state) => state.setting.systemSetting.adjustmentNotificationTimeSetting);
+  const {
+    systemThemeSetting,
+    autoStartSetting,
+    lowKeySetting,
+    adjustmentNotificationTimeSetting,
+    proxyTypeSetting,
+    proxyHostSetting,
+    proxyPortSetting,
+  } = useAppSelector((state) => state.setting.systemSetting);
 
   useIpcRendererListener('nativeTheme-updated', (e, data) => {
     requestIdleCallback(() => {
@@ -320,6 +325,22 @@ export function useMappingLocalToSystemSetting() {
   useAfterMountedEffect(() => {
     dispatch(clearAdjustmentNotificationDateAction());
   }, [adjustmentNotificationTimeSetting]);
+  useEffect(() => {
+    switch (proxyTypeSetting) {
+      case Enums.ProxyType.System:
+        ipcRenderer.invoke('set-proxy', { mode: 'system' });
+        break;
+      case Enums.ProxyType.Http:
+        ipcRenderer.invoke('set-proxy', { proxyRules: `http=${proxyHostSetting}:${proxyPortSetting}` });
+        break;
+      case Enums.ProxyType.Socks:
+        ipcRenderer.invoke('set-proxy', { proxyRules: `socks=${proxyHostSetting}:${proxyPortSetting}` });
+        break;
+      case Enums.ProxyType.None:
+      default:
+        ipcRenderer.invoke('set-proxy', { mode: 'direct' });
+    }
+  }, [proxyTypeSetting, proxyHostSetting, proxyPortSetting]);
 }
 
 export function useTrayContent() {
