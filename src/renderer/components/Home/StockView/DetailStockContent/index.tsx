@@ -10,6 +10,7 @@ import Estimate from '@/components/Home/StockView/DetailStockContent/Estimate';
 import K from '@/components/Home/StockView/DetailStockContent/K';
 import Company from '@/components/Home/StockView/DetailStockContent/Company';
 import Stocks from '@/components/Home/StockView/DetailStockContent/Stocks';
+import Recent from '@/components/Home/NewsList/Recent';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
 import { addStockAction } from '@/store/features/stock';
 import { useAppDispatch, useAppSelector } from '@/utils/hooks';
@@ -164,6 +165,13 @@ const DetailStockContent: React.FC<DetailStockContentProps> = (props) => {
           <Tabs animated={{ tabPane: true }} tabBarGutter={15}>
             <Tabs.TabPane tab="K线" key={String(0)}>
               <K secid={secid} />
+            </Tabs.TabPane>
+          </Tabs>
+        </div>
+        <div className={styles.container}>
+          <Tabs animated={{ tabPane: true }} tabBarGutter={15}>
+            <Tabs.TabPane tab="近期资讯" key={String(0)}>
+              <Recent keyword={stock.name} />
             </Tabs.TabPane>
           </Tabs>
         </div>

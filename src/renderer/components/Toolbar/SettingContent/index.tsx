@@ -382,22 +382,7 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
                 </Radio.Group>
               </div>
             </StandCard>
-            <StandCard
-              icon={<GlobalIcon />}
-              title="代理设置"
-              extra={
-                <div className={styles.guide}>
-                  <Guide
-                    list={[
-                      { name: 'http代理', text: '由于众所周知的原因，部分接口需开启代理访问' },
-                      { name: '白名单模式', text: '默认关闭，开启后代理规则中的域名将不走代理，其余接口全部代理' },
-                      { name: '代理地址', text: '例如http://127.0.0.1:1087' },
-                      { name: '代理规则', text: `需要走代理的域名，使用英文逗号分隔，主要用于货币接口，无特殊原因不建议手动修改` },
-                    ]}
-                  />
-                </div>
-              }
-            >
+            <StandCard icon={<GlobalIcon />} title="代理设置">
               <div className={clsx(styles.setting, 'card-body')}>
                 <section>
                   <label>代理模式：</label>

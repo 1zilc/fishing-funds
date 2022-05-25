@@ -7,6 +7,7 @@ import ChartCard from '@/components/Card/ChartCard';
 import Trend from '@/components/Home/CoinView/DetailCoinContent/Trend';
 import K from '@/components/Home/CoinView/DetailCoinContent/K';
 import Appraise from '@/components/Home/CoinView/DetailCoinContent/Appraise';
+import Recent from '@/components/Home/NewsList/Recent';
 import Sentiment from '@/components/Home/CoinView/DetailCoinContent/Sentiment';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
 import * as Services from '@/services';
@@ -99,6 +100,13 @@ const DetailCoinContent: React.FC<DetailCoinContentProps> = (props) => {
           <Tabs animated={{ tabPane: true }} tabBarGutter={15}>
             <Tabs.TabPane tab="K线" key={String(0)}>
               <K code={code} />
+            </Tabs.TabPane>
+          </Tabs>
+        </div>
+        <div className={styles.container}>
+          <Tabs animated={{ tabPane: true }} tabBarGutter={15}>
+            <Tabs.TabPane tab="近期资讯" key={String(0)}>
+              <Recent keyword={coin?.symbol || ''} />
             </Tabs.TabPane>
           </Tabs>
         </div>

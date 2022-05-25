@@ -8,6 +8,7 @@ import RealTimeFundFlow from '@/components/Home/QuotationView/DetailQuotationCon
 import AfterTimeFundFlow from '@/components/Home/QuotationView/DetailQuotationContent/AfterTimeFundFlow';
 import Stocks from '@/components/Home/QuotationView/DetailQuotationContent/Stocks';
 import Funds from '@/components/Home/QuotationView/DetailQuotationContent/Funds';
+import Recent from '@/components/Home/NewsList/Recent';
 import RealTimeTransaction from '@/components/Home/QuotationView/DetailQuotationContent/RealTimeTransaction';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
 import { setFavoriteQuotationMapAction } from '@/store/features/quotation';
@@ -94,6 +95,13 @@ const DetailQuotationContent: React.FC<DetailQuotationContentProps> = (props) =>
           <Tabs animated={{ tabPane: true }} tabBarGutter={15}>
             <Tabs.TabPane tab="实时成交分布" key={String(0)}>
               <RealTimeTransaction code={code} />
+            </Tabs.TabPane>
+          </Tabs>
+        </div>
+        <div className={styles.container}>
+          <Tabs animated={{ tabPane: true }} tabBarGutter={15}>
+            <Tabs.TabPane tab="近期资讯" key={String(0)}>
+              <Recent keyword={quotation.name} />
             </Tabs.TabPane>
           </Tabs>
         </div>

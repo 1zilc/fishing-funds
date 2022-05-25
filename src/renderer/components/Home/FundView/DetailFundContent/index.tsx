@@ -26,7 +26,7 @@ import SameFundList from '@/components/Home/FundView/DetailFundContent/SameFundL
 import IndustryLayout from '@/components/Home/FundView/DetailFundContent/IndustryLayout';
 import WarehouseEvent from '@/components/Home/FundView/DetailFundContent/WarehouseEvent';
 import Origin from '@/components/Home/FundView/DetailFundContent/Origin';
-
+import Recent from '@/components/Home/NewsList/Recent';
 import { useFundRating, useDrawer, useAppSelector } from '@/utils/hooks';
 import * as Services from '@/services';
 import * as Utils from '@/utils';
@@ -268,6 +268,9 @@ const DetailFundContent: React.FC<DetailFundContentProps> = (props) => {
               <PureCard>
                 <SameFundList swithSameType={pingzhongdata.swithSameType} />
               </PureCard>
+            </Tabs.TabPane>
+            <Tabs.TabPane tab="近期资讯" key={String(1)}>
+              <Recent keyword={fund?.fixName || ''} />
             </Tabs.TabPane>
           </Tabs>
         </div>
