@@ -16,7 +16,7 @@ export function createMenubar({ tray, mainWindowState }: { tray: Tray; mainWindo
 
     browserWindow: {
       backgroundColor: process.platform === 'darwin' ? undefined : '#fff',
-      transparent: true,
+      transparent: process.platform === 'darwin',
       width: mainWindowState.width,
       height: mainWindowState.height,
       minHeight: 400,
