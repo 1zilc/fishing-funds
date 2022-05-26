@@ -16,7 +16,6 @@ import FundOverview from '@/components/Home/FundView/FundStatisticsContent/FundO
 import { walletIcons } from '@/helpers/wallet';
 
 import { useAllCyFunds, useAppSelector } from '@/utils/hooks/utils';
-import * as Helpers from '@/helpers';
 import styles from './index.module.scss';
 
 export interface FundStatisticsContentProps {
@@ -26,7 +25,7 @@ export interface FundStatisticsContentProps {
 
 const FundStatisticsContent: React.FC<FundStatisticsContentProps> = (props) => {
   const { walletConfig } = useAppSelector((state) => state.wallet.config);
-  const [statusMap, setStatusMap] = useState<Record<string, boolean>>(
+  const [statusMap, setStatusMap] = useState(
     walletConfig.reduce((r, c) => {
       r[c.code] = true;
       return r;

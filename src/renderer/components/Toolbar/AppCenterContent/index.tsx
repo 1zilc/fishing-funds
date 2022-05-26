@@ -17,6 +17,7 @@ import LayoutIcon from '@/static/icon/layout.svg';
 import FundsIcon from '@/static/icon/funds.svg';
 import CalculatorIcon from '@/static/icon/calculator.svg';
 import GlobalFillIcon from '@/static/icon/global-fill.svg';
+import NodeTreeIcon from '@/static/icon/node-tree.svg';
 
 import CustomDrawer from '@/components/CustomDrawer';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
@@ -49,6 +50,7 @@ const CoinRankingContent = React.lazy(() => import('@/components/Home/CoinView/C
 const EconomicCalendarContent = React.lazy(() => import('@/components/Home/StockView/EconomicCalendarContent'));
 const GoldMarketContent = React.lazy(() => import('@/components/Home/QuotationView/GoldMarketContent'));
 const Calculator = React.lazy(() => import('@/components/Home/CoinView/Calculator'));
+const RelationContent = React.lazy(() => import('@/components/Home/FundView/RelationContent'));
 
 const { Search } = Input;
 const iconSize = { height: 18, width: 18 };
@@ -119,6 +121,7 @@ const AppCenterContent: React.FC<AppCenterContentProps> = (props) => {
   const [showEconomicCalendarDrawer, { setTrue: openEconomicCalendarDrawer, setFalse: closeEconomicCalendarDrawer }] = useBoolean(false);
   const [showGoldMarketDrawer, { setTrue: openGoldMarketDrawer, setFalse: closeGoldMarketDrawer }] = useBoolean(false);
   const [showCalculatorDrawer, { setTrue: openCalculatorDrawer, setFalse: closeCalculatorDrawer }] = useBoolean(false);
+  const [showRelationDrawer, { setTrue: openRelationDrawer, setFalse: closeRelationDrawer }] = useBoolean(false);
 
   const openWebView = useOpenWebView();
 
@@ -184,6 +187,12 @@ const AppCenterContent: React.FC<AppCenterContentProps> = (props) => {
                 iconType: Enums.WebIconType.Svg,
                 icon: <CalculatorIcon style={{ ...iconSize }} />,
                 click: openCalculatorDrawer,
+              },
+              {
+                title: '基股关系',
+                iconType: Enums.WebIconType.Svg,
+                icon: <NodeTreeIcon style={{ ...iconSize }} />,
+                click: openRelationDrawer,
               },
             ],
           },
@@ -360,6 +369,9 @@ const AppCenterContent: React.FC<AppCenterContentProps> = (props) => {
         </CustomDrawer>
         <CustomDrawer show={showCalculatorDrawer}>
           <Calculator onClose={closeCalculatorDrawer} onEnter={closeCalculatorDrawer} />
+        </CustomDrawer>
+        <CustomDrawer show={showRelationDrawer}>
+          <RelationContent onClose={closeRelationDrawer} onEnter={closeRelationDrawer} />
         </CustomDrawer>
       </div>
     </CustomDrawerContent>
