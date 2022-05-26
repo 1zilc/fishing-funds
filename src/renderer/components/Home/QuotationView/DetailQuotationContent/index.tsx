@@ -34,6 +34,7 @@ const DetailQuotationContent: React.FC<DetailQuotationContentProps> = (props) =>
     Services.Quotation.GetQuotationDetailFromEastmoney,
     {
       defaultParams: [code],
+      cacheKey: Utils.GenerateRequestKey('Quotation.GetQuotationDetailFromEastmoney', code),
     }
   );
 

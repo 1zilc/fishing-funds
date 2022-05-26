@@ -11,6 +11,7 @@ import Recent from '@/components/Home/NewsList/Recent';
 import Sentiment from '@/components/Home/CoinView/DetailCoinContent/Sentiment';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
 import * as Services from '@/services';
+import * as Utils from '@/utils';
 
 import styles from './index.module.scss';
 
@@ -28,6 +29,7 @@ const DetailCoinContent: React.FC<DetailCoinContentProps> = (props) => {
 
   const { data: coin, run: runGetDetailFromCoingecko } = useRequest(() => Services.Coin.GetDetailFromCoingecko(code), {
     pollingInterval: 1000 * 60,
+    cacheKey: Utils.GenerateRequestKey('Coin.GetDetailFromCoingecko', code),
   });
 
   return (

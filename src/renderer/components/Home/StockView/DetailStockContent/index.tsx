@@ -16,6 +16,7 @@ import { addStockAction } from '@/store/features/stock';
 import { useAppDispatch, useAppSelector } from '@/utils/hooks';
 import * as Services from '@/services';
 import * as Utils from '@/utils';
+import * as CONST from '@/constants';
 
 import styles from './index.module.scss';
 
@@ -34,10 +35,13 @@ const DetailStockContent: React.FC<DetailStockContentProps> = (props) => {
   const { data: stock = {} as any } = useRequest(Services.Stock.GetDetailFromEastmoney, {
     pollingInterval: 1000 * 60,
     defaultParams: [secid],
+    cacheKey: Utils.GenerateRequestKey('Stock.GetDetailFromEastmoney', secid),
   });
 
   const { data: industrys = [] } = useRequest(Services.Stock.GetIndustryFromEastmoney, {
     defaultParams: [secid, 3],
+    cacheKey: Utils.GenerateRequestKey('Stock.GetIndustryFromEastmoney', secid),
+    staleTime: CONST.DEFAULT.SWR_STALE_DELAY,
   });
 
   async function onAdd() {

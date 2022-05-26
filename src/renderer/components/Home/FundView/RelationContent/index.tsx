@@ -40,10 +40,10 @@ const RelationContent: React.FC<RelationContentProps> = (props) => {
   });
   const { data: result = [], run: runGetIndustryRateFromEaseMoney } = useRequest(() => Adpters.ChokeGroupAdapter(collectors, 5, 500), {
     refreshDeps: [allCyFunds],
-    cacheKey: JSON.stringify({
-      api: 'Fund.GetIndustryRateFromEaseMoney',
-      key: allCyFunds.map(({ fundcode }) => fundcode),
-    }),
+    cacheKey: Utils.GenerateRequestKey(
+      'Fund.GetIndustryRateFromEaseMoney',
+      allCyFunds.map(({ fundcode }) => fundcode)
+    ),
     staleTime: CONST.DEFAULT.SWR_STALE_DELAY,
   });
 

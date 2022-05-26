@@ -31,6 +31,7 @@ import { useFundRating, useDrawer, useAppSelector } from '@/utils/hooks';
 import * as Services from '@/services';
 import * as Utils from '@/utils';
 import * as Enums from '@/utils/enums';
+import * as CONST from '@/constants';
 import styles from './index.module.scss';
 
 const FundManagerContent = React.lazy(() => import('@/components/Home/FundView/FundManagerContent'));
@@ -99,12 +100,16 @@ const DetailFundContent: React.FC<DetailFundContentProps> = (props) => {
     () => Services.Fund.GetFundDetailFromEastmoney(code),
     {
       refreshDeps: [code],
+      cacheKey: Utils.GenerateRequestKey('Fund.GetFundDetailFromEastmoney', code),
+      staleTime: CONST.DEFAULT.SWR_STALE_DELAY,
     }
   );
   const { data: industryData = { stocks: [], expansion: '' }, run: runGetIndustryRateFromEaseMoney } = useRequest(
     () => Services.Fund.GetIndustryRateFromEaseMoney(code),
     {
       refreshDeps: [code],
+      cacheKey: Utils.GenerateRequestKey('Fund.GetIndustryRateFromEaseMoney', code),
+      staleTime: CONST.DEFAULT.SWR_STALE_DELAY,
     }
   );
 

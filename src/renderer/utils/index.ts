@@ -414,3 +414,9 @@ export function GetCodeMap<T extends Record<string, any>>(list: T[], key: keyof 
     return r;
   }, {} as Record<string, T & extraData>);
 }
+export function GenerateRequestKey(api: string, key: any) {
+  return JSON.stringify({
+    api,
+    key,
+  });
+}
