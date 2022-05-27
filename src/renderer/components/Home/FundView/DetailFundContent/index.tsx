@@ -180,7 +180,10 @@ const DetailFundContent: React.FC<DetailFundContentProps> = (props) => {
                 <HistoryValue data={pingzhongdata.Data_netWorthTrend} />
               </ChartCard>
             </Tabs.TabPane>
-            <Tabs.TabPane tab="源网站" key={String(2)}>
+            <Tabs.TabPane tab="近期资讯" key={String(2)}>
+              <Recent keyword={fund?.fixName || ''} />
+            </Tabs.TabPane>
+            <Tabs.TabPane tab="源网站" key={String(3)}>
               <ChartCard auto>
                 <Origin code={code} />
               </ChartCard>
@@ -273,9 +276,6 @@ const DetailFundContent: React.FC<DetailFundContentProps> = (props) => {
               <PureCard>
                 <SameFundList swithSameType={pingzhongdata.swithSameType} />
               </PureCard>
-            </Tabs.TabPane>
-            <Tabs.TabPane tab="近期资讯" key={String(1)}>
-              <Recent keyword={fund?.fixName || ''} />
             </Tabs.TabPane>
           </Tabs>
         </div>
