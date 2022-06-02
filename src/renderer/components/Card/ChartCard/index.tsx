@@ -1,9 +1,13 @@
 import React, { PropsWithChildren, ReactNode, useRef } from 'react';
 import html2canvas from 'html2canvas';
+import { useBoolean } from 'ahooks';
 import clsx from 'clsx';
 import DownloadIcon from '@/static/icon/download.svg';
 import CopyIcon from '@/static/icon/copy.svg';
 import RefreshIcon from '@/static/icon/refresh.svg';
+import ArrowDownIcon from '@/static/icon/arrow-down.svg';
+import ArrowUpIcon from '@/static/icon/arrow-up.svg';
+import Collapse from '@/components/Collapse';
 
 import styles from './index.module.scss';
 
@@ -34,6 +38,8 @@ export const ChartCard: React.FC<PropsWithChildren<ChartCardProps>> = ({
   TitleBar,
 }) => {
   const chartRef = useRef<HTMLDivElement>(null);
+
+  const [isOpened, { setTrue, setFalse }] = useBoolean(true);
   async function writeChartToClipboard() {
     try {
       const canvas = await html2canvas(chartRef.current!);
@@ -90,8 +96,9 @@ export const ChartCard: React.FC<PropsWithChildren<ChartCardProps>> = ({
         {onFresh && <RefreshIcon onClick={onFresh} />}
         <DownloadIcon onClick={downLoadChartToLocal} />
         <CopyIcon onClick={writeChartToClipboard} />
+        {isOpened ? <ArrowUpIcon onClick={setFalse} /> : <ArrowDownIcon onClick={setTrue} />}
       </div>
-      {children}
+      <Collapse isOpened={isOpened}>{children}</Collapse>
     </aside>
   );
 };

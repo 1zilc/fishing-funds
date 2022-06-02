@@ -4,6 +4,7 @@ import clsx from 'clsx';
 import StockSearch from '@/components/Toolbar/AppCenterContent/StockSearch';
 import ZindexSearch from '@/components/Toolbar/AppCenterContent/ZindexSearch';
 import FundSearch from '@/components/Toolbar/AppCenterContent/FundSearch';
+import RecentSearch from '@/components/Toolbar/AppCenterContent/RecentSearch';
 import * as Services from '@/services';
 import styles from './index.module.scss';
 
@@ -33,6 +34,7 @@ const SearchGroup: React.FC<SearchGroupProps> = (props) => {
 
   return (
     <div className={clsx(styles.content)}>
+      <RecentSearch keyword={keyword} />
       <FundSearch groupList={groupList} />
       <StockSearch groupList={groupList} />
       <ZindexSearch groupList={groupList} />
