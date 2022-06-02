@@ -5,6 +5,7 @@ import { Tabs, message } from 'antd';
 import { useMemoizedFn } from 'ahooks';
 
 import CustomDrawer from '@/components/CustomDrawer';
+import ChartCard from '@/components/Card/ChartCard';
 import { addStockAction } from '@/store/features/stock';
 
 import { useDrawer, useAppDispatch, useAppSelector } from '@/utils/hooks';
@@ -61,34 +62,36 @@ const StockSearch: React.FC<StockSearchProps> = (props) => {
       <Tabs animated={{ tabPane: true }} tabBarGutter={15} destroyInactiveTabPane>
         {list.map(({ Datas, Name, Type }) => (
           <Tabs.TabPane className={styles.tab} tab={Name} key={String(Type)}>
-            {Datas.map(({ Name, Code, MktNum }) => {
-              const secid = `${MktNum}.${Code}`;
-              return (
-                <div key={secid} className={styles.stock} onClick={() => setDetailDrawer({ secid, type: Type })}>
-                  <div>
-                    <div className={styles.name}>
-                      <span className={styles.nameText}>{Name}</span>
+            <ChartCard pureContent showCollapse>
+              {Datas.map(({ Name, Code, MktNum }) => {
+                const secid = `${MktNum}.${Code}`;
+                return (
+                  <div key={secid} className={styles.stock} onClick={() => setDetailDrawer({ secid, type: Type })}>
+                    <div>
+                      <div className={styles.name}>
+                        <span className={styles.nameText}>{Name}</span>
+                      </div>
+                      <div className={styles.code}>{Code}</div>
                     </div>
-                    <div className={styles.code}>{Code}</div>
+                    {codeMap[secid] ? (
+                      <button className={styles.added} disabled>
+                        已添加
+                      </button>
+                    ) : (
+                      <button
+                        className={styles.select}
+                        onClick={(e) => {
+                          onAdd(secid, Type);
+                          e.stopPropagation();
+                        }}
+                      >
+                        自选
+                      </button>
+                    )}
                   </div>
-                  {codeMap[secid] ? (
-                    <button className={styles.added} disabled>
-                      已添加
-                    </button>
-                  ) : (
-                    <button
-                      className={styles.select}
-                      onClick={(e) => {
-                        onAdd(secid, Type);
-                        e.stopPropagation();
-                      }}
-                    >
-                      自选
-                    </button>
-                  )}
-                </div>
-              );
-            })}
+                );
+              })}
+            </ChartCard>
           </Tabs.TabPane>
         ))}
       </Tabs>

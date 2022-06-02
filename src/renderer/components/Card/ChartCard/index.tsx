@@ -18,6 +18,8 @@ export interface ChartCardProps {
   auto?: boolean;
   onFresh?: () => void;
   TitleBar?: ReactNode;
+  pureContent?: boolean;
+  showCollapse?: boolean;
 }
 
 const { clipboard, dialog } = window.contextModules.electron;
@@ -36,6 +38,8 @@ export const ChartCard: React.FC<PropsWithChildren<ChartCardProps>> = ({
   children,
   auto,
   TitleBar,
+  pureContent,
+  showCollapse,
 }) => {
   const chartRef = useRef<HTMLDivElement>(null);
 
@@ -87,6 +91,9 @@ export const ChartCard: React.FC<PropsWithChildren<ChartCardProps>> = ({
       className={clsx(styles.content, className, {
         [styles.autoSize]: auto,
       })}
+      style={{
+        minHeight: !showCollapse ? 200 : 'initial',
+      }}
       onClick={onClick}
       onDoubleClick={onDoubleClick}
       ref={chartRef}
@@ -96,9 +103,18 @@ export const ChartCard: React.FC<PropsWithChildren<ChartCardProps>> = ({
         {onFresh && <RefreshIcon onClick={onFresh} />}
         <DownloadIcon onClick={downLoadChartToLocal} />
         <CopyIcon onClick={writeChartToClipboard} />
-        {isOpened ? <ArrowUpIcon onClick={setFalse} /> : <ArrowDownIcon onClick={setTrue} />}
+        {showCollapse && (isOpened ? <ArrowUpIcon onClick={setFalse} /> : <ArrowDownIcon onClick={setTrue} />)}
       </div>
-      <Collapse isOpened={isOpened}>{children}</Collapse>
+      <div
+        className={clsx([
+          styles.body,
+          {
+            [styles.pure]: pureContent,
+          },
+        ])}
+      >
+        {showCollapse ? <Collapse isOpened={isOpened}>{children}</Collapse> : children}
+      </div>
     </aside>
   );
 };
