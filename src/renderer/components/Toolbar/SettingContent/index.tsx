@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import clsx from 'clsx';
 
-import { InputNumber, Radio, Badge, Switch, Slider, TimePicker, Input, Tabs, Select } from 'antd';
+import { InputNumber, Radio, Badge, Switch, Slider, TimePicker, Input, Tabs, Select, Checkbox } from 'antd';
 import dayjs from 'dayjs';
+import { ReactSortable } from 'react-sortablejs';
 
 import PureCard from '@/components/Card/PureCard';
 import StandCard from '@/components/Card/StandCard';
@@ -21,9 +22,10 @@ import BitCoinIcon from '@/static/icon/bit-coin.svg';
 import WindowIcon from '@/static/icon/window.svg';
 import CalendarIcon from '@/static/icon/calendar.svg';
 import GlobalIcon from '@/static/icon/global.svg';
+import InboxIcon from '@/static/icon/inbox.svg';
 import { setSystemSettingAction, defaultSystemSetting } from '@/store/features/setting';
 
-import { useAppDispatch, useAppSelector } from '@/utils/hooks';
+import { useAppDispatch, useAppSelector, useAutoDestroySortableRef } from '@/utils/hooks';
 import * as Enums from '@/utils/enums';
 import * as Utils from '@/utils';
 import styles from './index.module.scss';
@@ -145,12 +147,14 @@ export const APIOptions = [
 
 const SettingContent: React.FC<SettingContentProps> = (props) => {
   const dispatch = useAppDispatch();
+  const sortableRef = useAutoDestroySortableRef();
   const {
     fundApiTypeSetting,
     conciseSetting,
     lowKeySetting,
     baseFontSizeSetting,
     systemThemeSetting,
+    bottomTabsSetting,
     adjustmentNotificationSetting,
     adjustmentNotificationTimeSetting,
     riskNotificationSetting,
@@ -175,6 +179,8 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
   const [lowKey, setLowKey] = useState(lowKeySetting);
   const [baseFontSize, setBaseFontSize] = useState(baseFontSizeSetting);
   const [systemTheme, setSystemTheme] = useState(systemThemeSetting);
+  // 底栏设置
+  const [bottomTabs, setBottomTabs] = useState(bottomTabsSetting);
   // 通知设置
   const [adjustmentNotification, setAdjustmentNotification] = useState(adjustmentNotificationSetting);
   const [adjustmentNotificationTime, setAdjustmentNotifitationTime] = useState(adjustmentNotificationTimeSetting);
@@ -194,6 +200,8 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
   const [timestamp, setTimestamp] = useState(timestampSetting);
 
   const proxyModeEnable = proxyType === Enums.ProxyType.Http || proxyType === Enums.ProxyType.Socks;
+  const tabsCheckedKeys = bottomTabs.filter(({ show }) => show).map(({ key }) => key);
+  const disableTabsCheck = tabsCheckedKeys.length <= 1;
 
   function onSave() {
     dispatch(
@@ -203,6 +211,7 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
         lowKeySetting: lowKey,
         baseFontSizeSetting: baseFontSize,
         systemThemeSetting: systemTheme,
+        bottomTabsSetting: bottomTabs.map((tab) => ({ key: tab.key, name: tab.name, show: tab.show })),
         adjustmentNotificationSetting: adjustmentNotification,
         adjustmentNotificationTimeSetting: adjustmentNotificationTime || defaultSystemSetting.adjustmentNotificationTimeSetting,
         riskNotificationSetting: riskNotification,
@@ -232,6 +241,15 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
       type: 'info',
       message: `已复制到粘贴板`,
     });
+  }
+
+  function onBottomTabCheckChange(key: Enums.TabKeyType) {
+    setBottomTabs(
+      bottomTabs.map((tab) => ({
+        ...tab,
+        show: tab.key === key ? !tab.show : tab.show,
+      }))
+    );
   }
 
   return (
@@ -357,6 +375,42 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
                     <Select.Option value={Enums.TrayContent.Zsyl}>所有钱包收益率</Select.Option>
                   </Select>
                 </section>
+              </div>
+            </StandCard>
+            <StandCard
+              icon={<InboxIcon />}
+              title="底栏设置"
+              extra={
+                <div className={styles.guide}>
+                  <Guide list={[{ name: '底栏设置', text: '对底部模块进行选择和排序' }]} />
+                </div>
+              }
+            >
+              <div className={clsx(styles.setting, 'card-body')}>
+                <ReactSortable
+                  ref={sortableRef}
+                  animation={200}
+                  delay={2}
+                  list={bottomTabs.map((_) => ({ ..._, id: _.key }))}
+                  setList={setBottomTabs}
+                  className={styles.bottomTabsRow}
+                  swap
+                >
+                  {bottomTabs.map((tab) => {
+                    return (
+                      <PureCard key={tab.key}>
+                        <div className={styles.bottomTabItem}>
+                          <div>{tab.name}</div>
+                          <Checkbox
+                            checked={tab.show}
+                            onClick={() => onBottomTabCheckChange(tab.key)}
+                            disabled={disableTabsCheck && tabsCheckedKeys[0] === tab.key}
+                          />
+                        </div>
+                      </PureCard>
+                    );
+                  })}
+                </ReactSortable>
               </div>
             </StandCard>
             <StandCard

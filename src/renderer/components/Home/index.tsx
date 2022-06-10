@@ -24,9 +24,17 @@ const QuotationView = React.lazy(() => import('@/components/Home/QuotationView')
 const StockView = React.lazy(() => import('@/components/Home/StockView'));
 const CoinView = React.lazy(() => import('@/components/Home/CoinView'));
 
+const tabsKeyMap = {
+  [Enums.TabKeyType.Funds]: FundGroup,
+  [Enums.TabKeyType.Zindex]: ZindexGroup,
+  [Enums.TabKeyType.Quotation]: QuotationGroup,
+  [Enums.TabKeyType.Stock]: StockGroup,
+  [Enums.TabKeyType.Coin]: CoinGroup,
+};
+
 export interface HomeProps {}
 
-const FundGroup = () => {
+function FundGroup() {
   const codeMap = useAppSelector((state) => state.wallet.fundConfigCodeMap);
 
   return (
@@ -45,9 +53,9 @@ const FundGroup = () => {
       </GroupTab.TabPane>
     </GroupTab>
   );
-};
+}
 
-const ZindexGroup = () => {
+function ZindexGroup() {
   // const { codeMap: zindexCodeMap } = useAppSelector((state) => state.zindex.config);
 
   return (
@@ -63,9 +71,9 @@ const ZindexGroup = () => {
       </GroupTab.TabPane>
     </GroupTab>
   );
-};
+}
 
-const QuotationGroup = () => {
+function QuotationGroup() {
   const favoriteQuotationMap = useAppSelector((state) => state.quotation.favoriteQuotationMap);
 
   return (
@@ -84,9 +92,9 @@ const QuotationGroup = () => {
       </GroupTab.TabPane>
     </GroupTab>
   );
-};
+}
 
-const StockGroup = () => {
+function StockGroup() {
   const { codeMap: stockCodeMap } = useAppSelector((state) => state.stock.config);
 
   return (
@@ -101,9 +109,9 @@ const StockGroup = () => {
       ))}
     </GroupTab>
   );
-};
+}
 
-const CoinGroup = () => {
+function CoinGroup() {
   return (
     <GroupTab tabKey={Enums.TabKeyType.Coin}>
       <GroupTab.TabPane tab="全部" key={String(0)}>
@@ -117,28 +125,22 @@ const CoinGroup = () => {
       </GroupTab.TabPane>
     </GroupTab>
   );
-};
+}
 
 const Body = () => {
   const tabsActiveKey = useAppSelector((state) => state.tabs.activeKey);
+  const bottomTabsSetting = useAppSelector((state) => state.setting.systemSetting.bottomTabsSetting);
 
   return (
     <Tabs renderTabBar={() => <></>} activeKey={String(tabsActiveKey)} animated={{ tabPane: true, inkBar: false }} destroyInactiveTabPane>
-      <Tabs.TabPane key={String(Enums.TabKeyType.Funds)}>
-        <FundGroup />
-      </Tabs.TabPane>
-      <Tabs.TabPane key={String(Enums.TabKeyType.Zindex)}>
-        <ZindexGroup />
-      </Tabs.TabPane>
-      <Tabs.TabPane key={String(Enums.TabKeyType.Quotation)}>
-        <QuotationGroup />
-      </Tabs.TabPane>
-      <Tabs.TabPane key={String(Enums.TabKeyType.Stock)}>
-        <StockGroup />
-      </Tabs.TabPane>
-      <Tabs.TabPane key={String(Enums.TabKeyType.Coin)}>
-        <CoinGroup />
-      </Tabs.TabPane>
+      {bottomTabsSetting.map((tab) => {
+        const Component = tabsKeyMap[tab.key];
+        return (
+          <Tabs.TabPane key={tab.key}>
+            <Component />
+          </Tabs.TabPane>
+        );
+      })}
     </Tabs>
   );
 };

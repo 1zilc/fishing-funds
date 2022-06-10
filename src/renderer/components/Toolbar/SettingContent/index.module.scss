@@ -192,6 +192,16 @@
   align-items: center;
 }
 
+.bottomTabsRow {
+  display: flex;
+  width: 100%;
+  justify-content: space-evenly;
+}
+.bottomTabItem {
+  padding: 2px var(--base-padding);
+  text-align: center;
+}
+
 @keyframes colorful {
   0% {
     background-position: 10% 0%;

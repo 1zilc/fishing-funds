@@ -5,7 +5,6 @@ import { Base64 } from 'js-base64';
 import dayjs from 'dayjs';
 import NP from 'number-precision';
 
-import { tabs } from '@/components/TabsBar';
 import { updateAvaliableAction } from '@/store/features/updater';
 import { setFundConfigAction } from '@/store/features/fund';
 import { setTabsActiveKeyAction } from '@/store/features/tabs';
@@ -511,6 +510,7 @@ export function useTouchBar() {
   const walletsConfig = useAppSelector((state) => state.wallet.config.walletConfig);
   const fundConfigCodeMap = useAppSelector((state) => state.wallet.fundConfigCodeMap);
   const varibleColors = useAppSelector((state) => state.setting.varibleColors);
+  const bottomTabsSetting = useAppSelector((state) => state.setting.systemSetting.bottomTabsSetting);
 
   useEffect(() => {
     ipcRenderer.invoke(
@@ -539,10 +539,12 @@ export function useTouchBar() {
   useEffect(() => {
     ipcRenderer.invoke(
       'update-touchbar-tab',
-      tabs.map((tab) => ({
-        label: tab.name,
-        selected: tab.key === activeKey,
-      }))
+      bottomTabsSetting
+        .filter(({ show }) => show)
+        .map((tab) => ({
+          label: tab.name,
+          selected: tab.key === activeKey,
+        }))
     );
   }, [activeKey]);
 
