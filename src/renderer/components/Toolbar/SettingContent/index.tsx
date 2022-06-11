@@ -200,8 +200,6 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
   const [timestamp, setTimestamp] = useState(timestampSetting);
 
   const proxyModeEnable = proxyType === Enums.ProxyType.Http || proxyType === Enums.ProxyType.Socks;
-  const tabsCheckedKeys = bottomTabs.filter(({ show }) => show).map(({ key }) => key);
-  const disableTabsCheck = tabsCheckedKeys.length <= 1;
 
   function onSave() {
     dispatch(
@@ -244,10 +242,13 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
   }
 
   function onBottomTabCheckChange(key: Enums.TabKeyType) {
+    const tabsCheckedKeys = bottomTabs.filter(({ show }) => show).map(({ key }) => key);
+    const disableTabsCheck = tabsCheckedKeys.length <= 1;
+
     setBottomTabs(
       bottomTabs.map((tab) => ({
         ...tab,
-        show: tab.key === key ? !tab.show : tab.show,
+        show: tab.key === key ? (tab.show && disableTabsCheck ? tab.show : !tab.show) : tab.show, // 至少选择一个
       }))
     );
   }
@@ -401,11 +402,7 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
                       <PureCard key={tab.key}>
                         <div className={styles.bottomTabItem}>
                           <div>{tab.name}</div>
-                          <Checkbox
-                            checked={tab.show}
-                            onClick={() => onBottomTabCheckChange(tab.key)}
-                            disabled={disableTabsCheck && tabsCheckedKeys[0] === tab.key}
-                          />
+                          <Checkbox checked={tab.show} onClick={() => onBottomTabCheckChange(tab.key)} />
                         </div>
                       </PureCard>
                     );

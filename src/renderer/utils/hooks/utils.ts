@@ -19,9 +19,9 @@ import { setCoinsLoadingAction, setRemoteCoinsLoadingAction, sortCoinsCachedActi
 import { updateStockAction, sortStocksCachedAction, setStocksLoadingAction } from '@/store/features/stock';
 import { setZindexesLoadingAction, sortZindexsCachedAction } from '@/store/features/zindex';
 import { sortQuotationsCachedAction } from '@/store/features/quotation';
-import { syncDarkMode } from '@/store/features/setting';
 import { TypedDispatch, StoreState } from '@/store';
 import * as Utils from '@/utils';
+import * as Enums from '@/utils/enums';
 import * as CONST from '@/constants';
 import * as Adapters from '@/utils/adpters';
 import * as Services from '@/services';
@@ -211,6 +211,9 @@ export function useSyncFixStockSetting() {
 export function useFreshFunds(throttleDelay: number) {
   const loadFunds = useLoadFunds(true);
   const loadFixFunds = useLoadFixFunds();
+  const bottomTabsSetting = useAppSelector((state) => state.setting.systemSetting.bottomTabsSetting);
+  const bottomTabsSettingKeyMap = Utils.GetCodeMap(bottomTabsSetting, 'key');
+
   const { run: runLoadFunds } = useThrottleFn(loadFunds, {
     wait: throttleDelay,
   });
@@ -226,7 +229,8 @@ export function useFreshFunds(throttleDelay: number) {
       }
     },
   });
-  return freshFunds;
+  const fn = useTabsFreshFn(Enums.TabKeyType.Funds, freshFunds);
+  return fn;
 }
 
 export function useLoadFunds(loading: boolean) {
@@ -247,7 +251,9 @@ export function useLoadFunds(loading: boolean) {
       dispatch(setFundsLoadingAction(false));
     }
   });
-  return load;
+
+  const fn = useTabsFreshFn(Enums.TabKeyType.Funds, load);
+  return fn;
 }
 
 export function useLoadFixFunds() {
@@ -262,8 +268,8 @@ export function useLoadFixFunds() {
       dispatch(syncFixWalletStateAction({ code, funds: fixFunds, updateTime: now }));
     } catch (error) {}
   });
-
-  return load;
+  const fn = useTabsFreshFn(Enums.TabKeyType.Funds, load);
+  return fn;
 }
 
 export function useLoadRemoteFunds() {
@@ -315,7 +321,8 @@ export function useLoadWalletsFunds() {
     } catch (error) {}
   });
 
-  return load;
+  const fn = useTabsFreshFn(Enums.TabKeyType.Funds, load);
+  return fn;
 }
 
 export function useLoadFixWalletsFunds() {
@@ -350,7 +357,8 @@ export function useFreshZindexs(throttleDelay: number) {
   const loadZindexs = useLoadZindexs(true);
   const { run: runLoadZindexs } = useThrottleFn(loadZindexs, { wait: throttleDelay });
   const freshZindexs = useScrollToTop({ after: () => runLoadZindexs() });
-  return freshZindexs;
+  const fn = useTabsFreshFn(Enums.TabKeyType.Zindex, freshZindexs);
+  return fn;
 }
 
 export function useLoadZindexs(loading: boolean) {
@@ -368,15 +376,16 @@ export function useLoadZindexs(loading: boolean) {
       dispatch(setZindexesLoadingAction(false));
     }
   });
-
-  return load;
+  const fn = useTabsFreshFn(Enums.TabKeyType.Zindex, load);
+  return fn;
 }
 
 export function useFreshQuotations(throttleDelay: number) {
   const loadQuotations = useLoadQuotations(true);
   const { run: runLoadQuotations } = useThrottleFn(loadQuotations, { wait: throttleDelay });
   const freshQuotations = useScrollToTop({ after: () => runLoadQuotations() });
-  return freshQuotations;
+  const fn = useTabsFreshFn(Enums.TabKeyType.Quotation, freshQuotations);
+  return fn;
 }
 
 export function useLoadQuotations(loading: boolean) {
@@ -394,15 +403,16 @@ export function useLoadQuotations(loading: boolean) {
       dispatch(setQuotationsLoadingAction(false));
     }
   });
-
-  return load;
+  const fn = useTabsFreshFn(Enums.TabKeyType.Quotation, load);
+  return fn;
 }
 
 export function useFreshStocks(throttleDelay: number) {
   const loadStocks = useLoadStocks(true);
   const { run: runLoadStocks } = useThrottleFn(loadStocks, { wait: throttleDelay });
   const freshStocks = useScrollToTop({ after: () => runLoadStocks(true) });
-  return freshStocks;
+  const fn = useTabsFreshFn(Enums.TabKeyType.Stock, freshStocks);
+  return fn;
 }
 
 export function useLoadStocks(loading: boolean) {
@@ -421,15 +431,16 @@ export function useLoadStocks(loading: boolean) {
       dispatch(setStocksLoadingAction(false));
     }
   });
-
-  return load;
+  const fn = useTabsFreshFn(Enums.TabKeyType.Stock, load);
+  return fn;
 }
 
 export function useFreshCoins(throttleDelay: number) {
   const loadCoins = useLoadCoins(true);
   const { run: runLoadCoins } = useThrottleFn(loadCoins, { wait: throttleDelay });
   const freshCoins = useScrollToTop({ after: () => runLoadCoins() });
-  return freshCoins;
+  const fn = useTabsFreshFn(Enums.TabKeyType.Coin, freshCoins);
+  return fn;
 }
 
 export function useLoadCoins(showLoading: boolean) {
@@ -449,8 +460,8 @@ export function useLoadCoins(showLoading: boolean) {
       dispatch(setCoinsLoadingAction(false));
     }
   });
-
-  return load;
+  const fn = useTabsFreshFn(Enums.TabKeyType.Coin, load);
+  return fn;
 }
 
 export function useLoadRemoteCoins() {
@@ -599,4 +610,10 @@ export function useIpcRendererListener(channel: string, listener: (event: Electr
       ipcRenderer.removeListener(channel, callback);
     };
   }, []);
+}
+
+export function useTabsFreshFn<T>(key: Enums.TabKeyType, fn: T) {
+  const bottomTabsSetting = useAppSelector((state) => state.setting.systemSetting.bottomTabsSetting);
+  const bottomTabsSettingKeyMap = Utils.GetCodeMap(bottomTabsSetting, 'key');
+  return bottomTabsSettingKeyMap[key].show ? fn : async () => {};
 }
