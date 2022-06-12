@@ -59,6 +59,7 @@ export const defaultSystemSetting: System.Setting = {
   proxyHostSetting: '127.0.0.1',
   proxyPortSetting: '1080',
 
+  hotkeySetting: '',
   autoStartSetting: true,
   autoFreshSetting: true,
   freshDelaySetting: 1,

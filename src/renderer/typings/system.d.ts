@@ -20,6 +20,7 @@ declare namespace System {
     proxyHostSetting: string; // 主机域名
     proxyPortSetting: string; // 主机端口
 
+    hotkeySetting: string; // 快捷键
     autoStartSetting: boolean; // 自动启动
     autoFreshSetting: boolean; // 自动刷新
     freshDelaySetting: number; // 刷新时间间隔

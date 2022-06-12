@@ -1,5 +1,5 @@
 import React, { useLayoutEffect, useState, useEffect, useRef, useMemo, useDeferredValue } from 'react';
-import { useInterval, useBoolean, useThrottleFn, useSize, useMemoizedFn } from 'ahooks';
+import { useInterval, useBoolean, useThrottleFn, useSize, useMemoizedFn, useEventListener } from 'ahooks';
 import { useDispatch, useSelector, TypedUseSelectorHook, batch } from 'react-redux';
 import dayjs from 'dayjs';
 import * as echarts from 'echarts';
@@ -616,4 +616,31 @@ export function useTabsFreshFn<T>(key: Enums.TabKeyType, fn: T) {
   const bottomTabsSetting = useAppSelector((state) => state.setting.systemSetting.bottomTabsSetting);
   const bottomTabsSettingKeyMap = Utils.GetCodeMap(bottomTabsSetting, 'key');
   return bottomTabsSettingKeyMap[key].show ? fn : async () => {};
+}
+
+export function useInputShortcut(initial: string) {
+  const [hotkey, setHotkey] = useState(initial);
+  const [isInput, { setTrue, setFalse }] = useBoolean(false);
+  const inputRef = useRef(null);
+
+  useEventListener('keydown', (e) => {
+    if (isInput) {
+      const { ctrlKey, metaKey, altKey, shiftKey, key } = e;
+      const keys = [ctrlKey && 'control', metaKey && 'meta', altKey && 'alt', shiftKey && 'shift', key && key].filter((_) => _) as string[];
+      const hotkeys = Array.from(new Set(keys.map((_) => _.toLocaleLowerCase())));
+      setHotkey(hotkeys.join(' + '));
+    }
+  });
+  useEventListener('focus', setTrue, { target: inputRef.current });
+  useEventListener('blur', setFalse, { target: inputRef.current });
+
+  function reset() {
+    setHotkey('');
+  }
+
+  return {
+    inputRef,
+    hotkey,
+    reset,
+  };
 }

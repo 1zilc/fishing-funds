@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import clsx from 'clsx';
-
+import { useEventListener } from 'ahooks';
 import { InputNumber, Radio, Badge, Switch, Slider, TimePicker, Input, Tabs, Select, Checkbox } from 'antd';
 import dayjs from 'dayjs';
 import { ReactSortable } from 'react-sortablejs';
@@ -24,8 +24,7 @@ import CalendarIcon from '@/static/icon/calendar.svg';
 import GlobalIcon from '@/static/icon/global.svg';
 import InboxIcon from '@/static/icon/inbox.svg';
 import { setSystemSettingAction, defaultSystemSetting } from '@/store/features/setting';
-
-import { useAppDispatch, useAppSelector, useAutoDestroySortableRef } from '@/utils/hooks';
+import { useAppDispatch, useAppSelector, useAutoDestroySortableRef, useInputShortcut } from '@/utils/hooks';
 import * as Enums from '@/utils/enums';
 import * as Utils from '@/utils';
 import styles from './index.module.scss';
@@ -163,6 +162,7 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
     proxyTypeSetting,
     proxyHostSetting,
     proxyPortSetting,
+    hotkeySetting,
     autoStartSetting,
     autoFreshSetting,
     freshDelaySetting,
@@ -193,6 +193,7 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
   const [proxyHost, setProxyHost] = useState(proxyHostSetting);
   const [proxyPort, setProxyPort] = useState(proxyPortSetting);
   // 通用设置
+  const { hotkey, inputRef: hotkeyInputRef, reset: resetHotkey } = useInputShortcut(hotkeySetting);
   const [autoStart, setAutoStart] = useState(autoStartSetting);
   const [autoFresh, setAutoFresh] = useState(autoFreshSetting);
   const [freshDelay, setFreshDelay] = useState(freshDelaySetting);
@@ -218,6 +219,7 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
         proxyTypeSetting: proxyType,
         proxyHostSetting: proxyHost,
         proxyPortSetting: proxyPort,
+        hotkeySetting: hotkey,
         autoStartSetting: autoStart,
         autoFreshSetting: autoFresh,
         freshDelaySetting: freshDelay || defaultSystemSetting.freshDelaySetting,
@@ -478,6 +480,10 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
             >
               <div className={clsx(styles.setting, 'card-body')}>
                 <section>
+                  <label>快捷键 {hotkey && <a onClick={resetHotkey}>(重置)</a>}：</label>
+                  <input ref={hotkeyInputRef} value={hotkey} placeholder="显示/隐藏快捷键" type="text" />
+                </section>
+                <section>
                   <label>开机自启：</label>
                   <Switch size="small" checked={autoStart} onChange={setAutoStart} />
                 </section>
@@ -591,7 +597,7 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
         </Tabs.TabPane>
       </Tabs>
       <div className={styles.exit}>
-        <button type="button" onClick={() => app.quit()}>
+        <button type="button" onClick={app.quit}>
           退出程序
         </button>
       </div>

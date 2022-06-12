@@ -299,6 +299,7 @@ export function useMappingLocalToSystemSetting() {
     proxyTypeSetting,
     proxyHostSetting,
     proxyPortSetting,
+    hotkeySetting,
   } = useAppSelector((state) => state.setting.systemSetting);
 
   useIpcRendererListener('nativeTheme-updated', (e, data) => {
@@ -340,6 +341,9 @@ export function useMappingLocalToSystemSetting() {
         ipcRenderer.invoke('set-proxy', { mode: 'direct' });
     }
   }, [proxyTypeSetting, proxyHostSetting, proxyPortSetting]);
+  useEffect(() => {
+    ipcRenderer.invoke('set-hotkey', hotkeySetting);
+  }, [hotkeySetting]);
 }
 
 export function useTrayContent() {
