@@ -20,7 +20,9 @@ const Recent: React.FC<RecentProps> = (props) => {
     loading,
     run: runNewsGetBondList,
   } = useRequest(() => Services.News.GetRecent(keyword, pageIndex), {
-    throttleWait: 1000,
+    debounceWait: 1000,
+    debounceLeading: true,
+    debounceTrailing: true,
     refreshDeps: [keyword, pageIndex],
     ready: !!keyword,
   });
