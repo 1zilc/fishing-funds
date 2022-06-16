@@ -435,7 +435,7 @@ export function useAllConfigBackup() {
         return;
       }
       const encodeBackupConfig = compose(Base64.encode, encodeFF)(backupConfig);
-      saveString(filePath!, encodeBackupConfig);
+      await saveString(filePath!, encodeBackupConfig);
       dialog.showMessageBox({
         type: 'info',
         title: `导出成功`,
@@ -459,7 +459,7 @@ export function useAllConfigBackup() {
       if (canceled || !filePath) {
         return;
       }
-      const encodeBackupConfig = readFile(filePath);
+      const encodeBackupConfig = await readFile(filePath);
       const backupConfig: Backup.Config = compose(decodeFF, Base64.decode)(encodeBackupConfig);
       Utils.CoverBackupConfig(backupConfig);
       await dialog.showMessageBox({
@@ -478,7 +478,7 @@ export function useAllConfigBackup() {
   });
   useIpcRendererListener('open-backup-file', async (e, filePath) => {
     try {
-      const encodeBackupConfig = readFile(filePath);
+      const encodeBackupConfig = await readFile(filePath);
       const backupConfig: Backup.Config = compose(decodeFF, Base64.decode)(encodeBackupConfig);
       const { response } = await dialog.showMessageBox({
         title: `确认从备份文件恢复`,

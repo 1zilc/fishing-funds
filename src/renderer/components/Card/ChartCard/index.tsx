@@ -72,7 +72,7 @@ export const ChartCard: React.FC<PropsWithChildren<ChartCardProps>> = ({
       if (canceled) {
         return;
       }
-      saveImage(filePath!, dataUrl);
+      await saveImage(filePath!, dataUrl);
       dialog.showMessageBox({
         title: '保存成功',
         type: 'info',
@@ -86,6 +86,7 @@ export const ChartCard: React.FC<PropsWithChildren<ChartCardProps>> = ({
       });
     }
   }
+
   return (
     <aside
       className={clsx(styles.content, className, {
