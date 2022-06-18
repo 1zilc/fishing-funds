@@ -94,10 +94,12 @@ contextBridge.exposeInMainWorld('contextModules', {
         fs.writeFile(filePath, content, resolve);
       });
     },
-    async saveJsonToCsv(filePath: string, json: string) {
+    async saveJsonToCsv(filePath: string, json: any[]) {
       const fields = Object.keys(json[0] || {});
       const csv = await parseAsync(json, { fields });
-      return this.saveString(filePath, csv);
+      return new Promise((resolve, reject) => {
+        fs.writeFile(filePath, csv, resolve);
+      });
     },
     async readFile(path: string) {
       return new Promise((resolve, reject) => {

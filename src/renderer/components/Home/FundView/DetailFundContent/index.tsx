@@ -7,6 +7,7 @@ import ChartCard from '@/components/Card/ChartCard';
 import PureCard from '@/components/Card/PureCard';
 import CustomDrawer from '@/components/CustomDrawer';
 import ColorfulTags from '@/components/ColorfulTags';
+import ExportTitleBar from '@/components/ExportTitleBar';
 import Estimate from '@/components/Home/FundView/DetailFundContent/Estimate';
 import InvestStyle from '@/components/Home/FundView/DetailFundContent/InvestStyle';
 import Performance from '@/components/Home/FundView/DetailFundContent/Performance';
@@ -176,7 +177,11 @@ const DetailFundContent: React.FC<DetailFundContentProps> = (props) => {
               </ChartCard>
             </Tabs.TabPane>
             <Tabs.TabPane tab="历史净值" key={String(1)}>
-              <ChartCard auto onFresh={runGetFundDetailFromEastmoney}>
+              <ChartCard
+                auto
+                onFresh={runGetFundDetailFromEastmoney}
+                TitleBar={<ExportTitleBar name={fund?.fixName} data={pingzhongdata.Data_netWorthTrend} />}
+              >
                 <HistoryValue data={pingzhongdata.Data_netWorthTrend} />
               </ChartCard>
             </Tabs.TabPane>

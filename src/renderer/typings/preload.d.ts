@@ -31,7 +31,7 @@ declare global {
       io: {
         saveImage: (filePath: string, dataUrl: string) => Promise<unknown>;
         saveString: (filePath: string, content: string) => Promise<unknown>;
-        saveJsonToCsv: (filePath: string, json: any) => Promise<unknown>;
+        saveJsonToCsv: (filePath: string, json: any[]) => Promise<unknown>;
         encodeFF: (content: any) => string;
         decodeFF: (content: string) => any;
         readFile: (content: string) => Promise<string>;
