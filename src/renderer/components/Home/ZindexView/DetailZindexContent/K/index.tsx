@@ -260,19 +260,19 @@ const K: React.FC<KProps> = ({ code = '', name }) => {
         dataZoom: [
           {
             type: 'inside',
-            start: 80,
+            start: 95,
             end: 100,
           },
           {
             xAxisIndex: [0, 1],
             type: 'inside',
-            start: 20,
+            start: 95,
             end: 100,
           },
           {
             xAxisIndex: [0, 2],
             type: 'inside',
-            start: 20,
+            start: 95,
             end: 100,
           },
         ],

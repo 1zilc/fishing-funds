@@ -277,13 +277,13 @@ const K: React.FC<PerformanceProps> = ({ secid = '', name }) => {
           {
             xAxisIndex: [0, 1],
             type: 'inside',
-            start: 20,
+            start: 80,
             end: 100,
           },
           {
             xAxisIndex: [0, 2],
             type: 'inside',
-            start: 20,
+            start: 80,
             end: 100,
           },
         ],
