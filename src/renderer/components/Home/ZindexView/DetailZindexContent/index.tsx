@@ -79,14 +79,14 @@ const DetailZindexContent: React.FC<DetailFundContentProps> = (props) => {
         <div className={styles.container}>
           <Tabs animated={{ tabPane: true }} tabBarGutter={15}>
             <Tabs.TabPane tab="指数走势" key={String(0)}>
-              <Trend code={code} zs={zindex.zs} />
+              <Trend code={code} zs={zindex.zs} name={zindex?.name} />
             </Tabs.TabPane>
           </Tabs>
         </div>
         <div className={styles.container}>
           <Tabs animated={{ tabPane: true }} tabBarGutter={15}>
             <Tabs.TabPane tab="K线" key={String(0)}>
-              <K code={code} />
+              <K code={code} name={zindex?.name} />
             </Tabs.TabPane>
           </Tabs>
         </div>

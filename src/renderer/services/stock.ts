@@ -327,7 +327,7 @@ export async function GetDetailFromEastmoney(secid: string) {
   }
 }
 
-export async function GetKFromEastmoney(secid: string, code: number) {
+export async function GetKFromEastmoney(secid: string, code: number, lmt = 10000) {
   try {
     const { body } = await request<{
       rc: 0;
@@ -352,22 +352,25 @@ export async function GetKFromEastmoney(secid: string, code: number) {
         klt: code,
         fqt: 0,
         end: 20500101,
-        lmt: 120,
+        lmt: lmt,
         _: new Date().getTime(),
       },
       responseType: 'json',
     });
     return (body?.data?.klines || []).map((_) => {
-      const [date, kp, sp, zg, zd, cjl, cje, zf] = _.split(',');
+      const [date, kp, sp, zg, zd, cjl, cje, zf, zdf, zde, hsl] = _.split(',');
       return {
         date,
-        kp: Number(kp),
-        sp: Number(sp),
-        zg: Number(zg),
-        zd: Number(zd),
-        cjl,
-        cje,
-        zf,
+        kp: Number(kp), // 开盘
+        sp: Number(sp), // 收盘
+        zg: Number(zg), // 最高
+        zd: Number(zd), // 最低
+        cjl, // 成交量
+        cje, // 成交额
+        zf, // 振幅
+        zdf, // 涨跌幅
+        zde, // 涨跌额
+        hsl, // 换手率
       };
     });
   } catch (error) {

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useRequest } from 'ahooks';
 
 import ChartCard from '@/components/Card/ChartCard';
+import ExportTitleBar from '@/components/ExportTitleBar';
 import TypeSelection from '@/components/TypeSelection';
 import { useResizeEchart, useRenderEcharts } from '@/utils/hooks';
 import * as CONST from '@/constants';
@@ -11,6 +12,7 @@ import styles from './index.module.scss';
 
 export interface KProps {
   code: string;
+  name?: string;
 }
 
 const yearTypeList = [
@@ -21,7 +23,7 @@ const yearTypeList = [
   { name: '最大', type: 5, code: 50 },
 ];
 
-const K: React.FC<KProps> = ({ code = '' }) => {
+const K: React.FC<KProps> = ({ code = '', name }) => {
   const { ref: chartRef, chartInstance } = useResizeEchart(CONST.DEFAULT.ECHARTS_SCALE);
   const [year, setYearType] = useState(yearTypeList[0]);
   const { data: result = [], run: runGetKFromEastmoney } = useRequest(() => Services.Zindex.GetKFromEastmoney(code, year.code), {
@@ -157,7 +159,7 @@ const K: React.FC<KProps> = ({ code = '' }) => {
   );
 
   return (
-    <ChartCard onFresh={runGetKFromEastmoney}>
+    <ChartCard onFresh={runGetKFromEastmoney} TitleBar={<ExportTitleBar name={name} data={result} />}>
       <div className={styles.content}>
         <div ref={chartRef} style={{ width: '100%' }} />
         <TypeSelection types={yearTypeList} activeType={year.type} onSelected={setYearType} flex />

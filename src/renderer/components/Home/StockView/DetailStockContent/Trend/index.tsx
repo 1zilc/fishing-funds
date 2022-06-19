@@ -2,6 +2,7 @@ import React from 'react';
 import { useRequest } from 'ahooks';
 
 import ChartCard from '@/components/Card/ChartCard';
+import ExportTitleBar from '@/components/ExportTitleBar';
 import { useResizeEchart, useRenderEcharts } from '@/utils/hooks';
 import * as CONST from '@/constants';
 import * as Services from '@/services';
@@ -11,8 +12,9 @@ import styles from './index.module.scss';
 export interface PerformanceProps {
   secid: string;
   zs: number;
+  name?: string;
 }
-const Trend: React.FC<PerformanceProps> = ({ secid, zs = 0 }) => {
+const Trend: React.FC<PerformanceProps> = ({ secid, zs = 0, name }) => {
   const { ref: chartRef, chartInstance } = useResizeEchart(CONST.DEFAULT.ECHARTS_SCALE);
   const { data: result = { trends: [] }, run: runGetTrendFromEastmoney } = useRequest(() => Services.Stock.GetTrendFromEastmoney(secid), {
     pollingInterval: CONST.DEFAULT.ESTIMATE_FUND_DELAY,
@@ -103,7 +105,7 @@ const Trend: React.FC<PerformanceProps> = ({ secid, zs = 0 }) => {
   );
 
   return (
-    <ChartCard onFresh={runGetTrendFromEastmoney}>
+    <ChartCard onFresh={runGetTrendFromEastmoney} TitleBar={<ExportTitleBar name={name} data={result.trends} />}>
       <div className={styles.content}>
         <div ref={chartRef} style={{ width: '100%' }} />
       </div>
