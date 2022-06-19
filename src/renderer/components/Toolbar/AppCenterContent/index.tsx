@@ -189,12 +189,12 @@ const AppCenterContent: React.FC<AppCenterContentProps> = (props) => {
                 icon: <CalculatorIcon style={{ ...iconSize }} />,
                 click: openCalculatorDrawer,
               },
-              {
-                title: '基股关系',
-                iconType: Enums.WebIconType.Svg,
-                icon: <NodeTreeIcon style={{ ...iconSize }} />,
-                click: openRelationDrawer,
-              },
+              // {
+              //   title: '基股关系',
+              //   iconType: Enums.WebIconType.Svg,
+              //   icon: <NodeTreeIcon style={{ ...iconSize }} />,
+              //   click: openRelationDrawer,
+              // },
               // {
               //   title: '净值导出',
               //   iconType: Enums.WebIconType.Svg,
