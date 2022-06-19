@@ -128,10 +128,13 @@ function main() {
     touchBarManager.updateEysStatusItems(config);
   });
   ipcMain.handle('set-hotkey', (event, keys: string) => {
-    if (!keys) {
-      globalShortcut.unregister(activeHotkeys);
-    } else if (activeHotkeys === keys) {
-    } else {
+    if (keys === activeHotkeys) {
+      return;
+    }
+    if (activeHotkeys) {
+      globalShortcut.unregister(activeHotkeys.split(' + ').join('+'));
+    }
+    if (keys) {
       const accelerator = keys.split(' + ').join('+');
       const ret = globalShortcut.register(accelerator, () => {
         const isWindowVisible = mb.window?.isVisible();
