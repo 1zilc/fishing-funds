@@ -195,12 +195,12 @@ const AppCenterContent: React.FC<AppCenterContentProps> = (props) => {
                 icon: <NodeTreeIcon style={{ ...iconSize }} />,
                 click: openRelationDrawer,
               },
-              {
-                title: '净值导出',
-                iconType: Enums.WebIconType.Svg,
-                icon: <FolderSharedIcon style={{ ...iconSize }} />,
-                click: openRelationDrawer,
-              },
+              // {
+              //   title: '净值导出',
+              //   iconType: Enums.WebIconType.Svg,
+              //   icon: <FolderSharedIcon style={{ ...iconSize }} />,
+              //   click: openRelationDrawer,
+              // },
             ],
           },
           {
