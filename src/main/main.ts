@@ -132,7 +132,6 @@ function main() {
       globalShortcut.unregister(activeHotkeys);
     } else if (activeHotkeys === keys) {
     } else {
-      activeHotkeys = keys;
       const accelerator = keys.split(' + ').join('+');
       const ret = globalShortcut.register(accelerator, () => {
         const isWindowVisible = mb.window?.isVisible();
@@ -153,6 +152,7 @@ function main() {
         }
       }
     }
+    activeHotkeys = keys;
   });
   // menubar 相关监听
   mb.on('after-create-window', () => {
