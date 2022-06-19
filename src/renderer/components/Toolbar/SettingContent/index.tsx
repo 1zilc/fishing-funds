@@ -470,6 +470,7 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
                 <div className={styles.guide}>
                   <Guide
                     list={[
+                      { name: '快捷键', text: '设置快捷键快速显示/隐藏程序' },
                       { name: '自动刷新', text: '开启后将自动间隔预设时间进行数据刷新' },
                       { name: '刷新间隔', text: '单位（分钟）' },
                       { name: '时间戳', text: '当前时间节点默认使用淘宝、苏宁等网络时间戳，若自动刷新功能失效，请尝试切换到本地时间戳' },
