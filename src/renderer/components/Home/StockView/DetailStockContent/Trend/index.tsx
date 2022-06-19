@@ -20,6 +20,7 @@ const Trend: React.FC<PerformanceProps> = ({ secid, zs = 0, name }) => {
     pollingInterval: CONST.DEFAULT.ESTIMATE_FUND_DELAY,
     refreshDeps: [secid, zs],
     ready: !!chartInstance,
+    cacheKey: Utils.GenerateRequestKey('Stock.GetTrendFromEastmoney', secid),
   });
 
   useRenderEcharts(

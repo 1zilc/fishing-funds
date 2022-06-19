@@ -49,6 +49,7 @@ const K: React.FC<PerformanceProps> = ({ secid = '', name }) => {
   const { data: result = [], run: runGetKFromEastmoney } = useRequest(() => Services.Stock.GetKFromEastmoney(secid, k.code, time.code), {
     refreshDeps: [secid, k.code, time.code],
     ready: !!chartInstance,
+    cacheKey: Utils.GenerateRequestKey('Stock.GetKFromEastmoney', [secid, k.code, time.code]),
   });
 
   useRenderEcharts(

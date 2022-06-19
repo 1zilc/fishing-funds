@@ -28,6 +28,7 @@ const Trend: React.FC<PerformanceProps> = ({ code, zs = 0, name }) => {
   const { data: result = [], run: runGetTrendFromEastmoney } = useRequest(() => Services.Zindex.GetTrendFromEastmoney(code, trend.code), {
     refreshDeps: [code, trend.code, zs],
     ready: !!chartInstance,
+    cacheKey: Utils.GenerateRequestKey('Zindex.GetTrendFromEastmoney', [code, trend.code]),
   });
 
   useRenderEcharts(

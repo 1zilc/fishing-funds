@@ -38,6 +38,7 @@ const K: React.FC<KProps> = ({ code = '', name }) => {
   const { data: result = [], run: runGetKFromEastmoney } = useRequest(() => Services.Zindex.GetKFromEastmoney(code, year.code), {
     refreshDeps: [code, year.code],
     ready: !!chartInstance,
+    cacheKey: Utils.GenerateRequestKey('Zindex.GetKFromEastmoney', [code, year.code]),
   });
 
   useRenderEcharts(
