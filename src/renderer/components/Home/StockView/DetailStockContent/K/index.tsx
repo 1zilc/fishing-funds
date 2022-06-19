@@ -383,7 +383,7 @@ const K: React.FC<PerformanceProps> = ({ secid = '', name }) => {
   );
 
   return (
-    <ChartCard onFresh={runGetKFromEastmoney} TitleBar={<ExportTitleBar name={name} data={result} />} auto>
+    <ChartCard onFresh={runGetKFromEastmoney} TitleBar={<ExportTitleBar name={name} data={result} />}>
       <div className={styles.content}>
         <TypeSelection types={kTypeList} activeType={k.type} onSelected={setKType} colspan={6} />
         <div ref={chartRef} style={{ width: '100%' }} />

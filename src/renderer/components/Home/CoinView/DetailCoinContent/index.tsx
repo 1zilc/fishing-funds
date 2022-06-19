@@ -82,7 +82,7 @@ const DetailCoinContent: React.FC<DetailCoinContentProps> = (props) => {
         <div className={styles.container}>
           <Tabs animated={{ tabPane: true }} tabBarGutter={15}>
             <Tabs.TabPane tab="近期走势" key={String(0)}>
-              <Trend code={code} />
+              <Trend code={code} name={coin?.name} />
             </Tabs.TabPane>
             <Tabs.TabPane tab="货币评估" key={String(1)}>
               <ChartCard onFresh={runGetDetailFromCoingecko}>
@@ -101,7 +101,7 @@ const DetailCoinContent: React.FC<DetailCoinContentProps> = (props) => {
         <div className={styles.container}>
           <Tabs animated={{ tabPane: true }} tabBarGutter={15}>
             <Tabs.TabPane tab="K线" key={String(0)}>
-              <K code={code} />
+              <K code={code} name={coin?.name} />
             </Tabs.TabPane>
           </Tabs>
         </div>

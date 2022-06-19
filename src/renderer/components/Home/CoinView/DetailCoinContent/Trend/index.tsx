@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useRequest } from 'ahooks';
 
 import TypeSelection from '@/components/TypeSelection';
+import ExportTitleBar from '@/components/ExportTitleBar';
 import ChartCard from '@/components/Card/ChartCard';
 import { useResizeEchart, useAppSelector, useRenderEcharts } from '@/utils/hooks';
 
@@ -11,6 +12,7 @@ import styles from './index.module.scss';
 
 export interface PerformanceProps {
   code: string;
+  name?: string;
 }
 
 const dateTypeList = [
@@ -22,7 +24,7 @@ const dateTypeList = [
   { name: '1年', type: 6, code: 365 },
 ];
 
-const Trend: React.FC<PerformanceProps> = ({ code }) => {
+const Trend: React.FC<PerformanceProps> = ({ code, name }) => {
   const { ref: chartRef, chartInstance } = useResizeEchart(CONST.DEFAULT.ECHARTS_SCALE);
   const [date, setDateType] = useState(dateTypeList[2]);
   const coinUnitSetting = useAppSelector((state) => state.setting.systemSetting.coinUnitSetting);
@@ -121,7 +123,7 @@ const Trend: React.FC<PerformanceProps> = ({ code }) => {
   );
 
   return (
-    <ChartCard onFresh={runGetHistoryFromCoingecko}>
+    <ChartCard onFresh={runGetHistoryFromCoingecko} TitleBar={<ExportTitleBar name={name} data={result.prices} />}>
       <div className={styles.content}>
         <div ref={chartRef} style={{ width: '100%' }} />
         <TypeSelection types={dateTypeList} activeType={date.type} onSelected={setDateType} flex />
