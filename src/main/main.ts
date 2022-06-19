@@ -43,6 +43,7 @@ function main() {
   const appUpdater = new AppUpdater({ icon: appIcon, mb });
   const touchBarManager = new TouchBarManager([], mb);
   let contextMenu = buildContextMenu({ mb, appUpdater }, []);
+  let activeHotkeys = '';
   const defaultTheme = storage.get('SYSTEM_SETTING.systemThemeSetting', Enums.SystemThemeType.Auto) as Enums.SystemThemeType;
   // mb.app.commandLine.appendSwitch('disable-backgrounding-occluded-windows', 'true');
 
@@ -126,6 +127,33 @@ function main() {
   ipcMain.handle('update-touchbar-eye-status', (event, config) => {
     touchBarManager.updateEysStatusItems(config);
   });
+  ipcMain.handle('set-hotkey', (event, keys: string) => {
+    if (!keys) {
+      globalShortcut.unregister(activeHotkeys);
+    } else if (activeHotkeys === keys) {
+    } else {
+      activeHotkeys = keys;
+      const accelerator = keys.split(' + ').join('+');
+      const ret = globalShortcut.register(accelerator, () => {
+        const isWindowVisible = mb.window?.isVisible();
+        if (isWindowVisible) {
+          mb.hideWindow();
+        } else {
+          mb.showWindow();
+        }
+      });
+      if (ret) {
+        // dialog.showMessageBox({ message: `${accelerator}快捷键设置成功`, type: 'info' });
+      } else {
+        const isRegistered = globalShortcut.isRegistered(accelerator);
+        if (isRegistered) {
+          dialog.showMessageBox({ message: `${accelerator}快捷键已被占用`, type: 'warning' });
+        } else {
+          dialog.showMessageBox({ message: `${accelerator}快捷键设置失败`, type: 'error' });
+        }
+      }
+    }
+  });
   // menubar 相关监听
   mb.on('after-create-window', () => {
     // 设置系统色彩偏好
@@ -203,5 +231,8 @@ app.on('open-file', (even, path: string) => {
     openBackupFilePath = path;
   }
 });
-
+app.on('will-quit', () => {
+  // Unregister all shortcuts.
+  globalShortcut.unregisterAll();
+});
 init().catch(console.log);

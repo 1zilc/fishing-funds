@@ -7,6 +7,8 @@ declare namespace System {
     baseFontSizeSetting: number; // 全局基础字体大小
     systemThemeSetting: import('@/utils/enums').SystemThemeType; // 系统主题
 
+    bottomTabsSetting: { key: import('@/utils/enums').TabKeyType; name: string; show: boolean }[]; // 底栏配置
+
     adjustmentNotificationSetting: boolean; // 调仓提醒
     adjustmentNotificationTimeSetting: string; // 调仓时间
     riskNotificationSetting: boolean; // 风险提醒
@@ -18,6 +20,7 @@ declare namespace System {
     proxyHostSetting: string; // 主机域名
     proxyPortSetting: string; // 主机端口
 
+    hotkeySetting: string; // 快捷键
     autoStartSetting: boolean; // 自动启动
     autoFreshSetting: boolean; // 自动刷新
     freshDelaySetting: number; // 刷新时间间隔

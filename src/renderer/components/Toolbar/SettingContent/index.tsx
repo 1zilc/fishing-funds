@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import clsx from 'clsx';
-
-import { InputNumber, Radio, Badge, Switch, Slider, TimePicker, Input, Tabs, Select } from 'antd';
+import { useEventListener } from 'ahooks';
+import { InputNumber, Radio, Badge, Switch, Slider, TimePicker, Input, Tabs, Select, Checkbox } from 'antd';
 import dayjs from 'dayjs';
+import { ReactSortable } from 'react-sortablejs';
 
 import PureCard from '@/components/Card/PureCard';
 import StandCard from '@/components/Card/StandCard';
@@ -21,9 +22,9 @@ import BitCoinIcon from '@/static/icon/bit-coin.svg';
 import WindowIcon from '@/static/icon/window.svg';
 import CalendarIcon from '@/static/icon/calendar.svg';
 import GlobalIcon from '@/static/icon/global.svg';
+import InboxIcon from '@/static/icon/inbox.svg';
 import { setSystemSettingAction, defaultSystemSetting } from '@/store/features/setting';
-
-import { useAppDispatch, useAppSelector } from '@/utils/hooks';
+import { useAppDispatch, useAppSelector, useAutoDestroySortableRef, useInputShortcut } from '@/utils/hooks';
 import * as Enums from '@/utils/enums';
 import * as Utils from '@/utils';
 import styles from './index.module.scss';
@@ -145,12 +146,14 @@ export const APIOptions = [
 
 const SettingContent: React.FC<SettingContentProps> = (props) => {
   const dispatch = useAppDispatch();
+  const sortableRef = useAutoDestroySortableRef();
   const {
     fundApiTypeSetting,
     conciseSetting,
     lowKeySetting,
     baseFontSizeSetting,
     systemThemeSetting,
+    bottomTabsSetting,
     adjustmentNotificationSetting,
     adjustmentNotificationTimeSetting,
     riskNotificationSetting,
@@ -159,6 +162,7 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
     proxyTypeSetting,
     proxyHostSetting,
     proxyPortSetting,
+    hotkeySetting,
     autoStartSetting,
     autoFreshSetting,
     freshDelaySetting,
@@ -175,6 +179,8 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
   const [lowKey, setLowKey] = useState(lowKeySetting);
   const [baseFontSize, setBaseFontSize] = useState(baseFontSizeSetting);
   const [systemTheme, setSystemTheme] = useState(systemThemeSetting);
+  // 底栏设置
+  const [bottomTabs, setBottomTabs] = useState(bottomTabsSetting);
   // 通知设置
   const [adjustmentNotification, setAdjustmentNotification] = useState(adjustmentNotificationSetting);
   const [adjustmentNotificationTime, setAdjustmentNotifitationTime] = useState(adjustmentNotificationTimeSetting);
@@ -187,6 +193,7 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
   const [proxyHost, setProxyHost] = useState(proxyHostSetting);
   const [proxyPort, setProxyPort] = useState(proxyPortSetting);
   // 通用设置
+  const { hotkey, inputRef: hotkeyInputRef, reset: resetHotkey } = useInputShortcut(hotkeySetting);
   const [autoStart, setAutoStart] = useState(autoStartSetting);
   const [autoFresh, setAutoFresh] = useState(autoFreshSetting);
   const [freshDelay, setFreshDelay] = useState(freshDelaySetting);
@@ -203,6 +210,7 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
         lowKeySetting: lowKey,
         baseFontSizeSetting: baseFontSize,
         systemThemeSetting: systemTheme,
+        bottomTabsSetting: bottomTabs.map((tab) => ({ key: tab.key, name: tab.name, show: tab.show })),
         adjustmentNotificationSetting: adjustmentNotification,
         adjustmentNotificationTimeSetting: adjustmentNotificationTime || defaultSystemSetting.adjustmentNotificationTimeSetting,
         riskNotificationSetting: riskNotification,
@@ -211,6 +219,7 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
         proxyTypeSetting: proxyType,
         proxyHostSetting: proxyHost,
         proxyPortSetting: proxyPort,
+        hotkeySetting: hotkey,
         autoStartSetting: autoStart,
         autoFreshSetting: autoFresh,
         freshDelaySetting: freshDelay || defaultSystemSetting.freshDelaySetting,
@@ -232,6 +241,18 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
       type: 'info',
       message: `已复制到粘贴板`,
     });
+  }
+
+  function onBottomTabCheckChange(key: Enums.TabKeyType) {
+    const tabsCheckedKeys = bottomTabs.filter(({ show }) => show).map(({ key }) => key);
+    const disableTabsCheck = tabsCheckedKeys.length <= 1;
+
+    setBottomTabs(
+      bottomTabs.map((tab) => ({
+        ...tab,
+        show: tab.key === key ? (tab.show && disableTabsCheck ? tab.show : !tab.show) : tab.show, // 至少选择一个
+      }))
+    );
   }
 
   return (
@@ -360,6 +381,38 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
               </div>
             </StandCard>
             <StandCard
+              icon={<InboxIcon />}
+              title="底栏设置"
+              extra={
+                <div className={styles.guide}>
+                  <Guide list={[{ name: '底栏设置', text: '对底部模块进行选择和排序' }]} />
+                </div>
+              }
+            >
+              <div className={clsx(styles.setting, 'card-body')}>
+                <ReactSortable
+                  ref={sortableRef}
+                  animation={200}
+                  delay={2}
+                  list={bottomTabs.map((_) => ({ ..._, id: _.key }))}
+                  setList={setBottomTabs}
+                  className={styles.bottomTabsRow}
+                  swap
+                >
+                  {bottomTabs.map((tab) => {
+                    return (
+                      <PureCard key={tab.key}>
+                        <div className={styles.bottomTabItem}>
+                          <div>{tab.name}</div>
+                          <Checkbox checked={tab.show} onClick={() => onBottomTabCheckChange(tab.key)} />
+                        </div>
+                      </PureCard>
+                    );
+                  })}
+                </ReactSortable>
+              </div>
+            </StandCard>
+            <StandCard
               icon={<BitCoinIcon />}
               title="货币单位"
               extra={
@@ -382,22 +435,7 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
                 </Radio.Group>
               </div>
             </StandCard>
-            <StandCard
-              icon={<GlobalIcon />}
-              title="代理设置"
-              extra={
-                <div className={styles.guide}>
-                  <Guide
-                    list={[
-                      { name: 'http代理', text: '由于众所周知的原因，部分接口需开启代理访问' },
-                      { name: '白名单模式', text: '默认关闭，开启后代理规则中的域名将不走代理，其余接口全部代理' },
-                      { name: '代理地址', text: '例如http://127.0.0.1:1087' },
-                      { name: '代理规则', text: `需要走代理的域名，使用英文逗号分隔，主要用于货币接口，无特殊原因不建议手动修改` },
-                    ]}
-                  />
-                </div>
-              }
-            >
+            <StandCard icon={<GlobalIcon />} title="代理设置">
               <div className={clsx(styles.setting, 'card-body')}>
                 <section>
                   <label>代理模式：</label>
@@ -432,6 +470,7 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
                 <div className={styles.guide}>
                   <Guide
                     list={[
+                      { name: '快捷键', text: '设置快捷键快速显示/隐藏程序' },
                       { name: '自动刷新', text: '开启后将自动间隔预设时间进行数据刷新' },
                       { name: '刷新间隔', text: '单位（分钟）' },
                       { name: '时间戳', text: '当前时间节点默认使用淘宝、苏宁等网络时间戳，若自动刷新功能失效，请尝试切换到本地时间戳' },
@@ -441,6 +480,10 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
               }
             >
               <div className={clsx(styles.setting, 'card-body')}>
+                <section>
+                  <label>快捷键 {hotkey && <a onClick={resetHotkey}>(重置)</a>}：</label>
+                  <input ref={hotkeyInputRef} value={hotkey} placeholder="显示/隐藏快捷键" type="text" />
+                </section>
                 <section>
                   <label>开机自启：</label>
                   <Switch size="small" checked={autoStart} onChange={setAutoStart} />
@@ -555,7 +598,7 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
         </Tabs.TabPane>
       </Tabs>
       <div className={styles.exit}>
-        <button type="button" onClick={() => app.quit()}>
+        <button type="button" onClick={app.quit}>
           退出程序
         </button>
       </div>

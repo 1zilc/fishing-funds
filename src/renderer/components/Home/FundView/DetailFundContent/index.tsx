@@ -7,6 +7,7 @@ import ChartCard from '@/components/Card/ChartCard';
 import PureCard from '@/components/Card/PureCard';
 import CustomDrawer from '@/components/CustomDrawer';
 import ColorfulTags from '@/components/ColorfulTags';
+import ExportTitleBar from '@/components/ExportTitleBar';
 import Estimate from '@/components/Home/FundView/DetailFundContent/Estimate';
 import InvestStyle from '@/components/Home/FundView/DetailFundContent/InvestStyle';
 import Performance from '@/components/Home/FundView/DetailFundContent/Performance';
@@ -26,11 +27,12 @@ import SameFundList from '@/components/Home/FundView/DetailFundContent/SameFundL
 import IndustryLayout from '@/components/Home/FundView/DetailFundContent/IndustryLayout';
 import WarehouseEvent from '@/components/Home/FundView/DetailFundContent/WarehouseEvent';
 import Origin from '@/components/Home/FundView/DetailFundContent/Origin';
-
+import Recent from '@/components/Home/NewsList/Recent';
 import { useFundRating, useDrawer, useAppSelector } from '@/utils/hooks';
 import * as Services from '@/services';
 import * as Utils from '@/utils';
 import * as Enums from '@/utils/enums';
+import * as CONST from '@/constants';
 import styles from './index.module.scss';
 
 const FundManagerContent = React.lazy(() => import('@/components/Home/FundView/FundManagerContent'));
@@ -99,12 +101,16 @@ const DetailFundContent: React.FC<DetailFundContentProps> = (props) => {
     () => Services.Fund.GetFundDetailFromEastmoney(code),
     {
       refreshDeps: [code],
+      cacheKey: Utils.GenerateRequestKey('Fund.GetFundDetailFromEastmoney', code),
+      staleTime: CONST.DEFAULT.SWR_STALE_DELAY,
     }
   );
   const { data: industryData = { stocks: [], expansion: '' }, run: runGetIndustryRateFromEaseMoney } = useRequest(
     () => Services.Fund.GetIndustryRateFromEaseMoney(code),
     {
       refreshDeps: [code],
+      cacheKey: Utils.GenerateRequestKey('Fund.GetIndustryRateFromEaseMoney', code),
+      staleTime: CONST.DEFAULT.SWR_STALE_DELAY,
     }
   );
 
@@ -160,7 +166,11 @@ const DetailFundContent: React.FC<DetailFundContentProps> = (props) => {
         <div className={styles.container}>
           <Tabs animated={{ tabPane: true }} tabBarGutter={15}>
             <Tabs.TabPane tab="历史业绩" key={String(0)}>
-              <ChartCard auto onFresh={runGetFundDetailFromEastmoney}>
+              <ChartCard
+                auto
+                onFresh={runGetFundDetailFromEastmoney}
+                TitleBar={<ExportTitleBar name={fund?.fixName} data={pingzhongdata.Data_netWorthTrend} />}
+              >
                 <HistoryPerformance
                   syl_1n={pingzhongdata.syl_1n}
                   syl_6y={pingzhongdata.syl_6y}
@@ -171,11 +181,18 @@ const DetailFundContent: React.FC<DetailFundContentProps> = (props) => {
               </ChartCard>
             </Tabs.TabPane>
             <Tabs.TabPane tab="历史净值" key={String(1)}>
-              <ChartCard auto onFresh={runGetFundDetailFromEastmoney}>
+              <ChartCard
+                auto
+                onFresh={runGetFundDetailFromEastmoney}
+                TitleBar={<ExportTitleBar name={fund?.fixName} data={pingzhongdata.Data_netWorthTrend} />}
+              >
                 <HistoryValue data={pingzhongdata.Data_netWorthTrend} />
               </ChartCard>
             </Tabs.TabPane>
-            <Tabs.TabPane tab="源网站" key={String(2)}>
+            <Tabs.TabPane tab="近期资讯" key={String(2)}>
+              <Recent keyword={fund?.fixName || ''} />
+            </Tabs.TabPane>
+            <Tabs.TabPane tab="源网站" key={String(3)}>
               <ChartCard auto>
                 <Origin code={code} />
               </ChartCard>

@@ -29,11 +29,12 @@ declare global {
       };
       log: ElectronLog;
       io: {
-        saveImage: (filePath: string, dataUrl: string) => void;
-        saveString: (filePath: string, content: string) => void;
+        saveImage: (filePath: string, dataUrl: string) => Promise<unknown>;
+        saveString: (filePath: string, content: string) => Promise<unknown>;
+        saveJsonToCsv: (filePath: string, json: any[]) => Promise<unknown>;
         encodeFF: (content: any) => string;
         decodeFF: (content: string) => any;
-        readFile: (content: string) => string;
+        readFile: (content: string) => Promise<string>;
       };
       electronStore: {
         get: <T = unknown>(key: string, init: T) => Promise<T>;

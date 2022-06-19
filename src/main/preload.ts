@@ -2,6 +2,7 @@ import got from 'got';
 import log from 'electron-log';
 import { contextBridge, ipcRenderer, shell, clipboard, nativeImage } from 'electron';
 import { encode, decode, fromUint8Array } from 'js-base64';
+import { parseAsync } from 'json2csv';
 import * as fs from 'fs';
 import { base64ToBuffer } from './util';
 import Proxy from './proxy';
@@ -82,15 +83,28 @@ contextBridge.exposeInMainWorld('contextModules', {
   },
   log: log,
   io: {
-    saveImage: (filePath: string, dataUrl: string) => {
+    async saveImage(filePath: string, dataUrl: string) {
       const imageBuffer = base64ToBuffer(dataUrl);
-      fs.writeFileSync(filePath, imageBuffer);
+      return new Promise((resolve, reject) => {
+        fs.writeFile(filePath, imageBuffer, resolve);
+      });
     },
-    saveString: (filePath: string, content: string) => {
-      fs.writeFileSync(filePath, content);
+    async saveString(filePath: string, content: string) {
+      return new Promise((resolve, reject) => {
+        fs.writeFile(filePath, content, resolve);
+      });
     },
-    readFile(path: string) {
-      return fs.readFileSync(path, 'utf-8');
+    async saveJsonToCsv(filePath: string, json: any[]) {
+      const fields = Object.keys(json[0] || {});
+      const csv = await parseAsync(json, { fields });
+      return new Promise((resolve, reject) => {
+        fs.writeFile(filePath, csv, resolve);
+      });
+    },
+    async readFile(path: string) {
+      return new Promise((resolve, reject) => {
+        fs.readFile(path, 'utf-8', resolve);
+      });
     },
     encodeFF(content: any) {
       const ffprotocol = 'ff://'; // FF协议

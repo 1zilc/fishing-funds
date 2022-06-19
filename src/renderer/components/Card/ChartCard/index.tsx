@@ -1,9 +1,13 @@
 import React, { PropsWithChildren, ReactNode, useRef } from 'react';
 import html2canvas from 'html2canvas';
+import { useBoolean } from 'ahooks';
 import clsx from 'clsx';
 import DownloadIcon from '@/static/icon/download.svg';
 import CopyIcon from '@/static/icon/copy.svg';
 import RefreshIcon from '@/static/icon/refresh.svg';
+import ArrowDownIcon from '@/static/icon/arrow-down.svg';
+import ArrowUpIcon from '@/static/icon/arrow-up.svg';
+import Collapse from '@/components/Collapse';
 
 import styles from './index.module.scss';
 
@@ -14,6 +18,8 @@ export interface ChartCardProps {
   auto?: boolean;
   onFresh?: () => void;
   TitleBar?: ReactNode;
+  pureContent?: boolean;
+  showCollapse?: boolean;
 }
 
 const { clipboard, dialog } = window.contextModules.electron;
@@ -32,8 +38,12 @@ export const ChartCard: React.FC<PropsWithChildren<ChartCardProps>> = ({
   children,
   auto,
   TitleBar,
+  pureContent,
+  showCollapse,
 }) => {
   const chartRef = useRef<HTMLDivElement>(null);
+
+  const [isOpened, { setTrue, setFalse }] = useBoolean(true);
   async function writeChartToClipboard() {
     try {
       const canvas = await html2canvas(chartRef.current!);
@@ -62,7 +72,7 @@ export const ChartCard: React.FC<PropsWithChildren<ChartCardProps>> = ({
       if (canceled) {
         return;
       }
-      saveImage(filePath!, dataUrl);
+      await saveImage(filePath!, dataUrl);
       dialog.showMessageBox({
         title: '保存成功',
         type: 'info',
@@ -76,11 +86,15 @@ export const ChartCard: React.FC<PropsWithChildren<ChartCardProps>> = ({
       });
     }
   }
+
   return (
     <aside
       className={clsx(styles.content, className, {
         [styles.autoSize]: auto,
       })}
+      style={{
+        minHeight: !showCollapse ? 200 : 'initial',
+      }}
       onClick={onClick}
       onDoubleClick={onDoubleClick}
       ref={chartRef}
@@ -90,8 +104,18 @@ export const ChartCard: React.FC<PropsWithChildren<ChartCardProps>> = ({
         {onFresh && <RefreshIcon onClick={onFresh} />}
         <DownloadIcon onClick={downLoadChartToLocal} />
         <CopyIcon onClick={writeChartToClipboard} />
+        {showCollapse && (isOpened ? <ArrowUpIcon onClick={setFalse} /> : <ArrowDownIcon onClick={setTrue} />)}
       </div>
-      {children}
+      <div
+        className={clsx([
+          styles.body,
+          {
+            [styles.pure]: pureContent,
+          },
+        ])}
+      >
+        {showCollapse ? <Collapse isOpened={isOpened}>{children}</Collapse> : children}
+      </div>
     </aside>
   );
 };

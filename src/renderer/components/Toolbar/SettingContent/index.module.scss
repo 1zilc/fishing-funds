@@ -18,6 +18,7 @@
     width: 50%;
     outline: none;
     border: 1px solid var(--border-color);
+    color: #000;
     // height: 20px;
   }
 }
@@ -190,6 +191,16 @@
   display: flex;
   justify-content: flex-end;
   align-items: center;
+}
+
+.bottomTabsRow {
+  display: flex;
+  width: 100%;
+  justify-content: space-evenly;
+}
+.bottomTabItem {
+  padding: 2px var(--base-padding);
+  text-align: center;
 }
 
 @keyframes colorful {

@@ -4,6 +4,7 @@ import { Timeline, Spin } from 'antd';
 import { useRequest } from 'ahooks';
 
 import * as Services from '@/services';
+import * as Utils from '@/utils';
 import styles from './index.module.scss';
 
 interface LogProps {}
@@ -11,7 +12,9 @@ interface LogProps {}
 const { version } = window.contextModules.process;
 
 const Log: React.FC<LogProps> = () => {
-  const { data: logs = [], loading } = useRequest(Services.Log.GetLog);
+  const { data: logs = [], loading } = useRequest(Services.Log.GetLog, {
+    cacheKey: Utils.GenerateRequestKey('Log.GetLog'),
+  });
 
   return (
     <Spin spinning={loading}>

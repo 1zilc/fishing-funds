@@ -247,3 +247,51 @@ export async function GetJpList() {
     return [];
   }
 }
+// 获取最新资讯
+export async function GetRecent(keyword: string, pageindex: number) {
+  try {
+    const { body } = await request<{
+      IsSuccess: true;
+      Code: 0;
+      Message: '成功';
+      TotalPage: 505;
+      TotalCount: 5041;
+      Keyword: '1.600519';
+      Data: {
+        Art_UniqueUrl: 'http://finance.eastmoney.com/a/202205252390829633.html';
+        Art_Title: '茅台拍出天价 闹剧一场';
+        Art_Url: 'http://finance.eastmoney.com/news/1354,202205252390829633.html';
+        Art_CreateTime: '2022-05-25 09:11:35';
+        Art_Content: '　　●近期，一瓶号称产自1992年的汉帝茅台在线上拍卖，赚足了人们的眼球。它起拍价定为3999万元，第一次拍卖临近结束被喊停，有人恶意出价99亿元，主办方被迫结束拍卖。第二次拍卖于20日结束，围观者多达12.4万人次，但仅有6人报名，到拍卖结束也无人报价。(北青网5月21日报道)...';
+      }[];
+      RelatedWord: '';
+      StillSearch: ['贵州茅台', '贵州茅台'];
+      StockModel: {
+        Name: '贵州茅台';
+        Code: '600519';
+      };
+    }>(`https://searchapi.eastmoney.com/bussiness/Web/GetCMSSearchList`, {
+      responseType: 'json',
+      headers: {
+        Referer: 'https://so.eastmoney.com/',
+      },
+      searchParams: {
+        _: Date.now(),
+        keyword,
+        type: 8193,
+        pageindex,
+        pagesize: 10,
+        name: 'web',
+      },
+    });
+    return {
+      total: body.TotalCount > 100 ? 100 : body.TotalCount,
+      list: body.Data,
+    };
+  } catch (error) {
+    return {
+      total: 0,
+      list: [],
+    };
+  }
+}

@@ -10,11 +10,13 @@ import Estimate from '@/components/Home/StockView/DetailStockContent/Estimate';
 import K from '@/components/Home/StockView/DetailStockContent/K';
 import Company from '@/components/Home/StockView/DetailStockContent/Company';
 import Stocks from '@/components/Home/StockView/DetailStockContent/Stocks';
+import Recent from '@/components/Home/NewsList/Recent';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
 import { addStockAction } from '@/store/features/stock';
 import { useAppDispatch, useAppSelector } from '@/utils/hooks';
 import * as Services from '@/services';
 import * as Utils from '@/utils';
+import * as CONST from '@/constants';
 
 import styles from './index.module.scss';
 
@@ -33,10 +35,13 @@ const DetailStockContent: React.FC<DetailStockContentProps> = (props) => {
   const { data: stock = {} as any } = useRequest(Services.Stock.GetDetailFromEastmoney, {
     pollingInterval: 1000 * 60,
     defaultParams: [secid],
+    cacheKey: Utils.GenerateRequestKey('Stock.GetDetailFromEastmoney', secid),
   });
 
   const { data: industrys = [] } = useRequest(Services.Stock.GetIndustryFromEastmoney, {
     defaultParams: [secid, 3],
+    cacheKey: Utils.GenerateRequestKey('Stock.GetIndustryFromEastmoney', secid),
+    staleTime: CONST.DEFAULT.SWR_STALE_DELAY,
   });
 
   async function onAdd() {
@@ -153,7 +158,7 @@ const DetailStockContent: React.FC<DetailStockContentProps> = (props) => {
         <div className={styles.container}>
           <Tabs animated={{ tabPane: true }} tabBarGutter={15}>
             <Tabs.TabPane tab="股票走势" key={String(0)}>
-              <Trend secid={secid} zs={stock.zs} />
+              <Trend secid={secid} zs={stock.zs} name={stock.name} />
             </Tabs.TabPane>
             <Tabs.TabPane tab="走势详情" key={String(1)}>
               <Estimate secid={secid} />
@@ -163,7 +168,14 @@ const DetailStockContent: React.FC<DetailStockContentProps> = (props) => {
         <div className={styles.container}>
           <Tabs animated={{ tabPane: true }} tabBarGutter={15}>
             <Tabs.TabPane tab="K线" key={String(0)}>
-              <K secid={secid} />
+              <K secid={secid} name={stock.name} />
+            </Tabs.TabPane>
+          </Tabs>
+        </div>
+        <div className={styles.container}>
+          <Tabs animated={{ tabPane: true }} tabBarGutter={15}>
+            <Tabs.TabPane tab="近期资讯" key={String(0)}>
+              <Recent keyword={stock.name} />
             </Tabs.TabPane>
           </Tabs>
         </div>

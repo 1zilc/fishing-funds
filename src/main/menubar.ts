@@ -1,7 +1,7 @@
 import path from 'path';
 import windowStateKeeper from 'electron-window-state';
 import { menubar, Menubar } from 'menubar';
-import { app, Tray, Menu } from 'electron';
+import { app, Tray, Menu, shell } from 'electron';
 import AppUpdater from './autoUpdater';
 import { resolveHtmlPath, sendMessageToRenderer } from './util';
 
@@ -15,8 +15,8 @@ export function createMenubar({ tray, mainWindowState }: { tray: Tray; mainWindo
     // showDockIcon: false,
 
     browserWindow: {
-      // backgroundColor: '#fff',
-      transparent: true,
+      backgroundColor: process.platform === 'darwin' ? undefined : '#fff',
+      transparent: process.platform === 'darwin',
       width: mainWindowState.width,
       height: mainWindowState.height,
       minHeight: 400,
@@ -46,6 +46,12 @@ export function buildContextMenu(
         appUpdater.checkUpdate('mainer');
       },
       label: '检查更新',
+    },
+    {
+      click: () => {
+        shell.openExternal('https://github.com/1zilc/fishing-funds/issues');
+      },
+      label: '帮助',
     },
     { type: 'separator' },
     {

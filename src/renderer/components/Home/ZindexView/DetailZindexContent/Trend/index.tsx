@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useRequest } from 'ahooks';
 
 import ChartCard from '@/components/Card/ChartCard';
+import ExportTitleBar from '@/components/ExportTitleBar';
 import TypeSelection from '@/components/TypeSelection';
 import { useResizeEchart, useRenderEcharts } from '@/utils/hooks';
 import * as CONST from '@/constants';
@@ -12,6 +13,7 @@ import styles from './index.module.scss';
 export interface PerformanceProps {
   code: string;
   zs: number;
+  name?: string;
 }
 const trendTypeList = [
   { name: '一天', type: 1, code: 1 },
@@ -20,12 +22,13 @@ const trendTypeList = [
   { name: '四天', type: 4, code: 4 },
   { name: '五天', type: 5, code: 5 },
 ];
-const Trend: React.FC<PerformanceProps> = ({ code, zs = 0 }) => {
+const Trend: React.FC<PerformanceProps> = ({ code, zs = 0, name }) => {
   const { ref: chartRef, chartInstance } = useResizeEchart(CONST.DEFAULT.ECHARTS_SCALE);
   const [trend, setTrendType] = useState(trendTypeList[0]);
   const { data: result = [], run: runGetTrendFromEastmoney } = useRequest(() => Services.Zindex.GetTrendFromEastmoney(code, trend.code), {
     refreshDeps: [code, trend.code, zs],
     ready: !!chartInstance,
+    cacheKey: Utils.GenerateRequestKey('Zindex.GetTrendFromEastmoney', [code, trend.code]),
   });
 
   useRenderEcharts(
@@ -115,7 +118,7 @@ const Trend: React.FC<PerformanceProps> = ({ code, zs = 0 }) => {
   );
 
   return (
-    <ChartCard onFresh={runGetTrendFromEastmoney}>
+    <ChartCard onFresh={runGetTrendFromEastmoney} TitleBar={<ExportTitleBar name={name} data={result} />}>
       <div className={styles.content}>
         <div ref={chartRef} style={{ width: '100%' }} />
         <TypeSelection types={trendTypeList} activeType={trend.type} onSelected={setTrendType} flex />

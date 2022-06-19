@@ -1,7 +1,7 @@
 ### Component
 
 ```
-npx generate-react-cli component SearchGroup --path=src/renderer/components/Toolbar/AppCenterContent
+npx generate-react-cli component ExportTitleBar --path=src/renderer/components
 ```
 
 ### Chart

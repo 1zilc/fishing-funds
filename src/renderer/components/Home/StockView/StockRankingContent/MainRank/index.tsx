@@ -73,6 +73,7 @@ const MainRank: React.FC<PropsWithChildren<MainRankProps>> = () => {
 
   const { data = [], loading } = useRequest(() => Services.Stock.GetMainRankFromEastmoney(dayType.code), {
     refreshDeps: [dayType.code],
+    cacheKey: Utils.GenerateRequestKey('Stock.GetSelfRankFromEastmoney', dayType.code),
   });
 
   return (

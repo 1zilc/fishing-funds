@@ -6,6 +6,7 @@ import { Tabs } from 'antd';
 import Trend from '@/components/Home/ZindexView/DetailZindexContent/Trend';
 import K from '@/components/Home/ZindexView/DetailZindexContent/K';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
+import Recent from '@/components/Home/NewsList/Recent';
 import * as Services from '@/services';
 import * as Utils from '@/utils';
 
@@ -19,11 +20,10 @@ export interface DetailFundContentProps {
 
 const DetailZindexContent: React.FC<DetailFundContentProps> = (props) => {
   const { code } = props;
-  const [zindex, setZindex] = useState<Zindex.ResponseItem | Record<string, any>>({});
 
-  useRequest(() => Services.Zindex.FromEastmoney(code), {
+  const { data: zindex = {} as any } = useRequest(() => Services.Zindex.FromEastmoney(code), {
     pollingInterval: 1000 * 60,
-    onSuccess: setZindex,
+    cacheKey: Utils.GenerateRequestKey('Zindex.FromEastmoney', code),
   });
 
   return (
@@ -79,14 +79,21 @@ const DetailZindexContent: React.FC<DetailFundContentProps> = (props) => {
         <div className={styles.container}>
           <Tabs animated={{ tabPane: true }} tabBarGutter={15}>
             <Tabs.TabPane tab="指数走势" key={String(0)}>
-              <Trend code={code} zs={zindex.zs} />
+              <Trend code={code} zs={zindex.zs} name={zindex?.name} />
             </Tabs.TabPane>
           </Tabs>
         </div>
         <div className={styles.container}>
           <Tabs animated={{ tabPane: true }} tabBarGutter={15}>
             <Tabs.TabPane tab="K线" key={String(0)}>
-              <K code={code} />
+              <K code={code} name={zindex?.name} />
+            </Tabs.TabPane>
+          </Tabs>
+        </div>
+        <div className={styles.container}>
+          <Tabs animated={{ tabPane: true }} tabBarGutter={15}>
+            <Tabs.TabPane tab="近期资讯" key={String(0)}>
+              <Recent keyword={zindex.name} />
             </Tabs.TabPane>
           </Tabs>
         </div>

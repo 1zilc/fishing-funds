@@ -3,6 +3,7 @@ import clsx from 'clsx';
 import { Tabs } from 'antd';
 
 import CustomDrawer from '@/components/CustomDrawer';
+import ChartCard from '@/components/Card/ChartCard';
 import { useDrawer, useAppSelector } from '@/utils/hooks';
 import * as Enums from '@/utils/enums';
 
@@ -39,33 +40,35 @@ const FundSearch: React.FC<FundSearchProps> = (props) => {
       <Tabs animated={{ tabPane: true }} tabBarGutter={15} destroyInactiveTabPane>
         {list.map(({ Datas, Name, Type }) => (
           <Tabs.TabPane className={styles.tab} tab={Name} key={String(Type)}>
-            {Datas.map(({ Name, Code }) => {
-              return (
-                <div key={`${Code}${Name}`} className={styles.stock} onClick={() => setDetailDrawer(Code)}>
-                  <div>
-                    <div className={styles.name}>
-                      <span className={styles.nameText}>{Name}</span>
+            <ChartCard pureContent showCollapse>
+              {Datas.map(({ Name, Code }) => {
+                return (
+                  <div key={`${Code}${Name}`} className={styles.stock} onClick={() => setDetailDrawer(Code)}>
+                    <div>
+                      <div className={styles.name}>
+                        <span className={styles.nameText}>{Name}</span>
+                      </div>
+                      <div className={styles.code}>{Code}</div>
                     </div>
-                    <div className={styles.code}>{Code}</div>
+                    {codeMap[Code] ? (
+                      <button className={styles.added} disabled>
+                        已添加
+                      </button>
+                    ) : (
+                      <button
+                        className={styles.select}
+                        onClick={(e) => {
+                          setAddDrawer(Code);
+                          e.stopPropagation();
+                        }}
+                      >
+                        自选
+                      </button>
+                    )}
                   </div>
-                  {codeMap[Code] ? (
-                    <button className={styles.added} disabled>
-                      已添加
-                    </button>
-                  ) : (
-                    <button
-                      className={styles.select}
-                      onClick={(e) => {
-                        setAddDrawer(Code);
-                        e.stopPropagation();
-                      }}
-                    >
-                      自选
-                    </button>
-                  )}
-                </div>
-              );
-            })}
+                );
+              })}
+            </ChartCard>
           </Tabs.TabPane>
         ))}
       </Tabs>

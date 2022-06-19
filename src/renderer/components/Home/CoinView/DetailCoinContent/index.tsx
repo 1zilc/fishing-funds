@@ -7,9 +7,11 @@ import ChartCard from '@/components/Card/ChartCard';
 import Trend from '@/components/Home/CoinView/DetailCoinContent/Trend';
 import K from '@/components/Home/CoinView/DetailCoinContent/K';
 import Appraise from '@/components/Home/CoinView/DetailCoinContent/Appraise';
+import Recent from '@/components/Home/NewsList/Recent';
 import Sentiment from '@/components/Home/CoinView/DetailCoinContent/Sentiment';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
 import * as Services from '@/services';
+import * as Utils from '@/utils';
 
 import styles from './index.module.scss';
 
@@ -27,6 +29,7 @@ const DetailCoinContent: React.FC<DetailCoinContentProps> = (props) => {
 
   const { data: coin, run: runGetDetailFromCoingecko } = useRequest(() => Services.Coin.GetDetailFromCoingecko(code), {
     pollingInterval: 1000 * 60,
+    cacheKey: Utils.GenerateRequestKey('Coin.GetDetailFromCoingecko', code),
   });
 
   return (
@@ -79,7 +82,7 @@ const DetailCoinContent: React.FC<DetailCoinContentProps> = (props) => {
         <div className={styles.container}>
           <Tabs animated={{ tabPane: true }} tabBarGutter={15}>
             <Tabs.TabPane tab="近期走势" key={String(0)}>
-              <Trend code={code} />
+              <Trend code={code} name={coin?.name} />
             </Tabs.TabPane>
             <Tabs.TabPane tab="货币评估" key={String(1)}>
               <ChartCard onFresh={runGetDetailFromCoingecko}>
@@ -98,7 +101,14 @@ const DetailCoinContent: React.FC<DetailCoinContentProps> = (props) => {
         <div className={styles.container}>
           <Tabs animated={{ tabPane: true }} tabBarGutter={15}>
             <Tabs.TabPane tab="K线" key={String(0)}>
-              <K code={code} />
+              <K code={code} name={coin?.name} />
+            </Tabs.TabPane>
+          </Tabs>
+        </div>
+        <div className={styles.container}>
+          <Tabs animated={{ tabPane: true }} tabBarGutter={15}>
+            <Tabs.TabPane tab="近期资讯" key={String(0)}>
+              <Recent keyword={coin?.symbol || ''} />
             </Tabs.TabPane>
           </Tabs>
         </div>

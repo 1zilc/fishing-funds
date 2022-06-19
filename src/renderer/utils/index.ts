@@ -414,3 +414,31 @@ export function GetCodeMap<T extends Record<string, any>>(list: T[], key: keyof 
     return r;
   }, {} as Record<string, T & extraData>);
 }
+
+export function GenerateRequestKey(api: string, key?: any) {
+  return JSON.stringify({
+    api,
+    key,
+  });
+}
+
+export function ConvertKData(data: any[]) {
+  // https://github.com/mudenglong/hxc3-indicatorFormula#demo
+  return data.map((_) => ({
+    t: _.date,
+    o: _.kp,
+    a: _.zg,
+    i: _.zd,
+    c: _.sp,
+    n: _.cjl,
+    np: _.cje,
+    // t --> time
+    // o --> openPrice 开盘价
+    // a --> maxPrice 最高价
+    // i --> minPrice 最低价
+    // c --> closePrice 收盘价
+    // n --> volume 成交量
+    // np --> turnover 成交金额
+    // n, np字段根据技术指标需要传入，有些技术指标不需要这两个字段
+  }));
+}

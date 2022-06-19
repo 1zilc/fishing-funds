@@ -5,10 +5,9 @@ import { Base64 } from 'js-base64';
 import dayjs from 'dayjs';
 import NP from 'number-precision';
 
-import { tabs } from '@/components/TabsBar';
 import { updateAvaliableAction } from '@/store/features/updater';
 import { setFundConfigAction } from '@/store/features/fund';
-import { setTabsActiveKeyAction } from '@/store/features/tabs';
+import { changeTabsActiveKeyAction } from '@/store/features/tabs';
 import { selectWalletAction, toggleEyeStatusAction } from '@/store/features/wallet';
 import { setAdjustmentNotificationDateAction, clearAdjustmentNotificationDateAction, syncDarkMode } from '@/store/features/setting';
 
@@ -300,6 +299,7 @@ export function useMappingLocalToSystemSetting() {
     proxyTypeSetting,
     proxyHostSetting,
     proxyPortSetting,
+    hotkeySetting,
   } = useAppSelector((state) => state.setting.systemSetting);
 
   useIpcRendererListener('nativeTheme-updated', (e, data) => {
@@ -341,6 +341,9 @@ export function useMappingLocalToSystemSetting() {
         ipcRenderer.invoke('set-proxy', { mode: 'direct' });
     }
   }, [proxyTypeSetting, proxyHostSetting, proxyPortSetting]);
+  useEffect(() => {
+    ipcRenderer.invoke('set-hotkey', hotkeySetting);
+  }, [hotkeySetting]);
 }
 
 export function useTrayContent() {
@@ -432,7 +435,7 @@ export function useAllConfigBackup() {
         return;
       }
       const encodeBackupConfig = compose(Base64.encode, encodeFF)(backupConfig);
-      saveString(filePath!, encodeBackupConfig);
+      await saveString(filePath!, encodeBackupConfig);
       dialog.showMessageBox({
         type: 'info',
         title: `导出成功`,
@@ -456,7 +459,7 @@ export function useAllConfigBackup() {
       if (canceled || !filePath) {
         return;
       }
-      const encodeBackupConfig = readFile(filePath);
+      const encodeBackupConfig = await readFile(filePath);
       const backupConfig: Backup.Config = compose(decodeFF, Base64.decode)(encodeBackupConfig);
       Utils.CoverBackupConfig(backupConfig);
       await dialog.showMessageBox({
@@ -475,7 +478,7 @@ export function useAllConfigBackup() {
   });
   useIpcRendererListener('open-backup-file', async (e, filePath) => {
     try {
-      const encodeBackupConfig = readFile(filePath);
+      const encodeBackupConfig = await readFile(filePath);
       const backupConfig: Backup.Config = compose(decodeFF, Base64.decode)(encodeBackupConfig);
       const { response } = await dialog.showMessageBox({
         title: `确认从备份文件恢复`,
@@ -511,6 +514,7 @@ export function useTouchBar() {
   const walletsConfig = useAppSelector((state) => state.wallet.config.walletConfig);
   const fundConfigCodeMap = useAppSelector((state) => state.wallet.fundConfigCodeMap);
   const varibleColors = useAppSelector((state) => state.setting.varibleColors);
+  const bottomTabsSetting = useAppSelector((state) => state.setting.systemSetting.bottomTabsSetting);
 
   useEffect(() => {
     ipcRenderer.invoke(
@@ -539,10 +543,12 @@ export function useTouchBar() {
   useEffect(() => {
     ipcRenderer.invoke(
       'update-touchbar-tab',
-      tabs.map((tab) => ({
-        label: tab.name,
-        selected: tab.key === activeKey,
-      }))
+      bottomTabsSetting
+        .filter(({ show }) => show)
+        .map((tab) => ({
+          label: tab.name,
+          selected: tab.key === activeKey,
+        }))
     );
   }, [activeKey]);
 
@@ -551,7 +557,7 @@ export function useTouchBar() {
   }, [eyeStatus]);
 
   useIpcRendererListener('change-tab-active-key', (e, key) => {
-    dispatch(setTabsActiveKeyAction(key));
+    dispatch(changeTabsActiveKeyAction(key));
   });
   useIpcRendererListener('change-eye-status', (e, key) => {
     dispatch(toggleEyeStatusAction());

@@ -4,6 +4,7 @@ import { Tabs } from 'antd';
 import PureCard from '@/components/Card/PureCard';
 import SelfRank from '@/components/Home/StockView/StockRankingContent/SelfRank';
 import MainRank from '@/components/Home/StockView/StockRankingContent/MainRank';
+import NorthRank from '@/components/Home/StockView/StockRankingContent/NorthRank';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
 import styles from './index.module.scss';
 
@@ -22,7 +23,12 @@ const StockRankingContent: React.FC<StockRankingContentProps> = (props) => {
               <SelfRank />
             </PureCard>
           </Tabs.TabPane>
-          <Tabs.TabPane tab="主力排名" key={String(1)}>
+          <Tabs.TabPane tab="北向排名" key={String(1)}>
+            <PureCard>
+              <NorthRank />
+            </PureCard>
+          </Tabs.TabPane>
+          <Tabs.TabPane tab="主力排名" key={String(2)}>
             <PureCard>
               <MainRank />
             </PureCard>

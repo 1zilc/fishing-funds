@@ -20,6 +20,34 @@ export const defaultSystemSetting: System.Setting = {
   baseFontSizeSetting: 12,
   systemThemeSetting: Enums.SystemThemeType.Auto,
 
+  bottomTabsSetting: [
+    {
+      key: Enums.TabKeyType.Funds,
+      name: '基金',
+      show: true,
+    },
+    {
+      key: Enums.TabKeyType.Zindex,
+      name: '指数',
+      show: true,
+    },
+    {
+      key: Enums.TabKeyType.Quotation,
+      name: '板块',
+      show: true,
+    },
+    {
+      key: Enums.TabKeyType.Stock,
+      name: '股票',
+      show: true,
+    },
+    {
+      key: Enums.TabKeyType.Coin,
+      name: '货币',
+      show: true,
+    },
+  ],
+
   adjustmentNotificationSetting: true,
   adjustmentNotificationTimeSetting: dayjs().hour(14).minute(30).format(),
   riskNotificationSetting: true,
@@ -31,6 +59,7 @@ export const defaultSystemSetting: System.Setting = {
   proxyHostSetting: '127.0.0.1',
   proxyPortSetting: '1080',
 
+  hotkeySetting: '',
   autoStartSetting: true,
   autoFreshSetting: true,
   freshDelaySetting: 1,
