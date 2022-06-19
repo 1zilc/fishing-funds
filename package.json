@@ -222,7 +222,7 @@
     "mini-css-extract-plugin": "^2.1.0",
     "opencollective-postinstall": "^2.0.3",
     "prettier": "^2.2.1",
-    "react-refresh": "^0.13.0",
+    "react-refresh": "^0.14.0",
     "react-test-renderer": "^18.0.0",
     "rimraf": "^3.0.0",
     "sass": "^1.32.12",
