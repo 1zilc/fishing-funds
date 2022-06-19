@@ -166,7 +166,11 @@ const DetailFundContent: React.FC<DetailFundContentProps> = (props) => {
         <div className={styles.container}>
           <Tabs animated={{ tabPane: true }} tabBarGutter={15}>
             <Tabs.TabPane tab="历史业绩" key={String(0)}>
-              <ChartCard auto onFresh={runGetFundDetailFromEastmoney}>
+              <ChartCard
+                auto
+                onFresh={runGetFundDetailFromEastmoney}
+                TitleBar={<ExportTitleBar name={fund?.fixName} data={pingzhongdata.Data_netWorthTrend} />}
+              >
                 <HistoryPerformance
                   syl_1n={pingzhongdata.syl_1n}
                   syl_6y={pingzhongdata.syl_6y}
