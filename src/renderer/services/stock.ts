@@ -503,6 +503,88 @@ export async function GetMainRankFromEastmoney(code: string) {
   }
 }
 
+export async function GetNorthRankFromEastmoney(code: string) {
+  try {
+    const { body: html } = await request<string>(`https://data.eastmoney.com/hsgtcg/list.html`);
+    const $ = cheerio.load(html);
+    const date = $('.title .t').text().slice(1, -1);
+
+    const { body } = await request<{
+      version: '8547510d8cabd51dd1536ff148ca0c13';
+      result: {
+        pages: 31;
+        data: {
+          SECUCODE: '600887.SH';
+          MUTUAL_TYPE: '001';
+          TRADE_DATE: '2022-06-17 00:00:00';
+          INTERVAL_TYPE: '3';
+          SECURITY_NAME: '伊利股份';
+          SECURITY_INNER_CODE: '1000004059';
+          ORG_CODE: '10004331';
+          SECURITY_CODE: '600887';
+          PARTICIPANT_NUM: null;
+          EFFECTIVE_DATE: '2014-11-17 00:00:00';
+          A_SHARES_RATIO: 17.53;
+          HOLD_SHARES_RATIO: 17.87;
+          HOLD_SHARES: 112209.83;
+          HOLD_MARKET_CAP: 4296514.34;
+          FREE_SHARES_RATIO: 17.87;
+          TOTAL_SHARES_RATIO: 17.53;
+          CLOSE_PRICE: 38.29;
+          CHANGE_RATE: 0.6;
+          INDUSTRY_CODE: '016012';
+          INDUSTRY_NAME: '食品饮料';
+          ORIG_INDUSTRY_CODE: '438';
+          CONCEPT_CODE: '007009,007035,007089,007090,007091,007133,007187,007221,007230,007271,007282,007292,007389';
+          CONCEPT_NAME: 'HS300_,MSCI中国,上证180_,上证50_,乳业,基金重仓,央视50_,婴童概念,富时罗素,标准普尔,茅指数,证金持股,超级品牌';
+          AREA_CODE: '020018';
+          AREA_NAME: '内蒙古';
+          ORIG_AREA_CODE: '175';
+          FREECAP: 24039379.32;
+          TOTAL_MARKET_CAP: 24506101.29;
+          FREECAP_HOLD_RATIO: 17.98;
+          TOTAL_MARKETCAP_HOLD_RATIO: 17.64;
+          ADD_MARKET_CAP: 145576.1;
+          ADD_SHARES_REPAIR: 3809.87;
+          ADD_SHARES_AMP: 3.56;
+          FREECAP_RATIO_CHG: 6.14;
+          TOTAL_RATIO_CHG: 6.02;
+          HOLD_MARKETCAP_BEFORECHG: 4093182.26;
+          HOLD_SHARES_BEFORECHG: 108399.95;
+          HOLD_MARKETCAP_CHG1: 493909597.18;
+          HOLD_MARKETCAP_CHG5: 3548366320.29;
+          HOLD_MARKETCAP_CHG10: 7392968539.26;
+          INDUSTRY_CODE_NEW: 'BK0438';
+          AREA_CODE_NEW: 'BK0175';
+        }[];
+        count: 1524;
+      };
+      success: true;
+      message: 'ok';
+      code: 0;
+    }>('https://datacenter-web.eastmoney.com/api/data/v1/get', {
+      searchParams: {
+        sortColumns: 'ADD_MARKET_CAP',
+        sortTypes: -1,
+        pageSize: 50,
+        pageNumber: 1,
+        reportName: 'RPT_MUTUAL_STOCK_NORTHSTA',
+        columns: 'ALL',
+        source: 'WEB',
+        client: 'WEB',
+        filter: `(TRADE_DATE='${date}')(INTERVAL_TYPE="${code}")`,
+      },
+      responseType: 'json',
+    });
+    return (body?.result?.data || []).map((_) => ({
+      ..._,
+      ADD_MARKET_CAP: NP.divide(Number(_.ADD_MARKET_CAP), 10 ** 4).toFixed(2),
+    }));
+  } catch (error) {
+    return [];
+  }
+}
+
 export async function GetABCompany(secid: string) {
   try {
     const [mk, code] = secid.split('.');
