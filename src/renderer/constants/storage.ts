@@ -22,4 +22,5 @@ export default {
   FUND_RATING_MAP: 'FUND_RATING_MAP', // 基金评级code -> map
   REMOTE_COIN_MAP: 'REMOTE_COIN_MAP', // 远程货币code -> map
   WEB_SETTING: 'WEB_SETTING', // 网站配置
+  TABS_ACTIVE_KEY: 'TABS_ACTIVE_KEY', // tabs活动键
 };
