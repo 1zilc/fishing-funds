@@ -93,7 +93,7 @@ export const ChartCard: React.FC<PropsWithChildren<ChartCardProps>> = ({
         [styles.autoSize]: auto,
       })}
       style={{
-        minHeight: !showCollapse ? 200 : 'initial',
+        minHeight: !showCollapse && !auto ? 200 : 'initial',
       }}
       onClick={onClick}
       onDoubleClick={onDoubleClick}
