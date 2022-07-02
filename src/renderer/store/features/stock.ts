@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
 import { batch } from 'react-redux';
-import { StoreState, AsyncThunkConfig } from '@/store';
+import { AsyncThunkConfig } from '@/store';
 import * as Utils from '@/utils';
 
 import * as Enums from '@/utils/enums';
@@ -233,7 +233,7 @@ export const syncStocksStateAction = createAsyncThunk<void, (Stock.ResponseItem 
         stock: {
           config: { codeMap },
         },
-      } = getState() as StoreState;
+      } = getState();
       const filterStocks = stocks.filter(({ secid }) => codeMap[secid]);
       dispatch(syncStocksAction(filterStocks));
     } catch {}

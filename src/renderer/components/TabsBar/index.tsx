@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import classnemes from 'clsx';
 
-import { changeTabsActiveKeyAction } from '@/store/features/tabs';
+import { syncTabsActiveKeyAction } from '@/store/features/tabs';
 import { useAppDispatch, useAppSelector } from '@/utils/hooks';
 import * as Enums from '@/utils/enums';
 import styles from './index.module.scss';
@@ -21,7 +21,7 @@ const TabsBar: React.FC<TabsBarProps> = () => {
     const validKeys = bottomTabsSetting.filter(({ show }) => show).map(({ key }) => key);
     const isActiveKeyValid = validKeys.includes(tabsActiveKey);
     if (!isActiveKeyValid) {
-      dispatch(changeTabsActiveKeyAction(validKeys[0]));
+      dispatch(syncTabsActiveKeyAction(validKeys[0]));
     }
   }, [tabsActiveKey, bottomTabsSetting]);
 
@@ -36,7 +36,7 @@ const TabsBar: React.FC<TabsBarProps> = () => {
                 className={classnemes(styles.tab, {
                   [styles.active]: tabsActiveKey === tab.key,
                 })}
-                onClick={() => dispatch(changeTabsActiveKeyAction(tab.key))}
+                onClick={() => dispatch(syncTabsActiveKeyAction(tab.key))}
               >
                 {tab.name}
               </div>

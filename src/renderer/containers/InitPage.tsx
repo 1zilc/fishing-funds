@@ -14,7 +14,7 @@ import { setWalletConfigAction, changeEyeStatusAction, selectWalletAction, defau
 import { setStockConfigAction } from '@/store/features/stock';
 import { setCoinConfigAction, setRemoteCoinsAction } from '@/store/features/coin';
 import { syncSortModeAction, setViewModeAction, initialState as sortInitialState } from '@/store/features/sort';
-import { changeTabsActiveKeyAction } from '@/store/features/tabs';
+import { syncTabsActiveKeyAction } from '@/store/features/tabs';
 import { setWebConfigAction, defaultWebConfig } from '@/store/features/web';
 import { useDrawer, useAppDispatch } from '@/utils/hooks';
 import { syncFavoriteQuotationMapAction } from '@/store/features/quotation';
@@ -90,7 +90,7 @@ const InitPage = () => {
 
     setLoading('加载tabs配置...');
     const tabsActiveKey = await Utils.GetStorage(CONST.STORAGE.TABS_ACTIVE_KEY, Enums.TabKeyType.Funds);
-    dispatch(changeTabsActiveKeyAction(tabsActiveKey));
+    dispatch(syncTabsActiveKeyAction(tabsActiveKey));
 
     setLoading('加载排序配置...');
     const sortMode = await Utils.GetStorage(CONST.STORAGE.SORT_MODE, sortInitialState.sortMode);

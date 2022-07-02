@@ -6,6 +6,7 @@ import startListeningFund from '@/store/listeners/fund';
 import startListeningQuotation from '@/store/listeners/quotation';
 import startListeningSetting from '@/store/listeners/setting';
 import startListeningSort from '@/store/listeners/sort';
+import startListeningTabs from '@/store/listeners/tabs';
 
 const listenerMiddleware = createListenerMiddleware<StoreState, AppDispatch>();
 
@@ -16,6 +17,7 @@ export function startListening() {
   startListeningQuotation();
   startListeningSetting();
   startListeningSort();
+  startListeningTabs();
 }
 
 export default listenerMiddleware;

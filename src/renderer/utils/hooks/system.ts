@@ -7,7 +7,7 @@ import NP from 'number-precision';
 
 import { updateAvaliableAction } from '@/store/features/updater';
 import { setFundConfigAction } from '@/store/features/fund';
-import { changeTabsActiveKeyAction } from '@/store/features/tabs';
+import { syncTabsActiveKeyAction } from '@/store/features/tabs';
 import { selectWalletAction, toggleEyeStatusAction } from '@/store/features/wallet';
 import { updateAdjustmentNotificationDateAction, syncDarkMode } from '@/store/features/setting';
 
@@ -557,7 +557,7 @@ export function useTouchBar() {
   }, [eyeStatus]);
 
   useIpcRendererListener('change-tab-active-key', (e, key) => {
-    dispatch(changeTabsActiveKeyAction(key));
+    dispatch(syncTabsActiveKeyAction(key));
   });
   useIpcRendererListener('change-eye-status', (e, key) => {
     dispatch(toggleEyeStatusAction());
