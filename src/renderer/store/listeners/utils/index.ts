@@ -1,4 +1,5 @@
 import { isAnyOf } from '@reduxjs/toolkit';
+import { throttle } from 'throttle-debounce';
 import listenerMiddleware from '@/store/listeners';
 import { syncCoinsConfigAction, syncRemoteCoinsMapAction } from '@/store/features/coin';
 import { syncFundRatingMapAction, syncRemoteFundsMapAction } from '@/store/features/fund';
@@ -13,6 +14,7 @@ import * as Utils from '@/utils';
 const { ipcRenderer } = window.contextModules.electron;
 export function shareStateListening() {
   // 窗口共享状态
+
   listenerMiddleware.startListening({
     matcher: isAnyOf(
       syncCoinsConfigAction,
@@ -27,13 +29,13 @@ export function shareStateListening() {
       syncRemoteFundsMapAction,
       syncRemoteCoinsMapAction
     ),
-    effect(action, {}) {
+    effect: throttle(1000, (action, {}) => {
       const isUpdating = Utils.GetUpdatingStoreStateStatus();
       if (isUpdating) {
         Utils.SetUpdatingStoreStateStatus(false);
       } else {
         ipcRenderer.invoke('sync-multi-window-store', action);
       }
-    },
+    }),
   });
 }

@@ -181,6 +181,7 @@
     "@types/react-test-renderer": "^18.0.0",
     "@types/redux-logger": "^3.0.8",
     "@types/redux-promise": "^0.5.29",
+    "@types/throttle-debounce": "^5.0.0",
     "@types/webpack-env": "^1.16.0",
     "@typescript-eslint/eslint-plugin": "^5.11.0",
     "@typescript-eslint/parser": "^5.3.1",
@@ -276,7 +277,8 @@
     "redux-thunk": "^2.3.0",
     "socks-proxy-agent": "^7.0.0",
     "sortablejs": "^1.13.0",
-    "swiper": "^8.0.3"
+    "swiper": "^8.0.3",
+    "throttle-debounce": "^5.0.0"
   },
   "devEngines": {
     "node": ">=14.x",

@@ -1,5 +1,5 @@
 import { useLayoutEffect, useState, useEffect, useMemo } from 'react';
-import { useInterval, useMemoizedFn } from 'ahooks';
+import { useDebounceFn, useInterval, useMemoizedFn } from 'ahooks';
 import { AnyAction, compose } from 'redux';
 import { Base64 } from 'js-base64';
 import dayjs from 'dayjs';
@@ -565,9 +565,15 @@ export function useTouchBar() {
 
 export function useShareStoreState() {
   const dispatch = useAppDispatch();
-  useIpcRendererListener('sync-store-data', (event, action: AnyAction) => {
-    Utils.SetUpdatingStoreStateStatus(true);
-    dispatch(action);
-  });
-  useEffect(() => {});
+  const { run } = useDebounceFn(
+    (event, action: AnyAction) => {
+      Utils.SetUpdatingStoreStateStatus(true);
+      dispatch(action);
+    },
+    {
+      leading: true,
+      wait: 1000,
+    }
+  );
+  useIpcRendererListener('sync-store-data', run);
 }
