@@ -7,7 +7,7 @@
  * `./src/main.prod.js` using webpack. This gives us some performance wins.
  */
 
-import { app, globalShortcut, ipcMain, nativeTheme, dialog, webContents, shell, TouchBar } from 'electron';
+import { app, globalShortcut, ipcMain, nativeTheme, dialog, webContents, shell, BrowserWindow } from 'electron';
 import windowStateKeeper from 'electron-window-state';
 import Store from 'electron-store';
 import { Menubar } from 'menubar';
@@ -16,7 +16,8 @@ import { appIcon, generateWalletIcon } from './icon';
 import { createTray } from './tray';
 import { createMenubar, buildContextMenu } from './menubar';
 import TouchBarManager from './touchbar';
-import { lockSingleInstance, checkEnvTool, sendMessageToRenderer, setNativeTheme } from './util';
+import { createChildWindow } from './childWindow';
+import { lockSingleInstance, checkEnvTool, sendMessageToRenderer, setNativeTheme, getOtherWindows } from './util';
 import * as Enums from '../renderer/utils/enums';
 
 let mb: Menubar;
@@ -32,7 +33,6 @@ async function init() {
 function main() {
   const storage = new Store({ encryptionKey: '1zilc' });
   const tray = createTray();
-
   const mainWindowState = windowStateKeeper({
     defaultWidth: 325,
     defaultHeight: 768,
@@ -44,6 +44,7 @@ function main() {
   const touchBarManager = new TouchBarManager([], mb);
   let contextMenu = buildContextMenu({ mb, appUpdater }, []);
   let activeHotkeys = '';
+  let windowIds: number[] = [];
   const defaultTheme = storage.get('SYSTEM_SETTING.systemThemeSetting', Enums.SystemThemeType.Auto) as Enums.SystemThemeType;
   // mb.app.commandLine.appendSwitch('disable-backgrounding-occluded-windows', 'true');
 
@@ -157,8 +158,25 @@ function main() {
     }
     activeHotkeys = keys;
   });
+  ipcMain.handle('open-child-window', (event, config) => {
+    const win = createChildWindow({ path: config.path, parentId: event.frameId });
+    if (win) {
+      const windowId = win.id;
+      windowIds.push(windowId);
+      win.on('closed', () => {
+        windowIds = windowIds.filter((id) => id !== windowId);
+      });
+    }
+  });
+  ipcMain.handle('sync-multi-window-store', (event, config) => {
+    getOtherWindows(windowIds, config.id).forEach((win) => {
+      win?.webContents.send('sync-store-data', config.data);
+    });
+  });
   // menubar 相关监听
   mb.on('after-create-window', () => {
+    // 注册windowId
+    windowIds.push(mb.window!.id);
     // 设置系统色彩偏好
     setNativeTheme(defaultTheme);
     // 系统级别高斯模糊
@@ -187,6 +205,7 @@ function main() {
       return { action: 'deny' };
     });
   });
+
   // 打开开发者工具
   if (!app.isPackaged) {
     mb.window?.webContents.openDevTools({ mode: 'undocked' });

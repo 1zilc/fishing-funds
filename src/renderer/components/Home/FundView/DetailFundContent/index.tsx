@@ -38,10 +38,12 @@ import styles from './index.module.scss';
 const FundManagerContent = React.lazy(() => import('@/components/Home/FundView/FundManagerContent'));
 const AddFundContent = React.lazy(() => import('@/components/Home/FundView/AddFundContent'));
 
-export interface DetailFundContentProps {
+export interface DetailFundProps {
+  code: string;
+}
+export interface DetailFundContentProps extends DetailFundProps {
   onEnter: () => void;
   onClose: () => void;
-  code: string;
 }
 
 export const ContinuousTag: React.FC<{ values: number[] }> = ({ values = [] }) => {
@@ -89,7 +91,9 @@ export const TypeTag: React.FC<{ type?: string }> = ({ type }) => {
   return <></>;
 };
 
-const DetailFundContent: React.FC<DetailFundContentProps> = (props) => {
+const { ipcRenderer } = window.contextModules.electron;
+
+export const DetailFund: React.FC<DetailFundProps> = (props) => {
   const { code } = props;
   const { star: fundStar, type: fundType } = useFundRating(code);
   const codeMap = useAppSelector((state) => state.wallet.fundConfigCodeMap);
@@ -119,7 +123,7 @@ const DetailFundContent: React.FC<DetailFundContentProps> = (props) => {
   const industryTags = useMemo(() => Array.from(new Set(industryData.stocks.map((stock) => stock.INDEXNAME))), [industryData.stocks]);
 
   return (
-    <CustomDrawerContent title="基金详情" enterText="确定" onClose={props.onClose} onEnter={props.onEnter}>
+    <>
       <div className={styles.content}>
         <div className={styles.container}>
           <div className={styles.titleRow}>
@@ -299,7 +303,20 @@ const DetailFundContent: React.FC<DetailFundContentProps> = (props) => {
       <CustomDrawer show={showAddDrawer}>
         <AddFundContent defaultCode={addCode} onClose={closeAddDrawer} onEnter={closeAddDrawer} />
       </CustomDrawer>
+    </>
+  );
+};
+
+const DetailFundContent: React.FC<DetailFundContentProps> = (props) => {
+  function onOpenChildWindow() {
+    ipcRenderer.invoke('open-child-window', { path: `/detail?code=${props.code}` });
+    props.onEnter();
+  }
+  return (
+    <CustomDrawerContent title="基金详情" enterText="小窗" onClose={props.onClose} onEnter={onOpenChildWindow}>
+      <DetailFund code={props.code} />
     </CustomDrawerContent>
   );
 };
+
 export default DetailFundContent;

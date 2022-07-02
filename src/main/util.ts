@@ -1,6 +1,6 @@
 import log from 'electron-log';
 import { Menubar } from 'menubar';
-import { app, nativeTheme } from 'electron';
+import { app, BrowserWindow, nativeTheme } from 'electron';
 import { URL } from 'url';
 import * as path from 'path';
 import * as Enums from '../renderer/utils/enums';
@@ -74,4 +74,12 @@ export function setNativeTheme(theme: Enums.SystemThemeType) {
       nativeTheme.themeSource = 'system';
       break;
   }
+}
+
+export function getPreloadPath() {
+  return app.isPackaged ? path.join(__dirname, 'preload.js') : path.join(__dirname, '../../.erb/dll/preload.js');
+}
+
+export function getOtherWindows(windowIds: number[], current: number | undefined) {
+  return windowIds.filter((id) => id !== current).map((id) => BrowserWindow.fromId(id));
 }

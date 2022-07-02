@@ -19,7 +19,7 @@ import { setCoinsLoadingAction, setRemoteCoinsLoadingAction, sortCoinsCachedActi
 import { updateStockAction, sortStocksCachedAction, setStocksLoadingAction } from '@/store/features/stock';
 import { setZindexesLoadingAction, sortZindexsCachedAction } from '@/store/features/zindex';
 import { sortQuotationsCachedAction } from '@/store/features/quotation';
-import { TypedDispatch, StoreState } from '@/store';
+import store, { TypedDispatch, StoreState } from '@/store';
 import * as Utils from '@/utils';
 import * as Enums from '@/utils/enums';
 import * as CONST from '@/constants';
@@ -643,4 +643,15 @@ export function useInputShortcut(initial: string) {
     hotkey,
     reset,
   };
+}
+
+export function useSyncMultiProcessStore() {
+  useEffect(() => {
+    store.subscribe(() => {
+      console.log(store.getState());
+      // ipcRenderer.invoke('sync-multi-window-store', { data: store.getState() });
+    });
+  }, []);
+
+  useIpcRendererListener('', () => {});
 }
