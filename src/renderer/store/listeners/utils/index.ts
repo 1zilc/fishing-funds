@@ -5,9 +5,10 @@ import { syncFundRatingMapAction, syncRemoteFundsMapAction } from '@/store/featu
 import { syncFavoriteQuotationMapAction } from '@/store/features/quotation';
 import { syncSettingAction } from '@/store/features/setting';
 import { syncStocksConfigAction } from '@/store/features/stock';
-import { syncEyeStatusAction, changeCurrentWalletCodeAction, syncWalletsConfigAction } from '@/store/features/wallet';
+import { changeCurrentWalletCodeAction, syncWalletsConfigAction } from '@/store/features/wallet';
 import { syncWebConfigAction } from '@/store/features/web';
 import { syncZindexesConfigAction } from '@/store/features/zindex';
+import * as Utils from '@/utils';
 
 const { ipcRenderer } = window.contextModules.electron;
 export function shareStateListening() {
@@ -21,10 +22,18 @@ export function shareStateListening() {
       syncWalletsConfigAction,
       syncFundRatingMapAction,
       syncSettingAction,
-      syncFavoriteQuotationMapAction
+      syncFavoriteQuotationMapAction,
+      changeCurrentWalletCodeAction,
+      syncRemoteFundsMapAction,
+      syncRemoteCoinsMapAction
     ),
     effect(action, {}) {
-      console.log(action);
+      const isUpdating = Utils.GetUpdatingStoreStateStatus();
+      if (isUpdating) {
+        Utils.SetUpdatingStoreStateStatus(false);
+      } else {
+        ipcRenderer.invoke('sync-multi-window-store', action);
+      }
     },
   });
 }

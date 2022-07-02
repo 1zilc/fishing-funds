@@ -1,9 +1,10 @@
 import { DetailFund } from '@//components/Home/FundView/DetailFundContent';
 import GlobalStyles from '@/components/GlobalStyles';
 
-import {} from '@/utils/hooks';
+import { useShareStoreState } from '@/utils/hooks';
 
 const DetailPage = () => {
+  useShareStoreState();
   return (
     <>
       <GlobalStyles />

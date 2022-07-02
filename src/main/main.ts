@@ -170,7 +170,7 @@ function main() {
   });
   ipcMain.handle('sync-multi-window-store', (event, config) => {
     getOtherWindows(windowIds, config.id).forEach((win) => {
-      win?.webContents.send('sync-store-data', config.data);
+      win?.webContents.send('sync-store-data', config);
     });
   });
   // menubar 相关监听

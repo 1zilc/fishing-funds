@@ -442,3 +442,15 @@ export function ConvertKData(data: any[]) {
     // n, np字段根据技术指标需要传入，有些技术指标不需要这两个字段
   }));
 }
+
+export function SetUpdatingStoreStateStatus(status: boolean) {
+  if (status) {
+    window.sessionStorage.setItem(CONST.STORAGE.UPDATING_STORE_STATE_FROM_OTHER, MakeHash());
+  } else {
+    window.sessionStorage.removeItem(CONST.STORAGE.UPDATING_STORE_STATE_FROM_OTHER);
+  }
+}
+
+export function GetUpdatingStoreStateStatus() {
+  return window.sessionStorage.getItem(CONST.STORAGE.UPDATING_STORE_STATE_FROM_OTHER);
+}

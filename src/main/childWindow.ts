@@ -16,6 +16,7 @@ export function createChildWindow(config: { path: string; parentId: number }) {
       maxWidth: 600,
       webPreferences: {
         webviewTag: true,
+        devTools: !app.isPackaged,
         preload: getPreloadPath(),
       },
     });

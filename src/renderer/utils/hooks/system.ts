@@ -1,6 +1,6 @@
 import { useLayoutEffect, useState, useEffect, useMemo } from 'react';
 import { useInterval, useMemoizedFn } from 'ahooks';
-import { compose } from 'redux';
+import { AnyAction, compose } from 'redux';
 import { Base64 } from 'js-base64';
 import dayjs from 'dayjs';
 import NP from 'number-precision';
@@ -30,7 +30,6 @@ import {
   useIpcRendererListener,
 } from '@/utils/hooks';
 import * as Utils from '@/utils';
-import * as CONST from '@/constants';
 import * as Adapters from '@/utils/adpters';
 import * as Helpers from '@/helpers';
 import * as Enums from '@/utils/enums';
@@ -562,4 +561,13 @@ export function useTouchBar() {
   useIpcRendererListener('change-eye-status', (e, key) => {
     dispatch(toggleEyeStatusAction());
   });
+}
+
+export function useShareStoreState() {
+  const dispatch = useAppDispatch();
+  useIpcRendererListener('sync-store-data', (event, action: AnyAction) => {
+    Utils.SetUpdatingStoreStateStatus(true);
+    dispatch(action);
+  });
+  useEffect(() => {});
 }

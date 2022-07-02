@@ -15,4 +15,5 @@ export default {
   REMOTE_COIN_MAP: 'REMOTE_COIN_MAP', // 远程货币code -> map
   WEB_SETTING: 'WEB_SETTING', // 网站配置
   TABS_ACTIVE_KEY: 'TABS_ACTIVE_KEY', // tabs活动键
+  UPDATING_STORE_STATE_FROM_OTHER: 'UPDATING_STORE_STATE_FROM_OTHER', // 正在从其他窗口更新store
 };
