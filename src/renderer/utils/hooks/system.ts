@@ -8,7 +8,7 @@ import NP from 'number-precision';
 import { updateAvaliableAction } from '@/store/features/updater';
 import { setFundConfigAction } from '@/store/features/fund';
 import { syncTabsActiveKeyAction } from '@/store/features/tabs';
-import { selectWalletAction, toggleEyeStatusAction } from '@/store/features/wallet';
+import { changeCurrentWalletCodeAction, toggleEyeStatusAction } from '@/store/features/wallet';
 import { updateAdjustmentNotificationDateAction, syncDarkMode } from '@/store/features/setting';
 
 import {
@@ -417,7 +417,7 @@ export function useUpdateContextMenuWalletsState() {
 
   useIpcRendererListener('change-current-wallet-code', (e, code) => {
     try {
-      dispatch(selectWalletAction(code));
+      dispatch(changeCurrentWalletCodeAction(code));
       freshFunds();
     } catch (error) {}
   });

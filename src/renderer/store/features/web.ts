@@ -1,7 +1,6 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { TypedThunk } from '@/store';
+import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
+import { AsyncThunkConfig } from '@/store';
 import * as Utils from '@/utils';
-import * as CONST from '@/constants';
 import * as Enums from '@/utils/enums';
 
 export interface WebState {
@@ -70,7 +69,7 @@ const webSlice = createSlice({
     syncWebAction(state, action) {
       state.view = action.payload;
     },
-    syncWebConfigAction(state, action) {
+    syncWebConfigAction(state, action: PayloadAction<{ webConfig: Web.SettingItem[]; codeMap: Web.CodeMap }>) {
       state.config = action.payload;
     },
   },
@@ -78,32 +77,36 @@ const webSlice = createSlice({
 
 export const { syncWebUrlAction, syncWebPhoneAction, syncWebAction, syncWebConfigAction } = webSlice.actions;
 
-export function setWebAction(data: { show: boolean; phone?: boolean; title: string; url: string }): TypedThunk {
-  return (dispatch, getState) => {
+export const setWebAction = createAsyncThunk<void, { show: boolean; phone?: boolean; title: string; url: string }, AsyncThunkConfig>(
+  'web/setWebAction',
+  async (data, { dispatch, getState }) => {
     try {
       const {
         web: { view },
       } = getState();
       dispatch(syncWebAction({ ...view, ...data }));
     } catch (error) {}
-  };
-}
-export function closeWebAction(): TypedThunk {
-  return (dispatch, getState) => {
-    try {
-      dispatch(setWebAction({ url: '', title: '', show: false }));
-    } catch (error) {}
-  };
-}
-export function openWebAction(data: { phone?: boolean; title: string; url: string }): TypedThunk {
-  return (dispatch, getState) => {
+  }
+);
+
+export const closeWebAction = createAsyncThunk<void, void, AsyncThunkConfig>('web/closeWebAction', async (_, { dispatch, getState }) => {
+  try {
+    dispatch(setWebAction({ url: '', title: '', show: false }));
+  } catch (error) {}
+});
+
+export const openWebAction = createAsyncThunk<void, { phone?: boolean; title: string; url: string }, AsyncThunkConfig>(
+  'web/openWebAction',
+  async (data, { dispatch, getState }) => {
     try {
       dispatch(setWebAction({ ...data, show: true }));
     } catch (error) {}
-  };
-}
-export function addWebAction(web: Web.SettingItem): TypedThunk {
-  return (dispatch, getState) => {
+  }
+);
+
+export const addWebAction = createAsyncThunk<void, Web.SettingItem, AsyncThunkConfig>(
+  'web/addWebAction',
+  async (web, { dispatch, getState }) => {
     try {
       const {
         web: {
@@ -117,11 +120,12 @@ export function addWebAction(web: Web.SettingItem): TypedThunk {
       }
       dispatch(setWebConfigAction(cloneWebConfig));
     } catch (error) {}
-  };
-}
+  }
+);
 
-export function updateWebAction(web: Web.SettingItem): TypedThunk {
-  return (dispatch, getState) => {
+export const updateWebAction = createAsyncThunk<void, Web.SettingItem, AsyncThunkConfig>(
+  'web/updateWebAction',
+  async (web, { dispatch, getState }) => {
     try {
       const {
         web: {
@@ -139,11 +143,12 @@ export function updateWebAction(web: Web.SettingItem): TypedThunk {
       });
       dispatch(setWebConfigAction(webConfig));
     } catch (error) {}
-  };
-}
+  }
+);
 
-export function deleteWebAction(url: string): TypedThunk {
-  return (dispatch, getState) => {
+export const deleteWebAction = createAsyncThunk<void, string, AsyncThunkConfig>(
+  'web/deleteWebAction',
+  async (url, { dispatch, getState }) => {
     try {
       const {
         web: {
@@ -159,18 +164,17 @@ export function deleteWebAction(url: string): TypedThunk {
         }
       });
     } catch (error) {}
-  };
-}
+  }
+);
 
-export function setWebConfigAction(webConfig: Web.SettingItem[]): TypedThunk {
-  return (dispatch, getState) => {
+export const setWebConfigAction = createAsyncThunk<void, Web.SettingItem[], AsyncThunkConfig>(
+  'web/setWebConfigAction',
+  async (webConfig, { dispatch, getState }) => {
     try {
       const codeMap = Utils.GetCodeMap(webConfig, 'url');
-
       dispatch(syncWebConfigAction({ webConfig, codeMap }));
-      Utils.SetStorage(CONST.STORAGE.WEB_SETTING, webConfig);
     } catch (error) {}
-  };
-}
+  }
+);
 
 export default webSlice.reducer;

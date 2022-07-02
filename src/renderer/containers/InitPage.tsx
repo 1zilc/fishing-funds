@@ -10,7 +10,7 @@ import {
   defaultSystemSetting,
   syncDarkMode,
 } from '@/store/features/setting';
-import { setWalletConfigAction, changeEyeStatusAction, selectWalletAction, defaultWallet } from '@/store/features/wallet';
+import { setWalletConfigAction, syncEyeStatusAction, changeCurrentWalletCodeAction, defaultWallet } from '@/store/features/wallet';
 import { setStockConfigAction } from '@/store/features/stock';
 import { setCoinConfigAction, setRemoteCoinsAction } from '@/store/features/coin';
 import { syncSortModeAction, setViewModeAction, initialState as sortInitialState } from '@/store/features/sort';
@@ -84,8 +84,8 @@ const InitPage = () => {
     const currentWalletCode = await Utils.GetStorage(CONST.STORAGE.CURRENT_WALLET_CODE, defaultWallet.code);
     batch(() => {
       dispatch(setWalletConfigAction(walletSetting));
-      dispatch(changeEyeStatusAction(eyeStatus));
-      dispatch(selectWalletAction(currentWalletCode));
+      dispatch(syncEyeStatusAction(eyeStatus));
+      dispatch(changeCurrentWalletCodeAction(currentWalletCode));
     });
 
     setLoading('加载tabs配置...');

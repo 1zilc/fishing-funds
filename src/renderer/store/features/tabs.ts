@@ -1,8 +1,5 @@
-import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
-import { TypedThunk, AsyncThunkConfig } from '@/store';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import * as Enums from '@/utils/enums';
-import * as CONST from '@/constants';
-import * as Utils from '@/utils';
 
 export interface TabsState {
   activeKey: Enums.TabKeyType;

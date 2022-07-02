@@ -1,10 +1,9 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
 import { batch } from 'react-redux';
 
-import { TypedThunk } from '@/store';
+import { AsyncThunkConfig } from '@/store';
 import { sortFundsAction } from '@/store/features/fund';
 import * as Enums from '@/utils/enums';
-import * as CONST from '@/constants';
 import * as Utils from '@/utils';
 import * as Helpers from '@/helpers';
 
@@ -46,7 +45,7 @@ const walletSlice = createSlice({
   name: 'wallet',
   initialState,
   reducers: {
-    changeEyeStatus(state, action: PayloadAction<Enums.EyeStatus>) {
+    syncEyeStatusAction(state, action: PayloadAction<Enums.EyeStatus>) {
       state.eyeStatus = action.payload;
     },
     changeCurrentWalletCodeAction(state, { payload }: PayloadAction<string>) {
@@ -95,7 +94,7 @@ const walletSlice = createSlice({
 });
 
 export const {
-  changeEyeStatus,
+  syncEyeStatusAction,
   changeCurrentWalletCodeAction,
   syncWalletsAction,
   syncWalletsConfigAction,
@@ -103,17 +102,9 @@ export const {
   toggleAllFundsCollapseAction,
 } = walletSlice.actions;
 
-export function changeEyeStatusAction(status: Enums.EyeStatus): TypedThunk {
-  return (dispatch, getState) => {
-    try {
-      dispatch(changeEyeStatus(status));
-      Utils.SetStorage(CONST.STORAGE.EYE_STATUS, status);
-    } catch (error) {}
-  };
-}
-
-export function toggleEyeStatusAction(): TypedThunk {
-  return (dispatch, getState) => {
+export const toggleEyeStatusAction = createAsyncThunk<void, void, AsyncThunkConfig>(
+  'wallet/toggleEyeStatusAction',
+  async (_, { dispatch, getState }) => {
     try {
       const {
         wallet: { eyeStatus },
@@ -121,19 +112,20 @@ export function toggleEyeStatusAction(): TypedThunk {
 
       switch (eyeStatus) {
         case Enums.EyeStatus.Open:
-          dispatch(changeEyeStatusAction(Enums.EyeStatus.Close));
+          dispatch(syncEyeStatusAction(Enums.EyeStatus.Close));
           break;
         case Enums.EyeStatus.Close:
         default:
-          dispatch(changeEyeStatusAction(Enums.EyeStatus.Open));
+          dispatch(syncEyeStatusAction(Enums.EyeStatus.Open));
           break;
       }
     } catch (error) {}
-  };
-}
+  }
+);
 
-export function setWalletConfigAction(walletConfig: Wallet.SettingItem[]): TypedThunk {
-  return (dispatch, getState) => {
+export const setWalletConfigAction = createAsyncThunk<void, Wallet.SettingItem[], AsyncThunkConfig>(
+  'wallet/setWalletConfigAction',
+  async (walletConfig, { dispatch, getState }) => {
     try {
       const {
         wallet: { wallets },
@@ -144,13 +136,13 @@ export function setWalletConfigAction(walletConfig: Wallet.SettingItem[]): Typed
         dispatch(syncWalletsConfigAction({ walletConfig, codeMap }));
         dispatch(syncWalletStateAction(wallets));
       });
-      Utils.SetStorage(CONST.STORAGE.WALLET_SETTING, walletConfig);
     } catch (error) {}
-  };
-}
+  }
+);
 
-export function syncWalletStateAction(wallets: Wallet.StateItem[]): TypedThunk {
-  return (dispatch, getState) => {
+export const syncWalletStateAction = createAsyncThunk<void, Wallet.StateItem[], AsyncThunkConfig>(
+  'wallet/syncWalletStateAction',
+  async (wallets, { dispatch, getState }) => {
     try {
       const {
         wallet: {
@@ -160,11 +152,12 @@ export function syncWalletStateAction(wallets: Wallet.StateItem[]): TypedThunk {
       const newWallets = wallets.filter((stateItem) => codeMap[stateItem.code]);
       dispatch(syncWalletsAction(newWallets));
     } catch (error) {}
-  };
-}
+  }
+);
 
-export function addWalletConfigAction(wallet: Wallet.SettingItem): TypedThunk {
-  return (dispatch, getState) => {
+export const addWalletConfigAction = createAsyncThunk<void, Wallet.SettingItem, AsyncThunkConfig>(
+  'wallet/addWalletConfigAction',
+  async (wallet, { dispatch, getState }) => {
     try {
       const {
         wallet: {
@@ -173,11 +166,12 @@ export function addWalletConfigAction(wallet: Wallet.SettingItem): TypedThunk {
       } = getState();
       dispatch(setWalletConfigAction(walletConfig.concat(wallet)));
     } catch (error) {}
-  };
-}
+  }
+);
 
-export function updateWalletConfigAction(wallet: Wallet.SettingItem): TypedThunk {
-  return (dispatch, getState) => {
+export const updateWalletConfigAction = createAsyncThunk<void, Wallet.SettingItem, AsyncThunkConfig>(
+  'wallet/updateWalletConfigAction',
+  async (wallet, { dispatch, getState }) => {
     try {
       const {
         wallet: {
@@ -193,11 +187,12 @@ export function updateWalletConfigAction(wallet: Wallet.SettingItem): TypedThunk
       });
       dispatch(setWalletConfigAction(cloneWalletConfig));
     } catch (error) {}
-  };
-}
+  }
+);
 
-export function deleteWalletConfigAction(code: string): TypedThunk {
-  return (dispatch, getState) => {
+export const deleteWalletConfigAction = createAsyncThunk<void, string, AsyncThunkConfig>(
+  'wallet/deleteWalletConfigAction',
+  async (code, { dispatch, getState }) => {
     try {
       const {
         wallet: {
@@ -212,20 +207,12 @@ export function deleteWalletConfigAction(code: string): TypedThunk {
         }
       });
     } catch (error) {}
-  };
-}
+  }
+);
 
-export function selectWalletAction(code: string): TypedThunk {
-  return (dispatch, getState) => {
-    try {
-      dispatch(changeCurrentWalletCodeAction(code));
-      Utils.SetStorage(CONST.STORAGE.CURRENT_WALLET_CODE, code);
-    } catch (error) {}
-  };
-}
-
-export function updateWalletStateAction(state: Wallet.StateItem): TypedThunk {
-  return (dispatch, getState) => {
+export const updateWalletStateAction = createAsyncThunk<void, Wallet.StateItem, AsyncThunkConfig>(
+  'wallet/updateWalletStateAction',
+  async (state, { dispatch, getState }) => {
     try {
       const {
         wallet: {
@@ -272,11 +259,12 @@ export function updateWalletStateAction(state: Wallet.StateItem): TypedThunk {
         dispatch(sortFundsAction(cloneState.code));
       });
     } catch (error) {}
-  };
-}
+  }
+);
 
-export function setWalletStateAction(state: Wallet.StateItem): TypedThunk {
-  return (dispatch, getState) => {
+export const setWalletStateAction = createAsyncThunk<void, Wallet.StateItem, AsyncThunkConfig>(
+  'wallet/setWalletStateAction',
+  async (state, { dispatch, getState }) => {
     try {
       const {
         wallet: { wallets },
@@ -292,11 +280,12 @@ export function setWalletStateAction(state: Wallet.StateItem): TypedThunk {
 
       dispatch(syncWalletsAction(cloneWallets));
     } catch (error) {}
-  };
-}
+  }
+);
 
-export function syncFixWalletStateAction(state: Wallet.StateItem): TypedThunk {
-  return (dispatch, getState) => {
+export const syncFixWalletStateAction = createAsyncThunk<void, Wallet.StateItem, AsyncThunkConfig>(
+  'wallet/syncFixWalletStateAction',
+  async (state, { dispatch, getState }) => {
     try {
       const {
         wallet: { wallets },
@@ -316,7 +305,7 @@ export function syncFixWalletStateAction(state: Wallet.StateItem): TypedThunk {
         dispatch(sortFundsAction(state.code));
       });
     } catch (error) {}
-  };
-}
+  }
+);
 
 export default walletSlice.reducer;
