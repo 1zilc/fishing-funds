@@ -110,7 +110,7 @@ const StockRow: React.FC<RowProps> = (props) => {
   useRequest(() => Services.Stock.GetIndustryFromEastmoney(stock.secid, 1), {
     onSuccess: (datas) => {
       if (datas.length) {
-        dispatch(setIndustryMapAction(stock.secid, datas));
+        dispatch(setIndustryMapAction({ secid: stock.secid, industrys: datas }));
       }
     },
     ready: !industrys.length,
