@@ -10,6 +10,7 @@ import Estimate from '@/components/Home/StockView/DetailStockContent/Estimate';
 import K from '@/components/Home/StockView/DetailStockContent/K';
 import Company from '@/components/Home/StockView/DetailStockContent/Company';
 import Stocks from '@/components/Home/StockView/DetailStockContent/Stocks';
+import HoldFunds from '@/components/Home/StockView/DetailStockContent/HoldFunds';
 import Recent from '@/components/Home/NewsList/Recent';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
 import { addStockAction } from '@/store/features/stock';
@@ -177,10 +178,13 @@ const DetailStockContent: React.FC<DetailStockContentProps> = (props) => {
         </div>
         <div className={styles.container}>
           <Tabs animated={{ tabPane: true }} tabBarGutter={15}>
-            <Tabs.TabPane tab="公司概况" key={String(0)}>
+            <Tabs.TabPane tab="持股基金" key={String(0)}>
+              <HoldFunds secid={secid} />
+            </Tabs.TabPane>
+            <Tabs.TabPane tab="公司概况" key={String(1)}>
               <Company secid={secid} />
             </Tabs.TabPane>
-            <Tabs.TabPane tab="同类股票" key={String(1)}>
+            <Tabs.TabPane tab="同类股票" key={String(2)}>
               <Stocks secid={secid} />
             </Tabs.TabPane>
           </Tabs>
