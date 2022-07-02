@@ -96,19 +96,15 @@ const DetailCoinContent: React.FC<DetailCoinContentProps> = (props) => {
                 <Sentiment up={coin?.sentiment_votes_up_percentage} down={coin?.sentiment_votes_down_percentage} />
               </ChartCard>
             </Tabs.TabPane>
+            <Tabs.TabPane tab="近期资讯" key={String(3)}>
+              <Recent keyword={coin?.symbol || ''} />
+            </Tabs.TabPane>
           </Tabs>
         </div>
         <div className={styles.container}>
           <Tabs animated={{ tabPane: true }} tabBarGutter={15}>
             <Tabs.TabPane tab="K线" key={String(0)}>
               <K code={code} name={coin?.name} />
-            </Tabs.TabPane>
-          </Tabs>
-        </div>
-        <div className={styles.container}>
-          <Tabs animated={{ tabPane: true }} tabBarGutter={15}>
-            <Tabs.TabPane tab="近期资讯" key={String(0)}>
-              <Recent keyword={coin?.symbol || ''} />
             </Tabs.TabPane>
           </Tabs>
         </div>

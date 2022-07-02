@@ -163,19 +163,15 @@ const DetailStockContent: React.FC<DetailStockContentProps> = (props) => {
             <Tabs.TabPane tab="走势详情" key={String(1)}>
               <Estimate secid={secid} />
             </Tabs.TabPane>
+            <Tabs.TabPane tab="近期资讯" key={String(2)}>
+              <Recent keyword={stock.name} />
+            </Tabs.TabPane>
           </Tabs>
         </div>
         <div className={styles.container}>
           <Tabs animated={{ tabPane: true }} tabBarGutter={15}>
             <Tabs.TabPane tab="K线" key={String(0)}>
               <K secid={secid} name={stock.name} />
-            </Tabs.TabPane>
-          </Tabs>
-        </div>
-        <div className={styles.container}>
-          <Tabs animated={{ tabPane: true }} tabBarGutter={15}>
-            <Tabs.TabPane tab="近期资讯" key={String(0)}>
-              <Recent keyword={stock.name} />
             </Tabs.TabPane>
           </Tabs>
         </div>

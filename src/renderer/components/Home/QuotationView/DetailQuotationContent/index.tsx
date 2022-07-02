@@ -101,18 +101,14 @@ const DetailQuotationContent: React.FC<DetailQuotationContentProps> = (props) =>
         </div>
         <div className={styles.container}>
           <Tabs animated={{ tabPane: true }} tabBarGutter={15}>
-            <Tabs.TabPane tab="近期资讯" key={String(0)}>
-              <Recent keyword={quotation.name} />
-            </Tabs.TabPane>
-          </Tabs>
-        </div>
-        <div className={styles.container}>
-          <Tabs animated={{ tabPane: true }} tabBarGutter={15}>
             <Tabs.TabPane tab="主题基金" key={String(0)}>
               <Funds code={code} />
             </Tabs.TabPane>
             <Tabs.TabPane tab={`${quotation.name}个股`} key={String(1)}>
               <Stocks code={code} />
+            </Tabs.TabPane>
+            <Tabs.TabPane tab="近期资讯" key={String(2)}>
+              <Recent keyword={quotation.name} />
             </Tabs.TabPane>
           </Tabs>
         </div>
