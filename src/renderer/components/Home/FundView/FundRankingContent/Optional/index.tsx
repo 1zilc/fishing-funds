@@ -57,7 +57,7 @@ const Optional: React.FC<OptionalProps> = () => {
       const fund = codeMap[item.code];
       return fund;
     });
-    dispatch(setFundConfigAction(fundConfig, currentWalletCode));
+    dispatch(setFundConfigAction({ config: fundConfig, walletCode: currentWalletCode }));
   }
 
   async function onRemoveFund(fund: Fund.SettingItem) {

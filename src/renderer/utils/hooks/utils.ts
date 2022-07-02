@@ -244,7 +244,7 @@ export function useLoadFunds(loading: boolean) {
       dispatch(setFundsLoadingAction(loading));
       const responseFunds = await Helpers.Fund.GetFunds(fundConfig, fundApiTypeSetting);
       batch(() => {
-        dispatch(sortFundsCachedAction(responseFunds, currentWalletCode));
+        dispatch(sortFundsCachedAction({ responseFunds, walletCode: currentWalletCode }));
         dispatch(setFundsLoadingAction(false));
       });
     } catch (error) {

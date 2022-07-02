@@ -119,9 +119,9 @@ const QuotationRow: React.FC<RowProps> = (props) => {
           <section>
             <span>特别关注：</span>
             {favorited ? (
-              <a onClick={() => dispatch(setFavoriteQuotationMapAction(quotation.code, false))}>已关注</a>
+              <a onClick={() => dispatch(setFavoriteQuotationMapAction({ code: quotation.code, status: false }))}>已关注</a>
             ) : (
-              <a onClick={() => dispatch(setFavoriteQuotationMapAction(quotation.code, true))}>未关注</a>
+              <a onClick={() => dispatch(setFavoriteQuotationMapAction({ code: quotation.code, status: true }))}>未关注</a>
             )}
           </section>
           <div className={styles.view}>

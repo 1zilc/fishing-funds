@@ -202,7 +202,7 @@ export function useFundsClipboard() {
         ...newCodeMap,
       };
       const allFundConfig = Object.entries(allCodeMap).map(([code, fund]) => fund);
-      dispatch(setFundConfigAction(allFundConfig, currentWalletCode));
+      dispatch(setFundConfigAction({ config: allFundConfig, walletCode: currentWalletCode }));
       dialog.showMessageBox({
         type: 'info',
         title: `导入完成`,

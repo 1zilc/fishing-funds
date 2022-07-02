@@ -52,11 +52,17 @@ const DetailQuotationContent: React.FC<DetailQuotationContentProps> = (props) =>
             <div>
               <span className="copify">{quotation?.code}</span>
               {favorited ? (
-                <a className={styles.selfAdd} onClick={() => dispatch(setFavoriteQuotationMapAction(quotation.code, false))}>
+                <a
+                  className={styles.selfAdd}
+                  onClick={() => dispatch(setFavoriteQuotationMapAction({ code: quotation.code, status: false }))}
+                >
                   已关注
                 </a>
               ) : (
-                <a className={styles.selfAdd} onClick={() => dispatch(setFavoriteQuotationMapAction(quotation.code, true))}>
+                <a
+                  className={styles.selfAdd}
+                  onClick={() => dispatch(setFavoriteQuotationMapAction({ code: quotation.code, status: true }))}
+                >
                   未关注
                 </a>
               )}
