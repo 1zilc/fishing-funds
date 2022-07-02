@@ -1,6 +1,6 @@
 import dayjs from 'dayjs';
-import { createSlice, PayloadAction, ThunkAction } from '@reduxjs/toolkit';
-import { TypedThunk } from '@/store';
+import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
+import { TypedThunk, AsyncThunkConfig } from '@/store';
 import * as Utils from '@/utils';
 import * as CONST from '@/constants';
 import * as Enums from '@/utils/enums';
@@ -78,7 +78,7 @@ const settingSlice = createSlice({
   name: 'setting',
   initialState,
   reducers: {
-    syncSettingAction(state, action) {
+    syncSettingAction(state, action: PayloadAction<System.Setting>) {
       state.systemSetting = action.payload;
     },
     updateAdjustmentNotificationDateAction(state, action: PayloadAction<string>) {
@@ -92,8 +92,9 @@ const settingSlice = createSlice({
 });
 export const { syncSettingAction, updateAdjustmentNotificationDateAction, syncDarkMode } = settingSlice.actions;
 
-export function setSystemSettingAction(newSetting: System.Setting): TypedThunk {
-  return (dispatch, getState) => {
+export const setSystemSettingAction = createAsyncThunk<void, System.Setting, AsyncThunkConfig>(
+  'setting/setSystemSettingAction',
+  async (newSetting, { dispatch, getState }) => {
     try {
       const {
         setting: { systemSetting: oldSystemSetting },
@@ -102,27 +103,8 @@ export function setSystemSettingAction(newSetting: System.Setting): TypedThunk {
       const systemSetting = { ...oldSystemSetting, ...newSetting };
 
       dispatch(syncSettingAction(systemSetting));
-      Utils.SetStorage(CONST.STORAGE.SYSTEM_SETTING, systemSetting);
     } catch (error) {}
-  };
-}
-
-export function setAdjustmentNotificationDateAction(date: string): TypedThunk {
-  return (dispatch, getState) => {
-    try {
-      dispatch(updateAdjustmentNotificationDateAction(date));
-      Utils.SetStorage(CONST.STORAGE.ADJUSTMENT_NOTIFICATION_DATE, date);
-    } catch (error) {}
-  };
-}
-
-export function clearAdjustmentNotificationDateAction(): TypedThunk {
-  return (dispatch, getState) => {
-    try {
-      dispatch(updateAdjustmentNotificationDateAction(''));
-      Utils.ClearStorage(CONST.STORAGE.ADJUSTMENT_NOTIFICATION_DATE);
-    } catch (error) {}
-  };
-}
+  }
+);
 
 export default settingSlice.reducer;

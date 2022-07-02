@@ -9,7 +9,7 @@ import { updateAvaliableAction } from '@/store/features/updater';
 import { setFundConfigAction } from '@/store/features/fund';
 import { changeTabsActiveKeyAction } from '@/store/features/tabs';
 import { selectWalletAction, toggleEyeStatusAction } from '@/store/features/wallet';
-import { setAdjustmentNotificationDateAction, clearAdjustmentNotificationDateAction, syncDarkMode } from '@/store/features/setting';
+import { updateAdjustmentNotificationDateAction, syncDarkMode } from '@/store/features/setting';
 
 import {
   useWorkDayTimeToDo,
@@ -83,7 +83,7 @@ export function useAdjustmentNotification() {
         notification.onclick = () => {
           invoke.showCurrentWindow();
         };
-        dispatch(setAdjustmentNotificationDateAction(currentDate));
+        dispatch(updateAdjustmentNotificationDateAction(currentDate));
       }
     },
     1000 * 50,
@@ -323,7 +323,7 @@ export function useMappingLocalToSystemSetting() {
     }
   }, [lowKeySetting]);
   useAfterMountedEffect(() => {
-    dispatch(clearAdjustmentNotificationDateAction());
+    dispatch(updateAdjustmentNotificationDateAction(''));
   }, [adjustmentNotificationTimeSetting]);
   useEffect(() => {
     switch (proxyTypeSetting) {

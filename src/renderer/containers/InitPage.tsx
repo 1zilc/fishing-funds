@@ -4,7 +4,12 @@ import { batch } from 'react-redux';
 import LoadingScreen from '@/components/LoadingScreen';
 import { setRemoteFundsAction, setFundRatingMapAction } from '@/store/features/fund';
 import { setZindexConfigAction, defaultZindexConfig } from '@/store/features/zindex';
-import { setSystemSettingAction, setAdjustmentNotificationDateAction, defaultSystemSetting, syncDarkMode } from '@/store/features/setting';
+import {
+  setSystemSettingAction,
+  updateAdjustmentNotificationDateAction,
+  defaultSystemSetting,
+  syncDarkMode,
+} from '@/store/features/setting';
 import { setWalletConfigAction, changeEyeStatusAction, selectWalletAction, defaultWallet } from '@/store/features/wallet';
 import { setStockConfigAction } from '@/store/features/stock';
 import { setCoinConfigAction, setRemoteCoinsAction } from '@/store/features/coin';
@@ -69,7 +74,7 @@ const InitPage = () => {
     const darkMode = await ipcRenderer.invoke('get-should-use-dark-colors');
     batch(() => {
       dispatch(setSystemSettingAction(systemSetting));
-      dispatch(setAdjustmentNotificationDateAction(adjustmentNotificationDate));
+      dispatch(updateAdjustmentNotificationDateAction(adjustmentNotificationDate));
       dispatch(syncDarkMode(darkMode));
     });
 
