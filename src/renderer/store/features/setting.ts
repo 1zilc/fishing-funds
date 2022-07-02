@@ -1,6 +1,6 @@
 import dayjs from 'dayjs';
 import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
-import { TypedThunk, AsyncThunkConfig } from '@/store';
+import { AsyncThunkConfig } from '@/store';
 import * as Utils from '@/utils';
 import * as CONST from '@/constants';
 import * as Enums from '@/utils/enums';

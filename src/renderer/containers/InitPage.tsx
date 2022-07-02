@@ -13,7 +13,7 @@ import {
 import { setWalletConfigAction, changeEyeStatusAction, selectWalletAction, defaultWallet } from '@/store/features/wallet';
 import { setStockConfigAction } from '@/store/features/stock';
 import { setCoinConfigAction, setRemoteCoinsAction } from '@/store/features/coin';
-import { syncSortModeAction, setViewModeAction } from '@/store/features/sort';
+import { syncSortModeAction, setViewModeAction, initialState as sortInitialState } from '@/store/features/sort';
 import { changeTabsActiveKeyAction } from '@/store/features/tabs';
 import { setWebConfigAction, defaultWebConfig } from '@/store/features/web';
 import { useDrawer, useAppDispatch } from '@/utils/hooks';
@@ -93,45 +93,13 @@ const InitPage = () => {
     dispatch(changeTabsActiveKeyAction(tabsActiveKey));
 
     setLoading('加载排序配置...');
-    const fundSortMode = await Utils.GetStorage(CONST.STORAGE.FUND_SORT_MODE, {
-      type: Enums.FundSortType.Custom,
-      order: Enums.SortOrderType.Desc,
-    });
-    const zindexSortMode = await Utils.GetStorage(CONST.STORAGE.ZINDEX_SORT_MODE, {
-      type: Enums.ZindexSortType.Custom,
-      order: Enums.SortOrderType.Desc,
-    });
-    const quotationSortMode = await Utils.GetStorage(CONST.STORAGE.QUOTATION_SORT_MODE, {
-      type: Enums.QuotationSortType.Zdf,
-      order: Enums.SortOrderType.Desc,
-    });
-    const stockSortMode = await Utils.GetStorage(CONST.STORAGE.STOCK_SORT_MODE, {
-      type: Enums.StockSortType.Custom,
-      order: Enums.SortOrderType.Desc,
-    });
-    const coinSortMode = await Utils.GetStorage(CONST.STORAGE.COIN_SORT_MODE, {
-      type: Enums.CoinSortType.Price,
-      order: Enums.SortOrderType.Desc,
-    });
-    dispatch(syncSortModeAction({ fundSortMode, zindexSortMode, quotationSortMode, stockSortMode, coinSortMode }));
+    const sortMode = await Utils.GetStorage(CONST.STORAGE.SORT_MODE, sortInitialState.sortMode);
+    dispatch(syncSortModeAction(sortMode));
 
     setLoading('加载视图配置...');
-    const fundViewMode = await Utils.GetStorage(CONST.STORAGE.FUND_VIEW_MODE, {
-      type: Enums.FundViewType.List,
-    });
-    const zindexViewMode = await Utils.GetStorage(CONST.STORAGE.ZINDEX_VIEW_MODE, {
-      type: Enums.ZindexViewType.Grid,
-    });
-    const quotationViewMode = await Utils.GetStorage(CONST.STORAGE.QUOTATION_VIEW_MODE, {
-      type: Enums.QuotationViewType.List,
-    });
-    const stockViewMode = await Utils.GetStorage(CONST.STORAGE.STOCK_VIEW_MODE, {
-      type: Enums.StockViewType.List,
-    });
-    const coinViewMode = await Utils.GetStorage(CONST.STORAGE.COIN_VIEW_MODE, {
-      type: Enums.CoinViewType.List,
-    });
-    dispatch(setViewModeAction({ fundViewMode, zindexViewMode, quotationViewMode, stockViewMode, coinViewMode }));
+    const viewMode = await Utils.GetStorage(CONST.STORAGE.VIEW_MODE, sortInitialState.viewMode);
+    dispatch(syncSortModeAction(sortMode));
+    dispatch(setViewModeAction(viewMode));
 
     setLoading('加载远程数据缓存...');
     const remoteFundMap = await Utils.GetStorage(CONST.STORAGE.REMOTE_FUND_MAP, {});
