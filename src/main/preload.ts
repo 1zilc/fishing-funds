@@ -54,6 +54,7 @@ contextBridge.exposeInMainWorld('contextModules', {
           'webview-new-window',
           'change-tab-active-key',
           'change-eye-status',
+          'sync-store-data',
         ];
         if (validChannels.includes(channel)) {
           return ipcRenderer.on(channel, func);

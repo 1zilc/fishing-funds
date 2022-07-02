@@ -3,7 +3,7 @@ import windowStateKeeper from 'electron-window-state';
 import { menubar, Menubar } from 'menubar';
 import { app, Tray, Menu, shell } from 'electron';
 import AppUpdater from './autoUpdater';
-import { resolveHtmlPath, sendMessageToRenderer } from './util';
+import { resolveHtmlPath, sendMessageToRenderer, getPreloadPath } from './util';
 
 export function createMenubar({ tray, mainWindowState }: { tray: Tray; mainWindowState: windowStateKeeper.State }) {
   return menubar({
@@ -26,7 +26,7 @@ export function createMenubar({ tray, mainWindowState }: { tray: Tray; mainWindo
       webPreferences: {
         webviewTag: true,
         devTools: !app.isPackaged,
-        preload: app.isPackaged ? path.join(__dirname, 'preload.js') : path.join(__dirname, '../../.erb/dll/preload.js'),
+        preload: getPreloadPath(),
       },
     },
   });
