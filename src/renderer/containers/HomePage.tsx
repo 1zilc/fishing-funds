@@ -11,6 +11,7 @@ import {
   useTouchBar,
   useMappingLocalToSystemSetting,
   useUpdateContextMenuWalletsState,
+  useShareStoreState,
 } from '@/utils/hooks';
 
 const HomePage = () => {
@@ -23,6 +24,7 @@ const HomePage = () => {
   useUpdateContextMenuWalletsState();
   useMappingLocalToSystemSetting();
   useTouchBar();
+  useShareStoreState();
   useBootStrap();
 
   return <Home />;
