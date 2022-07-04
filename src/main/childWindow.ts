@@ -1,8 +1,8 @@
 import { app, BrowserWindow } from 'electron';
 import { getPreloadPath, resolveHtmlPath } from './util';
 
-export function createChildWindow(config: { path: string; parentId: number }) {
-  const index = resolveHtmlPath('index.html') + config.path;
+export function createChildWindow(config: { search: string; parentId: number }) {
+  const index = resolveHtmlPath() + config.search;
   const parent = BrowserWindow.fromId(config.parentId);
   if (parent) {
     const [width, height] = parent.getSize();
@@ -20,11 +20,7 @@ export function createChildWindow(config: { path: string; parentId: number }) {
         preload: getPreloadPath(),
       },
     });
-    if (process.env.NODE_ENV === 'development') {
-      win.loadURL(index);
-    } else {
-      win.loadFile(index);
-    }
+    win.loadURL(index);
     return win;
   }
 }

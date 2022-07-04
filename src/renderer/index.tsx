@@ -26,7 +26,6 @@ NP.enableBoundaryChecking(false);
 Utils.CheckEnvTool();
 
 const { platform } = window.contextModules.process;
-const { ipcRenderer } = window.contextModules.electron;
 
 createRoot(document.getElementById('root')!).render(
   <ConfigProvider locale={zhCN}>

@@ -7,7 +7,7 @@ import { resolveHtmlPath, sendMessageToRenderer, getPreloadPath } from './util';
 
 export function createMenubar({ tray, mainWindowState }: { tray: Tray; mainWindowState: windowStateKeeper.State }) {
   return menubar({
-    index: resolveHtmlPath('index.html'),
+    index: resolveHtmlPath(),
     tray,
     tooltip: 'Fishing Funds',
     preloadWindow: true,

@@ -113,7 +113,9 @@ const InitPage = () => {
 
     setLoading('加载完毕');
 
-    navigate('/home');
+    const params = Utils.ParseSearchParams();
+
+    navigate(params.get('_nav') || '/home');
   }
 
   useEffect(() => {

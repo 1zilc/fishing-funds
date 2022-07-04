@@ -5,14 +5,13 @@ import { URL } from 'url';
 import * as path from 'path';
 import * as Enums from '../renderer/utils/enums';
 
-export function resolveHtmlPath(htmlFileName: string) {
+export function resolveHtmlPath() {
   if (process.env.NODE_ENV === 'development') {
     const port = process.env.PORT || 3456;
-    const url = new URL(`http://localhost:${port}`);
-    url.pathname = htmlFileName;
-    return url.href;
+    // const url = new URL();
+    return `http://localhost:${port}`;
   } else {
-    return `file://${path.resolve(__dirname, '../renderer/', htmlFileName)}`;
+    return `file://${path.resolve(__dirname, '../renderer/', 'index.html')}`;
   }
 }
 

@@ -4,7 +4,7 @@ import dayjs from 'dayjs';
 import * as Enums from '@/utils/enums';
 import * as CONST from '@/constants';
 
-const { invoke } = window.contextModules.electron;
+const { invoke, ipcRenderer } = window.contextModules.electron;
 const { version, production } = window.contextModules.process;
 const { encodeFF, decodeFF } = window.contextModules.io;
 const electronStore = window.contextModules.electronStore;
@@ -453,4 +453,15 @@ export function SetUpdatingStoreStateStatus(status: boolean) {
 
 export function GetUpdatingStoreStateStatus() {
   return window.sessionStorage.getItem(CONST.STORAGE.UPDATING_STORE_STATE_FROM_OTHER);
+}
+
+export function MakeSearchParams(config: { _nav: string; data?: Record<string, unknown> }) {
+  const data = config.data || {};
+  const search = '?' + new URLSearchParams({ ...data, _nav: config._nav }).toString();
+  return search;
+}
+
+export function ParseSearchParams() {
+  const data = new URLSearchParams(window.location.search);
+  return data;
 }

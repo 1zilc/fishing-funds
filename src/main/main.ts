@@ -159,7 +159,7 @@ function main() {
     activeHotkeys = keys;
   });
   ipcMain.handle('open-child-window', (event, config) => {
-    const win = createChildWindow({ path: config.path, parentId: event.frameId });
+    const win = createChildWindow({ search: config.search, parentId: event.frameId });
     if (win) {
       const windowId = win.id;
       windowIds.push(windowId);

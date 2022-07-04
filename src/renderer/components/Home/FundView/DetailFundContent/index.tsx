@@ -309,11 +309,12 @@ export const DetailFund: React.FC<DetailFundProps> = (props) => {
 
 const DetailFundContent: React.FC<DetailFundContentProps> = (props) => {
   function onOpenChildWindow() {
-    ipcRenderer.invoke('open-child-window', { path: `/detail?code=${props.code}` });
+    const search = Utils.MakeSearchParams({ _nav: '/detail/fund', data: { code: props.code } });
+    ipcRenderer.invoke('open-child-window', { search });
     props.onEnter();
   }
   return (
-    <CustomDrawerContent title="基金详情" enterText="小窗" onClose={props.onClose} onEnter={onOpenChildWindow}>
+    <CustomDrawerContent title="基金详情" enterText="多窗" onClose={props.onClose} onEnter={onOpenChildWindow}>
       <DetailFund code={props.code} />
     </CustomDrawerContent>
   );
