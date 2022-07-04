@@ -4,11 +4,13 @@ import { app, Tray, Menu, shell } from 'electron';
 import AppUpdater from './autoUpdater';
 import { resolveHtmlPath, sendMessageToRenderer, getPreloadPath } from './util';
 
+const { productName } = require('../../release/app/package.json');
+
 export function createMenubar({ tray, mainWindowState }: { tray: Tray; mainWindowState: windowStateKeeper.State }) {
   return menubar({
     index: resolveHtmlPath(),
     tray,
-    tooltip: 'Fishing Funds',
+    tooltip: productName,
     preloadWindow: true,
     showOnAllWorkspaces: true,
     // showDockIcon: false,
