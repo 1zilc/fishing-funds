@@ -39,9 +39,9 @@ function FundGroup() {
 
   return (
     <GroupTab tabKey={Enums.TabKeyType.Funds}>
-      <Tabs.TabPane tab="全部" key={String(0)}>
+      <GroupTab.TabPane tab="全部" key={String(0)}>
         <FundView filter={() => true} />
-      </Tabs.TabPane>
+      </GroupTab.TabPane>
       <GroupTab.TabPane tab="持有" key={String(1)}>
         <FundView filter={(fund) => !!codeMap[fund.fundcode!]?.cyfe} />
       </GroupTab.TabPane>
