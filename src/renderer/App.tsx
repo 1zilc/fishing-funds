@@ -13,6 +13,7 @@ const DetailZindexPage = React.lazy(() => import('@/components/Home/ZindexView/D
 const DetailStockPage = React.lazy(() => import('@/components/Home/StockView/DetailStockPage'));
 const DetailQuotationPage = React.lazy(() => import('@/components/Home/QuotationView/DetailQuotationPage'));
 const DetailCoinPage = React.lazy(() => import('@/components/Home/CoinView/DetailCoinPage'));
+const WebViewerPage = React.lazy(() => import('@/components/WebViewerDrawer/WebViewerPage'));
 
 const params = Utils.ParseSearchParams();
 
@@ -32,6 +33,10 @@ const App: React.FC<Record<string, unknown>> = () => {
               element={<DetailStockPage secid={params.get('secid')!} type={params.get('type') ? Number(params.get('type')) : undefined} />}
             />
             <Route path="coin" element={<DetailCoinPage code={params.get('code')!} />} />
+            <Route
+              path="webViewer"
+              element={<WebViewerPage full url={params.get('url')!} phone={params.get('phone') === 'true'} title={params.get('title')!} />}
+            />
           </Route>
         </Routes>
       </Suspense>

@@ -4,6 +4,7 @@ import { useBoolean, useMemoizedFn, useEventListener } from 'ahooks';
 
 import StarIcon from '@/static/icon/star.svg';
 import CopyIcon from '@/static/icon/copy.svg';
+import GlobalIcon from '@/static/icon/global.svg';
 import StarFillIcon from '@/static/icon/star-fill.svg';
 import ArrowLeftIcon from '@/static/icon/arrow-left.svg';
 import ArrowRightIcon from '@/static/icon/arrow-right.svg';
@@ -13,29 +14,42 @@ import CustomDrawerContent from '@/components/CustomDrawer/Content';
 import CustomDrawer from '@/components/CustomDrawer';
 import Empty from '@/components/Empty';
 
-import { closeWebAction, addWebAction, deleteWebAction, syncWebPhoneAction, syncWebUrlAction } from '@/store/features/web';
+import { closeWebAction, addWebAction, deleteWebAction, syncWebPhoneAction } from '@/store/features/web';
 import { useDrawer, useAppDispatch, useAppSelector, useIpcRendererListener } from '@/utils/hooks';
 import * as CONST from '@/constants';
 import * as Enums from '@/utils/enums';
+import * as Utils from '@/utils';
 import styles from './index.module.scss';
 
-const AddWebContent = React.lazy(() => import('@/components/WebViewer/AddWebContent'));
+const AddWebContent = React.lazy(() => import('@/components/WebViewerDrawer/AddWebContent'));
 
-interface ViewerContentProps {}
+interface WebViewerDrawerProps {}
+
+interface WebViewerProps {
+  url: string;
+  phone?: boolean;
+  title: string;
+  updateTitle?: (title: string) => void;
+  full?: boolean;
+}
+
+interface WebViewerContentProps {}
+
+const menuItemSize = { height: 14, width: 14 };
 
 const { clipboard, dialog, ipcRenderer, shell } = window.contextModules.electron;
 
 const defaultAgent =
   'Mozilla/5.0 (iPhone; CPU iPhone OS 10_3_1 like Mac OS X) AppleWebKit/603.1.30 (KHTML, like Gecko) Version/10.0 Mobile/14E304 Safari/602.1';
 
-const Content = () => {
+export const WebViewer: React.FC<WebViewerProps> = (props) => {
   const dispatch = useAppDispatch();
   const viewRef = useRef<any>(null);
+  const { url, phone, title, full } = props;
   const { codeMap } = useAppSelector((state) => state.web.config);
-  const { url, phone, show, title } = useAppSelector((state) => state.web.view);
+  const show = useAppSelector((state) => state.web.show);
   const [currentUrl, setCurrentUrl] = useState(url);
   const [currentTitle, setCurrentTitle] = useState(title);
-
   const [loading, { setTrue: setLoadingTrue, setFalse: setLoadingFalse }] = useBoolean(false);
   const [done, { setTrue: setDoneTrue, setFalse: setDoneFalse }] = useBoolean(false);
   const [percent, setPercent] = useState(0);
@@ -171,69 +185,97 @@ const Content = () => {
     }
   }, [show]);
 
+  useEffect(() => {
+    props.updateTitle?.(currentTitle);
+  }, [currentTitle]);
+
   return (
-    <CustomDrawerContent title={currentTitle} enterText="跳转" onClose={() => dispatch(closeWebAction())} onEnter={onVisit}>
-      <div className={styles.content}>
-        {url ? (
-          <webview
-            ref={viewRef}
-            src={url}
-            style={{ width: '100%', flex: '1' }}
-            useragent={phone ? defaultAgent : undefined}
-            allowpopups="true"
-          />
-        ) : (
-          <Empty text="404 Not Found" />
-        )}
-        <div>
-          <Progress
-            percent={percent}
-            status={loading ? 'active' : 'success'}
-            strokeWidth={2}
-            trailColor="transparent"
-            showInfo={false}
-            strokeColor={done ? 'transparent' : 'var(--primary-color)'}
-          />
-          <div className={styles.nav}>
-            <Dropdown
-              overlay={
-                <div className={styles.menu}>
-                  <div className={styles.menuItem} onClick={onCopyUrl}>
-                    <label>复制链接</label>
-                    <CopyIcon />
-                  </div>
-                  <div className={styles.menuItem}>
-                    <label>移动端标识</label>
-                    <Switch checked={!!phone} onChange={onPhoneChange} size="small" />
-                  </div>
+    <div className={styles.content} style={{ height: full ? '100vh' : 'calc(100vh - 48px)' }}>
+      {url ? (
+        <webview
+          ref={viewRef}
+          src={url}
+          style={{ width: '100%', flex: '1' }}
+          useragent={phone ? defaultAgent : undefined}
+          allowpopups="true"
+        />
+      ) : (
+        <Empty text="404 Not Found" />
+      )}
+      <div>
+        <Progress
+          percent={percent}
+          status={loading ? 'active' : 'success'}
+          strokeWidth={2}
+          trailColor="transparent"
+          showInfo={false}
+          strokeColor={done ? 'transparent' : 'var(--primary-color)'}
+        />
+        <div className={styles.nav}>
+          <Dropdown
+            overlay={
+              <div className={styles.menu}>
+                <div className={styles.menuItem} onClick={onVisit}>
+                  <label>浏览器打开</label>
+                  <GlobalIcon {...menuItemSize} />
                 </div>
-              }
-              placement="topLeft"
-            >
-              <ToolsIcon />
-            </Dropdown>
-            <ArrowLeftIcon onClick={() => viewRef.current?.goBack()} />
-            <RefreshIcon onClick={() => viewRef.current?.reload()} />
-            <ArrowRightIcon onClick={() => viewRef.current?.goForward()} />
-            {codeMap[currentUrl] ? <StarFillIcon onClick={onRemoveWeb} /> : <StarIcon onClick={onSetWeb} />}
-          </div>
+                <div className={styles.menuItem} onClick={onCopyUrl}>
+                  <label>复制链接</label>
+                  <CopyIcon {...menuItemSize} />
+                </div>
+                <div className={styles.menuItem}>
+                  <label>移动端标识</label>
+                  <Switch checked={!!phone} onChange={onPhoneChange} size="small" />
+                </div>
+              </div>
+            }
+            placement="topLeft"
+          >
+            <ToolsIcon />
+          </Dropdown>
+          <ArrowLeftIcon onClick={() => viewRef.current?.goBack()} />
+          <RefreshIcon onClick={() => viewRef.current?.reload()} />
+          <ArrowRightIcon onClick={() => viewRef.current?.goForward()} />
+          {codeMap[currentUrl] ? <StarFillIcon onClick={onRemoveWeb} /> : <StarIcon onClick={onSetWeb} />}
         </div>
       </div>
       <CustomDrawer show={showAddWebContent} zIndex={CONST.DEFAULT.DRAWER_ZINDEX_TOP}>
         <AddWebContent web={{ ...webDetail, title: currentTitle }} onClose={closeAddWebContent} onEnter={onAddWeb} favicons={favicons} />
       </CustomDrawer>
+    </div>
+  );
+};
+
+export const WebViewerContent: React.FC<WebViewerContentProps> = () => {
+  const dispatch = useAppDispatch();
+  const view = useAppSelector((state) => state.web.view);
+  const [currentTitle, setCurrentTitle] = useState(view.title);
+
+  function onClose() {
+    dispatch(closeWebAction());
+  }
+
+  function onOpenChildWindow() {
+    const search = Utils.MakeSearchParams({ _nav: '/detail/webViewer', data: view });
+    ipcRenderer.invoke('open-child-window', { search });
+  }
+
+  return (
+    <CustomDrawerContent title={currentTitle} enterText="多窗" onClose={onClose} onEnter={onOpenChildWindow}>
+      <WebViewer url={view.url} phone={view.phone} title={view.title} updateTitle={setCurrentTitle} />
     </CustomDrawerContent>
   );
 };
+
 // TODO:useragent待随机处理
-const WebViewer: React.FC<ViewerContentProps> = () => {
-  const { show } = useAppSelector((state) => state.web.view);
+const WebViewerDrawer: React.FC<WebViewerDrawerProps> = () => {
+  const show = useAppSelector((state) => state.web.show);
 
   return (
     <CustomDrawer show={show} zIndex={CONST.DEFAULT.DRAWER_ZINDEX_HEIGHT}>
-      <Content />
+      <WebViewerContent />
     </CustomDrawer>
   );
 };
 
-export default WebViewer;
+export default WebViewerDrawer;

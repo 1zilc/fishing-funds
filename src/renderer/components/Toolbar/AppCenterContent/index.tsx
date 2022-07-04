@@ -37,7 +37,7 @@ const ManageZindexContent = React.lazy(() => import('@/components/Home/ZindexVie
 const ManageStockContent = React.lazy(() => import('@/components/Home/StockView/ManageStockContent'));
 const ManageCoinContent = React.lazy(() => import('@/components/Home/CoinView/ManageCoinContent'));
 const ManageWalletContent = React.lazy(() => import('@/components/Wallet/ManageWalletContent'));
-const ManageWebContent = React.lazy(() => import('@/components/WebViewer/ManageWebContent'));
+const ManageWebContent = React.lazy(() => import('@/components/WebViewerDrawer/ManageWebContent'));
 const FundStatisticsContent = React.lazy(() => import('@/components/Home/FundView/FundStatisticsContent'));
 const NewsContent = React.lazy(() => import('@/components/Home/NewsList/NewsContent'));
 const HoldingContent = React.lazy(() => import('@/components/Home/QuotationView/HoldingContent'));

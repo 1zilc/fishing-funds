@@ -2,14 +2,15 @@ import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
 import { AsyncThunkConfig } from '@/store';
 import * as Utils from '@/utils';
 import * as Enums from '@/utils/enums';
+import { batch } from 'react-redux';
 
 export interface WebState {
   view: {
-    show: boolean;
     phone?: boolean;
     title: string;
     url: string;
   };
+  show: boolean;
   config: { webConfig: Web.SettingItem[]; codeMap: Web.CodeMap };
 }
 
@@ -48,11 +49,11 @@ export const defaultWebConfig = [
 
 const initialState: WebState = {
   view: {
-    show: false,
     phone: true,
     title: '',
     url: '',
   },
+  show: false,
   config: { webConfig: [], codeMap: {} },
 };
 
@@ -63,10 +64,13 @@ const webSlice = createSlice({
     syncWebUrlAction(state, action: PayloadAction<string>) {
       state.view.url = action.payload;
     },
+    syncWebShowAction(state, action: PayloadAction<boolean>) {
+      state.show = action.payload;
+    },
     syncWebPhoneAction(state, action: PayloadAction<boolean>) {
       state.view.phone = action.payload;
     },
-    syncWebAction(state, action) {
+    syncWebAction(state, action: PayloadAction<{ phone?: boolean; title: string; url: string }>) {
       state.view = action.payload;
     },
     syncWebConfigAction(state, action: PayloadAction<{ webConfig: Web.SettingItem[]; codeMap: Web.CodeMap }>) {
@@ -75,23 +79,17 @@ const webSlice = createSlice({
   },
 });
 
-export const { syncWebUrlAction, syncWebPhoneAction, syncWebAction, syncWebConfigAction } = webSlice.actions;
-
-export const setWebAction = createAsyncThunk<void, { show: boolean; phone?: boolean; title: string; url: string }, AsyncThunkConfig>(
-  'web/setWebAction',
-  async (data, { dispatch, getState }) => {
-    try {
-      const {
-        web: { view },
-      } = getState();
-      dispatch(syncWebAction({ ...view, ...data }));
-    } catch (error) {}
-  }
-);
+export const { syncWebUrlAction, syncWebShowAction, syncWebPhoneAction, syncWebAction, syncWebConfigAction } = webSlice.actions;
 
 export const closeWebAction = createAsyncThunk<void, void, AsyncThunkConfig>('web/closeWebAction', async (_, { dispatch, getState }) => {
   try {
-    dispatch(setWebAction({ url: '', title: '', show: false }));
+    const {
+      web: { view },
+    } = getState();
+    batch(() => {
+      dispatch(syncWebAction({ ...view, url: '', title: '' }));
+      dispatch(syncWebShowAction(false));
+    });
   } catch (error) {}
 });
 
@@ -99,7 +97,13 @@ export const openWebAction = createAsyncThunk<void, { phone?: boolean; title: st
   'web/openWebAction',
   async (data, { dispatch, getState }) => {
     try {
-      dispatch(setWebAction({ ...data, show: true }));
+      const {
+        web: { view },
+      } = getState();
+      batch(() => {
+        dispatch(syncWebAction({ ...view, ...data }));
+        dispatch(syncWebShowAction(true));
+      });
     } catch (error) {}
   }
 );
