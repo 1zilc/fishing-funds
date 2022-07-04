@@ -9,7 +9,7 @@ export function createChildWindow(config: { search: string; parentId: number }) 
     const win = new BrowserWindow({
       width,
       height,
-      backgroundColor: '#fff',
+      backgroundColor: process.platform === 'darwin' ? 'rgba(0, 0, 0, 0)' : '#fff',
       minHeight: 400,
       minWidth: 300,
       maxHeight: 1000,
@@ -21,6 +21,9 @@ export function createChildWindow(config: { search: string; parentId: number }) 
       },
     });
     win.loadURL(index);
+    if (process.platform === 'darwin') {
+      win.setVibrancy('sidebar');
+    }
     return win;
   }
 }

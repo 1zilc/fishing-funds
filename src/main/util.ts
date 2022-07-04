@@ -1,7 +1,6 @@
 import log from 'electron-log';
 import { Menubar } from 'menubar';
 import { app, BrowserWindow, nativeTheme } from 'electron';
-import { URL } from 'url';
 import * as path from 'path';
 import * as Enums from '../renderer/utils/enums';
 

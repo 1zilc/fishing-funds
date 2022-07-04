@@ -1,4 +1,3 @@
-import path from 'path';
 import windowStateKeeper from 'electron-window-state';
 import { menubar, Menubar } from 'menubar';
 import { app, Tray, Menu, shell } from 'electron';
@@ -15,8 +14,7 @@ export function createMenubar({ tray, mainWindowState }: { tray: Tray; mainWindo
     // showDockIcon: false,
 
     browserWindow: {
-      backgroundColor: process.platform === 'darwin' ? undefined : '#fff',
-      transparent: process.platform === 'darwin',
+      backgroundColor: process.platform === 'darwin' ? 'rgba(0, 0, 0, 0)' : '#fff',
       width: mainWindowState.width,
       height: mainWindowState.height,
       minHeight: 400,
