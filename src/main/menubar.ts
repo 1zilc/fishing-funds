@@ -21,6 +21,7 @@ export function createMenubar({ tray, mainWindowState }: { tray: Tray; mainWindo
       minWidth: 300,
       maxHeight: 1000,
       maxWidth: 600,
+      vibrancy: 'sidebar',
       webPreferences: {
         webviewTag: true,
         devTools: !app.isPackaged,
@@ -54,26 +55,26 @@ export function buildContextMenu(
     { type: 'separator' },
     {
       click: () => {
-        sendMessageToRenderer(mb, 'clipboard-funds-import');
+        sendMessageToRenderer(mb.window, 'clipboard-funds-import');
       },
       label: '录入基金JSON配置',
     },
     {
       click: () => {
-        sendMessageToRenderer(mb, 'clipboard-funds-copy');
+        sendMessageToRenderer(mb.window, 'clipboard-funds-copy');
       },
       label: '复制基金JSON配置',
     },
     { type: 'separator' },
     {
       click: () => {
-        sendMessageToRenderer(mb, 'backup-all-config-import');
+        sendMessageToRenderer(mb.window, 'backup-all-config-import');
       },
       label: '导入全局配置',
     },
     {
       click: () => {
-        sendMessageToRenderer(mb, 'backup-all-config-export');
+        sendMessageToRenderer(mb.window, 'backup-all-config-export');
       },
       label: '导出全局配置',
     },

@@ -1,4 +1,4 @@
-import { NativeImage, dialog, shell, app } from 'electron';
+import { NativeImage, dialog, shell } from 'electron';
 import { Menubar } from 'menubar';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
@@ -60,7 +60,7 @@ export default class AppUpdater {
               type: 'info',
               title: `发现新版本 v${data.version}`,
               message: `找到更新 v${data.version}，您现在要更新吗？`,
-              detail: data.releaseNote,
+              detail: data.releaseNotes as string,
               buttons: ['前往下载', '取消'],
             })
             .then(({ response }) => {
@@ -75,7 +75,7 @@ export default class AppUpdater {
             .catch((error) => {});
           break;
         case 'renderer':
-          sendMessageToRenderer(conf.mb, 'update-available', data);
+          sendMessageToRenderer(conf.mb.window, 'update-available', data);
           break;
         default:
           break;

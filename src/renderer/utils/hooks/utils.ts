@@ -644,14 +644,3 @@ export function useInputShortcut(initial: string) {
     reset,
   };
 }
-
-export function useSyncMultiProcessStore() {
-  useEffect(() => {
-    store.subscribe(() => {
-      console.log(store.getState());
-      // ipcRenderer.invoke('sync-multi-window-store', { data: store.getState() });
-    });
-  }, []);
-
-  useIpcRendererListener('', () => {});
-}

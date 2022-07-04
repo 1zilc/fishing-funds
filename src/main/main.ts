@@ -7,7 +7,7 @@
  * `./src/main.prod.js` using webpack. This gives us some performance wins.
  */
 
-import { app, globalShortcut, ipcMain, nativeTheme, dialog, webContents, shell, Menu } from 'electron';
+import { app, globalShortcut, ipcMain, nativeTheme, dialog, webContents, shell, Menu, BrowserWindow } from 'electron';
 import windowStateKeeper from 'electron-window-state';
 import Store from 'electron-store';
 import { Menubar } from 'menubar';
@@ -96,8 +96,9 @@ function main() {
   });
   ipcMain.handle('registry-webview', (event, config) => {
     const contents = webContents.fromId(config);
+    const win = BrowserWindow.fromId(event.frameId);
     contents.setWindowOpenHandler(({ url }) => {
-      sendMessageToRenderer(mb, 'webview-new-window', url);
+      sendMessageToRenderer(win, 'webview-new-window', url);
       return { action: 'deny' };
     });
   });
@@ -111,7 +112,7 @@ function main() {
     const menus = config.map((item: any) => ({
       ...item,
       icon: generateWalletIcon(item.iconIndex),
-      click: () => sendMessageToRenderer(mb, 'change-current-wallet-code', item.id),
+      click: () => sendMessageToRenderer(mb.window, 'change-current-wallet-code', item.id),
     }));
     contextMenu = buildContextMenu({ mb, appUpdater }, menus);
   });
@@ -179,10 +180,6 @@ function main() {
     windowIds.push(mb.window!.id);
     // 设置系统色彩偏好
     setNativeTheme(defaultTheme);
-    // 系统级别高斯模糊
-    if (process.platform === 'darwin') {
-      mb.window?.setVibrancy('sidebar');
-    }
     // 右键菜单
     tray.on('right-click', () => {
       mb.tray.popUpContextMenu(contextMenu);
@@ -191,7 +188,9 @@ function main() {
     Menu.setApplicationMenu(null);
     // 监听主题颜色变化
     nativeTheme.on('updated', () => {
-      sendMessageToRenderer(mb, 'nativeTheme-updated', { darkMode: nativeTheme.shouldUseDarkColors });
+      getOtherWindows(windowIds).forEach((win) => {
+        sendMessageToRenderer(win, 'nativeTheme-updated', { darkMode: nativeTheme.shouldUseDarkColors });
+      });
     });
     // 存储窗口大小
     mainWindowState.manage(mb.window!);
@@ -199,7 +198,7 @@ function main() {
     app.dock?.hide();
     // 是否打开备份文件
     if (openBackupFilePath) {
-      sendMessageToRenderer(mb, 'open-backup-file', openBackupFilePath);
+      sendMessageToRenderer(mb.window, 'open-backup-file', openBackupFilePath);
     }
     // 外部打开 _blank连接
     mb.window?.webContents.setWindowOpenHandler(({ url }) => {
@@ -250,7 +249,7 @@ app.on('second-instance', (event, argv, cwd) => {
 });
 app.on('open-file', (even, path: string) => {
   if (mb?.window) {
-    sendMessageToRenderer(mb, 'open-backup-file', path);
+    sendMessageToRenderer(mb.window, 'open-backup-file', path);
   } else {
     openBackupFilePath = path;
   }

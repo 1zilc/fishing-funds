@@ -55,8 +55,8 @@ export function base64ToBuffer(dataUrl: string) {
   return imageBuffer;
 }
 
-export function sendMessageToRenderer(mb: Menubar, key: string, data?: any) {
-  return mb.window?.webContents.send(key, data);
+export function sendMessageToRenderer(win: BrowserWindow | undefined | null, key: string, data?: any) {
+  return win?.webContents.send(key, data);
 }
 
 export function setNativeTheme(theme: Enums.SystemThemeType) {
@@ -78,6 +78,6 @@ export function getPreloadPath() {
   return app.isPackaged ? path.join(__dirname, 'preload.js') : path.join(__dirname, '../../.erb/dll/preload.js');
 }
 
-export function getOtherWindows(windowIds: number[], current: number | undefined) {
+export function getOtherWindows(windowIds: number[], current?: number) {
   return windowIds.filter((id) => id !== current).map((id) => BrowserWindow.fromId(id));
 }

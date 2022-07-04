@@ -14,6 +14,7 @@ export function createChildWindow(config: { search: string; parentId: number }) 
       minWidth: 300,
       maxHeight: 1000,
       maxWidth: 600,
+      vibrancy: 'sidebar',
       webPreferences: {
         webviewTag: true,
         devTools: !app.isPackaged,
@@ -21,9 +22,6 @@ export function createChildWindow(config: { search: string; parentId: number }) 
       },
     });
     win.loadURL(index);
-    if (process.platform === 'darwin') {
-      win.setVibrancy('sidebar');
-    }
     return win;
   }
 }
