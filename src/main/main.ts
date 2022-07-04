@@ -7,7 +7,7 @@
  * `./src/main.prod.js` using webpack. This gives us some performance wins.
  */
 
-import { app, globalShortcut, ipcMain, nativeTheme, dialog, webContents, shell, BrowserWindow } from 'electron';
+import { app, globalShortcut, ipcMain, nativeTheme, dialog, webContents, shell, Menu } from 'electron';
 import windowStateKeeper from 'electron-window-state';
 import Store from 'electron-store';
 import { Menubar } from 'menubar';
@@ -187,6 +187,8 @@ function main() {
     tray.on('right-click', () => {
       mb.tray.popUpContextMenu(contextMenu);
     });
+    // 隐藏菜单栏
+    Menu.setApplicationMenu(null);
     // 监听主题颜色变化
     nativeTheme.on('updated', () => {
       sendMessageToRenderer(mb, 'nativeTheme-updated', { darkMode: nativeTheme.shouldUseDarkColors });
