@@ -1,6 +1,5 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { batch } from 'react-redux';
 import LoadingScreen from '@/components/LoadingScreen';
 import { setRemoteFundsAction, setFundRatingMapAction } from '@/store/features/fund';
 import { setZindexConfigAction, defaultZindexConfig } from '@/store/features/zindex';
@@ -23,6 +22,8 @@ import * as Utils from '@/utils';
 import * as Enums from '@/utils/enums';
 
 const { ipcRenderer } = window.contextModules.electron;
+
+const params = Utils.ParseSearchParams();
 
 const InitPage = () => {
   const navigate = useNavigate();
@@ -48,72 +49,57 @@ const InitPage = () => {
   async function init() {
     await checkLocalStorage();
 
-    setLoading('加载指数配置...');
-    const zindexSetting = await Utils.GetStorage(CONST.STORAGE.ZINDEX_SETTING, defaultZindexConfig);
-    dispatch(setZindexConfigAction(zindexSetting));
+    await Promise.all([
+      Utils.GetStorage(CONST.STORAGE.ZINDEX_SETTING, defaultZindexConfig)
+        .then((_) => dispatch(setZindexConfigAction(_)))
+        .finally(() => setLoading('web配置加载完成')),
 
-    setLoading('加载关注板块配置...');
-    const favoriteQuotationMap = await Utils.GetStorage(CONST.STORAGE.FAVORITE_QUOTATION_MAP, {});
-    dispatch(syncFavoriteQuotationMapAction(favoriteQuotationMap));
+      Utils.GetStorage(CONST.STORAGE.FAVORITE_QUOTATION_MAP, {})
+        .then((_) => dispatch(syncFavoriteQuotationMapAction(_)))
+        .finally(() => setLoading('关注板块配置加载完成')),
 
-    setLoading('加载股票配置...');
-    const stockSetting = await Utils.GetStorage(CONST.STORAGE.STOCK_SETTING, []);
-    dispatch(setStockConfigAction(stockSetting));
+      Utils.GetStorage(CONST.STORAGE.STOCK_SETTING, [])
+        .then((_) => dispatch(setStockConfigAction(_)))
+        .finally(() => setLoading('股票配置加载完成')),
 
-    setLoading('加载货币配置...');
-    const coinSetting = await Utils.GetStorage(CONST.STORAGE.COIN_SETTING, []);
-    dispatch(setCoinConfigAction(coinSetting));
+      Utils.GetStorage(CONST.STORAGE.COIN_SETTING, [])
+        .then((_) => dispatch(setCoinConfigAction(_)))
+        .finally(() => setLoading('货币配置加载完成')),
 
-    setLoading('加载web配置...');
-    const webSetting = await Utils.GetStorage(CONST.STORAGE.WEB_SETTING, defaultWebConfig);
-    dispatch(setWebConfigAction(webSetting));
+      Utils.GetStorage(CONST.STORAGE.WEB_SETTING, defaultWebConfig)
+        .then((_) => dispatch(setWebConfigAction(_)))
+        .finally(() => setLoading('web配置加载完成')),
 
-    setLoading('加载系统设置...');
-    const systemSetting = await Utils.GetStorage(CONST.STORAGE.SYSTEM_SETTING, defaultSystemSetting);
-    const adjustmentNotificationDate = await Utils.GetStorage(CONST.STORAGE.ADJUSTMENT_NOTIFICATION_DATE, '');
-    const darkMode = await ipcRenderer.invoke('get-should-use-dark-colors');
-    batch(() => {
-      dispatch(setSystemSettingAction(systemSetting));
-      dispatch(updateAdjustmentNotificationDateAction(adjustmentNotificationDate));
-      dispatch(syncDarkMode(darkMode));
-    });
+      Promise.all([
+        Utils.GetStorage(CONST.STORAGE.SYSTEM_SETTING, defaultSystemSetting).then((_) => dispatch(setSystemSettingAction(_))),
+        Utils.GetStorage(CONST.STORAGE.ADJUSTMENT_NOTIFICATION_DATE, '').then((_) => dispatch(updateAdjustmentNotificationDateAction(_))),
+        ipcRenderer.invoke('get-should-use-dark-colors').then((_) => dispatch(syncDarkMode(_))),
+      ]).finally(() => setLoading('系统设置加载完成')),
 
-    setLoading('加载钱包配置...');
-    const walletSetting = await Utils.GetStorage(CONST.STORAGE.WALLET_SETTING, [defaultWallet]);
-    const eyeStatus = await Utils.GetStorage(CONST.STORAGE.EYE_STATUS, Enums.EyeStatus.Open);
-    const currentWalletCode = await Utils.GetStorage(CONST.STORAGE.CURRENT_WALLET_CODE, defaultWallet.code);
-    batch(() => {
-      dispatch(setWalletConfigAction(walletSetting));
-      dispatch(syncEyeStatusAction(eyeStatus));
-      dispatch(changeCurrentWalletCodeAction(currentWalletCode));
-    });
+      Promise.all([
+        Utils.GetStorage(CONST.STORAGE.WALLET_SETTING, [defaultWallet]).then((_) => dispatch(setWalletConfigAction(_))),
+        Utils.GetStorage(CONST.STORAGE.EYE_STATUS, Enums.EyeStatus.Open).then((_) => dispatch(syncEyeStatusAction(_))),
+        Utils.GetStorage(CONST.STORAGE.CURRENT_WALLET_CODE, defaultWallet.code).then((_) => dispatch(changeCurrentWalletCodeAction(_))),
+      ]).finally(() => setLoading('钱包配置加载完成')),
 
-    setLoading('加载tabs配置...');
-    const tabsActiveKey = await Utils.GetStorage(CONST.STORAGE.TABS_ACTIVE_KEY, Enums.TabKeyType.Funds);
-    dispatch(syncTabsActiveKeyAction(tabsActiveKey));
+      Utils.GetStorage(CONST.STORAGE.TABS_ACTIVE_KEY, Enums.TabKeyType.Funds)
+        .then((_) => dispatch(syncTabsActiveKeyAction(_)))
+        .finally(() => setLoading('tabs配置加载完成')),
 
-    setLoading('加载排序配置...');
-    const sortMode = await Utils.GetStorage(CONST.STORAGE.SORT_MODE, sortInitialState.sortMode);
-    dispatch(syncSortModeAction(sortMode));
+      Utils.GetStorage(CONST.STORAGE.SORT_MODE, sortInitialState.sortMode)
+        .then((_) => dispatch(syncSortModeAction(_)))
+        .finally(() => setLoading('排序配置加载完成')),
 
-    setLoading('加载视图配置...');
-    const viewMode = await Utils.GetStorage(CONST.STORAGE.VIEW_MODE, sortInitialState.viewMode);
-    dispatch(syncSortModeAction(sortMode));
-    dispatch(setViewModeAction(viewMode));
+      Utils.GetStorage(CONST.STORAGE.VIEW_MODE, sortInitialState.viewMode)
+        .then((_) => dispatch(setViewModeAction(_)))
+        .finally(() => setLoading('视图配置加载完成')),
 
-    setLoading('加载远程数据缓存...');
-    const remoteFundMap = await Utils.GetStorage(CONST.STORAGE.REMOTE_FUND_MAP, {});
-    const fundRatingMap = await Utils.GetStorage(CONST.STORAGE.FUND_RATING_MAP, {});
-    const remoteCoinMap = await Utils.GetStorage(CONST.STORAGE.REMOTE_COIN_MAP, {});
-    batch(() => {
-      dispatch(setRemoteFundsAction(Object.values(remoteFundMap)));
-      dispatch(setFundRatingMapAction(Object.values(fundRatingMap)));
-      dispatch(setRemoteCoinsAction(Object.values(remoteCoinMap)));
-    });
-
-    setLoading('加载完毕');
-
-    const params = Utils.ParseSearchParams();
+      Promise.all([
+        Utils.GetStorage(CONST.STORAGE.REMOTE_FUND_MAP, {}).then((_) => dispatch(setRemoteFundsAction(Object.values(_)))),
+        Utils.GetStorage(CONST.STORAGE.FUND_RATING_MAP, {}).then((_) => dispatch(setFundRatingMapAction(Object.values(_)))),
+        Utils.GetStorage(CONST.STORAGE.REMOTE_COIN_MAP, {}).then((_) => dispatch(setRemoteCoinsAction(Object.values(_)))),
+      ]).finally(() => setLoading('远程数据缓存加载完成')),
+    ]).finally(() => setLoading('加载完毕'));
 
     navigate(params.get('_nav') || '/home');
   }
