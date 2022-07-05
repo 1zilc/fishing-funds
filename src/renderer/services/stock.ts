@@ -905,11 +905,11 @@ export async function GetCloseDayDates() {
       result: {
         pages: 1;
         data: {
-          mkt: string;
-          holiday: string;
-          sdate: string; // 2021/4/2
-          edate: string;
-          xs: '';
+          MKT: string;
+          HOLIDAY: string;
+          SDATE: string;
+          EDATE: string;
+          XS: '';
         }[];
         count: 131;
       };

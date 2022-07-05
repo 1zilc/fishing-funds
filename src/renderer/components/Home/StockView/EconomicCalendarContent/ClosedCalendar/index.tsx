@@ -24,7 +24,7 @@ interface ClosedCalendarProps {}
 const ClosedCalendar: React.FC<ClosedCalendarProps> = () => {
   const [marketType, setMarketType] = useState(marketTypeList[0]);
   const { data: closeDates = [], run: runStockGetCloseDayDates } = useRequest(Services.Stock.GetCloseDayDates);
-  const currentCloseDates = closeDates.filter(({ mkt }) => marketType.name === mkt);
+  const currentCloseDates = closeDates.filter(({ MKT }) => marketType.name === MKT);
   return (
     <ChartCard TitleBar={<div className={styles.titleBar}>仅展示节假日、特殊工作日</div>} onFresh={runStockGetCloseDayDates}>
       <div className={clsx(styles.content)}>
@@ -33,14 +33,14 @@ const ClosedCalendar: React.FC<ClosedCalendarProps> = () => {
           validRange={[today.subtract(1, 'year'), today.add(1, 'year')]}
           dateFullCellRender={(d) => {
             const date = dayjs(d.format('YYYY/M/D'));
-            const day = currentCloseDates.find(({ sdate, edate }) => date.isSameOrAfter(sdate) && date.isSameOrBefore(edate));
+            const day = currentCloseDates.find(({ SDATE, EDATE }) => date.isSameOrAfter(SDATE) && date.isSameOrBefore(EDATE));
             const isToday = date.isSame(today.format('YYYY/M/D'));
             return (
               <div className={styles.filed}>
                 {day ? (
                   <div className="flex flex-column f-a-i-c">
                     <span className={styles.closed}>{isToday ? '今' : '休'}</span>
-                    <div className={styles.holiday}>{day.holiday.slice(0, 2)}</div>
+                    <div className={styles.holiday}>{day.HOLIDAY.slice(0, 2)}</div>
                   </div>
                 ) : isToday ? (
                   '今'
