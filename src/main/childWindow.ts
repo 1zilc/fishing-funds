@@ -15,9 +15,8 @@ export function createChildWindow(config: { search: string; parentId: number }) 
       backgroundColor: process.platform === 'darwin' ? 'rgba(0, 0, 0, 0)' : '#fff',
       minHeight: 400,
       minWidth: 300,
-      maxHeight: 1000,
-      maxWidth: 600,
       vibrancy: 'sidebar',
+      fullscreenable: false,
       webPreferences: {
         webviewTag: true,
         devTools: !app.isPackaged,
