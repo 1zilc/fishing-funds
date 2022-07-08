@@ -40,7 +40,6 @@ const TabsBar: React.FC<TabsBarProps> = () => {
               >
                 {tab.name}
               </div>
-              <i />
             </React.Fragment>
           ))}
       </div>
