@@ -33,7 +33,6 @@ const chartTypeList = [
   { name: 'BIAS', type: 4, code: 4 },
 ];
 const timeTypeList = [
-  { name: '半年', type: 1, code: 120 },
   { name: '一年', type: 2, code: 250 },
   { name: '三年', type: 3, code: 750 },
   { name: '五年', type: 4, code: 1250 },
@@ -192,7 +191,7 @@ const K: React.FC<PerformanceProps> = ({ secid = '', name }) => {
           },
         },
         legend: {
-          data: ['日K', 'MA5', 'MA10', 'MA20', 'MA30'],
+          data: ['日K', 'MA5', 'MA30', 'MA60', 'MA120', 'MA250'],
           textStyle: {
             color: varibleColors['--main-text-color'],
             fontSize: 10,
@@ -328,31 +327,42 @@ const K: React.FC<PerformanceProps> = ({ secid = '', name }) => {
             },
           },
           {
-            name: 'MA10',
-            type: 'line',
-            data: Utils.CalculateMA(10, values),
-            smooth: true,
-            showSymbol: false,
-            symbol: 'none',
-            lineStyle: {
-              opacity: 0.5,
-            },
-          },
-          {
-            name: 'MA20',
-            type: 'line',
-            data: Utils.CalculateMA(20, values),
-            smooth: true,
-            showSymbol: false,
-            symbol: 'none',
-            lineStyle: {
-              opacity: 0.5,
-            },
-          },
-          {
             name: 'MA30',
             type: 'line',
             data: Utils.CalculateMA(30, values),
+            smooth: true,
+            showSymbol: false,
+            symbol: 'none',
+            lineStyle: {
+              opacity: 0.5,
+            },
+          },
+          {
+            name: 'MA60',
+            type: 'line',
+            data: Utils.CalculateMA(60, values),
+            smooth: true,
+            showSymbol: false,
+            symbol: 'none',
+            lineStyle: {
+              opacity: 0.5,
+            },
+          },
+          {
+            name: 'MA120',
+            type: 'line',
+            data: Utils.CalculateMA(120, values),
+            smooth: true,
+            showSymbol: false,
+            symbol: 'none',
+            lineStyle: {
+              opacity: 0.5,
+            },
+          },
+          {
+            name: 'MA250',
+            type: 'line',
+            data: Utils.CalculateMA(250, values),
             smooth: true,
             showSymbol: false,
             symbol: 'none',

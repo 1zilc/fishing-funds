@@ -192,7 +192,7 @@ const K: React.FC<KProps> = ({ code = '', name }) => {
           },
         },
         legend: {
-          data: ['日K', 'MA5', 'MA10', 'MA20', 'MA30'],
+          data: ['日K', 'MA5', 'MA30', 'MA60', 'MA120', 'MA250'],
           textStyle: {
             color: varibleColors['--main-text-color'],
             fontSize: 10,
@@ -328,31 +328,42 @@ const K: React.FC<KProps> = ({ code = '', name }) => {
             },
           },
           {
-            name: 'MA10',
-            type: 'line',
-            data: Utils.CalculateMA(10, values),
-            smooth: true,
-            showSymbol: false,
-            symbol: 'none',
-            lineStyle: {
-              opacity: 0.5,
-            },
-          },
-          {
-            name: 'MA20',
-            type: 'line',
-            data: Utils.CalculateMA(20, values),
-            smooth: true,
-            showSymbol: false,
-            symbol: 'none',
-            lineStyle: {
-              opacity: 0.5,
-            },
-          },
-          {
             name: 'MA30',
             type: 'line',
             data: Utils.CalculateMA(30, values),
+            smooth: true,
+            showSymbol: false,
+            symbol: 'none',
+            lineStyle: {
+              opacity: 0.5,
+            },
+          },
+          {
+            name: 'MA60',
+            type: 'line',
+            data: Utils.CalculateMA(60, values),
+            smooth: true,
+            showSymbol: false,
+            symbol: 'none',
+            lineStyle: {
+              opacity: 0.5,
+            },
+          },
+          {
+            name: 'MA120',
+            type: 'line',
+            data: Utils.CalculateMA(120, values),
+            smooth: true,
+            showSymbol: false,
+            symbol: 'none',
+            lineStyle: {
+              opacity: 0.5,
+            },
+          },
+          {
+            name: 'MA250',
+            type: 'line',
+            data: Utils.CalculateMA(250, values),
             smooth: true,
             showSymbol: false,
             symbol: 'none',
