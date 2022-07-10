@@ -34,10 +34,10 @@ const chartTypeList = [
 ];
 const timeTypeList = [
   { name: '半年', type: 1, code: 120 },
-  { name: '一年', type: 2, code: 240 },
-  { name: '三年', type: 3, code: 720 },
-  { name: '五年', type: 4, code: 1200 },
-  { name: '十年', type: 5, code: 2400 },
+  { name: '一年', type: 2, code: 250 },
+  { name: '三年', type: 3, code: 750 },
+  { name: '五年', type: 4, code: 1250 },
+  { name: '十年', type: 5, code: 2500 },
   { name: '最大', type: 6, code: 10000 },
 ];
 

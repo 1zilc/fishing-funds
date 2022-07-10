@@ -1,7 +1,6 @@
 import dayjs from 'dayjs';
 import NP from 'number-precision';
 import request from '@/utils/request';
-import { number } from 'echarts';
 
 /**
  *
@@ -110,7 +109,7 @@ export async function GetTrendFromEastmoney(code: string, ndays: number) {
   }
 }
 
-export async function GetKFromEastmoney(code: string, year: number) {
+export async function GetKFromEastmoney(code: string, year: number, klt: number) {
   try {
     const { body } = await request<{
       rc: 0;
@@ -131,7 +130,7 @@ export async function GetKFromEastmoney(code: string, year: number) {
         secid: code,
         fields1: 'f1,f2,f3,f4,f5',
         fields2: 'f51,f52,f53,f54,f55,f56,f57,f58',
-        klt: 101,
+        klt,
         fqt: 0,
         beg: `${dayjs().get('year') - year}0101`,
         end: `${dayjs().get('year') + 1}0101`,
@@ -180,6 +179,7 @@ export async function GetEconomyIndexFromEastmoney(market: number) {
     return [];
   }
 }
+
 // 油价
 export async function GetOilPriceFromEastmoney() {
   try {
@@ -215,6 +215,7 @@ export async function GetOilPriceFromEastmoney() {
     return [];
   }
 }
+
 // 中美国债收益率
 export async function GetTreasuryYieldData() {
   try {
@@ -257,6 +258,7 @@ export async function GetTreasuryYieldData() {
     return [];
   }
 }
+
 // 国家队持股分布
 export async function GetNationalTeamDistributed() {
   try {
@@ -296,6 +298,7 @@ export async function GetNationalTeamDistributed() {
     };
   }
 }
+
 // 国家队持股分布
 export async function GetNationalTeamTrend() {
   try {
@@ -337,6 +340,7 @@ export async function GetNationalTeamTrend() {
     return [];
   }
 }
+
 // 国家队持股明细
 export async function GetNationalTeamDetail(columns: string) {
   try {
