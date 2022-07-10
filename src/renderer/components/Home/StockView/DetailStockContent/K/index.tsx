@@ -33,10 +33,10 @@ const chartTypeList = [
   { name: 'BIAS', type: 4, code: 4 },
 ];
 const timeTypeList = [
-  { name: '一年', type: 2, code: 250 },
-  { name: '三年', type: 3, code: 750 },
-  { name: '五年', type: 4, code: 1250 },
-  { name: '十年', type: 5, code: 2500 },
+  { name: '一年', type: 2, code: 360 },
+  { name: '三年', type: 3, code: 1080 },
+  { name: '五年', type: 4, code: 1800 },
+  { name: '十年', type: 5, code: 3600 },
   { name: '最大', type: 6, code: 10000 },
 ];
 
