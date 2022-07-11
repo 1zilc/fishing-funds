@@ -125,14 +125,14 @@ export const DetailCoin: React.FC<DetailCoinProps> = (props) => {
 };
 
 const DetailCoinContent: React.FC<DetailCoinContentProps> = (props) => {
-  function onOpenChildWindow() {
+  async function onOpenChildWindow() {
     const search = Utils.MakeSearchParams({
       _nav: '/detail/coin',
       data: {
         code: props.code,
       },
     });
-    ipcRenderer.invoke('open-child-window', { search });
+    await ipcRenderer.invoke('open-child-window', { search });
     props.onEnter();
   }
 

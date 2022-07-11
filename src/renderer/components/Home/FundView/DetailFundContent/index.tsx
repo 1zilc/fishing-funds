@@ -308,9 +308,9 @@ export const DetailFund: React.FC<DetailFundProps> = (props) => {
 };
 
 const DetailFundContent: React.FC<DetailFundContentProps> = (props) => {
-  function onOpenChildWindow() {
+  async function onOpenChildWindow() {
     const search = Utils.MakeSearchParams({ _nav: '/detail/fund', data: { code: props.code } });
-    ipcRenderer.invoke('open-child-window', { search });
+    await ipcRenderer.invoke('open-child-window', { search });
     props.onEnter();
   }
   return (

@@ -103,12 +103,12 @@ export const DetailZindex: React.FC<DetailFundProps> = (props) => {
 };
 
 const DetailZindexContent: React.FC<DetailFundContentProps> = (props) => {
-  function onOpenChildWindow() {
+  async function onOpenChildWindow() {
     const search = Utils.MakeSearchParams({
       _nav: '/detail/zindex',
       data: { code: props.code },
     });
-    ipcRenderer.invoke('open-child-window', { search });
+    await ipcRenderer.invoke('open-child-window', { search });
     props.onEnter();
   }
   return (

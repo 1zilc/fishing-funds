@@ -197,7 +197,7 @@ export const DetailStock: React.FC<DetailStockProps> = (props) => {
 };
 
 const DetailStockContent: React.FC<DetailStockContentProps> = (props) => {
-  function onOpenChildWindow() {
+  async function onOpenChildWindow() {
     const search = Utils.MakeSearchParams({
       _nav: '/detail/stock',
       data: {
@@ -205,7 +205,7 @@ const DetailStockContent: React.FC<DetailStockContentProps> = (props) => {
         type: props.type,
       },
     });
-    ipcRenderer.invoke('open-child-window', { search });
+    await ipcRenderer.invoke('open-child-window', { search });
     props.onEnter();
   }
 

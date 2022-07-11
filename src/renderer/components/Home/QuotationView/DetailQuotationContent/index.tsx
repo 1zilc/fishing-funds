@@ -122,14 +122,14 @@ export const DetailQuotation: React.FC<DetailQuotationProps> = (props) => {
 };
 
 const DetailQuotationContent: React.FC<DetailQuotationContentProps> = (props) => {
-  function onOpenChildWindow() {
+  async function onOpenChildWindow() {
     const search = Utils.MakeSearchParams({
       _nav: '/detail/quotation',
       data: {
         code: props.code,
       },
     });
-    ipcRenderer.invoke('open-child-window', { search });
+    await ipcRenderer.invoke('open-child-window', { search });
     props.onEnter();
   }
 
