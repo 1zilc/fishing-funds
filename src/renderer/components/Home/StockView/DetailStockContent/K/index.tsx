@@ -399,7 +399,7 @@ const K: React.FC<PerformanceProps> = ({ secid = '', name }) => {
         <TypeSelection types={kTypeList} activeType={k.type} onSelected={setKType} colspan={6} />
         <div ref={chartRef} style={{ width: '100%' }} />
         <TypeSelection types={chartTypeList} activeType={chart.type} onSelected={setChartType} colspan={6} />
-        <TypeSelection types={timeTypeList} activeType={time.type} onSelected={setTimeType} colspan={6} />
+        <TypeSelection types={timeTypeList} activeType={time.type} onSelected={setTimeType} flex />
       </div>
     </ChartCard>
   );

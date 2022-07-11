@@ -17,6 +17,7 @@ interface HoldFundsProps {
 
 const HoldFunds: React.FC<PropsWithChildren<HoldFundsProps>> = ({ secid }) => {
   const codeMap = useAppSelector((state) => state.wallet.fundConfigCodeMap);
+  const [dateIndex, setDateIndex] = useState(0);
   const { data: detailCode, show: showDetailDrawer, set: setDetailDrawer, close: closeDetailDrawer } = useDrawer('');
   const { data: addCode, show: showAddDrawer, set: setAddDrawer, close: closeAddDrawer } = useDrawer('');
 
@@ -64,12 +65,19 @@ const HoldFunds: React.FC<PropsWithChildren<HoldFundsProps>> = ({ secid }) => {
     data = [],
     run: runStockGetStockHoldFunds,
     loading,
-  } = useRequest(() => Services.Stock.GetStockHoldFunds(secid, date[0]), {
-    ready: !!date.length,
+  } = useRequest(() => Services.Stock.GetStockHoldFunds(secid, date[dateIndex]), {
+    refreshDeps: [dateIndex],
+    ready: !!date[dateIndex],
   });
 
+  useEffect(() => {
+    if (!data.length) {
+      setDateIndex(1);
+    }
+  }, [data]);
+
   return (
-    <ChartCard auto onFresh={runStockGetStockHoldFunds} TitleBar={<div className={styles.titleBar}>{date[0]}</div>}>
+    <ChartCard auto onFresh={runStockGetStockHoldFunds} TitleBar={<div className={styles.titleBar}>{date[dateIndex]}</div>}>
       <div className={styles.content}>
         <Table
           rowKey="HOLDER_CODE"
