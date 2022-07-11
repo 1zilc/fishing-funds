@@ -59,7 +59,7 @@ export async function FromEastmoney(secid: string) {
       trends,
     };
   } catch (error) {
-    return null;
+    return;
   }
 }
 

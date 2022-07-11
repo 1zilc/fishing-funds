@@ -21,7 +21,7 @@ export async function FromEastmoney(code: string) {
         return fund;
       }
     } else {
-      return null;
+      return;
     }
   } catch (error) {
     return await GetEtfFundHourFromEastMoney(code);
@@ -39,7 +39,7 @@ export async function FromDayFund(code: string) {
       },
     });
     if (body === '||||%|%|||||') {
-      return null;
+      return;
     }
     const { body: html } = await request(`https://www.dayfund.cn/fundinfo/${code}.html`, {
       responseType: 'text',
@@ -71,7 +71,7 @@ export async function FromDayFund(code: string) {
       gsz,
     };
   } catch (error) {
-    return null;
+    return;
   }
 }
 
@@ -89,7 +89,7 @@ export async function FromTencent(code: string) {
     });
     const { yesterdayDwjz, code: status, data: list, date: gzrq } = data;
     if (status === -1) {
-      return null;
+      return;
     }
     const [time, ssgsz] = list.pop();
     const { body } = await request(`https://gu.qq.com/jj${code}`, {
@@ -113,7 +113,7 @@ export async function FromTencent(code: string) {
       gszzl,
     };
   } catch (error) {
-    return null;
+    return;
   }
 }
 
@@ -130,7 +130,7 @@ export async function FromSina(code: string) {
     const [w, contnet] = utf8String.split('=');
     const data = contnet.replace(/(")|(;)|(\s)/g, '');
     if (!data) {
-      return null;
+      return;
     }
     const { body: html } = await request(`https://finance.sina.com.cn/fund/quotes/${code}/bc.shtml`, {
       responseType: 'text',
@@ -148,7 +148,7 @@ export async function FromSina(code: string) {
       gszzl: Number(gszzl).toFixed(2),
     };
   } catch (error) {
-    return null;
+    return;
   }
 }
 
@@ -163,7 +163,7 @@ export async function FromHowbuy(code: string) {
       },
     });
     if (!body) {
-      return null;
+      return;
     }
     let $ = cheerio.load(body);
     const gsz = $('span').eq(0).text();
@@ -196,7 +196,7 @@ export async function FromHowbuy(code: string) {
       gszzl: Number(gszzl).toFixed(2),
     };
   } catch (error) {
-    return null;
+    return;
   }
 }
 
@@ -231,7 +231,7 @@ export async function FromEtf(code: string) {
       responseType: 'json',
     });
     if (!data) {
-      return null;
+      return;
     }
     const { body: html } = await request(`http://www.etf88.com/jj/${code}/`, {
       responseType: 'text',
@@ -265,7 +265,7 @@ export async function FromEtf(code: string) {
       gsz: temp.gzprice, // 估算值 '1.2222'
     };
   } catch (error) {
-    return null;
+    return;
   }
 }
 
@@ -716,7 +716,7 @@ export async function GetFundDetailFromEastmoney(code: string) {
     const response: Fund.PingzhongData = Utils.Parsepingzhongdata(body);
     return response;
   } catch (error) {
-    return {};
+    return;
   }
 }
 
@@ -787,7 +787,7 @@ export async function GetFixFromEastMoney(code: string) {
     };
     return result;
   } catch (error) {
-    return null;
+    return;
   }
 }
 
@@ -851,7 +851,7 @@ export async function GetQDIIFundFromEastMoney(code: string) {
       gszzl: '',
     };
   } catch (error) {
-    return null;
+    return;
   }
 }
 
@@ -1102,7 +1102,7 @@ export async function GetQDIIFundFromFund123(code: string) {
 
     return result;
   } catch (error) {
-    return null;
+    return;
   }
 }
 
@@ -1208,7 +1208,7 @@ export async function GetQDIIFundFromFund10jqka(code: string) {
       gsz: data.net,
     };
   } catch (error) {
-    return null;
+    return;
   }
 }
 

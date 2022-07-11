@@ -26,22 +26,22 @@ export async function GetFunds(config: Fund.SettingItem[], fundApiTypeSetting: E
   const load = () => {
     switch (fundApiTypeSetting) {
       case Enums.FundApiType.Dayfund:
-        return Adapter.ChokeGroupAdapter<Fund.ResponseItem>(collectors, 1, 100);
+        return Adapter.ChokeGroupAdapter(collectors, 1, 100);
       case Enums.FundApiType.Tencent:
-        return Adapter.ChokeGroupAdapter<Fund.ResponseItem>(collectors, 3, 300);
+        return Adapter.ChokeGroupAdapter(collectors, 3, 300);
       case Enums.FundApiType.Sina:
-        return Adapter.ChokeGroupAdapter<Fund.ResponseItem>(collectors, 3, 300);
+        return Adapter.ChokeGroupAdapter(collectors, 3, 300);
       case Enums.FundApiType.Howbuy:
-        return Adapter.ChokeGroupAdapter<Fund.ResponseItem>(collectors, 3, 300);
+        return Adapter.ChokeGroupAdapter(collectors, 3, 300);
       case Enums.FundApiType.Etf:
-        return Adapter.ChokeGroupAdapter<Fund.ResponseItem>(collectors, 3, 300);
+        return Adapter.ChokeGroupAdapter(collectors, 3, 300);
       case Enums.FundApiType.Ant:
-        return Adapter.ChokeGroupAdapter<Fund.ResponseItem>(collectors, 4, 400);
+        return Adapter.ChokeGroupAdapter(collectors, 4, 400);
       case Enums.FundApiType.Fund10jqka:
-        return Adapter.ChokeGroupAdapter<Fund.ResponseItem>(collectors, 5, 500);
+        return Adapter.ChokeGroupAdapter(collectors, 5, 500);
       case Enums.FundApiType.Eastmoney:
       default:
-        return Adapter.ChokeGroupAdapter<Fund.ResponseItem>(collectors, 5, 500);
+        return Adapter.ChokeGroupAdapter(collectors, 5, 500);
     }
   };
   const list = await load();
@@ -163,7 +163,7 @@ export async function GetFixFunds(funds: (Fund.ResponseItem & Fund.FixData)[]) {
         () =>
           Services.Fund.GetFixFromEastMoney(fundcode!)
     );
-  const list = await Adapter.ChokeGroupAdapter<Fund.FixData>(collectors, 3, 500);
+  const list = await Adapter.ChokeGroupAdapter(collectors, 3, 500);
   return list.filter(Utils.NotEmpty);
 }
 

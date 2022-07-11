@@ -17,7 +17,7 @@ export async function GetCurrentDateTimeFromTaobao() {
     });
     return res?.body?.data?.t;
   } catch (error) {
-    return null;
+    return;
   }
 }
 
@@ -36,7 +36,7 @@ export async function GetCurrentDateTimeFromSuning() {
     });
     return res?.body?.currentTime;
   } catch (error) {
-    return null;
+    return;
   }
 }
 
@@ -52,6 +52,6 @@ export async function GetCurrentDateTimeFromJd() {
     });
     return res?.body?.serverTime;
   } catch {
-    return null;
+    return;
   }
 }

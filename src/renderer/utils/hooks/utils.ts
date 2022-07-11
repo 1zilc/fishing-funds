@@ -339,14 +339,14 @@ export function useLoadFixWalletsFunds() {
                 Services.Fund.GetFixFromEastMoney(fundcode!)
           );
         return async () => {
-          const fixFunds = await Adapters.ChokeGroupAdapter<Fund.FixData>(collectors, 5, 100);
+          const fixFunds = await Adapters.ChokeGroupAdapter(collectors, 5, 100);
           const now = dayjs().format('MM-DD HH:mm:ss');
           dispatch(syncFixWalletStateAction({ code: wallet.code, funds: fixFunds.filter(Utils.NotEmpty), updateTime: now }));
           return fixFunds;
         };
       });
 
-      await Adapters.ChokeAllAdapter<(Fund.FixData | null)[]>(fixCollects, CONST.DEFAULT.LOAD_WALLET_DELAY);
+      await Adapters.ChokeAllAdapter(fixCollects, CONST.DEFAULT.LOAD_WALLET_DELAY);
     } catch (error) {}
   });
 

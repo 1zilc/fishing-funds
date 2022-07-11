@@ -129,7 +129,7 @@ export async function GetQuotationDetailFromEastmoney(code: string) {
       hsl: data.f168,
     };
   } catch (error) {
-    return {};
+    return;
   }
 }
 
@@ -314,7 +314,7 @@ export async function GetTransactionFromEasymoney(code: string) {
       xdlc: Number(NP.divide(temp.f83, billion).toFixed(2)),
     };
   } catch (error) {
-    return {};
+    return;
   }
 }
 

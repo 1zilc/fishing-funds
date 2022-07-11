@@ -28,6 +28,7 @@ export const DetailZindex: React.FC<DetailFundProps> = (props) => {
     pollingInterval: 1000 * 60,
     cacheKey: Utils.GenerateRequestKey('Zindex.FromEastmoney', code),
   });
+
   return (
     <div className={styles.content}>
       <div className={styles.container}>
