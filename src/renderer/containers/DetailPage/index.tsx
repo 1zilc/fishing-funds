@@ -16,7 +16,7 @@ const DetailPage = () => {
     <div className={styles.content}>
       <GlobalStyles />
       <Outlet />
-      <Collect title={`/detail/${params.get('_nav')}`} />
+      <Collect title={`${params.get('_nav')}`} />
     </div>
   );
 };

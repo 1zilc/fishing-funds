@@ -76,8 +76,7 @@
   white-space: nowrap;
 }
 .continuous {
-  color: var(--main-text-color);
-  border: 1px solid var(--main-text-color);
+  border: 1px solid;
 }
 .exceed {
   color: var(--warn-color);
