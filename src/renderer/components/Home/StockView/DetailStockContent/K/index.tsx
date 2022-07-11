@@ -191,10 +191,15 @@ const K: React.FC<PerformanceProps> = ({ secid = '', name }) => {
           },
         },
         legend: {
-          data: ['日K', 'MA5', 'MA30', 'MA60', 'MA120', 'MA250'],
+          data: ['日K', 'MA5', 'MA10', 'MA20', 'MA30', 'MA60', 'MA120', 'MA250'],
           textStyle: {
             color: varibleColors['--main-text-color'],
             fontSize: 10,
+          },
+          selected: {
+            MA60: false,
+            MA120: false,
+            MA250: false,
           },
         },
         grid: [
@@ -319,6 +324,28 @@ const K: React.FC<PerformanceProps> = ({ secid = '', name }) => {
             name: 'MA5',
             type: 'line',
             data: Utils.CalculateMA(5, values),
+            smooth: true,
+            showSymbol: false,
+            symbol: 'none',
+            lineStyle: {
+              opacity: 0.5,
+            },
+          },
+          {
+            name: 'MA10',
+            type: 'line',
+            data: Utils.CalculateMA(10, values),
+            smooth: true,
+            showSymbol: false,
+            symbol: 'none',
+            lineStyle: {
+              opacity: 0.5,
+            },
+          },
+          {
+            name: 'MA20',
+            type: 'line',
+            data: Utils.CalculateMA(20, values),
             smooth: true,
             showSymbol: false,
             symbol: 'none',
