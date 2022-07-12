@@ -31,10 +31,13 @@ export const DetailCoin: React.FC<DetailCoinProps> = (props) => {
   const position = useScroll(ref, (val) => val.top <= 520);
   const miniMode = position && position.top > 40;
 
-  const { data: coin, run: runGetDetailFromCoingecko } = useRequest(() => Services.Coin.GetDetailFromCoingecko(code), {
-    pollingInterval: 1000 * 60,
-    cacheKey: Utils.GenerateRequestKey('Coin.GetDetailFromCoingecko', code),
-  });
+  const { data: coin = { image: {}, description: {} } as Coin.DetailItem, run: runGetDetailFromCoingecko } = useRequest(
+    () => Services.Coin.GetDetailFromCoingecko(code),
+    {
+      pollingInterval: 1000 * 60,
+      cacheKey: Utils.GenerateRequestKey('Coin.GetDetailFromCoingecko', code),
+    }
+  );
 
   return (
     <div className={styles.content} ref={ref}>

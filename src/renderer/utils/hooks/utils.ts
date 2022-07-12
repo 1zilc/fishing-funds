@@ -317,7 +317,7 @@ export function useLoadWalletsFunds() {
         dispatch(updateWalletStateAction({ code: walletCode, funds: responseFunds, updateTime: now }));
         return responseFunds;
       });
-      await Adapters.ChokeAllAdapter<(Fund.ResponseItem | null)[]>(collects, CONST.DEFAULT.LOAD_WALLET_DELAY);
+      await Adapters.ChokeAllAdapter(collects, CONST.DEFAULT.LOAD_WALLET_DELAY);
     } catch (error) {}
   });
 

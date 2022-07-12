@@ -58,7 +58,9 @@ const Calculator: React.FC<CalculatorProps> = (props) => {
 
   const onSelect = useMemoizedFn(async (code) => {
     const coin = await Helpers.Coin.GetCoin(code);
-    setCoin(coin);
+    if (coin) {
+      setCoin(coin);
+    }
   });
 
   const result = useMemo(() => {

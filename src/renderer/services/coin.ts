@@ -188,7 +188,7 @@ export async function GetDetailFromCoingecko(code: string) {
     });
     return body;
   } catch (error) {
-    return null;
+    return;
   }
 }
 
