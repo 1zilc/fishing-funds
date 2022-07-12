@@ -148,7 +148,7 @@ export async function GetPicTrendFromEastmoney(secid: string) {
     const b64encoded = base64.fromUint8Array(new Uint8Array(rawBody));
     return `data:image/png;base64,${b64encoded}`;
   } catch (error) {
-    return null;
+    return;
   }
 }
 

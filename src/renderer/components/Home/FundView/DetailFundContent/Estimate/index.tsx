@@ -11,7 +11,7 @@ export interface EstimateProps {
   code: string;
 }
 const Estimate: React.FC<EstimateProps> = ({ code }) => {
-  const [estimate, setEstimate] = useState<string | null>('');
+  const [estimate, setEstimate] = useState<string | undefined>('');
   const { run: runGetEstimatedFromEastmoney } = useRequest(() => Services.Fund.GetEstimatedFromEastmoney(code), {
     pollingInterval: CONST.DEFAULT.ESTIMATE_FUND_DELAY,
     onSuccess: setEstimate,
@@ -23,10 +23,10 @@ const Estimate: React.FC<EstimateProps> = ({ code }) => {
       <div className={styles.estimate}>
         {estimate === '' ? (
           <PictureImage />
-        ) : estimate === null ? (
+        ) : estimate === undefined ? (
           <PictureFailedImage />
         ) : (
-          <img src={estimate} onError={() => setEstimate(null)} />
+          <img src={estimate} onError={() => setEstimate(undefined)} />
         )}
       </div>
     </ChartCard>

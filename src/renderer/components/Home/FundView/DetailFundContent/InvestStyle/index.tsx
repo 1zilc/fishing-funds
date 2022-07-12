@@ -12,7 +12,7 @@ export interface InvestStyleProps {
   code: string;
 }
 const InvestStyle: React.FC<InvestStyleProps> = ({ code }) => {
-  const [estimate, setEstimate] = useState<string | null>('');
+  const [estimate, setEstimate] = useState<string | undefined>('');
   const { run: runGetInverstStyleFromEastmoney } = useRequest(() => Services.Fund.GetInverstStyleFromEastmoney(code), {
     pollingInterval: CONST.DEFAULT.ESTIMATE_FUND_DELAY,
     onSuccess: setEstimate,
@@ -24,10 +24,10 @@ const InvestStyle: React.FC<InvestStyleProps> = ({ code }) => {
       <div className={styles.estimate}>
         {estimate === '' ? (
           <PictureImage />
-        ) : estimate === null ? (
+        ) : estimate === undefined ? (
           <PictureFailedImage />
         ) : (
-          <img src={estimate} onError={() => setEstimate(null)} />
+          <img src={estimate} onError={() => setEstimate(undefined)} />
         )}
       </div>
     </ChartCard>
