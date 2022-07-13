@@ -181,3 +181,25 @@ export function MergeFixFunds(funds: (Fund.ResponseItem & Fund.FixData)[], fixFu
   });
   return cloneFunds;
 }
+
+export function MergeStateFunds(
+  config: Fund.SettingItem[],
+  oldFunds: (Fund.ResponseItem & Fund.FixData & Fund.ExtraRow)[],
+  newFunds: Fund.ResponseItem[]
+) {
+  const oldFundsCodeToMap = Utils.GetCodeMap(oldFunds, 'fundcode');
+  const newFundsCodeToMap = Utils.GetCodeMap(newFunds, 'fundcode');
+
+  const fundsWithChachedCodeToMap = config.reduce((map, { code }) => {
+    const oldFund = oldFundsCodeToMap[code];
+    const newFund = newFundsCodeToMap[code];
+    if (oldFund || newFund) {
+      map[code] = { ...(oldFund || {}), ...(newFund || {}) };
+    }
+    return map;
+  }, {} as Record<string, Fund.ResponseItem & Fund.FixData & Fund.ExtraRow>);
+
+  const fundsWithChached = Object.values(fundsWithChachedCodeToMap);
+
+  return fundsWithChached;
+}

@@ -2,6 +2,7 @@ import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
 import { batch } from 'react-redux';
 import { AsyncThunkConfig } from '@/store';
 import * as Utils from '@/utils';
+import * as Helpers from '@/helpers';
 import * as Enums from '@/utils/enums';
 
 export interface CoinState {
@@ -177,20 +178,8 @@ export const sortCoinsCachedAction = createAsyncThunk<void, Coin.ResponseItem[],
         },
       } = getState();
 
-      const coinsCodeToMap = Utils.GetCodeMap(coins, 'code');
-      const coinsWithChached = responseCoins.filter(Boolean).map((_) => ({
-        ...(coinsCodeToMap[_.code] || {}),
-        ..._,
-      }));
-      const coinsWithChachedCodeToMap = Utils.GetCodeMap(coinsWithChached, 'code');
+      const coinsWithChached = Helpers.Coin.MergeStateCoins(coinConfig, coins, responseCoins);
 
-      coinConfig.forEach((coin) => {
-        const responseCoin = coinsWithChachedCodeToMap[coin.code];
-        const stateCoin = coinsCodeToMap[coin.code];
-        if (!responseCoin && stateCoin) {
-          coinsWithChached.push(stateCoin);
-        }
-      });
       batch(() => {
         dispatch(syncCoinsStateAction(coinsWithChached));
         dispatch(sortCoinsAction());

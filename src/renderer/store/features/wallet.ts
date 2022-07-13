@@ -217,32 +217,16 @@ export const updateWalletStateAction = createAsyncThunk<void, Wallet.StateItem, 
       const {
         wallet: {
           wallets,
-          config: { codeMap, walletConfig },
+          config: { walletConfig },
         },
       } = getState();
       const cloneState = Utils.DeepCopy(state);
       const cloneWallets = Utils.DeepCopy(wallets);
-      const currentWalletConfig = codeMap[cloneState.code];
-      const { codeMap: configCodeMap } = Helpers.Fund.GetFundConfig(cloneState.code, walletConfig);
+      const { fundConfig } = Helpers.Fund.GetFundConfig(cloneState.code, walletConfig);
       const walletState = Helpers.Wallet.GetCurrentWalletState(cloneState.code, cloneWallets);
-      const fundsStateCodeToMap = Utils.GetCodeMap(walletState.funds, 'fundcode');
       const walletsStateCodeToMap = Utils.GetCodeMap(cloneWallets, 'code');
 
-      cloneState.funds = cloneState.funds.map((_) => ({
-        ...(fundsStateCodeToMap[_.fundcode!] || {}),
-        ..._,
-      }));
-      const itemFundsCodeToMap = Utils.GetCodeMap(cloneState.funds, 'fundcode');
-
-      currentWalletConfig.funds.forEach((fund) => {
-        const responseFund = itemFundsCodeToMap[fund.code];
-        const stateFund = fundsStateCodeToMap[fund.code];
-        if (!responseFund && stateFund) {
-          cloneState.funds.push(stateFund);
-        }
-      });
-
-      cloneState.funds = cloneState.funds.filter(({ fundcode }) => configCodeMap[fundcode!]);
+      cloneState.funds = Helpers.Fund.MergeStateFunds(fundConfig, walletState.funds, cloneState.funds);
 
       cloneWallets.forEach((wallet, index) => {
         if (wallet.code === cloneState.code) {

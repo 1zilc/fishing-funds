@@ -15,3 +15,25 @@ export async function GetZindexs(config: Zindex.SettingItem[]) {
 export async function GetZindex(code: string) {
   return Services.Zindex.FromEastmoney(code);
 }
+
+export function MergeStateZindexs(
+  config: Zindex.SettingItem[],
+  oldZindexs: (Zindex.ResponseItem & Zindex.ExtraRow)[],
+  newZindexs: Zindex.ResponseItem[]
+) {
+  const oldZindexsCodeToMap = Utils.GetCodeMap(oldZindexs, 'code');
+  const newZindexsCodeToMap = Utils.GetCodeMap(newZindexs, 'code');
+
+  const zindexsWithChachedCodeToMap = config.reduce((map, { code }) => {
+    const oldFund = oldZindexsCodeToMap[code];
+    const newFund = newZindexsCodeToMap[code];
+    if (oldFund || newFund) {
+      map[code] = { ...(oldFund || {}), ...(newFund || {}) };
+    }
+    return map;
+  }, {} as Record<string, Zindex.ResponseItem & Zindex.ExtraRow>);
+
+  const zindexsWithChached = Object.values(zindexsWithChachedCodeToMap);
+
+  return zindexsWithChached;
+}

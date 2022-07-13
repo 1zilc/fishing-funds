@@ -2,6 +2,7 @@ import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
 import { batch } from 'react-redux';
 import { AsyncThunkConfig } from '@/store';
 import * as Utils from '@/utils';
+import * as Helpers from '@/helpers';
 
 import * as Enums from '@/utils/enums';
 
@@ -161,26 +162,16 @@ export const sortStocksCachedAction = createAsyncThunk<void, Stock.ResponseItem[
   async (responseStocks, { getState, dispatch }) => {
     try {
       const {
-        stock: { stocks },
-      } = getState();
-      const {
         stock: {
+          stocks,
           config: { stockConfig },
         },
       } = getState();
-      const stocksCodeToMap = Utils.GetCodeMap(stocks, 'secid');
-      const stocksWithChached = responseStocks.filter(Boolean).map((_) => ({
-        ...(stocksCodeToMap[_.secid] || {}),
-        ..._,
-      }));
-      const stocksWithChachedCodeToMap = Utils.GetCodeMap(stocksWithChached, 'secid');
-      stockConfig.forEach((stock) => {
-        const responseStock = stocksWithChachedCodeToMap[stock.secid];
-        const stateStock = stocksCodeToMap[stock.secid];
-        if (!responseStock && stateStock) {
-          stocksWithChached.push(stateStock);
-        }
-      });
+      const {
+        stock: {},
+      } = getState();
+      const stocksWithChached = Helpers.Stock.MergeStateStocks(stockConfig, stocks, responseStocks);
+
       batch(() => {
         dispatch(syncStocksStateAction(stocksWithChached));
         dispatch(sortStocksAction());

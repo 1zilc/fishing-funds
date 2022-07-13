@@ -2,7 +2,7 @@ import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
 import { AsyncThunkConfig } from '@/store';
 import { batch } from 'react-redux';
 import * as Utils from '@/utils';
-import * as CONST from '@/constants';
+import * as Helpers from '@/helpers';
 import * as Enums from '@/utils/enums';
 
 export interface ZindexState {
@@ -178,22 +178,10 @@ export const sortZindexsCachedAction = createAsyncThunk<void, Zindex.ResponseIte
         },
       } = getState();
 
-      const zindexsCodeToMap = Utils.GetCodeMap(zindexs, 'code');
-      const zindexsWithCollapseChached = responseZindexs.map((_) => ({
-        ...(zindexsCodeToMap[_.code] || {}),
-        ..._,
-      }));
-      const zindexWithChachedCodeToMap = Utils.GetCodeMap(zindexsWithCollapseChached, 'code');
-      zindexConfig.forEach((zindex) => {
-        const responseZindex = zindexWithChachedCodeToMap[zindex.code];
-        const stateZindex = zindexsCodeToMap[zindex.code];
-        if (!responseZindex && stateZindex) {
-          zindexsWithCollapseChached.push(stateZindex);
-        }
-      });
+      const zindexsWithChached = Helpers.Zindex.MergeStateZindexs(zindexConfig, zindexs, responseZindexs);
 
       batch(() => {
-        dispatch(syncZindexsStateAction(zindexsWithCollapseChached));
+        dispatch(syncZindexsStateAction(zindexsWithChached));
         dispatch(sortZindexsAction());
       });
     } catch (error) {}

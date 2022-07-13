@@ -226,19 +226,7 @@ export const sortFundsCachedAction = createAsyncThunk<void, { responseFunds: Fun
       const { fundConfig } = Helpers.Fund.GetFundConfig(walletCode, walletConfig);
       const { funds } = Helpers.Wallet.GetCurrentWalletState(walletCode, wallets);
       const now = dayjs().format('MM-DD HH:mm:ss');
-      const fundsCodeToMap = Utils.GetCodeMap(funds, 'fundcode');
-      const fundsWithChached = responseFunds.map((_) => ({
-        ...(fundsCodeToMap[_.fundcode!] || {}),
-        ..._,
-      }));
-      const fundsWithChachedCodeToMap = Utils.GetCodeMap(fundsWithChached, 'fundcode');
-      fundConfig.forEach((fund) => {
-        const responseFund = fundsWithChachedCodeToMap[fund.code];
-        const stateFund = fundsCodeToMap[fund.code];
-        if (!responseFund && stateFund) {
-          fundsWithChached.push(stateFund);
-        }
-      });
+      const fundsWithChached = Helpers.Fund.MergeStateFunds(fundConfig, funds, responseFunds);
 
       batch(() => {
         dispatch(setWalletStateAction({ code: walletCode, funds: fundsWithChached, updateTime: now }));
