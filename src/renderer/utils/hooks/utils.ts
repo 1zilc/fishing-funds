@@ -211,8 +211,6 @@ export function useSyncFixStockSetting() {
 export function useFreshFunds(throttleDelay: number) {
   const loadFunds = useLoadFunds(true);
   const loadFixFunds = useLoadFixFunds();
-  const bottomTabsSetting = useAppSelector((state) => state.setting.systemSetting.bottomTabsSetting);
-  const bottomTabsSettingKeyMap = Utils.GetCodeMap(bottomTabsSetting, 'key');
 
   const { run: runLoadFunds } = useThrottleFn(loadFunds, {
     wait: throttleDelay,
