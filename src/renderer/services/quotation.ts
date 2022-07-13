@@ -1,6 +1,8 @@
 import NP from 'number-precision';
 import request from '@/utils/request';
 
+const { base64 } = window.contextModules;
+
 export async function GetQuotationsFromEastmoney() {
   try {
     const { body: data } = await request<{
@@ -1328,5 +1330,14 @@ export async function GetShanghaiGoldGoodsFromEastmoney() {
     return result || [];
   } catch (error) {
     return [];
+  }
+}
+export async function GetMainFundFromEastmoney(code: string) {
+  try {
+    const { rawBody } = await request(`https://webquotepic.eastmoney.com/GetPic.aspx?nid=${code}&imageType=FFRS1&type=FFR`);
+    const b64encoded = base64.fromUint8Array(new Uint8Array(rawBody));
+    return `data:image/png;base64,${b64encoded}`;
+  } catch (error) {
+    return;
   }
 }
