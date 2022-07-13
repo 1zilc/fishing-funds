@@ -24,11 +24,11 @@ export function MergeStateStocks(
   const oldStocksCodeToMap = Utils.GetCodeMap(oldStocks, 'secid');
   const newStocksCodeToMap = Utils.GetCodeMap(newStocks, 'secid');
 
-  const stocksWithChachedCodeToMap = config.reduce((map, { code }) => {
-    const oldFund = oldStocksCodeToMap[code];
-    const newFund = newStocksCodeToMap[code];
-    if (oldFund || newFund) {
-      map[code] = { ...(oldFund || {}), ...(newFund || {}) };
+  const stocksWithChachedCodeToMap = config.reduce((map, { secid }) => {
+    const oldStock = oldStocksCodeToMap[secid];
+    const newStock = newStocksCodeToMap[secid];
+    if (oldStock || newStock) {
+      map[secid] = { ...(oldStock || {}), ...(newStock || {}) };
     }
     return map;
   }, {} as Record<string, Stock.ResponseItem & Stock.ExtraRow>);
