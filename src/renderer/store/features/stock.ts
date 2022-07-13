@@ -168,7 +168,7 @@ export const sortStocksCachedAction = createAsyncThunk<void, Stock.ResponseItem[
         },
       } = getState();
 
-      const stocksWithChached = Helpers.Stock.MergeStateStocks(stockConfig, stocks, responseStocks);
+      const stocksWithChached = Utils.MergeStateWithResponse(stockConfig, 'secid', 'secid', stocks, responseStocks);
 
       batch(() => {
         dispatch(syncStocksStateAction(stocksWithChached));

@@ -178,7 +178,7 @@ export const sortZindexsCachedAction = createAsyncThunk<void, Zindex.ResponseIte
         },
       } = getState();
 
-      const zindexsWithChached = Helpers.Zindex.MergeStateZindexs(zindexConfig, zindexs, responseZindexs);
+      const zindexsWithChached = Utils.MergeStateWithResponse(zindexConfig, 'code', 'code', zindexs, responseZindexs);
 
       batch(() => {
         dispatch(syncZindexsStateAction(zindexsWithChached));

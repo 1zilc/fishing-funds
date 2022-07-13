@@ -178,7 +178,7 @@ export const sortCoinsCachedAction = createAsyncThunk<void, Coin.ResponseItem[],
         },
       } = getState();
 
-      const coinsWithChached = Helpers.Coin.MergeStateCoins(coinConfig, coins, responseCoins);
+      const coinsWithChached = Utils.MergeStateWithResponse(coinConfig, 'code', 'code', coins, responseCoins);
 
       batch(() => {
         dispatch(syncCoinsStateAction(coinsWithChached));

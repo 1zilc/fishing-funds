@@ -465,3 +465,28 @@ export function ParseSearchParams() {
   const data = new URLSearchParams(window.location.search);
   return data;
 }
+
+export function MergeStateWithResponse<C, CK extends keyof C, SK extends keyof S, S, R extends S>(
+  config: C[],
+  configKey: CK,
+  stateKey: SK,
+  state: S[],
+  response: R[]
+) {
+  const stateCodeToMap = GetCodeMap(state, stateKey);
+  const responseCodeToMap = GetCodeMap(response, stateKey);
+
+  const stateWithChachedCodeToMap = config.reduce<Record<string, S>>((map, current) => {
+    const index = current[configKey] as unknown as string;
+    const stateItem = stateCodeToMap[index];
+    const responseItem = responseCodeToMap[index];
+    if (stateItem || responseItem) {
+      map[index] = { ...(stateItem || {}), ...(responseItem || {}) };
+    }
+    return map;
+  }, {});
+
+  const stateWithChached = Object.values(stateWithChachedCodeToMap);
+
+  return stateWithChached;
+}

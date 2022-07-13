@@ -15,25 +15,3 @@ export async function GetStocks(config: Stock.SettingItem[]) {
 export async function GetStock(secid: string) {
   return Services.Stock.FromEastmoney(secid);
 }
-
-export function MergeStateStocks(
-  config: Stock.SettingItem[],
-  oldStocks: (Stock.ResponseItem & Stock.ExtraRow)[],
-  newStocks: Stock.ResponseItem[]
-) {
-  const oldStocksCodeToMap = Utils.GetCodeMap(oldStocks, 'secid');
-  const newStocksCodeToMap = Utils.GetCodeMap(newStocks, 'secid');
-
-  const stocksWithChachedCodeToMap = config.reduce((map, { secid }) => {
-    const oldStock = oldStocksCodeToMap[secid];
-    const newStock = newStocksCodeToMap[secid];
-    if (oldStock || newStock) {
-      map[secid] = { ...(oldStock || {}), ...(newStock || {}) };
-    }
-    return map;
-  }, {} as Record<string, Stock.ResponseItem & Stock.ExtraRow>);
-
-  const stocksWithChached = Object.values(stocksWithChachedCodeToMap);
-
-  return stocksWithChached;
-}

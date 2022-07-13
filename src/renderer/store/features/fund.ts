@@ -226,7 +226,7 @@ export const sortFundsCachedAction = createAsyncThunk<void, { responseFunds: Fun
       const { fundConfig } = Helpers.Fund.GetFundConfig(walletCode, walletConfig);
       const { funds } = Helpers.Wallet.GetCurrentWalletState(walletCode, wallets);
       const now = dayjs().format('MM-DD HH:mm:ss');
-      const fundsWithChached = Helpers.Fund.MergeStateFunds(fundConfig, funds, responseFunds);
+      const fundsWithChached = Utils.MergeStateWithResponse(fundConfig, 'code', 'fundcode', funds, responseFunds);
 
       batch(() => {
         dispatch(setWalletStateAction({ code: walletCode, funds: fundsWithChached, updateTime: now }));

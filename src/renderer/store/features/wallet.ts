@@ -226,7 +226,7 @@ export const updateWalletStateAction = createAsyncThunk<void, Wallet.StateItem, 
       const walletState = Helpers.Wallet.GetCurrentWalletState(cloneState.code, cloneWallets);
       const walletsStateCodeToMap = Utils.GetCodeMap(cloneWallets, 'code');
 
-      cloneState.funds = Helpers.Fund.MergeStateFunds(fundConfig, walletState.funds, cloneState.funds);
+      cloneState.funds = Utils.MergeStateWithResponse(fundConfig, 'code', 'fundcode', walletState.funds, cloneState.funds);
 
       cloneWallets.forEach((wallet, index) => {
         if (wallet.code === cloneState.code) {
