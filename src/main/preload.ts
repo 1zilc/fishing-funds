@@ -1,41 +1,25 @@
 import * as fs from 'fs';
-import got from 'got';
 import log from 'electron-log';
 import PromiseWorker from 'promise-worker';
 import { contextBridge, ipcRenderer, shell, clipboard, nativeImage } from 'electron';
 import { encode, decode, fromUint8Array } from 'js-base64';
 import { parseAsync } from 'json2csv';
 import { base64ToBuffer } from './util';
-import Proxy from './proxy';
-import RequestWorker from '@/workers/request.worker.ts';
+import RequestWorker from './workers/request.worker.ts';
 
 const { version } = require('../../release/app/package.json');
 const requestWorker = new RequestWorker();
-const promiseWorker = new PromiseWorker(requestWorker);
+const requestPromiseWorker = new PromiseWorker(requestWorker);
 
 contextBridge.exposeInMainWorld('contextModules', {
   got: async (url: string, config: any) => {
-    return promiseWorker.postMessage({ url, config }).then((res) => {
+    const proxyConent = await ipcRenderer.invoke('resolve-proxy', url);
+    return requestPromiseWorker.postMessage({ url, config, proxyConent }).then((res) => {
       if (!res) {
         throw Error('请求错误');
       } else {
         return res;
       }
-    });
-    const proxyConent = await ipcRenderer.invoke('resolve-proxy', url);
-    const { httpAgent, httpsAgent } = new Proxy(proxyConent, url);
-    return got(url, {
-      ...config,
-      retry: {
-        limit: 2,
-      },
-      timeout: {
-        request: 10000,
-      },
-      agent: {
-        http: httpAgent,
-        https: httpsAgent,
-      },
     });
   },
   process: {
