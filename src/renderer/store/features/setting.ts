@@ -22,7 +22,7 @@ export const defaultSystemSetting: System.Setting = {
 
   bottomTabsSetting: [
     {
-      key: Enums.TabKeyType.Funds,
+      key: Enums.TabKeyType.Fund,
       name: '基金',
       show: true,
     },

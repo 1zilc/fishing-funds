@@ -175,7 +175,7 @@ export const sortFundsAction = createAsyncThunk<void, string, AsyncThunkConfig>(
         },
         sort: {
           sortMode: {
-            fundSortMode: { type: fundSortType, order: fundSortOrder },
+            fundSortMode: { type, order },
           },
         },
       } = getState();
@@ -183,11 +183,11 @@ export const sortFundsAction = createAsyncThunk<void, string, AsyncThunkConfig>(
       const { codeMap } = Helpers.Fund.GetFundConfig(walletCode, walletConfig);
 
       const sortList = await new PromiseWorker(sortWorker).postMessage({
-        module: Enums.TabKeyType.Funds,
+        module: Enums.TabKeyType.Fund,
         codeMap,
         list: funds,
-        orderType: fundSortOrder,
-        sortType: fundSortType,
+        sortType: type,
+        orderType: order,
       });
 
       dispatch(setWalletStateAction({ code, funds: sortList, updateTime }));

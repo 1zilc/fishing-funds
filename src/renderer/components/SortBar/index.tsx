@@ -586,7 +586,7 @@ const SortBar: React.FC<SortBarProps> = () => {
 
   const renderSortBar = useMemo(() => {
     switch (tabsActiveKey) {
-      case Enums.TabKeyType.Funds:
+      case Enums.TabKeyType.Fund:
         return <FundsSortBar />;
       case Enums.TabKeyType.Zindex:
         return <ZindexSortBar />;

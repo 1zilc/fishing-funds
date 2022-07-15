@@ -1,6 +1,8 @@
 import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
+import PromiseWorker from 'promise-worker';
 import { batch } from 'react-redux';
 import { AsyncThunkConfig } from '@/store';
+import { sortWorker } from '@/workers';
 import * as Utils from '@/utils';
 import * as Enums from '@/utils/enums';
 
@@ -134,7 +136,7 @@ export const sortCoinsAction = createAsyncThunk<void, void, AsyncThunkConfig>('c
     const {
       coin: {
         coins,
-        config: { coinConfig },
+        config: { codeMap },
       },
       sort: {
         sortMode: {
@@ -142,24 +144,13 @@ export const sortCoinsAction = createAsyncThunk<void, void, AsyncThunkConfig>('c
         },
       },
     } = getState();
-    const codeMap = Utils.GetCodeMap(coinConfig, 'code');
-    const sortList = coins.slice();
 
-    sortList.sort((a, b) => {
-      const t = order === Enums.SortOrderType.Asc ? 1 : -1;
-      switch (type) {
-        case Enums.CoinSortType.Price:
-          return (Number(a.price) - Number(b.price)) * t;
-        case Enums.CoinSortType.Zdf:
-          return (Number(a.change24h) - Number(b.change24h)) * t;
-        case Enums.CoinSortType.Volum:
-          return (Number(a.vol24h) - Number(b.vol24h)) * t;
-        case Enums.CoinSortType.Name:
-          return b.code.localeCompare(a.code, 'zh') * t;
-        case Enums.CoinSortType.Custom:
-        default:
-          return (codeMap[b.code!]?.originSort - codeMap[a.code!]?.originSort) * t;
-      }
+    const sortList = await new PromiseWorker(sortWorker).postMessage({
+      module: Enums.TabKeyType.Coin,
+      codeMap,
+      list: coins,
+      sortType: type,
+      orderType: order,
     });
 
     dispatch(syncCoinsStateAction(sortList));

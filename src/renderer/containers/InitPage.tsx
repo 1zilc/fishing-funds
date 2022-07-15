@@ -87,7 +87,7 @@ const InitPage = () => {
         ),
       ]).finally(() => setLoading('钱包配置加载完成')),
 
-      Enhancement.GetStorage(CONST.STORAGE.TABS_ACTIVE_KEY, Enums.TabKeyType.Funds)
+      Enhancement.GetStorage(CONST.STORAGE.TABS_ACTIVE_KEY, Enums.TabKeyType.Fund)
         .then((_) => dispatch(syncTabsActiveKeyAction(_)))
         .finally(() => setLoading('tabs配置加载完成')),
 

@@ -25,7 +25,7 @@ const StockView = React.lazy(() => import('@/components/Home/StockView'));
 const CoinView = React.lazy(() => import('@/components/Home/CoinView'));
 
 const tabsKeyMap = {
-  [Enums.TabKeyType.Funds]: FundGroup,
+  [Enums.TabKeyType.Fund]: FundGroup,
   [Enums.TabKeyType.Zindex]: ZindexGroup,
   [Enums.TabKeyType.Quotation]: QuotationGroup,
   [Enums.TabKeyType.Stock]: StockGroup,
@@ -38,7 +38,7 @@ function FundGroup() {
   const codeMap = useAppSelector((state) => state.wallet.fundConfigCodeMap);
 
   return (
-    <GroupTab tabKey={Enums.TabKeyType.Funds}>
+    <GroupTab tabKey={Enums.TabKeyType.Fund}>
       <GroupTab.TabPane tab="全部" key={String(0)}>
         <FundView filter={() => true} />
       </GroupTab.TabPane>
