@@ -28,7 +28,7 @@ const configuration: webpack.Configuration = {
         use: {
           loader: 'worker-loader',
           options: {
-            filename: '[contenthash].[name].js',
+            filename: '[name].js',
             inline: 'fallback',
           },
         },

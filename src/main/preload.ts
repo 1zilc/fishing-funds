@@ -9,12 +9,11 @@ import RequestWorker from './workers/request.worker.ts';
 
 const { version } = require('../../release/app/package.json');
 const requestWorker = new RequestWorker();
-const requestPromiseWorker = new PromiseWorker(requestWorker);
 
 contextBridge.exposeInMainWorld('contextModules', {
   got: async (url: string, config: any) => {
     const proxyConent = await ipcRenderer.invoke('resolve-proxy', url);
-    return requestPromiseWorker.postMessage({ url, config, proxyConent }).then((res) => {
+    return new PromiseWorker(requestWorker).postMessage({ url, config, proxyConent }).then((res) => {
       if (!res) {
         throw Error('请求错误');
       } else {
