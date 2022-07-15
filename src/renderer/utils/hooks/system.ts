@@ -33,6 +33,7 @@ import * as Utils from '@/utils';
 import * as Adapters from '@/utils/adpters';
 import * as Helpers from '@/helpers';
 import * as Enums from '@/utils/enums';
+import * as Enhancement from '@/utils/enhancement';
 import { useLoadFunds } from './utils';
 
 const { invoke, dialog, ipcRenderer, clipboard, app } = window.contextModules.electron;
@@ -309,7 +310,7 @@ export function useMappingLocalToSystemSetting() {
   });
 
   useEffect(() => {
-    Utils.UpdateSystemTheme(systemThemeSetting);
+    Enhancement.UpdateSystemTheme(systemThemeSetting);
   }, [systemThemeSetting]);
   useEffect(() => {
     app.setLoginItemSettings({ openAtLogin: autoStartSetting });
@@ -425,7 +426,7 @@ export function useUpdateContextMenuWalletsState() {
 export function useAllConfigBackup() {
   useIpcRendererListener('backup-all-config-export', async (e, code) => {
     try {
-      const backupConfig = await Utils.GenerateBackupConfig();
+      const backupConfig = await Enhancement.GenerateBackupConfig();
       const { filePath, canceled } = await dialog.showSaveDialog({
         title: '保存',
         defaultPath: `${backupConfig.name}-${backupConfig.timestamp}.${backupConfig.suffix}`,
@@ -460,7 +461,7 @@ export function useAllConfigBackup() {
       }
       const encodeBackupConfig = await readFile(filePath);
       const backupConfig: Backup.Config = compose(decodeFF, Base64.decode)(encodeBackupConfig);
-      Utils.CoverBackupConfig(backupConfig);
+      Enhancement.CoverBackupConfig(backupConfig);
       await dialog.showMessageBox({
         type: 'info',
         title: `导入成功`,
@@ -485,7 +486,7 @@ export function useAllConfigBackup() {
         buttons: ['确定', '取消'],
       });
       if (response === 0) {
-        Utils.CoverBackupConfig(backupConfig);
+        Enhancement.CoverBackupConfig(backupConfig);
         await dialog.showMessageBox({
           type: 'info',
           title: `恢复成功`,

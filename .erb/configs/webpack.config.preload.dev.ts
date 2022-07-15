@@ -26,6 +26,30 @@ const configuration: webpack.Configuration = {
     filename: 'preload.js',
   },
 
+  module: {
+    rules: [
+      {
+        test: /\.worker\.ts$/,
+        use: {
+          loader: 'worker-loader',
+          options: {
+            filename: '[contenthash].[name].js',
+            inline: 'fallback',
+          },
+        },
+      },
+      {
+        test: /\.[jt]sx?$/,
+        exclude: /node_modules/,
+        loader: 'esbuild-loader',
+        options: {
+          loader: 'tsx',
+          target: 'esnext',
+        },
+      },
+    ],
+  },
+
   plugins: [
     new BundleAnalyzerPlugin({
       analyzerMode: process.env.ANALYZE === 'true' ? 'server' : 'disabled',
@@ -51,6 +75,10 @@ const configuration: webpack.Configuration = {
       debug: true,
     }),
   ],
+
+  stats: {
+    children: true,
+  },
 
   /**
    * Disables webpack processing of __dirname and __filename.

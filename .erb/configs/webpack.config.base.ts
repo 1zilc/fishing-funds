@@ -24,16 +24,6 @@ const configuration: webpack.Configuration = {
         type: 'asset/resource',
       },
       {
-        test: /\.worker\.ts$/,
-        use: {
-          loader: 'worker-loader',
-          options: {
-            filename: '[name].js',
-            inline: 'fallback',
-          },
-        },
-      },
-      {
         test: /\.[jt]sx?$/,
         exclude: /node_modules/,
         loader: 'esbuild-loader',

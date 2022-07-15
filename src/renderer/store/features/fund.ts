@@ -1,9 +1,10 @@
 import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
 import { batch } from 'react-redux';
 import dayjs from 'dayjs';
-
+import PromiseWorker from 'promise-worker';
 import { AsyncThunkConfig } from '@/store';
 import { setWalletConfigAction, updateWalletStateAction, setWalletStateAction } from '@/store/features/wallet';
+import { sortWorker } from '@/workers';
 import * as Utils from '@/utils';
 import * as Helpers from '@/helpers';
 import * as Enums from '@/utils/enums';
@@ -174,38 +175,19 @@ export const sortFundsAction = createAsyncThunk<void, string, AsyncThunkConfig>(
         },
         sort: {
           sortMode: {
-            fundSortMode: { type: fundSortType, order: fundSortorder },
+            fundSortMode: { type: fundSortType, order: fundSortOrder },
           },
         },
       } = getState();
       const { funds, updateTime, code } = Helpers.Wallet.GetCurrentWalletState(walletCode, wallets);
       const { codeMap } = Helpers.Fund.GetFundConfig(walletCode, walletConfig);
-      const sortList = funds.slice();
 
-      sortList.sort((a, b) => {
-        const calcA = Helpers.Fund.CalcFund(a, codeMap);
-        const calcB = Helpers.Fund.CalcFund(b, codeMap);
-        const t = fundSortorder === Enums.SortOrderType.Asc ? 1 : -1;
-
-        switch (fundSortType) {
-          case Enums.FundSortType.Growth:
-            return (Number(calcA.gszzl) - Number(calcB.gszzl)) * t;
-          case Enums.FundSortType.Cost:
-            return (Number(calcA.cbje || 0) - Number(calcB.cbje || 0)) * t;
-          case Enums.FundSortType.Money:
-            return (Number(calcA.jrsygz) - Number(calcB.jrsygz)) * t;
-          case Enums.FundSortType.Estimate:
-            return (Number(calcA.gszz) - Number(calcB.gszz)) * t;
-          case Enums.FundSortType.Income:
-            return (Number(calcA.cysy || 0) - Number(calcB.cysy || 0)) * t;
-          case Enums.FundSortType.IncomeRate:
-            return (Number(calcA.cysyl) - Number(calcB.cysyl || 0)) * t;
-          case Enums.FundSortType.Name:
-            return calcA.name!.localeCompare(calcB.name!, 'zh') * t;
-          case Enums.FundSortType.Custom:
-          default:
-            return (codeMap[b.fundcode!]?.originSort - codeMap[a.fundcode!]?.originSort) * t;
-        }
+      const sortList = await new PromiseWorker(sortWorker).postMessage({
+        module: Enums.TabKeyType.Funds,
+        codeMap,
+        list: funds,
+        orderType: fundSortOrder,
+        sortType: fundSortType,
       });
 
       dispatch(setWalletStateAction({ code, funds: sortList, updateTime }));

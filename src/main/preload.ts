@@ -5,10 +5,8 @@ import { contextBridge, ipcRenderer, shell, clipboard, nativeImage } from 'elect
 import { encode, decode, fromUint8Array } from 'js-base64';
 import { parseAsync } from 'json2csv';
 import { base64ToBuffer } from './util';
-import RequestWorker from './workers/request.worker.ts';
-
+import { requestWorker } from './workers';
 const { version } = require('../../release/app/package.json');
-const requestWorker = new RequestWorker();
 
 contextBridge.exposeInMainWorld('contextModules', {
   got: async (url: string, config: any) => {

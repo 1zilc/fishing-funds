@@ -20,6 +20,7 @@ import { syncFavoriteQuotationMapAction } from '@/store/features/quotation';
 import * as CONST from '@/constants';
 import * as Utils from '@/utils';
 import * as Enums from '@/utils/enums';
+import * as Enhancement from '@/utils/enhancement';
 
 const { ipcRenderer } = window.contextModules.electron;
 
@@ -40,7 +41,7 @@ const InitPage = () => {
         }
         return data;
       }, {});
-      await Utils.CoverStorage(config);
+      await Enhancement.CoverStorage(config);
       localStorage.clear();
     } else {
     }
@@ -50,54 +51,58 @@ const InitPage = () => {
     await checkLocalStorage();
 
     await Promise.all([
-      Utils.GetStorage(CONST.STORAGE.ZINDEX_SETTING, defaultZindexConfig)
+      Enhancement.GetStorage(CONST.STORAGE.ZINDEX_SETTING, defaultZindexConfig)
         .then((_) => dispatch(setZindexConfigAction(_)))
         .finally(() => setLoading('web配置加载完成')),
 
-      Utils.GetStorage(CONST.STORAGE.FAVORITE_QUOTATION_MAP, {})
+      Enhancement.GetStorage(CONST.STORAGE.FAVORITE_QUOTATION_MAP, {})
         .then((_) => dispatch(syncFavoriteQuotationMapAction(_)))
         .finally(() => setLoading('关注板块配置加载完成')),
 
-      Utils.GetStorage(CONST.STORAGE.STOCK_SETTING, [])
+      Enhancement.GetStorage(CONST.STORAGE.STOCK_SETTING, [])
         .then((_) => dispatch(setStockConfigAction(_)))
         .finally(() => setLoading('股票配置加载完成')),
 
-      Utils.GetStorage(CONST.STORAGE.COIN_SETTING, [])
+      Enhancement.GetStorage(CONST.STORAGE.COIN_SETTING, [])
         .then((_) => dispatch(setCoinConfigAction(_)))
         .finally(() => setLoading('货币配置加载完成')),
 
-      Utils.GetStorage(CONST.STORAGE.WEB_SETTING, defaultWebConfig)
+      Enhancement.GetStorage(CONST.STORAGE.WEB_SETTING, defaultWebConfig)
         .then((_) => dispatch(setWebConfigAction(_)))
         .finally(() => setLoading('web配置加载完成')),
 
       Promise.all([
-        Utils.GetStorage(CONST.STORAGE.SYSTEM_SETTING, defaultSystemSetting).then((_) => dispatch(setSystemSettingAction(_))),
-        Utils.GetStorage(CONST.STORAGE.ADJUSTMENT_NOTIFICATION_DATE, '').then((_) => dispatch(updateAdjustmentNotificationDateAction(_))),
+        Enhancement.GetStorage(CONST.STORAGE.SYSTEM_SETTING, defaultSystemSetting).then((_) => dispatch(setSystemSettingAction(_))),
+        Enhancement.GetStorage(CONST.STORAGE.ADJUSTMENT_NOTIFICATION_DATE, '').then((_) =>
+          dispatch(updateAdjustmentNotificationDateAction(_))
+        ),
         ipcRenderer.invoke('get-should-use-dark-colors').then((_) => dispatch(syncDarkMode(_))),
       ]).finally(() => setLoading('系统设置加载完成')),
 
       Promise.all([
-        Utils.GetStorage(CONST.STORAGE.WALLET_SETTING, [defaultWallet]).then((_) => dispatch(setWalletConfigAction(_))),
-        Utils.GetStorage(CONST.STORAGE.EYE_STATUS, Enums.EyeStatus.Open).then((_) => dispatch(syncEyeStatusAction(_))),
-        Utils.GetStorage(CONST.STORAGE.CURRENT_WALLET_CODE, defaultWallet.code).then((_) => dispatch(changeCurrentWalletCodeAction(_))),
+        Enhancement.GetStorage(CONST.STORAGE.WALLET_SETTING, [defaultWallet]).then((_) => dispatch(setWalletConfigAction(_))),
+        Enhancement.GetStorage(CONST.STORAGE.EYE_STATUS, Enums.EyeStatus.Open).then((_) => dispatch(syncEyeStatusAction(_))),
+        Enhancement.GetStorage(CONST.STORAGE.CURRENT_WALLET_CODE, defaultWallet.code).then((_) =>
+          dispatch(changeCurrentWalletCodeAction(_))
+        ),
       ]).finally(() => setLoading('钱包配置加载完成')),
 
-      Utils.GetStorage(CONST.STORAGE.TABS_ACTIVE_KEY, Enums.TabKeyType.Funds)
+      Enhancement.GetStorage(CONST.STORAGE.TABS_ACTIVE_KEY, Enums.TabKeyType.Funds)
         .then((_) => dispatch(syncTabsActiveKeyAction(_)))
         .finally(() => setLoading('tabs配置加载完成')),
 
-      Utils.GetStorage(CONST.STORAGE.SORT_MODE, sortInitialState.sortMode)
+      Enhancement.GetStorage(CONST.STORAGE.SORT_MODE, sortInitialState.sortMode)
         .then((_) => dispatch(syncSortModeAction(_)))
         .finally(() => setLoading('排序配置加载完成')),
 
-      Utils.GetStorage(CONST.STORAGE.VIEW_MODE, sortInitialState.viewMode)
+      Enhancement.GetStorage(CONST.STORAGE.VIEW_MODE, sortInitialState.viewMode)
         .then((_) => dispatch(setViewModeAction(_)))
         .finally(() => setLoading('视图配置加载完成')),
 
       Promise.all([
-        Utils.GetStorage(CONST.STORAGE.REMOTE_FUND_MAP, {}).then((_) => dispatch(setRemoteFundsAction(Object.values(_)))),
-        Utils.GetStorage(CONST.STORAGE.FUND_RATING_MAP, {}).then((_) => dispatch(setFundRatingMapAction(Object.values(_)))),
-        Utils.GetStorage(CONST.STORAGE.REMOTE_COIN_MAP, {}).then((_) => dispatch(setRemoteCoinsAction(Object.values(_)))),
+        Enhancement.GetStorage(CONST.STORAGE.REMOTE_FUND_MAP, {}).then((_) => dispatch(setRemoteFundsAction(Object.values(_)))),
+        Enhancement.GetStorage(CONST.STORAGE.FUND_RATING_MAP, {}).then((_) => dispatch(setFundRatingMapAction(Object.values(_)))),
+        Enhancement.GetStorage(CONST.STORAGE.REMOTE_COIN_MAP, {}).then((_) => dispatch(setRemoteCoinsAction(Object.values(_)))),
       ]).finally(() => setLoading('远程数据缓存加载完成')),
     ]).finally(() => setLoading('加载完毕'));
 

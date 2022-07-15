@@ -10,7 +10,6 @@ import baseConfig from './webpack.config.base';
 import webpackPaths from './webpack.paths';
 import checkNodeEnv from '../scripts/check-node-env';
 import ReactRefreshWebpackPlugin from '@pmmmwh/react-refresh-webpack-plugin';
-import { MFSU, esbuildLoader } from '@umijs/mfsu';
 
 // When an ESLint server is running, we can't set the NODE_ENV so we'll check if it's
 // at the dev webpack config is not accidentally run in a production environment
@@ -30,13 +29,6 @@ if (!requiredByDLLConfig && !(fs.existsSync(webpackPaths.dllPath) && fs.existsSy
   execSync('npm run postinstall');
 }
 
-// [mfsu] 1. init instance
-const mfsu = new MFSU({
-  implementor: webpack,
-  buildDepWithESBuild: true,
-  depBuildConfig: undefined,
-});
-
 const configuration: webpack.Configuration = {
   devtool: 'inline-source-map',
 
@@ -50,31 +42,11 @@ const configuration: webpack.Configuration = {
     path: webpackPaths.distRendererPath,
     publicPath: '/',
     filename: 'renderer.dev.js',
-    chunkFilename: '[name].bundle.js',
-    library: {
-      type: 'module',
-    },
-  },
-
-  experiments: {
-    outputModule: true,
+    library: { type: 'umd' },
   },
 
   module: {
     rules: [
-      {
-        test: /\.[jt]sx?$/,
-        exclude: /node_modules/,
-        loader: esbuildLoader,
-        options: {
-          handler: [
-            // [mfsu] 3. add mfsu esbuild loader handlers
-            ...mfsu.getEsbuildLoaderHandler(),
-          ],
-          loader: 'tsx',
-          target: 'esnext',
-        },
-      },
       {
         test: /\.s?css$/,
         use: [
@@ -173,13 +145,17 @@ const configuration: webpack.Configuration = {
       env: process.env.NODE_ENV,
       isDevelopment: process.env.NODE_ENV !== 'production',
       nodeModules: webpackPaths.appNodeModulesPath,
-      scriptLoading: 'module',
+      // scriptLoading: 'module',
     }),
   ],
 
   node: {
     __dirname: false,
     __filename: false,
+  },
+
+  stats: {
+    children: true,
   },
 
   devServer: {
@@ -195,9 +171,6 @@ const configuration: webpack.Configuration = {
     },
     setupMiddlewares(middlewares) {
       console.log('Starting preload.js builder...');
-      middlewares.unshift(...mfsu.getMiddlewares());
-
-      console.log('Starting preload.js builder...');
       const preloadProcess = spawn('npm', ['run', 'start:preload'], {
         shell: true,
         stdio: 'inherit',
@@ -208,9 +181,7 @@ const configuration: webpack.Configuration = {
       console.log('Starting Main Process...');
       let args = ['run', 'start:main'];
       if (process.env.MAIN_ARGS) {
-        args = args.concat(
-          ['--', ...process.env.MAIN_ARGS.matchAll(/"[^"]+"|[^\s"]+/g)].flat()
-        );
+        args = args.concat(['--', ...process.env.MAIN_ARGS.matchAll(/"[^"]+"|[^\s"]+/g)].flat());
       }
       spawn('npm', args, {
         shell: true,
@@ -227,11 +198,4 @@ const configuration: webpack.Configuration = {
   },
 };
 
-// [mfsu] 4. inject mfsu webpack config
-const getConfig = async () => {
-  const config = merge(baseConfig, configuration);
-  await mfsu.setWebpackConfig({ config } as any);
-  return config;
-};
-
-export default getConfig();
+export default merge(baseConfig, configuration);
