@@ -19,12 +19,14 @@ export function createMenubar({ tray, mainWindowState }: { tray: Tray; mainWindo
       backgroundColor: process.platform === 'darwin' ? 'rgba(0, 0, 0, 0)' : '#fff',
       width: mainWindowState.width,
       height: mainWindowState.height,
+
       minHeight: 400,
       minWidth: 300,
       maxHeight: 1000,
       maxWidth: 600,
       vibrancy: 'sidebar',
       webPreferences: {
+        nodeIntegrationInWorker: true,
         webviewTag: true,
         devTools: !app.isPackaged,
         preload: getPreloadPath(),
