@@ -132,11 +132,11 @@ export function useRenderEcharts(
 
 export function useSyncFixFundSetting() {
   const dispatch = useAppDispatch();
-  const [done, { setTrue }] = useBoolean(false);
+  const [done, { setTrue, setFalse }] = useBoolean(false);
   const fundConfig = useAppSelector((state) => state.wallet.fundConfig);
   const fundApiTypeSetting = useAppSelector((state) => state.setting.systemSetting.fundApiTypeSetting);
 
-  async function FixFundSetting(fundConfig: Fund.SettingItem[]) {
+  async function fixFundSetting(fundConfig: Fund.SettingItem[]) {
     try {
       const responseFunds = await Helpers.Fund.GetFunds(fundConfig, fundApiTypeSetting);
       responseFunds.filter(Boolean).forEach((responseFund) => {
@@ -156,11 +156,12 @@ export function useSyncFixFundSetting() {
   useEffect(() => {
     const unNamedFunds = fundConfig.filter(({ name }) => !name);
     if (unNamedFunds.length) {
-      FixFundSetting(unNamedFunds);
+      setFalse();
+      fixFundSetting(unNamedFunds);
     } else {
       setTrue();
     }
-  }, []);
+  }, [fundConfig]);
 
   return { done };
 }
