@@ -27,7 +27,7 @@ import * as Adapters from '@/utils/adpters';
 import * as Services from '@/services';
 import * as Helpers from '@/helpers';
 
-const { invoke, ipcRenderer } = window.contextModules.electron;
+const { ipcRenderer } = window.contextModules.electron;
 
 export const useAppDispatch = () => useDispatch<TypedDispatch>();
 
