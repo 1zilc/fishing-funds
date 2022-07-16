@@ -2,7 +2,7 @@ import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
 import PromiseWorker from 'promise-worker';
 import { AsyncThunkConfig } from '@/store';
 import { batch } from 'react-redux';
-import { sortWorker } from '@/workers';
+import { sortWorker, mergeWorker } from '@/workers';
 import * as Utils from '@/utils';
 import * as Enums from '@/utils/enums';
 
@@ -168,7 +168,13 @@ export const sortZindexsCachedAction = createAsyncThunk<void, Zindex.ResponseIte
         },
       } = getState();
 
-      const zindexsWithChached = Utils.MergeStateWithResponse(zindexConfig, 'code', 'code', zindexs, responseZindexs);
+      const zindexsWithChached = await new PromiseWorker(mergeWorker).postMessage({
+        config: zindexConfig,
+        configKey: 'code',
+        stateKey: 'code',
+        state: zindexs,
+        response: responseZindexs,
+      });
 
       batch(() => {
         dispatch(syncZindexsStateAction(zindexsWithChached));

@@ -2,7 +2,7 @@ import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
 import PromiseWorker from 'promise-worker';
 import { batch } from 'react-redux';
 import { AsyncThunkConfig } from '@/store';
-import { sortWorker } from '@/workers';
+import { sortWorker, mergeWorker } from '@/workers';
 import * as Utils from '@/utils';
 import * as Enums from '@/utils/enums';
 
@@ -168,7 +168,13 @@ export const sortCoinsCachedAction = createAsyncThunk<void, Coin.ResponseItem[],
         },
       } = getState();
 
-      const coinsWithChached = Utils.MergeStateWithResponse(coinConfig, 'code', 'code', coins, responseCoins);
+      const coinsWithChached = await new PromiseWorker(mergeWorker).postMessage({
+        config: coinConfig,
+        configKey: 'code',
+        stateKey: 'code',
+        state: coins,
+        response: responseCoins,
+      });
 
       batch(() => {
         dispatch(syncCoinsStateAction(coinsWithChached));

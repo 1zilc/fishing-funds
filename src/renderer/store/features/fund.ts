@@ -4,7 +4,7 @@ import dayjs from 'dayjs';
 import PromiseWorker from 'promise-worker';
 import { AsyncThunkConfig } from '@/store';
 import { setWalletConfigAction, updateWalletStateAction, setWalletStateAction } from '@/store/features/wallet';
-import { sortWorker } from '@/workers';
+import { sortWorker, mergeWorker } from '@/workers';
 import * as Utils from '@/utils';
 import * as Helpers from '@/helpers';
 import * as Enums from '@/utils/enums';
@@ -208,7 +208,14 @@ export const sortFundsCachedAction = createAsyncThunk<void, { responseFunds: Fun
       const { fundConfig } = Helpers.Fund.GetFundConfig(walletCode, walletConfig);
       const { funds } = Helpers.Wallet.GetCurrentWalletState(walletCode, wallets);
       const now = dayjs().format('MM-DD HH:mm:ss');
-      const fundsWithChached = Utils.MergeStateWithResponse(fundConfig, 'code', 'fundcode', funds, responseFunds);
+
+      const fundsWithChached = await new PromiseWorker(mergeWorker).postMessage({
+        config: fundConfig,
+        configKey: 'code',
+        stateKey: 'fundcode',
+        state: funds,
+        response: responseFunds,
+      });
 
       batch(() => {
         dispatch(setWalletStateAction({ code: walletCode, funds: fundsWithChached, updateTime: now }));

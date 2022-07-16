@@ -1,8 +1,8 @@
 import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
+import { batch } from 'react-redux';
 import { AsyncThunkConfig } from '@/store';
 import * as Utils from '@/utils';
 import * as Enums from '@/utils/enums';
-import { batch } from 'react-redux';
 
 export interface WebState {
   view: {
