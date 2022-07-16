@@ -1,8 +1,8 @@
 import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
-import PromiseWorker from 'promise-worker';
 import { AsyncThunkConfig } from '@/store';
 import { batch } from 'react-redux';
-import { sortWorker, mergeWorker } from '@/workers';
+import { sortFund, sortZindex } from '@/workers/sort.worker';
+import { mergeStateWithResponse } from '@/workers/merge.worker';
 import * as Utils from '@/utils';
 import * as Enums from '@/utils/enums';
 
@@ -144,7 +144,7 @@ export const sortZindexsAction = createAsyncThunk<void, void, AsyncThunkConfig>(
         },
       } = getState();
 
-      const sortList = await new PromiseWorker(sortWorker).postMessage({
+      const sortList = sortZindex({
         module: Enums.TabKeyType.Zindex,
         codeMap,
         list: zindexs,
@@ -168,7 +168,7 @@ export const sortZindexsCachedAction = createAsyncThunk<void, Zindex.ResponseIte
         },
       } = getState();
 
-      const zindexsWithChached = await new PromiseWorker(mergeWorker).postMessage({
+      const zindexsWithChached = mergeStateWithResponse({
         config: zindexConfig,
         configKey: 'code',
         stateKey: 'code',

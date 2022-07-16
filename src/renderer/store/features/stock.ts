@@ -1,8 +1,8 @@
 import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
-import PromiseWorker from 'promise-worker';
 import { batch } from 'react-redux';
 import { AsyncThunkConfig } from '@/store';
-import { sortWorker, mergeWorker } from '@/workers';
+import { sortStock } from '@/workers/sort.worker';
+import { mergeStateWithResponse } from '@/workers/merge.worker';
 import * as Utils from '@/utils';
 import * as Enums from '@/utils/enums';
 
@@ -136,7 +136,7 @@ export const sortStocksAction = createAsyncThunk<void, void, AsyncThunkConfig>(
         },
       } = getState();
 
-      const sortList = await new PromiseWorker(sortWorker).postMessage({
+      const sortList = sortStock({
         module: Enums.TabKeyType.Stock,
         codeMap,
         list: stocks,
@@ -160,7 +160,7 @@ export const sortStocksCachedAction = createAsyncThunk<void, Stock.ResponseItem[
         },
       } = getState();
 
-      const stocksWithChached = await new PromiseWorker(mergeWorker).postMessage({
+      const stocksWithChached = mergeStateWithResponse({
         config: stockConfig,
         configKey: 'secid',
         stateKey: 'secid',

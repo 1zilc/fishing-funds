@@ -1,9 +1,8 @@
 import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
 import { batch } from 'react-redux';
-import PromiseWorker from 'promise-worker';
 import { AsyncThunkConfig } from '@/store';
 import { sortFundsAction } from '@/store/features/fund';
-import { mergeWorker } from '@/workers';
+import { mergeStateWithResponse } from '@/workers/merge.worker';
 import * as Enums from '@/utils/enums';
 import * as Utils from '@/utils';
 import * as Helpers from '@/helpers';
@@ -227,7 +226,7 @@ export const updateWalletStateAction = createAsyncThunk<void, Wallet.StateItem, 
       const walletState = Helpers.Wallet.GetCurrentWalletState(cloneState.code, cloneWallets);
       const walletsStateCodeToMap = Utils.GetCodeMap(cloneWallets, 'code');
 
-      cloneState.funds = await new PromiseWorker(mergeWorker).postMessage({
+      cloneState.funds = mergeStateWithResponse({
         config: fundConfig,
         configKey: 'code',
         stateKey: 'fundcode',

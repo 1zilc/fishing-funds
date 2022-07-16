@@ -1,10 +1,10 @@
 import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
 import { batch } from 'react-redux';
 import dayjs from 'dayjs';
-import PromiseWorker from 'promise-worker';
 import { AsyncThunkConfig } from '@/store';
 import { setWalletConfigAction, updateWalletStateAction, setWalletStateAction } from '@/store/features/wallet';
-import { sortWorker, mergeWorker } from '@/workers';
+import { sortFund } from '@/workers/sort.worker';
+import { mergeStateWithResponse } from '@/workers/merge.worker';
 import * as Utils from '@/utils';
 import * as Helpers from '@/helpers';
 import * as Enums from '@/utils/enums';
@@ -182,7 +182,7 @@ export const sortFundsAction = createAsyncThunk<void, string, AsyncThunkConfig>(
       const { funds, updateTime, code } = Helpers.Wallet.GetCurrentWalletState(walletCode, wallets);
       const { codeMap } = Helpers.Fund.GetFundConfig(walletCode, walletConfig);
 
-      const sortList = await new PromiseWorker(sortWorker).postMessage({
+      const sortList = sortFund({
         module: Enums.TabKeyType.Fund,
         codeMap,
         list: funds,
@@ -209,7 +209,7 @@ export const sortFundsCachedAction = createAsyncThunk<void, { responseFunds: Fun
       const { funds } = Helpers.Wallet.GetCurrentWalletState(walletCode, wallets);
       const now = dayjs().format('MM-DD HH:mm:ss');
 
-      const fundsWithChached = await new PromiseWorker(mergeWorker).postMessage({
+      const fundsWithChached = mergeStateWithResponse({
         config: fundConfig,
         configKey: 'code',
         stateKey: 'fundcode',

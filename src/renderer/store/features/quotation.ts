@@ -1,8 +1,7 @@
 import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
-import PromiseWorker from 'promise-worker';
 import { batch } from 'react-redux';
 import { AsyncThunkConfig } from '@/store';
-import { sortWorker } from '@/workers';
+import { sortQuotation } from '@/workers/sort.worker';
 import * as Utils from '@/utils';
 import * as Enums from '@/utils/enums';
 
@@ -102,7 +101,7 @@ export const sortQuotationsAction = createAsyncThunk<void, void, AsyncThunkConfi
         },
       } = getState();
 
-      const sortList = await new PromiseWorker(sortWorker).postMessage({
+      const sortList = sortQuotation({
         module: Enums.TabKeyType.Quotation,
         list: quotations,
         sortType: type,

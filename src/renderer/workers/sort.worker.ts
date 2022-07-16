@@ -1,13 +1,13 @@
-import registerPromiseWorker from 'promise-worker/register';
+// import registerPromiseWorker from 'promise-worker/register';
 import * as Enums from '@/utils/enums';
 import { CalcFund } from '@/helpers/fund/utils';
 
 interface WorkerRecieveParams {
-  module: Enums.TabKeyType;
+  module?: Enums.TabKeyType;
   list: any[];
   orderType: Enums.SortOrderType;
   sortType: any;
-  codeMap: any;
+  codeMap?: any;
 }
 
 interface SortFundPrams extends WorkerRecieveParams {
@@ -35,25 +35,26 @@ interface SortCoinPrams extends WorkerRecieveParams {
   codeMap: Coin.CodeMap;
 }
 
-registerPromiseWorker((params: WorkerRecieveParams) => {
-  switch (params.module) {
-    case Enums.TabKeyType.Fund:
-      return sortFund(params);
-    case Enums.TabKeyType.Zindex:
-      return sortZindex(params);
-    case Enums.TabKeyType.Quotation:
-      return sortQuotation(params);
-    case Enums.TabKeyType.Stock:
-      return sortStock(params);
-    case Enums.TabKeyType.Coin:
-      return sortCoin(params);
-    default:
-      return params.list;
-  }
-});
+// registerPromiseWorker((params: WorkerRecieveParams) => {
+//   switch (params.module) {
+//     case Enums.TabKeyType.Fund:
+//       return sortFund(params);
+//     case Enums.TabKeyType.Zindex:
+//       return sortZindex(params);
+//     case Enums.TabKeyType.Quotation:
+//       return sortQuotation(params);
+//     case Enums.TabKeyType.Stock:
+//       return sortStock(params);
+//     case Enums.TabKeyType.Coin:
+//       return sortCoin(params);
+//     default:
+//       return params.list;
+//   }
+// });
 
-function sortFund({ codeMap, list, orderType, sortType }: SortFundPrams) {
-  list.sort((a, b) => {
+export function sortFund({ codeMap, list, orderType, sortType }: SortFundPrams) {
+  const sortList = list.slice();
+  sortList.sort((a, b) => {
     const calcA = CalcFund(a, codeMap);
     const calcB = CalcFund(b, codeMap);
     const t = orderType === Enums.SortOrderType.Asc ? 1 : -1;
@@ -77,10 +78,11 @@ function sortFund({ codeMap, list, orderType, sortType }: SortFundPrams) {
         return (codeMap[b.fundcode!]?.originSort - codeMap[a.fundcode!]?.originSort) * t;
     }
   });
-  return list;
+  return sortList;
 }
-function sortZindex({ codeMap, list, orderType, sortType }: SortZindexPrams) {
-  list.sort((a, b) => {
+export function sortZindex({ codeMap, list, orderType, sortType }: SortZindexPrams) {
+  const sortList = list.slice();
+  sortList.sort((a, b) => {
     const t = orderType === Enums.SortOrderType.Asc ? 1 : -1;
     switch (sortType) {
       case Enums.ZindexSortType.Zdd:
@@ -96,10 +98,11 @@ function sortZindex({ codeMap, list, orderType, sortType }: SortZindexPrams) {
         return (codeMap[b.code]?.originSort - codeMap[a.code]?.originSort) * t;
     }
   });
-  return list;
+  return sortList;
 }
-function sortQuotation({ list, orderType, sortType }: SortQuotationPrams) {
-  list.sort((a, b) => {
+export function sortQuotation({ list, orderType, sortType }: SortQuotationPrams) {
+  const sortList = list.slice();
+  sortList.sort((a, b) => {
     const t = orderType === Enums.SortOrderType.Asc ? 1 : -1;
     switch (sortType) {
       case Enums.QuotationSortType.Zde:
@@ -121,10 +124,11 @@ function sortQuotation({ list, orderType, sortType }: SortQuotationPrams) {
         return (Number(a.zdf) - Number(b.zdf)) * t;
     }
   });
-  return list;
+  return sortList;
 }
-function sortStock({ codeMap, list, orderType, sortType }: SortStockPrams) {
-  list.sort((a, b) => {
+export function sortStock({ codeMap, list, orderType, sortType }: SortStockPrams) {
+  const sortList = list.slice();
+  sortList.sort((a, b) => {
     const t = orderType === Enums.SortOrderType.Asc ? 1 : -1;
     switch (sortType) {
       case Enums.StockSortType.Zdd:
@@ -140,10 +144,11 @@ function sortStock({ codeMap, list, orderType, sortType }: SortStockPrams) {
         return (codeMap[b.secid!]?.originSort - codeMap[a.secid!]?.originSort) * t;
     }
   });
-  return list;
+  return sortList;
 }
-function sortCoin({ codeMap, list, orderType, sortType }: SortCoinPrams) {
-  list.sort((a, b) => {
+export function sortCoin({ codeMap, list, orderType, sortType }: SortCoinPrams) {
+  const sortList = list.slice();
+  sortList.sort((a, b) => {
     const t = orderType === Enums.SortOrderType.Asc ? 1 : -1;
     switch (sortType) {
       case Enums.CoinSortType.Price:
@@ -159,5 +164,5 @@ function sortCoin({ codeMap, list, orderType, sortType }: SortCoinPrams) {
         return (codeMap[b.code!]?.originSort - codeMap[a.code!]?.originSort) * t;
     }
   });
-  return list;
+  return sortList;
 }
