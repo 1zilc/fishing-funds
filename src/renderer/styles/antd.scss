@@ -18,6 +18,10 @@
 .ant-dropdown-trigger {
   color: var(--primary-color);
 }
+a:hover,
+.ant-tabs-tab:hover {
+  color: var(--primary-color);
+}
 
 .ant-rate-star-zero {
   svg {
