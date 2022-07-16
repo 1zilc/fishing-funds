@@ -11,7 +11,7 @@ import CustomDrawer from '@/components/CustomDrawer';
 import Empty from '@/components/Empty';
 import { deleteStockAction, setStockConfigAction } from '@/store/features/stock';
 import { useDrawer, useAutoDestroySortableRef, useAppDispatch, useAppSelector } from '@/utils/hooks';
-
+import * as Utils from '@/utils';
 import styles from './index.module.scss';
 
 const AddStockContent = React.lazy(() => import('@/components/Home/StockView/AddStockContent'));
@@ -28,17 +28,20 @@ const Optional: React.FC<OptionalProps> = () => {
   const sortStockConfig = useMemo(() => stockConfig.map((_) => ({ ..._, id: _.secid })), [stockConfig]);
 
   function onSortStockConfig(sortList: Stock.SettingItem[]) {
-    const stockConfig = sortList.map((item) => {
-      const stock = codeMap[item.secid];
-      return {
-        name: stock.name,
-        secid: stock.secid,
-        code: stock.code,
-        market: stock.market,
-        type: stock.type,
-      };
-    });
-    dispatch(setStockConfigAction(stockConfig));
+    const hasChanged = Utils.CheckListOrderHasChanged(stockConfig, sortList, 'secid');
+    if (hasChanged) {
+      const sortConfig = sortList.map((item) => {
+        const stock = codeMap[item.secid];
+        return {
+          name: stock.name,
+          secid: stock.secid,
+          code: stock.code,
+          market: stock.market,
+          type: stock.type,
+        };
+      });
+      dispatch(setStockConfigAction(sortConfig));
+    }
   }
 
   async function onRemoveStock(stock: Stock.SettingItem) {

@@ -12,7 +12,7 @@ import Empty from '@/components/Empty';
 import QuickSearch from '@/components/Toolbar/AppCenterContent/QuickSearch';
 import { deleteWebAction, setWebConfigAction } from '@/store/features/web';
 import { useAutoDestroySortableRef, useAppDispatch, useAppSelector } from '@/utils/hooks';
-
+import * as Utils from '@/utils';
 import styles from './index.module.scss';
 
 export interface OptionalProps {}
@@ -29,17 +29,20 @@ const Optional: React.FC<OptionalProps> = () => {
   const sortWebConfig = useMemo(() => webConfig.map((_) => ({ ..._, id: _.url })), [webConfig]);
 
   function onSortWebConfig(sortList: Web.SettingItem[]) {
-    const coinConfig = sortList.map((item) => {
-      const web = codeMap[item.url];
-      return {
-        title: web.title,
-        url: web.url,
-        iconType: web.iconType,
-        icon: web.icon,
-        color: web.color,
-      };
-    });
-    dispatch(setWebConfigAction(coinConfig));
+    const hasChanged = Utils.CheckListOrderHasChanged(webConfig, sortList, 'url');
+    if (hasChanged) {
+      const sortConfig = sortList.map((item) => {
+        const web = codeMap[item.url];
+        return {
+          title: web.title,
+          url: web.url,
+          iconType: web.iconType,
+          icon: web.icon,
+          color: web.color,
+        };
+      });
+      dispatch(setWebConfigAction(sortConfig));
+    }
   }
 
   async function onRemoveCoin(web: Web.SettingItem) {

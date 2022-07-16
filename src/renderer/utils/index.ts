@@ -411,3 +411,7 @@ export function ParseSearchParams() {
   const data = new URLSearchParams(window.location.search);
   return data;
 }
+
+export function CheckListOrderHasChanged<I1, I2 extends I1, K extends keyof I1>(list1: I1[], list2: I2[], key: K) {
+  return list1.map((i) => i[key]).toString() !== list2.map((i) => i[key]).toString();
+}
