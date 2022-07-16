@@ -1,5 +1,4 @@
 import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
-import { batch } from 'react-redux';
 import dayjs from 'dayjs';
 import { AsyncThunkConfig } from '@/store';
 import { setWalletConfigAction, updateWalletStateAction, setWalletStateAction } from '@/store/features/wallet';
@@ -62,10 +61,8 @@ export const setFundConfigAction = createAsyncThunk<void, { config: Fund.Setting
         funds: walletCode === item.code ? config : item.funds,
       }));
 
-      batch(() => {
-        dispatch(setWalletConfigAction(newWalletConfig));
-        dispatch(updateWalletStateAction(currentWallet));
-      });
+      dispatch(setWalletConfigAction(newWalletConfig));
+      dispatch(updateWalletStateAction(currentWallet));
     } catch (error) {}
   }
 );
@@ -217,10 +214,8 @@ export const sortFundsCachedAction = createAsyncThunk<void, { responseFunds: Fun
         response: responseFunds,
       });
 
-      batch(() => {
-        dispatch(setWalletStateAction({ code: walletCode, funds: fundsWithChached, updateTime: now }));
-        dispatch(sortFundsAction(walletCode));
-      });
+      dispatch(setWalletStateAction({ code: walletCode, funds: fundsWithChached, updateTime: now }));
+      dispatch(sortFundsAction(walletCode));
     } catch (error) {}
   }
 );

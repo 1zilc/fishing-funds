@@ -202,8 +202,8 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
 
   const proxyModeEnable = proxyType === Enums.ProxyType.Http || proxyType === Enums.ProxyType.Socks;
 
-  function onSave() {
-    dispatch(
+  async function onSave() {
+    await dispatch(
       setSystemSettingAction({
         fundApiTypeSetting: fundapiType,
         conciseSetting: concise,

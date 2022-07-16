@@ -1,6 +1,6 @@
 import React, { useLayoutEffect, useState, useEffect, useRef, useMemo, useDeferredValue } from 'react';
 import { useInterval, useBoolean, useThrottleFn, useSize, useMemoizedFn, useEventListener } from 'ahooks';
-import { useDispatch, useSelector, TypedUseSelectorHook, batch } from 'react-redux';
+import { useDispatch, useSelector, TypedUseSelectorHook } from 'react-redux';
 import dayjs from 'dayjs';
 import * as echarts from 'echarts';
 
@@ -240,10 +240,8 @@ export function useLoadFunds(loading: boolean) {
     try {
       dispatch(setFundsLoadingAction(loading));
       const responseFunds = await Helpers.Fund.GetFunds(fundConfig, fundApiTypeSetting);
-      batch(() => {
-        dispatch(sortFundsCachedAction({ responseFunds, walletCode: currentWalletCode }));
-        dispatch(setFundsLoadingAction(false));
-      });
+      dispatch(sortFundsCachedAction({ responseFunds, walletCode: currentWalletCode }));
+      dispatch(setFundsLoadingAction(false));
     } catch (error) {
       dispatch(setFundsLoadingAction(false));
     }
@@ -276,10 +274,8 @@ export function useLoadRemoteFunds() {
     try {
       dispatch(setRemoteFundsLoadingAction(true));
       const remoteFunds = await Services.Fund.GetRemoteFundsFromEastmoney();
-      batch(() => {
-        dispatch(setRemoteFundsAction(remoteFunds));
-        dispatch(setRemoteFundsLoadingAction(false));
-      });
+      dispatch(setRemoteFundsAction(remoteFunds));
+      dispatch(setRemoteFundsLoadingAction(false));
     } catch (error) {
       dispatch(setRemoteFundsLoadingAction(false));
     }
@@ -365,10 +361,8 @@ export function useLoadZindexs(loading: boolean) {
     try {
       dispatch(setZindexesLoadingAction(loading));
       const responseZindexs = await Helpers.Zindex.GetZindexs(zindexConfig);
-      batch(() => {
-        dispatch(sortZindexsCachedAction(responseZindexs));
-        dispatch(setZindexesLoadingAction(false));
-      });
+      dispatch(sortZindexsCachedAction(responseZindexs));
+      dispatch(setZindexesLoadingAction(false));
     } catch (error) {
       dispatch(setZindexesLoadingAction(false));
     }
@@ -392,10 +386,8 @@ export function useLoadQuotations(loading: boolean) {
     try {
       dispatch(setQuotationsLoadingAction(loading));
       const responseQuotations = await Helpers.Quotation.GetQuotations();
-      batch(() => {
-        dispatch(sortQuotationsCachedAction(responseQuotations));
-        dispatch(setQuotationsLoadingAction(false));
-      });
+      dispatch(sortQuotationsCachedAction(responseQuotations));
+      dispatch(setQuotationsLoadingAction(false));
     } catch (error) {
       dispatch(setQuotationsLoadingAction(false));
     }
@@ -420,10 +412,8 @@ export function useLoadStocks(loading: boolean) {
     try {
       dispatch(setStocksLoadingAction(loading));
       const responseStocks = await Helpers.Stock.GetStocks(stockConfig);
-      batch(() => {
-        dispatch(sortStocksCachedAction(responseStocks));
-        dispatch(setStocksLoadingAction(false));
-      });
+      dispatch(sortStocksCachedAction(responseStocks));
+      dispatch(setStocksLoadingAction(false));
     } catch (error) {
       dispatch(setStocksLoadingAction(false));
     }
@@ -449,10 +439,8 @@ export function useLoadCoins(showLoading: boolean) {
     try {
       dispatch(setCoinsLoadingAction(showLoading));
       const responseCoins = await Helpers.Coin.GetCoins(config, coinUnitSetting);
-      batch(() => {
-        dispatch(sortCoinsCachedAction(responseCoins));
-        dispatch(setCoinsLoadingAction(false));
-      });
+      dispatch(sortCoinsCachedAction(responseCoins));
+      dispatch(setCoinsLoadingAction(false));
     } catch (error) {
       dispatch(setCoinsLoadingAction(false));
     }
@@ -467,10 +455,8 @@ export function useLoadRemoteCoins() {
     try {
       dispatch(setRemoteCoinsLoadingAction(true));
       const remoteCoins = await Services.Coin.GetRemoteCoinsFromCoingecko();
-      batch(() => {
-        dispatch(setRemoteCoinsAction(remoteCoins));
-        dispatch(setRemoteCoinsLoadingAction(false));
-      });
+      dispatch(setRemoteCoinsAction(remoteCoins));
+      dispatch(setRemoteCoinsLoadingAction(false));
     } catch (error) {
       dispatch(setRemoteCoinsLoadingAction(false));
     }

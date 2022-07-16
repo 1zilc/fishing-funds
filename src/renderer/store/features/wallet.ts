@@ -1,5 +1,4 @@
 import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
-import { batch } from 'react-redux';
 import { AsyncThunkConfig } from '@/store';
 import { sortFundsAction } from '@/store/features/fund';
 import { mergeStateWithResponse } from '@/workers/merge.worker';
@@ -132,10 +131,8 @@ export const setWalletConfigAction = createAsyncThunk<void, Wallet.SettingItem[]
       } = getState();
       const codeMap = Utils.GetCodeMap(walletConfig, 'code');
 
-      batch(() => {
-        dispatch(syncWalletsConfigAction({ walletConfig, codeMap }));
-        dispatch(syncWalletStateAction(wallets));
-      });
+      dispatch(syncWalletsConfigAction({ walletConfig, codeMap }));
+      dispatch(syncWalletStateAction(wallets));
     } catch (error) {}
   }
 );
@@ -244,10 +241,8 @@ export const updateWalletStateAction = createAsyncThunk<void, Wallet.StateItem, 
         cloneWallets.push(cloneState);
       }
 
-      batch(() => {
-        dispatch(syncWalletsAction(cloneWallets));
-        dispatch(sortFundsAction(cloneState.code));
-      });
+      dispatch(syncWalletsAction(cloneWallets));
+      dispatch(sortFundsAction(cloneState.code));
     } catch (error) {}
   }
 );
@@ -290,10 +285,8 @@ export const syncFixWalletStateAction = createAsyncThunk<void, Wallet.StateItem,
         }
       });
 
-      batch(() => {
-        dispatch(syncWalletsAction(cloneWallets));
-        dispatch(sortFundsAction(state.code));
-      });
+      dispatch(syncWalletsAction(cloneWallets));
+      dispatch(sortFundsAction(state.code));
     } catch (error) {}
   }
 );

@@ -33,7 +33,7 @@ const EditWalletContent: React.FC<AddFundContentProps> = (props) => {
       return;
     }
     setFieldNameMessageTip({ show: false, text: '' });
-    dispatch(updateWalletConfigAction({ ...props.wallet, name, iconIndex }));
+    await dispatch(updateWalletConfigAction({ ...props.wallet, name, iconIndex }));
     props.onEnter();
   }
 

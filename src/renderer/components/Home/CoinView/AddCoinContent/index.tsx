@@ -40,7 +40,6 @@ const AddCoinContent: React.FC<AddCoinContentProps> = (props) => {
           name: coin.name!,
         })
       );
-      props.onEnter();
     } else {
       message.error('数据出错或网络原因请多次尝试~');
     }

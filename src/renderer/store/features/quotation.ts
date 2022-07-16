@@ -1,5 +1,4 @@
 import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
-import { batch } from 'react-redux';
 import { AsyncThunkConfig } from '@/store';
 import { sortQuotation } from '@/workers/sort.worker';
 import * as Utils from '@/utils';
@@ -80,10 +79,8 @@ export const sortQuotationsCachedAction = createAsyncThunk<void, Quotation.Respo
         ..._,
       }));
 
-      batch(() => {
-        dispatch(syncQuotationsAction(quotationsWithCollapseChached));
-        dispatch(sortQuotationsAction());
-      });
+      dispatch(syncQuotationsAction(quotationsWithCollapseChached));
+      dispatch(sortQuotationsAction());
     } catch (error) {}
   }
 );

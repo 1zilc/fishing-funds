@@ -1,5 +1,4 @@
 import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
-import { batch } from 'react-redux';
 import { AsyncThunkConfig } from '@/store';
 import * as Utils from '@/utils';
 import * as Enums from '@/utils/enums';
@@ -86,10 +85,8 @@ export const closeWebAction = createAsyncThunk<void, void, AsyncThunkConfig>('we
     const {
       web: { view },
     } = getState();
-    batch(() => {
-      dispatch(syncWebAction({ ...view, url: '', title: '' }));
-      dispatch(syncWebShowAction(false));
-    });
+    dispatch(syncWebAction({ ...view, url: '', title: '' }));
+    dispatch(syncWebShowAction(false));
   } catch (error) {}
 });
 
@@ -100,10 +97,8 @@ export const openWebAction = createAsyncThunk<void, { phone?: boolean; title: st
       const {
         web: { view },
       } = getState();
-      batch(() => {
-        dispatch(syncWebAction({ ...view, ...data }));
-        dispatch(syncWebShowAction(true));
-      });
+      dispatch(syncWebAction({ ...view, ...data }));
+      dispatch(syncWebShowAction(true));
     } catch (error) {}
   }
 );

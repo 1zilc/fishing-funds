@@ -97,8 +97,8 @@ export const WebViewer: React.FC<WebViewerProps> = (props) => {
     }
   });
 
-  const onAddWeb = useMemoizedFn((web: Web.SettingItem) => {
-    dispatch(addWebAction(web));
+  const onAddWeb = useMemoizedFn(async (web: Web.SettingItem) => {
+    await dispatch(addWebAction(web));
     closeAddWebContent();
   });
 

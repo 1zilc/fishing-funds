@@ -1,5 +1,4 @@
 import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
-import { batch } from 'react-redux';
 
 import { AsyncThunkConfig } from '@/store';
 import { sortFundsAction } from '@/store/features/fund';
@@ -109,10 +108,8 @@ export const setFundSortModeAction = createAsyncThunk<void, { type?: Enums.FundS
 
       const fundSortMode = { ...sortMode.fundSortMode, ...mode };
 
-      batch(() => {
-        dispatch(setSortModeAction({ ...sortMode, fundSortMode }));
-        dispatch(sortFundsAction(currentWalletCode));
-      });
+      dispatch(setSortModeAction({ ...sortMode, fundSortMode }));
+      dispatch(sortFundsAction(currentWalletCode));
     } catch (error) {}
   }
 );
@@ -129,10 +126,8 @@ export const setZindexSortModeAction = createAsyncThunk<
 
     const zindexSortMode = { ...sortMode.zindexSortMode, ...mode };
 
-    batch(() => {
-      dispatch(setSortModeAction({ ...sortMode, zindexSortMode }));
-      dispatch(sortZindexsAction());
-    });
+    dispatch(setSortModeAction({ ...sortMode, zindexSortMode }));
+    dispatch(sortZindexsAction());
   } catch (error) {}
 });
 
@@ -147,10 +142,8 @@ export const setQuotationSortModeAction = createAsyncThunk<
     } = getState();
 
     const quotationSortMode = { ...sortMode.quotationSortMode, ...mode };
-    batch(() => {
-      dispatch(setSortModeAction({ ...sortMode, quotationSortMode }));
-      dispatch(sortQuotationsAction());
-    });
+    dispatch(setSortModeAction({ ...sortMode, quotationSortMode }));
+    dispatch(sortQuotationsAction());
   } catch (error) {}
 });
 
@@ -164,10 +157,8 @@ export const setStockSortModeAction = createAsyncThunk<void, { type?: Enums.Stoc
 
       const stockSortMode = { ...sortMode.stockSortMode, ...mode };
 
-      batch(() => {
-        dispatch(setSortModeAction({ ...sortMode, stockSortMode }));
-        dispatch(sortStocksAction());
-      });
+      dispatch(setSortModeAction({ ...sortMode, stockSortMode }));
+      dispatch(sortStocksAction());
     } catch (error) {}
   }
 );
@@ -181,10 +172,8 @@ export const setCoinSortModeAction = createAsyncThunk<void, { type?: Enums.CoinS
       } = getState();
 
       const coinSortMode = { ...sortMode.coinSortMode, ...mode };
-      batch(() => {
-        dispatch(setSortModeAction({ ...sortMode, coinSortMode }));
-        dispatch(sortCoinsAction());
-      });
+      dispatch(setSortModeAction({ ...sortMode, coinSortMode }));
+      dispatch(sortCoinsAction());
     } catch (error) {}
   }
 );
@@ -203,10 +192,8 @@ export const troggleFundSortOrderAction = createAsyncThunk<void, void, AsyncThun
         order: sortMode.fundSortMode.order === Enums.SortOrderType.Asc ? Enums.SortOrderType.Desc : Enums.SortOrderType.Asc,
       };
 
-      batch(() => {
-        dispatch(setSortModeAction({ ...sortMode, fundSortMode }));
-        dispatch(sortFundsAction(currentWalletCode));
-      });
+      dispatch(setSortModeAction({ ...sortMode, fundSortMode }));
+      dispatch(sortFundsAction(currentWalletCode));
     } catch (error) {}
   }
 );
@@ -223,10 +210,8 @@ export const troggleZindexSortOrderAction = createAsyncThunk<void, void, AsyncTh
         ...sortMode.zindexSortMode,
         order: sortMode.zindexSortMode.order === Enums.SortOrderType.Asc ? Enums.SortOrderType.Desc : Enums.SortOrderType.Asc,
       };
-      batch(() => {
-        dispatch(setSortModeAction({ ...sortMode, zindexSortMode }));
-        dispatch(sortZindexsAction());
-      });
+      dispatch(setSortModeAction({ ...sortMode, zindexSortMode }));
+      dispatch(sortZindexsAction());
     } catch (error) {}
   }
 );
@@ -244,10 +229,8 @@ export const troggleQuotationSortOrderAction = createAsyncThunk<void, void, Asyn
         order: sortMode.quotationSortMode.order === Enums.SortOrderType.Asc ? Enums.SortOrderType.Desc : Enums.SortOrderType.Asc,
       };
 
-      batch(() => {
-        dispatch(setSortModeAction({ ...sortMode, quotationSortMode }));
-        dispatch(sortQuotationsAction());
-      });
+      dispatch(setSortModeAction({ ...sortMode, quotationSortMode }));
+      dispatch(sortQuotationsAction());
     } catch (error) {}
   }
 );
@@ -264,10 +247,8 @@ export const troggleStockSortOrderAction = createAsyncThunk<void, void, AsyncThu
         ...sortMode.stockSortMode,
         order: sortMode.stockSortMode.order === Enums.SortOrderType.Asc ? Enums.SortOrderType.Desc : Enums.SortOrderType.Asc,
       };
-      batch(() => {
-        dispatch(setSortModeAction({ ...sortMode, stockSortMode }));
-        dispatch(sortStocksAction());
-      });
+      dispatch(setSortModeAction({ ...sortMode, stockSortMode }));
+      dispatch(sortStocksAction());
     } catch (error) {}
   }
 );
@@ -285,10 +266,8 @@ export const troggleCoinSortOrderAction = createAsyncThunk<void, void, AsyncThun
         order: sortMode.coinSortMode.order === Enums.SortOrderType.Asc ? Enums.SortOrderType.Desc : Enums.SortOrderType.Asc,
       };
 
-      batch(() => {
-        dispatch(setSortModeAction({ ...sortMode, coinSortMode }));
-        dispatch(sortCoinsAction());
-      });
+      dispatch(setSortModeAction({ ...sortMode, coinSortMode }));
+      dispatch(sortCoinsAction());
     } catch (error) {}
   }
 );

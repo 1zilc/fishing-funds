@@ -1,5 +1,4 @@
 import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
-import { batch } from 'react-redux';
 import { AsyncThunkConfig } from '@/store';
 import { sortCoin } from '@/workers/sort.worker';
 import { mergeStateWithResponse } from '@/workers/merge.worker';
@@ -123,10 +122,8 @@ export const setCoinConfigAction = createAsyncThunk<void, Coin.SettingItem[], As
 
       const codeMap = Utils.GetCodeMap(coinConfig, 'code');
 
-      batch(() => {
-        dispatch(syncCoinsConfigAction({ coinConfig, codeMap }));
-        dispatch(syncCoinsStateAction(coins));
-      });
+      dispatch(syncCoinsConfigAction({ coinConfig, codeMap }));
+      dispatch(syncCoinsStateAction(coins));
     } catch (error) {}
   }
 );
@@ -176,10 +173,8 @@ export const sortCoinsCachedAction = createAsyncThunk<void, Coin.ResponseItem[],
         response: responseCoins,
       });
 
-      batch(() => {
-        dispatch(syncCoinsStateAction(coinsWithChached));
-        dispatch(sortCoinsAction());
-      });
+      dispatch(syncCoinsStateAction(coinsWithChached));
+      dispatch(sortCoinsAction());
     } catch (error) {}
   }
 );

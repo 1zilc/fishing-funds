@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-import { useDebounceFn, useMemoizedFn } from 'ahooks';
+import { useDebounceFn } from 'ahooks';
 import { Input, InputNumber, message } from 'antd';
 
 import CustomDrawer from '@/components/CustomDrawer';
@@ -39,7 +39,7 @@ const AddFundContent: React.FC<AddFundContentProps> = (props) => {
   async function onAdd() {
     const fund = await Helpers.Fund.GetFund(code, fundApiTypeSetting);
     if (fund) {
-      dispatch(
+      await dispatch(
         addFundAction({
           code,
           cyfe: cyfe ?? 0,

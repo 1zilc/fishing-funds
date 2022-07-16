@@ -49,8 +49,8 @@ const Wallet: React.FC<WalletProps> = () => {
     [walletConfig]
   );
 
-  function onSelectWallet(code: string) {
-    dispatch(changeCurrentWalletCodeAction(code));
+  async function onSelectWallet(code: string) {
+    await dispatch(changeCurrentWalletCodeAction(code));
     freshFunds();
   }
 

@@ -1,5 +1,4 @@
 import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
-import { batch } from 'react-redux';
 import { AsyncThunkConfig } from '@/store';
 import { sortStock } from '@/workers/sort.worker';
 import { mergeStateWithResponse } from '@/workers/merge.worker';
@@ -112,10 +111,8 @@ export const setStockConfigAction = createAsyncThunk<void, Stock.SettingItem[], 
         stock: { stocks },
       } = getState();
       const codeMap = Utils.GetCodeMap(stockConfig, 'secid');
-      batch(() => {
-        dispatch(syncStocksConfigAction({ stockConfig, codeMap }));
-        dispatch(syncStocksStateAction(stocks));
-      });
+      dispatch(syncStocksConfigAction({ stockConfig, codeMap }));
+      dispatch(syncStocksStateAction(stocks));
     } catch (error) {}
   }
 );
@@ -165,10 +162,8 @@ export const sortStocksCachedAction = createAsyncThunk<void, Stock.ResponseItem[
         response: responseStocks,
       });
 
-      batch(() => {
-        dispatch(syncStocksStateAction(stocksWithChached));
-        dispatch(sortStocksAction());
-      });
+      dispatch(syncStocksStateAction(stocksWithChached));
+      dispatch(sortStocksAction());
     } catch (error) {}
   }
 );

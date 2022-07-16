@@ -1,7 +1,6 @@
 import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
 import { AsyncThunkConfig } from '@/store';
-import { batch } from 'react-redux';
-import { sortFund, sortZindex } from '@/workers/sort.worker';
+import { sortZindex } from '@/workers/sort.worker';
 import { mergeStateWithResponse } from '@/workers/merge.worker';
 import * as Utils from '@/utils';
 import * as Enums from '@/utils/enums';
@@ -120,10 +119,8 @@ export const setZindexConfigAction = createAsyncThunk<void, Zindex.SettingItem[]
       } = getState();
       const codeMap = Utils.GetCodeMap(zindexConfig, 'code');
 
-      batch(() => {
-        dispatch(syncZindexesConfigAction({ zindexConfig, codeMap }));
-        dispatch(syncZindexsStateAction(zindexs));
-      });
+      dispatch(syncZindexesConfigAction({ zindexConfig, codeMap }));
+      dispatch(syncZindexsStateAction(zindexs));
     } catch (error) {}
   }
 );
@@ -173,10 +170,8 @@ export const sortZindexsCachedAction = createAsyncThunk<void, Zindex.ResponseIte
         response: responseZindexs,
       });
 
-      batch(() => {
-        dispatch(syncZindexsStateAction(zindexsWithChached));
-        dispatch(sortZindexsAction());
-      });
+      dispatch(syncZindexsStateAction(zindexsWithChached));
+      dispatch(sortZindexsAction());
     } catch (error) {}
   }
 );
