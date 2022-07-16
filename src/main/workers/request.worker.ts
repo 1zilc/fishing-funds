@@ -11,7 +11,7 @@ interface WorkerRecieveParams {
 registerPromiseWorker(async ({ url, config, proxyConent }: WorkerRecieveParams) => {
   try {
     const { httpAgent, httpsAgent } = new Proxy(proxyConent, url);
-    const { body, rawBody } = await got(url, {
+    const { body, rawBody, headers } = await got(url, {
       ...config,
       retry: {
         limit: 2,
@@ -24,7 +24,7 @@ registerPromiseWorker(async ({ url, config, proxyConent }: WorkerRecieveParams) 
         https: httpsAgent,
       },
     });
-    return { body, rawBody };
+    return { body, rawBody, headers };
   } catch {
     return;
   }
