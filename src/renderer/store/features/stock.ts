@@ -1,6 +1,8 @@
 import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
+import PromiseWorker from 'promise-worker';
 import { batch } from 'react-redux';
 import { AsyncThunkConfig } from '@/store';
+import { sortWorker } from '@/workers';
 import * as Utils from '@/utils';
 import * as Enums from '@/utils/enums';
 
@@ -118,42 +120,34 @@ export const setStockConfigAction = createAsyncThunk<void, Stock.SettingItem[], 
   }
 );
 
-export const sortStocksAction = createAsyncThunk<void, void, AsyncThunkConfig>('stock/sortStocksAction', (_, { dispatch, getState }) => {
-  try {
-    const {
-      stock: {
-        stocks,
-        config: { codeMap },
-      },
-      sort: {
-        sortMode: {
-          stockSortMode: { type: stockSortType, order: stockSortorder },
+export const sortStocksAction = createAsyncThunk<void, void, AsyncThunkConfig>(
+  'stock/sortStocksAction',
+  async (_, { dispatch, getState }) => {
+    try {
+      const {
+        stock: {
+          stocks,
+          config: { codeMap },
         },
-      },
-    } = getState();
+        sort: {
+          sortMode: {
+            stockSortMode: { type, order },
+          },
+        },
+      } = getState();
 
-    const sortList = stocks.slice();
+      const sortList = await new PromiseWorker(sortWorker).postMessage({
+        module: Enums.TabKeyType.Stock,
+        codeMap,
+        list: stocks,
+        sortType: type,
+        orderType: order,
+      });
 
-    sortList.sort((a, b) => {
-      const t = stockSortorder === Enums.SortOrderType.Asc ? 1 : -1;
-      switch (stockSortType) {
-        case Enums.StockSortType.Zdd:
-          return (Number(a.zdd) - Number(b.zdd)) * t;
-        case Enums.StockSortType.Zdf:
-          return (Number(a.zdf) - Number(b.zdf)) * t;
-        case Enums.StockSortType.Zx:
-          return (Number(a.zx) - Number(b.zx)) * t;
-        case Enums.StockSortType.Name:
-          return b.name.localeCompare(a.name, 'zh') * t;
-        case Enums.StockSortType.Custom:
-        default:
-          return (codeMap[b.secid!]?.originSort - codeMap[a.secid!]?.originSort) * t;
-      }
-    });
-
-    dispatch(syncStocksStateAction(sortList));
-  } catch (error) {}
-});
+      dispatch(syncStocksStateAction(sortList));
+    } catch (error) {}
+  }
+);
 
 export const sortStocksCachedAction = createAsyncThunk<void, Stock.ResponseItem[], AsyncThunkConfig>(
   'stock/sortStocksCachedAction',

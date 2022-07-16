@@ -238,7 +238,8 @@
     "webpack-bundle-analyzer": "^4.4.1",
     "webpack-cli": "^4.6.0",
     "webpack-dev-server": "^4.0.0",
-    "webpack-merge": "^5.7.3"
+    "webpack-merge": "^5.7.3",
+    "worker-loader": "^3.0.8"
   },
   "dependencies": {
     "@reduxjs/toolkit": "^1.8.1",
@@ -267,6 +268,7 @@
     "json2csv": "^5.0.7",
     "menubar": "^9.0.2",
     "number-precision": "^1.5.0",
+    "promise-worker": "^2.0.1",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
     "react-redux": "^8.0.1",

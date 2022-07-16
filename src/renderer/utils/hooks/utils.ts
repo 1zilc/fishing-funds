@@ -227,7 +227,7 @@ export function useFreshFunds(throttleDelay: number) {
       }
     },
   });
-  const fn = useTabsFreshFn(Enums.TabKeyType.Funds, freshFunds);
+  const fn = useTabsFreshFn(Enums.TabKeyType.Fund, freshFunds);
   return fn;
 }
 
@@ -250,7 +250,7 @@ export function useLoadFunds(loading: boolean) {
     }
   });
 
-  const fn = useTabsFreshFn(Enums.TabKeyType.Funds, load);
+  const fn = useTabsFreshFn(Enums.TabKeyType.Fund, load);
   return fn;
 }
 
@@ -266,7 +266,7 @@ export function useLoadFixFunds() {
       dispatch(syncFixWalletStateAction({ code, funds: fixFunds, updateTime: now }));
     } catch (error) {}
   });
-  const fn = useTabsFreshFn(Enums.TabKeyType.Funds, load);
+  const fn = useTabsFreshFn(Enums.TabKeyType.Fund, load);
   return fn;
 }
 
@@ -319,7 +319,7 @@ export function useLoadWalletsFunds() {
     } catch (error) {}
   });
 
-  const fn = useTabsFreshFn(Enums.TabKeyType.Funds, load);
+  const fn = useTabsFreshFn(Enums.TabKeyType.Fund, load);
   return fn;
 }
 

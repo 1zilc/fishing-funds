@@ -18,6 +18,7 @@ export function createChildWindow(config: { search: string; parentId: number }) 
       vibrancy: 'sidebar',
       fullscreenable: false,
       webPreferences: {
+        nodeIntegrationInWorker: true,
         webviewTag: true,
         devTools: !app.isPackaged,
         preload: getPreloadPath(),

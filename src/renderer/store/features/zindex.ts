@@ -1,6 +1,8 @@
 import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
+import PromiseWorker from 'promise-worker';
 import { AsyncThunkConfig } from '@/store';
 import { batch } from 'react-redux';
+import { sortWorker } from '@/workers';
 import * as Utils from '@/utils';
 import * as Enums from '@/utils/enums';
 
@@ -137,28 +139,17 @@ export const sortZindexsAction = createAsyncThunk<void, void, AsyncThunkConfig>(
         },
         sort: {
           sortMode: {
-            zindexSortMode: { type: zindexSortType, order: zindexSortorder },
+            zindexSortMode: { type, order },
           },
         },
       } = getState();
 
-      const sortList = zindexs.slice();
-
-      sortList.sort((a, b) => {
-        const t = zindexSortorder === Enums.SortOrderType.Asc ? 1 : -1;
-        switch (zindexSortType) {
-          case Enums.ZindexSortType.Zdd:
-            return (a.zdd - b.zdd) * t;
-          case Enums.ZindexSortType.Zdf:
-            return (a.zdf - b.zdf) * t;
-          case Enums.ZindexSortType.Zsz:
-            return (a.zsz - b.zsz) * t;
-          case Enums.ZindexSortType.Name:
-            return b.name.localeCompare(a.name, 'zh') * t;
-          case Enums.ZindexSortType.Custom:
-          default:
-            return (codeMap[b.code]?.originSort - codeMap[a.code]?.originSort) * t;
-        }
+      const sortList = await new PromiseWorker(sortWorker).postMessage({
+        module: Enums.TabKeyType.Zindex,
+        codeMap,
+        list: zindexs,
+        sortType: type,
+        orderType: order,
       });
 
       dispatch(syncZindexsStateAction(sortList));

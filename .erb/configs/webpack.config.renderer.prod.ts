@@ -36,15 +36,10 @@ const configuration: webpack.Configuration = {
   output: {
     path: webpackPaths.distRendererPath,
     publicPath: './',
-    filename: '[name].js',
-    chunkFilename: '[name].bundle.js',
+    filename: 'renderer.js',
     library: {
-      type: 'module',
+      type: 'umd',
     },
-  },
-
-  experiments: {
-    outputModule: true,
   },
 
   module: {
@@ -95,9 +90,6 @@ const configuration: webpack.Configuration = {
   },
 
   optimization: {
-    splitChunks: {
-      chunks: 'all',
-    },
     minimize: true,
     minimizer: [
       new ESBuildMinifyPlugin({
@@ -143,7 +135,6 @@ const configuration: webpack.Configuration = {
       },
       isBrowser: false,
       isDevelopment: process.env.NODE_ENV !== 'production',
-      scriptLoading: 'module',
     }),
   ],
 };

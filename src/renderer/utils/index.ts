@@ -1,14 +1,6 @@
 import NP from 'number-precision';
 import dayjs from 'dayjs';
-
-import * as Enums from '@/utils/enums';
 import * as CONST from '@/constants';
-
-const { invoke, ipcRenderer } = window.contextModules.electron;
-const { version, production } = window.contextModules.process;
-const { encodeFF, decodeFF } = window.contextModules.io;
-const electronStore = window.contextModules.electronStore;
-const log = window.contextModules.log;
 
 export function Yang(num: string | number | undefined) {
   try {
@@ -53,22 +45,6 @@ export function DeepCopy<T>(object: T): T {
       return data;
     }
   }
-}
-
-export async function GetStorage<T = any>(key: string, init: T): Promise<T> {
-  return electronStore.get(key, init);
-}
-
-export async function SetStorage(key: string, data: any) {
-  return electronStore.set(key, data);
-}
-
-export async function CoverStorage(data: any) {
-  return electronStore.cover(data);
-}
-
-export async function ClearStorage(key: string) {
-  return electronStore.delete(key);
 }
 
 export function Encrypt(s: string) {
@@ -185,10 +161,6 @@ export function ParseRemoteFunds(code: string) {
   }
 }
 
-export async function UpdateSystemTheme(setting: Enums.SystemThemeType) {
-  await invoke.setNativeThemeSource(setting);
-}
-
 export function UnitTransform(value: number) {
   const newValue = ['', '', ''];
   let fr = 1000;
@@ -299,26 +271,6 @@ export function CalcZDHC(list: number[]) {
   }
 }
 
-export async function GenerateBackupConfig() {
-  const config = await electronStore.all();
-  const fileConfig: Backup.Config = {
-    name: 'Fishing-Funds-Backup',
-    author: '1zilc',
-    website: 'https://ff.1zilc.top',
-    github: 'https://github.com/1zilc/fishing-funds',
-    version: version,
-    content: encodeFF(config),
-    timestamp: Date.now(),
-    suffix: 'ff',
-  };
-  return fileConfig;
-}
-
-export async function CoverBackupConfig(fileConfig: Backup.Config) {
-  const content = decodeFF(fileConfig.content);
-  return CoverStorage(content);
-}
-
 export function ColorRgba(sHex: string, alpha = 1) {
   // 十六进制颜色值的正则表达式
   const reg = /^#([0-9a-fA-f]{3}|[0-9a-fA-f]{6})$/;
@@ -342,12 +294,6 @@ export function ColorRgba(sHex: string, alpha = 1) {
     return 'rgba(' + sColorChange.join(',') + ',' + alpha + ')';
   } else {
     return sColor;
-  }
-}
-
-export function CheckEnvTool() {
-  if (production) {
-    Object.assign(console, log.functions);
   }
 }
 
