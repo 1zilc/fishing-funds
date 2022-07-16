@@ -104,7 +104,7 @@ export const {
 
 export const toggleEyeStatusAction = createAsyncThunk<void, void, AsyncThunkConfig>(
   'wallet/toggleEyeStatusAction',
-  async (_, { dispatch, getState }) => {
+  (_, { dispatch, getState }) => {
     try {
       const {
         wallet: { eyeStatus },
@@ -125,7 +125,7 @@ export const toggleEyeStatusAction = createAsyncThunk<void, void, AsyncThunkConf
 
 export const setWalletConfigAction = createAsyncThunk<void, Wallet.SettingItem[], AsyncThunkConfig>(
   'wallet/setWalletConfigAction',
-  async (walletConfig, { dispatch, getState }) => {
+  (walletConfig, { dispatch, getState }) => {
     try {
       const {
         wallet: { wallets },
@@ -142,7 +142,7 @@ export const setWalletConfigAction = createAsyncThunk<void, Wallet.SettingItem[]
 
 export const syncWalletStateAction = createAsyncThunk<void, Wallet.StateItem[], AsyncThunkConfig>(
   'wallet/syncWalletStateAction',
-  async (wallets, { dispatch, getState }) => {
+  (wallets, { dispatch, getState }) => {
     try {
       const {
         wallet: {
@@ -157,7 +157,7 @@ export const syncWalletStateAction = createAsyncThunk<void, Wallet.StateItem[], 
 
 export const addWalletConfigAction = createAsyncThunk<void, Wallet.SettingItem, AsyncThunkConfig>(
   'wallet/addWalletConfigAction',
-  async (wallet, { dispatch, getState }) => {
+  (wallet, { dispatch, getState }) => {
     try {
       const {
         wallet: {
@@ -171,7 +171,7 @@ export const addWalletConfigAction = createAsyncThunk<void, Wallet.SettingItem, 
 
 export const updateWalletConfigAction = createAsyncThunk<void, Wallet.SettingItem, AsyncThunkConfig>(
   'wallet/updateWalletConfigAction',
-  async (wallet, { dispatch, getState }) => {
+  (wallet, { dispatch, getState }) => {
     try {
       const {
         wallet: {
@@ -192,7 +192,7 @@ export const updateWalletConfigAction = createAsyncThunk<void, Wallet.SettingIte
 
 export const deleteWalletConfigAction = createAsyncThunk<void, string, AsyncThunkConfig>(
   'wallet/deleteWalletConfigAction',
-  async (code, { dispatch, getState }) => {
+  (code, { dispatch, getState }) => {
     try {
       const {
         wallet: {
@@ -212,7 +212,7 @@ export const deleteWalletConfigAction = createAsyncThunk<void, string, AsyncThun
 
 export const updateWalletStateAction = createAsyncThunk<void, Wallet.StateItem, AsyncThunkConfig>(
   'wallet/updateWalletStateAction',
-  async (state, { dispatch, getState }) => {
+  (state, { dispatch, getState }) => {
     try {
       const {
         wallet: {
@@ -254,7 +254,7 @@ export const updateWalletStateAction = createAsyncThunk<void, Wallet.StateItem, 
 
 export const setWalletStateAction = createAsyncThunk<void, Wallet.StateItem, AsyncThunkConfig>(
   'wallet/setWalletStateAction',
-  async (state, { dispatch, getState }) => {
+  (state, { dispatch, getState }) => {
     try {
       const {
         wallet: { wallets },
@@ -275,7 +275,7 @@ export const setWalletStateAction = createAsyncThunk<void, Wallet.StateItem, Asy
 
 export const syncFixWalletStateAction = createAsyncThunk<void, Wallet.StateItem, AsyncThunkConfig>(
   'wallet/syncFixWalletStateAction',
-  async (state, { dispatch, getState }) => {
+  (state, { dispatch, getState }) => {
     try {
       const {
         wallet: { wallets },

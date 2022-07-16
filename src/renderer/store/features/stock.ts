@@ -46,7 +46,7 @@ export const { setStocksLoadingAction, syncStocksAction, syncStocksConfigAction,
 
 export const addStockAction = createAsyncThunk<void, Stock.SettingItem, AsyncThunkConfig>(
   'stock/addStockAction',
-  async (stock, { dispatch, getState }) => {
+  (stock, { dispatch, getState }) => {
     try {
       const {
         stock: {
@@ -65,7 +65,7 @@ export const addStockAction = createAsyncThunk<void, Stock.SettingItem, AsyncThu
 
 export const updateStockAction = createAsyncThunk<void, { secid: string; type?: number }, AsyncThunkConfig>(
   'stock/updateStockAction',
-  async (stock, { dispatch, getState }) => {
+  (stock, { dispatch, getState }) => {
     try {
       const {
         stock: {
@@ -86,7 +86,7 @@ export const updateStockAction = createAsyncThunk<void, { secid: string; type?: 
 
 export const deleteStockAction = createAsyncThunk<void, string, AsyncThunkConfig>(
   'stock/deleteStockAction',
-  async (secid, { dispatch, getState }) => {
+  (secid, { dispatch, getState }) => {
     try {
       const {
         stock: {
@@ -106,7 +106,7 @@ export const deleteStockAction = createAsyncThunk<void, string, AsyncThunkConfig
 
 export const setStockConfigAction = createAsyncThunk<void, Stock.SettingItem[], AsyncThunkConfig>(
   'stock/setStockConfigAction',
-  async (stockConfig, { getState, dispatch }) => {
+  (stockConfig, { getState, dispatch }) => {
     try {
       const {
         stock: { stocks },
@@ -120,38 +120,35 @@ export const setStockConfigAction = createAsyncThunk<void, Stock.SettingItem[], 
   }
 );
 
-export const sortStocksAction = createAsyncThunk<void, void, AsyncThunkConfig>(
-  'stock/sortStocksAction',
-  async (_, { dispatch, getState }) => {
-    try {
-      const {
-        stock: {
-          stocks,
-          config: { codeMap },
+export const sortStocksAction = createAsyncThunk<void, void, AsyncThunkConfig>('stock/sortStocksAction', (_, { dispatch, getState }) => {
+  try {
+    const {
+      stock: {
+        stocks,
+        config: { codeMap },
+      },
+      sort: {
+        sortMode: {
+          stockSortMode: { type, order },
         },
-        sort: {
-          sortMode: {
-            stockSortMode: { type, order },
-          },
-        },
-      } = getState();
+      },
+    } = getState();
 
-      const sortList = sortStock({
-        module: Enums.TabKeyType.Stock,
-        codeMap,
-        list: stocks,
-        sortType: type,
-        orderType: order,
-      });
+    const sortList = sortStock({
+      module: Enums.TabKeyType.Stock,
+      codeMap,
+      list: stocks,
+      sortType: type,
+      orderType: order,
+    });
 
-      dispatch(syncStocksStateAction(sortList));
-    } catch (error) {}
-  }
-);
+    dispatch(syncStocksStateAction(sortList));
+  } catch (error) {}
+});
 
 export const sortStocksCachedAction = createAsyncThunk<void, Stock.ResponseItem[], AsyncThunkConfig>(
   'stock/sortStocksCachedAction',
-  async (responseStocks, { getState, dispatch }) => {
+  (responseStocks, { getState, dispatch }) => {
     try {
       const {
         stock: {
@@ -178,7 +175,7 @@ export const sortStocksCachedAction = createAsyncThunk<void, Stock.ResponseItem[
 
 export const toggleStockCollapseAction = createAsyncThunk<void, Stock.ResponseItem & Stock.ExtraRow, AsyncThunkConfig>(
   'stock/toggleStockCollapseAction',
-  async (stock, { getState, dispatch }) => {
+  (stock, { getState, dispatch }) => {
     try {
       const {
         stock: { stocks },
@@ -197,7 +194,7 @@ export const toggleStockCollapseAction = createAsyncThunk<void, Stock.ResponseIt
 
 export const toggleAllStocksCollapseAction = createAsyncThunk<void, void, AsyncThunkConfig>(
   'stock/toggleAllStocksCollapseAction',
-  async (_, { getState, dispatch }) => {
+  (_, { getState, dispatch }) => {
     try {
       const {
         stock: { stocks },
@@ -214,7 +211,7 @@ export const toggleAllStocksCollapseAction = createAsyncThunk<void, void, AsyncT
 
 export const syncStocksStateAction = createAsyncThunk<void, (Stock.ResponseItem & Stock.ExtraRow)[], AsyncThunkConfig>(
   'stock/syncStocksStateAction',
-  async (stocks, { getState, dispatch }) => {
+  (stocks, { getState, dispatch }) => {
     try {
       const {
         stock: {
@@ -229,7 +226,7 @@ export const syncStocksStateAction = createAsyncThunk<void, (Stock.ResponseItem 
 
 export const setIndustryMapAction = createAsyncThunk<void, { industrys: Stock.IndustryItem[]; secid: string }, AsyncThunkConfig>(
   'stock/setIndustryMapAction',
-  async ({ industrys, secid }, { getState, dispatch }) => {
+  ({ industrys, secid }, { getState, dispatch }) => {
     try {
       const {
         stock: { industryMap },

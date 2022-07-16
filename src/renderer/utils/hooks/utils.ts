@@ -160,7 +160,7 @@ export function useSyncFixFundSetting() {
     } else {
       setTrue();
     }
-  }, [fundConfig]);
+  }, []);
 
   return { done };
 }
@@ -236,7 +236,6 @@ export function useLoadFunds(loading: boolean) {
   const currentWalletCode = useAppSelector((state) => state.wallet.currentWalletCode);
   const fundConfig = useAppSelector((state) => state.wallet.fundConfig);
   const fundApiTypeSetting = useAppSelector((state) => state.setting.systemSetting.fundApiTypeSetting);
-
   const load = useMemoizedFn(async () => {
     try {
       dispatch(setFundsLoadingAction(loading));

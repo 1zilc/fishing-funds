@@ -100,7 +100,7 @@ export const { syncSortModeAction, syncViewModeAction } = sortSlice.actions;
 
 export const setFundSortModeAction = createAsyncThunk<void, { type?: Enums.FundSortType; order?: Enums.SortOrderType }, AsyncThunkConfig>(
   'sort/setFundSortModeAction',
-  async (mode, { dispatch, getState }) => {
+  (mode, { dispatch, getState }) => {
     try {
       const {
         sort: { sortMode },
@@ -121,7 +121,7 @@ export const setZindexSortModeAction = createAsyncThunk<
   void,
   { type?: Enums.ZindexSortType; order?: Enums.SortOrderType },
   AsyncThunkConfig
->('sort/setZindexSortModeAction', async (mode, { dispatch, getState }) => {
+>('sort/setZindexSortModeAction', (mode, { dispatch, getState }) => {
   try {
     const {
       sort: { sortMode },
@@ -140,7 +140,7 @@ export const setQuotationSortModeAction = createAsyncThunk<
   void,
   { type?: Enums.QuotationSortType; order?: Enums.SortOrderType },
   AsyncThunkConfig
->('sort/setQuotationSortModeAction', async (mode, { dispatch, getState }) => {
+>('sort/setQuotationSortModeAction', (mode, { dispatch, getState }) => {
   try {
     const {
       sort: { sortMode },
@@ -156,7 +156,7 @@ export const setQuotationSortModeAction = createAsyncThunk<
 
 export const setStockSortModeAction = createAsyncThunk<void, { type?: Enums.StockSortType; order?: Enums.SortOrderType }, AsyncThunkConfig>(
   'sort/setStockSortModeAction',
-  async (mode, { dispatch, getState }) => {
+  (mode, { dispatch, getState }) => {
     try {
       const {
         sort: { sortMode },
@@ -174,7 +174,7 @@ export const setStockSortModeAction = createAsyncThunk<void, { type?: Enums.Stoc
 
 export const setCoinSortModeAction = createAsyncThunk<void, { type?: Enums.CoinSortType; order?: Enums.SortOrderType }, AsyncThunkConfig>(
   'sort/setCoinSortModeAction',
-  async (mode, { dispatch, getState }) => {
+  (mode, { dispatch, getState }) => {
     try {
       const {
         sort: { sortMode },
@@ -191,7 +191,7 @@ export const setCoinSortModeAction = createAsyncThunk<void, { type?: Enums.CoinS
 
 export const troggleFundSortOrderAction = createAsyncThunk<void, void, AsyncThunkConfig>(
   'sort/troggleFundSortOrderAction',
-  async (_, { dispatch, getState }) => {
+  (_, { dispatch, getState }) => {
     try {
       const {
         sort: { sortMode },
@@ -213,7 +213,7 @@ export const troggleFundSortOrderAction = createAsyncThunk<void, void, AsyncThun
 
 export const troggleZindexSortOrderAction = createAsyncThunk<void, void, AsyncThunkConfig>(
   'sort/troggleZindexSortOrderAction',
-  async (_, { dispatch, getState }) => {
+  (_, { dispatch, getState }) => {
     try {
       const {
         sort: { sortMode },
@@ -233,7 +233,7 @@ export const troggleZindexSortOrderAction = createAsyncThunk<void, void, AsyncTh
 
 export const troggleQuotationSortOrderAction = createAsyncThunk<void, void, AsyncThunkConfig>(
   'sort/troggleQuotationSortOrderAction',
-  async (_, { dispatch, getState }) => {
+  (_, { dispatch, getState }) => {
     try {
       const {
         sort: { sortMode },
@@ -254,7 +254,7 @@ export const troggleQuotationSortOrderAction = createAsyncThunk<void, void, Asyn
 
 export const troggleStockSortOrderAction = createAsyncThunk<void, void, AsyncThunkConfig>(
   'sort/troggleStockSortOrderAction',
-  async (_, { dispatch, getState }) => {
+  (_, { dispatch, getState }) => {
     try {
       const {
         sort: { sortMode },
@@ -274,7 +274,7 @@ export const troggleStockSortOrderAction = createAsyncThunk<void, void, AsyncThu
 
 export const troggleCoinSortOrderAction = createAsyncThunk<void, void, AsyncThunkConfig>(
   'sort/troggleCoinSortOrderAction',
-  async (_, { dispatch, getState }) => {
+  (_, { dispatch, getState }) => {
     try {
       const {
         sort: { sortMode },
@@ -295,7 +295,7 @@ export const troggleCoinSortOrderAction = createAsyncThunk<void, void, AsyncThun
 
 export const setSortModeAction = createAsyncThunk<void, SortMode, AsyncThunkConfig>(
   'sort/setSortModeAction',
-  async (newSortMode, { dispatch, getState }) => {
+  (newSortMode, { dispatch, getState }) => {
     try {
       const {
         sort: { sortMode },
@@ -307,7 +307,7 @@ export const setSortModeAction = createAsyncThunk<void, SortMode, AsyncThunkConf
 
 export const setFundViewModeAction = createAsyncThunk<void, { type: Enums.FundViewType }, AsyncThunkConfig>(
   'sort/setFundViewModeAction',
-  async (mode, { dispatch, getState }) => {
+  (mode, { dispatch, getState }) => {
     try {
       const {
         sort: { viewMode },
@@ -321,7 +321,7 @@ export const setFundViewModeAction = createAsyncThunk<void, { type: Enums.FundVi
 
 export const setZindexViewModeAction = createAsyncThunk<void, { type: Enums.ZindexViewType }, AsyncThunkConfig>(
   'sort/setZindexViewModeAction',
-  async (mode, { dispatch, getState }) => {
+  (mode, { dispatch, getState }) => {
     try {
       const {
         sort: { viewMode },
@@ -336,7 +336,7 @@ export const setZindexViewModeAction = createAsyncThunk<void, { type: Enums.Zind
 
 export const setQuotationViewModeAction = createAsyncThunk<void, { type: Enums.QuotationViewType }, AsyncThunkConfig>(
   'sort/setQuotationViewModeAction',
-  async (mode, { dispatch, getState }) => {
+  (mode, { dispatch, getState }) => {
     try {
       const {
         sort: { viewMode },
@@ -350,7 +350,7 @@ export const setQuotationViewModeAction = createAsyncThunk<void, { type: Enums.Q
 
 export const setStockViewModeAction = createAsyncThunk<void, { type: Enums.StockViewType }, AsyncThunkConfig>(
   'sort/setStockViewModeAction',
-  async (mode, { dispatch, getState }) => {
+  (mode, { dispatch, getState }) => {
     try {
       const {
         sort: { viewMode },
@@ -365,7 +365,7 @@ export const setStockViewModeAction = createAsyncThunk<void, { type: Enums.Stock
 
 export const setCoinViewModeAction = createAsyncThunk<void, { type: Enums.CoinViewType }, AsyncThunkConfig>(
   'sort/setCoinViewModeAction',
-  async (mode, { dispatch, getState }) => {
+  (mode, { dispatch, getState }) => {
     try {
       const {
         sort: { viewMode },
@@ -379,7 +379,7 @@ export const setCoinViewModeAction = createAsyncThunk<void, { type: Enums.CoinVi
 
 export const setViewModeAction = createAsyncThunk<void, ViewMode, AsyncThunkConfig>(
   'sort/setViewModeAction',
-  async (newViewMode, { dispatch, getState }) => {
+  (newViewMode, { dispatch, getState }) => {
     try {
       const {
         sort: { viewMode },

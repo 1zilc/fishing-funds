@@ -73,7 +73,7 @@ export const {
 
 export const addZindexAction = createAsyncThunk<void, Zindex.SettingItem, AsyncThunkConfig>(
   'zindex/addZindexAction',
-  async (zindex, { dispatch, getState }) => {
+  (zindex, { dispatch, getState }) => {
     try {
       const {
         zindex: {
@@ -92,7 +92,7 @@ export const addZindexAction = createAsyncThunk<void, Zindex.SettingItem, AsyncT
 
 export const deleteZindexAction = createAsyncThunk<void, string, AsyncThunkConfig>(
   'zindex/deleteZindexAction',
-  async (code, { dispatch, getState }) => {
+  (code, { dispatch, getState }) => {
     try {
       const {
         zindex: {
@@ -113,7 +113,7 @@ export const deleteZindexAction = createAsyncThunk<void, string, AsyncThunkConfi
 
 export const setZindexConfigAction = createAsyncThunk<void, Zindex.SettingItem[], AsyncThunkConfig>(
   'zindex/setZindexConfigAction',
-  async (zindexConfig, { dispatch, getState }) => {
+  (zindexConfig, { dispatch, getState }) => {
     try {
       const {
         zindex: { zindexs },
@@ -128,38 +128,35 @@ export const setZindexConfigAction = createAsyncThunk<void, Zindex.SettingItem[]
   }
 );
 
-export const sortZindexsAction = createAsyncThunk<void, void, AsyncThunkConfig>(
-  'zindex/sortZindexsAction',
-  async (_, { dispatch, getState }) => {
-    try {
-      const {
-        zindex: {
-          zindexs,
-          config: { codeMap },
+export const sortZindexsAction = createAsyncThunk<void, void, AsyncThunkConfig>('zindex/sortZindexsAction', (_, { dispatch, getState }) => {
+  try {
+    const {
+      zindex: {
+        zindexs,
+        config: { codeMap },
+      },
+      sort: {
+        sortMode: {
+          zindexSortMode: { type, order },
         },
-        sort: {
-          sortMode: {
-            zindexSortMode: { type, order },
-          },
-        },
-      } = getState();
+      },
+    } = getState();
 
-      const sortList = sortZindex({
-        module: Enums.TabKeyType.Zindex,
-        codeMap,
-        list: zindexs,
-        sortType: type,
-        orderType: order,
-      });
+    const sortList = sortZindex({
+      module: Enums.TabKeyType.Zindex,
+      codeMap,
+      list: zindexs,
+      sortType: type,
+      orderType: order,
+    });
 
-      dispatch(syncZindexsStateAction(sortList));
-    } catch (error) {}
-  }
-);
+    dispatch(syncZindexsStateAction(sortList));
+  } catch (error) {}
+});
 
 export const sortZindexsCachedAction = createAsyncThunk<void, Zindex.ResponseItem[], AsyncThunkConfig>(
   'zindex/sortZindexsCachedAction',
-  async (responseZindexs, { dispatch, getState }) => {
+  (responseZindexs, { dispatch, getState }) => {
     try {
       const {
         zindex: {
@@ -186,7 +183,7 @@ export const sortZindexsCachedAction = createAsyncThunk<void, Zindex.ResponseIte
 
 export const syncZindexsStateAction = createAsyncThunk<void, (Zindex.ResponseItem & Zindex.ExtraRow)[], AsyncThunkConfig>(
   'zindex/syncZindexsStateAction',
-  async (zindexs, { dispatch, getState }) => {
+  (zindexs, { dispatch, getState }) => {
     try {
       const {
         zindex: {

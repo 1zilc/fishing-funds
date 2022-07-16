@@ -77,7 +77,7 @@ export const {
 
 export const addCoinAction = createAsyncThunk<void, Coin.SettingItem, AsyncThunkConfig>(
   'coin/addCoinAction',
-  async (coin, { dispatch, getState }) => {
+  (coin, { dispatch, getState }) => {
     try {
       const {
         coin: {
@@ -94,7 +94,7 @@ export const addCoinAction = createAsyncThunk<void, Coin.SettingItem, AsyncThunk
 
 export const deleteCoinAction = createAsyncThunk<void, string, AsyncThunkConfig>(
   'coin/deleteCoinAction',
-  async (code, { dispatch, getState }) => {
+  (code, { dispatch, getState }) => {
     try {
       const {
         coin: {
@@ -115,7 +115,7 @@ export const deleteCoinAction = createAsyncThunk<void, string, AsyncThunkConfig>
 
 export const setCoinConfigAction = createAsyncThunk<void, Coin.SettingItem[], AsyncThunkConfig>(
   'coin/setCoinConfigAction',
-  async (coinConfig, { dispatch, getState }) => {
+  (coinConfig, { dispatch, getState }) => {
     try {
       const {
         coin: { coins },
@@ -131,7 +131,7 @@ export const setCoinConfigAction = createAsyncThunk<void, Coin.SettingItem[], As
   }
 );
 
-export const sortCoinsAction = createAsyncThunk<void, void, AsyncThunkConfig>('coin/sortCoinsAction', async (_, { dispatch, getState }) => {
+export const sortCoinsAction = createAsyncThunk<void, void, AsyncThunkConfig>('coin/sortCoinsAction', (_, { dispatch, getState }) => {
   try {
     const {
       coin: {
@@ -159,7 +159,7 @@ export const sortCoinsAction = createAsyncThunk<void, void, AsyncThunkConfig>('c
 
 export const sortCoinsCachedAction = createAsyncThunk<void, Coin.ResponseItem[], AsyncThunkConfig>(
   'coin/sortCoinsCachedAction',
-  async (responseCoins, { dispatch, getState }) => {
+  (responseCoins, { dispatch, getState }) => {
     try {
       const {
         coin: {
@@ -186,7 +186,7 @@ export const sortCoinsCachedAction = createAsyncThunk<void, Coin.ResponseItem[],
 
 export const syncCoinsStateAction = createAsyncThunk<void, (Coin.ResponseItem & Coin.ExtraRow)[], AsyncThunkConfig>(
   'coin/syncCoinsStateAction',
-  async (coins, { dispatch, getState }) => {
+  (coins, { dispatch, getState }) => {
     try {
       const {
         coin: {
@@ -201,7 +201,7 @@ export const syncCoinsStateAction = createAsyncThunk<void, (Coin.ResponseItem & 
 
 export const setRemoteCoinsAction = createAsyncThunk<void, Coin.RemoteCoin[], AsyncThunkConfig>(
   'coin/setRemoteCoinsAction',
-  async (newRemoteCoins, { dispatch, getState }) => {
+  (newRemoteCoins, { dispatch, getState }) => {
     try {
       const {
         coin: { remoteCoins },

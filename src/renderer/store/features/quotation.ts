@@ -56,7 +56,7 @@ export const {
 
 export const setFavoriteQuotationMapAction = createAsyncThunk<void, { code: string; status: boolean }, AsyncThunkConfig>(
   'quotation/setFavoriteQuotationMapAction',
-  async ({ code, status }, { dispatch, getState }) => {
+  ({ code, status }, { dispatch, getState }) => {
     try {
       const { quotation } = getState();
       const favoriteQuotationMap = { ...quotation.favoriteQuotationMap, [code]: status };
@@ -68,7 +68,7 @@ export const setFavoriteQuotationMapAction = createAsyncThunk<void, { code: stri
 
 export const sortQuotationsCachedAction = createAsyncThunk<void, Quotation.ResponseItem[], AsyncThunkConfig>(
   'quotation/sortQuotationsCachedAction',
-  async (responseQuotations, { dispatch, getState }) => {
+  (responseQuotations, { dispatch, getState }) => {
     try {
       const {
         quotation: { quotations },
@@ -90,7 +90,7 @@ export const sortQuotationsCachedAction = createAsyncThunk<void, Quotation.Respo
 
 export const sortQuotationsAction = createAsyncThunk<void, void, AsyncThunkConfig>(
   'quotation/sortQuotationsAction',
-  async (_, { dispatch, getState }) => {
+  (_, { dispatch, getState }) => {
     try {
       const {
         quotation: { quotations },

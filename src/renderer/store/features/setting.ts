@@ -94,7 +94,7 @@ export const { syncSettingAction, updateAdjustmentNotificationDateAction, syncDa
 
 export const setSystemSettingAction = createAsyncThunk<void, System.Setting, AsyncThunkConfig>(
   'setting/setSystemSettingAction',
-  async (newSetting, { dispatch, getState }) => {
+  (newSetting, { dispatch, getState }) => {
     try {
       const {
         setting: { systemSetting: oldSystemSetting },

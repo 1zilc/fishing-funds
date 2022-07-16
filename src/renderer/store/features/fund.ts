@@ -49,7 +49,7 @@ export const { syncRemoteFundsMapAction, setFundsLoadingAction, setRemoteFundsLo
 
 export const setFundConfigAction = createAsyncThunk<void, { config: Fund.SettingItem[]; walletCode: string }, AsyncThunkConfig>(
   'fund/setFundConfigAction',
-  async ({ config, walletCode }, { dispatch, getState }) => {
+  ({ config, walletCode }, { dispatch, getState }) => {
     try {
       const {
         wallet: {
@@ -72,7 +72,7 @@ export const setFundConfigAction = createAsyncThunk<void, { config: Fund.Setting
 
 export const setRemoteFundsAction = createAsyncThunk<void, Fund.RemoteFund[], AsyncThunkConfig>(
   'fund/setRemoteFundsAction',
-  async (newRemoteFunds, { dispatch, getState }) => {
+  (newRemoteFunds, { dispatch, getState }) => {
     try {
       const {
         fund: { remoteFunds },
@@ -87,7 +87,7 @@ export const setRemoteFundsAction = createAsyncThunk<void, Fund.RemoteFund[], As
 
 export const setFundRatingMapAction = createAsyncThunk<void, Fund.RantingItem[], AsyncThunkConfig>(
   'fund/setFundRatingMapAction',
-  async (newFundRantings, { dispatch, getState }) => {
+  (newFundRantings, { dispatch, getState }) => {
     try {
       const {
         fund: { fundRatingMap: oldFundRatingMap },
@@ -103,7 +103,7 @@ export const setFundRatingMapAction = createAsyncThunk<void, Fund.RantingItem[],
 
 export const addFundAction = createAsyncThunk<void, Fund.SettingItem, AsyncThunkConfig>(
   'fund/addFundAction',
-  async (fund, { dispatch, getState }) => {
+  (fund, { dispatch, getState }) => {
     try {
       const {
         wallet: { currentWalletCode, fundConfig },
@@ -128,7 +128,7 @@ export const updateFundAction = createAsyncThunk<
     memo?: string;
   },
   AsyncThunkConfig
->('fund/updateFundAction', async (fund, { dispatch, getState }) => {
+>('fund/updateFundAction', (fund, { dispatch, getState }) => {
   try {
     const {
       wallet: { currentWalletCode, fundConfig },
@@ -148,7 +148,7 @@ export const updateFundAction = createAsyncThunk<
 
 export const deleteFundAction = createAsyncThunk<void, string, AsyncThunkConfig>(
   'fund/deleteFundAction',
-  async (code, { dispatch, getState }) => {
+  (code, { dispatch, getState }) => {
     try {
       const {
         wallet: { currentWalletCode, fundConfig },
@@ -166,7 +166,7 @@ export const deleteFundAction = createAsyncThunk<void, string, AsyncThunkConfig>
 
 export const sortFundsAction = createAsyncThunk<void, string, AsyncThunkConfig>(
   'fund/sortFundsAction',
-  async (walletCode, { dispatch, getState }) => {
+  (walletCode, { dispatch, getState }) => {
     try {
       const {
         wallet: {
@@ -197,7 +197,7 @@ export const sortFundsAction = createAsyncThunk<void, string, AsyncThunkConfig>(
 
 export const sortFundsCachedAction = createAsyncThunk<void, { responseFunds: Fund.ResponseItem[]; walletCode: string }, AsyncThunkConfig>(
   'fund/sortFundsCachedAction',
-  async ({ responseFunds, walletCode }, { dispatch, getState }) => {
+  ({ responseFunds, walletCode }, { dispatch, getState }) => {
     try {
       const {
         wallet: {
