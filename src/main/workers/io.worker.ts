@@ -8,7 +8,7 @@ interface WorkerRecieveParams {
   data: any;
 }
 
-registerPromiseWorker((params: WorkerRecieveParams) => {
+registerPromiseWorker(async (params: WorkerRecieveParams) => {
   switch (params.module) {
     case 'saveImage':
       return saveImage(params.filePath, params.data);
@@ -42,7 +42,9 @@ async function saveJsonToCsv(filePath: string, json: any[]) {
 }
 function readFile(path: string) {
   return new Promise((resolve, reject) => {
-    fs.readFile(path, 'utf-8', resolve);
+    fs.readFile(path, 'utf-8', (err, data) => {
+      resolve(data);
+    });
   });
 }
 
