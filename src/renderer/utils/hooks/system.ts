@@ -202,7 +202,7 @@ export function useFundsClipboard() {
         ...newCodeMap,
       };
       const allFundConfig = Object.entries(allCodeMap).map(([code, fund]) => fund);
-      dispatch(setFundConfigAction({ config: allFundConfig, walletCode: currentWalletCode }));
+      await dispatch(setFundConfigAction({ config: allFundConfig, walletCode: currentWalletCode }));
       dialog.showMessageBox({
         type: 'info',
         title: `导入完成`,
@@ -415,9 +415,9 @@ export function useUpdateContextMenuWalletsState() {
     );
   }, [wallets, currentWalletCode, walletsConfig]);
 
-  useIpcRendererListener('change-current-wallet-code', (e, code) => {
+  useIpcRendererListener('change-current-wallet-code', async (e, code) => {
     try {
-      dispatch(changeCurrentWalletCodeAction(code));
+      await dispatch(changeCurrentWalletCodeAction(code));
       freshFunds();
     } catch (error) {}
   });
