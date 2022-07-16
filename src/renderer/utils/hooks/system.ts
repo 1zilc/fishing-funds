@@ -36,7 +36,7 @@ import * as Enums from '@/utils/enums';
 import * as Enhancement from '@/utils/enhancement';
 import { useLoadFunds } from './utils';
 
-const { invoke, dialog, ipcRenderer, clipboard, app } = window.contextModules.electron;
+const { dialog, ipcRenderer, clipboard, app } = window.contextModules.electron;
 const { saveString, encodeFF, decodeFF, readFile } = window.contextModules.io;
 
 export function useUpdater() {
@@ -81,7 +81,7 @@ export function useAdjustmentNotification() {
           body: `当前时间${hour}:${minute} 注意行情走势`,
         });
         notification.onclick = () => {
-          invoke.showCurrentWindow();
+          ipcRenderer.invoke('show-current-window');
         };
         dispatch(updateAdjustmentNotificationDateAction(currentDate));
       }
@@ -124,7 +124,7 @@ export function useRiskNotification() {
                 body: `${walletConfig.name} ${fund.name} ${Utils.Yang(fund.gszzl)}%`,
               });
               notification.onclick = () => {
-                invoke.showCurrentWindow();
+                ipcRenderer.invoke('show-current-window');
               };
               cloneZdfRangeMap[riskKey] = true;
             }
@@ -139,7 +139,7 @@ export function useRiskNotification() {
                 body: `${walletConfig.name} ${fund.name} ${fund.gsz}`,
               });
               notification.onclick = () => {
-                invoke.showCurrentWindow();
+                ipcRenderer.invoke('show-current-window');
               };
               cloneJzNoticeMap[riskKey] = true;
             }

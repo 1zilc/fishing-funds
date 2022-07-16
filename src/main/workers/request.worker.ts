@@ -2,13 +2,13 @@ import got from 'got';
 import Proxy from '../proxy';
 import registerPromiseWorker from 'promise-worker/register';
 
-interface WorkerRecieveData {
+interface WorkerRecieveParams {
   url: string;
   proxyConent?: string;
   config: any;
 }
 
-registerPromiseWorker(async function ({ url, config, proxyConent }: WorkerRecieveData) {
+registerPromiseWorker(async ({ url, config, proxyConent }: WorkerRecieveParams) => {
   try {
     const { httpAgent, httpsAgent } = new Proxy(proxyConent, url);
     const { body, rawBody } = await got(url, {

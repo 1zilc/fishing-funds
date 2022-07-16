@@ -1,11 +1,8 @@
-import * as fs from 'fs';
 import log from 'electron-log';
 import PromiseWorker from 'promise-worker';
 import { contextBridge, ipcRenderer, shell, clipboard, nativeImage } from 'electron';
 import { encode, decode, fromUint8Array } from 'js-base64';
-import { parseAsync } from 'json2csv';
-import { base64ToBuffer } from './util';
-import { requestWorker } from './workers';
+import { requestWorker, ioWorker } from './workers';
 const { version } = require('../../release/app/package.json');
 
 contextBridge.exposeInMainWorld('contextModules', {
@@ -60,10 +57,6 @@ contextBridge.exposeInMainWorld('contextModules', {
       showSaveDialog: async (config: any) => ipcRenderer.invoke('show-save-dialog', config),
       showOpenDialog: async (config: any) => ipcRenderer.invoke('show-open-dialog', config),
     },
-    invoke: {
-      showCurrentWindow: () => ipcRenderer.invoke('show-current-window'),
-      setNativeThemeSource: (config: any) => ipcRenderer.invoke('set-native-theme-source', config),
-    },
     app: {
       setLoginItemSettings: (config: any) => ipcRenderer.invoke('set-login-item-settings', config),
       quit: () => ipcRenderer.invoke('app-quit'),
@@ -76,28 +69,17 @@ contextBridge.exposeInMainWorld('contextModules', {
   },
   log: log,
   io: {
-    async saveImage(filePath: string, dataUrl: string) {
-      const imageBuffer = base64ToBuffer(dataUrl);
-      return new Promise((resolve, reject) => {
-        fs.writeFile(filePath, imageBuffer, resolve);
-      });
+    saveImage(filePath: string, dataUrl: string) {
+      return new PromiseWorker(ioWorker).postMessage({ module: 'saveImage', filePath, data: dataUrl });
     },
-    async saveString(filePath: string, content: string) {
-      return new Promise((resolve, reject) => {
-        fs.writeFile(filePath, content, resolve);
-      });
+    saveString(filePath: string, content: string) {
+      return new PromiseWorker(ioWorker).postMessage({ module: 'saveString', filePath, data: content });
     },
-    async saveJsonToCsv(filePath: string, json: any[]) {
-      const fields = Object.keys(json[0] || {});
-      const csv = await parseAsync(json, { fields });
-      return new Promise((resolve, reject) => {
-        fs.writeFile(filePath, csv, resolve);
-      });
+    saveJsonToCsv(filePath: string, json: any[]) {
+      return new PromiseWorker(ioWorker).postMessage({ module: 'saveJsonToCsv', filePath, data: json });
     },
-    async readFile(path: string) {
-      return new Promise((resolve, reject) => {
-        fs.readFile(path, 'utf-8', resolve);
-      });
+    readFile(filePath: string) {
+      return new PromiseWorker(ioWorker).postMessage({ module: 'readFile', filePath });
     },
     encodeFF(content: any) {
       const ffprotocol = 'ff://'; // FF协议

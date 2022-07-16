@@ -3,14 +3,14 @@
  */
 import * as Enums from '@/utils/enums';
 
-const { invoke } = window.contextModules.electron;
+const { ipcRenderer } = window.contextModules.electron;
 const { version, production } = window.contextModules.process;
 const { encodeFF, decodeFF } = window.contextModules.io;
 const electronStore = window.contextModules.electronStore;
 const log = window.contextModules.log;
 
 export async function UpdateSystemTheme(setting: Enums.SystemThemeType) {
-  await invoke.setNativeThemeSource(setting);
+  await ipcRenderer.invoke('set-native-theme-source', setting);
 }
 
 export async function GenerateBackupConfig() {

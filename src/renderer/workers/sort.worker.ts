@@ -2,7 +2,7 @@ import registerPromiseWorker from 'promise-worker/register';
 import * as Enums from '@/utils/enums';
 import { CalcFund } from '@/helpers/fund/utils';
 
-interface WorkerRecieveData {
+interface WorkerRecieveParams {
   module: Enums.TabKeyType;
   list: any[];
   orderType: Enums.SortOrderType;
@@ -10,45 +10,45 @@ interface WorkerRecieveData {
   codeMap: any;
 }
 
-interface SortFundPrams extends WorkerRecieveData {
+interface SortFundPrams extends WorkerRecieveParams {
   list: (Fund.ResponseItem & Fund.FixData & Fund.ExtraRow)[];
   sortType: Enums.FundSortType;
   codeMap: Fund.CodeMap;
 }
-interface SortZindexPrams extends WorkerRecieveData {
+interface SortZindexPrams extends WorkerRecieveParams {
   list: (Zindex.ResponseItem & Zindex.ExtraRow)[];
   sortType: Enums.ZindexSortType;
   codeMap: Zindex.CodeMap;
 }
-interface SortQuotationPrams extends WorkerRecieveData {
+interface SortQuotationPrams extends WorkerRecieveParams {
   list: (Quotation.ResponseItem & Quotation.ExtraRow)[];
   sortType: Enums.QuotationSortType;
 }
-interface SortStockPrams extends WorkerRecieveData {
+interface SortStockPrams extends WorkerRecieveParams {
   list: (Stock.ResponseItem & Stock.ExtraRow)[];
   sortType: Enums.StockSortType;
   codeMap: Stock.CodeMap;
 }
-interface SortCoinPrams extends WorkerRecieveData {
+interface SortCoinPrams extends WorkerRecieveParams {
   list: (Coin.ResponseItem & Stock.ExtraRow)[];
   sortType: Enums.CoinSortType;
   codeMap: Coin.CodeMap;
 }
 
-registerPromiseWorker(function (data: WorkerRecieveData) {
-  switch (data.module) {
+registerPromiseWorker((params: WorkerRecieveParams) => {
+  switch (params.module) {
     case Enums.TabKeyType.Fund:
-      return sortFund(data);
+      return sortFund(params);
     case Enums.TabKeyType.Zindex:
-      return sortZindex(data);
+      return sortZindex(params);
     case Enums.TabKeyType.Quotation:
-      return sortQuotation(data);
+      return sortQuotation(params);
     case Enums.TabKeyType.Stock:
-      return sortStock(data);
+      return sortStock(params);
     case Enums.TabKeyType.Coin:
-      return sortCoin(data);
+      return sortCoin(params);
     default:
-      return data.list;
+      return params.list;
   }
 });
 
