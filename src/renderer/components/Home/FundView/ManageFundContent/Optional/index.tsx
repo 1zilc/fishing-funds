@@ -54,11 +54,15 @@ const Optional: React.FC<OptionalProps> = () => {
   const { done: syncFundSettingDone } = useSyncFixFundSetting();
 
   function onSortFundConfig(sortList: Fund.SettingItem[]) {
-    const fundConfig = sortList.map((item) => {
-      const fund = codeMap[item.code];
-      return fund;
-    });
-    dispatch(setFundConfigAction({ config: fundConfig, walletCode: currentWalletCode }));
+    // 判断顺序是否发生变化
+    const hasChanged = fundConfig.map(({ code }) => code).toString() !== sortList.map(({ code }) => code).toString();
+    if (hasChanged) {
+      const sortConfig = sortList.map((item) => {
+        const fund = codeMap[item.code];
+        return fund;
+      });
+      dispatch(setFundConfigAction({ config: sortConfig, walletCode: currentWalletCode }));
+    }
   }
 
   async function onRemoveFund(fund: Fund.SettingItem) {
