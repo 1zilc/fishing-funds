@@ -1,8 +1,9 @@
-import got from 'got';
+import got, { Response as GotResponse } from 'got';
 import Proxy from '../proxy';
 import registerPromiseWorker from 'promise-worker/register';
 
-interface WorkerRecieveParams {
+export { GotResponse };
+export interface WorkerRecieveParams {
   url: string;
   proxyConent?: string;
   config: any;

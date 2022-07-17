@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from 'react';
-
 import { useDebounceFn } from 'ahooks';
 import { Input, InputNumber, message } from 'antd';
-
 import CustomDrawer from '@/components/CustomDrawer';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
 import { addFundAction } from '@/store/features/fund';
-
 import { useDrawer, useAppDispatch, useAppSelector } from '@/utils/hooks';
+import { SearchPromiseWorker } from '@/workers';
+import { SearchRemoteFundParams } from '@/workers/search.worker';
 import * as Enums from '@/utils/enums';
 import * as Helpers from '@/helpers';
 import styles from './index.module.scss';
@@ -54,34 +53,21 @@ const AddFundContent: React.FC<AddFundContentProps> = (props) => {
     }
   }
 
-  const { run: onSearch } = useDebounceFn((type: Enums.SearchType, value: string) => {
+  const { run: onSearch } = useDebounceFn(async (type: Enums.SearchType, _value: string) => {
+    const value = _value.trim();
     if (!value) {
       setFundlist([]);
-      return;
-    }
-    switch (type) {
-      case Enums.SearchType.Code:
-        setFundlist(
-          remoteFunds.filter((remoteFund) => {
-            const [code, pinyin, name, type, quanpin] = remoteFund;
-            return code.indexOf(value) !== -1;
-          })
-        );
-        break;
-      case Enums.SearchType.Name:
-        setFundlist(
-          remoteFunds.filter((remoteFund) => {
-            const [code, pinyin, name, type, quanpin] = remoteFund;
-            return (
-              name.indexOf(value) !== -1 ||
-              pinyin.indexOf(value.toLocaleUpperCase()) !== -1 ||
-              quanpin.indexOf(value.toLocaleUpperCase()) !== -1
-            );
-          })
-        );
-        break;
-      default:
-        break;
+    } else {
+      const searchPromiseWorker = new SearchPromiseWorker();
+      const searchList = await searchPromiseWorker
+        .postMessage<typeof remoteFunds, SearchRemoteFundParams>({
+          module: Enums.TabKeyType.Fund,
+          list: remoteFunds,
+          type,
+          value,
+        })
+        .finally(() => searchPromiseWorker.terminate());
+      setFundlist(searchList);
     }
   });
 

@@ -1,14 +1,17 @@
 import log from 'electron-log';
-import PromiseWorker from 'promise-worker';
 import { contextBridge, ipcRenderer, shell, clipboard, nativeImage } from 'electron';
 import { encode, decode, fromUint8Array } from 'js-base64';
-import { requestWorker, IOWorker } from './workers';
+import { RequestPromiseWorker, IOPromiseWorker } from './workers';
+import { WorkerRecieveParams as IOWorkerRecieveParams } from './workers/io.worker';
+import { WorkerRecieveParams as RequestWorkerRecieveParams, GotResponse } from './workers/request.worker';
+
 const { version } = require('../../release/app/package.json');
+const requestPromiseWorker = new RequestPromiseWorker();
 
 contextBridge.exposeInMainWorld('contextModules', {
   got: async (url: string, config: any) => {
     const proxyConent = await ipcRenderer.invoke('resolve-proxy', url);
-    return new PromiseWorker(requestWorker).postMessage({ url, config, proxyConent }).then((res) => {
+    return requestPromiseWorker.postMessage<GotResponse, RequestWorkerRecieveParams>({ url, config, proxyConent }).then((res) => {
       if (!res) {
         throw Error('请求错误');
       } else {
@@ -70,20 +73,28 @@ contextBridge.exposeInMainWorld('contextModules', {
   log: log,
   io: {
     saveImage(filePath: string, dataUrl: string) {
-      const ioWorker = new IOWorker();
-      new PromiseWorker(ioWorker).postMessage({ module: 'saveImage', filePath, data: dataUrl }).finally(() => ioWorker.terminate());
+      const ioPromiseWorker = new IOPromiseWorker();
+      ioPromiseWorker
+        .postMessage<void, IOWorkerRecieveParams>({ module: 'saveImage', filePath, data: dataUrl })
+        .finally(() => ioPromiseWorker.terminate());
     },
     saveString(filePath: string, content: string) {
-      const ioWorker = new IOWorker();
-      new PromiseWorker(ioWorker).postMessage({ module: 'saveString', filePath, data: content }).finally(() => ioWorker.terminate());
+      const ioPromiseWorker = new IOPromiseWorker();
+      ioPromiseWorker
+        .postMessage<void, IOWorkerRecieveParams>({ module: 'saveString', filePath, data: content })
+        .finally(() => ioPromiseWorker.terminate());
     },
     saveJsonToCsv(filePath: string, json: any[]) {
-      const ioWorker = new IOWorker();
-      new PromiseWorker(ioWorker).postMessage({ module: 'saveJsonToCsv', filePath, data: json }).finally(() => ioWorker.terminate());
+      const ioPromiseWorker = new IOPromiseWorker();
+      ioPromiseWorker
+        .postMessage<void, IOWorkerRecieveParams>({ module: 'saveJsonToCsv', filePath, data: json })
+        .finally(() => ioPromiseWorker.terminate());
     },
     readFile(filePath: string) {
-      const ioWorker = new IOWorker();
-      return new PromiseWorker(ioWorker).postMessage({ module: 'readFile', filePath }).finally(() => ioWorker.terminate());
+      const ioPromiseWorker = new IOPromiseWorker();
+      ioPromiseWorker
+        .postMessage<string, IOWorkerRecieveParams>({ module: 'readFile', filePath })
+        .finally(() => ioPromiseWorker.terminate());
     },
     encodeFF(content: any) {
       const ffprotocol = 'ff://'; // FF协议

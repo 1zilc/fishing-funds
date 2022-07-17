@@ -2,10 +2,11 @@ import * as fs from 'fs';
 import { parseAsync } from 'json2csv';
 import registerPromiseWorker from 'promise-worker/register';
 
-interface WorkerRecieveParams {
-  module: string;
+type RecieveModule = 'saveImage' | 'saveString' | 'saveJsonToCsv' | 'readFile';
+export interface WorkerRecieveParams {
+  module: RecieveModule;
   filePath: string;
-  data: any;
+  data?: any;
 }
 
 registerPromiseWorker(async (params: WorkerRecieveParams) => {

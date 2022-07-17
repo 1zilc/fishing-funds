@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { useDebounceFn } from 'ahooks';
 import { Input, message } from 'antd';
-
 import CustomDrawer from '@/components/CustomDrawer';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
 import Empty from '@/components/Empty';
 import { addCoinAction } from '@/store/features/coin';
-
+import { SearchPromiseWorker } from '@/workers';
+import { SearchRemoteCoinParams } from '@/workers/search.worker';
 import { useDrawer, useAppDispatch, useAppSelector } from '@/utils/hooks';
 import * as Helpers from '@/helpers';
+import * as Enums from '@/utils/enums';
 import styles from './index.module.scss';
 
 const DetailCoinContent = React.lazy(() => import('@/components/Home/CoinView/DetailCoinContent'));
@@ -45,20 +46,21 @@ const AddCoinContent: React.FC<AddCoinContentProps> = (props) => {
     }
   }
 
-  const { run: onSearch } = useDebounceFn((_value: string) => {
+  const { run: onSearch } = useDebounceFn(async (_value: string) => {
     const value = _value.trim();
     if (!value) {
       setCoins([]);
-      return;
+    } else {
+      const searchPromiseWorker = new SearchPromiseWorker();
+      const searchList = await searchPromiseWorker
+        .postMessage<typeof remoteCoins, SearchRemoteCoinParams>({
+          module: Enums.TabKeyType.Coin,
+          list: remoteCoins,
+          value,
+        })
+        .finally(() => searchPromiseWorker.terminate());
+      setCoins(searchList);
     }
-    setCoins(
-      remoteCoins.filter((remoteCoin) => {
-        const { code, symbol } = remoteCoin;
-        return (
-          symbol.toLocaleUpperCase().indexOf(value.toLocaleUpperCase()) !== -1 || code.toLocaleUpperCase() === value.toLocaleUpperCase()
-        );
-      })
-    );
   });
 
   useEffect(() => {
