@@ -11,7 +11,7 @@ export class BasicWorker extends PromiseWorker {
   }
 
   terminate() {
-    this.worker?.terminate();
+    this.worker.terminate();
   }
 }
 
