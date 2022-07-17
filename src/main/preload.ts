@@ -2,7 +2,7 @@ import log from 'electron-log';
 import PromiseWorker from 'promise-worker';
 import { contextBridge, ipcRenderer, shell, clipboard, nativeImage } from 'electron';
 import { encode, decode, fromUint8Array } from 'js-base64';
-import { requestWorker, ioWorker } from './workers';
+import { requestWorker, IOWorker } from './workers';
 const { version } = require('../../release/app/package.json');
 
 contextBridge.exposeInMainWorld('contextModules', {
@@ -70,16 +70,20 @@ contextBridge.exposeInMainWorld('contextModules', {
   log: log,
   io: {
     saveImage(filePath: string, dataUrl: string) {
-      return new PromiseWorker(ioWorker).postMessage({ module: 'saveImage', filePath, data: dataUrl });
+      const ioWorker = new IOWorker();
+      new PromiseWorker(ioWorker).postMessage({ module: 'saveImage', filePath, data: dataUrl }).finally(() => ioWorker.terminate());
     },
     saveString(filePath: string, content: string) {
-      return new PromiseWorker(ioWorker).postMessage({ module: 'saveString', filePath, data: content });
+      const ioWorker = new IOWorker();
+      new PromiseWorker(ioWorker).postMessage({ module: 'saveString', filePath, data: content }).finally(() => ioWorker.terminate());
     },
     saveJsonToCsv(filePath: string, json: any[]) {
-      return new PromiseWorker(ioWorker).postMessage({ module: 'saveJsonToCsv', filePath, data: json });
+      const ioWorker = new IOWorker();
+      new PromiseWorker(ioWorker).postMessage({ module: 'saveJsonToCsv', filePath, data: json }).finally(() => ioWorker.terminate());
     },
     readFile(filePath: string) {
-      return new PromiseWorker(ioWorker).postMessage({ module: 'readFile', filePath });
+      const ioWorker = new IOWorker();
+      return new PromiseWorker(ioWorker).postMessage({ module: 'readFile', filePath }).finally(() => ioWorker.terminate());
     },
     encodeFF(content: any) {
       const ffprotocol = 'ff://'; // FF协议
