@@ -103,10 +103,12 @@ function main() {
     });
   });
   ipcMain.handle('resolve-proxy', (event, url) => {
-    return mb.window?.webContents.session.resolveProxy(url);
+    const win = BrowserWindow.fromId(event.frameId);
+    return win?.webContents.session.resolveProxy(url);
   });
   ipcMain.handle('set-proxy', (event, config) => {
-    return mb.window?.webContents.session.setProxy(config);
+    const win = BrowserWindow.fromId(event.frameId);
+    return win?.webContents.session.setProxy(config);
   });
   ipcMain.handle('update-tray-context-menu-wallets', (event, config) => {
     const menus = config.map((item: any) => ({

@@ -12,6 +12,7 @@ import {
   useMappingLocalToSystemSetting,
   useUpdateContextMenuWalletsState,
   useShareStoreState,
+  useSyncConfig,
 } from '@/utils/hooks';
 
 const HomePage = () => {
@@ -25,6 +26,7 @@ const HomePage = () => {
   useMappingLocalToSystemSetting();
   useTouchBar();
   useShareStoreState();
+  useSyncConfig();
   useBootStrap();
 
   return <Home />;

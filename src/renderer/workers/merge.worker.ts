@@ -23,7 +23,16 @@ export function mergeStateWithResponse<C, CK extends keyof C, SK extends keyof S
     return map;
   }, {});
 
+  const sortMap = params.state.reduce<Record<string, number>>((map, current, index) => {
+    map[current[params.stateKey] as unknown as string] = index;
+    return map;
+  }, {});
+
   const stateWithChached = Object.values(stateWithChachedCodeToMap);
+
+  stateWithChached.sort((a, b) => {
+    return sortMap[a[params.stateKey] as unknown as string] < sortMap[b[params.stateKey] as unknown as string] ? -1 : 1;
+  });
 
   return stateWithChached;
 }

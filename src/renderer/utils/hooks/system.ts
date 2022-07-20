@@ -1,7 +1,6 @@
 import { useLayoutEffect, useState, useEffect, useMemo } from 'react';
-import { useDebounceFn, useInterval, useMemoizedFn } from 'ahooks';
-import { AnyAction, compose } from 'redux';
-import { Base64 } from 'js-base64';
+import { useDebounceFn, useInterval } from 'ahooks';
+import { AnyAction } from 'redux';
 import dayjs from 'dayjs';
 import NP from 'number-precision';
 
@@ -37,7 +36,7 @@ import * as Enhancement from '@/utils/enhancement';
 import { useLoadFunds } from './utils';
 
 const { dialog, ipcRenderer, clipboard, app } = window.contextModules.electron;
-const { saveString, encodeFF, decodeFF, readFile } = window.contextModules.io;
+const { saveString, readFile, encryptFF, decryptFF } = window.contextModules.io;
 
 export function useUpdater() {
   const dispatch = useAppDispatch();
@@ -434,7 +433,7 @@ export function useAllConfigBackup() {
       if (canceled) {
         return;
       }
-      const encodeBackupConfig = compose(Base64.encode, encodeFF)(backupConfig);
+      const encodeBackupConfig = await encryptFF(backupConfig);
       await saveString(filePath!, encodeBackupConfig);
       dialog.showMessageBox({
         type: 'info',
@@ -460,7 +459,7 @@ export function useAllConfigBackup() {
         return;
       }
       const encodeBackupConfig = await readFile(filePath);
-      const backupConfig: Backup.Config = compose(decodeFF, Base64.decode)(encodeBackupConfig);
+      const backupConfig: Backup.Config = await decryptFF(encodeBackupConfig);
       Enhancement.CoverBackupConfig(backupConfig);
       await dialog.showMessageBox({
         type: 'info',
@@ -479,7 +478,7 @@ export function useAllConfigBackup() {
   useIpcRendererListener('open-backup-file', async (e, filePath) => {
     try {
       const encodeBackupConfig = await readFile(filePath);
-      const backupConfig: Backup.Config = compose(decodeFF, Base64.decode)(encodeBackupConfig);
+      const backupConfig: Backup.Config = await decryptFF(encodeBackupConfig);
       const { response } = await dialog.showMessageBox({
         title: `确认从备份文件恢复`,
         message: `备份时间：${dayjs(backupConfig.timestamp).format('YYYY-MM-DD HH:mm:ss')} ，当前数据将被覆盖，请谨慎操作`,
@@ -577,4 +576,15 @@ export function useShareStoreState() {
     }
   );
   useIpcRendererListener('sync-store-data', run);
+}
+
+export function useSyncConfig() {
+  const syncConfigSetting = useAppSelector((state) => state.setting.systemSetting.syncConfigSetting);
+  const syncConfigPathSetting = useAppSelector((state) => state.setting.systemSetting.syncConfigPathSetting);
+
+  useEffect(() => {
+    if (syncConfigSetting && syncConfigPathSetting) {
+      Enhancement.DoSyncConfig(syncConfigPathSetting);
+    }
+  }, [syncConfigSetting, syncConfigPathSetting]);
 }

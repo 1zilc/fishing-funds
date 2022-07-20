@@ -26,5 +26,8 @@ declare namespace System {
     freshDelaySetting: number; // 刷新时间间隔
     autoCheckUpdateSetting: boolean; // 自动检查更新
     timestampSetting: import('@/utils/enums').TimestampType; // 时间戳
+
+    syncConfigSetting: boolean; // 同步配置文件
+    syncConfigPathSetting: string; // 同步配置文件路径
   }
 }

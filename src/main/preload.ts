@@ -2,6 +2,7 @@ import log from 'electron-log';
 import { contextBridge, ipcRenderer, shell, clipboard, nativeImage } from 'electron';
 import { encode, decode, fromUint8Array } from 'js-base64';
 import { RequestPromiseWorker, IOPromiseWorker } from './workers';
+import { encodeFF, decodeFF } from './workers/utils/io';
 import { WorkerRecieveParams as IOWorkerRecieveParams } from './workers/io.worker';
 import { WorkerRecieveParams as RequestWorkerRecieveParams, GotResponse } from './workers/request.worker';
 
@@ -70,7 +71,7 @@ contextBridge.exposeInMainWorld('contextModules', {
       writeImage: (dataUrl: string) => clipboard.writeImage(nativeImage.createFromDataURL(dataUrl)),
     },
   },
-  log: log,
+  log,
   io: {
     saveImage(filePath: string, dataUrl: string) {
       const ioPromiseWorker = new IOPromiseWorker();
@@ -96,24 +97,20 @@ contextBridge.exposeInMainWorld('contextModules', {
         .postMessage<string, IOWorkerRecieveParams>({ module: 'readFile', filePath })
         .finally(() => ioPromiseWorker.terminate());
     },
-    encodeFF(content: any) {
-      const ffprotocol = 'ff://'; // FF协议
-      return `${ffprotocol}${encode(JSON.stringify(content))}`;
+    encryptFF(content: any) {
+      const ioPromiseWorker = new IOPromiseWorker();
+      ioPromiseWorker
+        .postMessage<string, IOWorkerRecieveParams>({ module: 'encryptFF', data: content })
+        .finally(() => ioPromiseWorker.terminate());
     },
-    decodeFF(content: string) {
-      const ffprotocol = 'ff://'; // FF协议
-      try {
-        const protocolLength = ffprotocol.length;
-        const protocol = content.slice(0, protocolLength);
-        if (protocol !== ffprotocol) {
-          throw Error('协议错误');
-        }
-        const body = content.slice(protocolLength);
-        return JSON.parse(decode(body));
-      } catch (error) {
-        return null;
-      }
+    decryptFF(content: string) {
+      const ioPromiseWorker = new IOPromiseWorker();
+      ioPromiseWorker
+        .postMessage<string, IOWorkerRecieveParams>({ module: 'decryptFF', data: content })
+        .finally(() => ioPromiseWorker.terminate());
     },
+    encodeFF,
+    decodeFF,
   },
   electronStore: {
     async get(key: string, init: unknown) {

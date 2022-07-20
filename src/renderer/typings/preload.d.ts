@@ -29,11 +29,13 @@ declare global {
         saveString: (filePath: string, content: string) => Promise<unknown>;
         saveJsonToCsv: (filePath: string, json: any[]) => Promise<unknown>;
         readFile: (content: string) => Promise<string>;
+        encryptFF: (content: any) => Promise<string>;
+        decryptFF: (content: string) => Promise<any>;
         encodeFF: (content: any) => string;
         decodeFF: (content: string) => any;
       };
       electronStore: {
-        get: <T = unknown>(key: string, init: T) => Promise<T>;
+        get: <T = unknown>(key: string, init?: T) => Promise<T>;
         set: (key: string, data: unknown) => Promise<void>;
         delete: (key: string) => Promise<void>;
         cover: (data: unknown) => Promise<void>;

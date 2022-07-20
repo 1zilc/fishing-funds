@@ -10,7 +10,7 @@ import startListeningTabs from '@/store/listeners/tabs';
 import startListeningWallet from '@/store/listeners/wallet';
 import startListeningWeb from '@/store/listeners/web';
 import startListeningZindex from '@/store/listeners/zindex';
-import { shareStateListening } from '@/store/listeners/utils';
+import { shareStateListening, syncConfigListening } from '@/store/listeners/utils';
 
 const listenerMiddleware = createListenerMiddleware<StoreState, AppDispatch>();
 
@@ -27,6 +27,8 @@ export function startListening() {
   startListeningZindex();
   // 窗口共享状态
   shareStateListening();
+  // 同步配置
+  syncConfigListening();
 }
 
 export default listenerMiddleware;

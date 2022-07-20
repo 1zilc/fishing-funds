@@ -19,7 +19,7 @@ import { setCoinsLoadingAction, setRemoteCoinsLoadingAction, sortCoinsCachedActi
 import { updateStockAction, sortStocksCachedAction, setStocksLoadingAction } from '@/store/features/stock';
 import { setZindexesLoadingAction, sortZindexsCachedAction } from '@/store/features/zindex';
 import { sortQuotationsCachedAction } from '@/store/features/quotation';
-import store, { TypedDispatch, StoreState } from '@/store';
+import { TypedDispatch, StoreState } from '@/store';
 import * as Utils from '@/utils';
 import * as Enums from '@/utils/enums';
 import * as CONST from '@/constants';

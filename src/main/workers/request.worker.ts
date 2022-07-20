@@ -3,6 +3,7 @@ import Proxy from '../proxy';
 import registerPromiseWorker from 'promise-worker/register';
 
 export { GotResponse };
+
 export interface WorkerRecieveParams {
   url: string;
   proxyConent?: string;

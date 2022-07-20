@@ -10,6 +10,7 @@ import { changeCurrentWalletCodeAction, syncWalletsConfigAction } from '@/store/
 import { syncWebConfigAction } from '@/store/features/web';
 import { syncZindexesConfigAction } from '@/store/features/zindex';
 import * as Utils from '@/utils';
+import * as Enhancement from '@/utils/enhancement';
 
 const { ipcRenderer } = window.contextModules.electron;
 export function shareStateListening() {
@@ -29,12 +30,34 @@ export function shareStateListening() {
       syncRemoteFundsMapAction,
       syncRemoteCoinsMapAction
     ),
-    effect: throttle(1000, (action, {}) => {
+    effect: throttle(1000, (action, listenerApi) => {
       const isUpdating = Utils.GetUpdatingStoreStateStatus();
       if (isUpdating) {
         Utils.SetUpdatingStoreStateStatus(false);
       } else {
         ipcRenderer.invoke('sync-multi-window-store', action);
+      }
+    }),
+  });
+}
+
+export function syncConfigListening() {
+  // 配置同步
+
+  listenerMiddleware.startListening({
+    matcher: isAnyOf(
+      syncCoinsConfigAction,
+      syncZindexesConfigAction,
+      syncWebConfigAction,
+      syncStocksConfigAction,
+      syncWalletsConfigAction,
+      syncFavoriteQuotationMapAction
+    ),
+    effect: throttle(1000, (action, listenerApi) => {
+      const isUpdating = Utils.GetUpdatingStoreStateStatus();
+      if (isUpdating) {
+      } else {
+        // Enhancement.DoSyncConfig();
       }
     }),
   });
