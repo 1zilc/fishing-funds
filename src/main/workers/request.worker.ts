@@ -1,4 +1,5 @@
-import got, { Response as GotResponse } from 'got';
+import got from 'got';
+import type { Response as GotResponse } from 'got';
 import Proxy from '../proxy';
 import registerPromiseWorker from 'promise-worker/register';
 

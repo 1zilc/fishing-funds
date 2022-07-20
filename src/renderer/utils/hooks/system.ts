@@ -8,7 +8,7 @@ import { updateAvaliableAction } from '@/store/features/updater';
 import { setFundConfigAction } from '@/store/features/fund';
 import { syncTabsActiveKeyAction } from '@/store/features/tabs';
 import { changeCurrentWalletCodeAction, toggleEyeStatusAction } from '@/store/features/wallet';
-import { updateAdjustmentNotificationDateAction, syncDarkMode } from '@/store/features/setting';
+import { updateAdjustmentNotificationDateAction, syncDarkMode, syncConfigAction } from '@/store/features/setting';
 
 import {
   useWorkDayTimeToDo,
@@ -565,26 +565,20 @@ export function useTouchBar() {
 
 export function useShareStoreState() {
   const dispatch = useAppDispatch();
-  const { run } = useDebounceFn(
-    (event, action: AnyAction) => {
-      Utils.SetUpdatingStoreStateStatus(true);
-      dispatch(action);
-    },
-    {
-      leading: true,
-      wait: 1000,
-    }
-  );
-  useIpcRendererListener('sync-store-data', run);
+
+  useIpcRendererListener('sync-store-data', (event, action: AnyAction) => {
+    dispatch(action);
+  });
 }
 
 export function useSyncConfig() {
+  const dispatch = useAppDispatch();
   const syncConfigSetting = useAppSelector((state) => state.setting.systemSetting.syncConfigSetting);
   const syncConfigPathSetting = useAppSelector((state) => state.setting.systemSetting.syncConfigPathSetting);
 
   useEffect(() => {
     if (syncConfigSetting && syncConfigPathSetting) {
-      Enhancement.DoSyncConfig(syncConfigPathSetting);
+      dispatch(syncConfigAction());
     }
   }, [syncConfigSetting, syncConfigPathSetting]);
 }

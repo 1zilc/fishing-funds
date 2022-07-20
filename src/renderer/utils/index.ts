@@ -389,18 +389,6 @@ export function ConvertKData(data: any[]) {
   }));
 }
 
-export function SetUpdatingStoreStateStatus(status: boolean) {
-  if (status) {
-    window.sessionStorage.setItem(CONST.STORAGE.UPDATING_STORE_STATE_FROM_OTHER, MakeHash());
-  } else {
-    window.sessionStorage.removeItem(CONST.STORAGE.UPDATING_STORE_STATE_FROM_OTHER);
-  }
-}
-
-export function GetUpdatingStoreStateStatus() {
-  return window.sessionStorage.getItem(CONST.STORAGE.UPDATING_STORE_STATE_FROM_OTHER);
-}
-
 export function MakeSearchParams(config: { _nav: string; data?: Record<string, unknown> }) {
   const data = config.data || {};
   const search = '?' + new URLSearchParams({ ...data, _nav: config._nav }).toString();

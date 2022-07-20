@@ -95,20 +95,17 @@ function main() {
     return storage.store;
   });
   ipcMain.handle('registry-webview', (event, config) => {
-    const contents = webContents.fromId(config);
-    const win = BrowserWindow.fromId(event.frameId);
-    contents.setWindowOpenHandler(({ url }) => {
+    const win = BrowserWindow.fromWebContents(event.sender);
+    event.sender.setWindowOpenHandler(({ url }) => {
       sendMessageToRenderer(win, 'webview-new-window', url);
       return { action: 'deny' };
     });
   });
   ipcMain.handle('resolve-proxy', (event, url) => {
-    const win = BrowserWindow.fromId(event.frameId);
-    return win?.webContents.session.resolveProxy(url);
+    return event.sender.session.resolveProxy(url);
   });
   ipcMain.handle('set-proxy', (event, config) => {
-    const win = BrowserWindow.fromId(event.frameId);
-    return win?.webContents.session.setProxy(config);
+    return event.sender.session.setProxy(config);
   });
   ipcMain.handle('update-tray-context-menu-wallets', (event, config) => {
     const menus = config.map((item: any) => ({
@@ -162,7 +159,8 @@ function main() {
     activeHotkeys = keys;
   });
   ipcMain.handle('open-child-window', (event, config) => {
-    const win = createChildWindow({ search: config.search, parentId: event.frameId });
+    const parentWin = BrowserWindow.fromWebContents(event.sender);
+    const win = createChildWindow({ search: config.search, parentId: parentWin!.id });
     if (win) {
       const windowId = win.id;
       windowIds.push(windowId);
@@ -172,14 +170,16 @@ function main() {
     }
   });
   ipcMain.handle('sync-multi-window-store', (event, config) => {
-    getOtherWindows(windowIds, config.id).forEach((win) => {
+    const fromWin = BrowserWindow.fromWebContents(event.sender);
+    config._share = true;
+    getOtherWindows(windowIds, fromWin?.id).forEach((win) => {
       win?.webContents.send('sync-store-data', config);
     });
   });
   // menubar 相关监听
   mb.on('after-create-window', () => {
     // 注册windowId
-    windowIds.push(mb.window!.id);
+    windowIds.push(mb.window!.webContents.id);
     // 设置系统色彩偏好
     setNativeTheme(defaultTheme);
     // 右键菜单

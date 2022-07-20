@@ -4,6 +4,7 @@ import { AsyncThunkConfig } from '@/store';
 import * as Utils from '@/utils';
 import * as CONST from '@/constants';
 import * as Enums from '@/utils/enums';
+import * as Enhancement from '@/utils/enhancement';
 
 export type SettingState = {
   systemSetting: System.Setting;
@@ -106,6 +107,46 @@ export const setSystemSettingAction = createAsyncThunk<void, System.Setting, Asy
       const systemSetting = { ...oldSystemSetting, ...newSetting };
 
       dispatch(syncSettingAction(systemSetting));
+    } catch (error) {}
+  }
+);
+
+export const syncConfigAction = createAsyncThunk<void, void, AsyncThunkConfig>(
+  'setting/setSystemSettingAction',
+  async (_, { dispatch, getState }) => {
+    try {
+      const {
+        wallet: {
+          config: { walletConfig },
+        },
+        zindex: {
+          config: { zindexConfig },
+        },
+        quotation: { favoriteQuotationMap },
+        stock: {
+          config: { stockConfig },
+        },
+        coin: {
+          config: { coinConfig },
+        },
+        web: {
+          config: { webConfig },
+        },
+        setting: {
+          systemSetting: { syncConfigPathSetting },
+        },
+      } = getState();
+
+      const config = {
+        [CONST.STORAGE.WALLET_SETTING]: walletConfig,
+        [CONST.STORAGE.ZINDEX_SETTING]: zindexConfig,
+        [CONST.STORAGE.FAVORITE_QUOTATION_MAP]: favoriteQuotationMap,
+        [CONST.STORAGE.STOCK_SETTING]: stockConfig,
+        [CONST.STORAGE.COIN_SETTING]: coinConfig,
+        [CONST.STORAGE.WEB_SETTING]: webConfig,
+      };
+      const syncConfig = Enhancement.GenerateSyncConfig(config);
+      await Enhancement.DoSyncConfig(syncConfigPathSetting, syncConfig);
     } catch (error) {}
   }
 );

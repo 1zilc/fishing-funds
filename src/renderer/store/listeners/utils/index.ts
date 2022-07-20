@@ -1,16 +1,13 @@
 import { isAnyOf } from '@reduxjs/toolkit';
-import { throttle } from 'throttle-debounce';
 import listenerMiddleware from '@/store/listeners';
 import { syncCoinsConfigAction, syncRemoteCoinsMapAction } from '@/store/features/coin';
 import { syncFundRatingMapAction, syncRemoteFundsMapAction } from '@/store/features/fund';
 import { syncFavoriteQuotationMapAction } from '@/store/features/quotation';
-import { syncSettingAction } from '@/store/features/setting';
+import { syncSettingAction, syncConfigAction } from '@/store/features/setting';
 import { syncStocksConfigAction } from '@/store/features/stock';
 import { changeCurrentWalletCodeAction, syncWalletsConfigAction } from '@/store/features/wallet';
 import { syncWebConfigAction } from '@/store/features/web';
 import { syncZindexesConfigAction } from '@/store/features/zindex';
-import * as Utils from '@/utils';
-import * as Enhancement from '@/utils/enhancement';
 
 const { ipcRenderer } = window.contextModules.electron;
 export function shareStateListening() {
@@ -30,14 +27,11 @@ export function shareStateListening() {
       syncRemoteFundsMapAction,
       syncRemoteCoinsMapAction
     ),
-    effect: throttle(1000, (action, listenerApi) => {
-      const isUpdating = Utils.GetUpdatingStoreStateStatus();
-      if (isUpdating) {
-        Utils.SetUpdatingStoreStateStatus(false);
-      } else {
+    effect: (action, listenerApi) => {
+      if (!action._share) {
         ipcRenderer.invoke('sync-multi-window-store', action);
       }
-    }),
+    },
   });
 }
 
@@ -53,12 +47,17 @@ export function syncConfigListening() {
       syncWalletsConfigAction,
       syncFavoriteQuotationMapAction
     ),
-    effect: throttle(1000, (action, listenerApi) => {
-      const isUpdating = Utils.GetUpdatingStoreStateStatus();
-      if (isUpdating) {
-      } else {
-        // Enhancement.DoSyncConfig();
+    effect: (action, { dispatch, getState }) => {
+      if (!action._share) {
+        const {
+          setting: {
+            systemSetting: { syncConfigSetting, syncConfigPathSetting },
+          },
+        } = getState();
+        if (syncConfigSetting && syncConfigPathSetting) {
+          dispatch(syncConfigAction());
+        }
       }
-    }),
+    },
   });
 }

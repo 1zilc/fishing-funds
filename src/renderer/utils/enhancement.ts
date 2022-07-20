@@ -31,15 +31,7 @@ export async function GenerateBackupConfig() {
   return fileConfig;
 }
 
-export async function GenerateSyncConfig() {
-  const config = {
-    [CONST.STORAGE.WALLET_SETTING]: await GetStorage(CONST.STORAGE.WALLET_SETTING),
-    [CONST.STORAGE.ZINDEX_SETTING]: await GetStorage(CONST.STORAGE.ZINDEX_SETTING),
-    [CONST.STORAGE.FAVORITE_QUOTATION_MAP]: await GetStorage(CONST.STORAGE.FAVORITE_QUOTATION_MAP),
-    [CONST.STORAGE.STOCK_SETTING]: await GetStorage(CONST.STORAGE.STOCK_SETTING),
-    [CONST.STORAGE.COIN_SETTING]: await GetStorage(CONST.STORAGE.COIN_SETTING),
-    [CONST.STORAGE.WEB_SETTING]: await GetStorage(CONST.STORAGE.WEB_SETTING),
-  };
+export function GenerateSyncConfig(config: { [x: string]: any }) {
   const fileConfig: Backup.Config = {
     name: 'Fishing-Funds-Sync',
     author: '1zilc',
@@ -80,8 +72,7 @@ export async function ClearStorage(key: string) {
   return electronStore.delete(key);
 }
 
-export async function DoSyncConfig(path: string) {
-  const syncConfig = await GenerateSyncConfig();
-  const encodeSyncConfig = await encryptFF(syncConfig);
+export async function DoSyncConfig(path: string, config: Backup.Config) {
+  const encodeSyncConfig = await encryptFF(config);
   await saveString(path, encodeSyncConfig);
 }

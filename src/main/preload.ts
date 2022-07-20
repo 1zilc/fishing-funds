@@ -93,19 +93,19 @@ contextBridge.exposeInMainWorld('contextModules', {
     },
     readFile(filePath: string) {
       const ioPromiseWorker = new IOPromiseWorker();
-      ioPromiseWorker
+      return ioPromiseWorker
         .postMessage<string, IOWorkerRecieveParams>({ module: 'readFile', filePath })
         .finally(() => ioPromiseWorker.terminate());
     },
     encryptFF(content: any) {
       const ioPromiseWorker = new IOPromiseWorker();
-      ioPromiseWorker
+      return ioPromiseWorker
         .postMessage<string, IOWorkerRecieveParams>({ module: 'encryptFF', data: content })
         .finally(() => ioPromiseWorker.terminate());
     },
     decryptFF(content: string) {
       const ioPromiseWorker = new IOPromiseWorker();
-      ioPromiseWorker
+      return ioPromiseWorker
         .postMessage<string, IOWorkerRecieveParams>({ module: 'decryptFF', data: content })
         .finally(() => ioPromiseWorker.terminate());
     },
