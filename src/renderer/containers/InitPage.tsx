@@ -8,6 +8,7 @@ import {
   updateAdjustmentNotificationDateAction,
   defaultSystemSetting,
   syncDarkMode,
+  loadSyncConfigAction,
 } from '@/store/features/setting';
 import { setWalletConfigAction, syncEyeStatusAction, changeCurrentWalletCodeAction, defaultWallet } from '@/store/features/wallet';
 import { setStockConfigAction } from '@/store/features/stock';
@@ -105,6 +106,8 @@ const InitPage = () => {
         Enhancement.GetStorage(CONST.STORAGE.REMOTE_COIN_MAP, {}).then((_) => dispatch(setRemoteCoinsAction(Object.values(_)))),
       ]).finally(() => setLoading('远程数据缓存加载完成')),
     ]).finally(() => setLoading('加载完毕'));
+
+    await dispatch(loadSyncConfigAction()).finally(() => setLoading('同步配置加载完成'));
 
     navigate(params.get('_nav') || '/home');
   }

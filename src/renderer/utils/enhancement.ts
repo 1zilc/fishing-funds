@@ -8,7 +8,7 @@ import * as CONST from '@/constants';
 
 const { ipcRenderer } = window.contextModules.electron;
 const { version, production } = window.contextModules.process;
-const { encodeFF, decodeFF, saveString, encryptFF } = window.contextModules.io;
+const { encodeFF, decodeFF, saveString, encryptFF, decryptFF, readFile } = window.contextModules.io;
 const electronStore = window.contextModules.electronStore;
 const log = window.contextModules.log;
 
@@ -72,7 +72,13 @@ export async function ClearStorage(key: string) {
   return electronStore.delete(key);
 }
 
-export async function DoSyncConfig(path: string, config: Backup.Config) {
+export async function SaveSyncConfig(path: string, config: Backup.Config) {
   const encodeSyncConfig = await encryptFF(config);
   await saveString(path, encodeSyncConfig);
+}
+export async function loadSyncConfig(path: string) {
+  const encodeSyncConfig = await readFile(path);
+  const syncConfig: Backup.Config = await decryptFF(encodeSyncConfig);
+  const content = decodeFF(syncConfig.content);
+  return content;
 }

@@ -8,7 +8,7 @@ import { updateAvaliableAction } from '@/store/features/updater';
 import { setFundConfigAction } from '@/store/features/fund';
 import { syncTabsActiveKeyAction } from '@/store/features/tabs';
 import { changeCurrentWalletCodeAction, toggleEyeStatusAction } from '@/store/features/wallet';
-import { updateAdjustmentNotificationDateAction, syncDarkMode, syncConfigAction } from '@/store/features/setting';
+import { updateAdjustmentNotificationDateAction, syncDarkMode, saveSyncConfigAction } from '@/store/features/setting';
 
 import {
   useWorkDayTimeToDo,
@@ -578,7 +578,7 @@ export function useSyncConfig() {
 
   useEffect(() => {
     if (syncConfigSetting && syncConfigPathSetting) {
-      dispatch(syncConfigAction());
+      dispatch(saveSyncConfigAction());
     }
   }, [syncConfigSetting, syncConfigPathSetting]);
 }

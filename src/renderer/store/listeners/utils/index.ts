@@ -3,7 +3,7 @@ import listenerMiddleware from '@/store/listeners';
 import { syncCoinsConfigAction, syncRemoteCoinsMapAction } from '@/store/features/coin';
 import { syncFundRatingMapAction, syncRemoteFundsMapAction } from '@/store/features/fund';
 import { syncFavoriteQuotationMapAction } from '@/store/features/quotation';
-import { syncSettingAction, syncConfigAction } from '@/store/features/setting';
+import { syncSettingAction, saveSyncConfigAction } from '@/store/features/setting';
 import { syncStocksConfigAction } from '@/store/features/stock';
 import { changeCurrentWalletCodeAction, syncWalletsConfigAction } from '@/store/features/wallet';
 import { syncWebConfigAction } from '@/store/features/web';
@@ -55,7 +55,7 @@ export function syncConfigListening() {
           },
         } = getState();
         if (syncConfigSetting && syncConfigPathSetting) {
-          dispatch(syncConfigAction());
+          dispatch(saveSyncConfigAction());
         }
       }
     },
