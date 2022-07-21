@@ -58,25 +58,25 @@ function main() {
   ipcMain.handle('show-open-dialog', async (event, config) => {
     return dialog.showOpenDialog(config);
   });
-  ipcMain.handle('show-current-window', (event, config) => {
+  ipcMain.handle('show-current-window', async (event, config) => {
     mb.window?.show();
   });
-  ipcMain.handle('get-should-use-dark-colors', (event, config) => {
+  ipcMain.handle('get-should-use-dark-colors', async (event, config) => {
     return nativeTheme.shouldUseDarkColors;
   });
-  ipcMain.handle('set-native-theme-source', (event, config) => {
+  ipcMain.handle('set-native-theme-source', async (event, config) => {
     setNativeTheme(config);
   });
-  ipcMain.handle('set-login-item-settings', (event, config) => {
+  ipcMain.handle('set-login-item-settings', async (event, config) => {
     app.setLoginItemSettings(config);
   });
-  ipcMain.handle('app-quit', (event, config) => {
+  ipcMain.handle('app-quit', async (event, config) => {
     app.quit();
   });
-  ipcMain.handle('set-tray-content', (event, config) => {
+  ipcMain.handle('set-tray-content', async (event, config) => {
     tray.setTitle(config);
   });
-  ipcMain.handle('check-update', (event) => {
+  ipcMain.handle('check-update', async (event) => {
     appUpdater.checkUpdate('renderer');
   });
   ipcMain.handle('get-storage-config', async (event, config) => {
@@ -94,20 +94,20 @@ function main() {
   ipcMain.handle('all-storage-config', async (event, config) => {
     return storage.store;
   });
-  ipcMain.handle('registry-webview', (event, config) => {
+  ipcMain.handle('registry-webview', async (event, config) => {
     const win = BrowserWindow.fromWebContents(event.sender);
     event.sender.setWindowOpenHandler(({ url }) => {
       sendMessageToRenderer(win, 'webview-new-window', url);
       return { action: 'deny' };
     });
   });
-  ipcMain.handle('resolve-proxy', (event, url) => {
+  ipcMain.handle('resolve-proxy', async (event, url) => {
     return event.sender.session.resolveProxy(url);
   });
-  ipcMain.handle('set-proxy', (event, config) => {
+  ipcMain.handle('set-proxy', async (event, config) => {
     return event.sender.session.setProxy(config);
   });
-  ipcMain.handle('update-tray-context-menu-wallets', (event, config) => {
+  ipcMain.handle('update-tray-context-menu-wallets', async (event, config) => {
     const menus = config.map((item: any) => ({
       ...item,
       icon: generateWalletIcon(item.iconIndex),
@@ -116,19 +116,19 @@ function main() {
     contextMenu = buildContextMenu({ mb, appUpdater }, menus);
   });
   // touchbar 相关监听
-  ipcMain.handle('update-touchbar-zindex', (event, config) => {
+  ipcMain.handle('update-touchbar-zindex', async (event, config) => {
     touchBarManager.updateZindexItems(config);
   });
-  ipcMain.handle('update-touchbar-wallet', (event, config) => {
+  ipcMain.handle('update-touchbar-wallet', async (event, config) => {
     touchBarManager.updateWalletItems(config);
   });
-  ipcMain.handle('update-touchbar-tab', (event, config) => {
+  ipcMain.handle('update-touchbar-tab', async (event, config) => {
     touchBarManager.updateTabItems(config);
   });
-  ipcMain.handle('update-touchbar-eye-status', (event, config) => {
+  ipcMain.handle('update-touchbar-eye-status', async (event, config) => {
     touchBarManager.updateEysStatusItems(config);
   });
-  ipcMain.handle('set-hotkey', (event, keys: string) => {
+  ipcMain.handle('set-hotkey', async (event, keys: string) => {
     if (keys === activeHotkeys) {
       return;
     }
@@ -158,7 +158,7 @@ function main() {
     }
     activeHotkeys = keys;
   });
-  ipcMain.handle('open-child-window', (event, config) => {
+  ipcMain.handle('open-child-window', async (event, config) => {
     const parentWin = BrowserWindow.fromWebContents(event.sender);
     const win = createChildWindow({ search: config.search, parentId: parentWin!.id });
     if (win) {
@@ -169,7 +169,7 @@ function main() {
       });
     }
   });
-  ipcMain.handle('sync-multi-window-store', (event, config) => {
+  ipcMain.handle('sync-multi-window-store', async (event, config) => {
     const fromWin = BrowserWindow.fromWebContents(event.sender);
     config._share = true;
     getOtherWindows(windowIds, fromWin?.id).forEach((win) => {
