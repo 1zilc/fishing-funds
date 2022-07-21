@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { startTransition } from 'react';
 import clsx from 'clsx';
 
 import { useRequest } from 'ahooks';
@@ -197,7 +197,7 @@ export const DetailStock: React.FC<DetailStockProps> = (props) => {
 };
 
 const DetailStockContent: React.FC<DetailStockContentProps> = (props) => {
-  async function onOpenChildWindow() {
+  function onOpenChildWindow() {
     const search = Utils.MakeSearchParams({
       _nav: '/detail/stock',
       data: {
@@ -205,8 +205,10 @@ const DetailStockContent: React.FC<DetailStockContentProps> = (props) => {
         type: props.type,
       },
     });
-    await ipcRenderer.invoke('open-child-window', { search });
-    props.onEnter();
+    ipcRenderer.invoke('open-child-window', { search });
+    startTransition(() => {
+      props.onEnter();
+    });
   }
 
   return (

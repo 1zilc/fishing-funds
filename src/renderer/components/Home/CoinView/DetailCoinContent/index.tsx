@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { startTransition, useRef } from 'react';
 import clsx from 'clsx';
 import { useScroll, useRequest } from 'ahooks';
 import { Tabs } from 'antd';
@@ -128,15 +128,17 @@ export const DetailCoin: React.FC<DetailCoinProps> = (props) => {
 };
 
 const DetailCoinContent: React.FC<DetailCoinContentProps> = (props) => {
-  async function onOpenChildWindow() {
+  function onOpenChildWindow() {
     const search = Utils.MakeSearchParams({
       _nav: '/detail/coin',
       data: {
         code: props.code,
       },
     });
-    await ipcRenderer.invoke('open-child-window', { search });
-    props.onEnter();
+    ipcRenderer.invoke('open-child-window', { search });
+    startTransition(() => {
+      props.onEnter();
+    });
   }
 
   return (

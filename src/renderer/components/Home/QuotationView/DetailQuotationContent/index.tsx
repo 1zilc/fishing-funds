@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { startTransition } from 'react';
 import clsx from 'clsx';
 
 import { useRequest } from 'ahooks';
@@ -122,15 +122,17 @@ export const DetailQuotation: React.FC<DetailQuotationProps> = (props) => {
 };
 
 const DetailQuotationContent: React.FC<DetailQuotationContentProps> = (props) => {
-  async function onOpenChildWindow() {
+  function onOpenChildWindow() {
     const search = Utils.MakeSearchParams({
       _nav: '/detail/quotation',
       data: {
         code: props.code,
       },
     });
-    await ipcRenderer.invoke('open-child-window', { search });
-    props.onEnter();
+    ipcRenderer.invoke('open-child-window', { search });
+    startTransition(() => {
+      props.onEnter();
+    });
   }
 
   return (

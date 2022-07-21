@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { startTransition } from 'react';
 import clsx from 'clsx';
 import { useRequest } from 'ahooks';
 import { Tabs } from 'antd';
@@ -104,13 +104,15 @@ export const DetailZindex: React.FC<DetailFundProps> = (props) => {
 };
 
 const DetailZindexContent: React.FC<DetailFundContentProps> = (props) => {
-  async function onOpenChildWindow() {
+  function onOpenChildWindow() {
     const search = Utils.MakeSearchParams({
       _nav: '/detail/zindex',
       data: { code: props.code },
     });
-    await ipcRenderer.invoke('open-child-window', { search });
-    props.onEnter();
+    ipcRenderer.invoke('open-child-window', { search });
+    startTransition(() => {
+      props.onEnter();
+    });
   }
   return (
     <CustomDrawerContent title="指数详情" enterText="多窗" onClose={props.onClose} onEnter={onOpenChildWindow}>
