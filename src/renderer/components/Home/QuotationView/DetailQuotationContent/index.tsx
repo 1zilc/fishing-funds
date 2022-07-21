@@ -1,4 +1,4 @@
-import React, { startTransition } from 'react';
+import React from 'react';
 import clsx from 'clsx';
 
 import { useRequest } from 'ahooks';
@@ -130,9 +130,6 @@ const DetailQuotationContent: React.FC<DetailQuotationContentProps> = (props) =>
       },
     });
     ipcRenderer.invoke('open-child-window', { search });
-    startTransition(() => {
-      props.onEnter();
-    });
   }
 
   return (

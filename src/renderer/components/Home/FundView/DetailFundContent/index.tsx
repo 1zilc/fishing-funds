@@ -1,4 +1,4 @@
-import React, { startTransition, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { useBoolean, useRequest } from 'ahooks';
 import clsx from 'clsx';
 import { Tabs, Rate } from 'antd';
@@ -311,9 +311,6 @@ const DetailFundContent: React.FC<DetailFundContentProps> = (props) => {
   function onOpenChildWindow() {
     const search = Utils.MakeSearchParams({ _nav: '/detail/fund', data: { code: props.code } });
     ipcRenderer.invoke('open-child-window', { search });
-    startTransition(() => {
-      props.onEnter();
-    });
   }
   return (
     <CustomDrawerContent title="基金详情" enterText="多窗" onClose={props.onClose} onEnter={onOpenChildWindow}>

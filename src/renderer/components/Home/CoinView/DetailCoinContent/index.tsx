@@ -1,4 +1,4 @@
-import React, { startTransition, useRef } from 'react';
+import React, { useRef } from 'react';
 import clsx from 'clsx';
 import { useScroll, useRequest } from 'ahooks';
 import { Tabs } from 'antd';
@@ -136,9 +136,6 @@ const DetailCoinContent: React.FC<DetailCoinContentProps> = (props) => {
       },
     });
     ipcRenderer.invoke('open-child-window', { search });
-    startTransition(() => {
-      props.onEnter();
-    });
   }
 
   return (

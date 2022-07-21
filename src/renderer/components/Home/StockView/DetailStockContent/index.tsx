@@ -1,4 +1,4 @@
-import React, { startTransition } from 'react';
+import React from 'react';
 import clsx from 'clsx';
 
 import { useRequest } from 'ahooks';
@@ -206,9 +206,6 @@ const DetailStockContent: React.FC<DetailStockContentProps> = (props) => {
       },
     });
     ipcRenderer.invoke('open-child-window', { search });
-    startTransition(() => {
-      props.onEnter();
-    });
   }
 
   return (
