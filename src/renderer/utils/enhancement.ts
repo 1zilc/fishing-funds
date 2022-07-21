@@ -17,7 +17,7 @@ export async function UpdateSystemTheme(setting: Enums.SystemThemeType) {
 }
 
 export async function GenerateBackupConfig() {
-  const config = await electronStore.all();
+  const config = await GetAllStorage();
   const fileConfig: Backup.Config = {
     name: 'Fishing-Funds-Backup',
     author: '1zilc',
@@ -70,6 +70,10 @@ export async function CoverStorage(data: any) {
 
 export async function ClearStorage(key: string) {
   return electronStore.delete(key);
+}
+
+export async function GetAllStorage<T = any>(): Promise<T> {
+  return electronStore.all();
 }
 
 export async function SaveSyncConfig(path: string, config: Backup.Config) {

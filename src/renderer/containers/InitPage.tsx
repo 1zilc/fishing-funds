@@ -51,63 +51,43 @@ const InitPage = () => {
   async function init() {
     await checkLocalStorage();
 
-    await Promise.all([
-      Enhancement.GetStorage(CONST.STORAGE.ZINDEX_SETTING, defaultZindexConfig)
-        .then((_) => dispatch(setZindexConfigAction(_)))
-        .finally(() => setLoading('web配置加载完成')),
+    const allStorage = await Enhancement.GetAllStorage();
+    //web配置加载完成
+    dispatch(setZindexConfigAction(allStorage[CONST.STORAGE.ZINDEX_SETTING] || defaultZindexConfig));
+    // 关注板块配置加载完成
+    dispatch(syncFavoriteQuotationMapAction(allStorage[CONST.STORAGE.FAVORITE_QUOTATION_MAP] || {}));
+    // 股票配置加载完成
+    dispatch(setStockConfigAction(allStorage[CONST.STORAGE.STOCK_SETTING] || []));
+    // 货币配置加载完成
+    dispatch(setCoinConfigAction(allStorage[CONST.STORAGE.COIN_SETTING] || []));
+    // web配置加载完成
+    dispatch(setWebConfigAction(allStorage[CONST.STORAGE.WEB_SETTING] || defaultWebConfig));
+    // 系统设置加载完成
+    dispatch(setSystemSettingAction(allStorage[CONST.STORAGE.SYSTEM_SETTING] || defaultSystemSetting));
+    dispatch(updateAdjustmentNotificationDateAction(allStorage[CONST.STORAGE.ADJUSTMENT_NOTIFICATION_DATE] || ''));
+    // 钱包配置加载完成
+    dispatch(setWalletConfigAction(allStorage[CONST.STORAGE.WALLET_SETTING] || [defaultWallet]));
+    dispatch(syncEyeStatusAction(allStorage[CONST.STORAGE.EYE_STATUS] || Enums.EyeStatus.Open));
+    dispatch(changeCurrentWalletCodeAction(allStorage[CONST.STORAGE.CURRENT_WALLET_CODE] || defaultWallet.code));
+    // tabs配置加载完成
+    dispatch(syncTabsActiveKeyAction(allStorage[CONST.STORAGE.TABS_ACTIVE_KEY] || Enums.TabKeyType.Fund));
+    // 排序配置加载完成
+    dispatch(syncSortModeAction(allStorage[CONST.STORAGE.SORT_MODE] || sortInitialState.sortMode));
+    // 视图配置加载完成
+    dispatch(setViewModeAction(allStorage[CONST.STORAGE.VIEW_MODE] || sortInitialState.viewMode));
+    //远程数据缓存加载完成
+    dispatch(setRemoteFundsAction(Object.values(allStorage[CONST.STORAGE.REMOTE_FUND_MAP] || {})));
+    dispatch(setFundRatingMapAction(Object.values(allStorage[CONST.STORAGE.FUND_RATING_MAP] || {})));
+    dispatch(setRemoteCoinsAction(Object.values(allStorage[CONST.STORAGE.REMOTE_COIN_MAP] || {})));
 
-      Enhancement.GetStorage(CONST.STORAGE.FAVORITE_QUOTATION_MAP, {})
-        .then((_) => dispatch(syncFavoriteQuotationMapAction(_)))
-        .finally(() => setLoading('关注板块配置加载完成')),
-
-      Enhancement.GetStorage(CONST.STORAGE.STOCK_SETTING, [])
-        .then((_) => dispatch(setStockConfigAction(_)))
-        .finally(() => setLoading('股票配置加载完成')),
-
-      Enhancement.GetStorage(CONST.STORAGE.COIN_SETTING, [])
-        .then((_) => dispatch(setCoinConfigAction(_)))
-        .finally(() => setLoading('货币配置加载完成')),
-
-      Enhancement.GetStorage(CONST.STORAGE.WEB_SETTING, defaultWebConfig)
-        .then((_) => dispatch(setWebConfigAction(_)))
-        .finally(() => setLoading('web配置加载完成')),
-
-      Promise.all([
-        Enhancement.GetStorage(CONST.STORAGE.SYSTEM_SETTING, defaultSystemSetting).then((_) => dispatch(setSystemSettingAction(_))),
-        Enhancement.GetStorage(CONST.STORAGE.ADJUSTMENT_NOTIFICATION_DATE, '').then((_) =>
-          dispatch(updateAdjustmentNotificationDateAction(_))
-        ),
-        ipcRenderer.invoke('get-should-use-dark-colors').then((_) => dispatch(syncDarkMode(_))),
-      ]).finally(() => setLoading('系统设置加载完成')),
-
-      Promise.all([
-        Enhancement.GetStorage(CONST.STORAGE.WALLET_SETTING, [defaultWallet]).then((_) => dispatch(setWalletConfigAction(_))),
-        Enhancement.GetStorage(CONST.STORAGE.EYE_STATUS, Enums.EyeStatus.Open).then((_) => dispatch(syncEyeStatusAction(_))),
-        Enhancement.GetStorage(CONST.STORAGE.CURRENT_WALLET_CODE, defaultWallet.code).then((_) =>
-          dispatch(changeCurrentWalletCodeAction(_))
-        ),
-      ]).finally(() => setLoading('钱包配置加载完成')),
-
-      Enhancement.GetStorage(CONST.STORAGE.TABS_ACTIVE_KEY, Enums.TabKeyType.Fund)
-        .then((_) => dispatch(syncTabsActiveKeyAction(_)))
-        .finally(() => setLoading('tabs配置加载完成')),
-
-      Enhancement.GetStorage(CONST.STORAGE.SORT_MODE, sortInitialState.sortMode)
-        .then((_) => dispatch(syncSortModeAction(_)))
-        .finally(() => setLoading('排序配置加载完成')),
-
-      Enhancement.GetStorage(CONST.STORAGE.VIEW_MODE, sortInitialState.viewMode)
-        .then((_) => dispatch(setViewModeAction(_)))
-        .finally(() => setLoading('视图配置加载完成')),
-
-      Promise.all([
-        Enhancement.GetStorage(CONST.STORAGE.REMOTE_FUND_MAP, {}).then((_) => dispatch(setRemoteFundsAction(Object.values(_)))),
-        Enhancement.GetStorage(CONST.STORAGE.FUND_RATING_MAP, {}).then((_) => dispatch(setFundRatingMapAction(Object.values(_)))),
-        Enhancement.GetStorage(CONST.STORAGE.REMOTE_COIN_MAP, {}).then((_) => dispatch(setRemoteCoinsAction(Object.values(_)))),
-      ]).finally(() => setLoading('远程数据缓存加载完成')),
-    ]).finally(() => setLoading('加载完毕'));
+    await ipcRenderer
+      .invoke('get-should-use-dark-colors')
+      .then((_) => dispatch(syncDarkMode(_)))
+      .finally(() => setLoading('系统主题加载完成'));
 
     await dispatch(loadSyncConfigAction()).finally(() => setLoading('同步配置加载完成'));
+
+    setLoading('加载完毕');
 
     navigate(params.get('_nav') || '/home');
   }
