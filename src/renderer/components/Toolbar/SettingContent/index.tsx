@@ -266,6 +266,7 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
     const { filePath, canceled } = await dialog.showSaveDialog({
       title: '选择路径',
       defaultPath: `Fishing-Funds-Sync.ff`,
+      filters: [{ name: 'Fishing Funds', extensions: ['ff'] }],
       buttonLabel: '确认',
     });
     if (canceled) {
