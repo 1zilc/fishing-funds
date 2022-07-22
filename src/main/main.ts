@@ -95,8 +95,9 @@ function main() {
     return storage.store;
   });
   ipcMain.handle('registry-webview', async (event, config) => {
-    const win = BrowserWindow.fromWebContents(event.sender);
-    event.sender.setWindowOpenHandler(({ url }) => {
+    const contents = webContents.fromId(config);
+    const win = BrowserWindow.fromWebContents(contents);
+    contents.setWindowOpenHandler(({ url }) => {
       sendMessageToRenderer(win, 'webview-new-window', url);
       return { action: 'deny' };
     });

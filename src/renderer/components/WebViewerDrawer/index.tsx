@@ -30,6 +30,7 @@ interface WebViewerProps {
   phone?: boolean;
   title: string;
   updateTitle?: (title: string) => void;
+  updateUrl?: (title: string) => void;
   full?: boolean;
 }
 
@@ -188,6 +189,9 @@ export const WebViewer: React.FC<WebViewerProps> = (props) => {
   useEffect(() => {
     props.updateTitle?.(currentTitle);
   }, [currentTitle]);
+  useEffect(() => {
+    props.updateUrl?.(currentUrl);
+  }, [currentUrl]);
 
   return (
     <div className={styles.content} style={{ height: full ? '100vh' : 'calc(100vh - 48px)' }}>
@@ -250,19 +254,27 @@ export const WebViewerContent: React.FC<WebViewerContentProps> = () => {
   const dispatch = useAppDispatch();
   const view = useAppSelector((state) => state.web.view);
   const [currentTitle, setCurrentTitle] = useState(view.title);
+  const [currentUrl, setCurrentUrl] = useState(view.url);
 
   function onClose() {
     dispatch(closeWebAction());
   }
 
   function onOpenChildWindow() {
-    const search = Utils.MakeSearchParams({ _nav: '/detail/webViewer', data: view });
+    const search = Utils.MakeSearchParams({
+      _nav: '/detail/webViewer',
+      data: {
+        ...view,
+        title: currentTitle,
+        url: currentUrl,
+      },
+    });
     ipcRenderer.invoke('open-child-window', { search });
   }
 
   return (
     <CustomDrawerContent title={currentTitle} enterText="多窗" onClose={onClose} onEnter={onOpenChildWindow}>
-      <WebViewer url={view.url} phone={view.phone} title={view.title} updateTitle={setCurrentTitle} />
+      <WebViewer url={view.url} phone={view.phone} title={view.title} updateTitle={setCurrentTitle} updateUrl={setCurrentUrl} />
     </CustomDrawerContent>
   );
 };
