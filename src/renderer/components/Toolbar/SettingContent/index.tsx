@@ -22,6 +22,7 @@ import WindowIcon from '@/static/icon/window.svg';
 import CalendarIcon from '@/static/icon/calendar.svg';
 import GlobalIcon from '@/static/icon/global.svg';
 import InboxIcon from '@/static/icon/inbox.svg';
+import FolderSettingsIcon from '@/static/icon/folder-settings.svg';
 import { setSystemSettingAction, defaultSystemSetting } from '@/store/features/setting';
 import { useAppDispatch, useAppSelector, useAutoDestroySortableRef, useInputShortcut } from '@/utils/hooks';
 import * as Enums from '@/utils/enums';
@@ -546,7 +547,7 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
               </div>
             </StandCard>
             <StandCard
-              icon={<SettingIcon />}
+              icon={<FolderSettingsIcon />}
               title="配置同步"
               extra={
                 <div className={styles.guide}>
