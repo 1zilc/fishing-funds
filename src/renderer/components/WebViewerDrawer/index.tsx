@@ -88,12 +88,11 @@ export const WebViewer: React.FC<WebViewerProps> = (props) => {
   });
 
   const onSetWeb = useMemoizedFn(() => {
-    const url = viewRef.current?.getURL();
-    if (url) {
+    if (currentUrl) {
       setAddWebContent({
         title: currentTitle,
+        url: currentUrl,
         iconType: Enums.WebIconType.First,
-        url,
       });
     }
   });
@@ -113,7 +112,6 @@ export const WebViewer: React.FC<WebViewerProps> = (props) => {
     'dom-ready',
     () => {
       const targetId = viewRef.current?.getWebContentsId();
-      setCurrentTitle((_) => _ || viewRef.current.getTitle());
       ipcRenderer.invoke('registry-webview', targetId);
     },
     { target: viewRef }
@@ -128,10 +126,16 @@ export const WebViewer: React.FC<WebViewerProps> = (props) => {
     { target: viewRef }
   );
   useEventListener(
-    'did-finish-load',
-    () => {
-      setCurrentTitle(viewRef.current.getTitle());
-      setCurrentUrl(viewRef.current.getURL());
+    'page-title-updated',
+    (res) => {
+      setCurrentTitle(res.title);
+    },
+    { target: viewRef }
+  );
+  useEventListener(
+    'did-navigate-in-page',
+    (res) => {
+      setCurrentUrl(res.url);
     },
     { target: viewRef }
   );
@@ -244,7 +248,7 @@ export const WebViewer: React.FC<WebViewerProps> = (props) => {
         </div>
       </div>
       <CustomDrawer show={showAddWebContent} zIndex={CONST.DEFAULT.DRAWER_ZINDEX_TOP}>
-        <AddWebContent web={{ ...webDetail, title: currentTitle }} onClose={closeAddWebContent} onEnter={onAddWeb} favicons={favicons} />
+        <AddWebContent web={webDetail} onClose={closeAddWebContent} onEnter={onAddWeb} favicons={favicons} />
       </CustomDrawer>
     </div>
   );
