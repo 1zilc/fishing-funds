@@ -554,7 +554,7 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
                   <Guide
                     list={[
                       { name: '开启同步', text: '开启后自动存储配置文件至指定路径，启动时优先读取该路径配置' },
-                      { name: '同步路径', text: '配置文件路径（可通过iCloud，OneDrive等云同步方案实现多设备配置同步）' },
+                      { name: '同步路径', text: '配置文件路径（通过iCloud、OneDrive等方式自动同步该文件至云端实现多台设备配置同步）' },
                       { name: '同步范围', text: '支持钱包，基金，指数，板块，股票，货币，h5配置同步' },
                     ]}
                   />
