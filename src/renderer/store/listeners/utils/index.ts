@@ -45,7 +45,8 @@ export function syncConfigListening() {
       syncWebConfigAction,
       syncStocksConfigAction,
       syncWalletsConfigAction,
-      syncFavoriteQuotationMapAction
+      syncFavoriteQuotationMapAction,
+      changeCurrentWalletCodeAction
     ),
     effect: (action, { dispatch, getState }) => {
       if (!action._share) {

@@ -124,6 +124,7 @@ export const saveSyncConfigAction = createAsyncThunk<void, void, AsyncThunkConfi
       const {
         wallet: {
           config: { walletConfig },
+          currentWalletCode,
         },
         zindex: {
           config: { zindexConfig },
@@ -150,6 +151,7 @@ export const saveSyncConfigAction = createAsyncThunk<void, void, AsyncThunkConfi
         [CONST.STORAGE.STOCK_SETTING]: stockConfig,
         [CONST.STORAGE.COIN_SETTING]: coinConfig,
         [CONST.STORAGE.WEB_SETTING]: webConfig,
+        [CONST.STORAGE.CURRENT_WALLET_CODE]: currentWalletCode,
       };
       const syncConfig = Enhancement.GenerateSyncConfig(config);
       await Enhancement.SaveSyncConfig(syncConfigPathSetting, syncConfig);
