@@ -1,4 +1,5 @@
 import { isAnyOf } from '@reduxjs/toolkit';
+import { ShareAction } from '@/store';
 import listenerMiddleware from '@/store/listeners';
 import { syncCoinsConfigAction, syncRemoteCoinsMapAction } from '@/store/features/coin';
 import { syncFundRatingMapAction, syncRemoteFundsMapAction } from '@/store/features/fund';
@@ -27,7 +28,7 @@ export function shareStateListening() {
       syncRemoteFundsMapAction,
       syncRemoteCoinsMapAction
     ),
-    effect: (action, listenerApi) => {
+    effect: (action: ShareAction, listenerApi) => {
       if (!action._share) {
         ipcRenderer.invoke('sync-multi-window-store', action);
       }
@@ -48,7 +49,7 @@ export function syncConfigListening() {
       syncFavoriteQuotationMapAction,
       changeCurrentWalletCodeAction
     ),
-    effect: (action, { dispatch, getState }) => {
+    effect: (action: ShareAction, { dispatch, getState }) => {
       if (!action._share) {
         const {
           setting: {
