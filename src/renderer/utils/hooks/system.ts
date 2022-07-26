@@ -1,9 +1,9 @@
 import { useLayoutEffect, useState, useEffect, useMemo } from 'react';
-import { useDebounceFn, useInterval } from 'ahooks';
+import { useInterval } from 'ahooks';
 import { AnyAction } from 'redux';
 import dayjs from 'dayjs';
 import NP from 'number-precision';
-
+import { startListening } from '@/store/listeners';
 import { updateAvaliableAction } from '@/store/features/updater';
 import { setFundConfigAction } from '@/store/features/fund';
 import { syncTabsActiveKeyAction } from '@/store/features/tabs';
@@ -565,6 +565,10 @@ export function useTouchBar() {
 
 export function useShareStoreState() {
   const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    startListening();
+  }, []);
 
   useIpcRendererListener('sync-store-data', (event, action: AnyAction) => {
     dispatch(action);

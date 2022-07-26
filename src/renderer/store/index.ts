@@ -1,6 +1,6 @@
 import { configureStore, AnyAction, ThunkAction, ThunkDispatch, Middleware } from '@reduxjs/toolkit';
 import logger from 'redux-logger';
-import listenerMiddleware, { startListening } from '@/store/listeners';
+import listenerMiddleware from '@/store/listeners';
 import coinReducer, { CoinState } from '@/store/features/coin';
 import fundReducer, { FundState } from '@/store/features/fund';
 import quotationReducer, { QuotationState } from '@/store/features/quotation';
@@ -38,9 +38,6 @@ const store = configureStore({
   middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(middleware),
   devTools: !production,
 });
-
-// redux store 监听
-startListening();
 
 /* Types */
 export type StoreState = {
