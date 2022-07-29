@@ -1,6 +1,5 @@
 import PromiseWorker from 'promise-worker';
-import RequestWorker from './request.worker.ts';
-import IOWorker from './io.worker.ts';
+import CodingWorker from './coding.worker.ts';
 
 export class BasicWorker extends PromiseWorker {
   private worker: Worker;
@@ -15,14 +14,8 @@ export class BasicWorker extends PromiseWorker {
   }
 }
 
-export class RequestPromiseWorker extends BasicWorker {
+export class CodingPromiseWorker extends BasicWorker {
   constructor() {
-    super(new RequestWorker());
-  }
-}
-
-export class IOPromiseWorker extends BasicWorker {
-  constructor() {
-    super(new IOWorker());
+    super(new CodingWorker());
   }
 }

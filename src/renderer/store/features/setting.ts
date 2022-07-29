@@ -153,7 +153,7 @@ export const saveSyncConfigAction = createAsyncThunk<void, void, AsyncThunkConfi
         [CONST.STORAGE.WEB_SETTING]: webConfig,
         [CONST.STORAGE.CURRENT_WALLET_CODE]: currentWalletCode,
       };
-      const syncConfig = Enhancement.GenerateSyncConfig(config);
+      const syncConfig = await Enhancement.GenerateSyncConfig(config);
       await Enhancement.SaveSyncConfig(syncConfigPathSetting, syncConfig);
     } catch (error) {}
   }

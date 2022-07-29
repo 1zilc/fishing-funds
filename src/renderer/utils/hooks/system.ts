@@ -36,7 +36,8 @@ import * as Enhancement from '@/utils/enhancement';
 import { useLoadFunds } from './utils';
 
 const { dialog, ipcRenderer, clipboard, app } = window.contextModules.electron;
-const { saveString, readFile, encryptFF, decryptFF } = window.contextModules.io;
+const { saveString, readFile } = window.contextModules.io;
+const { encryptFF, decryptFF } = window.contextModules.coding;
 
 export function useUpdater() {
   const dispatch = useAppDispatch();

@@ -8,7 +8,8 @@ import * as CONST from '@/constants';
 
 const { ipcRenderer } = window.contextModules.electron;
 const { version, production } = window.contextModules.process;
-const { encodeFF, decodeFF, saveString, encryptFF, decryptFF, readFile } = window.contextModules.io;
+const { saveString, readFile } = window.contextModules.io;
+const { encodeFF, decodeFF, encryptFF, decryptFF } = window.contextModules.coding;
 const electronStore = window.contextModules.electronStore;
 const log = window.contextModules.log;
 
@@ -24,21 +25,21 @@ export async function GenerateBackupConfig() {
     website: 'https://ff.1zilc.top',
     github: 'https://github.com/1zilc/fishing-funds',
     version: version,
-    content: encodeFF(config),
+    content: await encodeFF(config),
     timestamp: Date.now(),
     suffix: 'ff',
   };
   return fileConfig;
 }
 
-export function GenerateSyncConfig(config: { [x: string]: any }) {
+export async function GenerateSyncConfig(config: { [x: string]: any }) {
   const fileConfig: Backup.Config = {
     name: 'Fishing-Funds-Sync',
     author: '1zilc',
     website: 'https://ff.1zilc.top',
     github: 'https://github.com/1zilc/fishing-funds',
     version: version,
-    content: encodeFF(config),
+    content: await encodeFF(config),
     timestamp: Date.now(),
     suffix: 'ff',
   };
@@ -52,7 +53,7 @@ export function CheckEnvTool() {
 }
 
 export async function CoverBackupConfig(fileConfig: Backup.Config) {
-  const content = decodeFF(fileConfig.content);
+  const content = await decodeFF(fileConfig.content);
   return CoverStorage(content);
 }
 
@@ -83,6 +84,6 @@ export async function SaveSyncConfig(path: string, config: Backup.Config) {
 export async function loadSyncConfig(path: string) {
   const encodeSyncConfig = await readFile(path);
   const syncConfig: Backup.Config = await decryptFF(encodeSyncConfig);
-  const content = decodeFF(syncConfig.content);
+  const content = await decodeFF(syncConfig.content);
   return content;
 }

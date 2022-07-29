@@ -1,23 +1,30 @@
 import log from 'electron-log';
+import got from 'got';
 import { contextBridge, ipcRenderer, shell, clipboard, nativeImage } from 'electron';
 import { encode, decode, fromUint8Array } from 'js-base64';
-import { RequestPromiseWorker, IOPromiseWorker } from './workers';
-import { encodeFF, decodeFF } from './workers/utils/io';
-import { WorkerRecieveParams as IOWorkerRecieveParams } from './workers/io.worker';
-import { WorkerRecieveParams as RequestWorkerRecieveParams, GotResponse } from './workers/request.worker';
+import { CodingPromiseWorker } from './workers';
+import { saveImage, saveJsonToCsv, saveString, readFile } from './io';
+import Proxy from './proxy';
+import { WorkerRecieveParams as CodingWorkerRecieveParams } from './workers/coding.worker';
 
 const { version } = require('../../release/app/package.json');
-const requestPromiseWorker = new RequestPromiseWorker();
 
 contextBridge.exposeInMainWorld('contextModules', {
   got: async (url: string, config: any) => {
     const proxyConent = await ipcRenderer.invoke('resolve-proxy', url);
-    return requestPromiseWorker.postMessage<GotResponse, RequestWorkerRecieveParams>({ url, config, proxyConent }).then((res) => {
-      if (!res) {
-        throw Error('请求错误');
-      } else {
-        return res;
-      }
+    const { httpAgent, httpsAgent } = new Proxy(proxyConent, url);
+    return got(url, {
+      ...config,
+      retry: {
+        limit: 2,
+      },
+      timeout: {
+        request: 10000,
+      },
+      agent: {
+        http: httpAgent,
+        https: httpsAgent,
+      },
     });
   },
   process: {
@@ -73,44 +80,36 @@ contextBridge.exposeInMainWorld('contextModules', {
   },
   log,
   io: {
-    saveImage(filePath: string, dataUrl: string) {
-      const ioPromiseWorker = new IOPromiseWorker();
-      ioPromiseWorker
-        .postMessage<void, IOWorkerRecieveParams>({ module: 'saveImage', filePath, data: dataUrl })
-        .finally(() => ioPromiseWorker.terminate());
-    },
-    saveString(filePath: string, content: string) {
-      const ioPromiseWorker = new IOPromiseWorker();
-      ioPromiseWorker
-        .postMessage<void, IOWorkerRecieveParams>({ module: 'saveString', filePath, data: content })
-        .finally(() => ioPromiseWorker.terminate());
-    },
-    saveJsonToCsv(filePath: string, json: any[]) {
-      const ioPromiseWorker = new IOPromiseWorker();
-      ioPromiseWorker
-        .postMessage<void, IOWorkerRecieveParams>({ module: 'saveJsonToCsv', filePath, data: json })
-        .finally(() => ioPromiseWorker.terminate());
-    },
-    readFile(filePath: string) {
-      const ioPromiseWorker = new IOPromiseWorker();
-      return ioPromiseWorker
-        .postMessage<string, IOWorkerRecieveParams>({ module: 'readFile', filePath })
-        .finally(() => ioPromiseWorker.terminate());
-    },
+    saveImage,
+    saveJsonToCsv,
+    saveString,
+    readFile,
+  },
+  coding: {
     encryptFF(content: any) {
-      const ioPromiseWorker = new IOPromiseWorker();
-      return ioPromiseWorker
-        .postMessage<string, IOWorkerRecieveParams>({ module: 'encryptFF', data: content })
-        .finally(() => ioPromiseWorker.terminate());
+      const codingPromiseWorker = new CodingPromiseWorker();
+      return codingPromiseWorker
+        .postMessage<string, CodingWorkerRecieveParams>({ module: 'encryptFF', data: content })
+        .finally(() => codingPromiseWorker.terminate());
     },
     decryptFF(content: string) {
-      const ioPromiseWorker = new IOPromiseWorker();
-      return ioPromiseWorker
-        .postMessage<string, IOWorkerRecieveParams>({ module: 'decryptFF', data: content })
-        .finally(() => ioPromiseWorker.terminate());
+      const codingPromiseWorker = new CodingPromiseWorker();
+      return codingPromiseWorker
+        .postMessage<string, CodingWorkerRecieveParams>({ module: 'decryptFF', data: content })
+        .finally(() => codingPromiseWorker.terminate());
     },
-    encodeFF,
-    decodeFF,
+    encodeFF(content: string) {
+      const codingPromiseWorker = new CodingPromiseWorker();
+      return codingPromiseWorker
+        .postMessage<string, CodingWorkerRecieveParams>({ module: 'encodeFF', data: content })
+        .finally(() => codingPromiseWorker.terminate());
+    },
+    decodeFF(content: string) {
+      const codingPromiseWorker = new CodingPromiseWorker();
+      return codingPromiseWorker
+        .postMessage<string, CodingWorkerRecieveParams>({ module: 'decodeFF', data: content })
+        .finally(() => codingPromiseWorker.terminate());
+    },
   },
   electronStore: {
     async get(key: string, init: unknown) {
