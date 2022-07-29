@@ -26,7 +26,6 @@ export function createMenubar({ tray, mainWindowState }: { tray: Tray; mainWindo
       maxWidth: 600,
       vibrancy: 'sidebar',
       webPreferences: {
-        nodeIntegrationInWorker: true,
         webviewTag: true,
         devTools: !app.isPackaged,
         preload: getPreloadPath(),

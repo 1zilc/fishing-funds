@@ -5,8 +5,7 @@ type RecieveModule = 'encryptFF' | 'decryptFF' | 'encodeFF' | 'decodeFF';
 
 export interface WorkerRecieveParams {
   module: RecieveModule;
-  filePath?: string;
-  data?: any;
+  data: any;
 }
 
 registerPromiseWorker(async (params: WorkerRecieveParams) => {
