@@ -52,7 +52,7 @@ export const DetailCoin: React.FC<DetailCoinProps> = (props) => {
       </div>
       <div className={styles.container}>
         <h3 className={styles.titleRow}>
-          <span className="copify">{coin?.symbol.toUpperCase()}</span>
+          <span className="copify">{coin?.symbol?.toUpperCase()}</span>
           <span>排名：{coin?.market_cap_rank}</span>
         </h3>
         <div className={styles.subTitleRow}>
