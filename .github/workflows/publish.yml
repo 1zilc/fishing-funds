@@ -19,9 +19,6 @@ jobs:
     steps:
       - name: Setup repo
         uses: actions/checkout@v2
-      - run: |
-          git config user.name github-actions
-          git config user.email github-actions@github.com
 
       - name: Install Snapcraft
         uses: samuelmeuli/action-snapcraft@v1
