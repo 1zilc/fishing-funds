@@ -27,8 +27,8 @@ const EditFundContent: React.FC<EditFundContentProps> = (props) => {
   const jzNoticeInputRef = useRef<HTMLInputElement>(null);
   const memoInputRef = useRef<HTMLInputElement>(null);
 
-  function onSave() {
-    dispatch(
+  async function onSave() {
+    await dispatch(
       updateFundAction({
         code: fund.code,
         cyfe: cyfe ?? 0,

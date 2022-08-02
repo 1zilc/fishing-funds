@@ -8,7 +8,7 @@ export async function GetStocks(config: Stock.SettingItem[]) {
       () =>
         GetStock(secid)
   );
-  const list = await Adapter.ChokeGroupAdapter<Stock.ResponseItem>(collectors, 5, 500);
+  const list = await Adapter.ChokeGroupAdapter(collectors, 5, 500);
   return list.filter(Utils.NotEmpty);
 }
 

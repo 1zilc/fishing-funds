@@ -16,6 +16,16 @@ export interface KProps {
   name?: string;
 }
 
+const kTypeList = [
+  { name: '日K', type: 101, code: 101 },
+  { name: '周K', type: 102, code: 102 },
+  { name: '月K', type: 103, code: 103 },
+  { name: '5分钟', type: 5, code: 5 },
+  { name: '15分钟', type: 15, code: 15 },
+  { name: '30分钟', type: 30, code: 30 },
+  { name: '60分钟', type: 60, code: 60 },
+];
+
 const yearTypeList = [
   { name: '一年', type: 1, code: 1 },
   { name: '三年', type: 2, code: 3 },
@@ -33,12 +43,13 @@ const chartTypeList = [
 
 const K: React.FC<KProps> = ({ code = '', name }) => {
   const { ref: chartRef, chartInstance } = useResizeEchart(CONST.DEFAULT.ECHARTS_SCALE * 1.5, true);
-  const [year, setYearType] = useState(yearTypeList[0]);
+  const [k, setKType] = useState(kTypeList[0]);
   const [chart, setChartType] = useState(chartTypeList[0]);
-  const { data: result = [], run: runGetKFromEastmoney } = useRequest(() => Services.Zindex.GetKFromEastmoney(code, year.code), {
-    refreshDeps: [code, year.code],
+  const [year, setYearType] = useState(yearTypeList[0]);
+  const { data: result = [], run: runGetKFromEastmoney } = useRequest(() => Services.Zindex.GetKFromEastmoney(code, year.code, k.code), {
+    refreshDeps: [code, year.code, k.code],
     ready: !!chartInstance,
-    cacheKey: Utils.GenerateRequestKey('Zindex.GetKFromEastmoney', [code, year.code]),
+    cacheKey: Utils.GenerateRequestKey('Zindex.GetKFromEastmoney', [code, year.code, k.code]),
   });
 
   useRenderEcharts(
@@ -181,10 +192,15 @@ const K: React.FC<KProps> = ({ code = '', name }) => {
           },
         },
         legend: {
-          data: ['日K', 'MA5', 'MA10', 'MA20', 'MA30'],
+          data: ['日K', 'MA5', 'MA10', 'MA20', 'MA30', 'MA60', 'MA120', 'MA250'],
           textStyle: {
             color: varibleColors['--main-text-color'],
             fontSize: 10,
+          },
+          selected: {
+            MA60: false,
+            MA120: false,
+            MA250: false,
           },
         },
         grid: [
@@ -260,19 +276,19 @@ const K: React.FC<KProps> = ({ code = '', name }) => {
         dataZoom: [
           {
             type: 'inside',
-            start: 95,
+            start: 80,
             end: 100,
           },
           {
             xAxisIndex: [0, 1],
             type: 'inside',
-            start: 95,
+            start: 80,
             end: 100,
           },
           {
             xAxisIndex: [0, 2],
             type: 'inside',
-            start: 95,
+            start: 80,
             end: 100,
           },
         ],
@@ -350,6 +366,39 @@ const K: React.FC<KProps> = ({ code = '', name }) => {
             },
           },
           {
+            name: 'MA60',
+            type: 'line',
+            data: Utils.CalculateMA(60, values),
+            smooth: true,
+            showSymbol: false,
+            symbol: 'none',
+            lineStyle: {
+              opacity: 0.5,
+            },
+          },
+          {
+            name: 'MA120',
+            type: 'line',
+            data: Utils.CalculateMA(120, values),
+            smooth: true,
+            showSymbol: false,
+            symbol: 'none',
+            lineStyle: {
+              opacity: 0.5,
+            },
+          },
+          {
+            name: 'MA250',
+            type: 'line',
+            data: Utils.CalculateMA(250, values),
+            smooth: true,
+            showSymbol: false,
+            symbol: 'none',
+            lineStyle: {
+              opacity: 0.5,
+            },
+          },
+          {
             name: '成交量',
             type: 'bar',
             xAxisIndex: 1,
@@ -375,6 +424,7 @@ const K: React.FC<KProps> = ({ code = '', name }) => {
   return (
     <ChartCard onFresh={runGetKFromEastmoney} TitleBar={<ExportTitleBar name={name} data={result} />}>
       <div className={styles.content}>
+        <TypeSelection types={kTypeList} activeType={k.type} onSelected={setKType} colspan={6} />
         <div ref={chartRef} style={{ width: '100%' }} />
         <TypeSelection types={chartTypeList} activeType={chart.type} onSelected={setChartType} colspan={6} />
         <TypeSelection types={yearTypeList} activeType={year.type} onSelected={setYearType} flex />

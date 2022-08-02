@@ -14,7 +14,7 @@ export interface RealTimeTransactionProps {
 const RealTimeTransaction: React.FC<RealTimeTransactionProps> = ({ code = '' }) => {
   const { ref: chartRef, chartInstance } = useResizeEchart(CONST.DEFAULT.ECHARTS_SCALE);
 
-  const { data: result = {}, run: runGetTransactionFromEasymoney } = useRequest(
+  const { data: result = {} as any, run: runGetTransactionFromEasymoney } = useRequest(
     () => Services.Quotation.GetTransactionFromEasymoney(code),
     {
       pollingInterval: 1000 * 60,

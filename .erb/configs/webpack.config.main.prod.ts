@@ -30,7 +30,7 @@ const configuration: webpack.Configuration = {
   target: 'electron-main',
 
   entry: {
-    main: path.join(webpackPaths.srcMainPath, 'main.ts'),
+    main: ['v8-compile-cache', path.join(webpackPaths.srcMainPath, 'main.ts')],
     preload: path.join(webpackPaths.srcMainPath, 'preload.ts'),
   },
 
@@ -41,6 +41,30 @@ const configuration: webpack.Configuration = {
 
   optimization: {
     minimizer: [new ESBuildMinifyPlugin()],
+  },
+
+  module: {
+    rules: [
+      {
+        test: /\.worker\.ts$/,
+        use: {
+          loader: 'worker-loader',
+          options: {
+            filename: '[name].js',
+            inline: 'fallback',
+          },
+        },
+      },
+      {
+        test: /\.[jt]sx?$/,
+        exclude: /node_modules/,
+        loader: 'esbuild-loader',
+        options: {
+          loader: 'tsx',
+          target: 'esnext',
+        },
+      },
+    ],
   },
 
   plugins: [

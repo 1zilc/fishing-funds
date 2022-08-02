@@ -1,8 +1,7 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { batch } from 'react-redux';
-import { TypedThunk } from '@/store';
+import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
+import { AsyncThunkConfig } from '@/store';
+import { sortQuotation } from '@/workers/sort.worker';
 import * as Utils from '@/utils';
-import * as CONST from '@/constants';
 import * as Enums from '@/utils/enums';
 
 export interface QuotationState {
@@ -54,20 +53,21 @@ export const {
   toggleAllQuotationsCollapseAction,
 } = quotationlice.actions;
 
-export function setFavoriteQuotationMapAction(code: string, status: boolean): TypedThunk {
-  return (dispatch, getState) => {
+export const setFavoriteQuotationMapAction = createAsyncThunk<void, { code: string; status: boolean }, AsyncThunkConfig>(
+  'quotation/setFavoriteQuotationMapAction',
+  ({ code, status }, { dispatch, getState }) => {
     try {
       const { quotation } = getState();
       const favoriteQuotationMap = { ...quotation.favoriteQuotationMap, [code]: status };
 
       dispatch(syncFavoriteQuotationMapAction(favoriteQuotationMap));
-      Utils.SetStorage(CONST.STORAGE.FAVORITE_QUOTATION_MAP, favoriteQuotationMap);
     } catch (error) {}
-  };
-}
+  }
+);
 
-export function sortQuotationsCachedAction(responseQuotations: Quotation.ResponseItem[]): TypedThunk {
-  return (dispatch, getState) => {
+export const sortQuotationsCachedAction = createAsyncThunk<void, Quotation.ResponseItem[], AsyncThunkConfig>(
+  'quotation/sortQuotationsCachedAction',
+  (responseQuotations, { dispatch, getState }) => {
     try {
       const {
         quotation: { quotations },
@@ -79,62 +79,35 @@ export function sortQuotationsCachedAction(responseQuotations: Quotation.Respons
         ..._,
       }));
 
-      batch(() => {
-        dispatch(syncQuotationsStateAction(quotationsWithCollapseChached));
-        dispatch(sortQuotationsAction());
-      });
+      dispatch(syncQuotationsAction(quotationsWithCollapseChached));
+      dispatch(sortQuotationsAction());
     } catch (error) {}
-  };
-}
+  }
+);
 
-export function sortQuotationsAction(): TypedThunk {
-  return (dispatch, getState) => {
+export const sortQuotationsAction = createAsyncThunk<void, void, AsyncThunkConfig>(
+  'quotation/sortQuotationsAction',
+  (_, { dispatch, getState }) => {
     try {
       const {
         quotation: { quotations },
         sort: {
           sortMode: {
-            quotationSortMode: { type: quotationSortType, order: quotationSortorder },
+            quotationSortMode: { type, order },
           },
         },
       } = getState();
 
-      const sortList: Quotation.ResponseItem[] = Utils.DeepCopy(quotations);
-
-      sortList.sort((a, b) => {
-        const t = quotationSortorder === Enums.SortOrderType.Asc ? 1 : -1;
-        switch (quotationSortType) {
-          case Enums.QuotationSortType.Zde:
-            return (Number(a.zde) - Number(b.zde)) * t;
-          case Enums.QuotationSortType.Zdd:
-            return (Number(a.zdd) - Number(b.zdd)) * t;
-          case Enums.QuotationSortType.Zsz:
-            return (Number(a.zsz) - Number(b.zsz)) * t;
-          case Enums.QuotationSortType.Zxj:
-            return (Number(a.zxj) - Number(b.zxj)) * t;
-          case Enums.QuotationSortType.Szjs:
-            return (Number(a.szjs) - Number(b.szjs)) * t;
-          case Enums.QuotationSortType.Xdjs:
-            return (Number(a.xdjs) - Number(b.xdjs)) * t;
-          case Enums.QuotationSortType.Name:
-            return b.name.localeCompare(a.name, 'zh') * t;
-          case Enums.QuotationSortType.Zdf:
-          default:
-            return (Number(a.zdf) - Number(b.zdf)) * t;
-        }
+      const sortList = sortQuotation({
+        module: Enums.TabKeyType.Quotation,
+        list: quotations,
+        sortType: type,
+        orderType: order,
       });
 
-      dispatch(syncQuotationsStateAction(sortList));
+      dispatch(syncQuotationsAction(sortList));
     } catch (error) {}
-  };
-}
-
-export function syncQuotationsStateAction(quotations: Quotation.ResponseItem[]): TypedThunk {
-  return (dispatch, getState) => {
-    try {
-      dispatch(syncQuotationsAction(quotations));
-    } catch (error) {}
-  };
-}
+  }
+);
 
 export default quotationlice.reducer;

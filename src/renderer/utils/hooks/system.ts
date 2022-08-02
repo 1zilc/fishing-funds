@@ -1,15 +1,14 @@
 import { useLayoutEffect, useState, useEffect, useMemo } from 'react';
-import { useInterval, useMemoizedFn } from 'ahooks';
-import { compose } from 'redux';
-import { Base64 } from 'js-base64';
+import { useInterval } from 'ahooks';
+import { AnyAction } from 'redux';
 import dayjs from 'dayjs';
 import NP from 'number-precision';
-
+import { startListening } from '@/store/listeners';
 import { updateAvaliableAction } from '@/store/features/updater';
 import { setFundConfigAction } from '@/store/features/fund';
-import { changeTabsActiveKeyAction } from '@/store/features/tabs';
-import { selectWalletAction, toggleEyeStatusAction } from '@/store/features/wallet';
-import { setAdjustmentNotificationDateAction, clearAdjustmentNotificationDateAction, syncDarkMode } from '@/store/features/setting';
+import { syncTabsActiveKeyAction } from '@/store/features/tabs';
+import { changeCurrentWalletCodeAction, toggleEyeStatusAction } from '@/store/features/wallet';
+import { updateAdjustmentNotificationDateAction, syncDarkMode, saveSyncConfigAction } from '@/store/features/setting';
 
 import {
   useWorkDayTimeToDo,
@@ -30,14 +29,15 @@ import {
   useIpcRendererListener,
 } from '@/utils/hooks';
 import * as Utils from '@/utils';
-import * as CONST from '@/constants';
 import * as Adapters from '@/utils/adpters';
 import * as Helpers from '@/helpers';
 import * as Enums from '@/utils/enums';
+import * as Enhancement from '@/utils/enhancement';
 import { useLoadFunds } from './utils';
 
-const { invoke, dialog, ipcRenderer, clipboard, app } = window.contextModules.electron;
-const { saveString, encodeFF, decodeFF, readFile } = window.contextModules.io;
+const { dialog, ipcRenderer, clipboard, app } = window.contextModules.electron;
+const { saveString, readFile } = window.contextModules.io;
+const { encryptFF, decryptFF } = window.contextModules.coding;
 
 export function useUpdater() {
   const dispatch = useAppDispatch();
@@ -81,9 +81,9 @@ export function useAdjustmentNotification() {
           body: `当前时间${hour}:${minute} 注意行情走势`,
         });
         notification.onclick = () => {
-          invoke.showCurrentWindow();
+          ipcRenderer.invoke('show-current-window');
         };
-        dispatch(setAdjustmentNotificationDateAction(currentDate));
+        dispatch(updateAdjustmentNotificationDateAction(currentDate));
       }
     },
     1000 * 50,
@@ -124,7 +124,7 @@ export function useRiskNotification() {
                 body: `${walletConfig.name} ${fund.name} ${Utils.Yang(fund.gszzl)}%`,
               });
               notification.onclick = () => {
-                invoke.showCurrentWindow();
+                ipcRenderer.invoke('show-current-window');
               };
               cloneZdfRangeMap[riskKey] = true;
             }
@@ -139,7 +139,7 @@ export function useRiskNotification() {
                 body: `${walletConfig.name} ${fund.name} ${fund.gsz}`,
               });
               notification.onclick = () => {
-                invoke.showCurrentWindow();
+                ipcRenderer.invoke('show-current-window');
               };
               cloneJzNoticeMap[riskKey] = true;
             }
@@ -202,7 +202,7 @@ export function useFundsClipboard() {
         ...newCodeMap,
       };
       const allFundConfig = Object.entries(allCodeMap).map(([code, fund]) => fund);
-      dispatch(setFundConfigAction(allFundConfig, currentWalletCode));
+      await dispatch(setFundConfigAction({ config: allFundConfig, walletCode: currentWalletCode }));
       dialog.showMessageBox({
         type: 'info',
         title: `导入完成`,
@@ -310,7 +310,7 @@ export function useMappingLocalToSystemSetting() {
   });
 
   useEffect(() => {
-    Utils.UpdateSystemTheme(systemThemeSetting);
+    Enhancement.UpdateSystemTheme(systemThemeSetting);
   }, [systemThemeSetting]);
   useEffect(() => {
     app.setLoginItemSettings({ openAtLogin: autoStartSetting });
@@ -323,7 +323,7 @@ export function useMappingLocalToSystemSetting() {
     }
   }, [lowKeySetting]);
   useAfterMountedEffect(() => {
-    dispatch(clearAdjustmentNotificationDateAction());
+    dispatch(updateAdjustmentNotificationDateAction(''));
   }, [adjustmentNotificationTimeSetting]);
   useEffect(() => {
     switch (proxyTypeSetting) {
@@ -415,9 +415,9 @@ export function useUpdateContextMenuWalletsState() {
     );
   }, [wallets, currentWalletCode, walletsConfig]);
 
-  useIpcRendererListener('change-current-wallet-code', (e, code) => {
+  useIpcRendererListener('change-current-wallet-code', async (e, code) => {
     try {
-      dispatch(selectWalletAction(code));
+      await dispatch(changeCurrentWalletCodeAction(code));
       freshFunds();
     } catch (error) {}
   });
@@ -426,7 +426,7 @@ export function useUpdateContextMenuWalletsState() {
 export function useAllConfigBackup() {
   useIpcRendererListener('backup-all-config-export', async (e, code) => {
     try {
-      const backupConfig = await Utils.GenerateBackupConfig();
+      const backupConfig = await Enhancement.GenerateBackupConfig();
       const { filePath, canceled } = await dialog.showSaveDialog({
         title: '保存',
         defaultPath: `${backupConfig.name}-${backupConfig.timestamp}.${backupConfig.suffix}`,
@@ -434,7 +434,7 @@ export function useAllConfigBackup() {
       if (canceled) {
         return;
       }
-      const encodeBackupConfig = compose(Base64.encode, encodeFF)(backupConfig);
+      const encodeBackupConfig = await encryptFF(backupConfig);
       await saveString(filePath!, encodeBackupConfig);
       dialog.showMessageBox({
         type: 'info',
@@ -460,8 +460,8 @@ export function useAllConfigBackup() {
         return;
       }
       const encodeBackupConfig = await readFile(filePath);
-      const backupConfig: Backup.Config = compose(decodeFF, Base64.decode)(encodeBackupConfig);
-      Utils.CoverBackupConfig(backupConfig);
+      const backupConfig: Backup.Config = await decryptFF(encodeBackupConfig);
+      Enhancement.CoverBackupConfig(backupConfig);
       await dialog.showMessageBox({
         type: 'info',
         title: `导入成功`,
@@ -479,14 +479,14 @@ export function useAllConfigBackup() {
   useIpcRendererListener('open-backup-file', async (e, filePath) => {
     try {
       const encodeBackupConfig = await readFile(filePath);
-      const backupConfig: Backup.Config = compose(decodeFF, Base64.decode)(encodeBackupConfig);
+      const backupConfig: Backup.Config = await decryptFF(encodeBackupConfig);
       const { response } = await dialog.showMessageBox({
         title: `确认从备份文件恢复`,
         message: `备份时间：${dayjs(backupConfig.timestamp).format('YYYY-MM-DD HH:mm:ss')} ，当前数据将被覆盖，请谨慎操作`,
         buttons: ['确定', '取消'],
       });
       if (response === 0) {
-        Utils.CoverBackupConfig(backupConfig);
+        Enhancement.CoverBackupConfig(backupConfig);
         await dialog.showMessageBox({
           type: 'info',
           title: `恢复成功`,
@@ -557,9 +557,33 @@ export function useTouchBar() {
   }, [eyeStatus]);
 
   useIpcRendererListener('change-tab-active-key', (e, key) => {
-    dispatch(changeTabsActiveKeyAction(key));
+    dispatch(syncTabsActiveKeyAction(key));
   });
   useIpcRendererListener('change-eye-status', (e, key) => {
     dispatch(toggleEyeStatusAction());
   });
+}
+
+export function useShareStoreState() {
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    startListening();
+  }, []);
+
+  useIpcRendererListener('sync-store-data', (event, action: AnyAction) => {
+    dispatch(action);
+  });
+}
+
+export function useSyncConfig() {
+  const dispatch = useAppDispatch();
+  const syncConfigSetting = useAppSelector((state) => state.setting.systemSetting.syncConfigSetting);
+  const syncConfigPathSetting = useAppSelector((state) => state.setting.systemSetting.syncConfigPathSetting);
+
+  useEffect(() => {
+    if (syncConfigSetting && syncConfigPathSetting) {
+      dispatch(saveSyncConfigAction());
+    }
+  }, [syncConfigSetting, syncConfigPathSetting]);
 }

@@ -1,9 +1,16 @@
 import dayjs from 'dayjs';
-import { createSlice, PayloadAction, ThunkAction } from '@reduxjs/toolkit';
-import { TypedThunk } from '@/store';
+import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
+import { AsyncThunkConfig } from '@/store';
+import { setWalletConfigAction } from '@/store/features/wallet';
+import { setCoinConfigAction } from '@/store/features/coin';
+import { setStockConfigAction } from '@/store/features/stock';
+import { setFavoriteQuotationMapAction } from '@/store/features/quotation';
+import { setZindexConfigAction } from '@/store/features/zindex';
+import { setWebConfigAction } from '@/store/features/web';
 import * as Utils from '@/utils';
 import * as CONST from '@/constants';
 import * as Enums from '@/utils/enums';
+import * as Enhancement from '@/utils/enhancement';
 
 export type SettingState = {
   systemSetting: System.Setting;
@@ -22,7 +29,7 @@ export const defaultSystemSetting: System.Setting = {
 
   bottomTabsSetting: [
     {
-      key: Enums.TabKeyType.Funds,
+      key: Enums.TabKeyType.Fund,
       name: '基金',
       show: true,
     },
@@ -65,6 +72,9 @@ export const defaultSystemSetting: System.Setting = {
   freshDelaySetting: 1,
   autoCheckUpdateSetting: true,
   timestampSetting: Enums.TimestampType.Network,
+
+  syncConfigSetting: false,
+  syncConfigPathSetting: '',
 };
 
 const initialState: SettingState = {
@@ -78,7 +88,7 @@ const settingSlice = createSlice({
   name: 'setting',
   initialState,
   reducers: {
-    syncSettingAction(state, action) {
+    syncSettingAction(state, action: PayloadAction<System.Setting>) {
       state.systemSetting = action.payload;
     },
     updateAdjustmentNotificationDateAction(state, action: PayloadAction<string>) {
@@ -92,8 +102,9 @@ const settingSlice = createSlice({
 });
 export const { syncSettingAction, updateAdjustmentNotificationDateAction, syncDarkMode } = settingSlice.actions;
 
-export function setSystemSettingAction(newSetting: System.Setting): TypedThunk {
-  return (dispatch, getState) => {
+export const setSystemSettingAction = createAsyncThunk<void, System.Setting, AsyncThunkConfig>(
+  'setting/setSystemSettingAction',
+  (newSetting, { dispatch, getState }) => {
     try {
       const {
         setting: { systemSetting: oldSystemSetting },
@@ -102,27 +113,72 @@ export function setSystemSettingAction(newSetting: System.Setting): TypedThunk {
       const systemSetting = { ...oldSystemSetting, ...newSetting };
 
       dispatch(syncSettingAction(systemSetting));
-      Utils.SetStorage(CONST.STORAGE.SYSTEM_SETTING, systemSetting);
     } catch (error) {}
-  };
-}
+  }
+);
 
-export function setAdjustmentNotificationDateAction(date: string): TypedThunk {
-  return (dispatch, getState) => {
+export const saveSyncConfigAction = createAsyncThunk<void, void, AsyncThunkConfig>(
+  'setting/setSystemSettingAction',
+  async (_, { dispatch, getState }) => {
     try {
-      dispatch(updateAdjustmentNotificationDateAction(date));
-      Utils.SetStorage(CONST.STORAGE.ADJUSTMENT_NOTIFICATION_DATE, date);
-    } catch (error) {}
-  };
-}
+      const {
+        wallet: {
+          config: { walletConfig },
+          currentWalletCode,
+        },
+        zindex: {
+          config: { zindexConfig },
+        },
+        quotation: { favoriteQuotationMap },
+        stock: {
+          config: { stockConfig },
+        },
+        coin: {
+          config: { coinConfig },
+        },
+        web: {
+          config: { webConfig },
+        },
+        setting: {
+          systemSetting: { syncConfigPathSetting },
+        },
+      } = getState();
 
-export function clearAdjustmentNotificationDateAction(): TypedThunk {
-  return (dispatch, getState) => {
-    try {
-      dispatch(updateAdjustmentNotificationDateAction(''));
-      Utils.ClearStorage(CONST.STORAGE.ADJUSTMENT_NOTIFICATION_DATE);
+      const config = {
+        [CONST.STORAGE.WALLET_SETTING]: walletConfig,
+        [CONST.STORAGE.ZINDEX_SETTING]: zindexConfig,
+        [CONST.STORAGE.FAVORITE_QUOTATION_MAP]: favoriteQuotationMap,
+        [CONST.STORAGE.STOCK_SETTING]: stockConfig,
+        [CONST.STORAGE.COIN_SETTING]: coinConfig,
+        [CONST.STORAGE.WEB_SETTING]: webConfig,
+        [CONST.STORAGE.CURRENT_WALLET_CODE]: currentWalletCode,
+      };
+      const syncConfig = await Enhancement.GenerateSyncConfig(config);
+      await Enhancement.SaveSyncConfig(syncConfigPathSetting, syncConfig);
     } catch (error) {}
-  };
-}
+  }
+);
+
+export const loadSyncConfigAction = createAsyncThunk<void, void, AsyncThunkConfig>(
+  'setting/setSystemSettingAction',
+  async (_, { dispatch, getState }) => {
+    try {
+      const {
+        setting: {
+          systemSetting: { syncConfigSetting, syncConfigPathSetting },
+        },
+      } = getState();
+      if (syncConfigSetting && syncConfigPathSetting) {
+        const config = await Enhancement.loadSyncConfig(syncConfigPathSetting);
+        dispatch(setZindexConfigAction(config[CONST.STORAGE.ZINDEX_SETTING]));
+        dispatch(setFavoriteQuotationMapAction(config[CONST.STORAGE.FAVORITE_QUOTATION_MAP]));
+        dispatch(setStockConfigAction(config[CONST.STORAGE.STOCK_SETTING]));
+        dispatch(setCoinConfigAction(config[CONST.STORAGE.COIN_SETTING]));
+        dispatch(setWebConfigAction(config[CONST.STORAGE.WEB_SETTING]));
+        dispatch(setWalletConfigAction(config[CONST.STORAGE.WALLET_SETTING]));
+      }
+    } catch (error) {}
+  }
+);
 
 export default settingSlice.reducer;

@@ -1,11 +1,11 @@
-import got from 'got';
 import log from 'electron-log';
+import got from 'got';
 import { contextBridge, ipcRenderer, shell, clipboard, nativeImage } from 'electron';
 import { encode, decode, fromUint8Array } from 'js-base64';
-import { parseAsync } from 'json2csv';
-import * as fs from 'fs';
-import { base64ToBuffer } from './util';
+import { CodingPromiseWorker } from './workers';
+import { saveImage, saveJsonToCsv, saveString, readFile } from './io';
 import Proxy from './proxy';
+import { WorkerRecieveParams as CodingWorkerRecieveParams } from './workers/coding.worker';
 
 const { version } = require('../../release/app/package.json');
 
@@ -54,6 +54,7 @@ contextBridge.exposeInMainWorld('contextModules', {
           'webview-new-window',
           'change-tab-active-key',
           'change-eye-status',
+          'sync-store-data',
         ];
         if (validChannels.includes(channel)) {
           return ipcRenderer.on(channel, func);
@@ -67,10 +68,6 @@ contextBridge.exposeInMainWorld('contextModules', {
       showSaveDialog: async (config: any) => ipcRenderer.invoke('show-save-dialog', config),
       showOpenDialog: async (config: any) => ipcRenderer.invoke('show-open-dialog', config),
     },
-    invoke: {
-      showCurrentWindow: () => ipcRenderer.invoke('show-current-window'),
-      setNativeThemeSource: (config: any) => ipcRenderer.invoke('set-native-theme-source', config),
-    },
     app: {
       setLoginItemSettings: (config: any) => ipcRenderer.invoke('set-login-item-settings', config),
       quit: () => ipcRenderer.invoke('app-quit'),
@@ -81,48 +78,37 @@ contextBridge.exposeInMainWorld('contextModules', {
       writeImage: (dataUrl: string) => clipboard.writeImage(nativeImage.createFromDataURL(dataUrl)),
     },
   },
-  log: log,
+  log,
   io: {
-    async saveImage(filePath: string, dataUrl: string) {
-      const imageBuffer = base64ToBuffer(dataUrl);
-      return new Promise((resolve, reject) => {
-        fs.writeFile(filePath, imageBuffer, resolve);
-      });
+    saveImage,
+    saveJsonToCsv,
+    saveString,
+    readFile,
+  },
+  coding: {
+    encryptFF(content: any) {
+      const codingPromiseWorker = new CodingPromiseWorker();
+      return codingPromiseWorker
+        .postMessage<string, CodingWorkerRecieveParams>({ module: 'encryptFF', data: content })
+        .finally(() => codingPromiseWorker.terminate());
     },
-    async saveString(filePath: string, content: string) {
-      return new Promise((resolve, reject) => {
-        fs.writeFile(filePath, content, resolve);
-      });
+    decryptFF(content: string) {
+      const codingPromiseWorker = new CodingPromiseWorker();
+      return codingPromiseWorker
+        .postMessage<string, CodingWorkerRecieveParams>({ module: 'decryptFF', data: content })
+        .finally(() => codingPromiseWorker.terminate());
     },
-    async saveJsonToCsv(filePath: string, json: any[]) {
-      const fields = Object.keys(json[0] || {});
-      const csv = await parseAsync(json, { fields });
-      return new Promise((resolve, reject) => {
-        fs.writeFile(filePath, csv, resolve);
-      });
-    },
-    async readFile(path: string) {
-      return new Promise((resolve, reject) => {
-        fs.readFile(path, 'utf-8', resolve);
-      });
-    },
-    encodeFF(content: any) {
-      const ffprotocol = 'ff://'; // FF协议
-      return `${ffprotocol}${encode(JSON.stringify(content))}`;
+    encodeFF(content: string) {
+      const codingPromiseWorker = new CodingPromiseWorker();
+      return codingPromiseWorker
+        .postMessage<string, CodingWorkerRecieveParams>({ module: 'encodeFF', data: content })
+        .finally(() => codingPromiseWorker.terminate());
     },
     decodeFF(content: string) {
-      const ffprotocol = 'ff://'; // FF协议
-      try {
-        const protocolLength = ffprotocol.length;
-        const protocol = content.slice(0, protocolLength);
-        if (protocol !== ffprotocol) {
-          throw Error('协议错误');
-        }
-        const body = content.slice(protocolLength);
-        return JSON.parse(decode(body));
-      } catch (error) {
-        return null;
-      }
+      const codingPromiseWorker = new CodingPromiseWorker();
+      return codingPromiseWorker
+        .postMessage<string, CodingWorkerRecieveParams>({ module: 'decodeFF', data: content })
+        .finally(() => codingPromiseWorker.terminate());
     },
   },
   electronStore: {

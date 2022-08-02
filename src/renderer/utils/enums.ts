@@ -72,7 +72,7 @@ export enum SortOrderType {
 }
 
 export enum TabKeyType {
-  Funds,
+  Fund,
   Zindex,
   Quotation,
   Stock,

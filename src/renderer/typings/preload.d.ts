@@ -22,22 +22,22 @@ declare global {
           readText: Clipboard['readText'];
           writeImage: (dataUrl: string) => void;
         };
-        invoke: {
-          showCurrentWindow: () => void;
-          setNativeThemeSource: (theme: number) => Promise<void>;
-        };
       };
       log: ElectronLog;
       io: {
         saveImage: (filePath: string, dataUrl: string) => Promise<unknown>;
         saveString: (filePath: string, content: string) => Promise<unknown>;
         saveJsonToCsv: (filePath: string, json: any[]) => Promise<unknown>;
-        encodeFF: (content: any) => string;
-        decodeFF: (content: string) => any;
         readFile: (content: string) => Promise<string>;
       };
+      coding: {
+        encryptFF: (content: any) => Promise<string>;
+        decryptFF: (content: string) => Promise<any>;
+        encodeFF: (content: any) => Promise<string>;
+        decodeFF: (content: string) => Promise<any>;
+      };
       electronStore: {
-        get: <T = unknown>(key: string, init: T) => Promise<T>;
+        get: <T = unknown>(key: string, init?: T) => Promise<T>;
         set: (key: string, data: unknown) => Promise<void>;
         delete: (key: string) => Promise<void>;
         cover: (data: unknown) => Promise<void>;

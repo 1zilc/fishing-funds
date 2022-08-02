@@ -1,32 +1,35 @@
-import path from 'path';
 import windowStateKeeper from 'electron-window-state';
 import { menubar, Menubar } from 'menubar';
 import { app, Tray, Menu, shell } from 'electron';
 import AppUpdater from './autoUpdater';
-import { resolveHtmlPath, sendMessageToRenderer } from './util';
+import { resolveHtmlPath, sendMessageToRenderer, getPreloadPath } from './util';
+
+const { productName } = require('../../release/app/package.json');
 
 export function createMenubar({ tray, mainWindowState }: { tray: Tray; mainWindowState: windowStateKeeper.State }) {
   return menubar({
-    index: resolveHtmlPath('index.html'),
+    index: resolveHtmlPath(),
     tray,
-    tooltip: 'Fishing Funds',
+    tooltip: productName,
     preloadWindow: true,
     showOnAllWorkspaces: true,
     // showDockIcon: false,
 
     browserWindow: {
-      backgroundColor: process.platform === 'darwin' ? undefined : '#fff',
-      transparent: process.platform === 'darwin',
+      backgroundColor: process.platform === 'darwin' ? 'rgba(0, 0, 0, 0)' : '#fff',
       width: mainWindowState.width,
       height: mainWindowState.height,
+
       minHeight: 400,
       minWidth: 300,
       maxHeight: 1000,
       maxWidth: 600,
+      vibrancy: 'sidebar',
       webPreferences: {
         webviewTag: true,
+        sandbox: false,
         devTools: !app.isPackaged,
-        preload: app.isPackaged ? path.join(__dirname, 'preload.js') : path.join(__dirname, '../../.erb/dll/preload.js'),
+        preload: getPreloadPath(),
       },
     },
   });
@@ -56,26 +59,26 @@ export function buildContextMenu(
     { type: 'separator' },
     {
       click: () => {
-        sendMessageToRenderer(mb, 'clipboard-funds-import');
+        sendMessageToRenderer(mb.window, 'clipboard-funds-import');
       },
       label: '录入基金JSON配置',
     },
     {
       click: () => {
-        sendMessageToRenderer(mb, 'clipboard-funds-copy');
+        sendMessageToRenderer(mb.window, 'clipboard-funds-copy');
       },
       label: '复制基金JSON配置',
     },
     { type: 'separator' },
     {
       click: () => {
-        sendMessageToRenderer(mb, 'backup-all-config-import');
+        sendMessageToRenderer(mb.window, 'backup-all-config-import');
       },
       label: '导入全局配置',
     },
     {
       click: () => {
-        sendMessageToRenderer(mb, 'backup-all-config-export');
+        sendMessageToRenderer(mb.window, 'backup-all-config-export');
       },
       label: '导出全局配置',
     },

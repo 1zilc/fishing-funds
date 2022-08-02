@@ -1,18 +1,15 @@
 import log from 'electron-log';
-import { Menubar } from 'menubar';
-import { app, nativeTheme } from 'electron';
-import { URL } from 'url';
+import { app, BrowserWindow, nativeTheme } from 'electron';
 import * as path from 'path';
 import * as Enums from '../renderer/utils/enums';
 
-export function resolveHtmlPath(htmlFileName: string) {
+export function resolveHtmlPath() {
   if (process.env.NODE_ENV === 'development') {
     const port = process.env.PORT || 3456;
-    const url = new URL(`http://localhost:${port}`);
-    url.pathname = htmlFileName;
-    return url.href;
+    // const url = new URL();
+    return `http://localhost:${port}`;
   } else {
-    return `file://${path.resolve(__dirname, '../renderer/', htmlFileName)}`;
+    return `file://${path.resolve(__dirname, '../renderer/', 'index.html')}`;
   }
 }
 
@@ -51,14 +48,8 @@ export async function checkEnvTool() {
   }
 }
 
-export function base64ToBuffer(dataUrl: string) {
-  const data = dataUrl.match(/^data:([A-Za-z-+/]+);base64,(.+)$/);
-  const imageBuffer = Buffer.from(data![2], 'base64');
-  return imageBuffer;
-}
-
-export function sendMessageToRenderer(mb: Menubar, key: string, data?: any) {
-  return mb.window?.webContents.send(key, data);
+export function sendMessageToRenderer(win: BrowserWindow | undefined | null, key: string, data?: any) {
+  return win?.webContents.send(key, data);
 }
 
 export function setNativeTheme(theme: Enums.SystemThemeType) {
@@ -74,4 +65,12 @@ export function setNativeTheme(theme: Enums.SystemThemeType) {
       nativeTheme.themeSource = 'system';
       break;
   }
+}
+
+export function getPreloadPath() {
+  return app.isPackaged ? path.join(__dirname, 'preload.js') : path.join(__dirname, '../../.erb/dll/preload.js');
+}
+
+export function getOtherWindows(windowIds: number[], current?: number) {
+  return windowIds.filter((id) => id !== current).map((id) => BrowserWindow.fromId(id));
 }

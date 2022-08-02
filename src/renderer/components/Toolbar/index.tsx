@@ -36,7 +36,7 @@ const ToolBar: React.FC<ToolBarProps> = () => {
 
   const fresh = useMemoizedFn(() => {
     switch (tabsActiveKey) {
-      case Enums.TabKeyType.Funds:
+      case Enums.TabKeyType.Fund:
         freshFunds();
         break;
       case Enums.TabKeyType.Zindex:

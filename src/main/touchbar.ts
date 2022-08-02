@@ -47,7 +47,7 @@ export default class TouchBarManager {
           label: config.label,
           icon: generateWalletIcon(config.iconIndex),
           iconPosition: 'left',
-          click: () => sendMessageToRenderer(this.mb, 'change-current-wallet-code', config.id),
+          click: () => sendMessageToRenderer(this.mb.window, 'change-current-wallet-code', config.id),
           backgroundColor: config.backgroundColor,
         })
     );
@@ -61,7 +61,7 @@ export default class TouchBarManager {
         segmentStyle: 'automatic',
         segments: configs.map((config) => ({ label: config.label })),
         change: (selectedIndex) => {
-          sendMessageToRenderer(this.mb, 'change-tab-active-key', selectedIndex);
+          sendMessageToRenderer(this.mb.window, 'change-tab-active-key', selectedIndex);
         },
         selectedIndex,
       }),
@@ -73,7 +73,7 @@ export default class TouchBarManager {
     this.eyeStatusItems = [
       new TouchBarButton({
         icon: status === Enums.EyeStatus.Open ? generateIcon('touchbar/eye-open.png') : generateIcon('touchbar/eye-close.png'),
-        click: () => sendMessageToRenderer(this.mb, 'change-eye-status'),
+        click: () => sendMessageToRenderer(this.mb.window, 'change-eye-status'),
       }),
     ];
     this.updateTouchBar();

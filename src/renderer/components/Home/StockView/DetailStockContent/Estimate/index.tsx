@@ -12,7 +12,7 @@ export interface EstimateProps {
   secid: string;
 }
 const Estimate: React.FC<EstimateProps> = ({ secid }) => {
-  const [estimate, setEstimate] = useState<string | null>('');
+  const [estimate, setEstimate] = useState<string | undefined>('');
   const { run: runGetPicTrendFromEastmoney } = useRequest(() => Services.Stock.GetPicTrendFromEastmoney(secid), {
     pollingInterval: CONST.DEFAULT.ESTIMATE_FUND_DELAY,
     onSuccess: setEstimate,
@@ -24,10 +24,10 @@ const Estimate: React.FC<EstimateProps> = ({ secid }) => {
       <div className={styles.estimate}>
         {estimate === '' ? (
           <PictureImage />
-        ) : estimate === null ? (
+        ) : estimate === undefined ? (
           <PictureFailedImage />
         ) : (
-          <img src={estimate} onError={() => setEstimate(null)} />
+          <img src={estimate} onError={() => setEstimate(undefined)} />
         )}
       </div>
     </ChartCard>

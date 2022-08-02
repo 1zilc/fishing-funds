@@ -11,7 +11,7 @@ import CustomDrawer from '@/components/CustomDrawer';
 import Empty from '@/components/Empty';
 import { deleteZindexAction, setZindexConfigAction } from '@/store/features/zindex';
 import { useDrawer, useAutoDestroySortableRef, useAppDispatch, useAppSelector } from '@/utils/hooks';
-
+import * as Utils from '@/utils';
 import styles from './index.module.scss';
 
 const AddZindexContent = React.lazy(() => import('@/components/Home/ZindexView/AddZindexContent'));
@@ -28,14 +28,17 @@ const Optional: React.FC<OptionalProps> = () => {
   const sortZindexConfig = useMemo(() => zindexConfig.map((_) => ({ ..._, id: _.code })), [zindexConfig]);
 
   function onSortZindexConfig(sortList: Zindex.SettingItem[]) {
-    const zindexConfig = sortList.map((item) => {
-      const zindex = codeMap[item.code];
-      return {
-        name: zindex.name,
-        code: zindex.code,
-      };
-    });
-    dispatch(setZindexConfigAction(zindexConfig));
+    const hasChanged = Utils.CheckListOrderHasChanged(zindexConfig, sortList, 'code');
+    if (hasChanged) {
+      const sortConfig = sortList.map((item) => {
+        const zindex = codeMap[item.code];
+        return {
+          name: zindex.name,
+          code: zindex.code,
+        };
+      });
+      dispatch(setZindexConfigAction(sortConfig));
+    }
   }
 
   async function onRemoveZindex(zindex: Zindex.SettingItem) {

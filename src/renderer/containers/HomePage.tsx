@@ -1,4 +1,4 @@
-import Home from '../components/Home';
+import Home from '@/components/Home';
 
 import {
   useUpdater,
@@ -11,6 +11,8 @@ import {
   useTouchBar,
   useMappingLocalToSystemSetting,
   useUpdateContextMenuWalletsState,
+  useShareStoreState,
+  useSyncConfig,
 } from '@/utils/hooks';
 
 const HomePage = () => {
@@ -23,6 +25,8 @@ const HomePage = () => {
   useUpdateContextMenuWalletsState();
   useMappingLocalToSystemSetting();
   useTouchBar();
+  useShareStoreState();
+  useSyncConfig();
   useBootStrap();
 
   return <Home />;

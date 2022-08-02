@@ -14,7 +14,7 @@ import CustomDrawer from '@/components/CustomDrawer';
 import Empty from '@/components/Empty';
 import { deleteFundAction, setFundConfigAction, updateFundAction } from '@/store/features/fund';
 import { useSyncFixFundSetting, useDrawer, useAutoDestroySortableRef, useAppDispatch, useAppSelector } from '@/utils/hooks';
-
+import * as Utils from '@/utils';
 import styles from './index.module.scss';
 
 const AddFundContent = React.lazy(() => import('@/components/Home/FundView/AddFundContent'));
@@ -54,11 +54,15 @@ const Optional: React.FC<OptionalProps> = () => {
   const { done: syncFundSettingDone } = useSyncFixFundSetting();
 
   function onSortFundConfig(sortList: Fund.SettingItem[]) {
-    const fundConfig = sortList.map((item) => {
-      const fund = codeMap[item.code];
-      return fund;
-    });
-    dispatch(setFundConfigAction(fundConfig, currentWalletCode));
+    // 判断顺序是否发生变化
+    const hasChanged = Utils.CheckListOrderHasChanged(fundConfig, sortList, 'code');
+    if (hasChanged) {
+      const sortConfig = sortList.map((item) => {
+        const fund = codeMap[item.code];
+        return fund;
+      });
+      dispatch(setFundConfigAction({ config: sortConfig, walletCode: currentWalletCode }));
+    }
   }
 
   async function onRemoveFund(fund: Fund.SettingItem) {

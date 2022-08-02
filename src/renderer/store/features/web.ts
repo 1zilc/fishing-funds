@@ -1,16 +1,15 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { TypedThunk } from '@/store';
+import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
+import { AsyncThunkConfig } from '@/store';
 import * as Utils from '@/utils';
-import * as CONST from '@/constants';
 import * as Enums from '@/utils/enums';
 
 export interface WebState {
   view: {
-    show: boolean;
     phone?: boolean;
     title: string;
     url: string;
   };
+  show: boolean;
   config: { webConfig: Web.SettingItem[]; codeMap: Web.CodeMap };
 }
 
@@ -49,11 +48,11 @@ export const defaultWebConfig = [
 
 const initialState: WebState = {
   view: {
-    show: false,
     phone: true,
     title: '',
     url: '',
   },
+  show: false,
   config: { webConfig: [], codeMap: {} },
 };
 
@@ -64,64 +63,65 @@ const webSlice = createSlice({
     syncWebUrlAction(state, action: PayloadAction<string>) {
       state.view.url = action.payload;
     },
+    syncWebShowAction(state, action: PayloadAction<boolean>) {
+      state.show = action.payload;
+    },
     syncWebPhoneAction(state, action: PayloadAction<boolean>) {
       state.view.phone = action.payload;
     },
-    syncWebAction(state, action) {
+    syncWebAction(state, action: PayloadAction<{ phone?: boolean; title: string; url: string }>) {
       state.view = action.payload;
     },
-    syncWebConfigAction(state, action) {
+    syncWebConfigAction(state, action: PayloadAction<{ webConfig: Web.SettingItem[]; codeMap: Web.CodeMap }>) {
       state.config = action.payload;
     },
   },
 });
 
-export const { syncWebUrlAction, syncWebPhoneAction, syncWebAction, syncWebConfigAction } = webSlice.actions;
+export const { syncWebUrlAction, syncWebShowAction, syncWebPhoneAction, syncWebAction, syncWebConfigAction } = webSlice.actions;
 
-export function setWebAction(data: { show: boolean; phone?: boolean; title: string; url: string }): TypedThunk {
-  return (dispatch, getState) => {
+export const closeWebAction = createAsyncThunk<void, void, AsyncThunkConfig>('web/closeWebAction', (_, { dispatch, getState }) => {
+  try {
+    const {
+      web: { view },
+    } = getState();
+    dispatch(syncWebAction({ ...view, url: '', title: '' }));
+    dispatch(syncWebShowAction(false));
+  } catch (error) {}
+});
+
+export const openWebAction = createAsyncThunk<void, { phone?: boolean; title: string; url: string }, AsyncThunkConfig>(
+  'web/openWebAction',
+  (data, { dispatch, getState }) => {
     try {
       const {
         web: { view },
       } = getState();
       dispatch(syncWebAction({ ...view, ...data }));
+      dispatch(syncWebShowAction(true));
     } catch (error) {}
-  };
-}
-export function closeWebAction(): TypedThunk {
-  return (dispatch, getState) => {
-    try {
-      dispatch(setWebAction({ url: '', title: '', show: false }));
-    } catch (error) {}
-  };
-}
-export function openWebAction(data: { phone?: boolean; title: string; url: string }): TypedThunk {
-  return (dispatch, getState) => {
-    try {
-      dispatch(setWebAction({ ...data, show: true }));
-    } catch (error) {}
-  };
-}
-export function addWebAction(web: Web.SettingItem): TypedThunk {
-  return (dispatch, getState) => {
-    try {
-      const {
-        web: {
-          config: { webConfig },
-        },
-      } = getState();
-      const cloneWebConfig = Utils.DeepCopy(webConfig);
-      const exist = cloneWebConfig.find((item) => web.url === item.url);
-      if (!exist) {
-        cloneWebConfig.push(web);
-      }
-      dispatch(setWebConfigAction(cloneWebConfig));
-    } catch (error) {}
-  };
-}
+  }
+);
 
-export function updateWebAction(web: Web.SettingItem): TypedThunk {
-  return (dispatch, getState) => {
+export const addWebAction = createAsyncThunk<void, Web.SettingItem, AsyncThunkConfig>('web/addWebAction', (web, { dispatch, getState }) => {
+  try {
+    const {
+      web: {
+        config: { webConfig },
+      },
+    } = getState();
+    const cloneWebConfig = Utils.DeepCopy(webConfig);
+    const exist = cloneWebConfig.find((item) => web.url === item.url);
+    if (!exist) {
+      cloneWebConfig.push(web);
+    }
+    dispatch(setWebConfigAction(cloneWebConfig));
+  } catch (error) {}
+});
+
+export const updateWebAction = createAsyncThunk<void, Web.SettingItem, AsyncThunkConfig>(
+  'web/updateWebAction',
+  (web, { dispatch, getState }) => {
     try {
       const {
         web: {
@@ -139,38 +139,35 @@ export function updateWebAction(web: Web.SettingItem): TypedThunk {
       });
       dispatch(setWebConfigAction(webConfig));
     } catch (error) {}
-  };
-}
+  }
+);
 
-export function deleteWebAction(url: string): TypedThunk {
-  return (dispatch, getState) => {
-    try {
-      const {
-        web: {
-          config: { webConfig },
-        },
-      } = getState();
+export const deleteWebAction = createAsyncThunk<void, string, AsyncThunkConfig>('web/deleteWebAction', (url, { dispatch, getState }) => {
+  try {
+    const {
+      web: {
+        config: { webConfig },
+      },
+    } = getState();
 
-      webConfig.forEach((item, index) => {
-        if (url === item.url) {
-          const cloneWebSetting = JSON.parse(JSON.stringify(webConfig));
-          cloneWebSetting.splice(index, 1);
-          dispatch(setWebConfigAction(cloneWebSetting));
-        }
-      });
-    } catch (error) {}
-  };
-}
+    webConfig.forEach((item, index) => {
+      if (url === item.url) {
+        const cloneWebSetting = JSON.parse(JSON.stringify(webConfig));
+        cloneWebSetting.splice(index, 1);
+        dispatch(setWebConfigAction(cloneWebSetting));
+      }
+    });
+  } catch (error) {}
+});
 
-export function setWebConfigAction(webConfig: Web.SettingItem[]): TypedThunk {
-  return (dispatch, getState) => {
+export const setWebConfigAction = createAsyncThunk<void, Web.SettingItem[], AsyncThunkConfig>(
+  'web/setWebConfigAction',
+  (webConfig, { dispatch, getState }) => {
     try {
       const codeMap = Utils.GetCodeMap(webConfig, 'url');
-
       dispatch(syncWebConfigAction({ webConfig, codeMap }));
-      Utils.SetStorage(CONST.STORAGE.WEB_SETTING, webConfig);
     } catch (error) {}
-  };
-}
+  }
+);
 
 export default webSlice.reducer;

@@ -1,8 +1,8 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { batch } from 'react-redux';
-import { TypedThunk } from '@/store';
+import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
+import { AsyncThunkConfig } from '@/store';
+import { sortZindex } from '@/workers/sort.worker';
+import { mergeStateWithResponse } from '@/workers/merge.worker';
 import * as Utils from '@/utils';
-import * as CONST from '@/constants';
 import * as Enums from '@/utils/enums';
 
 export interface ZindexState {
@@ -43,7 +43,7 @@ const zindexSlice = createSlice({
     syncZindexesAction(state, action: PayloadAction<(Zindex.ResponseItem & Zindex.ExtraRow)[]>) {
       state.zindexs = action.payload;
     },
-    syncZindexesConfigAction(state, action) {
+    syncZindexesConfigAction(state, action: PayloadAction<{ zindexConfig: Zindex.SettingItem[]; codeMap: Zindex.CodeMap }>) {
       state.config = action.payload;
     },
     toggleZindexCollapseAction(state, { payload }: PayloadAction<Zindex.ResponseItem & Zindex.ExtraRow>) {
@@ -70,8 +70,9 @@ export const {
   toggleAllZindexsCollapseAction,
 } = zindexSlice.actions;
 
-export function addZindexAction(zindex: Zindex.SettingItem): TypedThunk {
-  return (dispatch, getState) => {
+export const addZindexAction = createAsyncThunk<void, Zindex.SettingItem, AsyncThunkConfig>(
+  'zindex/addZindexAction',
+  (zindex, { dispatch, getState }) => {
     try {
       const {
         zindex: {
@@ -85,11 +86,12 @@ export function addZindexAction(zindex: Zindex.SettingItem): TypedThunk {
       }
       dispatch(setZindexConfigAction(cloneZindexConfig));
     } catch (error) {}
-  };
-}
+  }
+);
 
-export function deleteZindexAction(code: string): TypedThunk {
-  return (dispatch, getState) => {
+export const deleteZindexAction = createAsyncThunk<void, string, AsyncThunkConfig>(
+  'zindex/deleteZindexAction',
+  (code, { dispatch, getState }) => {
     try {
       const {
         zindex: {
@@ -105,67 +107,53 @@ export function deleteZindexAction(code: string): TypedThunk {
         }
       });
     } catch (error) {}
-  };
-}
+  }
+);
 
-export function setZindexConfigAction(zindexConfig: Zindex.SettingItem[]): TypedThunk {
-  return (dispatch, getState) => {
+export const setZindexConfigAction = createAsyncThunk<void, Zindex.SettingItem[], AsyncThunkConfig>(
+  'zindex/setZindexConfigAction',
+  (zindexConfig, { dispatch, getState }) => {
     try {
       const {
         zindex: { zindexs },
       } = getState();
       const codeMap = Utils.GetCodeMap(zindexConfig, 'code');
 
-      batch(() => {
-        dispatch(syncZindexesConfigAction({ zindexConfig, codeMap }));
-        dispatch(syncZindexsStateAction(zindexs));
-      });
-      Utils.SetStorage(CONST.STORAGE.ZINDEX_SETTING, zindexConfig);
+      dispatch(syncZindexesConfigAction({ zindexConfig, codeMap }));
+      dispatch(syncZindexsStateAction(zindexs));
     } catch (error) {}
-  };
-}
+  }
+);
 
-export function sortZindexsAction(): TypedThunk {
-  return (dispatch, getState) => {
-    try {
-      const {
-        zindex: {
-          zindexs,
-          config: { codeMap },
+export const sortZindexsAction = createAsyncThunk<void, void, AsyncThunkConfig>('zindex/sortZindexsAction', (_, { dispatch, getState }) => {
+  try {
+    const {
+      zindex: {
+        zindexs,
+        config: { codeMap },
+      },
+      sort: {
+        sortMode: {
+          zindexSortMode: { type, order },
         },
-        sort: {
-          sortMode: {
-            zindexSortMode: { type: zindexSortType, order: zindexSortorder },
-          },
-        },
-      } = getState();
+      },
+    } = getState();
 
-      const sortList = zindexs.slice();
+    const sortList = sortZindex({
+      module: Enums.TabKeyType.Zindex,
+      codeMap,
+      list: zindexs,
+      sortType: type,
+      orderType: order,
+    });
 
-      sortList.sort((a, b) => {
-        const t = zindexSortorder === Enums.SortOrderType.Asc ? 1 : -1;
-        switch (zindexSortType) {
-          case Enums.ZindexSortType.Zdd:
-            return (a.zdd - b.zdd) * t;
-          case Enums.ZindexSortType.Zdf:
-            return (a.zdf - b.zdf) * t;
-          case Enums.ZindexSortType.Zsz:
-            return (a.zsz - b.zsz) * t;
-          case Enums.ZindexSortType.Name:
-            return b.name.localeCompare(a.name, 'zh') * t;
-          case Enums.ZindexSortType.Custom:
-          default:
-            return (codeMap[b.code]?.originSort - codeMap[a.code]?.originSort) * t;
-        }
-      });
+    dispatch(syncZindexsStateAction(sortList));
+  } catch (error) {}
+});
 
-      dispatch(syncZindexsStateAction(sortList));
-    } catch (error) {}
-  };
-}
-
-export function sortZindexsCachedAction(responseZindexs: Zindex.ResponseItem[]): TypedThunk {
-  return (dispatch, getState) => {
+export const sortZindexsCachedAction = createAsyncThunk<void, Zindex.ResponseItem[], AsyncThunkConfig>(
+  'zindex/sortZindexsCachedAction',
+  (responseZindexs, { dispatch, getState }) => {
     try {
       const {
         zindex: {
@@ -174,30 +162,23 @@ export function sortZindexsCachedAction(responseZindexs: Zindex.ResponseItem[]):
         },
       } = getState();
 
-      const zindexsCodeToMap = Utils.GetCodeMap(zindexs, 'code');
-      const zindexsWithCollapseChached = responseZindexs.map((_) => ({
-        ...(zindexsCodeToMap[_.code] || {}),
-        ..._,
-      }));
-      const zindexWithChachedCodeToMap = Utils.GetCodeMap(zindexsWithCollapseChached, 'code');
-      zindexConfig.forEach((zindex) => {
-        const responseZindex = zindexWithChachedCodeToMap[zindex.code];
-        const stateZindex = zindexsCodeToMap[zindex.code];
-        if (!responseZindex && stateZindex) {
-          zindexsWithCollapseChached.push(stateZindex);
-        }
+      const zindexsWithChached = mergeStateWithResponse({
+        config: zindexConfig,
+        configKey: 'code',
+        stateKey: 'code',
+        state: zindexs,
+        response: responseZindexs,
       });
 
-      batch(() => {
-        dispatch(syncZindexsStateAction(zindexsWithCollapseChached));
-        dispatch(sortZindexsAction());
-      });
+      dispatch(syncZindexsStateAction(zindexsWithChached));
+      dispatch(sortZindexsAction());
     } catch (error) {}
-  };
-}
+  }
+);
 
-export function syncZindexsStateAction(zindexs: (Zindex.ResponseItem & Zindex.ExtraRow)[]): TypedThunk {
-  return (dispatch, getState) => {
+export const syncZindexsStateAction = createAsyncThunk<void, (Zindex.ResponseItem & Zindex.ExtraRow)[], AsyncThunkConfig>(
+  'zindex/syncZindexsStateAction',
+  (zindexs, { dispatch, getState }) => {
     try {
       const {
         zindex: {
@@ -207,7 +188,7 @@ export function syncZindexsStateAction(zindexs: (Zindex.ResponseItem & Zindex.Ex
       const filterZindexs = zindexs.filter(({ code }) => codeMap[code]);
       dispatch(syncZindexesAction(filterZindexs));
     } catch (error) {}
-  };
-}
+  }
+);
 
 export default zindexSlice.reducer;

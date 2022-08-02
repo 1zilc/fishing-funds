@@ -18,6 +18,10 @@
 .ant-dropdown-trigger {
   color: var(--primary-color);
 }
+a:hover,
+.ant-tabs-tab:hover {
+  color: var(--primary-color);
+}
 
 .ant-rate-star-zero {
   svg {
@@ -58,4 +62,7 @@
   height: 5px;
   display: flex;
   align-items: center;
+}
+.ant-spin-dot-item {
+  background-color: var(--primary-color);
 }

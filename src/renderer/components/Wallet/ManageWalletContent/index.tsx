@@ -9,7 +9,7 @@ import WalletRow from '@/components/Wallet/WalletRow';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
 
 import { useDrawer, useAutoDestroySortableRef, useAppDispatch, useAppSelector } from '@/utils/hooks';
-import { setWalletConfigAction, selectWalletAction } from '@/store/features/wallet';
+import { setWalletConfigAction, changeCurrentWalletCodeAction } from '@/store/features/wallet';
 import styles from './index.module.scss';
 
 const AddWalletContent = React.lazy(() => import('@/components/Wallet/AddWalletContent'));
@@ -42,7 +42,7 @@ const ManageWalletContent: React.FC<ManageWalletContentProps> = (props) => {
 
   async function onSelectWallet(wallet: Wallet.SettingItem) {
     const { code } = wallet;
-    dispatch(selectWalletAction(code));
+    dispatch(changeCurrentWalletCodeAction(code));
   }
 
   function onSortWalletConfig(sortList: Wallet.SettingItem[]) {

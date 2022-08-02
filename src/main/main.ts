@@ -7,7 +7,7 @@
  * `./src/main.prod.js` using webpack. This gives us some performance wins.
  */
 
-import { app, globalShortcut, ipcMain, nativeTheme, dialog, webContents, shell, TouchBar } from 'electron';
+import { app, globalShortcut, ipcMain, nativeTheme, dialog, webContents, shell, Menu, BrowserWindow } from 'electron';
 import windowStateKeeper from 'electron-window-state';
 import Store from 'electron-store';
 import { Menubar } from 'menubar';
@@ -16,7 +16,8 @@ import { appIcon, generateWalletIcon } from './icon';
 import { createTray } from './tray';
 import { createMenubar, buildContextMenu } from './menubar';
 import TouchBarManager from './touchbar';
-import { lockSingleInstance, checkEnvTool, sendMessageToRenderer, setNativeTheme } from './util';
+import { createChildWindow } from './childWindow';
+import { lockSingleInstance, checkEnvTool, sendMessageToRenderer, setNativeTheme, getOtherWindows } from './util';
 import * as Enums from '../renderer/utils/enums';
 
 let mb: Menubar;
@@ -32,7 +33,6 @@ async function init() {
 function main() {
   const storage = new Store({ encryptionKey: '1zilc' });
   const tray = createTray();
-
   const mainWindowState = windowStateKeeper({
     defaultWidth: 325,
     defaultHeight: 768,
@@ -44,6 +44,7 @@ function main() {
   const touchBarManager = new TouchBarManager([], mb);
   let contextMenu = buildContextMenu({ mb, appUpdater }, []);
   let activeHotkeys = '';
+  let windowIds: number[] = [];
   const defaultTheme = storage.get('SYSTEM_SETTING.systemThemeSetting', Enums.SystemThemeType.Auto) as Enums.SystemThemeType;
   // mb.app.commandLine.appendSwitch('disable-backgrounding-occluded-windows', 'true');
 
@@ -57,25 +58,25 @@ function main() {
   ipcMain.handle('show-open-dialog', async (event, config) => {
     return dialog.showOpenDialog(config);
   });
-  ipcMain.handle('show-current-window', (event, config) => {
+  ipcMain.handle('show-current-window', async (event, config) => {
     mb.window?.show();
   });
-  ipcMain.handle('get-should-use-dark-colors', (event, config) => {
+  ipcMain.handle('get-should-use-dark-colors', async (event, config) => {
     return nativeTheme.shouldUseDarkColors;
   });
-  ipcMain.handle('set-native-theme-source', (event, config) => {
+  ipcMain.handle('set-native-theme-source', async (event, config) => {
     setNativeTheme(config);
   });
-  ipcMain.handle('set-login-item-settings', (event, config) => {
+  ipcMain.handle('set-login-item-settings', async (event, config) => {
     app.setLoginItemSettings(config);
   });
-  ipcMain.handle('app-quit', (event, config) => {
+  ipcMain.handle('app-quit', async (event, config) => {
     app.quit();
   });
-  ipcMain.handle('set-tray-content', (event, config) => {
+  ipcMain.handle('set-tray-content', async (event, config) => {
     tray.setTitle(config);
   });
-  ipcMain.handle('check-update', (event) => {
+  ipcMain.handle('check-update', async (event) => {
     appUpdater.checkUpdate('renderer');
   });
   ipcMain.handle('get-storage-config', async (event, config) => {
@@ -93,41 +94,42 @@ function main() {
   ipcMain.handle('all-storage-config', async (event, config) => {
     return storage.store;
   });
-  ipcMain.handle('registry-webview', (event, config) => {
+  ipcMain.handle('registry-webview', async (event, config) => {
     const contents = webContents.fromId(config);
+    const win = BrowserWindow.fromWebContents(contents);
     contents.setWindowOpenHandler(({ url }) => {
-      sendMessageToRenderer(mb, 'webview-new-window', url);
+      sendMessageToRenderer(win, 'webview-new-window', url);
       return { action: 'deny' };
     });
   });
-  ipcMain.handle('resolve-proxy', (event, url) => {
-    return mb.window?.webContents.session.resolveProxy(url);
+  ipcMain.handle('resolve-proxy', async (event, url) => {
+    return event.sender.session.resolveProxy(url);
   });
-  ipcMain.handle('set-proxy', (event, config) => {
-    return mb.window?.webContents.session.setProxy(config);
+  ipcMain.handle('set-proxy', async (event, config) => {
+    return event.sender.session.setProxy(config);
   });
-  ipcMain.handle('update-tray-context-menu-wallets', (event, config) => {
+  ipcMain.handle('update-tray-context-menu-wallets', async (event, config) => {
     const menus = config.map((item: any) => ({
       ...item,
       icon: generateWalletIcon(item.iconIndex),
-      click: () => sendMessageToRenderer(mb, 'change-current-wallet-code', item.id),
+      click: () => sendMessageToRenderer(mb.window, 'change-current-wallet-code', item.id),
     }));
     contextMenu = buildContextMenu({ mb, appUpdater }, menus);
   });
   // touchbar 相关监听
-  ipcMain.handle('update-touchbar-zindex', (event, config) => {
+  ipcMain.handle('update-touchbar-zindex', async (event, config) => {
     touchBarManager.updateZindexItems(config);
   });
-  ipcMain.handle('update-touchbar-wallet', (event, config) => {
+  ipcMain.handle('update-touchbar-wallet', async (event, config) => {
     touchBarManager.updateWalletItems(config);
   });
-  ipcMain.handle('update-touchbar-tab', (event, config) => {
+  ipcMain.handle('update-touchbar-tab', async (event, config) => {
     touchBarManager.updateTabItems(config);
   });
-  ipcMain.handle('update-touchbar-eye-status', (event, config) => {
+  ipcMain.handle('update-touchbar-eye-status', async (event, config) => {
     touchBarManager.updateEysStatusItems(config);
   });
-  ipcMain.handle('set-hotkey', (event, keys: string) => {
+  ipcMain.handle('set-hotkey', async (event, keys: string) => {
     if (keys === activeHotkeys) {
       return;
     }
@@ -157,21 +159,41 @@ function main() {
     }
     activeHotkeys = keys;
   });
+  ipcMain.handle('open-child-window', async (event, config) => {
+    const parentWin = BrowserWindow.fromWebContents(event.sender);
+    const win = createChildWindow({ search: config.search, parentId: parentWin!.id });
+    if (win) {
+      const windowId = win.id;
+      windowIds.push(windowId);
+      win.on('closed', () => {
+        windowIds = windowIds.filter((id) => id !== windowId);
+      });
+    }
+  });
+  ipcMain.handle('sync-multi-window-store', async (event, config) => {
+    const fromWin = BrowserWindow.fromWebContents(event.sender);
+    config._share = true;
+    getOtherWindows(windowIds, fromWin?.id).forEach((win) => {
+      win?.webContents.send('sync-store-data', config);
+    });
+  });
   // menubar 相关监听
   mb.on('after-create-window', () => {
+    // 注册windowId
+    windowIds.push(mb.window!.webContents.id);
     // 设置系统色彩偏好
     setNativeTheme(defaultTheme);
-    // 系统级别高斯模糊
-    if (process.platform === 'darwin') {
-      mb.window?.setVibrancy('sidebar');
-    }
     // 右键菜单
     tray.on('right-click', () => {
       mb.tray.popUpContextMenu(contextMenu);
     });
+    // 隐藏菜单栏
+    Menu.setApplicationMenu(null);
     // 监听主题颜色变化
     nativeTheme.on('updated', () => {
-      sendMessageToRenderer(mb, 'nativeTheme-updated', { darkMode: nativeTheme.shouldUseDarkColors });
+      getOtherWindows(windowIds).forEach((win) => {
+        sendMessageToRenderer(win, 'nativeTheme-updated', { darkMode: nativeTheme.shouldUseDarkColors });
+      });
     });
     // 存储窗口大小
     mainWindowState.manage(mb.window!);
@@ -179,7 +201,7 @@ function main() {
     app.dock?.hide();
     // 是否打开备份文件
     if (openBackupFilePath) {
-      sendMessageToRenderer(mb, 'open-backup-file', openBackupFilePath);
+      sendMessageToRenderer(mb.window, 'open-backup-file', openBackupFilePath);
     }
     // 外部打开 _blank连接
     mb.window?.webContents.setWindowOpenHandler(({ url }) => {
@@ -187,6 +209,7 @@ function main() {
       return { action: 'deny' };
     });
   });
+
   // 打开开发者工具
   if (!app.isPackaged) {
     mb.window?.webContents.openDevTools({ mode: 'undocked' });
@@ -229,7 +252,7 @@ app.on('second-instance', (event, argv, cwd) => {
 });
 app.on('open-file', (even, path: string) => {
   if (mb?.window) {
-    sendMessageToRenderer(mb, 'open-backup-file', path);
+    sendMessageToRenderer(mb.window, 'open-backup-file', path);
   } else {
     openBackupFilePath = path;
   }

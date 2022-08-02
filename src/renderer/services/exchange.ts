@@ -85,14 +85,22 @@ export async function GetGlobalBondFromEastmoney() {
       },
     });
     const result: {
-      code: string; //'US2Y_B';
-      name: string; //'美国2年期国债';
-      percent: string; //'0.00';
-      price: string; // 0.22;
-      timestamp: string; // 1629467984;
+      area: string;
+      code: string;
+      name: string;
+      date: string;
+      time: string;
+      price: string;
+      high: string;
+      low: string;
+      change: string;
+      percent: string;
     }[] = eval(`(()=>{
       ${script};
-      return BONDdata;
+      return data.slice(1).map((item)=>{
+        const [area,code,name,date,time,price,high,low,change,percent] = item.split(',');
+        return {area,code,name,date,time,price,high,low,change,percent};
+      });
     })()`);
     return result;
   } catch (error) {

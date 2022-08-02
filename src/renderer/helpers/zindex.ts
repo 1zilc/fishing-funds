@@ -8,7 +8,7 @@ export async function GetZindexs(config: Zindex.SettingItem[]) {
       () =>
         GetZindex(code)
   );
-  const list = await Adapter.ChokeGroupAdapter<Zindex.ResponseItem>(collectors, 5, 500);
+  const list = await Adapter.ChokeGroupAdapter(collectors, 5, 500);
   return list.filter(Utils.NotEmpty);
 }
 

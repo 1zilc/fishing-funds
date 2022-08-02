@@ -1,17 +1,17 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { batch } from 'react-redux';
+import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
 import dayjs from 'dayjs';
-
-import { TypedThunk } from '@/store';
+import { AsyncThunkConfig } from '@/store';
 import { setWalletConfigAction, updateWalletStateAction, setWalletStateAction } from '@/store/features/wallet';
+import { sortFund } from '@/workers/sort.worker';
+import { mergeStateWithResponse } from '@/workers/merge.worker';
 import * as Utils from '@/utils';
-import * as CONST from '@/constants';
 import * as Helpers from '@/helpers';
 import * as Enums from '@/utils/enums';
 
 export interface FundState {
   fundsLoading: boolean;
   remoteFunds: Fund.RemoteFund[];
+  remoteFundsMap: Record<string, Fund.RemoteFund>;
   remoteFundsLoading: boolean;
   fundRatingMap: Record<string, Fund.RantingItem>;
 }
@@ -19,6 +19,7 @@ export interface FundState {
 const initialState: FundState = {
   fundsLoading: false,
   remoteFunds: [],
+  remoteFundsMap: {},
   remoteFundsLoading: false,
   fundRatingMap: {},
 };
@@ -27,8 +28,9 @@ const fundSlice = createSlice({
   name: 'fund',
   initialState,
   reducers: {
-    syncRemoteFundsAction(state, action: PayloadAction<Fund.RemoteFund[]>) {
-      state.remoteFunds = action.payload;
+    syncRemoteFundsMapAction(state, { payload }: PayloadAction<Record<string, Fund.RemoteFund>>) {
+      state.remoteFunds = Object.values(payload);
+      state.remoteFundsMap = payload;
     },
     setFundsLoadingAction(state, action: PayloadAction<boolean>) {
       state.fundsLoading = action.payload;
@@ -36,16 +38,17 @@ const fundSlice = createSlice({
     setRemoteFundsLoadingAction(state, action: PayloadAction<boolean>) {
       state.remoteFundsLoading = action.payload;
     },
-    syncFundRatingMapAction(state, action) {
+    syncFundRatingMapAction(state, action: PayloadAction<Record<string, Fund.RantingItem>>) {
       state.fundRatingMap = action.payload;
     },
   },
 });
 
-export const { syncRemoteFundsAction, setFundsLoadingAction, setRemoteFundsLoadingAction, syncFundRatingMapAction } = fundSlice.actions;
+export const { syncRemoteFundsMapAction, setFundsLoadingAction, setRemoteFundsLoadingAction, syncFundRatingMapAction } = fundSlice.actions;
 
-export function setFundConfigAction(config: Fund.SettingItem[], walletCode: string): TypedThunk {
-  return (dispatch, getState) => {
+export const setFundConfigAction = createAsyncThunk<void, { config: Fund.SettingItem[]; walletCode: string }, AsyncThunkConfig>(
+  'fund/setFundConfigAction',
+  ({ config, walletCode }, { dispatch, getState }) => {
     try {
       const {
         wallet: {
@@ -58,16 +61,15 @@ export function setFundConfigAction(config: Fund.SettingItem[], walletCode: stri
         funds: walletCode === item.code ? config : item.funds,
       }));
 
-      batch(() => {
-        dispatch(setWalletConfigAction(newWalletConfig));
-        dispatch(updateWalletStateAction(currentWallet));
-      });
+      dispatch(setWalletConfigAction(newWalletConfig));
+      dispatch(updateWalletStateAction(currentWallet));
     } catch (error) {}
-  };
-}
+  }
+);
 
-export function setRemoteFundsAction(newRemoteFunds: Fund.RemoteFund[]): TypedThunk {
-  return (dispatch, getState) => {
+export const setRemoteFundsAction = createAsyncThunk<void, Fund.RemoteFund[], AsyncThunkConfig>(
+  'fund/setRemoteFundsAction',
+  (newRemoteFunds, { dispatch, getState }) => {
     try {
       const {
         fund: { remoteFunds },
@@ -75,14 +77,14 @@ export function setRemoteFundsAction(newRemoteFunds: Fund.RemoteFund[]): TypedTh
       const oldRemoteMap = Utils.GetCodeMap(remoteFunds, 0);
       const newRemoteMap = Utils.GetCodeMap(newRemoteFunds, 0);
       const remoteMap = { ...oldRemoteMap, ...newRemoteMap };
-      dispatch(syncRemoteFundsAction(Object.values(remoteMap)));
-      Utils.SetStorage(CONST.STORAGE.REMOTE_FUND_MAP, remoteMap);
+      dispatch(syncRemoteFundsMapAction(remoteMap));
     } catch (error) {}
-  };
-}
+  }
+);
 
-export function setFundRatingMapAction(newFundRantings: Fund.RantingItem[]): TypedThunk {
-  return (dispatch, getState) => {
+export const setFundRatingMapAction = createAsyncThunk<void, Fund.RantingItem[], AsyncThunkConfig>(
+  'fund/setFundRatingMapAction',
+  (newFundRantings, { dispatch, getState }) => {
     try {
       const {
         fund: { fundRatingMap: oldFundRatingMap },
@@ -90,57 +92,60 @@ export function setFundRatingMapAction(newFundRantings: Fund.RantingItem[]): Typ
 
       const nweFundRantingMap = Utils.GetCodeMap(newFundRantings, 'code');
       const fundRatingMap = { ...oldFundRatingMap, ...nweFundRantingMap };
-      Utils.SetStorage(CONST.STORAGE.FUND_RATING_MAP, fundRatingMap);
 
       dispatch(syncFundRatingMapAction(fundRatingMap));
     } catch (error) {}
-  };
-}
+  }
+);
 
-export function addFundAction(fund: Fund.SettingItem): TypedThunk {
-  return (dispatch, getState) => {
+export const addFundAction = createAsyncThunk<void, Fund.SettingItem, AsyncThunkConfig>(
+  'fund/addFundAction',
+  (fund, { dispatch, getState }) => {
     try {
       const {
         wallet: { currentWalletCode, fundConfig },
       } = getState();
       const exist = fundConfig.find((item) => fund.code === item.code);
       if (!exist) {
-        dispatch(setFundConfigAction(fundConfig.concat(fund), currentWalletCode));
+        dispatch(setFundConfigAction({ config: fundConfig.concat(fund), walletCode: currentWalletCode }));
       }
     } catch (error) {}
-  };
-}
+  }
+);
 
-export function updateFundAction(fund: {
-  code: string;
-  cyfe?: number;
-  name?: string;
-  cbj?: number;
-  zdfRange?: number;
-  jzNotice?: number;
-  memo?: string;
-}): TypedThunk {
-  return (dispatch, getState) => {
-    try {
-      const {
-        wallet: { currentWalletCode, fundConfig },
-      } = getState();
-      const cloneFundConfig = Utils.DeepCopy(fundConfig);
-      cloneFundConfig.forEach((item) => {
-        if (fund.code === item.code) {
-          Object.keys(fund).forEach((key) => {
-            (item[key as keyof Fund.SettingItem] as any) = fund[key as keyof Fund.SettingItem];
-          });
-        }
-      });
+export const updateFundAction = createAsyncThunk<
+  void,
+  {
+    code: string;
+    cyfe?: number;
+    name?: string;
+    cbj?: number;
+    zdfRange?: number;
+    jzNotice?: number;
+    memo?: string;
+  },
+  AsyncThunkConfig
+>('fund/updateFundAction', (fund, { dispatch, getState }) => {
+  try {
+    const {
+      wallet: { currentWalletCode, fundConfig },
+    } = getState();
+    const cloneFundConfig = Utils.DeepCopy(fundConfig);
+    cloneFundConfig.forEach((item) => {
+      if (fund.code === item.code) {
+        Object.keys(fund).forEach((key) => {
+          (item[key as keyof Fund.SettingItem] as any) = fund[key as keyof Fund.SettingItem];
+        });
+      }
+    });
 
-      dispatch(setFundConfigAction(cloneFundConfig, currentWalletCode));
-    } catch (error) {}
-  };
-}
+    dispatch(setFundConfigAction({ config: cloneFundConfig, walletCode: currentWalletCode }));
+  } catch (error) {}
+});
 
-export function deleteFundAction(code: string): TypedThunk {
-  return (dispatch, getState) => {
+export const deleteFundAction = createAsyncThunk<void, string, AsyncThunkConfig>(
+  'fund/deleteFundAction',
+  (code, { dispatch, getState }) => {
     try {
       const {
         wallet: { currentWalletCode, fundConfig },
@@ -149,15 +154,16 @@ export function deleteFundAction(code: string): TypedThunk {
         if (code === item.code) {
           const cloneFundConfig = Utils.DeepCopy(fundConfig);
           cloneFundConfig.splice(index, 1);
-          dispatch(setFundConfigAction(cloneFundConfig, currentWalletCode));
+          dispatch(setFundConfigAction({ config: cloneFundConfig, walletCode: currentWalletCode }));
         }
       });
     } catch (error) {}
-  };
-}
+  }
+);
 
-export function sortFundsAction(walletCode: string): TypedThunk {
-  return (dispatch, getState) => {
+export const sortFundsAction = createAsyncThunk<void, string, AsyncThunkConfig>(
+  'fund/sortFundsAction',
+  (walletCode, { dispatch, getState }) => {
     try {
       const {
         wallet: {
@@ -166,47 +172,29 @@ export function sortFundsAction(walletCode: string): TypedThunk {
         },
         sort: {
           sortMode: {
-            fundSortMode: { type: fundSortType, order: fundSortorder },
+            fundSortMode: { type, order },
           },
         },
       } = getState();
       const { funds, updateTime, code } = Helpers.Wallet.GetCurrentWalletState(walletCode, wallets);
       const { codeMap } = Helpers.Fund.GetFundConfig(walletCode, walletConfig);
-      const sortList = funds.slice();
 
-      sortList.sort((a, b) => {
-        const calcA = Helpers.Fund.CalcFund(a, codeMap);
-        const calcB = Helpers.Fund.CalcFund(b, codeMap);
-        const t = fundSortorder === Enums.SortOrderType.Asc ? 1 : -1;
-
-        switch (fundSortType) {
-          case Enums.FundSortType.Growth:
-            return (Number(calcA.gszzl) - Number(calcB.gszzl)) * t;
-          case Enums.FundSortType.Cost:
-            return (Number(calcA.cbje || 0) - Number(calcB.cbje || 0)) * t;
-          case Enums.FundSortType.Money:
-            return (Number(calcA.jrsygz) - Number(calcB.jrsygz)) * t;
-          case Enums.FundSortType.Estimate:
-            return (Number(calcA.gszz) - Number(calcB.gszz)) * t;
-          case Enums.FundSortType.Income:
-            return (Number(calcA.cysy || 0) - Number(calcB.cysy || 0)) * t;
-          case Enums.FundSortType.IncomeRate:
-            return (Number(calcA.cysyl) - Number(calcB.cysyl || 0)) * t;
-          case Enums.FundSortType.Name:
-            return calcA.name!.localeCompare(calcB.name!, 'zh') * t;
-          case Enums.FundSortType.Custom:
-          default:
-            return (codeMap[b.fundcode!]?.originSort - codeMap[a.fundcode!]?.originSort) * t;
-        }
+      const sortList = sortFund({
+        module: Enums.TabKeyType.Fund,
+        codeMap,
+        list: funds,
+        sortType: type,
+        orderType: order,
       });
 
       dispatch(setWalletStateAction({ code, funds: sortList, updateTime }));
     } catch (error) {}
-  };
-}
+  }
+);
 
-export function sortFundsCachedAction(responseFunds: Fund.ResponseItem[], walletCode: string): TypedThunk {
-  return (dispatch, getState) => {
+export const sortFundsCachedAction = createAsyncThunk<void, { responseFunds: Fund.ResponseItem[]; walletCode: string }, AsyncThunkConfig>(
+  'fund/sortFundsCachedAction',
+  ({ responseFunds, walletCode }, { dispatch, getState }) => {
     try {
       const {
         wallet: {
@@ -217,26 +205,19 @@ export function sortFundsCachedAction(responseFunds: Fund.ResponseItem[], wallet
       const { fundConfig } = Helpers.Fund.GetFundConfig(walletCode, walletConfig);
       const { funds } = Helpers.Wallet.GetCurrentWalletState(walletCode, wallets);
       const now = dayjs().format('MM-DD HH:mm:ss');
-      const fundsCodeToMap = Utils.GetCodeMap(funds, 'fundcode');
-      const fundsWithChached = responseFunds.map((_) => ({
-        ...(fundsCodeToMap[_.fundcode!] || {}),
-        ..._,
-      }));
-      const fundsWithChachedCodeToMap = Utils.GetCodeMap(fundsWithChached, 'fundcode');
-      fundConfig.forEach((fund) => {
-        const responseFund = fundsWithChachedCodeToMap[fund.code];
-        const stateFund = fundsCodeToMap[fund.code];
-        if (!responseFund && stateFund) {
-          fundsWithChached.push(stateFund);
-        }
+
+      const fundsWithChached = mergeStateWithResponse({
+        config: fundConfig,
+        configKey: 'code',
+        stateKey: 'fundcode',
+        state: funds,
+        response: responseFunds,
       });
 
-      batch(() => {
-        dispatch(setWalletStateAction({ code: walletCode, funds: fundsWithChached, updateTime: now }));
-        dispatch(sortFundsAction(walletCode));
-      });
+      dispatch(setWalletStateAction({ code: walletCode, funds: fundsWithChached, updateTime: now }));
+      dispatch(sortFundsAction(walletCode));
     } catch (error) {}
-  };
-}
+  }
+);
 
 export default fundSlice.reducer;

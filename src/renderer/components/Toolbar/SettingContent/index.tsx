@@ -1,6 +1,5 @@
 import React, { useRef, useState } from 'react';
 import clsx from 'clsx';
-import { useEventListener } from 'ahooks';
 import { InputNumber, Radio, Badge, Switch, Slider, TimePicker, Input, Tabs, Select, Checkbox } from 'antd';
 import dayjs from 'dayjs';
 import { ReactSortable } from 'react-sortablejs';
@@ -23,10 +22,12 @@ import WindowIcon from '@/static/icon/window.svg';
 import CalendarIcon from '@/static/icon/calendar.svg';
 import GlobalIcon from '@/static/icon/global.svg';
 import InboxIcon from '@/static/icon/inbox.svg';
+import FolderSettingsIcon from '@/static/icon/folder-settings.svg';
 import { setSystemSettingAction, defaultSystemSetting } from '@/store/features/setting';
 import { useAppDispatch, useAppSelector, useAutoDestroySortableRef, useInputShortcut } from '@/utils/hooks';
 import * as Enums from '@/utils/enums';
 import * as Utils from '@/utils';
+import * as Enhancement from '@/utils/enhancement';
 import styles from './index.module.scss';
 
 export interface SettingContentProps {
@@ -168,6 +169,8 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
     freshDelaySetting,
     autoCheckUpdateSetting,
     timestampSetting,
+    syncConfigSetting,
+    syncConfigPathSetting,
   } = useAppSelector((state) => state.setting.systemSetting);
   const updateInfo = useAppSelector((state) => state.updater.updateInfo);
   const isUpdateAvaliable = !!updateInfo.version;
@@ -199,11 +202,14 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
   const [freshDelay, setFreshDelay] = useState(freshDelaySetting);
   const [autoCheckUpdate, setAutoCheckUpdate] = useState(autoCheckUpdateSetting);
   const [timestamp, setTimestamp] = useState(timestampSetting);
+  // 配置同步
+  const [syncConfig, setSyncConfig] = useState(syncConfigSetting);
+  const [syncConfigPath, setSyncConfigPath] = useState(syncConfigPathSetting);
 
   const proxyModeEnable = proxyType === Enums.ProxyType.Http || proxyType === Enums.ProxyType.Socks;
 
-  function onSave() {
-    dispatch(
+  async function onSave() {
+    await dispatch(
       setSystemSettingAction({
         fundApiTypeSetting: fundapiType,
         conciseSetting: concise,
@@ -225,6 +231,8 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
         freshDelaySetting: freshDelay || defaultSystemSetting.freshDelaySetting,
         autoCheckUpdateSetting: autoCheckUpdate,
         timestampSetting: timestamp,
+        syncConfigSetting: syncConfig,
+        syncConfigPathSetting: syncConfigPath,
       })
     );
     props.onEnter();
@@ -253,6 +261,19 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
         show: tab.key === key ? (tab.show && disableTabsCheck ? tab.show : !tab.show) : tab.show, // 至少选择一个
       }))
     );
+  }
+
+  async function onSelectSyncConfigPath() {
+    const { filePath, canceled } = await dialog.showSaveDialog({
+      title: '选择路径',
+      defaultPath: `Fishing-Funds-Sync.ff`,
+      filters: [{ name: 'Fishing Funds', extensions: ['ff'] }],
+      buttonLabel: '确认',
+    });
+    if (canceled) {
+      return;
+    }
+    setSyncConfigPath(filePath!);
   }
 
   return (
@@ -522,6 +543,40 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
                     onChange={(e) => setTimestamp(e.target.value)}
                     value={timestamp}
                   />
+                </section>
+              </div>
+            </StandCard>
+            <StandCard
+              icon={<FolderSettingsIcon />}
+              title="配置同步"
+              extra={
+                <div className={styles.guide}>
+                  <Guide
+                    list={[
+                      { name: '开启同步', text: '开启后自动存储配置文件至指定路径，启动时优先读取该路径配置' },
+                      { name: '同步路径', text: '配置文件路径（通过iCloud、OneDrive等方式自动同步该文件至云端实现多台设备配置同步）' },
+                      { name: '同步范围', text: '支持钱包，基金，指数，板块，股票，货币，h5配置同步' },
+                    ]}
+                  />
+                </div>
+              }
+            >
+              <div className={clsx(styles.setting, 'card-body')}>
+                <section>
+                  <label>开启同步：</label>
+                  <Switch size="small" checked={syncConfig} onChange={setSyncConfig} />
+                </section>
+                <section>
+                  <label>
+                    同步路径{' '}
+                    {!!syncConfigPath ? (
+                      <a onClick={() => setSyncConfigPath('')}>(清除)</a>
+                    ) : (
+                      <a onClick={onSelectSyncConfigPath}>(选择)</a>
+                    )}
+                    ：
+                  </label>
+                  <Input size="small" value={syncConfigPath} disabled />
                 </section>
               </div>
             </StandCard>

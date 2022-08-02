@@ -1,8 +1,8 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { batch } from 'react-redux';
-import { TypedThunk } from '@/store';
+import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
+import { AsyncThunkConfig } from '@/store';
+import { sortCoin } from '@/workers/sort.worker';
+import { mergeStateWithResponse } from '@/workers/merge.worker';
 import * as Utils from '@/utils';
-import * as CONST from '@/constants';
 import * as Enums from '@/utils/enums';
 
 export interface CoinState {
@@ -36,12 +36,12 @@ const coinSlice = createSlice({
     syncCoinsAction(state, action) {
       state.coins = action.payload;
     },
-    syncCoinsConfigAction(state, action) {
+    syncCoinsConfigAction(state, action: PayloadAction<{ coinConfig: Coin.SettingItem[]; codeMap: Coin.CodeMap }>) {
       state.config = action.payload;
     },
-    syncRemoteCoinsAction(state, { payload }: PayloadAction<Coin.RemoteCoin[]>) {
-      state.remoteCoins = payload;
-      state.remoteCoinsMap = Utils.GetCodeMap(payload, 'code');
+    syncRemoteCoinsMapAction(state, { payload }: PayloadAction<Record<string, Coin.RemoteCoin>>) {
+      state.remoteCoins = Object.values(payload);
+      state.remoteCoinsMap = payload;
     },
     setRemoteCoinsLoadingAction(state, action: PayloadAction<boolean>) {
       state.remoteCoinsLoading = action.payload;
@@ -68,14 +68,15 @@ export const {
   setCoinsLoadingAction,
   syncCoinsAction,
   syncCoinsConfigAction,
-  syncRemoteCoinsAction,
+  syncRemoteCoinsMapAction,
   setRemoteCoinsLoadingAction,
   toggleCoinCollapseAction,
   toggleAllCoinsCollapseAction,
 } = coinSlice.actions;
 
-export function addCoinAction(coin: Coin.SettingItem): TypedThunk {
-  return (dispatch, getState) => {
+export const addCoinAction = createAsyncThunk<void, Coin.SettingItem, AsyncThunkConfig>(
+  'coin/addCoinAction',
+  (coin, { dispatch, getState }) => {
     try {
       const {
         coin: {
@@ -87,11 +88,12 @@ export function addCoinAction(coin: Coin.SettingItem): TypedThunk {
         dispatch(setCoinConfigAction(coinConfig.concat(coin)));
       }
     } catch (error) {}
-  };
-}
+  }
+);
 
-export function deleteCoinAction(code: string): TypedThunk {
-  return (dispatch, getState) => {
+export const deleteCoinAction = createAsyncThunk<void, string, AsyncThunkConfig>(
+  'coin/deleteCoinAction',
+  (code, { dispatch, getState }) => {
     try {
       const {
         coin: {
@@ -107,11 +109,12 @@ export function deleteCoinAction(code: string): TypedThunk {
         }
       });
     } catch (error) {}
-  };
-}
+  }
+);
 
-export function setCoinConfigAction(coinConfig: Coin.SettingItem[]): TypedThunk {
-  return (dispatch, getState) => {
+export const setCoinConfigAction = createAsyncThunk<void, Coin.SettingItem[], AsyncThunkConfig>(
+  'coin/setCoinConfigAction',
+  (coinConfig, { dispatch, getState }) => {
     try {
       const {
         coin: { coins },
@@ -119,57 +122,41 @@ export function setCoinConfigAction(coinConfig: Coin.SettingItem[]): TypedThunk 
 
       const codeMap = Utils.GetCodeMap(coinConfig, 'code');
 
-      batch(() => {
-        dispatch(syncCoinsConfigAction({ coinConfig, codeMap }));
-        dispatch(syncCoinsStateAction(coins));
-      });
-
-      Utils.SetStorage(CONST.STORAGE.COIN_SETTING, coinConfig);
+      dispatch(syncCoinsConfigAction({ coinConfig, codeMap }));
+      dispatch(syncCoinsStateAction(coins));
     } catch (error) {}
-  };
-}
+  }
+);
 
-export function sortCoinsAction(): TypedThunk {
-  return (dispatch, getState) => {
-    try {
-      const {
-        coin: {
-          coins,
-          config: { coinConfig },
+export const sortCoinsAction = createAsyncThunk<void, void, AsyncThunkConfig>('coin/sortCoinsAction', (_, { dispatch, getState }) => {
+  try {
+    const {
+      coin: {
+        coins,
+        config: { codeMap },
+      },
+      sort: {
+        sortMode: {
+          coinSortMode: { order, type },
         },
-        sort: {
-          sortMode: {
-            coinSortMode: { order, type },
-          },
-        },
-      } = getState();
-      const codeMap = Utils.GetCodeMap(coinConfig, 'code');
-      const sortList = coins.slice();
+      },
+    } = getState();
 
-      sortList.sort((a, b) => {
-        const t = order === Enums.SortOrderType.Asc ? 1 : -1;
-        switch (type) {
-          case Enums.CoinSortType.Price:
-            return (Number(a.price) - Number(b.price)) * t;
-          case Enums.CoinSortType.Zdf:
-            return (Number(a.change24h) - Number(b.change24h)) * t;
-          case Enums.CoinSortType.Volum:
-            return (Number(a.vol24h) - Number(b.vol24h)) * t;
-          case Enums.CoinSortType.Name:
-            return b.code.localeCompare(a.code, 'zh') * t;
-          case Enums.CoinSortType.Custom:
-          default:
-            return (codeMap[b.code!]?.originSort - codeMap[a.code!]?.originSort) * t;
-        }
-      });
+    const sortList = sortCoin({
+      module: Enums.TabKeyType.Coin,
+      codeMap,
+      list: coins,
+      sortType: type,
+      orderType: order,
+    });
 
-      dispatch(syncCoinsStateAction(sortList));
-    } catch (error) {}
-  };
-}
+    dispatch(syncCoinsStateAction(sortList));
+  } catch (error) {}
+});
 
-export function sortCoinsCachedAction(responseCoins: Coin.ResponseItem[]): TypedThunk {
-  return (dispatch, getState) => {
+export const sortCoinsCachedAction = createAsyncThunk<void, Coin.ResponseItem[], AsyncThunkConfig>(
+  'coin/sortCoinsCachedAction',
+  (responseCoins, { dispatch, getState }) => {
     try {
       const {
         coin: {
@@ -178,30 +165,23 @@ export function sortCoinsCachedAction(responseCoins: Coin.ResponseItem[]): Typed
         },
       } = getState();
 
-      const coinsCodeToMap = Utils.GetCodeMap(coins, 'code');
-      const coinsWithChached = responseCoins.filter(Boolean).map((_) => ({
-        ...(coinsCodeToMap[_.code] || {}),
-        ..._,
-      }));
-      const coinsWithChachedCodeToMap = Utils.GetCodeMap(coinsWithChached, 'code');
+      const coinsWithChached = mergeStateWithResponse({
+        config: coinConfig,
+        configKey: 'code',
+        stateKey: 'code',
+        state: coins,
+        response: responseCoins,
+      });
 
-      coinConfig.forEach((coin) => {
-        const responseCoin = coinsWithChachedCodeToMap[coin.code];
-        const stateCoin = coinsCodeToMap[coin.code];
-        if (!responseCoin && stateCoin) {
-          coinsWithChached.push(stateCoin);
-        }
-      });
-      batch(() => {
-        dispatch(syncCoinsStateAction(coinsWithChached));
-        dispatch(sortCoinsAction());
-      });
+      dispatch(syncCoinsStateAction(coinsWithChached));
+      dispatch(sortCoinsAction());
     } catch (error) {}
-  };
-}
+  }
+);
 
-export function syncCoinsStateAction(coins: (Coin.ResponseItem & Coin.ExtraRow)[]): TypedThunk {
-  return (dispatch, getState) => {
+export const syncCoinsStateAction = createAsyncThunk<void, (Coin.ResponseItem & Coin.ExtraRow)[], AsyncThunkConfig>(
+  'coin/syncCoinsStateAction',
+  (coins, { dispatch, getState }) => {
     try {
       const {
         coin: {
@@ -211,11 +191,12 @@ export function syncCoinsStateAction(coins: (Coin.ResponseItem & Coin.ExtraRow)[
       const filterCoins = coins.filter(({ code }) => codeMap[code]);
       dispatch(syncCoinsAction(filterCoins));
     } catch (error) {}
-  };
-}
+  }
+);
 
-export function setRemoteCoinsAction(newRemoteCoins: Coin.RemoteCoin[]): TypedThunk {
-  return (dispatch, getState) => {
+export const setRemoteCoinsAction = createAsyncThunk<void, Coin.RemoteCoin[], AsyncThunkConfig>(
+  'coin/setRemoteCoinsAction',
+  (newRemoteCoins, { dispatch, getState }) => {
     try {
       const {
         coin: { remoteCoins },
@@ -225,10 +206,9 @@ export function setRemoteCoinsAction(newRemoteCoins: Coin.RemoteCoin[]): TypedTh
       const newRemoteMap = Utils.GetCodeMap(newRemoteCoins, 'code');
       const remoteMap = { ...oldRemoteMap, ...newRemoteMap };
 
-      dispatch(syncRemoteCoinsAction(Object.values(remoteMap)));
-      Utils.SetStorage(CONST.STORAGE.REMOTE_COIN_MAP, remoteMap);
+      dispatch(syncRemoteCoinsMapAction(remoteMap));
     } catch (error) {}
-  };
-}
+  }
+);
 
 export default coinSlice.reducer;

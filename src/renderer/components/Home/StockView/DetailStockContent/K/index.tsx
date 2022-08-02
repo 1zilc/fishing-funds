@@ -33,11 +33,10 @@ const chartTypeList = [
   { name: 'BIAS', type: 4, code: 4 },
 ];
 const timeTypeList = [
-  { name: '半年', type: 1, code: 120 },
-  { name: '一年', type: 2, code: 240 },
-  { name: '三年', type: 3, code: 720 },
-  { name: '五年', type: 4, code: 1200 },
-  { name: '十年', type: 5, code: 2400 },
+  { name: '一年', type: 2, code: 360 },
+  { name: '三年', type: 3, code: 1080 },
+  { name: '五年', type: 4, code: 1800 },
+  { name: '十年', type: 5, code: 3600 },
   { name: '最大', type: 6, code: 10000 },
 ];
 
@@ -192,10 +191,15 @@ const K: React.FC<PerformanceProps> = ({ secid = '', name }) => {
           },
         },
         legend: {
-          data: ['日K', 'MA5', 'MA10', 'MA20', 'MA30'],
+          data: ['日K', 'MA5', 'MA10', 'MA20', 'MA30', 'MA60', 'MA120', 'MA250'],
           textStyle: {
             color: varibleColors['--main-text-color'],
             fontSize: 10,
+          },
+          selected: {
+            MA60: false,
+            MA120: false,
+            MA250: false,
           },
         },
         grid: [
@@ -361,6 +365,39 @@ const K: React.FC<PerformanceProps> = ({ secid = '', name }) => {
             },
           },
           {
+            name: 'MA60',
+            type: 'line',
+            data: Utils.CalculateMA(60, values),
+            smooth: true,
+            showSymbol: false,
+            symbol: 'none',
+            lineStyle: {
+              opacity: 0.5,
+            },
+          },
+          {
+            name: 'MA120',
+            type: 'line',
+            data: Utils.CalculateMA(120, values),
+            smooth: true,
+            showSymbol: false,
+            symbol: 'none',
+            lineStyle: {
+              opacity: 0.5,
+            },
+          },
+          {
+            name: 'MA250',
+            type: 'line',
+            data: Utils.CalculateMA(250, values),
+            smooth: true,
+            showSymbol: false,
+            symbol: 'none',
+            lineStyle: {
+              opacity: 0.5,
+            },
+          },
+          {
             name: '成交量',
             type: 'bar',
             xAxisIndex: 1,
@@ -389,7 +426,7 @@ const K: React.FC<PerformanceProps> = ({ secid = '', name }) => {
         <TypeSelection types={kTypeList} activeType={k.type} onSelected={setKType} colspan={6} />
         <div ref={chartRef} style={{ width: '100%' }} />
         <TypeSelection types={chartTypeList} activeType={chart.type} onSelected={setChartType} colspan={6} />
-        <TypeSelection types={timeTypeList} activeType={time.type} onSelected={setTimeType} colspan={6} />
+        <TypeSelection types={timeTypeList} activeType={time.type} onSelected={setTimeType} flex />
       </div>
     </ChartCard>
   );

@@ -11,7 +11,7 @@ import CustomDrawer from '@/components/CustomDrawer';
 import Empty from '@/components/Empty';
 import { deleteCoinAction, setCoinConfigAction } from '@/store/features/coin';
 import { useDrawer, useAutoDestroySortableRef, useAppDispatch, useAppSelector } from '@/utils/hooks';
-
+import * as Utils from '@/utils';
 import styles from './index.module.scss';
 
 const AddCoinContent = React.lazy(() => import('@/components/Home/CoinView/AddCoinContent'));
@@ -28,15 +28,18 @@ const Optional: React.FC<OptionalProps> = () => {
   const sortCoinConfig = useMemo(() => coinConfig.map((_) => ({ ..._, id: _.code })), [coinConfig]);
 
   function onSortCoinConfig(sortList: Coin.SettingItem[]) {
-    const coinConfig = sortList.map((item) => {
-      const coin = codeMap[item.code];
-      return {
-        name: coin.name,
-        code: coin.code,
-        symbol: coin.symbol,
-      };
-    });
-    dispatch(setCoinConfigAction(coinConfig));
+    const hasChanged = Utils.CheckListOrderHasChanged(coinConfig, sortList, 'code');
+    if (hasChanged) {
+      const sortConfig = sortList.map((item) => {
+        const coin = codeMap[item.code];
+        return {
+          name: coin.name,
+          code: coin.code,
+          symbol: coin.symbol,
+        };
+      });
+      dispatch(setCoinConfigAction(sortConfig));
+    }
   }
 
   async function onRemoveCoin(coin: Coin.SettingItem) {

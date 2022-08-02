@@ -5,7 +5,7 @@ import { Dropdown, Menu } from 'antd';
 import ConsumptionIcon from '@/static/icon/consumption.svg';
 import Eye from '@/components/Eye';
 import { useHeaderContext } from '@/components/Header';
-import { selectWalletAction, toggleEyeStatusAction } from '@/store/features/wallet';
+import { changeCurrentWalletCodeAction, toggleEyeStatusAction } from '@/store/features/wallet';
 import { useAppDispatch, useAppSelector, useFreshFunds } from '@/utils/hooks';
 import { walletIcons } from '@/helpers/wallet';
 import * as Enums from '@/utils/enums';
@@ -49,8 +49,8 @@ const Wallet: React.FC<WalletProps> = () => {
     [walletConfig]
   );
 
-  function onSelectWallet(code: string) {
-    dispatch(selectWalletAction(code));
+  async function onSelectWallet(code: string) {
+    await dispatch(changeCurrentWalletCodeAction(code));
     freshFunds();
   }
 

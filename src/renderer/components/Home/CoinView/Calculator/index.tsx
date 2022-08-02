@@ -2,13 +2,13 @@ import React, { useState, useMemo } from 'react';
 import { Select, Input } from 'antd';
 import { useDebounceFn, useRequest, useMemoizedFn } from 'ahooks';
 import * as NP from 'number-precision';
-
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
 import CustomDrawer from '@/components/CustomDrawer';
 import WebAppIcon from '@/components/Toolbar/AppCenterContent/WebAppIcon';
 import PureCard from '@/components/Card/PureCard';
 import ChartCard from '@/components/Card/ChartCard';
-
+import { SearchPromiseWorker } from '@/workers';
+import { SearchRemoteCoinParams } from '@/workers/search.worker';
 import { useDrawer, useAppSelector } from '@/utils/hooks';
 import * as Helpers from '@/helpers';
 import * as Enums from '@/utils/enums';
@@ -34,19 +34,20 @@ const Calculator: React.FC<CalculatorProps> = (props) => {
 
   const { data: detailCoinCode, show: showDetailDrawer, set: setDetailDrawer, close: closeDetailDrawer } = useDrawer('');
 
-  const { run: onSearch } = useDebounceFn((_value: string) => {
+  const { run: onSearch } = useDebounceFn(async (_value: string) => {
     const value = _value.trim();
-    if (value) {
-      setCoins(
-        remoteCoins.filter((remoteCoin) => {
-          const { code, symbol } = remoteCoin;
-          return (
-            symbol.toLocaleUpperCase().indexOf(value.toLocaleUpperCase()) !== -1 || code.toLocaleUpperCase() === value.toLocaleUpperCase()
-          );
-        })
-      );
-    } else {
+    if (!value) {
       setCoins(remoteCoins);
+    } else {
+      const searchPromiseWorker = new SearchPromiseWorker();
+      const searchList = await searchPromiseWorker
+        .postMessage<typeof remoteCoins, SearchRemoteCoinParams>({
+          module: Enums.TabKeyType.Coin,
+          list: remoteCoins,
+          value,
+        })
+        .finally(() => searchPromiseWorker.terminate());
+      setCoins(searchList);
     }
   });
 
@@ -58,7 +59,9 @@ const Calculator: React.FC<CalculatorProps> = (props) => {
 
   const onSelect = useMemoizedFn(async (code) => {
     const coin = await Helpers.Coin.GetCoin(code);
-    setCoin(coin);
+    if (coin) {
+      setCoin(coin);
+    }
   });
 
   const result = useMemo(() => {

@@ -10,7 +10,7 @@ import TabsBar from '@/components/TabsBar';
 import Collect from '@/components/Collect';
 import GroupTab from '@/components/GroupTab';
 import GlobalStyles from '@/components/GlobalStyles';
-import WebViewer from '@/components/WebViewer';
+import WebViewerDrawer from '@/components/WebViewerDrawer';
 import { stockTypesConfig } from '@/components/Toolbar/AppCenterContent/StockSearch';
 
 import { useAppSelector } from '@/utils/hooks';
@@ -25,7 +25,7 @@ const StockView = React.lazy(() => import('@/components/Home/StockView'));
 const CoinView = React.lazy(() => import('@/components/Home/CoinView'));
 
 const tabsKeyMap = {
-  [Enums.TabKeyType.Funds]: FundGroup,
+  [Enums.TabKeyType.Fund]: FundGroup,
   [Enums.TabKeyType.Zindex]: ZindexGroup,
   [Enums.TabKeyType.Quotation]: QuotationGroup,
   [Enums.TabKeyType.Stock]: StockGroup,
@@ -38,10 +38,10 @@ function FundGroup() {
   const codeMap = useAppSelector((state) => state.wallet.fundConfigCodeMap);
 
   return (
-    <GroupTab tabKey={Enums.TabKeyType.Funds}>
-      <Tabs.TabPane tab="全部" key={String(0)}>
+    <GroupTab tabKey={Enums.TabKeyType.Fund}>
+      <GroupTab.TabPane tab="全部" key={String(0)}>
         <FundView filter={() => true} />
-      </Tabs.TabPane>
+      </GroupTab.TabPane>
       <GroupTab.TabPane tab="持有" key={String(1)}>
         <FundView filter={(fund) => !!codeMap[fund.fundcode!]?.cyfe} />
       </GroupTab.TabPane>
@@ -158,7 +158,7 @@ const Home: React.FC<HomeProps> = () => {
         <Toolbar />
         <TabsBar />
       </Footer>
-      <WebViewer />
+      <WebViewerDrawer />
       <Collect title="home" />
     </div>
   );

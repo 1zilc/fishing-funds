@@ -15,7 +15,7 @@ export async function GetCurrentHours(timestampSetting: Enums.TimestampType) {
         return now;
       case Enums.TimestampType.Network:
       default:
-        return (await Adapter.ChokePreemptiveAdapter<string>(collectors)) || now;
+        return (await Adapter.ChokePreemptiveAdapter(collectors)) || now;
     }
   } catch (error) {
     return now;

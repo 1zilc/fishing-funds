@@ -1,6 +1,6 @@
 import React, { useLayoutEffect, useState, useEffect, useRef, useMemo, useDeferredValue } from 'react';
 import { useInterval, useBoolean, useThrottleFn, useSize, useMemoizedFn, useEventListener } from 'ahooks';
-import { useDispatch, useSelector, TypedUseSelectorHook, batch } from 'react-redux';
+import { useDispatch, useSelector, TypedUseSelectorHook } from 'react-redux';
 import dayjs from 'dayjs';
 import * as echarts from 'echarts';
 
@@ -27,7 +27,7 @@ import * as Adapters from '@/utils/adpters';
 import * as Services from '@/services';
 import * as Helpers from '@/helpers';
 
-const { invoke, ipcRenderer } = window.contextModules.electron;
+const { ipcRenderer } = window.contextModules.electron;
 
 export const useAppDispatch = () => useDispatch<TypedDispatch>();
 
@@ -132,11 +132,11 @@ export function useRenderEcharts(
 
 export function useSyncFixFundSetting() {
   const dispatch = useAppDispatch();
-  const [done, { setTrue }] = useBoolean(false);
+  const [done, { setTrue, setFalse }] = useBoolean(false);
   const fundConfig = useAppSelector((state) => state.wallet.fundConfig);
   const fundApiTypeSetting = useAppSelector((state) => state.setting.systemSetting.fundApiTypeSetting);
 
-  async function FixFundSetting(fundConfig: Fund.SettingItem[]) {
+  async function fixFundSetting(fundConfig: Fund.SettingItem[]) {
     try {
       const responseFunds = await Helpers.Fund.GetFunds(fundConfig, fundApiTypeSetting);
       responseFunds.filter(Boolean).forEach((responseFund) => {
@@ -156,7 +156,8 @@ export function useSyncFixFundSetting() {
   useEffect(() => {
     const unNamedFunds = fundConfig.filter(({ name }) => !name);
     if (unNamedFunds.length) {
-      FixFundSetting(unNamedFunds);
+      setFalse();
+      fixFundSetting(unNamedFunds);
     } else {
       setTrue();
     }
@@ -211,8 +212,6 @@ export function useSyncFixStockSetting() {
 export function useFreshFunds(throttleDelay: number) {
   const loadFunds = useLoadFunds(true);
   const loadFixFunds = useLoadFixFunds();
-  const bottomTabsSetting = useAppSelector((state) => state.setting.systemSetting.bottomTabsSetting);
-  const bottomTabsSettingKeyMap = Utils.GetCodeMap(bottomTabsSetting, 'key');
 
   const { run: runLoadFunds } = useThrottleFn(loadFunds, {
     wait: throttleDelay,
@@ -229,7 +228,7 @@ export function useFreshFunds(throttleDelay: number) {
       }
     },
   });
-  const fn = useTabsFreshFn(Enums.TabKeyType.Funds, freshFunds);
+  const fn = useTabsFreshFn(Enums.TabKeyType.Fund, freshFunds);
   return fn;
 }
 
@@ -238,21 +237,18 @@ export function useLoadFunds(loading: boolean) {
   const currentWalletCode = useAppSelector((state) => state.wallet.currentWalletCode);
   const fundConfig = useAppSelector((state) => state.wallet.fundConfig);
   const fundApiTypeSetting = useAppSelector((state) => state.setting.systemSetting.fundApiTypeSetting);
-
   const load = useMemoizedFn(async () => {
     try {
       dispatch(setFundsLoadingAction(loading));
       const responseFunds = await Helpers.Fund.GetFunds(fundConfig, fundApiTypeSetting);
-      batch(() => {
-        dispatch(sortFundsCachedAction(responseFunds, currentWalletCode));
-        dispatch(setFundsLoadingAction(false));
-      });
+      dispatch(sortFundsCachedAction({ responseFunds, walletCode: currentWalletCode }));
+      dispatch(setFundsLoadingAction(false));
     } catch (error) {
       dispatch(setFundsLoadingAction(false));
     }
   });
 
-  const fn = useTabsFreshFn(Enums.TabKeyType.Funds, load);
+  const fn = useTabsFreshFn(Enums.TabKeyType.Fund, load);
   return fn;
 }
 
@@ -268,7 +264,7 @@ export function useLoadFixFunds() {
       dispatch(syncFixWalletStateAction({ code, funds: fixFunds, updateTime: now }));
     } catch (error) {}
   });
-  const fn = useTabsFreshFn(Enums.TabKeyType.Funds, load);
+  const fn = useTabsFreshFn(Enums.TabKeyType.Fund, load);
   return fn;
 }
 
@@ -279,10 +275,8 @@ export function useLoadRemoteFunds() {
     try {
       dispatch(setRemoteFundsLoadingAction(true));
       const remoteFunds = await Services.Fund.GetRemoteFundsFromEastmoney();
-      batch(() => {
-        dispatch(setRemoteFundsAction(remoteFunds));
-        dispatch(setRemoteFundsLoadingAction(false));
-      });
+      dispatch(setRemoteFundsAction(remoteFunds));
+      dispatch(setRemoteFundsLoadingAction(false));
     } catch (error) {
       dispatch(setRemoteFundsLoadingAction(false));
     }
@@ -317,11 +311,11 @@ export function useLoadWalletsFunds() {
         dispatch(updateWalletStateAction({ code: walletCode, funds: responseFunds, updateTime: now }));
         return responseFunds;
       });
-      await Adapters.ChokeAllAdapter<(Fund.ResponseItem | null)[]>(collects, CONST.DEFAULT.LOAD_WALLET_DELAY);
+      await Adapters.ChokeAllAdapter(collects, CONST.DEFAULT.LOAD_WALLET_DELAY);
     } catch (error) {}
   });
 
-  const fn = useTabsFreshFn(Enums.TabKeyType.Funds, load);
+  const fn = useTabsFreshFn(Enums.TabKeyType.Fund, load);
   return fn;
 }
 
@@ -339,14 +333,14 @@ export function useLoadFixWalletsFunds() {
                 Services.Fund.GetFixFromEastMoney(fundcode!)
           );
         return async () => {
-          const fixFunds = await Adapters.ChokeGroupAdapter<Fund.FixData>(collectors, 5, 100);
+          const fixFunds = await Adapters.ChokeGroupAdapter(collectors, 5, 100);
           const now = dayjs().format('MM-DD HH:mm:ss');
           dispatch(syncFixWalletStateAction({ code: wallet.code, funds: fixFunds.filter(Utils.NotEmpty), updateTime: now }));
           return fixFunds;
         };
       });
 
-      await Adapters.ChokeAllAdapter<(Fund.FixData | null)[]>(fixCollects, CONST.DEFAULT.LOAD_WALLET_DELAY);
+      await Adapters.ChokeAllAdapter(fixCollects, CONST.DEFAULT.LOAD_WALLET_DELAY);
     } catch (error) {}
   });
 
@@ -368,10 +362,8 @@ export function useLoadZindexs(loading: boolean) {
     try {
       dispatch(setZindexesLoadingAction(loading));
       const responseZindexs = await Helpers.Zindex.GetZindexs(zindexConfig);
-      batch(() => {
-        dispatch(sortZindexsCachedAction(responseZindexs));
-        dispatch(setZindexesLoadingAction(false));
-      });
+      dispatch(sortZindexsCachedAction(responseZindexs));
+      dispatch(setZindexesLoadingAction(false));
     } catch (error) {
       dispatch(setZindexesLoadingAction(false));
     }
@@ -395,10 +387,8 @@ export function useLoadQuotations(loading: boolean) {
     try {
       dispatch(setQuotationsLoadingAction(loading));
       const responseQuotations = await Helpers.Quotation.GetQuotations();
-      batch(() => {
-        dispatch(sortQuotationsCachedAction(responseQuotations));
-        dispatch(setQuotationsLoadingAction(false));
-      });
+      dispatch(sortQuotationsCachedAction(responseQuotations));
+      dispatch(setQuotationsLoadingAction(false));
     } catch (error) {
       dispatch(setQuotationsLoadingAction(false));
     }
@@ -423,10 +413,8 @@ export function useLoadStocks(loading: boolean) {
     try {
       dispatch(setStocksLoadingAction(loading));
       const responseStocks = await Helpers.Stock.GetStocks(stockConfig);
-      batch(() => {
-        dispatch(sortStocksCachedAction(responseStocks));
-        dispatch(setStocksLoadingAction(false));
-      });
+      dispatch(sortStocksCachedAction(responseStocks));
+      dispatch(setStocksLoadingAction(false));
     } catch (error) {
       dispatch(setStocksLoadingAction(false));
     }
@@ -452,10 +440,8 @@ export function useLoadCoins(showLoading: boolean) {
     try {
       dispatch(setCoinsLoadingAction(showLoading));
       const responseCoins = await Helpers.Coin.GetCoins(config, coinUnitSetting);
-      batch(() => {
-        dispatch(sortCoinsCachedAction(responseCoins));
-        dispatch(setCoinsLoadingAction(false));
-      });
+      dispatch(sortCoinsCachedAction(responseCoins));
+      dispatch(setCoinsLoadingAction(false));
     } catch (error) {
       dispatch(setCoinsLoadingAction(false));
     }
@@ -470,10 +456,8 @@ export function useLoadRemoteCoins() {
     try {
       dispatch(setRemoteCoinsLoadingAction(true));
       const remoteCoins = await Services.Coin.GetRemoteCoinsFromCoingecko();
-      batch(() => {
-        dispatch(setRemoteCoinsAction(remoteCoins));
-        dispatch(setRemoteCoinsLoadingAction(false));
-      });
+      dispatch(setRemoteCoinsAction(remoteCoins));
+      dispatch(setRemoteCoinsLoadingAction(false));
     } catch (error) {
       dispatch(setRemoteCoinsLoadingAction(false));
     }

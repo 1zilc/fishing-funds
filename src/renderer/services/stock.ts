@@ -14,7 +14,7 @@ export async function FromEastmoney(secid: string) {
     const responseDetail = await GetDetailFromEastmoney(secid);
 
     if (!responseTrends || !Object.keys(responseDetail || {}).length) {
-      return null;
+      return;
     }
 
     const { trends } = responseTrends;
@@ -36,7 +36,7 @@ export async function FromEastmoney(secid: string) {
       trends,
     };
   } catch (error) {
-    return null;
+    return;
   }
 }
 
@@ -148,7 +148,7 @@ export async function GetPicTrendFromEastmoney(secid: string) {
     const b64encoded = base64.fromUint8Array(new Uint8Array(rawBody));
     return `data:image/png;base64,${b64encoded}`;
   } catch (error) {
-    return null;
+    return;
   }
 }
 
@@ -323,7 +323,7 @@ export async function GetDetailFromEastmoney(secid: string) {
       time: dayjs.unix(data.f86).format('MM-DD HH:mm'),
     };
   } catch (error) {
-    return null;
+    return;
   }
 }
 
@@ -905,11 +905,11 @@ export async function GetCloseDayDates() {
       result: {
         pages: 1;
         data: {
-          mkt: string;
-          holiday: string;
-          sdate: string; // 2021/4/2
-          edate: string;
-          xs: '';
+          MKT: string;
+          HOLIDAY: string;
+          SDATE: string;
+          EDATE: string;
+          XS: '';
         }[];
         count: 131;
       };
@@ -973,6 +973,90 @@ export async function GetMeetingData({ startTime, endTime, code }: { startTime: 
       responseType: 'json',
     });
     return body.result.data;
+  } catch (error) {
+    return [];
+  }
+}
+
+// 获取持有股票的基金
+export async function GetStockHoldFunds(secid: string, date: string) {
+  try {
+    const [type, code] = secid.split('.');
+    const { body } = await request<{
+      data: {
+        SECUCODE: '300750.SZ';
+        SECURITY_CODE: '300750';
+        SECURITY_INNER_CODE: '1001194744';
+        SECURITY_NAME_ABBR: '宁德时代';
+        REPORT_DATE: '2022-03-31 00:00:00';
+        HOLDER_CODE: '159915';
+        HOLDER_NAME: '易方达创业板ETF';
+        PARENT_ORG_CODE: '10004951';
+        PARENT_ORGCODE_OLD: '80000229';
+        PARENT_ORG_NAME: '易方达基金管理有限公司';
+        ORG_TYPE_CODE: '1';
+        ORG_TYPE: '基金';
+        TOTAL_SHARES: 6280642;
+        HOLD_MARKET_CAP: 3217572896.6;
+        TOTAL_SHARES_RATIO: 0.26945701;
+        FREE_SHARES_RATIO: 0.3080775;
+        NETASSET_RATIO: 18.85;
+        ORG_NAME_ABBR: '易方达基金';
+        BuyState: false;
+      }[];
+      pages: 22;
+      success: true;
+      url: 'http://datacenter-web.eastmoney.com/api/data/v1/get';
+    }>(`https://data.eastmoney.com/dataapi/zlsj/detail`, {
+      searchParams: {
+        SHType: 1,
+        SHCode: '',
+        SCode: code,
+        ReportDate: date,
+        sortField: 'TOTAL_SHARES',
+        sortDirec: 1,
+        pageNum: 1,
+        pageSize: 90,
+      },
+      responseType: 'json',
+    });
+    return body.data;
+  } catch (error) {
+    return [];
+  }
+}
+
+// 获取报告日期
+export async function GetReportDate() {
+  try {
+    const { body } = await request<{
+      version: '300d3b05facfd205e77e0cb4ad7f97cb';
+      result: {
+        pages: 4;
+        data: {
+          REPORT_DATE: '2022-03-31 00:00:00';
+        }[];
+        count: 96;
+      };
+      success: true;
+      message: 'ok';
+      code: 0;
+    }>(` https://datacenter-web.eastmoney.com/api/data/v1/get`, {
+      searchParams: {
+        reportName: 'RPT_MAIN_REPORTDATE',
+        columns: 'REPORT_DATE',
+        quoteColumns: '',
+        pageNumber: 1,
+        pageSize: 25,
+        sortTypes: -1,
+        sortColumns: 'REPORT_DATE',
+        source: 'WEB',
+        client: 'WEB',
+        _: Date.now(),
+      },
+      responseType: 'json',
+    });
+    return body.result.data.map((_) => dayjs(_.REPORT_DATE).format('YYYY-MM-DD'));
   } catch (error) {
     return [];
   }
