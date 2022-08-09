@@ -175,7 +175,7 @@
     "@types/color-hash": "^1.0.1",
     "@types/jest": "^28.1.0",
     "@types/json2csv": "^5.0.3",
-    "@types/node": "18.0.3",
+    "@types/node": "18.6.5",
     "@types/react": "^18.0.6",
     "@types/react-dom": "^18.0.2",
     "@types/react-test-renderer": "^18.0.0",
@@ -244,7 +244,7 @@
   "dependencies": {
     "@reduxjs/toolkit": "^1.8.1",
     "ahooks": "^3.0.3",
-    "antd": "^4.22.0",
+    "antd": "^4.22.4",
     "cheerio": "^1.0.0-rc.5",
     "clsx": "^1.1.1",
     "color-hash": "^2.0.1",
