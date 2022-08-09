@@ -14,6 +14,7 @@ const { version } = window.contextModules.process;
 const Log: React.FC<LogProps> = () => {
   const { data: logs = [], loading } = useRequest(Services.Log.GetLog, {
     cacheKey: Utils.GenerateRequestKey('Log.GetLog'),
+    staleTime: 1000 * 60 * 10,
   });
 
   return (
