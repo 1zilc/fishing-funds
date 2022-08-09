@@ -82,8 +82,8 @@ export const setRemoteFundsAction = createAsyncThunk<void, Fund.RemoteFund[], As
   }
 );
 
-export const setFundRatingMapAction = createAsyncThunk<void, Fund.RantingItem[], AsyncThunkConfig>(
-  'fund/setFundRatingMapAction',
+export const setFundRatingAction = createAsyncThunk<void, Fund.RantingItem[], AsyncThunkConfig>(
+  'fund/setFundRatingAction',
   (newFundRantings, { dispatch, getState }) => {
     try {
       const {

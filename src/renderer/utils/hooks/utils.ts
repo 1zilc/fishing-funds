@@ -8,7 +8,7 @@ import {
   updateFundAction,
   sortFundsCachedAction,
   setRemoteFundsAction,
-  setFundRatingMapAction,
+  setFundRatingAction,
   setFundsLoadingAction,
   setRemoteFundsLoadingAction,
 } from '@/store/features/fund';
@@ -291,7 +291,7 @@ export function useLoadFundRatingMap() {
   const load = useMemoizedFn(async () => {
     try {
       const remoteRantings = await Services.Fund.GetFundRatingFromEasemoney();
-      dispatch(setFundRatingMapAction(remoteRantings));
+      dispatch(setFundRatingAction(remoteRantings));
     } catch (error) {}
   });
 

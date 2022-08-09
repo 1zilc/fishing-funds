@@ -1,44 +1,15 @@
 import { isAnyOf } from '@reduxjs/toolkit';
 import { ShareAction } from '@/store';
 import listenerMiddleware from '@/store/listeners';
-import { syncCoinsConfigAction, syncRemoteCoinsMapAction } from '@/store/features/coin';
-import { syncFundRatingMapAction, syncRemoteFundsMapAction } from '@/store/features/fund';
+import { syncCoinsConfigAction } from '@/store/features/coin';
 import { syncFavoriteQuotationMapAction } from '@/store/features/quotation';
-import { syncSettingAction, saveSyncConfigAction } from '@/store/features/setting';
 import { syncStocksConfigAction } from '@/store/features/stock';
+import { saveSyncConfigAction } from '@/store/features/setting';
 import { changeCurrentWalletCodeAction, syncWalletsConfigAction } from '@/store/features/wallet';
 import { syncWebConfigAction } from '@/store/features/web';
 import { syncZindexesConfigAction } from '@/store/features/zindex';
 
-const { ipcRenderer } = window.contextModules.electron;
-export function shareStateListening() {
-  // 窗口共享状态
-
-  listenerMiddleware.startListening({
-    matcher: isAnyOf(
-      syncCoinsConfigAction,
-      syncZindexesConfigAction,
-      syncWebConfigAction,
-      syncStocksConfigAction,
-      syncWalletsConfigAction,
-      syncFundRatingMapAction,
-      syncSettingAction,
-      syncFavoriteQuotationMapAction,
-      changeCurrentWalletCodeAction,
-      syncRemoteFundsMapAction,
-      syncRemoteCoinsMapAction
-    ),
-    effect: (action: ShareAction, listenerApi) => {
-      if (!action._share) {
-        ipcRenderer.invoke('sync-multi-window-store', action);
-      }
-    },
-  });
-}
-
-export function syncConfigListening() {
-  // 配置同步
-
+export default () => {
   listenerMiddleware.startListening({
     matcher: isAnyOf(
       syncCoinsConfigAction,
@@ -62,4 +33,4 @@ export function syncConfigListening() {
       }
     },
   });
-}
+};

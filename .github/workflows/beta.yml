@@ -1,0 +1,32 @@
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
+
+# This workflow will install Deno and run tests across stable and canary builds on Windows, Ubuntu and macOS.
+# For more information see: https://github.com/denoland/setup-deno
+
+name: Build Beta
+
+on:
+  push:
+    branches: [beta]
+
+jobs:
+  build_beta:
+    runs-on: macos-latest # runs a publish on macOS
+
+    steps:
+      - name: Setup repo
+        uses: actions/checkout@v2
+
+      - name: Run build
+        uses: actions/setup-node@v2
+        with:
+          node-version: 16
+      - run: npm install --force
+      - run: npm run postinstall
+      - run: npm run beta-mac
+        env:
+          USE_HARD_LINKS: false
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
