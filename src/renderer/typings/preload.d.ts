@@ -37,11 +37,11 @@ declare global {
         decodeFF: (content: string) => Promise<any>;
       };
       electronStore: {
-        get: <T = unknown>(key: string, init?: T) => Promise<T>;
-        set: (key: string, data: unknown) => Promise<void>;
-        delete: (key: string) => Promise<void>;
-        cover: (data: unknown) => Promise<void>;
-        all: () => Promise<any>;
+        get: <T = unknown>(type: Store.StoreType, key: string, init?: T) => Promise<T>;
+        set: (type: Store.StoreType, key: string, data: unknown) => Promise<void>;
+        delete: (type: Store.StoreType, key: string) => Promise<void>;
+        cover: (type: Store.StoreType, data: unknown) => Promise<void>;
+        all: (type: Store.StoreType) => Promise<any>;
       };
       base64: {
         encode: (src: string, urlsafe?: boolean | undefined) => string;

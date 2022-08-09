@@ -6,7 +6,7 @@ import { useRequest } from 'ahooks';
 import ChartCard from '@/components/Card/ChartCard';
 import CustomDrawer from '@/components/CustomDrawer';
 import { useDrawer, useAppDispatch, useAppSelector } from '@/utils/hooks';
-import { setFundRatingMapAction } from '@/store/features/fund';
+import { setFundRatingAction } from '@/store/features/fund';
 
 import * as Services from '@/services';
 import styles from './index.module.scss';
@@ -74,7 +74,7 @@ const Ranting: React.FC<PropsWithChildren<RantingProps>> = () => {
   ];
 
   const { run: runGetFundRatingFromEasemoney, loading } = useRequest(Services.Fund.GetFundRatingFromEasemoney, {
-    onSuccess: (res) => dispatch(setFundRatingMapAction(res)),
+    onSuccess: (res) => dispatch(setFundRatingAction(res)),
     ready: !Object.keys(fundRatingMap).length,
   });
 

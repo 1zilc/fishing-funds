@@ -9,13 +9,13 @@
 
 import { app, globalShortcut, ipcMain, nativeTheme, dialog, webContents, shell, Menu, BrowserWindow } from 'electron';
 import windowStateKeeper from 'electron-window-state';
-import Store from 'electron-store';
 import { Menubar } from 'menubar';
 import AppUpdater from './autoUpdater';
 import { appIcon, generateWalletIcon } from './icon';
 import { createTray } from './tray';
 import { createMenubar, buildContextMenu } from './menubar';
 import TouchBarManager from './touchbar';
+import LocalStore from './store';
 import { createChildWindow } from './childWindow';
 import { lockSingleInstance, checkEnvTool, sendMessageToRenderer, setNativeTheme, getOtherWindows } from './util';
 import * as Enums from '../renderer/utils/enums';
@@ -31,7 +31,7 @@ async function init() {
 }
 
 function main() {
-  const storage = new Store({ encryptionKey: '1zilc' });
+  const localStore = new LocalStore();
   const tray = createTray();
   const mainWindowState = windowStateKeeper({
     defaultWidth: 325,
@@ -45,7 +45,7 @@ function main() {
   let contextMenu = buildContextMenu({ mb, appUpdater }, []);
   let activeHotkeys = '';
   let windowIds: number[] = [];
-  const defaultTheme = storage.get('SYSTEM_SETTING.systemThemeSetting', Enums.SystemThemeType.Auto) as Enums.SystemThemeType;
+  const defaultTheme = localStore.get('config', 'SYSTEM_SETTING.systemThemeSetting', Enums.SystemThemeType.Auto) as Enums.SystemThemeType;
   // mb.app.commandLine.appendSwitch('disable-backgrounding-occluded-windows', 'true');
 
   // ipcMain 主进程相关监听
@@ -79,20 +79,21 @@ function main() {
   ipcMain.handle('check-update', async (event) => {
     appUpdater.checkUpdate('renderer');
   });
+  // store相关
   ipcMain.handle('get-storage-config', async (event, config) => {
-    return storage.get(config.key, config.init);
+    return localStore.get(config.type, config.key, config.init);
   });
   ipcMain.handle('set-storage-config', async (event, config) => {
-    storage.set(config.key, config.value);
+    localStore.set(config.type, config.key, config.value);
   });
   ipcMain.handle('delete-storage-config', async (event, config) => {
-    storage.delete(config.key);
+    localStore.delete(config.type, config.key);
   });
   ipcMain.handle('cover-storage-config', async (event, config) => {
-    storage.set(config.value);
+    localStore.cover(config.type, config.value);
   });
   ipcMain.handle('all-storage-config', async (event, config) => {
-    return storage.store;
+    return localStore.getStore(config.type);
   });
   ipcMain.handle('registry-webview', async (event, config) => {
     const contents = webContents.fromId(config);

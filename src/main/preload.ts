@@ -112,20 +112,20 @@ contextBridge.exposeInMainWorld('contextModules', {
     },
   },
   electronStore: {
-    async get(key: string, init: unknown) {
-      return ipcRenderer.invoke('get-storage-config', { key, init });
+    async get(type: Store.StoreType, key: string, init: unknown) {
+      return ipcRenderer.invoke('get-storage-config', { type, key, init });
     },
-    async set(key: string, value: unknown) {
-      await ipcRenderer.invoke('set-storage-config', { key, value });
+    async set(type: Store.StoreType, key: string, value: unknown) {
+      await ipcRenderer.invoke('set-storage-config', { type, key, value });
     },
-    async delete(key: string) {
-      await ipcRenderer.invoke('delete-storage-config', { key });
+    async delete(type: Store.StoreType, key: string) {
+      await ipcRenderer.invoke('delete-storage-config', { type, key });
     },
-    async cover(value: unknown) {
-      await ipcRenderer.invoke('cover-storage-config', { value });
+    async cover(type: Store.StoreType, value: unknown) {
+      await ipcRenderer.invoke('cover-storage-config', { type, value });
     },
-    async all() {
-      return ipcRenderer.invoke('all-storage-config');
+    async all(type: Store.StoreType) {
+      return ipcRenderer.invoke('all-storage-config', { type });
     },
   },
   base64: {

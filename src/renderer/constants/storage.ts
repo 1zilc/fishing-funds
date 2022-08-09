@@ -1,19 +1,22 @@
 export default {
+  // config
   ZINDEX_SETTING: 'ZINDEX_SETTING', // 指数配置
   FAVORITE_QUOTATION_MAP: 'FAVORITE_QUOTATION_MAP', // 关注板块map
   STOCK_SETTING: 'STOCK_SETTING', // 股票配置
   COIN_SETTING: 'COIN_SETTING', // 货币配置
   SYSTEM_SETTING: 'SYSTEM_SETTING', // 系统设置
   WALLET_SETTING: 'WALLET_SETTING', // 钱包配置
-  EYE_STATUS: 'EYE_STATUS', // 钱包展示状态
+  WEB_SETTING: 'WEB_SETTING', // 网站配置
   CURRENT_WALLET_CODE: 'CURRENT_WALLET_CODE', // 当前选中钱包code
+  // state
+  EYE_STATUS: 'EYE_STATUS', // 钱包展示状态
   SORT_MODE: 'SORT_MODE', // 排序模式
   VIEW_MODE: 'VIEW_MODE', // 视图模式
+  TABS_ACTIVE_KEY: 'TABS_ACTIVE_KEY', // tabs活动键
   ADJUSTMENT_NOTIFICATION_DATE: 'ADJUSTMENT_NOTIFICATION_DATE', // 上一次提醒用户调仓的时间
+  // cache
   REMOTE_FUND_MAP: 'REMOTE_FUND_MAP', // 远程基金库code -> map
   FUND_RATING_MAP: 'FUND_RATING_MAP', // 基金评级code -> map
   REMOTE_COIN_MAP: 'REMOTE_COIN_MAP', // 远程货币code -> map
-  WEB_SETTING: 'WEB_SETTING', // 网站配置
-  TABS_ACTIVE_KEY: 'TABS_ACTIVE_KEY', // tabs活动键
-  UPDATING_STORE_STATE_FROM_OTHER: 'UPDATING_STORE_STATE_FROM_OTHER', // 正在从其他窗口更新store
+  // other
 };
