@@ -351,14 +351,19 @@ export function GetCodeMap<T extends Record<string, any>>(list: T[], key: keyof 
   type extraData = {
     originSort: number;
   };
-  return list.reduce((r, c, i) => {
-    if (Array.isArray(c)) {
-      r[c[key]] = c as any;
-    } else {
-      r[c[key]] = { ...c, originSort: i };
+  return list.reduce<Record<string, T & extraData>>((r, c, i) => {
+    if (c instanceof Object) {
+      const indexKey = c[key];
+      if (indexKey !== undefined && indexKey !== null) {
+        if (Array.isArray(c)) {
+          r[indexKey] = c as any;
+        } else {
+          r[indexKey] = { ...c, originSort: i };
+        }
+      }
     }
     return r;
-  }, {} as Record<string, T & extraData>);
+  }, {});
 }
 
 export function GenerateRequestKey(api: string, key?: any) {
