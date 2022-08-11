@@ -1,5 +1,6 @@
 import NP from 'number-precision';
 import * as Utils from '@/utils';
+import * as Enums from '@/utils/enums';
 
 export function CalcFund(fund: Fund.ResponseItem & Fund.FixData, codeMap: Fund.CodeMap) {
   const gzrq = fund.gztime?.slice(5, 10);
@@ -99,4 +100,43 @@ export function MergeFixFunds(funds: (Fund.ResponseItem & Fund.FixData)[], fixFu
     }
   });
   return cloneFunds;
+}
+
+export function SortFund({
+  codeMap,
+  list,
+  orderType,
+  sortType,
+}: {
+  list: (Fund.ResponseItem & Fund.FixData & Fund.ExtraRow)[];
+  sortType: Enums.FundSortType;
+  codeMap: Fund.CodeMap;
+  orderType: Enums.SortOrderType;
+}) {
+  const sortList = list.slice();
+  sortList.sort((a, b) => {
+    const calcA = CalcFund(a, codeMap);
+    const calcB = CalcFund(b, codeMap);
+    const t = orderType === Enums.SortOrderType.Asc ? 1 : -1;
+    switch (sortType) {
+      case Enums.FundSortType.Growth:
+        return (Number(calcA.gszzl) - Number(calcB.gszzl)) * t;
+      case Enums.FundSortType.Cost:
+        return (Number(calcA.cbje || 0) - Number(calcB.cbje || 0)) * t;
+      case Enums.FundSortType.Money:
+        return (Number(calcA.jrsygz) - Number(calcB.jrsygz)) * t;
+      case Enums.FundSortType.Estimate:
+        return (Number(calcA.gszz) - Number(calcB.gszz)) * t;
+      case Enums.FundSortType.Income:
+        return (Number(calcA.cysy || 0) - Number(calcB.cysy || 0)) * t;
+      case Enums.FundSortType.IncomeRate:
+        return (Number(calcA.cysyl) - Number(calcB.cysyl || 0)) * t;
+      case Enums.FundSortType.Name:
+        return calcA.name!.localeCompare(calcB.name!, 'zh') * t;
+      case Enums.FundSortType.Custom:
+      default:
+        return (codeMap[b.fundcode!]?.originSort - codeMap[a.fundcode!]?.originSort) * t;
+    }
+  });
+  return sortList;
 }

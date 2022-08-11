@@ -1,9 +1,7 @@
 import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
 import { AsyncThunkConfig } from '@/store';
-import { sortCoin } from '@/workers/sort.worker';
-import { mergeStateWithResponse } from '@/workers/merge.worker';
 import * as Utils from '@/utils';
-import * as Enums from '@/utils/enums';
+import * as Helpers from '@/helpers';
 
 export interface CoinState {
   coins: (Coin.ResponseItem & Coin.ExtraRow)[];
@@ -142,8 +140,7 @@ export const sortCoinsAction = createAsyncThunk<void, void, AsyncThunkConfig>('c
       },
     } = getState();
 
-    const sortList = sortCoin({
-      module: Enums.TabKeyType.Coin,
+    const sortList = Helpers.Coin.SortCoin({
       codeMap,
       list: coins,
       sortType: type,
@@ -165,7 +162,7 @@ export const sortCoinsCachedAction = createAsyncThunk<void, Coin.ResponseItem[],
         },
       } = getState();
 
-      const coinsWithChached = mergeStateWithResponse({
+      const coinsWithChached = Utils.MergeStateWithResponse({
         config: coinConfig,
         configKey: 'code',
         stateKey: 'code',

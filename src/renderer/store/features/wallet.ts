@@ -1,7 +1,6 @@
 import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
 import { AsyncThunkConfig } from '@/store';
 import { sortFundsAction } from '@/store/features/fund';
-import { mergeStateWithResponse } from '@/workers/merge.worker';
 import * as Enums from '@/utils/enums';
 import * as Utils from '@/utils';
 import * as Helpers from '@/helpers';
@@ -223,7 +222,7 @@ export const updateWalletStateAction = createAsyncThunk<void, Wallet.StateItem, 
       const walletState = Helpers.Wallet.GetCurrentWalletState(cloneState.code, cloneWallets);
       const walletsStateCodeToMap = Utils.GetCodeMap(cloneWallets, 'code');
 
-      cloneState.funds = mergeStateWithResponse({
+      cloneState.funds = Utils.MergeStateWithResponse({
         config: fundConfig,
         configKey: 'code',
         stateKey: 'fundcode',

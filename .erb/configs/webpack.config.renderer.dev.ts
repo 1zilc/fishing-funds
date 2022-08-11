@@ -42,7 +42,11 @@ const configuration: webpack.Configuration = {
     path: webpackPaths.distRendererPath,
     publicPath: '/',
     filename: 'renderer.dev.js',
-    library: { type: 'umd' },
+    library: { type: 'module' },
+  },
+
+  experiments: {
+    outputModule: true,
   },
 
   module: {
@@ -145,7 +149,7 @@ const configuration: webpack.Configuration = {
       env: process.env.NODE_ENV,
       isDevelopment: process.env.NODE_ENV !== 'production',
       nodeModules: webpackPaths.appNodeModulesPath,
-      // scriptLoading: 'module',
+      scriptLoading: 'module',
     }),
   ],
 
