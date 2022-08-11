@@ -2,8 +2,6 @@ import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
 import dayjs from 'dayjs';
 import { AsyncThunkConfig } from '@/store';
 import { setWalletConfigAction, updateWalletStateAction, setWalletStateAction } from '@/store/features/wallet';
-import { sortFund } from '@/workers/sort.worker';
-import { mergeStateWithResponse } from '@/workers/merge.worker';
 import * as Utils from '@/utils';
 import * as Helpers from '@/helpers';
 import * as Enums from '@/utils/enums';
@@ -179,8 +177,7 @@ export const sortFundsAction = createAsyncThunk<void, string, AsyncThunkConfig>(
       const { funds, updateTime, code } = Helpers.Wallet.GetCurrentWalletState(walletCode, wallets);
       const { codeMap } = Helpers.Fund.GetFundConfig(walletCode, walletConfig);
 
-      const sortList = sortFund({
-        module: Enums.TabKeyType.Fund,
+      const sortList = Helpers.Fund.SortFund({
         codeMap,
         list: funds,
         sortType: type,
@@ -206,7 +203,7 @@ export const sortFundsCachedAction = createAsyncThunk<void, { responseFunds: Fun
       const { funds } = Helpers.Wallet.GetCurrentWalletState(walletCode, wallets);
       const now = dayjs().format('MM-DD HH:mm:ss');
 
-      const fundsWithChached = mergeStateWithResponse({
+      const fundsWithChached = Utils.MergeStateWithResponse({
         config: fundConfig,
         configKey: 'code',
         stateKey: 'fundcode',

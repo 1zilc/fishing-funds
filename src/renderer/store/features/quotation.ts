@@ -1,8 +1,7 @@
 import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
 import { AsyncThunkConfig } from '@/store';
-import { sortQuotation } from '@/workers/sort.worker';
 import * as Utils from '@/utils';
-import * as Enums from '@/utils/enums';
+import * as Helpers from '@/helpers';
 
 export interface QuotationState {
   quotations: (Quotation.ResponseItem & Quotation.ExtraRow)[];
@@ -98,8 +97,7 @@ export const sortQuotationsAction = createAsyncThunk<void, void, AsyncThunkConfi
         },
       } = getState();
 
-      const sortList = sortQuotation({
-        module: Enums.TabKeyType.Quotation,
+      const sortList = Helpers.Quotation.SortQuotation({
         list: quotations,
         sortType: type,
         orderType: order,

@@ -1,9 +1,7 @@
 import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
 import { AsyncThunkConfig } from '@/store';
-import { sortStock } from '@/workers/sort.worker';
-import { mergeStateWithResponse } from '@/workers/merge.worker';
 import * as Utils from '@/utils';
-import * as Enums from '@/utils/enums';
+import * as Helpers from '@/helpers';
 
 export interface StockState {
   stocks: (Stock.ResponseItem & Stock.ExtraRow)[];
@@ -131,8 +129,7 @@ export const sortStocksAction = createAsyncThunk<void, void, AsyncThunkConfig>('
       },
     } = getState();
 
-    const sortList = sortStock({
-      module: Enums.TabKeyType.Stock,
+    const sortList = Helpers.Stock.SortStock({
       codeMap,
       list: stocks,
       sortType: type,
@@ -154,7 +151,7 @@ export const sortStocksCachedAction = createAsyncThunk<void, Stock.ResponseItem[
         },
       } = getState();
 
-      const stocksWithChached = mergeStateWithResponse({
+      const stocksWithChached = Utils.MergeStateWithResponse({
         config: stockConfig,
         configKey: 'secid',
         stateKey: 'secid',
