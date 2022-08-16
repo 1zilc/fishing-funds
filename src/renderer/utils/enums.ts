@@ -178,6 +178,7 @@ export enum StockMarketType {
   XSB = 7,
   Fund = 8,
   Bond = 9,
+  Futures = 10,
 }
 
 export enum CoinUnitType {

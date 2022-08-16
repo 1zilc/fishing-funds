@@ -30,6 +30,7 @@ export const stockTypesConfig = [
   { name: '三板', code: Enums.StockMarketType.XSB },
   // { name: '基金', code:  Enums.StockMarketType.Fund },
   { name: '债券', code: Enums.StockMarketType.Bond },
+  { name: '期货', code: Enums.StockMarketType.Futures },
 ];
 
 const StockSearch: React.FC<StockSearchProps> = (props) => {
