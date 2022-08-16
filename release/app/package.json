@@ -10,8 +10,8 @@
     "url": "https://github.com/1zilc"
   },
   "scripts": {
-    "electron-rebuild": "node -r ts-node/register ../../.erb/scripts/electron-rebuild.js",
-    "link-modules": "node -r ts-node/register ../../.erb/scripts/link-modules.ts",
+    "electron-rebuild": "tsx ../../.erb/scripts/electron-rebuild.js",
+    "link-modules": "tsx ../../.erb/scripts/link-modules.ts",
     "postinstall": "npm run electron-rebuild && npm run link-modules"
   },
   "license": "(ISC OR GPL-3.0)",
