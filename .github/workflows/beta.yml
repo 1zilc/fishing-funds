@@ -30,3 +30,7 @@ jobs:
         env:
           USE_HARD_LINKS: false
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
+
+      - name: Delete beta branch
+        uses: actions/checkout@v2
+      - run: git push --delete origin beta
