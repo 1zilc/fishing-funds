@@ -33,7 +33,6 @@ const FundRow: React.FC<RowProps> = (props) => {
   const eyeStatus = useAppSelector((state) => state.wallet.eyeStatus);
   const calcFundResult = useMemo(() => Helpers.Fund.CalcFund(fund, fundConfigCodeMap), [fund, fundConfigCodeMap]);
   const { isFix } = calcFundResult;
-
   function onRowClick() {
     if (readOnly) {
       onDetailClick();
@@ -98,9 +97,15 @@ const FundRow: React.FC<RowProps> = (props) => {
             {calcFundResult.gszzl === '' ? `  0.00 %` : `${Utils.Yang(calcFundResult.gszzl)} %`}
           </div>
         ) : (
-          <div className={clsx(styles.value, Utils.GetValueColor(calcFundResult.gszzl).blockClass)}>
-            {calcFundResult.gszzl === '' ? `  0.00 %` : `${Utils.Yang(calcFundResult.gszzl)} %`}
-          </div>
+          <>
+            <div className={clsx(styles.value, Utils.GetValueColor(calcFundResult.gszzl).blockClass)}>
+              {calcFundResult.gszzl === '' ? `  0.00 %` : `${Utils.Yang(calcFundResult.gszzl)} %`}
+            </div>
+            {/* 估算持有收益率 */}
+            <div className={clsx(styles.value, Utils.GetValueColor(calcFundResult.gscysyl).blockClass)}>
+              {calcFundResult.gscysyl === '' ? `  0.00 %` : `${Utils.Yang(calcFundResult.gscysyl)} %`}
+            </div>
+          </>
         )}
       </div>
       <Collapse style={{ zIndex: 1 }} isOpened={fund.collapse}>

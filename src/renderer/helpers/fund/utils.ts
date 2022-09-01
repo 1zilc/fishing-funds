@@ -17,7 +17,8 @@ export function CalcFund(fund: Fund.ResponseItem & Fund.FixData, codeMap: Fund.C
   const cbje = cbj && NP.times(cbj, cyfe);
   const cysyl = cbj && NP.divide(NP.minus(dwjz, cbj), cbj, 0.01);
   const cysy = cbj && NP.times(NP.minus(dwjz, cbj), cyfe);
-
+  const gszzl = isFix ? fund.fixZzl : fund.gszzl; // 估算收益率
+  const gscysyl = cyfe > 0 ? (isFix ? cysyl?.toFixed(2) : (Number(cysyl) + Number(gszzl)).toFixed(2)) : '';
   // cyfe: number; // 持有份额
   // bjz: number; // 比较值
   // jrsygz: number; // 今日收益估值
@@ -38,7 +39,8 @@ export function CalcFund(fund: Fund.ResponseItem & Fund.FixData, codeMap: Fund.C
     isFix, // 是否更新净值
     gsz, // 估算值（最新）
     dwjz, // 单位净值（上一次）
-    gszzl: isFix ? fund.fixZzl : fund.gszzl, // 估算收益率
+    gszzl, // 估算收益率
+    gscysyl, // 估算持有收益率
     jzrq: isFix ? fund.fixDate : jzrq, // 净值日期
   };
 }
