@@ -76,6 +76,10 @@ const FundRow: React.FC<RowProps> = (props) => {
           <div style={{ display: 'flex', alignItems: 'center' }}>
             <span className={styles.fundName}>{fund.name}</span>
             {!!calcFundResult.cyfe && <span className={styles.hold}>持有</span>}
+            {/* 估算持有收益率 */}
+            <span className={clsx(styles.gscysyl, Utils.GetValueColor(calcFundResult.gscysyl).blockClass)}>
+              {calcFundResult.gscysyl === '' ? `  0.00 %` : `${Utils.Yang(calcFundResult.gscysyl)} %`}
+            </span>
             {isFix && <span className={styles.warn}>更新</span>}
           </div>
           {!conciseSetting && (
@@ -97,15 +101,9 @@ const FundRow: React.FC<RowProps> = (props) => {
             {calcFundResult.gszzl === '' ? `  0.00 %` : `${Utils.Yang(calcFundResult.gszzl)} %`}
           </div>
         ) : (
-          <>
-            <div className={clsx(styles.value, Utils.GetValueColor(calcFundResult.gszzl).blockClass)}>
-              {calcFundResult.gszzl === '' ? `  0.00 %` : `${Utils.Yang(calcFundResult.gszzl)} %`}
-            </div>
-            {/* 估算持有收益率 */}
-            <div className={clsx(styles.value, Utils.GetValueColor(calcFundResult.gscysyl).blockClass)}>
-              {calcFundResult.gscysyl === '' ? `  0.00 %` : `${Utils.Yang(calcFundResult.gscysyl)} %`}
-            </div>
-          </>
+          <div className={clsx(styles.value, Utils.GetValueColor(calcFundResult.gszzl).blockClass)}>
+            {calcFundResult.gszzl === '' ? `  0.00 %` : `${Utils.Yang(calcFundResult.gszzl)} %`}
+          </div>
         )}
       </div>
       <Collapse style={{ zIndex: 1 }} isOpened={fund.collapse}>
