@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 
 import QuotationRow from '@/components/Home/QuotationView/QuotationRow';
+import QuotationFlow from '@/components/Home/QuotationView/QuotationFlow';
 import Empty from '@/components/Empty';
 import LoadingBar from '@/components/LoadingBar';
 import CustomDrawer from '@/components/CustomDrawer';
@@ -37,7 +38,6 @@ const QuotationView: React.FC<QuotationViewProps> = (props) => {
       case Enums.QuotationViewType.Grid:
         return <GridView list={list.map((item) => ({ ...item, value: item.zxj }))} onDetail={setDetailQuodationDrawer} />;
       case Enums.QuotationViewType.List:
-      default:
         return list.map((quotation) => (
           <QuotationRow
             key={quotation.name}
@@ -46,6 +46,9 @@ const QuotationView: React.FC<QuotationViewProps> = (props) => {
             onStockDetail={setDetailStockDrawer}
           />
         ));
+      case Enums.QuotationViewType.Flow:
+      default:
+        return <QuotationFlow list={list} onDetail={setDetailQuodationDrawer} />;
     }
   }, [list, quotationViewMode]);
 

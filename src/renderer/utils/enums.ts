@@ -211,6 +211,7 @@ export enum ZindexViewType {
 export enum QuotationViewType {
   List,
   Grid,
+  Flow,
 }
 export enum StockViewType {
   Chart,
