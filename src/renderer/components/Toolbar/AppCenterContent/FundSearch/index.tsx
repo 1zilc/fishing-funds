@@ -37,9 +37,14 @@ const FundSearch: React.FC<FundSearchProps> = (props) => {
 
   return list.length ? (
     <div className={clsx(styles.content)}>
-      <Tabs animated={{ tabPane: true }} tabBarGutter={15} destroyInactiveTabPane>
-        {list.map(({ Datas, Name, Type }) => (
-          <Tabs.TabPane className={styles.tab} tab={Name} key={String(Type)}>
+      <Tabs
+        animated={{ tabPane: true }}
+        tabBarGutter={15}
+        destroyInactiveTabPane
+        items={list.map(({ Datas, Name, Type }) => ({
+          key: String(Type),
+          label: Name,
+          children: (
             <ChartCard pureContent showCollapse>
               {Datas.map(({ Name, Code }) => {
                 return (
@@ -69,9 +74,9 @@ const FundSearch: React.FC<FundSearchProps> = (props) => {
                 );
               })}
             </ChartCard>
-          </Tabs.TabPane>
-        ))}
-      </Tabs>
+          ),
+        }))}
+      />
       <CustomDrawer show={showAddDrawer}>
         <AddFundContent onEnter={closeAddDrawer} onClose={closeAddDrawer} defaultCode={addCode} />
       </CustomDrawer>

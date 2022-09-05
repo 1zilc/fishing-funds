@@ -86,42 +86,74 @@ export const DetailCoin: React.FC<DetailCoinProps> = (props) => {
         </div>
       </div>
       <div className={styles.container}>
-        <Tabs animated={{ tabPane: true }} tabBarGutter={15}>
-          <Tabs.TabPane tab="近期走势" key={String(0)}>
-            <Trend code={code} name={coin?.name} />
-          </Tabs.TabPane>
-          <Tabs.TabPane tab="货币评估" key={String(1)}>
-            <ChartCard onFresh={runGetDetailFromCoingecko}>
-              <Appraise
-                data={[coin?.coingecko_score || 0, coin?.developer_score || 0, coin?.community_score || 0, coin?.liquidity_score || 0]}
-              />
-            </ChartCard>
-          </Tabs.TabPane>
-          <Tabs.TabPane tab="大众趋势" key={String(2)}>
-            <ChartCard onFresh={runGetDetailFromCoingecko}>
-              <Sentiment up={coin?.sentiment_votes_up_percentage} down={coin?.sentiment_votes_down_percentage} />
-            </ChartCard>
-          </Tabs.TabPane>
-          <Tabs.TabPane tab="近期资讯" key={String(3)}>
-            <Recent keyword={coin?.symbol || ''} />
-          </Tabs.TabPane>
-        </Tabs>
+        <Tabs
+          animated={{ tabPane: true }}
+          tabBarGutter={15}
+          items={[
+            {
+              key: String(0),
+              label: '近期走势',
+              children: <Trend code={code} name={coin?.name} />,
+            },
+            {
+              key: String(1),
+              label: '货币评估',
+              children: (
+                <ChartCard onFresh={runGetDetailFromCoingecko}>
+                  <Appraise
+                    data={[coin?.coingecko_score || 0, coin?.developer_score || 0, coin?.community_score || 0, coin?.liquidity_score || 0]}
+                  />
+                </ChartCard>
+              ),
+            },
+            {
+              key: String(2),
+              label: '大众趋势',
+              children: (
+                <ChartCard onFresh={runGetDetailFromCoingecko}>
+                  <Sentiment up={coin?.sentiment_votes_up_percentage} down={coin?.sentiment_votes_down_percentage} />
+                </ChartCard>
+              ),
+            },
+            {
+              key: String(3),
+              label: '近期资讯',
+              children: <Recent keyword={coin?.symbol || ''} />,
+            },
+          ]}
+        />
       </div>
       <div className={styles.container}>
-        <Tabs animated={{ tabPane: true }} tabBarGutter={15}>
-          <Tabs.TabPane tab="K线" key={String(0)}>
-            <K code={code} name={coin?.name} />
-          </Tabs.TabPane>
-        </Tabs>
+        <Tabs
+          animated={{ tabPane: true }}
+          tabBarGutter={15}
+          items={[
+            {
+              key: String(0),
+              label: 'K线',
+              children: <K code={code} name={coin?.name} />,
+            },
+          ]}
+        />
       </div>
       <div className={styles.container}>
-        <Tabs animated={{ tabPane: true }} tabBarGutter={15}>
-          <Tabs.TabPane tab="货币描述" key={String(0)}>
-            <ChartCard onFresh={runGetDetailFromCoingecko}>
-              <div dangerouslySetInnerHTML={{ __html: coin?.description?.en?.replace(/<a/g, '<a target="_blank"') || '暂无信息' }}></div>
-            </ChartCard>
-          </Tabs.TabPane>
-        </Tabs>
+        <Tabs
+          animated={{ tabPane: true }}
+          tabBarGutter={15}
+          items={[
+            {
+              key: String(0),
+              label: '货币描述',
+              children: (
+                <ChartCard onFresh={runGetDetailFromCoingecko}>
+                  <div
+                    dangerouslySetInnerHTML={{ __html: coin?.description?.en?.replace(/<a/g, '<a target="_blank"') || '暂无信息' }}
+                  ></div>
+                </ChartCard>
+              ),
+            },
+          ]}
+        />
       </div>
     </div>
   );

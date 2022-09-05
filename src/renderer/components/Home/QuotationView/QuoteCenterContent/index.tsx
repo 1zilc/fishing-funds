@@ -66,46 +66,66 @@ const QuoteCenterContent: React.FC<QuoteCenterContentProps> = (props) => {
     <CustomDrawerContent title="行情中心" enterText="确定" onClose={props.onClose} onEnter={props.onEnter}>
       <div className={styles.content}>
         <div className={styles.container}>
-          <Tabs animated={{ tabPane: true }} tabBarGutter={15}>
-            <Tabs.TabPane tab="建议仓位" key={String(0)}>
-              <ChartCard
-                auto
-                onFresh={runGetQuoteCenterFromEastmoney}
-                TitleBar={<span className={styles.cardTitle}>建议仓位 {data.TopText.PositionInd}%</span>}
-              >
-                <Capacity TopText={data.TopText} />
-              </ChartCard>
-            </Tabs.TabPane>
-            <Tabs.TabPane tab="今日机会" key={String(1)}>
-              <TodayHot />
-            </Tabs.TabPane>
-            <Tabs.TabPane tab="近期热点" key={String(2)}>
-              <RecentHot />
-            </Tabs.TabPane>
-            <Tabs.TabPane tab="热门主题" key={String(3)}>
-              <HotTheme />
-            </Tabs.TabPane>
-          </Tabs>
+          <Tabs
+            animated={{ tabPane: true }}
+            tabBarGutter={15}
+            items={[
+              {
+                key: String(0),
+                label: '建议仓位',
+                children: (
+                  <ChartCard
+                    auto
+                    onFresh={runGetQuoteCenterFromEastmoney}
+                    TitleBar={<span className={styles.cardTitle}>建议仓位 {data.TopText.PositionInd}%</span>}
+                  >
+                    <Capacity TopText={data.TopText} />
+                  </ChartCard>
+                ),
+              },
+              {
+                key: String(1),
+                label: '今日机会',
+                children: <TodayHot />,
+              },
+              {
+                key: String(2),
+                label: '近期热点',
+                children: <RecentHot />,
+              },
+              {
+                key: String(3),
+                label: '热门主题',
+                children: <HotTheme />,
+              },
+            ]}
+          />
         </div>
         <div className={styles.container}>
-          <Tabs animated={{ tabPane: true }} tabBarGutter={15}>
-            {data.MarketStyle.map((m) => (
-              <Tabs.TabPane tab={m.Category} key={m.Category}>
+          <Tabs
+            animated={{ tabPane: true }}
+            tabBarGutter={15}
+            items={data.MarketStyle.map((m) => ({
+              key: m.Category,
+              label: m.Category,
+              children: (
                 <ChartCard auto onFresh={runGetQuoteCenterFromEastmoney}>
                   <MarketStyle ThemeList={m.ThemeList} />
                 </ChartCard>
-              </Tabs.TabPane>
-            ))}
-          </Tabs>
+              ),
+            }))}
+          />
         </div>
         <div className={styles.container}>
-          <Tabs animated={{ tabPane: true }} tabBarGutter={15}>
-            {data.Recommend.map((r) => (
-              <Tabs.TabPane tab={r.Title} key={r.Title}>
-                <Recommend ThemeList={r.ThemeList} />
-              </Tabs.TabPane>
-            ))}
-          </Tabs>
+          <Tabs
+            animated={{ tabPane: true }}
+            tabBarGutter={15}
+            items={data.Recommend.map((r) => ({
+              key: r.Title,
+              label: r.Title,
+              children: <Recommend ThemeList={r.ThemeList} />,
+            }))}
+          />
         </div>
       </div>
       <div className={styles.footer}>

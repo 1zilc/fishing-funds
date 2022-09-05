@@ -79,25 +79,43 @@ export const DetailZindex: React.FC<DetailFundProps> = (props) => {
         </div>
       </div>
       <div className={styles.container}>
-        <Tabs animated={{ tabPane: true }} tabBarGutter={15}>
-          <Tabs.TabPane tab="指数走势" key={String(0)}>
-            <Trend code={code} zs={zindex.zs} name={zindex?.name} />
-          </Tabs.TabPane>
-        </Tabs>
+        <Tabs
+          animated={{ tabPane: true }}
+          tabBarGutter={15}
+          items={[
+            {
+              key: String(0),
+              label: '指数走势',
+              children: <Trend code={code} zs={zindex.zs} name={zindex?.name} />,
+            },
+          ]}
+        />
       </div>
       <div className={styles.container}>
-        <Tabs animated={{ tabPane: true }} tabBarGutter={15}>
-          <Tabs.TabPane tab="K线" key={String(0)}>
-            <K code={code} name={zindex?.name} />
-          </Tabs.TabPane>
-        </Tabs>
+        <Tabs
+          animated={{ tabPane: true }}
+          tabBarGutter={15}
+          items={[
+            {
+              key: String(0),
+              label: 'K线',
+              children: <K code={code} name={zindex?.name} />,
+            },
+          ]}
+        />
       </div>
       <div className={styles.container}>
-        <Tabs animated={{ tabPane: true }} tabBarGutter={15}>
-          <Tabs.TabPane tab="近期资讯" key={String(0)}>
-            <Recent keyword={zindex.name} />
-          </Tabs.TabPane>
-        </Tabs>
+        <Tabs
+          animated={{ tabPane: true }}
+          tabBarGutter={15}
+          items={[
+            {
+              key: String(0),
+              label: '近期资讯',
+              children: <Recent keyword={zindex.name} />,
+            },
+          ]}
+        />
       </div>
     </div>
   );

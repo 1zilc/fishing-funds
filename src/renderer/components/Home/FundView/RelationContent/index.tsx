@@ -73,18 +73,30 @@ const RelationContent: React.FC<RelationContentProps> = (props) => {
         <div className={styles.wallets}>
           <ColorfulTags tags={tags} />
         </div>
-        <Tabs animated={{ tabPane: true }} tabBarGutter={15}>
-          <Tabs.TabPane tab="股票关系" key={String(0)}>
-            <ChartCard onFresh={runGetIndustryRateFromEaseMoney}>
-              <Sankey data={data} valueKey="GPJC" length={allCyFunds.length} />
-            </ChartCard>
-          </Tabs.TabPane>
-          <Tabs.TabPane tab="板块关系" key={String(1)}>
-            <ChartCard onFresh={runGetIndustryRateFromEaseMoney}>
-              <Sankey data={data} valueKey="INDEXNAME" length={allCyFunds.length} />
-            </ChartCard>
-          </Tabs.TabPane>
-        </Tabs>
+        <Tabs
+          animated={{ tabPane: true }}
+          tabBarGutter={15}
+          items={[
+            {
+              key: String(0),
+              label: '股票关系',
+              children: (
+                <ChartCard onFresh={runGetIndustryRateFromEaseMoney}>
+                  <Sankey data={data} valueKey="GPJC" length={allCyFunds.length} />
+                </ChartCard>
+              ),
+            },
+            {
+              key: String(1),
+              label: '板块关系',
+              children: (
+                <ChartCard onFresh={runGetIndustryRateFromEaseMoney}>
+                  <Sankey data={data} valueKey="INDEXNAME" length={allCyFunds.length} />
+                </ChartCard>
+              ),
+            },
+          ]}
+        />
       </div>
     </CustomDrawerContent>
   );

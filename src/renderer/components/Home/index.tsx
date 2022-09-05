@@ -38,20 +38,31 @@ function FundGroup() {
   const codeMap = useAppSelector((state) => state.wallet.fundConfigCodeMap);
 
   return (
-    <GroupTab tabKey={Enums.TabKeyType.Fund}>
-      <GroupTab.TabPane tab="全部" key={String(0)}>
-        <FundView filter={() => true} />
-      </GroupTab.TabPane>
-      <GroupTab.TabPane tab="持有" key={String(1)}>
-        <FundView filter={(fund) => !!codeMap[fund.fundcode!]?.cyfe} />
-      </GroupTab.TabPane>
-      <GroupTab.TabPane tab="自选" key={String(2)}>
-        <FundView filter={(fund) => !codeMap[fund.fundcode!]?.cyfe} />
-      </GroupTab.TabPane>
-      <GroupTab.TabPane tab="净值更新" key={String(3)}>
-        <FundView filter={(fund) => !!Helpers.Fund.CalcFund(fund, codeMap).isFix} />
-      </GroupTab.TabPane>
-    </GroupTab>
+    <GroupTab
+      tabKey={Enums.TabKeyType.Fund}
+      items={[
+        {
+          key: String(0),
+          label: '全部',
+          children: <FundView filter={() => true} />,
+        },
+        {
+          key: String(1),
+          label: '持有',
+          children: <FundView filter={(fund) => !!codeMap[fund.fundcode!]?.cyfe} />,
+        },
+        {
+          key: String(2),
+          label: '自选',
+          children: <FundView filter={(fund) => !codeMap[fund.fundcode!]?.cyfe} />,
+        },
+        {
+          key: String(3),
+          label: '净值更新',
+          children: <FundView filter={(fund) => !!Helpers.Fund.CalcFund(fund, codeMap).isFix} />,
+        },
+      ]}
+    />
   );
 }
 
@@ -59,17 +70,26 @@ function ZindexGroup() {
   // const { codeMap: zindexCodeMap } = useAppSelector((state) => state.zindex.config);
 
   return (
-    <GroupTab tabKey={Enums.TabKeyType.Zindex}>
-      <GroupTab.TabPane tab="全部" key={String(0)}>
-        <ZindexView filter={() => true} />
-      </GroupTab.TabPane>
-      <GroupTab.TabPane tab="上涨" key={String(1)}>
-        <ZindexView filter={(zindex) => zindex.zdd >= 0} />
-      </GroupTab.TabPane>
-      <GroupTab.TabPane tab="下跌" key={String(2)}>
-        <ZindexView filter={(zindex) => zindex.zdd < 0} />
-      </GroupTab.TabPane>
-    </GroupTab>
+    <GroupTab
+      tabKey={Enums.TabKeyType.Zindex}
+      items={[
+        {
+          key: String(0),
+          label: '全部',
+          children: <ZindexView filter={() => true} />,
+        },
+        {
+          key: String(1),
+          label: '上涨',
+          children: <ZindexView filter={(zindex) => zindex.zdd >= 0} />,
+        },
+        {
+          key: String(2),
+          label: '下跌',
+          children: <ZindexView filter={(zindex) => zindex.zdd < 0} />,
+        },
+      ]}
+    />
   );
 }
 
@@ -77,20 +97,31 @@ function QuotationGroup() {
   const favoriteQuotationMap = useAppSelector((state) => state.quotation.favoriteQuotationMap);
 
   return (
-    <GroupTab tabKey={Enums.TabKeyType.Quotation}>
-      <GroupTab.TabPane tab="行业" key={String(0)}>
-        <QuotationView filter={(quotation) => quotation.type === Enums.QuotationType.Industry} />
-      </GroupTab.TabPane>
-      <GroupTab.TabPane tab="概念" key={String(1)}>
-        <QuotationView filter={(quotation) => quotation.type === Enums.QuotationType.Concept} />
-      </GroupTab.TabPane>
-      <GroupTab.TabPane tab="地域" key={String(2)}>
-        <QuotationView filter={(quotation) => quotation.type === Enums.QuotationType.Area} />
-      </GroupTab.TabPane>
-      <GroupTab.TabPane tab="关注" key={String(3)}>
-        <QuotationView filter={(quotaion) => favoriteQuotationMap[quotaion.code]} />
-      </GroupTab.TabPane>
-    </GroupTab>
+    <GroupTab
+      tabKey={Enums.TabKeyType.Quotation}
+      items={[
+        {
+          key: String(0),
+          label: '行业',
+          children: <QuotationView filter={(quotation) => quotation.type === Enums.QuotationType.Industry} />,
+        },
+        {
+          key: String(1),
+          label: '概念',
+          children: <QuotationView filter={(quotation) => quotation.type === Enums.QuotationType.Concept} />,
+        },
+        {
+          key: String(2),
+          label: '地域',
+          children: <QuotationView filter={(quotation) => quotation.type === Enums.QuotationType.Area} />,
+        },
+        {
+          key: String(3),
+          label: '关注',
+          children: <QuotationView filter={(quotaion) => favoriteQuotationMap[quotaion.code]} />,
+        },
+      ]}
+    />
   );
 }
 
@@ -98,32 +129,46 @@ function StockGroup() {
   const { codeMap: stockCodeMap } = useAppSelector((state) => state.stock.config);
 
   return (
-    <GroupTab tabKey={Enums.TabKeyType.Stock}>
-      <GroupTab.TabPane tab="全部" key={String(-1)}>
-        <StockView filter={() => true} />
-      </GroupTab.TabPane>
-      {stockTypesConfig.map((type) => (
-        <GroupTab.TabPane tab={type.name.slice(0, 2)} key={String(type.code)}>
-          <StockView filter={(stock) => stockCodeMap[stock.secid].type === type.code} />
-        </GroupTab.TabPane>
-      ))}
-    </GroupTab>
+    <GroupTab
+      tabKey={Enums.TabKeyType.Stock}
+      items={[
+        {
+          key: String(-1),
+          label: '全部',
+          children: <StockView filter={() => true} />,
+        },
+        ...stockTypesConfig.map((type) => ({
+          key: String(type.code),
+          label: type.name.slice(0, 2),
+          children: <StockView filter={(stock) => stockCodeMap[stock.secid].type === type.code} />,
+        })),
+      ]}
+    />
   );
 }
 
 function CoinGroup() {
   return (
-    <GroupTab tabKey={Enums.TabKeyType.Coin}>
-      <GroupTab.TabPane tab="全部" key={String(0)}>
-        <CoinView filter={() => true} />
-      </GroupTab.TabPane>
-      <GroupTab.TabPane tab="上涨" key={String(1)}>
-        <CoinView filter={(coin) => Number(coin.change24h) >= 0} />
-      </GroupTab.TabPane>
-      <GroupTab.TabPane tab="下跌" key={String(2)}>
-        <CoinView filter={(coin) => Number(coin.change24h) < 0} />
-      </GroupTab.TabPane>
-    </GroupTab>
+    <GroupTab
+      tabKey={Enums.TabKeyType.Coin}
+      items={[
+        {
+          key: String(0),
+          label: '全部',
+          children: <CoinView filter={() => true} />,
+        },
+        {
+          key: String(1),
+          label: '上涨',
+          children: <CoinView filter={(coin) => Number(coin.change24h) >= 0} />,
+        },
+        {
+          key: String(2),
+          label: '下跌',
+          children: <CoinView filter={(coin) => Number(coin.change24h) < 0} />,
+        },
+      ]}
+    />
   );
 }
 
@@ -132,16 +177,20 @@ const Body = () => {
   const bottomTabsSetting = useAppSelector((state) => state.setting.systemSetting.bottomTabsSetting);
 
   return (
-    <Tabs renderTabBar={() => <></>} activeKey={String(tabsActiveKey)} animated={{ tabPane: true, inkBar: false }} destroyInactiveTabPane>
-      {bottomTabsSetting.map((tab) => {
+    <Tabs
+      renderTabBar={() => <></>}
+      activeKey={String(tabsActiveKey)}
+      animated={{ tabPane: true, inkBar: false }}
+      destroyInactiveTabPane
+      items={bottomTabsSetting.map((tab) => {
         const Component = tabsKeyMap[tab.key];
-        return (
-          <Tabs.TabPane key={tab.key}>
-            <Component />
-          </Tabs.TabPane>
-        );
+        return {
+          label: tab.key,
+          key: String(tab.key),
+          children: <Component />,
+        };
       })}
-    </Tabs>
+    />
   );
 };
 

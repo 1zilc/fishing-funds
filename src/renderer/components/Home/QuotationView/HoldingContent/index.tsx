@@ -18,23 +18,39 @@ const HoldingContent: React.FC<HoldingContentProps> = (props) => {
       <div className={styles.content}>
         <MutualQuota />
         <div className={styles.container}>
-          <Tabs animated={{ tabPane: true }} tabBarGutter={15}>
-            <Tabs.TabPane tab="北向" key={String(0)}>
-              <PureCard>
-                <History marketCode="005" reportName="RPT_MUTUAL_MARKET_STA" />
-              </PureCard>
-            </Tabs.TabPane>
-            <Tabs.TabPane tab="沪股通" key={String(1)}>
-              <PureCard>
-                <History marketCode="001" reportName="RPT_HMUTUAL_MARKET_STA" />
-              </PureCard>
-            </Tabs.TabPane>
-            <Tabs.TabPane tab="深股通" key={String(2)}>
-              <PureCard>
-                <History marketCode="003" reportName="RPT_SMUTUAL_MARKET_STA" />
-              </PureCard>
-            </Tabs.TabPane>
-          </Tabs>
+          <Tabs
+            animated={{ tabPane: true }}
+            tabBarGutter={15}
+            items={[
+              {
+                key: String(0),
+                label: '北向',
+                children: (
+                  <PureCard>
+                    <History marketCode="005" reportName="RPT_MUTUAL_MARKET_STA" />
+                  </PureCard>
+                ),
+              },
+              {
+                key: String(1),
+                label: '沪股通',
+                children: (
+                  <PureCard>
+                    <History marketCode="001" reportName="RPT_HMUTUAL_MARKET_STA" />
+                  </PureCard>
+                ),
+              },
+              {
+                key: String(2),
+                label: '深股通',
+                children: (
+                  <PureCard>
+                    <History marketCode="003" reportName="RPT_SMUTUAL_MARKET_STA" />
+                  </PureCard>
+                ),
+              },
+            ]}
+          />
         </div>
       </div>
     </CustomDrawerContent>

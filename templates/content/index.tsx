@@ -14,9 +14,17 @@ const TemplateName: React.FC<TemplateNameProps> = (props) => {
     <CustomDrawerContent title="标题" enterText="确定" onClose={props.onClose} onEnter={props.onEnter}>
       <div className={styles.content}>
         <div className={styles.container}>
-          <Tabs animated={{ tabPane: true }} tabBarGutter={15}>
-            <Tabs.TabPane tab="标题" key={String(0)}></Tabs.TabPane>
-          </Tabs>
+          <Tabs
+            animated={{ tabPane: true }}
+            tabBarGutter={15}
+            items={[
+              {
+                key: String(0),
+                label: '标题',
+                children: null,
+              },
+            ]}
+          />
         </div>
       </div>
     </CustomDrawerContent>

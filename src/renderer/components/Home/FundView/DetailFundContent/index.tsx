@@ -168,129 +168,220 @@ export const DetailFund: React.FC<DetailFundProps> = (props) => {
           <ColorfulTags tags={industryTags} />
         </div>
         <div className={styles.container}>
-          <Tabs animated={{ tabPane: true }} tabBarGutter={15}>
-            <Tabs.TabPane tab="历史业绩" key={String(0)}>
-              <ChartCard
-                auto
-                onFresh={runGetFundDetailFromEastmoney}
-                TitleBar={<ExportTitleBar name={fund?.fixName} data={pingzhongdata.Data_netWorthTrend} />}
-              >
-                <HistoryPerformance
-                  syl_1n={pingzhongdata.syl_1n}
-                  syl_6y={pingzhongdata.syl_6y}
-                  syl_3y={pingzhongdata.syl_3y}
-                  syl_1y={pingzhongdata.syl_1y}
-                  data={pingzhongdata.Data_netWorthTrend}
-                />
-              </ChartCard>
-            </Tabs.TabPane>
-            <Tabs.TabPane tab="历史净值" key={String(1)}>
-              <ChartCard
-                auto
-                onFresh={runGetFundDetailFromEastmoney}
-                TitleBar={<ExportTitleBar name={fund?.fixName} data={pingzhongdata.Data_netWorthTrend} />}
-              >
-                <HistoryValue data={pingzhongdata.Data_netWorthTrend} />
-              </ChartCard>
-            </Tabs.TabPane>
-            <Tabs.TabPane tab="近期资讯" key={String(2)}>
-              <Recent keyword={fund?.fixName || ''} />
-            </Tabs.TabPane>
-            <Tabs.TabPane tab="源网站" key={String(3)}>
-              <ChartCard auto>
-                <Origin code={code} />
-              </ChartCard>
-            </Tabs.TabPane>
-          </Tabs>
+          <Tabs
+            animated={{ tabPane: true }}
+            tabBarGutter={15}
+            items={[
+              {
+                key: String(0),
+                label: '历史业绩',
+                children: (
+                  <ChartCard
+                    auto
+                    onFresh={runGetFundDetailFromEastmoney}
+                    TitleBar={<ExportTitleBar name={fund?.fixName} data={pingzhongdata.Data_netWorthTrend} />}
+                  >
+                    <HistoryPerformance
+                      syl_1n={pingzhongdata.syl_1n}
+                      syl_6y={pingzhongdata.syl_6y}
+                      syl_3y={pingzhongdata.syl_3y}
+                      syl_1y={pingzhongdata.syl_1y}
+                      data={pingzhongdata.Data_netWorthTrend}
+                    />
+                  </ChartCard>
+                ),
+              },
+              {
+                key: String(1),
+                label: '历史净值',
+                children: (
+                  <ChartCard
+                    auto
+                    onFresh={runGetFundDetailFromEastmoney}
+                    TitleBar={<ExportTitleBar name={fund?.fixName} data={pingzhongdata.Data_netWorthTrend} />}
+                  >
+                    <HistoryValue data={pingzhongdata.Data_netWorthTrend} />
+                  </ChartCard>
+                ),
+              },
+              {
+                key: String(2),
+                label: '历史净值',
+                children: <Recent keyword={fund?.fixName || ''} />,
+              },
+              {
+                key: String(3),
+                label: '源网站',
+                children: (
+                  <ChartCard auto>
+                    <Origin code={code} />
+                  </ChartCard>
+                ),
+              },
+            ]}
+          />
         </div>
         <div className={styles.container}>
-          <Tabs animated={{ tabPane: true }} tabBarGutter={15}>
-            <Tabs.TabPane tab="业绩走势" key={String(Enums.HistoryType.Performance)}>
-              <Performance code={code} />
-            </Tabs.TabPane>
-            <Tabs.TabPane tab="净值估算" key={String(Enums.HistoryType.Value)}>
-              <Estimate code={code} />
-            </Tabs.TabPane>
-            <Tabs.TabPane tab="投资风格" key={String(Enums.HistoryType.InvestStyle)}>
-              <InvestStyle code={code} />
-            </Tabs.TabPane>
-          </Tabs>
+          <Tabs
+            animated={{ tabPane: true }}
+            tabBarGutter={15}
+            items={[
+              {
+                key: String(Enums.HistoryType.Performance),
+                label: '业绩走势',
+                children: <Performance code={code} />,
+              },
+              {
+                key: String(Enums.HistoryType.Value),
+                label: '净值估算',
+                children: <Estimate code={code} />,
+              },
+              {
+                key: String(Enums.HistoryType.InvestStyle),
+                label: '投资风格',
+                children: <InvestStyle code={code} />,
+              },
+            ]}
+          />
         </div>
         <div className={styles.container}>
-          <Tabs animated={{ tabPane: true }} tabBarGutter={15}>
-            <Tabs.TabPane tab="股票持仓" key={String(Enums.WareHouseType.Stock)}>
-              <StockWareHouse code={code} stockCodes={pingzhongdata.stockCodesNew!} />
-            </Tabs.TabPane>
-            <Tabs.TabPane tab="债券持仓" key={String(Enums.WareHouseType.Securities)}>
-              <SecuritiesWareHouse code={code} securitiesCodes={pingzhongdata.zqCodesNew!} />
-            </Tabs.TabPane>
-            <Tabs.TabPane tab="行业布局" key={String(Enums.WareHouseType.IndustryLayout)}>
-              <ChartCard onFresh={runGetIndustryRateFromEaseMoney} TitleBar={<div className={styles.date}>{industryData.expansion}</div>}>
-                <IndustryLayout stocks={industryData.stocks} />
-              </ChartCard>
-            </Tabs.TabPane>
-            <Tabs.TabPane tab="股票仓位测算" key={String(Enums.WareHouseType.StockEstimate)}>
-              <ChartCard onFresh={runGetFundDetailFromEastmoney}>
-                <StockWareHouseEstimate fundSharesPositions={pingzhongdata.Data_fundSharesPositions!} />
-              </ChartCard>
-            </Tabs.TabPane>
-          </Tabs>
+          <Tabs
+            animated={{ tabPane: true }}
+            tabBarGutter={15}
+            items={[
+              {
+                key: String(Enums.WareHouseType.Stock),
+                label: '股票持仓',
+                children: <StockWareHouse code={code} stockCodes={pingzhongdata.stockCodesNew!} />,
+              },
+              {
+                key: String(Enums.WareHouseType.Securities),
+                label: '债券持仓',
+                children: <SecuritiesWareHouse code={code} securitiesCodes={pingzhongdata.zqCodesNew!} />,
+              },
+              {
+                key: String(Enums.WareHouseType.IndustryLayout),
+                label: '行业布局',
+                children: (
+                  <ChartCard
+                    onFresh={runGetIndustryRateFromEaseMoney}
+                    TitleBar={<div className={styles.date}>{industryData.expansion}</div>}
+                  >
+                    <IndustryLayout stocks={industryData.stocks} />
+                  </ChartCard>
+                ),
+              },
+              {
+                key: String(Enums.WareHouseType.StockEstimate),
+                label: '股票仓位测算',
+                children: (
+                  <ChartCard onFresh={runGetFundDetailFromEastmoney}>
+                    <StockWareHouseEstimate fundSharesPositions={pingzhongdata.Data_fundSharesPositions!} />
+                  </ChartCard>
+                ),
+              },
+            ]}
+          />
         </div>
         <div className={styles.container}>
-          <Tabs animated={{ tabPane: true }} tabBarGutter={15}>
-            <Tabs.TabPane tab="资产配置" key={String(Enums.ConfigType.Assets)}>
-              <ChartCard onFresh={runGetFundDetailFromEastmoney}>
-                <Assets Data_assetAllocation={pingzhongdata.Data_assetAllocation} />
-              </ChartCard>
-            </Tabs.TabPane>
-            <Tabs.TabPane tab="持有人结构" key={String(Enums.ConfigType.Hold)}>
-              <ChartCard onFresh={runGetFundDetailFromEastmoney}>
-                <Hold Data_holderStructure={pingzhongdata.Data_holderStructure} />
-              </ChartCard>
-            </Tabs.TabPane>
-            <Tabs.TabPane tab="仓位变动" key={String(Enums.ConfigType.WareHouse)}>
-              <ChartCard
-                auto
-                onFresh={runGetIndustryRateFromEaseMoney}
-                TitleBar={<div className={styles.date}>{industryData.expansion}</div>}
-              >
-                <WarehouseEvent stocks={industryData.stocks} />
-              </ChartCard>
-            </Tabs.TabPane>
-            <Tabs.TabPane tab="规模变动" key={String(Enums.ConfigType.Scale)}>
-              <ChartCard onFresh={runGetFundDetailFromEastmoney}>
-                <Scale Data_fluctuationScale={pingzhongdata.Data_fluctuationScale} />
-              </ChartCard>
-            </Tabs.TabPane>
-          </Tabs>
+          <Tabs
+            animated={{ tabPane: true }}
+            tabBarGutter={15}
+            items={[
+              {
+                key: String(Enums.ConfigType.Assets),
+                label: '资产配置',
+                children: (
+                  <ChartCard onFresh={runGetFundDetailFromEastmoney}>
+                    <Assets Data_assetAllocation={pingzhongdata.Data_assetAllocation} />
+                  </ChartCard>
+                ),
+              },
+              {
+                key: String(Enums.ConfigType.Hold),
+                label: '持有人结构',
+                children: (
+                  <ChartCard onFresh={runGetFundDetailFromEastmoney}>
+                    <Hold Data_holderStructure={pingzhongdata.Data_holderStructure} />
+                  </ChartCard>
+                ),
+              },
+              {
+                key: String(Enums.ConfigType.WareHouse),
+                label: '仓位变动',
+                children: (
+                  <ChartCard
+                    auto
+                    onFresh={runGetIndustryRateFromEaseMoney}
+                    TitleBar={<div className={styles.date}>{industryData.expansion}</div>}
+                  >
+                    <WarehouseEvent stocks={industryData.stocks} />
+                  </ChartCard>
+                ),
+              },
+              {
+                key: String(Enums.ConfigType.Scale),
+                label: '规模变动',
+                children: (
+                  <ChartCard onFresh={runGetFundDetailFromEastmoney}>
+                    <Scale Data_fluctuationScale={pingzhongdata.Data_fluctuationScale} />
+                  </ChartCard>
+                ),
+              },
+            ]}
+          />
         </div>
         <div className={styles.container}>
-          <Tabs animated={{ tabPane: true }} tabBarGutter={15}>
-            <Tabs.TabPane tab="同类排名" key={String(Enums.SimilarCompareType.Rank)}>
-              <ChartCard onFresh={runGetFundDetailFromEastmoney}>
-                <SimilarRank rateInSimilarType={pingzhongdata.Data_rateInSimilarType} />
-              </ChartCard>
-            </Tabs.TabPane>
-            <Tabs.TabPane tab="百分比排名" key={String(Enums.SimilarCompareType.Proportion)}>
-              <ChartCard onFresh={runGetFundDetailFromEastmoney}>
-                <SimilarProportion rateInSimilarPersent={pingzhongdata.Data_rateInSimilarPersent} />
-              </ChartCard>
-            </Tabs.TabPane>
-            <Tabs.TabPane tab="业绩评价" key={String(Enums.SimilarCompareType.Evaluation)}>
-              <ChartCard onFresh={runGetFundDetailFromEastmoney}>
-                <PerformanceEvaluation Data_performanceEvaluation={pingzhongdata.Data_performanceEvaluation} />
-              </ChartCard>
-            </Tabs.TabPane>
-          </Tabs>
+          <Tabs
+            animated={{ tabPane: true }}
+            tabBarGutter={15}
+            items={[
+              {
+                key: String(Enums.SimilarCompareType.Rank),
+                label: '同类排名',
+                children: (
+                  <ChartCard onFresh={runGetFundDetailFromEastmoney}>
+                    <SimilarRank rateInSimilarType={pingzhongdata.Data_rateInSimilarType} />
+                  </ChartCard>
+                ),
+              },
+              {
+                key: String(Enums.SimilarCompareType.Proportion),
+                label: '百分比排名',
+                children: (
+                  <ChartCard onFresh={runGetFundDetailFromEastmoney}>
+                    <SimilarProportion rateInSimilarPersent={pingzhongdata.Data_rateInSimilarPersent} />
+                  </ChartCard>
+                ),
+              },
+              {
+                key: String(Enums.SimilarCompareType.Evaluation),
+                label: '业绩评价',
+                children: (
+                  <ChartCard onFresh={runGetFundDetailFromEastmoney}>
+                    <PerformanceEvaluation Data_performanceEvaluation={pingzhongdata.Data_performanceEvaluation} />
+                  </ChartCard>
+                ),
+              },
+            ]}
+          />
         </div>
         <div className={styles.container}>
-          <Tabs animated={{ tabPane: true }} tabBarGutter={15}>
-            <Tabs.TabPane tab="同类型基金涨幅榜" key={String(0)}>
-              <PureCard>
-                <SameFundList swithSameType={pingzhongdata.swithSameType} />
-              </PureCard>
-            </Tabs.TabPane>
-          </Tabs>
+          <Tabs
+            animated={{ tabPane: true }}
+            tabBarGutter={15}
+            items={[
+              {
+                key: String(0),
+                label: '同类型基金涨幅榜',
+                children: (
+                  <PureCard>
+                    <SameFundList swithSameType={pingzhongdata.swithSameType} />
+                  </PureCard>
+                ),
+              },
+            ]}
+          />
         </div>
       </div>
       <CustomDrawer show={showManagerDrawer}>

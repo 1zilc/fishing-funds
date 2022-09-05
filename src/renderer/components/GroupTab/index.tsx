@@ -1,17 +1,10 @@
 import React, { PropsWithChildren, Suspense } from 'react';
-import { Tabs, TabPaneProps } from 'antd';
+import { Tabs, TabsProps } from 'antd';
 import Empty from '@/components/Empty';
 import { syncTabsKeyMapAction } from '@/store/features/tabs';
 import { useAppDispatch, useAppSelector } from '@/utils/hooks';
 import * as Enums from '@/utils/enums';
-
-export interface GroupTapProps {
-  tabKey: Enums.TabKeyType;
-}
-
-interface GroupTapType extends React.FC<PropsWithChildren<GroupTapProps>> {
-  TabPane: React.FC<PropsWithChildren<TabPaneProps>>;
-}
+import styles from './index.module.scss';
 
 const groupBarStyle = {
   background: 'var(--background-color)',
@@ -20,10 +13,29 @@ const groupBarStyle = {
   paddingLeft: 25,
 };
 
-const GroupTap: GroupTapType = (props) => {
+interface GroupTapProps extends TabsProps {
+  tabKey: Enums.TabKeyType;
+}
+
+const GroupTap = (props: GroupTapProps) => {
   const { tabKey } = props;
   const dispatch = useAppDispatch();
   const defaultActiveKey = useAppSelector((state) => state.tabs.tabsKeyMap[tabKey]);
+
+  const items = props.items?.map((item) => {
+    item.children = (
+      <Suspense
+        fallback={
+          <div className={styles.empty}>
+            <Empty text="加载中..." />
+          </div>
+        }
+      >
+        {item.children}
+      </Suspense>
+    );
+    return item;
+  });
 
   return (
     <Tabs
@@ -33,18 +45,9 @@ const GroupTap: GroupTapType = (props) => {
       tabBarGutter={15}
       tabBarStyle={groupBarStyle}
       destroyInactiveTabPane
+      items={items}
       onChange={(e) => dispatch(syncTabsKeyMapAction({ key: tabKey, activeKey: Number(e) }))}
-    >
-      {props.children}
-    </Tabs>
-  );
-};
-
-GroupTap.TabPane = (props) => {
-  return (
-    <Tabs.TabPane {...props}>
-      <Suspense fallback={<Empty text="加载中..." />}>{props.children}</Suspense>
-    </Tabs.TabPane>
+    />
   );
 };
 

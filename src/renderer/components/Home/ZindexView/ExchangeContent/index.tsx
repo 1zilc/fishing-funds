@@ -21,27 +21,45 @@ const ExchangeContent: React.FC<ExchangeContentProps> = (props) => {
       <div className={styles.content}>
         <Offshore />
         <div className={styles.container}>
-          <Tabs animated={{ tabPane: true }} tabBarGutter={15}>
-            <Tabs.TabPane tab="基本汇率" key={String(0)}>
-              <BaseExchange />
-            </Tabs.TabPane>
-            <Tabs.TabPane tab="交叉汇率" key={String(1)}>
-              <CrossExchange />
-            </Tabs.TabPane>
-            <Tabs.TabPane tab="中间价" key={String(2)}>
-              <CnyCenterExchange />
-            </Tabs.TabPane>
-            <Tabs.TabPane tab="即期混合" key={String(3)}>
-              <CnyMixExchange />
-            </Tabs.TabPane>
-          </Tabs>
+          <Tabs
+            animated={{ tabPane: true }}
+            tabBarGutter={15}
+            items={[
+              {
+                key: String(0),
+                label: '基本汇率',
+                children: <BaseExchange />,
+              },
+              {
+                key: String(1),
+                label: '交叉汇率',
+                children: <CrossExchange />,
+              },
+              {
+                key: String(2),
+                label: '中间价',
+                children: <CnyCenterExchange />,
+              },
+              {
+                key: String(3),
+                label: '即期混合',
+                children: <CnyMixExchange />,
+              },
+            ]}
+          />
         </div>
         <div className={styles.container}>
-          <Tabs animated={{ tabPane: true }} tabBarGutter={15}>
-            <Tabs.TabPane tab="全球债券" key={String(0)}>
-              <GlobalBond />
-            </Tabs.TabPane>
-          </Tabs>
+          <Tabs
+            animated={{ tabPane: true }}
+            tabBarGutter={15}
+            items={[
+              {
+                key: String(0),
+                label: '全球债券',
+                children: <GlobalBond />,
+              },
+            ]}
+          />
         </div>
       </div>
     </CustomDrawerContent>

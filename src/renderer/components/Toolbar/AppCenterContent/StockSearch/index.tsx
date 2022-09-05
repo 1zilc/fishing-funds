@@ -60,9 +60,14 @@ const StockSearch: React.FC<StockSearchProps> = (props) => {
 
   return list.length ? (
     <div className={clsx(styles.content)}>
-      <Tabs animated={{ tabPane: true }} tabBarGutter={15} destroyInactiveTabPane>
-        {list.map(({ Datas, Name, Type }) => (
-          <Tabs.TabPane className={styles.tab} tab={Name} key={String(Type)}>
+      <Tabs
+        animated={{ tabPane: true }}
+        tabBarGutter={15}
+        destroyInactiveTabPane
+        items={list.map(({ Datas, Name, Type }) => ({
+          key: String(Type),
+          label: Name,
+          children: (
             <ChartCard pureContent showCollapse>
               {Datas.map(({ Name, Code, MktNum }) => {
                 const secid = `${MktNum}.${Code}`;
@@ -93,9 +98,10 @@ const StockSearch: React.FC<StockSearchProps> = (props) => {
                 );
               })}
             </ChartCard>
-          </Tabs.TabPane>
-        ))}
-      </Tabs>
+          ),
+        }))}
+      />
+
       <CustomDrawer show={showDetailDrawer}>
         <DetailStockContent onEnter={closeDetailDrawer} onClose={closeDetailDrawer} secid={detailData.secid} type={detailData.type} />
       </CustomDrawer>

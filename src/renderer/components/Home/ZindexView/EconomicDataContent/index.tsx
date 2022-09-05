@@ -18,17 +18,27 @@ const EconomicDataContent: React.FC<EconomicDataContentProps> = (props) => {
     <CustomDrawerContent title="经济数据" enterText="确定" onEnter={props.onEnter} onClose={props.onClose}>
       <div className={styles.content}>
         <TreasuryYield />
-        <Tabs animated={{ tabPane: true }} tabBarGutter={15}>
-          <Tabs.TabPane tab="经济指数" key={String(0)}>
-            <Economy />
-          </Tabs.TabPane>
-          <Tabs.TabPane tab="财政统计" key={String(1)}>
-            <FinancialStatistics />
-          </Tabs.TabPane>
-          <Tabs.TabPane tab="国家队持股数据" key={String(2)}>
-            <NationalTeam />
-          </Tabs.TabPane>
-        </Tabs>
+        <Tabs
+          animated={{ tabPane: true }}
+          tabBarGutter={15}
+          items={[
+            {
+              key: String(0),
+              label: '经济指数',
+              children: <Economy />,
+            },
+            {
+              key: String(1),
+              label: '财政统计',
+              children: <FinancialStatistics />,
+            },
+            {
+              key: String(2),
+              label: '国家队持股数据',
+              children: <NationalTeam />,
+            },
+          ]}
+        />
       </div>
     </CustomDrawerContent>
   );
