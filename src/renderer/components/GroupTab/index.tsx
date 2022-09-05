@@ -4,7 +4,6 @@ import Empty from '@/components/Empty';
 import { syncTabsKeyMapAction } from '@/store/features/tabs';
 import { useAppDispatch, useAppSelector } from '@/utils/hooks';
 import * as Enums from '@/utils/enums';
-import styles from './index.module.scss';
 
 const groupBarStyle = {
   background: 'var(--background-color)',
@@ -23,17 +22,7 @@ const GroupTap = (props: GroupTapProps) => {
   const defaultActiveKey = useAppSelector((state) => state.tabs.tabsKeyMap[tabKey]);
 
   const items = props.items?.map((item) => {
-    item.children = (
-      <Suspense
-        fallback={
-          <div className={styles.empty}>
-            <Empty text="加载中..." />
-          </div>
-        }
-      >
-        {item.children}
-      </Suspense>
-    );
+    item.children = <Suspense fallback={<Empty text="加载中..." />}>{item.children}</Suspense>;
     return item;
   });
 

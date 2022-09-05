@@ -1,5 +1,6 @@
 .content {
-  height: 100%;
+  height: calc(100vh - 200px);
+  position: relative;
 }
 
 .text {
