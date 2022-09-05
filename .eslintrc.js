@@ -23,6 +23,7 @@ module.exports = {
     'react/display-name': 0,
     'react/no-array-index-key': 1,
     'react/jsx-props-no-spreading': 1,
+    'react/no-unknown-property': 1,
     'jsx-a11y/alt-text': 0,
     'jsx-a11y/label-has-associated-control': 0,
     'jsx-a11y/click-events-have-key-events': 0,
