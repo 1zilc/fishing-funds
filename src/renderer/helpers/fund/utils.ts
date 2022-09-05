@@ -18,7 +18,7 @@ export function CalcFund(fund: Fund.ResponseItem & Fund.FixData, codeMap: Fund.C
   const cysyl = cbj && NP.divide(NP.minus(dwjz, cbj), cbj, 0.01);
   const cysy = cbj && NP.times(NP.minus(dwjz, cbj), cyfe);
   const gszzl = isFix ? fund.fixZzl : fund.gszzl; // 估算收益率
-  const gscysyl = cyfe > 0 ? (isFix ? cysyl?.toFixed(2) : (Number(cysyl) + Number(gszzl)).toFixed(2)) : '';
+  const gscysyl = cbj && cbj > 0 ? (isFix ? cysyl?.toFixed(2) : (Number(cysyl) + Number(gszzl)).toFixed(2)) : '';
   // cyfe: number; // 持有份额
   // bjz: number; // 比较值
   // jrsygz: number; // 今日收益估值
