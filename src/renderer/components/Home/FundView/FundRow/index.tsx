@@ -33,7 +33,6 @@ const FundRow: React.FC<RowProps> = (props) => {
   const eyeStatus = useAppSelector((state) => state.wallet.eyeStatus);
   const calcFundResult = useMemo(() => Helpers.Fund.CalcFund(fund, fundConfigCodeMap), [fund, fundConfigCodeMap]);
   const { isFix } = calcFundResult;
-
   function onRowClick() {
     if (readOnly) {
       onDetailClick();
@@ -77,6 +76,12 @@ const FundRow: React.FC<RowProps> = (props) => {
           <div style={{ display: 'flex', alignItems: 'center' }}>
             <span className={styles.fundName}>{fund.name}</span>
             {!!calcFundResult.cyfe && <span className={styles.hold}>持有</span>}
+            {/* 估算持有收益率 */}
+            {!!calcFundResult.cbj && eyeStatus === Enums.EyeStatus.Open && (
+              <span className={clsx(Utils.GetValueColor(calcFundResult.gscysyl).blockClass, styles.gscysyl)}>
+                 {calcFundResult.gscysyl === '' ? `  0.00 %` : `${Utils.Yang(calcFundResult.gscysyl)} %`}
+              </span>
+            )}
             {isFix && <span className={styles.warn}>更新</span>}
           </div>
           {!conciseSetting && (

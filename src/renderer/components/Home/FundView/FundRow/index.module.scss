@@ -73,6 +73,17 @@
   margin-left: 5px;
   white-space: nowrap;
 }
+
+.gscysyl {
+  font-size: 8px;
+  border-radius: 3px;
+  padding: 0px 3px;
+  margin-left: 5px;
+  white-space: nowrap;
+  color: var(--tag-text-color);
+  box-shadow: none;
+}
+
 .conciseValue {
   font-size: calc(20rem / var(--base-font-size));
   line-height: 24px;
