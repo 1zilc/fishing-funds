@@ -108,7 +108,7 @@ const NewsContent: React.FC<NewsContentProps> = (props) => {
             },
             {
               key: String(4),
-              label: '英国',
+              label: '日本',
               children: <JpList onView={openWebView} />,
             },
           ]}
