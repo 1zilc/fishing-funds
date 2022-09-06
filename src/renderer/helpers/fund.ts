@@ -211,7 +211,7 @@ export function SortFund({
       case Enums.FundSortType.Income:
         return (Number(calcA.cysy || 0) - Number(calcB.cysy || 0)) * t;
       case Enums.FundSortType.IncomeRate:
-        return (Number(calcA.cysyl) - Number(calcB.cysyl || 0)) * t;
+        return (Number(calcA.cysyl || 0) - Number(calcB.cysyl || 0)) * t;
       case Enums.FundSortType.Name:
         return calcA.name!.localeCompare(calcB.name!, 'zh') * t;
       case Enums.FundSortType.Custom:
