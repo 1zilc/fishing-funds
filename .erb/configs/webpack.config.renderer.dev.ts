@@ -3,6 +3,7 @@ import path from 'path';
 import fs from 'fs';
 import webpack from 'webpack';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
+import AntdDayjsWebpackPlugin from 'antd-dayjs-webpack-plugin';
 import chalk from 'chalk';
 import { merge } from 'webpack-merge';
 import { spawn, execSync } from 'child_process';
@@ -83,22 +84,29 @@ const configuration: webpack.Configuration = {
         test: /\.(woff|woff2|eot|ttf|otf)$/i,
         type: 'asset/resource',
       },
-      // SVG Font
-      // {
-      //   test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
-      //   use: {
-      //     loader: 'url-loader',
-      //     options: {
-      //       limit: 10000,
-      //       mimetype: 'image/svg+xml',
-      //     },
-      //   },
-      // },
-      // Common Image Formats
-      // {
-      //   test: /\.(?:ico|gif|png|jpg|jpeg|webp)$/,
-      //   use: 'url-loader',
-      // },
+      // Images
+      {
+        test: /\.(png|jpg|jpeg|gif)$/i,
+        type: 'asset/resource',
+      },
+      // SVG
+      {
+        test: /\.svg$/,
+        use: [
+          {
+            loader: '@svgr/webpack',
+            options: {
+              prettier: false,
+              svgo: false,
+              svgoConfig: {
+                plugins: [{ removeViewBox: false }],
+              },
+              titleProp: true,
+              ref: true,
+            },
+          },
+        ],
+      },
     ],
   },
   plugins: [
@@ -154,6 +162,8 @@ const configuration: webpack.Configuration = {
       nodeModules: webpackPaths.appNodeModulesPath,
       scriptLoading: 'module',
     }),
+
+    new AntdDayjsWebpackPlugin(),
   ],
 
   node: {
