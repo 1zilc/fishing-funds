@@ -1,4 +1,5 @@
 import React from 'react';
+import { useCreation } from 'ahooks';
 import clsx from 'clsx';
 import { Tabs } from 'antd';
 import Toolbar from '@/components/Toolbar';
@@ -176,20 +177,26 @@ const Body = () => {
   const tabsActiveKey = useAppSelector((state) => state.tabs.activeKey);
   const bottomTabsSetting = useAppSelector((state) => state.setting.systemSetting.bottomTabsSetting);
 
-  return (
-    <Tabs
-      renderTabBar={() => <></>}
-      activeKey={String(tabsActiveKey)}
-      animated={{ tabPane: true, inkBar: false }}
-      destroyInactiveTabPane
-      items={bottomTabsSetting.map((tab) => {
+  const items = useCreation(
+    () =>
+      bottomTabsSetting.map((tab) => {
         const Component = tabsKeyMap[tab.key];
         return {
           label: tab.key,
           key: String(tab.key),
           children: <Component />,
         };
-      })}
+      }),
+    [bottomTabsSetting]
+  );
+
+  return (
+    <Tabs
+      renderTabBar={() => <></>}
+      activeKey={String(tabsActiveKey)}
+      animated={{ tabPane: true, inkBar: false }}
+      destroyInactiveTabPane
+      items={items}
     />
   );
 };
