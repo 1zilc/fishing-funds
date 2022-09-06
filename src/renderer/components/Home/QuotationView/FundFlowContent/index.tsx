@@ -99,7 +99,7 @@ const FundFlowContent: React.FC<DetailFundContentProps> = (props) => {
               },
               {
                 key: String(1),
-                label: '北向资金',
+                label: '北向日线',
                 children: <NorthDay />,
               },
               {
