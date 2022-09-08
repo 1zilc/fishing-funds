@@ -26,11 +26,12 @@ export const stockTypesConfig = [
   // { name: '板块', code:  Enums.StockMarketType.Quotation },
   { name: '港股', code: Enums.StockMarketType.HK },
   { name: '美股', code: Enums.StockMarketType.US },
-  { name: '英股', code: Enums.StockMarketType.UK },
+  // { name: '英股', code: Enums.StockMarketType.UK },
   { name: '三板', code: Enums.StockMarketType.XSB },
-  // { name: '基金', code:  Enums.StockMarketType.Fund },
+  // { name: '基金', code: Enums.StockMarketType.Fund },
   { name: '债券', code: Enums.StockMarketType.Bond },
   { name: '期货', code: Enums.StockMarketType.Futures },
+  { name: '外汇', code: Enums.StockMarketType.Exchange },
 ];
 
 const StockSearch: React.FC<StockSearchProps> = (props) => {

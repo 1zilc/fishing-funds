@@ -179,6 +179,7 @@ export enum StockMarketType {
   Fund = 8,
   Bond = 9,
   Futures = 10,
+  Exchange = 11,
 }
 
 export enum CoinUnitType {
