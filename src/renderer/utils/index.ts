@@ -273,7 +273,7 @@ export function CalcZDHC(list: number[]) {
 
 export function ColorRgba(sHex: string, alpha = 1) {
   // 十六进制颜色值的正则表达式
-  const reg = /^#([0-9a-fA-f]{3}|[0-9a-fA-f]{6})$/;
+  const reg = /^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/;
   /* 16进制颜色转为RGB格式 */
   let sColor = sHex.toLowerCase().trim();
   if (sColor && reg.test(sColor)) {
@@ -347,13 +347,13 @@ export function CalculateMA(dayCount: any, values: any[]) {
   return result;
 }
 
-export function GetCodeMap<T extends Record<string, any>>(list: T[], key: keyof T) {
+export function GetCodeMap<T>(list: T[], key: keyof T) {
   type extraData = {
     originSort: number;
   };
   return list.reduce<Record<string, T & extraData>>((r, c, i) => {
     if (c instanceof Object) {
-      const indexKey = c[key];
+      const indexKey = c[key] as string;
       if (indexKey !== undefined && indexKey !== null) {
         if (Array.isArray(c)) {
           r[indexKey] = c as any;
