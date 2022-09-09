@@ -1,4 +1,5 @@
-import { NativeImage, dialog, shell } from 'electron';
+import { NativeImage, dialog, shell, app } from 'electron';
+import path from 'path';
 import { Menubar } from 'menubar';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
@@ -15,6 +16,7 @@ export default class AppUpdater {
     //     return true;
     //   },
     // });
+    // autoUpdater.updateConfigPath = path.join(__dirname, '../../dev-app-update.yml');
     // (autoUpdater as any).currentVersion = '1.0.0';
     autoUpdater.logger = log;
     // autoUpdater.setFeedURL('https://download.1zilc.top');
@@ -59,8 +61,7 @@ export default class AppUpdater {
               icon: conf.icon,
               type: 'info',
               title: `发现新版本 v${data.version}`,
-              message: `找到更新 v${data.version}，您现在要更新吗？`,
-              detail: data.releaseNotes as string,
+              message: `您现在要更新 v${data.version} 吗？`,
               buttons: ['前往下载', '取消'],
             })
             .then(({ response }) => {
