@@ -210,7 +210,7 @@
     "eslint-import-resolver-webpack": "^0.13.0",
     "eslint-plugin-compat": "^4.0.0",
     "eslint-plugin-import": "^2.22.0",
-    "eslint-plugin-jest": "^26.1.0",
+    "eslint-plugin-jest": "^27.0.2",
     "eslint-plugin-jsx-a11y": "^6.4.1",
     "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-promise": "^6.0.1",
