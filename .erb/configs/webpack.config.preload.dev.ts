@@ -26,30 +26,6 @@ const configuration: webpack.Configuration = {
     filename: 'preload.js',
   },
 
-  module: {
-    rules: [
-      {
-        test: /\.worker\.ts$/,
-        use: {
-          loader: 'worker-loader',
-          options: {
-            filename: '[name].js',
-            inline: 'fallback',
-          },
-        },
-      },
-      {
-        test: /\.[jt]sx?$/,
-        exclude: /node_modules/,
-        loader: 'esbuild-loader',
-        options: {
-          loader: 'tsx',
-          target: 'esnext',
-        },
-      },
-    ],
-  },
-
   plugins: [
     new BundleAnalyzerPlugin({
       analyzerMode: process.env.ANALYZE === 'true' ? 'server' : 'disabled',

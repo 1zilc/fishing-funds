@@ -5,7 +5,6 @@
 import webpack from 'webpack';
 import webpackPaths from './webpack.paths';
 import { dependencies as externals } from '../../release/app/package.json';
-import AntdDayjsWebpackPlugin from 'antd-dayjs-webpack-plugin';
 
 const configuration: webpack.Configuration = {
   externals: [...Object.keys(externals || {})],
@@ -15,13 +14,14 @@ const configuration: webpack.Configuration = {
   module: {
     rules: [
       {
-        test: /\.svg$/i,
-        issuer: /\.[jt]sx?$/,
-        use: ['@svgr/webpack'],
-      },
-      {
-        test: /\.(?:ico|gif|png|jpg|jpeg|webp)$/,
-        type: 'asset/resource',
+        test: /\.worker\.ts$/,
+        use: {
+          loader: 'worker-loader',
+          options: {
+            filename: '[name].js',
+            inline: 'fallback',
+          },
+        },
       },
       {
         test: /\.[jt]sx?$/,
@@ -59,7 +59,6 @@ const configuration: webpack.Configuration = {
     new webpack.EnvironmentPlugin({
       NODE_ENV: 'production',
     }),
-    new AntdDayjsWebpackPlugin(),
   ],
 };
 

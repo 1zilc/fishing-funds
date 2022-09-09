@@ -14,11 +14,17 @@ const CoinRankingContent: React.FC<CoinRankingContentProps> = (props) => {
   return (
     <CustomDrawerContent title="货币榜" enterText="确定" onEnter={props.onEnter} onClose={props.onClose}>
       <div className={styles.content}>
-        <Tabs animated={{ tabPane: true }} tabBarGutter={15}>
-          <Tabs.TabPane tab="排行榜" key={String(0)}>
-            <MainRank />
-          </Tabs.TabPane>
-        </Tabs>
+        <Tabs
+          animated={{ tabPane: true }}
+          tabBarGutter={15}
+          items={[
+            {
+              key: String(0),
+              label: '排行榜',
+              children: <MainRank />,
+            },
+          ]}
+        />
       </div>
     </CustomDrawerContent>
   );

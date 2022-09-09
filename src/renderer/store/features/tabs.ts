@@ -12,7 +12,7 @@ const initialState: TabsState = {
     [Enums.TabKeyType.Fund]: 0,
     [Enums.TabKeyType.Zindex]: 0,
     [Enums.TabKeyType.Quotation]: 0,
-    [Enums.TabKeyType.Stock]: 0,
+    [Enums.TabKeyType.Stock]: -1,
     [Enums.TabKeyType.Coin]: 0,
   },
 };

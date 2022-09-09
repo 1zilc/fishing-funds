@@ -178,6 +178,8 @@ export enum StockMarketType {
   XSB = 7,
   Fund = 8,
   Bond = 9,
+  Futures = 10,
+  Exchange = 11,
 }
 
 export enum CoinUnitType {
@@ -210,6 +212,7 @@ export enum ZindexViewType {
 export enum QuotationViewType {
   List,
   Grid,
+  Flow,
 }
 export enum StockViewType {
   Chart,

@@ -1,8 +1,7 @@
 import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
 import { AsyncThunkConfig } from '@/store';
-import { sortZindex } from '@/workers/sort.worker';
-import { mergeStateWithResponse } from '@/workers/merge.worker';
 import * as Utils from '@/utils';
+import * as Helpers from '@/helpers';
 import * as Enums from '@/utils/enums';
 
 export interface ZindexState {
@@ -139,8 +138,7 @@ export const sortZindexsAction = createAsyncThunk<void, void, AsyncThunkConfig>(
       },
     } = getState();
 
-    const sortList = sortZindex({
-      module: Enums.TabKeyType.Zindex,
+    const sortList = Helpers.Zindex.SortZindex({
       codeMap,
       list: zindexs,
       sortType: type,
@@ -162,7 +160,7 @@ export const sortZindexsCachedAction = createAsyncThunk<void, Zindex.ResponseIte
         },
       } = getState();
 
-      const zindexsWithChached = mergeStateWithResponse({
+      const zindexsWithChached = Utils.MergeStateWithResponse({
         config: zindexConfig,
         configKey: 'code',
         stateKey: 'code',

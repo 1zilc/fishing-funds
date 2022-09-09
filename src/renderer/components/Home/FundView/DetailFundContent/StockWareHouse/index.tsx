@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { renderToString } from 'react-dom/server';
 import { useRequest } from 'ahooks';
 
 import ChartCard from '@/components/Card/ChartCard';
 import CustomDrawer from '@/components/CustomDrawer';
-import { useResizeEchart, useDrawer, useRenderEcharts } from '@/utils/hooks';
+import { useResizeEchart, useDrawer, useRenderEcharts, useEchartEventEffect } from '@/utils/hooks';
 import * as CONST from '@/constants';
 import * as Services from '@/services';
 import * as Utils from '@/utils';
@@ -101,16 +101,22 @@ const StockWareHouse: React.FC<StockWareHouseProps> = ({ code, stockCodes }) => 
           },
         ],
       });
-      chartInstance?.off('click');
-      chartInstance?.on('click', (params: any) => {
-        const { market, code } = params.data.item;
-        const secid = `${market}.${code}`;
-        setDetailStockDrawer(secid);
-      });
     },
     chartInstance,
     [result]
   );
+
+  useEchartEventEffect(() => {
+    chartInstance?.on('click', (params: any) => {
+      const { market, code } = params.data.item;
+      const secid = `${market}.${code}`;
+      setDetailStockDrawer(secid);
+    });
+
+    return () => {
+      chartInstance?.off('click');
+    };
+  }, chartInstance);
 
   return (
     <ChartCard onFresh={runGetStockWareHouseFromEastmoney}>

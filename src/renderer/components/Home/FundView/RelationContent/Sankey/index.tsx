@@ -1,7 +1,7 @@
 import React from 'react';
 
 import CustomDrawer from '@/components/CustomDrawer';
-import { useResizeEchart, useRenderEcharts, useDrawer } from '@/utils/hooks';
+import { useResizeEchart, useRenderEcharts, useDrawer, useEchartEventEffect } from '@/utils/hooks';
 import styles from './index.module.scss';
 
 const DetailFundContent = React.lazy(() => import('@/components/Home/FundView/DetailFundContent'));
@@ -57,24 +57,30 @@ const Sankey: React.FC<SankeyProps> = ({ data, valueKey, length }) => {
             .flat(),
         },
       });
-      chartInstance?.off('click');
-      chartInstance?.on('click', (params: any) => {
-        if (!params.data.item.INDEXCODE) {
-          const detailCode = params.data.item.fundcode;
-          setDetailDrawer(detailCode);
-        }
-        if (params.data.item.INDEXCODE && valueKey === 'GPJC') {
-          const stockName = params.data.item.GPJC;
-          setAddStockDrawer(stockName);
-        }
-        if (params.data.item.INDEXCODE && valueKey === 'INDEXNAME') {
-          // 板块详情暂时无法查看
-        }
-      });
     },
     chartInstance,
     [data, valueKey, dataSource]
   );
+
+  useEchartEventEffect(() => {
+    chartInstance?.on('click', (params: any) => {
+      if (!params.data.item.INDEXCODE) {
+        const detailCode = params.data.item.fundcode;
+        setDetailDrawer(detailCode);
+      }
+      if (params.data.item.INDEXCODE && valueKey === 'GPJC') {
+        const stockName = params.data.item.GPJC;
+        setAddStockDrawer(stockName);
+      }
+      if (params.data.item.INDEXCODE && valueKey === 'INDEXNAME') {
+        // 板块详情暂时无法查看
+      }
+    });
+
+    return () => {
+      chartInstance?.off('click');
+    };
+  }, chartInstance);
 
   return (
     <div className={styles.content}>

@@ -16,11 +16,18 @@ const FundSearch: React.FC<FundSearchProps> = (props) => {
   const { keyword } = props;
   return keyword ? (
     <div className={clsx(styles.content)}>
-      <Tabs animated={{ tabPane: true }} tabBarGutter={15} destroyInactiveTabPane>
-        <Tabs.TabPane className={styles.tab} tab="新闻资讯">
-          <Recent keyword={keyword} />
-        </Tabs.TabPane>
-      </Tabs>
+      <Tabs
+        animated={{ tabPane: true }}
+        tabBarGutter={15}
+        destroyInactiveTabPane
+        items={[
+          {
+            key: String(0),
+            label: '新闻资讯',
+            children: <Recent keyword={keyword} />,
+          },
+        ]}
+      />
     </div>
   ) : (
     <></>

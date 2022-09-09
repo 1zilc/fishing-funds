@@ -7,6 +7,7 @@ import Ranting from '@/components/Home/FundView/FundRankingContent/Ranting';
 import Today from '@/components/Home/FundView/FundRankingContent/Today';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
 import styles from './index.module.scss';
+import { children } from 'cheerio/lib/api/traversing';
 
 export interface FundRankingContentProps {
   onEnter: () => void;
@@ -17,20 +18,32 @@ const FundRankingContent: React.FC<FundRankingContentProps> = (props) => {
   return (
     <CustomDrawerContent title="基金榜" enterText="确定" onEnter={props.onEnter} onClose={props.onClose}>
       <div className={styles.content}>
-        <Tabs animated={{ tabPane: true }} tabBarGutter={15}>
-          <Tabs.TabPane tab="今日榜" key={String(0)}>
-            <Today />
-          </Tabs.TabPane>
-          <Tabs.TabPane tab="近期榜" key={String(1)}>
-            <Rank />
-          </Tabs.TabPane>
-          <Tabs.TabPane tab="定投榜" key={String(2)}>
-            <Automatic />
-          </Tabs.TabPane>
-          <Tabs.TabPane tab="评级榜" key={String(3)}>
-            <Ranting />
-          </Tabs.TabPane>
-        </Tabs>
+        <Tabs
+          animated={{ tabPane: true }}
+          tabBarGutter={15}
+          items={[
+            {
+              key: String(0),
+              label: '今日榜',
+              children: <Today />,
+            },
+            {
+              key: String(1),
+              label: '近期榜',
+              children: <Rank />,
+            },
+            {
+              key: String(2),
+              label: '定投榜',
+              children: <Automatic />,
+            },
+            {
+              key: String(3),
+              label: '评级榜',
+              children: <Ranting />,
+            },
+          ]}
+        />
       </div>
     </CustomDrawerContent>
   );

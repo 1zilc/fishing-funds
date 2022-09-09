@@ -1,17 +1,10 @@
-import React, { PropsWithChildren, Suspense } from 'react';
-import { Tabs, TabPaneProps } from 'antd';
+import { Suspense } from 'react';
+import { useCreation } from 'ahooks';
+import { Tabs, TabsProps } from 'antd';
 import Empty from '@/components/Empty';
 import { syncTabsKeyMapAction } from '@/store/features/tabs';
 import { useAppDispatch, useAppSelector } from '@/utils/hooks';
 import * as Enums from '@/utils/enums';
-
-export interface GroupTapProps {
-  tabKey: Enums.TabKeyType;
-}
-
-interface GroupTapType extends React.FC<PropsWithChildren<GroupTapProps>> {
-  TabPane: React.FC<PropsWithChildren<TabPaneProps>>;
-}
 
 const groupBarStyle = {
   background: 'var(--background-color)',
@@ -20,32 +13,36 @@ const groupBarStyle = {
   paddingLeft: 25,
 };
 
-const GroupTap: GroupTapType = (props) => {
+interface GroupTabProps extends TabsProps {
+  tabKey: Enums.TabKeyType;
+}
+
+const GroupTab = (props: GroupTabProps) => {
   const { tabKey } = props;
   const dispatch = useAppDispatch();
-  const defaultActiveKey = useAppSelector((state) => state.tabs.tabsKeyMap[tabKey]);
+  const activeKey = useAppSelector((state) => state.tabs.tabsKeyMap[tabKey]);
+
+  const items = useCreation(
+    () =>
+      props.items?.map((item) => {
+        item.children = <Suspense fallback={<Empty text="加载中..." />}>{item.children}</Suspense>;
+        return item;
+      }),
+    [props.items]
+  );
 
   return (
     <Tabs
       size="small"
-      defaultActiveKey={String(defaultActiveKey)}
+      activeKey={String(activeKey)}
       animated={{ tabPane: true, inkBar: true }}
       tabBarGutter={15}
       tabBarStyle={groupBarStyle}
       destroyInactiveTabPane
+      items={items}
       onChange={(e) => dispatch(syncTabsKeyMapAction({ key: tabKey, activeKey: Number(e) }))}
-    >
-      {props.children}
-    </Tabs>
+    />
   );
 };
 
-GroupTap.TabPane = (props) => {
-  return (
-    <Tabs.TabPane {...props}>
-      <Suspense fallback={<Empty text="加载中..." />}>{props.children}</Suspense>
-    </Tabs.TabPane>
-  );
-};
-
-export default GroupTap;
+export default GroupTab;

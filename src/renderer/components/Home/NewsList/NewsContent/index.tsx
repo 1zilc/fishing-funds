@@ -29,51 +29,90 @@ const NewsContent: React.FC<NewsContentProps> = (props) => {
   return (
     <CustomDrawerContent title="新闻动态" enterText="确定" onEnter={props.onEnter} onClose={props.onClose}>
       <div className={styles.content}>
-        <Tabs animated={{ tabPane: true }} tabBarGutter={15}>
-          <Tabs.TabPane tab="焦点" key={String(0)}>
-            <FocusList onView={openWebView} />
-          </Tabs.TabPane>
-          <Tabs.TabPane tab="股市直播" key={String(1)}>
-            <LiveList onView={openWebView} />
-          </Tabs.TabPane>
-          <Tabs.TabPane tab="上市公司" key={String(2)}>
-            <ListedList onView={openWebView} />
-          </Tabs.TabPane>
-          <Tabs.TabPane tab="全球直播" key={String(3)}>
-            <GlobalList onView={openWebView} />
-          </Tabs.TabPane>
-        </Tabs>
-        <Tabs animated={{ tabPane: true }} tabBarGutter={15}>
-          <Tabs.TabPane tab="商品" key={String(0)}>
-            <GoodsList onView={openWebView} />
-          </Tabs.TabPane>
-          <Tabs.TabPane tab="外汇" key={String(1)}>
-            <ExchangeList onView={openWebView} />
-          </Tabs.TabPane>
-          <Tabs.TabPane tab="债券" key={String(2)}>
-            <BondList onView={openWebView} />
-          </Tabs.TabPane>
-          <Tabs.TabPane tab="基金" key={String(3)}>
-            <FundList onView={openWebView} />
-          </Tabs.TabPane>
-        </Tabs>
-        <Tabs animated={{ tabPane: true }} tabBarGutter={15}>
-          <Tabs.TabPane tab="中国央行" key={String(0)}>
-            <ChinaList onView={openWebView} />
-          </Tabs.TabPane>
-          <Tabs.TabPane tab="美联储" key={String(1)}>
-            <UsaList onView={openWebView} />
-          </Tabs.TabPane>
-          <Tabs.TabPane tab="欧洲" key={String(2)}>
-            <EuList onView={openWebView} />
-          </Tabs.TabPane>
-          <Tabs.TabPane tab="英国" key={String(3)}>
-            <UkList onView={openWebView} />
-          </Tabs.TabPane>
-          <Tabs.TabPane tab="日本" key={String(4)}>
-            <JpList onView={openWebView} />
-          </Tabs.TabPane>
-        </Tabs>
+        <Tabs
+          animated={{ tabPane: true }}
+          tabBarGutter={15}
+          items={[
+            {
+              key: String(0),
+              label: '焦点',
+              children: <FocusList onView={openWebView} />,
+            },
+            {
+              key: String(1),
+              label: '股市直播',
+              children: <LiveList onView={openWebView} />,
+            },
+            {
+              key: String(2),
+              label: '上市公司',
+              children: <ListedList onView={openWebView} />,
+            },
+            {
+              key: String(3),
+              label: '全球直播',
+              children: <GlobalList onView={openWebView} />,
+            },
+          ]}
+        />
+
+        <Tabs
+          animated={{ tabPane: true }}
+          tabBarGutter={15}
+          items={[
+            {
+              key: String(0),
+              label: '商品',
+              children: <GoodsList onView={openWebView} />,
+            },
+            {
+              key: String(1),
+              label: '外汇',
+              children: <ExchangeList onView={openWebView} />,
+            },
+            {
+              key: String(2),
+              label: '债券',
+              children: <BondList onView={openWebView} />,
+            },
+            {
+              key: String(3),
+              label: '基金',
+              children: <FundList onView={openWebView} />,
+            },
+          ]}
+        />
+        <Tabs
+          animated={{ tabPane: true }}
+          tabBarGutter={15}
+          items={[
+            {
+              key: String(0),
+              label: '中国央行',
+              children: <ChinaList onView={openWebView} />,
+            },
+            {
+              key: String(1),
+              label: '美联储',
+              children: <UsaList onView={openWebView} />,
+            },
+            {
+              key: String(2),
+              label: '欧洲',
+              children: <EuList onView={openWebView} />,
+            },
+            {
+              key: String(3),
+              label: '英国',
+              children: <UkList onView={openWebView} />,
+            },
+            {
+              key: String(4),
+              label: '日本',
+              children: <JpList onView={openWebView} />,
+            },
+          ]}
+        />
       </div>
     </CustomDrawerContent>
   );

@@ -55,9 +55,14 @@ const ZindexSearch: React.FC<ZindexSearchProps> = (props) => {
 
   return list.length ? (
     <div className={clsx(styles.content)}>
-      <Tabs animated={{ tabPane: true }} tabBarGutter={15} destroyInactiveTabPane>
-        {list.map(({ Datas, Name, Type }) => (
-          <Tabs.TabPane className={styles.tab} tab={Name} key={String(Type)}>
+      <Tabs
+        animated={{ tabPane: true }}
+        tabBarGutter={15}
+        destroyInactiveTabPane
+        items={list.map(({ Datas, Name, Type }) => ({
+          key: String(Type),
+          label: Name,
+          children: (
             <ChartCard pureContent showCollapse>
               {Datas.map(({ Name, Code, MktNum }) => {
                 const secid = `${MktNum}.${Code}`;
@@ -88,9 +93,9 @@ const ZindexSearch: React.FC<ZindexSearchProps> = (props) => {
                 );
               })}
             </ChartCard>
-          </Tabs.TabPane>
-        ))}
-      </Tabs>
+          ),
+        }))}
+      />
       <CustomDrawer show={showDetailDrawer}>
         <DetailZindexContent onEnter={closeDetailDrawer} onClose={closeDetailDrawer} code={detailSecid} />
       </CustomDrawer>

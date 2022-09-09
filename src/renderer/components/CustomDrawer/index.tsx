@@ -13,14 +13,13 @@ const CustomDrawer: React.FC<PropsWithChildren<CustomDrawerProps>> = ({ show, ch
 
   return (
     <Drawer
-      visible={show}
+      open={show}
       closable={false}
-      handler={false}
       placement="bottom"
       height="100%"
       width="100%"
       keyboard={false}
-      afterVisibleChange={setDrawerOpened}
+      afterOpenChange={setDrawerOpened}
       bodyStyle={{ padding: 0 }}
       push={false}
       zIndex={CONST.DEFAULT.DRAWER_ZINDEX_DEFAULT}

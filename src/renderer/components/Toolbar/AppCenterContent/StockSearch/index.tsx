@@ -26,10 +26,12 @@ export const stockTypesConfig = [
   // { name: '板块', code:  Enums.StockMarketType.Quotation },
   { name: '港股', code: Enums.StockMarketType.HK },
   { name: '美股', code: Enums.StockMarketType.US },
-  { name: '英股', code: Enums.StockMarketType.UK },
+  // { name: '英股', code: Enums.StockMarketType.UK },
   { name: '三板', code: Enums.StockMarketType.XSB },
-  // { name: '基金', code:  Enums.StockMarketType.Fund },
+  // { name: '基金', code: Enums.StockMarketType.Fund },
   { name: '债券', code: Enums.StockMarketType.Bond },
+  { name: '期货', code: Enums.StockMarketType.Futures },
+  { name: '外汇', code: Enums.StockMarketType.Exchange },
 ];
 
 const StockSearch: React.FC<StockSearchProps> = (props) => {
@@ -59,9 +61,14 @@ const StockSearch: React.FC<StockSearchProps> = (props) => {
 
   return list.length ? (
     <div className={clsx(styles.content)}>
-      <Tabs animated={{ tabPane: true }} tabBarGutter={15} destroyInactiveTabPane>
-        {list.map(({ Datas, Name, Type }) => (
-          <Tabs.TabPane className={styles.tab} tab={Name} key={String(Type)}>
+      <Tabs
+        animated={{ tabPane: true }}
+        tabBarGutter={15}
+        destroyInactiveTabPane
+        items={list.map(({ Datas, Name, Type }) => ({
+          key: String(Type),
+          label: Name,
+          children: (
             <ChartCard pureContent showCollapse>
               {Datas.map(({ Name, Code, MktNum }) => {
                 const secid = `${MktNum}.${Code}`;
@@ -92,9 +99,10 @@ const StockSearch: React.FC<StockSearchProps> = (props) => {
                 );
               })}
             </ChartCard>
-          </Tabs.TabPane>
-        ))}
-      </Tabs>
+          ),
+        }))}
+      />
+
       <CustomDrawer show={showDetailDrawer}>
         <DetailStockContent onEnter={closeDetailDrawer} onClose={closeDetailDrawer} secid={detailData.secid} type={detailData.type} />
       </CustomDrawer>

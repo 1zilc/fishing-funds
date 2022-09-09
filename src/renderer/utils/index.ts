@@ -273,7 +273,7 @@ export function CalcZDHC(list: number[]) {
 
 export function ColorRgba(sHex: string, alpha = 1) {
   // 十六进制颜色值的正则表达式
-  const reg = /^#([0-9a-fA-f]{3}|[0-9a-fA-f]{6})$/;
+  const reg = /^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/;
   /* 16进制颜色转为RGB格式 */
   let sColor = sHex.toLowerCase().trim();
   if (sColor && reg.test(sColor)) {
@@ -347,18 +347,23 @@ export function CalculateMA(dayCount: any, values: any[]) {
   return result;
 }
 
-export function GetCodeMap<T extends Record<string, any>>(list: T[], key: keyof T) {
+export function GetCodeMap<T>(list: T[], key: keyof T) {
   type extraData = {
     originSort: number;
   };
-  return list.reduce((r, c, i) => {
-    if (Array.isArray(c)) {
-      r[c[key]] = c as any;
-    } else {
-      r[c[key]] = { ...c, originSort: i };
+  return list.reduce<Record<string, T & extraData>>((r, c, i) => {
+    if (c instanceof Object) {
+      const indexKey = c[key] as string;
+      if (indexKey !== undefined && indexKey !== null) {
+        if (Array.isArray(c)) {
+          r[indexKey] = c as any;
+        } else {
+          r[indexKey] = { ...c, originSort: i };
+        }
+      }
     }
     return r;
-  }, {} as Record<string, T & extraData>);
+  }, {});
 }
 
 export function GenerateRequestKey(api: string, key?: any) {
@@ -402,4 +407,38 @@ export function ParseSearchParams() {
 
 export function CheckListOrderHasChanged<I1, I2 extends I1, K extends keyof I1>(list1: I1[], list2: I2[], key: K) {
   return list1.map((i) => i[key]).toString() !== list2.map((i) => i[key]).toString();
+}
+
+export function MergeStateWithResponse<C, CK extends keyof C, SK extends keyof S, S, R extends S>(params: {
+  config: C[];
+  configKey: CK;
+  stateKey: SK;
+  state: S[];
+  response: R[];
+}) {
+  const stateCodeToMap = GetCodeMap(params.state, params.stateKey);
+  const responseCodeToMap = GetCodeMap(params.response, params.stateKey);
+
+  const stateWithChachedCodeToMap = params.config.reduce<Record<string, S>>((map, current) => {
+    const index = current[params.configKey] as unknown as string;
+    const stateItem = stateCodeToMap[index];
+    const responseItem = responseCodeToMap[index];
+    if (stateItem || responseItem) {
+      map[index] = { ...(stateItem || {}), ...(responseItem || {}) };
+    }
+    return map;
+  }, {});
+
+  const sortMap = params.state.reduce<Record<string, number>>((map, current, index) => {
+    map[current[params.stateKey] as unknown as string] = index;
+    return map;
+  }, {});
+
+  const stateWithChached = Object.values(stateWithChachedCodeToMap);
+
+  stateWithChached.sort((a, b) => {
+    return sortMap[a[params.stateKey] as unknown as string] < sortMap[b[params.stateKey] as unknown as string] ? -1 : 1;
+  });
+
+  return stateWithChached;
 }

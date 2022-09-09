@@ -71,7 +71,7 @@ export const initialState: SortState = {
       type: Enums.ZindexViewType.Grid,
     },
     quotationViewMode: {
-      type: Enums.QuotationViewType.List,
+      type: Enums.QuotationViewType.Flow,
     },
     stockViewMode: {
       type: Enums.StockViewType.List,

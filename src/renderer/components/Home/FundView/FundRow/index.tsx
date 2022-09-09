@@ -79,7 +79,7 @@ const FundRow: React.FC<RowProps> = (props) => {
             {/* 估算持有收益率 */}
             {!!calcFundResult.cbj && eyeStatus === Enums.EyeStatus.Open && (
               <span className={clsx(Utils.GetValueColor(calcFundResult.gscysyl).blockClass, styles.gscysyl)}>
-                 {calcFundResult.gscysyl === '' ? `  0.00 %` : `${Utils.Yang(calcFundResult.gscysyl)} %`}
+                {calcFundResult.gscysyl === '' ? `0.00%` : `${Utils.Yang(calcFundResult.gscysyl)}%`}
               </span>
             )}
             {isFix && <span className={styles.warn}>更新</span>}

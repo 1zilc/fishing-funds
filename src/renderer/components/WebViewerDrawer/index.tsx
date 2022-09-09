@@ -203,9 +203,9 @@ export const WebViewer: React.FC<WebViewerProps> = (props) => {
         <webview
           ref={viewRef}
           src={url}
-          style={{ width: '100%', flex: '1' }}
+          style={{ width: '100%', flex: '1' } as any}
           useragent={phone ? defaultAgent : undefined}
-          allowpopups="true"
+          allowpopups
         />
       ) : (
         <Empty text="404 Not Found" />

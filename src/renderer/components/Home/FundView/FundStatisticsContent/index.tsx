@@ -88,57 +88,106 @@ const FundStatisticsContent: React.FC<FundStatisticsContentProps> = (props) => {
           ))}
         </div>
         <ColorfulTags tags={tags} />
-        <Tabs animated={{ tabPane: true }} tabBarGutter={15}>
-          <Tabs.TabPane tab="持基结构" key={String(0)}>
-            <ChartCard>
-              <TypeConfig funds={allCyFunds} />
-            </ChartCard>
-          </Tabs.TabPane>
-          <Tabs.TabPane tab="资产结构" key={String(1)}>
-            <ChartCard>
-              <AssetsConfig funds={allCyFunds} codes={codes} />
-            </ChartCard>
-          </Tabs.TabPane>
-          <Tabs.TabPane tab="钱包配置" key={String(2)}>
-            <ChartCard>
-              <WalletConfig funds={allCyFunds} codes={codes} />
-            </ChartCard>
-          </Tabs.TabPane>
-          <Tabs.TabPane tab="钱包收益" key={String(3)}>
-            <ChartCard>
-              <WalletIncome funds={allCyFunds} codes={codes} />
-            </ChartCard>
-          </Tabs.TabPane>
-        </Tabs>
-        <Tabs animated={{ tabPane: true }} tabBarGutter={15}>
-          <Tabs.TabPane tab="基金收益概览" key={String(0)}>
-            <ChartCard>
-              <FundOverview funds={allCyFunds} codes={codes} />
-            </ChartCard>
-          </Tabs.TabPane>
-          <Tabs.TabPane tab="基金收益排行" key={String(1)}>
-            <ChartCard>
-              <FundRank funds={allCyFunds} codes={codes} />
-            </ChartCard>
-          </Tabs.TabPane>
-          <Tabs.TabPane tab="基金持仓排行" key={String(2)}>
-            <ChartCard>
-              <FundWarehouse funds={allCyFunds} codes={codes} />
-            </ChartCard>
-          </Tabs.TabPane>
-        </Tabs>
-        <Tabs animated={{ tabPane: true }} tabBarGutter={15}>
-          <Tabs.TabPane tab="股票关系" key={String(0)}>
-            <ChartCard onFresh={runGetIndustryRateFromEaseMoney}>
-              <Sankey data={sankeyData} valueKey="GPJC" length={allCyFunds.length} />
-            </ChartCard>
-          </Tabs.TabPane>
-          <Tabs.TabPane tab="板块关系" key={String(1)}>
-            <ChartCard onFresh={runGetIndustryRateFromEaseMoney}>
-              <Sankey data={sankeyData} valueKey="INDEXNAME" length={allCyFunds.length} />
-            </ChartCard>
-          </Tabs.TabPane>
-        </Tabs>
+        <Tabs
+          animated={{ tabPane: true }}
+          tabBarGutter={15}
+          items={[
+            {
+              key: String(0),
+              label: '持基结构',
+              children: (
+                <ChartCard>
+                  <TypeConfig funds={allCyFunds} />
+                </ChartCard>
+              ),
+            },
+            {
+              key: String(1),
+              label: '资产结构',
+              children: (
+                <ChartCard>
+                  <AssetsConfig funds={allCyFunds} codes={codes} />
+                </ChartCard>
+              ),
+            },
+            {
+              key: String(2),
+              label: '钱包配置',
+              children: (
+                <ChartCard>
+                  <WalletConfig funds={allCyFunds} codes={codes} />
+                </ChartCard>
+              ),
+            },
+            {
+              key: String(3),
+              label: '钱包收益',
+              children: (
+                <ChartCard>
+                  <WalletIncome funds={allCyFunds} codes={codes} />
+                </ChartCard>
+              ),
+            },
+          ]}
+        />
+        <Tabs
+          animated={{ tabPane: true }}
+          tabBarGutter={15}
+          items={[
+            {
+              key: String(0),
+              label: '基金收益概览',
+              children: (
+                <ChartCard>
+                  <FundOverview funds={allCyFunds} codes={codes} />
+                </ChartCard>
+              ),
+            },
+            {
+              key: String(1),
+              label: '基金收益排行',
+              children: (
+                <ChartCard>
+                  <FundRank funds={allCyFunds} codes={codes} />
+                </ChartCard>
+              ),
+            },
+            {
+              key: String(2),
+              label: '基金持仓排行',
+              children: (
+                <ChartCard>
+                  <FundWarehouse funds={allCyFunds} codes={codes} />
+                </ChartCard>
+              ),
+            },
+          ]}
+        />
+
+        <Tabs
+          animated={{ tabPane: true }}
+          tabBarGutter={15}
+          items={[
+            {
+              key: String(0),
+              label: '股票关系',
+              children: (
+                <ChartCard onFresh={runGetIndustryRateFromEaseMoney}>
+                  <Sankey data={sankeyData} valueKey="GPJC" length={allCyFunds.length} />
+                </ChartCard>
+              ),
+            },
+            {
+              key: String(1),
+              label: '板块关系',
+              children: (
+                <ChartCard onFresh={runGetIndustryRateFromEaseMoney}>
+                  <Sankey data={sankeyData} valueKey="INDEXNAME" length={allCyFunds.length} />
+                </ChartCard>
+              ),
+            },
+          ]}
+        />
       </div>
     </CustomDrawerContent>
   );

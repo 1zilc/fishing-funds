@@ -6,6 +6,7 @@ import path from 'path';
 import webpack from 'webpack';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
+import AntdDayjsWebpackPlugin from 'antd-dayjs-webpack-plugin';
 import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
 import { merge } from 'webpack-merge';
 import { ESBuildMinifyPlugin } from 'esbuild-loader';
@@ -36,10 +37,13 @@ const configuration: webpack.Configuration = {
   output: {
     path: webpackPaths.distRendererPath,
     publicPath: './',
-    filename: 'renderer.js',
-    library: {
-      type: 'umd',
-    },
+    filename: '[name].js',
+    chunkFilename: '[name].bundle.js',
+    library: { type: 'module' },
+  },
+
+  experiments: {
+    outputModule: true,
   },
 
   module: {
@@ -70,26 +74,24 @@ const configuration: webpack.Configuration = {
         test: /\.(woff|woff2|eot|ttf|otf)$/i,
         type: 'asset/resource',
       },
-      // SVG Font
-      // {
-      //   test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
-      //   use: {
-      //     loader: 'url-loader',
-      //     options: {
-      //       limit: 10000,
-      //       mimetype: 'image/svg+xml',
-      //     },
-      //   },
-      // },
-      // Common Image Formats
-      // {
-      //   test: /\.(?:ico|gif|png|jpg|jpeg|webp)$/,
-      //   use: 'url-loader',
-      // },
+      // Images
+      {
+        test: /\.(png|jpg|jpeg|gif)$/i,
+        type: 'asset/resource',
+      },
+      // SVG
+      {
+        test: /\.svg$/,
+        issuer: /\.[jt]sx?$/,
+        use: ['@svgr/webpack'],
+      },
     ],
   },
 
   optimization: {
+    splitChunks: {
+      chunks: 'all',
+    },
     minimize: true,
     minimizer: [
       new ESBuildMinifyPlugin({
@@ -135,7 +137,14 @@ const configuration: webpack.Configuration = {
       },
       isBrowser: false,
       isDevelopment: process.env.NODE_ENV !== 'production',
+      scriptLoading: 'module',
     }),
+
+    new webpack.DefinePlugin({
+      'process.type': '"renderer"',
+    }),
+
+    new AntdDayjsWebpackPlugin(),
   ],
 };
 

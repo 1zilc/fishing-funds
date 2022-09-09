@@ -88,34 +88,58 @@ export const DetailQuotation: React.FC<DetailQuotationProps> = (props) => {
         </div>
       </div>
       <div className={styles.container}>
-        <Tabs animated={{ tabPane: true }} tabBarGutter={15}>
-          <Tabs.TabPane tab="实时资金流向" key={String(Enums.FundFlowType.RealTime)}>
-            <RealTimeFundFlow code={code} />
-          </Tabs.TabPane>
-          <Tabs.TabPane tab="盘后资金流向" key={String(Enums.FundFlowType.AfterTime)}>
-            <AfterTimeFundFlow code={code} />
-          </Tabs.TabPane>
-        </Tabs>
+        <Tabs
+          animated={{ tabPane: true }}
+          tabBarGutter={15}
+          items={[
+            {
+              key: String(Enums.FundFlowType.RealTime),
+              label: '实时资金流向',
+              children: <RealTimeFundFlow code={code} />,
+            },
+            {
+              key: String(Enums.FundFlowType.AfterTime),
+              label: '盘后资金流向',
+              children: <AfterTimeFundFlow code={code} />,
+            },
+          ]}
+        />
       </div>
       <div className={styles.container}>
-        <Tabs animated={{ tabPane: true }} tabBarGutter={15}>
-          <Tabs.TabPane tab="实时成交分布" key={String(0)}>
-            <RealTimeTransaction code={code} />
-          </Tabs.TabPane>
-        </Tabs>
+        <Tabs
+          animated={{ tabPane: true }}
+          tabBarGutter={15}
+          items={[
+            {
+              key: String(0),
+              label: '实时成交分布',
+              children: <RealTimeTransaction code={code} />,
+            },
+          ]}
+        />
       </div>
       <div className={styles.container}>
-        <Tabs animated={{ tabPane: true }} tabBarGutter={15}>
-          <Tabs.TabPane tab="主题基金" key={String(0)}>
-            <Funds code={code} />
-          </Tabs.TabPane>
-          <Tabs.TabPane tab={`${quotation.name}个股`} key={String(1)}>
-            <Stocks code={code} />
-          </Tabs.TabPane>
-          <Tabs.TabPane tab="近期资讯" key={String(2)}>
-            <Recent keyword={quotation.name} />
-          </Tabs.TabPane>
-        </Tabs>
+        <Tabs
+          animated={{ tabPane: true }}
+          tabBarGutter={15}
+          items={[
+            {
+              key: String(0),
+              label: '主题基金',
+              children: <Funds code={code} />,
+            },
+            {
+              key: String(1),
+              label: `${quotation.name}个股`,
+              children: <Stocks code={code} />,
+            },
+            {
+              key: String(2),
+              label: '近期资讯',
+              children: <Recent keyword={quotation.name} />,
+            },
+          ]}
+        />
       </div>
     </div>
   );

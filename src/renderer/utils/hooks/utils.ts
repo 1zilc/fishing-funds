@@ -113,7 +113,55 @@ export function useResizeEchart(scale = 1, unlimited?: boolean) {
     });
   }, [chartWidth, unlimited]);
 
-  return { ref: chartRef, chartInstance: chartInstanceRef.current };
+  return { ref: chartRef, chartInstance: chartInstanceRef.current, chartInstanceRef };
+}
+
+export function useAutoSizeEchart() {
+  const chartRef = useRef<HTMLDivElement>(null);
+  const chartInstanceRef = useRef<echarts.ECharts>();
+  const chartWidth = useSize(chartRef)?.width;
+  const chartHeight = useSize(chartRef)?.height;
+
+  useEffect(() => {
+    const instance = echarts.init(chartRef.current!, undefined, {
+      renderer: 'svg',
+    });
+    chartInstanceRef.current = instance;
+    return () => {
+      instance.dispose();
+    };
+  }, []);
+
+  useAfterMountedEffect(() => {
+    React.startTransition(() => {
+      if (chartWidth && chartHeight) {
+        chartInstanceRef.current?.resize();
+      }
+    });
+  }, [chartWidth, chartHeight]);
+
+  return { ref: chartRef, chartInstance: chartInstanceRef.current, chartInstanceRef };
+}
+
+export function useEchartEventEffect(fn: () => void | (() => void), instance?: echarts.ECharts) {
+  const initRef = useRef(false);
+  const unMountRef = useRef<any>();
+
+  useEffect(() => {
+    if (instance && !initRef.current) {
+      initRef.current = true;
+      unMountRef.current = fn();
+    }
+  }, [instance]);
+
+  useEffect(
+    () => () => {
+      if (initRef.current) {
+        unMountRef.current?.();
+      }
+    },
+    []
+  );
 }
 
 export function useRenderEcharts(

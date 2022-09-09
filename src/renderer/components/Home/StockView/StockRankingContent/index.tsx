@@ -17,23 +17,39 @@ const StockRankingContent: React.FC<StockRankingContentProps> = (props) => {
   return (
     <CustomDrawerContent title="股票榜" enterText="确定" onEnter={props.onEnter} onClose={props.onClose}>
       <div className={styles.content}>
-        <Tabs animated={{ tabPane: true }} tabBarGutter={15}>
-          <Tabs.TabPane tab="个股资金流" key={String(0)}>
-            <PureCard>
-              <SelfRank />
-            </PureCard>
-          </Tabs.TabPane>
-          <Tabs.TabPane tab="北向排名" key={String(1)}>
-            <PureCard>
-              <NorthRank />
-            </PureCard>
-          </Tabs.TabPane>
-          <Tabs.TabPane tab="主力排名" key={String(2)}>
-            <PureCard>
-              <MainRank />
-            </PureCard>
-          </Tabs.TabPane>
-        </Tabs>
+        <Tabs
+          animated={{ tabPane: true }}
+          tabBarGutter={15}
+          items={[
+            {
+              key: String(0),
+              label: '个股资金流',
+              children: (
+                <PureCard>
+                  <SelfRank />
+                </PureCard>
+              ),
+            },
+            {
+              key: String(1),
+              label: '北向排名',
+              children: (
+                <PureCard>
+                  <NorthRank />
+                </PureCard>
+              ),
+            },
+            {
+              key: String(2),
+              label: '主力排名',
+              children: (
+                <PureCard>
+                  <MainRank />
+                </PureCard>
+              ),
+            },
+          ]}
+        />
       </div>
     </CustomDrawerContent>
   );

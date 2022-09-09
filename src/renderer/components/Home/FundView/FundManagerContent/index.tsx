@@ -70,27 +70,47 @@ const FundManagerContent: React.FC<FundManagerContentProps> = (props) => {
           </div>
         </div>
         <div className={styles.container}>
-          <Tabs animated={{ tabPane: true }} tabBarGutter={15}>
-            <Tabs.TabPane tab="能力评估" key={String(Enums.ManagerPowerType.Appraise)}>
-              <ChartCard>
-                <Appraise power={manager.power} />
-              </ChartCard>
-            </Tabs.TabPane>
-            <Tabs.TabPane tab="收益统计" key={String(Enums.ManagerPowerType.Profit)}>
-              <ChartCard>
-                <Profit profit={manager.profit} />
-              </ChartCard>
-            </Tabs.TabPane>
-          </Tabs>
+          <Tabs
+            animated={{ tabPane: true }}
+            tabBarGutter={15}
+            items={[
+              {
+                key: String(Enums.ManagerPowerType.Appraise),
+                label: '能力评估',
+                children: (
+                  <ChartCard>
+                    <Appraise power={manager.power} />
+                  </ChartCard>
+                ),
+              },
+              {
+                key: String(Enums.ManagerPowerType.Profit),
+                label: '收益统计',
+                children: (
+                  <ChartCard>
+                    <Profit profit={manager.profit} />
+                  </ChartCard>
+                ),
+              },
+            ]}
+          />
         </div>
         <div className={styles.container}>
-          <Tabs animated={{ tabPane: true }} tabBarGutter={15}>
-            <Tabs.TabPane tab={`${manager.name || ''}管理过的基金`} key={0}>
-              <PureCard>
-                <ManageHistoryFundList manageHistoryFunds={managerDetail.manageHistoryFunds} />
-              </PureCard>
-            </Tabs.TabPane>
-          </Tabs>
+          <Tabs
+            animated={{ tabPane: true }}
+            tabBarGutter={15}
+            items={[
+              {
+                key: String(0),
+                label: `${manager.name || ''}管理过的基金`,
+                children: (
+                  <PureCard>
+                    <ManageHistoryFundList manageHistoryFunds={managerDetail.manageHistoryFunds} />
+                  </PureCard>
+                ),
+              },
+            ]}
+          />
         </div>
       </div>
     </CustomDrawerContent>

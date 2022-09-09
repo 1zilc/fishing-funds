@@ -160,37 +160,63 @@ export const DetailStock: React.FC<DetailStockProps> = (props) => {
         <ColorfulTags tags={industrys.map((industry) => industry.name)} />
       </div>
       <div className={styles.container}>
-        <Tabs animated={{ tabPane: true }} tabBarGutter={15}>
-          <Tabs.TabPane tab="股票走势" key={String(0)}>
-            <Trend secid={secid} zs={stock.zs} name={stock.name} />
-          </Tabs.TabPane>
-          <Tabs.TabPane tab="走势详情" key={String(1)}>
-            <Estimate secid={secid} />
-          </Tabs.TabPane>
-          <Tabs.TabPane tab="近期资讯" key={String(2)}>
-            <Recent keyword={stock.name} />
-          </Tabs.TabPane>
-        </Tabs>
+        <Tabs
+          animated={{ tabPane: true }}
+          tabBarGutter={15}
+          items={[
+            {
+              key: String(0),
+              label: '股票走势',
+              children: <Trend secid={secid} zs={stock.zs} name={stock.name} />,
+            },
+            {
+              key: String(1),
+              label: '走势详情',
+              children: <Estimate secid={secid} />,
+            },
+            {
+              key: String(2),
+              label: '近期资讯',
+              children: <Recent keyword={stock.name} />,
+            },
+          ]}
+        />
       </div>
       <div className={styles.container}>
-        <Tabs animated={{ tabPane: true }} tabBarGutter={15}>
-          <Tabs.TabPane tab="K线" key={String(0)}>
-            <K secid={secid} name={stock.name} />
-          </Tabs.TabPane>
-        </Tabs>
+        <Tabs
+          animated={{ tabPane: true }}
+          tabBarGutter={15}
+          items={[
+            {
+              key: String(0),
+              label: 'K线',
+              children: <K secid={secid} name={stock.name} />,
+            },
+          ]}
+        />
       </div>
       <div className={styles.container}>
-        <Tabs animated={{ tabPane: true }} tabBarGutter={15}>
-          <Tabs.TabPane tab="持股基金" key={String(0)}>
-            <HoldFunds secid={secid} />
-          </Tabs.TabPane>
-          <Tabs.TabPane tab="公司概况" key={String(1)}>
-            <Company secid={secid} />
-          </Tabs.TabPane>
-          <Tabs.TabPane tab="同类股票" key={String(2)}>
-            <Stocks secid={secid} />
-          </Tabs.TabPane>
-        </Tabs>
+        <Tabs
+          animated={{ tabPane: true }}
+          tabBarGutter={15}
+          items={[
+            {
+              key: String(0),
+              label: '持股基金',
+              children: <HoldFunds secid={secid} />,
+            },
+            {
+              key: String(1),
+              label: '公司概况',
+              children: <Company secid={secid} />,
+            },
+            {
+              key: String(2),
+              label: '同类股票',
+              children: <Stocks secid={secid} />,
+            },
+          ]}
+        />
       </div>
     </div>
   );

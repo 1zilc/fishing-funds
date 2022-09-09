@@ -10,6 +10,7 @@ import ArrowDownIcon from '@/static/icon/arrow-down.svg';
 import ArrowUpIcon from '@/static/icon/arrow-up.svg';
 import LayoutListIcon from '@/static/icon/layout-list.svg';
 import LayoutGridIcon from '@/static/icon/layout-grid.svg';
+import LayoutFlowIcon from '@/static/icon/layout-flow.svg';
 import LineCharIcon from '@/static/icon/line-chart.svg';
 import SearchIcon from '@/static/icon/search.svg';
 
@@ -317,7 +318,10 @@ function QuotationSortBar() {
           <LayoutListIcon onClick={() => dispatch(setQuotationViewModeAction({ type: Enums.QuotationViewType.Grid }))} />
         )}
         {quotationViewType === Enums.QuotationViewType.Grid && (
-          <LayoutGridIcon onClick={() => dispatch(setQuotationViewModeAction({ type: Enums.QuotationViewType.List }))} />
+          <LayoutGridIcon onClick={() => dispatch(setQuotationViewModeAction({ type: Enums.QuotationViewType.Flow }))} />
+        )}
+        {quotationViewType === Enums.QuotationViewType.Flow && (
+          <LayoutFlowIcon onClick={() => dispatch(setQuotationViewModeAction({ type: Enums.QuotationViewType.List }))} />
         )}
       </div>
       <div className={styles.mode}>
