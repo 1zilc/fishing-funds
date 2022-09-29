@@ -164,7 +164,7 @@
       "^@/(.*)$": "<rootDir>/src/renderer/$1"
     },
     "moduleFileExtensions": ["js", "jsx", "ts", "tsx", "json"],
-    "moduleDirectories": ["node_modules", "release/app/node_modules"],
+    "moduleDirectories": ["node_modules", "release/app/node_modules", "src"],
     "testPathIgnorePatterns": ["release/app/dist"],
     "setupFiles": ["./.erb/scripts/check-build-exists.ts"]
   },
