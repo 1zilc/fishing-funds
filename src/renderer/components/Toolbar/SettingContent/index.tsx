@@ -673,7 +673,7 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
         ]}
       />
       <div className={styles.exit}>
-        <button type="button" onClick={app.quit}>
+        <button type="button" onClick={() => app.quit()}>
           退出程序
         </button>
       </div>

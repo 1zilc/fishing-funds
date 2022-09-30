@@ -94,7 +94,9 @@ function main() {
   ipcMain.handle('check-update', async (event) => {
     appUpdater.checkUpdate('renderer');
   });
-  ipcMain.handle('shell-openExternal', async (event, config) => shell.openExternal(config));
+  ipcMain.handle('shell-openExternal', async (event, config) => {
+    shell.openExternal(config);
+  });
   // store相关
   ipcMain.handle('get-storage-config', async (event, config) => {
     return localStore.get(config.type, config.key, config.init);
