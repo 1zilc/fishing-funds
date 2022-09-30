@@ -1,31 +1,12 @@
-import log from 'electron-log';
-import got from 'got';
-import { contextBridge, ipcRenderer, shell, clipboard, nativeImage } from 'electron';
+import { contextBridge, ipcRenderer } from 'electron';
 import { encode, decode, fromUint8Array } from 'js-base64';
 import { CodingPromiseWorker } from './workers';
-import { saveImage, saveJsonToCsv, saveString, readFile } from './io';
-import Proxy from './proxy';
 import { WorkerRecieveParams as CodingWorkerRecieveParams } from './workers/coding.worker';
-
 const { version } = require('../../release/app/package.json');
 
 contextBridge.exposeInMainWorld('contextModules', {
   got: async (url: string, config: any) => {
-    const proxyConent = await ipcRenderer.invoke('resolve-proxy', url);
-    const { httpAgent, httpsAgent } = new Proxy(proxyConent, url);
-    return got(url, {
-      ...config,
-      retry: {
-        limit: 2,
-      },
-      timeout: {
-        request: 10000,
-      },
-      agent: {
-        http: httpAgent,
-        https: httpsAgent,
-      },
-    });
+    return ipcRenderer.invoke('got', { url, config });
   },
   process: {
     production: process.env.NODE_ENV === 'production',
@@ -35,7 +16,7 @@ contextBridge.exposeInMainWorld('contextModules', {
   },
   electron: {
     shell: {
-      openExternal: shell.openExternal,
+      openExternal: () => {},
     },
     ipcRenderer: {
       invoke: ipcRenderer.invoke,
@@ -73,17 +54,16 @@ contextBridge.exposeInMainWorld('contextModules', {
       quit: () => ipcRenderer.invoke('app-quit'),
     },
     clipboard: {
-      readText: clipboard.readText,
-      writeText: clipboard.writeText,
-      writeImage: (dataUrl: string) => clipboard.writeImage(nativeImage.createFromDataURL(dataUrl)),
+      readText: () => {},
+      writeText: () => {},
+      writeImage: (dataUrl: string) => () => {},
     },
   },
-  log,
   io: {
-    saveImage,
-    saveJsonToCsv,
-    saveString,
-    readFile,
+    saveImage: (path: string, content: string) => ipcRenderer.invoke('io-saveImage', { path, content }),
+    saveJsonToCsv: (path: string, content: any[]) => ipcRenderer.invoke('io-saveJsonToCsv', { path, content }),
+    saveString: (path: string, content: string) => ipcRenderer.invoke('io-saveString', { path, content }),
+    readFile: (path: string) => ipcRenderer.invoke('io-readFile', { path }),
   },
   coding: {
     encryptFF(content: any) {

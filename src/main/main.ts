@@ -8,6 +8,7 @@
  */
 
 import { app, globalShortcut, ipcMain, nativeTheme, dialog, webContents, shell, Menu, BrowserWindow } from 'electron';
+import got from 'got';
 import windowStateKeeper from 'electron-window-state';
 import { Menubar } from 'menubar';
 import AppUpdater from './autoUpdater';
@@ -17,6 +18,8 @@ import { createMenubar, buildContextMenu } from './menubar';
 import TouchBarManager from './touchbar';
 import LocalStore from './store';
 import { createChildWindow } from './childWindow';
+import Proxy from './proxy';
+import { saveImage, saveJsonToCsv, saveString, readFile } from './io';
 import { lockSingleInstance, checkEnvTool, sendMessageToRenderer, setNativeTheme, getOtherWindows } from './util';
 import * as Enums from '../renderer/utils/enums';
 
@@ -130,6 +133,7 @@ function main() {
   ipcMain.handle('update-touchbar-eye-status', async (event, config) => {
     touchBarManager.updateEysStatusItems(config);
   });
+  // 快捷键
   ipcMain.handle('set-hotkey', async (event, keys: string) => {
     if (keys === activeHotkeys) {
       return;
@@ -160,6 +164,7 @@ function main() {
     }
     activeHotkeys = keys;
   });
+  // 多窗口相关
   ipcMain.handle('open-child-window', async (event, config) => {
     const parentWin = BrowserWindow.fromWebContents(event.sender);
     const win = createChildWindow({ search: config.search, parentId: parentWin!.id });
@@ -178,6 +183,33 @@ function main() {
       win?.webContents.send('sync-store-data', config);
     });
   });
+  // got
+  ipcMain.handle('got', async (event, { url, config }) => {
+    const proxyConent = await event.sender.session.resolveProxy(url);
+    const { httpAgent, httpsAgent } = new Proxy(proxyConent, url);
+    const res = await got(url, {
+      ...config,
+      retry: {
+        limit: 2,
+      },
+      timeout: {
+        request: 10000,
+      },
+      agent: {
+        http: httpAgent,
+        https: httpsAgent,
+      },
+    });
+    return {
+      body: res.body,
+      rawBody: res.rawBody,
+    };
+  });
+  // io操作
+  ipcMain.handle('io-saveImage', async (event, { path, content }) => saveImage(path, content));
+  ipcMain.handle('io-saveJsonToCsv', async (event, { path, content }) => saveJsonToCsv(path, content));
+  ipcMain.handle('io-saveString', async (event, { path, content }) => saveString(path, content));
+  ipcMain.handle('io-readFile', async (event, { path }) => readFile(path));
   // menubar 相关监听
   mb.on('after-create-window', () => {
     // 注册windowId

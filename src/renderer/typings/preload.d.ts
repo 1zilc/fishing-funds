@@ -1,6 +1,5 @@
 import { GotRequestFunction } from 'got';
 import { Shell, Dialog, App, IpcRenderer, Clipboard } from 'electron';
-import { ElectronLog } from 'electron-log';
 
 declare global {
   interface Window {
@@ -23,7 +22,6 @@ declare global {
           writeImage: (dataUrl: string) => void;
         };
       };
-      log: ElectronLog;
       io: {
         saveImage: (filePath: string, dataUrl: string) => Promise<unknown>;
         saveString: (filePath: string, content: string) => Promise<unknown>;
