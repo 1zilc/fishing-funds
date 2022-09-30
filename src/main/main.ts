@@ -7,7 +7,19 @@
  * `./src/main.prod.js` using webpack. This gives us some performance wins.
  */
 
-import { app, globalShortcut, ipcMain, nativeTheme, dialog, webContents, shell, Menu, BrowserWindow } from 'electron';
+import {
+  app,
+  globalShortcut,
+  ipcMain,
+  nativeImage,
+  nativeTheme,
+  clipboard,
+  dialog,
+  webContents,
+  shell,
+  Menu,
+  BrowserWindow,
+} from 'electron';
 import got from 'got';
 import windowStateKeeper from 'electron-window-state';
 import { Menubar } from 'menubar';
@@ -82,6 +94,7 @@ function main() {
   ipcMain.handle('check-update', async (event) => {
     appUpdater.checkUpdate('renderer');
   });
+  ipcMain.handle('shell-openExternal', async (event, config) => shell.openExternal(config));
   // store相关
   ipcMain.handle('get-storage-config', async (event, config) => {
     return localStore.get(config.type, config.key, config.init);
@@ -210,6 +223,10 @@ function main() {
   ipcMain.handle('io-saveJsonToCsv', async (event, { path, content }) => saveJsonToCsv(path, content));
   ipcMain.handle('io-saveString', async (event, { path, content }) => saveString(path, content));
   ipcMain.handle('io-readFile', async (event, { path }) => readFile(path));
+  // 剪贴板相关
+  ipcMain.handle('clipboard-readText', async (event) => clipboard.readText());
+  ipcMain.handle('clipboard-writeText', async (event, text) => clipboard.writeText(text));
+  ipcMain.handle('clipboard-writeImage', async (event, dataUrl) => clipboard.writeImage(nativeImage.createFromDataURL(dataUrl)));
   // menubar 相关监听
   mb.on('after-create-window', () => {
     // 注册windowId

@@ -5,9 +5,7 @@ import { WorkerRecieveParams as CodingWorkerRecieveParams } from './workers/codi
 const { version } = require('../../release/app/package.json');
 
 contextBridge.exposeInMainWorld('contextModules', {
-  got: async (url: string, config: any) => {
-    return ipcRenderer.invoke('got', { url, config });
-  },
+  got: async (url: string, config: any) => ipcRenderer.invoke('got', { url, config }),
   process: {
     production: process.env.NODE_ENV === 'production',
     electron: process.versions.electron,
@@ -16,7 +14,7 @@ contextBridge.exposeInMainWorld('contextModules', {
   },
   electron: {
     shell: {
-      openExternal: () => {},
+      openExternal: ipcRenderer.invoke.bind(null, 'shell-openExternal'),
     },
     ipcRenderer: {
       invoke: ipcRenderer.invoke,
@@ -45,18 +43,18 @@ contextBridge.exposeInMainWorld('contextModules', {
       },
     },
     dialog: {
-      showMessageBox: async (config: any) => ipcRenderer.invoke('show-message-box', config),
-      showSaveDialog: async (config: any) => ipcRenderer.invoke('show-save-dialog', config),
-      showOpenDialog: async (config: any) => ipcRenderer.invoke('show-open-dialog', config),
+      showMessageBox: ipcRenderer.invoke.bind(null, 'show-message-box'),
+      showSaveDialog: ipcRenderer.invoke.bind(null, 'show-save-dialog'),
+      showOpenDialog: ipcRenderer.invoke.bind(null, 'show-open-dialog'),
     },
     app: {
-      setLoginItemSettings: (config: any) => ipcRenderer.invoke('set-login-item-settings', config),
-      quit: () => ipcRenderer.invoke('app-quit'),
+      setLoginItemSettings: ipcRenderer.invoke.bind(null, 'set-login-item-settings'),
+      quit: ipcRenderer.invoke.bind(null, 'app-quit'),
     },
     clipboard: {
-      readText: () => {},
-      writeText: () => {},
-      writeImage: (dataUrl: string) => () => {},
+      readText: ipcRenderer.invoke.bind(null, 'clipboard-readText'),
+      writeText: ipcRenderer.invoke.bind(null, 'clipboard-writeText'),
+      writeImage: ipcRenderer.invoke.bind(null, 'clipboard-writeImage'),
     },
   },
   io: {
