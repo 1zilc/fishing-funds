@@ -27,7 +27,6 @@ export function createMenubar({ tray, mainWindowState }: { tray: Tray; mainWindo
       vibrancy: 'sidebar',
       webPreferences: {
         webviewTag: true,
-        sandbox: true,
         devTools: !app.isPackaged,
         preload: getPreloadPath(),
       },
