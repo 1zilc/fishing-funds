@@ -200,25 +200,29 @@ function main() {
   });
   // got
   ipcMain.handle('got', async (event, { url, config }) => {
-    const proxyConent = await event.sender.session.resolveProxy(url);
-    const { httpAgent, httpsAgent } = new Proxy(proxyConent, url);
-    const res = await got(url, {
-      ...config,
-      retry: {
-        limit: 2,
-      },
-      timeout: {
-        request: 10000,
-      },
-      agent: {
-        http: httpAgent,
-        https: httpsAgent,
-      },
-    });
-    return {
-      body: res.body,
-      rawBody: res.rawBody,
-    };
+    try {
+      const proxyConent = await event.sender.session.resolveProxy(url);
+      const { httpAgent, httpsAgent } = new Proxy(proxyConent, url);
+      const res = await got(url, {
+        ...config,
+        retry: {
+          limit: 2,
+        },
+        timeout: {
+          request: 10000,
+        },
+        agent: {
+          http: httpAgent,
+          https: httpsAgent,
+        },
+      });
+      return {
+        body: res.body,
+        rawBody: res.rawBody,
+      };
+    } catch {
+      return {};
+    }
   });
   // io操作
   ipcMain.handle('io-saveImage', async (event, { path, content }) => saveImage(path, content));
