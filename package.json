@@ -290,8 +290,7 @@
     "npm": ">=7.x"
   },
   "electronmon": {
-    "patterns": ["!src/renderer/**"]
-  },
-  "browserslist": [],
-  "__npminstall_done": false
+    "patterns": ["!**/**", "src/main/**"],
+    "logLevel": "quiet"
+  }
 }
