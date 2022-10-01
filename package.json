@@ -286,8 +286,8 @@
     "swiper": "^8.0.3"
   },
   "devEngines": {
-    "node": ">=14.x",
-    "npm": ">=7.x"
+    "node": ">=16.x",
+    "npm": ">=8.x"
   },
   "electronmon": {
     "patterns": ["!**/**", "src/main/**"],
