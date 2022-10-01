@@ -1,5 +1,4 @@
 import { configureStore, AnyAction, ThunkAction, ThunkDispatch, Middleware } from '@reduxjs/toolkit';
-import logger from 'redux-logger';
 import listenerMiddleware from '@/store/listeners';
 import coinReducer, { CoinState } from '@/store/features/coin';
 import fundReducer, { FundState } from '@/store/features/fund';
