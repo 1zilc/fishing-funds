@@ -285,6 +285,7 @@
     "sortablejs": "^1.13.0",
     "swiper": "^8.0.3"
   },
+  "browserslist": [],
   "devEngines": {
     "node": ">=16.x",
     "npm": ">=8.x"
