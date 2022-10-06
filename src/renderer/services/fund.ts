@@ -924,7 +924,7 @@ export async function GetEtfFundHourFromEastMoney(code: string) {
           'f58,f107,f57,f43,f59,f169,f170,f152,f46,f60,f44,f45,f47,f48,f19,f17,f531,f15,f13,f11,f20,f18,f16,f14,f12,f39,f37,f35,f33,f31,f40,f38,f36,f34,f32,f211,f212,f213,f214,f215,f210,f209,f208,f207,f206,f161,f49,f171,f50,f86,f168,f108,f167,f71,f292,f51,f52,f191,f192,f452',
         secid: `${code.startsWith('51') ? 1 : 0}.${code}`,
         wbp2u: '|0|0|0|web',
-        _: new Date().getTime(),
+        _: Date.now(),
       },
       responseType: 'json',
     });
@@ -1224,7 +1224,7 @@ export async function GetAutomaticPlanFromEastmoney(type: number) {
         issale: 1,
         page: 1,
         psize: 200,
-        _: new Date().getTime(),
+        _: Date.now(),
       },
     });
     const $ = cheerio.load(html);
@@ -1422,7 +1422,7 @@ export async function GetTodayListFromEastmoney(type: number) {
         canbuy: 0,
         pageIndex: 1,
         pageSize: 200,
-        _: new Date().getTime(),
+        _: Date.now(),
       },
       headers: {
         Referer: 'ttp://fund.eastmoney.com/',

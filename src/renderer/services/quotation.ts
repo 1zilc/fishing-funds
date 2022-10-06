@@ -45,7 +45,7 @@ export async function GetQuotationsFromEastmoney() {
         pn: 1,
         pz: 1000,
         fields: 'f2,f3,f4,f8,f12,f14,f19,f20,f128,f136,f104,f105,f140,f207,f208,f222',
-        _: new Date().getTime(),
+        _: Date.now(),
       },
       responseType: 'json',
     });
@@ -114,7 +114,7 @@ export async function GetQuotationDetailFromEastmoney(code: string) {
       searchParams: {
         invt: 2,
         fltt: 2,
-        _: new Date().getTime(),
+        _: Date.now(),
         secid: `90.${code}`,
         fields: 'f57,f58,f107,f43,f169,f170,f171,f47,f48,f60,f46,f44,f45,f168,f113,f114,f444,f445,f446,f447',
       },
@@ -151,7 +151,7 @@ export async function GetRealTimeFundFlowFromEasymoney(code: string) {
         fields1: 'f1,f2,f3,f7',
         fields2: 'f51,f52,f53,f54,f55,f56,f57,f58,f59,f60,f61,f62,f63,f64,f65',
         secid: `90.${code}`,
-        _: new Date().getTime(),
+        _: Date.now(),
       },
       responseType: 'json',
     });
@@ -298,7 +298,7 @@ export async function GetTransactionFromEasymoney(code: string) {
         fields:
           'f62,f184,f66,f69,f72,f75,f78,f81,f84,f87,f64,f65,f70,f71,f76,f77,f82,f83,f164,f166,f168,f170,f172,f252,f253,f254,f255,f256,f124,f6,f278,f279,f280,f281,f282',
         secids: `90.${code}`,
-        _: new Date().getTime(),
+        _: Date.now(),
       },
       responseType: 'json',
     });
@@ -350,7 +350,7 @@ export async function GetAfterTimeFundFlowFromEasymoney(code: string) {
         fields1: 'f1,f2,f3,f7',
         fields2: 'f51,f52,f53,f54,f55,f56,f57,f58,f59,f60,f61,f62,f63,f64,f65',
         secid: `90.${code}`,
-        _: new Date().getTime(),
+        _: Date.now(),
       },
       responseType: 'json',
     });
@@ -406,7 +406,7 @@ export async function GetFundFlowFromEastmoney(code: string, type: string) {
         pn: 1,
         pz: 500,
         fields: `f12,f14,${type}`,
-        _: new Date().getTime(),
+        _: Date.now(),
       },
       responseType: 'json',
     });
@@ -440,7 +440,7 @@ export async function GetFlowFromEastmoney(fields1: string, code: 'n2s' | 's2n')
       searchParams: {
         fields1,
         fields2: 'f51,f52,f54,f56',
-        _: new Date().getTime(),
+        _: Date.now(),
       },
       responseType: 'json',
     });
@@ -485,7 +485,7 @@ export async function GetNorthDayFromEastmoney(fields1: string, fields2: string)
         fields2,
         klt: 101,
         lmt: 365,
-        _: new Date().getTime(),
+        _: Date.now(),
       },
       responseType: 'json',
     });
@@ -523,7 +523,7 @@ export async function GetSouthDayFromEastmoney(fields1: string, fields2: string)
         fields2,
         klt: 101,
         lmt: 365,
-        _: new Date().getTime(),
+        _: Date.now(),
       },
       responseType: 'json',
     });
@@ -1083,7 +1083,7 @@ export async function GetInternationalMetalFuturesFromEastmoney() {
         fs: 'i:111.JAGC,i:101.QI00Y,i:111.JPAC,i:101.HG00Y,i:111.JAUC,i:111.JPLC,i:102.PL00Y,i:101.QO00Y,i:101.MGC00Y,i:101.GC00Y,i:101.SI00Y,i:102.PA00Y',
         fields:
           'f1,f2,f3,f4,f5,f6,f7,f8,f9,f10,f12,f13,f14,f15,f16,f17,f18,f20,f21,f23,f24,f25,f22,f28,f11,f62,f128,f136,f115,f152,f133,f124',
-        _: 1650267224149,
+        _: Date.now(),
       },
       responseType: 'json',
     });
@@ -1160,7 +1160,7 @@ export async function GetInternationalMetalGoodsFromEastmoney() {
         fs: 'm:122,m:123',
         fields:
           'f1,f2,f3,f4,f5,f6,f7,f8,f9,f10,f12,f13,f14,f15,f16,f17,f18,f20,f21,f23,f24,f25,f22,f28,f11,f62,f128,f136,f115,f152,f133,f124',
-        _: 1650267224149,
+        _: Date.now(),
       },
       responseType: 'json',
     });
@@ -1237,7 +1237,7 @@ export async function GetShanghaiGoldFuturesFromEastmoney() {
         fs: 'm:113 t:5',
         fields:
           'f1,f2,f3,f4,f5,f6,f7,f8,f9,f10,f12,f13,f14,f15,f16,f17,f18,f20,f21,f23,f24,f25,f22,f28,f11,f62,f128,f136,f115,f152,f133,f124',
-        _: 1650267224149,
+        _: Date.now(),
       },
       responseType: 'json',
     });
@@ -1314,7 +1314,7 @@ export async function GetShanghaiGoldGoodsFromEastmoney() {
         fs: 'm:118',
         fields:
           'f1,f2,f3,f4,f5,f6,f7,f8,f9,f10,f12,f13,f14,f15,f16,f17,f18,f20,f21,f23,f24,f25,f22,f28,f11,f62,f128,f136,f115,f152,f133,f124',
-        _: 1650267224149,
+        _: Date.now(),
       },
       responseType: 'json',
     });
@@ -1339,5 +1339,100 @@ export async function GetMainFundFromEastmoney(code: string) {
     return `data:image/png;base64,${b64encoded}`;
   } catch (error) {
     return;
+  }
+}
+export async function GetDistributionFromEastmoney() {
+  try {
+    const { body: data } = await request<{
+      rc: 0;
+      rt: 115;
+      svr: 181734952;
+      lt: 2;
+      full: 0;
+      data: {
+        fenbu: [
+          {
+            '-1': 900;
+          },
+          {
+            '-10': 21;
+          },
+          {
+            '-11': 22;
+          },
+          {
+            '-2': 868;
+          },
+          {
+            '-3': 614;
+          },
+          {
+            '-4': 376;
+          },
+          {
+            '-5': 256;
+          },
+          {
+            '-6': 147;
+          },
+          {
+            '-7': 78;
+          },
+          {
+            '-8': 45;
+          },
+          {
+            '-9': 19;
+          },
+          {
+            '0': 174;
+          },
+          {
+            '1': 643;
+          },
+          {
+            '10': 3;
+          },
+          {
+            '11': 36;
+          },
+          {
+            '2': 265;
+          },
+          {
+            '3': 115;
+          },
+          {
+            '4': 43;
+          },
+          {
+            '5': 29;
+          },
+          {
+            '6': 19;
+          },
+          {
+            '7': 9;
+          },
+          {
+            '8': 3;
+          },
+          {
+            '9': 1;
+          }
+        ];
+      };
+    }>('http://push2ex.eastmoney.com/getTopicZDFenBu', {
+      searchParams: {
+        ut: '7eea3edcaed734bea9cbfc24409ed989', // 意义暂时不明
+        dpt: 'wz.ztzt',
+        _: Date.now(),
+      },
+      responseType: 'json',
+    });
+
+    return data.data.fenbu || [];
+  } catch (error) {
+    return [];
   }
 }

@@ -56,7 +56,7 @@ export async function GetListFromEastmoney(po: string, fs: string) {
         fid: 'f3',
         fields: 'f1,f2,f3,f4,f5,f6,f7,f8,f9,f10,f12,f13,f14,f15,f16,f17,f18,f20,f21,f23,f24,f25,f22,f11,f62,f128,f136,f115,f152',
         fs,
-        _: new Date().getTime(),
+        _: Date.now(),
       },
       responseType: 'json',
     });
@@ -81,7 +81,7 @@ export async function GetGlobalBondFromEastmoney() {
     const { body: script } = await request('http://quote.eastmoney.com/center/api/qqzq.js', {
       responseType: 'text',
       searchParams: {
-        _: new Date().getTime(),
+        _: Date.now(),
       },
     });
     const result: {
