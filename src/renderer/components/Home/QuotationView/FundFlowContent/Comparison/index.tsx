@@ -41,6 +41,11 @@ const Comparison: React.FC<ComparisonProps> = () => {
           axisLabel: {
             fontSize: 10,
           },
+          splitLine: {
+            lineStyle: {
+              color: varibleColors['--border-color'],
+            },
+          },
         },
         grid: {
           top: 5,

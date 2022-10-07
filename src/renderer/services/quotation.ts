@@ -1494,3 +1494,47 @@ export async function GetTopicFBFailedFromEastmoney() {
     return [];
   }
 }
+export async function GetGBTrendFromEastmoney() {
+  try {
+    const { body: data } = await request<{
+      message: '';
+      result: {
+        data: {
+          name: '08:56';
+          val: 0.07879999999999998;
+        }[];
+        xAxis: [
+          {
+            index: 0;
+            title: '08:00';
+          },
+          {
+            index: 60;
+            title: '10:00';
+          },
+          {
+            index: 120;
+            title: '12:00';
+          },
+          {
+            index: 180;
+            title: '14:00';
+          },
+          {
+            index: 240;
+            title: '16:00';
+          }
+        ];
+        qxIndexNow: 0.5753;
+      };
+    }>('http://quote.eastmoney.com/ztb/api/gbtrend', {
+      searchParams: {
+        type: 2,
+      },
+      responseType: 'json',
+    });
+    return data.result.data;
+  } catch (error) {
+    return [];
+  }
+}

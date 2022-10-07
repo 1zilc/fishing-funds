@@ -16,6 +16,7 @@ import Estimate from '@/components/Home/QuotationView/FundFlowContent/Estimate';
 import Distribution from '@/components/Home/QuotationView/FundFlowContent/Distribution';
 import Comparison from '@/components/Home/QuotationView/FundFlowContent/Comparison';
 import SealPlate from '@/components/Home/QuotationView/FundFlowContent/SealPlate';
+import LeekTrend from '@/components/Home/QuotationView/FundFlowContent/LeekTrend';
 
 import * as Enums from '@/utils/enums';
 import styles from './index.module.scss';
@@ -41,11 +42,16 @@ const FundFlowContent: React.FC<DetailFundContentProps> = (props) => {
               },
               {
                 key: String(1),
+                label: '韭菜情绪',
+                children: <LeekTrend />,
+              },
+              {
+                key: String(2),
                 label: '涨跌停对比',
                 children: <Comparison />,
               },
               {
-                key: String(2),
+                key: String(3),
                 label: '封板未遂',
                 children: <SealPlate />,
               },
@@ -84,6 +90,34 @@ const FundFlowContent: React.FC<DetailFundContentProps> = (props) => {
           <Tabs
             animated={{ tabPane: true }}
             tabBarGutter={15}
+            items={[
+              {
+                key: String(0),
+                label: '北向资金',
+                children: <NorthFlow />,
+              },
+              {
+                key: String(1),
+                label: '北向日线',
+                children: <NorthDay />,
+              },
+              {
+                key: String(2),
+                label: '南向资金',
+                children: <SouthFlow />,
+              },
+              {
+                key: String(3),
+                label: '南向日线',
+                children: <SouthDay />,
+              },
+            ]}
+          />
+        </div>
+        <div className={styles.container}>
+          <Tabs
+            animated={{ tabPane: true }}
+            tabBarGutter={15}
             destroyInactiveTabPane
             items={[
               {
@@ -109,34 +143,6 @@ const FundFlowContent: React.FC<DetailFundContentProps> = (props) => {
                     <Geography />
                   </ChartCard>
                 ),
-              },
-            ]}
-          />
-        </div>
-        <div className={styles.container}>
-          <Tabs
-            animated={{ tabPane: true }}
-            tabBarGutter={15}
-            items={[
-              {
-                key: String(0),
-                label: '北向资金',
-                children: <NorthFlow />,
-              },
-              {
-                key: String(1),
-                label: '北向日线',
-                children: <NorthDay />,
-              },
-              {
-                key: String(2),
-                label: '南向资金',
-                children: <SouthFlow />,
-              },
-              {
-                key: String(3),
-                label: '南向日线',
-                children: <SouthDay />,
               },
             ]}
           />
