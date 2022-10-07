@@ -13,6 +13,7 @@ import SouthDay from '@/components/Home/QuotationView/FundFlowContent/SouthDay';
 import QuotationMap from '@/components/Home/QuotationView/FundFlowContent/QuotationMap';
 import Geography from '@/components/Home/QuotationView/FundFlowContent/Geography';
 import Estimate from '@/components/Home/QuotationView/FundFlowContent/Estimate';
+import Distribution from '@/components/Home/QuotationView/FundFlowContent/Distribution';
 
 import * as Enums from '@/utils/enums';
 import styles from './index.module.scss';
@@ -26,6 +27,19 @@ const FundFlowContent: React.FC<DetailFundContentProps> = (props) => {
   return (
     <CustomDrawerContent title="板块资金流" enterText="确定" onClose={props.onClose} onEnter={props.onEnter}>
       <div className={styles.content}>
+        <div className={styles.container}>
+          <Tabs
+            animated={{ tabPane: true }}
+            tabBarGutter={15}
+            items={[
+              {
+                key: String(0),
+                label: '涨跌分布',
+                children: <Distribution />,
+              },
+            ]}
+          />
+        </div>
         <div className={styles.container}>
           <Tabs
             animated={{ tabPane: true }}

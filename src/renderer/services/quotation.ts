@@ -1430,8 +1430,16 @@ export async function GetDistributionFromEastmoney() {
       },
       responseType: 'json',
     });
+    const map = (data.data.fenbu || []).reduce<Record<string, number>>((m, c) => {
+      return {
+        ...m,
+        ...c,
+      };
+    }, {});
 
-    return data.data.fenbu || [];
+    const result = Object.entries(map).map(([name, value]) => ({ name, value }));
+    result.sort((a, b) => Number(a.name) - Number(b.name));
+    return result;
   } catch (error) {
     return [];
   }
