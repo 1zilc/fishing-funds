@@ -14,6 +14,8 @@ import QuotationMap from '@/components/Home/QuotationView/FundFlowContent/Quotat
 import Geography from '@/components/Home/QuotationView/FundFlowContent/Geography';
 import Estimate from '@/components/Home/QuotationView/FundFlowContent/Estimate';
 import Distribution from '@/components/Home/QuotationView/FundFlowContent/Distribution';
+import Comparison from '@/components/Home/QuotationView/FundFlowContent/Comparison';
+import SealPlate from '@/components/Home/QuotationView/FundFlowContent/SealPlate';
 
 import * as Enums from '@/utils/enums';
 import styles from './index.module.scss';
@@ -36,6 +38,16 @@ const FundFlowContent: React.FC<DetailFundContentProps> = (props) => {
                 key: String(0),
                 label: '涨跌分布',
                 children: <Distribution />,
+              },
+              {
+                key: String(1),
+                label: '涨跌停对比',
+                children: <Comparison />,
+              },
+              {
+                key: String(2),
+                label: '封板未遂',
+                children: <SealPlate />,
               },
             ]}
           />

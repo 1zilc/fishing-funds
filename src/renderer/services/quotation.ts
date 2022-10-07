@@ -1444,3 +1444,53 @@ export async function GetDistributionFromEastmoney() {
     return [];
   }
 }
+export async function GetTopicZDTCountFromEastmoney() {
+  try {
+    const { body: data } = await request<{
+      rc: 0;
+      rt: 115;
+      svr: 181734952;
+      lt: 2;
+      full: 0;
+      data: {
+        zdtcount: { dtc: 2; t: 930; ztc: 6 }[];
+      };
+    }>('http://push2ex.eastmoney.com/getTopicZDTCount', {
+      searchParams: {
+        ut: '7eea3edcaed734bea9cbfc24409ed989', // 意义暂时不明
+        dpt: 'wz.ztzt',
+        time: 0,
+        _: Date.now(),
+      },
+      responseType: 'json',
+    });
+    return data.data.zdtcount;
+  } catch (error) {
+    return [];
+  }
+}
+export async function GetTopicFBFailedFromEastmoney() {
+  try {
+    const { body: data } = await request<{
+      rc: 0;
+      rt: 115;
+      svr: 181734952;
+      lt: 2;
+      full: 0;
+      data: {
+        fbfailed: { c: 1; t: 930; zbp: 14.285715103149414 }[];
+      };
+    }>('http://push2ex.eastmoney.com/getTopicFBFailed', {
+      searchParams: {
+        ut: '7eea3edcaed734bea9cbfc24409ed989', // 意义暂时不明
+        dpt: 'wz.ztzt',
+        time: 0,
+        _: Date.now(),
+      },
+      responseType: 'json',
+    });
+    return data.data.fbfailed;
+  } catch (error) {
+    return [];
+  }
+}

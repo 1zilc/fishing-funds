@@ -47,6 +47,9 @@ const Distribution: React.FC<DistributionProps> = () => {
                 color: varibleColors['--border-color'],
               },
             },
+            axisLabel: {
+              fontSize: 10,
+            },
           },
           {
             type: 'category',
@@ -92,7 +95,7 @@ const Distribution: React.FC<DistributionProps> = () => {
             stack: '涨跌',
             xAxisIndex: 1,
             yAxisIndex: 1,
-            barWidth: 10,
+            barWidth: 8,
             label: {
               show: true,
               position: 'top',
@@ -101,6 +104,7 @@ const Distribution: React.FC<DistributionProps> = () => {
             },
             itemStyle: {
               color: varibleColors['--reduce-color'],
+              borderRadius: [5, 0, 0, 5],
             },
             data: result.reduce(
               (r, c) => {
@@ -116,7 +120,7 @@ const Distribution: React.FC<DistributionProps> = () => {
             stack: '涨跌',
             xAxisIndex: 1,
             yAxisIndex: 1,
-            barWidth: 10,
+            barWidth: 8,
             label: {
               show: true,
               position: 'top',
@@ -140,7 +144,7 @@ const Distribution: React.FC<DistributionProps> = () => {
             stack: '涨跌',
             xAxisIndex: 1,
             yAxisIndex: 1,
-            barWidth: 10,
+            barWidth: 8,
             label: {
               show: true,
               position: 'top',
@@ -149,6 +153,7 @@ const Distribution: React.FC<DistributionProps> = () => {
             },
             itemStyle: {
               color: varibleColors['--increase-color'],
+              borderRadius: [0, 5, 5, 0],
             },
             data: result.reduce(
               (r, c) => {
@@ -166,10 +171,8 @@ const Distribution: React.FC<DistributionProps> = () => {
   );
 
   return (
-    <ChartCard onFresh={runQuotationGetDistributionFromEastmoney}>
-      <div className={styles.content}>
-        <div ref={chartRef} style={{ width: '100%' }} />
-      </div>
+    <ChartCard className={styles.content} onFresh={runQuotationGetDistributionFromEastmoney}>
+      <div ref={chartRef} style={{ width: '100%' }} />
     </ChartCard>
   );
 };
