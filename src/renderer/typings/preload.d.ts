@@ -15,7 +15,11 @@ declare global {
         shell: Shell;
         ipcRenderer: IpcRenderer;
         dialog: Dialog;
-        app: App;
+        app: {
+          quit: () => App['quit'];
+          relaunch: () => App['relaunch'];
+          setLoginItemSettings: App['setLoginItemSettings'];
+        };
         clipboard: {
           writeText: Clipboard['writeText'];
           readText: Clipboard['readText'];

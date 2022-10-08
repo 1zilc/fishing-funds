@@ -50,6 +50,7 @@ contextBridge.exposeInMainWorld('contextModules', {
     app: {
       setLoginItemSettings: ipcRenderer.invoke.bind(null, 'set-login-item-settings'),
       quit: ipcRenderer.invoke.bind(null, 'app-quit'),
+      relaunch: ipcRenderer.invoke.bind(null, 'app-relaunch'),
     },
     clipboard: {
       readText: ipcRenderer.invoke.bind(null, 'clipboard-readText'),

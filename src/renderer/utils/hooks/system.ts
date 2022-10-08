@@ -462,12 +462,17 @@ export function useAllConfigBackup() {
       const encodeBackupConfig = await readFile(filePath);
       const backupConfig: Backup.Config = await decryptFF(encodeBackupConfig);
       Enhancement.CoverBackupConfig(backupConfig);
-      await dialog.showMessageBox({
+      const { response } = await dialog.showMessageBox({
         type: 'info',
         title: `导入成功`,
-        message: `导入全局配置成功, 请重新启动Fishing Funds`,
+        message: `请重新启动Fishing Funds`,
+        buttons: ['重启', '关闭'],
       });
-      app.quit();
+      if (response === 0) {
+        app.relaunch();
+      } else {
+        app.quit();
+      }
     } catch (error) {
       dialog.showMessageBox({
         type: 'info',
@@ -487,12 +492,17 @@ export function useAllConfigBackup() {
       });
       if (response === 0) {
         Enhancement.CoverBackupConfig(backupConfig);
-        await dialog.showMessageBox({
+        const { response } = await dialog.showMessageBox({
           type: 'info',
           title: `恢复成功`,
-          message: `恢复备份成功, 请重新启动Fishing Funds`,
+          message: `请重新启动Fishing Funds`,
+          buttons: ['重启', '关闭'],
         });
-        app.quit();
+        if (response === 0) {
+          app.relaunch();
+        } else {
+          app.quit();
+        }
       }
     } catch (error) {
       dialog.showMessageBox({

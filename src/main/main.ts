@@ -88,6 +88,10 @@ function main() {
   ipcMain.handle('app-quit', async (event, config) => {
     app.quit();
   });
+  ipcMain.handle('app-relaunch', async (event, config) => {
+    app.relaunch();
+    app.exit();
+  });
   ipcMain.handle('set-tray-content', async (event, config) => {
     tray.setTitle(config);
   });
