@@ -81,8 +81,14 @@ const configuration: webpack.Configuration = {
       },
       // SVG
       {
+        test: /\.svg$/i,
+        type: 'asset',
+        resourceQuery: /url/, // *.svg?url
+      },
+      {
         test: /\.svg$/,
         issuer: /\.[jt]sx?$/,
+        resourceQuery: { not: [/url/] },
         use: ['@svgr/webpack'],
       },
     ],
