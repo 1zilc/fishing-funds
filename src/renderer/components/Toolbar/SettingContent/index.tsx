@@ -3,6 +3,7 @@ import clsx from 'clsx';
 import { InputNumber, Radio, Badge, Switch, Slider, TimePicker, Input, Tabs, Select, Checkbox } from 'antd';
 import dayjs from 'dayjs';
 import { ReactSortable } from 'react-sortablejs';
+import { useRequest } from 'ahooks';
 
 import PureCard from '@/components/Card/PureCard';
 import StandCard from '@/components/Card/StandCard';
@@ -27,7 +28,6 @@ import { setSystemSettingAction, defaultSystemSetting } from '@/store/features/s
 import { useAppDispatch, useAppSelector, useAutoDestroySortableRef, useInputShortcut } from '@/utils/hooks';
 import * as Enums from '@/utils/enums';
 import * as Utils from '@/utils';
-import * as Enhancement from '@/utils/enhancement';
 import styles from './index.module.scss';
 
 export interface SettingContentProps {
@@ -36,7 +36,7 @@ export interface SettingContentProps {
 }
 
 const { shell, app, clipboard, dialog } = window.contextModules.electron;
-const { electron, version } = window.contextModules.process;
+const { electron } = window.contextModules.process;
 
 const linksGroup = Utils.Group(
   [
@@ -207,6 +207,11 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
   const [syncConfigPath, setSyncConfigPath] = useState(syncConfigPathSetting);
 
   const proxyModeEnable = proxyType === Enums.ProxyType.Http || proxyType === Enums.ProxyType.Socks;
+
+  const { data: version } = useRequest(app.getVersion, {
+    cacheKey: 'get-version',
+    cacheTime: -1,
+  });
 
   async function onSave() {
     await dispatch(

@@ -24,7 +24,7 @@ import got from 'got';
 import windowStateKeeper from 'electron-window-state';
 import { Menubar } from 'menubar';
 import AppUpdater from './autoUpdater';
-import { appIcon, generateWalletIcon } from './icon';
+import { appIcon, generateIconFromDataURL, generateIconFromPath } from './icon';
 import { createTray } from './tray';
 import { createMenubar, buildContextMenu } from './menubar';
 import TouchBarManager from './touchbar';
@@ -134,10 +134,16 @@ function main() {
   ipcMain.handle('update-tray-context-menu-wallets', async (event, config) => {
     const menus = config.map((item: any) => ({
       ...item,
-      icon: generateWalletIcon(item.iconIndex),
+      icon: generateIconFromDataURL(item.dataURL),
       click: () => sendMessageToRenderer(mb.window, 'change-current-wallet-code', item.id),
     }));
     contextMenu = buildContextMenu({ mb, appUpdater }, menus);
+  });
+  ipcMain.handle('get-app-icon', async (event, config) => {
+    return appIcon.toDataURL();
+  });
+  ipcMain.handle('get-version', async (event, config) => {
+    return app.getVersion();
   });
   // touchbar 相关监听
   ipcMain.handle('update-touchbar-zindex', async (event, config) => {

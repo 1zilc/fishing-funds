@@ -28,6 +28,7 @@ import {
   useLoadStocks,
   useIpcRendererListener,
 } from '@/utils/hooks';
+import { walletIcons } from '@/helpers/wallet';
 import * as Utils from '@/utils';
 import * as Adapters from '@/utils/adpters';
 import * as Helpers from '@/helpers';
@@ -408,7 +409,7 @@ export function useUpdateContextMenuWalletsState() {
         return {
           label: `${walletConfig.name}  ${value}`,
           type: currentWalletCode === walletConfig.code ? 'radio' : 'normal',
-          iconIndex: walletConfig.iconIndex,
+          dataURL: walletIcons[walletConfig.iconIndex],
           id: walletConfig.code,
         };
       })
@@ -545,7 +546,7 @@ export function useTouchBar() {
       {
         id: currentWalletCode,
         label: `${value}%`, // 只显示当前钱包
-        iconIndex: walletConfig.iconIndex,
+        dataURL: walletIcons[walletConfig.iconIndex],
       },
     ]);
   }, [currentWallet, currentWalletCode, walletsConfig, fundConfigCodeMap]);

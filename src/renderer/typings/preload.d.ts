@@ -8,7 +8,6 @@ declare global {
       process: {
         production: boolean;
         electron: string;
-        version: string;
         platform: 'aix' | 'darwin' | 'freebsd' | 'linux' | 'openbsd' | 'sunos' | 'win32';
       };
       electron: {
@@ -16,9 +15,10 @@ declare global {
         ipcRenderer: IpcRenderer;
         dialog: Dialog;
         app: {
-          quit: () => App['quit'];
-          relaunch: () => App['relaunch'];
+          quit: App['quit'];
+          relaunch: App['relaunch'];
           setLoginItemSettings: App['setLoginItemSettings'];
+          getVersion: () => Promise<ReturnType<App['getVersion']>>;
         };
         clipboard: {
           writeText: Clipboard['writeText'];

@@ -2,14 +2,12 @@ import { contextBridge, ipcRenderer } from 'electron';
 import { encode, decode, fromUint8Array } from 'js-base64';
 import { CodingPromiseWorker } from './workers';
 import { WorkerRecieveParams as CodingWorkerRecieveParams } from './workers/coding.worker';
-const { version } = require('../../release/app/package.json');
 
 contextBridge.exposeInMainWorld('contextModules', {
   got: async (url: string, config: any) => ipcRenderer.invoke('got', { url, config }),
   process: {
     production: process.env.NODE_ENV === 'production',
     electron: process.versions.electron,
-    version: process.env.VERSION || version,
     platform: process.platform,
   },
   electron: {
@@ -51,6 +49,7 @@ contextBridge.exposeInMainWorld('contextModules', {
       setLoginItemSettings: ipcRenderer.invoke.bind(null, 'set-login-item-settings'),
       quit: ipcRenderer.invoke.bind(null, 'app-quit'),
       relaunch: ipcRenderer.invoke.bind(null, 'app-relaunch'),
+      getVersion: ipcRenderer.invoke.bind(null, 'get-version'),
     },
     clipboard: {
       readText: ipcRenderer.invoke.bind(null, 'clipboard-readText'),

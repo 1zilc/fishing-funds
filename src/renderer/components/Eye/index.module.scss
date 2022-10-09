@@ -1,4 +1,6 @@
 .eye {
-  fill: var(--svg-icon-color);
   cursor: pointer;
+  path:last-child {
+    fill: var(--svg-icon-color);
+  }
 }

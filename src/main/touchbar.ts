@@ -1,6 +1,6 @@
 import { TouchBar } from 'electron';
 import { Menubar } from 'menubar';
-import { generateWalletIcon, generateIcon } from './icon';
+import { generateIconFromDataURL, generateIconFromPath } from './icon';
 import { sendMessageToRenderer } from './util';
 import * as Enums from '../renderer/utils/enums';
 
@@ -40,12 +40,12 @@ export default class TouchBarManager {
     this.updateTouchBar();
   }
 
-  updateWalletItems(configs: (Electron.TouchBarButtonConstructorOptions & { iconIndex: number; id: string })[]) {
+  updateWalletItems(configs: (Electron.TouchBarButtonConstructorOptions & { dataURL: string; id: string })[]) {
     this.walletItems = configs.map(
       (config) =>
         new TouchBarButton({
           label: config.label,
-          icon: generateWalletIcon(config.iconIndex),
+          icon: generateIconFromDataURL(config.dataURL),
           iconPosition: 'left',
           click: () => sendMessageToRenderer(this.mb.window, 'change-current-wallet-code', config.id),
           backgroundColor: config.backgroundColor,
@@ -72,7 +72,10 @@ export default class TouchBarManager {
   updateEysStatusItems(status: Enums.EyeStatus) {
     this.eyeStatusItems = [
       new TouchBarButton({
-        icon: status === Enums.EyeStatus.Open ? generateIcon('touchbar/eye-open.png') : generateIcon('touchbar/eye-close.png'),
+        icon:
+          status === Enums.EyeStatus.Open
+            ? generateIconFromDataURL('touchbar/eye-open.png')
+            : generateIconFromPath('touchbar/eye-close.png'),
         click: () => sendMessageToRenderer(this.mb.window, 'change-eye-status'),
       }),
     ];

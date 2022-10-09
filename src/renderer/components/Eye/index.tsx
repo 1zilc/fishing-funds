@@ -15,18 +15,12 @@ export interface EyeProps {
 const Eye: React.FC<EyeProps> = (props) => {
   const { status, style, classNames = '' } = props;
   function toggle() {
-    if (props.onClick) {
-      props.onClick(!status);
-    }
+    props.onClick?.(!status);
   }
-  return (
-    <>
-      {status ? (
-        <EyeIcon className={clsx(styles.eye, classNames)} style={style} onClick={toggle} />
-      ) : (
-        <EyeCloseIcon className={clsx(styles.eye, classNames)} style={style} onClick={toggle} />
-      )}
-    </>
+  return status ? (
+    <EyeIcon className={clsx(styles.eye, classNames)} style={style} onClick={toggle} />
+  ) : (
+    <EyeCloseIcon className={clsx(styles.eye, classNames)} style={style} onClick={toggle} />
   );
 };
 export default Eye;
