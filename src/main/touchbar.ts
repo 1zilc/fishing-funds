@@ -1,6 +1,6 @@
 import { TouchBar } from 'electron';
 import { Menubar } from 'menubar';
-import { generateIconFromDataURL, generateIconFromPath } from './icon';
+import { generateIconFromPath, generateIconFromDataURL } from './icon';
 import { sendMessageToRenderer } from './util';
 import * as Enums from '../renderer/utils/enums';
 
@@ -73,9 +73,7 @@ export default class TouchBarManager {
     this.eyeStatusItems = [
       new TouchBarButton({
         icon:
-          status === Enums.EyeStatus.Open
-            ? generateIconFromDataURL('touchbar/eye-open.png')
-            : generateIconFromPath('touchbar/eye-close.png'),
+          status === Enums.EyeStatus.Open ? generateIconFromPath('touchbar/eye-open.png') : generateIconFromPath('touchbar/eye-close.png'),
         click: () => sendMessageToRenderer(this.mb.window, 'change-eye-status'),
       }),
     ];

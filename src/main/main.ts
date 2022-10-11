@@ -24,7 +24,7 @@ import got from 'got';
 import windowStateKeeper from 'electron-window-state';
 import { Menubar } from 'menubar';
 import AppUpdater from './autoUpdater';
-import { appIcon, generateIconFromDataURL, generateIconFromPath } from './icon';
+import { appIcon, generateIconFromDataURL } from './icon';
 import { createTray } from './tray';
 import { createMenubar, buildContextMenu } from './menubar';
 import TouchBarManager from './touchbar';
