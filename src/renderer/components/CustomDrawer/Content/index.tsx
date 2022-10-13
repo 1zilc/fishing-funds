@@ -1,4 +1,5 @@
 import React, { PropsWithChildren } from 'react';
+import { Button } from 'antd';
 import { useKeyPress } from 'ahooks';
 import Collect from '@/components/Collect';
 import styles from './index.module.scss';
@@ -34,13 +35,13 @@ const CustomDrawer: React.FC<PropsWithChildren<CustomDrawerContentProps>> = ({
   return (
     <div className={styles.content}>
       <div className={styles.header}>
-        <button className={styles.close} onClick={onClose}>
+        <Button type="text" onClick={onClose}>
           {closeText || '关闭'}
-        </button>
+        </Button>
         <h3>{title}</h3>
-        <button className={styles.add} onClick={onEnter}>
+        <Button type="primary" onClick={onEnter}>
           {enterText || '确定'}
-        </button>
+        </Button>
       </div>
       <div className={styles.body}>{children}</div>
       <Collect title={title} />
