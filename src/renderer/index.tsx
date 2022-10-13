@@ -29,15 +29,7 @@ const { platform } = window.contextModules.process;
 const { darkAlgorithm } = theme;
 
 createRoot(document.getElementById('root')!).render(
-  <ConfigProvider
-    locale={zhCN}
-    theme={{
-      token: {
-        colorPrimary: 'var(--primary-color)',
-      },
-      algorithm: [darkAlgorithm],
-    }}
-  >
+  <ConfigProvider locale={zhCN} theme={{}}>
     <Provider store={store}>
       <style>{` body { background-color: ${platform === 'darwin' ? 'initial' : 'var(--inner-color)'} }`}</style>
       <App />

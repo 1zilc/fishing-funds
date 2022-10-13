@@ -11,3 +11,10 @@
   width: 0;
   height: 0;
 }
+// 走马灯dots
+.ant-carousel .slick-dots li {
+  background: var(--cancel-color);
+}
+.ant-carousel .slick-dots li.slick-active button {
+  background: var(--primary-color);
+}
