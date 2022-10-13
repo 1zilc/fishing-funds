@@ -5,7 +5,6 @@
  */
 
 @import '~@/styles/antd.scss';
-@import '~@/styles/collapse.scss';
 @import '~@/styles/swiper.scss';
 @import '~@/styles/button.scss';
 @import '~@/styles/color.scss';
@@ -23,28 +22,6 @@ body {
 
 body::-webkit-scrollbar {
   width: 0;
-}
-
-h2 {
-  margin: 0;
-  font-size: 2.25rem;
-  font-weight: bold;
-  letter-spacing: -0.025em;
-  color: #fff;
-}
-
-h3 {
-  font-size: calc(14rem / var(--base-font-size));
-  margin: 0;
-  line-height: 24px;
-}
-
-p {
-  font-size: 24px;
-}
-
-li {
-  list-style: none;
 }
 
 a {
@@ -67,14 +44,6 @@ a:hover {
   &:hover {
     filter: brightness(105%);
   }
-}
-
-.img {
-  border-radius: 5px;
-  width: 100%;
-  display: block;
-  height: auto;
-  object-fit: cover;
 }
 
 .red {

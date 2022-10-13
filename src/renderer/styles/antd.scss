@@ -1,68 +1,13 @@
-@import '~antd/dist/antd.compact.css';
-@import './antd/table.scss';
-@import './antd/pagination.scss';
-
+// tab去除线条
 .ant-tabs-nav::before {
   border: none !important;
 }
-.ant-checkbox-checked .ant-checkbox-inner,
-.ant-radio-group-solid .ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled) {
-  background: var(--primary-color);
-  border-color: var(--primary-color);
-}
-.ant-tabs-ink-bar,
-.ant-switch-checked {
-  background-color: var(--primary-color);
-}
-.ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn,
-.ant-dropdown-trigger {
-  color: var(--primary-color);
-}
-a:hover,
-.ant-tabs-tab:hover {
-  color: var(--primary-color);
-}
-
-.ant-rate-star-zero {
-  svg {
-    fill: var(--inner-text-color);
-  }
-}
-
-.ant-slider {
-  margin: 0;
-}
-.ant-tabs-tab:first-child {
-  margin-left: 0 !important;
-}
+// 抽屉背景
 .ant-drawer-content {
   background-color: initial;
 }
+// 抽屉无滚动条
 .ant-drawer-body::-webkit-scrollbar {
   width: 0;
   height: 0;
-}
-.ant-tabs {
-  color: var(--main-text-color);
-}
-.ant-checkbox-wrapper {
-  color: var(--main-text-color);
-}
-.ant-radio-wrapper {
-  color: var(--main-text-color);
-}
-.ant-checkbox-indeterminate .ant-checkbox-inner {
-  border-color: var(--main-text-color);
-}
-.ant-progress-circle .ant-progress-text {
-  color: var(--main-text-color);
-}
-.ant-progress {
-  // width: 100%;
-  height: 5px;
-  display: flex;
-  align-items: center;
-}
-.ant-spin-dot-item {
-  background-color: var(--primary-color);
 }
