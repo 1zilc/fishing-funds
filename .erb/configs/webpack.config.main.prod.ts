@@ -30,7 +30,7 @@ const configuration: webpack.Configuration = {
   target: 'electron-main',
 
   entry: {
-    main: ['v8-compile-cache', path.join(webpackPaths.srcMainPath, 'main.ts')],
+    main: [path.join(webpackPaths.srcMainPath, 'main.ts')],
     preload: path.join(webpackPaths.srcMainPath, 'preload.ts'),
   },
 
