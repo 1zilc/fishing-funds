@@ -1,6 +1,6 @@
 import { createRoot } from 'react-dom/client';
 import NP from 'number-precision';
-import { ConfigProvider, theme } from 'antd';
+import { ConfigProvider } from 'antd';
 import zhCN from 'antd/es/locale/zh_CN';
 import * as echarts from 'echarts';
 import chinaMap from '@/static/map/china.json';
@@ -26,10 +26,9 @@ NP.enableBoundaryChecking(false);
 Enhancement.CheckEnvTool();
 
 const { platform } = window.contextModules.process;
-const { darkAlgorithm } = theme;
 
 createRoot(document.getElementById('root')!).render(
-  <ConfigProvider locale={zhCN} theme={{}}>
+  <ConfigProvider locale={zhCN}>
     <Provider store={store}>
       <style>{` body { background-color: ${platform === 'darwin' ? 'initial' : 'var(--inner-color)'} }`}</style>
       <App />
