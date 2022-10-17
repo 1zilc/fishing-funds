@@ -21,6 +21,7 @@ const params = Utils.ParseSearchParams();
 
 const App: React.FC<Record<string, unknown>> = () => {
   const darkMode = useAppSelector((state) => state.setting.darkMode);
+  const baseFontSizeSetting = useAppSelector((state) => state.setting.systemSetting.baseFontSizeSetting);
   const { themeColorTypeSetting, customThemeColorSetting, originPrimaryColor } = useThemeColor();
 
   return (
@@ -28,6 +29,7 @@ const App: React.FC<Record<string, unknown>> = () => {
       theme={{
         token: {
           colorPrimary: themeColorTypeSetting ? customThemeColorSetting : originPrimaryColor,
+          fontSizeBase: baseFontSizeSetting,
         },
         algorithm: darkMode ? [theme.darkAlgorithm] : [],
       }}
