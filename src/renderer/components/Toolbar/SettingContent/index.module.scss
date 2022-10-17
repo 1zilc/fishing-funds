@@ -158,10 +158,11 @@
 .group {
   display: flex;
   align-items: center;
-  padding: 10px 28px;
+  padding: 10px 10px;
   justify-content: center;
   width: 100%;
   flex-wrap: wrap;
+  box-sizing: border-box;
 
   & > section {
     display: flex;
