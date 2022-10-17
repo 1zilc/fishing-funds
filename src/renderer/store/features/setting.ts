@@ -71,7 +71,7 @@ export const defaultSystemSetting: System.Setting = {
   autoFreshSetting: true,
   freshDelaySetting: 1,
   autoCheckUpdateSetting: true,
-  timestampSetting: Enums.TimestampType.Network,
+  timestampSetting: Enums.TimestampType.Local,
 
   syncConfigSetting: false,
   syncConfigPathSetting: '',
