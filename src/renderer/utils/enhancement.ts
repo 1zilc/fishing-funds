@@ -3,11 +3,10 @@
  */
 import * as Enums from '@/utils/enums';
 const { ipcRenderer } = window.contextModules.electron;
-const { version, production } = window.contextModules.process;
+const { version } = window.contextModules.process;
 const { saveString, readFile } = window.contextModules.io;
 const { encodeFF, decodeFF, encryptFF, decryptFF } = window.contextModules.coding;
 const electronStore = window.contextModules.electronStore;
-const log = window.contextModules.log;
 
 export async function UpdateSystemTheme(setting: Enums.SystemThemeType) {
   await ipcRenderer.invoke('set-native-theme-source', setting);
@@ -40,12 +39,6 @@ export async function GenerateSyncConfig(config: { [x: string]: any }) {
     suffix: 'ff',
   };
   return fileConfig;
-}
-
-export function CheckEnvTool() {
-  if (production) {
-    Object.assign(console, log.functions);
-  }
 }
 
 export async function CoverBackupConfig(fileConfig: Backup.Config) {

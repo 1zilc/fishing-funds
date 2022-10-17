@@ -13,6 +13,10 @@ import SouthDay from '@/components/Home/QuotationView/FundFlowContent/SouthDay';
 import QuotationMap from '@/components/Home/QuotationView/FundFlowContent/QuotationMap';
 import Geography from '@/components/Home/QuotationView/FundFlowContent/Geography';
 import Estimate from '@/components/Home/QuotationView/FundFlowContent/Estimate';
+import Distribution from '@/components/Home/QuotationView/FundFlowContent/Distribution';
+import Comparison from '@/components/Home/QuotationView/FundFlowContent/Comparison';
+import SealPlate from '@/components/Home/QuotationView/FundFlowContent/SealPlate';
+import LeekTrend from '@/components/Home/QuotationView/FundFlowContent/LeekTrend';
 
 import * as Enums from '@/utils/enums';
 import styles from './index.module.scss';
@@ -26,6 +30,34 @@ const FundFlowContent: React.FC<DetailFundContentProps> = (props) => {
   return (
     <CustomDrawerContent title="板块资金流" enterText="确定" onClose={props.onClose} onEnter={props.onEnter}>
       <div className={styles.content}>
+        <div className={styles.container}>
+          <Tabs
+            animated={{ tabPane: true }}
+            tabBarGutter={15}
+            items={[
+              {
+                key: String(0),
+                label: '涨跌分布',
+                children: <Distribution />,
+              },
+              {
+                key: String(1),
+                label: '韭菜情绪',
+                children: <LeekTrend />,
+              },
+              {
+                key: String(2),
+                label: '涨跌停对比',
+                children: <Comparison />,
+              },
+              {
+                key: String(3),
+                label: '封板未遂',
+                children: <SealPlate />,
+              },
+            ]}
+          />
+        </div>
         <div className={styles.container}>
           <Tabs
             animated={{ tabPane: true }}
@@ -50,6 +82,34 @@ const FundFlowContent: React.FC<DetailFundContentProps> = (props) => {
                 key: String(3),
                 label: '创业板',
                 children: <Estimate code="0.399006" />,
+              },
+            ]}
+          />
+        </div>
+        <div className={styles.container}>
+          <Tabs
+            animated={{ tabPane: true }}
+            tabBarGutter={15}
+            items={[
+              {
+                key: String(0),
+                label: '北向资金',
+                children: <NorthFlow />,
+              },
+              {
+                key: String(1),
+                label: '北向日线',
+                children: <NorthDay />,
+              },
+              {
+                key: String(2),
+                label: '南向资金',
+                children: <SouthFlow />,
+              },
+              {
+                key: String(3),
+                label: '南向日线',
+                children: <SouthDay />,
               },
             ]}
           />
@@ -83,34 +143,6 @@ const FundFlowContent: React.FC<DetailFundContentProps> = (props) => {
                     <Geography />
                   </ChartCard>
                 ),
-              },
-            ]}
-          />
-        </div>
-        <div className={styles.container}>
-          <Tabs
-            animated={{ tabPane: true }}
-            tabBarGutter={15}
-            items={[
-              {
-                key: String(0),
-                label: '北向资金',
-                children: <NorthFlow />,
-              },
-              {
-                key: String(1),
-                label: '北向日线',
-                children: <NorthDay />,
-              },
-              {
-                key: String(2),
-                label: '南向资金',
-                children: <SouthFlow />,
-              },
-              {
-                key: String(3),
-                label: '南向日线',
-                children: <SouthDay />,
               },
             ]}
           />

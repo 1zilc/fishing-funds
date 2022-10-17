@@ -34,7 +34,7 @@ export async function FromEastmoney(secid: string) {
       searchParams: {
         fields: 'f43,f44,f45,f46,f57,f58,f60,f86,f107,f168,f169,f170,f171',
         secid, // 1.000001
-        _: new Date().getTime(),
+        _: Date.now(),
       },
       responseType: 'json',
     });
@@ -92,7 +92,7 @@ export async function GetTrendFromEastmoney(code: string, ndays: number) {
         iscr: 0,
         fields1: 'f1,f2,f3,f4,f5,f6,f7,f8,f9,f10,f11',
         fields2: 'f51,f53,f56,f58',
-        _: new Date().getTime(),
+        _: Date.now(),
       },
       responseType: 'json',
     });
@@ -134,7 +134,7 @@ export async function GetKFromEastmoney(code: string, year: number, klt: number)
         fqt: 0,
         beg: `${dayjs().get('year') - year}0101`,
         end: `${dayjs().get('year') + 1}0101`,
-        _: new Date().getTime(),
+        _: Date.now(),
       },
       responseType: 'json',
     });
@@ -167,7 +167,7 @@ export async function GetEconomyIndexFromEastmoney(market: number) {
         p: 1,
         ps: 200,
         mkt: market,
-        _: new Date().getTime(),
+        _: Date.now(),
       },
     });
     const data = eval(body);
@@ -206,7 +206,7 @@ export async function GetOilPriceFromEastmoney() {
         sr: -1,
         p: 1,
         ps: 5000,
-        _: new Date().getTime(),
+        _: Date.now(),
       },
       responseType: 'json',
     });
@@ -249,7 +249,7 @@ export async function GetTreasuryYieldData() {
         sr: -1,
         p: 1,
         ps: 99999,
-        _: new Date().getTime(),
+        _: Date.now(),
       },
       responseType: 'json',
     });
@@ -284,7 +284,7 @@ export async function GetNationalTeamDistributed() {
         source: 'WEB',
         client: 'WEB',
         quoteColumns: '',
-        _: new Date().getTime(),
+        _: Date.now(),
       },
       responseType: 'json',
     });
@@ -331,7 +331,7 @@ export async function GetNationalTeamTrend() {
         sortColumns: 'REPORT_DATE',
         sortTypes: -1,
         filter: `(TRADE_MARKET="all")(REPORT_DATE>'${dayjs().subtract(10, 'year').format('YYYY-MM-DD')}')`,
-        _: new Date().getTime(),
+        _: Date.now(),
       },
       responseType: 'json',
     });
@@ -396,7 +396,7 @@ export async function GetNationalTeamDetail(columns: string) {
         sortColumns: columns,
         sortTypes: -1,
         filter: `(REPORT_DATE='${time.slice(0, 10)}')`,
-        _: new Date().getTime(),
+        _: Date.now(),
       },
       responseType: 'json',
     });
@@ -408,7 +408,7 @@ export async function GetNationalTeamDetail(columns: string) {
 
 export async function GetRemoteZindexConfig() {
   const cb = 'parsezindex';
-  const now = new Date().getTime();
+  const now = Date.now();
   const fields = '12,13,14';
   const { body: b1 } = await request(
     `http://32.push2.eastmoney.com/api/qt/clist/get?pn=1&pz=50&po=1&np=1&ut=bd1d9ddb04089700cf9c27f6f7426281&fltt=2&invt=2&fid=&fs=b:MK0010`,

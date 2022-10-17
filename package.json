@@ -164,7 +164,7 @@
       "^@/(.*)$": "<rootDir>/src/renderer/$1"
     },
     "moduleFileExtensions": ["js", "jsx", "ts", "tsx", "json"],
-    "moduleDirectories": ["node_modules", "release/app/node_modules"],
+    "moduleDirectories": ["node_modules", "release/app/node_modules", "src"],
     "testPathIgnorePatterns": ["release/app/dist"],
     "setupFiles": ["./.erb/scripts/check-build-exists.ts"]
   },
@@ -178,13 +178,11 @@
     "@types/color-hash": "^1.0.1",
     "@types/jest": "^28.1.0",
     "@types/json2csv": "^5.0.3",
-    "@types/node": "18.7.16",
+    "@types/node": "18.8.4",
     "@types/react": "^18.0.6",
     "@types/react-color": "^3.0.6",
     "@types/react-dom": "^18.0.2",
     "@types/react-test-renderer": "^18.0.0",
-    "@types/redux-logger": "^3.0.8",
-    "@types/redux-promise": "^0.5.29",
     "@types/webpack-env": "^1.16.0",
     "@typescript-eslint/eslint-plugin": "^5.11.0",
     "@typescript-eslint/parser": "^5.3.1",
@@ -194,7 +192,7 @@
     "cross-env": "^7.0.3",
     "css-loader": "^6.2.0",
     "detect-port": "^1.3.0",
-    "electron": "^20.0.0",
+    "electron": "^21.0.0",
     "electron-builder": "^23.0.2",
     "electron-devtools-installer": "^3.2.0",
     "electron-notarize": "^1.0.0",
@@ -236,7 +234,6 @@
     "ts-node": "^10.9.1",
     "tsx": "^3.8.2",
     "typescript": "^4.2.4",
-    "v8-compile-cache": "^2.3.0",
     "webpack": "^5.38.1",
     "webpack-bundle-analyzer": "^4.4.1",
     "webpack-cli": "^4.6.0",
@@ -251,7 +248,6 @@
     "cheerio": "^1.0.0-rc.5",
     "clsx": "^1.1.1",
     "color-hash": "^2.0.1",
-    "connected-react-router": "^6.8.0",
     "dayjs": "^1.10.4",
     "echarts": "^5.0.2",
     "electron-debug": "^3.2.0",
@@ -279,19 +275,17 @@
     "react-router-dom": "^6.0.0",
     "react-sortablejs": "^6.0.0",
     "redux": "^4.0.5",
-    "redux-logger": "^3.0.6",
-    "redux-promise": "^0.6.0",
     "redux-thunk": "^2.3.0",
     "socks-proxy-agent": "^7.0.0",
     "sortablejs": "^1.13.0"
   },
+  "browserslist": [],
   "devEngines": {
-    "node": ">=14.x",
-    "npm": ">=7.x"
+    "node": ">=16.x",
+    "npm": ">=8.x"
   },
   "electronmon": {
-    "patterns": ["!src/renderer/**"]
-  },
-  "browserslist": [],
-  "__npminstall_done": false
+    "patterns": ["!**/**", "src/main/**"],
+    "logLevel": "quiet"
+  }
 }

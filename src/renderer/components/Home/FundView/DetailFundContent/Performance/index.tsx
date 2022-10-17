@@ -87,7 +87,6 @@ const Performance: React.FC<PerformanceProps> = ({ code }) => {
             ..._,
             type: 'line',
             showSymbol: false,
-            symbol: 'none',
             lineStyle: {
               width: 1,
             },
@@ -117,6 +116,7 @@ const Performance: React.FC<PerformanceProps> = ({ code }) => {
 
   return (
     <ChartCard
+      className={styles.content}
       onFresh={runGetFundPerformanceFromEastmoney}
       TitleBar={
         <div className={styles.zdhc}>
@@ -124,10 +124,8 @@ const Performance: React.FC<PerformanceProps> = ({ code }) => {
         </div>
       }
     >
-      <div className={styles.content}>
-        <div ref={chartRef} style={{ width: '100%' }} />
-        <TypeSelection types={performanceTypeList} activeType={performanceType.type} onSelected={setPerformanceType} />
-      </div>
+      <div ref={chartRef} style={{ width: '100%' }} />
+      <TypeSelection types={performanceTypeList} activeType={performanceType.type} onSelected={setPerformanceType} />
     </ChartCard>
   );
 };

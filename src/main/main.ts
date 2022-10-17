@@ -7,16 +7,31 @@
  * `./src/main.prod.js` using webpack. This gives us some performance wins.
  */
 
-import { app, globalShortcut, ipcMain, nativeTheme, dialog, webContents, shell, Menu, BrowserWindow } from 'electron';
+import {
+  app,
+  globalShortcut,
+  ipcMain,
+  nativeImage,
+  nativeTheme,
+  clipboard,
+  dialog,
+  webContents,
+  shell,
+  Menu,
+  BrowserWindow,
+} from 'electron';
+import got from 'got';
 import windowStateKeeper from 'electron-window-state';
 import { Menubar } from 'menubar';
 import AppUpdater from './autoUpdater';
-import { appIcon, generateWalletIcon } from './icon';
+import { appIcon, generateIconFromDataURL } from './icon';
 import { createTray } from './tray';
 import { createMenubar, buildContextMenu } from './menubar';
 import TouchBarManager from './touchbar';
 import LocalStore from './store';
 import { createChildWindow } from './childWindow';
+import Proxy from './proxy';
+import { saveImage, saveJsonToCsv, saveString, readFile } from './io';
 import { lockSingleInstance, checkEnvTool, sendMessageToRenderer, setNativeTheme, getOtherWindows } from './util';
 import * as Enums from '../renderer/utils/enums';
 
@@ -73,11 +88,18 @@ function main() {
   ipcMain.handle('app-quit', async (event, config) => {
     app.quit();
   });
+  ipcMain.handle('app-relaunch', async (event, config) => {
+    app.relaunch();
+    app.exit();
+  });
   ipcMain.handle('set-tray-content', async (event, config) => {
     tray.setTitle(config);
   });
   ipcMain.handle('check-update', async (event) => {
     appUpdater.checkUpdate('renderer');
+  });
+  ipcMain.handle('shell-openExternal', async (event, config) => {
+    shell.openExternal(config);
   });
   // store相关
   ipcMain.handle('get-storage-config', async (event, config) => {
@@ -112,10 +134,16 @@ function main() {
   ipcMain.handle('update-tray-context-menu-wallets', async (event, config) => {
     const menus = config.map((item: any) => ({
       ...item,
-      icon: generateWalletIcon(item.iconIndex),
+      icon: generateIconFromDataURL(item.dataURL),
       click: () => sendMessageToRenderer(mb.window, 'change-current-wallet-code', item.id),
     }));
     contextMenu = buildContextMenu({ mb, appUpdater }, menus);
+  });
+  ipcMain.handle('get-app-icon', async (event, config) => {
+    return appIcon.toDataURL();
+  });
+  ipcMain.handle('get-version', async (event, config) => {
+    return app.getVersion();
   });
   // touchbar 相关监听
   ipcMain.handle('update-touchbar-zindex', async (event, config) => {
@@ -130,6 +158,7 @@ function main() {
   ipcMain.handle('update-touchbar-eye-status', async (event, config) => {
     touchBarManager.updateEysStatusItems(config);
   });
+  // 快捷键
   ipcMain.handle('set-hotkey', async (event, keys: string) => {
     if (keys === activeHotkeys) {
       return;
@@ -160,6 +189,7 @@ function main() {
     }
     activeHotkeys = keys;
   });
+  // 多窗口相关
   ipcMain.handle('open-child-window', async (event, config) => {
     const parentWin = BrowserWindow.fromWebContents(event.sender);
     const win = createChildWindow({ search: config.search, parentId: parentWin!.id });
@@ -178,6 +208,41 @@ function main() {
       win?.webContents.send('sync-store-data', config);
     });
   });
+  // got
+  ipcMain.handle('got', async (event, { url, config }) => {
+    try {
+      const proxyConent = await event.sender.session.resolveProxy(url);
+      const { httpAgent, httpsAgent } = new Proxy(proxyConent, url);
+      const res = await got(url, {
+        ...config,
+        retry: {
+          limit: 2,
+        },
+        timeout: {
+          request: 10000,
+        },
+        agent: {
+          http: httpAgent,
+          https: httpsAgent,
+        },
+      });
+      return {
+        body: res.body,
+        rawBody: res.rawBody,
+      };
+    } catch {
+      return {};
+    }
+  });
+  // io操作
+  ipcMain.handle('io-saveImage', async (event, { path, content }) => saveImage(path, content));
+  ipcMain.handle('io-saveJsonToCsv', async (event, { path, content }) => saveJsonToCsv(path, content));
+  ipcMain.handle('io-saveString', async (event, { path, content }) => saveString(path, content));
+  ipcMain.handle('io-readFile', async (event, { path }) => readFile(path));
+  // 剪贴板相关
+  ipcMain.handle('clipboard-readText', async (event) => clipboard.readText());
+  ipcMain.handle('clipboard-writeText', async (event, text) => clipboard.writeText(text));
+  ipcMain.handle('clipboard-writeImage', async (event, dataUrl) => clipboard.writeImage(nativeImage.createFromDataURL(dataUrl)));
   // menubar 相关监听
   mb.on('after-create-window', () => {
     // 注册windowId

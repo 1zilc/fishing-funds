@@ -1,4 +1,5 @@
 import React, { PropsWithChildren, ReactNode, useRef } from 'react';
+import { Tooltip } from 'antd';
 import html2canvas from 'html2canvas';
 import { useBoolean } from 'ahooks';
 import clsx from 'clsx';
@@ -8,7 +9,7 @@ import RefreshIcon from '@/static/icon/refresh.svg';
 import ArrowDownIcon from '@/static/icon/arrow-down.svg';
 import ArrowUpIcon from '@/static/icon/arrow-up.svg';
 import Collapse from '@/components/Collapse';
-
+import QuestionIcon from '@/static/icon/question.svg';
 import styles from './index.module.scss';
 
 export interface ChartCardProps {
@@ -20,6 +21,7 @@ export interface ChartCardProps {
   TitleBar?: ReactNode;
   pureContent?: boolean;
   showCollapse?: boolean;
+  describe?: string;
 }
 
 const { clipboard, dialog } = window.contextModules.electron;
@@ -40,6 +42,7 @@ export const ChartCard: React.FC<PropsWithChildren<ChartCardProps>> = ({
   TitleBar,
   pureContent,
   showCollapse,
+  describe,
 }) => {
   const chartRef = useRef<HTMLDivElement>(null);
 
@@ -105,6 +108,11 @@ export const ChartCard: React.FC<PropsWithChildren<ChartCardProps>> = ({
         <DownloadIcon onClick={downLoadChartToLocal} />
         <CopyIcon onClick={writeChartToClipboard} />
         {showCollapse && (isOpened ? <ArrowUpIcon onClick={setFalse} /> : <ArrowDownIcon onClick={setTrue} />)}
+        {describe && (
+          <Tooltip placement="bottomRight" title={describe} overlayClassName={styles.describe} color={'var(--primary-color)'}>
+            <QuestionIcon />
+          </Tooltip>
+        )}
       </div>
       <div
         className={clsx([

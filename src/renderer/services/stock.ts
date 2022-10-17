@@ -68,7 +68,7 @@ export async function SearchFromEastmoney(keyword: string) {
         ps: 1000,
         pi: 1,
         token: Utils.MakeHash(),
-        _: new Date().getTime(),
+        _: Date.now(),
       },
       responseType: 'json',
     });
@@ -113,7 +113,7 @@ export async function GetTrendFromEastmoney(secid: string) {
         ndays: 1,
         iscr: 0,
         iscca: 0,
-        _: new Date().getTime(),
+        _: Date.now(),
       },
       responseType: 'json',
     });
@@ -293,7 +293,7 @@ export async function GetDetailFromEastmoney(secid: string) {
         fltt: 2,
         fields:
           'f43,f57,f58,f169,f170,f46,f44,f51,f168,f47,f164,f163,f116,f60,f45,f52,f50,f48,f167,f117,f71,f161,f49,f530,f135,f136,f137,f138,f139,f141,f142,f144,f145,f147,f148,f140,f143,f146,f149,f55,f62,f162,f92,f173,f104,f105,f84,f85,f183,f184,f185,f186,f187,f188,f189,f190,f191,f192,f107,f111,f86,f177,f78,f110,f262,f263,f264,f267,f268,f250,f251,f252,f253,f254,f255,f256,f257,f258,f266,f269,f270,f271,f273,f274,f275,f127,f199,f128,f193,f196,f194,f195,f197,f80,f280,f281,f282,f284,f285,f286,f287,f292',
-        _: new Date().getTime(),
+        _: Date.now(),
       },
       responseType: 'json',
     });
@@ -353,7 +353,7 @@ export async function GetKFromEastmoney(secid: string, code: number, lmt = 10000
         fqt: 0,
         end: 20500101,
         lmt: lmt,
-        _: new Date().getTime(),
+        _: Date.now(),
       },
       responseType: 'json',
     });
@@ -423,7 +423,7 @@ export async function GetSelfRankFromEastmoney(code: string) {
         fltt: 2,
         invt: 2,
         fs: 'm:0+t:6+f:!2,m:0+t:13+f:!2,m:0+t:80+f:!2,m:1+t:2+f:!2,m:1+t:23+f:!2,m:0+t:7+f:!2,m:1+t:3+f:!2',
-        _: new Date().getTime(),
+        _: Date.now(),
       },
       responseType: 'json',
     });
@@ -486,7 +486,7 @@ export async function GetMainRankFromEastmoney(code: string) {
         fltt: 2,
         invt: 2,
         fs: 'm:0+t:6+f:!2,m:0+t:13+f:!2,m:0+t:80+f:!2,m:1+t:2+f:!2,m:1+t:23+f:!2,m:0+t:7+f:!2,m:1+t:3+f:!2',
-        _: new Date().getTime(),
+        _: Date.now(),
       },
       responseType: 'json',
     });

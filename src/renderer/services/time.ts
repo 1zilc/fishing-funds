@@ -39,19 +39,3 @@ export async function GetCurrentDateTimeFromSuning() {
     return;
   }
 }
-
-/**
- * 京东接口拿当前时间
- */
-export async function GetCurrentDateTimeFromJd() {
-  try {
-    const res = await request<{
-      serverTime: string; // 1592663800521
-    }>('https://a.jd.com//ajax/queryServerData.html', {
-      responseType: 'json',
-    });
-    return res?.body?.serverTime;
-  } catch {
-    return;
-  }
-}

@@ -76,12 +76,19 @@ const configuration: webpack.Configuration = {
       // Images
       {
         test: /\.(png|jpg|jpeg|gif)$/i,
+        resourceQuery: { not: [/url/] },
         type: 'asset/resource',
+      },
+      {
+        test: /\.(png|jpg|jpeg|gif|svg)$/i,
+        type: 'asset/inline',
+        resourceQuery: /url/,
       },
       // SVG
       {
         test: /\.svg$/,
         issuer: /\.[jt]sx?$/,
+        resourceQuery: { not: [/url/] },
         use: ['@svgr/webpack'],
       },
     ],

@@ -4,26 +4,18 @@
     "target": "es2021",
     "module": "esnext",
     "lib": ["dom", "esnext"],
-    "declaration": false,
-    "declarationMap": false,
     "noEmit": false,
     "jsx": "react-jsx",
     "strict": true,
-    "pretty": true,
     "sourceMap": true,
     "removeComments": true,
-    /* Additional Checks */
-    "noUnusedLocals": false,
-    "noUnusedParameters": false,
-    "noImplicitReturns": false,
-    "noFallthroughCasesInSwitch": false,
     /* Module Resolution Options */
     "moduleResolution": "node",
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "resolveJsonModule": true,
     "allowJs": true,
-    "outDir": "release/app/dist",
+    "outDir": ".erb/dll",
     "paths": {
       "@/*": ["./src/renderer/*"],
       "@assets/*": ["./assets/*"]

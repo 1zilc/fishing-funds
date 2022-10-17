@@ -23,8 +23,6 @@ echarts.registerMap('china', chinaMap as any);
 
 NP.enableBoundaryChecking(false);
 
-Enhancement.CheckEnvTool();
-
 const { platform } = window.contextModules.process;
 
 createRoot(document.getElementById('root')!).render(

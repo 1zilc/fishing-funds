@@ -1,4 +1,5 @@
 .content {
-  transition: max-height 0.22s cubic-bezier(0.645, 0.045, 0.355, 1);
+  will-change: height, opacity;
+  transition: height 0.2s cubic-bezier(0.645, 0.045, 0.355, 1), opacity 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
   overflow: hidden;
 }

@@ -5,11 +5,7 @@ import * as Enums from '@/utils/enums';
 export async function GetCurrentHours(timestampSetting: Enums.TimestampType) {
   const now = Date.now().toString();
   try {
-    const collectors = [
-      Services.Time.GetCurrentDateTimeFromTaobao,
-      Services.Time.GetCurrentDateTimeFromJd,
-      Services.Time.GetCurrentDateTimeFromSuning,
-    ];
+    const collectors = [Services.Time.GetCurrentDateTimeFromTaobao, Services.Time.GetCurrentDateTimeFromSuning];
     switch (timestampSetting) {
       case Enums.TimestampType.Local:
         return now;

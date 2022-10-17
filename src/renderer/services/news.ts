@@ -278,7 +278,7 @@ export async function GetRecent(keyword: string, pageindex: number) {
       searchParams: {
         _: Date.now(),
         keyword,
-        type: 8193,
+        type: 16388, // 全部8196 标题16388 正文32772
         pageindex,
         pagesize: 10,
         name: 'web',

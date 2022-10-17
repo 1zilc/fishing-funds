@@ -4,6 +4,7 @@ import { InputNumber, Radio, Badge, Switch, Slider, TimePicker, Input, Tabs, Sel
 import dayjs from 'dayjs';
 import { ReactSortable } from 'react-sortablejs';
 import { HuePicker } from 'react-color';
+import { useRequest } from 'ahooks';
 
 import PureCard from '@/components/Card/PureCard';
 import StandCard from '@/components/Card/StandCard';
@@ -36,7 +37,7 @@ export interface SettingContentProps {
 }
 
 const { shell, app, clipboard, dialog } = window.contextModules.electron;
-const { electron, version } = window.contextModules.process;
+const { electron } = window.contextModules.process;
 
 const linksGroup = Utils.Group(
   [
@@ -212,6 +213,11 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
 
   const proxyModeEnable = proxyType === Enums.ProxyType.Http || proxyType === Enums.ProxyType.Socks;
   const customThemeColorEnable = themeColorType === Enums.ThemeColorType.Custom;
+
+  const { data: version } = useRequest(app.getVersion, {
+    cacheKey: 'get-version',
+    cacheTime: -1,
+  });
 
   async function onSave() {
     await dispatch(
@@ -716,7 +722,7 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
         ]}
       />
       <div className={styles.exit}>
-        <button type="button" onClick={app.quit}>
+        <button type="button" onClick={() => app.quit()}>
           退出程序
         </button>
       </div>
