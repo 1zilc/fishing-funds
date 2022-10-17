@@ -24,16 +24,7 @@ body::-webkit-scrollbar {
 }
 
 a {
-  /* color: white;
-  opacity: 0.75;
-  text-decoration: none; */
   color: var(--primary-color);
-}
-
-a:hover {
-  opacity: 1;
-  text-decoration: none;
-  cursor: pointer;
 }
 
 h3 {
