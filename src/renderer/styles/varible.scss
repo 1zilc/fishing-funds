@@ -1,5 +1,6 @@
 @media (prefers-color-scheme: light) {
   body {
+    --origin-primary-color: #1677ff;
     --background-color: #fff;
     --inner-color: #f8f9fa;
     --inner-text-color: #888;
@@ -42,6 +43,7 @@
 
 @media (prefers-color-scheme: dark) {
   body {
+    --origin-primary-color: #3086ff;
     --background-color: #1e1e1e;
     --inner-color: #333;
     --inner-text-color: #888;

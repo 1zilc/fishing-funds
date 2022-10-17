@@ -1,4 +1,5 @@
 import React, { useRef, useState, startTransition } from 'react';
+import { useCreation } from 'ahooks';
 import clsx from 'clsx';
 import { InputNumber, Radio, Badge, Switch, Slider, TimePicker, Input, Tabs, Select, Checkbox } from 'antd';
 import dayjs from 'dayjs';
@@ -25,7 +26,7 @@ import GlobalIcon from '@/static/icon/global.svg';
 import InboxIcon from '@/static/icon/inbox.svg';
 import FolderSettingsIcon from '@/static/icon/folder-settings.svg';
 import { setSystemSettingAction, defaultSystemSetting } from '@/store/features/setting';
-import { useAppDispatch, useAppSelector, useAutoDestroySortableRef, useInputShortcut } from '@/utils/hooks';
+import { useAppDispatch, useAppSelector, useAutoDestroySortableRef, useInputShortcut, useThemeColor } from '@/utils/hooks';
 import * as Enums from '@/utils/enums';
 import * as Utils from '@/utils';
 import styles from './index.module.scss';
@@ -175,8 +176,8 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
     syncConfigPathSetting,
   } = useAppSelector((state) => state.setting.systemSetting);
   const updateInfo = useAppSelector((state) => state.updater.updateInfo);
+  const { originPrimaryColor } = useThemeColor();
   const isUpdateAvaliable = !!updateInfo.version;
-
   // 数据来源
   const [fundapiType, setFundApiType] = useState(fundApiTypeSetting);
   // 外观设置
@@ -218,7 +219,7 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
       setSystemSettingAction({
         fundApiTypeSetting: fundapiType,
         themeColorTypeSetting: themeColorType,
-        customThemeColorSetting: customThemeColor,
+        customThemeColorSetting: customThemeColor || originPrimaryColor,
         conciseSetting: concise,
         lowKeySetting: lowKey,
         baseFontSizeSetting: baseFontSize,
@@ -351,12 +352,14 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
                       <div className={styles.colorBar}>
                         <i
                           className={styles.colorBlock}
-                          style={{ backgroundColor: customThemeColor || Utils.GetStylePropertyValue('--primary-clor') }}
+                          style={{
+                            backgroundColor: customThemeColorEnable ? customThemeColor || originPrimaryColor : originPrimaryColor,
+                          }}
                         />
                         {customThemeColorEnable && (
                           <HuePicker
                             className={styles.colorPicker}
-                            color={customThemeColor}
+                            color={customThemeColor || originPrimaryColor}
                             onChangeComplete={(v) => {
                               startTransition(() => {
                                 setCustomThemeColor(v.hex);

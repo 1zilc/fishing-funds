@@ -1,5 +1,5 @@
-import React, { useLayoutEffect, useState, useEffect, useRef, useMemo, useDeferredValue } from 'react';
-import { useInterval, useBoolean, useThrottleFn, useSize, useMemoizedFn, useEventListener } from 'ahooks';
+import React, { useLayoutEffect, useState, useEffect, useRef, useMemo } from 'react';
+import { useInterval, useBoolean, useThrottleFn, useSize, useMemoizedFn, useEventListener, useCreation } from 'ahooks';
 import { useDispatch, useSelector, TypedUseSelectorHook } from 'react-redux';
 import dayjs from 'dayjs';
 import * as echarts from 'echarts';
@@ -674,5 +674,20 @@ export function useInputShortcut(initial: string) {
     inputRef,
     hotkey,
     reset,
+  };
+}
+
+export function useThemeColor() {
+  const darkMode = useAppSelector((state) => state.setting.darkMode);
+  const themeColorTypeSetting = useAppSelector((state) => state.setting.systemSetting.themeColorTypeSetting);
+  const customThemeColorSetting = useAppSelector((state) => state.setting.systemSetting.customThemeColorSetting);
+  const originPrimaryColor = useCreation(() => Utils.GetStylePropertyValue('--origin-primary-color'), [darkMode]);
+  const customThemeColorEnable = themeColorTypeSetting === Enums.ThemeColorType.Custom;
+
+  return {
+    themeColorTypeSetting,
+    customThemeColorSetting,
+    originPrimaryColor,
+    customThemeColorEnable,
   };
 }

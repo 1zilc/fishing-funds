@@ -2,7 +2,7 @@ import React, { Suspense } from 'react';
 import { ConfigProvider, theme } from 'antd';
 import { MemoryRouter as Router, Routes, Route } from 'react-router-dom';
 import LoadingScreen from '@/components/LoadingScreen';
-import { useAppSelector } from '@/utils/hooks';
+import { useAppSelector, useThemeColor } from '@/utils/hooks';
 import * as CONST from '@/constants';
 import * as Utils from '@/utils';
 import '@/app.scss';
@@ -21,10 +21,14 @@ const params = Utils.ParseSearchParams();
 
 const App: React.FC<Record<string, unknown>> = () => {
   const darkMode = useAppSelector((state) => state.setting.darkMode);
+  const { themeColorTypeSetting, customThemeColorSetting, originPrimaryColor } = useThemeColor();
 
   return (
     <ConfigProvider
       theme={{
+        token: {
+          colorPrimary: themeColorTypeSetting ? customThemeColorSetting : originPrimaryColor,
+        },
         algorithm: darkMode ? [theme.darkAlgorithm] : [],
       }}
     >
