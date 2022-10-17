@@ -209,11 +209,11 @@
 }
 .colorPicker {
   flex: 1;
+  margin-left: var(--base-padding);
 }
 .colorBlock {
   display: inline-block;
   height: 16px;
   width: 16px;
   border-radius: 2px;
-  margin-right: var(--base-padding);
 }
