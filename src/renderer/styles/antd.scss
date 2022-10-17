@@ -18,3 +18,10 @@
 .ant-carousel .slick-dots li.slick-active button {
   background: var(--primary-color);
 }
+// 进度条
+.ant-progress {
+  // width: 100%;
+  height: 5px;
+  display: flex;
+  align-items: center;
+}
