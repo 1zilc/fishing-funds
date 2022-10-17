@@ -93,14 +93,19 @@ export const DetailQuotation: React.FC<DetailQuotationProps> = (props) => {
           tabBarGutter={15}
           items={[
             {
-              key: String(Enums.FundFlowType.RealTime),
+              key: String(0),
               label: '实时资金流向',
               children: <RealTimeFundFlow code={code} />,
             },
             {
-              key: String(Enums.FundFlowType.AfterTime),
+              key: String(1),
               label: '盘后资金流向',
               children: <AfterTimeFundFlow code={code} />,
+            },
+            {
+              key: String(2),
+              label: '近期资讯',
+              children: <Recent keyword={quotation.name} />,
             },
           ]}
         />
@@ -132,11 +137,6 @@ export const DetailQuotation: React.FC<DetailQuotationProps> = (props) => {
               key: String(1),
               label: `${quotation.name}个股`,
               children: <Stocks code={code} />,
-            },
-            {
-              key: String(2),
-              label: '近期资讯',
-              children: <Recent keyword={quotation.name} />,
             },
           ]}
         />

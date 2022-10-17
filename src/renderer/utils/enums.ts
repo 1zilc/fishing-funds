@@ -135,10 +135,6 @@ export enum SystemThemeType {
   Light,
   Dark,
 }
-export enum FundFlowType {
-  RealTime,
-  AfterTime,
-}
 
 export enum ZindexType {
   SS,
