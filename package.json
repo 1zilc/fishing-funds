@@ -246,7 +246,6 @@
   },
   "dependencies": {
     "@reduxjs/toolkit": "^1.8.1",
-    "@types/react-color": "^3.0.6",
     "ahooks": "^3.0.3",
     "antd": "5.0.0-alpha.2",
     "cheerio": "^1.0.0-rc.5",
