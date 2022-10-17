@@ -29,9 +29,7 @@ const App: React.FC<Record<string, unknown>> = () => {
       config={{
         baseFontSize: baseFontSizeSetting,
         lowKey: lowKeySetting,
-        customThemeColorEnable,
-        customThemeColor: customThemeColorSetting,
-        originPrimaryColor,
+        primaryColor: customThemeColorEnable ? customThemeColorSetting || originPrimaryColor : originPrimaryColor,
       }}
     >
       <Router>

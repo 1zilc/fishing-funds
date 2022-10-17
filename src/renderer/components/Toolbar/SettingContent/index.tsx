@@ -291,24 +291,9 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
         config={{
           lowKey,
           baseFontSize,
-          customThemeColor,
-          customThemeColorEnable,
-          originPrimaryColor,
+          primaryColor: customThemeColorEnable ? customThemeColor || originPrimaryColor : originPrimaryColor,
         }}
       >
-        <style>
-          {` html {
-            filter: ${lowKey && 'grayscale(90%)'};
-            font-size: ${baseFontSize}px;
-        }`}
-        </style>
-        {customThemeColorEnable && (
-          <style>
-            {` body {
-            --primary-color: ${customThemeColor || originPrimaryColor};
-        }`}
-          </style>
-        )}
         <PureCard
           className={clsx(
             styles.logo,

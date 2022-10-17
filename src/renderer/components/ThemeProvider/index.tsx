@@ -6,9 +6,7 @@ export interface ThemeProviderProps {
   config: {
     lowKey: boolean;
     baseFontSize: number;
-    customThemeColorEnable: boolean;
-    customThemeColor: string;
-    originPrimaryColor: string;
+    primaryColor: string;
   };
 }
 const { platform } = window.contextModules.process;
@@ -21,7 +19,7 @@ const ThemeProvider: React.FC<PropsWithChildren<ThemeProviderProps>> = (props) =
     <ConfigProvider
       theme={{
         token: {
-          colorPrimary: config.customThemeColorEnable ? config.customThemeColor || config.originPrimaryColor : config.originPrimaryColor,
+          colorPrimary: config.primaryColor,
           fontSizeBase: config.baseFontSize,
         },
         algorithm: darkMode ? [theme.darkAlgorithm] : [],
@@ -34,7 +32,7 @@ const ThemeProvider: React.FC<PropsWithChildren<ThemeProviderProps>> = (props) =
             font-size: ${config.baseFontSize}px;
         }`}
         {` body {
-            --primary-color: ${config.customThemeColor};
+            --primary-color: ${config.primaryColor};
             background-color: ${platform === 'darwin' ? 'initial' : 'var(--inner-color)'};
         }`}
       </style>
