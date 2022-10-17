@@ -8,8 +8,12 @@ const GlobalStyles: React.FC<GlobalStylesProps> = () => {
 
   return (
     <>
-      <style>{` html { filter: ${lowKeySetting && 'grayscale(90%)'} }`}</style>
-      <style>{` html { font-size: ${baseFontSizeSetting}px }`}</style>
+      <style>
+        {` html {
+            filter: ${lowKeySetting && 'grayscale(90%)'};
+            font-size: ${baseFontSizeSetting}px;
+        }`}
+      </style>
     </>
   );
 };

@@ -234,3 +234,7 @@ export enum ProxyType {
   Http,
   Socks,
 }
+export enum ThemeColorType {
+  Default,
+  Custom,
+}

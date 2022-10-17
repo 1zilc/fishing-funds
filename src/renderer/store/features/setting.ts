@@ -22,6 +22,8 @@ export type SettingState = {
 export const defaultSystemSetting: System.Setting = {
   fundApiTypeSetting: Enums.FundApiType.Eastmoney,
 
+  themeColorTypeSetting: Enums.ThemeColorType.Default,
+  customThemeColorSetting: '',
   conciseSetting: false,
   lowKeySetting: false,
   baseFontSizeSetting: 12,

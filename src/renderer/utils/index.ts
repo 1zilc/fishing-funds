@@ -96,10 +96,15 @@ export function JudgeAdjustmentNotificationTime(timestamp: number, adjustmentNot
   };
 }
 
+export function GetStylePropertyValue(varible: string) {
+  const value = window.getComputedStyle(document.body).getPropertyValue(varible);
+  return (value || '').trim();
+}
+
 export function GetVariblesColor(): Record<keyof typeof CONST.VARIBLES, string> {
   return Object.keys(CONST.VARIBLES).reduce<Record<string, string>>((colorMap, varible) => {
-    const color = window.getComputedStyle(document.body).getPropertyValue(varible);
-    colorMap[varible] = (color || '').trim();
+    const color = GetStylePropertyValue(varible);
+    colorMap[varible] = color;
     return colorMap;
   }, {});
 }

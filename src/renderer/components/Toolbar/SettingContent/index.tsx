@@ -1,8 +1,9 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, startTransition } from 'react';
 import clsx from 'clsx';
 import { InputNumber, Radio, Badge, Switch, Slider, TimePicker, Input, Tabs, Select, Checkbox } from 'antd';
 import dayjs from 'dayjs';
 import { ReactSortable } from 'react-sortablejs';
+import { HuePicker } from 'react-color';
 
 import PureCard from '@/components/Card/PureCard';
 import StandCard from '@/components/Card/StandCard';
@@ -27,7 +28,6 @@ import { setSystemSettingAction, defaultSystemSetting } from '@/store/features/s
 import { useAppDispatch, useAppSelector, useAutoDestroySortableRef, useInputShortcut } from '@/utils/hooks';
 import * as Enums from '@/utils/enums';
 import * as Utils from '@/utils';
-import * as Enhancement from '@/utils/enhancement';
 import styles from './index.module.scss';
 
 export interface SettingContentProps {
@@ -150,6 +150,8 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
   const sortableRef = useAutoDestroySortableRef();
   const {
     fundApiTypeSetting,
+    themeColorTypeSetting,
+    customThemeColorSetting,
     conciseSetting,
     lowKeySetting,
     baseFontSizeSetting,
@@ -178,6 +180,8 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
   // 数据来源
   const [fundapiType, setFundApiType] = useState(fundApiTypeSetting);
   // 外观设置
+  const [themeColorType, setThemeColorType] = useState(themeColorTypeSetting);
+  const [customThemeColor, setCustomThemeColor] = useState(customThemeColorSetting);
   const [concise, setConcise] = useState(conciseSetting);
   const [lowKey, setLowKey] = useState(lowKeySetting);
   const [baseFontSize, setBaseFontSize] = useState(baseFontSizeSetting);
@@ -207,11 +211,14 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
   const [syncConfigPath, setSyncConfigPath] = useState(syncConfigPathSetting);
 
   const proxyModeEnable = proxyType === Enums.ProxyType.Http || proxyType === Enums.ProxyType.Socks;
+  const customThemeColorEnable = themeColorType === Enums.ThemeColorType.Custom;
 
   async function onSave() {
     await dispatch(
       setSystemSettingAction({
         fundApiTypeSetting: fundapiType,
+        themeColorTypeSetting: themeColorType,
+        customThemeColorSetting: customThemeColor,
         conciseSetting: concise,
         lowKeySetting: lowKey,
         baseFontSizeSetting: baseFontSize,
@@ -325,6 +332,40 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
                 </StandCard>
                 <StandCard icon={<TShirtIcon />} title="外观设置">
                   <div className={clsx(styles.setting, 'card-body')}>
+                    <section>
+                      <label>主题色：</label>
+                      <Radio.Group
+                        optionType="button"
+                        size="small"
+                        buttonStyle="solid"
+                        options={[
+                          { label: '默认', value: Enums.ThemeColorType.Default },
+                          { label: '自定义', value: Enums.ThemeColorType.Custom },
+                        ]}
+                        onChange={(e) => setThemeColorType(e.target.value)}
+                        value={themeColorType}
+                      />
+                    </section>
+                    <section>
+                      <label>自定义主题色 ：</label>
+                      <div className={styles.colorBar}>
+                        <i
+                          className={styles.colorBlock}
+                          style={{ backgroundColor: customThemeColor || Utils.GetStylePropertyValue('--primary-clor') }}
+                        />
+                        {customThemeColorEnable && (
+                          <HuePicker
+                            className={styles.colorPicker}
+                            color={customThemeColor}
+                            onChangeComplete={(v) => {
+                              startTransition(() => {
+                                setCustomThemeColor(v.hex);
+                              });
+                            }}
+                          />
+                        )}
+                      </div>
+                    </section>
                     <section>
                       <label>简洁模式：</label>
                       <Switch size="small" checked={concise} onChange={setConcise} />
@@ -513,7 +554,7 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
                   <div className={clsx(styles.setting, 'card-body')}>
                     <section>
                       <label>快捷键 {hotkey && <a onClick={resetHotkey}>(重置)</a>}：</label>
-                      <input ref={hotkeyInputRef} value={hotkey} placeholder="显示/隐藏快捷键" type="text" />
+                      <input ref={hotkeyInputRef} value={hotkey} placeholder="请输入快捷键" type="text" readOnly />
                     </section>
                     <section>
                       <label>开机自启：</label>
