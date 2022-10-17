@@ -201,7 +201,7 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
   const [proxyHost, setProxyHost] = useState(proxyHostSetting);
   const [proxyPort, setProxyPort] = useState(proxyPortSetting);
   // 通用设置
-  const { hotkey, inputRef: hotkeyInputRef, reset: resetHotkey } = useInputShortcut(hotkeySetting);
+  const { hotkey, onBlur: hotkeyInputOnBlur, onFocus: hotkeyInputOnFocus, reset: resetHotkey } = useInputShortcut(hotkeySetting);
   const [autoStart, setAutoStart] = useState(autoStartSetting);
   const [autoFresh, setAutoFresh] = useState(autoFreshSetting);
   const [freshDelay, setFreshDelay] = useState(freshDelaySetting);
@@ -562,7 +562,13 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
                   <div className={clsx(styles.setting, 'card-body')}>
                     <section>
                       <label>快捷键 {hotkey && <a onClick={resetHotkey}>(重置)</a>}：</label>
-                      <input ref={hotkeyInputRef} value={hotkey} placeholder="请输入快捷键" type="text" readOnly />
+                      <Input
+                        onBlur={hotkeyInputOnBlur}
+                        onFocus={hotkeyInputOnFocus}
+                        value={hotkey}
+                        placeholder="请输入快捷键"
+                        type="text"
+                      />
                     </section>
                     <section>
                       <label>开机自启：</label>

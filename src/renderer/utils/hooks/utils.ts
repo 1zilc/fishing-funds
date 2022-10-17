@@ -653,7 +653,6 @@ export function useTabsFreshFn<T>(key: Enums.TabKeyType, fn: T) {
 export function useInputShortcut(initial: string) {
   const [hotkey, setHotkey] = useState(initial);
   const [isInput, { setTrue, setFalse }] = useBoolean(false);
-  const inputRef = useRef(null);
 
   useEventListener('keydown', (e) => {
     if (isInput) {
@@ -663,17 +662,16 @@ export function useInputShortcut(initial: string) {
       setHotkey(hotkeys.join(' + '));
     }
   });
-  useEventListener('focus', setTrue, { target: inputRef.current });
-  useEventListener('blur', setFalse, { target: inputRef.current });
 
   function reset() {
     setHotkey('');
   }
 
   return {
-    inputRef,
     hotkey,
     reset,
+    onBlur: setFalse,
+    onFocus: setTrue,
   };
 }
 
