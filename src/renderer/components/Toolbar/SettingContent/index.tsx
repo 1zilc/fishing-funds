@@ -176,7 +176,7 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
     syncConfigSetting,
     syncConfigPathSetting,
   } = useAppSelector((state) => state.setting.systemSetting);
-  const updateInfo = useAppSelector((state) => state.updater.updateInfo);
+  const { updateInfo, currentVersion } = useAppSelector((state) => state.updater);
   const { originPrimaryColor } = useThemeColor();
   const isUpdateAvaliable = !!updateInfo.version;
   // 数据来源
@@ -214,11 +214,6 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
 
   const proxyModeEnable = proxyType === Enums.ProxyType.Http || proxyType === Enums.ProxyType.Socks;
   const customThemeColorEnable = themeColorType === Enums.ThemeColorType.Custom;
-
-  const { data: version } = useRequest(app.getVersion, {
-    cacheKey: 'get-version',
-    cacheTime: -1,
-  });
 
   async function onSave() {
     await dispatch(
@@ -326,7 +321,7 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
         >
           <Logo />
           <Badge count={isUpdateAvaliable ? `v${updateInfo.version} 可更新` : 0} style={{ fontSize: 8 }} size="small">
-            <div className={styles.appName}>Fishing Funds v{version}</div>
+            <div className={styles.appName}>Fishing Funds v{currentVersion}</div>
           </Badge>
         </PureCard>
         <Tabs
