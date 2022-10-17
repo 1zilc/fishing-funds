@@ -1,12 +1,12 @@
-button {
-  padding: 5px 12px;
-  font-size: calc(10rem / var(--base-font-size));
-  border-radius: 5px;
-  border: none;
-  outline: none;
-  cursor: pointer;
-  opacity: 1;
-}
-button:hover {
-  filter: brightness(105%);
+.bottom-button {
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 20px;
+
+  svg {
+    fill: var(--primary-text-color);
+    height: 24px;
+    width: 24px;
+  }
 }

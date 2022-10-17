@@ -1,7 +1,7 @@
 import React from 'react';
 import clsx from 'clsx';
 
-import { Input, Tabs, message } from 'antd';
+import { Button, Tabs, message } from 'antd';
 import { useMemoizedFn } from 'ahooks';
 
 import CustomDrawer from '@/components/CustomDrawer';
@@ -74,21 +74,16 @@ const ZindexSearch: React.FC<ZindexSearchProps> = (props) => {
                       </div>
                       <div className={styles.code}>{Code}</div>
                     </div>
-                    {codeMap[secid] ? (
-                      <button className={styles.added} disabled>
-                        已添加
-                      </button>
-                    ) : (
-                      <button
-                        className={styles.select}
-                        onClick={(e) => {
-                          onAdd(secid);
-                          e.stopPropagation();
-                        }}
-                      >
-                        自选
-                      </button>
-                    )}
+                    <Button
+                      type="primary"
+                      disabled={!!codeMap[secid]}
+                      onClick={(e) => {
+                        onAdd(secid);
+                        e.stopPropagation();
+                      }}
+                    >
+                      {!!codeMap[secid] ? '已添加' : '自选'}
+                    </Button>
                   </div>
                 );
               })}

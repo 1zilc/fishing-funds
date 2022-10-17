@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useDebounceFn } from 'ahooks';
-import { Input, InputNumber, message } from 'antd';
+import { Input, InputNumber, message, Button } from 'antd';
 import CustomDrawer from '@/components/CustomDrawer';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
 import { addFundAction } from '@/store/features/fund';
@@ -183,23 +183,18 @@ const AddFundContent: React.FC<AddFundContentProps> = (props) => {
               </div>
               <div className={styles.code}>{code}</div>
             </div>
-            {codeMap[code] ? (
-              <button className={styles.added} disabled>
-                已添加
-              </button>
-            ) : (
-              <button
-                className={styles.select}
-                onClick={(e) => {
-                  setCode(code);
-                  setName(name);
-                  setFundlist([]);
-                  e.stopPropagation();
-                }}
-              >
-                选择
-              </button>
-            )}
+            <Button
+              type="primary"
+              disabled={!!codeMap[code]}
+              onClick={(e) => {
+                setCode(code);
+                setName(name);
+                setFundlist([]);
+                e.stopPropagation();
+              }}
+            >
+              {!!codeMap[code] ? '已添加' : '选择'}
+            </Button>
           </div>
         ))}
       <CustomDrawer show={showDetailDrawer}>

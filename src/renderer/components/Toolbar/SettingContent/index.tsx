@@ -1,6 +1,6 @@
 import React, { useState, startTransition } from 'react';
 import clsx from 'clsx';
-import { InputNumber, Radio, Badge, Switch, Slider, TimePicker, Input, Tabs, Select, Checkbox } from 'antd';
+import { InputNumber, Radio, Badge, Switch, Slider, TimePicker, Input, Tabs, Select, Checkbox, Button } from 'antd';
 import dayjs from 'dayjs';
 import { ReactSortable } from 'react-sortablejs';
 import { HuePicker } from 'react-color';
@@ -722,9 +722,9 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
         ]}
       />
       <div className={styles.exit}>
-        <button type="button" onClick={() => app.quit()}>
+        <Button type="text" onClick={() => app.quit()}>
           退出程序
-        </button>
+        </Button>
       </div>
       <div className={styles.version}>
         <div>Based on Electron v{electron}</div>

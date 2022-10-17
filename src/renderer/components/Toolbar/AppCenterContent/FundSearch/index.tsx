@@ -1,6 +1,6 @@
 import React from 'react';
 import clsx from 'clsx';
-import { Tabs } from 'antd';
+import { Tabs, Button } from 'antd';
 
 import CustomDrawer from '@/components/CustomDrawer';
 import ChartCard from '@/components/Card/ChartCard';
@@ -55,21 +55,16 @@ const FundSearch: React.FC<FundSearchProps> = (props) => {
                       </div>
                       <div className={styles.code}>{Code}</div>
                     </div>
-                    {codeMap[Code] ? (
-                      <button className={styles.added} disabled>
-                        已添加
-                      </button>
-                    ) : (
-                      <button
-                        className={styles.select}
-                        onClick={(e) => {
-                          setAddDrawer(Code);
-                          e.stopPropagation();
-                        }}
-                      >
-                        自选
-                      </button>
-                    )}
+                    <Button
+                      type="primary"
+                      disabled={!!codeMap[Code]}
+                      onClick={(e) => {
+                        setAddDrawer(Code);
+                        e.stopPropagation();
+                      }}
+                    >
+                      {!!codeMap[Code] ? '已添加' : '自选'}
+                    </Button>
                   </div>
                 );
               })}

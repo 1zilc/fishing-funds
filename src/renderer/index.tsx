@@ -26,7 +26,7 @@ NP.enableBoundaryChecking(false);
 const { platform } = window.contextModules.process;
 
 createRoot(document.getElementById('root')!).render(
-  <ConfigProvider locale={zhCN}>
+  <ConfigProvider locale={zhCN} componentSize="small">
     <Provider store={store}>
       <style>{` body { background-color: ${platform === 'darwin' ? 'initial' : 'var(--inner-color)'} }`}</style>
       <App />

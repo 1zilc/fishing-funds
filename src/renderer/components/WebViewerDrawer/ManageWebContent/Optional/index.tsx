@@ -1,7 +1,7 @@
 import React, { useMemo, useState, useRef } from 'react';
 
 import { ReactSortable } from 'react-sortablejs';
-import { Input, InputRef } from 'antd';
+import { Input, InputRef, Button } from 'antd';
 import clsx from 'clsx';
 
 import PureCard from '@/components/Card/PureCard';
@@ -103,15 +103,17 @@ const Optional: React.FC<OptionalProps> = () => {
       ) : (
         <Empty text="暂无h5网站收藏~" />
       )}
-      <div
-        className={styles.add}
+      <Button
+        className="bottom-button"
+        shape="circle"
+        type="primary"
+        size="large"
+        icon={<SearchIcon />}
         onClick={(e) => {
           searchRef.current?.focus();
           e.stopPropagation();
         }}
-      >
-        <SearchIcon />
-      </div>
+      />
     </div>
   );
 };
