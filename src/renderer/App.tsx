@@ -1,7 +1,7 @@
 import React, { Suspense } from 'react';
-import { ConfigProvider, theme } from 'antd';
 import { MemoryRouter as Router, Routes, Route } from 'react-router-dom';
 import LoadingScreen from '@/components/LoadingScreen';
+import ThemeProvider from '@/components/ThemeProvider';
 import { useAppSelector, useThemeColor } from '@/utils/hooks';
 import * as CONST from '@/constants';
 import * as Utils from '@/utils';
@@ -20,18 +20,18 @@ const WebViewerPage = React.lazy(() => import('@/components/WebViewerDrawer/WebV
 const params = Utils.ParseSearchParams();
 
 const App: React.FC<Record<string, unknown>> = () => {
-  const darkMode = useAppSelector((state) => state.setting.darkMode);
   const baseFontSizeSetting = useAppSelector((state) => state.setting.systemSetting.baseFontSizeSetting);
-  const { themeColorTypeSetting, customThemeColorSetting, originPrimaryColor } = useThemeColor();
+  const lowKeySetting = useAppSelector((state) => state.setting.systemSetting.lowKeySetting);
+  const { customThemeColorEnable, customThemeColorSetting, originPrimaryColor } = useThemeColor();
 
   return (
-    <ConfigProvider
-      theme={{
-        token: {
-          colorPrimary: themeColorTypeSetting ? customThemeColorSetting : originPrimaryColor,
-          fontSizeBase: baseFontSizeSetting,
-        },
-        algorithm: darkMode ? [theme.darkAlgorithm] : [],
+    <ThemeProvider
+      config={{
+        baseFontSize: baseFontSizeSetting,
+        lowKey: lowKeySetting,
+        customThemeColorEnable,
+        customThemeColor: customThemeColorSetting,
+        originPrimaryColor,
       }}
     >
       <Router>
@@ -60,7 +60,7 @@ const App: React.FC<Record<string, unknown>> = () => {
           </Routes>
         </Suspense>
       </Router>
-    </ConfigProvider>
+    </ThemeProvider>
   );
 };
 
