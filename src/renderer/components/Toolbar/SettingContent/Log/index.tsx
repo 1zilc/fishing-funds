@@ -9,12 +9,17 @@ import styles from './index.module.scss';
 
 interface LogProps {}
 
-const { version } = window.contextModules.process;
+const { app } = window.contextModules.electron;
 
 const Log: React.FC<LogProps> = () => {
   const { data: logs = [], loading } = useRequest(Services.Log.GetLog, {
     cacheKey: Utils.GenerateRequestKey('Log.GetLog'),
     staleTime: 1000 * 60 * 10,
+  });
+
+  const { data: version = '' } = useRequest(app.getVersion, {
+    cacheKey: 'get-version',
+    cacheTime: -1,
   });
 
   return (
