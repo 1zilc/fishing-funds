@@ -24,6 +24,7 @@
   "include": ["./src/**/*"],
   "exclude": ["test", "release/app/dist", ".erb/dll"],
   "ts-node": {
+    "esm": true,
     "compilerOptions": {
       "module": "commonjs"
     }
