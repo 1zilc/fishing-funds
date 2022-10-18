@@ -16,6 +16,6 @@ export default {
   '--base-padding': '--base-color',
   '--warn-color': '--warn-color',
   '--inner-text-color': '--inner-text-color',
-  '--hover-up-color': '--hover-up-color',
-  '--hover-down-color': '--hover-down-color',
+  '--increase-bg-color': '--increase-bg-color',
+  '--reduce-bg-color': '--reduce-bg-color',
 };

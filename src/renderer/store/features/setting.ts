@@ -98,11 +98,13 @@ const settingSlice = createSlice({
     },
     syncDarkMode(state, action: PayloadAction<boolean>) {
       state.darkMode = action.payload;
+    },
+    syncVaribleColors(state) {
       state.varibleColors = Utils.GetVariblesColor();
     },
   },
 });
-export const { syncSettingAction, updateAdjustmentNotificationDateAction, syncDarkMode } = settingSlice.actions;
+export const { syncSettingAction, updateAdjustmentNotificationDateAction, syncDarkMode, syncVaribleColors } = settingSlice.actions;
 
 export const setSystemSettingAction = createAsyncThunk<void, System.Setting, AsyncThunkConfig>(
   'setting/setSystemSettingAction',
