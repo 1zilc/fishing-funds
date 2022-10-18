@@ -360,6 +360,7 @@ export function useTrayContent() {
   const fundConfigCodeMap = useAppSelector((state) => state.wallet.fundConfigCodeMap);
   const walletsConfig = useAppSelector((state) => state.wallet.config.walletConfig);
   const wallets = useAppSelector((state) => state.wallet.wallets);
+  const eyeStatus = useAppSelector((state) => state.wallet.eyeStatus);
   const { funds } = useAppSelector((state) => state.wallet.currentWallet);
   const calcResult = Helpers.Fund.CalcFunds(funds, fundConfigCodeMap);
 
@@ -376,11 +377,11 @@ export function useTrayContent() {
     return { sygz, gssyl: allResult.zje ? NP.times(NP.divide(sygz, allResult.zje), 100) : 0 };
   }, [wallets, walletsConfig]);
 
-  useEffect(() => {
+  const trayContent = useMemo(() => {
     const group = [trayContentSetting].flat();
-    const content = group
-      .map((trayContent: Enums.TrayContent) => {
-        switch (trayContent) {
+    let content = group
+      .map((trayContentType: Enums.TrayContent) => {
+        switch (trayContentType) {
           case Enums.TrayContent.Sy:
             return `${Utils.Yang(calcResult.sygz.toFixed(2))}`;
           case Enums.TrayContent.Syl:
@@ -394,9 +395,15 @@ export function useTrayContent() {
         }
       })
       .join(' │ ');
-
-    ipcRenderer.invoke('set-tray-content', content ? ` ${content}` : content);
+    content = content ? ` ${content}` : content;
+    return content;
   }, [trayContentSetting, calcResult, allCalcResult]);
+
+  useEffect(() => {
+    const content = eyeStatus === Enums.EyeStatus.Close ? '' : trayContent;
+
+    ipcRenderer.invoke('set-tray-content', content);
+  }, [trayContent, eyeStatus]);
 }
 
 export function useUpdateContextMenuWalletsState() {

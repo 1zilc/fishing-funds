@@ -24,13 +24,14 @@ import got from 'got';
 import windowStateKeeper from 'electron-window-state';
 import { Menubar } from 'menubar';
 import AppUpdater from './autoUpdater';
-import { appIcon, generateIconFromDataURL } from './icon';
+import { appIcon } from './icon';
 import { createTray } from './tray';
-import { createMenubar, buildContextMenu } from './menubar';
+import { createMenubar } from './menubar';
 import TouchBarManager from './touchbar';
 import LocalStore from './store';
 import { createChildWindow } from './childWindow';
 import Proxy from './proxy';
+import ContextMenuManager from './contextMenu';
 import { saveImage, saveJsonToCsv, saveString, readFile } from './io';
 import { lockSingleInstance, checkEnvTool, sendMessageToRenderer, setNativeTheme, getOtherWindows } from './util';
 import * as Enums from '../renderer/utils/enums';
@@ -57,7 +58,7 @@ function main() {
   mb = createMenubar({ tray, mainWindowState });
   const appUpdater = new AppUpdater({ icon: appIcon, mb });
   const touchBarManager = new TouchBarManager([], mb);
-  let contextMenu = buildContextMenu({ mb, appUpdater }, []);
+  const contextMenuManager = new ContextMenuManager({ mb, updater: appUpdater });
   let activeHotkeys = '';
   let windowIds: number[] = [];
   const defaultTheme = localStore.get('config', 'SYSTEM_SETTING.systemThemeSetting', Enums.SystemThemeType.Auto) as Enums.SystemThemeType;
@@ -132,12 +133,7 @@ function main() {
     return event.sender.session.setProxy(config);
   });
   ipcMain.handle('update-tray-context-menu-wallets', async (event, config) => {
-    const menus = config.map((item: any) => ({
-      ...item,
-      icon: generateIconFromDataURL(item.dataURL),
-      click: () => sendMessageToRenderer(mb.window, 'change-current-wallet-code', item.id),
-    }));
-    contextMenu = buildContextMenu({ mb, appUpdater }, menus);
+    contextMenuManager.updateWalletMenu(config);
   });
   ipcMain.handle('get-app-icon', async (event, config) => {
     return appIcon.toDataURL();
@@ -157,6 +153,7 @@ function main() {
   });
   ipcMain.handle('update-touchbar-eye-status', async (event, config) => {
     touchBarManager.updateEysStatusItems(config);
+    contextMenuManager.updateEyeMenu(config);
   });
   // 快捷键
   ipcMain.handle('set-hotkey', async (event, keys: string) => {
@@ -251,7 +248,7 @@ function main() {
     setNativeTheme(defaultTheme);
     // 右键菜单
     tray.on('right-click', () => {
-      mb.tray.popUpContextMenu(contextMenu);
+      mb.tray.popUpContextMenu(contextMenuManager.buildContextMenu);
     });
     // 隐藏菜单栏
     Menu.setApplicationMenu(null);
