@@ -1,17 +1,18 @@
 import clsx from 'clsx';
-import React, { useState } from 'react';
+import React from 'react';
 import { Timeline, Spin } from 'antd';
 import { useRequest } from 'ahooks';
+import { compareVersions } from 'compare-versions';
 
+import { useAppSelector } from '@/utils/hooks';
 import * as Services from '@/services';
 import * as Utils from '@/utils';
 import styles from './index.module.scss';
 
 interface LogProps {}
 
-const { version } = window.contextModules.process;
-
 const Log: React.FC<LogProps> = () => {
+  const currentVersion = useAppSelector((state) => state.updater.currentVersion);
   const { data: logs = [], loading } = useRequest(Services.Log.GetLog, {
     cacheKey: Utils.GenerateRequestKey('Log.GetLog'),
     staleTime: 1000 * 60 * 10,
@@ -21,22 +22,22 @@ const Log: React.FC<LogProps> = () => {
     <Spin spinning={loading}>
       <div className={clsx(styles.content)}>
         <Timeline>
-          {logs.map((log) => (
-            <Timeline.Item
-              key={log.version}
-              color={log.version.slice(1) === version ? 'blue' : log.version.slice(1) > version ? 'green' : 'gray'}
-            >
-              <div className={clsx(styles.item, styles.title)}>
-                <div>{log.version}</div>
-                <div>{log.date}</div>
-              </div>
-              {log.contents.map((content, index) => (
-                <div className={styles.item} key={index}>
-                  {content}
+          {logs.map((log) => {
+            const compare = compareVersions(log.version.slice(1), currentVersion);
+            return (
+              <Timeline.Item key={log.version} color={compare === 0 ? 'blue' : compare > 1 ? 'green' : 'gray'}>
+                <div className={clsx(styles.item, styles.title)}>
+                  <div>{log.version}</div>
+                  <div>{log.date}</div>
                 </div>
-              ))}
-            </Timeline.Item>
-          ))}
+                {log.contents.map((content, index) => (
+                  <div className={styles.item} key={index}>
+                    {content}
+                  </div>
+                ))}
+              </Timeline.Item>
+            );
+          })}
         </Timeline>
       </div>
     </Spin>

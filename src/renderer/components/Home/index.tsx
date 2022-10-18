@@ -10,7 +10,6 @@ import SortBar from '@/components/SortBar';
 import TabsBar from '@/components/TabsBar';
 import Collect from '@/components/Collect';
 import GroupTab from '@/components/GroupTab';
-import GlobalStyles from '@/components/GlobalStyles';
 import WebViewerDrawer from '@/components/WebViewerDrawer';
 import { stockTypesConfig } from '@/components/Toolbar/AppCenterContent/StockSearch';
 
@@ -204,7 +203,6 @@ const Body = () => {
 const Home: React.FC<HomeProps> = () => {
   return (
     <div className={clsx(styles.layout)}>
-      <GlobalStyles />
       <Header>
         <Wallet />
         <SortBar />

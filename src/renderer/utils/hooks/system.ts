@@ -1,5 +1,6 @@
 import { useLayoutEffect, useState, useEffect, useMemo } from 'react';
 import { useInterval } from 'ahooks';
+import { theme } from 'antd';
 import { AnyAction } from 'redux';
 import dayjs from 'dayjs';
 import NP from 'number-precision';
@@ -8,7 +9,7 @@ import { updateAvaliableAction } from '@/store/features/updater';
 import { setFundConfigAction } from '@/store/features/fund';
 import { syncTabsActiveKeyAction } from '@/store/features/tabs';
 import { changeCurrentWalletCodeAction, toggleEyeStatusAction } from '@/store/features/wallet';
-import { updateAdjustmentNotificationDateAction, syncDarkMode, saveSyncConfigAction } from '@/store/features/setting';
+import { updateAdjustmentNotificationDateAction, syncDarkMode, saveSyncConfigAction, syncVaribleColors } from '@/store/features/setting';
 
 import {
   useWorkDayTimeToDo,
@@ -39,6 +40,7 @@ import { useLoadFunds } from './utils';
 const { dialog, ipcRenderer, clipboard, app } = window.contextModules.electron;
 const { saveString, readFile } = window.contextModules.io;
 const { encryptFF, decryptFF } = window.contextModules.coding;
+const { useToken } = theme;
 
 export function useUpdater() {
   const dispatch = useAppDispatch();
@@ -292,6 +294,7 @@ export function useBootStrap() {
 
 export function useMappingLocalToSystemSetting() {
   const dispatch = useAppDispatch();
+  const { token } = useToken();
   const {
     systemThemeSetting,
     autoStartSetting,
@@ -345,6 +348,11 @@ export function useMappingLocalToSystemSetting() {
   useEffect(() => {
     ipcRenderer.invoke('set-hotkey', hotkeySetting);
   }, [hotkeySetting]);
+  useEffect(() => {
+    requestAnimationFrame(() => {
+      dispatch(syncVaribleColors());
+    });
+  }, [token]);
 }
 
 export function useTrayContent() {

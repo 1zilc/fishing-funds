@@ -1,5 +1,5 @@
-import React, { useLayoutEffect, useState, useEffect, useRef, useMemo, useDeferredValue } from 'react';
-import { useInterval, useBoolean, useThrottleFn, useSize, useMemoizedFn, useEventListener } from 'ahooks';
+import React, { useLayoutEffect, useState, useEffect, useRef, useMemo } from 'react';
+import { useInterval, useBoolean, useThrottleFn, useSize, useMemoizedFn, useEventListener, useCreation } from 'ahooks';
 import { useDispatch, useSelector, TypedUseSelectorHook } from 'react-redux';
 import dayjs from 'dayjs';
 import * as echarts from 'echarts';
@@ -653,7 +653,6 @@ export function useTabsFreshFn<T>(key: Enums.TabKeyType, fn: T) {
 export function useInputShortcut(initial: string) {
   const [hotkey, setHotkey] = useState(initial);
   const [isInput, { setTrue, setFalse }] = useBoolean(false);
-  const inputRef = useRef(null);
 
   useEventListener('keydown', (e) => {
     if (isInput) {
@@ -663,16 +662,30 @@ export function useInputShortcut(initial: string) {
       setHotkey(hotkeys.join(' + '));
     }
   });
-  useEventListener('focus', setTrue, { target: inputRef.current });
-  useEventListener('blur', setFalse, { target: inputRef.current });
 
   function reset() {
     setHotkey('');
   }
 
   return {
-    inputRef,
     hotkey,
     reset,
+    onBlur: setFalse,
+    onFocus: setTrue,
+  };
+}
+
+export function useThemeColor() {
+  const darkMode = useAppSelector((state) => state.setting.darkMode);
+  const themeColorTypeSetting = useAppSelector((state) => state.setting.systemSetting.themeColorTypeSetting);
+  const customThemeColorSetting = useAppSelector((state) => state.setting.systemSetting.customThemeColorSetting);
+  const originPrimaryColor = useCreation(() => Utils.GetStylePropertyValue('--origin-primary-color'), [darkMode]);
+  const customThemeColorEnable = themeColorTypeSetting === Enums.ThemeColorType.Custom;
+
+  return {
+    themeColorTypeSetting,
+    customThemeColorSetting,
+    originPrimaryColor,
+    customThemeColorEnable,
   };
 }

@@ -1,26 +1,28 @@
 .content {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  width: 100%;
+  position: relative;
   height: 100vh;
-  visibility: visible;
   z-index: 1000;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
   color: var(--main-text-color);
-  transform: translateY(0);
-
-  a {
-    position: absolute;
-    bottom: var(--base-padding);
-    color: var(--main-text-color);
-  }
-
-  i {
-    color: var(--main-text-color);
-  }
+}
+.icon {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+.name {
+  font-size: 24px;
+  font-weight: bold;
+}
+.link {
+  position: absolute;
+  bottom: var(--base-padding);
+  font-size: 12px;
+}
+.spin {
+  position: absolute;
+  bottom: 40px;
 }

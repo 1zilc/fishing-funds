@@ -16,10 +16,14 @@ const LoadingScreen: React.FC<LoadingScreenProps> = (props) => {
 
   return (
     <div className={clsx(styles.content)}>
-      <Logo />
-      <p>Fishing Funds</p>
-      <Spin spinning={loading} size="small" tip={text} style={{ color: 'var(--main-text-color)' }} />
-      <a onClick={() => shell.openExternal('https://ff.1zilc.top')}>ff.1zilc.top</a>
+      <div className={styles.icon}>
+        <Logo size={96} />
+        <div className={styles.name}>Fishing Funds</div>
+      </div>
+      <Spin className={styles.spin} spinning={loading} size="small" tip={text} />
+      <a className={styles.link} onClick={() => shell.openExternal('https://ff.1zilc.top')}>
+        ff.1zilc.top
+      </a>
     </div>
   );
 };

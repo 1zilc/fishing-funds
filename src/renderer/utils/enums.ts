@@ -135,10 +135,6 @@ export enum SystemThemeType {
   Light,
   Dark,
 }
-export enum FundFlowType {
-  RealTime,
-  AfterTime,
-}
 
 export enum ZindexType {
   SS,
@@ -233,4 +229,8 @@ export enum ProxyType {
   System,
   Http,
   Socks,
+}
+export enum ThemeColorType {
+  Default,
+  Custom,
 }

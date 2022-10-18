@@ -1,6 +1,7 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 export interface UpdaderState {
+  currentVersion: string;
   updateInfo: {
     files: [];
     path: string; // 'Fishing-Funds-2.1.2-mac.zip';
@@ -13,6 +14,7 @@ export interface UpdaderState {
 }
 
 const initialState: UpdaderState = {
+  currentVersion: '',
   updateInfo: {
     files: [],
     path: '',
@@ -31,9 +33,12 @@ const uptaderSlice = createSlice({
     updateAvaliableAction(state, action) {
       state.updateInfo = action.payload;
     },
+    syncVersion(state, action: PayloadAction<string>) {
+      state.currentVersion = action.payload;
+    },
   },
 });
 
-export const { updateAvaliableAction } = uptaderSlice.actions;
+export const { updateAvaliableAction, syncVersion } = uptaderSlice.actions;
 
 export default uptaderSlice.reducer;

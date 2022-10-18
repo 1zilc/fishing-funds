@@ -57,7 +57,7 @@ const LeekTrend: React.FC<LeekTrendProps> = () => {
                     name: '看多',
                     yAxis: 0,
                     itemStyle: {
-                      color: varibleColors['--hover-up-color'],
+                      color: varibleColors['--increase-bg-color'],
                     },
                     label: {
                       position: 'insideLeft',
@@ -73,7 +73,7 @@ const LeekTrend: React.FC<LeekTrendProps> = () => {
                     name: '看空',
                     yAxis: 0,
                     itemStyle: {
-                      color: varibleColors['--hover-down-color'],
+                      color: varibleColors['--reduce-bg-color'],
                     },
                     label: {
                       position: 'insideLeft',

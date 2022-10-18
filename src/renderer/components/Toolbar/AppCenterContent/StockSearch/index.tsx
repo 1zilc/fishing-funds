@@ -1,7 +1,7 @@
 import React from 'react';
 import clsx from 'clsx';
 
-import { Tabs, message } from 'antd';
+import { Tabs, message, Button } from 'antd';
 import { useMemoizedFn } from 'ahooks';
 
 import CustomDrawer from '@/components/CustomDrawer';
@@ -80,21 +80,16 @@ const StockSearch: React.FC<StockSearchProps> = (props) => {
                       </div>
                       <div className={styles.code}>{Code}</div>
                     </div>
-                    {codeMap[secid] ? (
-                      <button className={styles.added} disabled>
-                        已添加
-                      </button>
-                    ) : (
-                      <button
-                        className={styles.select}
-                        onClick={(e) => {
-                          onAdd(secid, Type);
-                          e.stopPropagation();
-                        }}
-                      >
-                        自选
-                      </button>
-                    )}
+                    <Button
+                      type="primary"
+                      disabled={!!codeMap[secid]}
+                      onClick={(e) => {
+                        onAdd(secid, Type);
+                        e.stopPropagation();
+                      }}
+                    >
+                      {!!codeMap[secid] ? '已添加' : '自选'}
+                    </Button>
                   </div>
                 );
               })}

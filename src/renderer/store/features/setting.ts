@@ -22,6 +22,8 @@ export type SettingState = {
 export const defaultSystemSetting: System.Setting = {
   fundApiTypeSetting: Enums.FundApiType.Eastmoney,
 
+  themeColorTypeSetting: Enums.ThemeColorType.Default,
+  customThemeColorSetting: '',
   conciseSetting: false,
   lowKeySetting: false,
   baseFontSizeSetting: 12,
@@ -96,11 +98,13 @@ const settingSlice = createSlice({
     },
     syncDarkMode(state, action: PayloadAction<boolean>) {
       state.darkMode = action.payload;
+    },
+    syncVaribleColors(state) {
       state.varibleColors = Utils.GetVariblesColor();
     },
   },
 });
-export const { syncSettingAction, updateAdjustmentNotificationDateAction, syncDarkMode } = settingSlice.actions;
+export const { syncSettingAction, updateAdjustmentNotificationDateAction, syncDarkMode, syncVaribleColors } = settingSlice.actions;
 
 export const setSystemSettingAction = createAsyncThunk<void, System.Setting, AsyncThunkConfig>(
   'setting/setSystemSettingAction',

@@ -16,13 +16,14 @@ import { setCoinConfigAction, setRemoteCoinsAction } from '@/store/features/coin
 import { syncSortModeAction, setViewModeAction, initialState as sortInitialState } from '@/store/features/sort';
 import { syncTabsActiveKeyAction } from '@/store/features/tabs';
 import { setWebConfigAction, defaultWebConfig } from '@/store/features/web';
+import { syncVersion } from '@/store/features/updater';
 import { useDrawer, useAppDispatch } from '@/utils/hooks';
 import { syncFavoriteQuotationMapAction } from '@/store/features/quotation';
 import * as CONST from '@/constants';
 import * as Utils from '@/utils';
 import * as Enums from '@/utils/enums';
 
-const { ipcRenderer } = window.contextModules.electron;
+const { ipcRenderer, app } = window.contextModules.electron;
 const electronStore = window.contextModules.electronStore;
 
 const params = Utils.ParseSearchParams();
@@ -77,12 +78,22 @@ const InitPage = () => {
     setLoading('清理冗余配置...');
     await checkRedundanceStorage();
 
+    setLoading('加载中...');
+    const version = await app.getVersion();
     const allConfigStorage = await electronStore.all('config');
     const allStateStorage = await electronStore.all('state');
     const allCacheStorage = await electronStore.all('cache');
+
+    /**
+     * 版本号
+     */
+    dispatch(syncVersion(version));
     /**
      * config部分
      */
+    // 系统设置加载完成
+    dispatch(setSystemSettingAction(allConfigStorage[CONST.STORAGE.SYSTEM_SETTING] || defaultSystemSetting));
+    dispatch(updateAdjustmentNotificationDateAction(allConfigStorage[CONST.STORAGE.ADJUSTMENT_NOTIFICATION_DATE] || ''));
     //web配置加载完成
     dispatch(setZindexConfigAction(allConfigStorage[CONST.STORAGE.ZINDEX_SETTING] || defaultZindexConfig));
     // 关注板块配置加载完成
@@ -93,9 +104,6 @@ const InitPage = () => {
     dispatch(setCoinConfigAction(allConfigStorage[CONST.STORAGE.COIN_SETTING] || []));
     // web配置加载完成
     dispatch(setWebConfigAction(allConfigStorage[CONST.STORAGE.WEB_SETTING] || defaultWebConfig));
-    // 系统设置加载完成
-    dispatch(setSystemSettingAction(allConfigStorage[CONST.STORAGE.SYSTEM_SETTING] || defaultSystemSetting));
-    dispatch(updateAdjustmentNotificationDateAction(allConfigStorage[CONST.STORAGE.ADJUSTMENT_NOTIFICATION_DATE] || ''));
     // 钱包配置加载完成
     dispatch(setWalletConfigAction(allConfigStorage[CONST.STORAGE.WALLET_SETTING] || [defaultWallet]));
     dispatch(changeCurrentWalletCodeAction(allConfigStorage[CONST.STORAGE.CURRENT_WALLET_CODE] || defaultWallet.code));

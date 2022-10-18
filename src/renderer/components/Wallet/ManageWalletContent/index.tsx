@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 
 import { ReactSortable } from 'react-sortablejs';
+import { Button } from 'antd';
 
 import AddIcon from '@/static/icon/add.svg';
 import Empty from '@/components/Empty';
@@ -73,15 +74,17 @@ const ManageWalletContent: React.FC<ManageWalletContentProps> = (props) => {
           <Empty text="暂无钱包~" />
         )}
       </div>
-      <div
-        className={styles.add}
+      <Button
+        className="bottom-button"
+        shape="circle"
+        type="primary"
+        size="large"
+        icon={<AddIcon />}
         onClick={(e) => {
           setAddDrawer(null);
           e.stopPropagation();
         }}
-      >
-        <AddIcon />
-      </div>
+      />
       <CustomDrawer show={showAddDrawer}>
         <AddWalletContent onClose={closeAddDrawer} onEnter={closeAddDrawer} />
       </CustomDrawer>
