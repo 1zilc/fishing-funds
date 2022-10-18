@@ -4,7 +4,6 @@ import { InputNumber, Radio, Badge, Switch, Slider, TimePicker, Input, Tabs, Sel
 import dayjs from 'dayjs';
 import { ReactSortable } from 'react-sortablejs';
 import { HuePicker } from 'react-color';
-import { useRequest } from 'ahooks';
 
 import PureCard from '@/components/Card/PureCard';
 import StandCard from '@/components/Card/StandCard';
@@ -286,8 +285,9 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
   }
 
   return (
-    <CustomDrawerContent title="设置" enterText="保存" onClose={props.onClose} onEnter={onSave}>
+    <CustomDrawerContent classNames={styles.wrapper} title="设置" enterText="保存" onClose={props.onClose} onEnter={onSave}>
       <ThemeProvider
+        target={`.${styles.wrapper}`}
         config={{
           lowKey,
           baseFontSize,

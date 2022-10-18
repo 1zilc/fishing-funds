@@ -97,7 +97,7 @@ export function JudgeAdjustmentNotificationTime(timestamp: number, adjustmentNot
 }
 
 export function GetStylePropertyValue(varible: string) {
-  const value = window.getComputedStyle(document.body).getPropertyValue(varible);
+  const value = window.getComputedStyle(document.documentElement).getPropertyValue(varible);
   return (value || '').trim();
 }
 

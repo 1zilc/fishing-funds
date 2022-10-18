@@ -1,18 +1,18 @@
 @media (prefers-color-scheme: light) {
-  body {
+  :root {
     --origin-primary-color: #1677ff;
     --blur-color: rgba(255, 255, 255, 0.72);
   }
 }
 
 @media (prefers-color-scheme: dark) {
-  body {
+  :root {
     --origin-primary-color: #3086ff;
     --blur-color: rgba(29, 29, 31, 0.72);
   }
 }
 
-body {
+:root {
   --base-font-size: 12;
   --base-padding: 10px;
   --base-radius: 10px;

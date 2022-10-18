@@ -1,4 +1,5 @@
 import React, { PropsWithChildren } from 'react';
+import clsx from 'clsx';
 import { Button } from 'antd';
 import { useKeyPress } from 'ahooks';
 import Collect from '@/components/Collect';
@@ -10,6 +11,7 @@ export interface CustomDrawerContentProps {
   title: string;
   closeText?: string;
   enterText?: string;
+  classNames?: string;
 }
 
 const CustomDrawer: React.FC<PropsWithChildren<CustomDrawerContentProps>> = ({
@@ -19,6 +21,7 @@ const CustomDrawer: React.FC<PropsWithChildren<CustomDrawerContentProps>> = ({
   closeText,
   enterText,
   children,
+  classNames,
 }) => {
   useKeyPress(['Escape'], (e) => {
     switch (e.key) {
@@ -43,7 +46,7 @@ const CustomDrawer: React.FC<PropsWithChildren<CustomDrawerContentProps>> = ({
           {enterText || '确定'}
         </Button>
       </div>
-      <div className={styles.body}>{children}</div>
+      <div className={clsx(styles.body, classNames)}>{children}</div>
       <Collect title={title} />
     </div>
   );
