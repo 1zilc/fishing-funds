@@ -20,6 +20,7 @@ const WebViewerPage = React.lazy(() => import('@/components/WebViewerDrawer/WebV
 const params = Utils.ParseSearchParams();
 
 const App: React.FC<Record<string, unknown>> = () => {
+  const darkMode = useAppSelector((state) => state.setting.darkMode);
   const baseFontSizeSetting = useAppSelector((state) => state.setting.systemSetting.baseFontSizeSetting);
   const lowKeySetting = useAppSelector((state) => state.setting.systemSetting.lowKeySetting);
   const { customThemeColorEnable, customThemeColorSetting, originPrimaryColor } = useThemeColor();
@@ -27,6 +28,7 @@ const App: React.FC<Record<string, unknown>> = () => {
   return (
     <ThemeProvider
       config={{
+        darkMode,
         baseFontSize: baseFontSizeSetting,
         lowKey: lowKeySetting,
         primaryColor: customThemeColorEnable ? customThemeColorSetting || originPrimaryColor : originPrimaryColor,

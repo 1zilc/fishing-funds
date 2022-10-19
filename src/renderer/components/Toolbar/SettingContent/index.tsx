@@ -32,6 +32,7 @@ import * as Utils from '@/utils';
 import styles from './index.module.scss';
 
 export interface SettingContentProps {
+  themeWrapperClass: string;
   onEnter: () => void;
   onClose: () => void;
 }
@@ -175,6 +176,7 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
     syncConfigSetting,
     syncConfigPathSetting,
   } = useAppSelector((state) => state.setting.systemSetting);
+  const darkMode = useAppSelector((state) => state.setting.darkMode);
   const { updateInfo, currentVersion } = useAppSelector((state) => state.updater);
   const { originPrimaryColor } = useThemeColor();
   const isUpdateAvaliable = !!updateInfo.version;
@@ -213,6 +215,7 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
 
   const proxyModeEnable = proxyType === Enums.ProxyType.Http || proxyType === Enums.ProxyType.Socks;
   const customThemeColorEnable = themeColorType === Enums.ThemeColorType.Custom;
+  const darkModeEnable = systemTheme === Enums.SystemThemeType.Dark;
 
   async function onSave() {
     await dispatch(
@@ -285,14 +288,16 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
   }
 
   return (
-    <CustomDrawerContent title="设置" enterText="保存" onClose={props.onClose} onEnter={onSave}>
-      <ThemeProvider
-        config={{
-          lowKey,
-          baseFontSize,
-          primaryColor: customThemeColorEnable ? customThemeColor || originPrimaryColor : originPrimaryColor,
-        }}
-      >
+    <ThemeProvider
+      target={`.${props.themeWrapperClass}`}
+      config={{
+        darkMode: systemTheme === Enums.SystemThemeType.Auto ? darkMode : darkModeEnable,
+        lowKey,
+        baseFontSize,
+        primaryColor: customThemeColorEnable ? customThemeColor || originPrimaryColor : originPrimaryColor,
+      }}
+    >
+      <CustomDrawerContent title="设置" enterText="保存" onClose={props.onClose} onEnter={onSave}>
         <PureCard
           className={clsx(
             styles.logo,
@@ -739,8 +744,8 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
         <div className={styles.version}>
           <div>Based on Electron v{electron}</div>
         </div>
-      </ThemeProvider>
-    </CustomDrawerContent>
+      </CustomDrawerContent>
+    </ThemeProvider>
   );
 };
 

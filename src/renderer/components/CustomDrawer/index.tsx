@@ -7,12 +7,15 @@ export interface CustomDrawerProps {
   show: boolean;
   [index: string]: any;
   cached?: boolean;
+  classNames?: string;
 }
-const CustomDrawer: React.FC<PropsWithChildren<CustomDrawerProps>> = ({ show, children, cached, ...config }) => {
+const CustomDrawer: React.FC<PropsWithChildren<CustomDrawerProps>> = ({ show, children, cached, classNames, ...config }) => {
   const [drawerOpened, setDrawerOpened] = useState(show);
 
+  console.log(cached || show || drawerOpened);
   return (
     <Drawer
+      className={classNames}
       open={show}
       closable={false}
       placement="bottom"

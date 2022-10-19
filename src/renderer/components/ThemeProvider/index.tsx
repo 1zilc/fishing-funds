@@ -1,19 +1,21 @@
 import { PropsWithChildren } from 'react';
 import { ConfigProvider, theme } from 'antd';
-import { useAppSelector } from '@/utils/hooks';
 
 export interface ThemeProviderProps {
   target?: string;
   config: {
+    darkMode: boolean;
     lowKey: boolean;
     baseFontSize: number;
     primaryColor: string;
   };
 }
-const { platform } = window.contextModules.process;
-const { useToken } = theme;
+export type StylesProps = ThemeProviderProps;
 
-const Styles: React.FC<PropsWithChildren<ThemeProviderProps>> = (props) => {
+const { platform } = window.contextModules.process;
+
+const Styles: React.FC<StylesProps> = (props) => {
+  const { useToken } = theme;
   const { config, target } = props;
   const { token } = useToken();
 
@@ -45,6 +47,8 @@ const Styles: React.FC<PropsWithChildren<ThemeProviderProps>> = (props) => {
             --cancel-color: ${token.colorFillSecondary};
             --cancel-text-color: ${token.colorTextSecondary};
             --reverse-text-color: #888;
+            --blur-color: ${config.darkMode ? 'rgba(29, 29, 31, 0.72)' : 'rgba(255, 255, 255, 0.72)'};
+            --origin-primary-color: ${config.darkMode ? '#1677ff' : '#3086ff'};
       }`}
     </style>
   );
@@ -52,7 +56,6 @@ const Styles: React.FC<PropsWithChildren<ThemeProviderProps>> = (props) => {
 
 const ThemeProvider: React.FC<PropsWithChildren<ThemeProviderProps>> = (props) => {
   const { config, target } = props;
-  const darkMode = useAppSelector((state) => state.setting.darkMode);
 
   return (
     <ConfigProvider
@@ -64,7 +67,7 @@ const ThemeProvider: React.FC<PropsWithChildren<ThemeProviderProps>> = (props) =
           colorWarning: '#ff8f1f',
           colorError: '#ff3141',
         },
-        algorithm: darkMode ? [theme.darkAlgorithm] : [],
+        algorithm: config.darkMode ? [theme.darkAlgorithm] : [],
       }}
       autoInsertSpaceInButton={false}
     >

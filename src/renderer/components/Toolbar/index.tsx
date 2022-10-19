@@ -30,7 +30,8 @@ const ToolBar: React.FC<ToolBarProps> = () => {
   const freshStocks = useFreshStocks(CONST.DEFAULT.FRESH_BUTTON_THROTTLE_DELAY);
   const freshCoins = useFreshCoins(CONST.DEFAULT.FRESH_BUTTON_THROTTLE_DELAY);
 
-  const [showSettingDrawer, { setTrue: openSettingDrawer, setFalse: closeSettingDrawer, toggle: ToggleSettingDrawer }] = useBoolean(false);
+  const [showSettingContent, { setTrue: openSettingContent, setFalse: closeSettingContent, toggle: ToggleSettingContent }] =
+    useBoolean(false);
   const [showAppCenterDrawer, { setTrue: openAppCenterDrawer, setFalse: closeAppCenterDrawer, toggle: ToggleAppCenterDrawer }] =
     useBoolean(false);
 
@@ -69,7 +70,7 @@ const ToolBar: React.FC<ToolBarProps> = () => {
       <AppsIcon style={{ ...iconSize }} onClick={openAppCenterDrawer} />
       <RefreshIcon style={{ ...iconSize }} onClick={fresh} />
       <Badge dot={!!updateInfo.version}>
-        <SettingIcon style={{ ...iconSize }} onClick={openSettingDrawer} />
+        <SettingIcon style={{ ...iconSize }} onClick={openSettingContent} />
       </Badge>
       <CustomDrawer show={showAppCenterDrawer}>
         <AppCenterContent
@@ -80,12 +81,13 @@ const ToolBar: React.FC<ToolBarProps> = () => {
           }}
         />
       </CustomDrawer>
-      <CustomDrawer show={showSettingDrawer}>
+      <CustomDrawer classNames={styles.themeWrapper} show={showSettingContent}>
         <SettingContent
-          onClose={closeSettingDrawer}
+          themeWrapperClass={styles.themeWrapper}
+          onClose={closeSettingContent}
           onEnter={() => {
             freshAll();
-            closeSettingDrawer();
+            closeSettingContent();
           }}
         />
       </CustomDrawer>
