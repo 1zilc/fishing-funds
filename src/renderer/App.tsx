@@ -25,6 +25,7 @@ const App: React.FC<Record<string, unknown>> = () => {
   const lowKeySetting = useAppSelector((state) => state.setting.systemSetting.lowKeySetting);
   const { customThemeColorEnable, customThemeColorSetting, originPrimaryColor } = useThemeColor();
 
+  console.log(customThemeColorEnable, customThemeColorSetting, originPrimaryColor);
   return (
     <ThemeProvider
       config={{

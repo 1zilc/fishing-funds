@@ -671,11 +671,15 @@ export function useInputShortcut(initial: string) {
 }
 
 export function useThemeColor() {
+  const [originPrimaryColor, setOriginPrimaryColor] = useState('');
   const darkMode = useAppSelector((state) => state.setting.darkMode);
   const themeColorTypeSetting = useAppSelector((state) => state.setting.systemSetting.themeColorTypeSetting);
   const customThemeColorSetting = useAppSelector((state) => state.setting.systemSetting.customThemeColorSetting);
-  const originPrimaryColor = useCreation(() => Utils.GetStylePropertyValue('--origin-primary-color'), [darkMode]);
   const customThemeColorEnable = themeColorTypeSetting === Enums.ThemeColorType.Custom;
+
+  useLayoutEffect(() => {
+    setOriginPrimaryColor(Utils.GetStylePropertyValue('--origin-primary-color'));
+  }, [darkMode]);
 
   return {
     themeColorTypeSetting,

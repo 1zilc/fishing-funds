@@ -50,7 +50,7 @@ const Styles: React.FC<StylesProps> = (props) => {
             --cancel-text-color: ${token.colorTextSecondary};
             --reverse-text-color: #888;
             --blur-color: ${config.darkMode ? 'rgba(29, 29, 31, 0.72)' : 'rgba(255, 255, 255, 0.72)'};
-            --origin-primary-color: ${config.darkMode ? '#1677ff' : '#3086ff'};
+            --origin-primary-color: ${config.darkMode ? '#3086ff' : '#1677ff'};
       }`}
     </style>
   );
