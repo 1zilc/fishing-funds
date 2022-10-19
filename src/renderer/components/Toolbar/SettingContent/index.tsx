@@ -9,18 +9,15 @@ import PureCard from '@/components/Card/PureCard';
 import StandCard from '@/components/Card/StandCard';
 import Logo from '@/components/Logo';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
-import PayCarousel from '@/components/PayCarousel';
 import Guide from '@/components/Guide';
 import Log from '@/components/Toolbar/SettingContent/Log';
 import ThemeProvider from '@/components/ThemeProvider';
+import More from '@/components/Toolbar/SettingContent/More';
 import SettingIcon from '@/static/icon/setting.svg';
-import LinkIcon from '@/static/icon/link.svg';
 import LineCharIcon from '@/static/icon/line-chart.svg';
 import TShirtIcon from '@/static/icon/t-shirt.svg';
-import GroupIcon from '@/static/icon/group.svg';
 import NotificationIcon from '@/static/icon/notification.svg';
 import BitCoinIcon from '@/static/icon/bit-coin.svg';
-import WindowIcon from '@/static/icon/window.svg';
 import CalendarIcon from '@/static/icon/calendar.svg';
 import GlobalIcon from '@/static/icon/global.svg';
 import InboxIcon from '@/static/icon/inbox.svg';
@@ -28,7 +25,6 @@ import FolderSettingsIcon from '@/static/icon/folder-settings.svg';
 import { setSystemSettingAction, defaultSystemSetting } from '@/store/features/setting';
 import { useAppDispatch, useAppSelector, useAutoDestroySortableRef, useInputShortcut, useThemeColor } from '@/utils/hooks';
 import * as Enums from '@/utils/enums';
-import * as Utils from '@/utils';
 import styles from './index.module.scss';
 
 export interface SettingContentProps {
@@ -37,72 +33,8 @@ export interface SettingContentProps {
   onClose: () => void;
 }
 
-const { shell, app, clipboard, dialog } = window.contextModules.electron;
+const { shell, app, dialog } = window.contextModules.electron;
 const { electron } = window.contextModules.process;
-
-const linksGroup = Utils.Group(
-  [
-    {
-      url: 'mailto:dywzzjx@163.com',
-      name: '联系作者',
-    },
-    {
-      url: 'https://ff.1zilc.top',
-      name: '官方网站',
-    },
-    {
-      url: 'https://ff.1zilc.top/blog',
-      name: '更新日志',
-    },
-    {
-      url: 'https://github.com/1zilc/fishing-funds',
-      name: 'Github',
-    },
-    {
-      url: 'https://github.com/1zilc/fishing-funds/issues/new?assignees=&labels=&template=issue_template_bug.md',
-      name: 'BUG反馈',
-    },
-    {
-      url: 'https://github.com/1zilc/fishing-funds/issues/new?assignees=&labels=&template=issue_template_feature.md',
-      name: '提出建议',
-    },
-  ],
-  3
-);
-
-const recordSiteGroup = Utils.Group(
-  [
-    {
-      url: 'https://lemon.qq.com/lab/app/FishingFunds.html',
-      name: '柠檬精选',
-    },
-    {
-      url: 'https://www.electronjs.org/apps/fishing-funds',
-      name: 'Electron Apps',
-    },
-    {
-      url: 'https://www.macwk.com/soft/fishing-funds',
-      name: 'MacWk',
-    },
-    {
-      url: 'https://snapcraft.io/fishing-funds',
-      name: 'SnapStore',
-    },
-    {
-      url: 'https://formulae.brew.sh/cask/fishing-funds#default',
-      name: 'Homebrew',
-    },
-    {
-      url: 'https://github.com/jaywcjlove/awesome-mac',
-      name: 'Awesome Mac',
-    },
-    {
-      url: 'https://github.com/microsoft/winget-pkgs',
-      name: 'WinGet',
-    },
-  ],
-  3
-);
 
 export const APIOptions = [
   {
@@ -251,15 +183,6 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
 
   function onNavigate(url: string) {
     shell.openExternal(url);
-  }
-
-  function onCopyGroup(number: string) {
-    clipboard.writeText(number);
-    dialog.showMessageBox({
-      title: '复制成功',
-      type: 'info',
-      message: `已复制到粘贴板`,
-    });
   }
 
   function onBottomTabCheckChange(key: Enums.TabKeyType) {
@@ -671,68 +594,7 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
             {
               key: String(2),
               label: '更多信息',
-              children: (
-                <div className={styles.content}>
-                  <PayCarousel />
-                  <StandCard
-                    icon={<LinkIcon />}
-                    title="关于 Fishing Funds"
-                    extra={
-                      <div className={styles.guide}>
-                        <Guide list={[{ name: '☕️', text: 'buy me a coffee :)' }]} />
-                      </div>
-                    }
-                  >
-                    <div className={clsx('card-body')}>
-                      <div className={clsx(styles.describe)}>
-                        {
-                          'Fishing Funds是一款个人开发小软件，开源后深受大家的喜爱，接受了大量宝贵的改进建议，感谢大家的反馈，作者利用空闲时间开发不易，您的支持可以给本项目的开发和完善提供巨大的动力，感谢对本软件的喜爱和认可:)'
-                        }
-                      </div>
-                      {linksGroup.map((links, index) => (
-                        <div key={index} className={styles.link}>
-                          {links.map((link) => (
-                            <React.Fragment key={link.name}>
-                              <a onClick={() => onNavigate(link.url)}>{link.name}</a>
-                              <i />
-                            </React.Fragment>
-                          ))}
-                        </div>
-                      ))}
-                    </div>
-                  </StandCard>
-                  <StandCard icon={<GroupIcon />} title="讨论交流">
-                    <div className={clsx(styles.group, 'card-body')}>
-                      <section>
-                        <label>QQ群：</label>
-                        <a onClick={() => onCopyGroup('732268738')}>732268738</a>
-                      </section>
-                      <section>
-                        <label>issues：</label>
-                        <a onClick={() => onNavigate('https://github.com/1zilc/fishing-funds/issues/106')}>#106</a>
-                      </section>
-                      <section>
-                        <label>Telegram：</label>
-                        <a onClick={() => onNavigate('https://t.me/fishing_funds')}>t.me/fishing_funds</a>
-                      </section>
-                    </div>
-                  </StandCard>
-                  <StandCard icon={<WindowIcon />} title="收录网站">
-                    <div className={clsx('card-body')}>
-                      {recordSiteGroup.map((links, index) => (
-                        <div key={index} className={styles.link}>
-                          {links.map((link) => (
-                            <React.Fragment key={link.name}>
-                              <a onClick={() => onNavigate(link.url)}>{link.name}</a>
-                              <i />
-                            </React.Fragment>
-                          ))}
-                        </div>
-                      ))}
-                    </div>
-                  </StandCard>
-                </div>
-              ),
+              children: <More />,
             },
           ]}
         />
