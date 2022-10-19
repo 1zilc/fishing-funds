@@ -6,7 +6,7 @@
   }
 
   label {
-    font-size: 1rem;
+    font-size: var(--base-font-size);
     margin-bottom: 5px;
     display: block;
     font-weight: 600;
@@ -14,6 +14,6 @@
 }
 
 .none {
-  font-size: 1rem;
+  font-size: var(--base-font-size);
   color: #d65746;
 }

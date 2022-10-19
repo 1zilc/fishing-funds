@@ -3,7 +3,7 @@
 }
 
 .none {
-  font-size: 1rem;
+  font-size: var(--base-font-size);
   color: #d65746;
 }
 
@@ -16,7 +16,7 @@
 }
 
 .name {
-  font-size: 1rem;
+  font-size: var(--base-font-size);
   font-weight: 600;
   padding-right: 10px;
 
@@ -30,11 +30,11 @@
   border-radius: 3px;
   color: var(--main-text-color);
   border: 1px solid var(--main-text-color);
-  font-size: calc(10rem / var(--base-font-size));
+  font-size: calc(var(--base-font-size) * 5 / 6);
 
   white-space: nowrap;
 }
 
 .code {
-  font-size: calc(10rem / var(--base-font-size));
+  font-size: calc(var(--base-font-size) * 5 / 6);
 }

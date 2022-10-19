@@ -6,7 +6,7 @@
   }
 
   label {
-    font-size: 1rem;
+    font-size: var(--base-font-size);
     margin-bottom: 5px;
     display: block;
     font-weight: 600;
@@ -14,7 +14,7 @@
 }
 
 .none {
-  font-size: 1rem;
+  font-size: var(--base-font-size);
   color: #d65746;
 }
 
@@ -32,7 +32,7 @@
 }
 
 .name {
-  font-size: 1rem;
+  font-size: var(--base-font-size);
   font-weight: 600;
   padding-right: 10px;
 
@@ -42,5 +42,5 @@
 }
 
 .code {
-  font-size: calc(10rem / var(--base-font-size));
+  font-size: calc(var(--base-font-size) * 5 / 6);
 }

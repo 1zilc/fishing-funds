@@ -52,12 +52,12 @@
 }
 
 .name {
-  font-size: calc(14rem / var(--base-font-size));
+  font-size: calc(var(--base-font-size) * 1.2);
   font-weight: 600;
 }
 
 .code {
-  font-size: 1rem;
+  font-size: var(--base-font-size);
 }
 
 .dragItem {
@@ -76,7 +76,7 @@
 .cyfe {
   display: flex;
   align-items: center;
-  font-size: calc(11rem / var(--base-font-size));
+  font-size: calc(var(--base-font-size) * 11 / 12);
 }
 
 .wallet {
@@ -92,7 +92,7 @@
   }
 }
 .walletName {
-  font-size: calc(12rem / var(--base-font-size));
+  font-size: var(--base-font-size);
   font-weight: 600;
   position: relative;
 }

@@ -16,7 +16,7 @@
   align-items: center;
   padding: var(--base-padding);
   margin: 0 var(--base-padding) var(--base-padding) 0;
-  font-size: 1.1rem;
+  font-size: calc(var(--base-font-size) * 1.1);
   font-weight: 600;
   margin-right: var(--base-padding);
 

@@ -6,7 +6,7 @@
 .text {
   position: absolute;
   text-align: center;
-  font-size: 1rem;
+  font-size: var(--base-font-size);
   color: var(--main-text-color);
   width: 100%;
 }

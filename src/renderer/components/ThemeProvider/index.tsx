@@ -25,8 +25,10 @@ const Styles: React.FC<StylesProps> = (props) => {
             filter: ${config.lowKey && 'grayscale(90%)'};
             font-size: ${config.baseFontSize}px;
             background-color: ${platform === 'darwin' ? 'initial' : 'var(--inner-color)'};
+
             --alipay-color: #156dff;
             --wechat-color: #1fa131;
+            --base-font-size: ${token.fontSize}px;
             --primary-color: ${config.primaryColor};
             --hover-color: ${token.colorPrimaryBg};
             --selected-color: ${token.colorPrimaryBgHover};

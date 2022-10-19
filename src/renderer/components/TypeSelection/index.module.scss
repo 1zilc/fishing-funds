@@ -3,7 +3,7 @@
 }
 
 .selection {
-  font-size: calc(10rem / var(--base-font-size));
+  font-size: calc(var(--base-font-size) * 5 / 6);
   padding: 1px 6px;
   border-radius: 3px;
   cursor: pointer;

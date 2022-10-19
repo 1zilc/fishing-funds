@@ -4,7 +4,7 @@
 
 .tooltip {
   display: flex;
-  font-size: 1rem;
+  font-size: var(--base-font-size);
   flex-direction: column;
 
   .tooltipName {

@@ -5,7 +5,7 @@
 .card {
   padding: var(--base-padding);
   text-align: center;
-  font-size: calc(10rem / var(--base-font-size));
+  font-size: calc(var(--base-font-size) * 5 / 6);
 }
 .tag {
   font-size: 12px;
