@@ -18,14 +18,6 @@ export function Yang(num: string | number | undefined) {
   }
 }
 
-export function CalcWithPrefix(a: any, b: any) {
-  if (b >= a) {
-    return `+${NP.minus(b, a)}`;
-  } else {
-    return NP.minus(b, a);
-  }
-}
-
 export function DeepCopy<T>(object: T): T {
   const data: any = object;
   try {
@@ -288,18 +280,6 @@ export function GetValueMapColor(value: any = 0) {
   const color = GetValueColor(value).color;
   const rgb = Color(color).object();
   return `rgba(${rgb.r},${rgb.g},${rgb.b},${colorAlpha})`;
-}
-
-export function GbLength(str: string) {
-  let len = 0;
-  for (let i = 0; i < str.length; i++) {
-    if (str.charCodeAt(i) > 127 || str.charCodeAt(i) == 94) {
-      len += 2;
-    } else {
-      len++;
-    }
-  }
-  return len;
 }
 
 export function CheckUrlValid(value: string) {
