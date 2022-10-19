@@ -35,7 +35,7 @@ const Performance: React.FC<PerformanceProps> = ({ code }) => {
   );
 
   useRenderEcharts(
-    ({ varibleColors }) => {
+    () => {
       chartInstance?.setOption({
         title: {
           text: '',
@@ -47,7 +47,7 @@ const Performance: React.FC<PerformanceProps> = ({ code }) => {
         legend: {
           data: result?.map(({ name }) => name) || [],
           textStyle: {
-            color: varibleColors['--main-text-color'],
+            color: 'var(--main-text-color)',
             fontSize: 10,
           },
         },
@@ -72,7 +72,7 @@ const Performance: React.FC<PerformanceProps> = ({ code }) => {
           },
           splitLine: {
             lineStyle: {
-              color: varibleColors['--border-color'],
+              color: 'var(--border-color)',
             },
           },
         },

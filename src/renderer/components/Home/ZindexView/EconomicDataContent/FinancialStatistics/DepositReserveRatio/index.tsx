@@ -16,7 +16,7 @@ const DepositReserveRatio: React.FC<DepositReserveRatioProps> = () => {
   });
 
   useRenderEcharts(
-    ({ varibleColors }) => {
+    () => {
       try {
         chartInstance?.setOption({
           title: {
@@ -29,7 +29,7 @@ const DepositReserveRatio: React.FC<DepositReserveRatioProps> = () => {
           legend: {
             data: ['大型金融机构', '中小金融机构'],
             textStyle: {
-              color: varibleColors['--main-text-color'],
+              color: 'var(--main-text-color)',
               fontSize: 10,
             },
           },
@@ -56,7 +56,7 @@ const DepositReserveRatio: React.FC<DepositReserveRatioProps> = () => {
             },
             splitLine: {
               lineStyle: {
-                color: varibleColors['--border-color'],
+                color: 'var(--border-color)',
               },
             },
           },

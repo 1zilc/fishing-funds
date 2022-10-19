@@ -39,7 +39,7 @@ const Trend: React.FC<PerformanceProps> = ({ code, name }) => {
   );
 
   useRenderEcharts(
-    ({ varibleColors }) => {
+    () => {
       chartInstance?.setOption({
         title: {
           text: '',
@@ -72,7 +72,7 @@ const Trend: React.FC<PerformanceProps> = ({ code, name }) => {
             scale: true,
             splitLine: {
               lineStyle: {
-                color: varibleColors['--border-color'],
+                color: 'var(--border-color)',
               },
             },
           },
@@ -84,7 +84,7 @@ const Trend: React.FC<PerformanceProps> = ({ code, name }) => {
             scale: true,
             splitLine: {
               lineStyle: {
-                color: varibleColors['--border-color'],
+                color: 'var(--border-color)',
               },
             },
           },

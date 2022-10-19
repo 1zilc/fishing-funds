@@ -231,10 +231,8 @@ export function MakeMap(list: (string | number)[]) {
 
 export function GetValueColor(number?: number | string) {
   const value = Number(number);
-  const varibleColors = GetVariblesColor();
   return {
-    color:
-      value > 0 ? varibleColors['--increase-color'] : value < 0 ? varibleColors['--reduce-color'] : varibleColors['--reverse-text-color'],
+    color: value > 0 ? 'var(--increase-color)' : value < 0 ? 'var(--reduce-color)' : 'var(--reverse-text-color)',
     textClass: value > 0 ? 'text-up' : value < 0 ? 'text-down' : 'text-none',
     blockClass: value > 0 ? 'block-up' : value < 0 ? 'block-down' : 'block-none',
     bgClass: value > 0 ? 'bg-up' : value < 0 ? 'bg-down' : 'bg-none',
@@ -277,9 +275,14 @@ export function GetValueMapColor(value: any = 0) {
   const alphas = [0.6, 0.7, 0.8, 0.9, 1];
   const alphaindex = Math.ceil(Math.min(Math.abs(value) * 1.5, 5));
   const colorAlpha = value === 0 ? 1 : alphas[alphaindex];
-  const color = GetValueColor(value).color;
+  const colorVar = GetValueColor(value).color;
+  const color = ParseCSSVariableColor(colorVar);
   const rgb = Color(color).object();
   return `rgba(${rgb.r},${rgb.g},${rgb.b},${colorAlpha})`;
+}
+
+export function ParseCSSVariableColor(stringVar: string) {
+  return GetStylePropertyValue(stringVar.match(/var\((.*)\)/)?.[1] || '');
 }
 
 export function CheckUrlValid(value: string) {

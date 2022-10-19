@@ -45,7 +45,7 @@ const StockWareHouse: React.FC<StockWareHouseProps> = ({ code, stockCodes }) => 
   );
 
   useRenderEcharts(
-    ({ varibleColors }) => {
+    () => {
       chartInstance?.setOption({
         backgroundColor: 'transparent',
         title: {
@@ -80,11 +80,11 @@ const StockWareHouse: React.FC<StockWareHouseProps> = ({ code, stockCodes }) => 
               }) || [],
             roseType: 'radius',
             label: {
-              color: varibleColors['--main-text-color'],
+              color: 'var(--main-text-color)',
             },
             labelLine: {
               lineStyle: {
-                color: varibleColors['--main-text-color'],
+                color: 'var(--main-text-color)',
               },
               smooth: 0.2,
               length: 10,
@@ -92,7 +92,7 @@ const StockWareHouse: React.FC<StockWareHouseProps> = ({ code, stockCodes }) => 
             },
             itemStyle: {
               borderRadius: 10,
-              borderColor: varibleColors['--background-color'],
+              borderColor: 'var(--background-color)',
               borderWidth: 1,
             },
             animationType: 'scale',

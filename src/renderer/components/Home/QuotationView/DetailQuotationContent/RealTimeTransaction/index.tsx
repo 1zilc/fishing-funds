@@ -23,7 +23,7 @@ const RealTimeTransaction: React.FC<RealTimeTransactionProps> = ({ code = '' }) 
     }
   );
   useRenderEcharts(
-    ({ varibleColors, darkMode }) => {
+    ({ darkMode }) => {
       chartInstance?.setOption({
         backgroundColor: 'transparent',
         title: {
@@ -100,7 +100,7 @@ const RealTimeTransaction: React.FC<RealTimeTransactionProps> = ({ code = '' }) 
               },
             ],
             label: {
-              color: varibleColors['--main-text-color'],
+              color: 'var(--main-text-color)',
             },
             emphasis: {
               label: {

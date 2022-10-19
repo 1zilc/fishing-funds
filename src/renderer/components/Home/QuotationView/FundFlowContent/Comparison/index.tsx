@@ -19,7 +19,7 @@ const Comparison: React.FC<ComparisonProps> = () => {
     }
   );
   useRenderEcharts(
-    ({ varibleColors }) => {
+    () => {
       chartInstance?.setOption({
         tooltip: {
           trigger: 'axis',
@@ -43,7 +43,7 @@ const Comparison: React.FC<ComparisonProps> = () => {
           },
           splitLine: {
             lineStyle: {
-              color: varibleColors['--border-color'],
+              color: 'var(--border-color)',
             },
           },
         },
@@ -62,7 +62,7 @@ const Comparison: React.FC<ComparisonProps> = () => {
             showSymbol: false,
             smooth: true,
             itemStyle: {
-              color: varibleColors['--increase-color'],
+              color: 'var(--increase-color)',
             },
           },
           {
@@ -72,7 +72,7 @@ const Comparison: React.FC<ComparisonProps> = () => {
             showSymbol: false,
             smooth: true,
             itemStyle: {
-              color: varibleColors['--reduce-color'],
+              color: 'var(--reduce-color)',
             },
           },
         ],

@@ -14,7 +14,7 @@ const HistoryBar: React.FC<HistoryBarProps> = ({ data = [] }) => {
   const { ref: chartRef, chartInstance } = useResizeEchart(CONST.DEFAULT.ECHARTS_SCALE);
 
   useRenderEcharts(
-    ({ varibleColors }) => {
+    () => {
       chartInstance?.setOption({
         title: {
           show: false,
@@ -47,7 +47,7 @@ const HistoryBar: React.FC<HistoryBarProps> = ({ data = [] }) => {
           },
           splitLine: {
             lineStyle: {
-              color: varibleColors['--border-color'],
+              color: 'var(--border-color)',
             },
           },
         },

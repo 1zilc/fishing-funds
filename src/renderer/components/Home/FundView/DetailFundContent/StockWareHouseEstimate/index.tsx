@@ -12,7 +12,7 @@ const StockWareHouseEstimate: React.FC<StockWareHouseEstimateProps> = ({ fundSha
   const { ref: chartRef, chartInstance } = useResizeEchart(CONST.DEFAULT.ECHARTS_SCALE);
 
   useRenderEcharts(
-    ({ varibleColors }) => {
+    () => {
       chartInstance?.setOption({
         title: {
           show: false,
@@ -47,7 +47,7 @@ const StockWareHouseEstimate: React.FC<StockWareHouseEstimateProps> = ({ fundSha
           scale: true,
           splitLine: {
             lineStyle: {
-              color: varibleColors['--border-color'],
+              color: 'var(--border-color)',
             },
           },
         },

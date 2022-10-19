@@ -17,7 +17,7 @@ const K: React.FC<KProps> = () => {
     ready: !!chartInstance,
   });
   useRenderEcharts(
-    ({ varibleColors }) => {
+    () => {
       // 数据意义：开盘(open)，收盘(close)，最低(lowest)，最高(highest)
       const values = result.map(([time, ...values]) => values);
       chartInstance?.setOption({
@@ -34,7 +34,7 @@ const K: React.FC<KProps> = () => {
         legend: {
           data: ['日K', 'MA5', 'MA10'],
           textStyle: {
-            color: varibleColors['--main-text-color'],
+            color: 'var(--main-text-color)',
             fontSize: 10,
           },
         },
@@ -53,7 +53,7 @@ const K: React.FC<KProps> = () => {
             scale: true,
             splitLine: {
               lineStyle: {
-                color: varibleColors['--border-color'],
+                color: 'var(--border-color)',
               },
             },
           },
@@ -71,8 +71,8 @@ const K: React.FC<KProps> = () => {
             type: 'candlestick',
             data: values,
             itemStyle: {
-              color: varibleColors['--increase-color'],
-              color0: varibleColors['--reduce-color'],
+              color: 'var(--increase-color)',
+              color0: 'var(--reduce-color)',
             },
             markPoint: {
               data: [

@@ -22,7 +22,7 @@ const NorthFlow: React.FC<NorthFlowProps> = () => {
     ready: !!chartInstance,
   });
   useRenderEcharts(
-    ({ varibleColors }) => {
+    () => {
       chartInstance?.setOption({
         title: {
           text: '',
@@ -34,7 +34,7 @@ const NorthFlow: React.FC<NorthFlowProps> = () => {
         legend: {
           data: ['沪股通', '深股通', '北向'],
           textStyle: {
-            color: varibleColors['--main-text-color'],
+            color: 'var(--main-text-color)',
             fontSize: 10,
           },
         },
@@ -61,7 +61,7 @@ const NorthFlow: React.FC<NorthFlowProps> = () => {
           },
           splitLine: {
             lineStyle: {
-              color: varibleColors['--border-color'],
+              color: 'var(--border-color)',
             },
           },
         },

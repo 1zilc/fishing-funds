@@ -30,7 +30,7 @@ const Industry: React.FC<IndustryProps> = () => {
   );
 
   useRenderEcharts(
-    ({ varibleColors }) => {
+    () => {
       chartInstance?.setOption({
         title: {
           show: false,
@@ -65,7 +65,7 @@ const Industry: React.FC<IndustryProps> = () => {
           },
           splitLine: {
             lineStyle: {
-              color: varibleColors['--border-color'],
+              color: 'var(--border-color)',
             },
           },
         },

@@ -20,7 +20,7 @@ const Assets: React.FC<AssetsProps> = ({ Data_assetAllocation = {} }) => {
   const { ref: chartRef, chartInstance } = useResizeEchart(CONST.DEFAULT.ECHARTS_SCALE);
 
   useRenderEcharts(
-    ({ varibleColors }) => {
+    () => {
       chartInstance?.setOption({
         tooltip: {
           trigger: 'axis',
@@ -31,7 +31,7 @@ const Assets: React.FC<AssetsProps> = ({ Data_assetAllocation = {} }) => {
         legend: {
           data: Data_assetAllocation?.series?.map((item) => item.name) || [],
           textStyle: {
-            color: varibleColors['--main-text-color'],
+            color: 'var(--main-text-color)',
             fontSize: 10,
           },
         },
@@ -57,7 +57,7 @@ const Assets: React.FC<AssetsProps> = ({ Data_assetAllocation = {} }) => {
             },
             splitLine: {
               lineStyle: {
-                color: varibleColors['--border-color'],
+                color: 'var(--border-color)',
               },
             },
           },
@@ -69,7 +69,7 @@ const Assets: React.FC<AssetsProps> = ({ Data_assetAllocation = {} }) => {
             },
             splitLine: {
               lineStyle: {
-                color: varibleColors['--border-color'],
+                color: 'var(--border-color)',
               },
             },
           },

@@ -18,7 +18,7 @@ const TreasuryYield: React.FC<TreasuryYieldProps> = () => {
   });
 
   useRenderEcharts(
-    ({ varibleColors }) => {
+    () => {
       chartInstance?.setOption({
         title: {
           text: '',
@@ -30,7 +30,7 @@ const TreasuryYield: React.FC<TreasuryYieldProps> = () => {
         legend: {
           data: ['中国国债收益率:10年', '美国国债收益率:10年'],
           textStyle: {
-            color: varibleColors['--main-text-color'],
+            color: 'var(--main-text-color)',
             fontSize: 10,
           },
         },
@@ -55,7 +55,7 @@ const TreasuryYield: React.FC<TreasuryYieldProps> = () => {
           },
           splitLine: {
             lineStyle: {
-              color: varibleColors['--border-color'],
+              color: 'var(--border-color)',
             },
           },
         },

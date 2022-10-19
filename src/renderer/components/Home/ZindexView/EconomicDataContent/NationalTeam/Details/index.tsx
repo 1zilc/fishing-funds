@@ -29,7 +29,7 @@ const Details: React.FC<DetailsProps> = () => {
   );
 
   useRenderEcharts(
-    ({ varibleColors }) => {
+    () => {
       chartInstance?.setOption({
         tooltip: {
           trigger: 'axis',
@@ -41,7 +41,7 @@ const Details: React.FC<DetailsProps> = () => {
         legend: {
           data: ['证金持股', '汇金持股', '证金资管持股'],
           textStyle: {
-            color: varibleColors['--main-text-color'],
+            color: 'var(--main-text-color)',
             fontSize: 10,
           },
         },
@@ -60,7 +60,7 @@ const Details: React.FC<DetailsProps> = () => {
           },
           splitLine: {
             lineStyle: {
-              color: varibleColors['--border-color'],
+              color: 'var(--border-color)',
             },
           },
         },

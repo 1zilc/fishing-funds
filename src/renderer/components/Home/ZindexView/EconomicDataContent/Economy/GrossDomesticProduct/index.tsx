@@ -16,7 +16,7 @@ const GrossDomesticProduct: React.FC<GrossDomesticProductProps> = () => {
   });
 
   useRenderEcharts(
-    ({ varibleColors }) => {
+    () => {
       try {
         chartInstance?.setOption({
           title: {
@@ -29,7 +29,7 @@ const GrossDomesticProduct: React.FC<GrossDomesticProductProps> = () => {
           legend: {
             data: ['第一产业', '第二产业', '第三产业'],
             textStyle: {
-              color: varibleColors['--main-text-color'],
+              color: 'var(--main-text-color)',
               fontSize: 10,
             },
           },
@@ -56,7 +56,7 @@ const GrossDomesticProduct: React.FC<GrossDomesticProductProps> = () => {
               },
               splitLine: {
                 lineStyle: {
-                  color: varibleColors['--border-color'],
+                  color: 'var(--border-color)',
                 },
               },
             },
@@ -68,7 +68,7 @@ const GrossDomesticProduct: React.FC<GrossDomesticProductProps> = () => {
               },
               splitLine: {
                 lineStyle: {
-                  color: varibleColors['--border-color'],
+                  color: 'var(--border-color)',
                 },
               },
             },

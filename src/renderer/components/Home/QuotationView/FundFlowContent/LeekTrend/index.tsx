@@ -15,7 +15,7 @@ const LeekTrend: React.FC<LeekTrendProps> = () => {
     ready: !!chartInstance,
   });
   useRenderEcharts(
-    ({ varibleColors }) => {
+    () => {
       chartInstance?.setOption({
         xAxis: {
           type: 'category',
@@ -57,11 +57,11 @@ const LeekTrend: React.FC<LeekTrendProps> = () => {
                     name: '看多',
                     yAxis: 0,
                     itemStyle: {
-                      color: varibleColors['--increase-bg-color'],
+                      color: 'var(--increase-bg-color)',
                     },
                     label: {
                       position: 'insideLeft',
-                      color: varibleColors['--increase-color'],
+                      color: 'var(--increase-color)',
                     },
                   },
                   {
@@ -73,11 +73,11 @@ const LeekTrend: React.FC<LeekTrendProps> = () => {
                     name: '看空',
                     yAxis: 0,
                     itemStyle: {
-                      color: varibleColors['--reduce-bg-color'],
+                      color: 'var(--reduce-color)',
                     },
                     label: {
                       position: 'insideLeft',
-                      color: varibleColors['--reduce-color'],
+                      color: 'var(--reduce-color)',
                     },
                   },
                   {

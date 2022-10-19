@@ -24,7 +24,7 @@ const Trend: React.FC<PerformanceProps> = ({ secid, zs = 0, name }) => {
   });
 
   useRenderEcharts(
-    ({ varibleColors }) => {
+    () => {
       const { trends } = result;
       chartInstance?.setOption({
         title: {
@@ -57,7 +57,7 @@ const Trend: React.FC<PerformanceProps> = ({ secid, zs = 0, name }) => {
           },
           splitLine: {
             lineStyle: {
-              color: varibleColors['--border-color'],
+              color: 'var(--border-color)',
             },
           },
           scale: true,

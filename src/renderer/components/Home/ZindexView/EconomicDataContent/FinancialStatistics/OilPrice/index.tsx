@@ -15,7 +15,7 @@ const OilPrice: React.FC<OilPriceProps> = () => {
   });
 
   useRenderEcharts(
-    ({ varibleColors }) => {
+    () => {
       try {
         chartInstance?.setOption({
           title: {
@@ -28,7 +28,7 @@ const OilPrice: React.FC<OilPriceProps> = () => {
           legend: {
             data: ['NYMEX原油', '汽油', '柴油'],
             textStyle: {
-              color: varibleColors['--main-text-color'],
+              color: 'var(--main-text-color)',
               fontSize: 10,
             },
           },
@@ -56,7 +56,7 @@ const OilPrice: React.FC<OilPriceProps> = () => {
               },
               splitLine: {
                 lineStyle: {
-                  color: varibleColors['--border-color'],
+                  color: 'var(--border-color)',
                 },
               },
             },
@@ -69,7 +69,7 @@ const OilPrice: React.FC<OilPriceProps> = () => {
               },
               splitLine: {
                 lineStyle: {
-                  color: varibleColors['--border-color'],
+                  color: 'var(--border-color)',
                 },
               },
             },

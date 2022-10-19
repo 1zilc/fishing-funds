@@ -24,7 +24,7 @@ const Distributed: React.FC<DistributedProps> = () => {
   });
 
   useRenderEcharts(
-    ({ varibleColors }) => {
+    () => {
       chartInstance?.setOption({
         backgroundColor: 'transparent',
         title: {
@@ -60,11 +60,11 @@ const Distributed: React.FC<DistributedProps> = () => {
               },
             ],
             label: {
-              color: varibleColors['--main-text-color'],
+              color: 'var(--main-text-color)',
             },
             labelLine: {
               lineStyle: {
-                color: varibleColors['--main-text-color'],
+                color: 'var(--main-text-color)',
               },
               smooth: 0.2,
               length: 10,
@@ -72,7 +72,7 @@ const Distributed: React.FC<DistributedProps> = () => {
             },
             itemStyle: {
               borderRadius: 10,
-              borderColor: varibleColors['--background-color'],
+              borderColor: 'var(--background-color)',
               borderWidth: 1,
             },
             animationType: 'scale',

@@ -164,18 +164,13 @@ export function useEchartEventEffect(fn: () => void | (() => void), instance?: e
   );
 }
 
-export function useRenderEcharts(
-  callback: (data: { darkMode: boolean; varibleColors: Record<keyof typeof CONST.VARIBLES, string> }) => void,
-  instance?: echarts.ECharts,
-  dep: any[] = []
-) {
-  const varibleColors = useAppSelector((state) => state.setting.varibleColors);
+export function useRenderEcharts(callback: (data: { darkMode: boolean }) => void, instance?: echarts.ECharts, dep: any[] = []) {
   const darkMode = useAppSelector((state) => state.setting.darkMode);
   useEffect(() => {
     if (instance) {
-      callback({ darkMode, varibleColors });
+      callback({ darkMode });
     }
-  }, [instance, darkMode, varibleColors, ...dep]);
+  }, [instance, darkMode, ...dep]);
 }
 
 export function useSyncFixFundSetting() {

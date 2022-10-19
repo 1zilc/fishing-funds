@@ -12,7 +12,6 @@ const iconSize = { height: 16, width: 16 };
 
 const Guide: React.FC<GuideProps> = (props) => {
   const { list } = props;
-  const varibleColors = useAppSelector((state) => state.setting.varibleColors);
 
   return (
     <Tooltip
@@ -28,7 +27,7 @@ const Guide: React.FC<GuideProps> = (props) => {
         </div>
       }
       overlayClassName={styles.content}
-      color={varibleColors['--primary-color']}
+      color="var(--primary-color)"
     >
       <QuestionIcon {...iconSize} style={{ fill: 'var(--svg-icon-color)' }} />
     </Tooltip>

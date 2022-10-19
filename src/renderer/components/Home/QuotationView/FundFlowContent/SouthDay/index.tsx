@@ -32,7 +32,7 @@ const SouthDay: React.FC<SouthDayProps> = () => {
   );
 
   useRenderEcharts(
-    ({ varibleColors }) => {
+    () => {
       chartInstance?.setOption({
         title: {
           text: '',
@@ -44,7 +44,7 @@ const SouthDay: React.FC<SouthDayProps> = () => {
         legend: {
           data: ['港股通(沪)', '港股通(深)', '南向'],
           textStyle: {
-            color: varibleColors['--main-text-color'],
+            color: 'var(--main-text-color)',
             fontSize: 10,
           },
         },
@@ -70,7 +70,7 @@ const SouthDay: React.FC<SouthDayProps> = () => {
           },
           splitLine: {
             lineStyle: {
-              color: varibleColors['--border-color'],
+              color: 'var(--border-color)',
             },
           },
         },

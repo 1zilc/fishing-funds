@@ -38,7 +38,7 @@ const K: React.FC<PerformanceProps> = ({ code = '', name }) => {
   );
 
   useRenderEcharts(
-    ({ varibleColors }) => {
+    () => {
       // 数据意义：开盘(open)，收盘(close)，最低(lowest)，最高(highest)
       const values = result.map((_) => [_.kp, _.sp, _.zd, _.zg]);
       chartInstance?.setOption({
@@ -55,7 +55,7 @@ const K: React.FC<PerformanceProps> = ({ code = '', name }) => {
         legend: {
           data: ['K线'],
           textStyle: {
-            color: varibleColors['--main-text-color'],
+            color: 'var(--main-text-color)',
             fontSize: 10,
           },
         },
@@ -73,7 +73,7 @@ const K: React.FC<PerformanceProps> = ({ code = '', name }) => {
           scale: true,
           splitLine: {
             lineStyle: {
-              color: varibleColors['--border-color'],
+              color: 'var(--border-color)',
             },
           },
         },
@@ -90,8 +90,8 @@ const K: React.FC<PerformanceProps> = ({ code = '', name }) => {
             type: 'candlestick',
             data: values,
             itemStyle: {
-              color: varibleColors['--increase-color'],
-              color0: varibleColors['--reduce-color'],
+              color: 'var(--increase-color)',
+              color0: 'var(--reduce-color)',
             },
             markPoint: {
               data: [

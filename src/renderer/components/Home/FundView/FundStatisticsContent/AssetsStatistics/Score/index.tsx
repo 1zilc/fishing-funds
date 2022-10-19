@@ -31,7 +31,7 @@ const Score: React.FC<ScoreProps> = ({ gssyl = 0 }) => {
   });
 
   useRenderEcharts(
-    ({ varibleColors }) => {
+    () => {
       if (!result) {
         return;
       }
@@ -82,7 +82,7 @@ const Score: React.FC<ScoreProps> = ({ gssyl = 0 }) => {
               },
             },
             axisLabel: {
-              color: varibleColors['--main-text-color'],
+              color: 'var(--main-text-color)',
               fontSize: 10,
               distance: -50,
               formatter: (value: number) => {
@@ -102,7 +102,7 @@ const Score: React.FC<ScoreProps> = ({ gssyl = 0 }) => {
             title: {
               offsetCenter: [0, '-25%'],
               fontSize: 10,
-              color: varibleColors['--inner-text-color'],
+              color: 'var(--inner-text-color)',
             },
             detail: {
               fontSize: 12,

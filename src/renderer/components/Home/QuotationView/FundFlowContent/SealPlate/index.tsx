@@ -19,14 +19,14 @@ const SealPlate: React.FC<SealPlateProps> = () => {
     }
   );
   useRenderEcharts(
-    ({ varibleColors }) => {
+    () => {
       chartInstance?.setOption({
         tooltip: {
           trigger: 'axis',
         },
         legend: {
           textStyle: {
-            color: varibleColors['--main-text-color'],
+            color: 'var(--main-text-color)',
             fontSize: 10,
           },
         },
@@ -50,7 +50,7 @@ const SealPlate: React.FC<SealPlateProps> = () => {
             },
             splitLine: {
               lineStyle: {
-                color: varibleColors['--border-color'],
+                color: 'var(--border-color)',
               },
             },
           },

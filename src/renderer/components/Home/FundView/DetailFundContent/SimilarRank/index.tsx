@@ -12,14 +12,14 @@ const SimilarRank: React.FC<SimilarRankProps> = ({ rateInSimilarType = [] }) => 
   const { ref: chartRef, chartInstance } = useResizeEchart(CONST.DEFAULT.ECHARTS_SCALE);
 
   useRenderEcharts(
-    ({ varibleColors }) => {
+    () => {
       chartInstance?.setOption({
         title: {
           text: '同类中排名',
           left: 'center',
           top: 0,
           textStyle: {
-            color: varibleColors['--main-text-color'],
+            color: 'var(--main-text-color)',
             fontSize: 12,
           },
         },
@@ -50,7 +50,7 @@ const SimilarRank: React.FC<SimilarRankProps> = ({ rateInSimilarType = [] }) => 
           },
           splitLine: {
             lineStyle: {
-              color: varibleColors['--border-color'],
+              color: 'var(--border-color)',
             },
           },
         },

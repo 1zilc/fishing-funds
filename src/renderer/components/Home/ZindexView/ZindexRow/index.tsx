@@ -29,7 +29,7 @@ const TrendChart: React.FC<{
   const { ref: chartRef, chartInstance } = useResizeEchart(0.24);
 
   useRenderEcharts(
-    ({ varibleColors }) => {
+    () => {
       const { color } = Utils.GetValueColor(Number(trends[trends.length - 1]?.price) - zs);
       chartInstance?.setOption({
         title: {
@@ -56,7 +56,7 @@ const TrendChart: React.FC<{
           scale: true,
           splitLine: {
             lineStyle: {
-              color: varibleColors['--border-color'],
+              color: 'var(--border-color)',
             },
           },
           min: (value: any) => Math.min(value.min, zs),

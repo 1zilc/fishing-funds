@@ -18,7 +18,7 @@ const Distribution: React.FC<DistributionProps> = () => {
     ready: !!chartInstance,
   });
   useRenderEcharts(
-    ({ varibleColors }) => {
+    () => {
       chartInstance?.setOption({
         tooltip: { trigger: 'axis' },
         xAxis: [
@@ -44,7 +44,7 @@ const Distribution: React.FC<DistributionProps> = () => {
             gridIndex: 0,
             splitLine: {
               lineStyle: {
-                color: varibleColors['--border-color'],
+                color: 'var(--border-color)',
               },
             },
             axisLabel: {
@@ -100,10 +100,10 @@ const Distribution: React.FC<DistributionProps> = () => {
               show: true,
               position: 'top',
               distance: 2,
-              color: varibleColors['--reduce-color'],
+              color: 'var(--reduce-color)',
             },
             itemStyle: {
-              color: varibleColors['--reduce-color'],
+              color: 'var(--reduce-color)',
               borderRadius: [5, 0, 0, 5],
             },
             data: result.reduce(
@@ -125,10 +125,10 @@ const Distribution: React.FC<DistributionProps> = () => {
               show: true,
               position: 'top',
               distance: 2,
-              color: varibleColors['--reverse-text-color'],
+              color: 'var(--reverse-text-color)',
             },
             itemStyle: {
-              color: varibleColors['--reverse-text-color'],
+              color: 'var(--reverse-text-color)',
             },
             data: result.reduce(
               (r, c) => {
@@ -149,10 +149,10 @@ const Distribution: React.FC<DistributionProps> = () => {
               show: true,
               position: 'top',
               distance: 2,
-              color: varibleColors['--increase-color'],
+              color: 'var(--increase-color)',
             },
             itemStyle: {
-              color: varibleColors['--increase-color'],
+              color: 'var(--increase-color)',
               borderRadius: [0, 5, 5, 0],
             },
             data: result.reduce(

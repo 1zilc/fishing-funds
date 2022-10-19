@@ -14,7 +14,7 @@ const AssetsConfig: React.FC<AssetsConfigProps> = ({ funds, codes }) => {
   const walletsConfig = useAppSelector((state) => state.wallet.config.walletConfig);
 
   useRenderEcharts(
-    ({ varibleColors }) => {
+    () => {
       chartInstance?.setOption({
         backgroundColor: 'transparent',
         title: {
@@ -46,11 +46,11 @@ const AssetsConfig: React.FC<AssetsConfigProps> = ({ funds, codes }) => {
               };
             }),
             label: {
-              color: varibleColors['--main-text-color'],
+              color: 'var(--main-text-color)',
             },
             labelLine: {
               lineStyle: {
-                color: varibleColors['--main-text-color'],
+                color: 'var(--main-text-color)',
               },
               smooth: 0.2,
               length: 10,
@@ -58,7 +58,7 @@ const AssetsConfig: React.FC<AssetsConfigProps> = ({ funds, codes }) => {
             },
             itemStyle: {
               borderRadius: 10,
-              borderColor: varibleColors['--background-color'],
+              borderColor: 'var(--background-color)',
               borderWidth: 1,
             },
             animationType: 'scale',

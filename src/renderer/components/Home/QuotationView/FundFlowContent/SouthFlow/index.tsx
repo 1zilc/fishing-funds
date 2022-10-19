@@ -23,7 +23,7 @@ const SouthFlow: React.FC<SouthFlowProps> = () => {
   });
 
   useRenderEcharts(
-    ({ varibleColors }) => {
+    () => {
       chartInstance?.setOption({
         title: {
           text: '',
@@ -35,7 +35,7 @@ const SouthFlow: React.FC<SouthFlowProps> = () => {
         legend: {
           data: ['港股通(沪)', '港股通(深)', '南向'],
           textStyle: {
-            color: varibleColors['--main-text-color'],
+            color: 'var(--main-text-color)',
             fontSize: 10,
           },
         },
@@ -62,7 +62,7 @@ const SouthFlow: React.FC<SouthFlowProps> = () => {
           },
           splitLine: {
             lineStyle: {
-              color: varibleColors['--border-color'],
+              color: 'var(--border-color)',
             },
           },
         },
