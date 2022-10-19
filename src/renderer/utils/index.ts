@@ -1,4 +1,5 @@
 import NP from 'number-precision';
+import Color from 'color';
 import dayjs from 'dayjs';
 import * as CONST from '@/constants';
 
@@ -276,32 +277,6 @@ export function CalcZDHC(list: number[]) {
   }
 }
 
-export function ColorRgba(sHex: string, alpha = 1) {
-  // 十六进制颜色值的正则表达式
-  const reg = /^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/;
-  /* 16进制颜色转为RGB格式 */
-  let sColor = sHex.toLowerCase().trim();
-  if (sColor && reg.test(sColor)) {
-    if (sColor.length === 4) {
-      let sColorNew = '#';
-      for (let i = 1; i < 4; i += 1) {
-        sColorNew += sColor.slice(i, i + 1).concat(sColor.slice(i, i + 1));
-      }
-      sColor = sColorNew;
-    }
-    //  处理六位的颜色值
-    const sColorChange = [];
-    for (let i = 1; i < 7; i += 2) {
-      sColorChange.push(parseInt('0x' + sColor.slice(i, i + 2)));
-    }
-    // return sColorChange.join(',')
-    // 或
-    return 'rgba(' + sColorChange.join(',') + ',' + alpha + ')';
-  } else {
-    return sColor;
-  }
-}
-
 export function GetWeekDay(day: number) {
   return ['星期天', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'][day];
 }
@@ -311,8 +286,8 @@ export function GetValueMapColor(value: any = 0) {
   const alphaindex = Math.ceil(Math.min(Math.abs(value) * 1.5, 5));
   const colorAlpha = value === 0 ? 1 : alphas[alphaindex];
   const color = GetValueColor(value).color;
-  const rgba = ColorRgba(color, colorAlpha);
-  return rgba;
+  const rgb = Color(color).object();
+  return `rgba(${rgb.r},${rgb.g},${rgb.b},${colorAlpha})`;
 }
 
 export function GbLength(str: string) {

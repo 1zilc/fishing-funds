@@ -3,6 +3,7 @@ export default {
   '--primary-color': '--primary-color',
   '--increase-color': '--increase-color',
   '--cancel-color': '--cancel-color',
+  '--cancel-text-color': '--cancel-text-color',
   '--reduce-color': '--reduce-color',
   '--main-text-color': '--main-text-color',
   '--secondary-main-text-color': '--secondary-main-text-color',

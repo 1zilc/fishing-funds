@@ -44,7 +44,7 @@ const Styles: React.FC<PropsWithChildren<ThemeProviderProps>> = (props) => {
             --border-color: ${token.colorFillQuaternary};
             --cancel-color: ${token.colorFillSecondary};
             --cancel-text-color: ${token.colorTextSecondary};
-            --reverse-text-color: ${token.colorTextTertiary};
+            --reverse-text-color: #888;
       }`}
     </style>
   );

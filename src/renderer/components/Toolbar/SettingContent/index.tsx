@@ -285,9 +285,8 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
   }
 
   return (
-    <CustomDrawerContent classNames={styles.wrapper} title="设置" enterText="保存" onClose={props.onClose} onEnter={onSave}>
+    <CustomDrawerContent title="设置" enterText="保存" onClose={props.onClose} onEnter={onSave}>
       <ThemeProvider
-        target={`.${styles.wrapper}`}
         config={{
           lowKey,
           baseFontSize,
