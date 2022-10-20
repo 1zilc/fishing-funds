@@ -39,17 +39,6 @@ module.exports = {
     'global-require': 0,
     'promise/catch-or-return': 0,
     'import/prefer-default-export': 0,
-    'prettier/prettier': [
-      'error',
-      {
-        printWidth: 140,
-        tabWidth: 2,
-        trailingComma: 'es5',
-        semi: true,
-        singleQuote: true,
-        bracketSpacing: true,
-      },
-    ],
   },
   parserOptions: {
     ecmaVersion: 2020,
@@ -66,9 +55,6 @@ module.exports = {
         config: require.resolve('./.erb/configs/webpack.config.eslint.ts'),
       },
       typescript: {},
-    },
-    'import/parsers': {
-      '@typescript-eslint/parser': ['.ts', '.tsx'],
     },
   },
 };

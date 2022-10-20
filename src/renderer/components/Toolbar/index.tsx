@@ -81,7 +81,7 @@ const ToolBar: React.FC<ToolBarProps> = () => {
           }}
         />
       </CustomDrawer>
-      <CustomDrawer classNames={styles.themeWrapper} show={showSettingContent}>
+      <CustomDrawer className={styles.themeWrapper} show={showSettingContent}>
         <SettingContent
           themeWrapperClass={styles.themeWrapper}
           onClose={closeSettingContent}

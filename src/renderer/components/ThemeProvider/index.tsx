@@ -12,10 +12,9 @@ export interface ThemeProviderProps {
 }
 export type StylesProps = ThemeProviderProps;
 
-const { platform } = window.contextModules.process;
+const { useToken } = theme;
 
 const Styles: React.FC<StylesProps> = (props) => {
-  const { useToken } = theme;
   const { config, target } = props;
   const { token } = useToken();
 
@@ -23,13 +22,10 @@ const Styles: React.FC<StylesProps> = (props) => {
     <style>
       {` ${target || ':root'} {
             filter: ${config.lowKey && 'grayscale(90%)'};
-            font-size: ${config.baseFontSize}px;
-            background-color: ${platform === 'darwin' ? 'initial' : 'var(--inner-color)'};
+            font-size: ${token.fontSizeBase}px;
 
-            --alipay-color: #156dff;
-            --wechat-color: #1fa131;
+            --primary-color: ${token.colorPrimary};
             --base-font-size: ${token.fontSize}px;
-            --primary-color: ${config.primaryColor};
             --hover-color: ${token.colorPrimaryBg};
             --selected-color: ${token.colorPrimaryBgHover};
             --background-color: ${token.colorBgContainer};
@@ -48,7 +44,10 @@ const Styles: React.FC<StylesProps> = (props) => {
             --border-color: ${token.colorFillQuaternary};
             --cancel-color: ${token.colorFillSecondary};
             --cancel-text-color: ${token.colorTextSecondary};
+
             --reverse-text-color: #888;
+            --alipay-color: #156dff;
+            --wechat-color: #1fa131;
             --blur-color: ${config.darkMode ? 'rgba(29, 29, 31, 0.72)' : 'rgba(255, 255, 255, 0.72)'};
             --origin-primary-color: ${config.darkMode ? '#3086ff' : '#1677ff'};
       }`}

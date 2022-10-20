@@ -148,9 +148,10 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
   const proxyModeEnable = proxyType === Enums.ProxyType.Http || proxyType === Enums.ProxyType.Socks;
   const customThemeColorEnable = themeColorType === Enums.ThemeColorType.Custom;
   const darkModeEnable = systemTheme === Enums.SystemThemeType.Dark;
+  const themeColor = customThemeColorEnable ? customThemeColor || originPrimaryColor : originPrimaryColor;
 
-  async function onSave() {
-    await dispatch(
+  function onSave() {
+    dispatch(
       setSystemSettingAction({
         fundApiTypeSetting: fundapiType,
         themeColorTypeSetting: themeColorType,
@@ -217,7 +218,7 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
         darkMode: systemTheme === Enums.SystemThemeType.Auto ? darkMode : darkModeEnable,
         lowKey,
         baseFontSize,
-        primaryColor: customThemeColorEnable ? customThemeColor || originPrimaryColor : originPrimaryColor,
+        primaryColor: themeColor,
       }}
     >
       <CustomDrawerContent title="设置" enterText="保存" onClose={props.onClose} onEnter={onSave}>
@@ -287,7 +288,7 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
                           <i
                             className={styles.colorBlock}
                             style={{
-                              backgroundColor: customThemeColorEnable ? customThemeColor || originPrimaryColor : originPrimaryColor,
+                              backgroundColor: themeColor,
                             }}
                           />
                           {customThemeColorEnable && (

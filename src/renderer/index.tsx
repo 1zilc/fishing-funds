@@ -22,8 +22,15 @@ echarts.registerMap('china', chinaMap as any);
 
 NP.enableBoundaryChecking(false);
 
+const { platform } = window.contextModules.process;
+
 createRoot(document.getElementById('root')!).render(
   <ConfigProvider locale={zhCN} componentSize="small" space={{ size: 'small' }}>
+    <style>
+      {`:root{
+        background-color: ${platform === 'darwin' ? 'initial' : 'var(--inner-color)'};
+      }`}
+    </style>
     <Provider store={store}>
       <App />
     </Provider>

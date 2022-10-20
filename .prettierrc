@@ -4,11 +4,5 @@
   "trailingComma": "es5",
   "semi": true,
   "singleQuote": true,
-  "bracketSpacing": true,
-  "overrides": [
-    {
-      "files": ".prettierrc",
-      "options": { "parser": "json" }
-    }
-  ]
+  "bracketSpacing": true
 }
