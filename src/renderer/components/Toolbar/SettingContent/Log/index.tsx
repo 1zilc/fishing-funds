@@ -26,7 +26,8 @@ const Log: React.FC<LogProps> = () => {
     run: runGetLog,
   } = useRequest(Services.Log.GetLog, {
     cacheKey: Utils.GenerateRequestKey('Log.GetLog'),
-    cacheTime: 1000 * 60 * 10,
+    cacheTime: 1000 * 60,
+    staleTime: 1000 * 10,
   });
 
   function onDetail() {
