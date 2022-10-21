@@ -18,7 +18,6 @@ import LineCharIcon from '@/static/icon/line-chart.svg';
 import TShirtIcon from '@/static/icon/t-shirt.svg';
 import NotificationIcon from '@/static/icon/notification.svg';
 import BitCoinIcon from '@/static/icon/bit-coin.svg';
-import CalendarIcon from '@/static/icon/calendar.svg';
 import GlobalIcon from '@/static/icon/global.svg';
 import InboxIcon from '@/static/icon/inbox.svg';
 import FolderSettingsIcon from '@/static/icon/folder-settings.svg';
@@ -584,13 +583,7 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
             {
               key: String(1),
               label: '更新日志',
-              children: (
-                <div className={styles.content}>
-                  <StandCard icon={<CalendarIcon />} title="更新日志">
-                    <Log />
-                  </StandCard>
-                </div>
-              ),
+              children: <Log />,
             },
             {
               key: String(2),

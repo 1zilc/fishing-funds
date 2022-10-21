@@ -51,7 +51,7 @@ export const ChartCard: React.FC<PropsWithChildren<ChartCardProps>> = ({
     try {
       const canvas = await html2canvas(chartRef.current!);
       const dataUrl = canvas.toDataURL();
-      clipboard.writeImage(dataUrl);
+      await clipboard.writeImage(dataUrl);
       dialog.showMessageBox({
         title: '复制成功',
         type: 'info',
