@@ -23,6 +23,7 @@ const Styles: React.FC<StylesProps> = (props) => {
       {` ${target || ':root'} {
             filter: ${config.lowKey && 'grayscale(90%)'};
             font-size: ${token.fontSizeBase}px;
+            font-family: ${token.fontFamily};
 
             --primary-color: ${token.colorPrimary};
             --base-font-size: ${token.fontSize}px;
@@ -49,7 +50,6 @@ const Styles: React.FC<StylesProps> = (props) => {
             --alipay-color: #156dff;
             --wechat-color: #1fa131;
             --blur-color: ${config.darkMode ? 'rgba(29, 29, 31, 0.72)' : 'rgba(255, 255, 255, 0.72)'};
-            --origin-primary-color: ${config.darkMode ? '#3086ff' : '#1677ff'};
       }`}
     </style>
   );
