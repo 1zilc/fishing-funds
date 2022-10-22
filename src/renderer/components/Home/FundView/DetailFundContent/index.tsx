@@ -206,8 +206,8 @@ export const DetailFund: React.FC<DetailFundProps> = (props) => {
               },
               {
                 key: String(2),
-                label: '历史净值',
-                children: <Recent keyword={fund?.fixName || ''} />,
+                label: '近期资讯',
+                children: <Recent keyword={fund?.fixName || ''} filter={Enums.NewsFilterType.All} />,
               },
               {
                 key: String(3),

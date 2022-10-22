@@ -1,25 +1,27 @@
-import React, { PropsWithChildren, useState } from 'react';
+import React, { useState } from 'react';
 import dayjs from 'dayjs';
 import { Table } from 'antd';
 import { useRequest } from 'ahooks';
 import ChartCard from '@/components/Card/ChartCard';
 import { useOpenWebView } from '@/utils/hooks';
 import * as Services from '@/services';
+import * as Enums from '@/utils/enums';
 import styles from './index.module.scss';
 
 interface RecentProps {
   keyword: string;
+  filter?: Enums.NewsFilterType;
 }
 
 const Recent: React.FC<RecentProps> = (props) => {
-  const { keyword } = props;
+  const { keyword, filter } = props;
 
   const [pageIndex, setPageIndex] = useState(1);
   const {
     data = { total: 0, list: [] },
     loading,
     run: runNewsGetBondList,
-  } = useRequest(() => Services.News.GetRecent(keyword, pageIndex), {
+  } = useRequest(() => Services.News.GetRecent(keyword, pageIndex, filter), {
     debounceWait: 1000,
     debounceLeading: true,
     debounceTrailing: true,

@@ -234,3 +234,8 @@ export enum ThemeColorType {
   Default,
   Custom,
 }
+export enum NewsFilterType {
+  All = 8196,
+  Title = 16388,
+  Content = 32772,
+}

@@ -9,6 +9,7 @@ import CustomDrawerContent from '@/components/CustomDrawer/Content';
 import Recent from '@/components/Home/NewsList/Recent';
 import * as Services from '@/services';
 import * as Utils from '@/utils';
+import * as Enums from '@/utils/enums';
 
 import styles from './index.module.scss';
 
@@ -88,6 +89,11 @@ export const DetailZindex: React.FC<DetailFundProps> = (props) => {
               label: '指数走势',
               children: <Trend code={code} zs={zindex.zs} name={zindex?.name} />,
             },
+            {
+              key: String(1),
+              label: '近期资讯',
+              children: <Recent keyword={zindex.name} filter={Enums.NewsFilterType.Title} />,
+            },
           ]}
         />
       </div>
@@ -100,19 +106,6 @@ export const DetailZindex: React.FC<DetailFundProps> = (props) => {
               key: String(0),
               label: 'K线',
               children: <K code={code} name={zindex?.name} />,
-            },
-          ]}
-        />
-      </div>
-      <div className={styles.container}>
-        <Tabs
-          animated={{ tabPane: true }}
-          tabBarGutter={15}
-          items={[
-            {
-              key: String(0),
-              label: '近期资讯',
-              children: <Recent keyword={zindex.name} />,
             },
           ]}
         />
