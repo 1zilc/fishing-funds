@@ -52,7 +52,7 @@ const K: React.FC<PerformanceProps> = ({ secid = '', name }) => {
   });
 
   useRenderEcharts(
-    () => {
+    ({ varibleColors }) => {
       // 数据意义：开盘(open)，收盘(close)，最低(lowest)，最高(highest)
       const values = result.map((_) => [_.kp, _.sp, _.zd, _.zg]);
       const times = result.map((_) => _.date);
@@ -73,7 +73,7 @@ const K: React.FC<PerformanceProps> = ({ secid = '', name }) => {
             itemStyle: {
               normal: {
                 color: function (params: any) {
-                  return params.data >= 0 ? 'var(--increase-color)' : 'var(--reduce-color)';
+                  return params.data >= 0 ? varibleColors['--increase-color'] : varibleColors['--reduce-color'];
                 },
               },
             },
@@ -297,8 +297,8 @@ const K: React.FC<PerformanceProps> = ({ secid = '', name }) => {
             type: 'candlestick',
             data: values,
             itemStyle: {
-              color: 'var(--increase-color)',
-              color0: 'var(--reduce-color)',
+              color: varibleColors['--increase-color'],
+              color0: varibleColors['--reduce-color'],
             },
             markPoint: {
               data: [
@@ -407,7 +407,7 @@ const K: React.FC<PerformanceProps> = ({ secid = '', name }) => {
               normal: {
                 color: function (params: any) {
                   const { kp, sp } = result[params.dataIndex];
-                  return sp > kp ? 'var(--increase-color)' : 'var(--reduce-color)';
+                  return sp > kp ? varibleColors['--increase-color'] : varibleColors['--reduce-color'];
                 },
               },
             },

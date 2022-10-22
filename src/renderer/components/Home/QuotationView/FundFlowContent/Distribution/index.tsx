@@ -18,7 +18,7 @@ const Distribution: React.FC<DistributionProps> = () => {
     ready: !!chartInstance,
   });
   useRenderEcharts(
-    () => {
+    ({ varibleColors }) => {
       chartInstance?.setOption({
         tooltip: { trigger: 'axis' },
         xAxis: [
@@ -100,10 +100,10 @@ const Distribution: React.FC<DistributionProps> = () => {
               show: true,
               position: 'top',
               distance: 2,
-              color: 'var(--reduce-color)',
+              color: varibleColors['--reduce-color'],
             },
             itemStyle: {
-              color: 'var(--reduce-color)',
+              color: varibleColors['--reduce-color'],
               borderRadius: [5, 0, 0, 5],
             },
             data: result.reduce(
@@ -125,10 +125,10 @@ const Distribution: React.FC<DistributionProps> = () => {
               show: true,
               position: 'top',
               distance: 2,
-              color: 'var(--reverse-text-color)',
+              color: varibleColors['--reverse-text-color'],
             },
             itemStyle: {
-              color: 'var(--reverse-text-color)',
+              color: varibleColors['--reverse-text-color'],
             },
             data: result.reduce(
               (r, c) => {
@@ -149,10 +149,10 @@ const Distribution: React.FC<DistributionProps> = () => {
               show: true,
               position: 'top',
               distance: 2,
-              color: 'var(--increase-color)',
+              color: varibleColors['--increase-color'],
             },
             itemStyle: {
-              color: 'var(--increase-color)',
+              color: varibleColors['--increase-color'],
               borderRadius: [0, 5, 5, 0],
             },
             data: result.reduce(

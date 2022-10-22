@@ -542,7 +542,7 @@ export function useTouchBar() {
       'update-touchbar-zindex',
       zindexs.slice(0, 1).map((zindex) => ({
         label: `${zindex.name} ${zindex.zsz}`,
-        backgroundColor: Utils.ParseCSSVariableColor(Utils.GetValueColor(zindex.zdf).color),
+        backgroundColor: Utils.GetValueColor(zindex.zdf).color,
       }))
     );
   }, [zindexs]);

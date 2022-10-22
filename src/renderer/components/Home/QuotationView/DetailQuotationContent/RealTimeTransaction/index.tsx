@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useRequest } from 'ahooks';
-
+import Color from 'color';
 import ChartCard from '@/components/Card/ChartCard';
 import { useResizeEchart, useRenderEcharts } from '@/utils/hooks';
 import * as CONST from '@/constants';
@@ -23,7 +23,7 @@ const RealTimeTransaction: React.FC<RealTimeTransactionProps> = ({ code = '' }) 
     }
   );
   useRenderEcharts(
-    ({ darkMode }) => {
+    ({ varibleColors }) => {
       chartInstance?.setOption({
         backgroundColor: 'transparent',
         title: {
@@ -46,56 +46,56 @@ const RealTimeTransaction: React.FC<RealTimeTransactionProps> = ({ code = '' }) 
                 name: '超大单流入',
                 value: result.cddlr,
                 itemStyle: {
-                  color: darkMode ? '#431418' : '#820014',
+                  color: Color(varibleColors['--increase-color']).toString(),
                 },
               },
               {
                 name: '大单流入',
                 value: result.ddlr,
                 itemStyle: {
-                  color: darkMode ? '#791a1f' : '#cf1322',
+                  color: Color(varibleColors['--increase-color']).alpha(0.9).toString(),
                 },
               },
               {
                 name: '中单流入',
                 value: result.zdlr,
                 itemStyle: {
-                  color: darkMode ? '#d32029' : '#ff4d4f',
+                  color: Color(varibleColors['--increase-color']).alpha(0.8).toString(),
                 },
               },
               {
                 name: '小单流入',
                 value: result.xdlr,
                 itemStyle: {
-                  color: darkMode ? '#f37370' : '#ffa39e',
+                  color: Color(varibleColors['--increase-color']).alpha(0.7).toString(),
                 },
               },
               {
                 name: '小单流出',
                 value: result.xdlc,
                 itemStyle: {
-                  color: darkMode ? '#8fd460' : '#b7eb8f',
+                  color: Color(varibleColors['--reduce-color']).alpha(0.7).toString(),
                 },
               },
               {
                 name: '中单流出',
                 value: result.zdlc,
                 itemStyle: {
-                  color: darkMode ? '#49aa19' : '#73d13d',
+                  color: Color(varibleColors['--reduce-color']).alpha(0.8).toString(),
                 },
               },
               {
                 name: '大单流出',
                 value: result.ddlc,
                 itemStyle: {
-                  color: darkMode ? '#306317' : '#389e0d',
+                  color: Color(varibleColors['--reduce-color']).alpha(0.9).toString(),
                 },
               },
               {
                 name: '超大单流出',
                 value: result.cddlc,
                 itemStyle: {
-                  color: darkMode ? '#1d3712' : '#135200',
+                  color: Color(varibleColors['--reduce-color']).toString(),
                 },
               },
             ],
