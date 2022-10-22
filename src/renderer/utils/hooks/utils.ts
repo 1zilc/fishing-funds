@@ -1,6 +1,7 @@
 import React, { useLayoutEffect, useState, useEffect, useRef, useMemo } from 'react';
-import { useInterval, useBoolean, useThrottleFn, useSize, useMemoizedFn, useEventListener, useCreation } from 'ahooks';
+import { useInterval, useBoolean, useThrottleFn, useSize, useMemoizedFn, useEventListener } from 'ahooks';
 import { useDispatch, useSelector, TypedUseSelectorHook } from 'react-redux';
+import { theme } from 'antd';
 import dayjs from 'dayjs';
 import * as echarts from 'echarts';
 
@@ -164,13 +165,17 @@ export function useEchartEventEffect(fn: () => void | (() => void), instance?: e
   );
 }
 
-export function useRenderEcharts(callback: (data: { darkMode: boolean }) => void, instance?: echarts.ECharts, dep: any[] = []) {
-  const darkMode = useAppSelector((state) => state.setting.darkMode);
+export function useRenderEcharts(
+  callback: (data: { varibleColors: Record<keyof typeof CONST.VARIBLES, string> }) => void,
+  instance?: echarts.ECharts,
+  dep: any[] = []
+) {
+  const varibleColors = useAppSelector((state) => state.setting.varibleColors);
   useEffect(() => {
     if (instance) {
-      callback({ darkMode });
+      callback({ varibleColors });
     }
-  }, [instance, darkMode, ...dep]);
+  }, [instance, varibleColors, ...dep]);
 }
 
 export function useSyncFixFundSetting() {

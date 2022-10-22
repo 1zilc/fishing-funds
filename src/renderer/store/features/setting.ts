@@ -16,6 +16,7 @@ export type SettingState = {
   systemSetting: System.Setting;
   adjustmentNotificationDate: string;
   darkMode: boolean;
+  varibleColors: Record<keyof typeof CONST.VARIBLES, string>;
 };
 
 export const defaultSystemSetting: System.Setting = {
@@ -82,6 +83,7 @@ const initialState: SettingState = {
   systemSetting: defaultSystemSetting,
   adjustmentNotificationDate: '',
   darkMode: false,
+  varibleColors: {} as Record<keyof typeof CONST.VARIBLES, string>,
 };
 
 const settingSlice = createSlice({
@@ -97,9 +99,12 @@ const settingSlice = createSlice({
     syncDarkMode(state, action: PayloadAction<boolean>) {
       state.darkMode = action.payload;
     },
+    syncVaribleColors(state) {
+      state.varibleColors = Utils.GetVariblesColor();
+    },
   },
 });
-export const { syncSettingAction, updateAdjustmentNotificationDateAction, syncDarkMode } = settingSlice.actions;
+export const { syncSettingAction, updateAdjustmentNotificationDateAction, syncDarkMode, syncVaribleColors } = settingSlice.actions;
 
 export const setSystemSettingAction = createAsyncThunk<void, System.Setting, AsyncThunkConfig>(
   'setting/setSystemSettingAction',
