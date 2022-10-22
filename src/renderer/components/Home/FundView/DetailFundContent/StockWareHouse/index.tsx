@@ -73,7 +73,7 @@ const StockWareHouse: React.FC<StockWareHouseProps> = ({ code, stockCodes }) => 
                   value: item.ccb,
                   name: item.name,
                   itemStyle: {
-                    color: Utils.GetValueColor(item.zdf).color,
+                    color: Utils.GetValueMapColor(item.zdf),
                   },
                   item,
                 };

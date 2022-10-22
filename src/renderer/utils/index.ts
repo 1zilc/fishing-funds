@@ -89,14 +89,14 @@ export function JudgeAdjustmentNotificationTime(timestamp: number, adjustmentNot
   };
 }
 
-export function GetStylePropertyValue(varible: string) {
+export function GetStylePropertyValue(varible: keyof typeof CONST.VARIBLES) {
   const value = window.getComputedStyle(document.documentElement).getPropertyValue(varible);
   return (value || '').trim();
 }
 
 export function GetVariblesColor(): Record<keyof typeof CONST.VARIBLES, string> {
   return Object.keys(CONST.VARIBLES).reduce<Record<string, string>>((colorMap, varible) => {
-    const color = GetStylePropertyValue(varible);
+    const color = GetStylePropertyValue(varible as keyof typeof CONST.VARIBLES);
     colorMap[varible] = color;
     return colorMap;
   }, {});
@@ -273,16 +273,16 @@ export function GetWeekDay(day: number) {
 
 export function GetValueMapColor(value: any = 0) {
   const alphas = [0.6, 0.7, 0.8, 0.9, 1];
-  const alphaindex = Math.ceil(Math.min(Math.abs(value) * 1.5, 5));
-  const colorAlpha = value === 0 ? 1 : alphas[alphaindex];
+  const alphaindex = Math.ceil(Math.min(Math.abs(value) * 1.5, 4));
+  const colorAlpha = alphas[alphaindex];
   const colorVar = GetValueColor(value).color;
   const color = ParseCSSVariableColor(colorVar);
-  const rgb = Color(color).object();
-  return `rgba(${rgb.r},${rgb.g},${rgb.b},${colorAlpha})`;
+  const rgb = Color(color).alpha(colorAlpha);
+  return rgb.toString();
 }
 
 export function ParseCSSVariableColor(stringVar: string) {
-  return GetStylePropertyValue(stringVar.match(/var\((.*)\)/)?.[1] || '');
+  return GetStylePropertyValue((stringVar.match(/var\((.*)\)/)?.[1] || '') as any);
 }
 
 export function CheckUrlValid(value: string) {

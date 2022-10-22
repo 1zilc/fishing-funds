@@ -34,11 +34,11 @@ const Styles: React.FC<StylesProps> = (props) => {
             --inner-text-color: ${token.colorTextTertiary};
             --main-text-color: ${token.colorText};
             --secondary-main-text-color: ${token.colorTextTertiary};
-            --increase-color: ${token.colorError};
+            --increase-color: ${token.colorErrorText};
             --increase-bg-color: ${token.colorErrorBg};
-            --reduce-color: ${token.colorSuccess};
+            --reduce-color: ${token.colorSuccessText};
             --reduce-bg-color: ${token.colorSuccessBg};
-            --warn-color: ${token.colorWarning};
+            --warn-color: ${token.colorWarningText};
             --warn-bg-color: ${token.colorWarningBg};
             --tag-text-color: ${token.colorTextLightSolid};
             --svg-icon-color: ${token.colorTextSecondary};
