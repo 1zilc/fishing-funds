@@ -49,7 +49,7 @@ const Styles: React.FC<StylesProps> = (props) => {
             --reverse-text-color: #888;
             --alipay-color: #156dff;
             --wechat-color: #1fa131;
-            --blur-color: ${config.darkMode ? 'rgba(29, 29, 31, 0.72)' : 'rgba(255, 255, 255, 0.72)'};
+            --blur-color: ${config.darkMode ? 'rgba(0,0,0,0.72)' : 'rgba(255,255,255,0.72)'};
       }`}
     </style>
   );

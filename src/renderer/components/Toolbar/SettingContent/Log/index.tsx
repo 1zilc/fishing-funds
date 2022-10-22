@@ -68,7 +68,7 @@ const Log: React.FC<LogProps> = () => {
                 })}
               </Timeline>
             ) : (
-              <Empty text="无法获取更新日志，请重试～" />
+              !loading && <Empty text="无法获取更新日志，请重试～" />
             )}
           </div>
         </StandCard>
