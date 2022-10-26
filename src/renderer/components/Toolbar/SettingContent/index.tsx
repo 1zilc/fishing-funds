@@ -284,7 +284,6 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
                       <section>
                         <label>自定义主题色 ：</label>
                         <div className={styles.colorBar}>
-                          <i className={styles.colorBlock} />
                           {customThemeColorEnable && (
                             <HuePicker
                               className={styles.colorPicker}
@@ -296,6 +295,7 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
                               }}
                             />
                           )}
+                          <i className={styles.colorBlock} />
                         </div>
                       </section>
                       <section>
