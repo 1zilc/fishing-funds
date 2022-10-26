@@ -119,7 +119,7 @@ const AddFundContent: React.FC<AddFundContentProps> = (props) => {
             min={0}
             precision={2}
             value={cyfe}
-            onChange={setCyfe}
+            onChange={(v) => setCyfe(v as number)}
             size="small"
             style={{ width: '100%' }}
           />
