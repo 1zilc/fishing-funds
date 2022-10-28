@@ -13,6 +13,7 @@ export interface ThemeProviderProps {
 export type StylesProps = ThemeProviderProps;
 
 const { useToken } = theme;
+const baseAlgorithm = [theme.compactAlgorithm];
 
 const Styles: React.FC<StylesProps> = (props) => {
   const { config, target } = props;
@@ -68,7 +69,7 @@ const ThemeProvider: React.FC<PropsWithChildren<ThemeProviderProps>> = (props) =
           colorWarning: '#ff8f1f',
           colorError: '#ff3141',
         },
-        algorithm: config.darkMode ? [theme.darkAlgorithm] : [],
+        algorithm: config.darkMode ? [...baseAlgorithm, theme.darkAlgorithm] : baseAlgorithm,
       }}
       autoInsertSpaceInButton={false}
     >

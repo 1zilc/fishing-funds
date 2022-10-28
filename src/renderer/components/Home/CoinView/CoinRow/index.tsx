@@ -1,6 +1,5 @@
 import React from 'react';
 import clsx from 'clsx';
-import ColorHash from 'color-hash';
 
 import ArrowDownIcon from '@/static/icon/arrow-down.svg';
 import ArrowUpIcon from '@/static/icon/arrow-up.svg';
@@ -9,8 +8,8 @@ import Collapse from '@/components/Collapse';
 
 import { toggleCoinCollapseAction } from '@/store/features/coin';
 import { useAppDispatch, useAppSelector } from '@/utils/hooks';
+import colorHash from '@/utils/colorHash';
 import * as Utils from '@/utils';
-import * as Helpers from '@/helpers';
 import styles from './index.module.scss';
 
 export interface RowProps {
@@ -22,7 +21,6 @@ const arrowSize = {
   width: 12,
   height: 12,
 };
-const colorHash = new ColorHash();
 
 const CoinRow: React.FC<RowProps> = (props) => {
   const { coin } = props;

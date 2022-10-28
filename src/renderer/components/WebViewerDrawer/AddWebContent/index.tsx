@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { Input, Radio } from 'antd';
-import ColorHash from 'color-hash';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
 import WebAppIcon from '@/components/Toolbar/AppCenterContent/WebAppIcon';
 import StandCard from '@/components/Card/StandCard';
+import colorHash from '@/utils/colorHash';
 import * as Enums from '@/utils/enums';
 import styles from './index.module.scss';
 
@@ -13,8 +13,6 @@ interface AddWebContentProps {
   web: Web.SettingItem;
   favicons: string[];
 }
-
-const colorHash = new ColorHash();
 
 const AddWebContent: React.FC<AddWebContentProps> = (props) => {
   const { web, favicons } = props;

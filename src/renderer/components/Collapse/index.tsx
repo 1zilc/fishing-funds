@@ -34,23 +34,19 @@ const Collapse: React.FC<PropsWithChildren<CollapseProps>> = (props) => {
     if (props.isOpened) {
       setWrapStyle({
         height: 0,
-        opacity: 0,
       });
       requestAnimationFrame(() => {
         setWrapStyle({
           height: contentRef.current?.offsetHeight,
-          opacity: 1,
         });
       });
     } else {
       setWrapStyle({
         height: contentRef.current?.offsetHeight,
-        opacity: 1,
       });
       requestAnimationFrame(() => {
         setWrapStyle({
           height: 0,
-          opacity: 0,
         });
       });
     }

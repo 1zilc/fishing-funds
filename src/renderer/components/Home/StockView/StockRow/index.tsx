@@ -1,6 +1,5 @@
 import React from 'react';
 import clsx from 'clsx';
-import ColorHash from 'color-hash';
 import { useRequest } from 'ahooks';
 
 import ArrowDownIcon from '@/static/icon/arrow-down.svg';
@@ -11,12 +10,12 @@ import ArrowLine from '@/components/ArrowLine';
 
 import { toggleStockCollapseAction, setIndustryMapAction } from '@/store/features/stock';
 import { useResizeEchart, useRenderEcharts, useAppDispatch, useAppSelector } from '@/utils/hooks';
+import colorHash from '@/utils/colorHash';
 import * as Services from '@/services';
 import * as Utils from '@/utils';
 import * as Enums from '@/utils/enums';
 import styles from './index.module.scss';
 
-const colorHash = new ColorHash();
 export interface RowProps {
   stock: Stock.ResponseItem & Stock.ExtraRow;
   onDetail: (code: string) => void;

@@ -1,7 +1,6 @@
 import React, { useLayoutEffect, useState, useEffect, useRef, useMemo } from 'react';
 import { useInterval, useBoolean, useThrottleFn, useSize, useMemoizedFn, useEventListener } from 'ahooks';
 import { useDispatch, useSelector, TypedUseSelectorHook } from 'react-redux';
-import { theme } from 'antd';
 import dayjs from 'dayjs';
 import * as echarts from 'echarts';
 

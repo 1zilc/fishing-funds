@@ -17,8 +17,7 @@ import LayoutIcon from '@/static/icon/layout.svg';
 import FundsIcon from '@/static/icon/funds.svg';
 import CalculatorIcon from '@/static/icon/calculator.svg';
 import GlobalFillIcon from '@/static/icon/global-fill.svg';
-import NodeTreeIcon from '@/static/icon/node-tree.svg';
-import FolderSharedIcon from '@/static/icon/folder-shared.svg';
+import TranslateIcon from '@/static/icon/translate.svg';
 
 import CustomDrawer from '@/components/CustomDrawer';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
@@ -189,18 +188,12 @@ const AppCenterContent: React.FC<AppCenterContentProps> = (props) => {
                 icon: <CalculatorIcon style={{ ...iconSize }} />,
                 click: openCalculatorDrawer,
               },
-              // {
-              //   title: '基股关系',
-              //   iconType: Enums.WebIconType.Svg,
-              //   icon: <NodeTreeIcon style={{ ...iconSize }} />,
-              //   click: openRelationDrawer,
-              // },
-              // {
-              //   title: '净值导出',
-              //   iconType: Enums.WebIconType.Svg,
-              //   icon: <FolderSharedIcon style={{ ...iconSize }} />,
-              //   click: openRelationDrawer,
-              // },
+              {
+                title: '快捷翻译',
+                iconType: Enums.WebIconType.Svg,
+                icon: <TranslateIcon style={{ ...iconSize }} />,
+                click: openRelationDrawer,
+              },
             ],
           },
           {

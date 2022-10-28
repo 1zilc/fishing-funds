@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import { useBoolean } from 'ahooks';
-import ColorHash from 'color-hash';
+import colorHash from '@/utils/colorHash';
 import * as Enums from '@/utils/enums';
 import styles from './index.module.scss';
 
@@ -11,7 +11,6 @@ interface WebAppIconProps {
   svg?: React.ReactNode;
   onClick?: () => void;
 }
-const colorHash = new ColorHash();
 
 const WebAppIcon: React.FC<WebAppIconProps> = (props) => {
   const { iconType, title, favicon } = props;
