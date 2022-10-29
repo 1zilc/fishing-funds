@@ -170,7 +170,7 @@ export function useFundsClipboard() {
   useIpcRendererListener('clipboard-funds-import', async (e: Electron.IpcRendererEvent, data) => {
     try {
       const limit = 1024;
-      const text = clipboard.readText();
+      const text = await clipboard.readText();
       const json: any[] = JSON.parse(text);
       if (json.length > limit) {
         dialog.showMessageBox({
