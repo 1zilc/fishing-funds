@@ -17,6 +17,7 @@ import { syncSortModeAction, setViewModeAction, initialState as sortInitialState
 import { syncTabsActiveKeyAction } from '@/store/features/tabs';
 import { setWebConfigAction, defaultWebConfig } from '@/store/features/web';
 import { syncVersion } from '@/store/features/updater';
+import { syncTranslateSettingAction, defaultTranslateSetting } from '@/store/features/translate';
 import { useDrawer, useAppDispatch } from '@/utils/hooks';
 import { syncFavoriteQuotationMapAction } from '@/store/features/quotation';
 import * as CONST from '@/constants';
@@ -107,6 +108,8 @@ const InitPage = () => {
     // 钱包配置加载完成
     dispatch(setWalletConfigAction(allConfigStorage[CONST.STORAGE.WALLET_SETTING] || [defaultWallet]));
     dispatch(changeCurrentWalletCodeAction(allConfigStorage[CONST.STORAGE.CURRENT_WALLET_CODE] || defaultWallet.code));
+    // 翻译配置加载完成
+    dispatch(syncTranslateSettingAction(allConfigStorage[CONST.STORAGE.TRANSLATE_SETTING] || defaultTranslateSetting));
     /**
      * state部分
      */

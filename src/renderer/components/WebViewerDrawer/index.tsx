@@ -40,7 +40,7 @@ const menuItemSize = { height: 14, width: 14 };
 
 const { clipboard, dialog, ipcRenderer, shell } = window.contextModules.electron;
 
-const defaultAgent =
+export const defaultAgent =
   'Mozilla/5.0 (iPhone; CPU iPhone OS 10_3_1 like Mac OS X) AppleWebKit/603.1.30 (KHTML, like Gecko) Version/10.0 Mobile/14E304 Safari/602.1';
 
 export const WebViewer: React.FC<WebViewerProps> = (props) => {
@@ -200,13 +200,7 @@ export const WebViewer: React.FC<WebViewerProps> = (props) => {
   return (
     <div className={styles.content} style={{ height: full ? '100vh' : 'calc(100vh - 48px)' }}>
       {url ? (
-        <webview
-          ref={viewRef}
-          src={url}
-          style={{ width: '100%', flex: '1' } as any}
-          useragent={phone ? defaultAgent : undefined}
-          allowpopups
-        />
+        <webview ref={viewRef} src={url} style={{ width: '100%', flex: '1' }} useragent={phone ? defaultAgent : undefined} allowpopups />
       ) : (
         <Empty text="404 Not Found" />
       )}

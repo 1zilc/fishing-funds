@@ -11,6 +11,7 @@ import TabsBar from '@/components/TabsBar';
 import Collect from '@/components/Collect';
 import GroupTab from '@/components/GroupTab';
 import WebViewerDrawer from '@/components/WebViewerDrawer';
+import TranslateDrawer from '@/components/TranslateDrawer';
 import { stockTypesConfig } from '@/components/Toolbar/AppCenterContent/StockSearch';
 
 import { useAppSelector } from '@/utils/hooks';
@@ -213,6 +214,7 @@ const Home: React.FC<HomeProps> = () => {
         <TabsBar />
       </Footer>
       <WebViewerDrawer />
+      <TranslateDrawer />
       <Collect title="home" />
     </div>
   );

@@ -12,7 +12,6 @@ import colorHash from '@/utils/colorHash';
 import { setTranslateSettingAction } from '@/store/features/translate';
 import { useAppDispatch, useAppSelector, useInputShortcut } from '@/utils/hooks';
 import * as Enums from '@/utils/enums';
-import * as Utils from '@/utils';
 import styles from './index.module.scss';
 
 interface TranslateSettingContentProps {
@@ -26,7 +25,7 @@ export const APIOptions = [
     name: '谷歌翻译',
     code: Enums.TranslateApiType.Google,
     onTrans: (keyword: string) => {
-      return `https://translate.google.com/?hl=en&sl=auto&tl=en&text=${keyword}&op=translate`;
+      return `https://translate.google.com/?sl=en&tl=zh-CN&text=${keyword}&op=translate`;
     },
   },
   {
