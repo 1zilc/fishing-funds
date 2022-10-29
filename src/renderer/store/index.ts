@@ -11,6 +11,7 @@ import updaterReducer, { UpdaderState } from '@/store/features/updater';
 import walletReducer, { WalletState } from '@/store/features/wallet';
 import webReducer, { WebState } from '@/store/features/web';
 import zindexReducer, { ZindexState } from '@/store/features/zindex';
+import translateReducer, { TranslateState } from '@/store/features/translate';
 
 const { production } = window.contextModules.process;
 
@@ -33,6 +34,7 @@ const store = configureStore({
     wallet: walletReducer,
     web: webReducer,
     zindex: zindexReducer,
+    translate: translateReducer,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(middleware),
   devTools: !production,
@@ -51,6 +53,7 @@ export type StoreState = {
   sort: SortState;
   coin: CoinState;
   web: WebState;
+  translate: TranslateState;
 };
 
 export type AppDispatch = typeof store.dispatch;

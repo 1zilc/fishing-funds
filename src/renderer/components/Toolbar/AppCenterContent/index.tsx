@@ -50,7 +50,7 @@ const CoinRankingContent = React.lazy(() => import('@/components/Home/CoinView/C
 const EconomicCalendarContent = React.lazy(() => import('@/components/Home/StockView/EconomicCalendarContent'));
 const GoldMarketContent = React.lazy(() => import('@/components/Home/QuotationView/GoldMarketContent'));
 const Calculator = React.lazy(() => import('@/components/Home/CoinView/Calculator'));
-const RelationContent = React.lazy(() => import('@/components/Home/FundView/RelationContent'));
+const TranslateSettingContent = React.lazy(() => import('@/components/TranslateDrawer/TranslateSettingContent'));
 
 const { Search } = Input;
 const iconSize = { height: 18, width: 18 };
@@ -121,7 +121,7 @@ const AppCenterContent: React.FC<AppCenterContentProps> = (props) => {
   const [showEconomicCalendarDrawer, { setTrue: openEconomicCalendarDrawer, setFalse: closeEconomicCalendarDrawer }] = useBoolean(false);
   const [showGoldMarketDrawer, { setTrue: openGoldMarketDrawer, setFalse: closeGoldMarketDrawer }] = useBoolean(false);
   const [showCalculatorDrawer, { setTrue: openCalculatorDrawer, setFalse: closeCalculatorDrawer }] = useBoolean(false);
-  const [showRelationDrawer, { setTrue: openRelationDrawer, setFalse: closeRelationDrawer }] = useBoolean(false);
+  const [showTranslateSettingDrawer, { setTrue: openTranslateSettingDrawer, setFalse: closeTranslateSettingDrawer }] = useBoolean(false);
 
   const openWebView = useOpenWebView();
 
@@ -192,7 +192,7 @@ const AppCenterContent: React.FC<AppCenterContentProps> = (props) => {
                 title: '快捷翻译',
                 iconType: Enums.WebIconType.Svg,
                 icon: <TranslateIcon style={{ ...iconSize }} />,
-                click: openRelationDrawer,
+                click: openTranslateSettingDrawer,
               },
             ],
           },
@@ -370,8 +370,8 @@ const AppCenterContent: React.FC<AppCenterContentProps> = (props) => {
         <CustomDrawer show={showCalculatorDrawer}>
           <Calculator onClose={closeCalculatorDrawer} onEnter={closeCalculatorDrawer} />
         </CustomDrawer>
-        <CustomDrawer show={showRelationDrawer}>
-          <RelationContent onClose={closeRelationDrawer} onEnter={closeRelationDrawer} />
+        <CustomDrawer show={showTranslateSettingDrawer}>
+          <TranslateSettingContent onClose={closeTranslateSettingDrawer} onEnter={closeTranslateSettingDrawer} />
         </CustomDrawer>
       </div>
     </CustomDrawerContent>

@@ -8,6 +8,7 @@ export default {
   WALLET_SETTING: 'WALLET_SETTING', // 钱包配置
   WEB_SETTING: 'WEB_SETTING', // 网站配置
   CURRENT_WALLET_CODE: 'CURRENT_WALLET_CODE', // 当前选中钱包code
+  TRANSLATE_SETTING: 'TRANSLATE_SETTING', // 翻译设置
   // state
   EYE_STATUS: 'EYE_STATUS', // 钱包展示状态
   SORT_MODE: 'SORT_MODE', // 排序模式

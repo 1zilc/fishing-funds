@@ -239,3 +239,7 @@ export enum NewsFilterType {
   Title = 16388,
   Content = 32772,
 }
+export enum TranslateApiType {
+  Google,
+  BaiDu,
+}

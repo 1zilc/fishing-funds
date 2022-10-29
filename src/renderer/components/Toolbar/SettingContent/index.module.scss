@@ -1,30 +1,8 @@
 .content {
   padding: 0 var(--base-padding);
-  // margin-top: 20px;
-
-  section {
-    padding: 0 0;
-  }
-
-  section > label {
-    font-size: var(--base-font-size);
-    margin-bottom: 5px;
-    display: block;
-    word-break: keep-all;
-  }
-
-  textArea,
-  input {
-    width: 50%;
-    outline: none;
-    border: 1px solid var(--border-color);
-    color: var(--main-text-color);
-    // height: 20px;
-  }
 }
 
 .logo {
-  // width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -77,6 +55,14 @@
     span {
       top: 0;
     }
+  }
+
+  textArea,
+  input {
+    width: 50%;
+    outline: none;
+    border: 1px solid var(--border-color);
+    color: var(--main-text-color);
   }
 }
 

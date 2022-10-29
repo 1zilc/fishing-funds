@@ -1,12 +1,13 @@
 import dayjs from 'dayjs';
 import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
 import { AsyncThunkConfig } from '@/store';
-import { setWalletConfigAction } from '@/store/features/wallet';
+import { setWalletConfigAction, changeCurrentWalletCodeAction } from '@/store/features/wallet';
 import { setCoinConfigAction } from '@/store/features/coin';
 import { setStockConfigAction } from '@/store/features/stock';
 import { setFavoriteQuotationMapAction } from '@/store/features/quotation';
 import { setZindexConfigAction } from '@/store/features/zindex';
 import { setWebConfigAction } from '@/store/features/web';
+import { setTranslateSettingAction } from '@/store/features/translate';
 import * as Utils from '@/utils';
 import * as CONST from '@/constants';
 import * as Enums from '@/utils/enums';
@@ -111,10 +112,10 @@ export const setSystemSettingAction = createAsyncThunk<void, System.Setting, Asy
   (newSetting, { dispatch, getState }) => {
     try {
       const {
-        setting: { systemSetting: oldSystemSetting },
+        setting: { systemSetting: oldSetting },
       } = getState();
 
-      const systemSetting = { ...oldSystemSetting, ...newSetting };
+      const systemSetting = { ...oldSetting, ...newSetting };
 
       dispatch(syncSettingAction(systemSetting));
     } catch (error) {}
@@ -122,7 +123,7 @@ export const setSystemSettingAction = createAsyncThunk<void, System.Setting, Asy
 );
 
 export const saveSyncConfigAction = createAsyncThunk<void, void, AsyncThunkConfig>(
-  'setting/setSystemSettingAction',
+  'setting/saveSyncConfigAction',
   async (_, { dispatch, getState }) => {
     try {
       const {
@@ -143,6 +144,7 @@ export const saveSyncConfigAction = createAsyncThunk<void, void, AsyncThunkConfi
         web: {
           config: { webConfig },
         },
+        translate: { translateSetting },
         setting: {
           systemSetting: { syncConfigPathSetting },
         },
@@ -156,6 +158,7 @@ export const saveSyncConfigAction = createAsyncThunk<void, void, AsyncThunkConfi
         [CONST.STORAGE.COIN_SETTING]: coinConfig,
         [CONST.STORAGE.WEB_SETTING]: webConfig,
         [CONST.STORAGE.CURRENT_WALLET_CODE]: currentWalletCode,
+        [CONST.STORAGE.TRANSLATE_SETTING]: translateSetting,
       };
       const syncConfig = await Enhancement.GenerateSyncConfig(config);
       await Enhancement.SaveSyncConfig(syncConfigPathSetting, syncConfig);
@@ -164,7 +167,7 @@ export const saveSyncConfigAction = createAsyncThunk<void, void, AsyncThunkConfi
 );
 
 export const loadSyncConfigAction = createAsyncThunk<void, void, AsyncThunkConfig>(
-  'setting/setSystemSettingAction',
+  'setting/loadSyncConfigAction',
   async (_, { dispatch, getState }) => {
     try {
       const {
@@ -174,12 +177,14 @@ export const loadSyncConfigAction = createAsyncThunk<void, void, AsyncThunkConfi
       } = getState();
       if (syncConfigSetting && syncConfigPathSetting) {
         const config = await Enhancement.loadSyncConfig(syncConfigPathSetting);
+        dispatch(setWalletConfigAction(config[CONST.STORAGE.WALLET_SETTING]));
         dispatch(setZindexConfigAction(config[CONST.STORAGE.ZINDEX_SETTING]));
         dispatch(setFavoriteQuotationMapAction(config[CONST.STORAGE.FAVORITE_QUOTATION_MAP]));
         dispatch(setStockConfigAction(config[CONST.STORAGE.STOCK_SETTING]));
         dispatch(setCoinConfigAction(config[CONST.STORAGE.COIN_SETTING]));
         dispatch(setWebConfigAction(config[CONST.STORAGE.WEB_SETTING]));
-        dispatch(setWalletConfigAction(config[CONST.STORAGE.WALLET_SETTING]));
+        dispatch(changeCurrentWalletCodeAction(config[CONST.STORAGE.CURRENT_WALLET_CODE]));
+        dispatch(setTranslateSettingAction(config[CONST.STORAGE.TRANSLATE_SETTING]));
       }
     } catch (error) {}
   }
