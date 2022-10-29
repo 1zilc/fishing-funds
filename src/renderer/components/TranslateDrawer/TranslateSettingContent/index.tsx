@@ -25,12 +25,23 @@ export const APIOptions = [
   {
     name: '谷歌翻译',
     code: Enums.TranslateApiType.Google,
-    recommond: '★★★★★ (推荐)',
+    onTrans: (keyword: string) => {
+      return `https://translate.google.com/?hl=en&sl=auto&tl=en&text=${keyword}&op=translate`;
+    },
   },
   {
     name: '百度翻译',
     code: Enums.TranslateApiType.BaiDu,
-    recommond: '★★★★☆',
+    onTrans: (keyword: string) => {
+      return `https://fanyi.baidu.com/#zh/en/${keyword}`;
+    },
+  },
+  {
+    name: '有道翻译',
+    code: Enums.TranslateApiType.YouDao,
+    onTrans: (keyword: string) => {
+      return `https://www.youdao.com/m/result?word=${keyword}&lang=en`;
+    },
   },
 ];
 

@@ -242,4 +242,5 @@ export enum NewsFilterType {
 export enum TranslateApiType {
   Google,
   BaiDu,
+  YouDao,
 }
