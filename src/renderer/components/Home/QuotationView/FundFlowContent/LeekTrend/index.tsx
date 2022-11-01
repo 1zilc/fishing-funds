@@ -17,6 +17,7 @@ const LeekTrend: React.FC<LeekTrendProps> = () => {
   useRenderEcharts(
     ({ varibleColors }) => {
       chartInstance?.setOption({
+        tooltip: { trigger: 'axis' },
         xAxis: {
           type: 'category',
           axisLabel: {
