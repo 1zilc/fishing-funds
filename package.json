@@ -27,10 +27,18 @@
     "prepare": "husky install"
   },
   "lint-staged": {
-    "*.{js,jsx,ts,tsx}": ["cross-env NODE_ENV=development eslint --cache --fix"],
-    "{*.json,.{eslintrc,prettierrc}}": ["prettier --ignore-path .eslintignore --parser json --write"],
-    "*.{css,scss}": ["prettier --ignore-path .eslintignore --single-quote --write"],
-    "*.{html,md,yml}": ["prettier --ignore-path .eslintignore --single-quote --write"]
+    "*.{js,jsx,ts,tsx}": [
+      "cross-env NODE_ENV=development eslint --cache --fix"
+    ],
+    "{*.json,.{eslintrc,prettierrc}}": [
+      "prettier --ignore-path .eslintignore --write"
+    ],
+    "*.{css,scss}": [
+      "prettier --ignore-path .eslintignore --write"
+    ],
+    "*.{html,md,yml}": [
+      "prettier --ignore-path .eslintignore --write"
+    ]
   },
   "build": {
     "productName": "Fishing Funds",
@@ -38,7 +46,11 @@
     "asar": true,
     "asarUnpack": "**\\*.{node,dll}",
     "copyright": "Copyright © 2022 1zilc",
-    "files": ["dist", "node_modules", "package.json"],
+    "files": [
+      "dist",
+      "node_modules",
+      "package.json"
+    ],
     "afterSign": ".erb/scripts/notarize.js",
     "fileAssociations": [
       {
@@ -55,7 +67,10 @@
       "target": [
         {
           "target": "dmg",
-          "arch": ["x64", "arm64"]
+          "arch": [
+            "x64",
+            "arm64"
+          ]
         }
       ],
       "type": "distribution",
@@ -79,14 +94,19 @@
       ]
     },
     "win": {
-      "target": ["nsis"]
+      "target": [
+        "nsis"
+      ]
     },
     "nsis": {
       "oneClick": false,
       "allowToChangeInstallationDirectory": true
     },
     "linux": {
-      "target": ["AppImage", "snap"],
+      "target": [
+        "AppImage",
+        "snap"
+      ],
       "category": "Financial"
     },
     "snap": {
@@ -94,7 +114,9 @@
       "summary": "Display real-time trends of Chinese funds in the menubar.",
       "publish": {
         "provider": "snapStore",
-        "channels": ["stable"]
+        "channels": [
+          "stable"
+        ]
       }
     },
     "directories": {
@@ -102,7 +124,9 @@
       "buildResources": "assets",
       "output": "release/build"
     },
-    "extraResources": ["./assets/**"],
+    "extraResources": [
+      "./assets/**"
+    ],
     "publish": [
       {
         "provider": "github",
@@ -163,10 +187,24 @@
       "\\.(css|less|sass|scss)$": "identity-obj-proxy",
       "^@/(.*)$": "<rootDir>/src/renderer/$1"
     },
-    "moduleFileExtensions": ["js", "jsx", "ts", "tsx", "json"],
-    "moduleDirectories": ["node_modules", "release/app/node_modules", "src"],
-    "testPathIgnorePatterns": ["release/app/dist"],
-    "setupFiles": ["./.erb/scripts/check-build-exists.ts"]
+    "moduleFileExtensions": [
+      "js",
+      "jsx",
+      "ts",
+      "tsx",
+      "json"
+    ],
+    "moduleDirectories": [
+      "node_modules",
+      "release/app/node_modules",
+      "src"
+    ],
+    "testPathIgnorePatterns": [
+      "release/app/dist"
+    ],
+    "setupFiles": [
+      "./.erb/scripts/check-build-exists.ts"
+    ]
   },
   "devDependencies": {
     "@esbuild-kit/cjs-loader": "^2.3.3",
@@ -245,7 +283,7 @@
   "dependencies": {
     "@reduxjs/toolkit": "^1.8.1",
     "ahooks": "^3.0.3",
-    "antd": "5.0.0-alpha.33",
+    "antd": "5.0.0-alpha.34",
     "cheerio": "^1.0.0-rc.5",
     "clsx": "^1.1.1",
     "color": "^4.2.3",
@@ -288,7 +326,10 @@
     "npm": ">=8.x"
   },
   "electronmon": {
-    "patterns": ["!**/**", "src/main/**"],
+    "patterns": [
+      "!**/**",
+      "src/main/**"
+    ],
     "logLevel": "quiet"
   }
 }
