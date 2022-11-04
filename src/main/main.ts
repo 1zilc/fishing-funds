@@ -31,6 +31,7 @@ import TouchBarManager from './touchbar';
 import LocalStore from './store';
 import { createChildWindow } from './childWindow';
 import Proxy from './proxy';
+import HotkeyManager from './hotkey';
 import ContextMenuManager from './contextMenu';
 import { saveImage, saveJsonToCsv, saveString, readFile } from './io';
 import { lockSingleInstance, checkEnvTool, sendMessageToRenderer, setNativeTheme, getOtherWindows } from './util';
@@ -59,7 +60,6 @@ function main() {
   const appUpdater = new AppUpdater({ icon: appIcon, mb });
   const touchBarManager = new TouchBarManager([], mb);
   const contextMenuManager = new ContextMenuManager({ mb, updater: appUpdater });
-  let activeHotkeys = '';
   let windowIds: number[] = [];
   const defaultTheme = localStore.get('config', 'SYSTEM_SETTING.systemThemeSetting', Enums.SystemThemeType.Auto) as Enums.SystemThemeType;
   // mb.app.commandLine.appendSwitch('disable-backgrounding-occluded-windows', 'true');
@@ -101,6 +101,13 @@ function main() {
   });
   ipcMain.handle('shell-openExternal', async (event, config) => {
     shell.openExternal(config);
+  });
+  ipcMain.handle('set-menubar-visible', async (event, config) => {
+    if (config) {
+      mb.showWindow();
+    } else {
+      mb.hideWindow();
+    }
   });
   // store相关
   ipcMain.handle('get-storage-config', async (event, config) => {
@@ -156,35 +163,21 @@ function main() {
     contextMenuManager.updateEyeMenu(config);
   });
   // 快捷键
-  ipcMain.handle('set-hotkey', async (event, keys: string) => {
-    if (keys === activeHotkeys) {
-      return;
-    }
-    if (activeHotkeys) {
-      globalShortcut.unregister(activeHotkeys.split(' + ').join('+'));
-    }
-    if (keys) {
-      const accelerator = keys.split(' + ').join('+');
-      const ret = globalShortcut.register(accelerator, () => {
-        const isWindowVisible = mb.window?.isVisible();
-        if (isWindowVisible) {
-          mb.hideWindow();
-        } else {
-          mb.showWindow();
-        }
-      });
-      if (ret) {
-        // dialog.showMessageBox({ message: `${accelerator}快捷键设置成功`, type: 'info' });
+  const visibleHotkeyManager = new HotkeyManager({ mb });
+  const translateHotkeyManager = new HotkeyManager({ mb });
+  ipcMain.handle('set-visible-hotkey', async (event, keys: string) => {
+    visibleHotkeyManager.registryHotkey(keys, ({ visible }) => {
+      if (visible) {
+        mb.hideWindow();
       } else {
-        const isRegistered = globalShortcut.isRegistered(accelerator);
-        if (isRegistered) {
-          dialog.showMessageBox({ message: `${accelerator}快捷键已被占用`, type: 'warning' });
-        } else {
-          dialog.showMessageBox({ message: `${accelerator}快捷键设置失败`, type: 'error' });
-        }
+        mb.showWindow();
       }
-    }
-    activeHotkeys = keys;
+    });
+  });
+  ipcMain.handle('set-translate-hotkey', async (event, keys: string) => {
+    translateHotkeyManager.registryHotkey(keys, ({ visible }) => {
+      sendMessageToRenderer(mb.window, 'trigger-translate', visible);
+    });
   });
   // 多窗口相关
   ipcMain.handle('open-child-window', async (event, config) => {

@@ -13,6 +13,7 @@ import {
   useUpdateContextMenuWalletsState,
   useShareStoreState,
   useSyncConfig,
+  useTranslate,
 } from '@/utils/hooks';
 
 const HomePage = () => {
@@ -27,6 +28,7 @@ const HomePage = () => {
   useTouchBar();
   useShareStoreState();
   useSyncConfig();
+  useTranslate();
   useBootStrap();
 
   return <Home />;

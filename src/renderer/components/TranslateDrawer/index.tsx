@@ -53,7 +53,6 @@ const TranslateContent: React.FC<TranslateContentProps> = () => {
     }
     setTrue();
   }, [readClipboardSetting]);
-  console.log(url, readClipboardSetting);
 
   return (
     <CustomDrawerContent classNames={styles.content} title="翻译" enterText="多窗" onClose={onClose} onEnter={onOpenChildWindow}>
@@ -67,7 +66,7 @@ const TranslateDrawer: React.FC<TranslateDrawerProps> = () => {
   const show = useAppSelector((state) => state.translate.show);
 
   return (
-    <CustomDrawer show={show} zIndex={CONST.DEFAULT.DRAWER_ZINDEX_HEIGHT}>
+    <CustomDrawer show={show} zIndex={CONST.DEFAULT.DRAWER_ZINDEX_HEIGHT} closeImmediately>
       <TranslateContent />
     </CustomDrawer>
   );

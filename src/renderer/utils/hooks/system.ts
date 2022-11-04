@@ -1,4 +1,5 @@
 import { useLayoutEffect, useState, useEffect, useMemo } from 'react';
+import { flushSync } from 'react-dom';
 import { useInterval } from 'ahooks';
 import { theme } from 'antd';
 import { AnyAction } from 'redux';
@@ -10,6 +11,7 @@ import { setFundConfigAction } from '@/store/features/fund';
 import { syncTabsActiveKeyAction } from '@/store/features/tabs';
 import { changeCurrentWalletCodeAction, toggleEyeStatusAction } from '@/store/features/wallet';
 import { updateAdjustmentNotificationDateAction, syncDarkMode, saveSyncConfigAction, syncVaribleColors } from '@/store/features/setting';
+import { syncTranslateShowAction } from '@/store/features/translate';
 
 import {
   useWorkDayTimeToDo,
@@ -303,8 +305,9 @@ export function useMappingLocalToSystemSetting() {
     proxyTypeSetting,
     proxyHostSetting,
     proxyPortSetting,
-    hotkeySetting,
+    hotkeySetting: visibleHotkey,
   } = useAppSelector((state) => state.setting.systemSetting);
+  const { hotkeySetting: translateHotkey } = useAppSelector((state) => state.translate.translateSetting);
 
   useIpcRendererListener('nativeTheme-updated', (e, data) => {
     dispatch(syncDarkMode(!!data?.darkMode));
@@ -343,12 +346,14 @@ export function useMappingLocalToSystemSetting() {
     }
   }, [proxyTypeSetting, proxyHostSetting, proxyPortSetting]);
   useEffect(() => {
-    ipcRenderer.invoke('set-hotkey', hotkeySetting);
-  }, [hotkeySetting]);
-
+    ipcRenderer.invoke('set-visible-hotkey', visibleHotkey);
+  }, [visibleHotkey]);
   useEffect(() => {
     dispatch(syncVaribleColors());
   }, [hashId]);
+  useEffect(() => {
+    ipcRenderer.invoke('set-translate-hotkey', translateHotkey);
+  }, [translateHotkey]);
 }
 
 export function useTrayContent() {
@@ -607,4 +612,29 @@ export function useSyncConfig() {
       dispatch(saveSyncConfigAction());
     }
   }, [syncConfigSetting, syncConfigPathSetting]);
+}
+
+export function useTranslate() {
+  const dispatch = useAppDispatch();
+  const show = useAppSelector((state) => state.translate.show); // translate当前显示状态
+
+  useIpcRendererListener('trigger-translate', (event, visible: boolean) => {
+    // menubar 当前显示状态
+    if (visible) {
+      if (show) {
+        ipcRenderer.invoke('set-menubar-visible', false);
+        dispatch(syncTranslateShowAction(false));
+      } else {
+        dispatch(syncTranslateShowAction(true));
+      }
+    } else {
+      if (show) {
+        flushSync(() => {
+          dispatch(syncTranslateShowAction(false));
+        });
+      }
+      dispatch(syncTranslateShowAction(true));
+      ipcRenderer.invoke('set-menubar-visible', true);
+    }
+  });
 }

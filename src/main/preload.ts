@@ -32,6 +32,7 @@ contextBridge.exposeInMainWorld('contextModules', {
           'change-tab-active-key',
           'change-eye-status',
           'sync-store-data',
+          'trigger-translate',
         ];
         if (validChannels.includes(channel)) {
           return ipcRenderer.on(channel, func);
