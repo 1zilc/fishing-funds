@@ -13,7 +13,7 @@ export interface ThemeProviderProps {
 export type StylesProps = ThemeProviderProps;
 
 const { useToken } = theme;
-const baseAlgorithm = [theme.compactAlgorithm];
+const baseAlgorithm: any[] = [];
 
 const Styles: React.FC<StylesProps> = (props) => {
   const { config, target } = props;
