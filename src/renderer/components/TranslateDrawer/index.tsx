@@ -5,6 +5,8 @@ import CustomDrawerContent from '@/components/CustomDrawer/Content';
 import CustomDrawer from '@/components/CustomDrawer';
 import { defaultAgent } from '@/components/WebViewerDrawer';
 import { APIOptions } from '@/components/TranslateDrawer/TranslateSettingContent';
+import { RedirectSearchParams } from '@/containers/InitPage';
+import { WebViewerPageParams } from '@/components/WebViewerDrawer/WebViewerPage';
 import { syncTranslateShowAction } from '@/store/features/translate';
 import { useAppDispatch, useAppSelector } from '@/utils/hooks';
 import * as CONST from '@/constants';
@@ -35,14 +37,13 @@ const TranslateContent: React.FC<TranslateContentProps> = () => {
 
   function onOpenChildWindow() {
     const currentUrl = viewRef.current?.getURL();
-    const search = Utils.MakeSearchParams({
-      _nav: '/detail/webViewer',
-      data: {
+    const search = Utils.MakeSearchParams('', {
+      _redirect: Utils.MakeSearchParams(CONST.ROUTES.DETAIL_WEBVIEWER, {
         phone: true,
         title: '翻译',
         url: currentUrl,
-      },
-    });
+      } as WebViewerPageParams),
+    } as RedirectSearchParams);
     ipcRenderer.invoke('open-child-window', { search });
   }
 

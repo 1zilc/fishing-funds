@@ -1,4 +1,6 @@
 import React, { useLayoutEffect, useState, useEffect, useRef, useMemo } from 'react';
+import { useLocation } from 'react-router-dom';
+import queryString from 'query-string';
 import { useInterval, useBoolean, useThrottleFn, useSize, useMemoizedFn, useEventListener } from 'ahooks';
 import { useDispatch, useSelector, TypedUseSelectorHook } from 'react-redux';
 import dayjs from 'dayjs';
@@ -686,4 +688,11 @@ export function useThemeColor() {
     originPrimaryColor,
     customThemeColorEnable,
   };
+}
+
+export function useRouterParams<T = Record<string, unknown>>() {
+  const location = useLocation();
+  return queryString.parse(location.search, {
+    parseBooleans: true,
+  }) as T;
 }

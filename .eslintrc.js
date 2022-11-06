@@ -12,6 +12,7 @@ module.exports = {
     '@typescript-eslint/no-empty-interface': 1,
     '@typescript-eslint/naming-convention': 1,
     '@typescript-eslint/default-param-last': 0, // 默认参数滞后
+    '@typescript-eslint/ban-types': 1,
     'import/no-named-as-default': 0,
     'import/no-cycle': 0,
     'import/no-dynamic-require': 0,

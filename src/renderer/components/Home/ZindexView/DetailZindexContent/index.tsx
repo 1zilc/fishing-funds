@@ -7,15 +7,18 @@ import Trend from '@/components/Home/ZindexView/DetailZindexContent/Trend';
 import K from '@/components/Home/ZindexView/DetailZindexContent/K';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
 import Recent from '@/components/Home/NewsList/Recent';
+import { RedirectSearchParams } from '@/containers/InitPage';
+import { DetailZindexPageParams } from '@/components/Home/ZindexView/DetailZindexPage';
 import * as Services from '@/services';
 import * as Utils from '@/utils';
 import * as Enums from '@/utils/enums';
+import * as CONST from '@/constants';
 
 import styles from './index.module.scss';
 
-export interface DetailFundProps {
+export type DetailFundProps = {
   code: string;
-}
+};
 export interface DetailFundContentProps extends DetailFundProps {
   onEnter: () => void;
   onClose: () => void;
@@ -116,10 +119,11 @@ export const DetailZindex: React.FC<DetailFundProps> = (props) => {
 
 const DetailZindexContent: React.FC<DetailFundContentProps> = (props) => {
   function onOpenChildWindow() {
-    const search = Utils.MakeSearchParams({
-      _nav: '/detail/zindex',
-      data: { code: props.code },
-    });
+    const search = Utils.MakeSearchParams('', {
+      _redirect: Utils.MakeSearchParams(CONST.ROUTES.DETAIL_ZINDEX, {
+        code: props.code,
+      } as DetailZindexPageParams),
+    } as RedirectSearchParams);
     ipcRenderer.invoke('open-child-window', { search });
   }
   return (

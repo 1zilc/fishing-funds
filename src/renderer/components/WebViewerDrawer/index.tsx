@@ -13,6 +13,8 @@ import ToolsIcon from '@/static/icon/tools.svg';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
 import CustomDrawer from '@/components/CustomDrawer';
 import Empty from '@/components/Empty';
+import { RedirectSearchParams } from '@/containers/InitPage';
+import { WebViewerPageParams } from '@/components/WebViewerDrawer/WebViewerPage';
 
 import { closeWebAction, addWebAction, deleteWebAction, syncWebPhoneAction } from '@/store/features/web';
 import { useDrawer, useAppDispatch, useAppSelector, useIpcRendererListener } from '@/utils/hooks';
@@ -25,14 +27,14 @@ const AddWebContent = React.lazy(() => import('@/components/WebViewerDrawer/AddW
 
 interface WebViewerDrawerProps {}
 
-interface WebViewerProps {
+export type WebViewerProps = {
   url: string;
   phone?: boolean;
   title: string;
+  full?: boolean;
   updateTitle?: (title: string) => void;
   updateUrl?: (title: string) => void;
-  full?: boolean;
-}
+};
 
 interface WebViewerContentProps {}
 
@@ -259,14 +261,13 @@ export const WebViewerContent: React.FC<WebViewerContentProps> = () => {
   }
 
   function onOpenChildWindow() {
-    const search = Utils.MakeSearchParams({
-      _nav: '/detail/webViewer',
-      data: {
+    const search = Utils.MakeSearchParams('', {
+      _redirect: Utils.MakeSearchParams(CONST.ROUTES.DETAIL_WEBVIEWER, {
         ...view,
         title: currentTitle,
         url: currentUrl,
-      },
-    });
+      } as WebViewerPageParams),
+    } as RedirectSearchParams);
     ipcRenderer.invoke('open-child-window', { search });
   }
 

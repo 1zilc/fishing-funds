@@ -1,6 +1,5 @@
 import React from 'react';
 import clsx from 'clsx';
-
 import { useRequest } from 'ahooks';
 import { Tabs } from 'antd';
 
@@ -11,17 +10,19 @@ import Funds from '@/components/Home/QuotationView/DetailQuotationContent/Funds'
 import Recent from '@/components/Home/NewsList/Recent';
 import RealTimeTransaction from '@/components/Home/QuotationView/DetailQuotationContent/RealTimeTransaction';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
+import { RedirectSearchParams } from '@/containers/InitPage';
+import { DetailQuotationPageParams } from '@/components/Home/QuotationView/DetailQuotationPage';
 import { setFavoriteQuotationMapAction } from '@/store/features/quotation';
-
 import { useAppDispatch, useAppSelector } from '@/utils/hooks';
 import * as Services from '@/services';
 import * as Utils from '@/utils';
-import * as Enums from '@/utils/enums';
+import * as CONST from '@/constants';
 import styles from './index.module.scss';
 
-export interface DetailQuotationProps {
+export type DetailQuotationProps = {
   code: string;
-}
+};
+
 export interface DetailQuotationContentProps extends DetailQuotationProps {
   onEnter: () => void;
   onClose: () => void;
@@ -147,12 +148,11 @@ export const DetailQuotation: React.FC<DetailQuotationProps> = (props) => {
 
 const DetailQuotationContent: React.FC<DetailQuotationContentProps> = (props) => {
   function onOpenChildWindow() {
-    const search = Utils.MakeSearchParams({
-      _nav: '/detail/quotation',
-      data: {
+    const search = Utils.MakeSearchParams('', {
+      _redirect: Utils.MakeSearchParams(CONST.ROUTES.DETAIL_QUOTATION, {
         code: props.code,
-      },
-    });
+      } as DetailQuotationPageParams),
+    } as RedirectSearchParams);
     ipcRenderer.invoke('open-child-window', { search });
   }
 

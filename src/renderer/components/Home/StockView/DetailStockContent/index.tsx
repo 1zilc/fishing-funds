@@ -1,6 +1,5 @@
 import React from 'react';
 import clsx from 'clsx';
-
 import { useRequest } from 'ahooks';
 import { message, Tabs } from 'antd';
 
@@ -13,6 +12,8 @@ import Stocks from '@/components/Home/StockView/DetailStockContent/Stocks';
 import HoldFunds from '@/components/Home/StockView/DetailStockContent/HoldFunds';
 import Recent from '@/components/Home/NewsList/Recent';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
+import { RedirectSearchParams } from '@/containers/InitPage';
+import { DetailStockPageParams } from '@/components/Home/StockView/DetailStockPage';
 import { addStockAction } from '@/store/features/stock';
 import { useAppDispatch, useAppSelector } from '@/utils/hooks';
 import * as Services from '@/services';
@@ -21,10 +22,10 @@ import * as CONST from '@/constants';
 
 import styles from './index.module.scss';
 
-export interface DetailStockProps {
+export type DetailStockProps = {
   secid: string;
-  type?: number;
-}
+  type?: string | number;
+};
 
 export interface DetailStockContentProps extends DetailStockProps {
   onEnter: () => void;
@@ -73,7 +74,7 @@ export const DetailStock: React.FC<DetailStockProps> = (props) => {
           code: stock.code!,
           name: stock.name!,
           secid,
-          type: stockType,
+          type: Number(stockType),
         })
       );
     } catch (error) {
@@ -224,13 +225,12 @@ export const DetailStock: React.FC<DetailStockProps> = (props) => {
 
 const DetailStockContent: React.FC<DetailStockContentProps> = (props) => {
   function onOpenChildWindow() {
-    const search = Utils.MakeSearchParams({
-      _nav: '/detail/stock',
-      data: {
+    const search = Utils.MakeSearchParams('', {
+      _redirect: Utils.MakeSearchParams(CONST.ROUTES.DETAIL_STOCK, {
         secid: props.secid,
         type: props.type,
-      },
-    });
+      } as DetailStockPageParams),
+    } as RedirectSearchParams);
     ipcRenderer.invoke('open-child-window', { search });
   }
 

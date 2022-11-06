@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, startTransition } from 'react';
 import { useNavigate } from 'react-router-dom';
 import LoadingScreen from '@/components/LoadingScreen';
 import { setRemoteFundsAction, setFundRatingAction } from '@/store/features/fund';
@@ -18,7 +18,7 @@ import { syncTabsActiveKeyAction } from '@/store/features/tabs';
 import { setWebConfigAction, defaultWebConfig } from '@/store/features/web';
 import { syncVersion } from '@/store/features/updater';
 import { syncTranslateSettingAction, defaultTranslateSetting } from '@/store/features/translate';
-import { useDrawer, useAppDispatch } from '@/utils/hooks';
+import { useDrawer, useAppDispatch, useRouterParams } from '@/utils/hooks';
 import { syncFavoriteQuotationMapAction } from '@/store/features/quotation';
 import * as CONST from '@/constants';
 import * as Utils from '@/utils';
@@ -27,7 +27,9 @@ import * as Enums from '@/utils/enums';
 const { ipcRenderer, app } = window.contextModules.electron;
 const electronStore = window.contextModules.electronStore;
 
-const params = Utils.ParseSearchParams();
+export type RedirectSearchParams = {
+  _redirect: string;
+};
 
 async function checkLocalStorage() {
   if (localStorage.length) {
@@ -138,7 +140,11 @@ const InitPage = () => {
 
     setLoading('加载完毕');
 
-    navigate(params.get('_nav') || '/home');
+    startTransition(() => {
+      // 入口params使用真实地址window location做解析，其余一律使用router location
+      const params: RedirectSearchParams = Utils.ParseLocationParams();
+      navigate(params._redirect || CONST.ROUTES.HOME);
+    });
   }
 
   useEffect(() => {

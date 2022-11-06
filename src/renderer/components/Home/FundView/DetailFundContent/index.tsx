@@ -28,6 +28,8 @@ import IndustryLayout from '@/components/Home/FundView/DetailFundContent/Industr
 import WarehouseEvent from '@/components/Home/FundView/DetailFundContent/WarehouseEvent';
 import Origin from '@/components/Home/FundView/DetailFundContent/Origin';
 import Recent from '@/components/Home/NewsList/Recent';
+import { RedirectSearchParams } from '@/containers/InitPage';
+import { DetailFundPageParams } from '@/components/Home/FundView/DetailFundPage';
 import { useFundRating, useDrawer, useAppSelector } from '@/utils/hooks';
 import * as Services from '@/services';
 import * as Utils from '@/utils';
@@ -38,9 +40,9 @@ import styles from './index.module.scss';
 const FundManagerContent = React.lazy(() => import('@/components/Home/FundView/FundManagerContent'));
 const AddFundContent = React.lazy(() => import('@/components/Home/FundView/AddFundContent'));
 
-export interface DetailFundProps {
+export type DetailFundProps = {
   code: string;
-}
+};
 export interface DetailFundContentProps extends DetailFundProps {
   onEnter: () => void;
   onClose: () => void;
@@ -400,7 +402,11 @@ export const DetailFund: React.FC<DetailFundProps> = (props) => {
 
 const DetailFundContent: React.FC<DetailFundContentProps> = (props) => {
   function onOpenChildWindow() {
-    const search = Utils.MakeSearchParams({ _nav: '/detail/fund', data: { code: props.code } });
+    const search = Utils.MakeSearchParams('', {
+      _redirect: Utils.MakeSearchParams(CONST.ROUTES.DETAIL_FUND, {
+        code: props.code,
+      } as DetailFundPageParams),
+    } as RedirectSearchParams);
     ipcRenderer.invoke('open-child-window', { search });
   }
   return (

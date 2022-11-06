@@ -4,10 +4,10 @@ import { Tabs } from 'antd';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
 import styles from './index.module.scss';
 
-interface TemplateNameProps {
+export type TemplateNameProps = {
   onEnter: () => void;
   onClose: () => void;
-}
+};
 
 const TemplateName: React.FC<TemplateNameProps> = (props) => {
   return (

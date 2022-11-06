@@ -10,14 +10,17 @@ import Appraise from '@/components/Home/CoinView/DetailCoinContent/Appraise';
 import Recent from '@/components/Home/NewsList/Recent';
 import Sentiment from '@/components/Home/CoinView/DetailCoinContent/Sentiment';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
+import { RedirectSearchParams } from '@/containers/InitPage';
+import { DetailCoinPageParams } from '@/components/Home/CoinView/DetailCoinPage';
 import * as Services from '@/services';
 import * as Utils from '@/utils';
+import * as CONST from '@/constants';
 
 import styles from './index.module.scss';
 
-export interface DetailCoinProps {
+export type DetailCoinProps = {
   code: string;
-}
+};
 export interface DetailCoinContentProps extends DetailCoinProps {
   onEnter: () => void;
   onClose: () => void;
@@ -161,12 +164,11 @@ export const DetailCoin: React.FC<DetailCoinProps> = (props) => {
 
 const DetailCoinContent: React.FC<DetailCoinContentProps> = (props) => {
   function onOpenChildWindow() {
-    const search = Utils.MakeSearchParams({
-      _nav: '/detail/coin',
-      data: {
+    const search = Utils.MakeSearchParams('', {
+      _redirect: Utils.MakeSearchParams(CONST.ROUTES.DETAIL_COIN, {
         code: props.code,
-      },
-    });
+      } as DetailCoinPageParams),
+    } as RedirectSearchParams);
     ipcRenderer.invoke('open-child-window', { search });
   }
 

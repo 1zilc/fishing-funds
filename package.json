@@ -309,6 +309,7 @@
     "menubar": "^9.0.2",
     "number-precision": "^1.5.0",
     "promise-worker": "^2.0.1",
+    "query-string": "^7.1.1",
     "react": "^18.0.0",
     "react-color": "^2.19.3",
     "react-dom": "^18.0.0",

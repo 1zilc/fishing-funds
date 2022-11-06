@@ -6,7 +6,7 @@ import * as CONST from '@/constants';
 import * as Services from '@/services';
 import styles from './index.module.scss';
 
-interface TemplateNameProps {}
+export type TemplateNameProps = {};
 
 const TemplateName: React.FC<TemplateNameProps> = () => {
   const { ref: chartRef, chartInstance } = useResizeEchart(CONST.DEFAULT.ECHARTS_SCALE);

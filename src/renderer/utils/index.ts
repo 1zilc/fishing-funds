@@ -1,4 +1,5 @@
 import NP from 'number-precision';
+import queryString from 'query-string';
 import Color from 'color';
 import dayjs from 'dayjs';
 import * as CONST from '@/constants';
@@ -354,15 +355,16 @@ export function ConvertKData(data: any[]) {
   }));
 }
 
-export function MakeSearchParams(config: { _nav: string; data?: Record<string, unknown> }) {
-  const data = config.data || {};
-  const search = '?' + new URLSearchParams({ ...data, _nav: config._nav }).toString();
-  return search;
+export function MakeSearchParams(url: string, query: queryString.StringifiableRecord) {
+  return queryString.stringifyUrl({ url, query });
 }
 
-export function ParseSearchParams() {
-  const data = new URLSearchParams(window.location.search);
-  return data;
+export function ParseLocationParams<T = Record<string, unknown>>() {
+  const data = queryString.parse(location.search, {
+    parseNumbers: true,
+    parseBooleans: true,
+  });
+  return data as T;
 }
 
 export function CheckListOrderHasChanged<I1, I2 extends I1, K extends keyof I1>(list1: I1[], list2: I2[], key: K) {
