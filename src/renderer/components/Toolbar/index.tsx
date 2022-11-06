@@ -86,7 +86,6 @@ const ToolBar: React.FC<ToolBarProps> = () => {
             themeWrapperClass={styles.themeWrapper}
             onClose={closeSettingContent}
             onEnter={() => {
-              freshAll();
               closeSettingContent();
             }}
           />
