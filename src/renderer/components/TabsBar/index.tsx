@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import classnemes from 'clsx';
+import clsx from 'clsx';
 
 import { syncTabsActiveKeyAction } from '@/store/features/tabs';
 import { useAppDispatch, useAppSelector } from '@/utils/hooks';
@@ -27,13 +27,13 @@ const TabsBar: React.FC<TabsBarProps> = () => {
 
   return (
     <div className={styles.layout}>
-      <div className={styles.content}>
+      <div className={clsx(styles.content, 'max-content')}>
         {bottomTabsSetting
           .filter(({ show }) => show)
           .map((tab) => (
             <React.Fragment key={tab.key}>
               <div
-                className={classnemes(styles.tab, {
+                className={clsx(styles.tab, {
                   [styles.active]: tabsActiveKey === tab.key,
                 })}
                 onClick={() => dispatch(syncTabsActiveKeyAction(tab.key))}

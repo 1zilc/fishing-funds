@@ -1,5 +1,6 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { Dropdown, Progress, Switch } from 'antd';
+import clsx from 'clsx';
 import { useBoolean, useMemoizedFn, useEventListener } from 'ahooks';
 
 import StarIcon from '@/static/icon/star.svg';
@@ -215,7 +216,7 @@ export const WebViewer: React.FC<WebViewerProps> = (props) => {
           showInfo={false}
           strokeColor={done ? 'transparent' : 'var(--primary-color)'}
         />
-        <div className={styles.nav}>
+        <div className={clsx(styles.nav, 'max-content')}>
           <Dropdown
             overlay={
               <div className={styles.menu}>

@@ -45,6 +45,12 @@ h3 {
 .red {
   color: red;
 }
+
 :focus-visible {
   outline: none;
+}
+
+.max-content {
+  max-width: 400px;
+  margin: 0 auto;
 }

@@ -22,8 +22,7 @@ export function createMenubar({ tray, mainWindowState }: { tray: Tray; mainWindo
 
       minHeight: 400,
       minWidth: 300,
-      maxHeight: 1000,
-      maxWidth: 600,
+      maxWidth: 800,
       vibrancy: 'sidebar',
       webPreferences: {
         webviewTag: true,
