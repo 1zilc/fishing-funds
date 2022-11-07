@@ -23,7 +23,7 @@ const Styles: React.FC<StylesProps> = (props) => {
     <style>
       {` ${target || ':root'} {
             filter: ${config.lowKey && 'grayscale(90%)'};
-            font-size: ${token.fontSizeBase}px;
+            font-size: ${token.fontSize}px;
             font-family: ${token.fontFamily};
 
             --primary-color: ${token.colorPrimary};
@@ -64,7 +64,7 @@ const ThemeProvider: React.FC<PropsWithChildren<ThemeProviderProps>> = (props) =
       theme={{
         token: {
           colorPrimary: config.primaryColor,
-          fontSizeBase: config.baseFontSize,
+          fontSize: config.baseFontSize,
           colorSuccess: '#00b578',
           colorWarning: '#ff8f1f',
           colorError: '#ff3141',
@@ -72,6 +72,8 @@ const ThemeProvider: React.FC<PropsWithChildren<ThemeProviderProps>> = (props) =
         algorithm: config.darkMode ? [...baseAlgorithm, theme.darkAlgorithm] : baseAlgorithm,
       }}
       autoInsertSpaceInButton={false}
+      componentSize="small"
+      space={{ size: 'small' }}
     >
       <Styles config={config} target={target} />
       {props.children}
