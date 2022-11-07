@@ -82,18 +82,10 @@ const InitPage = () => {
     await checkRedundanceStorage();
 
     setLoading('加载中...');
-    const version = await app.getVersion();
-    const allConfigStorage = await electronStore.all('config');
-    const allStateStorage = await electronStore.all('state');
-    const allCacheStorage = await electronStore.all('cache');
-
-    /**
-     * 版本号
-     */
-    dispatch(syncVersion(version));
     /**
      * config部分
      */
+    const allConfigStorage = await electronStore.all('config');
     // 系统设置加载完成
     dispatch(setSystemSettingAction(allConfigStorage[CONST.STORAGE.SYSTEM_SETTING] || defaultSystemSetting));
     dispatch(updateAdjustmentNotificationDateAction(allConfigStorage[CONST.STORAGE.ADJUSTMENT_NOTIFICATION_DATE] || ''));
@@ -115,6 +107,7 @@ const InitPage = () => {
     /**
      * state部分
      */
+    const allStateStorage = await electronStore.all('state');
     // tabs配置加载完成
     dispatch(syncTabsActiveKeyAction(allStateStorage[CONST.STORAGE.TABS_ACTIVE_KEY] || Enums.TabKeyType.Fund));
     // 排序配置加载完成
@@ -126,16 +119,26 @@ const InitPage = () => {
     /**
      * cache部分
      */
+    const allCacheStorage = await electronStore.all('cache');
     //远程数据缓存加载完成
     dispatch(setRemoteFundsAction(Object.values(allCacheStorage[CONST.STORAGE.REMOTE_FUND_MAP] || {})));
     dispatch(setFundRatingAction(Object.values(allCacheStorage[CONST.STORAGE.FUND_RATING_MAP] || {})));
     dispatch(setRemoteCoinsAction(Object.values(allCacheStorage[CONST.STORAGE.REMOTE_COIN_MAP] || {})));
-
+    /**
+     * 版本号
+     */
+    const version = await app.getVersion();
+    dispatch(syncVersion(version));
+    /**
+     * 主题
+     */
     await ipcRenderer
       .invoke('get-should-use-dark-colors')
       .then((_) => dispatch(syncDarkMode(_)))
       .finally(() => setLoading('系统主题加载完成'));
-
+    /**
+     *
+     */
     await dispatch(loadSyncConfigAction()).finally(() => setLoading('同步配置加载完成'));
 
     setLoading('加载完毕');
