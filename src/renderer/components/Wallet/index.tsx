@@ -55,7 +55,9 @@ const Wallet: React.FC<WalletProps> = () => {
     <div className={clsx(styles.content, { [styles.miniMode]: miniMode })}>
       <Dropdown
         placement="bottomRight"
-        overlay={<Menu selectedKeys={[currentWalletCode]} items={walletMenuItems} onClick={({ key }) => onSelectWallet(key)} />}
+        dropdownRender={() => (
+          <Menu selectedKeys={[currentWalletCode]} items={walletMenuItems} onClick={({ key }) => onSelectWallet(key)} />
+        )}
       >
         <div className={styles.walletIcon}>
           <img src={walletIcons[currentWalletConfig.iconIndex || 0]} />

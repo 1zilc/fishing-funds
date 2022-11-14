@@ -118,13 +118,13 @@ function FundsSortBar() {
       <div className={styles.mode}>
         <Dropdown
           placement="bottomRight"
-          overlay={
+          dropdownRender={() => (
             <Menu
               selectedKeys={[String(fundSortModeOptionsMap[fundSortType].key)]}
               onClick={({ key }) => dispatch(setFundSortModeAction({ type: Number(key) as Enums.FundSortType }))}
               items={fundSortModeOptions}
             />
-          }
+          )}
         >
           <a>{fundSortModeOptionsMap[fundSortType].label}</a>
         </Dropdown>
@@ -229,13 +229,13 @@ function ZindexSortBar() {
       <div className={styles.mode}>
         <Dropdown
           placement="bottomRight"
-          overlay={
+          dropdownRender={() => (
             <Menu
               selectedKeys={[String(zindexSortModeOptionsMap[zindexSortType].key)]}
               onClick={({ key }) => dispatch(setZindexSortModeAction({ type: Number(key) as Enums.ZindexSortType }))}
               items={zindexSortModeOptions}
             />
-          }
+          )}
         >
           <a>{zindexSortModeOptionsMap[zindexSortType].label}</a>
         </Dropdown>
@@ -327,13 +327,13 @@ function QuotationSortBar() {
       <div className={styles.mode}>
         <Dropdown
           placement="bottomRight"
-          overlay={
+          dropdownRender={() => (
             <Menu
               selectedKeys={[String(quotationSortModeOptionsMap[quotationSortType].key)]}
               onClick={({ key }) => dispatch(setQuotationSortModeAction({ type: Number(key) as Enums.QuotationSortType }))}
               items={quotationSortModeOptions}
             />
-          }
+          )}
         >
           <a>{quotationSortModeOptionsMap[quotationSortType].label}</a>
         </Dropdown>
@@ -423,13 +423,13 @@ function StockSortBar() {
       <div className={styles.mode}>
         <Dropdown
           placement="bottomRight"
-          overlay={
+          dropdownRender={() => (
             <Menu
               selectedKeys={[String(stockSortModeOptionsMap[stockSortType].key)]}
               onClick={({ key }) => dispatch(setStockSortModeAction({ type: Number(key) as Enums.StockSortType }))}
               items={stockSortModeOptions}
             />
-          }
+          )}
         >
           <a>{stockSortModeOptionsMap[stockSortType].label}</a>
         </Dropdown>
@@ -530,13 +530,13 @@ function CoinSortBar() {
       <div className={styles.mode}>
         <Dropdown
           placement="bottomRight"
-          overlay={
+          dropdownRender={() => (
             <Menu
               selectedKeys={[String(coinSortModeOptionsMap[coinSortType].key)]}
               onClick={({ key }) => dispatch(setCoinSortModeAction({ type: Number(key) as Enums.CoinSortType }))}
               items={coinSortModeOptions}
             />
-          }
+          )}
         >
           <a>{coinSortModeOptionsMap[coinSortType].label}</a>
         </Dropdown>

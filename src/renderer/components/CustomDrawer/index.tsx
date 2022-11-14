@@ -23,7 +23,7 @@ const CustomDrawer: React.FC<PropsWithChildren<CustomDrawerProps>> = ({
 
   return (
     <Drawer
-      className={className}
+      rootClassName={className}
       open={show}
       closable={false}
       placement="bottom"
