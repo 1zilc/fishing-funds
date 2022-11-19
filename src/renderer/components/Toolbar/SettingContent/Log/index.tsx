@@ -1,5 +1,6 @@
 import clsx from 'clsx';
 import React from 'react';
+import dayjs from 'dayjs';
 import { Timeline, Spin } from 'antd';
 import { useRequest } from 'ahooks';
 import { compareVersions } from 'compare-versions';
@@ -56,7 +57,7 @@ const Log: React.FC<LogProps> = () => {
                     <Timeline.Item key={log.version} color={compare === 0 ? 'blue' : compare > 1 ? 'green' : 'gray'}>
                       <div className={clsx(styles.item, styles.title)}>
                         <div>{log.version}</div>
-                        <div>{log.date}</div>
+                        <div>{dayjs(log.date).format('YYYY-M-D')}</div>
                       </div>
                       {log.contents.map((content, index) => (
                         <div className={styles.item} key={index}>
