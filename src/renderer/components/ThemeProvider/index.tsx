@@ -25,9 +25,11 @@ const Styles: React.FC<StylesProps> = (props) => {
             filter: ${config.lowKey && 'grayscale(90%)'};
             font-size: ${token.fontSize}px;
             font-family: ${token.fontFamily};
+            --base-padding: ${token.paddingSM}px;
+            --base-radius: ${token.borderRadiusLG}px;
+            --base-font-size: ${token.fontSize}px;
 
             --primary-color: ${token.colorPrimary};
-            --base-font-size: ${token.fontSize}px;
             --hover-color: ${token.colorPrimaryBg};
             --selected-color: ${token.colorPrimaryBgHover};
             --background-color: ${token.colorBgContainer};
