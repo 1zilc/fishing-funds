@@ -432,10 +432,9 @@ export function useUpdateContextMenuWalletsState() {
     );
   }, [wallets, currentWalletCode, walletsConfig]);
 
-  useIpcRendererListener('change-current-wallet-code', async (e, code) => {
+  useIpcRendererListener('change-current-wallet-code', (e, code) => {
     try {
-      await dispatch(changeCurrentWalletCodeAction(code));
-      freshFunds();
+      dispatch(changeCurrentWalletCodeAction(code));
     } catch (error) {}
   });
 }
