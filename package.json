@@ -207,6 +207,8 @@
     ]
   },
   "devDependencies": {
+    "@electron/notarize": "^1.2.3",
+    "@electron/rebuild": "^3.2.10",
     "@esbuild-kit/cjs-loader": "^2.3.3",
     "@pmmmwh/react-refresh-webpack-plugin": "^0.5.2",
     "@svgr/webpack": "^6.0.0",
@@ -234,8 +236,6 @@
     "electron": "^22.0.0",
     "electron-builder": "^23.0.2",
     "electron-devtools-installer": "^3.2.0",
-    "electron-notarize": "^1.0.0",
-    "electron-rebuild": "^3.1.1",
     "electronmon": "^2.0.2",
     "esbuild-loader": "^2.18.0",
     "eslint": "^8.9.0",
