@@ -35,6 +35,7 @@ jobs:
         env:
           USE_HARD_LINKS: false
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
+          SNAPCRAFT_STORE_CREDENTIALS: ${{ secrets.SNAPCRAF_TOKEN }}
 
       - name: Codecov
         uses: codecov/codecov-action@v1.5.2
