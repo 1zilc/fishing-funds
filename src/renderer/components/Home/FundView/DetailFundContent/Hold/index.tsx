@@ -20,7 +20,7 @@ const Hold: React.FC<HoldProps> = ({
   const { ref: chartRef, chartInstance } = useResizeEchart(CONST.DEFAULT.ECHARTS_SCALE);
 
   useRenderEcharts(
-    ({ varibleColors }) => {
+    () => {
       chartInstance?.setOption({
         title: {
           show: false,
@@ -37,7 +37,7 @@ const Hold: React.FC<HoldProps> = ({
         legend: {
           data: Data_holderStructure.series.map((item) => item.name),
           textStyle: {
-            color: varibleColors['--main-text-color'],
+            color: 'var(--main-text-color)',
             fontSize: 10,
           },
         },
@@ -63,7 +63,7 @@ const Hold: React.FC<HoldProps> = ({
           },
           splitLine: {
             lineStyle: {
-              color: varibleColors['--border-color'],
+              color: 'var(--border-color)',
             },
           },
         },

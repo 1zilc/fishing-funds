@@ -1,5 +1,5 @@
 import request from '@/utils/request';
-
+import * as Enums from '@/utils/enums';
 // 获取股市直播
 export async function GetLiveList() {
   try {
@@ -248,7 +248,7 @@ export async function GetJpList() {
   }
 }
 // 获取最新资讯
-export async function GetRecent(keyword: string, pageindex: number) {
+export async function GetRecent(keyword: string, pageindex: number, type: number = Enums.NewsFilterType.All) {
   try {
     const { body } = await request<{
       IsSuccess: true;
@@ -278,7 +278,7 @@ export async function GetRecent(keyword: string, pageindex: number) {
       searchParams: {
         _: Date.now(),
         keyword,
-        type: 8193,
+        type, // 全部8196 标题16388 正文32772
         pageindex,
         pagesize: 10,
         name: 'web',

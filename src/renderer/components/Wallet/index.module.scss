@@ -1,5 +1,3 @@
-@import '../../styles/varible.scss';
-
 .content {
   padding: 10px;
   display: flex;
@@ -18,8 +16,8 @@
 
   .walletIcon {
     cursor: pointer;
-    height: calc(40rem / var(--base-font-size));
-    width: calc(40rem / var(--base-font-size));
+    height: calc(var(--base-font-size) * 10 / 3);
+    width: calc(var(--base-font-size) * 10 / 3);
     transition: height 0.2s, width 0.2s;
     background-color: transparent !important;
     display: flex;
@@ -48,14 +46,14 @@
       align-items: center;
 
       .last {
-        font-size: 1rem;
+        font-size: var(--base-font-size);
         font-weight: 500;
         color: var(--secondary-main-text-color);
       }
     }
 
     .moneyBar {
-      font-size: calc(10rem / var(--base-font-size));
+      font-size: calc(var(--base-font-size) * 5 / 6);
       color: var(--main-text-color);
       display: flex;
       // justify-content: space-around;
@@ -79,23 +77,23 @@
       }
 
       svg {
-        height: calc(14rem / var(--base-font-size));
-        width: calc(14rem / var(--base-font-size));
+        height: calc(var(--base-font-size) * 1.2);
+        width: calc(var(--base-font-size) * 1.2);
         fill: var(--svg-icon-color);
       }
     }
   }
 
   .eye {
-    height: calc(20rem / var(--base-font-size));
-    width: calc(20rem / var(--base-font-size));
+    height: calc(var(--base-font-size) * 5 / 3);
+    width: calc(var(--base-font-size) * 5 / 3);
   }
 }
 
 .miniMode {
   .walletIcon {
-    height: calc(20rem / var(--base-font-size));
-    width: calc(20rem / var(--base-font-size));
+    height: calc(var(--base-font-size) * 5 / 3);
+    width: calc(var(--base-font-size) * 5 / 3);
   }
 
   .info {
@@ -110,7 +108,7 @@
     }
 
     .moneyBar {
-      font-size: 1rem;
+      font-size: var(--base-font-size);
       font-weight: 600;
 
       i {

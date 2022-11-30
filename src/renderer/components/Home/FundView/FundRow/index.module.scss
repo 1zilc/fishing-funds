@@ -30,7 +30,7 @@
 
 .fundName {
   font-weight: 600;
-  font-size: calc(14rem / var(--base-font-size));
+  font-size: calc(var(--base-font-size) * 1.2);
 
   white-space: nowrap;
   text-overflow: ellipsis;
@@ -40,19 +40,19 @@
 }
 
 .code {
-  font-size: calc(10rem / var(--base-font-size));
+  font-size: calc(var(--base-font-size) * 5 / 6);
   margin-right: 5px;
 }
 
 .rowBar {
-  font-size: calc(10rem / var(--base-font-size));
+  font-size: calc(var(--base-font-size) * 5 / 6);
   display: flex;
   align-items: center;
   margin-top: 2px;
 }
 
 .value {
-  font-size: 1rem;
+  font-size: var(--base-font-size);
   display: block;
   float: right;
   color: var(--tag-text-color);
@@ -62,6 +62,7 @@
   margin-left: 5px;
   text-align: center;
   white-space: pre-wrap;
+  box-sizing: border-box;
 }
 
 .warn {
@@ -85,7 +86,7 @@
 }
 
 .conciseValue {
-  font-size: calc(20rem / var(--base-font-size));
+  font-size: calc(var(--base-font-size) * 5 / 3);
   line-height: 24px;
   white-space: pre-wrap;
   font-weight: 600;
@@ -117,7 +118,7 @@
   display: flex;
   padding: 5px 15px;
   flex-wrap: wrap;
-  font-size: calc(10rem / var(--base-font-size));
+  font-size: calc(var(--base-font-size) * 5 / 6);
   color: var(--inner-text-color);
   background-color: var(--inner-color);
   word-wrap: break-word;
@@ -159,7 +160,7 @@
   text-align: center;
   word-break: keep-all;
   margin-left: 5px;
-  transition: 0.3s;
+  transition: 0.2s;
 }
 .worth {
   margin-left: 10px;

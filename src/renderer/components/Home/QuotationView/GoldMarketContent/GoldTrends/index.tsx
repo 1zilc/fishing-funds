@@ -20,7 +20,7 @@ const GoldTrends: React.FC<GoldTrendsProps> = (props) => {
   });
 
   useRenderEcharts(
-    ({ varibleColors }) => {
+    () => {
       chartInstance?.setOption({
         title: {
           show: false,
@@ -51,7 +51,7 @@ const GoldTrends: React.FC<GoldTrendsProps> = (props) => {
           type: 'value',
           splitLine: {
             lineStyle: {
-              color: varibleColors['--border-color'],
+              color: 'var(--border-color)',
             },
           },
         },

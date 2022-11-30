@@ -9,7 +9,7 @@
 
   h3 {
     color: var(--main-text-color);
-    font-size: calc(16rem / var(--base-font-size));
+    font-size: calc(var(--base-font-size) * 4 / 3);
   }
 
   section {
@@ -17,7 +17,7 @@
   }
 
   label {
-    font-size: 1rem;
+    font-size: var(--base-font-size);
     margin-bottom: 5px;
     display: block;
     font-weight: 600;
@@ -49,7 +49,7 @@
 }
 
 .zdf {
-  font-size: calc(20rem / var(--base-font-size));
+  font-size: calc(var(--base-font-size) * 5 / 3);
   font-size: 600;
 }
 .titleRow {
@@ -70,7 +70,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  font-size: calc(11rem / var(--base-font-size));
+  font-size: calc(var(--base-font-size) * 11 / 12);
 }
 
 .avatarContent {
@@ -110,7 +110,7 @@
   z-index: 2;
 
   img {
-    transition: all 0.3s;
+    transition: all 0.2s;
     display: block;
     width: 100%;
     height: 100%;

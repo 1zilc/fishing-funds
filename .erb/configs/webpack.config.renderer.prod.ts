@@ -6,7 +6,6 @@ import path from 'path';
 import webpack from 'webpack';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
-import AntdDayjsWebpackPlugin from 'antd-dayjs-webpack-plugin';
 import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
 import { merge } from 'webpack-merge';
 import { ESBuildMinifyPlugin } from 'esbuild-loader';
@@ -77,12 +76,19 @@ const configuration: webpack.Configuration = {
       // Images
       {
         test: /\.(png|jpg|jpeg|gif)$/i,
+        resourceQuery: { not: [/url/] },
         type: 'asset/resource',
+      },
+      {
+        test: /\.(png|jpg|jpeg|gif|svg)$/i,
+        type: 'asset/inline',
+        resourceQuery: /url/,
       },
       // SVG
       {
         test: /\.svg$/,
         issuer: /\.[jt]sx?$/,
+        resourceQuery: { not: [/url/] },
         use: ['@svgr/webpack'],
       },
     ],
@@ -125,6 +131,7 @@ const configuration: webpack.Configuration = {
 
     new BundleAnalyzerPlugin({
       analyzerMode: process.env.ANALYZE === 'true' ? 'server' : 'disabled',
+      analyzerPort: 8889,
     }),
 
     new HtmlWebpackPlugin({
@@ -143,8 +150,6 @@ const configuration: webpack.Configuration = {
     new webpack.DefinePlugin({
       'process.type': '"renderer"',
     }),
-
-    new AntdDayjsWebpackPlugin(),
   ],
 };
 

@@ -6,12 +6,11 @@ import ConsumptionIcon from '@/static/icon/consumption.svg';
 import Eye from '@/components/Eye';
 import { useHeaderContext } from '@/components/Header';
 import { changeCurrentWalletCodeAction, toggleEyeStatusAction } from '@/store/features/wallet';
-import { useAppDispatch, useAppSelector, useFreshFunds } from '@/utils/hooks';
+import { useAppDispatch, useAppSelector } from '@/utils/hooks';
 import { walletIcons } from '@/helpers/wallet';
 import * as Enums from '@/utils/enums';
 import * as Utils from '@/utils';
 import * as Helpers from '@/helpers';
-import * as CONST from '@/constants';
 import styles from './index.module.scss';
 
 export interface WalletProps {}
@@ -26,7 +25,6 @@ const Wallet: React.FC<WalletProps> = () => {
   const { funds, updateTime } = useAppSelector((state) => state.wallet.currentWallet);
   const walletConfigCodeMap = useAppSelector((state) => state.wallet.config.codeMap);
   const currentWalletConfig = walletConfigCodeMap[currentWalletCode];
-  const freshFunds = useFreshFunds(CONST.DEFAULT.FRESH_BUTTON_THROTTLE_DELAY);
 
   const { displayZje, displaySygz } = useMemo(() => {
     const { zje, sygz } = Helpers.Fund.CalcFunds(funds, fundConfigCodeMap);
@@ -49,16 +47,17 @@ const Wallet: React.FC<WalletProps> = () => {
     [walletConfig]
   );
 
-  async function onSelectWallet(code: string) {
-    await dispatch(changeCurrentWalletCodeAction(code));
-    freshFunds();
+  function onSelectWallet(code: string) {
+    dispatch(changeCurrentWalletCodeAction(code));
   }
 
   return (
     <div className={clsx(styles.content, { [styles.miniMode]: miniMode })}>
       <Dropdown
         placement="bottomRight"
-        overlay={<Menu selectedKeys={[currentWalletCode]} items={walletMenuItems} onClick={({ key }) => onSelectWallet(key)} />}
+        dropdownRender={() => (
+          <Menu selectedKeys={[currentWalletCode]} items={walletMenuItems} onClick={({ key }) => onSelectWallet(key)} />
+        )}
       >
         <div className={styles.walletIcon}>
           <img src={walletIcons[currentWalletConfig.iconIndex || 0]} />

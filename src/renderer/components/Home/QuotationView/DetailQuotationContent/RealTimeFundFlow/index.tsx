@@ -24,7 +24,7 @@ const RealTimeFundFlow: React.FC<RealTimeFundFlowProps> = ({ code = '' }) => {
   );
 
   useRenderEcharts(
-    ({ varibleColors }) => {
+    () => {
       const seriesStyle = {
         type: 'line',
         showSymbol: false,
@@ -44,7 +44,7 @@ const RealTimeFundFlow: React.FC<RealTimeFundFlowProps> = ({ code = '' }) => {
         legend: {
           data: ['今日主力净流入', '今日超大单净流入', '今日大单净流入', '今日中单净流入', '今日小单净流入'],
           textStyle: {
-            color: varibleColors['--main-text-color'],
+            color: 'var(--main-text-color)',
             fontSize: 10,
           },
         },
@@ -69,7 +69,7 @@ const RealTimeFundFlow: React.FC<RealTimeFundFlowProps> = ({ code = '' }) => {
           },
           splitLine: {
             lineStyle: {
-              color: varibleColors['--border-color'],
+              color: 'var(--border-color)',
             },
           },
         },

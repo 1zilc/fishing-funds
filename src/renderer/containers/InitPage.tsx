@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, startTransition } from 'react';
 import { useNavigate } from 'react-router-dom';
 import LoadingScreen from '@/components/LoadingScreen';
 import { setRemoteFundsAction, setFundRatingAction } from '@/store/features/fund';
@@ -16,16 +16,20 @@ import { setCoinConfigAction, setRemoteCoinsAction } from '@/store/features/coin
 import { syncSortModeAction, setViewModeAction, initialState as sortInitialState } from '@/store/features/sort';
 import { syncTabsActiveKeyAction } from '@/store/features/tabs';
 import { setWebConfigAction, defaultWebConfig } from '@/store/features/web';
-import { useDrawer, useAppDispatch } from '@/utils/hooks';
+import { syncVersion } from '@/store/features/updater';
+import { syncTranslateSettingAction, defaultTranslateSetting } from '@/store/features/translate';
+import { useDrawer, useAppDispatch, useRouterParams } from '@/utils/hooks';
 import { syncFavoriteQuotationMapAction } from '@/store/features/quotation';
 import * as CONST from '@/constants';
 import * as Utils from '@/utils';
 import * as Enums from '@/utils/enums';
 
-const { ipcRenderer } = window.contextModules.electron;
+const { ipcRenderer, app } = window.contextModules.electron;
 const electronStore = window.contextModules.electronStore;
 
-const params = Utils.ParseSearchParams();
+export type RedirectSearchParams = {
+  _redirect: string;
+};
 
 async function checkLocalStorage() {
   if (localStorage.length) {
@@ -77,12 +81,14 @@ const InitPage = () => {
     setLoading('清理冗余配置...');
     await checkRedundanceStorage();
 
-    const allConfigStorage = await electronStore.all('config');
-    const allStateStorage = await electronStore.all('state');
-    const allCacheStorage = await electronStore.all('cache');
+    setLoading('加载中...');
     /**
      * config部分
      */
+    const allConfigStorage = await electronStore.all('config');
+    // 系统设置加载完成
+    dispatch(setSystemSettingAction(allConfigStorage[CONST.STORAGE.SYSTEM_SETTING] || defaultSystemSetting));
+    dispatch(updateAdjustmentNotificationDateAction(allConfigStorage[CONST.STORAGE.ADJUSTMENT_NOTIFICATION_DATE] || ''));
     //web配置加载完成
     dispatch(setZindexConfigAction(allConfigStorage[CONST.STORAGE.ZINDEX_SETTING] || defaultZindexConfig));
     // 关注板块配置加载完成
@@ -93,15 +99,15 @@ const InitPage = () => {
     dispatch(setCoinConfigAction(allConfigStorage[CONST.STORAGE.COIN_SETTING] || []));
     // web配置加载完成
     dispatch(setWebConfigAction(allConfigStorage[CONST.STORAGE.WEB_SETTING] || defaultWebConfig));
-    // 系统设置加载完成
-    dispatch(setSystemSettingAction(allConfigStorage[CONST.STORAGE.SYSTEM_SETTING] || defaultSystemSetting));
-    dispatch(updateAdjustmentNotificationDateAction(allConfigStorage[CONST.STORAGE.ADJUSTMENT_NOTIFICATION_DATE] || ''));
     // 钱包配置加载完成
     dispatch(setWalletConfigAction(allConfigStorage[CONST.STORAGE.WALLET_SETTING] || [defaultWallet]));
     dispatch(changeCurrentWalletCodeAction(allConfigStorage[CONST.STORAGE.CURRENT_WALLET_CODE] || defaultWallet.code));
+    // 翻译配置加载完成
+    dispatch(syncTranslateSettingAction(allConfigStorage[CONST.STORAGE.TRANSLATE_SETTING] || defaultTranslateSetting));
     /**
      * state部分
      */
+    const allStateStorage = await electronStore.all('state');
     // tabs配置加载完成
     dispatch(syncTabsActiveKeyAction(allStateStorage[CONST.STORAGE.TABS_ACTIVE_KEY] || Enums.TabKeyType.Fund));
     // 排序配置加载完成
@@ -113,21 +119,35 @@ const InitPage = () => {
     /**
      * cache部分
      */
+    const allCacheStorage = await electronStore.all('cache');
     //远程数据缓存加载完成
     dispatch(setRemoteFundsAction(Object.values(allCacheStorage[CONST.STORAGE.REMOTE_FUND_MAP] || {})));
     dispatch(setFundRatingAction(Object.values(allCacheStorage[CONST.STORAGE.FUND_RATING_MAP] || {})));
     dispatch(setRemoteCoinsAction(Object.values(allCacheStorage[CONST.STORAGE.REMOTE_COIN_MAP] || {})));
-
+    /**
+     * 版本号
+     */
+    const version = await app.getVersion();
+    dispatch(syncVersion(version));
+    /**
+     * 主题
+     */
     await ipcRenderer
       .invoke('get-should-use-dark-colors')
       .then((_) => dispatch(syncDarkMode(_)))
       .finally(() => setLoading('系统主题加载完成'));
-
+    /**
+     *
+     */
     await dispatch(loadSyncConfigAction()).finally(() => setLoading('同步配置加载完成'));
 
     setLoading('加载完毕');
 
-    navigate(params.get('_nav') || '/home');
+    startTransition(() => {
+      // 入口params使用真实地址window location做解析，其余一律使用router location
+      const params: RedirectSearchParams = Utils.ParseLocationParams();
+      navigate(params._redirect || CONST.ROUTES.HOME);
+    });
   }
 
   useEffect(() => {

@@ -1,14 +1,12 @@
 import React, { useMemo } from 'react';
-import ColorHash from 'color-hash';
 import clsx from 'clsx';
+import colorHash from '@/utils/colorHash';
 import styles from './index.module.scss';
 
 interface AvatarProps {
   url?: string;
   name?: string;
 }
-
-const colorHash = new ColorHash();
 
 const Avatar: React.FC<AvatarProps> = (props) => {
   const { url, name } = props;

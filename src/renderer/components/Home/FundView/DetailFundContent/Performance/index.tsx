@@ -35,7 +35,7 @@ const Performance: React.FC<PerformanceProps> = ({ code }) => {
   );
 
   useRenderEcharts(
-    ({ varibleColors }) => {
+    () => {
       chartInstance?.setOption({
         title: {
           text: '',
@@ -47,7 +47,7 @@ const Performance: React.FC<PerformanceProps> = ({ code }) => {
         legend: {
           data: result?.map(({ name }) => name) || [],
           textStyle: {
-            color: varibleColors['--main-text-color'],
+            color: 'var(--main-text-color)',
             fontSize: 10,
           },
         },
@@ -72,7 +72,7 @@ const Performance: React.FC<PerformanceProps> = ({ code }) => {
           },
           splitLine: {
             lineStyle: {
-              color: varibleColors['--border-color'],
+              color: 'var(--border-color)',
             },
           },
         },
@@ -87,7 +87,6 @@ const Performance: React.FC<PerformanceProps> = ({ code }) => {
             ..._,
             type: 'line',
             showSymbol: false,
-            symbol: 'none',
             lineStyle: {
               width: 1,
             },
@@ -117,6 +116,7 @@ const Performance: React.FC<PerformanceProps> = ({ code }) => {
 
   return (
     <ChartCard
+      className={styles.content}
       onFresh={runGetFundPerformanceFromEastmoney}
       TitleBar={
         <div className={styles.zdhc}>
@@ -124,10 +124,8 @@ const Performance: React.FC<PerformanceProps> = ({ code }) => {
         </div>
       }
     >
-      <div className={styles.content}>
-        <div ref={chartRef} style={{ width: '100%' }} />
-        <TypeSelection types={performanceTypeList} activeType={performanceType.type} onSelected={setPerformanceType} />
-      </div>
+      <div ref={chartRef} style={{ width: '100%' }} />
+      <TypeSelection types={performanceTypeList} activeType={performanceType.type} onSelected={setPerformanceType} />
     </ChartCard>
   );
 };

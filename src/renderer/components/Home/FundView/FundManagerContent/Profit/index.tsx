@@ -12,7 +12,7 @@ const Profit: React.FC<ProfitProps> = ({ profit }) => {
   const { ref: chartRef, chartInstance } = useResizeEchart(CONST.DEFAULT.ECHARTS_SCALE);
 
   useRenderEcharts(
-    ({ varibleColors }) => {
+    () => {
       chartInstance?.setOption({
         xAxis: {
           type: 'category',
@@ -29,7 +29,7 @@ const Profit: React.FC<ProfitProps> = ({ profit }) => {
           },
           splitLine: {
             lineStyle: {
-              color: varibleColors['--border-color'],
+              color: 'var(--border-color)',
             },
           },
         },

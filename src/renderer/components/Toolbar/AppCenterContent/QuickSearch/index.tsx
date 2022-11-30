@@ -2,8 +2,7 @@ import React from 'react';
 import SearchIcon from '@/static/icon/search.svg';
 import GlobalIcon from '@/static/icon/global.svg';
 import clsx from 'clsx';
-import {} from 'antd';
-import ColorHash from 'color-hash';
+import colorHash from '@/utils/colorHash';
 import * as Utils from '@/utils';
 import { useOpenWebView } from '@/utils/hooks';
 import styles from './index.module.scss';
@@ -11,8 +10,6 @@ import styles from './index.module.scss';
 interface QuickSearchProps {
   value: string;
 }
-
-const colorHash = new ColorHash();
 
 const QuickSearch: React.FC<QuickSearchProps> = (props) => {
   const { value } = props;

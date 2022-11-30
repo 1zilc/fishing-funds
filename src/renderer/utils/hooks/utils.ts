@@ -1,4 +1,6 @@
-import React, { useLayoutEffect, useState, useEffect, useRef, useMemo, useDeferredValue } from 'react';
+import React, { useLayoutEffect, useState, useEffect, useRef, useMemo } from 'react';
+import { useLocation } from 'react-router-dom';
+import queryString from 'query-string';
 import { useInterval, useBoolean, useThrottleFn, useSize, useMemoizedFn, useEventListener } from 'ahooks';
 import { useDispatch, useSelector, TypedUseSelectorHook } from 'react-redux';
 import dayjs from 'dayjs';
@@ -165,17 +167,16 @@ export function useEchartEventEffect(fn: () => void | (() => void), instance?: e
 }
 
 export function useRenderEcharts(
-  callback: (data: { darkMode: boolean; varibleColors: Record<keyof typeof CONST.VARIBLES, string> }) => void,
+  callback: (data: { varibleColors: Record<keyof typeof CONST.VARIBLES, string> }) => void,
   instance?: echarts.ECharts,
   dep: any[] = []
 ) {
   const varibleColors = useAppSelector((state) => state.setting.varibleColors);
-  const darkMode = useAppSelector((state) => state.setting.darkMode);
   useEffect(() => {
     if (instance) {
-      callback({ darkMode, varibleColors });
+      callback({ varibleColors });
     }
-  }, [instance, darkMode, varibleColors, ...dep]);
+  }, [instance, varibleColors, ...dep]);
 }
 
 export function useSyncFixFundSetting() {
@@ -653,7 +654,6 @@ export function useTabsFreshFn<T>(key: Enums.TabKeyType, fn: T) {
 export function useInputShortcut(initial: string) {
   const [hotkey, setHotkey] = useState(initial);
   const [isInput, { setTrue, setFalse }] = useBoolean(false);
-  const inputRef = useRef(null);
 
   useEventListener('keydown', (e) => {
     if (isInput) {
@@ -663,16 +663,36 @@ export function useInputShortcut(initial: string) {
       setHotkey(hotkeys.join(' + '));
     }
   });
-  useEventListener('focus', setTrue, { target: inputRef.current });
-  useEventListener('blur', setFalse, { target: inputRef.current });
 
   function reset() {
     setHotkey('');
   }
 
   return {
-    inputRef,
     hotkey,
     reset,
+    onBlur: setFalse,
+    onFocus: setTrue,
   };
+}
+
+export function useThemeColor() {
+  const originPrimaryColor = '#1677ff';
+  const themeColorTypeSetting = useAppSelector((state) => state.setting.systemSetting.themeColorTypeSetting);
+  const customThemeColorSetting = useAppSelector((state) => state.setting.systemSetting.customThemeColorSetting);
+  const customThemeColorEnable = themeColorTypeSetting === Enums.ThemeColorType.Custom;
+
+  return {
+    themeColorTypeSetting,
+    customThemeColorSetting,
+    originPrimaryColor,
+    customThemeColorEnable,
+  };
+}
+
+export function useRouterParams<T = Record<string, unknown>>() {
+  const location = useLocation();
+  return queryString.parse(location.search, {
+    parseBooleans: true,
+  }) as T;
 }

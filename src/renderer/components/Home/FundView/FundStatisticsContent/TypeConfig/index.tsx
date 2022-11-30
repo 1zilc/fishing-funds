@@ -17,7 +17,7 @@ const TypeConfig: React.FC<TypeConfigProps> = ({ funds = [] }) => {
   const { ref: chartRef, chartInstance } = useResizeEchart(CONST.DEFAULT.ECHARTS_SCALE);
 
   useRenderEcharts(
-    ({ varibleColors }) => {
+    () => {
       const remoteFundsMap = Utils.GetCodeMap(remoteFunds, 0);
       const typeMap: Record<string, Fund.ResponseItem[]> = {};
       funds.forEach((fund) => {
@@ -70,11 +70,11 @@ const TypeConfig: React.FC<TypeConfigProps> = ({ funds = [] }) => {
           ],
           itemStyle: {
             borderRadius: 10,
-            borderColor: varibleColors['--background-color'],
+            borderColor: 'var(--background-color)',
             borderWidth: 1,
           },
           label: {
-            color: varibleColors['--background-color'],
+            color: 'var(--background-color)',
           },
         },
       });

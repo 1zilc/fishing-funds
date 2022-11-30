@@ -1,8 +1,6 @@
 .content {
-  margin: 0 var(--base-padding) 5px;
+  margin-bottom: var(--base-padding);
   position: relative;
-  width: 100vw;
-  left: -20px;
   box-sizing: border-box;
 }
 
@@ -11,14 +9,13 @@
   justify-content: center;
   align-items: center;
   position: relative;
+  padding: 40px 0;
 
   img {
     display: block;
     width: 108px;
     height: auto;
     object-fit: cover;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-    margin-bottom: 5px;
   }
 }
 

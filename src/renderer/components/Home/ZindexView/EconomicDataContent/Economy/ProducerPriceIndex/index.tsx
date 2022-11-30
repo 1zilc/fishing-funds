@@ -16,7 +16,7 @@ const ProducerPriceIndex: React.FC<ProducerPriceIndexProps> = () => {
   });
 
   useRenderEcharts(
-    ({ varibleColors }) => {
+    () => {
       try {
         chartInstance?.setOption({
           title: {
@@ -29,7 +29,7 @@ const ProducerPriceIndex: React.FC<ProducerPriceIndexProps> = () => {
           legend: {
             data: ['当月', '累计'],
             textStyle: {
-              color: varibleColors['--main-text-color'],
+              color: 'var(--main-text-color)',
               fontSize: 10,
             },
           },
@@ -55,7 +55,7 @@ const ProducerPriceIndex: React.FC<ProducerPriceIndexProps> = () => {
             },
             splitLine: {
               lineStyle: {
-                color: varibleColors['--border-color'],
+                color: 'var(--border-color)',
               },
             },
           },

@@ -19,7 +19,6 @@ export function createChildWindow(config: { search: string; parentId: number }) 
       fullscreenable: false,
       webPreferences: {
         webviewTag: true,
-        sandbox: false,
         devTools: !app.isPackaged,
         preload: getPreloadPath(),
       },

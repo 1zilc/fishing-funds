@@ -16,7 +16,7 @@ const NationalStockTradingStatistics: React.FC<NationalStockTradingStatisticsPro
   });
 
   useRenderEcharts(
-    ({ varibleColors }) => {
+    () => {
       try {
         chartInstance?.setOption({
           title: {
@@ -29,7 +29,7 @@ const NationalStockTradingStatistics: React.FC<NationalStockTradingStatisticsPro
           legend: {
             data: ['上海成交', '深圳成交'],
             textStyle: {
-              color: varibleColors['--main-text-color'],
+              color: 'var(--main-text-color)',
               fontSize: 10,
             },
           },
@@ -56,7 +56,7 @@ const NationalStockTradingStatistics: React.FC<NationalStockTradingStatisticsPro
             },
             splitLine: {
               lineStyle: {
-                color: varibleColors['--border-color'],
+                color: 'var(--border-color)',
               },
             },
           },

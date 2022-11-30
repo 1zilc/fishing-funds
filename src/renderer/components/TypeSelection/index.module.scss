@@ -3,7 +3,7 @@
 }
 
 .selection {
-  font-size: calc(10rem / var(--base-font-size));
+  font-size: calc(var(--base-font-size) * 5 / 6);
   padding: 1px 6px;
   border-radius: 3px;
   cursor: pointer;
@@ -20,7 +20,7 @@
 }
 
 .active {
-  color: var(--primary-text-color);
+  color: var(--tag-text-color);
   background-color: var(--primary-color);
   box-shadow: 0 2px 10px var(--primary-color);
 }

@@ -30,13 +30,16 @@ const configuration: webpack.Configuration = {
   target: 'electron-main',
 
   entry: {
-    main: ['v8-compile-cache', path.join(webpackPaths.srcMainPath, 'main.ts')],
+    main: path.join(webpackPaths.srcMainPath, 'main.ts'),
     preload: path.join(webpackPaths.srcMainPath, 'preload.ts'),
   },
 
   output: {
     path: webpackPaths.distMainPath,
     filename: '[name].js',
+    library: {
+      type: 'umd',
+    },
   },
 
   optimization: {
@@ -46,6 +49,7 @@ const configuration: webpack.Configuration = {
   plugins: [
     new BundleAnalyzerPlugin({
       analyzerMode: process.env.ANALYZE === 'true' ? 'server' : 'disabled',
+      analyzerPort: 8888,
     }),
 
     /**

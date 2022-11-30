@@ -7,16 +7,33 @@
  * `./src/main.prod.js` using webpack. This gives us some performance wins.
  */
 
-import { app, globalShortcut, ipcMain, nativeTheme, dialog, webContents, shell, Menu, BrowserWindow } from 'electron';
+import {
+  app,
+  globalShortcut,
+  ipcMain,
+  nativeImage,
+  nativeTheme,
+  clipboard,
+  dialog,
+  webContents,
+  shell,
+  Menu,
+  BrowserWindow,
+} from 'electron';
+import got from 'got';
 import windowStateKeeper from 'electron-window-state';
 import { Menubar } from 'menubar';
 import AppUpdater from './autoUpdater';
-import { appIcon, generateWalletIcon } from './icon';
+import { appIcon } from './icon';
 import { createTray } from './tray';
-import { createMenubar, buildContextMenu } from './menubar';
+import { createMenubar } from './menubar';
 import TouchBarManager from './touchbar';
 import LocalStore from './store';
 import { createChildWindow } from './childWindow';
+import Proxy from './proxy';
+import HotkeyManager from './hotkey';
+import ContextMenuManager from './contextMenu';
+import { saveImage, saveJsonToCsv, saveString, readFile } from './io';
 import { lockSingleInstance, checkEnvTool, sendMessageToRenderer, setNativeTheme, getOtherWindows } from './util';
 import * as Enums from '../renderer/utils/enums';
 
@@ -42,8 +59,7 @@ function main() {
   mb = createMenubar({ tray, mainWindowState });
   const appUpdater = new AppUpdater({ icon: appIcon, mb });
   const touchBarManager = new TouchBarManager([], mb);
-  let contextMenu = buildContextMenu({ mb, appUpdater }, []);
-  let activeHotkeys = '';
+  const contextMenuManager = new ContextMenuManager({ mb, updater: appUpdater });
   let windowIds: number[] = [];
   const defaultTheme = localStore.get('config', 'SYSTEM_SETTING.systemThemeSetting', Enums.SystemThemeType.Auto) as Enums.SystemThemeType;
   // mb.app.commandLine.appendSwitch('disable-backgrounding-occluded-windows', 'true');
@@ -73,11 +89,25 @@ function main() {
   ipcMain.handle('app-quit', async (event, config) => {
     app.quit();
   });
+  ipcMain.handle('app-relaunch', async (event, config) => {
+    app.relaunch();
+    app.exit();
+  });
   ipcMain.handle('set-tray-content', async (event, config) => {
     tray.setTitle(config);
   });
   ipcMain.handle('check-update', async (event) => {
     appUpdater.checkUpdate('renderer');
+  });
+  ipcMain.handle('shell-openExternal', async (event, config) => {
+    shell.openExternal(config);
+  });
+  ipcMain.handle('set-menubar-visible', async (event, config) => {
+    if (config) {
+      mb.showWindow();
+    } else {
+      mb.hideWindow();
+    }
   });
   // store相关
   ipcMain.handle('get-storage-config', async (event, config) => {
@@ -110,12 +140,13 @@ function main() {
     return event.sender.session.setProxy(config);
   });
   ipcMain.handle('update-tray-context-menu-wallets', async (event, config) => {
-    const menus = config.map((item: any) => ({
-      ...item,
-      icon: generateWalletIcon(item.iconIndex),
-      click: () => sendMessageToRenderer(mb.window, 'change-current-wallet-code', item.id),
-    }));
-    contextMenu = buildContextMenu({ mb, appUpdater }, menus);
+    contextMenuManager.updateWalletMenu(config);
+  });
+  ipcMain.handle('get-app-icon', async (event, config) => {
+    return appIcon.toDataURL();
+  });
+  ipcMain.handle('get-version', async (event, config) => {
+    return app.getVersion();
   });
   // touchbar 相关监听
   ipcMain.handle('update-touchbar-zindex', async (event, config) => {
@@ -129,37 +160,26 @@ function main() {
   });
   ipcMain.handle('update-touchbar-eye-status', async (event, config) => {
     touchBarManager.updateEysStatusItems(config);
+    contextMenuManager.updateEyeMenu(config);
   });
-  ipcMain.handle('set-hotkey', async (event, keys: string) => {
-    if (keys === activeHotkeys) {
-      return;
-    }
-    if (activeHotkeys) {
-      globalShortcut.unregister(activeHotkeys.split(' + ').join('+'));
-    }
-    if (keys) {
-      const accelerator = keys.split(' + ').join('+');
-      const ret = globalShortcut.register(accelerator, () => {
-        const isWindowVisible = mb.window?.isVisible();
-        if (isWindowVisible) {
-          mb.hideWindow();
-        } else {
-          mb.showWindow();
-        }
-      });
-      if (ret) {
-        // dialog.showMessageBox({ message: `${accelerator}快捷键设置成功`, type: 'info' });
+  // 快捷键
+  const visibleHotkeyManager = new HotkeyManager({ mb });
+  const translateHotkeyManager = new HotkeyManager({ mb });
+  ipcMain.handle('set-visible-hotkey', async (event, keys: string) => {
+    visibleHotkeyManager.registryHotkey(keys, ({ visible }) => {
+      if (visible) {
+        mb.hideWindow();
       } else {
-        const isRegistered = globalShortcut.isRegistered(accelerator);
-        if (isRegistered) {
-          dialog.showMessageBox({ message: `${accelerator}快捷键已被占用`, type: 'warning' });
-        } else {
-          dialog.showMessageBox({ message: `${accelerator}快捷键设置失败`, type: 'error' });
-        }
+        mb.showWindow();
       }
-    }
-    activeHotkeys = keys;
+    });
   });
+  ipcMain.handle('set-translate-hotkey', async (event, keys: string) => {
+    translateHotkeyManager.registryHotkey(keys, ({ visible }) => {
+      sendMessageToRenderer(mb.window, 'trigger-translate', visible);
+    });
+  });
+  // 多窗口相关
   ipcMain.handle('open-child-window', async (event, config) => {
     const parentWin = BrowserWindow.fromWebContents(event.sender);
     const win = createChildWindow({ search: config.search, parentId: parentWin!.id });
@@ -178,6 +198,41 @@ function main() {
       win?.webContents.send('sync-store-data', config);
     });
   });
+  // got
+  ipcMain.handle('got', async (event, { url, config }) => {
+    try {
+      const proxyConent = await event.sender.session.resolveProxy(url);
+      const { httpAgent, httpsAgent } = new Proxy(proxyConent, url);
+      const res = await got(url, {
+        ...config,
+        retry: {
+          limit: 2,
+        },
+        timeout: {
+          request: 10000,
+        },
+        agent: {
+          http: httpAgent,
+          https: httpsAgent,
+        },
+      });
+      return {
+        body: res.body,
+        rawBody: res.rawBody,
+      };
+    } catch {
+      return {};
+    }
+  });
+  // io操作
+  ipcMain.handle('io-saveImage', async (event, { path, content }) => saveImage(path, content));
+  ipcMain.handle('io-saveJsonToCsv', async (event, { path, content }) => saveJsonToCsv(path, content));
+  ipcMain.handle('io-saveString', async (event, { path, content }) => saveString(path, content));
+  ipcMain.handle('io-readFile', async (event, { path }) => readFile(path));
+  // 剪贴板相关
+  ipcMain.handle('clipboard-readText', async (event) => clipboard.readText());
+  ipcMain.handle('clipboard-writeText', async (event, text) => clipboard.writeText(text));
+  ipcMain.handle('clipboard-writeImage', async (event, dataUrl) => clipboard.writeImage(nativeImage.createFromDataURL(dataUrl)));
   // menubar 相关监听
   mb.on('after-create-window', () => {
     // 注册windowId
@@ -186,7 +241,7 @@ function main() {
     setNativeTheme(defaultTheme);
     // 右键菜单
     tray.on('right-click', () => {
-      mb.tray.popUpContextMenu(contextMenu);
+      mb.tray.popUpContextMenu(contextMenuManager.buildContextMenu);
     });
     // 隐藏菜单栏
     Menu.setApplicationMenu(null);

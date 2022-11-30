@@ -6,6 +6,7 @@ import { syncSettingAction } from '@/store/features/setting';
 import { syncZindexesConfigAction } from '@/store/features/zindex';
 import { syncWebConfigAction } from '@/store/features/web';
 import { changeCurrentWalletCodeAction, syncWalletsConfigAction } from '@/store/features/wallet';
+import { syncTranslateSettingAction } from '@/store/features/translate';
 import * as CONST from '@/constants';
 
 const electronStore = window.contextModules.electronStore;
@@ -57,6 +58,12 @@ export default () => {
     actionCreator: syncZindexesConfigAction,
     effect: async (action) => {
       electronStore.set('config', CONST.STORAGE.ZINDEX_SETTING, action.payload.zindexConfig);
+    },
+  });
+  listenerMiddleware.startListening({
+    actionCreator: syncTranslateSettingAction,
+    effect: async (action) => {
+      electronStore.set('config', CONST.STORAGE.TRANSLATE_SETTING, action.payload);
     },
   });
 };

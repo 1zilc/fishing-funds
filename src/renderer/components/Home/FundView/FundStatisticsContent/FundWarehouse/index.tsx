@@ -15,7 +15,7 @@ const FundRank: React.FC<FundWarehouseProps> = ({ funds = [], codes = [] }) => {
   const walletsConfig = useAppSelector((state) => state.wallet.config.walletConfig);
 
   useRenderEcharts(
-    ({ varibleColors }) => {
+    () => {
       const codeMaps = Helpers.Fund.GetFundConfigMaps(codes, walletsConfig);
       chartInstance?.setOption({
         tooltip: {
@@ -50,7 +50,7 @@ const FundRank: React.FC<FundWarehouseProps> = ({ funds = [], codes = [] }) => {
           },
           splitLine: {
             lineStyle: {
-              color: varibleColors['--border-color'],
+              color: 'var(--border-color)',
             },
           },
         },

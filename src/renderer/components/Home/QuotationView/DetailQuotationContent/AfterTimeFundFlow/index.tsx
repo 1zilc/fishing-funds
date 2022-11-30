@@ -23,7 +23,7 @@ const AfterTimeFundFlow: React.FC<AfterTimeFundFlowProps> = ({ code = '' }) => {
   );
 
   useRenderEcharts(
-    ({ varibleColors }) => {
+    () => {
       const seriesStyle = {
         type: 'line',
         showSymbol: false,
@@ -43,7 +43,7 @@ const AfterTimeFundFlow: React.FC<AfterTimeFundFlowProps> = ({ code = '' }) => {
         legend: {
           data: ['主力净流入', '超大单净流入', '大单净流入', '中单净流入', '小单净流入'],
           textStyle: {
-            color: varibleColors['--main-text-color'],
+            color: 'var(--main-text-color)',
             fontSize: 10,
           },
         },
@@ -68,7 +68,7 @@ const AfterTimeFundFlow: React.FC<AfterTimeFundFlowProps> = ({ code = '' }) => {
           },
           splitLine: {
             lineStyle: {
-              color: varibleColors['--border-color'],
+              color: 'var(--border-color)',
             },
           },
         },

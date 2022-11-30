@@ -26,7 +26,7 @@ const dateTypeList = [
 
 const Trend: React.FC<PerformanceProps> = ({ code, name }) => {
   const { ref: chartRef, chartInstance } = useResizeEchart(CONST.DEFAULT.ECHARTS_SCALE);
-  const [date, setDateType] = useState(dateTypeList[2]);
+  const [date, setDateType] = useState(dateTypeList[1]);
   const coinUnitSetting = useAppSelector((state) => state.setting.systemSetting.coinUnitSetting);
 
   const { data: result = { prices: [], vol24h: [] }, run: runGetHistoryFromCoingecko } = useRequest(
@@ -39,7 +39,7 @@ const Trend: React.FC<PerformanceProps> = ({ code, name }) => {
   );
 
   useRenderEcharts(
-    ({ varibleColors }) => {
+    () => {
       chartInstance?.setOption({
         title: {
           text: '',
@@ -72,7 +72,7 @@ const Trend: React.FC<PerformanceProps> = ({ code, name }) => {
             scale: true,
             splitLine: {
               lineStyle: {
-                color: varibleColors['--border-color'],
+                color: 'var(--border-color)',
               },
             },
           },
@@ -84,7 +84,7 @@ const Trend: React.FC<PerformanceProps> = ({ code, name }) => {
             scale: true,
             splitLine: {
               lineStyle: {
-                color: varibleColors['--border-color'],
+                color: 'var(--border-color)',
               },
             },
           },
@@ -109,10 +109,8 @@ const Trend: React.FC<PerformanceProps> = ({ code, name }) => {
           {
             data: result.vol24h.map(({ time, price }) => [time, price]),
             yAxisIndex: 1,
-            type: 'line',
+            type: 'bar',
             name: `24H交易量 (亿)`,
-            showSymbol: false,
-            symbol: 'none',
             smooth: true,
           },
         ],

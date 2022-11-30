@@ -27,10 +27,18 @@
     "prepare": "husky install"
   },
   "lint-staged": {
-    "*.{js,jsx,ts,tsx}": ["cross-env NODE_ENV=development eslint --cache --fix"],
-    "{*.json,.{eslintrc,prettierrc}}": ["prettier --ignore-path .eslintignore --parser json --write"],
-    "*.{css,scss}": ["prettier --ignore-path .eslintignore --single-quote --write"],
-    "*.{html,md,yml}": ["prettier --ignore-path .eslintignore --single-quote --write"]
+    "*.{js,jsx,ts,tsx}": [
+      "cross-env NODE_ENV=development eslint --cache --fix"
+    ],
+    "{*.json,.{eslintrc,prettierrc}}": [
+      "prettier --ignore-path .eslintignore --write"
+    ],
+    "*.{css,scss}": [
+      "prettier --ignore-path .eslintignore --write"
+    ],
+    "*.{html,md,yml}": [
+      "prettier --ignore-path .eslintignore --write"
+    ]
   },
   "build": {
     "productName": "Fishing Funds",
@@ -38,7 +46,11 @@
     "asar": true,
     "asarUnpack": "**\\*.{node,dll}",
     "copyright": "Copyright © 2022 1zilc",
-    "files": ["dist", "node_modules", "package.json"],
+    "files": [
+      "dist",
+      "node_modules",
+      "package.json"
+    ],
     "afterSign": ".erb/scripts/notarize.js",
     "fileAssociations": [
       {
@@ -55,7 +67,10 @@
       "target": [
         {
           "target": "dmg",
-          "arch": ["x64", "arm64"]
+          "arch": [
+            "x64",
+            "arm64"
+          ]
         }
       ],
       "type": "distribution",
@@ -79,14 +94,19 @@
       ]
     },
     "win": {
-      "target": ["nsis"]
+      "target": [
+        "nsis"
+      ]
     },
     "nsis": {
       "oneClick": false,
       "allowToChangeInstallationDirectory": true
     },
     "linux": {
-      "target": ["AppImage", "snap"],
+      "target": [
+        "AppImage",
+        "snap"
+      ],
       "category": "Financial"
     },
     "snap": {
@@ -94,7 +114,9 @@
       "summary": "Display real-time trends of Chinese funds in the menubar.",
       "publish": {
         "provider": "snapStore",
-        "channels": ["stable"]
+        "channels": [
+          "stable"
+        ]
       }
     },
     "directories": {
@@ -102,7 +124,9 @@
       "buildResources": "assets",
       "output": "release/build"
     },
-    "extraResources": ["./assets/**"],
+    "extraResources": [
+      "./assets/**"
+    ],
     "publish": [
       {
         "provider": "github",
@@ -163,42 +187,55 @@
       "\\.(css|less|sass|scss)$": "identity-obj-proxy",
       "^@/(.*)$": "<rootDir>/src/renderer/$1"
     },
-    "moduleFileExtensions": ["js", "jsx", "ts", "tsx", "json"],
-    "moduleDirectories": ["node_modules", "release/app/node_modules"],
-    "testPathIgnorePatterns": ["release/app/dist"],
-    "setupFiles": ["./.erb/scripts/check-build-exists.ts"]
+    "moduleFileExtensions": [
+      "js",
+      "jsx",
+      "ts",
+      "tsx",
+      "json"
+    ],
+    "moduleDirectories": [
+      "node_modules",
+      "release/app/node_modules",
+      "src"
+    ],
+    "testPathIgnorePatterns": [
+      "release/app/dist"
+    ],
+    "setupFiles": [
+      "./.erb/scripts/check-build-exists.ts"
+    ]
   },
   "devDependencies": {
+    "@electron/notarize": "^1.2.3",
+    "@electron/rebuild": "^3.2.10",
     "@esbuild-kit/cjs-loader": "^2.3.3",
     "@pmmmwh/react-refresh-webpack-plugin": "^0.5.2",
     "@svgr/webpack": "^6.0.0",
     "@teamsupercell/typings-for-css-modules-loader": "^2.5.1",
     "@testing-library/jest-dom": "^5.12.0",
     "@testing-library/react": "^13.0.0",
+    "@types/color": "^3.0.3",
     "@types/color-hash": "^1.0.1",
-    "@types/jest": "^28.1.0",
+    "@types/jest": "^29.2.2",
     "@types/json2csv": "^5.0.3",
-    "@types/node": "18.7.16",
+    "@types/node": "18.11.9",
     "@types/react": "^18.0.6",
+    "@types/react-color": "^3.0.6",
     "@types/react-dom": "^18.0.2",
     "@types/react-test-renderer": "^18.0.0",
-    "@types/redux-logger": "^3.0.8",
-    "@types/redux-promise": "^0.5.29",
     "@types/webpack-env": "^1.16.0",
     "@typescript-eslint/eslint-plugin": "^5.11.0",
     "@typescript-eslint/parser": "^5.3.1",
     "@umijs/mfsu": "^4.0.0-canary.20220421.1",
-    "antd-dayjs-webpack-plugin": "^1.0.6",
     "chalk": "^4.1.1",
     "concurrently": "^7.0.0",
     "cross-env": "^7.0.3",
     "css-loader": "^6.2.0",
     "detect-port": "^1.3.0",
-    "electron": "^20.0.0",
+    "electron": "^22.0.0",
     "electron-builder": "^23.0.2",
     "electron-devtools-installer": "^3.2.0",
-    "electron-notarize": "^1.0.0",
-    "electron-rebuild": "^3.1.1",
     "electronmon": "^2.0.2",
     "esbuild-loader": "^2.18.0",
     "eslint": "^8.9.0",
@@ -216,7 +253,7 @@
     "eslint-plugin-promise": "^6.0.1",
     "eslint-plugin-react": "^7.26.1",
     "eslint-plugin-react-hooks": "^4.2.0",
-    "generate-react-cli": "^7.0.4",
+    "generate-react-cli": "^8.0.1",
     "html-webpack-plugin": "^5.5.0",
     "husky": "^7.0.0",
     "identity-obj-proxy": "^3.0.0",
@@ -236,10 +273,9 @@
     "ts-node": "^10.9.1",
     "tsx": "^3.8.2",
     "typescript": "^4.2.4",
-    "v8-compile-cache": "^2.3.0",
     "webpack": "^5.38.1",
     "webpack-bundle-analyzer": "^4.4.1",
-    "webpack-cli": "^4.6.0",
+    "webpack-cli": "^5.0.0",
     "webpack-dev-server": "^4.0.0",
     "webpack-merge": "^5.7.3",
     "worker-loader": "^3.0.8"
@@ -247,11 +283,12 @@
   "dependencies": {
     "@reduxjs/toolkit": "^1.8.1",
     "ahooks": "^3.0.3",
-    "antd": "^4.22.4",
+    "antd": "^5.0.0",
     "cheerio": "^1.0.0-rc.5",
     "clsx": "^1.1.1",
+    "color": "^4.2.3",
     "color-hash": "^2.0.1",
-    "connected-react-router": "^6.8.0",
+    "compare-versions": "^5.0.1",
     "dayjs": "^1.10.4",
     "echarts": "^5.0.2",
     "electron-debug": "^3.2.0",
@@ -272,26 +309,28 @@
     "menubar": "^9.0.2",
     "number-precision": "^1.5.0",
     "promise-worker": "^2.0.1",
+    "query-string": "^7.1.1",
     "react": "^18.0.0",
+    "react-color": "^2.19.3",
     "react-dom": "^18.0.0",
     "react-redux": "^8.0.1",
     "react-router-dom": "^6.0.0",
     "react-sortablejs": "^6.0.0",
     "redux": "^4.0.5",
-    "redux-logger": "^3.0.6",
-    "redux-promise": "^0.6.0",
     "redux-thunk": "^2.3.0",
     "socks-proxy-agent": "^7.0.0",
-    "sortablejs": "^1.13.0",
-    "swiper": "^8.0.3"
-  },
-  "devEngines": {
-    "node": ">=14.x",
-    "npm": ">=7.x"
-  },
-  "electronmon": {
-    "patterns": ["!src/renderer/**"]
+    "sortablejs": "^1.13.0"
   },
   "browserslist": [],
-  "__npminstall_done": false
+  "devEngines": {
+    "node": ">=16.x",
+    "npm": ">=8.x"
+  },
+  "electronmon": {
+    "patterns": [
+      "!**/**",
+      "src/main/**"
+    ],
+    "logLevel": "quiet"
+  }
 }

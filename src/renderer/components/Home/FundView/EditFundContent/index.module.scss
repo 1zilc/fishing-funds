@@ -6,7 +6,7 @@
   }
 
   label {
-    font-size: 1rem;
+    font-size: var(--base-font-size);
     width: 100px;
     margin-bottom: 5px;
     display: block;
@@ -15,6 +15,6 @@
   }
 
   span {
-    font-size: calc(11rem / var(--base-font-size));
+    font-size: calc(var(--base-font-size) * 11 / 12);
   }
 }

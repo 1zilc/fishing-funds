@@ -4,7 +4,7 @@
     color: var(--main-text-color);
   }
   p {
-    font-size: 1rem;
+    font-size: var(--base-font-size);
     word-break: break-all;
     color: var(--inner-text-color);
   }

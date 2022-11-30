@@ -34,7 +34,7 @@ const K: React.FC<KProps> = () => {
         legend: {
           data: ['日K', 'MA5', 'MA10'],
           textStyle: {
-            color: varibleColors['--main-text-color'],
+            color: 'var(--main-text-color)',
             fontSize: 10,
           },
         },
@@ -53,7 +53,7 @@ const K: React.FC<KProps> = () => {
             scale: true,
             splitLine: {
               lineStyle: {
-                color: varibleColors['--border-color'],
+                color: 'var(--border-color)',
               },
             },
           },

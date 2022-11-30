@@ -2,6 +2,7 @@ import React, { useMemo } from 'react';
 
 import { ReactSortable } from 'react-sortablejs';
 import clsx from 'clsx';
+import { Button } from 'antd';
 
 import PureCard from '@/components/Card/PureCard';
 import AddIcon from '@/static/icon/add.svg';
@@ -90,15 +91,17 @@ const Optional: React.FC<OptionalProps> = () => {
       ) : (
         <Empty text="暂未自选货币~" />
       )}
-      <div
-        className={styles.add}
+      <Button
+        className="bottom-button"
+        shape="circle"
+        type="primary"
+        size="large"
+        icon={<AddIcon />}
         onClick={(e) => {
           setAddDrawer(null);
           e.stopPropagation();
         }}
-      >
-        <AddIcon />
-      </div>
+      />
       <CustomDrawer show={showAddDrawer}>
         <AddCoinContent onClose={closeAddDrawer} onEnter={closeAddDrawer} />
       </CustomDrawer>

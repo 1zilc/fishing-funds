@@ -2,6 +2,8 @@ declare namespace System {
   export interface Setting {
     fundApiTypeSetting: import('@/utils/enums').FundApiType; // 基金源
 
+    themeColorTypeSetting: import('@/utils/enums').ThemeColorType;
+    customThemeColorSetting: string;
     conciseSetting: boolean; // 简洁模式
     lowKeySetting: boolean; // 低调模式
     baseFontSizeSetting: number; // 全局基础字体大小

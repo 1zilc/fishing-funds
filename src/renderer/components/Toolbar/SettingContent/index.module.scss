@@ -1,30 +1,8 @@
 .content {
   padding: 0 var(--base-padding);
-  // margin-top: 20px;
-
-  section {
-    padding: 0 0;
-  }
-
-  section > label {
-    font-size: 1rem;
-    margin-bottom: 5px;
-    display: block;
-    word-break: keep-all;
-  }
-
-  textArea,
-  input {
-    width: 50%;
-    outline: none;
-    border: 1px solid var(--border-color);
-    color: #000;
-    // height: 20px;
-  }
 }
 
 .logo {
-  // width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -34,7 +12,7 @@
   .appName {
     margin-top: 10px;
     text-align: center;
-    font-size: 1rem;
+    font-size: var(--base-font-size);
     color: var(--inner-text-color);
     font-weight: 500;
   }
@@ -49,7 +27,7 @@
   & > section {
     width: 100%;
     display: flex;
-    font-size: 1rem;
+    font-size: var(--base-font-size);
     align-items: center;
     box-sizing: border-box;
     justify-content: space-between;
@@ -67,7 +45,7 @@
   }
 
   .radio {
-    font-size: 1rem;
+    font-size: var(--base-font-size);
     display: flex;
     width: 100%;
     align-items: center;
@@ -78,10 +56,18 @@
       top: 0;
     }
   }
+
+  textArea,
+  input {
+    width: 50%;
+    outline: none;
+    border: 1px solid var(--border-color);
+    color: var(--main-text-color);
+  }
 }
 
 .title {
-  font-size: 1.1rem;
+  font-size: calc(var(--base-font-size) * 1.1);
   font-weight: 600;
   display: flex;
   align-items: center;
@@ -103,7 +89,7 @@
 }
 
 .link {
-  font-size: 1rem;
+  font-size: var(--base-font-size);
   text-align: center;
 
   i {
@@ -128,15 +114,15 @@
     color: var(--inner-text-color);
     background-color: transparent;
     // border: 1px solid var(--border-color);
-    font-size: calc(12rem / var(--base-font-size));
+    font-size: var(--base-font-size);
   }
 }
 
 .describe {
-  font-size: calc(11rem / var(--base-font-size));
+  font-size: calc(var(--base-font-size) * 11 / 12);
   color: var(--inner-text-color);
   font-weight: 500;
-  text-indent: calc(11rem / var(--base-font-size) * 2);
+  text-indent: calc(var(--base-font-size) * 2);
   margin-bottom: var(--base-padding);
 }
 
@@ -146,7 +132,7 @@
   line-height: 36px;
   background-color: var(--inner-color);
   color: var(--inner-text-color);
-  font-size: calc(10rem / var(--base-font-size));
+  font-size: calc(var(--base-font-size) * 5 / 6);
   position: fixed;
   bottom: 0;
   width: 100%;
@@ -158,14 +144,15 @@
 .group {
   display: flex;
   align-items: center;
-  padding: 10px 28px;
+  padding: 10px 10px;
   justify-content: center;
   width: 100%;
   flex-wrap: wrap;
+  box-sizing: border-box;
 
   & > section {
     display: flex;
-    font-size: 1rem;
+    font-size: var(--base-font-size);
     align-items: center;
     box-sizing: border-box;
     justify-content: center;
@@ -183,10 +170,6 @@
   }
 }
 
-.colorful {
-  animation: colorful 9s infinite;
-}
-
 .guide {
   display: flex;
   justify-content: flex-end;
@@ -198,21 +181,28 @@
   width: 100%;
   justify-content: space-evenly;
 }
+
 .bottomTabItem {
   padding: 2px var(--base-padding);
   text-align: center;
 }
 
-@keyframes colorful {
-  0% {
-    background-position: 10% 0%;
-  }
-
-  50% {
-    background-position: 91% 100%;
-  }
-
-  100% {
-    background-position: 10% 0%;
-  }
+.colorBar {
+  display: flex;
+  align-items: center;
+  width: 50%;
+  box-sizing: border-box;
+  justify-content: flex-end;
+}
+.colorPicker {
+  flex: 1;
+  margin-right: var(--base-padding);
+}
+.colorBlock {
+  display: inline-block;
+  height: 16px;
+  width: 16px;
+  border-radius: 2px;
+  background-color: var(--primary-color);
+  transition: background 0.2s;
 }

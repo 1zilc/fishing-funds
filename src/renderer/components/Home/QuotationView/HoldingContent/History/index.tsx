@@ -41,7 +41,7 @@ const NorthHistory: React.FC<PropsWithChildren<NorthHistoryProps>> = (props) => 
         columns={[
           {
             title: '时间',
-            width: 80,
+            width: 90,
             dataIndex: 'HOLD_DATE',
             render: (text: string) => <span className="text-center">{dayjs(text).format('YYYY-MM-DD')}</span>,
           },

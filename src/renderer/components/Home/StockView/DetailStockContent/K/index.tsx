@@ -193,7 +193,7 @@ const K: React.FC<PerformanceProps> = ({ secid = '', name }) => {
         legend: {
           data: ['日K', 'MA5', 'MA10', 'MA20', 'MA30', 'MA60', 'MA120', 'MA250'],
           textStyle: {
-            color: varibleColors['--main-text-color'],
+            color: 'var(--main-text-color)',
             fontSize: 10,
           },
           selected: {
@@ -250,7 +250,7 @@ const K: React.FC<PerformanceProps> = ({ secid = '', name }) => {
             scale: true,
             splitLine: {
               lineStyle: {
-                color: varibleColors['--border-color'],
+                color: 'var(--border-color)',
               },
             },
           },

@@ -2,12 +2,10 @@
  *  该文件对window.contextModules的模块进行二次封装
  */
 import * as Enums from '@/utils/enums';
-const { ipcRenderer } = window.contextModules.electron;
-const { version, production } = window.contextModules.process;
+const { ipcRenderer, app } = window.contextModules.electron;
 const { saveString, readFile } = window.contextModules.io;
 const { encodeFF, decodeFF, encryptFF, decryptFF } = window.contextModules.coding;
 const electronStore = window.contextModules.electronStore;
-const log = window.contextModules.log;
 
 export async function UpdateSystemTheme(setting: Enums.SystemThemeType) {
   await ipcRenderer.invoke('set-native-theme-source', setting);
@@ -20,7 +18,7 @@ export async function GenerateBackupConfig() {
     author: '1zilc',
     website: 'https://ff.1zilc.top',
     github: 'https://github.com/1zilc/fishing-funds',
-    version: version,
+    version: await app.getVersion(),
     content: await encodeFF(config),
     timestamp: Date.now(),
     suffix: 'ff',
@@ -34,18 +32,12 @@ export async function GenerateSyncConfig(config: { [x: string]: any }) {
     author: '1zilc',
     website: 'https://ff.1zilc.top',
     github: 'https://github.com/1zilc/fishing-funds',
-    version: version,
+    version: await app.getVersion(),
     content: await encodeFF(config),
     timestamp: Date.now(),
     suffix: 'ff',
   };
   return fileConfig;
-}
-
-export function CheckEnvTool() {
-  if (production) {
-    Object.assign(console, log.functions);
-  }
 }
 
 export async function CoverBackupConfig(fileConfig: Backup.Config) {

@@ -1,5 +1,5 @@
 import React, { PropsWithChildren, useLayoutEffect, useRef, useState } from 'react';
-
+import { useMemoizedFn } from 'ahooks';
 import clsx from 'clsx';
 import styles from './index.module.scss';
 
@@ -10,22 +10,56 @@ interface CollapseProps {
 
 const Collapse: React.FC<PropsWithChildren<CollapseProps>> = (props) => {
   const contentRef = useRef<HTMLDivElement>(null);
-  const [maxHeight, setMaxHeight] = useState(contentRef.current?.clientHeight);
+  const montedRef = useRef(false);
+  const [wrapStyle, setWrapStyle] = useState<React.CSSProperties>({
+    height: props.isOpened ? contentRef.current?.offsetHeight : undefined,
+    display: props.isOpened ? undefined : 'none',
+  });
 
-  /**
-   * 在渲染前取到最新的字组件高度，设置为collapse最大高度
-   */
+  const onTransitionEnd = useMemoizedFn(() => {
+    if (props.isOpened) {
+      setWrapStyle({});
+    } else {
+      setWrapStyle({
+        display: 'none',
+      });
+    }
+  });
+
   useLayoutEffect(() => {
-    setMaxHeight(contentRef.current?.clientHeight);
-  }, [contentRef.current?.clientHeight]);
+    if (!montedRef.current) {
+      montedRef.current = true;
+      return;
+    }
+    if (props.isOpened) {
+      setWrapStyle({
+        height: 0,
+      });
+      requestAnimationFrame(() => {
+        setWrapStyle({
+          height: contentRef.current?.offsetHeight,
+        });
+      });
+    } else {
+      setWrapStyle({
+        height: contentRef.current?.offsetHeight,
+      });
+      requestAnimationFrame(() => {
+        setWrapStyle({
+          height: 0,
+        });
+      });
+    }
+  }, [props.isOpened]);
 
   return (
     <div
       className={clsx(styles.content)}
       style={{
-        maxHeight: props.isOpened ? maxHeight : 0,
+        ...wrapStyle,
         ...props.style,
       }}
+      onTransitionEnd={onTransitionEnd}
     >
       <div ref={contentRef}>{props.children}</div>
     </div>

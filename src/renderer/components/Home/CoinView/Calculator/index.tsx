@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { Select, Input } from 'antd';
+import { Select, Input, Button } from 'antd';
 import { useDebounceFn, useRequest, useMemoizedFn } from 'ahooks';
 import * as NP from 'number-precision';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
@@ -150,15 +150,9 @@ const Calculator: React.FC<CalculatorProps> = (props) => {
                     </div>
                     <div className={styles.code}>{code}</div>
                   </div>
-                  {coin?.id === code ? (
-                    <button className={styles.added} disabled>
-                      已选择
-                    </button>
-                  ) : (
-                    <button className={styles.select} onClick={() => onSelect(code)}>
-                      选择
-                    </button>
-                  )}
+                  <Button type="primary" disabled={coin?.id === code} onClick={() => onSelect(code)}>
+                    {coin?.id === code ? '已选择' : '选择'}
+                  </Button>
                 </div>
               );
             })}

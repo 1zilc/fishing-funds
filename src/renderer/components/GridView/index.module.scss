@@ -32,7 +32,7 @@
   }
 }
 .value {
-  font-size: 1.2rem;
+  font-size: calc(var(--base-font-size) * 1.2);
   font-weight: 500;
 }
 .footer {

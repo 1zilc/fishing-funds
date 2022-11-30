@@ -23,9 +23,9 @@ const MarketStyle: React.FC<MarketStyleProps> = (props) => {
   const { ref: chartRef, chartInstance } = useResizeEchart(CONST.DEFAULT.ECHARTS_SCALE);
 
   useRenderEcharts(
-    ({ varibleColors }) => {
+    () => {
       chartInstance?.setOption({
-        color: [varibleColors['--primary-color'], varibleColors['--warn-color']],
+        color: ['var(--primary-color)', 'var(--warn-color)'],
         tooltip: {
           trigger: 'axis',
           axisPointer: { type: 'cross' },
@@ -48,7 +48,7 @@ const MarketStyle: React.FC<MarketStyleProps> = (props) => {
             axisLabel: { formatter: '{value}%' },
             splitLine: {
               lineStyle: {
-                color: varibleColors['--border-color'],
+                color: 'var(--border-color)',
               },
             },
           },
@@ -58,7 +58,7 @@ const MarketStyle: React.FC<MarketStyleProps> = (props) => {
             position: 'right',
             splitLine: {
               lineStyle: {
-                color: varibleColors['--border-color'],
+                color: 'var(--border-color)',
               },
             },
           },

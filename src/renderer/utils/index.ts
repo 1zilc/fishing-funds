@@ -1,4 +1,6 @@
 import NP from 'number-precision';
+import queryString from 'query-string';
+import Color from 'color';
 import dayjs from 'dayjs';
 import * as CONST from '@/constants';
 
@@ -14,14 +16,6 @@ export function Yang(num: string | number | undefined) {
     }
   } catch (error) {
     return String(num);
-  }
-}
-
-export function CalcWithPrefix(a: any, b: any) {
-  if (b >= a) {
-    return `+${NP.minus(b, a)}`;
-  } else {
-    return NP.minus(b, a);
   }
 }
 
@@ -96,10 +90,15 @@ export function JudgeAdjustmentNotificationTime(timestamp: number, adjustmentNot
   };
 }
 
+export function GetStylePropertyValue(varible: keyof typeof CONST.VARIBLES) {
+  const value = window.getComputedStyle(document.documentElement).getPropertyValue(varible);
+  return (value || '').trim();
+}
+
 export function GetVariblesColor(): Record<keyof typeof CONST.VARIBLES, string> {
   return Object.keys(CONST.VARIBLES).reduce<Record<string, string>>((colorMap, varible) => {
-    const color = window.getComputedStyle(document.body).getPropertyValue(varible);
-    colorMap[varible] = (color || '').trim();
+    const color = GetStylePropertyValue(varible as keyof typeof CONST.VARIBLES);
+    colorMap[varible] = color;
     return colorMap;
   }, {});
 }
@@ -271,55 +270,17 @@ export function CalcZDHC(list: number[]) {
   }
 }
 
-export function ColorRgba(sHex: string, alpha = 1) {
-  // 十六进制颜色值的正则表达式
-  const reg = /^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/;
-  /* 16进制颜色转为RGB格式 */
-  let sColor = sHex.toLowerCase().trim();
-  if (sColor && reg.test(sColor)) {
-    if (sColor.length === 4) {
-      let sColorNew = '#';
-      for (let i = 1; i < 4; i += 1) {
-        sColorNew += sColor.slice(i, i + 1).concat(sColor.slice(i, i + 1));
-      }
-      sColor = sColorNew;
-    }
-    //  处理六位的颜色值
-    const sColorChange = [];
-    for (let i = 1; i < 7; i += 2) {
-      sColorChange.push(parseInt('0x' + sColor.slice(i, i + 2)));
-    }
-    // return sColorChange.join(',')
-    // 或
-    return 'rgba(' + sColorChange.join(',') + ',' + alpha + ')';
-  } else {
-    return sColor;
-  }
-}
-
 export function GetWeekDay(day: number) {
   return ['星期天', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'][day];
 }
 
 export function GetValueMapColor(value: any = 0) {
   const alphas = [0.6, 0.7, 0.8, 0.9, 1];
-  const alphaindex = Math.ceil(Math.min(Math.abs(value) * 1.5, 5));
-  const colorAlpha = value === 0 ? 1 : alphas[alphaindex];
+  const alphaindex = Math.ceil(Math.min(Math.abs(value) * 1.5, 4));
+  const colorAlpha = alphas[alphaindex];
   const color = GetValueColor(value).color;
-  const rgba = ColorRgba(color, colorAlpha);
-  return rgba;
-}
-
-export function GbLength(str: string) {
-  let len = 0;
-  for (let i = 0; i < str.length; i++) {
-    if (str.charCodeAt(i) > 127 || str.charCodeAt(i) == 94) {
-      len += 2;
-    } else {
-      len++;
-    }
-  }
-  return len;
+  const rgb = Color(color).alpha(colorAlpha);
+  return rgb.toString();
 }
 
 export function CheckUrlValid(value: string) {
@@ -394,15 +355,16 @@ export function ConvertKData(data: any[]) {
   }));
 }
 
-export function MakeSearchParams(config: { _nav: string; data?: Record<string, unknown> }) {
-  const data = config.data || {};
-  const search = '?' + new URLSearchParams({ ...data, _nav: config._nav }).toString();
-  return search;
+export function MakeSearchParams(url: string, query: queryString.StringifiableRecord) {
+  return queryString.stringifyUrl({ url, query });
 }
 
-export function ParseSearchParams() {
-  const data = new URLSearchParams(window.location.search);
-  return data;
+export function ParseLocationParams<T = Record<string, unknown>>() {
+  const data = queryString.parse(location.search, {
+    parseNumbers: true,
+    parseBooleans: true,
+  });
+  return data as T;
 }
 
 export function CheckListOrderHasChanged<I1, I2 extends I1, K extends keyof I1>(list1: I1[], list2: I2[], key: K) {

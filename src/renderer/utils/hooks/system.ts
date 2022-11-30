@@ -1,5 +1,7 @@
 import { useLayoutEffect, useState, useEffect, useMemo } from 'react';
+import { flushSync } from 'react-dom';
 import { useInterval } from 'ahooks';
+import { theme } from 'antd';
 import { AnyAction } from 'redux';
 import dayjs from 'dayjs';
 import NP from 'number-precision';
@@ -8,7 +10,8 @@ import { updateAvaliableAction } from '@/store/features/updater';
 import { setFundConfigAction } from '@/store/features/fund';
 import { syncTabsActiveKeyAction } from '@/store/features/tabs';
 import { changeCurrentWalletCodeAction, toggleEyeStatusAction } from '@/store/features/wallet';
-import { updateAdjustmentNotificationDateAction, syncDarkMode, saveSyncConfigAction } from '@/store/features/setting';
+import { updateAdjustmentNotificationDateAction, syncDarkMode, saveSyncConfigAction, syncVaribleColors } from '@/store/features/setting';
+import { syncTranslateShowAction } from '@/store/features/translate';
 
 import {
   useWorkDayTimeToDo,
@@ -28,6 +31,7 @@ import {
   useLoadStocks,
   useIpcRendererListener,
 } from '@/utils/hooks';
+import { walletIcons } from '@/helpers/wallet';
 import * as Utils from '@/utils';
 import * as Adapters from '@/utils/adpters';
 import * as Helpers from '@/helpers';
@@ -38,6 +42,7 @@ import { useLoadFunds } from './utils';
 const { dialog, ipcRenderer, clipboard, app } = window.contextModules.electron;
 const { saveString, readFile } = window.contextModules.io;
 const { encryptFF, decryptFF } = window.contextModules.coding;
+const { useToken } = theme;
 
 export function useUpdater() {
   const dispatch = useAppDispatch();
@@ -167,7 +172,7 @@ export function useFundsClipboard() {
   useIpcRendererListener('clipboard-funds-import', async (e: Electron.IpcRendererEvent, data) => {
     try {
       const limit = 1024;
-      const text = clipboard.readText();
+      const text = await clipboard.readText();
       const json: any[] = JSON.parse(text);
       if (json.length > limit) {
         dialog.showMessageBox({
@@ -291,6 +296,7 @@ export function useBootStrap() {
 
 export function useMappingLocalToSystemSetting() {
   const dispatch = useAppDispatch();
+  const { hashId } = useToken();
   const {
     systemThemeSetting,
     autoStartSetting,
@@ -299,14 +305,12 @@ export function useMappingLocalToSystemSetting() {
     proxyTypeSetting,
     proxyHostSetting,
     proxyPortSetting,
-    hotkeySetting,
+    hotkeySetting: visibleHotkey,
   } = useAppSelector((state) => state.setting.systemSetting);
+  const { hotkeySetting: translateHotkey } = useAppSelector((state) => state.translate.translateSetting);
 
   useIpcRendererListener('nativeTheme-updated', (e, data) => {
-    requestIdleCallback(() => {
-      // TODO: 暂时不清楚，为什么第一时间无法取最新的 property color
-      dispatch(syncDarkMode(!!data?.darkMode));
-    });
+    dispatch(syncDarkMode(!!data?.darkMode));
   });
 
   useEffect(() => {
@@ -342,8 +346,14 @@ export function useMappingLocalToSystemSetting() {
     }
   }, [proxyTypeSetting, proxyHostSetting, proxyPortSetting]);
   useEffect(() => {
-    ipcRenderer.invoke('set-hotkey', hotkeySetting);
-  }, [hotkeySetting]);
+    ipcRenderer.invoke('set-visible-hotkey', visibleHotkey);
+  }, [visibleHotkey]);
+  useEffect(() => {
+    dispatch(syncVaribleColors());
+  }, [hashId]);
+  useEffect(() => {
+    ipcRenderer.invoke('set-translate-hotkey', translateHotkey);
+  }, [translateHotkey]);
 }
 
 export function useTrayContent() {
@@ -351,6 +361,7 @@ export function useTrayContent() {
   const fundConfigCodeMap = useAppSelector((state) => state.wallet.fundConfigCodeMap);
   const walletsConfig = useAppSelector((state) => state.wallet.config.walletConfig);
   const wallets = useAppSelector((state) => state.wallet.wallets);
+  const eyeStatus = useAppSelector((state) => state.wallet.eyeStatus);
   const { funds } = useAppSelector((state) => state.wallet.currentWallet);
   const calcResult = Helpers.Fund.CalcFunds(funds, fundConfigCodeMap);
 
@@ -367,11 +378,11 @@ export function useTrayContent() {
     return { sygz, gssyl: allResult.zje ? NP.times(NP.divide(sygz, allResult.zje), 100) : 0 };
   }, [wallets, walletsConfig]);
 
-  useEffect(() => {
+  const trayContent = useMemo(() => {
     const group = [trayContentSetting].flat();
-    const content = group
-      .map((trayContent: Enums.TrayContent) => {
-        switch (trayContent) {
+    let content = group
+      .map((trayContentType: Enums.TrayContent) => {
+        switch (trayContentType) {
           case Enums.TrayContent.Sy:
             return `${Utils.Yang(calcResult.sygz.toFixed(2))}`;
           case Enums.TrayContent.Syl:
@@ -385,9 +396,15 @@ export function useTrayContent() {
         }
       })
       .join(' │ ');
-
-    ipcRenderer.invoke('set-tray-content', content ? ` ${content}` : content);
+    content = content ? ` ${content}` : content;
+    return content;
   }, [trayContentSetting, calcResult, allCalcResult]);
+
+  useEffect(() => {
+    const content = eyeStatus === Enums.EyeStatus.Close ? '' : trayContent;
+
+    ipcRenderer.invoke('set-tray-content', content);
+  }, [trayContent, eyeStatus]);
 }
 
 export function useUpdateContextMenuWalletsState() {
@@ -408,17 +425,16 @@ export function useUpdateContextMenuWalletsState() {
         return {
           label: `${walletConfig.name}  ${value}`,
           type: currentWalletCode === walletConfig.code ? 'radio' : 'normal',
-          iconIndex: walletConfig.iconIndex,
+          dataURL: walletIcons[walletConfig.iconIndex],
           id: walletConfig.code,
         };
       })
     );
   }, [wallets, currentWalletCode, walletsConfig]);
 
-  useIpcRendererListener('change-current-wallet-code', async (e, code) => {
+  useIpcRendererListener('change-current-wallet-code', (e, code) => {
     try {
-      await dispatch(changeCurrentWalletCodeAction(code));
-      freshFunds();
+      dispatch(changeCurrentWalletCodeAction(code));
     } catch (error) {}
   });
 }
@@ -462,12 +478,17 @@ export function useAllConfigBackup() {
       const encodeBackupConfig = await readFile(filePath);
       const backupConfig: Backup.Config = await decryptFF(encodeBackupConfig);
       Enhancement.CoverBackupConfig(backupConfig);
-      await dialog.showMessageBox({
+      const { response } = await dialog.showMessageBox({
         type: 'info',
         title: `导入成功`,
-        message: `导入全局配置成功, 请重新启动Fishing Funds`,
+        message: `请重新启动Fishing Funds`,
+        buttons: ['重启', '关闭'],
       });
-      app.quit();
+      if (response === 0) {
+        app.relaunch();
+      } else {
+        app.quit();
+      }
     } catch (error) {
       dialog.showMessageBox({
         type: 'info',
@@ -487,12 +508,17 @@ export function useAllConfigBackup() {
       });
       if (response === 0) {
         Enhancement.CoverBackupConfig(backupConfig);
-        await dialog.showMessageBox({
+        const { response } = await dialog.showMessageBox({
           type: 'info',
           title: `恢复成功`,
-          message: `恢复备份成功, 请重新启动Fishing Funds`,
+          message: `请重新启动Fishing Funds`,
+          buttons: ['重启', '关闭'],
         });
-        app.quit();
+        if (response === 0) {
+          app.relaunch();
+        } else {
+          app.quit();
+        }
       }
     } catch (error) {
       dialog.showMessageBox({
@@ -513,7 +539,6 @@ export function useTouchBar() {
   const currentWalletCode = useAppSelector((state) => state.wallet.currentWalletCode);
   const walletsConfig = useAppSelector((state) => state.wallet.config.walletConfig);
   const fundConfigCodeMap = useAppSelector((state) => state.wallet.fundConfigCodeMap);
-  const varibleColors = useAppSelector((state) => state.setting.varibleColors);
   const bottomTabsSetting = useAppSelector((state) => state.setting.systemSetting.bottomTabsSetting);
 
   useEffect(() => {
@@ -524,7 +549,7 @@ export function useTouchBar() {
         backgroundColor: Utils.GetValueColor(zindex.zdf).color,
       }))
     );
-  }, [varibleColors, zindexs]);
+  }, [zindexs]);
 
   useEffect(() => {
     const walletConfig = Helpers.Wallet.GetCurrentWalletConfig(currentWalletCode, walletsConfig);
@@ -535,7 +560,7 @@ export function useTouchBar() {
       {
         id: currentWalletCode,
         label: `${value}%`, // 只显示当前钱包
-        iconIndex: walletConfig.iconIndex,
+        dataURL: walletIcons[walletConfig.iconIndex],
       },
     ]);
   }, [currentWallet, currentWalletCode, walletsConfig, fundConfigCodeMap]);
@@ -586,4 +611,29 @@ export function useSyncConfig() {
       dispatch(saveSyncConfigAction());
     }
   }, [syncConfigSetting, syncConfigPathSetting]);
+}
+
+export function useTranslate() {
+  const dispatch = useAppDispatch();
+  const show = useAppSelector((state) => state.translate.show); // translate当前显示状态
+
+  useIpcRendererListener('trigger-translate', (event, visible: boolean) => {
+    // menubar 当前显示状态
+    if (visible) {
+      if (show) {
+        ipcRenderer.invoke('set-menubar-visible', false);
+        dispatch(syncTranslateShowAction(false));
+      } else {
+        dispatch(syncTranslateShowAction(true));
+      }
+    } else {
+      if (show) {
+        flushSync(() => {
+          dispatch(syncTranslateShowAction(false));
+        });
+      }
+      dispatch(syncTranslateShowAction(true));
+      ipcRenderer.invoke('set-menubar-visible', true);
+    }
+  });
 }

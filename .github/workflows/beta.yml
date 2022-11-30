@@ -18,10 +18,11 @@ jobs:
 
     steps:
       - name: Setup repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
+      - run: git push --delete origin beta
 
       - name: Run build
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
           node-version: 16
       - run: npm install --force
@@ -30,7 +31,3 @@ jobs:
         env:
           USE_HARD_LINKS: false
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
-
-      - name: Delete beta branch
-        uses: actions/checkout@v2
-      - run: git push --delete origin beta

@@ -13,7 +13,7 @@ const cards = new Array(6).fill('');
 
 const SkeletonContent: React.FC<SkeletonContentProps> = () => {
   return (
-    <CustomDrawerContent title="" enterText="确定" onClose={callback} onEnter={callback}>
+    <CustomDrawerContent title="" enterText="..." onClose={callback} onEnter={callback}>
       <div className={styles.content}>
         {cards.map((_, index) => (
           <PureCard key={index} className={styles.card}>

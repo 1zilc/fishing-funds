@@ -12,14 +12,14 @@ const SimilarProportion: React.FC<SimilarProportionProps> = ({ rateInSimilarPers
   const { ref: chartRef, chartInstance } = useResizeEchart(CONST.DEFAULT.ECHARTS_SCALE);
 
   useRenderEcharts(
-    ({ varibleColors }) => {
+    () => {
       chartInstance?.setOption({
         title: {
           text: '优于同类百分比',
           left: 'center',
           top: 0,
           textStyle: {
-            color: varibleColors['--main-text-color'],
+            color: 'var(--main-text-color)',
             fontSize: 12,
           },
         },
@@ -51,7 +51,7 @@ const SimilarProportion: React.FC<SimilarProportionProps> = ({ rateInSimilarPers
           },
           splitLine: {
             lineStyle: {
-              color: varibleColors['--border-color'],
+              color: 'var(--border-color)',
             },
           },
         },

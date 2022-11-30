@@ -3,7 +3,6 @@ import path from 'path';
 import fs from 'fs';
 import webpack from 'webpack';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
-import AntdDayjsWebpackPlugin from 'antd-dayjs-webpack-plugin';
 import chalk from 'chalk';
 import { merge } from 'webpack-merge';
 import { spawn, execSync } from 'child_process';
@@ -87,12 +86,19 @@ const configuration: webpack.Configuration = {
       // Images
       {
         test: /\.(png|jpg|jpeg|gif)$/i,
+        resourceQuery: { not: [/url/] },
         type: 'asset/resource',
+      },
+      {
+        test: /\.(png|jpg|jpeg|gif|svg)$/i,
+        type: 'asset/inline',
+        resourceQuery: /url/,
       },
       // SVG
       {
         test: /\.svg$/,
         issuer: /\.[jt]sx?$/,
+        resourceQuery: { not: [/url/] },
         use: ['@svgr/webpack'],
       },
     ],
@@ -150,8 +156,6 @@ const configuration: webpack.Configuration = {
       nodeModules: webpackPaths.appNodeModulesPath,
       scriptLoading: 'module',
     }),
-
-    new AntdDayjsWebpackPlugin(),
   ],
 
   node: {

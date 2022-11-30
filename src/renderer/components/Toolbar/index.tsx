@@ -1,13 +1,12 @@
 import React from 'react';
 import { Badge } from 'antd';
-
+import clsx from 'clsx';
 import { useBoolean, useMemoizedFn } from 'ahooks';
 
 import RefreshIcon from '@/static/icon/refresh.svg';
 import SettingIcon from '@/static/icon/setting.svg';
 import AppsIcon from '@/static/icon/apps.svg';
 import CustomDrawer from '@/components/CustomDrawer';
-
 import { useFreshFunds, useFreshZindexs, useFreshQuotations, useFreshStocks, useFreshCoins, useAppSelector } from '@/utils/hooks';
 import * as Enums from '@/utils/enums';
 import * as CONST from '@/constants';
@@ -30,7 +29,8 @@ const ToolBar: React.FC<ToolBarProps> = () => {
   const freshStocks = useFreshStocks(CONST.DEFAULT.FRESH_BUTTON_THROTTLE_DELAY);
   const freshCoins = useFreshCoins(CONST.DEFAULT.FRESH_BUTTON_THROTTLE_DELAY);
 
-  const [showSettingDrawer, { setTrue: openSettingDrawer, setFalse: closeSettingDrawer, toggle: ToggleSettingDrawer }] = useBoolean(false);
+  const [showSettingContent, { setTrue: openSettingContent, setFalse: closeSettingContent, toggle: ToggleSettingContent }] =
+    useBoolean(false);
   const [showAppCenterDrawer, { setTrue: openAppCenterDrawer, setFalse: closeAppCenterDrawer, toggle: ToggleAppCenterDrawer }] =
     useBoolean(false);
 
@@ -65,30 +65,32 @@ const ToolBar: React.FC<ToolBarProps> = () => {
   });
 
   return (
-    <div className={styles.bar}>
-      <AppsIcon style={{ ...iconSize }} onClick={openAppCenterDrawer} />
-      <RefreshIcon style={{ ...iconSize }} onClick={fresh} />
-      <Badge dot={!!updateInfo.version}>
-        <SettingIcon style={{ ...iconSize }} onClick={openSettingDrawer} />
-      </Badge>
-      <CustomDrawer show={showAppCenterDrawer}>
-        <AppCenterContent
-          onClose={closeAppCenterDrawer}
-          onEnter={() => {
-            freshAll();
-            closeAppCenterDrawer();
-          }}
-        />
-      </CustomDrawer>
-      <CustomDrawer show={showSettingDrawer}>
-        <SettingContent
-          onClose={closeSettingDrawer}
-          onEnter={() => {
-            freshAll();
-            closeSettingDrawer();
-          }}
-        />
-      </CustomDrawer>
+    <div className={styles.content}>
+      <div className={clsx(styles.bar, 'max-content')}>
+        <AppsIcon style={{ ...iconSize }} onClick={openAppCenterDrawer} />
+        <RefreshIcon style={{ ...iconSize }} onClick={fresh} />
+        <Badge dot={!!updateInfo.version}>
+          <SettingIcon style={{ ...iconSize }} onClick={openSettingContent} />
+        </Badge>
+        <CustomDrawer show={showAppCenterDrawer}>
+          <AppCenterContent
+            onClose={closeAppCenterDrawer}
+            onEnter={() => {
+              freshAll();
+              closeAppCenterDrawer();
+            }}
+          />
+        </CustomDrawer>
+        <CustomDrawer className={styles.themeWrapper} show={showSettingContent}>
+          <SettingContent
+            themeWrapperClass={styles.themeWrapper}
+            onClose={closeSettingContent}
+            onEnter={() => {
+              closeSettingContent();
+            }}
+          />
+        </CustomDrawer>
+      </div>
     </div>
   );
 };

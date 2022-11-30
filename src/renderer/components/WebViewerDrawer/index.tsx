@@ -1,5 +1,6 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { Dropdown, Progress, Switch } from 'antd';
+import clsx from 'clsx';
 import { useBoolean, useMemoizedFn, useEventListener } from 'ahooks';
 
 import StarIcon from '@/static/icon/star.svg';
@@ -13,6 +14,8 @@ import ToolsIcon from '@/static/icon/tools.svg';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
 import CustomDrawer from '@/components/CustomDrawer';
 import Empty from '@/components/Empty';
+import { RedirectSearchParams } from '@/containers/InitPage';
+import { WebViewerPageParams } from '@/components/WebViewerDrawer/WebViewerPage';
 
 import { closeWebAction, addWebAction, deleteWebAction, syncWebPhoneAction } from '@/store/features/web';
 import { useDrawer, useAppDispatch, useAppSelector, useIpcRendererListener } from '@/utils/hooks';
@@ -25,14 +28,14 @@ const AddWebContent = React.lazy(() => import('@/components/WebViewerDrawer/AddW
 
 interface WebViewerDrawerProps {}
 
-interface WebViewerProps {
+export type WebViewerProps = {
   url: string;
   phone?: boolean;
   title: string;
+  full?: boolean;
   updateTitle?: (title: string) => void;
   updateUrl?: (title: string) => void;
-  full?: boolean;
-}
+};
 
 interface WebViewerContentProps {}
 
@@ -40,7 +43,7 @@ const menuItemSize = { height: 14, width: 14 };
 
 const { clipboard, dialog, ipcRenderer, shell } = window.contextModules.electron;
 
-const defaultAgent =
+export const defaultAgent =
   'Mozilla/5.0 (iPhone; CPU iPhone OS 10_3_1 like Mac OS X) AppleWebKit/603.1.30 (KHTML, like Gecko) Version/10.0 Mobile/14E304 Safari/602.1';
 
 export const WebViewer: React.FC<WebViewerProps> = (props) => {
@@ -200,15 +203,9 @@ export const WebViewer: React.FC<WebViewerProps> = (props) => {
   return (
     <div className={styles.content} style={{ height: full ? '100vh' : 'calc(100vh - 48px)' }}>
       {url ? (
-        <webview
-          ref={viewRef}
-          src={url}
-          style={{ width: '100%', flex: '1' } as any}
-          useragent={phone ? defaultAgent : undefined}
-          allowpopups
-        />
+        <webview ref={viewRef} src={url} style={{ width: '100%', flex: '1' }} useragent={phone ? defaultAgent : undefined} allowpopups />
       ) : (
-        <Empty text="404 Not Found" />
+        <Empty className={styles.empty} text="404 Not Found" />
       )}
       <div>
         <Progress
@@ -219,9 +216,9 @@ export const WebViewer: React.FC<WebViewerProps> = (props) => {
           showInfo={false}
           strokeColor={done ? 'transparent' : 'var(--primary-color)'}
         />
-        <div className={styles.nav}>
+        <div className={clsx(styles.nav, 'max-content')}>
           <Dropdown
-            overlay={
+            dropdownRender={() => (
               <div className={styles.menu}>
                 <div className={styles.menuItem} onClick={onVisit}>
                   <label>浏览器打开</label>
@@ -236,7 +233,7 @@ export const WebViewer: React.FC<WebViewerProps> = (props) => {
                   <Switch checked={!!phone} onChange={onPhoneChange} size="small" />
                 </div>
               </div>
-            }
+            )}
             placement="topLeft"
           >
             <ToolsIcon />
@@ -265,14 +262,13 @@ export const WebViewerContent: React.FC<WebViewerContentProps> = () => {
   }
 
   function onOpenChildWindow() {
-    const search = Utils.MakeSearchParams({
-      _nav: '/detail/webViewer',
-      data: {
+    const search = Utils.MakeSearchParams('', {
+      _redirect: Utils.MakeSearchParams(CONST.ROUTES.DETAIL_WEBVIEWER, {
         ...view,
         title: currentTitle,
         url: currentUrl,
-      },
-    });
+      } as WebViewerPageParams),
+    } as RedirectSearchParams);
     ipcRenderer.invoke('open-child-window', { search });
   }
 

@@ -17,7 +17,7 @@
   }
 }
 .walletName {
-  font-size: calc(12rem / var(--base-font-size));
+  font-size: var(--base-font-size);
   font-weight: 600;
   position: relative;
 }

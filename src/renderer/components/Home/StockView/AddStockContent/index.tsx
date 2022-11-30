@@ -21,7 +21,7 @@ const AddStockContent: React.FC<AddStockContentProps> = (props) => {
   const { defaultName } = props;
   const [groupList, setGroupList] = useState<Stock.SearchResult[]>([]);
 
-  const { run: runSearch } = useRequest(Services.Stock.SearchFromEastmoney, {
+  const { run: runSearch, loading: loadingSearchFromEastmoney } = useRequest(Services.Stock.SearchFromEastmoney, {
     manual: true,
     onSuccess: (res) => setGroupList(res.filter(({ Type }) => stockTypesConfig.map(({ code }) => code).includes(Type))),
   });
@@ -46,7 +46,15 @@ const AddStockContent: React.FC<AddStockContentProps> = (props) => {
       <div className={styles.content}>
         <section>
           <label>关键字：</label>
-          <Search defaultValue={defaultName} type="text" placeholder="股票代码或名称关键字" enterButton onSearch={onSearch} size="small" />
+          <Search
+            defaultValue={defaultName}
+            type="text"
+            placeholder="股票代码或名称关键字"
+            enterButton
+            onSearch={onSearch}
+            size="small"
+            loading={loadingSearchFromEastmoney}
+          />
         </section>
         {groupList.length ? <StockSearch groupList={groupList} /> : <Empty text="暂无相关数据~" />}
       </div>

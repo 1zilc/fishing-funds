@@ -51,11 +51,11 @@ const Sentiment: React.FC<SentimentProps> = ({ up = 0, down = 0 }) => {
               },
             ],
             label: {
-              color: varibleColors['--main-text-color'],
+              color: 'var(--main-text-color)',
             },
             labelLine: {
               lineStyle: {
-                color: varibleColors['--main-text-color'],
+                color: 'var(--main-text-color)',
               },
               smooth: 0.2,
               length: 10,
@@ -63,7 +63,7 @@ const Sentiment: React.FC<SentimentProps> = ({ up = 0, down = 0 }) => {
             },
             itemStyle: {
               borderRadius: 10,
-              borderColor: varibleColors['--background-color'],
+              borderColor: 'var(--background-color)',
               borderWidth: 1,
             },
             animationType: 'scale',

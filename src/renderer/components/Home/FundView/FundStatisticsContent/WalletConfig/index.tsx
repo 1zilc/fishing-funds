@@ -14,7 +14,7 @@ const WalletConfig: React.FC<WalletConfigProps> = ({ funds, codes }) => {
   const walletsConfig = useAppSelector((state) => state.wallet.config.walletConfig);
 
   useRenderEcharts(
-    ({ varibleColors }) => {
+    () => {
       const walletsName = codes.map((code) => Helpers.Wallet.GetCurrentWalletConfig(code, walletsConfig).name);
       chartInstance?.setOption(
         {
@@ -29,7 +29,7 @@ const WalletConfig: React.FC<WalletConfigProps> = ({ funds, codes }) => {
             show: true,
             data: funds.map(({ name }) => name),
             textStyle: {
-              color: varibleColors['--main-text-color'],
+              color: 'var(--main-text-color)',
               fontSize: 10,
               overflow: 'truncate',
               width: 50,
@@ -39,7 +39,7 @@ const WalletConfig: React.FC<WalletConfigProps> = ({ funds, codes }) => {
             type: 'scroll',
             pageIconSize: 10,
             pageTextStyle: {
-              color: varibleColors['--main-text-color'],
+              color: 'var(--main-text-color)',
               fontSize: 10,
             },
           },
@@ -65,7 +65,7 @@ const WalletConfig: React.FC<WalletConfigProps> = ({ funds, codes }) => {
             },
             splitLine: {
               lineStyle: {
-                color: varibleColors['--border-color'],
+                color: 'var(--border-color)',
               },
             },
           },

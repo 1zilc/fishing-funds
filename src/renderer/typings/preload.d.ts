@@ -1,6 +1,5 @@
 import { GotRequestFunction } from 'got';
 import { Shell, Dialog, App, IpcRenderer, Clipboard } from 'electron';
-import { ElectronLog } from 'electron-log';
 
 declare global {
   interface Window {
@@ -9,21 +8,24 @@ declare global {
       process: {
         production: boolean;
         electron: string;
-        version: string;
         platform: 'aix' | 'darwin' | 'freebsd' | 'linux' | 'openbsd' | 'sunos' | 'win32';
       };
       electron: {
         shell: Shell;
         ipcRenderer: IpcRenderer;
         dialog: Dialog;
-        app: App;
+        app: {
+          quit: App['quit'];
+          relaunch: App['relaunch'];
+          setLoginItemSettings: App['setLoginItemSettings'];
+          getVersion: () => Promise<ReturnType<App['getVersion']>>;
+        };
         clipboard: {
           writeText: Clipboard['writeText'];
           readText: Clipboard['readText'];
           writeImage: (dataUrl: string) => void;
         };
       };
-      log: ElectronLog;
       io: {
         saveImage: (filePath: string, dataUrl: string) => Promise<unknown>;
         saveString: (filePath: string, content: string) => Promise<unknown>;

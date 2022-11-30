@@ -32,7 +32,7 @@ const Trend: React.FC<PerformanceProps> = ({ code, zs = 0, name }) => {
   });
 
   useRenderEcharts(
-    ({ varibleColors }) => {
+    () => {
       chartInstance?.setOption({
         title: {
           text: '',
@@ -65,7 +65,7 @@ const Trend: React.FC<PerformanceProps> = ({ code, zs = 0, name }) => {
           scale: true,
           splitLine: {
             lineStyle: {
-              color: varibleColors['--border-color'],
+              color: 'var(--border-color)',
             },
           },
           min: (value: any) => Math.min(value.min, zs),

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useDebounceFn } from 'ahooks';
-import { Input, message } from 'antd';
+import { Input, message, Button } from 'antd';
 import CustomDrawer from '@/components/CustomDrawer';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
 import Empty from '@/components/Empty';
@@ -88,21 +88,16 @@ const AddCoinContent: React.FC<AddCoinContentProps> = (props) => {
                 </div>
                 <div className={styles.code}>{code}</div>
               </div>
-              {codeMap[code] ? (
-                <button className={styles.added} disabled>
-                  已添加
-                </button>
-              ) : (
-                <button
-                  className={styles.select}
-                  onClick={(e) => {
-                    onAdd(code);
-                    e.stopPropagation();
-                  }}
-                >
-                  自选
-                </button>
-              )}
+              <Button
+                type="primary"
+                disabled={!!codeMap[code]}
+                onClick={(e) => {
+                  onAdd(code);
+                  e.stopPropagation();
+                }}
+              >
+                {!!codeMap[code] ? '已添加' : '自选'}
+              </Button>
             </div>
           );
         })

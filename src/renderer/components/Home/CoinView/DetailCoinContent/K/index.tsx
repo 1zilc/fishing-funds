@@ -55,7 +55,7 @@ const K: React.FC<PerformanceProps> = ({ code = '', name }) => {
         legend: {
           data: ['K线'],
           textStyle: {
-            color: varibleColors['--main-text-color'],
+            color: 'var(--main-text-color)',
             fontSize: 10,
           },
         },
@@ -73,7 +73,7 @@ const K: React.FC<PerformanceProps> = ({ code = '', name }) => {
           scale: true,
           splitLine: {
             lineStyle: {
-              color: varibleColors['--border-color'],
+              color: 'var(--border-color)',
             },
           },
         },

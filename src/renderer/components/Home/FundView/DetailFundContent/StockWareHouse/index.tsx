@@ -45,7 +45,7 @@ const StockWareHouse: React.FC<StockWareHouseProps> = ({ code, stockCodes }) => 
   );
 
   useRenderEcharts(
-    ({ varibleColors }) => {
+    () => {
       chartInstance?.setOption({
         backgroundColor: 'transparent',
         title: {
@@ -73,18 +73,18 @@ const StockWareHouse: React.FC<StockWareHouseProps> = ({ code, stockCodes }) => 
                   value: item.ccb,
                   name: item.name,
                   itemStyle: {
-                    color: Utils.GetValueColor(item.zdf).color,
+                    color: Utils.GetValueMapColor(item.zdf),
                   },
                   item,
                 };
               }) || [],
             roseType: 'radius',
             label: {
-              color: varibleColors['--main-text-color'],
+              color: 'var(--main-text-color)',
             },
             labelLine: {
               lineStyle: {
-                color: varibleColors['--main-text-color'],
+                color: 'var(--main-text-color)',
               },
               smooth: 0.2,
               length: 10,
@@ -92,7 +92,7 @@ const StockWareHouse: React.FC<StockWareHouseProps> = ({ code, stockCodes }) => 
             },
             itemStyle: {
               borderRadius: 10,
-              borderColor: varibleColors['--background-color'],
+              borderColor: 'var(--background-color)',
               borderWidth: 1,
             },
             animationType: 'scale',

@@ -7,12 +7,23 @@ export interface CustomDrawerProps {
   show: boolean;
   [index: string]: any;
   cached?: boolean;
+  className?: string;
+  closeImmediately?: boolean;
 }
-const CustomDrawer: React.FC<PropsWithChildren<CustomDrawerProps>> = ({ show, children, cached, ...config }) => {
+const CustomDrawer: React.FC<PropsWithChildren<CustomDrawerProps>> = ({
+  show,
+  children,
+  cached,
+  className,
+  closeImmediately,
+  ...config
+}) => {
   const [drawerOpened, setDrawerOpened] = useState(show);
+  const drawerOpenedTruth = closeImmediately ? show : drawerOpened;
 
   return (
     <Drawer
+      rootClassName={className}
       open={show}
       closable={false}
       placement="bottom"
@@ -25,7 +36,7 @@ const CustomDrawer: React.FC<PropsWithChildren<CustomDrawerProps>> = ({ show, ch
       zIndex={CONST.DEFAULT.DRAWER_ZINDEX_DEFAULT}
       {...config}
     >
-      <Suspense fallback={<SkeletonContent />}>{(cached || show || drawerOpened) && children}</Suspense>
+      <Suspense fallback={<SkeletonContent />}>{(cached || show || drawerOpenedTruth) && children}</Suspense>
     </Drawer>
   );
 };

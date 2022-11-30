@@ -32,7 +32,7 @@ const NorthDay: React.FC<NorthDayProps> = () => {
   );
 
   useRenderEcharts(
-    ({ varibleColors }) => {
+    () => {
       chartInstance?.setOption({
         title: {
           text: '',
@@ -44,7 +44,7 @@ const NorthDay: React.FC<NorthDayProps> = () => {
         legend: {
           data: ['沪股通', '深股通', '北向'],
           textStyle: {
-            color: varibleColors['--main-text-color'],
+            color: 'var(--main-text-color)',
             fontSize: 10,
           },
         },
@@ -70,7 +70,7 @@ const NorthDay: React.FC<NorthDayProps> = () => {
           },
           splitLine: {
             lineStyle: {
-              color: varibleColors['--border-color'],
+              color: 'var(--border-color)',
             },
           },
         },

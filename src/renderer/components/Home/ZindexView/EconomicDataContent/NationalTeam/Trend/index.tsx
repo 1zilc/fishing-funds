@@ -27,7 +27,7 @@ const Trend: React.FC<TrendProps> = () => {
   });
 
   useRenderEcharts(
-    ({ varibleColors }) => {
+    () => {
       chartInstance?.setOption({
         title: {
           text: '',
@@ -39,7 +39,7 @@ const Trend: React.FC<TrendProps> = () => {
         legend: {
           data: [trendType.name, '沪深300'],
           textStyle: {
-            color: varibleColors['--main-text-color'],
+            color: 'var(--main-text-color)',
             fontSize: 10,
           },
         },
@@ -67,7 +67,7 @@ const Trend: React.FC<TrendProps> = () => {
             },
             splitLine: {
               lineStyle: {
-                color: varibleColors['--border-color'],
+                color: 'var(--border-color)',
               },
             },
           },
@@ -75,7 +75,7 @@ const Trend: React.FC<TrendProps> = () => {
             type: 'value',
             splitLine: {
               lineStyle: {
-                color: varibleColors['--border-color'],
+                color: 'var(--border-color)',
               },
             },
           },

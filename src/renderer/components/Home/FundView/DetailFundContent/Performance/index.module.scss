@@ -3,5 +3,5 @@
   z-index: 2;
 }
 .zdhc {
-  font-size: calc(10rem / var(--base-font-size));
+  font-size: calc(var(--base-font-size) * 5 / 6);
 }

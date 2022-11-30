@@ -135,10 +135,6 @@ export enum SystemThemeType {
   Light,
   Dark,
 }
-export enum FundFlowType {
-  RealTime,
-  AfterTime,
-}
 
 export enum ZindexType {
   SS,
@@ -233,4 +229,18 @@ export enum ProxyType {
   System,
   Http,
   Socks,
+}
+export enum ThemeColorType {
+  Default,
+  Custom,
+}
+export enum NewsFilterType {
+  All = 8196,
+  Title = 16388,
+  Content = 32772,
+}
+export enum TranslateApiType {
+  Google,
+  BaiDu,
+  YouDao,
 }

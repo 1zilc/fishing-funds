@@ -17,7 +17,7 @@ const ConsumerPriceIndex: React.FC<ConsumerPriceIndexProps> = () => {
   });
 
   useRenderEcharts(
-    ({ varibleColors }) => {
+    () => {
       try {
         chartInstance?.setOption({
           title: {
@@ -30,7 +30,7 @@ const ConsumerPriceIndex: React.FC<ConsumerPriceIndexProps> = () => {
           legend: {
             data: ['全国', '城市', '农村'],
             textStyle: {
-              color: varibleColors['--main-text-color'],
+              color: 'var(--main-text-color)',
               fontSize: 10,
             },
           },
@@ -56,7 +56,7 @@ const ConsumerPriceIndex: React.FC<ConsumerPriceIndexProps> = () => {
             },
             splitLine: {
               lineStyle: {
-                color: varibleColors['--border-color'],
+                color: 'var(--border-color)',
               },
             },
           },

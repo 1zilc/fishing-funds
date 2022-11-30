@@ -13,7 +13,7 @@ const Geography: React.FC<GeographyProps> = () => {
   const quotations = useAppSelector((state) => state.quotation.quotations);
 
   useRenderEcharts(
-    ({ varibleColors }) => {
+    () => {
       chartInstance?.setOption({
         tooltip: {
           show: true,
@@ -25,12 +25,20 @@ const Geography: React.FC<GeographyProps> = () => {
             mapType: 'china',
             selectedMode: false,
             itemStyle: {
-              normal: { label: { show: false }, borderColor: varibleColors['--background-color'] },
+              normal: {
+                label: {
+                  show: false,
+                },
+                borderColor: 'var(--background-color)',
+              },
             },
             emphasis: {
-              label: { show: true, color: varibleColors['--main-text-color'] },
+              label: {
+                show: true,
+                color: 'var(--main-text-color)',
+              },
               itemStyle: {
-                areaColor: varibleColors['--primary-color'],
+                areaColor: 'var(--primary-color)',
               },
             },
             roam: true,

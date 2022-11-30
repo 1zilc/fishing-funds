@@ -1,41 +1,18 @@
-import log from 'electron-log';
-import got from 'got';
-import { contextBridge, ipcRenderer, shell, clipboard, nativeImage } from 'electron';
+import { contextBridge, ipcRenderer } from 'electron';
 import { encode, decode, fromUint8Array } from 'js-base64';
 import { CodingPromiseWorker } from './workers';
-import { saveImage, saveJsonToCsv, saveString, readFile } from './io';
-import Proxy from './proxy';
 import { WorkerRecieveParams as CodingWorkerRecieveParams } from './workers/coding.worker';
 
-const { version } = require('../../release/app/package.json');
-
 contextBridge.exposeInMainWorld('contextModules', {
-  got: async (url: string, config: any) => {
-    const proxyConent = await ipcRenderer.invoke('resolve-proxy', url);
-    const { httpAgent, httpsAgent } = new Proxy(proxyConent, url);
-    return got(url, {
-      ...config,
-      retry: {
-        limit: 2,
-      },
-      timeout: {
-        request: 10000,
-      },
-      agent: {
-        http: httpAgent,
-        https: httpsAgent,
-      },
-    });
-  },
+  got: async (url: string, config: any) => ipcRenderer.invoke('got', { url, config }),
   process: {
     production: process.env.NODE_ENV === 'production',
     electron: process.versions.electron,
-    version: process.env.VERSION || version,
     platform: process.platform,
   },
   electron: {
     shell: {
-      openExternal: shell.openExternal,
+      openExternal: ipcRenderer.invoke.bind(null, 'shell-openExternal'),
     },
     ipcRenderer: {
       invoke: ipcRenderer.invoke,
@@ -55,6 +32,7 @@ contextBridge.exposeInMainWorld('contextModules', {
           'change-tab-active-key',
           'change-eye-status',
           'sync-store-data',
+          'trigger-translate',
         ];
         if (validChannels.includes(channel)) {
           return ipcRenderer.on(channel, func);
@@ -64,26 +42,27 @@ contextBridge.exposeInMainWorld('contextModules', {
       },
     },
     dialog: {
-      showMessageBox: async (config: any) => ipcRenderer.invoke('show-message-box', config),
-      showSaveDialog: async (config: any) => ipcRenderer.invoke('show-save-dialog', config),
-      showOpenDialog: async (config: any) => ipcRenderer.invoke('show-open-dialog', config),
+      showMessageBox: ipcRenderer.invoke.bind(null, 'show-message-box'),
+      showSaveDialog: ipcRenderer.invoke.bind(null, 'show-save-dialog'),
+      showOpenDialog: ipcRenderer.invoke.bind(null, 'show-open-dialog'),
     },
     app: {
-      setLoginItemSettings: (config: any) => ipcRenderer.invoke('set-login-item-settings', config),
-      quit: () => ipcRenderer.invoke('app-quit'),
+      setLoginItemSettings: ipcRenderer.invoke.bind(null, 'set-login-item-settings'),
+      quit: ipcRenderer.invoke.bind(null, 'app-quit'),
+      relaunch: ipcRenderer.invoke.bind(null, 'app-relaunch'),
+      getVersion: ipcRenderer.invoke.bind(null, 'get-version'),
     },
     clipboard: {
-      readText: clipboard.readText,
-      writeText: clipboard.writeText,
-      writeImage: (dataUrl: string) => clipboard.writeImage(nativeImage.createFromDataURL(dataUrl)),
+      readText: ipcRenderer.invoke.bind(null, 'clipboard-readText'),
+      writeText: ipcRenderer.invoke.bind(null, 'clipboard-writeText'),
+      writeImage: ipcRenderer.invoke.bind(null, 'clipboard-writeImage'),
     },
   },
-  log,
   io: {
-    saveImage,
-    saveJsonToCsv,
-    saveString,
-    readFile,
+    saveImage: (path: string, content: string) => ipcRenderer.invoke('io-saveImage', { path, content }),
+    saveJsonToCsv: (path: string, content: any[]) => ipcRenderer.invoke('io-saveJsonToCsv', { path, content }),
+    saveString: (path: string, content: string) => ipcRenderer.invoke('io-saveString', { path, content }),
+    readFile: (path: string) => ipcRenderer.invoke('io-readFile', { path }),
   },
   coding: {
     encryptFF(content: any) {

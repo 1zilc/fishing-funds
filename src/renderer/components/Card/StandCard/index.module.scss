@@ -21,7 +21,7 @@
   }
 }
 .title {
-  font-size: 1.1rem;
+  font-size: calc(var(--base-font-size) * 1.1);
   font-weight: 600;
   margin-right: var(--base-padding);
 }

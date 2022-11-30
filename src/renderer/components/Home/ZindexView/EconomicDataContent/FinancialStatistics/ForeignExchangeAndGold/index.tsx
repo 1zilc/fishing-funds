@@ -15,7 +15,7 @@ const ForeignExchangeAndGold: React.FC<ForeignExchangeAndGoldProps> = () => {
   });
 
   useRenderEcharts(
-    ({ varibleColors }) => {
+    () => {
       try {
         chartInstance?.setOption({
           title: {
@@ -28,7 +28,7 @@ const ForeignExchangeAndGold: React.FC<ForeignExchangeAndGoldProps> = () => {
           legend: {
             data: ['外汇储备', '黄金储备'],
             textStyle: {
-              color: varibleColors['--main-text-color'],
+              color: 'var(--main-text-color)',
               fontSize: 10,
             },
           },
@@ -56,7 +56,7 @@ const ForeignExchangeAndGold: React.FC<ForeignExchangeAndGoldProps> = () => {
               },
               splitLine: {
                 lineStyle: {
-                  color: varibleColors['--border-color'],
+                  color: 'var(--border-color)',
                 },
               },
             },
@@ -69,7 +69,7 @@ const ForeignExchangeAndGold: React.FC<ForeignExchangeAndGoldProps> = () => {
               },
               splitLine: {
                 lineStyle: {
-                  color: varibleColors['--border-color'],
+                  color: 'var(--border-color)',
                 },
               },
             },

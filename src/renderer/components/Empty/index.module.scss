@@ -1,12 +1,12 @@
 .content {
-  height: calc(100vh - 202px);
+  height: calc(100vh - 210px);
   position: relative;
 }
 
 .text {
   position: absolute;
   text-align: center;
-  font-size: 1rem;
+  font-size: var(--base-font-size);
   color: var(--main-text-color);
   width: 100%;
 }

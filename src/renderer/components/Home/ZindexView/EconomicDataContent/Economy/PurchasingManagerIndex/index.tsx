@@ -16,7 +16,7 @@ const PurchasingManagerIndex: React.FC<PurchasingManagerIndexProps> = () => {
   });
 
   useRenderEcharts(
-    ({ varibleColors }) => {
+    () => {
       try {
         chartInstance?.setOption({
           title: {
@@ -29,7 +29,7 @@ const PurchasingManagerIndex: React.FC<PurchasingManagerIndexProps> = () => {
           legend: {
             data: ['制造业', '非制造业'],
             textStyle: {
-              color: varibleColors['--main-text-color'],
+              color: 'var(--main-text-color)',
               fontSize: 10,
             },
           },
@@ -56,7 +56,7 @@ const PurchasingManagerIndex: React.FC<PurchasingManagerIndexProps> = () => {
             },
             splitLine: {
               lineStyle: {
-                color: varibleColors['--border-color'],
+                color: 'var(--border-color)',
               },
             },
           },

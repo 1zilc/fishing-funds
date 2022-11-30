@@ -1,4 +1,8 @@
 .eye {
-  fill: var(--svg-icon-color);
   cursor: pointer;
+  height: 18px;
+  width: 18px;
+  path:last-child {
+    fill: var(--svg-icon-color);
+  }
 }

@@ -3,5 +3,5 @@
   box-sizing: border-box;
 }
 .date {
-  font-size: calc(10rem / var(--base-font-size));
+  font-size: calc(var(--base-font-size) * 5 / 6);
 }

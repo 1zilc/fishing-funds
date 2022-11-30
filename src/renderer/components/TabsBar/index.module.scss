@@ -20,7 +20,7 @@
   cursor: pointer;
   height: 100%;
   line-height: 40px;
-  font-size: 1rem;
+  font-size: var(--base-font-size);
   opacity: 0.5;
 
   &:last-child {
@@ -33,7 +33,7 @@
 }
 
 .active {
-  font-size: 1.2rem;
+  font-size: calc(var(--base-font-size) * 1.2);
   font-weight: 600;
   opacity: 1 !important;
 }

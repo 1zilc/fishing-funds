@@ -1,5 +1,7 @@
+.content {
+  background-color: var(--background-color);
+}
 .bar {
-  background-color: var(--inner-color);
   display: flex;
   align-items: center;
   justify-content: space-evenly;
@@ -18,4 +20,7 @@
       transform: scale(1.25);
     }
   }
+}
+.themeWrapper {
+  display: block;
 }
