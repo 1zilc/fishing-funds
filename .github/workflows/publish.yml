@@ -22,8 +22,6 @@ jobs:
 
       - name: Install Snapcraft
         uses: samuelmeuli/action-snapcraft@v1
-        with:
-          snapcraft_token: ${{ secrets.SNAPCRAF_TOKEN }}
 
       - name: Run build
         uses: actions/setup-node@v3
