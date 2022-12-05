@@ -219,6 +219,7 @@ function main() {
       return {
         body: res.body,
         rawBody: res.rawBody,
+        headers: res.headers,
       };
     } catch {
       return {};
