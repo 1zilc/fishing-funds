@@ -235,9 +235,9 @@ export enum ThemeColorType {
   Custom,
 }
 export enum NewsFilterType {
-  All = 8196,
-  Title = 16388,
-  Content = 32772,
+  All = 'default',
+  Title = 'title',
+  Content = 'content',
 }
 export enum TranslateApiType {
   Google,
