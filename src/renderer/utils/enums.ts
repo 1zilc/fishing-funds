@@ -177,6 +177,20 @@ export enum StockMarketType {
   Futures = 10,
   Exchange = 11,
 }
+// 2022-12-16 新版类型枚举
+export enum NewStockMarketType {
+  AB_STOCK = 1,
+  INDEX = 2,
+  BK = 3,
+  HK = 4,
+  UN = 5,
+  UK = 6,
+  TB = 7,
+  FUND = 8,
+  DEBT = 9,
+  FU_OR_OP = 10,
+  FE = 11,
+}
 
 export enum CoinUnitType {
   Usd = 'usd',
