@@ -3,6 +3,7 @@ import cheerio from 'cheerio';
 import NP from 'number-precision';
 import request from '@/utils/request';
 import * as Utils from '@/utils';
+import * as Enums from '@/utils/enums';
 import { defaultCompany } from '@/components/Home/StockView/DetailStockContent/Company';
 
 const { base64 } = window.contextModules;
@@ -42,37 +43,50 @@ export async function FromEastmoney(secid: string) {
 
 export async function SearchFromEastmoney(keyword: string) {
   try {
-    const {
-      body: { Data },
-    } = await request<{
-      Data: {
-        Type: number; // 7,
-        Name: string; // "三板",
-        Count: number; // 3;
-        Datas: {
-          Code: string; // '839489';
-          Name: string; // '同步天成';
-          ID: string; // '839489_TB';
-          MktNum: string; // '0';
-          SecurityType: string; // '10';
-          MarketType: string; // '_TB';
-          JYS: string; // '81';
-          GubaCode: string; // '839489';
-          UnifiedCode: string; // '839489';
-        }[];
-      }[];
-    }>('https://searchapi.eastmoney.com/bussiness/web/QuotationLabelSearch', {
-      searchParams: {
-        keyword,
-        type: 0,
-        ps: 1000,
-        pi: 1,
-        token: Utils.MakeHash(),
-        _: Date.now(),
+    const { body: script } = await request('https://search-api-web.eastmoney.com/search/jsonp', {
+      responseType: 'text',
+      headers: {
+        Host: 'search-api-web.eastmoney.com',
+        Referer: 'https://so.eastmoney.com/',
       },
-      responseType: 'json',
+      searchParams: {
+        _: Date.now(),
+        param: JSON.stringify({
+          uid: '',
+          keyword,
+          type: ['codetableLabelWeb'],
+          client: 'web',
+          clientType: 'wap',
+          clientVersion: 'curr',
+          param: { codetableLabelWeb: { pageIndex: 1, pageSize: 100, preTag: '', postTag: '', isHighlight: false, label: 'ALL' } },
+        }),
+        cb: 'cb',
+      },
     });
-    return Data || [];
+    const data = eval(script);
+
+    return (
+      data.result.codetableLabelWeb.labelList.map((item: any) => {
+        return {
+          Type: Enums.NewStockMarketType[item.type], // 7,
+          Name: item.name, // "三板",
+          Count: item.count, // 3;
+          Datas: item.quoteList.map((item: any) => {
+            return {
+              Code: item.code, // '839489';
+              Name: item.shortName, // '同步天成';
+              ID: item.id, // '839489_TB';
+              MktNum: item.market, // '0';
+              SecurityType: item.securityType, // '10';
+              MarketType: item.marketType, // '_TB';
+              UnifiedId: item.unifiedId, // "0.839489",
+              JYS: item.jys, // '81';
+              UnifiedCode: item.unifiedCode, // '839489';
+            };
+          }),
+        };
+      }) as Stock.SearchResult[]
+    ).filter((item) => !!item.Count);
   } catch (error) {
     return [];
   }

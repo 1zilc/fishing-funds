@@ -71,9 +71,9 @@ declare namespace Stock {
     ID: string; // '839489_TB';
     MktNum: string; // '0';
     SecurityType: string; // '10';
+    UnifiedId: string; // "0.839489",
     MarketType: string; // '_TB';
     JYS: string; // '81';
-    GubaCode: string; // '839489';
     UnifiedCode: string; // '839489';
   }
 

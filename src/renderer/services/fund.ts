@@ -80,7 +80,7 @@ export async function FromTencent(code: string) {
   try {
     const {
       body: { data },
-    } = await request('https://web.ifzq.gtimg.cn/fund/newfund/fundSsgz/getSsgz', {
+    } = await request<any>('https://web.ifzq.gtimg.cn/fund/newfund/fundSsgz/getSsgz', {
       searchParams: {
         app: 'web',
         symbol: `jj${code}`,
@@ -626,7 +626,7 @@ export async function GetStockWareHouseFromEastmoney(code: string, stockCodes: s
 
     const {
       body: { data },
-    } = await request('https://push2.eastmoney.com/api/qt/ulist.np/get', {
+    } = await request<any>('https://push2.eastmoney.com/api/qt/ulist.np/get', {
       searchParams: {
         fields: 'f2,f3,f12,f13,f14',
         fltt: 2,
@@ -672,7 +672,7 @@ export async function GetSecuritiesWareHouseFromEastmoney(code: string, securiti
 
     const {
       body: { data },
-    } = await request('https://push2.eastmoney.com/api/qt/ulist.np/get', {
+    } = await request<any>('https://push2.eastmoney.com/api/qt/ulist.np/get', {
       searchParams: {
         fields: 'f2,f3,f12,f13,f14',
         fltt: 2,
@@ -728,7 +728,7 @@ export async function GetFundPerformanceFromEastmoney(
   try {
     const {
       body: { Data },
-    } = await request(`http://api.fund.eastmoney.com/pinzhong/LJSYLZS`, {
+    } = await request<any>(`http://api.fund.eastmoney.com/pinzhong/LJSYLZS`, {
       searchParams: {
         fundCode: code,
         indexcode: '000300',

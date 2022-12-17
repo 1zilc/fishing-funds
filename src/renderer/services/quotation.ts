@@ -144,7 +144,7 @@ export async function GetRealTimeFundFlowFromEasymoney(code: string) {
   try {
     const {
       body: { data },
-    } = await request('http://push2.eastmoney.com/api/qt/stock/fflow/kline/get', {
+    } = await request<any>('http://push2.eastmoney.com/api/qt/stock/fflow/kline/get', {
       searchParams: {
         lmt: 0,
         klt: 1,

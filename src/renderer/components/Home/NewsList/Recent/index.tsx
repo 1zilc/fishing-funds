@@ -40,13 +40,13 @@ const Recent: React.FC<RecentProps> = (props) => {
           columns={[
             {
               title: '时间',
-              dataIndex: 'Art_CreateTime',
+              dataIndex: 'date',
               width: 50,
               render: (text: string) => <span className="text-center">{dayjs(text).format('MM-DD')}</span>,
             },
             {
               title: '内容',
-              dataIndex: 'Art_Title',
+              dataIndex: 'content',
               ellipsis: true,
               render: (text: string) => <a className={styles.title} dangerouslySetInnerHTML={{ __html: text }}></a>,
             },
@@ -63,7 +63,7 @@ const Recent: React.FC<RecentProps> = (props) => {
             },
           }}
           onRow={(record) => ({
-            onClick: () => openWebView(record.Art_UniqueUrl),
+            onClick: () => openWebView(record.url),
           })}
         />
       </div>
