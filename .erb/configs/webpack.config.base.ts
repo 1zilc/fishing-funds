@@ -3,6 +3,7 @@
  */
 
 import webpack from 'webpack';
+import TsconfigPathsPlugins from 'tsconfig-paths-webpack-plugin';
 import webpackPaths from './webpack.paths';
 import { dependencies as externals } from '../../release/app/package.json';
 
@@ -49,10 +50,8 @@ const configuration: webpack.Configuration = {
   resolve: {
     extensions: ['.ts', '.tsx', '.js', '.jsx', '.json'],
     modules: [webpackPaths.srcPath, 'node_modules'],
-    alias: {
-      '@': webpackPaths.srcRendererPath,
-      '@assets': webpackPaths.assetsPath,
-    },
+    // There is no need to add aliases here, the paths in tsconfig get mirrored
+    plugins: [new TsconfigPathsPlugins()],
   },
 
   plugins: [
