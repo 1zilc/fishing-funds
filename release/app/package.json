@@ -14,7 +14,7 @@
     "postinstall": "npm run rebuild && npm run link-modules",
     "link-modules": "tsx ../../.erb/scripts/link-modules.ts"
   },
-  "license": "(ISC OR GPL-3.0)",
+  "license": "GPL-3.0",
   "dependencies": {
     "install": "^0.13.0"
   }
