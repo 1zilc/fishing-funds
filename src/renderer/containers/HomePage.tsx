@@ -16,7 +16,7 @@ import {
   useTranslate,
 } from '@/utils/hooks';
 
-const HomePage = () => {
+function GlobalTask() {
   useUpdater();
   useAdjustmentNotification();
   useRiskNotification();
@@ -30,8 +30,16 @@ const HomePage = () => {
   useSyncConfig();
   useTranslate();
   useBootStrap();
+  return null;
+}
 
-  return <Home />;
+const HomePage = () => {
+  return (
+    <>
+      <Home />
+      <GlobalTask />
+    </>
+  );
 };
 
 export default HomePage;
