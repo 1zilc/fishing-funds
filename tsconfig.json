@@ -16,6 +16,7 @@
     "resolveJsonModule": true,
     "allowJs": true,
     "outDir": ".erb/dll",
+    "baseUrl": "./",
     "paths": {
       "@/*": ["./src/renderer/*"],
       "@assets/*": ["./assets/*"]
