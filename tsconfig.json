@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "incremental": true,
-    "target": "es2021",
+    "target": "ES2022",
     "module": "esnext",
     "lib": ["dom", "esnext"],
     "noEmit": false,
@@ -25,9 +25,9 @@
   "include": ["./src/**/*"],
   "exclude": ["test", "release/app/dist", ".erb/dll"],
   "ts-node": {
-    "esm": true,
+    "transpileOnly": true,
     "compilerOptions": {
-      "module": "commonjs"
+      "module": "CommonJS"
     }
   }
 }
