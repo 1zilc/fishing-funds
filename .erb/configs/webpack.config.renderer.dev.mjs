@@ -5,11 +5,11 @@ import webpack from 'webpack';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import chalk from 'chalk';
 import { merge } from 'webpack-merge';
-import { spawn, execSync } from 'child_process';
-import baseConfig from './webpack.config.base';
-import webpackPaths from './webpack.paths';
-import checkNodeEnv from '../scripts/check-node-env';
+import { execSync, spawn } from 'child_process';
 import ReactRefreshWebpackPlugin from '@pmmmwh/react-refresh-webpack-plugin';
+import baseConfig from './webpack.config.base.mjs';
+import webpackPaths from './webpack.paths.mjs';
+import checkNodeEnv from '../scripts/check-node-env.js';
 
 // When an ESLint server is running, we can't set the NODE_ENV so we'll check if it's
 // at the dev webpack config is not accidentally run in a production environment
@@ -18,19 +18,30 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 const port = process.env.PORT || 3456;
-const manifest = path.resolve(webpackPaths.dllPath, 'renderer.json');
-const skipDLLs =
-  module.parent?.filename.includes('webpack.config.renderer.dev.dll') || module.parent?.filename.includes('webpack.config.eslint');
+// const manifest = path.resolve(webpackPaths.dllPath, 'renderer.json');
+const skipDLLs = false;
+// module.parent?.filename.includes('webpack.config.renderer.dev.dll') ||
+// module.parent?.filename.includes('webpack.config.eslint');
 
 /**
  * Warn if the DLL is not built
  */
-if (!skipDLLs && !(fs.existsSync(webpackPaths.dllPath) && fs.existsSync(manifest))) {
-  console.log(chalk.black.bgYellow.bold('The DLL files are missing. Sit back while we build them for you with "npm run build-dll"'));
-  execSync('npm run postinstall');
-}
+// if (
+//   !skipDLLs &&
+//   !(fs.existsSync(webpackPaths.dllPath) && fs.existsSync(manifest))
+// ) {
+//   console.log(
+//     chalk.black.bgYellow.bold(
+//       'The DLL files are missing. Sit back while we build them for you with "npm run build-dll"'
+//     )
+//   );
+//   execSync('npm run postinstall');
+// }
 
-const configuration: webpack.Configuration = {
+/**
+ * @type {typeof import("webpack").Configuration }
+ */
+const configuration = {
   devtool: 'inline-source-map',
 
   mode: 'development',
@@ -104,15 +115,15 @@ const configuration: webpack.Configuration = {
     ],
   },
   plugins: [
-    ...(skipDLLs
-      ? []
-      : [
-          new webpack.DllReferencePlugin({
-            context: webpackPaths.dllPath,
-            manifest: require(manifest),
-            sourceType: 'var',
-          }),
-        ]),
+    // ...(skipDLLs
+    //   ? []
+    //   : [
+    //       new webpack.DllReferencePlugin({
+    //         context: webpackPaths.dllPath,
+    //         manifest,
+    //         sourceType: 'var',
+    //       }),
+    //     ]),
 
     new webpack.NoEmitOnErrorsPlugin(),
 
@@ -184,7 +195,7 @@ const configuration: webpack.Configuration = {
         shell: true,
         stdio: 'inherit',
       })
-        .on('close', (code: number) => process.exit(code!))
+        .on('close', (code) => process.exit(code))
         .on('error', (spawnError) => console.error(spawnError));
 
       console.log('Starting Main Process...');
@@ -196,9 +207,9 @@ const configuration: webpack.Configuration = {
         shell: true,
         stdio: 'inherit',
       })
-        .on('close', (code: number) => {
+        .on('close', (code) => {
           preloadProcess.kill();
-          process.exit(code!);
+          process.exit(code);
         })
         .on('error', (spawnError) => console.error(spawnError));
 

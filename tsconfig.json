@@ -25,9 +25,11 @@
   "include": ["./src/**/*"],
   "exclude": ["test", "release/app/dist", ".erb/dll"],
   "ts-node": {
+    "esm": true,
     "transpileOnly": true,
     "compilerOptions": {
-      "module": "CommonJS"
+      "module": "Node16",
+      "moduleResolution": "Node16"
     }
   }
 }

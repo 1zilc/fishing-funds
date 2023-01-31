@@ -7,23 +7,16 @@ import webpack from 'webpack';
 import { merge } from 'webpack-merge';
 import { ESBuildMinifyPlugin } from 'esbuild-loader';
 import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
-import baseConfig from './webpack.config.base';
-import webpackPaths from './webpack.paths';
-import checkNodeEnv from '../scripts/check-node-env';
-import deleteSourceMaps from '../scripts/delete-source-maps';
+import baseConfig from './webpack.config.base.mjs';
+import webpackPaths from './webpack.paths.mjs';
+import checkNodeEnv from '../scripts/check-node-env.js';
+import deleteSourceMaps from '../scripts/delete-source-maps.js';
 
 checkNodeEnv('production');
 deleteSourceMaps();
 
-const devtoolsConfig =
-  process.env.DEBUG_PROD === 'true'
-    ? {
-        devtool: 'source-map',
-      }
-    : {};
-
-const configuration: webpack.Configuration = {
-  ...devtoolsConfig,
+const configuration = {
+  devtool: 'source-map',
 
   mode: 'production',
 
