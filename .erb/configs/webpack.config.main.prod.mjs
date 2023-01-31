@@ -31,7 +31,7 @@ const configuration = {
     path: webpackPaths.distMainPath,
     filename: '[name].js',
     library: {
-      type: 'umd',
+      type: 'commonjs',
     },
   },
 

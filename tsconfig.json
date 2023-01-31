@@ -22,13 +22,5 @@
     }
   },
   "include": ["./src/**/*"],
-  "exclude": ["test", "release/app/dist", ".erb/dll"],
-  "ts-node": {
-    "esm": true,
-    "transpileOnly": true,
-    "compilerOptions": {
-      "module": "Node16",
-      "moduleResolution": "Node16"
-    }
-  }
+  "exclude": ["test", "release/app/dist", ".erb/dll"]
 }
