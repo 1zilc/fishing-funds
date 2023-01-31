@@ -2,15 +2,14 @@
   "compilerOptions": {
     "incremental": true,
     "target": "ES2022",
-    "module": "esnext",
+    "module": "node16",
+    "moduleResolution": "node16",
     "lib": ["dom", "esnext"],
     "noEmit": false,
     "jsx": "react-jsx",
     "strict": true,
     "sourceMap": true,
     "removeComments": true,
-    /* Module Resolution Options */
-    "moduleResolution": "node",
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "resolveJsonModule": true,
