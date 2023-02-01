@@ -21,6 +21,5 @@
       "@assets/*": ["./assets/*"]
     }
   },
-  "include": ["./src/**/*"],
-  "exclude": ["test", "release/app/dist", ".erb/dll"]
+  "exclude": ["test", "release/app/dist", "templates", "assets", ".erb/dll"]
 }
