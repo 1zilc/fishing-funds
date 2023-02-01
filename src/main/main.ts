@@ -209,7 +209,7 @@ function main() {
         ...config,
         headers: {
           'user-agent': fakeUA,
-          ...config.headers,
+          ...config?.headers,
         },
         retry: {
           limit: 2,
