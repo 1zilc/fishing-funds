@@ -20,11 +20,11 @@
     "beta-mac": "node ./.erb/scripts/clean.js dist && npm run build && electron-builder build -m -p always",
     "beta-win": "node ./.erb/scripts/clean.js dist && npm run build && electron-builder build -w -p always",
     "postinstall": "node .erb/scripts/check-native-dep.js && electron-builder install-app-deps && cross-env NODE_ENV=development webpack --config ./.erb/configs/webpack.config.renderer.dev.dll.mjs && opencollective-postinstall",
-    "start": "cross-env node ./.erb/scripts/check-port-in-use.js && npm run start:renderer",
+    "start": "node ./.erb/scripts/check-port-in-use.js && npm run start:renderer",
     "start:main": "cross-env NODE_ENV=development NODE_OPTIONS=\"--loader tsx\" electronmon .",
     "start:preload": "cross-env NODE_ENV=development webpack --config ./.erb/configs/webpack.config.preload.dev.mjs",
     "start:renderer": "cross-env NODE_ENV=development webpack serve --config ./.erb/configs/webpack.config.renderer.dev.mjs",
-    "test": "cross-env npx jest",
+    "test": "npx jest",
     "prepare": "husky install"
   },
   "lint-staged": {
