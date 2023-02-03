@@ -203,7 +203,15 @@ export const WebViewer: React.FC<WebViewerProps> = (props) => {
   return (
     <div className={styles.content} style={{ height: full ? '100vh' : 'calc(100vh - 48px)' }}>
       {url ? (
-        <webview ref={viewRef} src={url} style={{ width: '100%', flex: '1' }} useragent={phone ? defaultAgent : undefined} allowpopups />
+        <webview
+          ref={viewRef}
+          src={url}
+          style={{ width: '100%', flex: '1' }}
+          useragent={phone ? defaultAgent : undefined}
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
+          allowpopups="true"
+        />
       ) : (
         <Empty className={styles.empty} text="404 Not Found" />
       )}
