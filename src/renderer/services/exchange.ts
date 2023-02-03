@@ -95,7 +95,7 @@ export async function GetGlobalBondFromEastmoney() {
       low: string;
       change: string;
       percent: string;
-    }[] = eval(`(()=>{
+    }[] = (0, eval)(`(()=>{
       ${script};
       return data.slice(1).map((item)=>{
         const [area,code,name,date,time,price,high,low,change,percent] = item.split(',');

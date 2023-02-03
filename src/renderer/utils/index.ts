@@ -105,7 +105,7 @@ export function GetVariblesColor(): Record<keyof typeof CONST.VARIBLES, string> 
 
 export function Parsepingzhongdata(code: string) {
   try {
-    return eval(`(() => {
+    return (0, eval)(`(() => {
       ${code}
       return {
         /*基金持仓股票代码(新市场号)*/
@@ -151,7 +151,7 @@ export function Parsepingzhongdata(code: string) {
 
 export function ParseRemoteFunds(code: string) {
   try {
-    return eval(`(() => {
+    return (0, eval)(`(() => {
       ${code}
       return r;
     })()`);

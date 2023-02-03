@@ -10,7 +10,7 @@ export async function GetLiveList() {
       },
     });
 
-    const list: News.ResponseItem[] = eval(`(()=>{
+    const list: News.ResponseItem[] = (0, eval)(`(()=>{
       ${script}
       return ajaxResult.LivesList;
     })()`);
@@ -29,7 +29,7 @@ export async function GetFocusList() {
       },
     });
 
-    const list: News.ResponseItem[] = eval(`(()=>{
+    const list: News.ResponseItem[] = (0, eval)(`(()=>{
       ${script}
       return ajaxResult.LivesList;
     })()`);
@@ -48,7 +48,7 @@ export async function GetListedList() {
       },
     });
 
-    const list: News.ResponseItem[] = eval(`(()=>{
+    const list: News.ResponseItem[] = (0, eval)(`(()=>{
       ${script}
       return ajaxResult.LivesList;
     })()`);
@@ -67,7 +67,7 @@ export async function GetGlobalList() {
       },
     });
 
-    const list: News.ResponseItem[] = eval(`(()=>{
+    const list: News.ResponseItem[] = (0, eval)(`(()=>{
       ${script}
       return ajaxResult.LivesList;
     })()`);
@@ -86,7 +86,7 @@ export async function GetGoodsList() {
       },
     });
 
-    const list: News.ResponseItem[] = eval(`(()=>{
+    const list: News.ResponseItem[] = (0, eval)(`(()=>{
       ${script}
       return ajaxResult.LivesList;
     })()`);
@@ -105,7 +105,7 @@ export async function GetExchangeList() {
       },
     });
 
-    const list: News.ResponseItem[] = eval(`(()=>{
+    const list: News.ResponseItem[] = (0, eval)(`(()=>{
       ${script}
       return ajaxResult.LivesList;
     })()`);
@@ -124,7 +124,7 @@ export async function GetBondList() {
       },
     });
 
-    const list: News.ResponseItem[] = eval(`(()=>{
+    const list: News.ResponseItem[] = (0, eval)(`(()=>{
       ${script}
       return ajaxResult.LivesList;
     })()`);
@@ -143,7 +143,7 @@ export async function GetFundList() {
       },
     });
 
-    const list: News.ResponseItem[] = eval(`(()=>{
+    const list: News.ResponseItem[] = (0, eval)(`(()=>{
       ${script}
       return ajaxResult.LivesList;
     })()`);
@@ -162,7 +162,7 @@ export async function GetChinaList() {
       },
     });
 
-    const list: News.ResponseItem[] = eval(`(()=>{
+    const list: News.ResponseItem[] = (0, eval)(`(()=>{
       ${script}
       return ajaxResult.LivesList;
     })()`);
@@ -181,7 +181,7 @@ export async function GetUsaList() {
       },
     });
 
-    const list: News.ResponseItem[] = eval(`(()=>{
+    const list: News.ResponseItem[] = (0, eval)(`(()=>{
       ${script}
       return ajaxResult.LivesList;
     })()`);
@@ -200,7 +200,7 @@ export async function GetEuList() {
       },
     });
 
-    const list: News.ResponseItem[] = eval(`(()=>{
+    const list: News.ResponseItem[] = (0, eval)(`(()=>{
       ${script}
       return ajaxResult.LivesList;
     })()`);
@@ -219,7 +219,7 @@ export async function GetUkList() {
       },
     });
 
-    const list: News.ResponseItem[] = eval(`(()=>{
+    const list: News.ResponseItem[] = (0, eval)(`(()=>{
       ${script}
       return ajaxResult.LivesList;
     })()`);
@@ -238,7 +238,7 @@ export async function GetJpList() {
       },
     });
 
-    const list: News.ResponseItem[] = eval(`(()=>{
+    const list: News.ResponseItem[] = (0, eval)(`(()=>{
       ${script}
       return ajaxResult.LivesList;
     })()`);
@@ -272,7 +272,7 @@ export async function GetRecent(keyword: string, pageindex: number, type: string
         cb: 'cb',
       },
     });
-    const data = eval(script);
+    const data = (0, eval)(script);
     return {
       total: data.hitsTotal > 100 ? 100 : data.hitsTotal,
       list: data.result.cmsArticleWebOld,

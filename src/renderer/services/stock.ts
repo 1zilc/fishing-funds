@@ -63,7 +63,7 @@ export async function SearchFromEastmoney(keyword: string) {
         cb: 'cb',
       },
     });
-    const data = eval(script);
+    const data = (0, eval)(script);
 
     return (
       data.result.codetableLabelWeb.labelList.map((item: any) => {
