@@ -170,7 +170,7 @@ export async function GetEconomyIndexFromEastmoney(market: number) {
         _: Date.now(),
       },
     });
-    const data = (0, eval)(body);
+    const data = eval(body);
     const result = data.map((item: string) => {
       return item.split(',');
     });
@@ -421,7 +421,7 @@ export async function GetRemoteZindexConfig() {
       },
     }
   );
-  const a1 = (0, eval)(b1);
+  const a1 = eval(b1);
   const { body: b2 } = await request(
     `http://32.push2.eastmoney.com/api/qt/clist/get?pn=1&pz=5&po=1&np=1&ut=bd1d9ddb04089700cf9c27f6f7426281&fltt=2&invt=2&fid=f3&fs=m:1+t:1`,
     {
@@ -433,7 +433,7 @@ export async function GetRemoteZindexConfig() {
       },
     }
   );
-  const a2 = (0, eval)(b2);
+  const a2 = eval(b2);
   const { body: b3 } = await request(
     `http://32.push2.eastmoney.com/api/qt/clist/get?&pn=1&pz=5&po=1&np=1&ut=bd1d9ddb04089700cf9c27f6f7426281&fltt=2&invt=2&fid=f3&fs=m:0+t:5`,
     {
@@ -445,7 +445,7 @@ export async function GetRemoteZindexConfig() {
       },
     }
   );
-  const a3 = (0, eval)(b3);
+  const a3 = eval(b3);
   const result = [...a1, ...a2, ...a3];
   return result;
 }

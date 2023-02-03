@@ -14,7 +14,7 @@ export async function FromEastmoney(code: string) {
       responseType: 'text',
     });
     if (body.startsWith('jsonpgz')) {
-      const fund: Fund.ResponseItem = (0, eval)(body);
+      const fund: Fund.ResponseItem = eval(body);
       if (fund === undefined) {
         return await GetEtfFundHourFromEastMoney(code);
       } else {
@@ -281,7 +281,7 @@ export async function FromFund123(code: string) {
     const $ = cheerio.load(html);
     const script = $('script').eq(2).html();
     const fixscript = script?.replace(/window\.context/g, 'const o');
-    const context = (0, eval)(`(() => {
+    const context = eval(`(() => {
       ${fixscript}
       return o;
     })()`);
@@ -568,7 +568,7 @@ export async function FromFund10jqka(code: string) {
       },
     });
 
-    const string = (0, eval)(`(()=>{
+    const string = eval(`(()=>{
       const ${script};
       return vm_fd_${data.hqcode};
     })()`);
@@ -959,7 +959,7 @@ export async function GetQDIIFundFromFund123(code: string) {
     const $ = cheerio.load(html);
     const script = $('script').eq(2).html();
     const fixscript = script?.replace(/window\.context/g, 'const o');
-    const context = (0, eval)(`(() => {
+    const context = eval(`(() => {
       ${fixscript}
       return o;
     })()`);
@@ -1279,7 +1279,7 @@ export async function GetRankDataFromEasemoney(type: string) {
         ed: `${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()}`,
       },
     });
-    return (0, eval)(`(() => {
+    return eval(`(() => {
       ${body}
       return rankData.datas;
     })()`);
@@ -1294,7 +1294,7 @@ export async function GetFundRatingFromEasemoney() {
     const { body: html } = await request('http://fund.eastmoney.com/data/fundrating.html', { responseType: 'text' });
     const $ = cheerio.load(html);
     const script = $('#fundinfo').find('script').html();
-    const fundinfos = (0, eval)(`(() => {
+    const fundinfos = eval(`(() => {
       ${script}
       return fundinfos;
     })()`);
