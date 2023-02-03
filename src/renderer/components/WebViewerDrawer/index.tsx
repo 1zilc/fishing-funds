@@ -44,7 +44,7 @@ const menuItemSize = { height: 14, width: 14 };
 const { clipboard, dialog, ipcRenderer, shell } = window.contextModules.electron;
 
 export const defaultAgent =
-  'Mozilla/5.0 (iPhone; CPU iPhone OS 10_3_1 like Mac OS X) AppleWebKit/603.1.30 (KHTML, like Gecko) Version/10.0 Mobile/14E304 Safari/602.1';
+  'Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1';
 
 export const WebViewer: React.FC<WebViewerProps> = (props) => {
   const dispatch = useAppDispatch();
