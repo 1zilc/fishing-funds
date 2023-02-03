@@ -8,11 +8,11 @@ import * as Enums from '@/utils/enums';
 
 import styles from './index.module.scss';
 
-interface FundSearchProps {
+interface RecentSearchProps {
   keyword: string;
 }
 
-const FundSearch: React.FC<FundSearchProps> = (props) => {
+const RecentSearch: React.FC<RecentSearchProps> = (props) => {
   const { keyword } = props;
   return keyword ? (
     <div className={clsx(styles.content)}>
@@ -34,4 +34,4 @@ const FundSearch: React.FC<FundSearchProps> = (props) => {
   );
 };
 
-export default FundSearch;
+export default RecentSearch;
