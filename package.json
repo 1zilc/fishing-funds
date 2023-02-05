@@ -24,22 +24,7 @@
     "start:main": "cross-env NODE_ENV=development NODE_OPTIONS=\"--loader tsx\" electronmon .",
     "start:preload": "cross-env NODE_ENV=development webpack --config ./.erb/configs/webpack.config.preload.dev.mjs",
     "start:renderer": "cross-env NODE_ENV=development webpack serve --config ./.erb/configs/webpack.config.renderer.dev.mjs",
-    "test": "npx jest",
-    "prepare": "husky install"
-  },
-  "lint-staged": {
-    "*.{js,jsx,ts,tsx}": [
-      "cross-env NODE_ENV=development eslint --cache --fix"
-    ],
-    "{*.json,.{eslintrc,prettierrc}}": [
-      "prettier --ignore-path .eslintignore --write"
-    ],
-    "*.{css,scss}": [
-      "prettier --ignore-path .eslintignore --write"
-    ],
-    "*.{html,md,yml}": [
-      "prettier --ignore-path .eslintignore --write"
-    ]
+    "test": "npx jest"
   },
   "build": {
     "productName": "Fishing Funds",
@@ -255,10 +240,8 @@
     "eslint-plugin-react-hooks": "^4.2.0",
     "generate-react-cli": "^8.0.1",
     "html-webpack-plugin": "^5.5.0",
-    "husky": "^7.0.0",
     "identity-obj-proxy": "^3.0.0",
     "jest": "^29.0.2",
-    "lint-staged": "^13.0.0",
     "mini-css-extract-plugin": "^2.1.0",
     "opencollective-postinstall": "^2.0.3",
     "prettier": "^2.2.1",

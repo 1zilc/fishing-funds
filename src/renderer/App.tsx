@@ -49,6 +49,6 @@ const App: React.FC<Record<string, unknown>> = () => {
       </Router>
     </ThemeProvider>
   );
-};
+}
 
 export default App;
