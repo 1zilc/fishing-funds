@@ -92,7 +92,7 @@ function renderApps(groups: { title: string; config: AppConfig[] }[], keyword: s
         {constructApps(list)}
       </StandCard>
     ) : (
-      <></>
+      <React.Fragment key={group.title} />
     );
   });
 }

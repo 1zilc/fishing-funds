@@ -1,32 +1,25 @@
 {
   "compilerOptions": {
     "incremental": true,
-    "target": "es2021",
+    "target": "ES2022",
     "module": "esnext",
+    "moduleResolution": "bundler",
     "lib": ["dom", "esnext"],
     "noEmit": false,
     "jsx": "react-jsx",
     "strict": true,
     "sourceMap": true,
     "removeComments": true,
-    /* Module Resolution Options */
-    "moduleResolution": "node",
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "resolveJsonModule": true,
     "allowJs": true,
     "outDir": ".erb/dll",
+    "baseUrl": "./",
     "paths": {
       "@/*": ["./src/renderer/*"],
       "@assets/*": ["./assets/*"]
     }
   },
-  "include": ["./src/**/*"],
-  "exclude": ["test", "release/app/dist", ".erb/dll"],
-  "ts-node": {
-    "esm": true,
-    "compilerOptions": {
-      "module": "commonjs"
-    }
-  }
+  "exclude": ["test", "release/app/dist", "templates", "assets", ".erb/dll"]
 }

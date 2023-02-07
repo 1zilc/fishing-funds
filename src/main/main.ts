@@ -202,9 +202,15 @@ function main() {
   ipcMain.handle('got', async (event, { url, config }) => {
     try {
       const proxyConent = await event.sender.session.resolveProxy(url);
+      const UA = event.sender.session.getUserAgent();
+      const fakeUA = UA.replace(/(FishingFunds|Electron)\/.*?\s/g, '');
       const { httpAgent, httpsAgent } = new Proxy(proxyConent, url);
       const res = await got(url, {
         ...config,
+        headers: {
+          'user-agent': fakeUA,
+          ...config?.headers,
+        },
         retry: {
           limit: 2,
         },

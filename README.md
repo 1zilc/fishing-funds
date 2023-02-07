@@ -14,7 +14,6 @@
 ![GitHub package.json dependency version (dev dep on branch)](https://img.shields.io/github/package-json/dependency-version/1zilc/fishing-funds/dev/electron/main)
 ![GitHub package.json dependency version (prod)](https://img.shields.io/github/package-json/dependency-version/1zilc/fishing-funds/menubar)
 <a href="https://qm.qq.com/cgi-bin/qm/qr?k=Su4GnbsicHvsPrbLMwNu557LyZQO19KZ&jump_from=webapi"><img src="https://img.shields.io/badge/QQ%E7%BE%A4-732268738-red" alt="QQ群" /></a>
-<a href="https://t.me/fishing_funds"><img src="https://img.shields.io/badge/Telegram-t.me%2Ffishing__funds-5C90C2" alt="QQ群" /></a>
 ![GitHub](https://img.shields.io/github/license/1zilc/fishing-funds)
 
 > 基金,大盘,股票,虚拟货币状态栏显示小应用,基于 Electron 开发,支持 MacOS,Windows,Linux 客户端,数据源来自天天基金,蚂蚁基金,爱基金,腾讯证券,新浪基金等
@@ -72,7 +71,6 @@
 
 - QQ 群: [732268738](https://download.1zilc.top/ff/screenshots/group1.jpg)
 - issues: [#106](https://github.com/1zilc/fishing-funds/issues/106)
-- Telegram: [https://t.me/fishing_funds](https://t.me/fishing_funds)
 
 ## 系统代理
 

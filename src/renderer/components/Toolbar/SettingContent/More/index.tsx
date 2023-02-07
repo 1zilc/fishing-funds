@@ -132,10 +132,6 @@ const More: React.FC<MoreProps> = () => {
             <label>issues：</label>
             <a onClick={() => onNavigate('https://github.com/1zilc/fishing-funds/issues/106')}>#106</a>
           </section>
-          <section>
-            <label>Telegram：</label>
-            <a onClick={() => onNavigate('https://t.me/fishing_funds')}>t.me/fishing_funds</a>
-          </section>
         </div>
       </StandCard>
       <StandCard icon={<WindowIcon />} title="收录网站">

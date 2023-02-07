@@ -44,7 +44,7 @@ const menuItemSize = { height: 14, width: 14 };
 const { clipboard, dialog, ipcRenderer, shell } = window.contextModules.electron;
 
 export const defaultAgent =
-  'Mozilla/5.0 (iPhone; CPU iPhone OS 10_3_1 like Mac OS X) AppleWebKit/603.1.30 (KHTML, like Gecko) Version/10.0 Mobile/14E304 Safari/602.1';
+  'Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1';
 
 export const WebViewer: React.FC<WebViewerProps> = (props) => {
   const dispatch = useAppDispatch();
@@ -203,7 +203,15 @@ export const WebViewer: React.FC<WebViewerProps> = (props) => {
   return (
     <div className={styles.content} style={{ height: full ? '100vh' : 'calc(100vh - 48px)' }}>
       {url ? (
-        <webview ref={viewRef} src={url} style={{ width: '100%', flex: '1' }} useragent={phone ? defaultAgent : undefined} allowpopups />
+        <webview
+          ref={viewRef}
+          src={url}
+          style={{ width: '100%', flex: '1' }}
+          useragent={phone ? defaultAgent : undefined}
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
+          allowpopups="true"
+        />
       ) : (
         <Empty className={styles.empty} text="404 Not Found" />
       )}
