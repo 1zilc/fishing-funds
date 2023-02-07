@@ -24,7 +24,7 @@ jobs:
       - name: Run build
         uses: actions/setup-node@v3
         with:
-          node-version: 16
+          node-version: 18
       - run: npm install --force
       - run: npm run postinstall
       - run: npm run beta-mac
