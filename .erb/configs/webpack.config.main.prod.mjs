@@ -5,7 +5,7 @@
 import path from 'path';
 import webpack from 'webpack';
 import { merge } from 'webpack-merge';
-import { ESBuildMinifyPlugin } from 'esbuild-loader';
+import { EsbuildPlugin } from 'esbuild-loader';
 import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
 import baseConfig from './webpack.config.base.mjs';
 import webpackPaths from './webpack.paths.mjs';
@@ -36,7 +36,7 @@ const configuration = {
   },
 
   optimization: {
-    minimizer: [new ESBuildMinifyPlugin()],
+    minimizer: [new EsbuildPlugin()],
   },
 
   plugins: [
