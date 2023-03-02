@@ -38,12 +38,28 @@
 .name {
   position: relative;
   cursor: pointer;
+  width: 0;
   flex: 1;
-  transition: opacity 0.2s;
   display: flex;
   align-items: center;
+
+  span {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    word-break: keep-all;
+    flex-shrink: 1;
+    flex-grow: 0;
+    display: block;
+  }
   a {
-    margin: 0 var(--base-padding);
+    flex-shrink: 0;
+    word-break: keep-all;
+    white-space: nowrap;
+    margin: 0 calc(var(--base-padding)) 0 0;
+
+    &:first-of-type {
+      margin-left: calc(var(--base-padding));
+    }
   }
 }
 .view {
@@ -60,7 +76,7 @@
 }
 .mode {
   text-align: right;
-  padding-right: 10px;
+  padding-right: 6px;
 }
 
 .sort {

@@ -89,7 +89,7 @@ function FundsSortBar() {
         {expandAllFunds ? <ArrowUpIcon /> : <ArrowDownIcon />}
       </div>
       <div className={styles.name} onClick={toggleFundsCollapse}>
-        基金名称
+        <span>基金名称</span>
         <a
           onClick={(e) => {
             openManageFundDrawer();
@@ -97,6 +97,14 @@ function FundsSortBar() {
           }}
         >
           管理
+        </a>
+        <a
+          onClick={(e) => {
+            openManageFundDrawer();
+            e.stopPropagation();
+          }}
+        >
+          统计
         </a>
         <div className={styles.view}>
           <SearchIcon
@@ -197,7 +205,7 @@ function ZindexSortBar() {
         {expandAllZindexs ? <ArrowUpIcon /> : <ArrowDownIcon />}
       </div>
       <div className={styles.name} onClick={toggleZindexsCollapse}>
-        指数名称
+        <span>指数名称</span>
         <a
           onClick={(e) => {
             openManageZindexDrawer();
@@ -303,7 +311,7 @@ function QuotationSortBar() {
         {expandAllQuotations ? <ArrowUpIcon /> : <ArrowDownIcon />}
       </div>
       <div className={styles.name} onClick={toggleQuotationsCollapse}>
-        板块名称
+        <span>板块名称</span>
         <a
           onClick={(e) => {
             openFundFlowDrawer();
@@ -391,7 +399,7 @@ function StockSortBar() {
         {expandAllStocks ? <ArrowUpIcon /> : <ArrowDownIcon />}
       </div>
       <div className={styles.name} onClick={toggleStocksCollapse}>
-        股票名称
+        <span>股票名称</span>
         <a
           onClick={(e) => {
             openManageStockDrawer();
@@ -501,7 +509,7 @@ function CoinSortBar() {
         {expandAllCoins ? <ArrowUpIcon /> : <ArrowDownIcon />}
       </div>
       <div className={styles.name} onClick={toggleCoinsCollapse}>
-        货币名称
+        <span>货币名称</span>
         <a
           onClick={(e) => {
             openManageCoinDrawer();

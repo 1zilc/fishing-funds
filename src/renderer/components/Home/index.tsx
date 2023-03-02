@@ -59,13 +59,13 @@ function FundGroup() {
         },
         {
           key: String(3),
-          label: '净值更新',
-          children: <FundView filter={(fund) => !!Helpers.Fund.CalcFund(fund, codeMap).isFix} />,
+          label: '含成本价',
+          children: <FundView filter={(fund) => !!codeMap[fund.fundcode!]?.cbj} />,
         },
         {
           key: String(4),
-          label: '含成本价',
-          children: <FundView filter={(fund) => !!codeMap[fund.fundcode!]?.cbj} />,
+          label: '净值更新',
+          children: <FundView filter={(fund) => !!Helpers.Fund.CalcFund(fund, codeMap).isFix} />,
         },
       ]}
     />
