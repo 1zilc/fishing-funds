@@ -47,6 +47,7 @@ import styles from './index.module.scss';
 const ManageFundContent = React.lazy(() => import('@/components/Home/FundView/ManageFundContent'));
 const AddFundContent = React.lazy(() => import('@/components/Home/FundView/AddFundContent'));
 const ManageStockContent = React.lazy(() => import('@/components/Home/StockView/ManageStockContent'));
+const FundStatisticsContent = React.lazy(() => import('@/components/Home/FundView/FundStatisticsContent'));
 const AddStockContent = React.lazy(() => import('@/components/Home/StockView/AddStockContent'));
 const ManageCoinContent = React.lazy(() => import('@/components/Home/CoinView/ManageCoinContent'));
 const AddCoinContent = React.lazy(() => import('@/components/Home/CoinView/AddCoinContent'));
@@ -73,6 +74,8 @@ function FundsSortBar() {
 
   const [showManageFundDrawer, { setTrue: openManageFundDrawer, setFalse: closeManageFundDrawer, toggle: ToggleManageFundDrawer }] =
     useBoolean(false);
+  const [showFundsStatisticsDrawer, { setTrue: openFundStatisticsDrawer, setFalse: closeFundStatisticsDrawer }] = useBoolean(false);
+
   const [showAddFundDrawer, { setTrue: openAddFundDrawer, setFalse: closeAddFundDrawer, toggle: ToggleAddFundDrawer }] = useBoolean(false);
 
   const [expandAllFunds, expandSomeFunds] = useMemo(() => {
@@ -100,7 +103,7 @@ function FundsSortBar() {
         </a>
         <a
           onClick={(e) => {
-            openManageFundDrawer();
+            openFundStatisticsDrawer();
             e.stopPropagation();
           }}
         >
@@ -166,6 +169,9 @@ function FundsSortBar() {
             closeAddFundDrawer();
           }}
         />
+      </CustomDrawer>
+      <CustomDrawer show={showFundsStatisticsDrawer}>
+        <FundStatisticsContent onClose={closeFundStatisticsDrawer} onEnter={closeFundStatisticsDrawer} />
       </CustomDrawer>
     </div>
   );
