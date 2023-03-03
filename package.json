@@ -204,7 +204,7 @@
     "@types/color-hash": "^1.0.1",
     "@types/jest": "^29.2.2",
     "@types/json2csv": "^5.0.3",
-    "@types/node": "18.11.19",
+    "@types/node": "18.14.4",
     "@types/react": "^18.0.6",
     "@types/react-color": "^3.0.6",
     "@types/react-dom": "^18.0.2",
