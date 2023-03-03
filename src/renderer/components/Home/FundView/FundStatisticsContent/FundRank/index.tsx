@@ -14,8 +14,8 @@ interface FundRankProps {
 }
 
 const rankTypeList = [
-  { name: '收益', type: Enums.FundRankType.Sy, code: '' },
-  { name: '收益率', type: Enums.FundRankType.Syl, code: '' },
+  { name: '收益(今)', type: Enums.FundRankType.Sy, code: '' },
+  { name: '收益率(今)', type: Enums.FundRankType.Syl, code: '' },
   { name: '持有收益', type: Enums.FundRankType.Cysy, code: '' },
   { name: '持有收益率', type: Enums.FundRankType.Cysyl, code: '' },
 ];
@@ -136,7 +136,7 @@ const FundRank: React.FC<FundRankProps> = ({ funds = [], codes = [] }) => {
   return (
     <div className={styles.content}>
       <div ref={chartRef} style={{ width: '100%' }} />
-      <TypeSelection types={rankTypeList} activeType={rankType.type} onSelected={setRankType} />
+      <TypeSelection types={rankTypeList} activeType={rankType.type} onSelected={setRankType} colspan={12} />
     </div>
   );
 };
