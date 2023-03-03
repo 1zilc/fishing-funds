@@ -136,19 +136,19 @@ const FundStatisticsContent: React.FC<FundStatisticsContentProps> = (props) => {
           items={[
             {
               key: String(0),
-              label: '基金收益概览',
+              label: '基金收益排行',
               children: (
                 <ChartCard>
-                  <FundOverview funds={allCyFunds} codes={codes} />
+                  <FundRank funds={allCyFunds} codes={codes} />
                 </ChartCard>
               ),
             },
             {
               key: String(1),
-              label: '基金收益排行',
+              label: '基金收益概览',
               children: (
                 <ChartCard>
-                  <FundRank funds={allCyFunds} codes={codes} />
+                  <FundOverview funds={allCyFunds} codes={codes} />
                 </ChartCard>
               ),
             },
