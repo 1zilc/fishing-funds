@@ -1,9 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { useScroll, useDebounceFn, useBoolean } from 'ahooks';
-
 import classsames from 'clsx';
 import { Dropdown, Menu } from 'antd';
-
 import SortArrowUpIcon from '@/static/icon/sort-arrow-up.svg';
 import SortArrowDownIcon from '@/static/icon/sort-arrow-down.svg';
 import ArrowDownIcon from '@/static/icon/arrow-down.svg';
@@ -13,7 +11,6 @@ import LayoutGridIcon from '@/static/icon/layout-grid.svg';
 import LayoutFlowIcon from '@/static/icon/layout-flow.svg';
 import LineCharIcon from '@/static/icon/line-chart.svg';
 import SearchIcon from '@/static/icon/search.svg';
-
 import {
   setFundSortModeAction,
   troggleFundSortOrderAction,
@@ -32,7 +29,6 @@ import {
   setCoinViewModeAction,
 } from '@/store/features/sort';
 import CustomDrawer from '@/components/CustomDrawer';
-
 import { toggleAllZindexsCollapseAction } from '@/store/features/zindex';
 import { toggleAllQuotationsCollapseAction } from '@/store/features/quotation';
 import { toggleAllStocksCollapseAction } from '@/store/features/stock';
