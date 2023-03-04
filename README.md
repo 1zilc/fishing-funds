@@ -63,7 +63,6 @@
 ```
 
 - [官网下载](https://ff.1zilc.top)
-- [阿里云网盘下载](https://alist.1zilc.top/Fishing%20Funds)
 - [Homebrew 安装](https://formulae.brew.sh/cask/fishing-funds#default) `brew install --cask fishing-funds`
 - WinGet 安装 `winget install Fishing Funds`
 
