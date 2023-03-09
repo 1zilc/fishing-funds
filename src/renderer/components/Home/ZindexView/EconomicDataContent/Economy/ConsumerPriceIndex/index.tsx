@@ -12,9 +12,12 @@ interface ConsumerPriceIndexProps {}
 const ConsumerPriceIndex: React.FC<ConsumerPriceIndexProps> = () => {
   const { ref: chartRef, chartInstance } = useResizeEchart(0.4);
 
-  const { data: result = [], run: runGetEconomyIndexFromEastmoney } = useRequest(() => Services.Zindex.GetEconomyIndexFromEastmoney(19), {
-    ready: !!chartInstance,
-  });
+  const { data: result = [], run: runGetEconomyIndexFromEastmoney } = useRequest(
+    () => Services.Zindex.GetEconomyIndexFromEastmoney('RPT_ECONOMY_CPI', 'REPORT_DATE,NATIONAL_BASE,CITY_BASE,RURAL_BASE'),
+    {
+      ready: !!chartInstance,
+    }
+  );
 
   useRenderEcharts(
     () => {
@@ -66,21 +69,21 @@ const ConsumerPriceIndex: React.FC<ConsumerPriceIndexProps> = () => {
               name: '全国',
               showSymbol: false,
               lineStyle: { width: 1 },
-              data: result.map((item: any) => [item[0], item[1]]),
+              data: result.map((item: any) => [item.REPORT_DATE, item.NATIONAL_BASE]),
             },
             {
               type: 'line',
               name: '城市',
               showSymbol: false,
               lineStyle: { width: 1 },
-              data: result.map((item: any) => [item[0], item[5]]),
+              data: result.map((item: any) => [item.REPORT_DATE, item.CITY_BASE]),
             },
             {
               type: 'line',
               name: '农村',
               showSymbol: false,
               lineStyle: { width: 1 },
-              data: result.map((item: any) => [item[0], item[9]]),
+              data: result.map((item: any) => [item.REPORT_DATE, item.RURAL_BASE]),
             },
           ],
         });

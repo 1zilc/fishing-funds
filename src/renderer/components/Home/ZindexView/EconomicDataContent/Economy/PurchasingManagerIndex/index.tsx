@@ -11,9 +11,12 @@ interface PurchasingManagerIndexProps {}
 const PurchasingManagerIndex: React.FC<PurchasingManagerIndexProps> = () => {
   const { ref: chartRef, chartInstance } = useResizeEchart(0.4);
 
-  const { data: result = [], run: runGetEconomyIndexFromEastmoney } = useRequest(() => Services.Zindex.GetEconomyIndexFromEastmoney(21), {
-    ready: !!chartInstance,
-  });
+  const { data: result = [], run: runGetEconomyIndexFromEastmoney } = useRequest(
+    () => Services.Zindex.GetEconomyIndexFromEastmoney('RPT_ECONOMY_PMI', 'REPORT_DATE,MAKE_INDEX,NMAKE_INDEX'),
+    {
+      ready: !!chartInstance,
+    }
+  );
 
   useRenderEcharts(
     () => {
@@ -66,14 +69,14 @@ const PurchasingManagerIndex: React.FC<PurchasingManagerIndexProps> = () => {
               name: '制造业',
               showSymbol: false,
               lineStyle: { width: 1 },
-              data: result.map((item: any) => [item[0], item[1]]),
+              data: result.map((item: any) => [item.REPORT_DATE, item.MAKE_INDEX]),
             },
             {
               type: 'line',
               name: '非制造业',
               showSymbol: false,
               lineStyle: { width: 1 },
-              data: result.map((item: any) => [item[0], item[3]]),
+              data: result.map((item: any) => [item.REPORT_DATE, item.NMAKE_INDEX]),
             },
           ],
         });

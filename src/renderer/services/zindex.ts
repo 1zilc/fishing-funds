@@ -157,24 +157,31 @@ export async function GetKFromEastmoney(code: string, year: number, klt: number)
 }
 
 // 中国 居民消费价格指数(CPI)等指数
-export async function GetEconomyIndexFromEastmoney(market: number) {
+export async function GetEconomyIndexFromEastmoney(reportName: string, columns: string) {
   try {
-    const { body } = await request('https://datainterface.eastmoney.com/EM_DataCenter/JS.aspx', {
-      responseType: 'text',
+    const { body: data } = await request<{
+      version: 'ab87442f6bc9b2b1d3c5e6947e2fcd6e';
+      result: {
+        pages: 1;
+        data: any[];
+        count: 182;
+      };
+      success: true;
+      message: 'ok';
+      code: 0;
+    }>('https://datacenter-web.eastmoney.com/api/data/v1/get', {
+      responseType: 'json',
       searchParams: {
-        type: 'GJZB',
-        sty: 'ZGZB',
-        p: 1,
-        ps: 200,
-        mkt: market,
+        columns,
+        sortColumns: 'REPORT_DATE',
+        sortTypes: -1,
+        source: 'WEB',
+        client: 'WEB',
+        reportName,
         _: Date.now(),
       },
     });
-    const data = eval(body);
-    const result = data.map((item: string) => {
-      return item.split(',');
-    });
-    return result;
+    return data.result.data;
   } catch (error) {
     return [];
   }
@@ -198,14 +205,15 @@ export async function GetOilPriceFromEastmoney() {
       success: true;
       message: 'ok';
       code: 0;
-    }>('https://datacenter-web.eastmoney.com/api/data/get', {
+    }>('https://datacenter-web.eastmoney.com/api/data/v1/get', {
       searchParams: {
-        type: 'RPTA_WEB_JY_HQ',
-        sty: 'ALL',
-        st: 'date',
-        sr: -1,
-        p: 1,
-        ps: 5000,
+        reportName: 'RPTA_WEB_JY_HQ',
+        columns: 'ALL',
+        sortColumns: 'date',
+        sortTypes: -1,
+        pageNumber: 1,
+        pageSize: 5000,
+        source: 'WEB',
         _: Date.now(),
       },
       responseType: 'json',
