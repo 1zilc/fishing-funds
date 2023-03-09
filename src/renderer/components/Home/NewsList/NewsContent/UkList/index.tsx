@@ -4,6 +4,8 @@ import { Table } from 'antd';
 import { useRequest } from 'ahooks';
 import ChartCard from '@/components/Card/ChartCard';
 import * as Services from '@/services';
+import * as Utils from '@/utils';
+import * as CONST from '@/constants';
 import styles from './index.module.scss';
 
 interface UkListProps {
@@ -11,7 +13,14 @@ interface UkListProps {
 }
 
 const UkList: React.FC<PropsWithChildren<UkListProps>> = (props) => {
-  const { data = [], loading, run: runNewsGetUkList } = useRequest(Services.News.GetUkList);
+  const {
+    data = [],
+    loading,
+    run: runNewsGetUkList,
+  } = useRequest(Services.News.GetUkList, {
+    cacheKey: Utils.GenerateRequestKey('News.GetUkList'),
+    staleTime: CONST.DEFAULT.NEWS_STALE_DELAY,
+  });
 
   return (
     <ChartCard auto onFresh={runNewsGetUkList}>

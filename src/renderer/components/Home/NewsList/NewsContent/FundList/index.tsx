@@ -4,6 +4,8 @@ import { Table } from 'antd';
 import { useRequest } from 'ahooks';
 import ChartCard from '@/components/Card/ChartCard';
 import * as Services from '@/services';
+import * as Utils from '@/utils';
+import * as CONST from '@/constants';
 import styles from './index.module.scss';
 
 interface FundListProps {
@@ -11,7 +13,14 @@ interface FundListProps {
 }
 
 const FundView: React.FC<PropsWithChildren<FundListProps>> = (props) => {
-  const { data = [], loading, run: runNewsGetFundList } = useRequest(Services.News.GetFundList);
+  const {
+    data = [],
+    loading,
+    run: runNewsGetFundList,
+  } = useRequest(Services.News.GetFundList, {
+    cacheKey: Utils.GenerateRequestKey('News.GetFundList'),
+    staleTime: CONST.DEFAULT.NEWS_STALE_DELAY,
+  });
 
   return (
     <ChartCard auto onFresh={runNewsGetFundList}>

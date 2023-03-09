@@ -4,6 +4,8 @@ import { Table } from 'antd';
 import { useRequest } from 'ahooks';
 import ChartCard from '@/components/Card/ChartCard';
 import * as Services from '@/services';
+import * as Utils from '@/utils';
+import * as CONST from '@/constants';
 import styles from './index.module.scss';
 
 interface ExchangeListProps {
@@ -11,7 +13,14 @@ interface ExchangeListProps {
 }
 
 const ExchangeList: React.FC<PropsWithChildren<ExchangeListProps>> = (props) => {
-  const { data = [], loading, run: runNewsGetExchangeList } = useRequest(Services.News.GetExchangeList);
+  const {
+    data = [],
+    loading,
+    run: runNewsGetExchangeList,
+  } = useRequest(Services.News.GetExchangeList, {
+    cacheKey: Utils.GenerateRequestKey('News.GetExchangeList'),
+    staleTime: CONST.DEFAULT.NEWS_STALE_DELAY,
+  });
 
   return (
     <ChartCard auto onFresh={runNewsGetExchangeList}>
