@@ -49,3 +49,5 @@ jobs:
       - name: Run test
         run: |
           pnpm package
+        env:
+          USE_HARD_LINKS: false
