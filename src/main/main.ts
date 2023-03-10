@@ -205,8 +205,10 @@ function main() {
       const UA = event.sender.session.getUserAgent();
       const fakeUA = UA.replace(/(FishingFunds|Electron)\/.*?\s/g, '');
       const { httpAgent, httpsAgent } = new Proxy(proxyConent, url);
+      const noAgent = !httpAgent && !httpsAgent;
       const res = await got(url, {
         ...config,
+        http2: noAgent,
         headers: {
           'user-agent': fakeUA,
           ...config?.headers,
