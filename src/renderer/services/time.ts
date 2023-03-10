@@ -12,7 +12,7 @@ export async function GetCurrentDateTimeFromTaobao() {
       data: {
         t: string; // 1592663852058
       };
-    }>('http://api.m.taobao.com/rest/api3.do?api=mtop.common.getTimestamp', {
+    }>('https://api.m.taobao.com/rest/api3.do?api=mtop.common.getTimestamp', {
       responseType: 'json',
     });
     return res?.body?.data?.t;

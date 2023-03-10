@@ -34,7 +34,7 @@ export async function GetQuotationsFromEastmoney() {
           f222: number; // 领跌股票zdf
         }[];
       };
-    }>('http://77.push2.eastmoney.com/api/qt/clist/get', {
+    }>('https://77.push2.eastmoney.com/api/qt/clist/get', {
       searchParams: {
         fs: 'm:90',
         fid: 'f3',
@@ -110,7 +110,7 @@ export async function GetQuotationDetailFromEastmoney(code: string) {
         f171: 4.29;
         f444: 10.06;
       };
-    }>('http://push2.eastmoney.com/api/qt/stock/get', {
+    }>('https://push2.eastmoney.com/api/qt/stock/get', {
       searchParams: {
         invt: 2,
         fltt: 2,
@@ -144,7 +144,7 @@ export async function GetRealTimeFundFlowFromEasymoney(code: string) {
   try {
     const {
       body: { data },
-    } = await request<any>('http://push2.eastmoney.com/api/qt/stock/fflow/kline/get', {
+    } = await request<any>('https://push2.eastmoney.com/api/qt/stock/fflow/kline/get', {
       searchParams: {
         lmt: 0,
         klt: 1,
@@ -209,7 +209,7 @@ export async function GetStocksFromEasymoney(code: string) {
           }
         ];
       };
-    }>('http://push2.eastmoney.com/api/qt/clist/get', {
+    }>('https://push2.eastmoney.com/api/qt/clist/get', {
       searchParams: {
         fid: 'f62',
         po: 1,
@@ -292,7 +292,7 @@ export async function GetTransactionFromEasymoney(code: string) {
           }
         ];
       };
-    }>('http://push2.eastmoney.com/api/qt/ulist.np/get', {
+    }>('https://push2.eastmoney.com/api/qt/ulist.np/get', {
       searchParams: {
         fltt: 2,
         fields:
@@ -343,7 +343,7 @@ export async function GetAfterTimeFundFlowFromEasymoney(code: string) {
           '2021-01-21,-575181168.0,578836480.0,-3655168.0,-449500912.0,-125680256.0,-3.99,4.01,-0.03,-3.12,-0.87,10533.62,0.08,0.00,0.00'
         ];
       };
-    }>('http://push2his.eastmoney.com/api/qt/stock/fflow/daykline/get', {
+    }>('https://push2his.eastmoney.com/api/qt/stock/fflow/daykline/get', {
       searchParams: {
         lmt: 0,
         klt: 101,
@@ -397,7 +397,7 @@ export async function GetFundFlowFromEastmoney(code: string, type: string) {
           [index: string]: any;
         }[];
       };
-    }>('http://push2.eastmoney.com/api/qt/clist/get', {
+    }>('https://push2.eastmoney.com/api/qt/clist/get', {
       searchParams: {
         fs: code,
         fid: type,
@@ -436,7 +436,7 @@ export async function GetFlowFromEastmoney(fields1: string, code: 'n2s' | 's2n')
         s2n: ['9:00,1985.62,2362.16,4347.78', '9:57,-,-,-'];
         s2nDate: '07-12';
       };
-    }>('http://push2.eastmoney.com/api/qt/kamt.rtmin/get', {
+    }>('https://push2.eastmoney.com/api/qt/kamt.rtmin/get', {
       searchParams: {
         fields1,
         fields2: 'f51,f52,f54,f56',
@@ -479,7 +479,7 @@ export async function GetNorthDayFromEastmoney(fields1: string, fields2: string)
         hk2sz: string[];
         s2n: string[];
       };
-    }>('http://push2his.eastmoney.com/api/qt/kamt.kline/get', {
+    }>('https://push2his.eastmoney.com/api/qt/kamt.kline/get', {
       searchParams: {
         fields1,
         fields2,
@@ -517,7 +517,7 @@ export async function GetSouthDayFromEastmoney(fields1: string, fields2: string)
         sz2hk: string[];
         n2s: string[];
       };
-    }>('http://push2his.eastmoney.com/api/qt/kamt.kline/get', {
+    }>('https://push2his.eastmoney.com/api/qt/kamt.kline/get', {
       searchParams: {
         fields1,
         fields2,
@@ -577,9 +577,9 @@ export async function GetFundsFromEastmoney(code: string) {
       Expansion: null;
       PageSize: 100;
       PageIndex: 1;
-    }>('http://api.fund.eastmoney.com/ztjj/GetBKRelTopicFund', {
+    }>('https://api.fund.eastmoney.com/ztjj/GetBKRelTopicFund', {
       headers: {
-        Referer: 'http://fund.eastmoney.com/',
+        Referer: 'https://fund.eastmoney.com/',
       },
       searchParams: {
         sort: 'SYL_Z',
@@ -651,7 +651,7 @@ export async function GetQuoteCenterFromEastmoney() {
           }
         ];
       }[];
-    }>('http://quote.eastmoney.com/zhuti/api/fenggeindex', {
+    }>('https://quote.eastmoney.com/zhuti/api/fenggeindex', {
       responseType: 'json',
     });
     const result = body.result.pop();
@@ -714,7 +714,7 @@ export async function GetHodingFromEastmoney(marketCode: string, reportName: str
       success: true;
       message: 'ok';
       code: 0;
-    }>('http://datacenter-web.eastmoney.com/api/data/v1/get', {
+    }>('https://datacenter-web.eastmoney.com/api/data/v1/get', {
       searchParams: {
         sortColumns: 'HOLD_DATE',
         sortTypes: -1,
@@ -770,7 +770,7 @@ export async function GetMutualQuotaFromEastmoney() {
       success: true;
       message: 'ok';
       code: 0;
-    }>('http://datacenter-web.eastmoney.com/api/data/get', {
+    }>('https://datacenter-web.eastmoney.com/api/data/get', {
       searchParams: {
         type: 'RPT_MUTUAL_QUOTA',
         sty: 'TRADE_DATE,MUTUAL_TYPE,BOARD_TYPE,MUTUAL_TYPE_NAME,FUNDS_DIRECTION,INDEX_CODE,INDEX_NAME,BOARD_CODE',
@@ -831,7 +831,7 @@ export async function GetTodayHotFromEastmoney() {
           '0.69|006003008|VR&AR|0|006|人工智能|炒股的尽头是“元宇宙”？400多家企业注册相关商标 多家上市公司被监管“盯上”|600358|国旅联合|01||||0|'
         ];
       }[];
-    }>('http://quote.eastmoney.com/zhuti/api/todayopportunity', {
+    }>('https://quote.eastmoney.com/zhuti/api/todayopportunity', {
       responseType: 'json',
     });
     const result = body.result[0].Data.map((item) => {
@@ -881,7 +881,7 @@ export async function GetHotThemeFromEastmoney() {
         FieldName: 'CategoryCode,CategoryName,ParentCode,ParentName,CategoryPchg,SecuCode,SecuName,IsImportant,Market';
         Data: ['a141|虚拟电厂|||6.30|300376|易事特|0|02'];
       }[];
-    }>('http://quote.eastmoney.com/zhuti/api/hottheme', {
+    }>('https://quote.eastmoney.com/zhuti/api/hottheme', {
       searchParams: {
         startIndex: 1,
         pageSize: 100,
@@ -918,7 +918,7 @@ export async function GetRecentHotFromEastmoney() {
         FieldName: 'CategoryCode,CategoryName,IsImportant,ParentCode,ParentName,SecuCode,SecuName,Market,IsFocused';
         Data: ['a198|元宇宙概念|0|||300081|恒信东方|02|0'];
       }[];
-    }>('http://quote.eastmoney.com/zhuti/api/recenthot', {
+    }>('https://quote.eastmoney.com/zhuti/api/recenthot', {
       searchParams: {
         startIndex: 1,
         pageSize: 100,
@@ -965,7 +965,7 @@ export async function GetGoldTrendsFromEastmoney(secid: string) {
         prePrice: 404.8;
         trends: '2022-04-15 21:00,405.82,405.82,405.82,405.82,0,0.00,405.820'[];
       };
-    }>('http://push2.eastmoney.com/api/qt/stock/trends2/get', {
+    }>('https://push2.eastmoney.com/api/qt/stock/trends2/get', {
       searchParams: {
         secid,
         fields1: 'f1,f2,f3,f4,f5,f6,f7,f8,f9,f10,f11,f12,f13',
@@ -1001,7 +1001,7 @@ export async function GetGoldKFromEastmoney() {
         name: 'COMEX黄金';
         klines: '2022-01-26,1848.0,1818.8,1850.2,1814.1,262456,0.0,1.95,-1.82,-33.7,0.00'[];
       };
-    }>('http://push2his.eastmoney.com/api/qt/stock/kline/get', {
+    }>('https://push2his.eastmoney.com/api/qt/stock/kline/get', {
       searchParams: {
         secid: '101.GC00Y',
         fields1: 'f1,f2,f3,f4,f5',
@@ -1071,7 +1071,7 @@ export async function GetInternationalMetalFuturesFromEastmoney() {
           f152: 2;
         }[];
       };
-    }>('http://62.push2.eastmoney.com/api/qt/clist/get', {
+    }>('https://62.push2.eastmoney.com/api/qt/clist/get', {
       searchParams: {
         pn: 1,
         pz: 20,
@@ -1148,7 +1148,7 @@ export async function GetInternationalMetalGoodsFromEastmoney() {
           f152: 2;
         }[];
       };
-    }>('http://62.push2.eastmoney.com/api/qt/clist/get', {
+    }>('https://62.push2.eastmoney.com/api/qt/clist/get', {
       searchParams: {
         pn: 1,
         pz: 20,
@@ -1225,7 +1225,7 @@ export async function GetShanghaiGoldFuturesFromEastmoney() {
           f152: 2;
         }[];
       };
-    }>('http://62.push2.eastmoney.com/api/qt/clist/get', {
+    }>('https://62.push2.eastmoney.com/api/qt/clist/get', {
       searchParams: {
         pn: 1,
         pz: 20,
@@ -1302,7 +1302,7 @@ export async function GetShanghaiGoldGoodsFromEastmoney() {
           f152: 2;
         }[];
       };
-    }>('http://62.push2.eastmoney.com/api/qt/clist/get', {
+    }>('https://62.push2.eastmoney.com/api/qt/clist/get', {
       searchParams: {
         pn: 1,
         pz: 20,
@@ -1422,7 +1422,7 @@ export async function GetDistributionFromEastmoney() {
           }
         ];
       };
-    }>('http://push2ex.eastmoney.com/getTopicZDFenBu', {
+    }>('https://push2ex.eastmoney.com/getTopicZDFenBu', {
       searchParams: {
         ut: '7eea3edcaed734bea9cbfc24409ed989', // 意义暂时不明
         dpt: 'wz.ztzt',
@@ -1455,7 +1455,7 @@ export async function GetTopicZDTCountFromEastmoney() {
       data: {
         zdtcount: { dtc: 2; t: 930; ztc: 6 }[];
       };
-    }>('http://push2ex.eastmoney.com/getTopicZDTCount', {
+    }>('https://push2ex.eastmoney.com/getTopicZDTCount', {
       searchParams: {
         ut: '7eea3edcaed734bea9cbfc24409ed989', // 意义暂时不明
         dpt: 'wz.ztzt',
@@ -1480,7 +1480,7 @@ export async function GetTopicFBFailedFromEastmoney() {
       data: {
         fbfailed: { c: 1; t: 930; zbp: 14.285715103149414 }[];
       };
-    }>('http://push2ex.eastmoney.com/getTopicFBFailed', {
+    }>('https://push2ex.eastmoney.com/getTopicFBFailed', {
       searchParams: {
         ut: '7eea3edcaed734bea9cbfc24409ed989', // 意义暂时不明
         dpt: 'wz.ztzt',
@@ -1527,7 +1527,7 @@ export async function GetGBTrendFromEastmoney() {
         ];
         qxIndexNow: 0.5753;
       };
-    }>('http://quote.eastmoney.com/ztb/api/gbtrend', {
+    }>('https://quote.eastmoney.com/ztb/api/gbtrend', {
       searchParams: {
         type: 2,
       },

@@ -119,7 +119,7 @@ export async function GetTrendFromEastmoney(secid: string) {
         prePrice: 2012.9;
         trends: ['2021-07-07 09:30,2012.90,2012.90,2013.00,2012.00,0,0.00,2012.900'];
       };
-    }>('http://push2.eastmoney.com/api/qt/stock/trends2/get', {
+    }>('https://push2.eastmoney.com/api/qt/stock/trends2/get', {
       searchParams: {
         secid,
         fields1: 'f1,f2,f3,f4,f5,f6,f7,f8,f9,f10,f11,f12,f13',
@@ -152,7 +152,7 @@ export async function GetTrendFromEastmoney(secid: string) {
 
 export async function GetPicTrendFromEastmoney(secid: string) {
   try {
-    const { rawBody } = await request('http://webquotepic.eastmoney.com/GetPic.aspx', {
+    const { rawBody } = await request('https://webquotepic.eastmoney.com/GetPic.aspx', {
       searchParams: {
         nid: secid,
         imageType: 'GNR',
@@ -300,7 +300,7 @@ export async function GetDetailFromEastmoney(secid: string) {
         f11: 14.29;
         f12: 71;
       };
-    }>('http://push2.eastmoney.com/api/qt/stock/get', {
+    }>('https://push2.eastmoney.com/api/qt/stock/get', {
       searchParams: {
         secid,
         invt: 2,
@@ -358,7 +358,7 @@ export async function GetKFromEastmoney(secid: string, code: number, lmt = 10000
         preKPrice: 206.69;
         klines: ['2021-07-09,2059.97,1972.11,2110.00,1945.00,244227,49006317568.00,8.02,-4.11,-84.59,1.94'];
       };
-    }>('http://68.push2his.eastmoney.com/api/qt/stock/kline/get', {
+    }>('https://68.push2his.eastmoney.com/api/qt/stock/kline/get', {
       searchParams: {
         secid,
         fields1: 'f1,f2,f3,f4,f5,f6',
@@ -426,7 +426,7 @@ export async function GetSelfRankFromEastmoney(code: string) {
           [index: string]: any;
         }[];
       };
-    }>('http://push2.eastmoney.com/api/qt/clist/get', {
+    }>('https://push2.eastmoney.com/api/qt/clist/get', {
       searchParams: {
         fields: 'f2,f3,f12,f13,f14,f62,f184,f225,f165,f263,f109,f175,f264,f160,f100,f124,f265,f1,f267,f164,f174',
         fid: code,
@@ -489,7 +489,7 @@ export async function GetMainRankFromEastmoney(code: string) {
           [index: string]: any;
         }[];
       };
-    }>('http://push2.eastmoney.com/api/qt/clist/get', {
+    }>('https://push2.eastmoney.com/api/qt/clist/get', {
       searchParams: {
         fields: 'f2,f3,f12,f13,f14,f62,f184,f225,f165,f263,f109,f175,f176,f264,f160,f100,f124,f265,f1',
         fid: code,
@@ -668,7 +668,7 @@ export async function GetABCompany(secid: string) {
       Market: 'SH';
       SecurityType: null;
       ExpireTime: '/Date(-62135596800000)/';
-    }>(`http://f10.eastmoney.com/CompanySurvey/CompanySurveyAjax?code=${mk === '0' ? 'sz' : 'sh'}${code}`, {
+    }>(`https://f10.eastmoney.com/CompanySurvey/CompanySurveyAjax?code=${mk === '0' ? 'sz' : 'sh'}${code}`, {
       responseType: 'json',
     });
     return {
@@ -722,7 +722,7 @@ export async function GetHKCompany(secid: string) {
         gsjs: '    小米集团是一家以手机、智能硬件和IoT平台为核心的互联网公司。公司的产品按照产品功能、形态及模式,大体上可以划分为智能手机、IoT和生活消费产品、互联网服务产品。作为一家由工程师和设计师创建的公司,小米集团崇尚大胆创新的互联网文化,并不断探索前沿科技。创新精神在小米蓬勃发展并渗透到每个角落,并引导小米集团所做的一切。同时,小米集团不懈追求效率的持续提升。小米集团致力於降低运营成本,并同时把效率提升产生的价值回馈给小米集团的用户。小米集团独特且强大的铁人三项商业模式由三个相互协作的支柱组成(1)创新、高质量、精心设计且专注於卓越用户体验的硬件,(2)使小米集团能以厚道的价格销售产品的高效新零售和(3)丰富的互联网服务。';
         sshy: '资讯科技器材';
       };
-    }>(`http://emweb.securities.eastmoney.com/PC_HKF10/CompanyProfile/PageAjax?code=${code}`, {
+    }>(`https://emweb.securities.eastmoney.com/PC_HKF10/CompanyProfile/PageAjax?code=${code}`, {
       responseType: 'json',
     });
     return {
@@ -828,7 +828,7 @@ export async function GetUSCompany(secid: string) {
           }
         ];
       };
-    }>(`http://emweb.eastmoney.com/pc_usf10/CompanyInfo/PageAjax?fullCode=${code}.O`, {
+    }>(`https://emweb.eastmoney.com/pc_usf10/CompanyInfo/PageAjax?fullCode=${code}.O`, {
       responseType: 'json',
     });
     return {
@@ -847,7 +847,7 @@ export async function GetUSCompany(secid: string) {
 export async function GetXSBCompany(secid: string) {
   try {
     const [mk, code] = secid.split('.');
-    const { body: html } = await request<string>(`http:xinsanban.eastmoney.com/F10/CompanyInfo/Introduction/${code}.html`);
+    const { body: html } = await request<string>(`https:xinsanban.eastmoney.com/F10/CompanyInfo/Introduction/${code}.html`);
     const $ = cheerio.load(html);
     const gsjs = $("span:contains('公司简介')").next().text();
     const sshy = $("span:contains('行业分类')").next().text();
@@ -888,7 +888,7 @@ export async function GetIndustryFromEastmoney(secid: string, type: 1 | 2 | 3) {
           };
         };
       };
-    }>(`http://push2.eastmoney.com/api/qt/slist/get`, {
+    }>(`https://push2.eastmoney.com/api/qt/slist/get`, {
       searchParams: {
         pi: 0,
         pz: 100,
@@ -1020,7 +1020,7 @@ export async function GetStockHoldFunds(secid: string, date: string) {
       }[];
       pages: 22;
       success: true;
-      url: 'http://datacenter-web.eastmoney.com/api/data/v1/get';
+      url: 'https://datacenter-web.eastmoney.com/api/data/v1/get';
     }>(`https://data.eastmoney.com/dataapi/zlsj/detail`, {
       searchParams: {
         SHType: 1,
