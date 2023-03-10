@@ -38,6 +38,6 @@ jobs:
       - name: Run npm test
         env:
           USE_HARD_LINKS: false
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ github.token }}
         run: |
           npm run package

@@ -31,7 +31,7 @@ jobs:
       - run: npm run release-all
         env:
           USE_HARD_LINKS: false
-          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+          GH_TOKEN: ${{ github.token }}
           SNAPCRAFT_STORE_CREDENTIALS: ${{ secrets.SNAPCRAF_TOKEN }}
 
       - name: Codecov

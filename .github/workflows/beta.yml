@@ -30,4 +30,4 @@ jobs:
       - run: npm run beta-mac
         env:
           USE_HARD_LINKS: false
-          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+          GH_TOKEN: ${{ github.token }}
