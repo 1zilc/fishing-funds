@@ -28,7 +28,7 @@ const configuration = {
     path: webpackPaths.dllPath,
     filename: 'preload.js',
     library: {
-      type: 'umd',
+      type: 'commonjs',
     },
   },
 
