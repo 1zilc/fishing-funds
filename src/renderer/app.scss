@@ -16,6 +16,10 @@ body {
   cursor: default;
   user-select: none;
   width: 100% !important;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
 }
 
 body::-webkit-scrollbar {
