@@ -65,7 +65,7 @@ export const defaultSystemSetting: System.Setting = {
 
   coinUnitSetting: Enums.CoinUnitType.Usd,
 
-  proxyTypeSetting: Enums.ProxyType.None,
+  proxyTypeSetting: Enums.ProxyType.System,
   proxyHostSetting: '127.0.0.1',
   proxyPortSetting: '1080',
 
