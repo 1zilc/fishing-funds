@@ -227,8 +227,7 @@ function main() {
         rawBody: res.rawBody,
         headers: res.headers,
       };
-    } catch (e) {
-      console.log(e);
+    } catch {
       return {};
     }
   });
