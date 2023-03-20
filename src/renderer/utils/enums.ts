@@ -117,13 +117,6 @@ export enum SimilarCompareType {
   Evaluation,
 }
 
-// 历史类型
-export enum HistoryType {
-  Performance,
-  Value,
-  InvestStyle,
-}
-
 // 经理能力类型
 export enum ManagerPowerType {
   Appraise,

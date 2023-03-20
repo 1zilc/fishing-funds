@@ -20,6 +20,7 @@ import Scale from '@/components/Home/FundView/DetailFundContent/Scale';
 import Hold from '@/components/Home/FundView/DetailFundContent/Hold';
 import Assets from '@/components/Home/FundView/DetailFundContent/Assets';
 import SimilarRank from '@/components/Home/FundView/DetailFundContent/SimilarRank';
+import CycleReturn from '@/components/Home/FundView/DetailFundContent/CycleReturn';
 import SimilarProportion from '@/components/Home/FundView/DetailFundContent/SimilarProportion';
 import PerformanceEvaluation from '@/components/Home/FundView/DetailFundContent/PerformanceEvaluation';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
@@ -229,17 +230,22 @@ export const DetailFund: React.FC<DetailFundProps> = (props) => {
             tabBarGutter={15}
             items={[
               {
-                key: String(Enums.HistoryType.Performance),
+                key: String(0),
                 label: '业绩走势',
                 children: <Performance code={code} />,
               },
               {
-                key: String(Enums.HistoryType.Value),
+                key: String(1),
                 label: '净值估算',
                 children: <Estimate code={code} />,
               },
               {
-                key: String(Enums.HistoryType.InvestStyle),
+                key: String(2),
+                label: '周期回报',
+                children: <CycleReturn data={pingzhongdata.Data_netWorthTrend} />,
+              },
+              {
+                key: String(3),
                 label: '投资风格',
                 children: <InvestStyle code={code} />,
               },
