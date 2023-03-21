@@ -242,7 +242,7 @@ export const DetailFund: React.FC<DetailFundProps> = (props) => {
               {
                 key: String(2),
                 label: '周期回报',
-                children: <CycleReturn data={pingzhongdata.Data_netWorthTrend} />,
+                children: <CycleReturn onFresh={runGetFundDetailFromEastmoney} data={pingzhongdata.Data_netWorthTrend} />,
               },
               {
                 key: String(3),
