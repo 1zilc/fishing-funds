@@ -52,8 +52,8 @@ export const DetailStock: React.FC<DetailStockProps> = (props) => {
     staleTime: CONST.DEFAULT.SWR_STALE_DELAY,
   });
 
-  const { data: kdata = [], run: runGetKFromEastmoney } = useRequest(() => Services.Stock.GetKFromEastmoney(secid, 101, 1800), {
-    cacheKey: Utils.GenerateRequestKey('Stock.GetKFromEastmoney', [secid, 101, 1800]),
+  const { data: kdata = [], run: runGetKFromEastmoney } = useRequest(() => Services.Stock.GetKFromEastmoney(secid, 101, 3600), {
+    cacheKey: Utils.GenerateRequestKey('Stock.GetKFromEastmoney', [secid, 101, 3600]),
   });
 
   async function onAdd() {

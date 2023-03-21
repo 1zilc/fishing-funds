@@ -34,8 +34,8 @@ export const DetailZindex: React.FC<DetailFundProps> = (props) => {
     cacheKey: Utils.GenerateRequestKey('Zindex.FromEastmoney', code),
   });
 
-  const { data: kdata = [], run: runGetKFromEastmoney } = useRequest(() => Services.Zindex.GetKFromEastmoney(code, 5, 101), {
-    cacheKey: Utils.GenerateRequestKey('Zindex.GetKFromEastmoney', [code, 5, 101]),
+  const { data: kdata = [], run: runGetKFromEastmoney } = useRequest(() => Services.Zindex.GetKFromEastmoney(code, 10, 101), {
+    cacheKey: Utils.GenerateRequestKey('Zindex.GetKFromEastmoney', [code, 10, 101]),
   });
 
   return (
