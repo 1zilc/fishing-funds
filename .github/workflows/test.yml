@@ -51,3 +51,4 @@ jobs:
           pnpm package
         env:
           USE_HARD_LINKS: false
+          DEBUG: electron-builder
