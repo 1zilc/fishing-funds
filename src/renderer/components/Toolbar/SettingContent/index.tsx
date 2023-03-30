@@ -30,6 +30,7 @@ export interface SettingContentProps {
   themeWrapperClass: string;
   onEnter: () => void;
   onClose: () => void;
+  openSupport?: boolean;
 }
 
 const { shell, app, dialog } = window.contextModules.electron;
@@ -237,6 +238,7 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
           </Badge>
         </PureCard>
         <Tabs
+          defaultActiveKey={props.openSupport ? '2' : '0'}
           animated={{ tabPane: true }}
           tabBarGutter={15}
           tabBarStyle={{ marginLeft: 15 }}

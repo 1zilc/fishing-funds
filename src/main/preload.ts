@@ -33,6 +33,7 @@ contextBridge.exposeInMainWorld('contextModules', {
           'change-eye-status',
           'sync-store-data',
           'trigger-translate',
+          'support-author',
         ];
         if (validChannels.includes(channel)) {
           return ipcRenderer.on(channel, func);
