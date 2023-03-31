@@ -199,7 +199,7 @@
     "@svgr/webpack": "^7.0.0",
     "@teamsupercell/typings-for-css-modules-loader": "^2.5.2",
     "@testing-library/jest-dom": "^5.16.5",
-    "@testing-library/react": "^13.4.0",
+    "@testing-library/react": "^14.0.0",
     "@types/color": "^3.0.3",
     "@types/color-hash": "^1.0.2",
     "@types/jest": "^29.4.2",
