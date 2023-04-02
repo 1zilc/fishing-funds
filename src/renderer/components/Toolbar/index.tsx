@@ -118,4 +118,4 @@ const ToolBar: React.FC<ToolBarProps> = () => {
   );
 };
 
-export default ToolBar;
+export default React.memo(ToolBar);
