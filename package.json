@@ -214,7 +214,7 @@
     "@typescript-eslint/parser": "^5.55.0",
     "@umijs/mfsu": "^4.0.58",
     "chalk": "^5.2.0",
-    "concurrently": "^7.6.0",
+    "concurrently": "^8.0.1",
     "cross-env": "^7.0.3",
     "css-loader": "^6.7.3",
     "detect-port": "^1.5.1",
