@@ -260,8 +260,6 @@ function main() {
     });
     // 存储窗口大小
     mainWindowState.manage(mb.window!);
-    // 隐藏dock栏
-    app.dock?.hide();
     // 是否打开备份文件
     if (openBackupFilePath) {
       sendMessageToRenderer(mb.window, 'open-backup-file', openBackupFilePath);
@@ -278,9 +276,6 @@ function main() {
     mb.window?.webContents.openDevTools({ mode: 'undocked' });
   }
 
-  // mb.on('ready', () => {
-  //   // mb.window?.setVisibleOnAllWorkspaces(true);
-  // });
   // new AppUpdater({ icon: nativeIcon, win: mb.window });
 }
 
