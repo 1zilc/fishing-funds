@@ -1,3 +1,4 @@
+import React from 'react';
 import { useRequest } from 'ahooks';
 import styles from './index.module.scss';
 const { ipcRenderer } = window.contextModules.electron;
@@ -22,4 +23,4 @@ const Logo: React.FC<LogoProps> = (props) => {
     </div>
   );
 };
-export default Logo;
+export default React.memo(Logo);

@@ -42,4 +42,4 @@ const SearchGroup: React.FC<SearchGroupProps> = (props) => {
   );
 };
 
-export default SearchGroup;
+export default React.memo(SearchGroup);

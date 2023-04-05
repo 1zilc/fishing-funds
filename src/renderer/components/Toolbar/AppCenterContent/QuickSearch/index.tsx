@@ -81,4 +81,4 @@ const QuickSearch: React.FC<QuickSearchProps> = (props) => {
   );
 };
 
-export default QuickSearch;
+export default React.memo(QuickSearch);

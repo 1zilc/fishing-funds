@@ -66,4 +66,4 @@ const Collapse: React.FC<PropsWithChildren<CollapseProps>> = (props) => {
   );
 };
 
-export default Collapse;
+export default React.memo(Collapse);

@@ -108,7 +108,7 @@ const FundRow: React.FC<RowProps> = (props) => {
           </div>
         )}
       </div>
-      <Collapse style={{ zIndex: 1 }} isOpened={fund.collapse}>
+      <Collapse isOpened={fund.collapse}>
         <div className={styles.collapseContent}>
           <section>
             <span>净值：</span>
