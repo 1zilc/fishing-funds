@@ -15,7 +15,7 @@ const Capacity: React.FC<CapacityProps> = (props) => {
   const { PositionInd, Title, Content } = props.TopText;
   return (
     <div className={clsx(styles.content)}>
-      <Progress type="circle" percent={PositionInd} width={64} strokeWidth={16} />
+      <Progress type="circle" percent={PositionInd} size={64} strokeWidth={16} />
       <div className={styles.info}>
         <h3>{Title}</h3>
         <p>{Content}</p>
