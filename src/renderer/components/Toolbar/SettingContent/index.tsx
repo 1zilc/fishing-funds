@@ -150,6 +150,8 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
   const darkModeEnable = systemTheme === Enums.SystemThemeType.Dark;
   const themeColor = customThemeColorEnable ? customThemeColor || originPrimaryColor : originPrimaryColor;
 
+  const defaultActiveKey = props.openSupport ? '2' : '0';
+
   function onSave() {
     dispatch(
       setSystemSettingAction({
@@ -238,7 +240,8 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
           </Badge>
         </PureCard>
         <Tabs
-          defaultActiveKey={props.openSupport ? '2' : '0'}
+          key={defaultActiveKey}
+          defaultActiveKey={defaultActiveKey}
           animated={{ tabPane: true }}
           tabBarGutter={15}
           tabBarStyle={{ marginLeft: 15 }}
