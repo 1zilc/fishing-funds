@@ -1,6 +1,7 @@
 name: Release
 
 on:
+  workflow_dispatch:
   release:
     types: [published]
 
@@ -13,5 +14,6 @@ jobs:
         run: |
           LATEST_VERSION=$(gh release view -R 1zilc/fishing-funds --json name -q '.name')
           brew bump-cask-pr --version "$LATEST_VERSION" fishing-funds
-        with:
+        env:
           GH_TOKEN: ${{ secrets.HOMEBREW_GH_TOKEN }}
+          HOMEBREW_GITHUB_API_TOKEN: ${{ secrets.HOMEBREW_GH_TOKEN }}
