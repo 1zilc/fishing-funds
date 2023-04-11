@@ -7,6 +7,7 @@ import Trend from '@/components/Home/ZindexView/DetailZindexContent/Trend';
 import K from '@/components/Home/ZindexView/DetailZindexContent/K';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
 import Recent from '@/components/Home/NewsList/Recent';
+import CycleReturn from '@/components/Home/FundView/DetailFundContent/CycleReturn';
 import { RedirectSearchParams } from '@/containers/InitPage';
 import { DetailZindexPageParams } from '@/components/Home/ZindexView/DetailZindexPage';
 import * as Services from '@/services';
@@ -31,6 +32,10 @@ export const DetailZindex: React.FC<DetailFundProps> = (props) => {
   const { data: zindex = {} as any } = useRequest(() => Services.Zindex.FromEastmoney(code), {
     pollingInterval: 1000 * 60,
     cacheKey: Utils.GenerateRequestKey('Zindex.FromEastmoney', code),
+  });
+
+  const { data: kdata = [], run: runGetKFromEastmoney } = useRequest(() => Services.Zindex.GetKFromEastmoney(code, 10, 101), {
+    cacheKey: Utils.GenerateRequestKey('Zindex.GetKFromEastmoney', [code, 10, 101]),
   });
 
   return (
@@ -109,6 +114,11 @@ export const DetailZindex: React.FC<DetailFundProps> = (props) => {
               key: String(0),
               label: 'K线',
               children: <K code={code} name={zindex?.name} />,
+            },
+            {
+              key: String(1),
+              label: '周期回报',
+              children: <CycleReturn onFresh={runGetKFromEastmoney} data={kdata.map(({ date: x, sp: y }) => ({ x, y }))} />,
             },
           ]}
         />

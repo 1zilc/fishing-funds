@@ -260,8 +260,6 @@ function main() {
     });
     // 存储窗口大小
     mainWindowState.manage(mb.window!);
-    // 隐藏dock栏
-    app.dock?.hide();
     // 是否打开备份文件
     if (openBackupFilePath) {
       sendMessageToRenderer(mb.window, 'open-backup-file', openBackupFilePath);
@@ -271,6 +269,21 @@ function main() {
       shell.openExternal(url);
       return { action: 'deny' };
     });
+    // FIXME: hack 关闭dock.icon,尝试3次
+    let count = 0;
+    let timer: NodeJS.Timer;
+    function hideDockIcon() {
+      if (count < 3 && app.dock?.isVisible()) {
+        timer = setInterval(() => {
+          app.dock?.hide();
+          count++;
+          hideDockIcon();
+        }, 1000);
+      } else {
+        timer && clearInterval(timer);
+      }
+    }
+    hideDockIcon();
   });
 
   // 打开开发者工具
@@ -278,9 +291,6 @@ function main() {
     mb.window?.webContents.openDevTools({ mode: 'undocked' });
   }
 
-  // mb.on('ready', () => {
-  //   // mb.window?.setVisibleOnAllWorkspaces(true);
-  // });
   // new AppUpdater({ icon: nativeIcon, win: mb.window });
 }
 

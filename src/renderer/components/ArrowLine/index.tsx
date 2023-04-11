@@ -15,4 +15,4 @@ const ArrowLine: React.FC<ArrowLineProps> = ({ value }) =>
     <SubtractLineIcon className="svg-none" />
   );
 
-export default ArrowLine;
+export default React.memo(ArrowLine);

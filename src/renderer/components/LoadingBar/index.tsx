@@ -18,4 +18,4 @@ const LoadingBar: React.FC<LoadingBarProps> = ({ show }) => {
     </div>
   );
 };
-export default LoadingBar;
+export default React.memo(LoadingBar);

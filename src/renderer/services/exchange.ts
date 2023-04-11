@@ -46,7 +46,7 @@ export async function GetListFromEastmoney(po: string, fs: string) {
           }
         ];
       };
-    }>('http://73.push2.eastmoney.com/api/qt/clist/get', {
+    }>('https://73.push2.eastmoney.com/api/qt/clist/get', {
       searchParams: {
         pn: 1,
         pz: 200,
@@ -78,7 +78,7 @@ export async function GetListFromEastmoney(po: string, fs: string) {
 
 export async function GetGlobalBondFromEastmoney() {
   try {
-    const { body: script } = await request('http://quote.eastmoney.com/center/api/qqzq.js', {
+    const { body: script } = await request('https://quote.eastmoney.com/center/api/qqzq.js', {
       responseType: 'text',
       searchParams: {
         _: Date.now(),

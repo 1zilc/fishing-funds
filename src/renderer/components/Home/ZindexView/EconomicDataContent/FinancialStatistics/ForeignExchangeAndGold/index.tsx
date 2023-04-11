@@ -10,9 +10,12 @@ interface ForeignExchangeAndGoldProps {}
 
 const ForeignExchangeAndGold: React.FC<ForeignExchangeAndGoldProps> = () => {
   const { ref: chartRef, chartInstance } = useResizeEchart(0.4);
-  const { data: result = [], run: runGetEconomyIndexFromEastmoney } = useRequest(() => Services.Zindex.GetEconomyIndexFromEastmoney(16), {
-    ready: !!chartInstance,
-  });
+  const { data: result = [], run: runGetEconomyIndexFromEastmoney } = useRequest(
+    () => Services.Zindex.GetEconomyIndexFromEastmoney('RPT_ECONOMY_GOLD_CURRENCY', 'REPORT_DATE,GOLD_RESERVES,FOREX'),
+    {
+      ready: !!chartInstance,
+    }
+  );
 
   useRenderEcharts(
     () => {
@@ -80,7 +83,7 @@ const ForeignExchangeAndGold: React.FC<ForeignExchangeAndGoldProps> = () => {
               name: '外汇储备',
               showSymbol: false,
               lineStyle: { width: 1 },
-              data: result.map((item: any) => [item[0], item[1]]),
+              data: result.map((item: any) => [item.REPORT_DATE, item.FOREX]),
             },
             {
               type: 'line',
@@ -88,7 +91,7 @@ const ForeignExchangeAndGold: React.FC<ForeignExchangeAndGoldProps> = () => {
               yAxisIndex: 1,
               showSymbol: false,
               lineStyle: { width: 1 },
-              data: result.map((item: any) => [item[0], item[4]]),
+              data: result.map((item: any) => [item.REPORT_DATE, item.GOLD_RESERVES]),
             },
           ],
         });

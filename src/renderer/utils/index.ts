@@ -72,7 +72,7 @@ export function JudgeFixTime(timestamp: number) {
   const minute = now.get('minute');
   const minites = hour * 60 + minute;
   const isWorkDay = day >= 1 && day <= 5;
-  const isFixTime = minites <= 9 * 60 + 30 || minites >= 15 * 60;
+  const isFixTime = minites <= 9 * 60 + 30 || minites >= 18 * 60;
   return (isWorkDay && isFixTime) || !isWorkDay;
 }
 
@@ -284,12 +284,18 @@ export function GetValueMapColor(value: any = 0) {
 }
 
 export function CheckUrlValid(value: string) {
-  const domainReg = new RegExp('((http|https)://)(www.)?[a-zA-Z0-9@:%._\\+~#?&//=]{2,256}\\.[a-z]{2,6}\\b([-a-zA-Z0-9@:%._\\+~#?&//=]*)');
-  const valid = domainReg.test(`http://${value}`) || domainReg.test(`https://${value}`) || domainReg.test(value);
-  return {
-    valid,
-    url: value.startsWith('http://') || value.startsWith('https://') ? value : `http://${value}`,
-  };
+  try {
+    const url = new URL(value);
+    return {
+      valid: url.protocol === 'http:' || url.protocol === 'https:',
+      url: url.href,
+    };
+  } catch (e) {
+    return {
+      valid: false,
+      url: value,
+    };
+  }
 }
 
 export function CalculateMA(dayCount: any, values: any[]) {

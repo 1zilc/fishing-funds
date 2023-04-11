@@ -1,9 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { useScroll, useDebounceFn, useBoolean } from 'ahooks';
-
 import classsames from 'clsx';
 import { Dropdown, Menu } from 'antd';
-
 import SortArrowUpIcon from '@/static/icon/sort-arrow-up.svg';
 import SortArrowDownIcon from '@/static/icon/sort-arrow-down.svg';
 import ArrowDownIcon from '@/static/icon/arrow-down.svg';
@@ -13,7 +11,6 @@ import LayoutGridIcon from '@/static/icon/layout-grid.svg';
 import LayoutFlowIcon from '@/static/icon/layout-flow.svg';
 import LineCharIcon from '@/static/icon/line-chart.svg';
 import SearchIcon from '@/static/icon/search.svg';
-
 import {
   setFundSortModeAction,
   troggleFundSortOrderAction,
@@ -32,7 +29,6 @@ import {
   setCoinViewModeAction,
 } from '@/store/features/sort';
 import CustomDrawer from '@/components/CustomDrawer';
-
 import { toggleAllZindexsCollapseAction } from '@/store/features/zindex';
 import { toggleAllQuotationsCollapseAction } from '@/store/features/quotation';
 import { toggleAllStocksCollapseAction } from '@/store/features/stock';
@@ -47,12 +43,17 @@ import styles from './index.module.scss';
 const ManageFundContent = React.lazy(() => import('@/components/Home/FundView/ManageFundContent'));
 const AddFundContent = React.lazy(() => import('@/components/Home/FundView/AddFundContent'));
 const ManageStockContent = React.lazy(() => import('@/components/Home/StockView/ManageStockContent'));
+const FundStatisticsContent = React.lazy(() => import('@/components/Home/FundView/FundStatisticsContent'));
 const AddStockContent = React.lazy(() => import('@/components/Home/StockView/AddStockContent'));
 const ManageCoinContent = React.lazy(() => import('@/components/Home/CoinView/ManageCoinContent'));
 const AddCoinContent = React.lazy(() => import('@/components/Home/CoinView/AddCoinContent'));
 const ManageZindexContent = React.lazy(() => import('@/components/Home/ZindexView/ManageZindexContent'));
 const AddZindexContent = React.lazy(() => import('@/components/Home/ZindexView/AddZindexContent'));
 const FundFlowContent = React.lazy(() => import('@/components/Home/QuotationView/FundFlowContent'));
+const NewsContent = React.lazy(() => import('@/components/Home/NewsList/NewsContent'));
+const StockRankingContent = React.lazy(() => import('@/components/Home/StockView/StockRankingContent'));
+const CoinRankingContent = React.lazy(() => import('@/components/Home/CoinView/CoinRankingContent'));
+const FundRankingContent = React.lazy(() => import('@/components/Home/FundView/FundRankingContent'));
 
 export interface SortBarProps {}
 
@@ -74,6 +75,7 @@ function FundsSortBar() {
   const [showManageFundDrawer, { setTrue: openManageFundDrawer, setFalse: closeManageFundDrawer, toggle: ToggleManageFundDrawer }] =
     useBoolean(false);
   const [showAddFundDrawer, { setTrue: openAddFundDrawer, setFalse: closeAddFundDrawer, toggle: ToggleAddFundDrawer }] = useBoolean(false);
+  const [showFundRankingDrawer, { setTrue: openFundRankingDrawer, setFalse: closeFundRankingDrawer }] = useBoolean(false);
 
   const [expandAllFunds, expandSomeFunds] = useMemo(() => {
     return [funds.every((_) => _.collapse), funds.some((_) => _.collapse)];
@@ -89,7 +91,7 @@ function FundsSortBar() {
         {expandAllFunds ? <ArrowUpIcon /> : <ArrowDownIcon />}
       </div>
       <div className={styles.name} onClick={toggleFundsCollapse}>
-        基金名称
+        <span>基金名称</span>
         <a
           onClick={(e) => {
             openManageFundDrawer();
@@ -97,6 +99,14 @@ function FundsSortBar() {
           }}
         >
           管理
+        </a>
+        <a
+          onClick={(e) => {
+            openFundRankingDrawer();
+            e.stopPropagation();
+          }}
+        >
+          榜单
         </a>
         <div className={styles.view}>
           <SearchIcon
@@ -159,6 +169,9 @@ function FundsSortBar() {
           }}
         />
       </CustomDrawer>
+      <CustomDrawer show={showFundRankingDrawer}>
+        <FundRankingContent onClose={closeFundRankingDrawer} onEnter={closeFundRankingDrawer} />
+      </CustomDrawer>
     </div>
   );
 }
@@ -182,6 +195,7 @@ function ZindexSortBar() {
     useBoolean(false);
   const [showAddZindexDrawer, { setTrue: openAddZindexDrawer, setFalse: closeAddZindexDrawer, toggle: ToggleAddZindexDrawer }] =
     useBoolean(false);
+  const [showNewsDrawer, { setTrue: openNewsDrawer, setFalse: closeNewsDrawer }] = useBoolean(false);
 
   const [expandAllZindexs, expandSomeZindexs] = useMemo(() => {
     return [zindexs.every((_) => _.collapse), zindexs.some((_) => _.collapse)];
@@ -197,7 +211,7 @@ function ZindexSortBar() {
         {expandAllZindexs ? <ArrowUpIcon /> : <ArrowDownIcon />}
       </div>
       <div className={styles.name} onClick={toggleZindexsCollapse}>
-        指数名称
+        <span>指数名称</span>
         <a
           onClick={(e) => {
             openManageZindexDrawer();
@@ -205,6 +219,14 @@ function ZindexSortBar() {
           }}
         >
           管理
+        </a>
+        <a
+          onClick={(e) => {
+            openNewsDrawer();
+            e.stopPropagation();
+          }}
+        >
+          新闻
         </a>
         <div className={styles.view}>
           <SearchIcon
@@ -270,6 +292,9 @@ function ZindexSortBar() {
           }}
         />
       </CustomDrawer>
+      <CustomDrawer show={showNewsDrawer}>
+        <NewsContent onClose={closeNewsDrawer} onEnter={closeNewsDrawer} />
+      </CustomDrawer>
     </div>
   );
 }
@@ -286,6 +311,7 @@ function QuotationSortBar() {
   } = useAppSelector((state) => state.sort.viewMode);
 
   const [showFundFlowDrawer, { setTrue: openFundFlowDrawer, setFalse: closeFundFlowDrawer }] = useBoolean(false);
+  const [showFundsStatisticsDrawer, { setTrue: openFundStatisticsDrawer, setFalse: closeFundStatisticsDrawer }] = useBoolean(false);
 
   const { quotationSortModeOptions, quotationSortModeOptionsMap } = Helpers.Sort.GetSortConfig();
 
@@ -303,7 +329,7 @@ function QuotationSortBar() {
         {expandAllQuotations ? <ArrowUpIcon /> : <ArrowDownIcon />}
       </div>
       <div className={styles.name} onClick={toggleQuotationsCollapse}>
-        板块名称
+        <span>板块名称</span>
         <a
           onClick={(e) => {
             openFundFlowDrawer();
@@ -311,6 +337,14 @@ function QuotationSortBar() {
           }}
         >
           资金流
+        </a>
+        <a
+          onClick={(e) => {
+            openFundStatisticsDrawer();
+            e.stopPropagation();
+          }}
+        >
+          统计
         </a>
       </div>
       <div className={styles.view}>
@@ -353,6 +387,9 @@ function QuotationSortBar() {
       <CustomDrawer show={showFundFlowDrawer}>
         <FundFlowContent onClose={closeFundFlowDrawer} onEnter={closeFundFlowDrawer} />
       </CustomDrawer>
+      <CustomDrawer show={showFundsStatisticsDrawer}>
+        <FundStatisticsContent onClose={closeFundStatisticsDrawer} onEnter={closeFundStatisticsDrawer} />
+      </CustomDrawer>
     </div>
   );
 }
@@ -376,6 +413,7 @@ function StockSortBar() {
     useBoolean(false);
   const [showAddStockDrawer, { setTrue: openAddStockDrawer, setFalse: closeAddStockDrawer, toggle: ToggleAddStockDrawer }] =
     useBoolean(false);
+  const [showStockRankingDrawer, { setTrue: openStockRankingDrawer, setFalse: closeStockRankingDrawer }] = useBoolean(false);
 
   const [expandAllStocks, expandSomeStocks] = useMemo(() => {
     return [stocks.every((_) => _.collapse), stocks.some((_) => _.collapse)];
@@ -391,7 +429,7 @@ function StockSortBar() {
         {expandAllStocks ? <ArrowUpIcon /> : <ArrowDownIcon />}
       </div>
       <div className={styles.name} onClick={toggleStocksCollapse}>
-        股票名称
+        <span>股票名称</span>
         <a
           onClick={(e) => {
             openManageStockDrawer();
@@ -399,6 +437,14 @@ function StockSortBar() {
           }}
         >
           管理
+        </a>
+        <a
+          onClick={(e) => {
+            openStockRankingDrawer();
+            e.stopPropagation();
+          }}
+        >
+          榜单
         </a>
         <div className={styles.view}>
           <SearchIcon
@@ -464,6 +510,9 @@ function StockSortBar() {
           }}
         />
       </CustomDrawer>
+      <CustomDrawer show={showStockRankingDrawer}>
+        <StockRankingContent onClose={closeStockRankingDrawer} onEnter={closeStockRankingDrawer} />
+      </CustomDrawer>
     </div>
   );
 }
@@ -486,6 +535,7 @@ function CoinSortBar() {
   const [showManageCoinDrawer, { setTrue: openManageCoinDrawer, setFalse: closeManageCoinDrawer, toggle: ToggleManageCoinDrawer }] =
     useBoolean(false);
   const [showAddCoinDrawer, { setTrue: openAddCoinDrawer, setFalse: closeAddCoinDrawer, toggle: ToggleAddCoinDrawer }] = useBoolean(false);
+  const [showCoinRankingDrawer, { setTrue: openCoinRankingDrawer, setFalse: closeCoinRankingDrawer }] = useBoolean(false);
 
   const [expandAllCoins, expandSomeCoins] = useMemo(() => {
     return [coins.every((_) => _.collapse), coins.some((_) => _.collapse)];
@@ -501,7 +551,7 @@ function CoinSortBar() {
         {expandAllCoins ? <ArrowUpIcon /> : <ArrowDownIcon />}
       </div>
       <div className={styles.name} onClick={toggleCoinsCollapse}>
-        货币名称
+        <span>货币名称</span>
         <a
           onClick={(e) => {
             openManageCoinDrawer();
@@ -509,6 +559,14 @@ function CoinSortBar() {
           }}
         >
           管理
+        </a>
+        <a
+          onClick={(e) => {
+            openCoinRankingDrawer();
+            e.stopPropagation();
+          }}
+        >
+          榜单
         </a>
         <div className={styles.view}>
           <SearchIcon
@@ -570,6 +628,9 @@ function CoinSortBar() {
             closeAddCoinDrawer();
           }}
         />
+      </CustomDrawer>
+      <CustomDrawer show={showCoinRankingDrawer}>
+        <CoinRankingContent onClose={closeCoinRankingDrawer} onEnter={closeCoinRankingDrawer} />
       </CustomDrawer>
     </div>
   );

@@ -4,6 +4,8 @@ import { Table } from 'antd';
 import { useRequest } from 'ahooks';
 import ChartCard from '@/components/Card/ChartCard';
 import * as Services from '@/services';
+import * as Utils from '@/utils';
+import * as CONST from '@/constants';
 import styles from './index.module.scss';
 
 interface JpListProps {
@@ -11,7 +13,14 @@ interface JpListProps {
 }
 
 const JpList: React.FC<PropsWithChildren<JpListProps>> = (props) => {
-  const { data = [], loading, run: runNewsGetJpList } = useRequest(Services.News.GetJpList);
+  const {
+    data = [],
+    loading,
+    run: runNewsGetJpList,
+  } = useRequest(Services.News.GetJpList, {
+    cacheKey: Utils.GenerateRequestKey('News.GetJpList'),
+    staleTime: CONST.DEFAULT.NEWS_STALE_DELAY,
+  });
 
   return (
     <ChartCard auto onFresh={runNewsGetJpList}>

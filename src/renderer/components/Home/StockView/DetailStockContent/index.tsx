@@ -11,6 +11,7 @@ import Company from '@/components/Home/StockView/DetailStockContent/Company';
 import Stocks from '@/components/Home/StockView/DetailStockContent/Stocks';
 import HoldFunds from '@/components/Home/StockView/DetailStockContent/HoldFunds';
 import Recent from '@/components/Home/NewsList/Recent';
+import CycleReturn from '@/components/Home/FundView/DetailFundContent/CycleReturn';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
 import { RedirectSearchParams } from '@/containers/InitPage';
 import { DetailStockPageParams } from '@/components/Home/StockView/DetailStockPage';
@@ -49,6 +50,10 @@ export const DetailStock: React.FC<DetailStockProps> = (props) => {
     defaultParams: [secid, 3],
     cacheKey: Utils.GenerateRequestKey('Stock.GetIndustryFromEastmoney', secid),
     staleTime: CONST.DEFAULT.SWR_STALE_DELAY,
+  });
+
+  const { data: kdata = [], run: runGetKFromEastmoney } = useRequest(() => Services.Stock.GetKFromEastmoney(secid, 101, 3600), {
+    cacheKey: Utils.GenerateRequestKey('Stock.GetKFromEastmoney', [secid, 101, 3600]),
   });
 
   async function onAdd() {
@@ -192,6 +197,11 @@ export const DetailStock: React.FC<DetailStockProps> = (props) => {
               key: String(0),
               label: 'K线',
               children: <K secid={secid} name={stock.name} />,
+            },
+            {
+              key: String(1),
+              label: '周期回报',
+              children: <CycleReturn onFresh={runGetKFromEastmoney} data={kdata.map(({ date: x, sp: y }) => ({ x, y }))} />,
             },
           ]}
         />

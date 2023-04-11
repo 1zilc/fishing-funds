@@ -353,11 +353,20 @@ export function useLoadWalletsFunds() {
   const fundApiTypeSetting = useAppSelector((state) => state.setting.systemSetting.fundApiTypeSetting);
 
   const load = useMemoizedFn(async () => {
+    // 优化多钱包同一支基金重复获取
+    const responseMap = {} as Record<string, PromiseInnerType<ReturnType<typeof Helpers.Fund.GetFunds>>[number]>;
     try {
       const collects = walletConfig.map(({ funds: fundsConfig, code: walletCode }) => async () => {
-        const responseFunds = await Helpers.Fund.GetFunds(fundsConfig, fundApiTypeSetting);
+        const unRequestConfig = fundsConfig.filter(({ code }) => !responseMap[code]); // 未请求过的配置
+        const responseFunds = await Helpers.Fund.GetFunds(unRequestConfig, fundApiTypeSetting);
+        // 将请求的结果保存到map
+        responseFunds.forEach((response) => {
+          responseMap[response.fundcode] = response;
+        });
+        // 用code去取已经获取到的结果
+        const finalResponseFunds = fundsConfig.filter(({ code }) => !!responseMap[code]).map(({ code }) => responseMap[code]);
         const now = dayjs().format('MM-DD HH:mm:ss');
-        dispatch(updateWalletStateAction({ code: walletCode, funds: responseFunds, updateTime: now }));
+        dispatch(updateWalletStateAction({ code: walletCode, funds: finalResponseFunds, updateTime: now }));
         return responseFunds;
       });
       await Adapters.ChokeAllAdapter(collects, CONST.DEFAULT.LOAD_WALLET_DELAY);

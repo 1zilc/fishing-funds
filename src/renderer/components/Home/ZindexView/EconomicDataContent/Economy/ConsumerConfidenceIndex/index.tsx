@@ -12,9 +12,16 @@ interface ConsumerConfidenceIndexProps {}
 const ConsumerConfidenceIndex: React.FC<ConsumerConfidenceIndexProps> = () => {
   const { ref: chartRef, chartInstance } = useResizeEchart(0.4);
 
-  const { data: result = [], run: runGetEconomyIndexFromEastmoney } = useRequest(() => Services.Zindex.GetEconomyIndexFromEastmoney(4), {
-    ready: !!chartInstance,
-  });
+  const { data: result = [], run: runGetEconomyIndexFromEastmoney } = useRequest(
+    () =>
+      Services.Zindex.GetEconomyIndexFromEastmoney(
+        'RPT_ECONOMY_FAITH_INDEX',
+        'REPORT_DATE,CONSUMERS_FAITH_INDEX,CONSUMERS_ASTIS_INDEX,CONSUMERS_EXPECT_INDEX'
+      ),
+    {
+      ready: !!chartInstance,
+    }
+  );
 
   useRenderEcharts(
     () => {
@@ -67,21 +74,21 @@ const ConsumerConfidenceIndex: React.FC<ConsumerConfidenceIndexProps> = () => {
               name: '信心指数',
               showSymbol: false,
               lineStyle: { width: 1 },
-              data: result.map((item: any) => [item[0], item[1]]),
+              data: result.map((item: any) => [item.REPORT_DATE, item.CONSUMERS_FAITH_INDEX]),
             },
             {
               type: 'line',
               name: '满意指数',
               showSymbol: false,
               lineStyle: { width: 1 },
-              data: result.map((item: any) => [item[0], item[4]]),
+              data: result.map((item: any) => [item.REPORT_DATE, item.CONSUMERS_ASTIS_INDEX]),
             },
             {
               type: 'line',
               name: '预期指数',
               showSymbol: false,
               lineStyle: { width: 1 },
-              data: result.map((item: any) => [item[0], item[7]]),
+              data: result.map((item: any) => [item.REPORT_DATE, item.CONSUMERS_EXPECT_INDEX]),
             },
           ],
         });

@@ -32,7 +32,7 @@ export const fundSortModeOptions: Option.EnumsOption<Enums.FundSortType>[] = [
   { key: Enums.FundSortType.Estimate, label: '今日总值' },
   { key: Enums.FundSortType.Income, label: '持有收益' },
   { key: Enums.FundSortType.IncomeRate, label: '持有收益率' },
-  { key: Enums.FundSortType.Name, label: '名称（A-Z）' },
+  { key: Enums.FundSortType.Name, label: '名称(A-Z)' },
 ];
 
 export const zindexSortModeOptions: Option.EnumsOption<Enums.ZindexSortType>[] = [
@@ -40,7 +40,7 @@ export const zindexSortModeOptions: Option.EnumsOption<Enums.ZindexSortType>[] =
   { key: Enums.ZindexSortType.Zdd, label: '涨跌点' },
   { key: Enums.ZindexSortType.Zdf, label: '涨跌幅' },
   { key: Enums.ZindexSortType.Zsz, label: '指数值' },
-  { key: Enums.ZindexSortType.Name, label: '名称（A-Z）' },
+  { key: Enums.ZindexSortType.Name, label: '名称(A-Z)' },
 ];
 
 export const quotationSortModeOptions: Option.EnumsOption<Enums.QuotationSortType>[] = [
@@ -51,7 +51,7 @@ export const quotationSortModeOptions: Option.EnumsOption<Enums.QuotationSortTyp
   { key: Enums.QuotationSortType.Zxj, label: '最新价' },
   { key: Enums.QuotationSortType.Szjs, label: '上涨家数' },
   { key: Enums.QuotationSortType.Xdjs, label: '下跌家数' },
-  { key: Enums.QuotationSortType.Name, label: '名称（A-Z）' },
+  { key: Enums.QuotationSortType.Name, label: '名称(A-Z)' },
 ];
 
 export const stockSortModeOptions: Option.EnumsOption<Enums.StockSortType>[] = [
@@ -59,7 +59,7 @@ export const stockSortModeOptions: Option.EnumsOption<Enums.StockSortType>[] = [
   { key: Enums.StockSortType.Zdd, label: '涨跌点' },
   { key: Enums.StockSortType.Zdf, label: '涨跌幅' },
   { key: Enums.StockSortType.Zx, label: '最新值' },
-  { key: Enums.StockSortType.Name, label: '名称（A-Z）' },
+  { key: Enums.StockSortType.Name, label: '名称(A-Z)' },
 ];
 
 export const coinSortModeOptions: Option.EnumsOption<Enums.CoinSortType>[] = [
@@ -67,7 +67,7 @@ export const coinSortModeOptions: Option.EnumsOption<Enums.CoinSortType>[] = [
   { key: Enums.CoinSortType.Price, label: '价格' },
   { key: Enums.CoinSortType.Zdf, label: '24H涨跌幅' },
   { key: Enums.CoinSortType.Volum, label: '24H交易量' },
-  { key: Enums.CoinSortType.Name, label: '名称（A-Z）' },
+  { key: Enums.CoinSortType.Name, label: '名称(A-Z)' },
 ];
 
 export function GetSortConfig() {

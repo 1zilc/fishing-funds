@@ -16,7 +16,7 @@ export function useHeaderContext() {
   return context;
 }
 
-const Header: React.FC<PropsWithChildren<Record<string, unknown>>> = (props) => {
+const Header: React.FC<PropsWithChildren<{}>> = (props) => {
   const position = useScroll(document, (val) => val.top <= 520);
   const deferredTop = useDeferredValue(position?.top);
   const miniMode = !!(deferredTop && deferredTop > 40);

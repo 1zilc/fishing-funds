@@ -11,9 +11,16 @@ interface DepositReserveRatioProps {}
 const DepositReserveRatio: React.FC<DepositReserveRatioProps> = () => {
   const { ref: chartRef, chartInstance } = useResizeEchart(0.4);
 
-  const { data: result = [], run: runGetEconomyIndexFromEastmoney } = useRequest(() => Services.Zindex.GetEconomyIndexFromEastmoney(23), {
-    ready: !!chartInstance,
-  });
+  const { data: result = [], run: runGetEconomyIndexFromEastmoney } = useRequest(
+    () =>
+      Services.Zindex.GetEconomyIndexFromEastmoney(
+        'RPT_ECONOMY_DEPOSIT_RESERVE',
+        'REPORT_DATE,PUBLISH_DATE,INTEREST_RATE_BA,INTEREST_RATE_SA'
+      ),
+    {
+      ready: !!chartInstance,
+    }
+  );
 
   useRenderEcharts(
     () => {
@@ -66,14 +73,14 @@ const DepositReserveRatio: React.FC<DepositReserveRatioProps> = () => {
               name: '大型金融机构',
               showSymbol: false,
               lineStyle: { width: 1 },
-              data: result.map((item: any) => [item[0], item[3]]),
+              data: result.map((item: any) => [item.REPORT_DATE, item.INTEREST_RATE_BA]),
             },
             {
               type: 'line',
               name: '中小金融机构',
               showSymbol: false,
               lineStyle: { width: 1 },
-              data: result.map((item: any) => [item[0], item[6]]),
+              data: result.map((item: any) => [item.REPORT_DATE, item.INTEREST_RATE_SA]),
             },
           ],
         });

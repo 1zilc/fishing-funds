@@ -4,6 +4,8 @@ import { Table } from 'antd';
 import { useRequest } from 'ahooks';
 import ChartCard from '@/components/Card/ChartCard';
 import * as Services from '@/services';
+import * as Utils from '@/utils';
+import * as CONST from '@/constants';
 import styles from './index.module.scss';
 
 interface EuListProps {
@@ -11,7 +13,14 @@ interface EuListProps {
 }
 
 const EuList: React.FC<PropsWithChildren<EuListProps>> = (props) => {
-  const { data = [], loading, run: runNewsGetEuList } = useRequest(Services.News.GetEuList);
+  const {
+    data = [],
+    loading,
+    run: runNewsGetEuList,
+  } = useRequest(Services.News.GetEuList, {
+    cacheKey: Utils.GenerateRequestKey('News.GetEuList'),
+    staleTime: CONST.DEFAULT.NEWS_STALE_DELAY,
+  });
 
   return (
     <ChartCard auto onFresh={runNewsGetEuList}>

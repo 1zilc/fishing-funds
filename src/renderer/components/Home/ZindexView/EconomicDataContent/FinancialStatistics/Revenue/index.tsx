@@ -11,9 +11,12 @@ interface RevenueProps {}
 const Revenue: React.FC<RevenueProps> = () => {
   const { ref: chartRef, chartInstance } = useResizeEchart(0.4);
 
-  const { data: result = [], run: runGetEconomyIndexFromEastmoney } = useRequest(() => Services.Zindex.GetEconomyIndexFromEastmoney(14), {
-    ready: !!chartInstance,
-  });
+  const { data: result = [], run: runGetEconomyIndexFromEastmoney } = useRequest(
+    () => Services.Zindex.GetEconomyIndexFromEastmoney('RPT_ECONOMY_INCOME', 'REPORT_DATE,BASE'),
+    {
+      ready: !!chartInstance,
+    }
+  );
 
   useRenderEcharts(
     () => {
@@ -66,7 +69,7 @@ const Revenue: React.FC<RevenueProps> = () => {
               name: '当月',
               showSymbol: false,
               lineStyle: { width: 1 },
-              data: result.map((item: any) => [item[0], item[1]]),
+              data: result.map((item: any) => [item.REPORT_DATE, item.BASE]),
             },
           ],
         });

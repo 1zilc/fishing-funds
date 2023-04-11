@@ -4,6 +4,8 @@ import { Table } from 'antd';
 import { useRequest } from 'ahooks';
 import ChartCard from '@/components/Card/ChartCard';
 import * as Services from '@/services';
+import * as Utils from '@/utils';
+import * as CONST from '@/constants';
 import styles from './index.module.scss';
 
 interface GlobalListProps {
@@ -11,7 +13,14 @@ interface GlobalListProps {
 }
 
 const GlobalList: React.FC<PropsWithChildren<GlobalListProps>> = (props) => {
-  const { data = [], loading, run: runNewsGetGlobalList } = useRequest(Services.News.GetGlobalList);
+  const {
+    data = [],
+    loading,
+    run: runNewsGetGlobalList,
+  } = useRequest(Services.News.GetGlobalList, {
+    cacheKey: Utils.GenerateRequestKey('News.GetGlobalList'),
+    staleTime: CONST.DEFAULT.NEWS_STALE_DELAY,
+  });
 
   return (
     <ChartCard auto onFresh={runNewsGetGlobalList}>

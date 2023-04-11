@@ -11,4 +11,4 @@ const MemoNote: React.FC<MemoNoteProps> = (props) => {
   return <div className={clsx(styles.content)}>{text}</div>;
 };
 
-export default MemoNote;
+export default React.memo(MemoNote);

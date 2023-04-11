@@ -108,6 +108,12 @@ export default class ContextMenuManager {
       { type: 'separator' },
       ...this.walletMenu,
       { type: 'separator' },
+      {
+        click: () => {
+          sendMessageToRenderer(this.win, 'support-author');
+        },
+        label: '支持作者',
+      },
       { role: 'quit', label: '退出' },
     ] as typeof this.contextMenu;
 

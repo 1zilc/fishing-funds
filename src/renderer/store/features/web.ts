@@ -44,6 +44,12 @@ export const defaultWebConfig = [
     iconType: Enums.WebIconType.Favicon,
     icon: 'https://diy-assets.msstatic.com/mobile/favicon.ico',
   },
+  {
+    title: 'ChatGPT',
+    url: 'https://chat.openai.com/chat',
+    iconType: Enums.WebIconType.Favicon,
+    icon: 'https://chat.openai.com/favicon.ico',
+  },
 ];
 
 const initialState: WebState = {

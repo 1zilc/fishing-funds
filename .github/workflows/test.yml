@@ -26,18 +26,29 @@ jobs:
       - name: Setup repo
         uses: actions/checkout@v3
 
-      - name: Install Node.js and NPM
-        uses: actions/setup-node@v3
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
         with:
-          node-version: 18
+          version: latest
 
-      - name: Run npm install
+      - name: Get pnpm store directory
+        id: pnpm-cache
+        shell: bash
         run: |
-          npm install --force
+          echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_OUTPUT
 
-      - name: Run npm test
+      - name: Cache pnpm
+        uses: actions/cache@v3
+        with:
+          key: ${{ runner.os }}-pnpm-dep
+          path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
+
+      - name: Install dependencies
+        run: pnpm i
+
+      - name: Run test
+        run: |
+          pnpm package
         env:
           USE_HARD_LINKS: false
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          npm run package
+          DEBUG: electron-builder

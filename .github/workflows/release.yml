@@ -10,7 +10,8 @@ jobs:
 
     steps:
       - name: Homebrew Cask Bumper
-        uses: EINDEX/bump-homebrew-cask-action@v1.1
+        run: |
+          LATEST_VERSION=$(gh release view -R 1zilc/fishing-funds --json name -q '.name')
+          brew bump-cask-pr --version "$LATEST_VERSION" fishing-funds
         with:
-          token: ${{ secrets.HOMEBREW_GH_TOKEN }}
-          package: 'fishing-funds'
+          GH_TOKEN: ${{ secrets.HOMEBREW_GH_TOKEN }}

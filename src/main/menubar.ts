@@ -1,8 +1,7 @@
 import windowStateKeeper from 'electron-window-state';
-import { menubar, Menubar } from 'menubar';
-import { app, Tray, Menu, shell } from 'electron';
-import AppUpdater from './autoUpdater';
-import { resolveHtmlPath, sendMessageToRenderer, getPreloadPath } from './util';
+import { menubar } from 'menubar';
+import { app, Tray } from 'electron';
+import { resolveHtmlPath, getPreloadPath } from './util';
 
 const { productName } = require('../../release/app/package.json');
 

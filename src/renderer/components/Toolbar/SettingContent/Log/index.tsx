@@ -50,24 +50,27 @@ const Log: React.FC<LogProps> = () => {
         >
           <div className={clsx(styles.content)}>
             {logs.length ? (
-              <Timeline>
-                {logs.map((log) => {
+              <Timeline
+                items={logs.map((log) => {
                   const compare = compareVersions(log.version.slice(1), currentVersion);
-                  return (
-                    <Timeline.Item key={log.version} color={compare === 0 ? 'blue' : compare > 1 ? 'green' : 'gray'}>
-                      <div className={clsx(styles.item, styles.title)}>
-                        <div>{log.version}</div>
-                        <div>{dayjs(log.date).format('YYYY-M-D')}</div>
-                      </div>
-                      {log.contents.map((content, index) => (
-                        <div className={styles.item} key={index}>
-                          {content}
+                  return {
+                    color: compare === 0 ? 'blue' : compare > 1 ? 'green' : 'gray',
+                    children: (
+                      <>
+                        <div className={clsx(styles.item, styles.title)}>
+                          <div>{log.version}</div>
+                          <div>{dayjs(log.date).format('YYYY-M-D')}</div>
                         </div>
-                      ))}
-                    </Timeline.Item>
-                  );
+                        {log.contents.map((content, index) => (
+                          <div className={styles.item} key={index}>
+                            {content}
+                          </div>
+                        ))}
+                      </>
+                    ),
+                  };
                 })}
-              </Timeline>
+              />
             ) : (
               !loading && <Empty text="无法获取更新日志，请重试～" />
             )}

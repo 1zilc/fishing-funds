@@ -11,9 +11,12 @@ interface GrossDomesticProductProps {}
 const GrossDomesticProduct: React.FC<GrossDomesticProductProps> = () => {
   const { ref: chartRef, chartInstance } = useResizeEchart(0.4);
 
-  const { data: result = [], run: runGetEconomyIndexFromEastmoney } = useRequest(() => Services.Zindex.GetEconomyIndexFromEastmoney(20), {
-    ready: !!chartInstance,
-  });
+  const { data: result = [], run: runGetEconomyIndexFromEastmoney } = useRequest(
+    () => Services.Zindex.GetEconomyIndexFromEastmoney('RPT_ECONOMY_GDP', 'REPORT_DATE,SUM_SAME,FIRST_SAME,SECOND_SAME,THIRD_SAME'),
+    {
+      ready: !!chartInstance,
+    }
+  );
 
   useRenderEcharts(
     () => {
@@ -86,7 +89,7 @@ const GrossDomesticProduct: React.FC<GrossDomesticProductProps> = () => {
               areaStyle: {
                 opacity: 0.8,
               },
-              data: result.map((item: any) => [item[0], item[3]]),
+              data: result.map((item: any) => [item.REPORT_DATE, item.FIRST_SAME]),
             },
             {
               name: '第二产业',
@@ -100,7 +103,7 @@ const GrossDomesticProduct: React.FC<GrossDomesticProductProps> = () => {
               areaStyle: {
                 opacity: 0.8,
               },
-              data: result.map((item: any) => [item[0], item[5]]),
+              data: result.map((item: any) => [item.REPORT_DATE, item.SECOND_SAME]),
             },
             {
               name: '第三产业',
@@ -114,7 +117,7 @@ const GrossDomesticProduct: React.FC<GrossDomesticProductProps> = () => {
               areaStyle: {
                 opacity: 0.8,
               },
-              data: result.map((item: any) => [item[0], item[7]]),
+              data: result.map((item: any) => [item.REPORT_DATE, item.THIRD_SAME]),
             },
             {
               type: 'line',
@@ -122,7 +125,7 @@ const GrossDomesticProduct: React.FC<GrossDomesticProductProps> = () => {
               showSymbol: false,
               lineStyle: { width: 1 },
               yAxisIndex: 1,
-              data: result.map((item: any) => [item[0], item[2]]),
+              data: result.map((item: any) => [item.REPORT_DATE, item.SUM_SAME]),
             },
           ],
         });

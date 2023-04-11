@@ -30,7 +30,7 @@ export async function FromEastmoney(secid: string) {
         f170: number; // 涨跌幅
         f171: number; // 振幅
       };
-    }>('http://push2.eastmoney.com/api/qt/stock/get?=', {
+    }>('https://push2.eastmoney.com/api/qt/stock/get?=', {
       searchParams: {
         fields: 'f43,f44,f45,f46,f57,f58,f60,f86,f107,f168,f169,f170,f171',
         secid, // 1.000001
@@ -85,7 +85,7 @@ export async function GetTrendFromEastmoney(code: string, ndays: number) {
         time: 1617348843;
         trends: ['2021-04-01 09:30,5441.55,34310,5441.553'];
       };
-    }>('http://push2his.eastmoney.com/api/qt/stock/trends2/get', {
+    }>('https://push2his.eastmoney.com/api/qt/stock/trends2/get', {
       searchParams: {
         secid: code,
         ndays,
@@ -125,7 +125,7 @@ export async function GetKFromEastmoney(code: string, year: number, klt: number)
         dktotal: 477;
         klines: ['2019-04-18,3105.00,3078.87,3113.69,3077.85,13321590,21989221888.00,0.00'];
       };
-    }>('http://push2his.eastmoney.com/api/qt/stock/kline/get', {
+    }>('https://push2his.eastmoney.com/api/qt/stock/kline/get', {
       searchParams: {
         secid: code,
         fields1: 'f1,f2,f3,f4,f5',
@@ -157,24 +157,31 @@ export async function GetKFromEastmoney(code: string, year: number, klt: number)
 }
 
 // 中国 居民消费价格指数(CPI)等指数
-export async function GetEconomyIndexFromEastmoney(market: number) {
+export async function GetEconomyIndexFromEastmoney(reportName: string, columns: string) {
   try {
-    const { body } = await request('https://datainterface.eastmoney.com/EM_DataCenter/JS.aspx', {
-      responseType: 'text',
+    const { body: data } = await request<{
+      version: 'ab87442f6bc9b2b1d3c5e6947e2fcd6e';
+      result: {
+        pages: 1;
+        data: any[];
+        count: 182;
+      };
+      success: true;
+      message: 'ok';
+      code: 0;
+    }>('https://datacenter-web.eastmoney.com/api/data/v1/get', {
+      responseType: 'json',
       searchParams: {
-        type: 'GJZB',
-        sty: 'ZGZB',
-        p: 1,
-        ps: 200,
-        mkt: market,
+        columns,
+        sortColumns: 'REPORT_DATE',
+        sortTypes: -1,
+        source: 'WEB',
+        client: 'WEB',
+        reportName,
         _: Date.now(),
       },
     });
-    const data = eval(body);
-    const result = data.map((item: string) => {
-      return item.split(',');
-    });
-    return result;
+    return data.result.data;
   } catch (error) {
     return [];
   }
@@ -198,14 +205,15 @@ export async function GetOilPriceFromEastmoney() {
       success: true;
       message: 'ok';
       code: 0;
-    }>('https://datacenter-web.eastmoney.com/api/data/get', {
+    }>('https://datacenter-web.eastmoney.com/api/data/v1/get', {
       searchParams: {
-        type: 'RPTA_WEB_JY_HQ',
-        sty: 'ALL',
-        st: 'date',
-        sr: -1,
-        p: 1,
-        ps: 5000,
+        reportName: 'RPTA_WEB_JY_HQ',
+        columns: 'ALL',
+        sortColumns: 'date',
+        sortTypes: -1,
+        pageNumber: 1,
+        pageSize: 5000,
+        source: 'WEB',
         _: Date.now(),
       },
       responseType: 'json',
@@ -411,7 +419,7 @@ export async function GetRemoteZindexConfig() {
   const now = Date.now();
   const fields = '12,13,14';
   const { body: b1 } = await request(
-    `http://32.push2.eastmoney.com/api/qt/clist/get?pn=1&pz=50&po=1&np=1&ut=bd1d9ddb04089700cf9c27f6f7426281&fltt=2&invt=2&fid=&fs=b:MK0010`,
+    `https://32.push2.eastmoney.com/api/qt/clist/get?pn=1&pz=50&po=1&np=1&ut=bd1d9ddb04089700cf9c27f6f7426281&fltt=2&invt=2&fid=&fs=b:MK0010`,
     {
       responseType: 'text',
       searchParams: {
@@ -423,7 +431,7 @@ export async function GetRemoteZindexConfig() {
   );
   const a1 = eval(b1);
   const { body: b2 } = await request(
-    `http://32.push2.eastmoney.com/api/qt/clist/get?pn=1&pz=5&po=1&np=1&ut=bd1d9ddb04089700cf9c27f6f7426281&fltt=2&invt=2&fid=f3&fs=m:1+t:1`,
+    `https://32.push2.eastmoney.com/api/qt/clist/get?pn=1&pz=5&po=1&np=1&ut=bd1d9ddb04089700cf9c27f6f7426281&fltt=2&invt=2&fid=f3&fs=m:1+t:1`,
     {
       responseType: 'text',
       searchParams: {
@@ -435,7 +443,7 @@ export async function GetRemoteZindexConfig() {
   );
   const a2 = eval(b2);
   const { body: b3 } = await request(
-    `http://32.push2.eastmoney.com/api/qt/clist/get?&pn=1&pz=5&po=1&np=1&ut=bd1d9ddb04089700cf9c27f6f7426281&fltt=2&invt=2&fid=f3&fs=m:0+t:5`,
+    `https://32.push2.eastmoney.com/api/qt/clist/get?&pn=1&pz=5&po=1&np=1&ut=bd1d9ddb04089700cf9c27f6f7426281&fltt=2&invt=2&fid=f3&fs=m:0+t:5`,
     {
       responseType: 'text',
       searchParams: {

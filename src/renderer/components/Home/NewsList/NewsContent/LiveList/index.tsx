@@ -4,6 +4,8 @@ import { Table } from 'antd';
 import { useRequest } from 'ahooks';
 import ChartCard from '@/components/Card/ChartCard';
 import * as Services from '@/services';
+import * as Utils from '@/utils';
+import * as CONST from '@/constants';
 import styles from './index.module.scss';
 
 interface LiveListProps {
@@ -11,7 +13,14 @@ interface LiveListProps {
 }
 
 const LiveList: React.FC<PropsWithChildren<LiveListProps>> = (props) => {
-  const { data = [], loading, run: runNewsGetLiveList } = useRequest(Services.News.GetLiveList);
+  const {
+    data = [],
+    loading,
+    run: runNewsGetLiveList,
+  } = useRequest(Services.News.GetLiveList, {
+    cacheKey: Utils.GenerateRequestKey('News.GetLiveList'),
+    staleTime: CONST.DEFAULT.NEWS_STALE_DELAY,
+  });
 
   return (
     <ChartCard auto onFresh={runNewsGetLiveList}>

@@ -8,7 +8,7 @@ import HtmlWebpackPlugin from 'html-webpack-plugin';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
 import { merge } from 'webpack-merge';
-import { ESBuildMinifyPlugin } from 'esbuild-loader';
+import { EsbuildPlugin } from 'esbuild-loader';
 import baseConfig from './webpack.config.base.mjs';
 import webpackPaths from './webpack.paths.mjs';
 import checkNodeEnv from '../scripts/check-node-env.js';
@@ -96,7 +96,7 @@ const configuration = {
     },
     minimize: true,
     minimizer: [
-      new ESBuildMinifyPlugin({
+      new EsbuildPlugin({
         css: true,
       }),
     ],

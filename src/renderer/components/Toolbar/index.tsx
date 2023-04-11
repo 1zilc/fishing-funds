@@ -7,7 +7,15 @@ import RefreshIcon from '@/static/icon/refresh.svg';
 import SettingIcon from '@/static/icon/setting.svg';
 import AppsIcon from '@/static/icon/apps.svg';
 import CustomDrawer from '@/components/CustomDrawer';
-import { useFreshFunds, useFreshZindexs, useFreshQuotations, useFreshStocks, useFreshCoins, useAppSelector } from '@/utils/hooks';
+import {
+  useFreshFunds,
+  useFreshZindexs,
+  useFreshQuotations,
+  useFreshStocks,
+  useFreshCoins,
+  useAppSelector,
+  useIpcRendererListener,
+} from '@/utils/hooks';
 import * as Enums from '@/utils/enums';
 import * as CONST from '@/constants';
 import styles from './index.module.scss';
@@ -18,6 +26,7 @@ const SettingContent = React.lazy(() => import('@/components/Toolbar/SettingCont
 export interface ToolBarProps {}
 
 const iconSize = { height: 18, width: 18 };
+const { ipcRenderer } = window.contextModules.electron;
 
 const ToolBar: React.FC<ToolBarProps> = () => {
   const updateInfo = useAppSelector((state) => state.updater.updateInfo);
@@ -29,10 +38,19 @@ const ToolBar: React.FC<ToolBarProps> = () => {
   const freshStocks = useFreshStocks(CONST.DEFAULT.FRESH_BUTTON_THROTTLE_DELAY);
   const freshCoins = useFreshCoins(CONST.DEFAULT.FRESH_BUTTON_THROTTLE_DELAY);
 
+  const [openSupport, { setTrue: setOpenSupportTrue, setFalse: setOpenSupportFalse }] = useBoolean(false);
   const [showSettingContent, { setTrue: openSettingContent, setFalse: closeSettingContent, toggle: ToggleSettingContent }] =
     useBoolean(false);
   const [showAppCenterDrawer, { setTrue: openAppCenterDrawer, setFalse: closeAppCenterDrawer, toggle: ToggleAppCenterDrawer }] =
     useBoolean(false);
+
+  useIpcRendererListener('support-author', (e) => {
+    try {
+      ipcRenderer.invoke('set-menubar-visible', true);
+      setOpenSupportTrue();
+      openSettingContent();
+    } catch {}
+  });
 
   const fresh = useMemoizedFn(() => {
     switch (tabsActiveKey) {
@@ -83,9 +101,14 @@ const ToolBar: React.FC<ToolBarProps> = () => {
         </CustomDrawer>
         <CustomDrawer className={styles.themeWrapper} show={showSettingContent}>
           <SettingContent
+            openSupport={openSupport}
             themeWrapperClass={styles.themeWrapper}
-            onClose={closeSettingContent}
+            onClose={() => {
+              setOpenSupportFalse();
+              closeSettingContent();
+            }}
             onEnter={() => {
+              setOpenSupportFalse();
               closeSettingContent();
             }}
           />

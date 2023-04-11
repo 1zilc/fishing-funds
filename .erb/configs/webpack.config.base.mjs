@@ -32,7 +32,6 @@ const configuration = {
         exclude: /node_modules/,
         loader: 'esbuild-loader',
         options: {
-          loader: 'tsx',
           target: 'esnext',
         },
       },

@@ -4,6 +4,8 @@ import { Table } from 'antd';
 import { useRequest } from 'ahooks';
 import ChartCard from '@/components/Card/ChartCard';
 import * as Services from '@/services';
+import * as Utils from '@/utils';
+import * as CONST from '@/constants';
 import styles from './index.module.scss';
 
 interface ChinaListProps {
@@ -11,7 +13,14 @@ interface ChinaListProps {
 }
 
 const ChinaList: React.FC<PropsWithChildren<ChinaListProps>> = (props) => {
-  const { data = [], loading, run: runNewsGetChinaList } = useRequest(Services.News.GetChinaList);
+  const {
+    data = [],
+    loading,
+    run: runNewsGetChinaList,
+  } = useRequest(Services.News.GetChinaList, {
+    cacheKey: Utils.GenerateRequestKey('News.GetChinaList'),
+    staleTime: CONST.DEFAULT.NEWS_STALE_DELAY,
+  });
 
   return (
     <ChartCard auto onFresh={runNewsGetChinaList}>

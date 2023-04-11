@@ -11,9 +11,16 @@ interface NationalStockTradingStatisticsProps {}
 const NationalStockTradingStatistics: React.FC<NationalStockTradingStatisticsProps> = () => {
   const { ref: chartRef, chartInstance } = useResizeEchart(0.4);
 
-  const { data: result = [], run: runGetEconomyIndexFromEastmoney } = useRequest(() => Services.Zindex.GetEconomyIndexFromEastmoney(2), {
-    ready: !!chartInstance,
-  });
+  const { data: result = [], run: runGetEconomyIndexFromEastmoney } = useRequest(
+    () =>
+      Services.Zindex.GetEconomyIndexFromEastmoney(
+        'RPT_ECONOMY_STOCK_STATISTICS',
+        'REPORT_DATE,TIME,TOTAL_SHARES_SH,TOTAL_MARKE_SH,DEAL_AMOUNT_SH,VOLUME_SH,HIGH_INDEX_SH,LOW_INDEX_SH,TOTAL_SZARES_SZ,TOTAL_MARKE_SZ,DEAL_AMOUNT_SZ,VOLUME_SZ,HIGH_INDEX_SZ,LOW_INDEX_SZ'
+      ),
+    {
+      ready: !!chartInstance,
+    }
+  );
 
   useRenderEcharts(
     () => {
@@ -66,14 +73,14 @@ const NationalStockTradingStatistics: React.FC<NationalStockTradingStatisticsPro
               name: '上海成交',
               showSymbol: false,
               lineStyle: { width: 1 },
-              data: result.map((item: any) => [item[0], item[5]]),
+              data: result.map((item: any) => [item.REPORT_DATE, item.DEAL_AMOUNT_SH]),
             },
             {
               type: 'line',
               name: '深圳成交',
               showSymbol: false,
               lineStyle: { width: 1 },
-              data: result.map((item: any) => [item[0], item[6]]),
+              data: result.map((item: any) => [item.REPORT_DATE, item.DEAL_AMOUNT_SZ]),
             },
           ],
         });
