@@ -27,6 +27,7 @@ export function createMenubar({ tray, mainWindowState }: { tray: Tray; mainWindo
         webviewTag: true,
         devTools: !app.isPackaged,
         preload: getPreloadPath(),
+        v8CacheOptions: 'bypassHeatCheck',
       },
     },
   });
