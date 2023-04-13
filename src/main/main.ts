@@ -41,6 +41,7 @@ let mb: Menubar;
 let openBackupFilePath = '';
 
 async function init() {
+  // 单例
   lockSingleInstance();
   await app.whenReady();
   await checkEnvTool();
@@ -250,8 +251,6 @@ function main() {
     tray.on('right-click', () => {
       mb.tray.popUpContextMenu(contextMenuManager.buildContextMenu);
     });
-    // 隐藏菜单栏
-    Menu.setApplicationMenu(null);
     // 监听主题颜色变化
     nativeTheme.on('updated', () => {
       getOtherWindows(windowIds).forEach((win) => {
@@ -293,7 +292,8 @@ function main() {
 
   // new AppUpdater({ icon: nativeIcon, win: mb.window });
 }
-
+// 隐藏菜单栏
+Menu.setApplicationMenu(null);
 // app 相关监听
 app.on('window-all-closed', () => {
   // Respect the OSX convention of having the application in memory even
