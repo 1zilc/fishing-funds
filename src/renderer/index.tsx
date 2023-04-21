@@ -10,9 +10,12 @@ import isSameOrAfter from 'dayjs/plugin/isSameOrAfter';
 import { Provider } from 'react-redux';
 import store from '@/store';
 import App from '@/App';
+import * as Enhancement from '@/utils/enhancement';
 import 'electron-disable-file-drop';
 import 'dayjs/locale/zh-cn';
 import '@/utils/window';
+
+Enhancement.CheckEnvTool();
 
 dayjs.extend(isSameOrBefore);
 dayjs.extend(isSameOrAfter);

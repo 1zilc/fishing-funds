@@ -1,11 +1,13 @@
 /**
  *  该文件对window.contextModules的模块进行二次封装
  */
+import log from 'electron-log/renderer';
 import * as Enums from '@/utils/enums';
 const { ipcRenderer, app } = window.contextModules.electron;
 const { saveString, readFile } = window.contextModules.io;
 const { encodeFF, decodeFF, encryptFF, decryptFF } = window.contextModules.coding;
 const electronStore = window.contextModules.electronStore;
+const { production } = window.contextModules.process;
 
 export async function UpdateSystemTheme(setting: Enums.SystemThemeType) {
   await ipcRenderer.invoke('set-native-theme-source', setting);
@@ -38,6 +40,12 @@ export async function GenerateSyncConfig(config: { [x: string]: any }) {
     suffix: 'ff',
   };
   return fileConfig;
+}
+
+export function CheckEnvTool() {
+  if (production) {
+    Object.assign(console, log.functions);
+  }
 }
 
 export async function CoverBackupConfig(fileConfig: Backup.Config) {

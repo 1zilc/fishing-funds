@@ -35,8 +35,11 @@ export function lockSingleInstance() {
 export async function checkEnvTool() {
   const isDebug = process.env.NODE_ENV === 'development' || process.env.DEBUG_PROD === 'true';
   if (process.env.NODE_ENV === 'production') {
-    const sourceMapSupport = require('source-map-support');
+    // 初始化log
+    log.initialize();
     Object.assign(console, log.functions);
+
+    const sourceMapSupport = require('source-map-support');
     sourceMapSupport.install();
   }
 
