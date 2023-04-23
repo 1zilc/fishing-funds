@@ -7,7 +7,7 @@ export function resolveHtmlPath() {
   if (process.env.NODE_ENV === 'development') {
     const port = process.env.PORT || 3456;
     // const url = new URL();
-    return `http://localhost:${port}`;
+    return `https://localhost:${port}`;
   } else {
     return `file://${path.resolve(__dirname, '../renderer/', 'index.html')}`;
   }
@@ -45,8 +45,8 @@ export async function checkEnvTool() {
 
   if (isDebug) {
     require('electron-debug')();
-  }
-  if (isDebug) {
+    // 关闭自签ca错误
+    app.commandLine.appendSwitch('ignore-certificate-errors');
     await installExtensions();
   }
 }

@@ -189,6 +189,7 @@ const configuration = {
     historyApiFallback: {
       verbose: true,
     },
+    server: 'https',
     setupMiddlewares(middlewares) {
       console.log('Starting preload.js builder...');
       const preloadProcess = spawn('npm', ['run', 'start:preload'], {
