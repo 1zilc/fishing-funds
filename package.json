@@ -282,7 +282,7 @@
     "electron-window-state": "^5.0.3",
     "got": "^12.6.0",
     "html2canvas": "^1.4.1",
-    "http-proxy-agent": "^5.0.0",
+    "http-proxy-agent": "^6.0.0",
     "https-proxy-agent": "^5.0.1",
     "hxc3-indicator-formula": "^1.0.9",
     "iconv-lite": "^0.6.3",
