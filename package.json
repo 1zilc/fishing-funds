@@ -220,7 +220,7 @@
     "detect-port": "^1.5.1",
     "electron": "^24.0.0",
     "electron-builder": "^24.1.2",
-    "electron-devtools-installer": "^3.2.0",
+    "electron-extension-installer": "^1.1.0",
     "electronmon": "^2.0.2",
     "esbuild-loader": "^3.0.1",
     "eslint": "^8.36.0",

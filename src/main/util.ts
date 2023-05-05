@@ -19,10 +19,17 @@ export function getAssetPath(resourceFilename: string) {
 }
 
 export function installExtensions() {
-  const installer = require('electron-devtools-installer');
-  const forceDownload = !!process.env.UPGRADE_EXTENSIONS;
-  const extensions = ['REACT_DEVELOPER_TOOLS', 'REDUX_DEVTOOLS'];
-  return Promise.all(extensions.map((name) => installer.default(installer[name], forceDownload))).catch(console.log);
+  const installer = require('electron-extension-installer');
+  const extensions = ['REACT_DEVELOPER_TOOLS'];
+  return Promise.all(
+    extensions.map((name) =>
+      installer.default(installer[name], {
+        loadExtensionOptions: {
+          allowFileAccess: true,
+        },
+      })
+    )
+  ).catch(console.log);
 }
 
 export function lockSingleInstance() {
