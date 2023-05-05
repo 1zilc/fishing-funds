@@ -1,8 +1,7 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { Badge } from 'antd';
 import clsx from 'clsx';
-import { useBoolean, useMemoizedFn } from 'ahooks';
-
+import { useBoolean, useMemoizedFn, useLongPress } from 'ahooks';
 import RefreshIcon from '@/static/icon/refresh.svg';
 import SettingIcon from '@/static/icon/setting.svg';
 import AppsIcon from '@/static/icon/apps.svg';
@@ -29,6 +28,7 @@ const iconSize = { height: 18, width: 18 };
 const { ipcRenderer } = window.contextModules.electron;
 
 const ToolBar: React.FC<ToolBarProps> = () => {
+  const freshRef = useRef<HTMLDivElement>(null);
   const updateInfo = useAppSelector((state) => state.updater.updateInfo);
   const tabsActiveKey = useAppSelector((state) => state.tabs.activeKey);
 
@@ -82,11 +82,17 @@ const ToolBar: React.FC<ToolBarProps> = () => {
     freshCoins();
   });
 
+  useLongPress(freshAll, freshRef, {
+    onClick: fresh,
+  });
+
   return (
     <div className={styles.content}>
       <div className={clsx(styles.bar, 'max-content')}>
         <AppsIcon style={{ ...iconSize }} onClick={openAppCenterDrawer} />
-        <RefreshIcon style={{ ...iconSize }} onClick={fresh} />
+        <div ref={freshRef}>
+          <RefreshIcon style={{ ...iconSize }} />
+        </div>
         <Badge dot={!!updateInfo.version}>
           <SettingIcon style={{ ...iconSize }} onClick={openSettingContent} />
         </Badge>
