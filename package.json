@@ -300,7 +300,7 @@
     "react-sortablejs": "^6.1.4",
     "redux": "^4.2.1",
     "redux-thunk": "^2.4.2",
-    "socks-proxy-agent": "^7.0.0",
+    "socks-proxy-agent": "^8.0.0",
     "sortablejs": "^1.15.0"
   },
   "browserslist": [],
