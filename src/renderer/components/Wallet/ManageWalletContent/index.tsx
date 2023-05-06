@@ -26,7 +26,7 @@ const ManageWalletContent: React.FC<ManageWalletContentProps> = (props) => {
   const sortableRef = useAutoDestroySortableRef();
   const currentWalletCode = useAppSelector((state) => state.wallet.currentWalletCode);
   const { codeMap, walletConfig } = useAppSelector((state) => state.wallet.config);
-  const { show: showAddDrawer, set: setAddDrawer, close: closeAddDrawer } = useDrawer(null);
+  const { show: showAddWalletDrawer, open: openAddWalletDrawer, close: closeAddWalletDrawer } = useDrawer('');
   const sortWalletConfig = useMemo(() => walletConfig.map((_) => ({ ..._, id: _.code })), [walletConfig]);
 
   const {
@@ -81,12 +81,12 @@ const ManageWalletContent: React.FC<ManageWalletContentProps> = (props) => {
         size="large"
         icon={<AddIcon />}
         onClick={(e) => {
-          setAddDrawer(null);
+          openAddWalletDrawer();
           e.stopPropagation();
         }}
       />
-      <CustomDrawer show={showAddDrawer}>
-        <AddWalletContent onClose={closeAddDrawer} onEnter={closeAddDrawer} />
+      <CustomDrawer show={showAddWalletDrawer}>
+        <AddWalletContent onClose={closeAddWalletDrawer} onEnter={closeAddWalletDrawer} />
       </CustomDrawer>
       <CustomDrawer show={showEditDrawer}>
         <EditWalletContent onClose={closeEditDrawer} onEnter={closeEditDrawer} wallet={editWalletData} />
