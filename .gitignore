@@ -33,7 +33,6 @@ yarn-error.log
 .yarnrc
 pnpm-lock.yaml
 package-lock.json
-.mfsu
 
 # src js
 /src/**/*.js
