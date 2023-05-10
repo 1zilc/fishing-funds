@@ -127,7 +127,7 @@ function main() {
     return localStore.getStore(config.type);
   });
   ipcMain.handle('registry-webview', async (event, config) => {
-    const contents = webContents.fromId(config);
+    const contents = webContents.fromId(config)!;
     const win = BrowserWindow.fromWebContents(contents);
     contents.setWindowOpenHandler(({ url }) => {
       sendMessageToRenderer(win, 'webview-new-window', url);
