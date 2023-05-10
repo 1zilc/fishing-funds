@@ -16,6 +16,7 @@ export function createChildWindow(config: { search: string; parentId: number }) 
       minHeight: 400,
       minWidth: 300,
       vibrancy: 'sidebar',
+      visualEffectState: 'active',
       fullscreenable: false,
       webPreferences: {
         webviewTag: true,
