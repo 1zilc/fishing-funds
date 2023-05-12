@@ -213,7 +213,7 @@ export async function GetRemoteCoinsFromCoingecko() {
   }
 }
 
-export async function GetKFromCoingecko(code: string, currency: string, days: number) {
+export async function GetKFromCoingecko(code: string, currency: string, days: string) {
   try {
     const { body } = await request<[1597795200000, 85083.78, 85083.78, 82712.82, 82712.82][]>(
       `https://api.coingecko.com/api/v3/coins/${code}/ohlc`,
@@ -237,7 +237,7 @@ export async function GetKFromCoingecko(code: string, currency: string, days: nu
   }
 }
 
-export async function GetHistoryFromCoingecko(code: string, currency: string, days: number) {
+export async function GetHistoryFromCoingecko(code: string, currency: string, days: string) {
   try {
     const { body } = await request<{
       prices: [1629106772337, 47108.05433394351][];

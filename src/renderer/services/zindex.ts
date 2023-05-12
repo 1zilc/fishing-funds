@@ -129,7 +129,7 @@ export async function GetKFromEastmoney(code: string, year: number, klt: number)
       searchParams: {
         secid: code,
         fields1: 'f1,f2,f3,f4,f5',
-        fields2: 'f51,f52,f53,f54,f55,f56,f57,f58',
+        fields2: 'f51,f52,f53,f54,f55,f56,f57,f58,f59',
         klt,
         fqt: 0,
         beg: `${dayjs().get('year') - year}0101`,
@@ -139,7 +139,7 @@ export async function GetKFromEastmoney(code: string, year: number, klt: number)
       responseType: 'json',
     });
     return (body?.data?.klines || []).map((_) => {
-      const [date, kp, sp, zg, zd, cjl, cje, zf] = _.split(',');
+      const [date, kp, sp, zg, zd, cjl, cje, zf, zdf] = _.split(',');
       return {
         date,
         kp: Number(kp),
@@ -149,6 +149,7 @@ export async function GetKFromEastmoney(code: string, year: number, klt: number)
         cjl,
         cje,
         zf,
+        zdf,
       };
     });
   } catch (error) {
