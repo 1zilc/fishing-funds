@@ -1,7 +1,7 @@
-import React, { useLayoutEffect, useState, useEffect, useRef, useMemo } from 'react';
+import { useLayoutEffect, useState, useEffect, useRef, useMemo, startTransition } from 'react';
 import { useLocation } from 'react-router-dom';
 import queryString from 'query-string';
-import { useInterval, useBoolean, useThrottleFn, useSize, useMemoizedFn, useEventListener } from 'ahooks';
+import { useInterval, useBoolean, useThrottleFn, useSize, useMemoizedFn, useEventListener, useUpdateEffect } from 'ahooks';
 import { useDispatch, useSelector, TypedUseSelectorHook } from 'react-redux';
 import dayjs from 'dayjs';
 import * as echarts from 'echarts';
@@ -91,10 +91,10 @@ export function useScrollToTop(config: {
 }
 
 export function useResizeEchart(scale = 1, unlimited?: boolean) {
+  const sizeInited = useRef(false);
   const chartRef = useRef<HTMLDivElement>(null);
   const chartInstanceRef = useRef<echarts.ECharts>();
   const chartWidth = useSize(chartRef)?.width;
-  // const chartWidth = useDeferredValue(size?.width);
 
   useEffect(() => {
     const instance = echarts.init(chartRef.current!, undefined, {
@@ -106,19 +106,24 @@ export function useResizeEchart(scale = 1, unlimited?: boolean) {
     };
   }, []);
 
-  useAfterMountedEffect(() => {
-    React.startTransition(() => {
-      if (chartWidth) {
-        const height = chartWidth * scale;
-        chartInstanceRef.current?.resize({ height: unlimited ? height : height > 200 ? 200 : height });
-      }
-    });
-  }, [chartWidth, unlimited]);
+  useUpdateEffect(() => {
+    if (sizeInited.current) {
+      startTransition(() => {
+        if (chartWidth) {
+          const height = chartWidth * scale;
+          chartInstanceRef.current?.resize({ height: unlimited ? height : Math.min(height, 240) });
+        }
+      });
+    } else {
+      sizeInited.current = true;
+    }
+  }, [chartWidth]);
 
   return { ref: chartRef, chartInstance: chartInstanceRef.current, chartInstanceRef };
 }
 
 export function useAutoSizeEchart() {
+  const sizeInited = useRef(false);
   const chartRef = useRef<HTMLDivElement>(null);
   const chartInstanceRef = useRef<echarts.ECharts>();
   const chartWidth = useSize(chartRef)?.width;
@@ -134,12 +139,16 @@ export function useAutoSizeEchart() {
     };
   }, []);
 
-  useAfterMountedEffect(() => {
-    React.startTransition(() => {
-      if (chartWidth && chartHeight) {
-        chartInstanceRef.current?.resize();
-      }
-    });
+  useUpdateEffect(() => {
+    if (sizeInited.current) {
+      startTransition(() => {
+        if (chartWidth && chartHeight) {
+          chartInstanceRef.current?.resize();
+        }
+      });
+    } else {
+      sizeInited.current = true;
+    }
   }, [chartWidth, chartHeight]);
 
   return { ref: chartRef, chartInstance: chartInstanceRef.current, chartInstanceRef };
