@@ -219,27 +219,31 @@ const K: React.FC<PerformanceProps> = ({ secid = '', name }) => {
         },
         grid: [
           {
-            left: 0,
-            right: 0,
+            left: 40,
+            right: 5,
             top: 42,
             height: '50%',
-            containLabel: true,
           },
           {
-            left: 0,
-            right: 0,
+            left: 40,
+            right: 5,
             top: '66%',
             height: '15%',
-            containLabel: true,
           },
           {
-            left: 0,
-            right: 0,
+            left: 40,
+            right: 5,
             top: '84%',
             height: '15%',
-            containLabel: true,
           },
         ],
+        axisPointer: {
+          link: [
+            {
+              xAxisIndex: [0, 1],
+            },
+          ],
+        },
         xAxis: [
           {
             data: times,
@@ -249,6 +253,9 @@ const K: React.FC<PerformanceProps> = ({ secid = '', name }) => {
             splitLine: { show: false },
             splitNumber: 20,
             axisLabel: { show: true, fontSize: 10 },
+            axisPointer: {
+              label: { show: false },
+            },
           },
           {
             type: 'category',
@@ -271,7 +278,10 @@ const K: React.FC<PerformanceProps> = ({ secid = '', name }) => {
                 color: 'var(--border-color)',
               },
             },
-            axisLabel: { show: true, fontSize: 10 },
+            axisLabel: {
+              show: true,
+              fontSize: 10,
+            },
           },
           {
             gridIndex: 1,
@@ -292,7 +302,10 @@ const K: React.FC<PerformanceProps> = ({ secid = '', name }) => {
             axisLine: { onZero: false },
             axisTick: { show: false },
             splitLine: { show: false },
-            axisLabel: { show: true, fontSize: 10 },
+            axisLabel: {
+              show: true,
+              fontSize: 10,
+            },
           },
         ],
         dataZoom: [

@@ -22,7 +22,7 @@ export function Yang(num: string | number | undefined) {
 export function ConvertBigNum(n: number) {
   return n.toFixed(0).replace(/(\d{1,4})((\d{4})*)$/, (a, b, c) => {
     const t = ['', '万', '亿', '万亿'][c.length / 4];
-    return t ? `${b}.${c.slice(0, 1)}${t}` : b;
+    return t ? `${b}${t}` : b;
   });
 }
 
