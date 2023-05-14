@@ -10,7 +10,7 @@ export type TranslateState = {
 };
 
 export const defaultTranslateSetting: Translate.Setting = {
-  translateApiTypeSetting: Enums.TranslateApiType.Google,
+  translateApiTypeSetting: Enums.TranslateApiType.BaiDu,
   readClipboardSetting: false,
   hotkeySetting: '',
 };
