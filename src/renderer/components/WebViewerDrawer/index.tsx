@@ -1,5 +1,6 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { Dropdown, Progress, Switch } from 'antd';
+import { useRequest } from 'ahooks';
 import clsx from 'clsx';
 import { useBoolean, useMemoizedFn, useEventListener } from 'ahooks';
 
@@ -59,6 +60,11 @@ export const WebViewer: React.FC<WebViewerProps> = (props) => {
   const [percent, setPercent] = useState(0);
   const [timer, setTimer] = useState<any>(0);
   const [favicons, setFavicons] = useState<string[]>([]);
+
+  const { data: fakeUA } = useRequest(() => ipcRenderer.invoke('get-fakeUA'), {
+    cacheKey: 'invole-get-fakeUA',
+    cacheTime: -1,
+  });
 
   const {
     data: webDetail,
@@ -207,7 +213,7 @@ export const WebViewer: React.FC<WebViewerProps> = (props) => {
           ref={viewRef}
           src={url}
           style={{ width: '100%', flex: '1' }}
-          useragent={phone ? defaultAgent : undefined}
+          useragent={phone ? defaultAgent : fakeUA}
           // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           // @ts-ignore
           allowpopups="true"
