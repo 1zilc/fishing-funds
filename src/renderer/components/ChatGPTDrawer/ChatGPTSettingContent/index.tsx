@@ -55,7 +55,12 @@ const ChatGPTSettingContent: React.FC<ChatGPTSettingContentProps> = (props) => {
                       title="基础设置"
                       extra={
                         <div className={styles.guide}>
-                          <Guide list={[{ name: '快捷键', text: '设置快捷键快速显示/隐藏翻译' }]} />
+                          <Guide
+                            list={[
+                              { name: '快捷键', text: '设置快捷键显示/隐藏ChatGPT' },
+                              { name: '网络代理', text: '建议将软件代理设置为"系统"' },
+                            ]}
+                          />
                         </div>
                       }
                     >

@@ -19,7 +19,7 @@ const WebAppIcon: React.FC<WebAppIconProps> = (props) => {
 
   const icon = useMemo(() => {
     const color = props.color || colorHash.hex(title);
-    console.log(props);
+
     switch (iconType) {
       case Enums.WebIconType.First:
         return (

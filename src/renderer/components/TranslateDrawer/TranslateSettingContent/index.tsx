@@ -97,7 +97,7 @@ const TranslateSettingContent: React.FC<TranslateSettingContentProps> = (props) 
                         <div className={styles.guide}>
                           <Guide
                             list={[
-                              { name: '快捷键', text: '设置快捷键快速显示/隐藏翻译' },
+                              { name: '快捷键', text: '设置快捷键显示/隐藏翻译' },
                               { name: '自动填充', text: '当使用快捷键开启翻译后，将自动翻译剪贴板上的内容。' },
                             ]}
                           />
