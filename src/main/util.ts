@@ -84,3 +84,11 @@ export function getPreloadPath() {
 export function getOtherWindows(windowIds: number[], current?: number) {
   return windowIds.filter((id) => id !== current).map((id) => BrowserWindow.fromId(id));
 }
+
+export function makeFakeUA(ua: string) {
+  if (ua) {
+    return ua.replace(/(FishingFunds|Electron)\/.*?\s/g, '');
+  } else {
+    return ua;
+  }
+}

@@ -9,6 +9,7 @@ interface WebAppIconProps {
   iconType?: Enums.WebIconType;
   favicon?: string;
   svg?: React.ReactNode;
+  color?: string;
   onClick?: () => void;
 }
 
@@ -17,7 +18,8 @@ const WebAppIcon: React.FC<WebAppIconProps> = (props) => {
   const [success, { setFalse }] = useBoolean(true);
 
   const icon = useMemo(() => {
-    const color = colorHash.hex(title);
+    const color = props.color || colorHash.hex(title);
+    console.log(props);
     switch (iconType) {
       case Enums.WebIconType.First:
         return (

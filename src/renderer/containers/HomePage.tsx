@@ -14,6 +14,7 @@ import {
   useShareStoreState,
   useSyncConfig,
   useTranslate,
+  useChatGPT,
 } from '@/utils/hooks';
 
 function GlobalTask() {
@@ -29,6 +30,7 @@ function GlobalTask() {
   useShareStoreState();
   useSyncConfig();
   useTranslate();
+  useChatGPT();
   useBootStrap();
   return null;
 }

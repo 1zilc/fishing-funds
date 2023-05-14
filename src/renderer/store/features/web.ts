@@ -36,19 +36,13 @@ export const defaultWebConfig = [
     title: '东财人气榜',
     url: 'https://vipmoney.eastmoney.com/collect/stockranking/pages/ranking9_3/list.html',
     iconType: Enums.WebIconType.First,
-    color: '#b16ce0',
+    color: '#ea5404',
   },
   {
     title: '虎牙直播',
     url: 'https://m.huya.com/',
     iconType: Enums.WebIconType.Favicon,
     icon: 'https://diy-assets.msstatic.com/mobile/favicon.ico',
-  },
-  {
-    title: 'ChatGPT',
-    url: 'https://chat.openai.com/chat',
-    iconType: Enums.WebIconType.Favicon,
-    icon: 'https://chat.openai.com/favicon.ico',
   },
 ];
 

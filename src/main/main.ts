@@ -35,7 +35,7 @@ import HotkeyManager from './hotkey';
 import ContextMenuManager from './contextMenu';
 import { createAppMenu } from './menu';
 import { saveImage, saveJsonToCsv, saveString, readFile } from './io';
-import { lockSingleInstance, checkEnvTool, sendMessageToRenderer, setNativeTheme, getOtherWindows } from './util';
+import { lockSingleInstance, checkEnvTool, sendMessageToRenderer, setNativeTheme, getOtherWindows, makeFakeUA } from './util';
 import * as Enums from '../renderer/utils/enums';
 
 let mb: Menubar;
@@ -141,6 +141,9 @@ function main() {
   ipcMain.handle('set-proxy', async (event, config) => {
     return event.sender.session.setProxy(config);
   });
+  ipcMain.handle('get-fakeUA', async (event, config) => {
+    return makeFakeUA(event.sender.session.getUserAgent());
+  });
   ipcMain.handle('update-tray-context-menu-wallets', async (event, config) => {
     contextMenuManager.updateWalletMenu(config);
   });
@@ -167,6 +170,7 @@ function main() {
   // 快捷键
   const visibleHotkeyManager = new HotkeyManager({ mb });
   const translateHotkeyManager = new HotkeyManager({ mb });
+  const chatGPTHotkeyManager = new HotkeyManager({ mb });
   ipcMain.handle('set-visible-hotkey', async (event, keys: string) => {
     visibleHotkeyManager.registryHotkey(keys, ({ visible }) => {
       if (visible) {
@@ -179,6 +183,11 @@ function main() {
   ipcMain.handle('set-translate-hotkey', async (event, keys: string) => {
     translateHotkeyManager.registryHotkey(keys, ({ visible }) => {
       sendMessageToRenderer(mb.window, 'trigger-translate', visible);
+    });
+  });
+  ipcMain.handle('set-chatGPT-hotkey', async (event, keys: string) => {
+    chatGPTHotkeyManager.registryHotkey(keys, ({ visible }) => {
+      sendMessageToRenderer(mb.window, 'trigger-chatGPT', visible);
     });
   });
   // 多窗口相关
@@ -204,8 +213,8 @@ function main() {
   ipcMain.handle('got', async (event, { url, config }) => {
     try {
       const proxyConent = await event.sender.session.resolveProxy(url);
-      const UA = event.sender.session.getUserAgent();
-      const fakeUA = UA.replace(/(FishingFunds|Electron)\/.*?\s/g, '');
+      const ua = event.sender.session.getUserAgent();
+      const fakeUA = makeFakeUA(ua);
       const { httpAgent, httpsAgent } = new Proxy(proxyConent, url);
       const res = await got(url, {
         ...config,

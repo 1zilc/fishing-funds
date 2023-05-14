@@ -18,6 +18,7 @@ import FundsIcon from '@/static/icon/funds.svg';
 import CalculatorIcon from '@/static/icon/calculator.svg';
 import GlobalFillIcon from '@/static/icon/global-fill.svg';
 import TranslateIcon from '@/static/icon/translate.svg';
+import OpenAIIcon from '@/static/icon/openai.svg';
 
 import CustomDrawer from '@/components/CustomDrawer';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
@@ -51,6 +52,7 @@ const EconomicCalendarContent = React.lazy(() => import('@/components/Home/Stock
 const GoldMarketContent = React.lazy(() => import('@/components/Home/QuotationView/GoldMarketContent'));
 const Calculator = React.lazy(() => import('@/components/Home/CoinView/Calculator'));
 const TranslateSettingContent = React.lazy(() => import('@/components/TranslateDrawer/TranslateSettingContent'));
+const ChatGPTSettingContent = React.lazy(() => import('@/components/ChatGPTDrawer/ChatGPTSettingContent'));
 
 const { Search } = Input;
 const iconSize = { height: 18, width: 18 };
@@ -76,7 +78,14 @@ function constructApps(appConfigs: AppConfig[]) {
       {appConfigs.map((config) => {
         return (
           <div className={styles.appContent} key={`${config.title}${config.url}`}>
-            <WebAppIcon title={config.title} onClick={config.click} iconType={config.iconType} svg={config.icon} favicon={config.favicon} />
+            <WebAppIcon
+              title={config.title}
+              onClick={config.click}
+              iconType={config.iconType}
+              svg={config.icon}
+              favicon={config.favicon}
+              color={config.color}
+            />
           </div>
         );
       })}
@@ -122,6 +131,7 @@ const AppCenterContent: React.FC<AppCenterContentProps> = (props) => {
   const [showGoldMarketDrawer, { setTrue: openGoldMarketDrawer, setFalse: closeGoldMarketDrawer }] = useBoolean(false);
   const [showCalculatorDrawer, { setTrue: openCalculatorDrawer, setFalse: closeCalculatorDrawer }] = useBoolean(false);
   const [showTranslateSettingDrawer, { setTrue: openTranslateSettingDrawer, setFalse: closeTranslateSettingDrawer }] = useBoolean(false);
+  const [showChatGPTSettingDrawer, { setTrue: openChatGPTSettingDrawer, setFalse: closeChatGPTSettingDrawer }] = useBoolean(false);
 
   const openWebView = useOpenWebView();
 
@@ -193,6 +203,13 @@ const AppCenterContent: React.FC<AppCenterContentProps> = (props) => {
                 iconType: Enums.WebIconType.Svg,
                 icon: <TranslateIcon style={{ ...iconSize }} />,
                 click: openTranslateSettingDrawer,
+              },
+              {
+                title: 'ChatGPT',
+                iconType: Enums.WebIconType.Svg,
+                color: '#80A89C',
+                icon: <OpenAIIcon style={{ ...iconSize }} />,
+                click: openChatGPTSettingDrawer,
               },
             ],
           },
@@ -272,7 +289,6 @@ const AppCenterContent: React.FC<AppCenterContentProps> = (props) => {
       ),
     [keyword]
   );
-
   const h5s = useMemo(
     () =>
       renderApps(
@@ -372,6 +388,9 @@ const AppCenterContent: React.FC<AppCenterContentProps> = (props) => {
         </CustomDrawer>
         <CustomDrawer show={showTranslateSettingDrawer}>
           <TranslateSettingContent onClose={closeTranslateSettingDrawer} onEnter={closeTranslateSettingDrawer} />
+        </CustomDrawer>
+        <CustomDrawer show={showChatGPTSettingDrawer}>
+          <ChatGPTSettingContent onClose={closeChatGPTSettingDrawer} onEnter={closeChatGPTSettingDrawer} />
         </CustomDrawer>
       </div>
     </CustomDrawerContent>
