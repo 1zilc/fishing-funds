@@ -40,7 +40,7 @@ const TranslateContent: React.FC<TranslateContentProps> = () => {
     const search = Utils.MakeSearchParams('', {
       _redirect: Utils.MakeSearchParams(CONST.ROUTES.DETAIL_WEBVIEWER, {
         phone: true,
-        title: '翻译',
+        title: '快捷翻译',
         url: currentUrl,
       } as WebViewerPageParams),
     } as RedirectSearchParams);
@@ -56,7 +56,7 @@ const TranslateContent: React.FC<TranslateContentProps> = () => {
   }, [readClipboardSetting]);
 
   return (
-    <CustomDrawerContent classNames={styles.content} title="翻译" enterText="多窗" onClose={onClose} onEnter={onOpenChildWindow}>
+    <CustomDrawerContent classNames={styles.content} title="快捷翻译" enterText="多窗" onClose={onClose} onEnter={onOpenChildWindow}>
       {ready && <webview ref={viewRef} src={url} style={{ width: '100%', flex: '1' }} useragent={defaultAgent} />}
     </CustomDrawerContent>
   );
