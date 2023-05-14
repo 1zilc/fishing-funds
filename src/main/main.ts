@@ -33,6 +33,7 @@ import { createChildWindow } from './childWindow';
 import Proxy from './proxy';
 import HotkeyManager from './hotkey';
 import ContextMenuManager from './contextMenu';
+import { createAppMenu } from './menu';
 import { saveImage, saveJsonToCsv, saveString, readFile } from './io';
 import { lockSingleInstance, checkEnvTool, sendMessageToRenderer, setNativeTheme, getOtherWindows } from './util';
 import * as Enums from '../renderer/utils/enums';
@@ -259,6 +260,9 @@ function main() {
     });
     // 存储窗口大小
     mainWindowState.manage(mb.window!);
+    // 生成应用菜单
+    const appMenu = createAppMenu();
+    Menu.setApplicationMenu(appMenu);
     // 是否打开备份文件
     if (openBackupFilePath) {
       sendMessageToRenderer(mb.window, 'open-backup-file', openBackupFilePath);
@@ -292,8 +296,6 @@ function main() {
 
   // new AppUpdater({ icon: nativeIcon, win: mb.window });
 }
-// 隐藏菜单栏
-Menu.setApplicationMenu(null);
 // app 相关监听
 app.on('window-all-closed', () => {
   // Respect the OSX convention of having the application in memory even
