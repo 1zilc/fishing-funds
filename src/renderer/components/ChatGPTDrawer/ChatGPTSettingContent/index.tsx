@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Tabs, Input } from 'antd';
+import { Tabs, Input, Switch } from 'antd';
 import clsx from 'clsx';
 import OpenAIIcon from '@/static/icon/openai.svg';
 import SettingIcon from '@/static/icon/setting.svg';
@@ -21,9 +21,10 @@ const appName = 'ChatGPT';
 
 const ChatGPTSettingContent: React.FC<ChatGPTSettingContentProps> = (props) => {
   const dispatch = useAppDispatch();
-  const { hotkeySetting, chatIdSetting } = useAppSelector((state) => state.chatGPT.chatGPTSetting);
+  const { hotkeySetting, chatIdSetting, cachedSetting } = useAppSelector((state) => state.chatGPT.chatGPTSetting);
 
   const [chatId, setChatId] = useState(chatIdSetting);
+  const [cached, setCached] = useState(cachedSetting);
   const { hotkey, onBlur: hotkeyInputOnBlur, onFocus: hotkeyInputOnFocus, reset: resetHotkey } = useInputShortcut(hotkeySetting);
 
   function onSave() {
@@ -31,6 +32,7 @@ const ChatGPTSettingContent: React.FC<ChatGPTSettingContentProps> = (props) => {
       setChatGPTSettingAction({
         hotkeySetting: hotkey,
         chatIdSetting: chatId,
+        cachedSetting: cached,
       })
     );
     props.onEnter();
@@ -61,6 +63,7 @@ const ChatGPTSettingContent: React.FC<ChatGPTSettingContentProps> = (props) => {
                             list={[
                               { name: '快捷键', text: '设置快捷键显示/隐藏ChatGPT' },
                               { name: '会话id', text: '网址中提取，可忽略，自动填充' },
+                              { name: '保留窗口', text: '不会销毁窗口，每次打开速度更快，资源占用更高' },
                               { name: '网络代理', text: '建议将软件代理设置为"系统"' },
                             ]}
                           />
@@ -86,6 +89,10 @@ const ChatGPTSettingContent: React.FC<ChatGPTSettingContentProps> = (props) => {
                             type="text"
                             onChange={(e) => setChatId(e.target.value)}
                           />
+                        </section>
+                        <section>
+                          <label>保留窗口：</label>
+                          <Switch size="small" checked={cached} onChange={setCached} />
                         </section>
                       </div>
                     </StandCard>

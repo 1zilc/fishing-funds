@@ -12,6 +12,7 @@ export type ChatGPTState = {
 export const defaultChatGPTSetting: ChatGPT.Setting = {
   hotkeySetting: '',
   chatIdSetting: '',
+  cachedSetting: false,
 };
 
 const initialState: ChatGPTState = {

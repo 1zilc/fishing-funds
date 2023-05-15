@@ -70,9 +70,10 @@ const ChatGPTContent: React.FC<ChatGPTContentProps> = () => {
 // TODO:useragent待随机处理
 const ChatGPTDrawer: React.FC<ChatGPTDrawerProps> = () => {
   const show = useAppSelector((state) => state.chatGPT.show);
+  const cachedSetting = useAppSelector((state) => state.chatGPT.chatGPTSetting.cachedSetting);
 
   return (
-    <CustomDrawer show={show} zIndex={CONST.DEFAULT.DRAWER_ZINDEX_HEIGHT} closeImmediately>
+    <CustomDrawer show={show} zIndex={CONST.DEFAULT.DRAWER_ZINDEX_HEIGHT} closeImmediately={!cachedSetting} cached={cachedSetting}>
       <ChatGPTContent />
     </CustomDrawer>
   );
