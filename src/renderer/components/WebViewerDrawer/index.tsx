@@ -62,7 +62,7 @@ export const WebViewer: React.FC<WebViewerProps> = (props) => {
   const [favicons, setFavicons] = useState<string[]>([]);
 
   const { data: fakeUA } = useRequest(() => ipcRenderer.invoke('get-fakeUA'), {
-    cacheKey: 'invole-get-fakeUA',
+    cacheKey: 'invoke-get-fakeUA',
     cacheTime: -1,
   });
 

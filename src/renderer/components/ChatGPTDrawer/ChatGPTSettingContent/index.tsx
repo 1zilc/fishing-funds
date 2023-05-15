@@ -47,7 +47,7 @@ const ChatGPTSettingContent: React.FC<ChatGPTSettingContentProps> = (props) => {
             items={[
               {
                 key: String(0),
-                label: '翻译设置',
+                label: 'ChatGPT设置',
                 children: (
                   <>
                     <StandCard
