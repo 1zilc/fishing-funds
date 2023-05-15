@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Tabs, Input } from 'antd';
 import clsx from 'clsx';
 import OpenAIIcon from '@/static/icon/openai.svg';
@@ -21,14 +21,16 @@ const appName = 'ChatGPT';
 
 const ChatGPTSettingContent: React.FC<ChatGPTSettingContentProps> = (props) => {
   const dispatch = useAppDispatch();
-  const { hotkeySetting } = useAppSelector((state) => state.chatGPT.chatGPTSetting);
+  const { hotkeySetting, chatIdSetting } = useAppSelector((state) => state.chatGPT.chatGPTSetting);
 
+  const [chatId, setChatId] = useState(chatIdSetting);
   const { hotkey, onBlur: hotkeyInputOnBlur, onFocus: hotkeyInputOnFocus, reset: resetHotkey } = useInputShortcut(hotkeySetting);
 
   function onSave() {
     dispatch(
       setChatGPTSettingAction({
         hotkeySetting: hotkey,
+        chatIdSetting: chatId,
       })
     );
     props.onEnter();
@@ -58,6 +60,7 @@ const ChatGPTSettingContent: React.FC<ChatGPTSettingContentProps> = (props) => {
                           <Guide
                             list={[
                               { name: '快捷键', text: '设置快捷键显示/隐藏ChatGPT' },
+                              { name: '会话id', text: '网址中提取，可忽略，自动填充' },
                               { name: '网络代理', text: '建议将软件代理设置为"系统"' },
                             ]}
                           />
@@ -73,6 +76,15 @@ const ChatGPTSettingContent: React.FC<ChatGPTSettingContentProps> = (props) => {
                             value={hotkey}
                             placeholder="请输入快捷键"
                             type="text"
+                          />
+                        </section>
+                        <section>
+                          <label>会话id：</label>
+                          <Input
+                            value={chatId}
+                            placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+                            type="text"
+                            onChange={(e) => setChatId(e.target.value)}
                           />
                         </section>
                       </div>

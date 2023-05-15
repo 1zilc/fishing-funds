@@ -4,7 +4,7 @@ import CustomDrawerContent from '@/components/CustomDrawer/Content';
 import CustomDrawer from '@/components/CustomDrawer';
 import { RedirectSearchParams } from '@/containers/InitPage';
 import { WebViewerPageParams } from '@/components/WebViewerDrawer/WebViewerPage';
-import { syncChatGPTShowAction, syncChatIdAction } from '@/store/features/chatGPT';
+import { syncChatGPTShowAction, setChatGPTSettingAction } from '@/store/features/chatGPT';
 import { useAppDispatch, useAppSelector } from '@/utils/hooks';
 import * as CONST from '@/constants';
 import * as Utils from '@/utils';
@@ -19,14 +19,14 @@ const openaiHost = 'https://chat.openai.com';
 
 const ChatGPTContent: React.FC<ChatGPTContentProps> = () => {
   const dispatch = useAppDispatch();
-  const chatId = useAppSelector((state) => state.chatGPT.chatId);
+  const chatIdSetting = useAppSelector((state) => state.chatGPT.chatGPTSetting.chatIdSetting);
   const viewRef = useRef<any>(null);
 
   const { data: fakeUA } = useRequest(() => ipcRenderer.invoke('get-fakeUA'), {
     cacheKey: 'invoke-get-fakeUA',
     cacheTime: -1,
   });
-  const chatUrl = chatId ? `${openaiHost}/c/${chatId}` : openaiHost;
+  const chatUrl = chatIdSetting ? `${openaiHost}/c/${chatIdSetting}` : openaiHost;
   const ready = !!fakeUA;
 
   function onClose() {
@@ -50,7 +50,11 @@ const ChatGPTContent: React.FC<ChatGPTContentProps> = () => {
     (res) => {
       const [host, id] = (res.url as string).split('/c/');
       if (openaiHost === host && id) {
-        dispatch(syncChatIdAction(id));
+        dispatch(
+          setChatGPTSettingAction({
+            chatIdSetting: id,
+          })
+        );
       }
     },
     { target: viewRef }

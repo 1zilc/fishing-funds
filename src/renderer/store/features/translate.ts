@@ -34,7 +34,7 @@ const translateSlice = createSlice({
 });
 export const { syncTranslateSettingAction, syncTranslateShowAction } = translateSlice.actions;
 
-export const setTranslateSettingAction = createAsyncThunk<void, Translate.Setting, AsyncThunkConfig>(
+export const setTranslateSettingAction = createAsyncThunk<void, Partial<Translate.Setting>, AsyncThunkConfig>(
   'translate/setTranslateSettingAction',
   (newSetting, { dispatch, getState }) => {
     try {

@@ -6,17 +6,16 @@ import * as Enums from '@/utils/enums';
 
 export type ChatGPTState = {
   chatGPTSetting: ChatGPT.Setting;
-  chatId: string;
   show: boolean;
 };
 
 export const defaultChatGPTSetting: ChatGPT.Setting = {
   hotkeySetting: '',
+  chatIdSetting: '',
 };
 
 const initialState: ChatGPTState = {
   chatGPTSetting: defaultChatGPTSetting,
-  chatId: '',
   show: false,
 };
 
@@ -30,14 +29,11 @@ const chatGPTSlice = createSlice({
     syncChatGPTShowAction(state, action: PayloadAction<boolean>) {
       state.show = action.payload;
     },
-    syncChatIdAction(state, action: PayloadAction<string>) {
-      state.chatId = action.payload;
-    },
   },
 });
-export const { syncChatGPTSettingAction, syncChatGPTShowAction, syncChatIdAction } = chatGPTSlice.actions;
+export const { syncChatGPTSettingAction, syncChatGPTShowAction } = chatGPTSlice.actions;
 
-export const setChatGPTSettingAction = createAsyncThunk<void, ChatGPT.Setting, AsyncThunkConfig>(
+export const setChatGPTSettingAction = createAsyncThunk<void, Partial<ChatGPT.Setting>, AsyncThunkConfig>(
   'chatGPT/setChatGPTSettingAction',
   (newSetting, { dispatch, getState }) => {
     try {
