@@ -219,7 +219,7 @@ export const WebViewer: React.FC<WebViewerProps> = (props) => {
           allowpopups="true"
         />
       ) : (
-        <Empty className={styles.empty} text="404 Not Found" />
+        show && <Empty className={styles.empty} text="404 Not Found" />
       )}
       <div>
         <Progress
