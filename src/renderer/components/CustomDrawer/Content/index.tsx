@@ -14,7 +14,7 @@ export interface CustomDrawerContentProps {
   classNames?: string;
 }
 
-const CustomDrawer: React.FC<PropsWithChildren<CustomDrawerContentProps>> = ({
+const CustomDrawerContent: React.FC<PropsWithChildren<CustomDrawerContentProps>> = ({
   onEnter,
   onClose,
   title,
@@ -52,4 +52,4 @@ const CustomDrawer: React.FC<PropsWithChildren<CustomDrawerContentProps>> = ({
   );
 };
 
-export default CustomDrawer;
+export default CustomDrawerContent;
