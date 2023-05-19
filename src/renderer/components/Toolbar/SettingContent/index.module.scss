@@ -190,13 +190,14 @@
 .colorBar {
   display: flex;
   align-items: center;
-  width: 50%;
   box-sizing: border-box;
   justify-content: flex-end;
 }
 .colorPicker {
-  flex: 1;
-  margin-right: var(--base-padding);
+  height: 16px;
+  width: 16px;
+  border-radius: 2px;
+  box-sizing: border-box;
 }
 .colorBlock {
   display: inline-block;
