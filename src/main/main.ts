@@ -40,6 +40,8 @@ import * as Enums from '../renderer/utils/enums';
 
 let mb: Menubar;
 let openBackupFilePath = '';
+let ua = '';
+let fakeUA = '';
 
 async function init() {
   // 单例
@@ -213,8 +215,6 @@ function main() {
   ipcMain.handle('got', async (event, { url, config }) => {
     try {
       const proxyConent = await event.sender.session.resolveProxy(url);
-      const ua = event.sender.session.getUserAgent();
-      const fakeUA = makeFakeUA(ua);
       const { httpAgent, httpsAgent } = new Proxy(proxyConent, url);
       const res = await got(url, {
         ...config,
@@ -252,6 +252,13 @@ function main() {
   ipcMain.handle('clipboard-writeText', async (event, text) => clipboard.writeText(text));
   ipcMain.handle('clipboard-writeImage', async (event, dataUrl) => clipboard.writeImage(nativeImage.createFromDataURL(dataUrl)));
   // menubar 相关监听
+  mb.on('before-load', () => {
+    // 生成fakeUA
+    ua = mb.window!.webContents.getUserAgent();
+    fakeUA = makeFakeUA(ua);
+    mb.window?.webContents.setUserAgent(fakeUA);
+    mb.window?.webContents.session.setUserAgent(fakeUA);
+  });
   mb.on('after-create-window', () => {
     // 注册windowId
     windowIds.push(mb.window!.webContents.id);
