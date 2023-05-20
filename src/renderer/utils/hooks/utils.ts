@@ -1,6 +1,7 @@
 import React, { useLayoutEffect, useState, useEffect, useRef, useMemo } from 'react';
 import { useLocation } from 'react-router-dom';
 import queryString from 'query-string';
+import { useRequest } from 'ahooks';
 import { useInterval, useBoolean, useThrottleFn, useSize, useMemoizedFn, useEventListener } from 'ahooks';
 import { useDispatch, useSelector, TypedUseSelectorHook } from 'react-redux';
 import dayjs from 'dayjs';
@@ -704,4 +705,17 @@ export function useRouterParams<T = Record<string, unknown>>() {
   return queryString.parse(location.search, {
     parseBooleans: true,
   }) as T;
+}
+
+export function useFakeUA(phone: boolean) {
+  const phoneFakeUA =
+    'Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1';
+
+  const { data: fakeUA } = useRequest((): Promise<string> => ipcRenderer.invoke('get-fakeUA'), {
+    cacheKey: 'invoke-get-fakeUA',
+    cacheTime: -1,
+    ready: !phone,
+  });
+
+  return phone ? phoneFakeUA : fakeUA;
 }

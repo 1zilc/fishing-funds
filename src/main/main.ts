@@ -144,7 +144,7 @@ function main() {
     return event.sender.session.setProxy(config);
   });
   ipcMain.handle('get-fakeUA', async (event, config) => {
-    return makeFakeUA(event.sender.session.getUserAgent());
+    return fakeUA;
   });
   ipcMain.handle('update-tray-context-menu-wallets', async (event, config) => {
     contextMenuManager.updateWalletMenu(config);

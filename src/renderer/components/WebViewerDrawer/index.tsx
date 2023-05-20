@@ -19,7 +19,7 @@ import { RedirectSearchParams } from '@/containers/InitPage';
 import { WebViewerPageParams } from '@/components/WebViewerDrawer/WebViewerPage';
 
 import { closeWebAction, addWebAction, deleteWebAction, syncWebPhoneAction } from '@/store/features/web';
-import { useDrawer, useAppDispatch, useAppSelector, useIpcRendererListener } from '@/utils/hooks';
+import { useDrawer, useAppDispatch, useAppSelector, useIpcRendererListener, useFakeUA } from '@/utils/hooks';
 import * as CONST from '@/constants';
 import * as Enums from '@/utils/enums';
 import * as Utils from '@/utils';
@@ -44,9 +44,6 @@ const menuItemSize = { height: 14, width: 14 };
 
 const { clipboard, dialog, ipcRenderer, shell } = window.contextModules.electron;
 
-export const defaultAgent =
-  'Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1';
-
 export const WebViewer: React.FC<WebViewerProps> = (props) => {
   const dispatch = useAppDispatch();
   const viewRef = useRef<any>(null);
@@ -61,10 +58,7 @@ export const WebViewer: React.FC<WebViewerProps> = (props) => {
   const [timer, setTimer] = useState<any>(0);
   const [favicons, setFavicons] = useState<string[]>([]);
 
-  const { data: fakeUA } = useRequest(() => ipcRenderer.invoke('get-fakeUA'), {
-    cacheKey: 'invoke-get-fakeUA',
-    cacheTime: -1,
-  });
+  const fakeUA = useFakeUA(!!phone);
 
   const {
     data: webDetail,
@@ -213,7 +207,7 @@ export const WebViewer: React.FC<WebViewerProps> = (props) => {
           ref={viewRef}
           src={url}
           style={{ width: '100%', flex: '1' }}
-          useragent={phone ? defaultAgent : fakeUA}
+          useragent={fakeUA}
           // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           // @ts-ignore
           allowpopups="true"

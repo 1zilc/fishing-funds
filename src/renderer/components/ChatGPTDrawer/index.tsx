@@ -5,7 +5,7 @@ import CustomDrawer from '@/components/CustomDrawer';
 import { RedirectSearchParams } from '@/containers/InitPage';
 import { WebViewerPageParams } from '@/components/WebViewerDrawer/WebViewerPage';
 import { syncChatGPTShowAction, setChatGPTSettingAction } from '@/store/features/chatGPT';
-import { useAppDispatch, useAppSelector } from '@/utils/hooks';
+import { useAppDispatch, useAppSelector, useFakeUA } from '@/utils/hooks';
 import * as CONST from '@/constants';
 import * as Utils from '@/utils';
 import styles from './index.module.scss';
@@ -22,10 +22,7 @@ const ChatGPTContent: React.FC<ChatGPTContentProps> = () => {
   const chatIdSetting = useAppSelector((state) => state.chatGPT.chatGPTSetting.chatIdSetting);
   const viewRef = useRef<any>(null);
 
-  const { data: fakeUA } = useRequest(() => ipcRenderer.invoke('get-fakeUA'), {
-    cacheKey: 'invoke-get-fakeUA',
-    cacheTime: -1,
-  });
+  const fakeUA = useFakeUA(false);
   const chatUrl = chatIdSetting ? `${openaiHost}/c/${chatIdSetting}` : openaiHost;
   const ready = !!fakeUA;
 
