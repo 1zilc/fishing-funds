@@ -8,6 +8,8 @@ import { saveSyncConfigAction } from '@/store/features/setting';
 import { changeCurrentWalletCodeAction, syncWalletsConfigAction } from '@/store/features/wallet';
 import { syncWebConfigAction } from '@/store/features/web';
 import { syncZindexesConfigAction } from '@/store/features/zindex';
+import { syncTranslateSettingAction } from '@/store/features/translate';
+import { syncChatGPTSettingAction } from '@/store/features/chatGPT';
 
 export default () => {
   listenerMiddleware.startListening({
@@ -18,7 +20,9 @@ export default () => {
       syncStocksConfigAction,
       syncWalletsConfigAction,
       syncFavoriteQuotationMapAction,
-      changeCurrentWalletCodeAction
+      changeCurrentWalletCodeAction,
+      syncTranslateSettingAction,
+      syncChatGPTSettingAction
     ),
     effect: (action: ShareAction, { dispatch, getState }) => {
       if (!action._share) {
