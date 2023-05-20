@@ -52,4 +52,4 @@ const CustomDrawerContent: React.FC<PropsWithChildren<CustomDrawerContentProps>>
   );
 };
 
-export default CustomDrawerContent;
+export default React.memo(CustomDrawerContent);
