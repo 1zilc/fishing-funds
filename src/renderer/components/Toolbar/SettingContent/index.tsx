@@ -291,6 +291,7 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
                         <label>自定义主题色 ：</label>
                         <div className={styles.colorBar}>
                           <ColorPicker
+                            trigger="hover"
                             disabled={!customThemeColorEnable}
                             value={themeColor}
                             presets={[{ label: '推荐', colors: presetColors }]}
@@ -406,16 +407,14 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
                         className={styles.bottomTabsRow}
                         swap
                       >
-                        {bottomTabs.map((tab) => {
-                          return (
-                            <PureCard key={tab.key}>
-                              <div className={styles.bottomTabItem}>
-                                <div>{tab.name}</div>
-                                <Checkbox checked={tab.show} onClick={() => onBottomTabCheckChange(tab.key)} />
-                              </div>
-                            </PureCard>
-                          );
-                        })}
+                        {bottomTabs.map((tab) => (
+                          <PureCard key={tab.key}>
+                            <div className={styles.bottomTabItem}>
+                              <div>{tab.name}</div>
+                              <Checkbox checked={tab.show} onClick={() => onBottomTabCheckChange(tab.key)} />
+                            </div>
+                          </PureCard>
+                        ))}
                       </ReactSortable>
                     </div>
                   </StandCard>
