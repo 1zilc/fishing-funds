@@ -10,6 +10,7 @@ import Funds from '@/components/Home/QuotationView/DetailQuotationContent/Funds'
 import Recent from '@/components/Home/NewsList/Recent';
 import RealTimeTransaction from '@/components/Home/QuotationView/DetailQuotationContent/RealTimeTransaction';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
+import GuBa from '@/components/Home/NewsList/GuBa';
 import { RedirectSearchParams } from '@/containers/InitPage';
 import { DetailQuotationPageParams } from '@/components/Home/QuotationView/DetailQuotationPage';
 import { setFavoriteQuotationMapAction } from '@/store/features/quotation';
@@ -107,6 +108,11 @@ export const DetailQuotation: React.FC<DetailQuotationProps> = (props) => {
               key: String(2),
               label: '近期资讯',
               children: <Recent keyword={quotation.name} />,
+            },
+            {
+              key: String(3),
+              label: '股吧',
+              children: <GuBa keyword={quotation.code} type="103" />,
             },
           ]}
         />

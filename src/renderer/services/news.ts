@@ -1,5 +1,7 @@
 import request from '@/utils/request';
+import cheerio from 'cheerio';
 import * as Enums from '@/utils/enums';
+
 // 获取股市直播
 export async function GetLiveList() {
   try {
@@ -282,5 +284,76 @@ export async function GetRecent(keyword: string, pageindex: number, type: string
       total: 0,
       list: [],
     };
+  }
+}
+// 获取股吧帖子
+/**
+ *
+ * @param code
+ * @param category '100个股吧' | '102指数吧' | '103板块吧' | '105基金吧'
+ * @returns
+ */
+export async function GetGuBaList(code: string, category: '' | '100' | '102' | '103' | '105' = '') {
+  try {
+    const { body: script } = await request<string>(`https://search-api-web.eastmoney.com/search/jsonp`, {
+      searchParams: {
+        cb: 'cb',
+        param: JSON.stringify({
+          uid: '',
+          keyword: code,
+          type: ['gubaCodetableWeb'],
+          client: 'web',
+          clientVersion: 'curr',
+          clientType: 'web',
+          param: { gubaCodetableWeb: { pageSize: 90, pageIndex: 1, postTag: '', preTag: '', filter: `category:${category}` } },
+        }),
+        _: Date.now(),
+      },
+      headers: {
+        Host: 'search-api-web.eastmoney.com',
+      },
+    });
+
+    const data: {
+      bizCode: '';
+      bizMsg: '';
+      code: 0;
+      extra: {};
+      hitsTotal: 1;
+      msg: 'OK';
+      result: {
+        gubaCodetableWeb: [
+          {
+            outerCode: '600519';
+            shortName: '贵州茅台';
+            marketName: '上交所';
+            url: 'http://guba.eastmoney.com/list,600519.html';
+          }
+        ];
+      };
+      searchId: '3b5b60e7-a060-4faa-bc24-9ee6fe89d5d5';
+    } = eval(script);
+
+    const { body: html } = await request(data.result.gubaCodetableWeb[0].url, {
+      responseType: 'text',
+    });
+    const $ = cheerio.load(html);
+    const list = $('.articleh.normal_post')
+      .map(function () {
+        const a = $(this).find('.l3 > a');
+        const time = $(this).find('.l5').text();
+        const title = a.text();
+        const url = a.attr('href');
+        return { title, url, time };
+      })
+      .toArray()
+      .filter((item) => item.url?.startsWith('/news'))
+      .map((item) => ({
+        ...item,
+        url: `http://guba.eastmoney.com${item.url}`,
+      }));
+    return list;
+  } catch (e) {
+    return [];
   }
 }

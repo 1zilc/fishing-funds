@@ -5,31 +5,29 @@ import { useRequest } from 'ahooks';
 import ChartCard from '@/components/Card/ChartCard';
 import { useOpenWebView } from '@/utils/hooks';
 import * as Services from '@/services';
-import * as Enums from '@/utils/enums';
 import styles from './index.module.scss';
 
-interface RecentProps {
-  keyword: string;
-  filter?: Enums.NewsFilterType;
+interface GuBaProps {
+  keyword?: string;
+  type: Parameters<typeof Services.News.GetGuBaList>[1];
 }
 
-const Recent: React.FC<RecentProps> = (props) => {
-  const { keyword, filter } = props;
+const GuBa: React.FC<GuBaProps> = (props) => {
+  const { keyword } = props;
 
-  const [pageIndex, setPageIndex] = useState(1);
   const {
-    data = { total: 0, list: [] },
+    data,
     loading,
     run: runNewsGetBondList,
-  } = useRequest(() => Services.News.GetRecent(keyword, pageIndex, filter), {
+  } = useRequest(() => Services.News.GetGuBaList(keyword || '', props.type), {
     debounceWait: 1000,
     debounceLeading: true,
     debounceTrailing: true,
-    refreshDeps: [keyword, pageIndex],
+    refreshDeps: [keyword],
     ready: !!keyword,
   });
 
-  const openWebView = useOpenWebView({ title: '资讯详情', phone: true });
+  const openWebView = useOpenWebView({ title: '股吧', phone: true });
 
   return (
     <ChartCard auto onFresh={runNewsGetBondList}>
@@ -40,27 +38,23 @@ const Recent: React.FC<RecentProps> = (props) => {
           columns={[
             {
               title: '时间',
-              dataIndex: 'date',
-              width: 60,
-              render: (text: string) => <span className="text-center">{dayjs(text).format('MM-DD')}</span>,
+              dataIndex: 'time',
+              width: 90,
             },
             {
-              title: '内容',
-              dataIndex: 'content',
+              title: '标题',
+              dataIndex: 'title',
               ellipsis: true,
-              render: (text: string) => <a className={styles.title} dangerouslySetInnerHTML={{ __html: text }}></a>,
+              render: (text: string) => <a className={styles.title}>{text}</a>,
             },
           ]}
-          dataSource={data.list}
+          dataSource={data}
           loading={loading}
           pagination={{
             defaultPageSize: 10,
             hideOnSinglePage: true,
             position: ['bottomCenter'],
-            total: data.total,
-            onChange(page) {
-              setPageIndex(page);
-            },
+            total: data?.length,
           }}
           onRow={(record) => ({
             onClick: () => openWebView(record.url),
@@ -71,4 +65,4 @@ const Recent: React.FC<RecentProps> = (props) => {
   );
 };
 
-export default Recent;
+export default GuBa;
