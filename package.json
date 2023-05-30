@@ -216,7 +216,7 @@
     "cross-env": "^7.0.3",
     "css-loader": "^6.7.3",
     "detect-port": "^1.5.1",
-    "electron": "^24.2.0",
+    "electron": "^25.0.0",
     "electron-builder": "^24.3.0",
     "electron-extension-installer": "^1.1.0",
     "electronmon": "^2.0.2",
