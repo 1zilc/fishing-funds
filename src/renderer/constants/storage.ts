@@ -9,6 +9,7 @@ export default {
   WEB_SETTING: 'WEB_SETTING', // 网站配置
   CURRENT_WALLET_CODE: 'CURRENT_WALLET_CODE', // 当前选中钱包code
   TRANSLATE_SETTING: 'TRANSLATE_SETTING', // 翻译设置
+  CHATGPT_SETTING: 'CHATGPT_SETTING', // chatGPT设置
   // state
   EYE_STATUS: 'EYE_STATUS', // 钱包展示状态
   SORT_MODE: 'SORT_MODE', // 排序模式

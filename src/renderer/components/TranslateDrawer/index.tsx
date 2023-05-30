@@ -3,12 +3,11 @@ import { useBoolean, useAsyncEffect } from 'ahooks';
 
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
 import CustomDrawer from '@/components/CustomDrawer';
-import { defaultAgent } from '@/components/WebViewerDrawer';
 import { APIOptions } from '@/components/TranslateDrawer/TranslateSettingContent';
 import { RedirectSearchParams } from '@/containers/InitPage';
 import { WebViewerPageParams } from '@/components/WebViewerDrawer/WebViewerPage';
 import { syncTranslateShowAction } from '@/store/features/translate';
-import { useAppDispatch, useAppSelector } from '@/utils/hooks';
+import { useAppDispatch, useAppSelector, useFakeUA } from '@/utils/hooks';
 import * as CONST from '@/constants';
 import * as Utils from '@/utils';
 import styles from './index.module.scss';
@@ -26,6 +25,8 @@ const TranslateContent: React.FC<TranslateContentProps> = () => {
   const [keyword, setKeyword] = useState('');
   const { translateApiTypeSetting, readClipboardSetting } = useAppSelector((state) => state.translate.translateSetting);
 
+  const fakeUA = useFakeUA(true);
+
   const url = useMemo(() => {
     const api = Utils.GetCodeMap(APIOptions, 'code')[translateApiTypeSetting];
     return api.onTrans(keyword || '');
@@ -40,7 +41,7 @@ const TranslateContent: React.FC<TranslateContentProps> = () => {
     const search = Utils.MakeSearchParams('', {
       _redirect: Utils.MakeSearchParams(CONST.ROUTES.DETAIL_WEBVIEWER, {
         phone: true,
-        title: '翻译',
+        title: '快捷翻译',
         url: currentUrl,
       } as WebViewerPageParams),
     } as RedirectSearchParams);
@@ -56,8 +57,8 @@ const TranslateContent: React.FC<TranslateContentProps> = () => {
   }, [readClipboardSetting]);
 
   return (
-    <CustomDrawerContent classNames={styles.content} title="翻译" enterText="多窗" onClose={onClose} onEnter={onOpenChildWindow}>
-      {ready && <webview ref={viewRef} src={url} style={{ width: '100%', flex: '1' }} useragent={defaultAgent} />}
+    <CustomDrawerContent classNames={styles.content} title="快捷翻译" enterText="多窗" onClose={onClose} onEnter={onOpenChildWindow}>
+      {ready && <webview ref={viewRef} src={url} style={{ width: '100%', flex: '1' }} useragent={fakeUA} />}
     </CustomDrawerContent>
   );
 };

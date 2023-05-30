@@ -43,7 +43,7 @@ const Trend: React.FC<PerformanceProps> = ({ code, zs = 0, name }) => {
         },
         grid: {
           left: 0,
-          right: 5,
+          right: 0,
           bottom: 0,
           top: 25,
           containLabel: true,

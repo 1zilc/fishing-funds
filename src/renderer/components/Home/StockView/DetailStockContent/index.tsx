@@ -13,6 +13,7 @@ import HoldFunds from '@/components/Home/StockView/DetailStockContent/HoldFunds'
 import Recent from '@/components/Home/NewsList/Recent';
 import CycleReturn from '@/components/Home/FundView/DetailFundContent/CycleReturn';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
+import GuBa from '@/components/Home/NewsList/GuBa';
 import { RedirectSearchParams } from '@/containers/InitPage';
 import { DetailStockPageParams } from '@/components/Home/StockView/DetailStockPage';
 import { addStockAction } from '@/store/features/stock';
@@ -184,6 +185,11 @@ export const DetailStock: React.FC<DetailStockProps> = (props) => {
               key: String(2),
               label: '近期资讯',
               children: <Recent keyword={stock.name} />,
+            },
+            {
+              key: String(3),
+              label: '股吧',
+              children: <GuBa keyword={stock.code} type="100" />,
             },
           ]}
         />

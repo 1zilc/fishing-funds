@@ -16,12 +16,12 @@ export interface PerformanceProps {
 }
 
 const dateTypeList = [
-  { name: '1天', type: 1, code: 1 },
-  { name: '1周', type: 2, code: 7 },
-  { name: '1月', type: 3, code: 30 },
-  { name: '3月', type: 4, code: 90 },
-  { name: '半年', type: 5, code: 180 },
-  { name: '1年', type: 6, code: 365 },
+  { name: '1天', type: 1, code: '1' },
+  { name: '1月', type: 3, code: '30' },
+  { name: '3月', type: 4, code: '90' },
+  { name: '半年', type: 5, code: '180' },
+  { name: '1年', type: 6, code: '365' },
+  { name: '最大', type: 7, code: 'max' },
 ];
 
 const Trend: React.FC<PerformanceProps> = ({ code, name }) => {

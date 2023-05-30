@@ -77,6 +77,7 @@ const K: React.FC<PerformanceProps> = ({ secid = '', name }) => {
                 },
               },
             },
+            symbol: 'none',
           },
           {
             name: 'DIF',
@@ -84,6 +85,7 @@ const K: React.FC<PerformanceProps> = ({ secid = '', name }) => {
             xAxisIndex: 2,
             yAxisIndex: 2,
             data: macdData.map((_) => _.DIFF),
+            symbol: 'none',
           },
           {
             name: 'DEA',
@@ -91,6 +93,7 @@ const K: React.FC<PerformanceProps> = ({ secid = '', name }) => {
             xAxisIndex: 2,
             yAxisIndex: 2,
             data: macdData.map((_) => _.DEA),
+            symbol: 'none',
           },
         ]);
       }
@@ -105,6 +108,7 @@ const K: React.FC<PerformanceProps> = ({ secid = '', name }) => {
             xAxisIndex: 2,
             yAxisIndex: 2,
             data: kdjData.map((_) => _.K),
+            symbol: 'none',
           },
           {
             name: 'D',
@@ -112,6 +116,7 @@ const K: React.FC<PerformanceProps> = ({ secid = '', name }) => {
             xAxisIndex: 2,
             yAxisIndex: 2,
             data: kdjData.map((_) => _.D),
+            symbol: 'none',
           },
           {
             name: 'J',
@@ -119,6 +124,7 @@ const K: React.FC<PerformanceProps> = ({ secid = '', name }) => {
             xAxisIndex: 2,
             yAxisIndex: 2,
             data: kdjData.map((_) => _.J),
+            symbol: 'none',
           },
         ]);
       }
@@ -133,6 +139,7 @@ const K: React.FC<PerformanceProps> = ({ secid = '', name }) => {
             xAxisIndex: 2,
             yAxisIndex: 2,
             data: rsiData.map((_) => _.RSI6),
+            symbol: 'none',
           },
           {
             name: 'RSI12',
@@ -140,6 +147,7 @@ const K: React.FC<PerformanceProps> = ({ secid = '', name }) => {
             xAxisIndex: 2,
             yAxisIndex: 2,
             data: rsiData.map((_) => _.RSI12),
+            symbol: 'none',
           },
           {
             name: 'RSI24',
@@ -147,6 +155,7 @@ const K: React.FC<PerformanceProps> = ({ secid = '', name }) => {
             xAxisIndex: 2,
             yAxisIndex: 2,
             data: rsiData.map((_) => _.RSI24),
+            symbol: 'none',
           },
         ]);
       }
@@ -161,6 +170,7 @@ const K: React.FC<PerformanceProps> = ({ secid = '', name }) => {
             xAxisIndex: 2,
             yAxisIndex: 2,
             data: biasData.map((_) => _.BIAS),
+            symbol: 'none',
           },
           {
             name: 'BIAS2',
@@ -168,6 +178,7 @@ const K: React.FC<PerformanceProps> = ({ secid = '', name }) => {
             xAxisIndex: 2,
             yAxisIndex: 2,
             data: biasData.map((_) => _.BIAS2),
+            symbol: 'none',
           },
           {
             name: 'BIAS3',
@@ -175,6 +186,7 @@ const K: React.FC<PerformanceProps> = ({ secid = '', name }) => {
             xAxisIndex: 2,
             yAxisIndex: 2,
             data: biasData.map((_) => _.BIAS3),
+            symbol: 'none',
           },
         ]);
       }
@@ -191,7 +203,7 @@ const K: React.FC<PerformanceProps> = ({ secid = '', name }) => {
           },
         },
         legend: {
-          data: ['日K', 'MA5', 'MA10', 'MA20', 'MA30', 'MA60', 'MA120', 'MA250'],
+          data: ['MA5', 'MA10', 'MA20', 'MA30', 'MA60', 'MA120', 'MA250'],
           textStyle: {
             color: 'var(--main-text-color)',
             fontSize: 10,
@@ -201,28 +213,37 @@ const K: React.FC<PerformanceProps> = ({ secid = '', name }) => {
             MA120: false,
             MA250: false,
           },
+          top: 0,
+          padding: [5, 0, 5, 0],
+          itemGap: 5,
         },
         grid: [
           {
-            left: 60,
+            left: 40,
             right: 5,
+            top: 42,
             height: '50%',
-            // containLabel: true,
           },
           {
-            left: 60,
+            left: 40,
             right: 5,
             top: '66%',
             height: '15%',
-            // containLabel: true,
           },
           {
-            left: 60,
+            left: 40,
             right: 5,
             top: '84%',
             height: '15%',
           },
         ],
+        axisPointer: {
+          link: [
+            {
+              xAxisIndex: [0, 1],
+            },
+          ],
+        },
         xAxis: [
           {
             data: times,
@@ -231,6 +252,10 @@ const K: React.FC<PerformanceProps> = ({ secid = '', name }) => {
             axisLine: { onZero: false },
             splitLine: { show: false },
             splitNumber: 20,
+            axisLabel: { show: true, fontSize: 10 },
+            axisPointer: {
+              label: { show: false },
+            },
           },
           {
             type: 'category',
@@ -253,6 +278,10 @@ const K: React.FC<PerformanceProps> = ({ secid = '', name }) => {
                 color: 'var(--border-color)',
               },
             },
+            axisLabel: {
+              show: true,
+              fontSize: 10,
+            },
           },
           {
             gridIndex: 1,
@@ -260,7 +289,11 @@ const K: React.FC<PerformanceProps> = ({ secid = '', name }) => {
             axisLine: { onZero: false },
             axisTick: { show: false },
             splitLine: { show: false },
-            axisLabel: { show: true },
+            axisLabel: {
+              show: true,
+              formatter: Utils.ConvertBigNum,
+              fontSize: 10,
+            },
           },
           {
             scale: true,
@@ -269,7 +302,10 @@ const K: React.FC<PerformanceProps> = ({ secid = '', name }) => {
             axisLine: { onZero: false },
             axisTick: { show: false },
             splitLine: { show: false },
-            axisLabel: { show: true },
+            axisLabel: {
+              show: true,
+              fontSize: 10,
+            },
           },
         ],
         dataZoom: [
@@ -301,6 +337,7 @@ const K: React.FC<PerformanceProps> = ({ secid = '', name }) => {
               color0: varibleColors['--reduce-color'],
             },
             markPoint: {
+              symbolSize: 30,
               data: [
                 {
                   name: '最高值',
@@ -311,11 +348,6 @@ const K: React.FC<PerformanceProps> = ({ secid = '', name }) => {
                   name: '最低值',
                   type: 'min',
                   valueDim: 'lowest',
-                },
-                {
-                  name: '平均值',
-                  type: 'average',
-                  valueDim: 'close',
                 },
               ],
             },
@@ -406,8 +438,8 @@ const K: React.FC<PerformanceProps> = ({ secid = '', name }) => {
             itemStyle: {
               normal: {
                 color: function (params: any) {
-                  const { kp, sp } = result[params.dataIndex];
-                  return sp > kp ? varibleColors['--increase-color'] : varibleColors['--reduce-color'];
+                  const { zdf } = result[params.dataIndex];
+                  return Number(zdf) > 0 ? varibleColors['--increase-color'] : varibleColors['--reduce-color'];
                 },
               },
             },

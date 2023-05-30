@@ -56,9 +56,16 @@
 
 ## 下载使用
 
-> 注意 ⚠️：由于 MacOS 不允许打开未经 Apple 公证的程序，如果出现软件无法打开请进行以下操作 或[参考这里](https://github.com/1zilc/fishing-funds/issues/149)
+> 注意 ⚠️：由于 MacOS 不允许打开未签名的程序，如果出现软件无法打开请进行以下操作 或[参考这里](https://github.com/1zilc/fishing-funds/issues/149)
+
 
 ```bash
+# 终端执行
+sudo xattr -d com.apple.quarantine "/Applications/Fishing Funds.app"
+```
+
+```bash
+# 安全设置
 进入 「设置」- 「安全性与隐私」- 「通用」- 「允许从以下位置下载的App」-「仍然打开」
 ```
 

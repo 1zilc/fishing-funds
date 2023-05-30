@@ -1,9 +1,8 @@
 import React, { useState, startTransition } from 'react';
 import clsx from 'clsx';
-import { InputNumber, Radio, Badge, Switch, Slider, TimePicker, Input, Tabs, Select, Checkbox, Button, ConfigProvider } from 'antd';
+import { InputNumber, Radio, Badge, Switch, Slider, TimePicker, Input, Tabs, Select, Checkbox, Button, ColorPicker } from 'antd';
 import dayjs from 'dayjs';
 import { ReactSortable } from 'react-sortablejs';
-import { HuePicker } from 'react-color';
 
 import PureCard from '@/components/Card/PureCard';
 import StandCard from '@/components/Card/StandCard';
@@ -78,6 +77,8 @@ export const APIOptions = [
     recommond: '★★★☆☆',
   },
 ];
+
+const presetColors = ['#F5222D', '#FA8C16', '#FADB14', '#8BBB11', '#52C41A', '#13A8A8', '#1677FF', '#2F54EB', '#722ED1', '#EB2F96'];
 
 const SettingContent: React.FC<SettingContentProps> = (props) => {
   const dispatch = useAppDispatch();
@@ -289,18 +290,19 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
                       <section>
                         <label>自定义主题色 ：</label>
                         <div className={styles.colorBar}>
-                          {customThemeColorEnable && (
-                            <HuePicker
-                              className={styles.colorPicker}
-                              color={customThemeColor || originPrimaryColor}
-                              onChangeComplete={(v) => {
-                                startTransition(() => {
-                                  setCustomThemeColor(v.hex);
-                                });
-                              }}
-                            />
-                          )}
-                          <i className={styles.colorBlock} />
+                          <ColorPicker
+                            trigger="hover"
+                            disabled={!customThemeColorEnable}
+                            value={themeColor}
+                            presets={[{ label: '推荐', colors: presetColors }]}
+                            onChange={(v, hex) => {
+                              startTransition(() => {
+                                setCustomThemeColor(hex);
+                              });
+                            }}
+                          >
+                            <div className={styles.colorPicker} style={{ backgroundColor: themeColor }} />
+                          </ColorPicker>
                         </div>
                       </section>
                       <section>
@@ -405,16 +407,14 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
                         className={styles.bottomTabsRow}
                         swap
                       >
-                        {bottomTabs.map((tab) => {
-                          return (
-                            <PureCard key={tab.key}>
-                              <div className={styles.bottomTabItem}>
-                                <div>{tab.name}</div>
-                                <Checkbox checked={tab.show} onClick={() => onBottomTabCheckChange(tab.key)} />
-                              </div>
-                            </PureCard>
-                          );
-                        })}
+                        {bottomTabs.map((tab) => (
+                          <PureCard key={tab.key}>
+                            <div className={styles.bottomTabItem}>
+                              <div>{tab.name}</div>
+                              <Checkbox checked={tab.show} onClick={() => onBottomTabCheckChange(tab.key)} />
+                            </div>
+                          </PureCard>
+                        ))}
                       </ReactSortable>
                     </div>
                   </StandCard>

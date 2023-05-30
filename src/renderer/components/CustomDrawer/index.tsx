@@ -41,4 +41,4 @@ const CustomDrawer: React.FC<PropsWithChildren<CustomDrawerProps>> = ({
   );
 };
 
-export default CustomDrawer;
+export default React.memo(CustomDrawer);

@@ -5,10 +5,10 @@ import TranslateIcon from '@/static/icon/translate.svg';
 import SettingIcon from '@/static/icon/setting.svg';
 import LineCharIcon from '@/static/icon/line-chart.svg';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
+import WebAppIcon from '@/components/Toolbar/AppCenterContent/WebAppIcon';
 import StandCard from '@/components/Card/StandCard';
 import PureCard from '@/components/Card/PureCard';
 import Guide from '@/components/Guide';
-import colorHash from '@/utils/colorHash';
 import { setTranslateSettingAction } from '@/store/features/translate';
 import { useAppDispatch, useAppSelector, useInputShortcut } from '@/utils/hooks';
 import * as Enums from '@/utils/enums';
@@ -44,22 +44,6 @@ export const APIOptions = [
   },
 ];
 
-const Logo: React.FC = () => {
-  const color = colorHash.hex(appName);
-
-  return (
-    <div
-      className={styles.logo}
-      style={{
-        background: color,
-        boxShadow: `0 2px 5px ${color}`,
-      }}
-    >
-      <TranslateIcon />
-    </div>
-  );
-};
-
 const TranslateSettingContent: React.FC<TranslateSettingContentProps> = (props) => {
   const dispatch = useAppDispatch();
   const { translateApiTypeSetting, readClipboardSetting, hotkeySetting } = useAppSelector((state) => state.translate.translateSetting);
@@ -83,8 +67,7 @@ const TranslateSettingContent: React.FC<TranslateSettingContentProps> = (props) 
     <CustomDrawerContent title={appName} enterText="保存" onClose={props.onClose} onEnter={onSave}>
       <div className={styles.content}>
         <PureCard className={clsx(styles.logoContent, 'card-body')}>
-          <Logo />
-          <div className={styles.appName}>{appName}</div>
+          <WebAppIcon title={appName} iconType={Enums.WebIconType.Svg} svg={<TranslateIcon />} />
         </PureCard>
         <div className={styles.container}>
           <Tabs
@@ -114,7 +97,7 @@ const TranslateSettingContent: React.FC<TranslateSettingContentProps> = (props) 
                         <div className={styles.guide}>
                           <Guide
                             list={[
-                              { name: '快捷键', text: '设置快捷键快速显示/隐藏翻译' },
+                              { name: '快捷键', text: '设置快捷键显示/隐藏翻译' },
                               { name: '自动填充', text: '当使用快捷键开启翻译后，将自动翻译剪贴板上的内容。' },
                             ]}
                           />

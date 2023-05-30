@@ -15,7 +15,6 @@ import AssetsStatistics from '@/components/Home/FundView/FundStatisticsContent/A
 import AssetsConfig from '@/components/Home/FundView/FundStatisticsContent/AssetsConfig';
 import FundWarehouse from '@/components/Home/FundView/FundStatisticsContent/FundWarehouse';
 import FundOverview from '@/components/Home/FundView/FundStatisticsContent/FundOverview';
-import Sankey from '@/components/Home/FundView/RelationContent/Sankey';
 import { walletIcons } from '@/helpers/wallet';
 import * as Services from '@/services';
 import * as Utils from '@/utils';
@@ -52,17 +51,14 @@ const FundStatisticsContent: React.FC<FundStatisticsContentProps> = (props) => {
     };
   });
 
-  const { data: sankeyResult = [], run: runGetIndustryRateFromEaseMoney } = useRequest(
-    () => Adpters.ChokeGroupAdapter(collectors, 5, 500),
-    {
-      refreshDeps: [allCyFunds],
-      cacheKey: Utils.GenerateRequestKey(
-        'Fund.GetIndustryRateFromEaseMoney',
-        allCyFunds.map(({ fundcode }) => fundcode)
-      ),
-      staleTime: CONST.DEFAULT.SWR_STALE_DELAY,
-    }
-  );
+  const { data: sankeyResult = [] } = useRequest(() => Adpters.ChokeGroupAdapter(collectors, 5, 500), {
+    refreshDeps: [allCyFunds],
+    cacheKey: Utils.GenerateRequestKey(
+      'Fund.GetIndustryRateFromEaseMoney',
+      allCyFunds.map(({ fundcode }) => fundcode)
+    ),
+    staleTime: CONST.DEFAULT.SWR_STALE_DELAY,
+  });
 
   const sankeyData = sankeyResult.filter(Utils.NotEmpty);
   const tags = Array.from(new Set(sankeyData.map(({ stocks = [] }) => stocks.map((stock) => stock.INDEXNAME)).flat()));
@@ -158,31 +154,6 @@ const FundStatisticsContent: React.FC<FundStatisticsContentProps> = (props) => {
               children: (
                 <ChartCard>
                   <FundWarehouse funds={allCyFunds} codes={codes} />
-                </ChartCard>
-              ),
-            },
-          ]}
-        />
-
-        <Tabs
-          animated={{ tabPane: true }}
-          tabBarGutter={15}
-          items={[
-            {
-              key: String(0),
-              label: '股票关系',
-              children: (
-                <ChartCard onFresh={runGetIndustryRateFromEaseMoney}>
-                  <Sankey data={sankeyData} valueKey="GPJC" length={allCyFunds.length} />
-                </ChartCard>
-              ),
-            },
-            {
-              key: String(1),
-              label: '板块关系',
-              children: (
-                <ChartCard onFresh={runGetIndustryRateFromEaseMoney}>
-                  <Sankey data={sankeyData} valueKey="INDEXNAME" length={allCyFunds.length} />
                 </ChartCard>
               ),
             },

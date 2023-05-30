@@ -29,6 +29,7 @@ import IndustryLayout from '@/components/Home/FundView/DetailFundContent/Industr
 import WarehouseEvent from '@/components/Home/FundView/DetailFundContent/WarehouseEvent';
 import Origin from '@/components/Home/FundView/DetailFundContent/Origin';
 import Recent from '@/components/Home/NewsList/Recent';
+import GuBa from '@/components/Home/NewsList/GuBa';
 import { RedirectSearchParams } from '@/containers/InitPage';
 import { DetailFundPageParams } from '@/components/Home/FundView/DetailFundPage';
 import { useFundRating, useDrawer, useAppSelector } from '@/utils/hooks';
@@ -214,6 +215,11 @@ export const DetailFund: React.FC<DetailFundProps> = (props) => {
               },
               {
                 key: String(3),
+                label: '股吧',
+                children: <GuBa keyword={fund?.code} type="105" />,
+              },
+              {
+                key: String(4),
                 label: '源网站',
                 children: (
                   <ChartCard auto>

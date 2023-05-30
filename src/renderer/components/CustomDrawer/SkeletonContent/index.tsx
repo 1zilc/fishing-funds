@@ -25,4 +25,4 @@ const SkeletonContent: React.FC<SkeletonContentProps> = () => {
   );
 };
 
-export default SkeletonContent;
+export default React.memo(SkeletonContent);

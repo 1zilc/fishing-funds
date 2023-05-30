@@ -8,6 +8,7 @@ import K from '@/components/Home/ZindexView/DetailZindexContent/K';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
 import Recent from '@/components/Home/NewsList/Recent';
 import CycleReturn from '@/components/Home/FundView/DetailFundContent/CycleReturn';
+import GuBa from '@/components/Home/NewsList/GuBa';
 import { RedirectSearchParams } from '@/containers/InitPage';
 import { DetailZindexPageParams } from '@/components/Home/ZindexView/DetailZindexPage';
 import * as Services from '@/services';
@@ -101,6 +102,11 @@ export const DetailZindex: React.FC<DetailFundProps> = (props) => {
               key: String(1),
               label: '近期资讯',
               children: <Recent keyword={zindex.name} filter={Enums.NewsFilterType.Title} />,
+            },
+            {
+              key: String(2),
+              label: '股吧',
+              children: <GuBa keyword={zindex.zindexCode} type="102" />,
             },
           ]}
         />

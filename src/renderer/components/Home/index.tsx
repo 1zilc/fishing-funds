@@ -12,6 +12,7 @@ import Collect from '@/components/Collect';
 import GroupTab from '@/components/GroupTab';
 import WebViewerDrawer from '@/components/WebViewerDrawer';
 import TranslateDrawer from '@/components/TranslateDrawer';
+import ChatGPTDrawer from '@/components/ChatGPTDrawer';
 import { stockTypesConfig } from '@/components/Toolbar/AppCenterContent/StockSearch';
 
 import { useAppSelector } from '@/utils/hooks';
@@ -219,6 +220,7 @@ const Home: React.FC<HomeProps> = () => {
         <TabsBar />
       </Footer>
       <WebViewerDrawer />
+      <ChatGPTDrawer />
       <TranslateDrawer />
       <Collect title="home" />
     </div>

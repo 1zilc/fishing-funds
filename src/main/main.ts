@@ -33,14 +33,18 @@ import { createChildWindow } from './childWindow';
 import Proxy from './proxy';
 import HotkeyManager from './hotkey';
 import ContextMenuManager from './contextMenu';
+import { createAppMenu } from './menu';
 import { saveImage, saveJsonToCsv, saveString, readFile } from './io';
-import { lockSingleInstance, checkEnvTool, sendMessageToRenderer, setNativeTheme, getOtherWindows } from './util';
+import { lockSingleInstance, checkEnvTool, sendMessageToRenderer, setNativeTheme, getOtherWindows, makeFakeUA } from './util';
 import * as Enums from '../renderer/utils/enums';
 
 let mb: Menubar;
 let openBackupFilePath = '';
+let ua = '';
+let fakeUA = '';
 
 async function init() {
+  // 单例
   lockSingleInstance();
   await app.whenReady();
   await checkEnvTool();
@@ -126,7 +130,7 @@ function main() {
     return localStore.getStore(config.type);
   });
   ipcMain.handle('registry-webview', async (event, config) => {
-    const contents = webContents.fromId(config);
+    const contents = webContents.fromId(config)!;
     const win = BrowserWindow.fromWebContents(contents);
     contents.setWindowOpenHandler(({ url }) => {
       sendMessageToRenderer(win, 'webview-new-window', url);
@@ -138,6 +142,9 @@ function main() {
   });
   ipcMain.handle('set-proxy', async (event, config) => {
     return event.sender.session.setProxy(config);
+  });
+  ipcMain.handle('get-fakeUA', async (event, config) => {
+    return fakeUA;
   });
   ipcMain.handle('update-tray-context-menu-wallets', async (event, config) => {
     contextMenuManager.updateWalletMenu(config);
@@ -165,6 +172,7 @@ function main() {
   // 快捷键
   const visibleHotkeyManager = new HotkeyManager({ mb });
   const translateHotkeyManager = new HotkeyManager({ mb });
+  const chatGPTHotkeyManager = new HotkeyManager({ mb });
   ipcMain.handle('set-visible-hotkey', async (event, keys: string) => {
     visibleHotkeyManager.registryHotkey(keys, ({ visible }) => {
       if (visible) {
@@ -177,6 +185,11 @@ function main() {
   ipcMain.handle('set-translate-hotkey', async (event, keys: string) => {
     translateHotkeyManager.registryHotkey(keys, ({ visible }) => {
       sendMessageToRenderer(mb.window, 'trigger-translate', visible);
+    });
+  });
+  ipcMain.handle('set-chatGPT-hotkey', async (event, keys: string) => {
+    chatGPTHotkeyManager.registryHotkey(keys, ({ visible }) => {
+      sendMessageToRenderer(mb.window, 'trigger-chatGPT', visible);
     });
   });
   // 多窗口相关
@@ -202,8 +215,6 @@ function main() {
   ipcMain.handle('got', async (event, { url, config }) => {
     try {
       const proxyConent = await event.sender.session.resolveProxy(url);
-      const UA = event.sender.session.getUserAgent();
-      const fakeUA = UA.replace(/(FishingFunds|Electron)\/.*?\s/g, '');
       const { httpAgent, httpsAgent } = new Proxy(proxyConent, url);
       const res = await got(url, {
         ...config,
@@ -241,6 +252,13 @@ function main() {
   ipcMain.handle('clipboard-writeText', async (event, text) => clipboard.writeText(text));
   ipcMain.handle('clipboard-writeImage', async (event, dataUrl) => clipboard.writeImage(nativeImage.createFromDataURL(dataUrl)));
   // menubar 相关监听
+  mb.on('before-load', () => {
+    // 生成fakeUA
+    ua = mb.window!.webContents.getUserAgent();
+    fakeUA = makeFakeUA(ua);
+    mb.window?.webContents.setUserAgent(fakeUA);
+    mb.window?.webContents.session.setUserAgent(fakeUA);
+  });
   mb.on('after-create-window', () => {
     // 注册windowId
     windowIds.push(mb.window!.webContents.id);
@@ -250,8 +268,6 @@ function main() {
     tray.on('right-click', () => {
       mb.tray.popUpContextMenu(contextMenuManager.buildContextMenu);
     });
-    // 隐藏菜单栏
-    Menu.setApplicationMenu(null);
     // 监听主题颜色变化
     nativeTheme.on('updated', () => {
       getOtherWindows(windowIds).forEach((win) => {
@@ -260,6 +276,9 @@ function main() {
     });
     // 存储窗口大小
     mainWindowState.manage(mb.window!);
+    // 生成应用菜单
+    const appMenu = createAppMenu();
+    Menu.setApplicationMenu(appMenu);
     // 是否打开备份文件
     if (openBackupFilePath) {
       sendMessageToRenderer(mb.window, 'open-backup-file', openBackupFilePath);
@@ -293,7 +312,6 @@ function main() {
 
   // new AppUpdater({ icon: nativeIcon, win: mb.window });
 }
-
 // app 相关监听
 app.on('window-all-closed', () => {
   // Respect the OSX convention of having the application in memory even
