@@ -1,5 +1,5 @@
 import * as fs from 'fs';
-import { parseAsync } from 'json2csv';
+import { Parser } from '@json2csv/plainjs';
 
 export async function saveImage(filePath: string, dataUrl: string) {
   const data = dataUrl.match(/^data:([A-Za-z-+/]+);base64,(.+)$/);
@@ -16,8 +16,8 @@ export async function saveString(filePath: string, content: string) {
 }
 
 export async function saveJsonToCsv(filePath: string, json: any[]) {
-  const fields = Object.keys(json[0] || {});
-  const csv = await parseAsync(json, { fields });
+  const parser = new Parser();
+  const csv = parser.parse(json);
   return new Promise((resolve, reject) => {
     fs.writeFile(filePath, csv, resolve);
   });

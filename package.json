@@ -203,7 +203,6 @@
     "@types/color": "^3.0.3",
     "@types/color-hash": "^1.0.2",
     "@types/jest": "^29.5.1",
-    "@types/json2csv": "^5.0.3",
     "@types/node": "20.2.5",
     "@types/react": "^18.2.5",
     "@types/react-dom": "^18.2.3",
@@ -261,6 +260,7 @@
     "worker-loader": "^3.0.8"
   },
   "dependencies": {
+    "@json2csv/plainjs": "^7.0.0",
     "@reduxjs/toolkit": "^1.9.5",
     "ahooks": "^3.7.7",
     "antd": "^5.5.0",
@@ -285,7 +285,6 @@
     "hxc3-indicator-formula": "^1.0.9",
     "iconv-lite": "^0.6.3",
     "js-base64": "^3.7.5",
-    "json2csv": "^5.0.7",
     "menubar": "^9.3.0",
     "number-precision": "^1.6.0",
     "promise-worker": "^2.0.1",
