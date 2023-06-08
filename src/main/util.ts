@@ -7,7 +7,7 @@ export function resolveHtmlPath() {
   if (process.env.NODE_ENV === 'development') {
     const port = process.env.PORT || 3456;
     // const url = new URL();
-    return `https://localhost:${port}`;
+    return `https://127.0.0.1:${port}`;
   } else {
     return `file://${path.resolve(__dirname, '../renderer/', 'index.html')}`;
   }
@@ -78,7 +78,7 @@ export function setNativeTheme(theme: Enums.SystemThemeType) {
 }
 
 export function getPreloadPath() {
-  return app.isPackaged ? path.join(__dirname, 'preload.js') : path.join(__dirname, '../../.erb/dll/preload.js');
+  return app.isPackaged ? path.join(__dirname, '../preload/index.js') : path.join(__dirname, '../../out/preload/index.js');
 }
 
 export function getOtherWindows(windowIds: number[], current?: number) {

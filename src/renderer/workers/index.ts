@@ -1,6 +1,6 @@
 import PromiseWorker from 'promise-worker';
 //TODO:redux 异步action 会导致逻辑问题，暂时停止使用worker方案
-import SearchWorker from '@/workers/search.worker.ts';
+// import SearchWorker from '@/workers/search.worker';
 
 export class BasicWorker extends PromiseWorker {
   private worker: Worker;
@@ -16,7 +16,7 @@ export class BasicWorker extends PromiseWorker {
 }
 
 export class SearchPromiseWorker extends BasicWorker {
-  constructor() {
-    super(new SearchWorker());
-  }
+  // constructor() {
+  //   super(new SearchWorker());
+  // }
 }

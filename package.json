@@ -2,7 +2,7 @@
   "name": "fishing-funds",
   "productName": "Fishing Funds",
   "description": "基金,大盘,股票,虚拟货币状态栏显示小应用,基于Electron开发,支持 MacOS,Windows,Linux客户端,数据源来自天天基金,蚂蚁基金,爱基金,腾讯证券,新浪基金等",
-  "main": "./src/main/main.ts",
+  "main": "./out/main/index.js",
   "type": "module",
   "scripts": {
     "build": "concurrently \"npm run build:main\" \"npm run build:renderer\"",
@@ -24,7 +24,8 @@
     "start:main": "cross-env NODE_ENV=development NODE_OPTIONS=\"--loader tsx\" electronmon .",
     "start:preload": "cross-env NODE_ENV=development webpack --config ./.erb/configs/webpack.config.preload.dev.mjs",
     "start:renderer": "cross-env NODE_ENV=development webpack serve --config ./.erb/configs/webpack.config.renderer.dev.mjs",
-    "test": "npx jest"
+    "test": "npx jest",
+    "dev": "cross-env NODE_ENV=development NODE_OPTIONS=\"--loader tsx\" electron-vite build"
   },
   "build": {
     "productName": "Fishing Funds",
@@ -196,6 +197,8 @@
     "@electron/notarize": "^1.2.3",
     "@electron/rebuild": "^3.2.13",
     "@pmmmwh/react-refresh-webpack-plugin": "^0.5.10",
+    "@svgr/plugin-jsx": "^8.0.1",
+    "@svgr/plugin-svgo": "^8.0.1",
     "@svgr/webpack": "^8.0.1",
     "@teamsupercell/typings-for-css-modules-loader": "^2.5.2",
     "@testing-library/jest-dom": "^5.16.5",
@@ -218,6 +221,7 @@
     "electron": "^25.0.0",
     "electron-builder": "^24.4.0",
     "electron-extension-installer": "^1.2.0",
+    "electron-vite": "^1.0.23",
     "electronmon": "^2.0.2",
     "esbuild-loader": "^3.0.1",
     "eslint": "^8.41.0",
@@ -252,6 +256,8 @@
     "tsconfig-paths-webpack-plugin": "^4.0.1",
     "tsx": "^3.12.7",
     "typescript": "^5.0.4",
+    "vite-plugin-mkcert": "^1.15.0",
+    "vite-plugin-svgr": "^3.2.0",
     "webpack": "^5.84.1",
     "webpack-bundle-analyzer": "^4.8.0",
     "webpack-cli": "^5.1.1",

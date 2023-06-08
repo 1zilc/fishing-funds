@@ -1,5 +1,4 @@
 import { NativeImage, dialog, shell, app } from 'electron';
-import path from 'path';
 import { Menubar } from 'menubar';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
@@ -10,7 +9,7 @@ export default class AppUpdater {
 
   constructor(conf: { icon?: NativeImage; mb: Menubar }) {
     autoUpdater.autoDownload = false;
-    log.transports.file.level = 'info';
+    // log.transports.file.level = 'info';
     // Object.defineProperty(app, 'isPackaged', {
     //   get() {
     //     return true;

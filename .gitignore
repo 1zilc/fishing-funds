@@ -36,3 +36,5 @@ package-lock.json
 
 # src js
 /src/**/*.js
+
+out
