@@ -48,7 +48,7 @@ const Wallet: React.FC<WalletProps> = () => {
         .map((config) => ({
           key: config.code,
           label: config.name,
-          icon: <img className={styles.menuIcon} src={walletIcons[config.iconIndex] || 0} />,
+          icon: <img className={styles.menuIcon} src={walletIcons[config.iconIndex || 0]} />,
         }))
         .concat({
           key: '',
