@@ -7,7 +7,7 @@ export function resolveHtmlPath() {
   if (process.env.NODE_ENV === 'development') {
     const port = process.env.PORT || 3456;
     // const url = new URL();
-    return `https://127.0.0.1:${port}`;
+    return `https://localhost:${port}`;
   } else {
     return `file://${path.resolve(__dirname, '../renderer/', 'index.html')}`;
   }
