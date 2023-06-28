@@ -1,8 +1,9 @@
 import path from 'path';
-const mkcert = require('vite-plugin-mkcert').default;
+import mkcert from 'vite-plugin-mkcert';
+import { defineConfig, splitVendorChunkPlugin } from 'electron-vite';
 
 // electron.vite.config.js
-export default {
+export default defineConfig({
   main: {
     // vite config options
   },
@@ -23,4 +24,4 @@ export default {
       },
     },
   },
-};
+});

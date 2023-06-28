@@ -6,11 +6,12 @@
   "main": "./out/main/index.js",
   "type": "module",
   "scripts": {
+    "dev": "cross-env NODE_ENV=development NODE_OPTIONS=\"--loader tsx\" electron-vite dev",
+    "build": "cross-env NODE_ENV=development NODE_OPTIONS=\"--loader tsx\" electron-vite build",
     "build:icon": "electron-icon-builder --input=./assets/icon.png --output=./icon-build",
     "package-all": "node ./.erb/scripts/clean.js dist && npm run build && electron-builder build -mwl -p never",
     "release-all": "node ./.erb/scripts/clean.js dist && npm run build && electron-builder build -mwl -p always",
-    "beta-mac": "node ./.erb/scripts/clean.js dist && npm run build && electron-builder build -m -p always",
-    "dev": "cross-env NODE_ENV=development NODE_OPTIONS=\"--loader tsx\" electron-vite dev"
+    "beta-mac": "node ./.erb/scripts/clean.js dist && npm run build && electron-builder build -m -p always"
   },
   "build": {
     "productName": "Fishing Funds",
@@ -154,8 +155,6 @@
     "electron-extension-installer": "^1.2.0",
     "electron-vite": "^1.0.23",
     "generate-react-cli": "^8.3.0",
-    "prettier": "^2.8.8",
-    "react-refresh": "^0.14.0",
     "react-test-renderer": "^18.2.0",
     "rimraf": "^5.0.1",
     "sass": "^1.62.1",
@@ -183,7 +182,6 @@
     "electron-updater": "^6.1.0",
     "electron-window-state": "^5.0.3",
     "got": "^13.0.0",
-    "html2canvas": "^1.4.1",
     "http-proxy-agent": "^7.0.0",
     "https-proxy-agent": "^7.0.0",
     "hxc3-indicator-formula": "^1.0.9",
