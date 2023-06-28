@@ -1,11 +1,10 @@
 import iconv from 'iconv-lite';
+import { fromUint8Array } from 'js-base64';
 import NP from 'number-precision';
 import cheerio from 'cheerio';
 import dayjs from 'dayjs';
 import request from '@/utils/request';
 import * as Utils from '@/utils';
-
-const { base64 } = window.contextModules;
 
 // 天天基金
 export async function FromEastmoney(code: string) {
@@ -426,7 +425,7 @@ export async function FromFund123(code: string) {
         _csrf: csrf,
       },
       headers: {
-        cookie: cookies?.join(''),
+        'cookie': cookies?.join(''),
         'content-type': 'application/json',
       },
       body: JSON.stringify({
@@ -598,7 +597,7 @@ export async function FromFund10jqka(code: string) {
 export async function GetEstimatedFromEastmoney(code: string) {
   try {
     const { rawBody } = await request(`https://j4.dfcfw.com/charts/pic6/${code}.png`);
-    const b64encoded = base64.fromUint8Array(new Uint8Array(rawBody));
+    const b64encoded = fromUint8Array(new Uint8Array(rawBody));
     return `data:image/png;base64,${b64encoded}`;
   } catch (error) {
     return;
@@ -609,7 +608,7 @@ export async function GetEstimatedFromEastmoney(code: string) {
 export async function GetInverstStyleFromEastmoney(code: string) {
   try {
     const { rawBody } = await request(`https://j3.dfcfw.com/images/InvestStyle/${code}.png`);
-    const b64encoded = base64.fromUint8Array(new Uint8Array(rawBody));
+    const b64encoded = fromUint8Array(new Uint8Array(rawBody));
     return `data:image/png;base64,${b64encoded}`;
   } catch (error) {
     return;

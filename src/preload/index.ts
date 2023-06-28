@@ -1,7 +1,4 @@
 import { contextBridge, ipcRenderer } from 'electron';
-import { encode, decode, fromUint8Array } from 'js-base64';
-import { CodingPromiseWorker } from '../main/workers';
-// import { WorkerRecieveParams as CodingWorkerRecieveParams } from '../main/workers/coding.worker';
 
 contextBridge.exposeInMainWorld('contextModules', {
   got: async (url: string, config: any) => ipcRenderer.invoke('got', { url, config }),
@@ -66,32 +63,6 @@ contextBridge.exposeInMainWorld('contextModules', {
     saveString: (path: string, content: string) => ipcRenderer.invoke('io-saveString', { path, content }),
     readFile: (path: string) => ipcRenderer.invoke('io-readFile', { path }),
   },
-  coding: {
-    // encryptFF(content: any) {
-    //   const codingPromiseWorker = new CodingPromiseWorker();
-    //   return codingPromiseWorker
-    //     .postMessage<string, CodingWorkerRecieveParams>({ module: 'encryptFF', data: content })
-    //     .finally(() => codingPromiseWorker.terminate());
-    // },
-    // decryptFF(content: string) {
-    //   const codingPromiseWorker = new CodingPromiseWorker();
-    //   return codingPromiseWorker
-    //     .postMessage<string, CodingWorkerRecieveParams>({ module: 'decryptFF', data: content })
-    //     .finally(() => codingPromiseWorker.terminate());
-    // },
-    // encodeFF(content: string) {
-    //   const codingPromiseWorker = new CodingPromiseWorker();
-    //   return codingPromiseWorker
-    //     .postMessage<string, CodingWorkerRecieveParams>({ module: 'encodeFF', data: content })
-    //     .finally(() => codingPromiseWorker.terminate());
-    // },
-    // decodeFF(content: string) {
-    //   const codingPromiseWorker = new CodingPromiseWorker();
-    //   return codingPromiseWorker
-    //     .postMessage<string, CodingWorkerRecieveParams>({ module: 'decodeFF', data: content })
-    //     .finally(() => codingPromiseWorker.terminate());
-    // },
-  },
   electronStore: {
     async get(type: Store.StoreType, key: string, init: unknown) {
       return ipcRenderer.invoke('get-storage-config', { type, key, init });
@@ -108,10 +79,5 @@ contextBridge.exposeInMainWorld('contextModules', {
     async all(type: Store.StoreType) {
       return ipcRenderer.invoke('all-storage-config', { type });
     },
-  },
-  base64: {
-    encode,
-    decode,
-    fromUint8Array,
   },
 });

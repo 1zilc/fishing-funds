@@ -9,7 +9,7 @@ export interface WorkerRecieveParams {
   data: any;
 }
 
-registerPromiseWorker(async (params: WorkerRecieveParams) => {
+registerPromiseWorker((params: WorkerRecieveParams) => {
   switch (params.module) {
     case 'encryptFF':
       return encryptFF(params.data);

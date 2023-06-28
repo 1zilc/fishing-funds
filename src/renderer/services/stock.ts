@@ -1,12 +1,11 @@
 import dayjs from 'dayjs';
+import { fromUint8Array } from 'js-base64';
 import cheerio from 'cheerio';
 import NP from 'number-precision';
 import request from '@/utils/request';
 import * as Utils from '@/utils';
 import * as Enums from '@/utils/enums';
 import { defaultCompany } from '@/components/Home/StockView/DetailStockContent/Company';
-
-const { base64 } = window.contextModules;
 
 // 天天基金获取股票
 export async function FromEastmoney(secid: string) {
@@ -159,7 +158,7 @@ export async function GetPicTrendFromEastmoney(secid: string) {
         token: Utils.MakeHash(),
       },
     });
-    const b64encoded = base64.fromUint8Array(new Uint8Array(rawBody));
+    const b64encoded = fromUint8Array(new Uint8Array(rawBody));
     return `data:image/png;base64,${b64encoded}`;
   } catch (error) {
     return;

@@ -2,10 +2,10 @@
  *  该文件对window.contextModules的模块进行二次封装
  */
 import log from 'electron-log/renderer';
+import { encodeFF, decodeFF, encryptFF, decryptFF } from '@/utils/coding';
 import * as Enums from '@/utils/enums';
 const { ipcRenderer, app } = window.contextModules.electron;
 const { saveString, readFile } = window.contextModules.io;
-const { encodeFF, decodeFF, encryptFF, decryptFF } = window.contextModules.coding;
 const electronStore = window.contextModules.electronStore;
 const { production } = window.contextModules.process;
 
