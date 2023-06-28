@@ -9,6 +9,7 @@
     "dev": "cross-env NODE_OPTIONS=\"--loader tsx\" electron-vite dev",
     "build": "cross-env NODE_OPTIONS=\"--loader tsx\" electron-vite build",
     "build:icon": "electron-icon-builder --input=./assets/icon.png --output=./icon-build",
+    "package": "npm run build && electron-builder build -p never",
     "package-mac": "npm run build && electron-builder build -m -p never",
     "package-all": "npm run build && electron-builder build -mwl -p never",
     "release-all": "npm run build && electron-builder build -mwl -p always",
