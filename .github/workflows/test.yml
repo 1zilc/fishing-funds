@@ -48,7 +48,7 @@ jobs:
 
       - name: Run test
         run: |
-          pnpm package
+          pnpm package-all
         env:
           USE_HARD_LINKS: false
           DEBUG: electron-builder
