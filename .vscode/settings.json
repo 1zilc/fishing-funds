@@ -4,13 +4,8 @@
     ".prettierrc": "jsonc",
     ".eslintignore": "ignore"
   },
-  
-  "eslint.validate": [
-    "javascript",
-    "javascriptreact",
-    "html",
-    "typescriptreact"
-  ],
+
+  "eslint.validate": ["javascript", "javascriptreact", "html", "typescriptreact"],
 
   "files.exclude": {
     "**/src/**/*.js": false
@@ -21,13 +16,11 @@
 
   "search.exclude": {
     ".git": true,
-    ".eslintcache": true,
-    ".erb/dll": true,
-    "release/{build,app/dist}": true,
+    "out": true,
     "node_modules": true,
-    "npm-debug.log.*": true,
-    "test/**/__snapshots__": true,
     "package-lock.json": true,
+    "pnpm-lock.yaml": true,
+    "LICENSE": true,
     "*.{css,sass,scss}.d.ts": true
   }
 }

@@ -1,0 +1,9 @@
+{
+    "name": "fishing-funds",
+    "productName": "Fishing Funds",
+    "version": "8.0.0",
+    "main": "./dist/main/index.js",
+    "scripts": {},
+    "license": "GPL-3.0",
+    "dependencies": {}
+}
