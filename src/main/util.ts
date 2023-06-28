@@ -3,17 +3,24 @@ import { app, BrowserWindow, nativeTheme } from 'electron';
 import * as path from 'path';
 import * as Enums from '../renderer/utils/enums';
 
+export const processPath = process.cwd();
+export const assetsPath = path.join(processPath, 'assets');
+export const appPath = path.resolve(__dirname, '../');
+export const mainPath = path.join(appPath, 'main');
+export const preloadPath = path.join(appPath, 'preload');
+export const rendererPath = path.join(appPath, 'renderer');
+
 export function resolveHtmlPath() {
   if (process.env.NODE_ENV === 'development') {
     const port = process.env.PORT || 3456;
     return `https://localhost:${port}`;
   } else {
-    return `file://${path.resolve(__dirname, '../renderer/', 'index.html')}`;
+    return `file://${path.resolve(rendererPath, 'index.html')}`;
   }
 }
 
 export function getAssetPath(resourceFilename: string) {
-  const EXTRA_RESOURCES_PATH = app.isPackaged ? path.join(process.resourcesPath, 'assets') : path.join(__dirname, '../../../../assets');
+  const EXTRA_RESOURCES_PATH = app.isPackaged ? path.join(process.resourcesPath, 'assets') : assetsPath;
   return path.join(EXTRA_RESOURCES_PATH, resourceFilename);
 }
 
@@ -62,7 +69,7 @@ export function setNativeTheme(theme: Enums.SystemThemeType) {
 }
 
 export function getPreloadPath() {
-  return app.isPackaged ? path.join(__dirname, '../preload/index.js') : path.join(__dirname, '../preload/index.js');
+  return path.join(preloadPath, 'index.js');
 }
 
 export function getOtherWindows(windowIds: number[], current?: number) {
