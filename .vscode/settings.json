@@ -16,8 +16,8 @@
 
   "search.exclude": {
     ".git": true,
-    "out": true,
     "node_modules": true,
+    "release": true,
     "package-lock.json": true,
     "pnpm-lock.yaml": true,
     "LICENSE": true,

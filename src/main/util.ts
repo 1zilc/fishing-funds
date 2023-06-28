@@ -13,7 +13,7 @@ export function resolveHtmlPath() {
 }
 
 export function getAssetPath(resourceFilename: string) {
-  const EXTRA_RESOURCES_PATH = app.isPackaged ? path.join(process.resourcesPath, 'assets') : path.join(__dirname, '../../assets');
+  const EXTRA_RESOURCES_PATH = app.isPackaged ? path.join(process.resourcesPath, 'assets') : path.join(__dirname, '../../../../assets');
   return path.join(EXTRA_RESOURCES_PATH, resourceFilename);
 }
 
@@ -62,7 +62,7 @@ export function setNativeTheme(theme: Enums.SystemThemeType) {
 }
 
 export function getPreloadPath() {
-  return app.isPackaged ? path.join(__dirname, '../preload/index.js') : path.join(__dirname, '../../out/preload/index.js');
+  return app.isPackaged ? path.join(__dirname, '../preload/index.js') : path.join(__dirname, '../preload/index.js');
 }
 
 export function getOtherWindows(windowIds: number[], current?: number) {
