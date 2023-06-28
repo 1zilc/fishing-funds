@@ -19,5 +19,5 @@
       "@/*": ["./src/renderer/*"]
     }
   },
-  "exclude": ["out", "templates", "assets"]
+  "exclude": ["release", "templates", "assets"]
 }
