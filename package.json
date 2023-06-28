@@ -2,29 +2,14 @@
   "name": "fishing-funds",
   "productName": "Fishing Funds",
   "description": "基金,大盘,股票,虚拟货币状态栏显示小应用,基于Electron开发,支持 MacOS,Windows,Linux客户端,数据源来自天天基金,蚂蚁基金,爱基金,腾讯证券,新浪基金等",
+  "version": "8.0.0",
   "main": "./out/main/index.js",
   "type": "module",
   "scripts": {
-    "build": "concurrently \"npm run build:main\" \"npm run build:renderer\"",
-    "build:main": "cross-env NODE_ENV=production webpack --config ./.erb/configs/webpack.config.main.prod.mjs",
-    "build:renderer": "cross-env NODE_ENV=production webpack --config ./.erb/configs/webpack.config.renderer.prod.mjs",
     "build:icon": "electron-icon-builder --input=./assets/icon.png --output=./icon-build",
-    "rebuild": "electron-rebuild --parallel --types prod,dev,optional --module-dir release/app",
-    "lint": "cross-env NODE_ENV=development eslint . --cache --ext .ts,.tsx --fix",
-    "package": "node ./.erb/scripts/clean.js dist && npm run build && electron-builder build --publish never",
-    "package-mac": "node ./.erb/scripts/clean.js dist && npm run build && electron-builder build --mac -p never",
-    "package-linux": "node ./.erb/scripts/clean.js dist && npm run build && electron-builder build --linux -p never",
-    "package-win": "node ./.erb/scripts/clean.js dist && npm run build && electron-builder build --win --x64 -p never",
     "package-all": "node ./.erb/scripts/clean.js dist && npm run build && electron-builder build -mwl -p never",
     "release-all": "node ./.erb/scripts/clean.js dist && npm run build && electron-builder build -mwl -p always",
     "beta-mac": "node ./.erb/scripts/clean.js dist && npm run build && electron-builder build -m -p always",
-    "beta-win": "node ./.erb/scripts/clean.js dist && npm run build && electron-builder build -w -p always",
-    "postinstall": "node .erb/scripts/check-native-dep.js && electron-builder install-app-deps && cross-env NODE_ENV=development webpack --config ./.erb/configs/webpack.config.renderer.dev.dll.mjs",
-    "start": "node ./.erb/scripts/check-port-in-use.js && npm run start:renderer",
-    "start:main": "cross-env NODE_ENV=development NODE_OPTIONS=\"--loader tsx\" electronmon .",
-    "start:preload": "cross-env NODE_ENV=development webpack --config ./.erb/configs/webpack.config.preload.dev.mjs",
-    "start:renderer": "cross-env NODE_ENV=development webpack serve --config ./.erb/configs/webpack.config.renderer.dev.mjs",
-    "test": "npx jest",
     "dev": "cross-env NODE_ENV=development NODE_OPTIONS=\"--loader tsx\" electron-vite dev"
   },
   "build": {
@@ -38,7 +23,6 @@
       "node_modules",
       "package.json"
     ],
-    "afterSign": ".erb/scripts/notarize.cjs",
     "fileAssociations": [
       {
         "ext": "ff",
@@ -131,13 +115,6 @@
     "email": "dywzzjx@163.com",
     "url": "https://www.1zilc.top"
   },
-  "contributors": [
-    {
-      "name": "1zilc",
-      "email": "dywzzjx@163.com",
-      "url": "https://www.1zilc.top"
-    }
-  ],
   "license": "GPL-3.0",
   "bugs": {
     "url": "https://github.com/1zilc/fishing-funds/issues"
@@ -163,107 +140,29 @@
     "snapcraft"
   ],
   "homepage": "https://github.com/1zilc",
-  "jest": {
-    "testURL": "http://localhost/",
-    "testEnvironment": "jsdom",
-    "transform": {
-      "\\.(ts|tsx|js|jsx)$": "ts-jest"
-    },
-    "moduleNameMapper": {
-      "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/.erb/mocks/fileMock.js",
-      "\\.(css|less|sass|scss)$": "identity-obj-proxy",
-      "^@/(.*)$": "<rootDir>/src/renderer/$1"
-    },
-    "moduleFileExtensions": [
-      "js",
-      "jsx",
-      "ts",
-      "tsx",
-      "json"
-    ],
-    "moduleDirectories": [
-      "node_modules",
-      "release/app/node_modules",
-      "src"
-    ],
-    "testPathIgnorePatterns": [
-      "release/app/dist"
-    ],
-    "setupFiles": [
-      "./.erb/scripts/check-build-exists.ts"
-    ]
-  },
   "devDependencies": {
     "@electron/notarize": "^1.2.3",
     "@electron/rebuild": "^3.2.13",
-    "@pmmmwh/react-refresh-webpack-plugin": "^0.5.10",
-    "@svgr/plugin-jsx": "^8.0.1",
-    "@svgr/plugin-svgo": "^8.0.1",
-    "@svgr/webpack": "^8.0.1",
-    "@teamsupercell/typings-for-css-modules-loader": "^2.5.2",
-    "@testing-library/jest-dom": "^5.16.5",
-    "@testing-library/react": "^14.0.0",
-    "@types/color": "^3.0.3",
     "@types/color-hash": "^1.0.2",
-    "@types/jest": "^29.5.1",
     "@types/node": "20.2.5",
     "@types/react": "^18.2.7",
     "@types/react-dom": "^18.2.4",
-    "@types/react-test-renderer": "^18.0.0",
-    "@types/webpack-env": "^1.18.1",
-    "@typescript-eslint/eslint-plugin": "^5.59.8",
-    "@typescript-eslint/parser": "^5.59.8",
-    "chalk": "^5.2.0",
     "concurrently": "^8.0.1",
     "cross-env": "^7.0.3",
-    "css-loader": "^6.8.1",
-    "detect-port": "^1.5.1",
     "electron": "^25.0.0",
     "electron-builder": "^24.4.0",
     "electron-extension-installer": "^1.2.0",
     "electron-vite": "^1.0.23",
-    "electronmon": "^2.0.2",
-    "esbuild-loader": "^3.0.1",
-    "eslint": "^8.41.0",
-    "eslint-config-airbnb": "^19.0.4",
-    "eslint-config-airbnb-typescript": "^17.0.0",
-    "eslint-config-erb": "^4.0.6",
-    "eslint-config-prettier": "8.8.0",
-    "eslint-import-resolver-typescript": "^3.5.5",
-    "eslint-import-resolver-webpack": "^0.13.2",
-    "eslint-plugin-compat": "^4.1.4",
-    "eslint-plugin-import": "^2.27.5",
-    "eslint-plugin-jest": "^27.2.1",
-    "eslint-plugin-jsx-a11y": "^6.7.1",
-    "eslint-plugin-prettier": "^4.2.1",
-    "eslint-plugin-promise": "^6.1.1",
-    "eslint-plugin-react": "^7.32.2",
-    "eslint-plugin-react-hooks": "^4.6.0",
     "generate-react-cli": "^8.3.0",
-    "html-webpack-plugin": "^5.5.1",
-    "identity-obj-proxy": "^3.0.0",
-    "jest": "^29.5.0",
-    "mini-css-extract-plugin": "^2.7.6",
     "prettier": "^2.8.8",
     "react-refresh": "^0.14.0",
     "react-test-renderer": "^18.2.0",
     "rimraf": "^5.0.1",
     "sass": "^1.62.1",
-    "sass-loader": "^13.3.1",
     "source-map-support": "^0.5.21",
-    "style-loader": "^3.3.3",
-    "ts-jest": "^29.1.0",
-    "tsconfig-paths-webpack-plugin": "^4.0.1",
     "tsx": "^3.12.7",
     "typescript": "^5.0.4",
-    "vite-plugin-mkcert": "^1.15.0",
-    "vite-plugin-svgr": "^3.2.0",
-    "webpack": "^5.84.1",
-    "webpack-bundle-analyzer": "^4.8.0",
-    "webpack-cli": "^5.1.1",
-    "webpack-dev-server": "^4.15.0",
-    "webpack-merge": "^5.9.0",
-    "worker-loader": "^3.0.8"
+    "vite-plugin-mkcert": "^1.15.0"
   },
   "dependencies": {
     "@json2csv/plainjs": "^7.0.0",
@@ -272,7 +171,6 @@
     "antd": "^5.5.2",
     "cheerio": "1.0.0-rc.12",
     "clsx": "^1.2.1",
-    "color": "^4.2.3",
     "color-hash": "^2.0.2",
     "compare-versions": "^5.0.3",
     "dayjs": "^1.11.7",
@@ -297,6 +195,7 @@
     "query-string": "^8.1.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-icons": "^4.10.1",
     "react-redux": "^8.0.5",
     "react-router-dom": "^6.11.2",
     "react-sortablejs": "^6.1.4",
@@ -305,16 +204,8 @@
     "socks-proxy-agent": "^8.0.1",
     "sortablejs": "^1.15.0"
   },
-  "browserslist": [],
   "devEngines": {
     "node": ">=18.x",
     "npm": ">=8.x"
-  },
-  "electronmon": {
-    "patterns": [
-      "!**/**",
-      "src/main/**"
-    ],
-    "logLevel": "quiet"
   }
 }
