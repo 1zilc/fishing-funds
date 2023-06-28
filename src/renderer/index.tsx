@@ -1,4 +1,5 @@
 import { createRoot } from 'react-dom/client';
+import { IconContext } from 'react-icons';
 import NP from 'number-precision';
 import { ConfigProvider } from 'antd';
 import zhCN from 'antd/es/locale/zh_CN';
@@ -35,7 +36,9 @@ createRoot(document.getElementById('root')!).render(
       }`}
     </style>
     <Provider store={store}>
-      <App />
+      <IconContext.Provider value={{ size: '16px' }}>
+        <App />
+      </IconContext.Provider>
     </Provider>
   </ConfigProvider>
 );
