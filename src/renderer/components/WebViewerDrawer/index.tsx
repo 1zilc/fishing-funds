@@ -1,17 +1,17 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { Dropdown, Progress, Switch } from 'antd';
-import { useRequest } from 'ahooks';
 import clsx from 'clsx';
 import { useBoolean, useMemoizedFn, useEventListener } from 'ahooks';
-
-import StarIcon from '@/static/icon/star.svg';
-import CopyIcon from '@/static/icon/copy.svg';
-import GlobalIcon from '@/static/icon/global.svg';
-import StarFillIcon from '@/static/icon/star-fill.svg';
-import ArrowLeftIcon from '@/static/icon/arrow-left.svg';
-import ArrowRightIcon from '@/static/icon/arrow-right.svg';
-import RefreshIcon from '@/static/icon/refresh.svg';
-import ToolsIcon from '@/static/icon/tools.svg';
+import {
+  RiStarFill,
+  RiStarLine,
+  RiFileCopyFill,
+  RiRefreshLine,
+  RiToolsLine,
+  RiArrowLeftLine,
+  RiArrowRightLine,
+  RiGlobalLine,
+} from 'react-icons/ri';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
 import CustomDrawer from '@/components/CustomDrawer';
 import Empty from '@/components/Empty';
@@ -230,11 +230,11 @@ export const WebViewer: React.FC<WebViewerProps> = (props) => {
               <div className={styles.menu}>
                 <div className={styles.menuItem} onClick={onVisit}>
                   <label>浏览器打开</label>
-                  <GlobalIcon {...menuItemSize} />
+                  <RiGlobalLine {...menuItemSize} />
                 </div>
                 <div className={styles.menuItem} onClick={onCopyUrl}>
                   <label>复制链接</label>
-                  <CopyIcon {...menuItemSize} />
+                  <RiFileCopyFill {...menuItemSize} />
                 </div>
                 <div className={styles.menuItem}>
                   <label>移动端标识</label>
@@ -244,12 +244,12 @@ export const WebViewer: React.FC<WebViewerProps> = (props) => {
             )}
             placement="topLeft"
           >
-            <ToolsIcon />
+            <RiToolsLine />
           </Dropdown>
-          <ArrowLeftIcon onClick={() => viewRef.current?.goBack()} />
-          <RefreshIcon onClick={() => viewRef.current?.reload()} />
-          <ArrowRightIcon onClick={() => viewRef.current?.goForward()} />
-          {codeMap[currentUrl] ? <StarFillIcon onClick={onRemoveWeb} /> : <StarIcon onClick={onSetWeb} />}
+          <RiArrowLeftLine onClick={() => viewRef.current?.goBack()} />
+          <RiRefreshLine onClick={() => viewRef.current?.reload()} />
+          <RiArrowRightLine onClick={() => viewRef.current?.goForward()} />
+          {codeMap[currentUrl] ? <RiStarFill onClick={onRemoveWeb} /> : <RiStarLine onClick={onSetWeb} />}
         </div>
       </div>
       <CustomDrawer show={showAddWebContent} zIndex={CONST.DEFAULT.DRAWER_ZINDEX_TOP}>

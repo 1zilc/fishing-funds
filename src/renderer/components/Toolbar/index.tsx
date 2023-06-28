@@ -2,9 +2,7 @@ import React, { useRef } from 'react';
 import { Badge } from 'antd';
 import clsx from 'clsx';
 import { useBoolean, useMemoizedFn, useLongPress } from 'ahooks';
-import RefreshIcon from '@/static/icon/refresh.svg';
-import SettingIcon from '@/static/icon/setting.svg';
-import AppsIcon from '@/static/icon/apps.svg';
+import { RiRefreshLine, RiSettingsLine, RiAppsLine } from 'react-icons/ri';
 import CustomDrawer from '@/components/CustomDrawer';
 import {
   useFreshFunds,
@@ -89,12 +87,12 @@ const ToolBar: React.FC<ToolBarProps> = () => {
   return (
     <div className={styles.content}>
       <div className={clsx(styles.bar, 'max-content')}>
-        <AppsIcon style={{ ...iconSize }} onClick={openAppCenterDrawer} />
+        <RiAppsLine style={{ ...iconSize }} onClick={openAppCenterDrawer} />
         <div ref={freshRef}>
-          <RefreshIcon style={{ ...iconSize }} />
+          <RiRefreshLine style={{ ...iconSize }} />
         </div>
         <Badge dot={!!updateInfo.version}>
-          <SettingIcon style={{ ...iconSize }} onClick={openSettingContent} />
+          <RiSettingsLine style={{ ...iconSize }} onClick={openSettingContent} />
         </Badge>
         <CustomDrawer show={showAppCenterDrawer}>
           <AppCenterContent

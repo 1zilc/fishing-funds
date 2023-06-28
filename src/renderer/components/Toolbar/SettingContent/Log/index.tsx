@@ -4,12 +4,9 @@ import dayjs from 'dayjs';
 import { Timeline, Spin } from 'antd';
 import { useRequest } from 'ahooks';
 import { compareVersions } from 'compare-versions';
-
+import { RiLink, RiRefreshLine, RiCalendar2Line } from 'react-icons/ri';
 import StandCard from '@/components/Card/StandCard';
 import Empty from '@/components/Empty';
-import CalendarIcon from '@/static/icon/calendar.svg';
-import RefreshIcon from '@/static/icon/refresh.svg';
-import LinkIcon from '@/static/icon/link.svg';
 import { useAppSelector } from '@/utils/hooks';
 import * as Services from '@/services';
 import * as Utils from '@/utils';
@@ -39,12 +36,12 @@ const Log: React.FC<LogProps> = () => {
     <div className={styles.layout}>
       <Spin spinning={loading}>
         <StandCard
-          icon={<CalendarIcon />}
+          icon={<RiCalendar2Line />}
           title="更新日志"
           extra={
             <div className={styles.toolbar}>
-              <RefreshIcon onClick={runGetLog} />
-              <LinkIcon onClick={onDetail} />
+              <RiRefreshLine onClick={runGetLog} />
+              <RiLink onClick={onDetail} />
             </div>
           }
         >

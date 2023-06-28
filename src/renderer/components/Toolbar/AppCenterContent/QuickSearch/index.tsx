@@ -1,6 +1,5 @@
 import React from 'react';
-import SearchIcon from '@/static/icon/search.svg';
-import GlobalIcon from '@/static/icon/global.svg';
+import { RiSearchLine, RiGlobalLine } from 'react-icons/ri';
 import clsx from 'clsx';
 import colorHash from '@/utils/colorHash';
 import * as Utils from '@/utils';
@@ -71,7 +70,7 @@ const QuickSearch: React.FC<QuickSearchProps> = (props) => {
             onClick={() => openWebView(site.url)}
           >
             <span>{site.name}</span>
-            {site.name === '访问' ? <GlobalIcon /> : <SearchIcon />}
+            {site.name === '访问' ? <RiGlobalLine /> : <RiSearchLine />}
           </div>
         );
       })}

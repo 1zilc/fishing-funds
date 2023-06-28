@@ -1,11 +1,8 @@
 import React from 'react';
 import clsx from 'clsx';
-
-import ArrowDownIcon from '@/static/icon/arrow-down.svg';
-import ArrowUpIcon from '@/static/icon/arrow-up.svg';
+import { RiArrowDownSLine, RiArrowUpSLine } from 'react-icons/ri';
 import ArrowLine from '@/components/ArrowLine';
 import Collapse from '@/components/Collapse';
-
 import { toggleCoinCollapseAction } from '@/store/features/coin';
 import { useAppDispatch, useAppSelector } from '@/utils/hooks';
 import colorHash from '@/utils/colorHash';
@@ -37,7 +34,7 @@ const CoinRow: React.FC<RowProps> = (props) => {
     <>
       <div className={clsx(styles.row)} onClick={() => dispatch(toggleCoinCollapseAction(coin))}>
         <div className={styles.arrow}>
-          {coin.collapse ? <ArrowUpIcon style={{ ...arrowSize }} /> : <ArrowDownIcon style={{ ...arrowSize }} />}
+          {coin.collapse ? <RiArrowUpSLine style={{ ...arrowSize }} /> : <RiArrowDownSLine style={{ ...arrowSize }} />}
         </div>
         <div style={{ flex: 1, width: 0 }}>
           <div style={{ display: 'flex', alignItems: 'center' }}>

@@ -3,13 +3,8 @@ import { Tooltip } from 'antd';
 import html2canvas from 'html2canvas';
 import { useBoolean } from 'ahooks';
 import clsx from 'clsx';
-import DownloadIcon from '@/static/icon/download.svg';
-import CopyIcon from '@/static/icon/copy.svg';
-import RefreshIcon from '@/static/icon/refresh.svg';
-import ArrowDownIcon from '@/static/icon/arrow-down.svg';
-import ArrowUpIcon from '@/static/icon/arrow-up.svg';
+import { RiFileCopyLine, RiDownload2Line, RiRefreshLine, RiArrowDownSLine, RiArrowUpSLine, RiQuestionLine } from 'react-icons/ri';
 import Collapse from '@/components/Collapse';
-import QuestionIcon from '@/static/icon/question.svg';
 import styles from './index.module.scss';
 
 export interface ChartCardProps {
@@ -104,13 +99,13 @@ export const ChartCard: React.FC<PropsWithChildren<ChartCardProps>> = ({
     >
       <div className={styles.toolbar}>
         {TitleBar && <div style={{ flex: 1 }}>{TitleBar}</div>}
-        {onFresh && <RefreshIcon onClick={onFresh} />}
-        <DownloadIcon onClick={downLoadChartToLocal} />
-        <CopyIcon onClick={writeChartToClipboard} />
-        {showCollapse && (isOpened ? <ArrowUpIcon onClick={setFalse} /> : <ArrowDownIcon onClick={setTrue} />)}
+        {onFresh && <RiRefreshLine onClick={onFresh} />}
+        <RiDownload2Line onClick={downLoadChartToLocal} />
+        <RiFileCopyLine onClick={writeChartToClipboard} />
+        {showCollapse && (isOpened ? <RiArrowUpSLine onClick={setFalse} /> : <RiArrowDownSLine onClick={setTrue} />)}
         {describe && (
           <Tooltip placement="bottomRight" title={describe} overlayClassName={styles.describe} color={'var(--primary-color)'}>
-            <QuestionIcon />
+            <RiQuestionLine />
           </Tooltip>
         )}
       </div>

@@ -1,7 +1,6 @@
 import React from 'react';
 import { Tooltip } from 'antd';
-import { useAppSelector } from '@/utils/hooks';
-import QuestionIcon from '@/static/icon/question.svg';
+import { RiQuestionLine } from 'react-icons/ri';
 import styles from './index.module.scss';
 
 export interface GuideProps {
@@ -29,7 +28,7 @@ const Guide: React.FC<GuideProps> = (props) => {
       overlayClassName={styles.content}
       color="var(--primary-color)"
     >
-      <QuestionIcon {...iconSize} style={{ fill: 'var(--svg-icon-color)' }} />
+      <RiQuestionLine {...iconSize} style={{ fill: 'var(--svg-icon-color)' }} />
     </Tooltip>
   );
 };

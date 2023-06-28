@@ -1,6 +1,4 @@
 import path from 'path';
-// import svgr from '';
-const svgr = require('vite-plugin-svgr').default;
 const mkcert = require('vite-plugin-mkcert').default;
 
 // electron.vite.config.js
@@ -18,17 +16,7 @@ export default {
       strictPort: true,
       https: true,
     },
-    plugins: [
-      mkcert(),
-      svgr({
-        exportAsDefault: true,
-        svgrOptions: {
-          svgoConfig: {
-            plugins: [],
-          },
-        },
-      }),
-    ],
+    plugins: [mkcert()],
     resolve: {
       alias: {
         '@': path.resolve('src/renderer'),

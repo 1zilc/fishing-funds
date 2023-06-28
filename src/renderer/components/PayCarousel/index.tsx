@@ -1,12 +1,10 @@
 import React from 'react';
 import { Carousel } from 'antd';
 import clsx from 'clsx';
-
+import { RiAlipayFill, RiWechatFill } from 'react-icons/ri';
 import StandCard from '@/components/Card/StandCard';
 import wechatQRcodeImage from '@/static/qrcode/wechat.png';
 import alipayQRcodeImage from '@/static/qrcode/alipay.png';
-import WechatPayIcon from '@/static/icon/wechat-pay.svg';
-import AliPayIcon from '@/static/icon/alipay.svg';
 
 import styles from './index.module.scss';
 
@@ -16,12 +14,12 @@ const PayCarousel: React.FC<PayCarouselProps> = () => {
   return (
     <div className={styles.content}>
       <Carousel autoplay>
-        <StandCard icon={<AliPayIcon className={styles.alipay} />} title="支付宝">
+        <StandCard icon={<RiAlipayFill className={styles.alipay} />} title="支付宝">
           <div className={clsx(styles.pay, 'card-body')}>
             <img src={alipayQRcodeImage} />
           </div>
         </StandCard>
-        <StandCard icon={<WechatPayIcon className={styles.wechat} />} title="微信">
+        <StandCard icon={<RiWechatFill className={styles.wechat} />} title="微信">
           <div className={clsx(styles.pay, 'card-body')}>
             <img src={wechatQRcodeImage} />
           </div>

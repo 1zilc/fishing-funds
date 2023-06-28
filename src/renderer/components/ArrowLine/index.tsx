@@ -1,18 +1,16 @@
 import React from 'react';
-import ArrowDownLineIcon from '@/static/icon/arrow-down-s.svg';
-import ArrowUpLineIcon from '@/static/icon/arrow-up-s.svg';
-import SubtractLineIcon from '@/static/icon/subtract-line.svg';
+import { RiArrowDownSFill, RiArrowUpSFill, RiSubtractLine } from 'react-icons/ri';
 
 export interface ArrowLineProps {
   value?: string | number;
 }
 const ArrowLine: React.FC<ArrowLineProps> = ({ value }) =>
   Number(value) > 0 ? (
-    <ArrowUpLineIcon className="svg-up" />
+    <RiArrowUpSFill className="svg-up" style={{ fintSize: 20 }} />
   ) : Number(value) ? (
-    <ArrowDownLineIcon className="svg-down" />
+    <RiArrowDownSFill className="svg-down" />
   ) : (
-    <SubtractLineIcon className="svg-none" />
+    <RiSubtractLine className="svg-none" />
   );
 
 export default React.memo(ArrowLine);

@@ -18,4 +18,4 @@ const EmptyContent: React.FC<EmptyProps> = ({ text, className }) => {
   );
 };
 
-export default EmptyContent;
+export default React.memo(EmptyContent);
