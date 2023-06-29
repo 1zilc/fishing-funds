@@ -1,13 +1,9 @@
 import React from 'react';
 import clsx from 'clsx';
-
+import { RiIndeterminateCircleFill, RiEditFill, RiCheckboxCircleFill } from 'react-icons/ri';
 import StandCard from '@/components/Card/StandCard';
-import RemoveIcon from '@/static/icon/remove.svg';
-import CheckboxIcon from '@/static/icon/checkbox.svg';
-import EditIcon from '@/static/icon/edit.svg';
 import { deleteWalletConfigAction } from '@/store/features/wallet';
 import { walletIcons } from '@/helpers/wallet';
-
 import { useAppDispatch, useAppSelector } from '@/utils/hooks';
 import * as Utils from '@/utils';
 import * as Enums from '@/utils/enums';
@@ -99,7 +95,7 @@ const WalletRow: React.FC<WalletRowProps> = (props) => {
           {readonly ? (
             <i />
           ) : (
-            <EditIcon
+            <RiEditFill
               className={styles.editor}
               onClick={(e) => {
                 onEditClick();
@@ -148,9 +144,9 @@ const WalletRow: React.FC<WalletRowProps> = (props) => {
             </div>
           </div>
         </div>
-        {!readonly && selected && <CheckboxIcon className={styles.checkbox} />}
+        {!readonly && selected && <RiCheckboxCircleFill className={styles.checkbox} />}
         {!readonly && !selected && (
-          <RemoveIcon
+          <RiIndeterminateCircleFill
             className={styles.remove}
             onClick={(e) => {
               onRemoveClick(wallet);

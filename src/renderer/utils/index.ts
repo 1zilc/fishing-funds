@@ -417,3 +417,7 @@ export function MergeStateWithResponse<C, CK extends keyof C, SK extends keyof S
 
   return stateWithChached;
 }
+
+export function ImportStatic(path: string) {
+  return new URL(`../static/${path}`, import.meta.url).href;
+}

@@ -5,9 +5,7 @@ import clsx from 'clsx';
 import { Button } from 'antd';
 
 import PureCard from '@/components/Card/PureCard';
-import AddIcon from '@/static/icon/add.svg';
-import MenuIcon from '@/static/icon/menu.svg';
-import RemoveIcon from '@/static/icon/remove.svg';
+import { RiAddLine, RiMenuLine, RiIndeterminateCircleFill } from 'react-icons/ri';
 import CustomDrawer from '@/components/CustomDrawer';
 import Empty from '@/components/Empty';
 import { deleteZindexAction, setZindexConfigAction } from '@/store/features/zindex';
@@ -70,7 +68,7 @@ const Optional: React.FC<OptionalProps> = () => {
             const [market, code] = zindex.code.split('.');
             return (
               <PureCard key={zindex.code} className={clsx(styles.row, 'hoverable')}>
-                <RemoveIcon
+                <RiIndeterminateCircleFill
                   className={styles.remove}
                   onClick={(e) => {
                     onRemoveZindex(zindex);
@@ -83,7 +81,7 @@ const Optional: React.FC<OptionalProps> = () => {
                     <span className={styles.code}>（{code}）</span>
                   </div>
                 </div>
-                <MenuIcon className={styles.menu} />
+                <RiMenuLine className={styles.menu} />
               </PureCard>
             );
           })}
@@ -96,7 +94,7 @@ const Optional: React.FC<OptionalProps> = () => {
         shape="circle"
         type="primary"
         size="large"
-        icon={<AddIcon />}
+        icon={<RiAddLine />}
         onClick={(e) => {
           setAddDrawer(null);
           e.stopPropagation();

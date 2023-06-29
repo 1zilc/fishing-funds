@@ -2,8 +2,7 @@ import React, { useMemo } from 'react';
 
 import { ReactSortable } from 'react-sortablejs';
 import { Button } from 'antd';
-
-import AddIcon from '@/static/icon/add.svg';
+import { RiAddLine } from 'react-icons/ri';
 import Empty from '@/components/Empty';
 import CustomDrawer from '@/components/CustomDrawer';
 import WalletRow from '@/components/Wallet/WalletRow';
@@ -79,7 +78,7 @@ const ManageWalletContent: React.FC<ManageWalletContentProps> = (props) => {
         shape="circle"
         type="primary"
         size="large"
-        icon={<AddIcon />}
+        icon={<RiAddLine />}
         onClick={(e) => {
           openAddWalletDrawer();
           e.stopPropagation();

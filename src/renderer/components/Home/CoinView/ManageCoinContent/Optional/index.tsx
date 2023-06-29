@@ -3,11 +3,8 @@ import React, { useMemo } from 'react';
 import { ReactSortable } from 'react-sortablejs';
 import clsx from 'clsx';
 import { Button } from 'antd';
-
+import { RiAddLine, RiMenuLine, RiIndeterminateCircleFill } from 'react-icons/ri';
 import PureCard from '@/components/Card/PureCard';
-import AddIcon from '@/static/icon/add.svg';
-import MenuIcon from '@/static/icon/menu.svg';
-import RemoveIcon from '@/static/icon/remove.svg';
 import CustomDrawer from '@/components/CustomDrawer';
 import Empty from '@/components/Empty';
 import { deleteCoinAction, setCoinConfigAction } from '@/store/features/coin';
@@ -70,7 +67,7 @@ const Optional: React.FC<OptionalProps> = () => {
           {sortCoinConfig.map((coin) => {
             return (
               <PureCard key={coin.code} className={clsx(styles.row, 'hoverable')}>
-                <RemoveIcon
+                <RiIndeterminateCircleFill
                   className={styles.remove}
                   onClick={(e) => {
                     onRemoveCoin(coin);
@@ -83,7 +80,7 @@ const Optional: React.FC<OptionalProps> = () => {
                     <span className={styles.code}>（{coin.code}）</span>
                   </div>
                 </div>
-                <MenuIcon className={styles.menu} />
+                <RiMenuLine className={styles.menu} />
               </PureCard>
             );
           })}
@@ -96,7 +93,7 @@ const Optional: React.FC<OptionalProps> = () => {
         shape="circle"
         type="primary"
         size="large"
-        icon={<AddIcon />}
+        icon={<RiAddLine />}
         onClick={(e) => {
           setAddDrawer(null);
           e.stopPropagation();

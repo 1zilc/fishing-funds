@@ -3,7 +3,16 @@ import clsx from 'clsx';
 import { InputNumber, Radio, Badge, Switch, Slider, TimePicker, Input, Tabs, Select, Checkbox, Button, ColorPicker } from 'antd';
 import dayjs from 'dayjs';
 import { ReactSortable } from 'react-sortablejs';
-
+import {
+  RiSettingsLine,
+  RiLineChartLine,
+  RiTShirtLine,
+  RiNotificationBadgeLine,
+  RiBitCoinLine,
+  RiInboxLine,
+  RiGlobalLine,
+  RiFolderSettingsLine,
+} from 'react-icons/ri';
 import PureCard from '@/components/Card/PureCard';
 import StandCard from '@/components/Card/StandCard';
 import Logo from '@/components/Logo';
@@ -12,14 +21,6 @@ import Guide from '@/components/Guide';
 import Log from '@/components/Toolbar/SettingContent/Log';
 import ThemeProvider from '@/components/ThemeProvider';
 import More from '@/components/Toolbar/SettingContent/More';
-import SettingIcon from '@/static/icon/setting.svg';
-import LineCharIcon from '@/static/icon/line-chart.svg';
-import TShirtIcon from '@/static/icon/t-shirt.svg';
-import NotificationIcon from '@/static/icon/notification.svg';
-import BitCoinIcon from '@/static/icon/bit-coin.svg';
-import GlobalIcon from '@/static/icon/global.svg';
-import InboxIcon from '@/static/icon/inbox.svg';
-import FolderSettingsIcon from '@/static/icon/folder-settings.svg';
 import { setSystemSettingAction, defaultSystemSetting } from '@/store/features/setting';
 import { useAppDispatch, useAppSelector, useAutoDestroySortableRef, useInputShortcut, useThemeColor } from '@/utils/hooks';
 import * as Enums from '@/utils/enums';
@@ -55,26 +56,6 @@ export const APIOptions = [
     name: '腾讯证券',
     code: Enums.FundApiType.Tencent,
     recommond: '★★★★☆',
-  },
-  {
-    name: '新浪基金',
-    code: Enums.FundApiType.Sina,
-    recommond: '★★★★☆',
-  },
-  {
-    name: '基金速查网',
-    code: Enums.FundApiType.Dayfund,
-    recommond: '★★★☆☆',
-  },
-  {
-    name: '好买基金',
-    code: Enums.FundApiType.Howbuy,
-    recommond: '★★★☆☆',
-  },
-  {
-    name: '易天富',
-    code: Enums.FundApiType.Etf,
-    recommond: '★★★☆☆',
   },
 ];
 
@@ -253,7 +234,7 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
               children: (
                 <div className={styles.content}>
                   <StandCard
-                    icon={<LineCharIcon />}
+                    icon={<RiLineChartLine />}
                     title="数据来源"
                     extra={
                       <div className={styles.guide}>
@@ -271,7 +252,7 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
                       </Radio.Group>
                     </div>
                   </StandCard>
-                  <StandCard icon={<TShirtIcon />} title="外观设置">
+                  <StandCard icon={<RiTShirtLine />} title="外观设置">
                     <div className={clsx(styles.setting, 'card-body')}>
                       <section>
                         <label>主题色：</label>
@@ -335,7 +316,7 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
                     </div>
                   </StandCard>
                   <StandCard
-                    icon={<NotificationIcon />}
+                    icon={<RiNotificationBadgeLine />}
                     title="通知设置"
                     extra={
                       <div className={styles.guide}>
@@ -389,7 +370,7 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
                     </div>
                   </StandCard>
                   <StandCard
-                    icon={<InboxIcon />}
+                    icon={<RiInboxLine />}
                     title="底栏设置"
                     extra={
                       <div className={styles.guide}>
@@ -419,7 +400,7 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
                     </div>
                   </StandCard>
                   <StandCard
-                    icon={<BitCoinIcon />}
+                    icon={<RiBitCoinLine />}
                     title="货币单位"
                     extra={
                       <div className={styles.guide}>
@@ -441,7 +422,7 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
                       </Radio.Group>
                     </div>
                   </StandCard>
-                  <StandCard icon={<GlobalIcon />} title="代理设置">
+                  <StandCard icon={<RiGlobalLine />} title="代理设置">
                     <div className={clsx(styles.setting, 'card-body')}>
                       <section>
                         <label>代理模式：</label>
@@ -470,7 +451,7 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
                     </div>
                   </StandCard>
                   <StandCard
-                    icon={<SettingIcon />}
+                    icon={<RiSettingsLine />}
                     title="系统设置"
                     extra={
                       <div className={styles.guide}>
@@ -541,7 +522,7 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
                     </div>
                   </StandCard>
                   <StandCard
-                    icon={<FolderSettingsIcon />}
+                    icon={<RiFolderSettingsLine />}
                     title="配置同步"
                     extra={
                       <div className={styles.guide}>

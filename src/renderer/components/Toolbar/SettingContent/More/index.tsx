@@ -1,12 +1,9 @@
 import React from 'react';
 import clsx from 'clsx';
-
+import { RiLink, RiWindowLine, RiGroupLine } from 'react-icons/ri';
 import StandCard from '@/components/Card/StandCard';
 import PayCarousel from '@/components/PayCarousel';
 import Guide from '@/components/Guide';
-import LinkIcon from '@/static/icon/link.svg';
-import GroupIcon from '@/static/icon/group.svg';
-import WindowIcon from '@/static/icon/window.svg';
 import * as Utils from '@/utils';
 import styles from '../index.module.scss';
 
@@ -96,7 +93,7 @@ const More: React.FC<MoreProps> = () => {
     <div className={styles.content}>
       <PayCarousel />
       <StandCard
-        icon={<LinkIcon />}
+        icon={<RiLink />}
         title="关于 Fishing Funds"
         extra={
           <div className={styles.guide}>
@@ -122,7 +119,7 @@ const More: React.FC<MoreProps> = () => {
           ))}
         </div>
       </StandCard>
-      <StandCard icon={<GroupIcon />} title="讨论交流">
+      <StandCard icon={<RiGroupLine />} title="讨论交流">
         <div className={clsx(styles.group, 'card-body')}>
           <section>
             <label>QQ群：</label>
@@ -134,7 +131,7 @@ const More: React.FC<MoreProps> = () => {
           </section>
         </div>
       </StandCard>
-      <StandCard icon={<WindowIcon />} title="收录网站">
+      <StandCard icon={<RiWindowLine />} title="收录网站">
         <div className={clsx('card-body')}>
           {recordSiteGroup.map((links, index) => (
             <div key={index} className={styles.link}>

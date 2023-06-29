@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
 import { useRequest } from 'ahooks';
 import ChartCard from '@/components/Card/ChartCard';
-import PictureImage from '@/static/img/picture.svg';
-import PictureFailedImage from '@/static/img/picture-failed.svg';
 import * as Services from '@/services';
 import * as CONST from '@/constants';
+import * as Utils from '@/utils';
 import styles from './index.module.scss';
 
 export interface EstimateProps {
@@ -22,9 +21,9 @@ const Estimate: React.FC<EstimateProps> = ({ code }) => {
     <ChartCard onFresh={runGetEstimatedFromEastmoney}>
       <div className={styles.estimate}>
         {estimate === '' ? (
-          <PictureImage />
+          <img src={Utils.ImportStatic('img/picture.svg')} />
         ) : estimate === undefined ? (
-          <PictureFailedImage />
+          <img src={Utils.ImportStatic('img/picture-failed.svg')} />
         ) : (
           <img src={estimate} onError={() => setEstimate(undefined)} />
         )}
@@ -33,4 +32,4 @@ const Estimate: React.FC<EstimateProps> = ({ code }) => {
   );
 };
 
-export default Estimate;
+export default React.memo(Estimate);

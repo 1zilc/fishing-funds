@@ -1,9 +1,6 @@
 import React, { useMemo } from 'react';
 import clsx from 'clsx';
-
-import EditIcon from '@/static/icon/edit.svg';
-import ArrowDownIcon from '@/static/icon/arrow-down.svg';
-import ArrowUpIcon from '@/static/icon/arrow-up.svg';
+import { RiEditLine, RiArrowDownSLine, RiArrowUpSLine } from 'react-icons/ri';
 import Collapse from '@/components/Collapse';
 import MemoNote from '@/components/MemoNote';
 import { toggleFundCollapseAction } from '@/store/features/wallet';
@@ -69,7 +66,7 @@ const FundRow: React.FC<RowProps> = (props) => {
       <div className={clsx(styles.row)} onClick={onRowClick}>
         {!readOnly && (
           <div className={styles.arrow}>
-            {fund.collapse ? <ArrowUpIcon style={{ ...arrowSize }} /> : <ArrowDownIcon style={{ ...arrowSize }} />}
+            {fund.collapse ? <RiArrowUpSLine style={{ ...arrowSize }} /> : <RiArrowDownSLine style={{ ...arrowSize }} />}
           </div>
         )}
         <div style={{ flex: 1, width: 0 }}>
@@ -122,7 +119,7 @@ const FundRow: React.FC<RowProps> = (props) => {
           <section>
             <span>持有份额：</span>
             <span>{calcFundResult.cyfe}</span>
-            <EditIcon className={styles.editor} onClick={() => onEditClick('cyfe')} />
+            <RiEditLine className={styles.editor} onClick={() => onEditClick('cyfe')} />
           </section>
           <section>
             <span>成本金额：</span>

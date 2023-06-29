@@ -14,12 +14,10 @@
     "allowSyntheticDefaultImports": true,
     "resolveJsonModule": true,
     "allowJs": true,
-    "outDir": ".erb/dll",
     "baseUrl": "./",
     "paths": {
-      "@/*": ["./src/renderer/*"],
-      "@assets/*": ["./assets/*"]
+      "@/*": ["./src/renderer/*"]
     }
   },
-  "exclude": ["test", "release/app/dist", "templates", "assets", ".erb/dll"]
+  "exclude": ["release", "templates", "assets"]
 }

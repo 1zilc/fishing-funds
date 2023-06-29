@@ -3,13 +3,11 @@ import { menubar } from 'menubar';
 import { app, Tray } from 'electron';
 import { resolveHtmlPath, getPreloadPath } from './util';
 
-const { productName } = require('../../release/app/package.json');
-
 export function createMenubar({ tray, mainWindowState }: { tray: Tray; mainWindowState: windowStateKeeper.State }) {
   return menubar({
     index: resolveHtmlPath(),
     tray,
-    tooltip: productName,
+    tooltip: app.getName(),
     preloadWindow: true,
     showOnAllWorkspaces: true,
     // showDockIcon: false,

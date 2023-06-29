@@ -2,9 +2,7 @@ import React from 'react';
 import clsx from 'clsx';
 
 import NP from 'number-precision';
-
-import ArrowDownIcon from '@/static/icon/arrow-down.svg';
-import ArrowUpIcon from '@/static/icon/arrow-up.svg';
+import { RiArrowDownSLine, RiArrowUpSLine } from 'react-icons/ri';
 import ArrowLine from '@/components/ArrowLine';
 import Collapse from '@/components/Collapse';
 
@@ -39,7 +37,7 @@ const QuotationRow: React.FC<RowProps> = (props) => {
     <>
       <div className={clsx(styles.row)} onClick={() => dispatch(toggleQuotationCollapseAction(quotation))}>
         <div className={styles.arrow}>
-          {quotation.collapse ? <ArrowUpIcon style={{ ...arrowSize }} /> : <ArrowDownIcon style={{ ...arrowSize }} />}
+          {quotation.collapse ? <RiArrowUpSLine style={{ ...arrowSize }} /> : <RiArrowDownSLine style={{ ...arrowSize }} />}
         </div>
         <div style={{ flex: 1, width: 0 }}>
           <div style={{ display: 'flex', alignItems: 'center' }}>

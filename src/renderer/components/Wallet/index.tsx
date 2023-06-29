@@ -1,9 +1,7 @@
 import React, { useMemo } from 'react';
 import clsx from 'clsx';
 import { Dropdown, Menu } from 'antd';
-
-import ConsumptionIcon from '@/static/icon/consumption.svg';
-import AddIcon from '@/static/icon/add.svg';
+import { RiAddFill, RiMoneyCnyCircleLine } from 'react-icons/ri';
 import Eye from '@/components/Eye';
 import CustomDrawer from '@/components/CustomDrawer';
 import { useHeaderContext } from '@/components/Header';
@@ -53,7 +51,7 @@ const Wallet: React.FC<WalletProps> = () => {
         .concat({
           key: '',
           label: '添加',
-          icon: <AddIcon className={styles.addIcon} />,
+          icon: <RiAddFill className={styles.addIcon} />,
         }),
     [walletConfig]
   );
@@ -92,13 +90,13 @@ const Wallet: React.FC<WalletProps> = () => {
         </div>
         <div className={styles.moneyBar}>
           <div>
-            <ConsumptionIcon />
+            <RiMoneyCnyCircleLine />
             <span>持有金额：</span>
             <span>{displayZje}</span>
           </div>
           <i />
           <div>
-            <ConsumptionIcon />
+            <RiMoneyCnyCircleLine />
             <span>收益估值：</span>
             <span>{displaySygz}</span>
           </div>

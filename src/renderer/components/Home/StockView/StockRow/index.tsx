@@ -2,8 +2,7 @@ import React from 'react';
 import clsx from 'clsx';
 import { useRequest } from 'ahooks';
 
-import ArrowDownIcon from '@/static/icon/arrow-down.svg';
-import ArrowUpIcon from '@/static/icon/arrow-up.svg';
+import { RiArrowDownSLine, RiArrowUpSLine } from 'react-icons/ri';
 
 import Collapse from '@/components/Collapse';
 import ArrowLine from '@/components/ArrowLine';
@@ -119,7 +118,7 @@ const StockRow: React.FC<RowProps> = (props) => {
     <>
       <div className={clsx(styles.row)} onClick={() => dispatch(toggleStockCollapseAction(stock))}>
         <div className={styles.arrow}>
-          {stock.collapse ? <ArrowUpIcon style={{ ...arrowSize }} /> : <ArrowDownIcon style={{ ...arrowSize }} />}
+          {stock.collapse ? <RiArrowUpSLine style={{ ...arrowSize }} /> : <RiArrowDownSLine style={{ ...arrowSize }} />}
         </div>
         <div style={{ flex: 1, width: 0 }}>
           <div

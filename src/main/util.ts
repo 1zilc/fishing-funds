@@ -3,33 +3,25 @@ import { app, BrowserWindow, nativeTheme } from 'electron';
 import * as path from 'path';
 import * as Enums from '../renderer/utils/enums';
 
+export const processPath = process.cwd();
+export const assetsPath = path.join(processPath, 'assets');
+export const appPath = path.resolve(__dirname, '../');
+export const mainPath = path.join(appPath, 'main');
+export const preloadPath = path.join(appPath, 'preload');
+export const rendererPath = path.join(appPath, 'renderer');
+
 export function resolveHtmlPath() {
-  if (process.env.NODE_ENV === 'development') {
-    const port = process.env.PORT || 3456;
-    // const url = new URL();
+  if (import.meta.env.DEV) {
+    const port = 3456;
     return `https://localhost:${port}`;
   } else {
-    return `file://${path.resolve(__dirname, '../renderer/', 'index.html')}`;
+    return `file://${path.resolve(rendererPath, 'index.html')}`;
   }
 }
 
 export function getAssetPath(resourceFilename: string) {
-  const EXTRA_RESOURCES_PATH = app.isPackaged ? path.join(process.resourcesPath, 'assets') : path.join(__dirname, '../../assets');
+  const EXTRA_RESOURCES_PATH = app.isPackaged ? path.join(process.resourcesPath, 'assets') : assetsPath;
   return path.join(EXTRA_RESOURCES_PATH, resourceFilename);
-}
-
-export function installExtensions() {
-  const installer = require('electron-extension-installer');
-  const extensions = ['REACT_DEVELOPER_TOOLS'];
-  return Promise.all(
-    extensions.map((name) =>
-      installer.default(installer[name], {
-        loadExtensionOptions: {
-          allowFileAccess: true,
-        },
-      })
-    )
-  ).catch(console.log);
 }
 
 export function lockSingleInstance() {
@@ -40,21 +32,18 @@ export function lockSingleInstance() {
 }
 
 export async function checkEnvTool() {
-  const isDebug = process.env.NODE_ENV === 'development' || process.env.DEBUG_PROD === 'true';
-  if (process.env.NODE_ENV === 'production') {
+  const isDebug = import.meta.env.DEV;
+
+  if (import.meta.env.PROD) {
     // 初始化log
     log.initialize();
     Object.assign(console, log.functions);
-
-    const sourceMapSupport = require('source-map-support');
-    sourceMapSupport.install();
   }
 
   if (isDebug) {
     require('electron-debug')();
     // 关闭自签ca错误
     app.commandLine.appendSwitch('ignore-certificate-errors');
-    await installExtensions();
   }
 }
 
@@ -78,7 +67,7 @@ export function setNativeTheme(theme: Enums.SystemThemeType) {
 }
 
 export function getPreloadPath() {
-  return app.isPackaged ? path.join(__dirname, 'preload.js') : path.join(__dirname, '../../.erb/dll/preload.js');
+  return path.join(preloadPath, 'index.js');
 }
 
 export function getOtherWindows(windowIds: number[], current?: number) {

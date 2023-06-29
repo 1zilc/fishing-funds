@@ -3,11 +3,8 @@ import React, { useMemo } from 'react';
 import { ReactSortable } from 'react-sortablejs';
 import clsx from 'clsx';
 import { Button } from 'antd';
-
+import { RiAddLine, RiMenuLine, RiIndeterminateCircleFill } from 'react-icons/ri';
 import PureCard from '@/components/Card/PureCard';
-import AddIcon from '@/static/icon/add.svg';
-import MenuIcon from '@/static/icon/menu.svg';
-import RemoveIcon from '@/static/icon/remove.svg';
 import CustomDrawer from '@/components/CustomDrawer';
 import Empty from '@/components/Empty';
 import { deleteStockAction, setStockConfigAction } from '@/store/features/stock';
@@ -72,7 +69,7 @@ const Optional: React.FC<OptionalProps> = () => {
           {sortStockConfig.map((stock) => {
             return (
               <PureCard key={stock.secid} className={clsx(styles.row, 'hoverable')}>
-                <RemoveIcon
+                <RiIndeterminateCircleFill
                   className={styles.remove}
                   onClick={(e) => {
                     onRemoveStock(stock);
@@ -85,7 +82,7 @@ const Optional: React.FC<OptionalProps> = () => {
                     <span className={styles.code}>（{stock.code}）</span>
                   </div>
                 </div>
-                <MenuIcon className={styles.menu} />
+                <RiMenuLine className={styles.menu} />
               </PureCard>
             );
           })}
@@ -98,7 +95,7 @@ const Optional: React.FC<OptionalProps> = () => {
         shape="circle"
         type="primary"
         size="large"
-        icon={<AddIcon />}
+        icon={<RiAddLine />}
         onClick={(e) => {
           setAddDrawer(null);
           e.stopPropagation();

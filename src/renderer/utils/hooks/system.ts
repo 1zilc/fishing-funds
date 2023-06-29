@@ -33,6 +33,7 @@ import {
   useIpcRendererListener,
 } from '@/utils/hooks';
 import { walletIcons } from '@/helpers/wallet';
+import { encryptFF, decryptFF } from '@/utils/coding';
 import * as Utils from '@/utils';
 import * as Adapters from '@/utils/adpters';
 import * as Helpers from '@/helpers';
@@ -42,7 +43,6 @@ import { useLoadFunds } from './utils';
 
 const { dialog, ipcRenderer, clipboard, app } = window.contextModules.electron;
 const { saveString, readFile } = window.contextModules.io;
-const { encryptFF, decryptFF } = window.contextModules.coding;
 const { useToken } = theme;
 
 export function useUpdater() {

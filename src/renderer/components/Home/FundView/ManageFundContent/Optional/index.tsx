@@ -2,15 +2,16 @@ import React, { useMemo } from 'react';
 import { ReactSortable } from 'react-sortablejs';
 import clsx from 'clsx';
 import { Button } from 'antd';
-
+import {
+  RiAddLine,
+  RiMenuLine,
+  RiIndeterminateCircleFill,
+  RiEditLine,
+  RiFileCopyLine,
+  RiNotification2Line,
+  RiNotification2Fill,
+} from 'react-icons/ri';
 import PureCard from '@/components/Card/PureCard';
-import AddIcon from '@/static/icon/add.svg';
-import MenuIcon from '@/static/icon/menu.svg';
-import RemoveIcon from '@/static/icon/remove.svg';
-import EditIcon from '@/static/icon/edit.svg';
-import CopyIcon from '@/static/icon/copy.svg';
-import BellsLineIcon from '@/static/icon/bells-line.svg';
-import BellsFillIcon from '@/static/icon/bells-fill.svg';
 import CustomDrawer from '@/components/CustomDrawer';
 import Empty from '@/components/Empty';
 import { deleteFundAction, setFundConfigAction, updateFundAction } from '@/store/features/fund';
@@ -129,14 +130,14 @@ const Optional: React.FC<OptionalProps> = () => {
             {sortFundConfig.map((fund) => {
               return (
                 <PureCard key={fund.code} className={clsx(styles.row, 'hoverable')}>
-                  <RemoveIcon className={styles.remove} onClick={() => onRemoveFund(fund)} />
+                  <RiIndeterminateCircleFill className={styles.remove} onClick={() => onRemoveFund(fund)} />
                   <div className={styles.inner}>
                     <div className={styles.name}>
                       {fund.name}
                       <span className={styles.code}>（{fund.code}）</span>
                     </div>
                   </div>
-                  <EditIcon
+                  <RiEditLine
                     className={styles.function}
                     onClick={() =>
                       setEditDrawer({
@@ -153,9 +154,9 @@ const Optional: React.FC<OptionalProps> = () => {
                     }
                   />
                   {fund.zdfRange || fund.jzNotice ? (
-                    <BellsFillIcon className={styles.function} onClick={() => onCancleRiskNotice(fund)} />
+                    <RiNotification2Fill className={styles.function} onClick={() => onCancleRiskNotice(fund)} />
                   ) : (
-                    <BellsLineIcon
+                    <RiNotification2Line
                       className={styles.function}
                       onClick={() =>
                         setEditDrawer({
@@ -172,8 +173,8 @@ const Optional: React.FC<OptionalProps> = () => {
                       }
                     />
                   )}
-                  <CopyIcon className={styles.function} onClick={() => onCopyFund(fund)} />
-                  <MenuIcon className={styles.menu} />
+                  <RiFileCopyLine className={styles.function} onClick={() => onCopyFund(fund)} />
+                  <RiMenuLine className={styles.menu} />
                 </PureCard>
               );
             })}
@@ -189,7 +190,7 @@ const Optional: React.FC<OptionalProps> = () => {
         shape="circle"
         type="primary"
         size="large"
-        icon={<AddIcon />}
+        icon={<RiAddLine />}
         onClick={(e) => {
           setAddDrawer(null);
           e.stopPropagation();
