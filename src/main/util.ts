@@ -10,8 +10,9 @@ export const mainPath = path.join(appPath, 'main');
 export const preloadPath = path.join(appPath, 'preload');
 export const rendererPath = path.join(appPath, 'renderer');
 
+const isDev = process.env.NODE_ENV === 'development';
 export function resolveHtmlPath() {
-  if (process.env.NODE_ENV === 'development') {
+  if (isDev) {
     const port = process.env.PORT || 3456;
     return `https://localhost:${port}`;
   } else {
@@ -32,8 +33,8 @@ export function lockSingleInstance() {
 }
 
 export async function checkEnvTool() {
-  const isDebug = process.env.NODE_ENV === 'development';
-  if (process.env.NODE_ENV === 'production') {
+  const isDebug = isDev;
+  if (!isDev) {
     // 初始化log
     log.initialize();
     Object.assign(console, log.functions);
