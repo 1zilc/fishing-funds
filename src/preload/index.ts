@@ -3,7 +3,7 @@ import { contextBridge, ipcRenderer } from 'electron';
 contextBridge.exposeInMainWorld('contextModules', {
   got: async (url: string, config: any) => ipcRenderer.invoke('got', { url, config }),
   process: {
-    production: process.env.NODE_ENV === 'production',
+    production: import.meta.env.PROD,
     electron: process.versions.electron,
     platform: process.platform,
   },

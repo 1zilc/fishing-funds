@@ -162,6 +162,7 @@
     "source-map-support": "^0.5.21",
     "tsx": "^3.12.7",
     "typescript": "^5.1.5",
+    "vite": "^4.3.9",
     "vite-plugin-mkcert": "^1.16.0"
   },
   "dependencies": {
