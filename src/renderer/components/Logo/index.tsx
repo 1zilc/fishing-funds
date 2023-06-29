@@ -6,7 +6,7 @@ const { ipcRenderer } = window.contextModules.electron;
 export interface LogoProps {
   size?: number;
 }
-const Logo: React.FC<LogoProps> = (props) => {
+const Logo: React.FC<LogoProps> = React.memo((props) => {
   const { data } = useRequest(ipcRenderer.invoke.bind(null, 'get-app-icon'), {
     cacheKey: 'get-app-icon',
     cacheTime: -1,
@@ -22,5 +22,5 @@ const Logo: React.FC<LogoProps> = (props) => {
       <img src={data} draggable={false} />
     </div>
   );
-};
-export default React.memo(Logo);
+});
+export default Logo;

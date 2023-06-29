@@ -18,4 +18,4 @@ window.parsezindex = (response) => {
   });
 };
 
-export {};
+export default {};

@@ -12,7 +12,7 @@ interface SearchGroupProps {
   keyword: string;
 }
 
-const SearchGroup: React.FC<SearchGroupProps> = (props) => {
+const SearchGroup: React.FC<SearchGroupProps> = React.memo((props) => {
   const { keyword } = props;
   const [groupList, setGroupList] = useState<Stock.SearchResult[]>([]);
   const { run: runSearch } = useRequest(Services.Stock.SearchFromEastmoney, {
@@ -40,6 +40,6 @@ const SearchGroup: React.FC<SearchGroupProps> = (props) => {
       <ZindexSearch groupList={groupList} />
     </div>
   );
-};
+});
 
-export default React.memo(SearchGroup);
+export default SearchGroup;

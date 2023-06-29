@@ -8,7 +8,7 @@ export interface EmptyProps {
   text?: string;
   className?: string;
 }
-const EmptyContent: React.FC<EmptyProps> = ({ text, className }) => {
+const EmptyContent: React.FC<EmptyProps> = React.memo(({ text, className }) => {
   return (
     <div className={clsx(styles.content, className)}>
       <div className={styles.img}>
@@ -16,6 +16,6 @@ const EmptyContent: React.FC<EmptyProps> = ({ text, className }) => {
       </div>
     </div>
   );
-};
+});
 
-export default React.memo(EmptyContent);
+export default EmptyContent;

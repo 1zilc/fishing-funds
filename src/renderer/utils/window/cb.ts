@@ -8,4 +8,4 @@ window.cb = (response) => {
   return response;
 };
 
-export {};
+export default {};

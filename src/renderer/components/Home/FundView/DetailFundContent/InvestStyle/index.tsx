@@ -9,7 +9,7 @@ import styles from './index.module.scss';
 export interface InvestStyleProps {
   code: string;
 }
-const InvestStyle: React.FC<InvestStyleProps> = ({ code }) => {
+const InvestStyle: React.FC<InvestStyleProps> = React.memo(({ code }) => {
   const [estimate, setEstimate] = useState<string | undefined>('');
 
   const { run: runGetInverstStyleFromEastmoney } = useRequest(() => Services.Fund.GetInverstStyleFromEastmoney(code), {
@@ -31,6 +31,6 @@ const InvestStyle: React.FC<InvestStyleProps> = ({ code }) => {
       </div>
     </ChartCard>
   );
-};
+});
 
-export default React.memo(InvestStyle);
+export default InvestStyle;
