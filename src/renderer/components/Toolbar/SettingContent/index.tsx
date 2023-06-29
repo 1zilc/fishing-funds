@@ -57,26 +57,6 @@ export const APIOptions = [
     code: Enums.FundApiType.Tencent,
     recommond: '★★★★☆',
   },
-  {
-    name: '新浪基金',
-    code: Enums.FundApiType.Sina,
-    recommond: '★★★★☆',
-  },
-  {
-    name: '基金速查网',
-    code: Enums.FundApiType.Dayfund,
-    recommond: '★★★☆☆',
-  },
-  {
-    name: '好买基金',
-    code: Enums.FundApiType.Howbuy,
-    recommond: '★★★☆☆',
-  },
-  {
-    name: '易天富',
-    code: Enums.FundApiType.Etf,
-    recommond: '★★★☆☆',
-  },
 ];
 
 const presetColors = ['#F5222D', '#FA8C16', '#FADB14', '#8BBB11', '#52C41A', '#13A8A8', '#1677FF', '#2F54EB', '#722ED1', '#EB2F96'];
