@@ -362,7 +362,7 @@ export function useLoadWalletsFunds() {
         const responseFunds = await Helpers.Fund.GetFunds(unRequestConfig, fundApiTypeSetting);
         // 将请求的结果保存到map
         responseFunds.forEach((response) => {
-          responseMap[response.fundcode] = response;
+          responseMap[response.fundcode!] = response;
         });
         // 用code去取已经获取到的结果
         const finalResponseFunds = fundsConfig.filter(({ code }) => !!responseMap[code]).map(({ code }) => responseMap[code]);

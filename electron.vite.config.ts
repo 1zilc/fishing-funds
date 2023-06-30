@@ -1,5 +1,6 @@
 import path from 'path';
 import mkcert from 'vite-plugin-mkcert';
+import react from '@vitejs/plugin-react';
 import { defineConfig, splitVendorChunkPlugin } from 'electron-vite';
 
 // electron.vite.config.js
@@ -26,7 +27,7 @@ export default defineConfig({
       strictPort: true,
       https: true,
     },
-    plugins: [mkcert(), splitVendorChunkPlugin()],
+    plugins: [react(), mkcert(), splitVendorChunkPlugin()],
     resolve: {
       alias: {
         '@': path.resolve('src/renderer'),
