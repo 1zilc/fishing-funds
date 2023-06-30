@@ -15,7 +15,13 @@ import PureCard from '@/components/Card/PureCard';
 import CustomDrawer from '@/components/CustomDrawer';
 import Empty from '@/components/Empty';
 import { deleteFundAction, setFundConfigAction, updateFundAction } from '@/store/features/fund';
-import { useSyncFixFundSetting, useDrawer, useAutoDestroySortableRef, useAppDispatch, useAppSelector } from '@/utils/hooks';
+import {
+  useSyncFixFundSetting,
+  useDrawer,
+  useAutoDestroySortableRef,
+  useAppDispatch,
+  useAppSelector,
+} from '@/utils/hooks';
 import * as Utils from '@/utils';
 import styles from './index.module.scss';
 
@@ -40,15 +46,12 @@ const Optional: React.FC<OptionalProps> = () => {
     set: setEditDrawer,
     close: closeEditDrawer,
   } = useDrawer({
-    focus: '',
-    fundData: {
-      cyfe: 0,
-      code: '',
-      name: '',
-      cbj: undefined as number | undefined,
-      zdfRange: undefined as number | undefined,
-      memo: '' as string | undefined,
-    },
+    cyfe: 0,
+    code: '',
+    name: '',
+    cbj: undefined as number | undefined,
+    zdfRange: undefined as number | undefined,
+    memo: '' as string | undefined,
   });
 
   const sortFundConfig = useMemo(() => fundConfig.map((_) => ({ ..._, id: _.code })), [fundConfig]);
@@ -141,15 +144,12 @@ const Optional: React.FC<OptionalProps> = () => {
                     className={styles.function}
                     onClick={() =>
                       setEditDrawer({
-                        fundData: {
-                          name: fund.name,
-                          cyfe: fund.cyfe,
-                          code: fund.code,
-                          cbj: fund.cbj,
-                          zdfRange: fund.zdfRange,
-                          memo: fund.memo,
-                        },
-                        focus: '',
+                        name: fund.name,
+                        cyfe: fund.cyfe,
+                        code: fund.code,
+                        cbj: fund.cbj,
+                        zdfRange: fund.zdfRange,
+                        memo: fund.memo,
                       })
                     }
                   />
@@ -160,15 +160,12 @@ const Optional: React.FC<OptionalProps> = () => {
                       className={styles.function}
                       onClick={() =>
                         setEditDrawer({
-                          fundData: {
-                            name: fund.name,
-                            cyfe: fund.cyfe,
-                            code: fund.code,
-                            cbj: fund.cbj,
-                            zdfRange: fund.zdfRange,
-                            memo: fund.memo,
-                          },
-                          focus: 'zdfRange',
+                          name: fund.name,
+                          cyfe: fund.cyfe,
+                          code: fund.code,
+                          cbj: fund.cbj,
+                          zdfRange: fund.zdfRange,
+                          memo: fund.memo,
                         })
                       }
                     />
@@ -200,7 +197,7 @@ const Optional: React.FC<OptionalProps> = () => {
         <AddFundContent onClose={closeAddDrawer} onEnter={closeAddDrawer} />
       </CustomDrawer>
       <CustomDrawer show={showEditDrawer}>
-        <EditFundContent onClose={closeEditDrawer} onEnter={closeEditDrawer} fund={editData.fundData} focus={editData.focus} />
+        <EditFundContent onClose={closeEditDrawer} onEnter={closeEditDrawer} fund={editData} />
       </CustomDrawer>
     </div>
   );

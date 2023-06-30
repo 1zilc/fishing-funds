@@ -65,19 +65,17 @@ const Wallet: React.FC<WalletProps> = () => {
       <Dropdown
         placement="bottomRight"
         dropdownRender={() => (
-          <>
-            <Menu
-              selectedKeys={[currentWalletCode]}
-              items={walletMenuItems}
-              onClick={({ key }) => {
-                if (key) {
-                  onSelectWallet(key);
-                } else {
-                  openAddWalletDrawer();
-                }
-              }}
-            />
-          </>
+          <Menu
+            selectedKeys={[currentWalletCode]}
+            items={walletMenuItems}
+            onClick={({ key }) => {
+              if (key) {
+                onSelectWallet(key);
+              } else {
+                openAddWalletDrawer();
+              }
+            }}
+          />
         )}
       >
         <div className={styles.walletIcon}>
@@ -102,7 +100,11 @@ const Wallet: React.FC<WalletProps> = () => {
           </div>
         </div>
       </div>
-      <Eye classNames={styles.eye} status={eyeStatus === Enums.EyeStatus.Open} onClick={() => dispatch(toggleEyeStatusAction())} />
+      <Eye
+        classNames={styles.eye}
+        status={eyeStatus === Enums.EyeStatus.Open}
+        onClick={() => dispatch(toggleEyeStatusAction())}
+      />
       <CustomDrawer show={showAddWalletDrawer}>
         <AddWalletContent onClose={closeAddWalletDrawer} onEnter={closeAddWalletDrawer} />
       </CustomDrawer>

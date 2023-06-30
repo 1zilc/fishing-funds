@@ -13,7 +13,7 @@ import styles from './index.module.scss';
 export interface RowProps {
   fund: Fund.ResponseItem & Fund.ExtraRow & Fund.FixData;
   readOnly?: boolean;
-  onEdit?: (fund: Fund.SettingItem, focus: 'cbj' | 'cyfe') => void;
+  onEdit?: (fund: Fund.SettingItem) => void;
   onDetail?: (code: string) => void;
 }
 
@@ -44,20 +44,17 @@ const FundRow: React.FC<RowProps> = (props) => {
     }
   }
 
-  function onEditClick(focus: 'cbj' | 'cyfe') {
+  function onEditClick() {
     if (props.onEdit) {
-      props.onEdit(
-        {
-          name: fund.name!,
-          code: fund.fundcode!,
-          cyfe: Number(calcFundResult.cyfe),
-          cbj: calcFundResult.cbj,
-          zdfRange: fundConfigCodeMap[fund.fundcode!]?.zdfRange,
-          jzNotice: fundConfigCodeMap[fund.fundcode!]?.jzNotice,
-          memo: fundConfigCodeMap[fund.fundcode!]?.memo,
-        },
-        focus
-      );
+      props.onEdit({
+        name: fund.name!,
+        code: fund.fundcode!,
+        cyfe: Number(calcFundResult.cyfe),
+        cbj: calcFundResult.cbj,
+        zdfRange: fundConfigCodeMap[fund.fundcode!]?.zdfRange,
+        jzNotice: fundConfigCodeMap[fund.fundcode!]?.jzNotice,
+        memo: fundConfigCodeMap[fund.fundcode!]?.memo,
+      });
     }
   }
 
@@ -66,7 +63,11 @@ const FundRow: React.FC<RowProps> = (props) => {
       <div className={clsx(styles.row)} onClick={onRowClick}>
         {!readOnly && (
           <div className={styles.arrow}>
-            {fund.collapse ? <RiArrowUpSLine style={{ ...arrowSize }} /> : <RiArrowDownSLine style={{ ...arrowSize }} />}
+            {fund.collapse ? (
+              <RiArrowUpSLine style={{ ...arrowSize }} />
+            ) : (
+              <RiArrowDownSLine style={{ ...arrowSize }} />
+            )}
           </div>
         )}
         <div style={{ flex: 1, width: 0 }}>
@@ -114,12 +115,12 @@ const FundRow: React.FC<RowProps> = (props) => {
           </section>
           <section>
             <span>成本价：</span>
-            {calcFundResult.cbj !== undefined ? <span>{calcFundResult.cbj}</span> : <a onClick={() => onEditClick('cbj')}>录入</a>}
+            {calcFundResult.cbj !== undefined ? <span>{calcFundResult.cbj}</span> : <a onClick={onEditClick}>录入</a>}
           </section>
           <section>
             <span>持有份额：</span>
             <span>{calcFundResult.cyfe}</span>
-            <RiEditLine className={styles.editor} onClick={() => onEditClick('cyfe')} />
+            <RiEditLine className={styles.editor} onClick={onEditClick} />
           </section>
           <section>
             <span>成本金额：</span>

@@ -35,7 +35,14 @@ import HotkeyManager from './hotkey';
 import ContextMenuManager from './contextMenu';
 import { createAppMenu } from './menu';
 import { saveImage, saveJsonToCsv, saveString, readFile } from './io';
-import { lockSingleInstance, checkEnvTool, sendMessageToRenderer, setNativeTheme, getOtherWindows, makeFakeUA } from './util';
+import {
+  lockSingleInstance,
+  checkEnvTool,
+  sendMessageToRenderer,
+  setNativeTheme,
+  getOtherWindows,
+  makeFakeUA,
+} from './util';
 import * as Enums from '../renderer/utils/enums';
 
 let mb: Menubar;
@@ -65,7 +72,11 @@ function main() {
   const touchBarManager = new TouchBarManager([], mb);
   const contextMenuManager = new ContextMenuManager({ mb, updater: appUpdater });
   let windowIds: number[] = [];
-  const defaultTheme = localStore.get('config', 'SYSTEM_SETTING.systemThemeSetting', Enums.SystemThemeType.Auto) as Enums.SystemThemeType;
+  const defaultTheme = localStore.get(
+    'config',
+    'SYSTEM_SETTING.systemThemeSetting',
+    Enums.SystemThemeType.Auto
+  ) as Enums.SystemThemeType;
   // mb.app.commandLine.appendSwitch('disable-backgrounding-occluded-windows', 'true');
 
   // ipcMain 主进程相关监听
@@ -250,7 +261,9 @@ function main() {
   // 剪贴板相关
   ipcMain.handle('clipboard-readText', async (event) => clipboard.readText());
   ipcMain.handle('clipboard-writeText', async (event, text) => clipboard.writeText(text));
-  ipcMain.handle('clipboard-writeImage', async (event, dataUrl) => clipboard.writeImage(nativeImage.createFromDataURL(dataUrl)));
+  ipcMain.handle('clipboard-writeImage', async (event, dataUrl) =>
+    clipboard.writeImage(nativeImage.createFromDataURL(dataUrl))
+  );
   // menubar 相关监听
   mb.on('before-load', () => {
     // 生成fakeUA
