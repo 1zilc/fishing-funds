@@ -5,7 +5,7 @@ import * as CONST from '@/constants';
 
 const electronStore = window.contextModules.electronStore;
 
-export default () => {
+const cacheListener = () => {
   listenerMiddleware.startListening({
     actionCreator: syncRemoteCoinsMapAction,
     effect: async (action) => {
@@ -25,3 +25,4 @@ export default () => {
     },
   });
 };
+export default cacheListener;

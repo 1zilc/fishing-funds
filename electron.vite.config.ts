@@ -7,19 +7,19 @@ export default defineConfig({
   main: {
     // vite config options
     build: {
-      outDir: 'release/app/dist/main'
-    }
+      outDir: 'release/app/dist/main',
+    },
   },
   preload: {
     // vite config options
     build: {
-      outDir: 'release/app/dist/preload'
-    }
+      outDir: 'release/app/dist/preload',
+    },
   },
   renderer: {
     // vite config options
     build: {
-      outDir: 'release/app/dist/renderer'
+      outDir: 'release/app/dist/renderer',
     },
     server: {
       port: 3456,

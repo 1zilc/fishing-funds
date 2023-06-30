@@ -11,7 +11,7 @@ import { syncZindexesConfigAction } from '@/store/features/zindex';
 import { syncTranslateSettingAction } from '@/store/features/translate';
 import { syncChatGPTSettingAction } from '@/store/features/chatGPT';
 
-export default () => {
+const syncistener = () => {
   listenerMiddleware.startListening({
     matcher: isAnyOf(
       syncCoinsConfigAction,
@@ -38,3 +38,4 @@ export default () => {
     },
   });
 };
+export default syncistener;

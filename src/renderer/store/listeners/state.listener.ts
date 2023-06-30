@@ -7,7 +7,7 @@ import * as CONST from '@/constants';
 
 const electronStore = window.contextModules.electronStore;
 
-export default () => {
+const stateListener = () => {
   listenerMiddleware.startListening({
     actionCreator: syncEyeStatusAction,
     effect: async (action) => {
@@ -43,3 +43,4 @@ export default () => {
     },
   });
 };
+export default stateListener;

@@ -12,7 +12,7 @@ import { syncZindexesConfigAction } from '@/store/features/zindex';
 
 const { ipcRenderer } = window.contextModules.electron;
 
-export default () => {
+const shareListener = () => {
   listenerMiddleware.startListening({
     matcher: isAnyOf(
       syncCoinsConfigAction,
@@ -34,3 +34,4 @@ export default () => {
     },
   });
 };
+export default shareListener;

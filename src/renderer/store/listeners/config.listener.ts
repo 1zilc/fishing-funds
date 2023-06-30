@@ -12,7 +12,7 @@ import * as CONST from '@/constants';
 
 const electronStore = window.contextModules.electronStore;
 
-export default () => {
+const configListener = () => {
   listenerMiddleware.startListening({
     actionCreator: syncCoinsConfigAction,
     effect: async (action) => {
@@ -74,3 +74,4 @@ export default () => {
     },
   });
 };
+export default configListener;
