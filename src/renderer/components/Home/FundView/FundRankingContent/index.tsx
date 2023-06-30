@@ -7,7 +7,6 @@ import Ranting from '@/components/Home/FundView/FundRankingContent/Ranting';
 import Today from '@/components/Home/FundView/FundRankingContent/Today';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
 import styles from './index.module.scss';
-import { children } from 'cheerio/lib/api/traversing';
 
 export interface FundRankingContentProps {
   onEnter: () => void;
