@@ -5,7 +5,7 @@ import { useRequest } from 'ahooks';
 import { useInterval, useBoolean, useThrottleFn, useSize, useMemoizedFn, useEventListener } from 'ahooks';
 import { useDispatch, useSelector, TypedUseSelectorHook } from 'react-redux';
 import dayjs from 'dayjs';
-import * as echarts from 'echarts';
+import * as echarts from 'echarts/core';
 
 import {
   updateFundAction,

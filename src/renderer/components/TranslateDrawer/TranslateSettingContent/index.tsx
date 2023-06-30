@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Tabs, Radio, Input, Switch } from 'antd';
 import clsx from 'clsx';
-import { RiTreasureMapFill, RiLineChartLine } from 'react-icons/ri';
+import { RiTreasureMapFill, RiLineChartLine, RiSettingsLine } from 'react-icons/ri';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
 import WebAppIcon from '@/components/Toolbar/AppCenterContent/WebAppIcon';
 import StandCard from '@/components/Card/StandCard';
@@ -44,10 +44,17 @@ export const APIOptions = [
 
 const TranslateSettingContent: React.FC<TranslateSettingContentProps> = (props) => {
   const dispatch = useAppDispatch();
-  const { translateApiTypeSetting, readClipboardSetting, hotkeySetting } = useAppSelector((state) => state.translate.translateSetting);
+  const { translateApiTypeSetting, readClipboardSetting, hotkeySetting } = useAppSelector(
+    (state) => state.translate.translateSetting
+  );
 
   const [translateApiType, setTranslateApiType] = useState(translateApiTypeSetting);
-  const { hotkey, onBlur: hotkeyInputOnBlur, onFocus: hotkeyInputOnFocus, reset: resetHotkey } = useInputShortcut(hotkeySetting);
+  const {
+    hotkey,
+    onBlur: hotkeyInputOnBlur,
+    onFocus: hotkeyInputOnFocus,
+    reset: resetHotkey,
+  } = useInputShortcut(hotkeySetting);
   const [readClipboard, setReadClipboard] = useState(readClipboardSetting);
 
   function onSave() {
