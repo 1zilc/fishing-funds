@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
 
 import StockRow from '@/components/Home/StockView/StockRow';
 import Empty from '@/components/Empty';

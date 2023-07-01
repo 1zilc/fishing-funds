@@ -22,10 +22,10 @@ const arrowSize = {
   height: 12,
 };
 
-const FundRow: React.FC<RowProps> = (props) => {
+const FundRow: React.FC<RowProps> = React.memo((props) => {
   const { fund, readOnly } = props;
   const dispatch = useAppDispatch();
-  const { conciseSetting } = useAppSelector((state) => state.setting.systemSetting);
+  const conciseSetting = useAppSelector((state) => state.setting.systemSetting.conciseSetting);
   const fundConfigCodeMap = useAppSelector((state) => state.wallet.fundConfigCodeMap);
   const eyeStatus = useAppSelector((state) => state.wallet.eyeStatus);
   const calcFundResult = useMemo(() => Helpers.Fund.CalcFund(fund, fundConfigCodeMap), [fund, fundConfigCodeMap]);
@@ -147,6 +147,6 @@ const FundRow: React.FC<RowProps> = (props) => {
       </Collapse>
     </>
   );
-};
+});
 
 export default FundRow;

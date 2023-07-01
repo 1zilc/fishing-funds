@@ -1,5 +1,5 @@
-import React, { useMemo } from 'react';
-
+import React, { useEffect, useMemo } from 'react';
+import { useWhyDidYouUpdate } from 'ahooks';
 import FundRow from '@/components/Home/FundView/FundRow';
 import Empty from '@/components/Empty';
 import LoadingBar from '@/components/LoadingBar';
@@ -21,7 +21,7 @@ interface FundListProps {
 const FundView: React.FC<FundListProps> = (props) => {
   const fundsLoading = useAppSelector((state) => state.fund.fundsLoading);
   const fundViewMode = useAppSelector((state) => state.sort.viewMode.fundViewMode);
-  const { funds } = useAppSelector((state) => state.wallet.currentWallet);
+  const funds = useAppSelector((state) => state.wallet.currentWallet.funds);
   const fundConfigCodeMap = useAppSelector((state) => state.wallet.fundConfigCodeMap);
 
   const freshFunds = useFreshFunds(0);

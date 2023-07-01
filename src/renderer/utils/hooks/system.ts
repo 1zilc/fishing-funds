@@ -340,7 +340,7 @@ export function useBootStrap() {
     if (autoFreshSetting) {
       Adapters.ChokeAllAdapter([runLoadFixWalletsFunds]);
     }
-  }, freshDelaySetting * 1000 * 60);
+  }, 1000 * 60 * 5);
 
   // 间隔时间刷新货币
   useInterval(() => {
@@ -426,15 +426,15 @@ export function useMappingLocalToSystemSetting() {
 }
 
 export function useTrayContent() {
-  const { trayContentSetting } = useAppSelector((state) => state.setting.systemSetting);
+  const trayContentSetting = useAppSelector((state) => state.setting.systemSetting.trayContentSetting);
   const fundConfigCodeMap = useAppSelector((state) => state.wallet.fundConfigCodeMap);
   const walletsConfig = useAppSelector((state) => state.wallet.config.walletConfig);
   const wallets = useAppSelector((state) => state.wallet.wallets);
   const eyeStatus = useAppSelector((state) => state.wallet.eyeStatus);
-  const { funds } = useAppSelector((state) => state.wallet.currentWallet);
+  const funds = useAppSelector((state) => state.wallet.currentWallet.funds);
   const calcResult = Helpers.Fund.CalcFunds(funds, fundConfigCodeMap);
 
-  const allCalcResult = useMemo(() => {
+  const allCalcResult = (() => {
     const allResult = wallets.reduce(
       (r, { code, funds }) => {
         const { codeMap } = Helpers.Fund.GetFundConfig(code, walletsConfig);
@@ -445,9 +445,9 @@ export function useTrayContent() {
     );
     const sygz = NP.minus(allResult.gszje, allResult.zje);
     return { sygz, gssyl: allResult.zje ? NP.times(NP.divide(sygz, allResult.zje), 100) : 0 };
-  }, [wallets, walletsConfig]);
+  })();
 
-  const trayContent = useMemo(() => {
+  const trayContent = (() => {
     const group = [trayContentSetting].flat();
     let content = group
       .map((trayContentType: Enums.TrayContent) => {
@@ -467,7 +467,7 @@ export function useTrayContent() {
       .join(' │ ');
     content = content ? ` ${content}` : content;
     return content;
-  }, [trayContentSetting, calcResult, allCalcResult]);
+  })();
 
   useEffect(() => {
     const content = eyeStatus === Enums.EyeStatus.Close ? '' : trayContent;

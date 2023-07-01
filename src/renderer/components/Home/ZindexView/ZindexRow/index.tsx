@@ -95,10 +95,10 @@ const TrendChart: React.FC<{
   return <div ref={chartRef} style={{ width: 72 }} />;
 };
 
-const ZindexRow: React.FC<RowProps> = (props) => {
+const ZindexRow: React.FC<RowProps> = React.memo((props) => {
   const { zindex } = props;
   const dispatch = useAppDispatch();
-  const { conciseSetting } = useAppSelector((state) => state.setting.systemSetting);
+  const conciseSetting = useAppSelector((state) => state.setting.systemSetting.conciseSetting);
   const zindexViewMode = useAppSelector((state) => state.sort.viewMode.zindexViewMode);
   const zindexConfigCodeMap = useAppSelector((state) => state.zindex.config.codeMap);
 
@@ -220,6 +220,6 @@ const ZindexRow: React.FC<RowProps> = (props) => {
       </Collapse>
     </>
   );
-};
+});
 
 export default ZindexRow;

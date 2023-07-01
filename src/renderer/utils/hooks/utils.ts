@@ -18,7 +18,12 @@ import {
 import { setQuotationsLoadingAction } from '@/store/features/quotation';
 import { openWebAction } from '@/store/features/web';
 import { syncFixWalletStateAction, updateWalletStateAction } from '@/store/features/wallet';
-import { setCoinsLoadingAction, setRemoteCoinsLoadingAction, sortCoinsCachedAction, setRemoteCoinsAction } from '@/store/features/coin';
+import {
+  setCoinsLoadingAction,
+  setRemoteCoinsLoadingAction,
+  sortCoinsCachedAction,
+  setRemoteCoinsAction,
+} from '@/store/features/coin';
 import { updateStockAction, sortStocksCachedAction, setStocksLoadingAction } from '@/store/features/stock';
 import { setZindexesLoadingAction, sortZindexsCachedAction } from '@/store/features/zindex';
 import { sortQuotationsCachedAction } from '@/store/features/quotation';
@@ -365,7 +370,9 @@ export function useLoadWalletsFunds() {
           responseMap[response.fundcode!] = response;
         });
         // 用code去取已经获取到的结果
-        const finalResponseFunds = fundsConfig.filter(({ code }) => !!responseMap[code]).map(({ code }) => responseMap[code]);
+        const finalResponseFunds = fundsConfig
+          .filter(({ code }) => !!responseMap[code])
+          .map(({ code }) => responseMap[code]);
         const now = dayjs().format('MM-DD HH:mm:ss');
         dispatch(updateWalletStateAction({ code: walletCode, funds: finalResponseFunds, updateTime: now }));
         return responseFunds;
@@ -394,7 +401,9 @@ export function useLoadFixWalletsFunds() {
         return async () => {
           const fixFunds = await Adapters.ChokeGroupAdapter(collectors, 5, 100);
           const now = dayjs().format('MM-DD HH:mm:ss');
-          dispatch(syncFixWalletStateAction({ code: wallet.code, funds: fixFunds.filter(Utils.NotEmpty), updateTime: now }));
+          dispatch(
+            syncFixWalletStateAction({ code: wallet.code, funds: fixFunds.filter(Utils.NotEmpty), updateTime: now })
+          );
           return fixFunds;
         };
       });
@@ -529,18 +538,17 @@ export function useDrawer<T>(initialData: T) {
     data: initialData,
     show: false,
   });
+
+  const set = useMemoizedFn((data: T) => setDrawer({ show: true, data }));
+  const close = useMemoizedFn(() => setDrawer({ show: false, data: initialData }));
+  const open = useMemoizedFn(() => setDrawer((_) => ({ ..._, show: true })));
+
   return {
     data: drawer.data,
     show: drawer.show,
-    set: (data: T) => {
-      setDrawer({ show: true, data });
-    },
-    close: () => {
-      setDrawer({ show: false, data: initialData });
-    },
-    open: () => {
-      setDrawer((_) => ({ ..._, show: true }));
-    },
+    set,
+    close,
+    open,
   };
 }
 
@@ -644,7 +652,10 @@ export function useFundConfigMap(codes: string[]) {
   return codeMaps;
 }
 
-export function useIpcRendererListener(channel: string, listener: (event: Electron.IpcRendererEvent, ...args: any[]) => void) {
+export function useIpcRendererListener(
+  channel: string,
+  listener: (event: Electron.IpcRendererEvent, ...args: any[]) => void
+) {
   const callback = useMemoizedFn(listener);
 
   useEffect(() => {
@@ -668,7 +679,9 @@ export function useInputShortcut(initial: string) {
   useEventListener('keydown', (e) => {
     if (isInput) {
       const { ctrlKey, metaKey, altKey, shiftKey, key } = e;
-      const keys = [ctrlKey && 'control', metaKey && 'meta', altKey && 'alt', shiftKey && 'shift', key && key].filter((_) => _) as string[];
+      const keys = [ctrlKey && 'control', metaKey && 'meta', altKey && 'alt', shiftKey && 'shift', key && key].filter(
+        (_) => _
+      ) as string[];
       const hotkeys = Array.from(new Set(keys.map((_) => _.toLocaleLowerCase())));
       setHotkey(hotkeys.join(' + '));
     }

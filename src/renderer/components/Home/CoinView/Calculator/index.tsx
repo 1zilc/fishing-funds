@@ -32,7 +32,12 @@ const Calculator: React.FC<CalculatorProps> = (props) => {
   const [coins, setCoins] = useState<Coin.RemoteCoin[]>(remoteCoins);
   const [price, setPrice] = useState({ cny: 0, btc: 0, usd: 0 });
 
-  const { data: detailCoinCode, show: showDetailDrawer, set: setDetailDrawer, close: closeDetailDrawer } = useDrawer('');
+  const {
+    data: detailCoinCode,
+    show: showDetailDrawer,
+    set: setDetailDrawer,
+    close: closeDetailDrawer,
+  } = useDrawer('');
 
   const { run: onSearch } = useDebounceFn(async (_value: string) => {
     const value = _value.trim();

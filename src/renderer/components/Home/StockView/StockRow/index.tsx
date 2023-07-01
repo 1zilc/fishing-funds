@@ -97,10 +97,10 @@ const TrendChart: React.FC<{
   return <div ref={chartRef} style={{ width: 72 }} />;
 };
 
-const StockRow: React.FC<RowProps> = (props) => {
+const StockRow: React.FC<RowProps> = React.memo((props) => {
   const { stock } = props;
   const dispatch = useAppDispatch();
-  const { conciseSetting } = useAppSelector((state) => state.setting.systemSetting);
+  const conciseSetting = useAppSelector((state) => state.setting.systemSetting.conciseSetting);
   const industrys = useAppSelector((state) => state.stock.industryMap[stock.secid]) || [];
   const stockViewMode = useAppSelector((state) => state.sort.viewMode.stockViewMode);
   const stockConfigCodeMap = useAppSelector((state) => state.stock.config.codeMap);
@@ -213,6 +213,6 @@ const StockRow: React.FC<RowProps> = (props) => {
       </Collapse>
     </>
   );
-};
+});
 
 export default StockRow;

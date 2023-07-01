@@ -1,6 +1,5 @@
 import React from 'react';
 import { useCreation } from 'ahooks';
-import clsx from 'clsx';
 import { Tabs } from 'antd';
 import Toolbar from '@/components/Toolbar';
 import Wallet from '@/components/Wallet/index';
@@ -196,20 +195,12 @@ const Body = () => {
     [bottomTabsSetting]
   );
 
-  return (
-    <Tabs
-      renderTabBar={() => <></>}
-      activeKey={String(tabsActiveKey)}
-      animated={{ tabPane: true, inkBar: false }}
-      destroyInactiveTabPane
-      items={items}
-    />
-  );
+  return <Tabs renderTabBar={() => <></>} activeKey={String(tabsActiveKey)} animated={true} items={items} />;
 };
 
 const Home: React.FC<HomeProps> = () => {
   return (
-    <div className={clsx(styles.layout)}>
+    <div className={styles.layout}>
       <Header>
         <Wallet />
         <SortBar />

@@ -36,11 +36,30 @@ const stockSlice = createSlice({
     syncIndustryMapAction(state, action) {
       state.industryMap = action.payload;
     },
+    toggleStockCollapseAction(state, { payload }: PayloadAction<Stock.ResponseItem & Stock.ExtraRow>) {
+      state.stocks.forEach((item) => {
+        if (item.secid === payload.secid) {
+          item.collapse = !payload.collapse;
+        }
+      });
+    },
+    toggleAllStocksCollapseAction(state) {
+      const expandAllStocks = state.stocks.every((item) => item.collapse);
+      state.stocks.forEach((item) => {
+        item.collapse = !expandAllStocks;
+      });
+    },
   },
 });
 
-export const { setStocksLoadingAction, syncStocksAction, syncStocksConfigAction, syncIndustryMapAction } =
-  stockSlice.actions;
+export const {
+  setStocksLoadingAction,
+  syncStocksAction,
+  syncStocksConfigAction,
+  syncIndustryMapAction,
+  toggleStockCollapseAction,
+  toggleAllStocksCollapseAction,
+} = stockSlice.actions;
 
 export const addStockAction = createAsyncThunk<void, Stock.SettingItem, AsyncThunkConfig>(
   'stock/addStockAction',
@@ -170,42 +189,6 @@ export const sortStocksCachedAction = createAsyncThunk<void, Stock.ResponseItem[
 
       dispatch(syncStocksStateAction(stocksWithChached));
       dispatch(sortStocksAction());
-    } catch (error) {}
-  }
-);
-
-export const toggleStockCollapseAction = createAsyncThunk<void, Stock.ResponseItem & Stock.ExtraRow, AsyncThunkConfig>(
-  'stock/toggleStockCollapseAction',
-  (stock, { getState, dispatch }) => {
-    try {
-      const {
-        stock: { stocks },
-      } = getState();
-
-      const cloneStocks = Utils.DeepCopy(stocks);
-      cloneStocks.forEach((_) => {
-        if (_.secid === stock.secid) {
-          _.collapse = !stock.collapse;
-        }
-      });
-      dispatch(syncStocksStateAction(cloneStocks));
-    } catch (error) {}
-  }
-);
-
-export const toggleAllStocksCollapseAction = createAsyncThunk<void, void, AsyncThunkConfig>(
-  'stock/toggleAllStocksCollapseAction',
-  (_, { getState, dispatch }) => {
-    try {
-      const {
-        stock: { stocks },
-      } = getState();
-      const cloneStocks = Utils.DeepCopy(stocks);
-      const expandAllStocks = stocks.every((_) => _.collapse);
-      cloneStocks.forEach((_) => {
-        _.collapse = !expandAllStocks;
-      });
-      dispatch(syncStocksStateAction(cloneStocks));
     } catch (error) {}
   }
 );

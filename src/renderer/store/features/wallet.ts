@@ -59,7 +59,10 @@ const walletSlice = createSlice({
       state.wallets = payload;
       state.currentWallet = wallet;
     },
-    syncWalletsConfigAction(state, { payload }: PayloadAction<{ walletConfig: Wallet.SettingItem[]; codeMap: Wallet.CodeMap }>) {
+    syncWalletsConfigAction(
+      state,
+      { payload }: PayloadAction<{ walletConfig: Wallet.SettingItem[]; codeMap: Wallet.CodeMap }>
+    ) {
       const { codeMap, fundConfig } = Helpers.Fund.GetFundConfig(state.currentWalletCode, payload.walletConfig);
       state.config = payload;
       state.fundConfig = fundConfig;
