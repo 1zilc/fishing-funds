@@ -8,7 +8,7 @@ export interface StockState {
   stocksLoading: boolean;
   config: {
     stockConfig: Stock.SettingItem[];
-    codeMap: Stock.CodeMap;
+    codeMap: Stock.CodeMap; // secid做key
   };
   industryMap: Record<string, Stock.IndustryItem[]>;
 }
@@ -39,7 +39,8 @@ const stockSlice = createSlice({
   },
 });
 
-export const { setStocksLoadingAction, syncStocksAction, syncStocksConfigAction, syncIndustryMapAction } = stockSlice.actions;
+export const { setStocksLoadingAction, syncStocksAction, syncStocksConfigAction, syncIndustryMapAction } =
+  stockSlice.actions;
 
 export const addStockAction = createAsyncThunk<void, Stock.SettingItem, AsyncThunkConfig>(
   'stock/addStockAction',
@@ -60,26 +61,31 @@ export const addStockAction = createAsyncThunk<void, Stock.SettingItem, AsyncThu
   }
 );
 
-export const updateStockAction = createAsyncThunk<void, { secid: string; type?: number }, AsyncThunkConfig>(
-  'stock/updateStockAction',
-  (stock, { dispatch, getState }) => {
-    try {
-      const {
-        stock: {
-          config: { stockConfig },
-        },
-      } = getState();
-      stockConfig.forEach((item) => {
-        if (stock.secid === item.secid) {
-          if (stock.type !== undefined) {
-            item.type = stock.type;
-          }
-        }
-      });
-      dispatch(setStockConfigAction(stockConfig));
-    } catch (error) {}
-  }
-);
+export const updateStockAction = createAsyncThunk<
+  void,
+  Partial<Stock.SettingItem> & {
+    secid: string;
+  },
+  AsyncThunkConfig
+>('stock/updateStockAction', (stock, { dispatch, getState }) => {
+  try {
+    const {
+      stock: {
+        config: { stockConfig },
+      },
+    } = getState();
+    const cloneStockConfig = Utils.DeepCopy(stockConfig);
+
+    cloneStockConfig.forEach((item) => {
+      if (stock.secid === item.secid) {
+        Object.keys(stock).forEach((key) => {
+          (item[key as keyof Stock.SettingItem] as any) = stock[key as keyof Stock.SettingItem];
+        });
+      }
+    });
+    dispatch(setStockConfigAction(cloneStockConfig));
+  } catch (error) {}
+});
 
 export const deleteStockAction = createAsyncThunk<void, string, AsyncThunkConfig>(
   'stock/deleteStockAction',
@@ -115,30 +121,33 @@ export const setStockConfigAction = createAsyncThunk<void, Stock.SettingItem[], 
   }
 );
 
-export const sortStocksAction = createAsyncThunk<void, void, AsyncThunkConfig>('stock/sortStocksAction', (_, { dispatch, getState }) => {
-  try {
-    const {
-      stock: {
-        stocks,
-        config: { codeMap },
-      },
-      sort: {
-        sortMode: {
-          stockSortMode: { type, order },
+export const sortStocksAction = createAsyncThunk<void, void, AsyncThunkConfig>(
+  'stock/sortStocksAction',
+  (_, { dispatch, getState }) => {
+    try {
+      const {
+        stock: {
+          stocks,
+          config: { codeMap },
         },
-      },
-    } = getState();
+        sort: {
+          sortMode: {
+            stockSortMode: { type, order },
+          },
+        },
+      } = getState();
 
-    const sortList = Helpers.Stock.SortStock({
-      codeMap,
-      list: stocks,
-      sortType: type,
-      orderType: order,
-    });
+      const sortList = Helpers.Stock.SortStock({
+        codeMap,
+        list: stocks,
+        sortType: type,
+        orderType: order,
+      });
 
-    dispatch(syncStocksStateAction(sortList));
-  } catch (error) {}
-});
+      dispatch(syncStocksStateAction(sortList));
+    } catch (error) {}
+  }
+);
 
 export const sortStocksCachedAction = createAsyncThunk<void, Stock.ResponseItem[], AsyncThunkConfig>(
   'stock/sortStocksCachedAction',
@@ -216,16 +225,17 @@ export const syncStocksStateAction = createAsyncThunk<void, (Stock.ResponseItem 
   }
 );
 
-export const setIndustryMapAction = createAsyncThunk<void, { industrys: Stock.IndustryItem[]; secid: string }, AsyncThunkConfig>(
-  'stock/setIndustryMapAction',
-  ({ industrys, secid }, { getState, dispatch }) => {
-    try {
-      const {
-        stock: { industryMap },
-      } = getState();
-      dispatch(syncIndustryMapAction({ ...industryMap, [secid]: industrys }));
-    } catch (error) {}
-  }
-);
+export const setIndustryMapAction = createAsyncThunk<
+  void,
+  { industrys: Stock.IndustryItem[]; secid: string },
+  AsyncThunkConfig
+>('stock/setIndustryMapAction', ({ industrys, secid }, { getState, dispatch }) => {
+  try {
+    const {
+      stock: { industryMap },
+    } = getState();
+    dispatch(syncIndustryMapAction({ ...industryMap, [secid]: industrys }));
+  } catch (error) {}
+});
 
 export default stockSlice.reducer;

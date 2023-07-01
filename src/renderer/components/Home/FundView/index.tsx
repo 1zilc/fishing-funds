@@ -24,20 +24,22 @@ const FundView: React.FC<FundListProps> = (props) => {
   const { funds } = useAppSelector((state) => state.wallet.currentWallet);
   const fundConfigCodeMap = useAppSelector((state) => state.wallet.fundConfigCodeMap);
 
+  const freshFunds = useFreshFunds(0);
+
   const {
     data: editData,
     show: showEditDrawer,
     set: setEditDrawer,
     close: closeEditDrawer,
-  } = useDrawer({ cyfe: 0, code: '', name: '' });
+  } = useDrawer({} as Fund.SettingItem);
 
-  const freshFunds = useFreshFunds(0);
   const {
     data: detailFundCode,
     show: showDetailDrawer,
     set: setDetailDrawer,
     close: closeDetailDrawer,
   } = useDrawer('');
+
   const list = funds.filter(props.filter);
 
   const view = useMemo(() => {
@@ -61,12 +63,7 @@ const FundView: React.FC<FundListProps> = (props) => {
       case Enums.FundViewType.List:
       default:
         return list.map((fund) => (
-          <FundRow
-            key={fund.fundcode}
-            fund={fund}
-            onEdit={(fundData) => setEditDrawer(fundData)}
-            onDetail={setDetailDrawer}
-          />
+          <FundRow key={fund.fundcode} fund={fund} onEdit={setEditDrawer} onDetail={setDetailDrawer} />
         ));
     }
   }, [list, fundViewMode, fundConfigCodeMap]);

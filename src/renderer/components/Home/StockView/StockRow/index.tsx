@@ -1,12 +1,10 @@
 import React from 'react';
 import clsx from 'clsx';
 import { useRequest } from 'ahooks';
-
-import { RiArrowDownSLine, RiArrowUpSLine } from 'react-icons/ri';
-
+import { RiArrowDownSLine, RiArrowUpSLine, RiEditLine } from 'react-icons/ri';
 import Collapse from '@/components/Collapse';
 import ArrowLine from '@/components/ArrowLine';
-
+import MemoNote from '@/components/MemoNote';
 import { toggleStockCollapseAction, setIndustryMapAction } from '@/store/features/stock';
 import { useResizeEchart, useRenderEcharts, useAppDispatch, useAppSelector } from '@/utils/hooks';
 import colorHash from '@/utils/colorHash';
@@ -17,6 +15,7 @@ import styles from './index.module.scss';
 
 export interface RowProps {
   stock: Stock.ResponseItem & Stock.ExtraRow;
+  onEdit?: (fund: Stock.SettingItem) => void;
   onDetail: (code: string) => void;
 }
 
@@ -104,6 +103,9 @@ const StockRow: React.FC<RowProps> = (props) => {
   const { conciseSetting } = useAppSelector((state) => state.setting.systemSetting);
   const industrys = useAppSelector((state) => state.stock.industryMap[stock.secid]) || [];
   const stockViewMode = useAppSelector((state) => state.sort.viewMode.stockViewMode);
+  const stockConfigCodeMap = useAppSelector((state) => state.stock.config.codeMap);
+
+  const stockConfig = stockConfigCodeMap[stock.secid];
 
   useRequest(() => Services.Stock.GetIndustryFromEastmoney(stock.secid, 1), {
     onSuccess: (datas) => {
@@ -114,6 +116,10 @@ const StockRow: React.FC<RowProps> = (props) => {
     ready: !industrys.length,
   });
 
+  function onEditClick() {
+    props.onEdit?.(stockConfig);
+  }
+
   return (
     <>
       <div className={clsx(styles.row)} onClick={() => dispatch(toggleStockCollapseAction(stock))}>
@@ -121,12 +127,7 @@ const StockRow: React.FC<RowProps> = (props) => {
           {stock.collapse ? <RiArrowUpSLine style={{ ...arrowSize }} /> : <RiArrowDownSLine style={{ ...arrowSize }} />}
         </div>
         <div style={{ flex: 1, width: 0 }}>
-          <div
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-            }}
-          >
+          <div style={{ display: 'flex', alignItems: 'center' }}>
             <span className={styles.stockName}>{stock.name}</span>
             {industrys.map((industry) => {
               const color = colorHash.hex(industry.name);
@@ -162,9 +163,13 @@ const StockRow: React.FC<RowProps> = (props) => {
               {stockViewMode.type === Enums.StockViewType.Chart ? (
                 <div className={clsx(styles.zdd)}>{stock.zx}</div>
               ) : (
-                <div className={clsx(styles.zdd, Utils.GetValueColor(stock.zdd).textClass)}>{Utils.Yang(stock.zdd)}</div>
+                <div className={clsx(styles.zdd, Utils.GetValueColor(stock.zdd).textClass)}>
+                  {Utils.Yang(stock.zdd)}
+                </div>
               )}
-              <div className={clsx(styles.zdf, Utils.GetValueColor(stock.zdf).textClass)}>{Utils.Yang(stock.zdf)} %</div>
+              <div className={clsx(styles.zdf, Utils.GetValueColor(stock.zdf).textClass)}>
+                {Utils.Yang(stock.zdf)} %
+              </div>
             </div>
           )}
         </div>
@@ -186,6 +191,7 @@ const StockRow: React.FC<RowProps> = (props) => {
           <section>
             <span>昨收：</span>
             <span>{stock.zs}</span>
+            <RiEditLine className={styles.editor} onClick={onEditClick} />
           </section>
           <section>
             <span>今开：</span>
@@ -199,6 +205,7 @@ const StockRow: React.FC<RowProps> = (props) => {
             <span>最低：</span>
             <span className="text-down">{stock.zd}</span>
           </section>
+          {stockConfig.memo && <MemoNote text={stockConfig.memo} />}
           <div className={styles.view}>
             <a onClick={() => props.onDetail(stock.secid)}>{'查看详情 >'}</a>
           </div>

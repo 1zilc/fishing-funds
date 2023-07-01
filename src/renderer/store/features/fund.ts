@@ -42,28 +42,30 @@ const fundSlice = createSlice({
   },
 });
 
-export const { syncRemoteFundsMapAction, setFundsLoadingAction, setRemoteFundsLoadingAction, syncFundRatingMapAction } = fundSlice.actions;
+export const { syncRemoteFundsMapAction, setFundsLoadingAction, setRemoteFundsLoadingAction, syncFundRatingMapAction } =
+  fundSlice.actions;
 
-export const setFundConfigAction = createAsyncThunk<void, { config: Fund.SettingItem[]; walletCode: string }, AsyncThunkConfig>(
-  'fund/setFundConfigAction',
-  ({ config, walletCode }, { dispatch, getState }) => {
-    try {
-      const {
-        wallet: {
-          config: { walletConfig },
-          currentWallet,
-        },
-      } = getState();
-      const newWalletConfig = walletConfig.map((item) => ({
-        ...item,
-        funds: walletCode === item.code ? config : item.funds,
-      }));
+export const setFundConfigAction = createAsyncThunk<
+  void,
+  { config: Fund.SettingItem[]; walletCode: string },
+  AsyncThunkConfig
+>('fund/setFundConfigAction', ({ config, walletCode }, { dispatch, getState }) => {
+  try {
+    const {
+      wallet: {
+        config: { walletConfig },
+        currentWallet,
+      },
+    } = getState();
+    const newWalletConfig = walletConfig.map((item) => ({
+      ...item,
+      funds: walletCode === item.code ? config : item.funds,
+    }));
 
-      dispatch(setWalletConfigAction(newWalletConfig));
-      dispatch(updateWalletStateAction(currentWallet));
-    } catch (error) {}
-  }
-);
+    dispatch(setWalletConfigAction(newWalletConfig));
+    dispatch(updateWalletStateAction(currentWallet));
+  } catch (error) {}
+});
 
 export const setRemoteFundsAction = createAsyncThunk<void, Fund.RemoteFund[], AsyncThunkConfig>(
   'fund/setRemoteFundsAction',
@@ -113,14 +115,8 @@ export const addFundAction = createAsyncThunk<void, Fund.SettingItem, AsyncThunk
 
 export const updateFundAction = createAsyncThunk<
   void,
-  {
+  Partial<Fund.SettingItem> & {
     code: string;
-    cyfe?: number;
-    name?: string;
-    cbj?: number;
-    zdfRange?: number;
-    jzNotice?: number;
-    memo?: string;
   },
   AsyncThunkConfig
 >('fund/updateFundAction', (fund, { dispatch, getState }) => {
@@ -189,32 +185,33 @@ export const sortFundsAction = createAsyncThunk<void, string, AsyncThunkConfig>(
   }
 );
 
-export const sortFundsCachedAction = createAsyncThunk<void, { responseFunds: Fund.ResponseItem[]; walletCode: string }, AsyncThunkConfig>(
-  'fund/sortFundsCachedAction',
-  ({ responseFunds, walletCode }, { dispatch, getState }) => {
-    try {
-      const {
-        wallet: {
-          config: { walletConfig },
-          wallets,
-        },
-      } = getState();
-      const { fundConfig } = Helpers.Fund.GetFundConfig(walletCode, walletConfig);
-      const { funds } = Helpers.Wallet.GetCurrentWalletState(walletCode, wallets);
-      const now = dayjs().format('MM-DD HH:mm:ss');
+export const sortFundsCachedAction = createAsyncThunk<
+  void,
+  { responseFunds: Fund.ResponseItem[]; walletCode: string },
+  AsyncThunkConfig
+>('fund/sortFundsCachedAction', ({ responseFunds, walletCode }, { dispatch, getState }) => {
+  try {
+    const {
+      wallet: {
+        config: { walletConfig },
+        wallets,
+      },
+    } = getState();
+    const { fundConfig } = Helpers.Fund.GetFundConfig(walletCode, walletConfig);
+    const { funds } = Helpers.Wallet.GetCurrentWalletState(walletCode, wallets);
+    const now = dayjs().format('MM-DD HH:mm:ss');
 
-      const fundsWithChached = Utils.MergeStateWithResponse({
-        config: fundConfig,
-        configKey: 'code',
-        stateKey: 'fundcode',
-        state: funds,
-        response: responseFunds,
-      });
+    const fundsWithChached = Utils.MergeStateWithResponse({
+      config: fundConfig,
+      configKey: 'code',
+      stateKey: 'fundcode',
+      state: funds,
+      response: responseFunds,
+    });
 
-      dispatch(setWalletStateAction({ code: walletCode, funds: fundsWithChached, updateTime: now }));
-      dispatch(sortFundsAction(walletCode));
-    } catch (error) {}
-  }
-);
+    dispatch(setWalletStateAction({ code: walletCode, funds: fundsWithChached, updateTime: now }));
+    dispatch(sortFundsAction(walletCode));
+  } catch (error) {}
+});
 
 export default fundSlice.reducer;

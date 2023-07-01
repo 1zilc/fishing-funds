@@ -82,17 +82,9 @@ const Optional: React.FC<OptionalProps> = () => {
           {sortWebConfig.map((web) => {
             return (
               <PureCard key={web.url} className={clsx(styles.row, 'hoverable')}>
-                <RiIndeterminateCircleFill
-                  className={styles.remove}
-                  onClick={(e) => {
-                    onRemoveCoin(web);
-                    e.stopPropagation();
-                  }}
-                />
-                <div className={styles.inner}>
-                  <div className={styles.name}>{web.title}</div>
-                </div>
-                <RiMenuLine className={styles.menu} />
+                <RiIndeterminateCircleFill className={styles.remove} onClick={() => onRemoveCoin(web)} />
+                <div className={styles.name}>{web.title}</div>
+                <RiMenuLine className={styles.function} />
               </PureCard>
             );
           })}

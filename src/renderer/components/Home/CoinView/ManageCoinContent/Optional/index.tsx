@@ -64,26 +64,13 @@ const Optional: React.FC<OptionalProps> = () => {
           dragClass={styles.dragItem}
           swap
         >
-          {sortCoinConfig.map((coin) => {
-            return (
-              <PureCard key={coin.code} className={clsx(styles.row, 'hoverable')}>
-                <RiIndeterminateCircleFill
-                  className={styles.remove}
-                  onClick={(e) => {
-                    onRemoveCoin(coin);
-                    e.stopPropagation();
-                  }}
-                />
-                <div className={styles.inner}>
-                  <div className={styles.name}>
-                    {coin.symbol}
-                    <span className={styles.code}>（{coin.code}）</span>
-                  </div>
-                </div>
-                <RiMenuLine className={styles.menu} />
-              </PureCard>
-            );
-          })}
+          {sortCoinConfig.map((coin) => (
+            <PureCard key={coin.code} className={clsx(styles.row, 'hoverable')}>
+              <RiIndeterminateCircleFill className={styles.remove} onClick={() => onRemoveCoin(coin)} />
+              <div className={styles.name}>{coin.symbol}</div>
+              <RiMenuLine className={styles.function} />
+            </PureCard>
+          ))}
         </ReactSortable>
       ) : (
         <Empty text="暂未自选货币~" />

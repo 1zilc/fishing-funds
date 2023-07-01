@@ -89,6 +89,33 @@ export const addCoinAction = createAsyncThunk<void, Coin.SettingItem, AsyncThunk
   }
 );
 
+export const updateCoinAction = createAsyncThunk<
+  void,
+  Partial<Coin.SettingItem> & {
+    code: string;
+  },
+  AsyncThunkConfig
+>('coin/updateCoinAction', (coin, { dispatch, getState }) => {
+  try {
+    const {
+      coin: {
+        config: { coinConfig },
+      },
+    } = getState();
+    const cloneCoinConfig = Utils.DeepCopy(coinConfig);
+
+    cloneCoinConfig.forEach((item) => {
+      if (coin.code === item.code) {
+        Object.keys(coin).forEach((key) => {
+          (item[key as keyof Coin.SettingItem] as any) = coin[key as keyof Coin.SettingItem];
+        });
+      }
+    });
+
+    dispatch(setCoinConfigAction(cloneCoinConfig));
+  } catch (error) {}
+});
+
 export const deleteCoinAction = createAsyncThunk<void, string, AsyncThunkConfig>(
   'coin/deleteCoinAction',
   (code, { dispatch, getState }) => {
@@ -126,30 +153,33 @@ export const setCoinConfigAction = createAsyncThunk<void, Coin.SettingItem[], As
   }
 );
 
-export const sortCoinsAction = createAsyncThunk<void, void, AsyncThunkConfig>('coin/sortCoinsAction', (_, { dispatch, getState }) => {
-  try {
-    const {
-      coin: {
-        coins,
-        config: { codeMap },
-      },
-      sort: {
-        sortMode: {
-          coinSortMode: { order, type },
+export const sortCoinsAction = createAsyncThunk<void, void, AsyncThunkConfig>(
+  'coin/sortCoinsAction',
+  (_, { dispatch, getState }) => {
+    try {
+      const {
+        coin: {
+          coins,
+          config: { codeMap },
         },
-      },
-    } = getState();
+        sort: {
+          sortMode: {
+            coinSortMode: { order, type },
+          },
+        },
+      } = getState();
 
-    const sortList = Helpers.Coin.SortCoin({
-      codeMap,
-      list: coins,
-      sortType: type,
-      orderType: order,
-    });
+      const sortList = Helpers.Coin.SortCoin({
+        codeMap,
+        list: coins,
+        sortType: type,
+        orderType: order,
+      });
 
-    dispatch(syncCoinsStateAction(sortList));
-  } catch (error) {}
-});
+      dispatch(syncCoinsStateAction(sortList));
+    } catch (error) {}
+  }
+);
 
 export const sortCoinsCachedAction = createAsyncThunk<void, Coin.ResponseItem[], AsyncThunkConfig>(
   'coin/sortCoinsCachedAction',

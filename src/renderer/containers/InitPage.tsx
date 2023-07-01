@@ -10,7 +10,12 @@ import {
   syncDarkMode,
   loadSyncConfigAction,
 } from '@/store/features/setting';
-import { setWalletConfigAction, syncEyeStatusAction, changeCurrentWalletCodeAction, defaultWallet } from '@/store/features/wallet';
+import {
+  setWalletConfigAction,
+  syncEyeStatusAction,
+  changeCurrentWalletCodeAction,
+  defaultWallet,
+} from '@/store/features/wallet';
 import { setStockConfigAction } from '@/store/features/stock';
 import { setCoinConfigAction, setRemoteCoinsAction } from '@/store/features/coin';
 import { syncSortModeAction, setViewModeAction, initialState as sortInitialState } from '@/store/features/sort';
@@ -19,7 +24,7 @@ import { setWebConfigAction, defaultWebConfig } from '@/store/features/web';
 import { syncVersion } from '@/store/features/updater';
 import { syncTranslateSettingAction, defaultTranslateSetting } from '@/store/features/translate';
 import { syncChatGPTSettingAction, defaultChatGPTSetting } from '@/store/features/chatGPT';
-import { useDrawer, useAppDispatch, useRouterParams } from '@/utils/hooks';
+import { useDrawer, useAppDispatch } from '@/utils/hooks';
 import { syncFavoriteQuotationMapAction } from '@/store/features/quotation';
 import * as CONST from '@/constants';
 import * as Utils from '@/utils';
@@ -89,7 +94,9 @@ const InitPage = () => {
     const allConfigStorage = await electronStore.all('config');
     // 系统设置加载完成
     dispatch(setSystemSettingAction(allConfigStorage[CONST.STORAGE.SYSTEM_SETTING] || defaultSystemSetting));
-    dispatch(updateAdjustmentNotificationDateAction(allConfigStorage[CONST.STORAGE.ADJUSTMENT_NOTIFICATION_DATE] || ''));
+    dispatch(
+      updateAdjustmentNotificationDateAction(allConfigStorage[CONST.STORAGE.ADJUSTMENT_NOTIFICATION_DATE] || '')
+    );
     //web配置加载完成
     dispatch(setZindexConfigAction(allConfigStorage[CONST.STORAGE.ZINDEX_SETTING] || defaultZindexConfig));
     // 关注板块配置加载完成

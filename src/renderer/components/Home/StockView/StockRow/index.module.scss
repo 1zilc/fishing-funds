@@ -113,6 +113,15 @@
     flex-wrap: wrap;
   }
 }
+
+.editor {
+  margin-left: 5px;
+  cursor: pointer;
+  height: 12px;
+  width: 12px;
+  fill: var(--svg-icon-color);
+}
+
 .view {
   padding: 5px;
   text-align: center;

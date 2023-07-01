@@ -45,14 +45,7 @@ const Optional: React.FC<OptionalProps> = () => {
     show: showEditDrawer,
     set: setEditDrawer,
     close: closeEditDrawer,
-  } = useDrawer({
-    cyfe: 0,
-    code: '',
-    name: '',
-    cbj: undefined as number | undefined,
-    zdfRange: undefined as number | undefined,
-    memo: '' as string | undefined,
-  });
+  } = useDrawer({} as Fund.SettingItem);
 
   const sortFundConfig = useMemo(() => fundConfig.map((_) => ({ ..._, id: _.code })), [fundConfig]);
 
@@ -130,17 +123,15 @@ const Optional: React.FC<OptionalProps> = () => {
             dragClass={styles.dragItem}
             swap
           >
-            {sortFundConfig.map((fund) => {
-              return (
-                <PureCard key={fund.code} className={clsx(styles.row, 'hoverable')}>
-                  <RiIndeterminateCircleFill className={styles.remove} onClick={() => onRemoveFund(fund)} />
-                  <div className={styles.inner}>
-                    <div className={styles.name}>
-                      {fund.name}
-                      <span className={styles.code}>（{fund.code}）</span>
-                    </div>
-                  </div>
-                  <RiEditLine
+            {sortFundConfig.map((fund) => (
+              <PureCard key={fund.code} className={clsx(styles.row, 'hoverable')}>
+                <RiIndeterminateCircleFill className={styles.remove} onClick={() => onRemoveFund(fund)} />
+                <div className={styles.name}>{fund.name}</div>
+                <RiEditLine className={styles.function} onClick={() => setEditDrawer(fund)} />
+                {fund.zdfRange || fund.jzNotice ? (
+                  <RiNotification2Fill className={styles.function} onClick={() => onCancleRiskNotice(fund)} />
+                ) : (
+                  <RiNotification2Line
                     className={styles.function}
                     onClick={() =>
                       setEditDrawer({
@@ -153,28 +144,11 @@ const Optional: React.FC<OptionalProps> = () => {
                       })
                     }
                   />
-                  {fund.zdfRange || fund.jzNotice ? (
-                    <RiNotification2Fill className={styles.function} onClick={() => onCancleRiskNotice(fund)} />
-                  ) : (
-                    <RiNotification2Line
-                      className={styles.function}
-                      onClick={() =>
-                        setEditDrawer({
-                          name: fund.name,
-                          cyfe: fund.cyfe,
-                          code: fund.code,
-                          cbj: fund.cbj,
-                          zdfRange: fund.zdfRange,
-                          memo: fund.memo,
-                        })
-                      }
-                    />
-                  )}
-                  <RiFileCopyLine className={styles.function} onClick={() => onCopyFund(fund)} />
-                  <RiMenuLine className={styles.menu} />
-                </PureCard>
-              );
-            })}
+                )}
+                <RiFileCopyLine className={styles.function} onClick={() => onCopyFund(fund)} />
+                <RiMenuLine className={styles.function} />
+              </PureCard>
+            ))}
           </ReactSortable>
         ) : (
           <Empty text="正在同步基金设置~" />

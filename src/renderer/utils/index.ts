@@ -242,7 +242,11 @@ export function GetValueColor(number?: number | string) {
   const varibleColors = GetVariblesColor();
   return {
     color:
-      value > 0 ? varibleColors['--increase-color'] : value < 0 ? varibleColors['--reduce-color'] : varibleColors['--reverse-text-color'],
+      value > 0
+        ? varibleColors['--increase-color']
+        : value < 0
+        ? varibleColors['--reduce-color']
+        : varibleColors['--reverse-text-color'],
     textClass: value > 0 ? 'text-up' : value < 0 ? 'text-down' : 'text-none',
     blockClass: value > 0 ? 'block-up' : value < 0 ? 'block-down' : 'block-none',
     bgClass: value > 0 ? 'bg-up' : value < 0 ? 'bg-down' : 'bg-none',

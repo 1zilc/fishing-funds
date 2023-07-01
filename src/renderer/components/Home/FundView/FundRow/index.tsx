@@ -14,7 +14,7 @@ export interface RowProps {
   fund: Fund.ResponseItem & Fund.ExtraRow & Fund.FixData;
   readOnly?: boolean;
   onEdit?: (fund: Fund.SettingItem) => void;
-  onDetail?: (code: string) => void;
+  onDetail: (code: string) => void;
 }
 
 const arrowSize = {
@@ -30,6 +30,9 @@ const FundRow: React.FC<RowProps> = (props) => {
   const eyeStatus = useAppSelector((state) => state.wallet.eyeStatus);
   const calcFundResult = useMemo(() => Helpers.Fund.CalcFund(fund, fundConfigCodeMap), [fund, fundConfigCodeMap]);
   const { isFix } = calcFundResult;
+
+  const fundConfig = fundConfigCodeMap[fund.fundcode!];
+
   function onRowClick() {
     if (readOnly) {
       onDetailClick();
@@ -39,23 +42,11 @@ const FundRow: React.FC<RowProps> = (props) => {
   }
 
   function onDetailClick() {
-    if (props.onDetail) {
-      props.onDetail(fund.fundcode!);
-    }
+    props.onDetail(fund.fundcode!);
   }
 
   function onEditClick() {
-    if (props.onEdit) {
-      props.onEdit({
-        name: fund.name!,
-        code: fund.fundcode!,
-        cyfe: Number(calcFundResult.cyfe),
-        cbj: calcFundResult.cbj,
-        zdfRange: fundConfigCodeMap[fund.fundcode!]?.zdfRange,
-        jzNotice: fundConfigCodeMap[fund.fundcode!]?.jzNotice,
-        memo: fundConfigCodeMap[fund.fundcode!]?.memo,
-      });
-    }
+    props.onEdit?.(fundConfig);
   }
 
   return (

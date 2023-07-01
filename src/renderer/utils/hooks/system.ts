@@ -1,4 +1,4 @@
-import { useLayoutEffect, useState, useEffect, useMemo } from 'react';
+import { useLayoutEffect, useEffect, useMemo, useRef } from 'react';
 import { flushSync } from 'react-dom';
 import { useInterval } from 'ahooks';
 import { theme } from 'antd';
@@ -10,10 +10,14 @@ import { updateAvaliableAction } from '@/store/features/updater';
 import { setFundConfigAction } from '@/store/features/fund';
 import { syncTabsActiveKeyAction } from '@/store/features/tabs';
 import { changeCurrentWalletCodeAction, toggleEyeStatusAction } from '@/store/features/wallet';
-import { updateAdjustmentNotificationDateAction, syncDarkMode, saveSyncConfigAction, syncVaribleColors } from '@/store/features/setting';
+import {
+  updateAdjustmentNotificationDateAction,
+  syncDarkMode,
+  saveSyncConfigAction,
+  syncVaribleColors,
+} from '@/store/features/setting';
 import { syncTranslateShowAction } from '@/store/features/translate';
 import { syncChatGPTShowAction } from '@/store/features/chatGPT';
-
 import {
   useWorkDayTimeToDo,
   useFixTimeToDo,
@@ -100,59 +104,81 @@ export function useAdjustmentNotification() {
 }
 
 export function useRiskNotification() {
-  const [zdfRangeMap, setZdfRangeMap] = useState<Record<string, boolean>>({});
-  const [jzNoticeMap, setJzNoticeMap] = useState<Record<string, boolean>>({});
-  const systemSetting = useAppSelector((state) => state.setting.systemSetting);
+  const noticeMapRef = useRef<Record<string, boolean>>({});
+
+  const riskNotificationSetting = useAppSelector((state) => state.setting.systemSetting.riskNotificationSetting);
   const wallets = useAppSelector((state) => state.wallet.wallets);
   const walletsConfig = useAppSelector((state) => state.wallet.config.walletConfig);
-  const { riskNotificationSetting } = systemSetting;
+  const stocks = useAppSelector((state) => state.stock.stocks);
+  const stocksCodeMap = useAppSelector((state) => state.stock.config.codeMap);
+  const zindexs = useAppSelector((state) => state.zindex.zindexs);
+  const zindexsCodeMap = useAppSelector((state) => state.zindex.config.codeMap);
 
   useInterval(
     () => {
-      const cloneZdfRangeMap = Utils.DeepCopy(zdfRangeMap);
-      const cloneJzNoticeMap = Utils.DeepCopy(jzNoticeMap);
       if (!riskNotificationSetting) {
         return;
       }
       try {
+        // 基金提醒
         wallets.forEach((wallet) => {
           const { codeMap } = Helpers.Fund.GetFundConfig(wallet.code, walletsConfig);
           const walletConfig = Helpers.Wallet.GetCurrentWalletConfig(wallet.code, walletsConfig);
+
           wallet.funds?.forEach((fund) => {
-            const zdfRange = codeMap[fund.fundcode!]?.zdfRange;
-            const jzNotice = codeMap[fund.fundcode!]?.jzNotice;
-            const riskKey = `${wallet.code}-${fund.fundcode}`;
-            const zdfRangeNoticed = cloneZdfRangeMap[riskKey];
-            const jzNoticeNoticed = cloneJzNoticeMap[riskKey];
-
-            if (zdfRange && Math.abs(zdfRange) < Math.abs(Number(fund.gszzl)) && !zdfRangeNoticed) {
-              const notification = new Notification('涨跌提醒', {
-                body: `${walletConfig.name} ${fund.name} ${Utils.Yang(fund.gszzl)}%`,
-              });
-              notification.onclick = () => {
-                ipcRenderer.invoke('show-current-window');
-              };
-              cloneZdfRangeMap[riskKey] = true;
-            }
-
-            if (
-              jzNotice &&
-              ((Number(fund.dwjz) <= jzNotice && Number(fund.gsz) >= jzNotice) ||
-                (Number(fund.dwjz) >= jzNotice && Number(fund.gsz) <= jzNotice)) &&
-              !jzNoticeNoticed
-            ) {
-              const notification = new Notification('净值提醒', {
-                body: `${walletConfig.name} ${fund.name} ${fund.gsz}`,
-              });
-              notification.onclick = () => {
-                ipcRenderer.invoke('show-current-window');
-              };
-              cloneJzNoticeMap[riskKey] = true;
-            }
+            // 涨跌范围提醒
+            checkZdfRange({
+              zdf: fund.gszzl,
+              preset: codeMap[fund.fundcode!]?.zdfRange,
+              key: `${wallet.code}-${fund.fundcode}-zdfRange`,
+              content: `${walletConfig.name} ${fund.name} ${Utils.Yang(fund.gszzl)}%`,
+            });
+            // 净值提醒
+            checkJzNotice({
+              dwjz: fund.dwjz,
+              gsz: fund.gsz,
+              preset: codeMap[fund.fundcode!]?.jzNotice,
+              key: `${wallet.code}-${fund.fundcode}-jzNotice`,
+              content: `${walletConfig.name} ${fund.name} ${fund.gsz}`,
+            });
           });
         });
-        setZdfRangeMap(cloneZdfRangeMap);
-        setJzNoticeMap(cloneJzNoticeMap);
+        // 股票提醒
+        stocks.forEach((stock) => {
+          // 涨跌范围提醒
+          checkZdfRange({
+            zdf: stock.zdf,
+            preset: stocksCodeMap[stock.secid!]?.zdfRange,
+            key: `${stock.secid}-zdfRange`,
+            content: `${stock.name} ${Utils.Yang(stock.zdf)}%`,
+          });
+          // 净值提醒
+          checkJzNotice({
+            dwjz: stock.zs,
+            gsz: stock.zx,
+            preset: stocksCodeMap[stock.secid!]?.jzNotice,
+            key: `${stock.secid}-jzNotice`,
+            content: `${stock.name} ${stock.zx}`,
+          });
+        });
+        // 指数提醒
+        zindexs.forEach((zindex) => {
+          // 涨跌范围提醒
+          checkZdfRange({
+            zdf: zindex.zdf,
+            preset: zindexsCodeMap[zindex.code!]?.zdfRange,
+            key: `${zindex.code}-zdfRange`,
+            content: `${zindex.name} ${Utils.Yang(zindex.zdf)}%`,
+          });
+          // 净值提醒
+          checkJzNotice({
+            dwjz: zindex.zs,
+            gsz: zindex.zsz,
+            preset: zindexsCodeMap[zindex.code!]?.jzNotice,
+            key: `${zindex.code}-jzNotice`,
+            content: `${zindex.name} ${zindex.zsz}`,
+          });
+        });
       } catch (error) {}
     },
     1000 * 60,
@@ -160,6 +186,44 @@ export function useRiskNotification() {
       immediate: true,
     }
   );
+
+  // 24小时清除一次
+  useInterval(() => {
+    noticeMapRef.current = {};
+  }, 1000 * 60 * 60 * 24);
+
+  function checkZdfRange(data: { zdf: any; preset: any; key: string; content: string }) {
+    const { zdf, preset, key, content } = data;
+    const noticed = noticeMapRef.current[key];
+
+    if (preset && Math.abs(preset) < Math.abs(Number(zdf)) && !noticed) {
+      const notification = new Notification('涨跌提醒', {
+        body: content,
+      });
+      notification.onclick = () => {
+        ipcRenderer.invoke('show-current-window');
+      };
+      noticeMapRef.current[key] = true;
+    }
+  }
+
+  function checkJzNotice(data: { dwjz: any; gsz: any; preset: any; key: string; content: string }) {
+    const { dwjz, gsz, preset, key, content } = data;
+    const noticed = noticeMapRef.current[key];
+    if (
+      preset &&
+      ((Number(dwjz) <= preset && Number(gsz) >= preset) || (Number(dwjz) >= preset && Number(gsz) <= preset)) &&
+      !noticed
+    ) {
+      const notification = new Notification('净值提醒', {
+        body: content,
+      });
+      notification.onclick = () => {
+        ipcRenderer.invoke('show-current-window');
+      };
+      noticeMapRef.current[key] = true;
+    }
+  }
 }
 
 export function useFundsClipboard() {
@@ -508,7 +572,9 @@ export function useAllConfigBackup() {
       const backupConfig: Backup.Config = await decryptFF(encodeBackupConfig);
       const { response } = await dialog.showMessageBox({
         title: `确认从备份文件恢复`,
-        message: `备份时间：${dayjs(backupConfig.timestamp).format('YYYY-MM-DD HH:mm:ss')} ，当前数据将被覆盖，请谨慎操作`,
+        message: `备份时间：${dayjs(backupConfig.timestamp).format(
+          'YYYY-MM-DD HH:mm:ss'
+        )} ，当前数据将被覆盖，请谨慎操作`,
         buttons: ['确定', '取消'],
       });
       if (response === 0) {

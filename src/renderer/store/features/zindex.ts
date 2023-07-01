@@ -42,7 +42,10 @@ const zindexSlice = createSlice({
     syncZindexesAction(state, action: PayloadAction<(Zindex.ResponseItem & Zindex.ExtraRow)[]>) {
       state.zindexs = action.payload;
     },
-    syncZindexesConfigAction(state, action: PayloadAction<{ zindexConfig: Zindex.SettingItem[]; codeMap: Zindex.CodeMap }>) {
+    syncZindexesConfigAction(
+      state,
+      action: PayloadAction<{ zindexConfig: Zindex.SettingItem[]; codeMap: Zindex.CodeMap }>
+    ) {
       state.config = action.payload;
     },
     toggleZindexCollapseAction(state, { payload }: PayloadAction<Zindex.ResponseItem & Zindex.ExtraRow>) {
@@ -88,6 +91,33 @@ export const addZindexAction = createAsyncThunk<void, Zindex.SettingItem, AsyncT
   }
 );
 
+export const updateZindexAction = createAsyncThunk<
+  void,
+  Partial<Zindex.SettingItem> & {
+    code: string;
+  },
+  AsyncThunkConfig
+>('zindex/updateZindexAction', (zindex, { dispatch, getState }) => {
+  try {
+    const {
+      zindex: {
+        config: { zindexConfig },
+      },
+    } = getState();
+    const cloneZindexConfig = Utils.DeepCopy(zindexConfig);
+
+    cloneZindexConfig.forEach((item) => {
+      if (zindex.code === item.code) {
+        Object.keys(zindex).forEach((key) => {
+          (item[key as keyof Zindex.SettingItem] as any) = zindex[key as keyof Zindex.SettingItem];
+        });
+      }
+    });
+
+    dispatch(setZindexConfigAction(cloneZindexConfig));
+  } catch (error) {}
+});
+
 export const deleteZindexAction = createAsyncThunk<void, string, AsyncThunkConfig>(
   'zindex/deleteZindexAction',
   (code, { dispatch, getState }) => {
@@ -124,30 +154,33 @@ export const setZindexConfigAction = createAsyncThunk<void, Zindex.SettingItem[]
   }
 );
 
-export const sortZindexsAction = createAsyncThunk<void, void, AsyncThunkConfig>('zindex/sortZindexsAction', (_, { dispatch, getState }) => {
-  try {
-    const {
-      zindex: {
-        zindexs,
-        config: { codeMap },
-      },
-      sort: {
-        sortMode: {
-          zindexSortMode: { type, order },
+export const sortZindexsAction = createAsyncThunk<void, void, AsyncThunkConfig>(
+  'zindex/sortZindexsAction',
+  (_, { dispatch, getState }) => {
+    try {
+      const {
+        zindex: {
+          zindexs,
+          config: { codeMap },
         },
-      },
-    } = getState();
+        sort: {
+          sortMode: {
+            zindexSortMode: { type, order },
+          },
+        },
+      } = getState();
 
-    const sortList = Helpers.Zindex.SortZindex({
-      codeMap,
-      list: zindexs,
-      sortType: type,
-      orderType: order,
-    });
+      const sortList = Helpers.Zindex.SortZindex({
+        codeMap,
+        list: zindexs,
+        sortType: type,
+        orderType: order,
+      });
 
-    dispatch(syncZindexsStateAction(sortList));
-  } catch (error) {}
-});
+      dispatch(syncZindexsStateAction(sortList));
+    } catch (error) {}
+  }
+);
 
 export const sortZindexsCachedAction = createAsyncThunk<void, Zindex.ResponseItem[], AsyncThunkConfig>(
   'zindex/sortZindexsCachedAction',
@@ -174,19 +207,20 @@ export const sortZindexsCachedAction = createAsyncThunk<void, Zindex.ResponseIte
   }
 );
 
-export const syncZindexsStateAction = createAsyncThunk<void, (Zindex.ResponseItem & Zindex.ExtraRow)[], AsyncThunkConfig>(
-  'zindex/syncZindexsStateAction',
-  (zindexs, { dispatch, getState }) => {
-    try {
-      const {
-        zindex: {
-          config: { codeMap },
-        },
-      } = getState();
-      const filterZindexs = zindexs.filter(({ code }) => codeMap[code]);
-      dispatch(syncZindexesAction(filterZindexs));
-    } catch (error) {}
-  }
-);
+export const syncZindexsStateAction = createAsyncThunk<
+  void,
+  (Zindex.ResponseItem & Zindex.ExtraRow)[],
+  AsyncThunkConfig
+>('zindex/syncZindexsStateAction', (zindexs, { dispatch, getState }) => {
+  try {
+    const {
+      zindex: {
+        config: { codeMap },
+      },
+    } = getState();
+    const filterZindexs = zindexs.filter(({ code }) => codeMap[code]);
+    dispatch(syncZindexesAction(filterZindexs));
+  } catch (error) {}
+});
 
 export default zindexSlice.reducer;
