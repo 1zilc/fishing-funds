@@ -105,6 +105,7 @@ export function useResizeEchart(scale = 1, unlimited?: boolean) {
   useEffect(() => {
     const instance = echarts.init(chartRef.current!, undefined, {
       renderer: 'svg',
+      locale: 'ZH',
     });
     chartInstanceRef.current = instance;
     return () => {
@@ -133,6 +134,7 @@ export function useAutoSizeEchart() {
   useEffect(() => {
     const instance = echarts.init(chartRef.current!, undefined, {
       renderer: 'svg',
+      locale: 'ZH',
     });
     chartInstanceRef.current = instance;
     return () => {
