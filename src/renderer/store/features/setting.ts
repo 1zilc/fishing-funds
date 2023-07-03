@@ -105,7 +105,8 @@ const settingSlice = createSlice({
     },
   },
 });
-export const { syncSettingAction, updateAdjustmentNotificationDateAction, syncDarkMode, syncVaribleColors } = settingSlice.actions;
+export const { syncSettingAction, updateAdjustmentNotificationDateAction, syncDarkMode, syncVaribleColors } =
+  settingSlice.actions;
 
 export const setSystemSettingAction = createAsyncThunk<void, System.Setting, AsyncThunkConfig>(
   'setting/setSystemSettingAction',
@@ -178,7 +179,7 @@ export const loadSyncConfigAction = createAsyncThunk<void, void, AsyncThunkConfi
         },
       } = getState();
       if (syncConfigSetting && syncConfigPathSetting) {
-        const config = await Enhancement.loadSyncConfig(syncConfigPathSetting);
+        const config: any = await Enhancement.loadSyncConfig(syncConfigPathSetting);
         dispatch(setWalletConfigAction(config[CONST.STORAGE.WALLET_SETTING]));
         dispatch(setZindexConfigAction(config[CONST.STORAGE.ZINDEX_SETTING]));
         dispatch(setFavoriteQuotationMapAction(config[CONST.STORAGE.FAVORITE_QUOTATION_MAP]));

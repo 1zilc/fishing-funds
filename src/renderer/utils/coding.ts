@@ -19,9 +19,9 @@ export function encodeFF(content: any) {
     .postMessage<string, CodingWorkerRecieveParams>({ module: 'encodeFF', data: content })
     .finally(() => codingPromiseWorker.terminate());
 }
-export function decodeFF(content: string) {
+export function decodeFF<T = unknown>(content: string) {
   const codingPromiseWorker = new CodingPromiseWorker();
   return codingPromiseWorker
-    .postMessage<string, CodingWorkerRecieveParams>({ module: 'decodeFF', data: content })
+    .postMessage<T, CodingWorkerRecieveParams>({ module: 'decodeFF', data: content })
     .finally(() => codingPromiseWorker.terminate());
 }
