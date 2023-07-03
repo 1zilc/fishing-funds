@@ -143,3 +143,26 @@
     filter: brightness(115%);
   }
 }
+.hold {
+  color: var(--tag-text-color);
+  border-radius: 3px;
+  font-size: 8px;
+  background-color: var(--primary-color);
+  padding: 0 3px;
+  text-align: center;
+  word-break: keep-all;
+  margin-left: 5px;
+  transition: 0.2s;
+}
+.gscysyl {
+  font-size: 8px;
+  border-radius: 3px;
+  padding: 0px 3px;
+  margin-left: 5px;
+  white-space: nowrap;
+  color: var(--tag-text-color);
+  box-shadow: none;
+}
+.worth {
+  margin-left: 10px;
+}

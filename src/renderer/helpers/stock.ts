@@ -1,7 +1,45 @@
+import NP from 'number-precision';
 import * as Adapter from '@/utils/adpters';
 import * as Services from '@/services';
 import * as Utils from '@/utils';
 import * as Enums from '@/utils/enums';
+
+export function CalcStock(stock: Stock.ResponseItem, codeMap: Stock.CodeMap) {
+  const config = codeMap[stock.secid];
+  const cyfe = config?.cyfe || 0;
+  const cbj = config?.cbj;
+  const memo = config?.memo;
+
+  const gsz = stock.zx;
+  const dwjz = stock.zs;
+  const bjz = NP.minus(gsz, dwjz);
+  const jrsygz = NP.times(cyfe, bjz);
+  const gszz = NP.times(gsz!, cyfe);
+  const cyje = NP.times(dwjz, cyfe);
+  const cbje = cbj && NP.times(cbj, cyfe);
+  const cysyl = cbj && NP.divide(NP.minus(dwjz, cbj), cbj, 0.01);
+  const cysy = cbj && NP.times(NP.minus(dwjz, cbj), cyfe);
+  const gszzl = stock.zdf; // 估算收益率
+  const gscysyl = cbj && cbj > 0 ? cysyl?.toFixed(2) : '';
+
+  return {
+    ...stock,
+    cyfe, // 持有份额
+    cbj, // 成本价
+    memo, // 备注
+    cbje, // 成本金额
+    cyje, // 持有金额
+    cysyl, // 持有收益率
+    cysy, // 持有收益
+    bjz, // 比较值
+    jrsygz, // 今日收益估值
+    gszz, // 估算
+    gsz, // 估算值（最新）
+    dwjz, // 单位净值（上一次）
+    gszzl, // 估算收益率
+    gscysyl, // 估算持有收益率
+  };
+}
 
 export async function GetStocks(config: Stock.SettingItem[]) {
   const collectors = config.map(

@@ -41,10 +41,12 @@ const AddFundContent: React.FC<AddFundContentProps> = (props) => {
       await dispatch(
         addFundAction({
           code,
-          cyfe: cyfe ?? 0,
           name: fund.name || '未知',
+          cyfe: cyfe ?? 0,
           cbj: cbj ?? undefined,
           zdfRange: zdfRange ?? undefined,
+          jzNotice: jzNotice ?? undefined,
+          memo: memo ?? undefined,
         })
       );
       props.onEnter();

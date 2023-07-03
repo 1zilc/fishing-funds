@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState } from 'react';
 import { InputNumber, Input } from 'antd';
 
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
@@ -15,6 +15,8 @@ export interface EditStockContentProps {
 const EditStockContent: React.FC<EditStockContentProps> = (props) => {
   const { stock } = props;
   const dispatch = useAppDispatch();
+  const [cyfe, setCyfe] = useState<any>(stock.cyfe);
+  const [cbj, setCbj] = useState<any>(stock.cbj);
   const [zdfRange, setZdfRange] = useState<any>(stock.zdfRange);
   const [jzNotice, setJzNotice] = useState<any>(stock.jzNotice);
   const [memo, setMemo] = useState<any>(stock.memo);
@@ -23,6 +25,8 @@ const EditStockContent: React.FC<EditStockContentProps> = (props) => {
     await dispatch(
       updateStockAction({
         secid: stock.secid,
+        cyfe: cyfe ?? 0,
+        cbj: cbj ?? undefined,
         zdfRange: zdfRange ?? undefined,
         jzNotice: jzNotice ?? undefined,
         memo: memo ?? undefined,
@@ -41,6 +45,30 @@ const EditStockContent: React.FC<EditStockContentProps> = (props) => {
         <section>
           <label>股票代码：</label>
           <span>{stock.code}</span>
+        </section>
+        <section>
+          <label>持股数：</label>
+          <InputNumber
+            placeholder="保留整数"
+            min={0}
+            precision={0}
+            value={cyfe}
+            onChange={setCyfe}
+            size="small"
+            style={{ width: '100%' }}
+          />
+        </section>
+        <section>
+          <label>成本价：</label>
+          <InputNumber
+            placeholder="可精确4位小数"
+            min={0}
+            precision={4}
+            value={cbj}
+            onChange={setCbj}
+            size="small"
+            style={{ width: '100%' }}
+          />
         </section>
         <section>
           <label>涨跌幅提醒范围（%）：</label>

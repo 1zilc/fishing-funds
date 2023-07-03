@@ -2,7 +2,6 @@ import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
 import { AsyncThunkConfig } from '@/store';
 import * as Utils from '@/utils';
 import * as Helpers from '@/helpers';
-import { UnitType } from 'dayjs';
 
 export interface StockState {
   stocks: (Stock.ResponseItem & Stock.ExtraRow)[];

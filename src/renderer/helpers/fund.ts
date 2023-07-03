@@ -68,12 +68,14 @@ export async function GetFund(code: string, fundApiTypeSetting: Enums.FundApiTyp
 }
 
 export function CalcFund(fund: Fund.ResponseItem & Fund.FixData, codeMap: Fund.CodeMap) {
+  const config = codeMap[fund.fundcode!];
+  const cyfe = config?.cyfe || 0;
+  const cbj = config?.cbj;
+  const memo = config?.memo;
+
   const gzrq = fund.gztime?.slice(5, 10);
   const jzrq = fund.jzrq?.slice(5);
   const isFix = fund.fixDate && fund.fixDate === gzrq;
-  const cyfe = codeMap[fund.fundcode!]?.cyfe || 0;
-  const cbj = codeMap[fund.fundcode!]?.cbj;
-  const memo = codeMap[fund.fundcode!]?.memo;
   const gsz = isFix ? fund.fixDwjz! : fund.gsz!;
   const dwjz = isFix ? fund.fixDwjz! : fund.dwjz!;
   const bjz = NP.minus(gsz!, fund.dwjz!);

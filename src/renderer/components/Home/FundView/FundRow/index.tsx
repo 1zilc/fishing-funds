@@ -28,7 +28,7 @@ const FundRow: React.FC<RowProps> = React.memo((props) => {
   const conciseSetting = useAppSelector((state) => state.setting.systemSetting.conciseSetting);
   const fundConfigCodeMap = useAppSelector((state) => state.wallet.fundConfigCodeMap);
   const eyeStatus = useAppSelector((state) => state.wallet.eyeStatus);
-  const calcFundResult = useMemo(() => Helpers.Fund.CalcFund(fund, fundConfigCodeMap), [fund, fundConfigCodeMap]);
+  const calcFundResult = Helpers.Fund.CalcFund(fund, fundConfigCodeMap);
   const { isFix } = calcFundResult;
 
   const fundConfig = fundConfigCodeMap[fund.fundcode!];

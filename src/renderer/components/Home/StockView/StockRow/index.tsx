@@ -11,6 +11,7 @@ import colorHash from '@/utils/colorHash';
 import * as Services from '@/services';
 import * as Utils from '@/utils';
 import * as Enums from '@/utils/enums';
+import * as Helpers from '@/helpers';
 import styles from './index.module.scss';
 
 export interface RowProps {
@@ -100,10 +101,12 @@ const TrendChart: React.FC<{
 const StockRow: React.FC<RowProps> = React.memo((props) => {
   const { stock } = props;
   const dispatch = useAppDispatch();
+  const eyeStatus = useAppSelector((state) => state.wallet.eyeStatus);
   const conciseSetting = useAppSelector((state) => state.setting.systemSetting.conciseSetting);
   const industrys = useAppSelector((state) => state.stock.industryMap[stock.secid]) || [];
   const stockViewMode = useAppSelector((state) => state.sort.viewMode.stockViewMode);
   const stockConfigCodeMap = useAppSelector((state) => state.stock.config.codeMap);
+  const calcStockResult = Helpers.Stock.CalcStock(stock, stockConfigCodeMap);
 
   const stockConfig = stockConfigCodeMap[stock.secid];
 
@@ -137,12 +140,23 @@ const StockRow: React.FC<RowProps> = React.memo((props) => {
                 </span>
               );
             })}
+            {!!calcStockResult.cyfe && <span className={styles.hold}>持有</span>}
+            {!!calcStockResult.cbj && eyeStatus === Enums.EyeStatus.Open && (
+              <span className={clsx(Utils.GetValueColor(calcStockResult.gscysyl).blockClass, styles.gscysyl)}>
+                {calcStockResult.gscysyl === '' ? `0.00%` : `${Utils.Yang(calcStockResult.gscysyl)}%`}
+              </span>
+            )}
           </div>
           {!conciseSetting && (
             <div className={styles.rowBar}>
               <div>
                 <span className={styles.code}>{stock.code}</span>
                 <span>{stock.time}</span>
+                {eyeStatus === Enums.EyeStatus.Open && (
+                  <span className={clsx(Utils.GetValueColor(calcStockResult.jrsygz).textClass, styles.worth)}>
+                    {Utils.Yang(calcStockResult.jrsygz.toFixed(2))}
+                  </span>
+                )}
               </div>
             </div>
           )}
@@ -191,7 +205,6 @@ const StockRow: React.FC<RowProps> = React.memo((props) => {
           <section>
             <span>昨收：</span>
             <span>{stock.zs}</span>
-            <RiEditLine className={styles.editor} onClick={onEditClick} />
           </section>
           <section>
             <span>今开：</span>
@@ -204,6 +217,41 @@ const StockRow: React.FC<RowProps> = React.memo((props) => {
           <section>
             <span>最低：</span>
             <span className="text-down">{stock.zd}</span>
+          </section>
+          <section>
+            <span>持股数：</span>
+            <span>{stockConfig.cyfe}</span>
+            <RiEditLine className={styles.editor} onClick={onEditClick} />
+          </section>
+          <section>
+            <span>成本金额：</span>
+            <span>{calcStockResult.cbje !== undefined ? `¥ ${calcStockResult.cbje.toFixed(2)}` : '暂无'}</span>
+          </section>
+          <section>
+            <span>持有收益率：</span>
+            <span className={clsx(Utils.GetValueColor(calcStockResult.cysyl).textClass)}>
+              {calcStockResult.cysyl !== undefined ? `${Utils.Yang(calcStockResult.cysyl.toFixed(2))}%` : '暂无'}
+            </span>
+          </section>
+          <section>
+            <span>今日收益：</span>
+            <span className={clsx(Utils.GetValueColor(calcStockResult.jrsygz).textClass)}>
+              ¥ {Utils.Yang(calcStockResult.jrsygz.toFixed(2))}
+            </span>
+          </section>
+          <section>
+            <span>持有收益：</span>
+            <span className={clsx(Utils.GetValueColor(calcStockResult.cysy).textClass)}>
+              {calcStockResult.cysy !== undefined ? `¥ ${Utils.Yang(calcStockResult.cysy.toFixed(2))}` : '暂无'}
+            </span>
+          </section>
+          <section>
+            <span>今日总额：</span>
+            <span>¥ {calcStockResult.gszz.toFixed(2)}</span>
+          </section>
+          <section>
+            <span>成本价：</span>
+            {calcStockResult.cbj !== undefined ? <span>{calcStockResult.cbj}</span> : <a onClick={onEditClick}>录入</a>}
           </section>
           {stockConfig.memo && <MemoNote text={stockConfig.memo} />}
           <div className={styles.view}>
