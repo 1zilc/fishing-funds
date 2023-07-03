@@ -2,6 +2,7 @@ import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
 import { AsyncThunkConfig } from '@/store';
 import * as Utils from '@/utils';
 import * as Helpers from '@/helpers';
+import { UnitType } from 'dayjs';
 
 export interface StockState {
   stocks: (Stock.ResponseItem & Stock.ExtraRow)[];
@@ -24,39 +25,42 @@ const stockSlice = createSlice({
   name: 'stock',
   initialState,
   reducers: {
-    setStocksLoadingAction(state, action: PayloadAction<boolean>) {
-      state.stocksLoading = action.payload;
+    setStocksLoadingAction(state, { payload }: PayloadAction<boolean>) {
+      state.stocksLoading = payload;
     },
-    syncStocksAction(state, action) {
-      state.stocks = action.payload;
+    filterStocksAction(state) {
+      state.stocks = state.stocks.filter(({ secid }) => state.config.codeMap[secid]);
     },
-    syncStocksConfigAction(state, action: PayloadAction<{ stockConfig: Stock.SettingItem[]; codeMap: Stock.CodeMap }>) {
-      state.config = action.payload;
+    syncStocksStateAction(state, { payload }: PayloadAction<StockState['stocks']>) {
+      state.stocks = payload;
     },
-    syncIndustryMapAction(state, action) {
-      state.industryMap = action.payload;
+    syncStocksConfigAction(state, { payload }: PayloadAction<StockState['config']>) {
+      state.config = payload;
     },
-    toggleStockCollapseAction(state, { payload }: PayloadAction<Stock.ResponseItem & Stock.ExtraRow>) {
-      state.stocks.forEach((item) => {
-        if (item.secid === payload.secid) {
-          item.collapse = !payload.collapse;
-        }
+    toggleStockCollapseAction(state, { payload }: PayloadAction<StockState['stocks'][number]>) {
+      Helpers.Base.Collapse({
+        list: state.stocks,
+        key: 'secid',
+        data: payload,
       });
     },
     toggleAllStocksCollapseAction(state) {
-      const expandAllStocks = state.stocks.every((item) => item.collapse);
-      state.stocks.forEach((item) => {
-        item.collapse = !expandAllStocks;
+      Helpers.Base.CollapseAll({
+        list: state.stocks,
       });
+    },
+    setIndustryMapAction(state, { payload }: PayloadAction<{ industrys: Stock.IndustryItem[]; secid: string }>) {
+      state.industryMap = { ...state.industryMap, [payload.secid]: payload.industrys };
     },
   },
 });
 
 export const {
   setStocksLoadingAction,
-  syncStocksAction,
+  filterStocksAction,
+  syncStocksStateAction,
   syncStocksConfigAction,
-  syncIndustryMapAction,
+  setIndustryMapAction,
   toggleStockCollapseAction,
   toggleAllStocksCollapseAction,
 } = stockSlice.actions;
@@ -70,12 +74,14 @@ export const addStockAction = createAsyncThunk<void, Stock.SettingItem, AsyncThu
           config: { stockConfig },
         },
       } = getState();
-      const cloneStockConfig = Utils.DeepCopy(stockConfig);
-      const exist = cloneStockConfig.find((item) => stock.secid === item.secid);
-      if (!exist) {
-        cloneStockConfig.push(stock);
-      }
-      dispatch(setStockConfigAction(cloneStockConfig));
+
+      const config = Helpers.Base.Add({
+        list: Utils.DeepCopy(stockConfig),
+        key: 'secid',
+        data: stock,
+      });
+
+      dispatch(setStockConfigAction(config));
     } catch (error) {}
   }
 );
@@ -93,16 +99,14 @@ export const updateStockAction = createAsyncThunk<
         config: { stockConfig },
       },
     } = getState();
-    const cloneStockConfig = Utils.DeepCopy(stockConfig);
 
-    cloneStockConfig.forEach((item) => {
-      if (stock.secid === item.secid) {
-        Object.keys(stock).forEach((key) => {
-          (item[key as keyof Stock.SettingItem] as any) = stock[key as keyof Stock.SettingItem];
-        });
-      }
+    const config = Helpers.Base.Update({
+      list: Utils.DeepCopy(stockConfig),
+      key: 'secid',
+      data: stock,
     });
-    dispatch(setStockConfigAction(cloneStockConfig));
+
+    dispatch(setStockConfigAction(config));
   } catch (error) {}
 });
 
@@ -115,34 +119,21 @@ export const deleteStockAction = createAsyncThunk<void, string, AsyncThunkConfig
           config: { stockConfig },
         },
       } = getState();
-      stockConfig.forEach((item, index) => {
-        if (secid === item.secid) {
-          const cloneStockSetting = JSON.parse(JSON.stringify(stockConfig));
-          cloneStockSetting.splice(index, 1);
-          dispatch(setStockConfigAction(cloneStockSetting));
-        }
+
+      const config = Helpers.Base.Delete({
+        list: Utils.DeepCopy(stockConfig),
+        key: 'secid',
+        data: secid,
       });
+
+      dispatch(setStockConfigAction(config));
     } catch (error) {}
   }
 );
 
-export const setStockConfigAction = createAsyncThunk<void, Stock.SettingItem[], AsyncThunkConfig>(
-  'stock/setStockConfigAction',
-  (stockConfig, { getState, dispatch }) => {
-    try {
-      const {
-        stock: { stocks },
-      } = getState();
-      const codeMap = Utils.GetCodeMap(stockConfig, 'secid');
-      dispatch(syncStocksConfigAction({ stockConfig, codeMap }));
-      dispatch(syncStocksStateAction(stocks));
-    } catch (error) {}
-  }
-);
-
-export const sortStocksAction = createAsyncThunk<void, void, AsyncThunkConfig>(
+export const sortStocksAction = createAsyncThunk<void, StockState['stocks'] | undefined, AsyncThunkConfig>(
   'stock/sortStocksAction',
-  (_, { dispatch, getState }) => {
+  (list, { dispatch, getState }) => {
     try {
       const {
         stock: {
@@ -158,7 +149,7 @@ export const sortStocksAction = createAsyncThunk<void, void, AsyncThunkConfig>(
 
       const sortList = Helpers.Stock.SortStock({
         codeMap,
-        list: stocks,
+        list: list || stocks,
         sortType: type,
         orderType: order,
       });
@@ -187,38 +178,21 @@ export const sortStocksCachedAction = createAsyncThunk<void, Stock.ResponseItem[
         response: responseStocks,
       });
 
-      dispatch(syncStocksStateAction(stocksWithChached));
-      dispatch(sortStocksAction());
+      dispatch(sortStocksAction(stocksWithChached));
     } catch (error) {}
   }
 );
 
-export const syncStocksStateAction = createAsyncThunk<void, (Stock.ResponseItem & Stock.ExtraRow)[], AsyncThunkConfig>(
-  'stock/syncStocksStateAction',
-  (stocks, { getState, dispatch }) => {
+export const setStockConfigAction = createAsyncThunk<void, Stock.SettingItem[], AsyncThunkConfig>(
+  'stock/setStockConfigAction',
+  (stockConfig, { dispatch }) => {
     try {
-      const {
-        stock: {
-          config: { codeMap },
-        },
-      } = getState();
-      const filterStocks = stocks.filter(({ secid }) => codeMap[secid]);
-      dispatch(syncStocksAction(filterStocks));
-    } catch {}
+      const codeMap = Utils.GetCodeMap(stockConfig, 'secid');
+      dispatch(syncStocksConfigAction({ stockConfig, codeMap }));
+
+      dispatch(filterStocksAction());
+    } catch (error) {}
   }
 );
-
-export const setIndustryMapAction = createAsyncThunk<
-  void,
-  { industrys: Stock.IndustryItem[]; secid: string },
-  AsyncThunkConfig
->('stock/setIndustryMapAction', ({ industrys, secid }, { getState, dispatch }) => {
-  try {
-    const {
-      stock: { industryMap },
-    } = getState();
-    dispatch(syncIndustryMapAction({ ...industryMap, [secid]: industrys }));
-  } catch (error) {}
-});
 
 export default stockSlice.reducer;
