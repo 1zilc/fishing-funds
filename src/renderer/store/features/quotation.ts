@@ -19,7 +19,7 @@ const quotationlice = createSlice({
   name: 'quotation',
   initialState,
   reducers: {
-    syncQuotationsAction(state, action: PayloadAction<(Quotation.ResponseItem & Quotation.ExtraRow)[]>) {
+    syncQuotationsAction(state, action: PayloadAction<QuotationState['quotations']>) {
       state.quotations = action.payload;
     },
     setQuotationsLoadingAction(state, action: PayloadAction<boolean>) {
@@ -28,17 +28,16 @@ const quotationlice = createSlice({
     syncFavoriteQuotationMapAction(state, action: PayloadAction<Record<string, boolean>>) {
       state.favoriteQuotationMap = action.payload;
     },
-    toggleQuotationCollapseAction(state, { payload }: PayloadAction<Quotation.ResponseItem & Quotation.ExtraRow>) {
-      state.quotations.forEach((item) => {
-        if (item.name === payload.name) {
-          item.collapse = !item.collapse;
-        }
+    toggleQuotationCollapseAction(state, { payload }: PayloadAction<QuotationState['quotations'][number]>) {
+      Helpers.Base.Collapse({
+        list: state.quotations,
+        key: 'code',
+        data: payload,
       });
     },
     toggleAllQuotationsCollapseAction(state) {
-      const expandAll = state.quotations.every((item) => item.collapse);
-      state.quotations.forEach((item) => {
-        item.collapse = !expandAll;
+      Helpers.Base.CollapseAll({
+        list: state.quotations,
       });
     },
   },
@@ -52,17 +51,18 @@ export const {
   toggleAllQuotationsCollapseAction,
 } = quotationlice.actions;
 
-export const setFavoriteQuotationMapAction = createAsyncThunk<void, { code: string; status: boolean }, AsyncThunkConfig>(
-  'quotation/setFavoriteQuotationMapAction',
-  ({ code, status }, { dispatch, getState }) => {
-    try {
-      const { quotation } = getState();
-      const favoriteQuotationMap = { ...quotation.favoriteQuotationMap, [code]: status };
+export const setFavoriteQuotationMapAction = createAsyncThunk<
+  void,
+  { code: string; status: boolean },
+  AsyncThunkConfig
+>('quotation/setFavoriteQuotationMapAction', ({ code, status }, { dispatch, getState }) => {
+  try {
+    const { quotation } = getState();
+    const favoriteQuotationMap = { ...quotation.favoriteQuotationMap, [code]: status };
 
-      dispatch(syncFavoriteQuotationMapAction(favoriteQuotationMap));
-    } catch (error) {}
-  }
-);
+    dispatch(syncFavoriteQuotationMapAction(favoriteQuotationMap));
+  } catch (error) {}
+});
 
 export const sortQuotationsCachedAction = createAsyncThunk<void, Quotation.ResponseItem[], AsyncThunkConfig>(
   'quotation/sortQuotationsCachedAction',
@@ -78,15 +78,14 @@ export const sortQuotationsCachedAction = createAsyncThunk<void, Quotation.Respo
         ..._,
       }));
 
-      dispatch(syncQuotationsAction(quotationsWithCollapseChached));
-      dispatch(sortQuotationsAction());
+      dispatch(sortQuotationsAction(quotationsWithCollapseChached));
     } catch (error) {}
   }
 );
 
-export const sortQuotationsAction = createAsyncThunk<void, void, AsyncThunkConfig>(
+export const sortQuotationsAction = createAsyncThunk<void, QuotationState['quotations'] | undefined, AsyncThunkConfig>(
   'quotation/sortQuotationsAction',
-  (_, { dispatch, getState }) => {
+  (list, { dispatch, getState }) => {
     try {
       const {
         quotation: { quotations },
@@ -98,7 +97,7 @@ export const sortQuotationsAction = createAsyncThunk<void, void, AsyncThunkConfi
       } = getState();
 
       const sortList = Helpers.Quotation.SortQuotation({
-        list: quotations,
+        list: list || quotations,
         sortType: type,
         orderType: order,
       });

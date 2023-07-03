@@ -139,9 +139,9 @@ export const deleteCoinAction = createAsyncThunk<void, string, AsyncThunkConfig>
   }
 );
 
-export const sortCoinsAction = createAsyncThunk<void, void, AsyncThunkConfig>(
+export const sortCoinsAction = createAsyncThunk<void, CoinState['coins'] | undefined, AsyncThunkConfig>(
   'coin/sortCoinsAction',
-  (_, { dispatch, getState }) => {
+  (list, { dispatch, getState }) => {
     try {
       const {
         coin: {
@@ -157,7 +157,7 @@ export const sortCoinsAction = createAsyncThunk<void, void, AsyncThunkConfig>(
 
       const sortList = Helpers.Coin.SortCoin({
         codeMap,
-        list: coins,
+        list: list || coins,
         sortType: type,
         orderType: order,
       });
@@ -186,8 +186,7 @@ export const sortCoinsCachedAction = createAsyncThunk<void, Coin.ResponseItem[],
         response: responseCoins,
       });
 
-      dispatch(syncCoinsStateAction(coinsWithChached));
-      dispatch(sortCoinsAction());
+      dispatch(sortCoinsAction(coinsWithChached));
     } catch (error) {}
   }
 );
