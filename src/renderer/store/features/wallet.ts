@@ -4,6 +4,7 @@ import { sortFundsAction } from '@/store/features/fund';
 import * as Enums from '@/utils/enums';
 import * as Utils from '@/utils';
 import * as Helpers from '@/helpers';
+import { helper } from 'echarts';
 
 export interface WalletState {
   eyeStatus: Enums.EyeStatus;
@@ -54,6 +55,9 @@ const walletSlice = createSlice({
       state.fundConfigCodeMap = codeMap;
       state.currentWallet = wallet;
     },
+    filterWalletStateAction(state) {
+      state.wallets = state.wallets.filter((item) => state.config.codeMap[item.code]);
+    },
     syncWalletsAction(state, { payload }: PayloadAction<Wallet.StateItem[]>) {
       const wallet = Helpers.Wallet.GetCurrentWalletState(state.currentWalletCode, payload);
       state.wallets = payload;
@@ -69,26 +73,27 @@ const walletSlice = createSlice({
       state.fundConfigCodeMap = codeMap;
     },
     toggleFundCollapseAction(state, { payload }: PayloadAction<Fund.ResponseItem & Fund.ExtraRow>) {
-      state.currentWallet.funds.forEach((items) => {
-        if (items.fundcode === payload.fundcode) {
-          items.collapse = !items.collapse;
-        }
+      Helpers.Base.Collapse({
+        list: state.currentWallet.funds,
+        key: 'fundcode',
+        data: payload,
       });
-      state.wallets.forEach((item, index) => {
-        if (item.code === state.currentWalletCode) {
-          state.wallets[index] = state.currentWallet;
-        }
+      Helpers.Base.Replace({
+        list: state.wallets,
+        key: 'code',
+        data: state.currentWalletCode,
+        cover: state.currentWallet,
       });
     },
     toggleAllFundsCollapseAction(state) {
-      const expandAll = state.currentWallet.funds.every((item) => item.collapse);
-      state.currentWallet.funds.forEach((item) => {
-        item.collapse = !expandAll;
+      Helpers.Base.CollapseAll({
+        list: state.currentWallet.funds,
       });
-      state.wallets.forEach((item, index) => {
-        if (item.code === state.currentWalletCode) {
-          state.wallets[index] = state.currentWallet;
-        }
+      Helpers.Base.Replace({
+        list: state.wallets,
+        key: 'code',
+        data: state.currentWalletCode,
+        cover: state.currentWallet,
       });
     },
   },
@@ -97,6 +102,7 @@ const walletSlice = createSlice({
 export const {
   syncEyeStatusAction,
   changeCurrentWalletCodeAction,
+  filterWalletStateAction,
   syncWalletsAction,
   syncWalletsConfigAction,
   toggleFundCollapseAction,
@@ -128,28 +134,10 @@ export const setWalletConfigAction = createAsyncThunk<void, Wallet.SettingItem[]
   'wallet/setWalletConfigAction',
   (walletConfig, { dispatch, getState }) => {
     try {
-      const {
-        wallet: { wallets },
-      } = getState();
       const codeMap = Utils.GetCodeMap(walletConfig, 'code');
-
       dispatch(syncWalletsConfigAction({ walletConfig, codeMap }));
-      dispatch(syncWalletStateAction(wallets));
-    } catch (error) {}
-  }
-);
 
-export const syncWalletStateAction = createAsyncThunk<void, Wallet.StateItem[], AsyncThunkConfig>(
-  'wallet/syncWalletStateAction',
-  (wallets, { dispatch, getState }) => {
-    try {
-      const {
-        wallet: {
-          config: { codeMap },
-        },
-      } = getState();
-      const newWallets = wallets.filter((stateItem) => codeMap[stateItem.code]);
-      dispatch(syncWalletsAction(newWallets));
+      dispatch(filterWalletStateAction());
     } catch (error) {}
   }
 );
@@ -163,7 +151,14 @@ export const addWalletConfigAction = createAsyncThunk<void, Wallet.SettingItem, 
           config: { walletConfig },
         },
       } = getState();
-      dispatch(setWalletConfigAction(walletConfig.concat(wallet)));
+
+      const config = Helpers.Base.Add({
+        list: Utils.DeepCopy(walletConfig),
+        key: 'code',
+        data: wallet,
+      });
+
+      dispatch(setWalletConfigAction(config));
     } catch (error) {}
   }
 );
@@ -177,14 +172,14 @@ export const updateWalletConfigAction = createAsyncThunk<void, Wallet.SettingIte
           config: { walletConfig },
         },
       } = getState();
-      const cloneWalletConfig = Utils.DeepCopy(walletConfig);
-      cloneWalletConfig.forEach((item) => {
-        if (wallet.code === item.code) {
-          item.name = wallet.name;
-          item.iconIndex = wallet.iconIndex;
-        }
+
+      const config = Helpers.Base.Update({
+        list: Utils.DeepCopy(walletConfig),
+        key: 'code',
+        data: wallet,
       });
-      dispatch(setWalletConfigAction(cloneWalletConfig));
+
+      dispatch(setWalletConfigAction(config));
     } catch (error) {}
   }
 );
@@ -198,13 +193,14 @@ export const deleteWalletConfigAction = createAsyncThunk<void, string, AsyncThun
           config: { walletConfig },
         },
       } = getState();
-      walletConfig.forEach((item, index) => {
-        if (code === item.code) {
-          const cloneWalletSetting = Utils.DeepCopy(walletConfig);
-          cloneWalletSetting.splice(index, 1);
-          dispatch(setWalletConfigAction(cloneWalletSetting));
-        }
+
+      const config = Helpers.Base.Delete({
+        list: Utils.DeepCopy(walletConfig),
+        key: 'code',
+        data: code,
       });
+
+      dispatch(setWalletConfigAction(config));
     } catch (error) {}
   }
 );
@@ -233,10 +229,11 @@ export const updateWalletStateAction = createAsyncThunk<void, Wallet.StateItem, 
         response: cloneState.funds,
       });
 
-      cloneWallets.forEach((wallet, index) => {
-        if (wallet.code === cloneState.code) {
-          cloneWallets[index] = cloneState;
-        }
+      Helpers.Base.Replace({
+        list: cloneWallets,
+        key: 'code',
+        data: cloneState.code,
+        cover: cloneState,
       });
 
       if (!walletsStateCodeToMap[cloneState.code]) {
@@ -257,15 +254,13 @@ export const setWalletStateAction = createAsyncThunk<void, Wallet.StateItem, Asy
         wallet: { wallets },
       } = getState();
 
-      const cloneWallets = Utils.DeepCopy(wallets);
-      cloneWallets.forEach((wallet) => {
-        if (wallet.code === state.code) {
-          wallet.funds = state.funds;
-          wallet.updateTime = state.updateTime;
-        }
+      const config = Helpers.Base.Update({
+        list: Utils.DeepCopy(wallets),
+        key: 'code',
+        data: state,
       });
 
-      dispatch(syncWalletsAction(cloneWallets));
+      dispatch(syncWalletsAction(config));
     } catch (error) {}
   }
 );

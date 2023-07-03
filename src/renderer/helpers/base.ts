@@ -64,3 +64,15 @@ export function CollapseAll<T extends { collapse?: boolean }>(config: { list: T[
 
   return list;
 }
+
+export function Replace<T>(config: { key: keyof T; list: T[]; data: string; cover: T }) {
+  const { list, key, data, cover } = config;
+
+  list.forEach((item, index) => {
+    if (item[key] === data) {
+      list[index] = cover;
+    }
+  });
+
+  return list;
+}

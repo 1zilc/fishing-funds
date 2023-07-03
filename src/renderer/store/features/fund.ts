@@ -125,6 +125,7 @@ export const updateFundAction = createAsyncThunk<
       wallet: { currentWalletCode, fundConfig },
     } = getState();
     const cloneFundConfig = Utils.DeepCopy(fundConfig);
+
     cloneFundConfig.forEach((item) => {
       if (fund.code === item.code) {
         Object.keys(fund).forEach((key) => {
