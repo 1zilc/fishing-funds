@@ -1,6 +1,19 @@
 import React, { useState, startTransition } from 'react';
 import clsx from 'clsx';
-import { InputNumber, Radio, Badge, Switch, Slider, TimePicker, Input, Tabs, Select, Checkbox, Button, ColorPicker } from 'antd';
+import {
+  InputNumber,
+  Radio,
+  Badge,
+  Switch,
+  Slider,
+  TimePicker,
+  Input,
+  Tabs,
+  Select,
+  Checkbox,
+  Button,
+  ColorPicker,
+} from 'antd';
 import dayjs from 'dayjs';
 import { ReactSortable } from 'react-sortablejs';
 import {
@@ -22,7 +35,13 @@ import Log from '@/components/Toolbar/SettingContent/Log';
 import ThemeProvider from '@/components/ThemeProvider';
 import More from '@/components/Toolbar/SettingContent/More';
 import { setSystemSettingAction, defaultSystemSetting } from '@/store/features/setting';
-import { useAppDispatch, useAppSelector, useAutoDestroySortableRef, useInputShortcut, useThemeColor } from '@/utils/hooks';
+import {
+  useAppDispatch,
+  useAppSelector,
+  useAutoDestroySortableRef,
+  useInputShortcut,
+  useThemeColor,
+} from '@/utils/hooks';
 import * as Enums from '@/utils/enums';
 import styles from './index.module.scss';
 
@@ -59,7 +78,18 @@ export const APIOptions = [
   },
 ];
 
-const presetColors = ['#F5222D', '#FA8C16', '#FADB14', '#8BBB11', '#52C41A', '#13A8A8', '#1677FF', '#2F54EB', '#722ED1', '#EB2F96'];
+const presetColors = [
+  '#F5222D',
+  '#FA8C16',
+  '#FADB14',
+  '#8BBB11',
+  '#52C41A',
+  '#13A8A8',
+  '#1677FF',
+  '#2F54EB',
+  '#722ED1',
+  '#EB2F96',
+];
 
 const SettingContent: React.FC<SettingContentProps> = (props) => {
   const dispatch = useAppDispatch();
@@ -117,7 +147,12 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
   const [proxyHost, setProxyHost] = useState(proxyHostSetting);
   const [proxyPort, setProxyPort] = useState(proxyPortSetting);
   // 通用设置
-  const { hotkey, onBlur: hotkeyInputOnBlur, onFocus: hotkeyInputOnFocus, reset: resetHotkey } = useInputShortcut(hotkeySetting);
+  const {
+    hotkey,
+    onBlur: hotkeyInputOnBlur,
+    onFocus: hotkeyInputOnFocus,
+    reset: resetHotkey,
+  } = useInputShortcut(hotkeySetting);
   const [autoStart, setAutoStart] = useState(autoStartSetting);
   const [autoFresh, setAutoFresh] = useState(autoFreshSetting);
   const [freshDelay, setFreshDelay] = useState(freshDelaySetting);
@@ -146,7 +181,8 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
         systemThemeSetting: systemTheme,
         bottomTabsSetting: bottomTabs.map((tab) => ({ key: tab.key, name: tab.name, show: tab.show })),
         adjustmentNotificationSetting: adjustmentNotification,
-        adjustmentNotificationTimeSetting: adjustmentNotificationTime || defaultSystemSetting.adjustmentNotificationTimeSetting,
+        adjustmentNotificationTimeSetting:
+          adjustmentNotificationTime || defaultSystemSetting.adjustmentNotificationTimeSetting,
         riskNotificationSetting: riskNotification,
         trayContentSetting: trayContent,
         coinUnitSetting: coinUnit,
@@ -296,7 +332,14 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
                       </section>
                       <section>
                         <label>字体大小：</label>
-                        <Slider min={11} max={14} style={{ flex: 0.5 }} defaultValue={baseFontSize} onChange={setBaseFontSize} step={0.1} />
+                        <Slider
+                          min={11}
+                          max={14}
+                          style={{ flex: 0.5 }}
+                          defaultValue={baseFontSize}
+                          onChange={setBaseFontSize}
+                          step={0.1}
+                        />
                       </section>
                       <section>
                         <label>系统主题：</label>
@@ -365,6 +408,8 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
                           <Select.Option value={Enums.TrayContent.Syl}>选中钱包收益率</Select.Option>
                           <Select.Option value={Enums.TrayContent.Zsy}>所有钱包收益</Select.Option>
                           <Select.Option value={Enums.TrayContent.Zsyl}>所有钱包收益率</Select.Option>
+                          <Select.Option value={Enums.TrayContent.StockSy}>股票收益</Select.Option>
+                          <Select.Option value={Enums.TrayContent.StockSyl}>股票收益率</Select.Option>
                         </Select>
                       </section>
                     </div>
@@ -442,11 +487,21 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
                       </section>
                       <section>
                         <label>代理地址：</label>
-                        <Input size="small" value={proxyHost} onChange={(e) => setProxyHost(e.target.value)} disabled={!proxyModeEnable} />
+                        <Input
+                          size="small"
+                          value={proxyHost}
+                          onChange={(e) => setProxyHost(e.target.value)}
+                          disabled={!proxyModeEnable}
+                        />
                       </section>
                       <section>
                         <label>代理端口：</label>
-                        <Input size="small" value={proxyPort} onChange={(e) => setProxyPort(e.target.value)} disabled={!proxyModeEnable} />
+                        <Input
+                          size="small"
+                          value={proxyPort}
+                          onChange={(e) => setProxyPort(e.target.value)}
+                          disabled={!proxyModeEnable}
+                        />
                       </section>
                     </div>
                   </StandCard>

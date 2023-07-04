@@ -432,7 +432,11 @@ export function useTrayContent() {
   const wallets = useAppSelector((state) => state.wallet.wallets);
   const eyeStatus = useAppSelector((state) => state.wallet.eyeStatus);
   const funds = useAppSelector((state) => state.wallet.currentWallet.funds);
+  const stocks = useAppSelector((state) => state.stock.stocks);
+  const stockConfigCodeMap = useAppSelector((state) => state.stock.config.codeMap);
+
   const calcResult = Helpers.Fund.CalcFunds(funds, fundConfigCodeMap);
+  const calcStockResult = Helpers.Stock.CalcStocks(stocks, stockConfigCodeMap);
 
   const allCalcResult = (() => {
     const allResult = wallets.reduce(
@@ -460,12 +464,16 @@ export function useTrayContent() {
             return `${Utils.Yang(allCalcResult.sygz.toFixed(2))}`;
           case Enums.TrayContent.Zsyl:
             return `${Utils.Yang(allCalcResult.gssyl.toFixed(2))}%`;
+          case Enums.TrayContent.StockSy:
+            return `${Utils.Yang(calcStockResult.sygz.toFixed(2))}`;
+          case Enums.TrayContent.StockSyl:
+            return `${Utils.Yang(calcStockResult.gssyl.toFixed(2))}%`;
           default:
             break;
         }
       })
       .join(' │ ');
-    content = content ? ` ${content}` : content;
+    content = !!content ? ` ${content}` : content;
     return content;
   })();
 
