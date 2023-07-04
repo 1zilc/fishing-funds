@@ -53,9 +53,12 @@ export const DetailStock: React.FC<DetailStockProps> = (props) => {
     staleTime: CONST.DEFAULT.SWR_STALE_DELAY,
   });
 
-  const { data: kdata = [], run: runGetKFromEastmoney } = useRequest(() => Services.Stock.GetKFromEastmoney(secid, 101, 3600), {
-    cacheKey: Utils.GenerateRequestKey('Stock.GetKFromEastmoney', [secid, 101, 3600]),
-  });
+  const { data: kdata = [], run: runGetKFromEastmoney } = useRequest(
+    () => Services.Stock.GetKFromEastmoney(secid, 101, 3600),
+    {
+      cacheKey: Utils.GenerateRequestKey('Stock.GetKFromEastmoney', [secid, 101, 3600]),
+    }
+  );
 
   async function onAdd() {
     try {
@@ -76,11 +79,13 @@ export const DetailStock: React.FC<DetailStockProps> = (props) => {
       }
       dispatch(
         addStockAction({
-          market: stock.market!,
-          code: stock.code!,
-          name: stock.name!,
           secid,
+          market: stock.market,
+          code: stock.code,
+          name: stock.name,
           type: Number(stockType),
+          cbj: undefined,
+          cyfe: 0,
         })
       );
     } catch (error) {
@@ -207,7 +212,9 @@ export const DetailStock: React.FC<DetailStockProps> = (props) => {
             {
               key: String(1),
               label: '周期回报',
-              children: <CycleReturn onFresh={runGetKFromEastmoney} data={kdata.map(({ date: x, sp: y }) => ({ x, y }))} />,
+              children: (
+                <CycleReturn onFresh={runGetKFromEastmoney} data={kdata.map(({ date: x, sp: y }) => ({ x, y }))} />
+              ),
             },
           ]}
         />

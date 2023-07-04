@@ -38,18 +38,27 @@ const StockSearch: React.FC<StockSearchProps> = (props) => {
   const { groupList } = props;
   const dispatch = useAppDispatch();
   const { codeMap } = useAppSelector((state) => state.stock.config);
-  const { data: detailData, show: showDetailDrawer, set: setDetailDrawer, close: closeDetailDrawer } = useDrawer({ secid: '', type: 0 });
+
+  const {
+    data: detailData,
+    show: showDetailDrawer,
+    set: setDetailDrawer,
+    close: closeDetailDrawer,
+  } = useDrawer({ secid: '', type: 0 });
 
   const onAdd = useMemoizedFn(async (secid: string, type: number) => {
     const stock = await Helpers.Stock.GetStock(secid);
+
     if (stock) {
       dispatch(
         addStockAction({
-          market: stock.market!,
-          code: stock.code!,
+          market: stock.market,
+          code: stock.code,
           secid: stock.secid,
-          name: stock.name!,
+          name: stock.name,
           type,
+          cbj: undefined,
+          cyfe: 0,
         })
       );
     } else {
@@ -99,7 +108,12 @@ const StockSearch: React.FC<StockSearchProps> = (props) => {
       />
 
       <CustomDrawer show={showDetailDrawer}>
-        <DetailStockContent onEnter={closeDetailDrawer} onClose={closeDetailDrawer} secid={detailData.secid} type={detailData.type} />
+        <DetailStockContent
+          onEnter={closeDetailDrawer}
+          onClose={closeDetailDrawer}
+          secid={detailData.secid}
+          type={detailData.type}
+        />
       </CustomDrawer>
     </div>
   ) : (

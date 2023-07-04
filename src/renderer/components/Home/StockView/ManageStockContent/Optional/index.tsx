@@ -42,16 +42,7 @@ const Optional: React.FC<OptionalProps> = () => {
   function onSortStockConfig(sortList: Stock.SettingItem[]) {
     const hasChanged = Utils.CheckListOrderHasChanged(stockConfig, sortList, 'secid');
     if (hasChanged) {
-      const sortConfig = sortList.map((item) => {
-        const stock = codeMap[item.secid];
-        return {
-          name: stock.name,
-          secid: stock.secid,
-          code: stock.code,
-          market: stock.market,
-          type: stock.type,
-        };
-      });
+      const sortConfig = sortList.map((item) => codeMap[item.secid]);
       dispatch(setStockConfigAction(sortConfig));
     }
   }

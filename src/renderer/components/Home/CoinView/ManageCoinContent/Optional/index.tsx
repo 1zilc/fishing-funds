@@ -28,14 +28,7 @@ const Optional: React.FC<OptionalProps> = () => {
   function onSortCoinConfig(sortList: Coin.SettingItem[]) {
     const hasChanged = Utils.CheckListOrderHasChanged(coinConfig, sortList, 'code');
     if (hasChanged) {
-      const sortConfig = sortList.map((item) => {
-        const coin = codeMap[item.code];
-        return {
-          name: coin.name,
-          code: coin.code,
-          symbol: coin.symbol,
-        };
-      });
+      const sortConfig = sortList.map((item) => codeMap[item.code]);
       dispatch(setCoinConfigAction(sortConfig));
     }
   }

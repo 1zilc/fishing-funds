@@ -55,10 +55,7 @@ const Optional: React.FC<OptionalProps> = () => {
     // 判断顺序是否发生变化
     const hasChanged = Utils.CheckListOrderHasChanged(fundConfig, sortList, 'code');
     if (hasChanged) {
-      const sortConfig = sortList.map((item) => {
-        const fund = codeMap[item.code];
-        return fund;
-      });
+      const sortConfig = sortList.map((item) => codeMap[item.code]);
       dispatch(setFundConfigAction({ config: sortConfig, walletCode: currentWalletCode }));
     }
   }

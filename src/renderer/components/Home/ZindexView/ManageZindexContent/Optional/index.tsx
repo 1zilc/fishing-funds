@@ -43,13 +43,7 @@ const Optional: React.FC<OptionalProps> = () => {
   function onSortZindexConfig(sortList: Zindex.SettingItem[]) {
     const hasChanged = Utils.CheckListOrderHasChanged(zindexConfig, sortList, 'code');
     if (hasChanged) {
-      const sortConfig = sortList.map((item) => {
-        const zindex = codeMap[item.code];
-        return {
-          name: zindex.name,
-          code: zindex.code,
-        };
-      });
+      const sortConfig = sortList.map((item) => codeMap[item.code]);
       dispatch(setZindexConfigAction(sortConfig));
     }
   }
