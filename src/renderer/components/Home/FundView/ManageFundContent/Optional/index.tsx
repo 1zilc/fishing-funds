@@ -128,19 +128,7 @@ const Optional: React.FC<OptionalProps> = () => {
                 {fund.zdfRange || fund.jzNotice ? (
                   <RiNotification2Fill className={styles.function} onClick={() => onCancleRiskNotice(fund)} />
                 ) : (
-                  <RiNotification2Line
-                    className={styles.function}
-                    onClick={() =>
-                      setEditDrawer({
-                        name: fund.name,
-                        cyfe: fund.cyfe,
-                        code: fund.code,
-                        cbj: fund.cbj,
-                        zdfRange: fund.zdfRange,
-                        memo: fund.memo,
-                      })
-                    }
-                  />
+                  <RiNotification2Line className={styles.function} onClick={() => setEditDrawer(fund)} />
                 )}
                 <RiFileCopyLine className={styles.function} onClick={() => onCopyFund(fund)} />
                 <RiMenuLine className={styles.function} />

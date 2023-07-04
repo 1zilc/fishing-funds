@@ -9,6 +9,7 @@ import {
   RiIndeterminateCircleFill,
   RiNotification2Line,
   RiNotification2Fill,
+  RiEditLine,
 } from 'react-icons/ri';
 import PureCard from '@/components/Card/PureCard';
 import CustomDrawer from '@/components/CustomDrawer';
@@ -93,6 +94,7 @@ const Optional: React.FC<OptionalProps> = () => {
             <PureCard key={stock.secid} className={clsx(styles.row, 'hoverable')}>
               <RiIndeterminateCircleFill className={styles.remove} onClick={() => onRemoveStock(stock)} />
               <div className={styles.name}>{stock.name}</div>
+              <RiEditLine className={styles.function} onClick={() => setEditDrawer(stock)} />
               {stock.zdfRange || stock.jzNotice ? (
                 <RiNotification2Fill className={styles.function} onClick={() => onCancleRiskNotice(stock)} />
               ) : (
