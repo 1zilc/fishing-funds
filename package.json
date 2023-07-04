@@ -157,7 +157,6 @@
     "electron-builder": "^24.4.0",
     "electron-vite": "^1.0.24",
     "generate-react-cli": "^8.3.0",
-    "rimraf": "^5.0.1",
     "sass": "^1.63.6",
     "typescript": "^5.1.5",
     "vite": "^4.3.9",
@@ -186,7 +185,6 @@
     "http-proxy-agent": "^7.0.0",
     "https-proxy-agent": "^7.0.0",
     "hxc3-indicator-formula": "^1.0.9",
-    "iconv-lite": "^0.6.3",
     "js-base64": "^3.7.5",
     "menubar": "^9.3.0",
     "number-precision": "^1.6.0",
@@ -199,7 +197,6 @@
     "react-router-dom": "^6.14.0",
     "react-sortablejs": "^6.1.4",
     "redux": "^4.2.1",
-    "redux-thunk": "^2.4.2",
     "socks-proxy-agent": "^8.0.1",
     "sortablejs": "^1.15.0"
   },
