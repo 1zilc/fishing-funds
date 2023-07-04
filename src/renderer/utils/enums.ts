@@ -43,9 +43,13 @@ export enum QuotationSortType {
 
 export enum StockSortType {
   Custom, // 自定义
-  Zdd, // 涨跌点
   Zdf, // 涨跌幅
   Zx, // 指数值
+  Cost, // 成本
+  Money, // 收益
+  Estimate, // 估值
+  Income, // 收益
+  IncomeRate, // 收益率
   Name, // a-z
 }
 

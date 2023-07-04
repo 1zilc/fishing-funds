@@ -56,9 +56,13 @@ export const quotationSortModeOptions: Option.EnumsOption<Enums.QuotationSortTyp
 
 export const stockSortModeOptions: Option.EnumsOption<Enums.StockSortType>[] = [
   { key: Enums.StockSortType.Custom, label: '自定义' },
-  { key: Enums.StockSortType.Zdd, label: '涨跌点' },
   { key: Enums.StockSortType.Zdf, label: '涨跌幅' },
   { key: Enums.StockSortType.Zx, label: '最新值' },
+  { key: Enums.StockSortType.Cost, label: '持有成本' },
+  { key: Enums.StockSortType.Money, label: '今日收益' },
+  { key: Enums.StockSortType.Estimate, label: '今日总值' },
+  { key: Enums.StockSortType.Income, label: '持有收益' },
+  { key: Enums.StockSortType.IncomeRate, label: '持有收益率' },
   { key: Enums.StockSortType.Name, label: '名称(A-Z)' },
 ];
 

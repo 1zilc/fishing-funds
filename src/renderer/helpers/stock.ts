@@ -68,14 +68,25 @@ export function SortStock({
 }) {
   const sortList = list.slice();
   sortList.sort((a, b) => {
+    const calcA = CalcStock(a, codeMap);
+    const calcB = CalcStock(b, codeMap);
     const t = orderType === Enums.SortOrderType.Asc ? 1 : -1;
+
     switch (sortType) {
-      case Enums.StockSortType.Zdd:
-        return (Number(a.zdd) - Number(b.zdd)) * t;
       case Enums.StockSortType.Zdf:
-        return (Number(a.zdf) - Number(b.zdf)) * t;
+        return (Number(calcA.zdf) - Number(calcB.zdf)) * t;
       case Enums.StockSortType.Zx:
-        return (Number(a.zx) - Number(b.zx)) * t;
+        return (Number(calcA.zx) - Number(calcB.zx)) * t;
+      case Enums.StockSortType.Cost:
+        return (Number(calcA.cbje || 0) - Number(calcB.cbje || 0)) * t;
+      case Enums.StockSortType.Money:
+        return (Number(calcA.jrsygz) - Number(calcB.jrsygz)) * t;
+      case Enums.StockSortType.Estimate:
+        return (Number(calcA.gszz) - Number(calcB.gszz)) * t;
+      case Enums.StockSortType.Income:
+        return (Number(calcA.cysy || 0) - Number(calcB.cysy || 0)) * t;
+      case Enums.StockSortType.IncomeRate:
+        return (Number(calcA.cysyl || 0) - Number(calcB.cysyl || 0)) * t;
       case Enums.StockSortType.Name:
         return b.name.localeCompare(a.name, 'zh') * t;
       case Enums.StockSortType.Custom:
