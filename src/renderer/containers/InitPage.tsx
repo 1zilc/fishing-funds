@@ -125,7 +125,7 @@ const InitPage = () => {
     // 视图配置加载完成
     dispatch(setViewModeAction(allStateStorage[CONST.STORAGE.VIEW_MODE] || sortInitialState.viewMode));
     // 保密状态加载完成
-    dispatch(syncEyeStatusAction(allStateStorage[CONST.STORAGE.EYE_STATUS] || Enums.EyeStatus.Open));
+    dispatch(syncEyeStatusAction(allStateStorage[CONST.STORAGE.EYE_STATUS] || true));
     /**
      * cache部分
      */
