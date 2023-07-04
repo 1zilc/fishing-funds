@@ -15,6 +15,7 @@ import {
   useSyncConfig,
   useTranslate,
   useChatGPT,
+  useUpdateContextMenuStocksState,
 } from '@/utils/hooks';
 
 function GlobalTask() {
@@ -25,6 +26,7 @@ function GlobalTask() {
   useAllConfigBackup();
   useTrayContent();
   useUpdateContextMenuWalletsState();
+  useUpdateContextMenuStocksState();
   useMappingLocalToSystemSetting();
   useTouchBar();
   useShareStoreState();

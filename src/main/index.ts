@@ -160,6 +160,9 @@ function main() {
   ipcMain.handle('update-tray-context-menu-wallets', async (event, config) => {
     contextMenuManager.updateWalletMenu(config);
   });
+  ipcMain.handle('update-tray-context-menu-stocks', async (event, config) => {
+    contextMenuManager.updateStockMenu(config);
+  });
   ipcMain.handle('get-app-icon', async (event, config) => {
     return appIcon.toDataURL();
   });

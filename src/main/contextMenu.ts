@@ -11,11 +11,17 @@ export type WalletMenuConfig = {
   dataURL: string;
   id: string;
 };
+export type StockMenuConfig = {
+  label: string;
+  dataURL: string;
+  id: string;
+};
 
 export default class ContextMenuManager {
   private contextMenu: (Electron.MenuItemConstructorOptions | Electron.MenuItem)[] = [];
 
   private walletMenu: Electron.MenuItemConstructorOptions[] = [];
+  private stockMenu: Electron.MenuItemConstructorOptions[] = [];
 
   private eyeMenu: Electron.MenuItemConstructorOptions = {
     click: () => {
@@ -51,6 +57,11 @@ export default class ContextMenuManager {
       click: () => sendMessageToRenderer(this.win, 'change-current-wallet-code', item.id),
     }));
     this.walletMenu = menu;
+    this.render();
+  }
+
+  updateStockMenu(config: StockMenuConfig[]) {
+    this.stockMenu = config;
     this.render();
   }
 
@@ -107,6 +118,8 @@ export default class ContextMenuManager {
       },
       { type: 'separator' },
       ...this.walletMenu,
+      { type: 'separator' },
+      ...this.stockMenu,
       { type: 'separator' },
       {
         click: () => {

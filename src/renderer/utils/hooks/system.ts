@@ -481,7 +481,6 @@ export function useUpdateContextMenuWalletsState() {
   const wallets = useAppSelector((state) => state.wallet.wallets);
   const currentWalletCode = useAppSelector((state) => state.wallet.currentWalletCode);
   const walletsConfig = useAppSelector((state) => state.wallet.config.walletConfig);
-  const freshFunds = useFreshFunds(0);
 
   useEffect(() => {
     ipcRenderer.invoke(
@@ -506,6 +505,23 @@ export function useUpdateContextMenuWalletsState() {
       dispatch(changeCurrentWalletCodeAction(code));
     } catch (error) {}
   });
+}
+
+export function useUpdateContextMenuStocksState() {
+  const stocks = useAppSelector((state) => state.stock.stocks);
+  const codeMap = useAppSelector((state) => state.stock.config.codeMap);
+
+  useEffect(() => {
+    const calcResult = Helpers.Stock.CalcStocks(stocks, codeMap);
+    const value = `  ${Utils.Yang(calcResult.sygz.toFixed(2))}  ${Utils.Yang(calcResult.gssyl.toFixed(2))}%`;
+
+    ipcRenderer.invoke('update-tray-context-menu-stocks', [
+      {
+        label: `股票收益  ${value}`,
+        id: 'stock-income',
+      },
+    ]);
+  }, [stocks, codeMap]);
 }
 
 export function useAllConfigBackup() {
