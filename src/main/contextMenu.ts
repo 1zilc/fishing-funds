@@ -54,8 +54,8 @@ export default class ContextMenuManager {
     this.render();
   }
 
-  updateEyeMenu(status: Enums.EyeStatus) {
-    this.eyeMenu.label = status === Enums.EyeStatus.Open ? '隐藏收益' : '显示收益';
+  updateEyeMenu(status: boolean) {
+    this.eyeMenu.label = status ? '隐藏收益' : '显示收益';
     this.render();
   }
 

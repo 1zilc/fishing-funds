@@ -66,7 +66,7 @@ const FundRow: React.FC<RowProps> = React.memo((props) => {
             <span className={styles.fundName}>{fund.name}</span>
             {!!calcFundResult.cyfe && <span className={styles.hold}>持有</span>}
             {/* 估算持有收益率 */}
-            {!!calcFundResult.cbj && eyeStatus === Enums.EyeStatus.Open && (
+            {!!calcFundResult.cbj && eyeStatus && (
               <span className={clsx(Utils.GetValueColor(calcFundResult.gscysyl).blockClass, styles.gscysyl)}>
                 {calcFundResult.gscysyl === '' ? `0.00%` : `${Utils.Yang(calcFundResult.gscysyl)}%`}
               </span>
@@ -78,7 +78,7 @@ const FundRow: React.FC<RowProps> = React.memo((props) => {
               <div>
                 <span className={styles.code}>{fund.fundcode}</span>
                 <span>{isFix ? calcFundResult.fixDate : calcFundResult.gztime?.slice(5)}</span>
-                {eyeStatus === Enums.EyeStatus.Open && (
+                {eyeStatus && (
                   <span className={clsx(Utils.GetValueColor(calcFundResult.jrsygz).textClass, styles.worth)}>
                     {Utils.Yang(calcFundResult.jrsygz.toFixed(2))}
                   </span>

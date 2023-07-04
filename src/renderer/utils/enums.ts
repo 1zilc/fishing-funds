@@ -4,11 +4,6 @@ export enum ToolBarDwawerType {
   Setting,
 }
 
-export enum EyeStatus {
-  Close,
-  Open,
-}
-
 export enum FundApiType {
   Eastmoney, // 东方财富-天天基金
   Tencent, // 腾讯证券

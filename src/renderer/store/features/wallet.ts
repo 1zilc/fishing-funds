@@ -1,13 +1,11 @@
 import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
 import { AsyncThunkConfig } from '@/store';
 import { sortFundsAction } from '@/store/features/fund';
-import * as Enums from '@/utils/enums';
 import * as Utils from '@/utils';
 import * as Helpers from '@/helpers';
-import { helper } from 'echarts';
 
 export interface WalletState {
-  eyeStatus: Enums.EyeStatus;
+  eyeStatus: boolean;
   currentWalletCode: string;
   currentWallet: Wallet.StateItem;
   wallets: Wallet.StateItem[];
@@ -29,7 +27,7 @@ export const defaultWallet: Wallet.SettingItem = {
 const initialState: WalletState = {
   wallets: [],
   config: { walletConfig: [], codeMap: {} },
-  eyeStatus: Enums.EyeStatus.Open,
+  eyeStatus: true,
   currentWalletCode: '',
   currentWallet: {
     code: '',
@@ -44,8 +42,11 @@ const walletSlice = createSlice({
   name: 'wallet',
   initialState,
   reducers: {
-    syncEyeStatusAction(state, action: PayloadAction<Enums.EyeStatus>) {
+    syncEyeStatusAction(state, action: PayloadAction<boolean>) {
       state.eyeStatus = action.payload;
+    },
+    toggleEyeStatusAction(state) {
+      state.eyeStatus = !state.eyeStatus;
     },
     changeCurrentWalletCodeAction(state, { payload }: PayloadAction<string>) {
       const wallet = Helpers.Wallet.GetCurrentWalletState(payload, state.wallets);
@@ -101,6 +102,7 @@ const walletSlice = createSlice({
 
 export const {
   syncEyeStatusAction,
+  toggleEyeStatusAction,
   changeCurrentWalletCodeAction,
   filterWalletStateAction,
   syncWalletsAction,
@@ -108,27 +110,6 @@ export const {
   toggleFundCollapseAction,
   toggleAllFundsCollapseAction,
 } = walletSlice.actions;
-
-export const toggleEyeStatusAction = createAsyncThunk<void, void, AsyncThunkConfig>(
-  'wallet/toggleEyeStatusAction',
-  (_, { dispatch, getState }) => {
-    try {
-      const {
-        wallet: { eyeStatus },
-      } = getState();
-
-      switch (eyeStatus) {
-        case Enums.EyeStatus.Open:
-          dispatch(syncEyeStatusAction(Enums.EyeStatus.Close));
-          break;
-        case Enums.EyeStatus.Close:
-        default:
-          dispatch(syncEyeStatusAction(Enums.EyeStatus.Open));
-          break;
-      }
-    } catch (error) {}
-  }
-);
 
 export const setWalletConfigAction = createAsyncThunk<void, Wallet.SettingItem[], AsyncThunkConfig>(
   'wallet/setWalletConfigAction',

@@ -470,7 +470,7 @@ export function useTrayContent() {
   })();
 
   useEffect(() => {
-    const content = eyeStatus === Enums.EyeStatus.Close ? '' : trayContent;
+    const content = eyeStatus ? trayContent : '';
 
     ipcRenderer.invoke('set-tray-content', content);
   }, [trayContent, eyeStatus]);

@@ -141,7 +141,7 @@ const StockRow: React.FC<RowProps> = React.memo((props) => {
               );
             })}
             {!!calcStockResult.cyfe && <span className={styles.hold}>持有</span>}
-            {!!calcStockResult.cbj && eyeStatus === Enums.EyeStatus.Open && (
+            {!!calcStockResult.cbj && eyeStatus && (
               <span className={clsx(Utils.GetValueColor(calcStockResult.gscysyl).blockClass, styles.gscysyl)}>
                 {calcStockResult.gscysyl === '' ? `0.00%` : `${Utils.Yang(calcStockResult.gscysyl)}%`}
               </span>
@@ -152,7 +152,7 @@ const StockRow: React.FC<RowProps> = React.memo((props) => {
               <div>
                 <span className={styles.code}>{stock.code}</span>
                 <span>{stock.time}</span>
-                {eyeStatus === Enums.EyeStatus.Open && (
+                {eyeStatus && (
                   <span className={clsx(Utils.GetValueColor(calcStockResult.jrsygz).textClass, styles.worth)}>
                     {Utils.Yang(calcStockResult.jrsygz.toFixed(2))}
                   </span>

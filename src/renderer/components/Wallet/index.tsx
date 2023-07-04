@@ -8,10 +8,10 @@ import { useHeaderContext } from '@/components/Header';
 import { changeCurrentWalletCodeAction, toggleEyeStatusAction } from '@/store/features/wallet';
 import { useAppDispatch, useAppSelector, useDrawer } from '@/utils/hooks';
 import { walletIcons } from '@/helpers/wallet';
-import * as Enums from '@/utils/enums';
 import * as Utils from '@/utils';
 import * as Helpers from '@/helpers';
 import styles from './index.module.scss';
+import { useMemoizedFn } from 'ahooks';
 
 const AddWalletContent = React.lazy(() => import('@/components/Wallet/AddWalletContent'));
 
@@ -31,9 +31,8 @@ const Wallet: React.FC<WalletProps> = () => {
 
   const { displayZje, displaySygz } = useMemo(() => {
     const { zje, sygz } = Helpers.Fund.CalcFunds(funds, fundConfigCodeMap);
-    const eyeOpen = eyeStatus === Enums.EyeStatus.Open;
-    const displayZje = eyeOpen ? zje.toFixed(2) : Utils.Encrypt(zje.toFixed(2));
-    const displaySygz = eyeOpen ? Utils.Yang(sygz.toFixed(2)) : Utils.Encrypt(Utils.Yang(sygz.toFixed(2)));
+    const displayZje = eyeStatus ? zje.toFixed(2) : Utils.Encrypt(zje.toFixed(2));
+    const displaySygz = eyeStatus ? Utils.Yang(sygz.toFixed(2)) : Utils.Encrypt(Utils.Yang(sygz.toFixed(2)));
     return {
       displayZje,
       displaySygz,
@@ -56,9 +55,11 @@ const Wallet: React.FC<WalletProps> = () => {
     [walletConfig]
   );
 
-  function onSelectWallet(code: string) {
+  const onSelectWallet = useMemoizedFn((code: string) => {
     dispatch(changeCurrentWalletCodeAction(code));
-  }
+  });
+
+  const onToggleEye = useMemoizedFn(() => dispatch(toggleEyeStatusAction()));
 
   return (
     <div className={clsx(styles.content, { [styles.miniMode]: miniMode })}>
@@ -100,11 +101,7 @@ const Wallet: React.FC<WalletProps> = () => {
           </div>
         </div>
       </div>
-      <Eye
-        classNames={styles.eye}
-        status={eyeStatus === Enums.EyeStatus.Open}
-        onClick={() => dispatch(toggleEyeStatusAction())}
-      />
+      <Eye classNames={styles.eye} status={eyeStatus} onClick={onToggleEye} />
       <CustomDrawer show={showAddWalletDrawer}>
         <AddWalletContent onClose={closeAddWalletDrawer} onEnter={closeAddWalletDrawer} />
       </CustomDrawer>

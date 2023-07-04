@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React from 'react';
 import NP from 'number-precision';
 import clsx from 'clsx';
-
+import { useMemoizedFn } from 'ahooks';
 import PureCard from '@/components/Card/PureCard';
 import Score from '@/components/Home/FundView/FundStatisticsContent/AssetsStatistics/Score';
 import Eye from '@/components/Eye';
@@ -24,7 +24,6 @@ const AssetsStatistics: React.FC<AssetsStatisticsProps> = ({ funds, codes }) => 
   const currentWallet = useAppSelector((state) => state.wallet.currentWallet);
   const walletsConfig = useAppSelector((state) => state.wallet.config.walletConfig);
   const fundConfigMap = useFundConfigMap(codes);
-  const eyeOpen = eyeStatus === Enums.EyeStatus.Open;
   // 盈利钱包数
   const winWalletCount = codes.reduce((result, code) => {
     const { codeMap } = Helpers.Fund.GetFundConfig(code, walletsConfig);
@@ -48,15 +47,17 @@ const AssetsStatistics: React.FC<AssetsStatisticsProps> = ({ funds, codes }) => 
   const gssyl = cyje ? NP.times(NP.divide(jrsygz, cyje), 100) : 0;
   const cysyl = cbje ? NP.times(NP.divide(cysy, cbje), 100) : 0;
 
-  const displayCyje = eyeOpen ? cyje.toFixed(2) : Utils.Encrypt(cyje.toFixed(2));
-  const displaySygz = eyeOpen ? Utils.Yang(jrsygz.toFixed(2)) : Utils.Encrypt(Utils.Yang(jrsygz.toFixed(2)));
-  const displayGssyl = eyeOpen ? gssyl.toFixed(2) : Utils.Encrypt(gssyl.toFixed(2));
-  const displayWinWalletCount = eyeOpen ? winWalletCount : Utils.Encrypt(String(winWalletCount));
-  const displayWinFundCount = eyeOpen ? winFundCount : Utils.Encrypt(String(winFundCount));
-  const displayCodesLength = eyeOpen ? codes.length : Utils.Encrypt(String(codes.length));
-  const displayFundsLength = eyeOpen ? funds.length : Utils.Encrypt(String(funds.length));
-  const displayCysy = eyeOpen ? Utils.Yang(cysy.toFixed(2)) : Utils.Encrypt(Utils.Yang(cysy.toFixed(2)));
-  const displayCysyl = eyeOpen ? cysyl.toFixed(2) : Utils.Encrypt(cysyl.toFixed(2));
+  const displayCyje = eyeStatus ? cyje.toFixed(2) : Utils.Encrypt(cyje.toFixed(2));
+  const displaySygz = eyeStatus ? Utils.Yang(jrsygz.toFixed(2)) : Utils.Encrypt(Utils.Yang(jrsygz.toFixed(2)));
+  const displayGssyl = eyeStatus ? gssyl.toFixed(2) : Utils.Encrypt(gssyl.toFixed(2));
+  const displayWinWalletCount = eyeStatus ? winWalletCount : Utils.Encrypt(String(winWalletCount));
+  const displayWinFundCount = eyeStatus ? winFundCount : Utils.Encrypt(String(winFundCount));
+  const displayCodesLength = eyeStatus ? codes.length : Utils.Encrypt(String(codes.length));
+  const displayFundsLength = eyeStatus ? funds.length : Utils.Encrypt(String(funds.length));
+  const displayCysy = eyeStatus ? Utils.Yang(cysy.toFixed(2)) : Utils.Encrypt(Utils.Yang(cysy.toFixed(2)));
+  const displayCysyl = eyeStatus ? cysyl.toFixed(2) : Utils.Encrypt(cysyl.toFixed(2));
+
+  const onToggleEye = useMemoizedFn(() => dispatch(toggleEyeStatusAction()));
 
   return (
     <>
@@ -64,7 +65,7 @@ const AssetsStatistics: React.FC<AssetsStatisticsProps> = ({ funds, codes }) => 
         <div style={{ textAlign: 'center' }}>
           <div className={styles.titleBar}>
             <span>总资产(元)</span>
-            <Eye status={eyeStatus === Enums.EyeStatus.Open} onClick={() => dispatch(toggleEyeStatusAction())} />
+            <Eye status={eyeStatus} onClick={onToggleEye} />
           </div>
           <div
             style={{
@@ -74,17 +75,17 @@ const AssetsStatistics: React.FC<AssetsStatisticsProps> = ({ funds, codes }) => 
               marginBottom: 10,
             }}
           >
-            {eyeOpen ? '￥' : ''}
+            {eyeStatus ? '￥' : ''}
             {displayCyje}
           </div>
           <div className={styles.row}>
             <div>
               钱包：{displayCodesLength}
-              {eyeOpen ? '个' : ''}
+              {eyeStatus ? '个' : ''}
             </div>
             <div>
               基金：{displayFundsLength}
-              {eyeOpen ? '支' : ''}
+              {eyeStatus ? '支' : ''}
             </div>
           </div>
           <div className={styles.row}>
@@ -96,7 +97,7 @@ const AssetsStatistics: React.FC<AssetsStatisticsProps> = ({ funds, codes }) => 
               收益(今)：
               <span
                 className={clsx({
-                  [Utils.GetValueColor(displaySygz).textClass]: eyeOpen,
+                  [Utils.GetValueColor(displaySygz).textClass]: eyeStatus,
                 })}
               >
                 {displaySygz}
@@ -106,11 +107,11 @@ const AssetsStatistics: React.FC<AssetsStatisticsProps> = ({ funds, codes }) => 
               收益率(今)：
               <span
                 className={clsx({
-                  [Utils.GetValueColor(displayGssyl).textClass]: eyeOpen,
+                  [Utils.GetValueColor(displayGssyl).textClass]: eyeStatus,
                 })}
               >
                 {displayGssyl}
-                {eyeOpen ? '%' : ''}
+                {eyeStatus ? '%' : ''}
               </span>
             </div>
           </div>
@@ -119,7 +120,7 @@ const AssetsStatistics: React.FC<AssetsStatisticsProps> = ({ funds, codes }) => 
               持有收益：
               <span
                 className={clsx({
-                  [Utils.GetValueColor(displayCysy).textClass]: eyeOpen,
+                  [Utils.GetValueColor(displayCysy).textClass]: eyeStatus,
                 })}
               >
                 {displayCysy}
@@ -129,11 +130,11 @@ const AssetsStatistics: React.FC<AssetsStatisticsProps> = ({ funds, codes }) => 
               持有收益率：
               <span
                 className={clsx({
-                  [Utils.GetValueColor(displayCysyl).textClass]: eyeOpen,
+                  [Utils.GetValueColor(displayCysyl).textClass]: eyeStatus,
                 })}
               >
                 {displayCysyl}
-                {eyeOpen ? '%' : ''}
+                {eyeStatus ? '%' : ''}
               </span>
             </div>
           </div>
