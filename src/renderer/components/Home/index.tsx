@@ -143,6 +143,11 @@ function StockGroup() {
           label: '全部',
           children: <StockView filter={() => true} />,
         },
+        {
+          key: String(-2),
+          label: '持有',
+          children: <StockView filter={(stock) => !!stockCodeMap[stock.secid]?.cyfe} />,
+        },
         ...stockTypesConfig.map((type) => ({
           key: String(type.code),
           label: type.name.slice(0, 2),

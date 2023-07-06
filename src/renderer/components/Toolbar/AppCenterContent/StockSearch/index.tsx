@@ -29,7 +29,7 @@ export const stockTypesConfig = [
   // { name: '英股', code: Enums.StockMarketType.UK },
   { name: '三板', code: Enums.StockMarketType.XSB },
   // { name: '基金', code: Enums.StockMarketType.Fund },
-  { name: '债券', code: Enums.StockMarketType.Bond },
+  // { name: '债券', code: Enums.StockMarketType.Bond },
   { name: '期货', code: Enums.StockMarketType.Futures },
   { name: '外汇', code: Enums.StockMarketType.Exchange },
 ];
