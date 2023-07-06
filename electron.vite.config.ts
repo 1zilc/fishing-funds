@@ -24,6 +24,7 @@ export default defineConfig(({ command }) => {
         outDir: 'release/app/dist/renderer',
         minify: prod,
         cssCodeSplit: false,
+        assetsInlineLimit: 1024 * 20,
       },
       server: {
         port: 3456,
