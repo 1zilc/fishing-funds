@@ -24,7 +24,7 @@ const FundView: React.FC<FundListProps> = (props) => {
   const funds = useAppSelector((state) => state.wallet.currentWallet.funds);
   const fundConfigCodeMap = useAppSelector((state) => state.wallet.fundConfigCodeMap);
 
-  const freshFunds = useFreshFunds(0);
+  const freshFunds = useFreshFunds();
 
   const {
     data: editData,

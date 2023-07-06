@@ -22,7 +22,6 @@ import {
   useWorkDayTimeToDo,
   useFixTimeToDo,
   useAfterMountedEffect,
-  useFreshFunds,
   useAppDispatch,
   useAppSelector,
   useLoadCoins,
@@ -43,7 +42,7 @@ import * as Adapters from '@/utils/adpters';
 import * as Helpers from '@/helpers';
 import * as Enums from '@/utils/enums';
 import * as Enhancement from '@/utils/enhancement';
-import { useLoadFunds } from './utils';
+import { useFreshFunds, useLoadFunds } from './utils';
 
 const { dialog, ipcRenderer, clipboard, app } = window.contextModules.electron;
 const { saveString, readFile } = window.contextModules.io;
@@ -232,7 +231,10 @@ export function useFundsClipboard() {
   const walletsConfig = useAppSelector((state) => state.wallet.config.walletConfig);
   const fundConfig = useAppSelector((state) => state.wallet.fundConfig);
   const fundApiTypeSetting = useAppSelector((state) => state.setting.systemSetting.fundApiTypeSetting);
-  const loadFunds = useLoadFunds(true);
+  const loadFunds = useLoadFunds({
+    enableLoading: true,
+    autoFix: true,
+  });
 
   useIpcRendererListener('clipboard-funds-import', async (e: Electron.IpcRendererEvent, data) => {
     try {
@@ -313,10 +315,22 @@ export function useBootStrap() {
   const runLoadRemoteCoins = useLoadRemoteCoins();
   const runLoadWalletsFunds = useLoadWalletsFunds();
   const runLoadFixWalletsFunds = useLoadFixWalletsFunds();
-  const runLoadZindexs = useLoadZindexs(false);
-  const runLoadQuotations = useLoadQuotations(false);
-  const runLoadStocks = useLoadStocks(false);
-  const runLoadCoins = useLoadCoins(false);
+  const runLoadZindexs = useLoadZindexs({
+    enableLoading: false,
+    autoFilter: false,
+  });
+  const runLoadQuotations = useLoadQuotations({
+    enableLoading: false,
+    autoFilter: false,
+  });
+  const runLoadStocks = useLoadStocks({
+    enableLoading: false,
+    autoFilter: false,
+  });
+  const runLoadCoins = useLoadCoins({
+    enableLoading: false,
+    autoFilter: false,
+  });
 
   // 间隔时间刷新远程基金数据,远程货币数据,基金评级
   useInterval(() => {

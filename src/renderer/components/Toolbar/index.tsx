@@ -12,6 +12,7 @@ import {
   useFreshCoins,
   useAppSelector,
   useIpcRendererListener,
+  useFreshAll,
 } from '@/utils/hooks';
 import * as Enums from '@/utils/enums';
 import * as CONST from '@/constants';
@@ -30,17 +31,15 @@ const ToolBar: React.FC<ToolBarProps> = () => {
   const updateInfo = useAppSelector((state) => state.updater.updateInfo);
   const tabsActiveKey = useAppSelector((state) => state.tabs.activeKey);
 
-  const freshFunds = useFreshFunds(CONST.DEFAULT.FRESH_BUTTON_THROTTLE_DELAY);
-  const freshZindexs = useFreshZindexs(CONST.DEFAULT.FRESH_BUTTON_THROTTLE_DELAY);
-  const freshQuotations = useFreshQuotations(CONST.DEFAULT.FRESH_BUTTON_THROTTLE_DELAY);
-  const freshStocks = useFreshStocks(CONST.DEFAULT.FRESH_BUTTON_THROTTLE_DELAY);
-  const freshCoins = useFreshCoins(CONST.DEFAULT.FRESH_BUTTON_THROTTLE_DELAY);
+  const freshFunds = useFreshFunds();
+  const freshZindexs = useFreshZindexs();
+  const freshQuotations = useFreshQuotations();
+  const freshStocks = useFreshStocks();
+  const freshCoins = useFreshCoins();
 
   const [openSupport, { setTrue: setOpenSupportTrue, setFalse: setOpenSupportFalse }] = useBoolean(false);
-  const [showSettingContent, { setTrue: openSettingContent, setFalse: closeSettingContent, toggle: ToggleSettingContent }] =
-    useBoolean(false);
-  const [showAppCenterDrawer, { setTrue: openAppCenterDrawer, setFalse: closeAppCenterDrawer, toggle: ToggleAppCenterDrawer }] =
-    useBoolean(false);
+  const [showSettingContent, { setTrue: openSettingContent, setFalse: closeSettingContent }] = useBoolean(false);
+  const [showAppCenterDrawer, { setTrue: openAppCenterDrawer, setFalse: closeAppCenterDrawer }] = useBoolean(false);
 
   useIpcRendererListener('support-author', (e) => {
     try {
@@ -72,13 +71,7 @@ const ToolBar: React.FC<ToolBarProps> = () => {
     }
   });
 
-  const freshAll = useMemoizedFn(() => {
-    freshFunds();
-    freshZindexs();
-    freshQuotations();
-    freshStocks();
-    freshCoins();
-  });
+  const freshAll = useFreshAll();
 
   useLongPress(freshAll, freshRef, {
     onClick: fresh,

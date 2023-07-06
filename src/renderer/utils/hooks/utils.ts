@@ -266,41 +266,79 @@ export function useSyncFixStockSetting() {
   return { done };
 }
 
-export function useFreshFunds(throttleDelay: number) {
-  const loadFunds = useLoadFunds(true);
-  const loadFixFunds = useLoadFixFunds();
-
-  const { run: runLoadFunds } = useThrottleFn(loadFunds, {
-    wait: throttleDelay,
+export function useFreshAll() {
+  const loadFunds = useLoadFunds({
+    enableLoading: true,
+    autoFilter: true,
+    autoFix: true,
   });
-  const { run: runLoadFixFunds } = useThrottleFn(loadFixFunds, {
-    wait: throttleDelay,
+  const loadStocks = useLoadStocks({
+    enableLoading: true,
+    autoFilter: true,
   });
-  const freshFunds = useScrollToTop({
-    after: async () => {
-      const isFixTime = Utils.JudgeFixTime(dayjs().valueOf());
-      await runLoadFunds();
-      if (isFixTime) {
-        await runLoadFixFunds();
-      }
+  const loadZindexs = useLoadZindexs({
+    enableLoading: true,
+    autoFilter: true,
+  });
+  const loadQuotation = useLoadQuotations({
+    enableLoading: true,
+    autoFilter: true,
+  });
+  const loadCoins = useLoadCoins({
+    enableLoading: true,
+    autoFilter: true,
+  });
+  const { run: run } = useThrottleFn(
+    () => {
+      loadFunds();
+      loadStocks();
+      loadZindexs();
+      loadQuotation();
+      loadCoins();
     },
-  });
-  const fn = useTabsFreshFn(Enums.TabKeyType.Fund, freshFunds);
-  return fn;
+    { wait: CONST.DEFAULT.FRESH_BUTTON_THROTTLE_DELAY }
+  );
+  const fresh = useScrollToTop({ after: run });
+  return fresh;
 }
 
-export function useLoadFunds(loading: boolean) {
+export function useFreshFunds() {
+  const loadFunds = useLoadFunds({
+    enableLoading: true,
+    autoFilter: true,
+    autoFix: true,
+  });
+  const { run: runLoadFunds } = useThrottleFn(loadFunds, {
+    wait: CONST.DEFAULT.FRESH_BUTTON_THROTTLE_DELAY,
+  });
+  const freshFunds = useScrollToTop({ after: runLoadFunds });
+  return freshFunds;
+}
+
+export function useLoadFunds(config?: {
+  enableLoading?: boolean; // 是否开启刷新loading
+  autoFilter?: boolean; // 是否开启自动过滤配置
+  autoFix?: boolean; // 是否开启最新净值
+}) {
   const dispatch = useAppDispatch();
   const currentWalletCode = useAppSelector((state) => state.wallet.currentWalletCode);
   const fundConfig = useAppSelector((state) => state.wallet.fundConfig);
   const fundApiTypeSetting = useAppSelector((state) => state.setting.systemSetting.fundApiTypeSetting);
+  const loadFixFunds = useLoadFixFunds();
+
   const load = useMemoizedFn(async () => {
     try {
-      dispatch(setFundsLoadingAction(loading));
+      dispatch(setFundsLoadingAction(!!config?.enableLoading));
       const responseFunds = await Helpers.Fund.GetFunds(fundConfig, fundApiTypeSetting);
       dispatch(sortFundsCachedAction({ responseFunds, walletCode: currentWalletCode }));
-      dispatch(setFundsLoadingAction(false));
-    } catch (error) {
+
+      if (!!config?.autoFix) {
+        const isFixTime = Utils.JudgeFixTime(dayjs().valueOf());
+        if (isFixTime) {
+          loadFixFunds();
+        }
+      }
+    } finally {
       dispatch(setFundsLoadingAction(false));
     }
   });
@@ -333,8 +371,7 @@ export function useLoadRemoteFunds() {
       dispatch(setRemoteFundsLoadingAction(true));
       const remoteFunds = await Services.Fund.GetRemoteFundsFromEastmoney();
       dispatch(setRemoteFundsAction(remoteFunds));
-      dispatch(setRemoteFundsLoadingAction(false));
-    } catch (error) {
+    } finally {
       dispatch(setRemoteFundsLoadingAction(false));
     }
   });
@@ -417,24 +454,28 @@ export function useLoadFixWalletsFunds() {
   return load;
 }
 
-export function useFreshZindexs(throttleDelay: number) {
-  const loadZindexs = useLoadZindexs(true);
-  const { run: runLoadZindexs } = useThrottleFn(loadZindexs, { wait: throttleDelay });
-  const freshZindexs = useScrollToTop({ after: () => runLoadZindexs() });
-  const fn = useTabsFreshFn(Enums.TabKeyType.Zindex, freshZindexs);
-  return fn;
+export function useFreshZindexs() {
+  const loadZindexs = useLoadZindexs({
+    enableLoading: true,
+    autoFilter: true,
+  });
+  const { run: runLoadZindexs } = useThrottleFn(loadZindexs, { wait: CONST.DEFAULT.FRESH_BUTTON_THROTTLE_DELAY });
+  const freshZindexs = useScrollToTop({ after: runLoadZindexs });
+  return freshZindexs;
 }
 
-export function useLoadZindexs(loading: boolean) {
+export function useLoadZindexs(config?: {
+  enableLoading?: boolean; // 是否开启刷新loading
+  autoFilter?: boolean; // 是否开启自动过滤配置
+}) {
   const dispatch = useAppDispatch();
   const zindexConfig = useAppSelector((state) => state.zindex.config.zindexConfig);
   const load = useMemoizedFn(async () => {
     try {
-      dispatch(setZindexesLoadingAction(loading));
+      dispatch(setZindexesLoadingAction(!!config?.enableLoading));
       const responseZindexs = await Helpers.Zindex.GetZindexs(zindexConfig);
       dispatch(sortZindexsCachedAction(responseZindexs));
-      dispatch(setZindexesLoadingAction(false));
-    } catch (error) {
+    } finally {
       dispatch(setZindexesLoadingAction(false));
     }
   });
@@ -442,24 +483,28 @@ export function useLoadZindexs(loading: boolean) {
   return fn;
 }
 
-export function useFreshQuotations(throttleDelay: number) {
-  const loadQuotations = useLoadQuotations(true);
-  const { run: runLoadQuotations } = useThrottleFn(loadQuotations, { wait: throttleDelay });
-  const freshQuotations = useScrollToTop({ after: () => runLoadQuotations() });
-  const fn = useTabsFreshFn(Enums.TabKeyType.Quotation, freshQuotations);
-  return fn;
+export function useFreshQuotations() {
+  const loadQuotations = useLoadQuotations({
+    enableLoading: true,
+    autoFilter: true,
+  });
+  const { run: runLoadQuotations } = useThrottleFn(loadQuotations, { wait: CONST.DEFAULT.FRESH_BUTTON_THROTTLE_DELAY });
+  const freshQuotations = useScrollToTop({ after: runLoadQuotations });
+  return freshQuotations;
 }
 
-export function useLoadQuotations(loading: boolean) {
+export function useLoadQuotations(config?: {
+  enableLoading?: boolean; // 是否开启刷新loading
+  autoFilter?: boolean; // 是否开启自动过滤配置
+}) {
   const dispatch = useAppDispatch();
 
   const load = useMemoizedFn(async () => {
     try {
-      dispatch(setQuotationsLoadingAction(loading));
+      dispatch(setQuotationsLoadingAction(!!config?.enableLoading));
       const responseQuotations = await Helpers.Quotation.GetQuotations();
       dispatch(sortQuotationsCachedAction(responseQuotations));
-      dispatch(setQuotationsLoadingAction(false));
-    } catch (error) {
+    } finally {
       dispatch(setQuotationsLoadingAction(false));
     }
   });
@@ -467,25 +512,29 @@ export function useLoadQuotations(loading: boolean) {
   return fn;
 }
 
-export function useFreshStocks(throttleDelay: number) {
-  const loadStocks = useLoadStocks(true);
-  const { run: runLoadStocks } = useThrottleFn(loadStocks, { wait: throttleDelay });
-  const freshStocks = useScrollToTop({ after: () => runLoadStocks(true) });
-  const fn = useTabsFreshFn(Enums.TabKeyType.Stock, freshStocks);
-  return fn;
+export function useFreshStocks() {
+  const loadStocks = useLoadStocks({
+    enableLoading: true,
+    autoFilter: true,
+  });
+  const { run: runLoadStocks } = useThrottleFn(loadStocks, { wait: CONST.DEFAULT.FRESH_BUTTON_THROTTLE_DELAY });
+  const freshStocks = useScrollToTop({ after: runLoadStocks });
+  return freshStocks;
 }
 
-export function useLoadStocks(loading: boolean) {
+export function useLoadStocks(config?: {
+  enableLoading?: boolean; // 是否开启刷新loading
+  autoFilter?: boolean; // 是否开启自动过滤配置
+}) {
   const dispatch = useAppDispatch();
   const stockConfig = useAppSelector((state) => state.stock.config.stockConfig);
 
   const load = useMemoizedFn(async () => {
     try {
-      dispatch(setStocksLoadingAction(loading));
+      dispatch(setStocksLoadingAction(!!config?.enableLoading));
       const responseStocks = await Helpers.Stock.GetStocks(stockConfig);
       dispatch(sortStocksCachedAction(responseStocks));
-      dispatch(setStocksLoadingAction(false));
-    } catch (error) {
+    } finally {
       dispatch(setStocksLoadingAction(false));
     }
   });
@@ -493,26 +542,30 @@ export function useLoadStocks(loading: boolean) {
   return fn;
 }
 
-export function useFreshCoins(throttleDelay: number) {
-  const loadCoins = useLoadCoins(true);
-  const { run: runLoadCoins } = useThrottleFn(loadCoins, { wait: throttleDelay });
-  const freshCoins = useScrollToTop({ after: () => runLoadCoins() });
-  const fn = useTabsFreshFn(Enums.TabKeyType.Coin, freshCoins);
-  return fn;
+export function useFreshCoins() {
+  const loadCoins = useLoadCoins({
+    enableLoading: true,
+    autoFilter: true,
+  });
+  const { run: runLoadCoins } = useThrottleFn(loadCoins, { wait: CONST.DEFAULT.FRESH_BUTTON_THROTTLE_DELAY });
+  const freshCoins = useScrollToTop({ after: runLoadCoins });
+  return freshCoins;
 }
 
-export function useLoadCoins(showLoading: boolean) {
+export function useLoadCoins(config?: {
+  enableLoading?: boolean; // 是否开启刷新loading
+  autoFilter?: boolean; // 是否开启自动过滤配置
+}) {
   const dispatch = useAppDispatch();
-  const config = useAppSelector((state) => state.coin.config.coinConfig);
+  const coinConfig = useAppSelector((state) => state.coin.config.coinConfig);
   const coinUnitSetting = useAppSelector((state) => state.setting.systemSetting.coinUnitSetting);
 
   const load = useMemoizedFn(async () => {
     try {
-      dispatch(setCoinsLoadingAction(showLoading));
-      const responseCoins = await Helpers.Coin.GetCoins(config, coinUnitSetting);
+      dispatch(setCoinsLoadingAction(!!config?.enableLoading));
+      const responseCoins = await Helpers.Coin.GetCoins(coinConfig, coinUnitSetting);
       dispatch(sortCoinsCachedAction(responseCoins));
-      dispatch(setCoinsLoadingAction(false));
-    } catch (error) {
+    } finally {
       dispatch(setCoinsLoadingAction(false));
     }
   });
@@ -527,8 +580,7 @@ export function useLoadRemoteCoins() {
       dispatch(setRemoteCoinsLoadingAction(true));
       const remoteCoins = await Services.Coin.GetRemoteCoinsFromCoingecko();
       dispatch(setRemoteCoinsAction(remoteCoins));
-      dispatch(setRemoteCoinsLoadingAction(false));
-    } catch (error) {
+    } finally {
       dispatch(setRemoteCoinsLoadingAction(false));
     }
   });
@@ -615,9 +667,6 @@ export function useAutoDestroySortableRef() {
   return sortableRef;
 }
 
-/***
- * statusMap Record<钱包code,booealn>
- */
 export function useAllCyFunds(statusMap: Record<string, boolean>) {
   const wallets = useAppSelector((state) => state.wallet.wallets);
   const walletsConfig = useAppSelector((state) => state.wallet.config.walletConfig);
@@ -671,7 +720,8 @@ export function useIpcRendererListener(
 export function useTabsFreshFn<T>(key: Enums.TabKeyType, fn: T) {
   const bottomTabsSetting = useAppSelector((state) => state.setting.systemSetting.bottomTabsSetting);
   const bottomTabsSettingKeyMap = Utils.GetCodeMap(bottomTabsSetting, 'key');
-  return bottomTabsSettingKeyMap[key].show ? fn : async () => {};
+  const temp = useMemoizedFn(async () => {});
+  return bottomTabsSettingKeyMap[key].show ? fn : temp;
 }
 
 export function useInputShortcut(initial: string) {
