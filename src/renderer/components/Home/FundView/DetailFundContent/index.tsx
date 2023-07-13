@@ -1,7 +1,7 @@
 import React from 'react';
 import { useBoolean, useRequest } from 'ahooks';
 import clsx from 'clsx';
-import { Tabs, Rate } from 'antd';
+import { Tabs, Rate, Avatar } from 'antd';
 
 import ChartCard from '@/components/Card/ChartCard';
 import PureCard from '@/components/Card/PureCard';
@@ -132,12 +132,16 @@ export const DetailFund: React.FC<DetailFundProps> = (props) => {
     }
   })();
 
+  // tags
   const industryTags = [
     fundType,
     beyond,
     continuous,
     ...Array.from(new Set(industryData.stocks.map((stock) => stock.INDEXNAME))),
   ].filter(Utils.NotEmpty);
+
+  // 基金经理
+  const manager: Fund.Manager.Info | undefined = pingzhongdata.Data_currentFundManager?.[0];
 
   return (
     <>
@@ -148,6 +152,9 @@ export const DetailFund: React.FC<DetailFundProps> = (props) => {
           </div>
           <div className={styles.subTitleRow}>
             <Rate allowHalf defaultValue={fundStar} disabled />
+            <Avatar src={manager?.pic} onClick={openManagerDrawer}>
+              {manager?.name?.slice(0, 1)}
+            </Avatar>
           </div>
           <div className={styles.subTitleRow}>
             <div>
@@ -160,7 +167,7 @@ export const DetailFund: React.FC<DetailFundProps> = (props) => {
             </div>
             <div>
               <span>基金经理：</span>
-              <a onClick={openManagerDrawer}>{pingzhongdata.Data_currentFundManager?.[0]?.name}</a>
+              <a onClick={openManagerDrawer}>{manager?.name}</a>
             </div>
           </div>
           <div className={styles.detail}>
