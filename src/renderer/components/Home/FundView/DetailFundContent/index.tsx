@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import { useBoolean, useRequest } from 'ahooks';
 import clsx from 'clsx';
 import { Tabs, Rate } from 'antd';
@@ -50,7 +50,7 @@ export interface DetailFundContentProps extends DetailFundProps {
   onClose: () => void;
 }
 
-export const ContinuousTag: React.FC<{ values: number[] }> = ({ values = [] }) => {
+function getContinuous(values: number[]) {
   values.reverse();
   const up = values[0] > 0;
   const down = values[0] < 0;
@@ -73,27 +73,12 @@ export const ContinuousTag: React.FC<{ values: number[] }> = ({ values = [] }) =
   const maxDay = Math.max(maxDownDay, maxUpDay);
 
   if (up && maxDay >= 3) {
-    return <span className={clsx(styles.continuous, 'text-up', 'boder-up')}>{maxUpDay}天 ↗</span>;
+    return maxDay;
   }
   if (down && maxDay >= 3) {
-    return <span className={clsx(styles.continuous, 'text-down', 'boder-down')}>{maxDownDay}天 ↘</span>;
+    return -maxDay;
   }
-  return <></>;
-};
-
-export const ExceedTag: React.FC<{ value: number }> = ({ value }) => {
-  if (value !== undefined) {
-    return <span className={styles.exceed}>{`> ${value}%`}</span>;
-  }
-  return <></>;
-};
-
-export const TypeTag: React.FC<{ type?: string }> = ({ type }) => {
-  if (type !== undefined) {
-    return <span className={styles.type}>{type}</span>;
-  }
-  return <></>;
-};
+}
 
 const { ipcRenderer } = window.contextModules.electron;
 
@@ -102,17 +87,16 @@ export const DetailFund: React.FC<DetailFundProps> = (props) => {
   const { star: fundStar, type: fundType } = useFundRating(code);
   const codeMap = useAppSelector((state) => state.wallet.fundConfigCodeMap);
   const { data: addCode, show: showAddDrawer, set: setAddDrawer, close: closeAddDrawer } = useDrawer(code);
-  const [showManagerDrawer, { setTrue: openManagerDrawer, setFalse: closeManagerDrawer, toggle: ToggleManagerDrawer }] = useBoolean(false);
+  const [showManagerDrawer, { setTrue: openManagerDrawer, setFalse: closeManagerDrawer, toggle: ToggleManagerDrawer }] =
+    useBoolean(false);
 
   const { data: fund = {} } = useRequest(() => Services.Fund.GetFixFromEastMoney(code));
-  const { data: pingzhongdata = {} as Fund.PingzhongData | Record<string, any>, run: runGetFundDetailFromEastmoney } = useRequest(
-    () => Services.Fund.GetFundDetailFromEastmoney(code),
-    {
+  const { data: pingzhongdata = {} as Fund.PingzhongData | Record<string, any>, run: runGetFundDetailFromEastmoney } =
+    useRequest(() => Services.Fund.GetFundDetailFromEastmoney(code), {
       refreshDeps: [code],
       cacheKey: Utils.GenerateRequestKey('Fund.GetFundDetailFromEastmoney', code),
       staleTime: CONST.DEFAULT.SWR_STALE_DELAY,
-    }
-  );
+    });
   const { data: industryData = { stocks: [], expansion: '' }, run: runGetIndustryRateFromEaseMoney } = useRequest(
     () => Services.Fund.GetIndustryRateFromEaseMoney(code),
     {
@@ -124,7 +108,36 @@ export const DetailFund: React.FC<DetailFundProps> = (props) => {
 
   const rateInSimilarPersent = pingzhongdata.Data_rateInSimilarPersent || [];
   const syl_1n = pingzhongdata.syl_1n || pingzhongdata.syl_6y || pingzhongdata.syl_3y || pingzhongdata.syl_1y;
-  const industryTags = useMemo(() => Array.from(new Set(industryData.stocks.map((stock) => stock.INDEXNAME))), [industryData.stocks]);
+
+  // 超越比例
+  const beyond = (() => {
+    const beyondNum = rateInSimilarPersent[rateInSimilarPersent.length - 1]?.[1];
+    if (beyondNum !== undefined) {
+      return `≥ ${beyondNum}%`;
+    }
+  })();
+  // 连续
+  const continuous = (() => {
+    const continuousDay = getContinuous(
+      (pingzhongdata.Data_netWorthTrend || []).map(({ equityReturn }: any) => equityReturn)
+    );
+    if (continuousDay === undefined) {
+      return;
+    }
+    if (continuousDay > 0) {
+      return `连涨${continuousDay}天`;
+    }
+    if (continuousDay < 0) {
+      return `连跌${Math.abs(continuousDay)}天`;
+    }
+  })();
+
+  const industryTags = [
+    fundType,
+    beyond,
+    continuous,
+    ...Array.from(new Set(industryData.stocks.map((stock) => stock.INDEXNAME))),
+  ].filter(Utils.NotEmpty);
 
   return (
     <>
@@ -135,11 +148,6 @@ export const DetailFund: React.FC<DetailFundProps> = (props) => {
           </div>
           <div className={styles.subTitleRow}>
             <Rate allowHalf defaultValue={fundStar} disabled />
-            <div className={styles.labels}>
-              <TypeTag type={fundType} />
-              <ExceedTag value={rateInSimilarPersent[rateInSimilarPersent.length - 1]?.[1]} />
-              <ContinuousTag values={(pingzhongdata.Data_netWorthTrend || []).map(({ equityReturn }: any) => equityReturn)} />
-            </div>
           </div>
           <div className={styles.subTitleRow}>
             <div>
@@ -248,7 +256,9 @@ export const DetailFund: React.FC<DetailFundProps> = (props) => {
               {
                 key: String(2),
                 label: '周期回报',
-                children: <CycleReturn onFresh={runGetFundDetailFromEastmoney} data={pingzhongdata.Data_netWorthTrend} />,
+                children: (
+                  <CycleReturn onFresh={runGetFundDetailFromEastmoney} data={pingzhongdata.Data_netWorthTrend} />
+                ),
               },
               {
                 key: String(3),
