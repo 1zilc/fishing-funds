@@ -6,6 +6,7 @@ declare namespace System {
     customThemeColorSetting: string;
     conciseSetting: boolean; // 简洁模式
     lowKeySetting: boolean; // 低调模式
+    lowKeyDegreeSetting: number; // 低调程度
     baseFontSizeSetting: number; // 全局基础字体大小
     systemThemeSetting: import('@/utils/enums').SystemThemeType; // 系统主题
 

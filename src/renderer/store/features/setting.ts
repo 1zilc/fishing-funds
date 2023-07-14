@@ -27,6 +27,7 @@ export const defaultSystemSetting: System.Setting = {
   customThemeColorSetting: '',
   conciseSetting: false,
   lowKeySetting: false,
+  lowKeyDegreeSetting: 90,
   baseFontSizeSetting: 12,
   systemThemeSetting: Enums.SystemThemeType.Auto,
 

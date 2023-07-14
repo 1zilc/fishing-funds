@@ -100,6 +100,7 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
     customThemeColorSetting,
     conciseSetting,
     lowKeySetting,
+    lowKeyDegreeSetting,
     baseFontSizeSetting,
     systemThemeSetting,
     bottomTabsSetting,
@@ -131,6 +132,7 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
   const [customThemeColor, setCustomThemeColor] = useState(customThemeColorSetting);
   const [concise, setConcise] = useState(conciseSetting);
   const [lowKey, setLowKey] = useState(lowKeySetting);
+  const [lowKeyDegree, setLowKeyDegree] = useState(lowKeyDegreeSetting);
   const [baseFontSize, setBaseFontSize] = useState(baseFontSizeSetting);
   const [systemTheme, setSystemTheme] = useState(systemThemeSetting);
   // 底栏设置
@@ -177,6 +179,7 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
         customThemeColorSetting: customThemeColor || originPrimaryColor,
         conciseSetting: concise,
         lowKeySetting: lowKey,
+        lowKeyDegreeSetting: lowKeyDegree,
         baseFontSizeSetting: baseFontSize,
         systemThemeSetting: systemTheme,
         bottomTabsSetting: bottomTabs.map((tab) => ({ key: tab.key, name: tab.name, show: tab.show })),
@@ -237,6 +240,7 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
       config={{
         darkMode: systemTheme === Enums.SystemThemeType.Auto ? darkMode : darkModeEnable,
         lowKey,
+        lowKeyDegree,
         baseFontSize,
         primaryColor: themeColor,
       }}
@@ -329,6 +333,17 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
                       <section>
                         <label>低调模式：</label>
                         <Switch size="small" checked={lowKey} onChange={setLowKey} />
+                      </section>
+                      <section>
+                        <label>低调程度：</label>
+                        <Slider
+                          min={0}
+                          max={100}
+                          style={{ flex: 0.5 }}
+                          defaultValue={lowKeyDegree}
+                          onChange={setLowKeyDegree}
+                          step={1}
+                        />
                       </section>
                       <section>
                         <label>字体大小：</label>

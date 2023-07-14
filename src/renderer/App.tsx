@@ -64,6 +64,7 @@ const App: React.FC<Record<string, unknown>> = () => {
   const darkMode = useAppSelector((state) => state.setting.darkMode);
   const baseFontSizeSetting = useAppSelector((state) => state.setting.systemSetting.baseFontSizeSetting);
   const lowKeySetting = useAppSelector((state) => state.setting.systemSetting.lowKeySetting);
+  const lowKeyDegreeSetting = useAppSelector((state) => state.setting.systemSetting.lowKeyDegreeSetting);
   const { customThemeColorEnable, customThemeColorSetting, originPrimaryColor } = useThemeColor();
 
   return (
@@ -71,6 +72,7 @@ const App: React.FC<Record<string, unknown>> = () => {
       config={{
         darkMode,
         lowKey: lowKeySetting,
+        lowKeyDegree: lowKeyDegreeSetting,
         baseFontSize: baseFontSizeSetting,
         primaryColor: customThemeColorEnable ? customThemeColorSetting || originPrimaryColor : originPrimaryColor,
       }}
