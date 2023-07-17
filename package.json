@@ -168,7 +168,7 @@
     "ahooks": "^3.7.8",
     "antd": "^5.6.3",
     "cheerio": "1.0.0-rc.12",
-    "clsx": "^1.2.1",
+    "clsx": "^2.0.0",
     "color": "^4.2.3",
     "color-hash": "^2.0.2",
     "compare-versions": "^6.0.0",
