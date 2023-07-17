@@ -35,7 +35,7 @@ import isSameOrAfter from 'dayjs/plugin/isSameOrAfter';
 import { Provider } from 'react-redux';
 import chinaMap from '@/static/map/china.json';
 import store from '@/store';
-import App from '@/App';
+import App from '@/app';
 import * as Enhancement from '@/utils/enhancement';
 import 'electron-disable-file-drop';
 import 'dayjs/locale/zh-cn';

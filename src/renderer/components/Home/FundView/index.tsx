@@ -1,5 +1,4 @@
 import React, { useEffect, useMemo } from 'react';
-import { useWhyDidYouUpdate } from 'ahooks';
 import FundRow from '@/components/Home/FundView/FundRow';
 import Empty from '@/components/Empty';
 import LoadingBar from '@/components/LoadingBar';
