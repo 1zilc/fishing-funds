@@ -1,3 +1,5 @@
+import * as Utils from '@/utils';
+
 export function Add<T extends {}>(config: { key: keyof T; list: T[]; data: T }) {
   const { list, key, data } = config;
 
@@ -75,4 +77,12 @@ export function Replace<T>(config: { key: keyof T; list: T[]; data: string; cove
   });
 
   return list;
+}
+
+export function Deduplication<T extends {}>(config: { key: keyof T; list: T[] }) {
+  const { list, key } = config;
+
+  const codeMap = Utils.GetCodeMap(list, key);
+  // 去重复
+  return Object.entries(codeMap).map(([code, item]) => item);
 }
