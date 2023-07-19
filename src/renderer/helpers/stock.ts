@@ -52,8 +52,8 @@ export function CalcStock(stock: Stock.ResponseItem, codeMap: Stock.CodeMap) {
 export function CalcStocks(stocks: Stock.ResponseItem[] = [], codeMap: Stock.CodeMap) {
   const [zje, gszje, sygz, cysy, cbje] = stocks.reduce(
     ([a, b, c, d, e], stock) => {
-      const calcFundResult = CalcStock(stock, codeMap);
-      const { bjz, gsz, cysy, cbje } = calcFundResult; // 比较值（估算值 - 持有净值）
+      const calcStockResult = CalcStock(stock, codeMap);
+      const { bjz, gsz, cysy, cbje } = calcStockResult; // 比较值（估算值 - 持有净值）
       const cyfe = codeMap[stock.secid]?.cyfe || 0; // 持有份额
       const jrsygz = NP.times(cyfe, bjz); // 今日收益估值（持有份额 * 比较值）
       const gszz = NP.times(gsz, cyfe); // 估算总值 (持有份额 * 估算值)

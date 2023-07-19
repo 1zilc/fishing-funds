@@ -36,8 +36,8 @@ const Wallet: React.FC<WalletProps> = () => {
       wallets,
     });
     const displayZje = eyeStatus ? zje.toFixed(2) : Utils.Encrypt(zje.toFixed(2));
-    const displaySygz = eyeStatus ? Utils.Yang(sygz.toFixed(2)) : Utils.Encrypt(Utils.Yang(sygz.toFixed(2)));
-    const displayGssyl = eyeStatus ? Utils.Yang(gssyl.toFixed(2)) : Utils.Encrypt(Utils.Yang(gssyl.toFixed(2)));
+    const displaySygz = eyeStatus ? sygz.toFixed(2) : Utils.Encrypt(Utils.Yang(sygz.toFixed(2)));
+    const displayGssyl = eyeStatus ? gssyl.toFixed(2) : Utils.Encrypt(Utils.Yang(gssyl.toFixed(2)));
     return {
       displayZje,
       displaySygz,

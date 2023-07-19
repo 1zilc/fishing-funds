@@ -33,17 +33,16 @@ import {
   useLoadFixWalletsFunds,
   useLoadQuotations,
   useLoadZindexs,
-  useLoadStocks,
   useIpcRendererListener,
 } from '@/utils/hooks';
 import { walletIcons } from '@/helpers/wallet';
 import { encryptFF, decryptFF } from '@/utils/coding';
+import { useLoadFunds } from './utils';
 import * as Utils from '@/utils';
 import * as Adapters from '@/utils/adpters';
 import * as Helpers from '@/helpers';
 import * as Enums from '@/utils/enums';
 import * as Enhancement from '@/utils/enhancement';
-import { useFreshFunds, useLoadFunds } from './utils';
 
 const { dialog, ipcRenderer, clipboard, app } = window.contextModules.electron;
 const { saveString, readFile } = window.contextModules.io;

@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
 import { AsyncThunkConfig } from '@/store';
 import { sortFundsAction } from '@/store/features/fund';
+import { sortStocksAction } from '@/store/features/stock';
 import * as Utils from '@/utils';
 import * as Helpers from '@/helpers';
 
@@ -255,8 +256,8 @@ export const updateWalletStateAction = createAsyncThunk<
       cover: cloneState,
     });
 
-    cloneState.funds = cloneState.funds || [];
-    cloneState.stocks = cloneState.stocks || [];
+    cloneState.funds = cloneState.funds || walletState.funds || [];
+    cloneState.stocks = cloneState.stocks || walletState.stocks || [];
 
     if (!walletsStateCodeToMap[cloneState.code]) {
       cloneWallets.push(cloneState as Wallet.StateItem);
@@ -264,6 +265,7 @@ export const updateWalletStateAction = createAsyncThunk<
 
     dispatch(syncWalletsAction(cloneWallets));
     dispatch(sortFundsAction(cloneState.code));
+    dispatch(sortStocksAction(cloneState.code));
   } catch (error) {}
 });
 

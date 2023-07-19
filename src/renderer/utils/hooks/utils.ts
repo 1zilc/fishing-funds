@@ -526,7 +526,7 @@ export function useLoadWalletsStocks() {
     } catch (error) {}
   });
 
-  const fn = useTabsFreshFn(Enums.TabKeyType.Fund, load);
+  const fn = useTabsFreshFn(Enums.TabKeyType.Stock, load);
   return fn;
 }
 

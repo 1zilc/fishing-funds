@@ -27,9 +27,9 @@ export function CalcWallet(option: { wallets: Wallet.StateItem[]; walletConfig: 
   const { codeMap: stockConfigCodeMap } = Helpers.Stock.GetStockConfig(code, walletConfig);
   const calcFundResult = Helpers.Fund.CalcFunds(funds, fundConfigCodeMap);
   const calcStockResult = Helpers.Stock.CalcStocks(stocks, stockConfigCodeMap);
-  const zje = calcFundResult.zje + calcStockResult.zje;
-  const sygz = calcFundResult.sygz + calcStockResult.sygz;
-  const gszje = calcFundResult.gszje + calcStockResult.gszje;
+  const zje = NP.plus(calcFundResult.zje, calcStockResult.zje);
+  const sygz = NP.plus(calcFundResult.sygz, calcStockResult.sygz);
+  const gszje = NP.plus(calcFundResult.gszje, calcStockResult.gszje);
   const gssyl = zje ? NP.times(NP.divide(sygz, zje), 100) : 0;
 
   return {
