@@ -29,13 +29,20 @@ const Wallet: React.FC<WalletProps> = () => {
   const walletConfigCodeMap = useAppSelector((state) => state.wallet.config.codeMap);
   const currentWalletConfig = walletConfigCodeMap[currentWalletCode];
 
-  const { displayZje, displaySygz } = useMemo(() => {
-    const { zje, sygz } = Helpers.Wallet.CalcWallet({ code: currentWalletCode, walletConfig, wallets });
+  const calcResult = useMemo(() => {
+    const { zje, sygz, gssyl, ...reset } = Helpers.Wallet.CalcWallet({
+      code: currentWalletCode,
+      walletConfig,
+      wallets,
+    });
     const displayZje = eyeStatus ? zje.toFixed(2) : Utils.Encrypt(zje.toFixed(2));
     const displaySygz = eyeStatus ? Utils.Yang(sygz.toFixed(2)) : Utils.Encrypt(Utils.Yang(sygz.toFixed(2)));
+    const displayGssyl = eyeStatus ? Utils.Yang(gssyl.toFixed(2)) : Utils.Encrypt(Utils.Yang(gssyl.toFixed(2)));
     return {
       displayZje,
       displaySygz,
+      displayGssyl,
+      ...reset,
     };
   }, [wallets, eyeStatus, walletConfig, currentWalletCode]);
 
@@ -65,45 +72,47 @@ const Wallet: React.FC<WalletProps> = () => {
 
   return (
     <div className={clsx(styles.content, { [styles.miniMode]: miniMode })}>
-      <Dropdown
-        placement="bottomRight"
-        dropdownRender={() => (
-          <Menu
-            selectedKeys={[currentWalletCode]}
-            items={walletMenuItems}
-            onClick={({ key }) => {
-              if (key) {
-                onSelectWallet(key);
-              } else {
-                openAddWalletDrawer();
-              }
-            }}
-          />
-        )}
-      >
-        <div className={styles.walletIcon}>
-          <img src={walletIcons[currentWalletConfig.iconIndex || 0]} />
-        </div>
-      </Dropdown>
-      <div className={styles.info}>
-        <div className={styles.timeBar}>
-          <div className={styles.last}>刷新时间：{updateTime || '还没有刷新过哦~'}</div>
-        </div>
-        <div className={styles.moneyBar}>
-          <div>
-            <RiMoneyCnyCircleLine />
-            <span>持有金额：</span>
-            <span>{displayZje}</span>
+      <div className={styles.topBar}>
+        <Dropdown
+          placement="bottomRight"
+          dropdownRender={() => (
+            <Menu
+              selectedKeys={[currentWalletCode]}
+              items={walletMenuItems}
+              onClick={({ key }) => {
+                if (key) {
+                  onSelectWallet(key);
+                } else {
+                  openAddWalletDrawer();
+                }
+              }}
+            />
+          )}
+        >
+          <div className={styles.walletIcon}>
+            <img src={walletIcons[currentWalletConfig.iconIndex || 0]} />
           </div>
-          <i />
+        </Dropdown>
+        <div className={styles.timeBar}>刷新时间：{updateTime || '还没有刷新过哦~'}</div>
+        <Eye classNames={styles.eye} status={eyeStatus} onClick={onToggleEye} />
+      </div>
+      <div className={styles.numBar}>
+        <div className={clsx(styles.sygz, styles.zsygz, Utils.GetValueColor(calcResult.displaySygz).textClass)}>
+          ¥ {Utils.Yang(calcResult.displaySygz)}
+        </div>
+        <div className={styles.numIndex}>
           <div>
-            <RiMoneyCnyCircleLine />
-            <span>收益估值：</span>
-            <span>{displaySygz}</span>
+            {!miniMode && <label>今日收益率</label>}
+            <div className={clsx(Utils.GetValueColor(calcResult.displayGssyl).textClass)}>
+              {calcResult.displayGssyl}%
+            </div>
+          </div>
+          <div>
+            {!miniMode && <label>持有金额</label>}
+            <div>{calcResult.displayZje}</div>
           </div>
         </div>
       </div>
-      <Eye classNames={styles.eye} status={eyeStatus} onClick={onToggleEye} />
       <CustomDrawer show={showAddWalletDrawer}>
         <AddWalletContent onClose={closeAddWalletDrawer} onEnter={closeAddWalletDrawer} />
       </CustomDrawer>
