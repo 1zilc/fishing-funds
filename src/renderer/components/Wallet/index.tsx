@@ -96,23 +96,60 @@ const Wallet: React.FC<WalletProps> = () => {
         <div className={styles.timeBar}>刷新时间：{updateTime || '还没有刷新过哦~'}</div>
         <Eye classNames={styles.eye} status={eyeStatus} onClick={onToggleEye} />
       </div>
-      <div className={styles.numBar}>
-        <div className={clsx(styles.sygz, styles.zsygz, Utils.GetValueColor(calcResult.displaySygz).textClass)}>
-          {eyeStatus ? `¥ ${Utils.Yang(calcResult.displaySygz)}` : `${Utils.Yang(calcResult.displaySygz)}`}
-        </div>
-        <div className={styles.numIndex}>
-          <div>
-            {!miniMode && <label>今日收益率</label>}
-            <div className={clsx(Utils.GetValueColor(calcResult.displayGssyl).textClass)}>
-              {eyeStatus ? `${Utils.Yang(calcResult.displayGssyl)}%` : `${Utils.Yang(calcResult.displayGssyl)}`}
+      <Dropdown
+        placement="bottomCenter"
+        dropdownRender={() => (
+          <div className={styles.detailBar}>
+            <div>
+              <div className={styles.sygz}>
+                <div className={styles.tag}>基金:</div>
+                <div className={clsx(Utils.GetValueColor(calcResult.calcFundResult.sygz).textClass)}>
+                  {Utils.Yang(calcResult.calcFundResult.sygz.toFixed(2))}
+                </div>
+              </div>
+              <div className={styles.numIndex}>
+                <div className={clsx(Utils.GetValueColor(calcResult.calcFundResult.gssyl).textClass)}>
+                  {calcResult.calcFundResult.gssyl.toFixed(2)}%
+                </div>
+                <div>{calcResult.calcFundResult.zje.toFixed(2)}</div>
+              </div>
+            </div>
+            <div>
+              <div className={styles.sygz}>
+                <div className={styles.tag}>股票:</div>
+                <div className={clsx(Utils.GetValueColor(calcResult.calcStockResult.sygz).textClass)}>
+                  {Utils.Yang(calcResult.calcStockResult.sygz.toFixed(2))}
+                </div>
+              </div>
+              <div className={styles.numIndex}>
+                <div className={clsx(Utils.GetValueColor(calcResult.calcStockResult.gssyl).textClass)}>
+                  {calcResult.calcStockResult.gssyl.toFixed(2)}%
+                </div>
+                <div>{calcResult.calcStockResult.zje.toFixed(2)}</div>
+              </div>
             </div>
           </div>
-          <div>
-            {!miniMode && <label>持有金额</label>}
-            <div>{calcResult.displayZje}</div>
+        )}
+      >
+        <div className={styles.numBar}>
+          <div className={clsx(styles.sygz, styles.zsygz, Utils.GetValueColor(calcResult.displaySygz).textClass)}>
+            {eyeStatus ? `¥ ${Utils.Yang(calcResult.displaySygz)}` : `${Utils.Yang(calcResult.displaySygz)}`}
+          </div>
+          <div className={styles.numIndex}>
+            <div>
+              {!miniMode && <label>今日收益率</label>}
+              <div className={clsx(Utils.GetValueColor(calcResult.displayGssyl).textClass)}>
+                {eyeStatus ? `${Utils.Yang(calcResult.displayGssyl)}%` : `${Utils.Yang(calcResult.displayGssyl)}`}
+              </div>
+            </div>
+            <div>
+              {!miniMode && <label>持有金额</label>}
+              <div>{calcResult.displayZje}</div>
+            </div>
           </div>
         </div>
-      </div>
+      </Dropdown>
+
       <CustomDrawer show={showAddWalletDrawer}>
         <AddWalletContent onClose={closeAddWalletDrawer} onEnter={closeAddWalletDrawer} />
       </CustomDrawer>
