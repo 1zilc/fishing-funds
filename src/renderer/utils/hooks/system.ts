@@ -29,6 +29,7 @@ import {
   useLoadRemoteFunds,
   useLoadFundRatingMap,
   useLoadWalletsFunds,
+  useLoadWalletsStocks,
   useLoadFixWalletsFunds,
   useLoadQuotations,
   useLoadZindexs,
@@ -320,15 +321,12 @@ export function useBootStrap() {
   const runLoadRemoteCoins = useLoadRemoteCoins();
   const runLoadWalletsFunds = useLoadWalletsFunds();
   const runLoadFixWalletsFunds = useLoadFixWalletsFunds();
+  const runLoadWalletsStocks = useLoadWalletsStocks();
   const runLoadZindexs = useLoadZindexs({
     enableLoading: false,
     autoFilter: false,
   });
   const runLoadQuotations = useLoadQuotations({
-    enableLoading: false,
-    autoFilter: false,
-  });
-  const runLoadStocks = useLoadStocks({
     enableLoading: false,
     autoFilter: false,
   });
@@ -349,7 +347,8 @@ export function useBootStrap() {
     if (autoFreshSetting) {
       Adapters.ConCurrencyAllAdapter([
         () => Adapters.ChokeAllAdapter([runLoadWalletsFunds]),
-        () => Adapters.ChokeAllAdapter([runLoadZindexs, runLoadQuotations, runLoadStocks]),
+        () => Adapters.ChokeAllAdapter([runLoadWalletsStocks]),
+        () => Adapters.ChokeAllAdapter([runLoadZindexs, runLoadQuotations]),
       ]);
     }
   }, freshDelaySetting * 1000 * 60);
@@ -359,7 +358,7 @@ export function useBootStrap() {
     if (autoFreshSetting) {
       Adapters.ChokeAllAdapter([runLoadFixWalletsFunds]);
     }
-  }, 1000 * 60 * 5);
+  }, 1000 * 60 * 10);
 
   // 间隔时间刷新货币
   useInterval(() => {
@@ -373,7 +372,8 @@ export function useBootStrap() {
     Adapters.ConCurrencyAllAdapter([
       () => Adapters.ChokeAllAdapter([runLoadRemoteFunds, runLoadRemoteCoins, runLoadFundRatingMap]),
       () => Adapters.ChokeAllAdapter([runLoadWalletsFunds, runLoadFixWalletsFunds]),
-      () => Adapters.ChokeAllAdapter([runLoadZindexs, runLoadQuotations, runLoadStocks, runLoadCoins]),
+      () => Adapters.ChokeAllAdapter([runLoadWalletsStocks]),
+      () => Adapters.ChokeAllAdapter([runLoadZindexs, runLoadQuotations, runLoadCoins]),
     ]);
   }, []);
 }

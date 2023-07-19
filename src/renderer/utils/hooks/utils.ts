@@ -356,7 +356,7 @@ export function useLoadWalletsFunds() {
 
   const load = useMemoizedFn(async () => {
     // 优化多钱包同一支基金重复获取
-    const responseMap = {} as Record<string, PromiseInnerType<ReturnType<typeof Helpers.Fund.GetFunds>>[number]>;
+    const responseMap = {} as Record<string, Awaited<ReturnType<typeof Helpers.Fund.GetFunds>>[number]>;
     try {
       const collects = walletConfig.map(({ funds: fundsConfig, code: walletCode }) => async () => {
         const unRequestConfig = fundsConfig.filter(({ code }) => !responseMap[code]); // 未请求过的配置
@@ -497,6 +497,36 @@ export function useLoadStocks(config?: {
     }
   });
   const fn = useTabsFreshFn(Enums.TabKeyType.Stock, load);
+  return fn;
+}
+
+export function useLoadWalletsStocks() {
+  const dispatch = useAppDispatch();
+  const { walletConfig } = useAppSelector((state) => state.wallet.config);
+
+  const load = useMemoizedFn(async () => {
+    const responseMap = {} as Record<string, Awaited<ReturnType<typeof Helpers.Stock.GetStocks>>[number]>;
+    try {
+      const collects = walletConfig.map(({ stocks: stocksConfig, code: walletCode }) => async () => {
+        const unRequestConfig = stocksConfig.filter(({ secid }) => !responseMap[secid]); // 未请求过的配置
+        const responseStocks = await Helpers.Stock.GetStocks(unRequestConfig);
+        // 将请求的结果保存到map
+        responseStocks.forEach((response) => {
+          responseMap[response.secid!] = response;
+        });
+        // 用code去取已经获取到的结果
+        const finalResponseStocks = stocksConfig
+          .filter(({ secid }) => !!responseMap[secid])
+          .map(({ secid }) => responseMap[secid]);
+        const now = dayjs().format('MM-DD HH:mm:ss');
+        dispatch(updateWalletStateAction({ code: walletCode, stocks: finalResponseStocks, updateTime: now }));
+        return responseStocks;
+      });
+      await Adapters.ChokeAllAdapter(collects, CONST.DEFAULT.LOAD_WALLET_DELAY);
+    } catch (error) {}
+  });
+
+  const fn = useTabsFreshFn(Enums.TabKeyType.Fund, load);
   return fn;
 }
 
