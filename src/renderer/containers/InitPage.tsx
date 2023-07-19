@@ -16,7 +16,6 @@ import {
   changeCurrentWalletCodeAction,
   defaultWallet,
 } from '@/store/features/wallet';
-import { setStockConfigAction } from '@/store/features/stock';
 import { setCoinConfigAction, setRemoteCoinsAction } from '@/store/features/coin';
 import { syncSortModeAction, setViewModeAction, initialState as sortInitialState } from '@/store/features/sort';
 import { syncTabsActiveKeyAction } from '@/store/features/tabs';
@@ -48,7 +47,6 @@ async function checkLocalStorage() {
     }, {});
     await electronStore.cover('config', config);
     localStorage.clear();
-  } else {
   }
 }
 
@@ -74,6 +72,18 @@ async function checkRedundanceStorage() {
       electronStore.delete('config', key);
     }
   });
+}
+
+async function migrateStock(data: Wallet.SettingItem[]) {
+  // 8.0.0 将股票配置迁移到钱包
+  const allConfigStorage = await electronStore.all('config');
+  const stockConfig = allConfigStorage[CONST.STORAGE.STOCK_SETTING];
+  if (stockConfig) {
+    data[0]!.stocks = stockConfig;
+    await electronStore.set('config', CONST.STORAGE.WALLET_SETTING, data);
+    electronStore.delete('config', CONST.STORAGE.STOCK_SETTING);
+  }
+  return data;
 }
 
 const InitPage = () => {
@@ -106,7 +116,9 @@ const InitPage = () => {
     // web配置加载完成
     dispatch(setWebConfigAction(allConfigStorage[CONST.STORAGE.WEB_SETTING] || defaultWebConfig));
     // 钱包配置加载完成
-    dispatch(setWalletConfigAction(allConfigStorage[CONST.STORAGE.WALLET_SETTING] || [defaultWallet]));
+    dispatch(
+      setWalletConfigAction(await migrateStock(allConfigStorage[CONST.STORAGE.WALLET_SETTING] || [defaultWallet]))
+    );
     dispatch(changeCurrentWalletCodeAction(allConfigStorage[CONST.STORAGE.CURRENT_WALLET_CODE] || defaultWallet.code));
     // 翻译配置加载完成
     dispatch(syncTranslateSettingAction(allConfigStorage[CONST.STORAGE.TRANSLATE_SETTING] || defaultTranslateSetting));
