@@ -446,14 +446,10 @@ export function useMappingLocalToSystemSetting() {
 
 export function useTrayContent() {
   const trayContentSetting = useAppSelector((state) => state.setting.systemSetting.trayContentSetting);
-  const fundConfigCodeMap = useAppSelector((state) => state.wallet.fundConfigCodeMap);
-  const stockConfigCodeMap = useAppSelector((state) => state.wallet.stockConfigCodeMap);
   const walletConfig = useAppSelector((state) => state.wallet.config.walletConfig);
   const wallets = useAppSelector((state) => state.wallet.wallets);
   const currentWalletCode = useAppSelector((state) => state.wallet.currentWalletCode);
   const eyeStatus = useAppSelector((state) => state.wallet.eyeStatus);
-  const funds = useAppSelector((state) => state.wallet.currentWallet.funds);
-  const stocks = useAppSelector((state) => state.wallet.currentWallet.stocks);
 
   // 当前选中钱包
   const { sygz, gssyl } = Helpers.Wallet.CalcWallet({ code: currentWalletCode, walletConfig, wallets });
@@ -532,21 +528,6 @@ export function useUpdateContextMenuWalletsState() {
       dispatch(changeCurrentWalletCodeAction(code));
     } catch (error) {}
   });
-}
-
-export function useUpdateContextMenuStocksState() {
-  // const stocks = useAppSelector((state) => state.stock.stocks);
-  // const codeMap = useAppSelector((state) => state.stock.config.codeMap);
-  // useEffect(() => {
-  //   const calcResult = Helpers.Stock.CalcStocks(stocks, codeMap);
-  //   const value = `  ${Utils.Yang(calcResult.sygz.toFixed(2))}  ${Utils.Yang(calcResult.gssyl.toFixed(2))}%`;
-  //   ipcRenderer.invoke('update-tray-context-menu-stocks', [
-  //     {
-  //       label: `股票收益  ${value}`,
-  //       id: 'stock-income',
-  //     },
-  //   ]);
-  // }, [stocks, codeMap]);
 }
 
 export function useAllConfigBackup() {
