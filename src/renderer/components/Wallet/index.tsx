@@ -98,13 +98,13 @@ const Wallet: React.FC<WalletProps> = () => {
       </div>
       <div className={styles.numBar}>
         <div className={clsx(styles.sygz, styles.zsygz, Utils.GetValueColor(calcResult.displaySygz).textClass)}>
-          ¥ {Utils.Yang(calcResult.displaySygz)}
+          {eyeStatus ? `¥ ${Utils.Yang(calcResult.displaySygz)}` : `${Utils.Yang(calcResult.displaySygz)}`}
         </div>
         <div className={styles.numIndex}>
           <div>
             {!miniMode && <label>今日收益率</label>}
             <div className={clsx(Utils.GetValueColor(calcResult.displayGssyl).textClass)}>
-              {calcResult.displayGssyl}%
+              {eyeStatus ? `${Utils.Yang(calcResult.displayGssyl)}%` : `${Utils.Yang(calcResult.displayGssyl)}`}
             </div>
           </div>
           <div>
