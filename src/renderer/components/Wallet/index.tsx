@@ -97,7 +97,7 @@ const Wallet: React.FC<WalletProps> = () => {
         <Eye classNames={styles.eye} status={eyeStatus} onClick={onToggleEye} />
       </div>
       <Dropdown
-        placement="bottomCenter"
+        placement="bottom"
         dropdownRender={() => (
           <div className={styles.detailBar}>
             <div>
