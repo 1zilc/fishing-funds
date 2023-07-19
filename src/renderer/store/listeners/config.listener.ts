@@ -1,7 +1,6 @@
 import listenerMiddleware from '@/store/listeners';
 import { syncFavoriteQuotationMapAction } from '@/store/features/quotation';
 import { syncCoinsConfigAction } from '@/store/features/coin';
-import { syncStocksConfigAction } from '@/store/features/stock';
 import { syncSettingAction } from '@/store/features/setting';
 import { syncZindexesConfigAction } from '@/store/features/zindex';
 import { syncWebConfigAction } from '@/store/features/web';
@@ -29,12 +28,6 @@ const configListener = () => {
     actionCreator: syncSettingAction,
     effect: async (action) => {
       electronStore.set('config', CONST.STORAGE.SYSTEM_SETTING, action.payload);
-    },
-  });
-  listenerMiddleware.startListening({
-    actionCreator: syncStocksConfigAction,
-    effect: async (action) => {
-      electronStore.set('config', CONST.STORAGE.STOCK_SETTING, action.payload.stockConfig);
     },
   });
   listenerMiddleware.startListening({

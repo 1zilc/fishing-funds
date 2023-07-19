@@ -1,8 +1,16 @@
 import NP from 'number-precision';
+import { defaultWallet } from '@/store/features/wallet';
 import * as Adapter from '@/utils/adpters';
 import * as Services from '@/services';
 import * as Utils from '@/utils';
 import * as Enums from '@/utils/enums';
+
+export function GetStockConfig(walletCode: string, walletsConfig: Wallet.SettingItem[]) {
+  const walletConfig = walletsConfig.find(({ code }) => code === walletCode) || defaultWallet;
+  const stockConfig = walletConfig.stocks || [];
+  const codeMap = Utils.GetCodeMap(stockConfig, 'secid');
+  return { stockConfig, codeMap };
+}
 
 export function CalcStock(stock: Stock.ResponseItem, codeMap: Stock.CodeMap) {
   const config = codeMap[stock.secid];

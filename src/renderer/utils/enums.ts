@@ -151,8 +151,6 @@ export enum TrayContent {
   Syl,
   Zsy,
   Zsyl,
-  StockSy,
-  StockSyl,
 }
 export enum StockMarketType {
   AB = 1,

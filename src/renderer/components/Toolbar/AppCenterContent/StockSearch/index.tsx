@@ -37,7 +37,7 @@ export const stockTypesConfig = [
 const StockSearch: React.FC<StockSearchProps> = (props) => {
   const { groupList } = props;
   const dispatch = useAppDispatch();
-  const { codeMap } = useAppSelector((state) => state.stock.config);
+  const codeMap = useAppSelector((state) => state.wallet.stockConfigCodeMap);
 
   const {
     data: detailData,

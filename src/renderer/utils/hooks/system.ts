@@ -108,8 +108,6 @@ export function useRiskNotification() {
   const riskNotificationSetting = useAppSelector((state) => state.setting.systemSetting.riskNotificationSetting);
   const wallets = useAppSelector((state) => state.wallet.wallets);
   const walletsConfig = useAppSelector((state) => state.wallet.config.walletConfig);
-  const stocks = useAppSelector((state) => state.stock.stocks);
-  const stocksCodeMap = useAppSelector((state) => state.stock.config.codeMap);
   const zindexs = useAppSelector((state) => state.zindex.zindexs);
   const zindexsCodeMap = useAppSelector((state) => state.zindex.config.codeMap);
 
@@ -143,23 +141,30 @@ export function useRiskNotification() {
           });
         });
         // 股票提醒
-        stocks.forEach((stock) => {
-          // 涨跌范围提醒
-          checkZdfRange({
-            zdf: stock.zdf,
-            preset: stocksCodeMap[stock.secid!]?.zdfRange,
-            key: `${stock.secid}-zdfRange`,
-            content: `${stock.name} ${Utils.Yang(stock.zdf)}%`,
-          });
-          // 净值提醒
-          checkJzNotice({
-            dwjz: stock.zs,
-            gsz: stock.zx,
-            preset: stocksCodeMap[stock.secid!]?.jzNotice,
-            key: `${stock.secid}-jzNotice`,
-            content: `${stock.name} ${stock.zx}`,
+
+        wallets.forEach((wallet) => {
+          const { codeMap } = Helpers.Stock.GetStockConfig(wallet.code, walletsConfig);
+          const walletConfig = Helpers.Wallet.GetCurrentWalletConfig(wallet.code, walletsConfig);
+
+          wallet.stocks.forEach((stock) => {
+            // 涨跌范围提醒
+            checkZdfRange({
+              zdf: stock.zdf,
+              preset: codeMap[stock.secid!]?.zdfRange,
+              key: `${stock.secid}-zdfRange`,
+              content: `${walletConfig.name} ${stock.name} ${Utils.Yang(stock.zdf)}%`,
+            });
+            // 净值提醒
+            checkJzNotice({
+              dwjz: stock.zs,
+              gsz: stock.zx,
+              preset: codeMap[stock.secid!]?.jzNotice,
+              key: `${stock.secid}-jzNotice`,
+              content: `${walletConfig.name} ${stock.name} ${stock.zx}`,
+            });
           });
         });
+
         // 指数提醒
         zindexs.forEach((zindex) => {
           // 涨跌范围提醒
@@ -442,22 +447,27 @@ export function useMappingLocalToSystemSetting() {
 export function useTrayContent() {
   const trayContentSetting = useAppSelector((state) => state.setting.systemSetting.trayContentSetting);
   const fundConfigCodeMap = useAppSelector((state) => state.wallet.fundConfigCodeMap);
-  const walletsConfig = useAppSelector((state) => state.wallet.config.walletConfig);
+  const stockConfigCodeMap = useAppSelector((state) => state.wallet.stockConfigCodeMap);
+  const walletConfig = useAppSelector((state) => state.wallet.config.walletConfig);
   const wallets = useAppSelector((state) => state.wallet.wallets);
+  const currentWalletCode = useAppSelector((state) => state.wallet.currentWalletCode);
   const eyeStatus = useAppSelector((state) => state.wallet.eyeStatus);
   const funds = useAppSelector((state) => state.wallet.currentWallet.funds);
-  const stocks = useAppSelector((state) => state.stock.stocks);
-  const stockConfigCodeMap = useAppSelector((state) => state.stock.config.codeMap);
+  const stocks = useAppSelector((state) => state.wallet.currentWallet.stocks);
 
-  const calcResult = Helpers.Fund.CalcFunds(funds, fundConfigCodeMap);
-  const calcStockResult = Helpers.Stock.CalcStocks(stocks, stockConfigCodeMap);
+  // 当前选中钱包
+  const { sygz, gssyl } = Helpers.Wallet.CalcWallet({ code: currentWalletCode, walletConfig, wallets });
 
+  // 所有钱包
   const allCalcResult = (() => {
     const allResult = wallets.reduce(
-      (r, { code, funds }) => {
-        const { codeMap } = Helpers.Fund.GetFundConfig(code, walletsConfig);
-        const result = Helpers.Fund.CalcFunds(funds, codeMap);
-        return { zje: r.zje + result.zje, gszje: r.gszje + result.gszje };
+      (r, { code }) => {
+        const { zje, gszje } = Helpers.Wallet.CalcWallet({ code, walletConfig, wallets });
+
+        return {
+          zje: r.zje + zje,
+          gszje: r.gszje + gszje,
+        };
       },
       { zje: 0, gszje: 0 }
     );
@@ -471,17 +481,13 @@ export function useTrayContent() {
       .map((trayContentType: Enums.TrayContent) => {
         switch (trayContentType) {
           case Enums.TrayContent.Sy:
-            return `${Utils.Yang(calcResult.sygz.toFixed(2))}`;
+            return `${Utils.Yang(sygz.toFixed(2))}`;
           case Enums.TrayContent.Syl:
-            return `${Utils.Yang(calcResult.gssyl.toFixed(2))}%`;
+            return `${Utils.Yang(gssyl.toFixed(2))}%`;
           case Enums.TrayContent.Zsy:
             return `${Utils.Yang(allCalcResult.sygz.toFixed(2))}`;
           case Enums.TrayContent.Zsyl:
             return `${Utils.Yang(allCalcResult.gssyl.toFixed(2))}%`;
-          case Enums.TrayContent.StockSy:
-            return `${Utils.Yang(calcStockResult.sygz.toFixed(2))}`;
-          case Enums.TrayContent.StockSyl:
-            return `${Utils.Yang(calcStockResult.gssyl.toFixed(2))}%`;
           default:
             break;
         }
@@ -502,25 +508,24 @@ export function useUpdateContextMenuWalletsState() {
   const dispatch = useAppDispatch();
   const wallets = useAppSelector((state) => state.wallet.wallets);
   const currentWalletCode = useAppSelector((state) => state.wallet.currentWalletCode);
-  const walletsConfig = useAppSelector((state) => state.wallet.config.walletConfig);
+  const walletConfig = useAppSelector((state) => state.wallet.config.walletConfig);
 
   useEffect(() => {
     ipcRenderer.invoke(
       'update-tray-context-menu-wallets',
-      walletsConfig.map((walletConfig) => {
-        const { codeMap } = Helpers.Fund.GetFundConfig(walletConfig.code, walletsConfig);
-        const { funds } = Helpers.Wallet.GetCurrentWalletState(walletConfig.code, wallets);
-        const calcResult = Helpers.Fund.CalcFunds(funds, codeMap);
-        const value = `  ${Utils.Yang(calcResult.sygz.toFixed(2))}  ${Utils.Yang(calcResult.gssyl.toFixed(2))}%`;
+      walletConfig.map((config) => {
+        const { sygz, gssyl } = Helpers.Wallet.CalcWallet({ code: config.code, walletConfig, wallets });
+        const value = `  ${Utils.Yang(sygz.toFixed(2))}  ${Utils.Yang(gssyl.toFixed(2))}%`;
+
         return {
-          label: `${walletConfig.name}  ${value}`,
-          type: currentWalletCode === walletConfig.code ? 'radio' : 'normal',
-          dataURL: walletIcons[walletConfig.iconIndex],
-          id: walletConfig.code,
+          label: `${config.name}  ${value}`,
+          type: currentWalletCode === config.code ? 'radio' : 'normal',
+          dataURL: walletIcons[config.iconIndex],
+          id: config.code,
         };
       })
     );
-  }, [wallets, currentWalletCode, walletsConfig]);
+  }, [wallets, currentWalletCode, walletConfig]);
 
   useIpcRendererListener('change-current-wallet-code', (e, code) => {
     try {
@@ -530,20 +535,18 @@ export function useUpdateContextMenuWalletsState() {
 }
 
 export function useUpdateContextMenuStocksState() {
-  const stocks = useAppSelector((state) => state.stock.stocks);
-  const codeMap = useAppSelector((state) => state.stock.config.codeMap);
-
-  useEffect(() => {
-    const calcResult = Helpers.Stock.CalcStocks(stocks, codeMap);
-    const value = `  ${Utils.Yang(calcResult.sygz.toFixed(2))}  ${Utils.Yang(calcResult.gssyl.toFixed(2))}%`;
-
-    ipcRenderer.invoke('update-tray-context-menu-stocks', [
-      {
-        label: `股票收益  ${value}`,
-        id: 'stock-income',
-      },
-    ]);
-  }, [stocks, codeMap]);
+  // const stocks = useAppSelector((state) => state.stock.stocks);
+  // const codeMap = useAppSelector((state) => state.stock.config.codeMap);
+  // useEffect(() => {
+  //   const calcResult = Helpers.Stock.CalcStocks(stocks, codeMap);
+  //   const value = `  ${Utils.Yang(calcResult.sygz.toFixed(2))}  ${Utils.Yang(calcResult.gssyl.toFixed(2))}%`;
+  //   ipcRenderer.invoke('update-tray-context-menu-stocks', [
+  //     {
+  //       label: `股票收益  ${value}`,
+  //       id: 'stock-income',
+  //     },
+  //   ]);
+  // }, [stocks, codeMap]);
 }
 
 export function useAllConfigBackup() {

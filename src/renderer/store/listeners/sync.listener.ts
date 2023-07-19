@@ -3,7 +3,6 @@ import { ShareAction } from '@/store';
 import listenerMiddleware from '@/store/listeners';
 import { syncCoinsConfigAction } from '@/store/features/coin';
 import { syncFavoriteQuotationMapAction } from '@/store/features/quotation';
-import { syncStocksConfigAction } from '@/store/features/stock';
 import { saveSyncConfigAction } from '@/store/features/setting';
 import { changeCurrentWalletCodeAction, syncWalletsConfigAction } from '@/store/features/wallet';
 import { syncWebConfigAction } from '@/store/features/web';
@@ -17,7 +16,6 @@ const syncistener = () => {
       syncCoinsConfigAction,
       syncZindexesConfigAction,
       syncWebConfigAction,
-      syncStocksConfigAction,
       syncWalletsConfigAction,
       syncFavoriteQuotationMapAction,
       changeCurrentWalletCodeAction,

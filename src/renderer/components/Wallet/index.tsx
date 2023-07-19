@@ -20,24 +20,24 @@ export interface WalletProps {}
 const Wallet: React.FC<WalletProps> = () => {
   const dispatch = useAppDispatch();
   const { miniMode } = useHeaderContext();
-  const { show: showAddWalletDrawer, open: openAddWalletDrawer, close: closeAddWalletDrawer } = useDrawer('');
+
+  const updateTime = useAppSelector((state) => state.wallet.currentWallet.updateTime);
   const eyeStatus = useAppSelector((state) => state.wallet.eyeStatus);
-  const fundConfigCodeMap = useAppSelector((state) => state.wallet.fundConfigCodeMap);
-  const { walletConfig } = useAppSelector((state) => state.wallet.config);
+  const wallets = useAppSelector((state) => state.wallet.wallets);
+  const walletConfig = useAppSelector((state) => state.wallet.config.walletConfig);
   const currentWalletCode = useAppSelector((state) => state.wallet.currentWalletCode);
-  const { funds, updateTime } = useAppSelector((state) => state.wallet.currentWallet);
   const walletConfigCodeMap = useAppSelector((state) => state.wallet.config.codeMap);
   const currentWalletConfig = walletConfigCodeMap[currentWalletCode];
 
   const { displayZje, displaySygz } = useMemo(() => {
-    const { zje, sygz } = Helpers.Fund.CalcFunds(funds, fundConfigCodeMap);
+    const { zje, sygz } = Helpers.Wallet.CalcWallet({ code: currentWalletCode, walletConfig, wallets });
     const displayZje = eyeStatus ? zje.toFixed(2) : Utils.Encrypt(zje.toFixed(2));
     const displaySygz = eyeStatus ? Utils.Yang(sygz.toFixed(2)) : Utils.Encrypt(Utils.Yang(sygz.toFixed(2)));
     return {
       displayZje,
       displaySygz,
     };
-  }, [funds, eyeStatus, fundConfigCodeMap]);
+  }, [wallets, eyeStatus, walletConfig, currentWalletCode]);
 
   const walletMenuItems = useMemo(
     () =>
@@ -54,6 +54,8 @@ const Wallet: React.FC<WalletProps> = () => {
         }),
     [walletConfig]
   );
+
+  const { show: showAddWalletDrawer, open: openAddWalletDrawer, close: closeAddWalletDrawer } = useDrawer('');
 
   const onSelectWallet = useMemoizedFn((code: string) => {
     dispatch(changeCurrentWalletCodeAction(code));

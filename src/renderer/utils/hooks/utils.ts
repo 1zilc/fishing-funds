@@ -223,49 +223,6 @@ export function useSyncFixFundSetting() {
   return { done };
 }
 
-export function useSyncFixStockSetting() {
-  const dispatch = useAppDispatch();
-  const [done, { setTrue, setFalse }] = useBoolean(true);
-  const { stockConfig } = useAppSelector((state) => state.stock.config);
-  async function FixStockSetting(stockConfig: Stock.SettingItem[]) {
-    try {
-      const collectors = stockConfig.map(
-        ({ name, code, secid }) =>
-          () =>
-            Services.Stock.SearchFromEastmoney(name).then((searchResult) => {
-              searchResult?.forEach(({ Datas, Type }) => {
-                Datas.forEach(({ Code }) => {
-                  if (Code === code) {
-                    dispatch(
-                      updateStockAction({
-                        secid,
-                        type: Type,
-                      })
-                    );
-                  }
-                });
-              });
-              return searchResult;
-            })
-      );
-      await Adapters.ChokeAllAdapter(collectors, 100);
-    } catch (error) {
-    } finally {
-      setTrue();
-    }
-  }
-
-  useEffect(() => {
-    const unTypedStocks = stockConfig.filter(({ type }) => !type);
-    if (unTypedStocks.length) {
-      setFalse();
-      FixStockSetting(unTypedStocks);
-    }
-  }, [stockConfig]);
-
-  return { done };
-}
-
 export function useFreshAll() {
   const loadFunds = useLoadFunds({
     enableLoading: true,
@@ -527,13 +484,14 @@ export function useLoadStocks(config?: {
   autoFilter?: boolean; // 是否开启自动过滤配置
 }) {
   const dispatch = useAppDispatch();
-  const stockConfig = useAppSelector((state) => state.stock.config.stockConfig);
+  const currentWalletCode = useAppSelector((state) => state.wallet.currentWalletCode);
+  const stockConfig = useAppSelector((state) => state.wallet.stockConfig);
 
   const load = useMemoizedFn(async () => {
     try {
       dispatch(setStocksLoadingAction(!!config?.enableLoading));
       const responseStocks = await Helpers.Stock.GetStocks(stockConfig);
-      dispatch(sortStocksCachedAction(responseStocks));
+      dispatch(sortStocksCachedAction({ responseStocks, walletCode: currentWalletCode }));
     } finally {
       dispatch(setStocksLoadingAction(false));
     }

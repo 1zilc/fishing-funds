@@ -5,7 +5,8 @@ import { RiArrowDownSLine, RiArrowUpSLine, RiEditLine } from 'react-icons/ri';
 import Collapse from '@/components/Collapse';
 import ArrowLine from '@/components/ArrowLine';
 import MemoNote from '@/components/MemoNote';
-import { toggleStockCollapseAction, setIndustryMapAction } from '@/store/features/stock';
+import { setIndustryMapAction } from '@/store/features/stock';
+import { toggleStockCollapseAction } from '@/store/features/wallet';
 import { useResizeEchart, useRenderEcharts, useAppDispatch, useAppSelector } from '@/utils/hooks';
 import colorHash from '@/utils/colorHash';
 import * as Services from '@/services';
@@ -105,7 +106,7 @@ const StockRow: React.FC<RowProps> = React.memo((props) => {
   const conciseSetting = useAppSelector((state) => state.setting.systemSetting.conciseSetting);
   const industrys = useAppSelector((state) => state.stock.industryMap[stock.secid]) || [];
   const stockViewMode = useAppSelector((state) => state.sort.viewMode.stockViewMode);
-  const stockConfigCodeMap = useAppSelector((state) => state.stock.config.codeMap);
+  const stockConfigCodeMap = useAppSelector((state) => state.wallet.stockConfigCodeMap);
   const calcStockResult = Helpers.Stock.CalcStock(stock, stockConfigCodeMap);
 
   const stockConfig = stockConfigCodeMap[stock.secid];

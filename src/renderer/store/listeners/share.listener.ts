@@ -5,7 +5,6 @@ import { syncCoinsConfigAction, syncRemoteCoinsMapAction } from '@/store/feature
 import { syncFundRatingMapAction, syncRemoteFundsMapAction } from '@/store/features/fund';
 import { syncFavoriteQuotationMapAction } from '@/store/features/quotation';
 import { syncSettingAction } from '@/store/features/setting';
-import { syncStocksConfigAction } from '@/store/features/stock';
 import { changeCurrentWalletCodeAction, syncWalletsConfigAction } from '@/store/features/wallet';
 import { syncWebConfigAction } from '@/store/features/web';
 import { syncZindexesConfigAction } from '@/store/features/zindex';
@@ -18,7 +17,6 @@ const shareListener = () => {
       syncCoinsConfigAction,
       syncZindexesConfigAction,
       syncWebConfigAction,
-      syncStocksConfigAction,
       syncWalletsConfigAction,
       syncFundRatingMapAction,
       syncSettingAction,

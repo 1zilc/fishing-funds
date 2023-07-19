@@ -49,7 +49,8 @@ export function DeepCopy<T>(object: T): T {
 }
 
 export function Encrypt(s: string) {
-  return s.replace(/[+-]/g, '').replace(/[0-9]/g, '✱');
+  // return s.replace(/[+-]/g, '').replace(/[0-9]/g, '✱');
+  return '✱✱✱✱';
 }
 
 export async function Sleep<T>(time: number, F?: T): Promise<T | undefined> {

@@ -6,7 +6,7 @@ import LoadingBar from '@/components/LoadingBar';
 import CustomDrawer from '@/components/CustomDrawer';
 import GridView from '@/components/GridView';
 
-import { useDrawer, useSyncFixStockSetting, useAppSelector, useFreshStocks } from '@/utils/hooks';
+import { useDrawer, useAppSelector, useFreshStocks } from '@/utils/hooks';
 import * as Enums from '@/utils/enums';
 import styles from './index.module.scss';
 
@@ -18,11 +18,11 @@ interface StockListProps {
 }
 
 const StockView: React.FC<StockListProps> = (props) => {
-  const stocks = useAppSelector((state) => state.stock.stocks);
+  const stocks = useAppSelector((state) => state.wallet.currentWallet.stocks);
   const stocksLoading = useAppSelector((state) => state.stock.stocksLoading);
   const stockViewMode = useAppSelector((state) => state.sort.viewMode.stockViewMode);
 
-  const freshStocks = useFreshStocks(0);
+  const freshStocks = useFreshStocks();
 
   const {
     data: detailStockSecid,
@@ -57,8 +57,6 @@ const StockView: React.FC<StockListProps> = (props) => {
     }
   }, [list, stockViewMode]);
 
-  const { done: syncStockSettingDone } = useSyncFixStockSetting();
-
   function enterEditDrawer() {
     freshStocks();
     closeEditDrawer();
@@ -67,7 +65,7 @@ const StockView: React.FC<StockListProps> = (props) => {
   return (
     <div className={styles.container}>
       <LoadingBar show={stocksLoading} />
-      {list.length ? syncStockSettingDone ? view : <Empty text="正在同步股票设置~" /> : <Empty text="暂无股票数据~" />}
+      {list.length ? view : <Empty text="暂无股票数据~" />}
       <CustomDrawer show={showEditDrawer}>
         <EditStockContent onClose={closeEditDrawer} onEnter={enterEditDrawer} stock={editData} />
       </CustomDrawer>

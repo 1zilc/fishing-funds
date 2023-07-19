@@ -101,8 +101,6 @@ const InitPage = () => {
     dispatch(setZindexConfigAction(allConfigStorage[CONST.STORAGE.ZINDEX_SETTING] || defaultZindexConfig));
     // 关注板块配置加载完成
     dispatch(syncFavoriteQuotationMapAction(allConfigStorage[CONST.STORAGE.FAVORITE_QUOTATION_MAP] || {}));
-    // 股票配置加载完成
-    dispatch(setStockConfigAction(allConfigStorage[CONST.STORAGE.STOCK_SETTING] || []));
     // 货币配置加载完成
     dispatch(setCoinConfigAction(allConfigStorage[CONST.STORAGE.COIN_SETTING] || []));
     // web配置加载完成

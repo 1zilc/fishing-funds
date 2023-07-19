@@ -33,9 +33,8 @@ import {
 import CustomDrawer from '@/components/CustomDrawer';
 import { toggleAllZindexsCollapseAction } from '@/store/features/zindex';
 import { toggleAllQuotationsCollapseAction } from '@/store/features/quotation';
-import { toggleAllStocksCollapseAction } from '@/store/features/stock';
 import { toggleAllCoinsCollapseAction } from '@/store/features/coin';
-import { toggleAllFundsCollapseAction } from '@/store/features/wallet';
+import { toggleAllFundsCollapseAction, toggleAllStocksCollapseAction } from '@/store/features/wallet';
 import {
   useFreshFunds,
   useFreshZindexs,
@@ -76,7 +75,7 @@ function FundsSortBar() {
     fundViewMode: { type: fundViewType },
   } = useAppSelector((state) => state.sort.viewMode);
 
-  const { funds } = useAppSelector((state) => state.wallet.currentWallet);
+  const funds = useAppSelector((state) => state.wallet.currentWallet.funds);
 
   const { fundSortModeOptions, fundSortModeOptionsMap } = Helpers.Sort.GetSortConfig();
 
@@ -415,7 +414,7 @@ function StockSortBar() {
 
   const { stockSortModeOptions, stockSortModeOptionsMap } = Helpers.Sort.GetSortConfig();
 
-  const stocks = useAppSelector((state) => state.stock.stocks);
+  const stocks = useAppSelector((state) => state.wallet.currentWallet.stocks);
 
   const [showManageStockDrawer, { setTrue: openManageStockDrawer, setFalse: closeManageStockDrawer }] =
     useBoolean(false);

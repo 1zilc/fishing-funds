@@ -29,7 +29,7 @@ const RenderColorCol = ({ value }: { value: string }) => {
 
 const SelfRank: React.FC<PropsWithChildren<SelfRankProps>> = () => {
   const [dayType, setDayType] = useState(dayTypeList[0]);
-  const { codeMap } = useAppSelector((state) => state.stock.config);
+  const codeMap = useAppSelector((state) => state.wallet.stockConfigCodeMap);
 
   const { data: detailSecid, show: showDetailDrawer, set: setDetailDrawer, close: closeDetailDrawer } = useDrawer('');
 
@@ -84,7 +84,12 @@ const SelfRank: React.FC<PropsWithChildren<SelfRankProps>> = () => {
 
   return (
     <div className={styles.content}>
-      <TypeSelection types={dayTypeList} activeType={dayType.type} onSelected={setDayType} style={{ marginTop: 10, marginBottom: 10 }} />
+      <TypeSelection
+        types={dayTypeList}
+        activeType={dayType.type}
+        onSelected={setDayType}
+        style={{ marginTop: 10, marginBottom: 10 }}
+      />
       <Table
         rowKey="code"
         size="small"

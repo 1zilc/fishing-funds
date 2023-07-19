@@ -7,7 +7,7 @@ import * as Adapter from '@/utils/adpters';
 
 export function GetFundConfig(walletCode: string, walletsConfig: Wallet.SettingItem[]) {
   const walletConfig = walletsConfig.find(({ code }) => code === walletCode) || defaultWallet;
-  const fundConfig = walletConfig.funds;
+  const fundConfig = walletConfig.funds || [];
   const codeMap = Utils.GetCodeMap(fundConfig, 'code');
   return { fundConfig, codeMap };
 }

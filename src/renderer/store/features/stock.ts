@@ -1,22 +1,17 @@
+import dayjs from 'dayjs';
 import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
 import { AsyncThunkConfig } from '@/store';
+import { setWalletConfigAction, updateWalletStateAction, setWalletStateAction } from '@/store/features/wallet';
 import * as Utils from '@/utils';
 import * as Helpers from '@/helpers';
 
 export interface StockState {
-  stocks: (Stock.ResponseItem & Stock.ExtraRow)[];
   stocksLoading: boolean;
-  config: {
-    stockConfig: Stock.SettingItem[];
-    codeMap: Stock.CodeMap; // secid做key
-  };
   industryMap: Record<string, Stock.IndustryItem[]>;
 }
 
 const initialState: StockState = {
-  stocks: [],
   stocksLoading: false,
-  config: { stockConfig: [], codeMap: {} },
   industryMap: {},
 };
 
@@ -27,51 +22,20 @@ const stockSlice = createSlice({
     setStocksLoadingAction(state, { payload }: PayloadAction<boolean>) {
       state.stocksLoading = payload;
     },
-    filterStocksAction(state) {
-      state.stocks = state.stocks.filter(({ secid }) => state.config.codeMap[secid]);
-    },
-    syncStocksStateAction(state, { payload }: PayloadAction<StockState['stocks']>) {
-      state.stocks = payload;
-    },
-    syncStocksConfigAction(state, { payload }: PayloadAction<StockState['config']>) {
-      state.config = payload;
-    },
-    toggleStockCollapseAction(state, { payload }: PayloadAction<StockState['stocks'][number]>) {
-      Helpers.Base.Collapse({
-        list: state.stocks,
-        key: 'secid',
-        data: payload,
-      });
-    },
-    toggleAllStocksCollapseAction(state) {
-      Helpers.Base.CollapseAll({
-        list: state.stocks,
-      });
-    },
     setIndustryMapAction(state, { payload }: PayloadAction<{ industrys: Stock.IndustryItem[]; secid: string }>) {
       state.industryMap = { ...state.industryMap, [payload.secid]: payload.industrys };
     },
   },
 });
 
-export const {
-  setStocksLoadingAction,
-  filterStocksAction,
-  syncStocksStateAction,
-  syncStocksConfigAction,
-  setIndustryMapAction,
-  toggleStockCollapseAction,
-  toggleAllStocksCollapseAction,
-} = stockSlice.actions;
+export const { setStocksLoadingAction, setIndustryMapAction } = stockSlice.actions;
 
 export const addStockAction = createAsyncThunk<void, Stock.SettingItem, AsyncThunkConfig>(
   'stock/addStockAction',
   (stock, { dispatch, getState }) => {
     try {
       const {
-        stock: {
-          config: { stockConfig },
-        },
+        wallet: { currentWalletCode, stockConfig },
       } = getState();
 
       const config = Helpers.Base.Add({
@@ -80,7 +44,7 @@ export const addStockAction = createAsyncThunk<void, Stock.SettingItem, AsyncThu
         data: stock,
       });
 
-      dispatch(setStockConfigAction(config));
+      dispatch(setStockConfigAction({ config, walletCode: currentWalletCode }));
     } catch (error) {}
   }
 );
@@ -94,9 +58,7 @@ export const updateStockAction = createAsyncThunk<
 >('stock/updateStockAction', (stock, { dispatch, getState }) => {
   try {
     const {
-      stock: {
-        config: { stockConfig },
-      },
+      wallet: { currentWalletCode, stockConfig },
     } = getState();
 
     const config = Helpers.Base.Update({
@@ -105,7 +67,7 @@ export const updateStockAction = createAsyncThunk<
       data: stock,
     });
 
-    dispatch(setStockConfigAction(config));
+    dispatch(setStockConfigAction({ config, walletCode: currentWalletCode }));
   } catch (error) {}
 });
 
@@ -114,9 +76,7 @@ export const deleteStockAction = createAsyncThunk<void, string, AsyncThunkConfig
   (secid, { dispatch, getState }) => {
     try {
       const {
-        stock: {
-          config: { stockConfig },
-        },
+        wallet: { currentWalletCode, stockConfig },
       } = getState();
 
       const config = Helpers.Base.Delete({
@@ -125,19 +85,19 @@ export const deleteStockAction = createAsyncThunk<void, string, AsyncThunkConfig
         data: secid,
       });
 
-      dispatch(setStockConfigAction(config));
+      dispatch(setStockConfigAction({ config, walletCode: currentWalletCode }));
     } catch (error) {}
   }
 );
 
-export const sortStocksAction = createAsyncThunk<void, StockState['stocks'] | undefined, AsyncThunkConfig>(
+export const sortStocksAction = createAsyncThunk<void, string, AsyncThunkConfig>(
   'stock/sortStocksAction',
-  (list, { dispatch, getState }) => {
+  (walletCode, { dispatch, getState }) => {
     try {
       const {
-        stock: {
-          stocks,
-          config: { codeMap },
+        wallet: {
+          wallets,
+          config: { walletConfig },
         },
         sort: {
           sortMode: {
@@ -146,52 +106,72 @@ export const sortStocksAction = createAsyncThunk<void, StockState['stocks'] | un
         },
       } = getState();
 
+      const { stocks, updateTime, code } = Helpers.Wallet.GetCurrentWalletState(walletCode, wallets);
+      const { codeMap } = Helpers.Stock.GetStockConfig(walletCode, walletConfig);
+
       const sortList = Helpers.Stock.SortStock({
         codeMap,
-        list: list || stocks,
+        list: stocks,
         sortType: type,
         orderType: order,
       });
 
-      dispatch(syncStocksStateAction(sortList));
+      dispatch(setWalletStateAction({ code, stocks: sortList, updateTime }));
     } catch (error) {}
   }
 );
 
-export const sortStocksCachedAction = createAsyncThunk<void, Stock.ResponseItem[], AsyncThunkConfig>(
-  'stock/sortStocksCachedAction',
-  (responseStocks, { getState, dispatch }) => {
-    try {
-      const {
-        stock: {
-          stocks,
-          config: { stockConfig },
-        },
-      } = getState();
+export const sortStocksCachedAction = createAsyncThunk<
+  void,
+  { responseStocks: Stock.ResponseItem[]; walletCode: string },
+  AsyncThunkConfig
+>('stock/sortStocksCachedAction', ({ responseStocks, walletCode }, { getState, dispatch }) => {
+  try {
+    const {
+      wallet: {
+        config: { walletConfig },
+        wallets,
+      },
+    } = getState();
 
-      const stocksWithChached = Utils.MergeStateWithResponse({
-        config: stockConfig,
-        configKey: 'secid',
-        stateKey: 'secid',
-        state: stocks,
-        response: responseStocks,
-      });
+    const { stockConfig } = Helpers.Stock.GetStockConfig(walletCode, walletConfig);
+    const { stocks } = Helpers.Wallet.GetCurrentWalletState(walletCode, wallets);
+    const now = dayjs().format('MM-DD HH:mm:ss');
 
-      dispatch(sortStocksAction(stocksWithChached));
-    } catch (error) {}
-  }
-);
+    const stocksWithChached = Utils.MergeStateWithResponse({
+      config: stockConfig,
+      configKey: 'secid',
+      stateKey: 'secid',
+      state: stocks,
+      response: responseStocks,
+    });
 
-export const setStockConfigAction = createAsyncThunk<void, Stock.SettingItem[], AsyncThunkConfig>(
-  'stock/setStockConfigAction',
-  (stockConfig, { dispatch }) => {
-    try {
-      const codeMap = Utils.GetCodeMap(stockConfig, 'secid');
-      dispatch(syncStocksConfigAction({ stockConfig, codeMap }));
+    dispatch(setWalletStateAction({ code: walletCode, stocks: stocksWithChached, updateTime: now }));
+    dispatch(sortStocksAction(walletCode));
+  } catch (error) {}
+});
 
-      dispatch(filterStocksAction());
-    } catch (error) {}
-  }
-);
+export const setStockConfigAction = createAsyncThunk<
+  void,
+  { config: Stock.SettingItem[]; walletCode: string },
+  AsyncThunkConfig
+>('stock/setStockConfigAction', ({ config, walletCode }, { dispatch, getState }) => {
+  try {
+    const {
+      wallet: {
+        config: { walletConfig },
+        currentWallet,
+      },
+    } = getState();
+
+    const newWalletConfig = walletConfig.map((item) => ({
+      ...item,
+      stocks: walletCode === item.code ? config : item.stocks,
+    }));
+
+    dispatch(setWalletConfigAction(newWalletConfig));
+    dispatch(updateWalletStateAction(currentWallet));
+  } catch (error) {}
+});
 
 export default stockSlice.reducer;

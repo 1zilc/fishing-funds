@@ -29,9 +29,12 @@ const { dialog } = window.contextModules.electron;
 const Optional: React.FC<OptionalProps> = () => {
   const dispatch = useAppDispatch();
   const sortableRef = useAutoDestroySortableRef();
-  const { codeMap, stockConfig } = useAppSelector((state) => state.stock.config);
-  const { show: showAddDrawer, set: setAddDrawer, close: closeAddDrawer } = useDrawer(null);
+  const currentWalletCode = useAppSelector((state) => state.wallet.currentWalletCode);
+  const stockConfig = useAppSelector((state) => state.wallet.stockConfig);
+  const codeMap = useAppSelector((state) => state.wallet.stockConfigCodeMap);
   const sortStockConfig = useMemo(() => stockConfig.map((_) => ({ ..._, id: _.secid })), [stockConfig]);
+
+  const { show: showAddDrawer, set: setAddDrawer, close: closeAddDrawer } = useDrawer(null);
 
   const {
     data: editData,
@@ -44,7 +47,7 @@ const Optional: React.FC<OptionalProps> = () => {
     const hasChanged = Utils.CheckListOrderHasChanged(stockConfig, sortList, 'secid');
     if (hasChanged) {
       const sortConfig = sortList.map((item) => codeMap[item.secid]);
-      dispatch(setStockConfigAction(sortConfig));
+      dispatch(setStockConfigAction({ config: sortConfig, walletCode: currentWalletCode }));
     }
   }
 

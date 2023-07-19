@@ -35,10 +35,12 @@ const { dialog, clipboard } = window.contextModules.electron;
 const Optional: React.FC<OptionalProps> = () => {
   const dispatch = useAppDispatch();
   const sortableRef = useAutoDestroySortableRef();
-  const { show: showAddDrawer, set: setAddDrawer, close: closeAddDrawer } = useDrawer(null);
   const currentWalletCode = useAppSelector((state) => state.wallet.currentWalletCode);
   const fundConfig = useAppSelector((state) => state.wallet.fundConfig);
   const codeMap = useAppSelector((state) => state.wallet.fundConfigCodeMap);
+  const sortFundConfig = useMemo(() => fundConfig.map((_) => ({ ..._, id: _.code })), [fundConfig]);
+
+  const { show: showAddDrawer, set: setAddDrawer, close: closeAddDrawer } = useDrawer(null);
 
   const {
     data: editData,
@@ -46,8 +48,6 @@ const Optional: React.FC<OptionalProps> = () => {
     set: setEditDrawer,
     close: closeEditDrawer,
   } = useDrawer({} as Fund.SettingItem);
-
-  const sortFundConfig = useMemo(() => fundConfig.map((_) => ({ ..._, id: _.code })), [fundConfig]);
 
   const { done: syncFundSettingDone } = useSyncFixFundSetting();
 

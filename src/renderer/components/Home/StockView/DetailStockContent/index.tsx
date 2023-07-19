@@ -39,7 +39,7 @@ const { ipcRenderer } = window.contextModules.electron;
 export const DetailStock: React.FC<DetailStockProps> = (props) => {
   const { secid, type } = props;
   const dispatch = useAppDispatch();
-  const { codeMap } = useAppSelector((state) => state.stock.config);
+  const codeMap = useAppSelector((state) => state.wallet.stockConfigCodeMap);
 
   const { data: stock = {} as any } = useRequest(Services.Stock.GetDetailFromEastmoney, {
     pollingInterval: 1000 * 60,

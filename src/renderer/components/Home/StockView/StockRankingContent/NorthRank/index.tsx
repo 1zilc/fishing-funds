@@ -27,7 +27,6 @@ const dayTypeList = [
 
 const NorthRank: React.FC<PropsWithChildren<NorthRankProps>> = () => {
   const [dayType, setDayType] = useState(dayTypeList[0]);
-  const { codeMap, stockConfig } = useAppSelector((state) => state.stock.config);
   const { data: addName, show: showAddDrawer, set: setAddDrawer, close: closeAddDrawer } = useDrawer('');
 
   const columns = [
@@ -67,7 +66,12 @@ const NorthRank: React.FC<PropsWithChildren<NorthRankProps>> = () => {
 
   return (
     <div className={styles.content}>
-      <TypeSelection types={dayTypeList} activeType={dayType.type} onSelected={setDayType} style={{ marginTop: 10, marginBottom: 10 }} />
+      <TypeSelection
+        types={dayTypeList}
+        activeType={dayType.type}
+        onSelected={setDayType}
+        style={{ marginTop: 10, marginBottom: 10 }}
+      />
       <Table
         rowKey="code"
         size="small"
