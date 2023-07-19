@@ -64,6 +64,7 @@
   font-size: 22px;
   font-weight: 500;
   transition: all 0.2s;
+  white-space: nowrap;
 }
 .numIndex {
   width: 60%;
@@ -72,6 +73,7 @@
   display: flex;
   font-size: 10px;
   padding-left: 10px;
+  box-sizing: border-box;
   label {
     color: var(--secondary-main-text-color);
   }
