@@ -316,12 +316,12 @@ function main() {
       }
     }
     hideDockIcon();
-  });
 
-  // 打开开发者工具
-  if (!app.isPackaged) {
-    mb.window?.webContents.openDevTools({ mode: 'undocked' });
-  }
+    // 打开开发者工具
+    if (!app.isPackaged) {
+      mb.window?.webContents.openDevTools({ mode: 'undocked' });
+    }
+  });
 
   // new AppUpdater({ icon: nativeIcon, win: mb.window });
 }

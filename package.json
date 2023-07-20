@@ -8,6 +8,7 @@
     "postinstall": "electron-builder install-app-deps",
     "dev": "electron-vite dev",
     "build": "electron-vite build",
+    "preview": "electron-vite preview",
     "build:icon": "electron-icon-builder --input=./assets/icon.png --output=./icon-build",
     "package": "npm run build && electron-builder build -p never",
     "package-mac": "npm run build && electron-builder build -m -p never",
