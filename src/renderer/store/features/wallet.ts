@@ -249,6 +249,9 @@ export const updateWalletStateAction = createAsyncThunk<
       });
     }
 
+    cloneState.funds = cloneState.funds || walletState.funds || [];
+    cloneState.stocks = cloneState.stocks || walletState.stocks || [];
+
     Helpers.Base.Replace({
       list: cloneWallets,
       key: 'code',
@@ -256,16 +259,18 @@ export const updateWalletStateAction = createAsyncThunk<
       cover: cloneState,
     });
 
-    cloneState.funds = cloneState.funds || walletState.funds || [];
-    cloneState.stocks = cloneState.stocks || walletState.stocks || [];
-
     if (!walletsStateCodeToMap[cloneState.code]) {
       cloneWallets.push(cloneState as Wallet.StateItem);
     }
 
     dispatch(syncWalletsAction(cloneWallets));
-    dispatch(sortFundsAction(cloneState.code));
-    dispatch(sortStocksAction(cloneState.code));
+
+    if (state.funds) {
+      dispatch(sortFundsAction(cloneState.code));
+    }
+    if (state.stocks) {
+      dispatch(sortStocksAction(cloneState.code));
+    }
   } catch (error) {}
 });
 
