@@ -25,7 +25,7 @@ export interface ManagerDetail {
 }
 
 const FundManagerContent: React.FC<FundManagerContentProps> = (props) => {
-  const { manager } = props;
+  const { manager = {} as Fund.Manager.Info } = props;
   const ref = useRef(null);
   const position = useScroll(ref, (val) => val.top <= 520);
   const miniMode = position && position.top > 40;
@@ -37,6 +37,7 @@ const FundManagerContent: React.FC<FundManagerContentProps> = (props) => {
     },
   } = useRequest(Services.Fund.GetFundManagerDetailFromEastMoney, {
     defaultParams: [manager.id],
+    ready: !!manager.id,
   });
 
   return (
