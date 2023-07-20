@@ -101,10 +101,22 @@ const walletSlice = createSlice({
         key: 'fundcode',
         data: payload,
       });
+      Helpers.Base.Replace({
+        list: state.wallets,
+        key: 'code',
+        data: state.currentWalletCode,
+        cover: state.currentWallet,
+      });
     },
     toggleAllFundsCollapseAction(state) {
       Helpers.Base.CollapseAll({
         list: state.currentWallet.funds,
+      });
+      Helpers.Base.Replace({
+        list: state.wallets,
+        key: 'code',
+        data: state.currentWalletCode,
+        cover: state.currentWallet,
       });
     },
     toggleStockCollapseAction(state, { payload }: PayloadAction<WalletState['currentWallet']['stocks'][number]>) {
@@ -113,10 +125,22 @@ const walletSlice = createSlice({
         key: 'secid',
         data: payload,
       });
+      Helpers.Base.Replace({
+        list: state.wallets,
+        key: 'code',
+        data: state.currentWalletCode,
+        cover: state.currentWallet,
+      });
     },
     toggleAllStocksCollapseAction(state) {
       Helpers.Base.CollapseAll({
         list: state.currentWallet.stocks,
+      });
+      Helpers.Base.Replace({
+        list: state.wallets,
+        key: 'code',
+        data: state.currentWalletCode,
+        cover: state.currentWallet,
       });
     },
   },
@@ -284,10 +308,13 @@ export const setWalletStateAction = createAsyncThunk<
       wallet: { wallets },
     } = getState();
 
+    const currentWallet = Helpers.Wallet.GetCurrentWalletState(state.code, wallets);
+    const mergedWallet = Helpers.Base.Merge({ data: Utils.DeepCopy(currentWallet), overide: state });
+
     const config = Helpers.Base.Update({
       list: Utils.DeepCopy(wallets),
       key: 'code',
-      data: state,
+      data: mergedWallet,
     });
 
     dispatch(syncWalletsAction(config));

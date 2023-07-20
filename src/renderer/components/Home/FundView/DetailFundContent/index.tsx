@@ -87,8 +87,7 @@ export const DetailFund: React.FC<DetailFundProps> = (props) => {
   const { star: fundStar, type: fundType } = useFundRating(code);
   const codeMap = useAppSelector((state) => state.wallet.fundConfigCodeMap);
   const { data: addCode, show: showAddDrawer, set: setAddDrawer, close: closeAddDrawer } = useDrawer(code);
-  const [showManagerDrawer, { setTrue: openManagerDrawer, setFalse: closeManagerDrawer, toggle: ToggleManagerDrawer }] =
-    useBoolean(false);
+  const [showManagerDrawer, { setTrue: openManagerDrawer, setFalse: closeManagerDrawer }] = useBoolean(false);
 
   const { data: fund = {} } = useRequest(() => Services.Fund.GetFixFromEastMoney(code));
   const { data: pingzhongdata = {} as Fund.PingzhongData | Record<string, any>, run: runGetFundDetailFromEastmoney } =
