@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { Tabs, Input, Switch } from 'antd';
 import clsx from 'clsx';
-import OpenAIIcon from '@/static/icon/openai.svg';
-import SettingIcon from '@/static/icon/setting.svg';
+import { RiOpenaiFill, RiSettingsLine } from 'react-icons/ri';
 import WebAppIcon from '@/components/Toolbar/AppCenterContent/WebAppIcon';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
 import StandCard from '@/components/Card/StandCard';
@@ -42,7 +41,7 @@ const ChatGPTSettingContent: React.FC<ChatGPTSettingContentProps> = (props) => {
     <CustomDrawerContent title={appName} enterText="保存" onClose={props.onClose} onEnter={onSave}>
       <div className={styles.content}>
         <PureCard className={clsx(styles.logoContent, 'card-body')}>
-          <WebAppIcon title={appName} iconType={Enums.WebIconType.Svg} svg={<OpenAIIcon />} color="#80A89C" />
+          <WebAppIcon title={appName} iconType={Enums.WebIconType.Svg} svg={<RiOpenaiFill />} color="#80A89C" />
         </PureCard>
         <div className={styles.container}>
           <Tabs
@@ -55,7 +54,7 @@ const ChatGPTSettingContent: React.FC<ChatGPTSettingContentProps> = (props) => {
                 children: (
                   <>
                     <StandCard
-                      icon={<SettingIcon />}
+                      icon={<RiSettingsLine />}
                       title="基础设置"
                       extra={
                         <div className={styles.guide}>

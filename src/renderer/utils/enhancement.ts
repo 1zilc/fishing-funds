@@ -2,10 +2,10 @@
  *  该文件对window.contextModules的模块进行二次封装
  */
 import log from 'electron-log/renderer';
+import { encodeFF, decodeFF, encryptFF, decryptFF } from '@/utils/coding';
 import * as Enums from '@/utils/enums';
 const { ipcRenderer, app } = window.contextModules.electron;
 const { saveString, readFile } = window.contextModules.io;
-const { encodeFF, decodeFF, encryptFF, decryptFF } = window.contextModules.coding;
 const electronStore = window.contextModules.electronStore;
 const { production } = window.contextModules.process;
 
@@ -58,9 +58,9 @@ export async function SaveSyncConfig(path: string, config: Backup.Config) {
   await saveString(path, encodeSyncConfig);
 }
 
-export async function loadSyncConfig(path: string) {
+export async function loadSyncConfig<T = unknown>(path: string) {
   const encodeSyncConfig = await readFile(path);
   const syncConfig: Backup.Config = await decryptFF(encodeSyncConfig);
-  const content = await decodeFF(syncConfig.content);
+  const content = await decodeFF<T>(syncConfig.content);
   return content;
 }

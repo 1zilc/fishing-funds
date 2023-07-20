@@ -1,9 +1,31 @@
 import React, { useState, startTransition } from 'react';
 import clsx from 'clsx';
-import { InputNumber, Radio, Badge, Switch, Slider, TimePicker, Input, Tabs, Select, Checkbox, Button, ColorPicker } from 'antd';
+import {
+  InputNumber,
+  Radio,
+  Badge,
+  Switch,
+  Slider,
+  TimePicker,
+  Input,
+  Tabs,
+  Select,
+  Checkbox,
+  Button,
+  ColorPicker,
+} from 'antd';
 import dayjs from 'dayjs';
 import { ReactSortable } from 'react-sortablejs';
-
+import {
+  RiSettingsLine,
+  RiLineChartLine,
+  RiTShirtLine,
+  RiNotificationBadgeLine,
+  RiBitCoinLine,
+  RiInboxLine,
+  RiGlobalLine,
+  RiFolderSettingsLine,
+} from 'react-icons/ri';
 import PureCard from '@/components/Card/PureCard';
 import StandCard from '@/components/Card/StandCard';
 import Logo from '@/components/Logo';
@@ -12,16 +34,14 @@ import Guide from '@/components/Guide';
 import Log from '@/components/Toolbar/SettingContent/Log';
 import ThemeProvider from '@/components/ThemeProvider';
 import More from '@/components/Toolbar/SettingContent/More';
-import SettingIcon from '@/static/icon/setting.svg';
-import LineCharIcon from '@/static/icon/line-chart.svg';
-import TShirtIcon from '@/static/icon/t-shirt.svg';
-import NotificationIcon from '@/static/icon/notification.svg';
-import BitCoinIcon from '@/static/icon/bit-coin.svg';
-import GlobalIcon from '@/static/icon/global.svg';
-import InboxIcon from '@/static/icon/inbox.svg';
-import FolderSettingsIcon from '@/static/icon/folder-settings.svg';
 import { setSystemSettingAction, defaultSystemSetting } from '@/store/features/setting';
-import { useAppDispatch, useAppSelector, useAutoDestroySortableRef, useInputShortcut, useThemeColor } from '@/utils/hooks';
+import {
+  useAppDispatch,
+  useAppSelector,
+  useAutoDestroySortableRef,
+  useInputShortcut,
+  useThemeColor,
+} from '@/utils/hooks';
 import * as Enums from '@/utils/enums';
 import styles from './index.module.scss';
 
@@ -56,29 +76,20 @@ export const APIOptions = [
     code: Enums.FundApiType.Tencent,
     recommond: '★★★★☆',
   },
-  {
-    name: '新浪基金',
-    code: Enums.FundApiType.Sina,
-    recommond: '★★★★☆',
-  },
-  {
-    name: '基金速查网',
-    code: Enums.FundApiType.Dayfund,
-    recommond: '★★★☆☆',
-  },
-  {
-    name: '好买基金',
-    code: Enums.FundApiType.Howbuy,
-    recommond: '★★★☆☆',
-  },
-  {
-    name: '易天富',
-    code: Enums.FundApiType.Etf,
-    recommond: '★★★☆☆',
-  },
 ];
 
-const presetColors = ['#F5222D', '#FA8C16', '#FADB14', '#8BBB11', '#52C41A', '#13A8A8', '#1677FF', '#2F54EB', '#722ED1', '#EB2F96'];
+const presetColors = [
+  '#F5222D',
+  '#FA8C16',
+  '#FADB14',
+  '#8BBB11',
+  '#52C41A',
+  '#13A8A8',
+  '#1677FF',
+  '#2F54EB',
+  '#722ED1',
+  '#EB2F96',
+];
 
 const SettingContent: React.FC<SettingContentProps> = (props) => {
   const dispatch = useAppDispatch();
@@ -89,6 +100,7 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
     customThemeColorSetting,
     conciseSetting,
     lowKeySetting,
+    lowKeyDegreeSetting,
     baseFontSizeSetting,
     systemThemeSetting,
     bottomTabsSetting,
@@ -120,6 +132,7 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
   const [customThemeColor, setCustomThemeColor] = useState(customThemeColorSetting);
   const [concise, setConcise] = useState(conciseSetting);
   const [lowKey, setLowKey] = useState(lowKeySetting);
+  const [lowKeyDegree, setLowKeyDegree] = useState(lowKeyDegreeSetting);
   const [baseFontSize, setBaseFontSize] = useState(baseFontSizeSetting);
   const [systemTheme, setSystemTheme] = useState(systemThemeSetting);
   // 底栏设置
@@ -136,7 +149,12 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
   const [proxyHost, setProxyHost] = useState(proxyHostSetting);
   const [proxyPort, setProxyPort] = useState(proxyPortSetting);
   // 通用设置
-  const { hotkey, onBlur: hotkeyInputOnBlur, onFocus: hotkeyInputOnFocus, reset: resetHotkey } = useInputShortcut(hotkeySetting);
+  const {
+    hotkey,
+    onBlur: hotkeyInputOnBlur,
+    onFocus: hotkeyInputOnFocus,
+    reset: resetHotkey,
+  } = useInputShortcut(hotkeySetting);
   const [autoStart, setAutoStart] = useState(autoStartSetting);
   const [autoFresh, setAutoFresh] = useState(autoFreshSetting);
   const [freshDelay, setFreshDelay] = useState(freshDelaySetting);
@@ -161,11 +179,13 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
         customThemeColorSetting: customThemeColor || originPrimaryColor,
         conciseSetting: concise,
         lowKeySetting: lowKey,
+        lowKeyDegreeSetting: lowKeyDegree,
         baseFontSizeSetting: baseFontSize,
         systemThemeSetting: systemTheme,
         bottomTabsSetting: bottomTabs.map((tab) => ({ key: tab.key, name: tab.name, show: tab.show })),
         adjustmentNotificationSetting: adjustmentNotification,
-        adjustmentNotificationTimeSetting: adjustmentNotificationTime || defaultSystemSetting.adjustmentNotificationTimeSetting,
+        adjustmentNotificationTimeSetting:
+          adjustmentNotificationTime || defaultSystemSetting.adjustmentNotificationTimeSetting,
         riskNotificationSetting: riskNotification,
         trayContentSetting: trayContent,
         coinUnitSetting: coinUnit,
@@ -220,6 +240,7 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
       config={{
         darkMode: systemTheme === Enums.SystemThemeType.Auto ? darkMode : darkModeEnable,
         lowKey,
+        lowKeyDegree,
         baseFontSize,
         primaryColor: themeColor,
       }}
@@ -253,7 +274,7 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
               children: (
                 <div className={styles.content}>
                   <StandCard
-                    icon={<LineCharIcon />}
+                    icon={<RiLineChartLine />}
                     title="数据来源"
                     extra={
                       <div className={styles.guide}>
@@ -271,7 +292,7 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
                       </Radio.Group>
                     </div>
                   </StandCard>
-                  <StandCard icon={<TShirtIcon />} title="外观设置">
+                  <StandCard icon={<RiTShirtLine />} title="外观设置">
                     <div className={clsx(styles.setting, 'card-body')}>
                       <section>
                         <label>主题色：</label>
@@ -314,8 +335,26 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
                         <Switch size="small" checked={lowKey} onChange={setLowKey} />
                       </section>
                       <section>
+                        <label>低调程度：</label>
+                        <Slider
+                          min={0}
+                          max={100}
+                          style={{ flex: 0.5 }}
+                          defaultValue={lowKeyDegree}
+                          onChange={setLowKeyDegree}
+                          step={1}
+                        />
+                      </section>
+                      <section>
                         <label>字体大小：</label>
-                        <Slider min={11} max={14} style={{ flex: 0.5 }} defaultValue={baseFontSize} onChange={setBaseFontSize} step={0.1} />
+                        <Slider
+                          min={11}
+                          max={14}
+                          style={{ flex: 0.5 }}
+                          defaultValue={baseFontSize}
+                          onChange={setBaseFontSize}
+                          step={0.1}
+                        />
                       </section>
                       <section>
                         <label>系统主题：</label>
@@ -335,7 +374,7 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
                     </div>
                   </StandCard>
                   <StandCard
-                    icon={<NotificationIcon />}
+                    icon={<RiNotificationBadgeLine />}
                     title="通知设置"
                     extra={
                       <div className={styles.guide}>
@@ -384,12 +423,14 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
                           <Select.Option value={Enums.TrayContent.Syl}>选中钱包收益率</Select.Option>
                           <Select.Option value={Enums.TrayContent.Zsy}>所有钱包收益</Select.Option>
                           <Select.Option value={Enums.TrayContent.Zsyl}>所有钱包收益率</Select.Option>
+                          <Select.Option value={Enums.TrayContent.StockSy}>股票收益</Select.Option>
+                          <Select.Option value={Enums.TrayContent.StockSyl}>股票收益率</Select.Option>
                         </Select>
                       </section>
                     </div>
                   </StandCard>
                   <StandCard
-                    icon={<InboxIcon />}
+                    icon={<RiInboxLine />}
                     title="底栏设置"
                     extra={
                       <div className={styles.guide}>
@@ -419,7 +460,7 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
                     </div>
                   </StandCard>
                   <StandCard
-                    icon={<BitCoinIcon />}
+                    icon={<RiBitCoinLine />}
                     title="货币单位"
                     extra={
                       <div className={styles.guide}>
@@ -441,7 +482,7 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
                       </Radio.Group>
                     </div>
                   </StandCard>
-                  <StandCard icon={<GlobalIcon />} title="代理设置">
+                  <StandCard icon={<RiGlobalLine />} title="代理设置">
                     <div className={clsx(styles.setting, 'card-body')}>
                       <section>
                         <label>代理模式：</label>
@@ -461,16 +502,26 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
                       </section>
                       <section>
                         <label>代理地址：</label>
-                        <Input size="small" value={proxyHost} onChange={(e) => setProxyHost(e.target.value)} disabled={!proxyModeEnable} />
+                        <Input
+                          size="small"
+                          value={proxyHost}
+                          onChange={(e) => setProxyHost(e.target.value)}
+                          disabled={!proxyModeEnable}
+                        />
                       </section>
                       <section>
                         <label>代理端口：</label>
-                        <Input size="small" value={proxyPort} onChange={(e) => setProxyPort(e.target.value)} disabled={!proxyModeEnable} />
+                        <Input
+                          size="small"
+                          value={proxyPort}
+                          onChange={(e) => setProxyPort(e.target.value)}
+                          disabled={!proxyModeEnable}
+                        />
                       </section>
                     </div>
                   </StandCard>
                   <StandCard
-                    icon={<SettingIcon />}
+                    icon={<RiSettingsLine />}
                     title="系统设置"
                     extra={
                       <div className={styles.guide}>
@@ -541,7 +592,7 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
                     </div>
                   </StandCard>
                   <StandCard
-                    icon={<FolderSettingsIcon />}
+                    icon={<RiFolderSettingsLine />}
                     title="配置同步"
                     extra={
                       <div className={styles.guide}>

@@ -7,7 +7,7 @@ import * as Adapter from '@/utils/adpters';
 
 export function GetFundConfig(walletCode: string, walletsConfig: Wallet.SettingItem[]) {
   const walletConfig = walletsConfig.find(({ code }) => code === walletCode) || defaultWallet;
-  const fundConfig = walletConfig.funds;
+  const fundConfig = walletConfig.funds || [];
   const codeMap = Utils.GetCodeMap(fundConfig, 'code');
   return { fundConfig, codeMap };
 }
@@ -36,15 +36,7 @@ export async function GetFunds(config: Fund.SettingItem[], fundApiTypeSetting: E
   );
   const load = () => {
     switch (fundApiTypeSetting) {
-      case Enums.FundApiType.Dayfund:
-        return Adapter.ChokeGroupAdapter(collectors, 1, 100);
       case Enums.FundApiType.Tencent:
-        return Adapter.ChokeGroupAdapter(collectors, 3, 300);
-      case Enums.FundApiType.Sina:
-        return Adapter.ChokeGroupAdapter(collectors, 3, 300);
-      case Enums.FundApiType.Howbuy:
-        return Adapter.ChokeGroupAdapter(collectors, 3, 300);
-      case Enums.FundApiType.Etf:
         return Adapter.ChokeGroupAdapter(collectors, 3, 300);
       case Enums.FundApiType.Ant:
         return Adapter.ChokeGroupAdapter(collectors, 4, 400);
@@ -62,16 +54,8 @@ export async function GetFunds(config: Fund.SettingItem[], fundApiTypeSetting: E
 
 export async function GetFund(code: string, fundApiTypeSetting: Enums.FundApiType) {
   switch (fundApiTypeSetting) {
-    case Enums.FundApiType.Dayfund:
-      return Services.Fund.FromDayFund(code);
     case Enums.FundApiType.Tencent:
       return Services.Fund.FromTencent(code);
-    case Enums.FundApiType.Sina:
-      return Services.Fund.FromSina(code);
-    case Enums.FundApiType.Howbuy:
-      return Services.Fund.FromHowbuy(code);
-    case Enums.FundApiType.Etf:
-      return Services.Fund.FromEtf(code);
     case Enums.FundApiType.Ant:
       return Services.Fund.FromFund123(code);
     case Enums.FundApiType.Fund10jqka:
@@ -84,12 +68,14 @@ export async function GetFund(code: string, fundApiTypeSetting: Enums.FundApiTyp
 }
 
 export function CalcFund(fund: Fund.ResponseItem & Fund.FixData, codeMap: Fund.CodeMap) {
+  const config = codeMap[fund.fundcode!];
+  const cyfe = config?.cyfe || 0;
+  const cbj = config?.cbj;
+  const memo = config?.memo;
+
   const gzrq = fund.gztime?.slice(5, 10);
   const jzrq = fund.jzrq?.slice(5);
   const isFix = fund.fixDate && fund.fixDate === gzrq;
-  const cyfe = codeMap[fund.fundcode!]?.cyfe || 0;
-  const cbj = codeMap[fund.fundcode!]?.cbj;
-  const memo = codeMap[fund.fundcode!]?.memo;
   const gsz = isFix ? fund.fixDwjz! : fund.gsz!;
   const dwjz = isFix ? fund.fixDwjz! : fund.dwjz!;
   const bjz = NP.minus(gsz!, fund.dwjz!);

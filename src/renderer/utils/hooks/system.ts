@@ -1,4 +1,4 @@
-import { useLayoutEffect, useState, useEffect, useMemo } from 'react';
+import { useLayoutEffect, useEffect, useMemo, useRef } from 'react';
 import { flushSync } from 'react-dom';
 import { useInterval } from 'ahooks';
 import { theme } from 'antd';
@@ -10,15 +10,18 @@ import { updateAvaliableAction } from '@/store/features/updater';
 import { setFundConfigAction } from '@/store/features/fund';
 import { syncTabsActiveKeyAction } from '@/store/features/tabs';
 import { changeCurrentWalletCodeAction, toggleEyeStatusAction } from '@/store/features/wallet';
-import { updateAdjustmentNotificationDateAction, syncDarkMode, saveSyncConfigAction, syncVaribleColors } from '@/store/features/setting';
+import {
+  updateAdjustmentNotificationDateAction,
+  syncDarkMode,
+  saveSyncConfigAction,
+  syncVaribleColors,
+} from '@/store/features/setting';
 import { syncTranslateShowAction } from '@/store/features/translate';
 import { syncChatGPTShowAction } from '@/store/features/chatGPT';
-
 import {
   useWorkDayTimeToDo,
   useFixTimeToDo,
   useAfterMountedEffect,
-  useFreshFunds,
   useAppDispatch,
   useAppSelector,
   useLoadCoins,
@@ -26,23 +29,23 @@ import {
   useLoadRemoteFunds,
   useLoadFundRatingMap,
   useLoadWalletsFunds,
+  useLoadWalletsStocks,
   useLoadFixWalletsFunds,
   useLoadQuotations,
   useLoadZindexs,
-  useLoadStocks,
   useIpcRendererListener,
 } from '@/utils/hooks';
 import { walletIcons } from '@/helpers/wallet';
+import { encryptFF, decryptFF } from '@/utils/coding';
+import { useLoadFunds } from './utils';
 import * as Utils from '@/utils';
 import * as Adapters from '@/utils/adpters';
 import * as Helpers from '@/helpers';
 import * as Enums from '@/utils/enums';
 import * as Enhancement from '@/utils/enhancement';
-import { useLoadFunds } from './utils';
 
 const { dialog, ipcRenderer, clipboard, app } = window.contextModules.electron;
 const { saveString, readFile } = window.contextModules.io;
-const { encryptFF, decryptFF } = window.contextModules.coding;
 const { useToken } = theme;
 
 export function useUpdater() {
@@ -100,59 +103,86 @@ export function useAdjustmentNotification() {
 }
 
 export function useRiskNotification() {
-  const [zdfRangeMap, setZdfRangeMap] = useState<Record<string, boolean>>({});
-  const [jzNoticeMap, setJzNoticeMap] = useState<Record<string, boolean>>({});
-  const systemSetting = useAppSelector((state) => state.setting.systemSetting);
+  const noticeMapRef = useRef<Record<string, boolean>>({});
+
+  const riskNotificationSetting = useAppSelector((state) => state.setting.systemSetting.riskNotificationSetting);
   const wallets = useAppSelector((state) => state.wallet.wallets);
   const walletsConfig = useAppSelector((state) => state.wallet.config.walletConfig);
-  const { riskNotificationSetting } = systemSetting;
+  const zindexs = useAppSelector((state) => state.zindex.zindexs);
+  const zindexsCodeMap = useAppSelector((state) => state.zindex.config.codeMap);
 
   useInterval(
     () => {
-      const cloneZdfRangeMap = Utils.DeepCopy(zdfRangeMap);
-      const cloneJzNoticeMap = Utils.DeepCopy(jzNoticeMap);
       if (!riskNotificationSetting) {
         return;
       }
       try {
+        // 基金提醒
         wallets.forEach((wallet) => {
           const { codeMap } = Helpers.Fund.GetFundConfig(wallet.code, walletsConfig);
           const walletConfig = Helpers.Wallet.GetCurrentWalletConfig(wallet.code, walletsConfig);
+
           wallet.funds?.forEach((fund) => {
-            const zdfRange = codeMap[fund.fundcode!]?.zdfRange;
-            const jzNotice = codeMap[fund.fundcode!]?.jzNotice;
-            const riskKey = `${wallet.code}-${fund.fundcode}`;
-            const zdfRangeNoticed = cloneZdfRangeMap[riskKey];
-            const jzNoticeNoticed = cloneJzNoticeMap[riskKey];
-
-            if (zdfRange && Math.abs(zdfRange) < Math.abs(Number(fund.gszzl)) && !zdfRangeNoticed) {
-              const notification = new Notification('涨跌提醒', {
-                body: `${walletConfig.name} ${fund.name} ${Utils.Yang(fund.gszzl)}%`,
-              });
-              notification.onclick = () => {
-                ipcRenderer.invoke('show-current-window');
-              };
-              cloneZdfRangeMap[riskKey] = true;
-            }
-
-            if (
-              jzNotice &&
-              ((Number(fund.dwjz) <= jzNotice && Number(fund.gsz) >= jzNotice) ||
-                (Number(fund.dwjz) >= jzNotice && Number(fund.gsz) <= jzNotice)) &&
-              !jzNoticeNoticed
-            ) {
-              const notification = new Notification('净值提醒', {
-                body: `${walletConfig.name} ${fund.name} ${fund.gsz}`,
-              });
-              notification.onclick = () => {
-                ipcRenderer.invoke('show-current-window');
-              };
-              cloneJzNoticeMap[riskKey] = true;
-            }
+            // 涨跌范围提醒
+            checkZdfRange({
+              zdf: fund.gszzl,
+              preset: codeMap[fund.fundcode!]?.zdfRange,
+              key: `${wallet.code}-${fund.fundcode}-zdfRange`,
+              content: `${walletConfig.name} ${fund.name} ${Utils.Yang(fund.gszzl)}%`,
+            });
+            // 净值提醒
+            checkJzNotice({
+              dwjz: fund.dwjz,
+              gsz: fund.gsz,
+              preset: codeMap[fund.fundcode!]?.jzNotice,
+              key: `${wallet.code}-${fund.fundcode}-jzNotice`,
+              content: `${walletConfig.name} ${fund.name} ${fund.gsz}`,
+            });
           });
         });
-        setZdfRangeMap(cloneZdfRangeMap);
-        setJzNoticeMap(cloneJzNoticeMap);
+        // 股票提醒
+
+        wallets.forEach((wallet) => {
+          const { codeMap } = Helpers.Stock.GetStockConfig(wallet.code, walletsConfig);
+          const walletConfig = Helpers.Wallet.GetCurrentWalletConfig(wallet.code, walletsConfig);
+
+          wallet.stocks.forEach((stock) => {
+            // 涨跌范围提醒
+            checkZdfRange({
+              zdf: stock.zdf,
+              preset: codeMap[stock.secid!]?.zdfRange,
+              key: `${stock.secid}-zdfRange`,
+              content: `${walletConfig.name} ${stock.name} ${Utils.Yang(stock.zdf)}%`,
+            });
+            // 净值提醒
+            checkJzNotice({
+              dwjz: stock.zs,
+              gsz: stock.zx,
+              preset: codeMap[stock.secid!]?.jzNotice,
+              key: `${stock.secid}-jzNotice`,
+              content: `${walletConfig.name} ${stock.name} ${stock.zx}`,
+            });
+          });
+        });
+
+        // 指数提醒
+        zindexs.forEach((zindex) => {
+          // 涨跌范围提醒
+          checkZdfRange({
+            zdf: zindex.zdf,
+            preset: zindexsCodeMap[zindex.code!]?.zdfRange,
+            key: `${zindex.code}-zdfRange`,
+            content: `${zindex.name} ${Utils.Yang(zindex.zdf)}%`,
+          });
+          // 净值提醒
+          checkJzNotice({
+            dwjz: zindex.zs,
+            gsz: zindex.zsz,
+            preset: zindexsCodeMap[zindex.code!]?.jzNotice,
+            key: `${zindex.code}-jzNotice`,
+            content: `${zindex.name} ${zindex.zsz}`,
+          });
+        });
       } catch (error) {}
     },
     1000 * 60,
@@ -160,6 +190,44 @@ export function useRiskNotification() {
       immediate: true,
     }
   );
+
+  // 24小时清除一次
+  useInterval(() => {
+    noticeMapRef.current = {};
+  }, 1000 * 60 * 60 * 24);
+
+  function checkZdfRange(data: { zdf: any; preset: any; key: string; content: string }) {
+    const { zdf, preset, key, content } = data;
+    const noticed = noticeMapRef.current[key];
+
+    if (preset && Math.abs(preset) < Math.abs(Number(zdf)) && !noticed) {
+      const notification = new Notification('涨跌提醒', {
+        body: content,
+      });
+      notification.onclick = () => {
+        ipcRenderer.invoke('show-current-window');
+      };
+      noticeMapRef.current[key] = true;
+    }
+  }
+
+  function checkJzNotice(data: { dwjz: any; gsz: any; preset: any; key: string; content: string }) {
+    const { dwjz, gsz, preset, key, content } = data;
+    const noticed = noticeMapRef.current[key];
+    if (
+      preset &&
+      ((Number(dwjz) <= preset && Number(gsz) >= preset) || (Number(dwjz) >= preset && Number(gsz) <= preset)) &&
+      !noticed
+    ) {
+      const notification = new Notification('净值提醒', {
+        body: content,
+      });
+      notification.onclick = () => {
+        ipcRenderer.invoke('show-current-window');
+      };
+      noticeMapRef.current[key] = true;
+    }
+  }
 }
 
 export function useFundsClipboard() {
@@ -168,11 +236,14 @@ export function useFundsClipboard() {
   const walletsConfig = useAppSelector((state) => state.wallet.config.walletConfig);
   const fundConfig = useAppSelector((state) => state.wallet.fundConfig);
   const fundApiTypeSetting = useAppSelector((state) => state.setting.systemSetting.fundApiTypeSetting);
-  const loadFunds = useLoadFunds(true);
+  const loadFunds = useLoadFunds({
+    enableLoading: true,
+    autoFix: true,
+  });
 
   useIpcRendererListener('clipboard-funds-import', async (e: Electron.IpcRendererEvent, data) => {
     try {
-      const limit = 1024;
+      const limit = 99;
       const text = await clipboard.readText();
       const json: any[] = JSON.parse(text);
       if (json.length > limit) {
@@ -249,10 +320,19 @@ export function useBootStrap() {
   const runLoadRemoteCoins = useLoadRemoteCoins();
   const runLoadWalletsFunds = useLoadWalletsFunds();
   const runLoadFixWalletsFunds = useLoadFixWalletsFunds();
-  const runLoadZindexs = useLoadZindexs(false);
-  const runLoadQuotations = useLoadQuotations(false);
-  const runLoadStocks = useLoadStocks(false);
-  const runLoadCoins = useLoadCoins(false);
+  const runLoadWalletsStocks = useLoadWalletsStocks();
+  const runLoadZindexs = useLoadZindexs({
+    enableLoading: false,
+    autoFilter: false,
+  });
+  const runLoadQuotations = useLoadQuotations({
+    enableLoading: false,
+    autoFilter: false,
+  });
+  const runLoadCoins = useLoadCoins({
+    enableLoading: false,
+    autoFilter: false,
+  });
 
   // 间隔时间刷新远程基金数据,远程货币数据,基金评级
   useInterval(() => {
@@ -266,7 +346,8 @@ export function useBootStrap() {
     if (autoFreshSetting) {
       Adapters.ConCurrencyAllAdapter([
         () => Adapters.ChokeAllAdapter([runLoadWalletsFunds]),
-        () => Adapters.ChokeAllAdapter([runLoadZindexs, runLoadQuotations, runLoadStocks]),
+        () => Adapters.ChokeAllAdapter([runLoadWalletsStocks]),
+        () => Adapters.ChokeAllAdapter([runLoadZindexs, runLoadQuotations]),
       ]);
     }
   }, freshDelaySetting * 1000 * 60);
@@ -276,7 +357,7 @@ export function useBootStrap() {
     if (autoFreshSetting) {
       Adapters.ChokeAllAdapter([runLoadFixWalletsFunds]);
     }
-  }, freshDelaySetting * 1000 * 60);
+  }, 1000 * 60 * 10);
 
   // 间隔时间刷新货币
   useInterval(() => {
@@ -290,7 +371,8 @@ export function useBootStrap() {
     Adapters.ConCurrencyAllAdapter([
       () => Adapters.ChokeAllAdapter([runLoadRemoteFunds, runLoadRemoteCoins, runLoadFundRatingMap]),
       () => Adapters.ChokeAllAdapter([runLoadWalletsFunds, runLoadFixWalletsFunds]),
-      () => Adapters.ChokeAllAdapter([runLoadZindexs, runLoadQuotations, runLoadStocks, runLoadCoins]),
+      () => Adapters.ChokeAllAdapter([runLoadWalletsStocks]),
+      () => Adapters.ChokeAllAdapter([runLoadZindexs, runLoadQuotations, runLoadCoins]),
     ]);
   }, []);
 }
@@ -362,36 +444,41 @@ export function useMappingLocalToSystemSetting() {
 }
 
 export function useTrayContent() {
-  const { trayContentSetting } = useAppSelector((state) => state.setting.systemSetting);
-  const fundConfigCodeMap = useAppSelector((state) => state.wallet.fundConfigCodeMap);
-  const walletsConfig = useAppSelector((state) => state.wallet.config.walletConfig);
+  const trayContentSetting = useAppSelector((state) => state.setting.systemSetting.trayContentSetting);
+  const walletConfig = useAppSelector((state) => state.wallet.config.walletConfig);
   const wallets = useAppSelector((state) => state.wallet.wallets);
+  const currentWalletCode = useAppSelector((state) => state.wallet.currentWalletCode);
   const eyeStatus = useAppSelector((state) => state.wallet.eyeStatus);
-  const { funds } = useAppSelector((state) => state.wallet.currentWallet);
-  const calcResult = Helpers.Fund.CalcFunds(funds, fundConfigCodeMap);
 
-  const allCalcResult = useMemo(() => {
+  // 当前选中钱包
+  const { sygz, gssyl } = Helpers.Wallet.CalcWallet({ code: currentWalletCode, walletConfig, wallets });
+
+  // 所有钱包
+  const allCalcResult = (() => {
     const allResult = wallets.reduce(
-      (r, { code, funds }) => {
-        const { codeMap } = Helpers.Fund.GetFundConfig(code, walletsConfig);
-        const result = Helpers.Fund.CalcFunds(funds, codeMap);
-        return { zje: r.zje + result.zje, gszje: r.gszje + result.gszje };
+      (r, { code }) => {
+        const { zje, gszje } = Helpers.Wallet.CalcWallet({ code, walletConfig, wallets });
+
+        return {
+          zje: r.zje + zje,
+          gszje: r.gszje + gszje,
+        };
       },
       { zje: 0, gszje: 0 }
     );
     const sygz = NP.minus(allResult.gszje, allResult.zje);
     return { sygz, gssyl: allResult.zje ? NP.times(NP.divide(sygz, allResult.zje), 100) : 0 };
-  }, [wallets, walletsConfig]);
+  })();
 
-  const trayContent = useMemo(() => {
+  const trayContent = (() => {
     const group = [trayContentSetting].flat();
     let content = group
       .map((trayContentType: Enums.TrayContent) => {
         switch (trayContentType) {
           case Enums.TrayContent.Sy:
-            return `${Utils.Yang(calcResult.sygz.toFixed(2))}`;
+            return `${Utils.Yang(sygz.toFixed(2))}`;
           case Enums.TrayContent.Syl:
-            return `${Utils.Yang(calcResult.gssyl.toFixed(2))}%`;
+            return `${Utils.Yang(gssyl.toFixed(2))}%`;
           case Enums.TrayContent.Zsy:
             return `${Utils.Yang(allCalcResult.sygz.toFixed(2))}`;
           case Enums.TrayContent.Zsyl:
@@ -401,12 +488,12 @@ export function useTrayContent() {
         }
       })
       .join(' │ ');
-    content = content ? ` ${content}` : content;
+    content = !!content ? ` ${content}` : content;
     return content;
-  }, [trayContentSetting, calcResult, allCalcResult]);
+  })();
 
   useEffect(() => {
-    const content = eyeStatus === Enums.EyeStatus.Close ? '' : trayContent;
+    const content = eyeStatus ? trayContent : '';
 
     ipcRenderer.invoke('set-tray-content', content);
   }, [trayContent, eyeStatus]);
@@ -416,26 +503,24 @@ export function useUpdateContextMenuWalletsState() {
   const dispatch = useAppDispatch();
   const wallets = useAppSelector((state) => state.wallet.wallets);
   const currentWalletCode = useAppSelector((state) => state.wallet.currentWalletCode);
-  const walletsConfig = useAppSelector((state) => state.wallet.config.walletConfig);
-  const freshFunds = useFreshFunds(0);
+  const walletConfig = useAppSelector((state) => state.wallet.config.walletConfig);
 
   useEffect(() => {
     ipcRenderer.invoke(
       'update-tray-context-menu-wallets',
-      walletsConfig.map((walletConfig) => {
-        const { codeMap } = Helpers.Fund.GetFundConfig(walletConfig.code, walletsConfig);
-        const { funds } = Helpers.Wallet.GetCurrentWalletState(walletConfig.code, wallets);
-        const calcResult = Helpers.Fund.CalcFunds(funds, codeMap);
-        const value = `  ${Utils.Yang(calcResult.sygz.toFixed(2))}  ${Utils.Yang(calcResult.gssyl.toFixed(2))}%`;
+      walletConfig.map((config) => {
+        const { sygz, gssyl } = Helpers.Wallet.CalcWallet({ code: config.code, walletConfig, wallets });
+        const value = `  ${Utils.Yang(sygz.toFixed(2))}  ${Utils.Yang(gssyl.toFixed(2))}%`;
+
         return {
-          label: `${walletConfig.name}  ${value}`,
-          type: currentWalletCode === walletConfig.code ? 'radio' : 'normal',
-          dataURL: walletIcons[walletConfig.iconIndex],
-          id: walletConfig.code,
+          label: `${config.name}  ${value}`,
+          type: currentWalletCode === config.code ? 'radio' : 'normal',
+          dataURL: walletIcons[config.iconIndex],
+          id: config.code,
         };
       })
     );
-  }, [wallets, currentWalletCode, walletsConfig]);
+  }, [wallets, currentWalletCode, walletConfig]);
 
   useIpcRendererListener('change-current-wallet-code', (e, code) => {
     try {
@@ -508,7 +593,9 @@ export function useAllConfigBackup() {
       const backupConfig: Backup.Config = await decryptFF(encodeBackupConfig);
       const { response } = await dialog.showMessageBox({
         title: `确认从备份文件恢复`,
-        message: `备份时间：${dayjs(backupConfig.timestamp).format('YYYY-MM-DD HH:mm:ss')} ，当前数据将被覆盖，请谨慎操作`,
+        message: `备份时间：${dayjs(backupConfig.timestamp).format(
+          'YYYY-MM-DD HH:mm:ss'
+        )} ，当前数据将被覆盖，请谨慎操作`,
         buttons: ['确定', '取消'],
       });
       if (response === 0) {

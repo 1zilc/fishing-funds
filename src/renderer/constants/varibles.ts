@@ -14,7 +14,7 @@ export default {
   '--svg-icon-color': '--svg-icon-color',
   '--blur-color': '--blur-color',
   '--base-font-size': '--base-font-color',
-  '--base-padding': '--base-color',
+  '--base-padding': '--base-padding',
   '--warn-color': '--warn-color',
   '--inner-text-color': '--inner-text-color',
   '--increase-bg-color': '--increase-bg-color',

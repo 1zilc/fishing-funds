@@ -2,6 +2,7 @@ import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
 import { AsyncThunkConfig } from '@/store';
 import * as Utils from '@/utils';
 import * as Enums from '@/utils/enums';
+import * as Helpers from '@/helpers';
 
 export interface WebState {
   view: {
@@ -78,17 +79,21 @@ const webSlice = createSlice({
   },
 });
 
-export const { syncWebUrlAction, syncWebShowAction, syncWebPhoneAction, syncWebAction, syncWebConfigAction } = webSlice.actions;
+export const { syncWebUrlAction, syncWebShowAction, syncWebPhoneAction, syncWebAction, syncWebConfigAction } =
+  webSlice.actions;
 
-export const closeWebAction = createAsyncThunk<void, void, AsyncThunkConfig>('web/closeWebAction', (_, { dispatch, getState }) => {
-  try {
-    const {
-      web: { view },
-    } = getState();
-    dispatch(syncWebAction({ ...view, url: '', title: '' }));
-    dispatch(syncWebShowAction(false));
-  } catch (error) {}
-});
+export const closeWebAction = createAsyncThunk<void, void, AsyncThunkConfig>(
+  'web/closeWebAction',
+  (_, { dispatch, getState }) => {
+    try {
+      const {
+        web: { view },
+      } = getState();
+      dispatch(syncWebAction({ ...view, url: '', title: '' }));
+      dispatch(syncWebShowAction(false));
+    } catch (error) {}
+  }
+);
 
 export const openWebAction = createAsyncThunk<void, { phone?: boolean; title: string; url: string }, AsyncThunkConfig>(
   'web/openWebAction',
@@ -103,21 +108,26 @@ export const openWebAction = createAsyncThunk<void, { phone?: boolean; title: st
   }
 );
 
-export const addWebAction = createAsyncThunk<void, Web.SettingItem, AsyncThunkConfig>('web/addWebAction', (web, { dispatch, getState }) => {
-  try {
-    const {
-      web: {
-        config: { webConfig },
-      },
-    } = getState();
-    const cloneWebConfig = Utils.DeepCopy(webConfig);
-    const exist = cloneWebConfig.find((item) => web.url === item.url);
-    if (!exist) {
-      cloneWebConfig.push(web);
-    }
-    dispatch(setWebConfigAction(cloneWebConfig));
-  } catch (error) {}
-});
+export const addWebAction = createAsyncThunk<void, Web.SettingItem, AsyncThunkConfig>(
+  'web/addWebAction',
+  (web, { dispatch, getState }) => {
+    try {
+      const {
+        web: {
+          config: { webConfig },
+        },
+      } = getState();
+
+      const config = Helpers.Base.Add({
+        list: Utils.DeepCopy(webConfig),
+        key: 'url',
+        data: web,
+      });
+
+      dispatch(setWebConfigAction(config));
+    } catch (error) {}
+  }
+);
 
 export const updateWebAction = createAsyncThunk<void, Web.SettingItem, AsyncThunkConfig>(
   'web/updateWebAction',
@@ -128,37 +138,38 @@ export const updateWebAction = createAsyncThunk<void, Web.SettingItem, AsyncThun
           config: { webConfig },
         },
       } = getState();
-      webConfig.forEach((item) => {
-        if (web.url === item.url) {
-          item.url = web.url;
-          item.title = web.title;
-          item.iconType = web.iconType;
-          item.color = web.color;
-          item.icon = web.icon;
-        }
+
+      const config = Helpers.Base.Update({
+        list: Utils.DeepCopy(webConfig),
+        key: 'url',
+        data: web,
       });
-      dispatch(setWebConfigAction(webConfig));
+
+      dispatch(setWebConfigAction(config));
     } catch (error) {}
   }
 );
 
-export const deleteWebAction = createAsyncThunk<void, string, AsyncThunkConfig>('web/deleteWebAction', (url, { dispatch, getState }) => {
-  try {
-    const {
-      web: {
-        config: { webConfig },
-      },
-    } = getState();
+export const deleteWebAction = createAsyncThunk<void, string, AsyncThunkConfig>(
+  'web/deleteWebAction',
+  (url, { dispatch, getState }) => {
+    try {
+      const {
+        web: {
+          config: { webConfig },
+        },
+      } = getState();
 
-    webConfig.forEach((item, index) => {
-      if (url === item.url) {
-        const cloneWebSetting = JSON.parse(JSON.stringify(webConfig));
-        cloneWebSetting.splice(index, 1);
-        dispatch(setWebConfigAction(cloneWebSetting));
-      }
-    });
-  } catch (error) {}
-});
+      const config = Helpers.Base.Delete({
+        list: Utils.DeepCopy(webConfig),
+        key: 'url',
+        data: url,
+      });
+
+      dispatch(setWebConfigAction(config));
+    } catch (error) {}
+  }
+);
 
 export const setWebConfigAction = createAsyncThunk<void, Web.SettingItem[], AsyncThunkConfig>(
   'web/setWebConfigAction',

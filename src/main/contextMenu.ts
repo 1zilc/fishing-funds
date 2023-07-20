@@ -11,6 +11,11 @@ export type WalletMenuConfig = {
   dataURL: string;
   id: string;
 };
+export type StockMenuConfig = {
+  label: string;
+  dataURL: string;
+  id: string;
+};
 
 export default class ContextMenuManager {
   private contextMenu: (Electron.MenuItemConstructorOptions | Electron.MenuItem)[] = [];
@@ -54,8 +59,8 @@ export default class ContextMenuManager {
     this.render();
   }
 
-  updateEyeMenu(status: Enums.EyeStatus) {
-    this.eyeMenu.label = status === Enums.EyeStatus.Open ? '隐藏收益' : '显示收益';
+  updateEyeMenu(status: boolean) {
+    this.eyeMenu.label = status ? '隐藏收益' : '显示收益';
     this.render();
   }
 

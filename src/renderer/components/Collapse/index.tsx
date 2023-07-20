@@ -8,7 +8,7 @@ interface CollapseProps {
   style?: React.CSSProperties;
 }
 
-const Collapse: React.FC<PropsWithChildren<CollapseProps>> = (props) => {
+const Collapse: React.FC<PropsWithChildren<CollapseProps>> = React.memo((props) => {
   const contentRef = useRef<HTMLDivElement>(null);
   const montedRef = useRef(false);
   const [wrapStyle, setWrapStyle] = useState<React.CSSProperties>({
@@ -64,6 +64,6 @@ const Collapse: React.FC<PropsWithChildren<CollapseProps>> = (props) => {
       <div ref={contentRef}>{props.children}</div>
     </div>
   );
-};
+});
 
-export default React.memo(Collapse);
+export default Collapse;

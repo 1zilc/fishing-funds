@@ -1,6 +1,5 @@
 import React from 'react';
 import { useCreation } from 'ahooks';
-import clsx from 'clsx';
 import { Tabs } from 'antd';
 import Toolbar from '@/components/Toolbar';
 import Wallet from '@/components/Wallet/index';
@@ -133,7 +132,7 @@ function QuotationGroup() {
 }
 
 function StockGroup() {
-  const { codeMap: stockCodeMap } = useAppSelector((state) => state.stock.config);
+  const codeMap = useAppSelector((state) => state.wallet.stockConfigCodeMap);
 
   return (
     <GroupTab
@@ -144,10 +143,15 @@ function StockGroup() {
           label: '全部',
           children: <StockView filter={() => true} />,
         },
+        {
+          key: String(-2),
+          label: '持有',
+          children: <StockView filter={(stock) => !!codeMap[stock.secid]?.cyfe} />,
+        },
         ...stockTypesConfig.map((type) => ({
           key: String(type.code),
           label: type.name.slice(0, 2),
-          children: <StockView filter={(stock) => stockCodeMap[stock.secid].type === type.code} />,
+          children: <StockView filter={(stock) => codeMap[stock.secid].type === type.code} />,
         })),
       ]}
     />
@@ -200,7 +204,7 @@ const Body = () => {
     <Tabs
       renderTabBar={() => <></>}
       activeKey={String(tabsActiveKey)}
-      animated={{ tabPane: true, inkBar: false }}
+      animated={true}
       destroyInactiveTabPane
       items={items}
     />
@@ -209,7 +213,7 @@ const Body = () => {
 
 const Home: React.FC<HomeProps> = () => {
   return (
-    <div className={clsx(styles.layout)}>
+    <div className={styles.layout}>
       <Header>
         <Wallet />
         <SortBar />

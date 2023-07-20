@@ -31,10 +31,13 @@ const coinSlice = createSlice({
     setCoinsLoadingAction(state, action: PayloadAction<boolean>) {
       state.coinsLoading = action.payload;
     },
-    syncCoinsAction(state, action) {
-      state.coins = action.payload;
+    filterCoinsAction(state) {
+      state.coins = state.coins.filter(({ code }) => state.config.codeMap[code]);
     },
-    syncCoinsConfigAction(state, action: PayloadAction<{ coinConfig: Coin.SettingItem[]; codeMap: Coin.CodeMap }>) {
+    syncCoinsStateAction(state, { payload }: PayloadAction<CoinState['coins']>) {
+      state.coins = payload;
+    },
+    syncCoinsConfigAction(state, action: PayloadAction<CoinState['config']>) {
       state.config = action.payload;
     },
     syncRemoteCoinsMapAction(state, { payload }: PayloadAction<Record<string, Coin.RemoteCoin>>) {
@@ -44,19 +47,16 @@ const coinSlice = createSlice({
     setRemoteCoinsLoadingAction(state, action: PayloadAction<boolean>) {
       state.remoteCoinsLoading = action.payload;
     },
-    toggleCoinCollapseAction(state, { payload }: PayloadAction<Coin.ResponseItem & Coin.ExtraRow>) {
-      const { coins } = state;
-      coins.forEach((item) => {
-        if (item.code === payload.code) {
-          item.collapse = !payload.collapse;
-        }
+    toggleCoinCollapseAction(state, { payload }: PayloadAction<CoinState['coins'][number]>) {
+      Helpers.Base.Collapse({
+        list: state.coins,
+        key: 'code',
+        data: payload,
       });
     },
     toggleAllCoinsCollapseAction(state) {
-      const { coins } = state;
-      const expandAll = coins.every((item) => item.collapse);
-      coins.forEach((item) => {
-        item.collapse = !expandAll;
+      Helpers.Base.CollapseAll({
+        list: state.coins,
       });
     },
   },
@@ -64,7 +64,8 @@ const coinSlice = createSlice({
 
 export const {
   setCoinsLoadingAction,
-  syncCoinsAction,
+  syncCoinsStateAction,
+  filterCoinsAction,
   syncCoinsConfigAction,
   syncRemoteCoinsMapAction,
   setRemoteCoinsLoadingAction,
@@ -81,13 +82,41 @@ export const addCoinAction = createAsyncThunk<void, Coin.SettingItem, AsyncThunk
           config: { coinConfig },
         },
       } = getState();
-      const exist = coinConfig.find((item) => coin.code === item.code);
-      if (!exist) {
-        dispatch(setCoinConfigAction(coinConfig.concat(coin)));
-      }
+
+      const config = Helpers.Base.Add({
+        list: Utils.DeepCopy(coinConfig),
+        key: 'code',
+        data: coin,
+      });
+
+      dispatch(setCoinConfigAction(config));
     } catch (error) {}
   }
 );
+
+export const updateCoinAction = createAsyncThunk<
+  void,
+  Partial<Coin.SettingItem> & {
+    code: string;
+  },
+  AsyncThunkConfig
+>('coin/updateCoinAction', (coin, { dispatch, getState }) => {
+  try {
+    const {
+      coin: {
+        config: { coinConfig },
+      },
+    } = getState();
+
+    const config = Helpers.Base.Update({
+      list: Utils.DeepCopy(coinConfig),
+      key: 'code',
+      data: coin,
+    });
+
+    dispatch(setCoinConfigAction(config));
+  } catch (error) {}
+});
 
 export const deleteCoinAction = createAsyncThunk<void, string, AsyncThunkConfig>(
   'coin/deleteCoinAction',
@@ -98,58 +127,45 @@ export const deleteCoinAction = createAsyncThunk<void, string, AsyncThunkConfig>
           config: { coinConfig },
         },
       } = getState();
-      const cloneCoinConfig = coinConfig.slice();
 
-      cloneCoinConfig.forEach((item, index) => {
-        if (code === item.code) {
-          cloneCoinConfig.splice(index, 1);
-          dispatch(setCoinConfigAction(cloneCoinConfig));
-        }
+      const config = Helpers.Base.Delete({
+        list: Utils.DeepCopy(coinConfig),
+        key: 'code',
+        data: code,
       });
+
+      dispatch(setCoinConfigAction(config));
     } catch (error) {}
   }
 );
 
-export const setCoinConfigAction = createAsyncThunk<void, Coin.SettingItem[], AsyncThunkConfig>(
-  'coin/setCoinConfigAction',
-  (coinConfig, { dispatch, getState }) => {
+export const sortCoinsAction = createAsyncThunk<void, CoinState['coins'] | undefined, AsyncThunkConfig>(
+  'coin/sortCoinsAction',
+  (list, { dispatch, getState }) => {
     try {
       const {
-        coin: { coins },
+        coin: {
+          coins,
+          config: { codeMap },
+        },
+        sort: {
+          sortMode: {
+            coinSortMode: { order, type },
+          },
+        },
       } = getState();
 
-      const codeMap = Utils.GetCodeMap(coinConfig, 'code');
+      const sortList = Helpers.Coin.SortCoin({
+        codeMap,
+        list: list || coins,
+        sortType: type,
+        orderType: order,
+      });
 
-      dispatch(syncCoinsConfigAction({ coinConfig, codeMap }));
-      dispatch(syncCoinsStateAction(coins));
+      dispatch(syncCoinsStateAction(sortList));
     } catch (error) {}
   }
 );
-
-export const sortCoinsAction = createAsyncThunk<void, void, AsyncThunkConfig>('coin/sortCoinsAction', (_, { dispatch, getState }) => {
-  try {
-    const {
-      coin: {
-        coins,
-        config: { codeMap },
-      },
-      sort: {
-        sortMode: {
-          coinSortMode: { order, type },
-        },
-      },
-    } = getState();
-
-    const sortList = Helpers.Coin.SortCoin({
-      codeMap,
-      list: coins,
-      sortType: type,
-      orderType: order,
-    });
-
-    dispatch(syncCoinsStateAction(sortList));
-  } catch (error) {}
-});
 
 export const sortCoinsCachedAction = createAsyncThunk<void, Coin.ResponseItem[], AsyncThunkConfig>(
   'coin/sortCoinsCachedAction',
@@ -170,23 +186,19 @@ export const sortCoinsCachedAction = createAsyncThunk<void, Coin.ResponseItem[],
         response: responseCoins,
       });
 
-      dispatch(syncCoinsStateAction(coinsWithChached));
-      dispatch(sortCoinsAction());
+      dispatch(sortCoinsAction(coinsWithChached));
     } catch (error) {}
   }
 );
 
-export const syncCoinsStateAction = createAsyncThunk<void, (Coin.ResponseItem & Coin.ExtraRow)[], AsyncThunkConfig>(
-  'coin/syncCoinsStateAction',
-  (coins, { dispatch, getState }) => {
+export const setCoinConfigAction = createAsyncThunk<void, Coin.SettingItem[], AsyncThunkConfig>(
+  'coin/setCoinConfigAction',
+  (coinConfig, { dispatch }) => {
     try {
-      const {
-        coin: {
-          config: { codeMap },
-        },
-      } = getState();
-      const filterCoins = coins.filter(({ code }) => codeMap[code]);
-      dispatch(syncCoinsAction(filterCoins));
+      const codeMap = Utils.GetCodeMap(coinConfig, 'code');
+      dispatch(syncCoinsConfigAction({ coinConfig, codeMap }));
+
+      dispatch(filterCoinsAction());
     } catch (error) {}
   }
 );

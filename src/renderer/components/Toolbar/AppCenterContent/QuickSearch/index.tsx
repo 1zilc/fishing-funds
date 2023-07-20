@@ -1,6 +1,5 @@
 import React from 'react';
-import SearchIcon from '@/static/icon/search.svg';
-import GlobalIcon from '@/static/icon/global.svg';
+import { RiSearchLine, RiGlobalLine } from 'react-icons/ri';
 import clsx from 'clsx';
 import colorHash from '@/utils/colorHash';
 import * as Utils from '@/utils';
@@ -11,7 +10,7 @@ interface QuickSearchProps {
   value: string;
 }
 
-const QuickSearch: React.FC<QuickSearchProps> = (props) => {
+const QuickSearch: React.FC<QuickSearchProps> = React.memo((props) => {
   const { value } = props;
   const { valid, url } = Utils.CheckUrlValid(value);
 
@@ -71,7 +70,7 @@ const QuickSearch: React.FC<QuickSearchProps> = (props) => {
             onClick={() => openWebView(site.url)}
           >
             <span>{site.name}</span>
-            {site.name === '访问' ? <GlobalIcon /> : <SearchIcon />}
+            {site.name === '访问' ? <RiGlobalLine /> : <RiSearchLine />}
           </div>
         );
       })}
@@ -79,6 +78,6 @@ const QuickSearch: React.FC<QuickSearchProps> = (props) => {
   ) : (
     <></>
   );
-};
+});
 
-export default React.memo(QuickSearch);
+export default QuickSearch;

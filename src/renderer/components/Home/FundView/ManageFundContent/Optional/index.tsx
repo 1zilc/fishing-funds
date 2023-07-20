@@ -2,19 +2,26 @@ import React, { useMemo } from 'react';
 import { ReactSortable } from 'react-sortablejs';
 import clsx from 'clsx';
 import { Button } from 'antd';
-
+import {
+  RiAddLine,
+  RiMenuLine,
+  RiIndeterminateCircleFill,
+  RiEditLine,
+  RiFileCopyLine,
+  RiNotification2Line,
+  RiNotification2Fill,
+} from 'react-icons/ri';
 import PureCard from '@/components/Card/PureCard';
-import AddIcon from '@/static/icon/add.svg';
-import MenuIcon from '@/static/icon/menu.svg';
-import RemoveIcon from '@/static/icon/remove.svg';
-import EditIcon from '@/static/icon/edit.svg';
-import CopyIcon from '@/static/icon/copy.svg';
-import BellsLineIcon from '@/static/icon/bells-line.svg';
-import BellsFillIcon from '@/static/icon/bells-fill.svg';
 import CustomDrawer from '@/components/CustomDrawer';
 import Empty from '@/components/Empty';
 import { deleteFundAction, setFundConfigAction, updateFundAction } from '@/store/features/fund';
-import { useSyncFixFundSetting, useDrawer, useAutoDestroySortableRef, useAppDispatch, useAppSelector } from '@/utils/hooks';
+import {
+  useSyncFixFundSetting,
+  useDrawer,
+  useAutoDestroySortableRef,
+  useAppDispatch,
+  useAppSelector,
+} from '@/utils/hooks';
 import * as Utils from '@/utils';
 import styles from './index.module.scss';
 
@@ -28,29 +35,19 @@ const { dialog, clipboard } = window.contextModules.electron;
 const Optional: React.FC<OptionalProps> = () => {
   const dispatch = useAppDispatch();
   const sortableRef = useAutoDestroySortableRef();
-  const { show: showAddDrawer, set: setAddDrawer, close: closeAddDrawer } = useDrawer(null);
   const currentWalletCode = useAppSelector((state) => state.wallet.currentWalletCode);
   const fundConfig = useAppSelector((state) => state.wallet.fundConfig);
   const codeMap = useAppSelector((state) => state.wallet.fundConfigCodeMap);
+  const sortFundConfig = useMemo(() => fundConfig.map((_) => ({ ..._, id: _.code })), [fundConfig]);
+
+  const { show: showAddDrawer, set: setAddDrawer, close: closeAddDrawer } = useDrawer(null);
 
   const {
     data: editData,
     show: showEditDrawer,
     set: setEditDrawer,
     close: closeEditDrawer,
-  } = useDrawer({
-    focus: '',
-    fundData: {
-      cyfe: 0,
-      code: '',
-      name: '',
-      cbj: undefined as number | undefined,
-      zdfRange: undefined as number | undefined,
-      memo: '' as string | undefined,
-    },
-  });
-
-  const sortFundConfig = useMemo(() => fundConfig.map((_) => ({ ..._, id: _.code })), [fundConfig]);
+  } = useDrawer({} as Fund.SettingItem);
 
   const { done: syncFundSettingDone } = useSyncFixFundSetting();
 
@@ -58,10 +55,7 @@ const Optional: React.FC<OptionalProps> = () => {
     // 判断顺序是否发生变化
     const hasChanged = Utils.CheckListOrderHasChanged(fundConfig, sortList, 'code');
     if (hasChanged) {
-      const sortConfig = sortList.map((item) => {
-        const fund = codeMap[item.code];
-        return fund;
-      });
+      const sortConfig = sortList.map((item) => codeMap[item.code]);
       dispatch(setFundConfigAction({ config: sortConfig, walletCode: currentWalletCode }));
     }
   }
@@ -126,57 +120,20 @@ const Optional: React.FC<OptionalProps> = () => {
             dragClass={styles.dragItem}
             swap
           >
-            {sortFundConfig.map((fund) => {
-              return (
-                <PureCard key={fund.code} className={clsx(styles.row, 'hoverable')}>
-                  <RemoveIcon className={styles.remove} onClick={() => onRemoveFund(fund)} />
-                  <div className={styles.inner}>
-                    <div className={styles.name}>
-                      {fund.name}
-                      <span className={styles.code}>（{fund.code}）</span>
-                    </div>
-                  </div>
-                  <EditIcon
-                    className={styles.function}
-                    onClick={() =>
-                      setEditDrawer({
-                        fundData: {
-                          name: fund.name,
-                          cyfe: fund.cyfe,
-                          code: fund.code,
-                          cbj: fund.cbj,
-                          zdfRange: fund.zdfRange,
-                          memo: fund.memo,
-                        },
-                        focus: '',
-                      })
-                    }
-                  />
-                  {fund.zdfRange || fund.jzNotice ? (
-                    <BellsFillIcon className={styles.function} onClick={() => onCancleRiskNotice(fund)} />
-                  ) : (
-                    <BellsLineIcon
-                      className={styles.function}
-                      onClick={() =>
-                        setEditDrawer({
-                          fundData: {
-                            name: fund.name,
-                            cyfe: fund.cyfe,
-                            code: fund.code,
-                            cbj: fund.cbj,
-                            zdfRange: fund.zdfRange,
-                            memo: fund.memo,
-                          },
-                          focus: 'zdfRange',
-                        })
-                      }
-                    />
-                  )}
-                  <CopyIcon className={styles.function} onClick={() => onCopyFund(fund)} />
-                  <MenuIcon className={styles.menu} />
-                </PureCard>
-              );
-            })}
+            {sortFundConfig.map((fund) => (
+              <PureCard key={fund.code} className={clsx(styles.row, 'hoverable')}>
+                <RiIndeterminateCircleFill className={styles.remove} onClick={() => onRemoveFund(fund)} />
+                <div className={styles.name}>{fund.name}</div>
+                <RiEditLine className={styles.function} onClick={() => setEditDrawer(fund)} />
+                {fund.zdfRange || fund.jzNotice ? (
+                  <RiNotification2Fill className={styles.function} onClick={() => onCancleRiskNotice(fund)} />
+                ) : (
+                  <RiNotification2Line className={styles.function} onClick={() => setEditDrawer(fund)} />
+                )}
+                <RiFileCopyLine className={styles.function} onClick={() => onCopyFund(fund)} />
+                <RiMenuLine className={styles.function} />
+              </PureCard>
+            ))}
           </ReactSortable>
         ) : (
           <Empty text="正在同步基金设置~" />
@@ -189,7 +146,7 @@ const Optional: React.FC<OptionalProps> = () => {
         shape="circle"
         type="primary"
         size="large"
-        icon={<AddIcon />}
+        icon={<RiAddLine />}
         onClick={(e) => {
           setAddDrawer(null);
           e.stopPropagation();
@@ -199,7 +156,7 @@ const Optional: React.FC<OptionalProps> = () => {
         <AddFundContent onClose={closeAddDrawer} onEnter={closeAddDrawer} />
       </CustomDrawer>
       <CustomDrawer show={showEditDrawer}>
-        <EditFundContent onClose={closeEditDrawer} onEnter={closeEditDrawer} fund={editData.fundData} focus={editData.focus} />
+        <EditFundContent onClose={closeEditDrawer} onEnter={closeEditDrawer} fund={editData} />
       </CustomDrawer>
     </div>
   );

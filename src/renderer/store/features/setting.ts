@@ -27,6 +27,7 @@ export const defaultSystemSetting: System.Setting = {
   customThemeColorSetting: '',
   conciseSetting: false,
   lowKeySetting: false,
+  lowKeyDegreeSetting: 90,
   baseFontSizeSetting: 12,
   systemThemeSetting: Enums.SystemThemeType.Auto,
 
@@ -105,7 +106,8 @@ const settingSlice = createSlice({
     },
   },
 });
-export const { syncSettingAction, updateAdjustmentNotificationDateAction, syncDarkMode, syncVaribleColors } = settingSlice.actions;
+export const { syncSettingAction, updateAdjustmentNotificationDateAction, syncDarkMode, syncVaribleColors } =
+  settingSlice.actions;
 
 export const setSystemSettingAction = createAsyncThunk<void, System.Setting, AsyncThunkConfig>(
   'setting/setSystemSettingAction',
@@ -135,9 +137,6 @@ export const saveSyncConfigAction = createAsyncThunk<void, void, AsyncThunkConfi
           config: { zindexConfig },
         },
         quotation: { favoriteQuotationMap },
-        stock: {
-          config: { stockConfig },
-        },
         coin: {
           config: { coinConfig },
         },
@@ -155,7 +154,6 @@ export const saveSyncConfigAction = createAsyncThunk<void, void, AsyncThunkConfi
         [CONST.STORAGE.WALLET_SETTING]: walletConfig,
         [CONST.STORAGE.ZINDEX_SETTING]: zindexConfig,
         [CONST.STORAGE.FAVORITE_QUOTATION_MAP]: favoriteQuotationMap,
-        [CONST.STORAGE.STOCK_SETTING]: stockConfig,
         [CONST.STORAGE.COIN_SETTING]: coinConfig,
         [CONST.STORAGE.WEB_SETTING]: webConfig,
         [CONST.STORAGE.CURRENT_WALLET_CODE]: currentWalletCode,
@@ -178,11 +176,10 @@ export const loadSyncConfigAction = createAsyncThunk<void, void, AsyncThunkConfi
         },
       } = getState();
       if (syncConfigSetting && syncConfigPathSetting) {
-        const config = await Enhancement.loadSyncConfig(syncConfigPathSetting);
+        const config: any = await Enhancement.loadSyncConfig(syncConfigPathSetting);
         dispatch(setWalletConfigAction(config[CONST.STORAGE.WALLET_SETTING]));
         dispatch(setZindexConfigAction(config[CONST.STORAGE.ZINDEX_SETTING]));
         dispatch(setFavoriteQuotationMapAction(config[CONST.STORAGE.FAVORITE_QUOTATION_MAP]));
-        dispatch(setStockConfigAction(config[CONST.STORAGE.STOCK_SETTING]));
         dispatch(setCoinConfigAction(config[CONST.STORAGE.COIN_SETTING]));
         dispatch(setWebConfigAction(config[CONST.STORAGE.WEB_SETTING]));
         dispatch(changeCurrentWalletCodeAction(config[CONST.STORAGE.CURRENT_WALLET_CODE]));

@@ -3,11 +3,8 @@ import React, { useMemo } from 'react';
 import { ReactSortable } from 'react-sortablejs';
 import clsx from 'clsx';
 import { Button } from 'antd';
-
+import { RiAddLine, RiMenuLine, RiIndeterminateCircleFill } from 'react-icons/ri';
 import PureCard from '@/components/Card/PureCard';
-import AddIcon from '@/static/icon/add.svg';
-import MenuIcon from '@/static/icon/menu.svg';
-import RemoveIcon from '@/static/icon/remove.svg';
 import CustomDrawer from '@/components/CustomDrawer';
 import Empty from '@/components/Empty';
 import { deleteCoinAction, setCoinConfigAction } from '@/store/features/coin';
@@ -31,14 +28,7 @@ const Optional: React.FC<OptionalProps> = () => {
   function onSortCoinConfig(sortList: Coin.SettingItem[]) {
     const hasChanged = Utils.CheckListOrderHasChanged(coinConfig, sortList, 'code');
     if (hasChanged) {
-      const sortConfig = sortList.map((item) => {
-        const coin = codeMap[item.code];
-        return {
-          name: coin.name,
-          code: coin.code,
-          symbol: coin.symbol,
-        };
-      });
+      const sortConfig = sortList.map((item) => codeMap[item.code]);
       dispatch(setCoinConfigAction(sortConfig));
     }
   }
@@ -67,26 +57,13 @@ const Optional: React.FC<OptionalProps> = () => {
           dragClass={styles.dragItem}
           swap
         >
-          {sortCoinConfig.map((coin) => {
-            return (
-              <PureCard key={coin.code} className={clsx(styles.row, 'hoverable')}>
-                <RemoveIcon
-                  className={styles.remove}
-                  onClick={(e) => {
-                    onRemoveCoin(coin);
-                    e.stopPropagation();
-                  }}
-                />
-                <div className={styles.inner}>
-                  <div className={styles.name}>
-                    {coin.symbol}
-                    <span className={styles.code}>（{coin.code}）</span>
-                  </div>
-                </div>
-                <MenuIcon className={styles.menu} />
-              </PureCard>
-            );
-          })}
+          {sortCoinConfig.map((coin) => (
+            <PureCard key={coin.code} className={clsx(styles.row, 'hoverable')}>
+              <RiIndeterminateCircleFill className={styles.remove} onClick={() => onRemoveCoin(coin)} />
+              <div className={styles.name}>{coin.symbol}</div>
+              <RiMenuLine className={styles.function} />
+            </PureCard>
+          ))}
         </ReactSortable>
       ) : (
         <Empty text="暂未自选货币~" />
@@ -96,7 +73,7 @@ const Optional: React.FC<OptionalProps> = () => {
         shape="circle"
         type="primary"
         size="large"
-        icon={<AddIcon />}
+        icon={<RiAddLine />}
         onClick={(e) => {
           setAddDrawer(null);
           e.stopPropagation();

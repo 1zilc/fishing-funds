@@ -1,23 +1,23 @@
 import React from 'react';
 import clsx from 'clsx';
 import { useRequest } from 'ahooks';
-
-import ArrowDownIcon from '@/static/icon/arrow-down.svg';
-import ArrowUpIcon from '@/static/icon/arrow-up.svg';
-
+import { RiArrowDownSLine, RiArrowUpSLine, RiEditLine } from 'react-icons/ri';
 import Collapse from '@/components/Collapse';
 import ArrowLine from '@/components/ArrowLine';
-
-import { toggleStockCollapseAction, setIndustryMapAction } from '@/store/features/stock';
+import MemoNote from '@/components/MemoNote';
+import { setIndustryMapAction } from '@/store/features/stock';
+import { toggleStockCollapseAction } from '@/store/features/wallet';
 import { useResizeEchart, useRenderEcharts, useAppDispatch, useAppSelector } from '@/utils/hooks';
 import colorHash from '@/utils/colorHash';
 import * as Services from '@/services';
 import * as Utils from '@/utils';
 import * as Enums from '@/utils/enums';
+import * as Helpers from '@/helpers';
 import styles from './index.module.scss';
 
 export interface RowProps {
   stock: Stock.ResponseItem & Stock.ExtraRow;
+  onEdit?: (fund: Stock.SettingItem) => void;
   onDetail: (code: string) => void;
 }
 
@@ -99,12 +99,17 @@ const TrendChart: React.FC<{
   return <div ref={chartRef} style={{ width: 72 }} />;
 };
 
-const StockRow: React.FC<RowProps> = (props) => {
+const StockRow: React.FC<RowProps> = React.memo((props) => {
   const { stock } = props;
   const dispatch = useAppDispatch();
-  const { conciseSetting } = useAppSelector((state) => state.setting.systemSetting);
+  const eyeStatus = useAppSelector((state) => state.wallet.eyeStatus);
+  const conciseSetting = useAppSelector((state) => state.setting.systemSetting.conciseSetting);
   const industrys = useAppSelector((state) => state.stock.industryMap[stock.secid]) || [];
   const stockViewMode = useAppSelector((state) => state.sort.viewMode.stockViewMode);
+  const stockConfigCodeMap = useAppSelector((state) => state.wallet.stockConfigCodeMap);
+  const calcStockResult = Helpers.Stock.CalcStock(stock, stockConfigCodeMap);
+
+  const stockConfig = stockConfigCodeMap[stock.secid];
 
   useRequest(() => Services.Stock.GetIndustryFromEastmoney(stock.secid, 1), {
     onSuccess: (datas) => {
@@ -115,19 +120,18 @@ const StockRow: React.FC<RowProps> = (props) => {
     ready: !industrys.length,
   });
 
+  function onEditClick() {
+    props.onEdit?.(stockConfig);
+  }
+
   return (
     <>
       <div className={clsx(styles.row)} onClick={() => dispatch(toggleStockCollapseAction(stock))}>
         <div className={styles.arrow}>
-          {stock.collapse ? <ArrowUpIcon style={{ ...arrowSize }} /> : <ArrowDownIcon style={{ ...arrowSize }} />}
+          {stock.collapse ? <RiArrowUpSLine style={{ ...arrowSize }} /> : <RiArrowDownSLine style={{ ...arrowSize }} />}
         </div>
         <div style={{ flex: 1, width: 0 }}>
-          <div
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-            }}
-          >
+          <div style={{ display: 'flex', alignItems: 'center' }}>
             <span className={styles.stockName}>{stock.name}</span>
             {industrys.map((industry) => {
               const color = colorHash.hex(industry.name);
@@ -137,12 +141,23 @@ const StockRow: React.FC<RowProps> = (props) => {
                 </span>
               );
             })}
+            {!!calcStockResult.cyfe && <span className={styles.hold}>持有</span>}
+            {!!calcStockResult.cbj && eyeStatus && (
+              <span className={clsx(Utils.GetValueColor(calcStockResult.gscysyl).blockClass, styles.gscysyl)}>
+                {calcStockResult.gscysyl === '' ? `0.00%` : `${Utils.Yang(calcStockResult.gscysyl)}%`}
+              </span>
+            )}
           </div>
           {!conciseSetting && (
             <div className={styles.rowBar}>
               <div>
                 <span className={styles.code}>{stock.code}</span>
                 <span>{stock.time}</span>
+                {eyeStatus && (
+                  <span className={clsx(Utils.GetValueColor(calcStockResult.jrsygz).textClass, styles.worth)}>
+                    {Utils.Yang(calcStockResult.jrsygz.toFixed(2))}
+                  </span>
+                )}
               </div>
             </div>
           )}
@@ -163,9 +178,13 @@ const StockRow: React.FC<RowProps> = (props) => {
               {stockViewMode.type === Enums.StockViewType.Chart ? (
                 <div className={clsx(styles.zdd)}>{stock.zx}</div>
               ) : (
-                <div className={clsx(styles.zdd, Utils.GetValueColor(stock.zdd).textClass)}>{Utils.Yang(stock.zdd)}</div>
+                <div className={clsx(styles.zdd, Utils.GetValueColor(stock.zdd).textClass)}>
+                  {Utils.Yang(stock.zdd)}
+                </div>
               )}
-              <div className={clsx(styles.zdf, Utils.GetValueColor(stock.zdf).textClass)}>{Utils.Yang(stock.zdf)} %</div>
+              <div className={clsx(styles.zdf, Utils.GetValueColor(stock.zdf).textClass)}>
+                {Utils.Yang(stock.zdf)} %
+              </div>
             </div>
           )}
         </div>
@@ -200,6 +219,42 @@ const StockRow: React.FC<RowProps> = (props) => {
             <span>最低：</span>
             <span className="text-down">{stock.zd}</span>
           </section>
+          <section>
+            <span>持股数：</span>
+            <span>{stockConfig.cyfe}</span>
+            <RiEditLine className={styles.editor} onClick={onEditClick} />
+          </section>
+          <section>
+            <span>成本金额：</span>
+            <span>{calcStockResult.cbje !== undefined ? `¥ ${calcStockResult.cbje.toFixed(2)}` : '暂无'}</span>
+          </section>
+          <section>
+            <span>持有收益率：</span>
+            <span className={clsx(Utils.GetValueColor(calcStockResult.cysyl).textClass)}>
+              {calcStockResult.cysyl !== undefined ? `${Utils.Yang(calcStockResult.cysyl.toFixed(2))}%` : '暂无'}
+            </span>
+          </section>
+          <section>
+            <span>今日收益：</span>
+            <span className={clsx(Utils.GetValueColor(calcStockResult.jrsygz).textClass)}>
+              ¥ {Utils.Yang(calcStockResult.jrsygz.toFixed(2))}
+            </span>
+          </section>
+          <section>
+            <span>持有收益：</span>
+            <span className={clsx(Utils.GetValueColor(calcStockResult.cysy).textClass)}>
+              {calcStockResult.cysy !== undefined ? `¥ ${Utils.Yang(calcStockResult.cysy.toFixed(2))}` : '暂无'}
+            </span>
+          </section>
+          <section>
+            <span>今日总额：</span>
+            <span>¥ {calcStockResult.gszz.toFixed(2)}</span>
+          </section>
+          <section>
+            <span>成本价：</span>
+            {calcStockResult.cbj !== undefined ? <span>{calcStockResult.cbj}</span> : <a onClick={onEditClick}>录入</a>}
+          </section>
+          {stockConfig.memo && <MemoNote text={stockConfig.memo} />}
           <div className={styles.view}>
             <a onClick={() => props.onDetail(stock.secid)}>{'查看详情 >'}</a>
           </div>
@@ -207,6 +262,6 @@ const StockRow: React.FC<RowProps> = (props) => {
       </Collapse>
     </>
   );
-};
+});
 
 export default StockRow;

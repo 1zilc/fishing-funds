@@ -1,10 +1,9 @@
 import React from 'react';
 import clsx from 'clsx';
-
-import ArrowDownIcon from '@/static/icon/arrow-down.svg';
-import ArrowUpIcon from '@/static/icon/arrow-up.svg';
+import { RiArrowDownSLine, RiArrowUpSLine, RiEditLine } from 'react-icons/ri';
 import Collapse from '@/components/Collapse';
 import ArrowLine from '@/components/ArrowLine';
+import MemoNote from '@/components/MemoNote';
 
 import { toggleZindexCollapseAction } from '@/store/features/zindex';
 import { useAppDispatch, useAppSelector, useRenderEcharts, useResizeEchart } from '@/utils/hooks';
@@ -14,6 +13,7 @@ import styles from './index.module.scss';
 
 export interface RowProps {
   zindex: Zindex.ResponseItem & Zindex.ExtraRow;
+  onEdit?: (fund: Zindex.SettingItem) => void;
   onDetail: (code: string) => void;
 }
 
@@ -95,15 +95,22 @@ const TrendChart: React.FC<{
   return <div ref={chartRef} style={{ width: 72 }} />;
 };
 
-const ZindexRow: React.FC<RowProps> = (props) => {
+const ZindexRow: React.FC<RowProps> = React.memo((props) => {
   const { zindex } = props;
   const dispatch = useAppDispatch();
-  const { conciseSetting } = useAppSelector((state) => state.setting.systemSetting);
+  const conciseSetting = useAppSelector((state) => state.setting.systemSetting.conciseSetting);
   const zindexViewMode = useAppSelector((state) => state.sort.viewMode.zindexViewMode);
+  const zindexConfigCodeMap = useAppSelector((state) => state.zindex.config.codeMap);
+
+  const zindexConfig = zindexConfigCodeMap[zindex.code];
 
   const onDetailClick = () => {
     props.onDetail(zindex.code);
   };
+
+  function onEditClick() {
+    props.onEdit?.(zindexConfig);
+  }
 
   return (
     <>
@@ -114,7 +121,11 @@ const ZindexRow: React.FC<RowProps> = (props) => {
         }}
       >
         <div className={styles.arrow}>
-          {zindex.collapse ? <ArrowUpIcon style={{ ...arrowSize }} /> : <ArrowDownIcon style={{ ...arrowSize }} />}
+          {zindex.collapse ? (
+            <RiArrowUpSLine style={{ ...arrowSize }} />
+          ) : (
+            <RiArrowDownSLine style={{ ...arrowSize }} />
+          )}
         </div>
         <div style={{ flex: 1 }}>
           <div style={{ display: 'flex', alignItems: 'center' }}>
@@ -145,9 +156,13 @@ const ZindexRow: React.FC<RowProps> = (props) => {
               {zindexViewMode.type === Enums.ZindexViewType.Chart ? (
                 <div className={clsx(styles.zdd)}>{zindex.zsz}</div>
               ) : (
-                <div className={clsx(styles.zdd, Utils.GetValueColor(zindex.zdd).textClass)}>{Utils.Yang(zindex.zdd)}</div>
+                <div className={clsx(styles.zdd, Utils.GetValueColor(zindex.zdd).textClass)}>
+                  {Utils.Yang(zindex.zdd)}
+                </div>
               )}
-              <div className={clsx(styles.zdf, Utils.GetValueColor(zindex.zdf).textClass)}>{Utils.Yang(zindex.zdf)} %</div>
+              <div className={clsx(styles.zdf, Utils.GetValueColor(zindex.zdf).textClass)}>
+                {Utils.Yang(zindex.zdf)} %
+              </div>
             </div>
           )}
         </div>
@@ -167,12 +182,13 @@ const ZindexRow: React.FC<RowProps> = (props) => {
             </section>
           )}
           <section>
-            <span>今开：</span>
-            <span className={clsx(Utils.GetValueColor(zindex.jk - zindex.zs).textClass)}>{zindex.jk}</span>
-          </section>
-          <section>
             <span>昨收：</span>
             <span>{zindex.zs}</span>
+            <RiEditLine className={styles.editor} onClick={onEditClick} />
+          </section>
+          <section>
+            <span>今开：</span>
+            <span className={clsx(Utils.GetValueColor(zindex.jk - zindex.zs).textClass)}>{zindex.jk}</span>
           </section>
           <section>
             <span>最高：</span>
@@ -196,6 +212,7 @@ const ZindexRow: React.FC<RowProps> = (props) => {
               <span>{zindex.zindexCode}</span>
             </section>
           )}
+          {zindexConfig.memo && <MemoNote text={zindexConfig.memo} />}
           <div className={styles.view}>
             <a onClick={onDetailClick}>{'查看详情 >'}</a>
           </div>
@@ -203,6 +220,6 @@ const ZindexRow: React.FC<RowProps> = (props) => {
       </Collapse>
     </>
   );
-};
+});
 
 export default ZindexRow;

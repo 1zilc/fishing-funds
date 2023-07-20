@@ -26,14 +26,19 @@ const ClosedCalendar: React.FC<ClosedCalendarProps> = () => {
   const { data: closeDates = [], run: runStockGetCloseDayDates } = useRequest(Services.Stock.GetCloseDayDates);
   const currentCloseDates = closeDates.filter(({ MKT }) => marketType.name === MKT);
   return (
-    <ChartCard TitleBar={<div className={styles.titleBar}>仅展示节假日、特殊工作日</div>} onFresh={runStockGetCloseDayDates}>
+    <ChartCard
+      TitleBar={<div className={styles.titleBar}>仅展示节假日、特殊工作日</div>}
+      onFresh={runStockGetCloseDayDates}
+    >
       <div className={clsx(styles.content)}>
         <Calendar
           fullscreen={false}
           validRange={[today.subtract(1, 'year'), today.add(1, 'year')]}
-          dateFullCellRender={(d) => {
+          fullCellRender={(d) => {
             const date = dayjs(d.format('YYYY/M/D'));
-            const day = currentCloseDates.find(({ SDATE, EDATE }) => date.isSameOrAfter(SDATE) && date.isSameOrBefore(EDATE));
+            const day = currentCloseDates.find(
+              ({ SDATE, EDATE }) => date.isSameOrAfter(SDATE) && date.isSameOrBefore(EDATE)
+            );
             const isToday = date.isSame(today.format('YYYY/M/D'));
             return (
               <div className={styles.filed}>

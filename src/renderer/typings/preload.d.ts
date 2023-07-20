@@ -32,12 +32,6 @@ declare global {
         saveJsonToCsv: (filePath: string, json: any[]) => Promise<unknown>;
         readFile: (content: string) => Promise<string>;
       };
-      coding: {
-        encryptFF: (content: any) => Promise<string>;
-        decryptFF: (content: string) => Promise<any>;
-        encodeFF: (content: any) => Promise<string>;
-        decodeFF: (content: string) => Promise<any>;
-      };
       electronStore: {
         get: <T = unknown>(type: Store.StoreType, key: string, init?: T) => Promise<T>;
         set: (type: Store.StoreType, key: string, data: unknown) => Promise<void>;
@@ -45,13 +39,6 @@ declare global {
         cover: (type: Store.StoreType, data: unknown) => Promise<void>;
         all: (type: Store.StoreType) => Promise<any>;
       };
-      base64: {
-        encode: (src: string, urlsafe?: boolean | undefined) => string;
-        decode: (src: string) => string;
-        fromUint8Array: (u8a: Uint8Array, urlsafe?: boolean | undefined) => string;
-      };
     };
   }
 }
-
-export {};

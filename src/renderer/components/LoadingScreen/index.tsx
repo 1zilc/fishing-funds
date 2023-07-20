@@ -20,7 +20,11 @@ const LoadingScreen: React.FC<LoadingScreenProps> = (props) => {
         <Logo size={96} />
         <div className={styles.name}>Fishing Funds</div>
       </div>
-      <Spin className={styles.spin} spinning={loading} size="small" tip={text} />
+      <div className={styles.spin}>
+        <Spin spinning={loading} size="small" tip={text}>
+          <div style={{ width: 240 }}></div>
+        </Spin>
+      </div>
       <a className={styles.link} onClick={() => shell.openExternal('https://ff.1zilc.top')}>
         ff.1zilc.top
       </a>

@@ -1,5 +1,4 @@
-import React, { useMemo } from 'react';
-
+import React, { useEffect, useMemo } from 'react';
 import FundRow from '@/components/Home/FundView/FundRow';
 import Empty from '@/components/Empty';
 import LoadingBar from '@/components/LoadingBar';
@@ -21,20 +20,25 @@ interface FundListProps {
 const FundView: React.FC<FundListProps> = (props) => {
   const fundsLoading = useAppSelector((state) => state.fund.fundsLoading);
   const fundViewMode = useAppSelector((state) => state.sort.viewMode.fundViewMode);
-  const { funds } = useAppSelector((state) => state.wallet.currentWallet);
+  const funds = useAppSelector((state) => state.wallet.currentWallet.funds);
   const fundConfigCodeMap = useAppSelector((state) => state.wallet.fundConfigCodeMap);
+
+  const freshFunds = useFreshFunds();
 
   const {
     data: editData,
     show: showEditDrawer,
     set: setEditDrawer,
     close: closeEditDrawer,
-  } = useDrawer({
-    focus: '',
-    fundData: { cyfe: 0, code: '', name: '' },
-  });
-  const freshFunds = useFreshFunds(0);
-  const { data: detailFundCode, show: showDetailDrawer, set: setDetailDrawer, close: closeDetailDrawer } = useDrawer('');
+  } = useDrawer({} as Fund.SettingItem);
+
+  const {
+    data: detailFundCode,
+    show: showDetailDrawer,
+    set: setDetailDrawer,
+    close: closeDetailDrawer,
+  } = useDrawer('');
+
   const list = funds.filter(props.filter);
 
   const view = useMemo(() => {
@@ -58,12 +62,7 @@ const FundView: React.FC<FundListProps> = (props) => {
       case Enums.FundViewType.List:
       default:
         return list.map((fund) => (
-          <FundRow
-            key={fund.fundcode}
-            fund={fund}
-            onEdit={(fundData, focus) => setEditDrawer({ fundData, focus })}
-            onDetail={setDetailDrawer}
-          />
+          <FundRow key={fund.fundcode} fund={fund} onEdit={setEditDrawer} onDetail={setDetailDrawer} />
         ));
     }
   }, [list, fundViewMode, fundConfigCodeMap]);
@@ -78,7 +77,7 @@ const FundView: React.FC<FundListProps> = (props) => {
       <LoadingBar show={fundsLoading} />
       {list.length ? view : <Empty text="暂无基金数据~" />}
       <CustomDrawer show={showEditDrawer}>
-        <EditFundContent onClose={closeEditDrawer} onEnter={enterEditDrawer} fund={editData.fundData} focus={editData.focus} />
+        <EditFundContent onClose={closeEditDrawer} onEnter={enterEditDrawer} fund={editData} />
       </CustomDrawer>
       <CustomDrawer show={showDetailDrawer}>
         <DetailFundContent onEnter={closeDetailDrawer} onClose={closeDetailDrawer} code={detailFundCode} />

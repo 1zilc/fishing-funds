@@ -1,18 +1,18 @@
 .block-up {
   background-color: var(--increase-color);
-  box-shadow: 0 2px 5px var(--increase-color);
+  box-shadow: 0 1px 5px var(--increase-color);
   transition: background 0.2s;
 }
 
 .block-down {
   background-color: var(--reduce-color);
-  box-shadow: 0 2px 5px var(--reduce-color);
+  box-shadow: 0 1px 5px var(--reduce-color);
   transition: background 0.2s;
 }
 
 .block-none {
   background-color: var(--reverse-text-color);
-  box-shadow: 0 2px 5px var(--reverse-text-color);
+  box-shadow: 0 1px 5px var(--reverse-text-color);
   transition: background 0.2s;
 }
 

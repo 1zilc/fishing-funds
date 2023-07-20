@@ -6,6 +6,7 @@ export interface ThemeProviderProps {
   config: {
     darkMode: boolean;
     lowKey: boolean;
+    lowKeyDegree: number;
     baseFontSize: number;
     primaryColor: string;
   };
@@ -22,7 +23,7 @@ const Styles: React.FC<StylesProps> = (props) => {
   return (
     <style>
       {` ${target || ':root'} {
-            filter: ${config.lowKey && 'grayscale(90%)'};
+            filter: ${config.lowKey && `grayscale(${config.lowKeyDegree}%)`};
             font-size: ${token.fontSize}px;
             font-family: ${token.fontFamily};
             --base-padding: ${token.paddingSM}px;

@@ -1,11 +1,9 @@
-import iconv from 'iconv-lite';
+import { fromUint8Array } from 'js-base64';
 import NP from 'number-precision';
 import cheerio from 'cheerio';
 import dayjs from 'dayjs';
 import request from '@/utils/request';
 import * as Utils from '@/utils';
-
-const { base64 } = window.contextModules;
 
 // 天天基金
 export async function FromEastmoney(code: string) {
@@ -25,53 +23,6 @@ export async function FromEastmoney(code: string) {
     }
   } catch (error) {
     return await GetEtfFundHourFromEastMoney(code);
-  }
-}
-
-// 基金速查网
-export async function FromDayFund(code: string) {
-  try {
-    const { body } = await request('https://www.dayfund.cn/ajs/ajaxdata.shtml', {
-      responseType: 'text',
-      searchParams: {
-        showtype: 'getfundvalue',
-        fundcode: code,
-      },
-    });
-    if (body === '||||%|%|||||') {
-      return;
-    }
-    const { body: html } = await request(`https://www.dayfund.cn/fundinfo/${code}.html`, {
-      responseType: 'text',
-    });
-    const $ = cheerio.load(html);
-    const [name] = $('meta[name=keywords]').attr('content')?.split(',') || [''];
-    const [
-      jzrq,
-      dwjz, // 单位净值
-      ljjz,
-      sjbjz,
-      sjzzl,
-      gsbjl,
-      gsbjz,
-      gsz,
-      xxjz, // 未知净值
-      gzrq,
-      gztime,
-    ] = body.split('|');
-
-    // 2021-01-29|1.8040|2.2490|-0.0440|-2.3800%|-1.8652%|-0.0345|1.8135|1.8480|2021-01-29|15:35:00
-    return {
-      name,
-      fundcode: code,
-      gztime: `${gzrq} ${gztime}`,
-      gszzl: Number(gsbjl.replace(/%/g, '')).toFixed(2),
-      jzrq,
-      dwjz,
-      gsz,
-    };
-  } catch (error) {
-    return;
   }
 }
 
@@ -111,158 +62,6 @@ export async function FromTencent(code: string) {
       jzrq,
       gsz,
       gszzl,
-    };
-  } catch (error) {
-    return;
-  }
-}
-
-// 新浪基金
-export async function FromSina(code: string) {
-  try {
-    const { rawBody } = await request(`https://hq.sinajs.cn/list=fu_${code}`, {
-      headers: {
-        Referer: 'https://finance.sina.com.cn/',
-      },
-    });
-
-    const utf8String = iconv.decode(rawBody, 'GB18030');
-    const [w, contnet] = utf8String.split('=');
-    const data = contnet.replace(/(")|(;)|(\s)/g, '');
-    if (!data) {
-      return;
-    }
-    const { body: html } = await request(`https://finance.sina.com.cn/fund/quotes/${code}/bc.shtml`, {
-      responseType: 'text',
-    });
-    const $ = cheerio.load(html);
-    const jzrq = $('#fund_info_blk2 > .fund_data_date').text().slice(5);
-    const [name, time, gsz, dwjz, zjz, unknow1, gszzl, gzrq] = data.split(',');
-    return {
-      name,
-      dwjz,
-      fundcode: code,
-      gztime: `${gzrq} ${time}`,
-      jzrq,
-      gsz,
-      gszzl: Number(gszzl).toFixed(2),
-    };
-  } catch (error) {
-    return;
-  }
-}
-
-// 好买基金
-export async function FromHowbuy(code: string) {
-  try {
-    const { body } = await request(`https://www.howbuy.com/fund/ajax/gmfund/valuation/valuationnav.htm`, {
-      method: 'POST',
-      responseType: 'text',
-      searchParams: {
-        jjdm: code,
-      },
-    });
-    if (!body) {
-      return;
-    }
-    let $ = cheerio.load(body);
-    const gsz = $('span').eq(0).text();
-    const gszzl = $('span').eq(2).text().replace(/%/g, '');
-    const year = new Date().getFullYear();
-    const gztime = `${year}-${$('span')
-      .eq(3)
-      .text()
-      .replace(/(\[)|(\])/g, '')
-      .trim()}`;
-
-    const { body: html } = await request(`https://www.howbuy.com/fund/${code}/`, {
-      responseType: 'text',
-      method: 'POST',
-    });
-    $ = cheerio.load(html);
-    const name = $('.gmfund_title .lt h1')
-      .text()
-      .replace(/(\()|(\))|(\d)/g, '');
-    const dwjz = $('.dRate > div').text().trim();
-    const date = /\d{2}-\d{2}/.exec($('.dRate').next().text())?.[0];
-    const jzrq = date ? `${year}-${date}` : '无法获取';
-    return {
-      name,
-      dwjz,
-      fundcode: code,
-      gztime,
-      jzrq,
-      gsz,
-      gszzl: Number(gszzl).toFixed(2),
-    };
-  } catch (error) {
-    return;
-  }
-}
-
-// 易天富
-export async function FromEtf(code: string) {
-  try {
-    const {
-      body: { data },
-    } = await request<{
-      code: 200;
-      successcode: 1;
-      data: {
-        gzrq: '2021-05-14';
-        result: {
-          fundcode: string;
-          gztime: string; // '09:30';
-          gzprice: number; // '1.0468';
-          gzzf: string; // '0.56';
-          hushen300xj: number; // '5009.46';
-          shenzhengxj: number; // '13967.33';
-          shangzhengxj: number; // '3436.76';
-          hushen300zf: number; // '0.33';
-          shenzhengzf: number; // '0.36';
-          shangzhengzf: number; // '0.21';
-        }[];
-      };
-      msg: '查询成功';
-    }>(`https://api.etf88.com/fundcode/getfundguzhizhangfuzoushi`, {
-      searchParams: {
-        fundcode: code,
-      },
-      responseType: 'json',
-    });
-    if (!data) {
-      return;
-    }
-    const { body: html } = await request(`https://www.etf88.com/jj/${code}/`, {
-      responseType: 'text',
-    });
-    const $ = cheerio.load(html);
-    const name = $('h1[class="name"]').text();
-    const firstDate = $('.table').eq(1).find('tbody tr').eq(0).find('td').eq(0).text();
-
-    const firstJz = $('.table').eq(1).find('tbody tr').eq(0).find('td').eq(1).text();
-
-    const secondDate = $('.table').eq(1).find('tbody tr').eq(1).find('td').eq(0).text();
-
-    const secondJz = $('.table').eq(1).find('tbody tr').eq(1).find('td').eq(1).text();
-    const dwjz = data.gzrq === firstDate ? secondJz : firstJz;
-
-    const jzrq = $('.fund-d-title')
-      .eq(0)
-      .text()
-      .replace(/(?![0-9/-])./g, '');
-
-    const result = data.result || [];
-    const temp: any = result.pop() || {};
-
-    return {
-      name, // 名称 '诺安混合'
-      fundcode: temp.fundcode, // 代码 '320007'
-      gztime: `${data.gzrq} ${temp.gztime}`, // 估值时间 '2021-01-01 15:00'
-      gszzl: temp.gzzf, // 估算增长率 '-1.234'
-      jzrq, // 净值日期 '2021-01-01'
-      dwjz, // 当前净值 '1.1111'
-      gsz: temp.gzprice, // 估算值 '1.2222'
     };
   } catch (error) {
     return;
@@ -426,7 +225,7 @@ export async function FromFund123(code: string) {
         _csrf: csrf,
       },
       headers: {
-        cookie: cookies?.join(''),
+        'cookie': cookies?.join(''),
         'content-type': 'application/json',
       },
       body: JSON.stringify({
@@ -598,7 +397,7 @@ export async function FromFund10jqka(code: string) {
 export async function GetEstimatedFromEastmoney(code: string) {
   try {
     const { rawBody } = await request(`https://j4.dfcfw.com/charts/pic6/${code}.png`);
-    const b64encoded = base64.fromUint8Array(new Uint8Array(rawBody));
+    const b64encoded = fromUint8Array(new Uint8Array(rawBody));
     return `data:image/png;base64,${b64encoded}`;
   } catch (error) {
     return;
@@ -609,7 +408,7 @@ export async function GetEstimatedFromEastmoney(code: string) {
 export async function GetInverstStyleFromEastmoney(code: string) {
   try {
     const { rawBody } = await request(`https://j3.dfcfw.com/images/InvestStyle/${code}.png`);
-    const b64encoded = base64.fromUint8Array(new Uint8Array(rawBody));
+    const b64encoded = fromUint8Array(new Uint8Array(rawBody));
     return `data:image/png;base64,${b64encoded}`;
   } catch (error) {
     return;

@@ -54,7 +54,9 @@ export default class TouchBarManager {
     this.updateTouchBar();
   }
 
-  updateTabItems(configs: (Electron.TouchBarButtonConstructorOptions & { key: Enums.TabKeyType; selected: boolean })[]) {
+  updateTabItems(
+    configs: (Electron.TouchBarButtonConstructorOptions & { key: Enums.TabKeyType; selected: boolean })[]
+  ) {
     const selectedIndex = configs.findIndex(({ selected }) => selected);
     this.tabItems = [
       new TouchBarSegmentedControl({
@@ -69,11 +71,10 @@ export default class TouchBarManager {
     this.updateTouchBar();
   }
 
-  updateEysStatusItems(status: Enums.EyeStatus) {
+  updateEysStatusItems(status: boolean) {
     this.eyeStatusItems = [
       new TouchBarButton({
-        icon:
-          status === Enums.EyeStatus.Open ? generateIconFromPath('touchbar/eye-open.png') : generateIconFromPath('touchbar/eye-close.png'),
+        icon: status ? generateIconFromPath('touchbar/eye-open.png') : generateIconFromPath('touchbar/eye-close.png'),
         click: () => sendMessageToRenderer(this.mb.window, 'change-eye-status'),
       }),
     ];

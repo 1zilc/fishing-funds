@@ -4,7 +4,6 @@ import { AsyncThunkConfig } from '@/store';
 import { setWalletConfigAction, updateWalletStateAction, setWalletStateAction } from '@/store/features/wallet';
 import * as Utils from '@/utils';
 import * as Helpers from '@/helpers';
-import * as Enums from '@/utils/enums';
 
 export interface FundState {
   fundsLoading: boolean;
@@ -42,28 +41,30 @@ const fundSlice = createSlice({
   },
 });
 
-export const { syncRemoteFundsMapAction, setFundsLoadingAction, setRemoteFundsLoadingAction, syncFundRatingMapAction } = fundSlice.actions;
+export const { syncRemoteFundsMapAction, setFundsLoadingAction, setRemoteFundsLoadingAction, syncFundRatingMapAction } =
+  fundSlice.actions;
 
-export const setFundConfigAction = createAsyncThunk<void, { config: Fund.SettingItem[]; walletCode: string }, AsyncThunkConfig>(
-  'fund/setFundConfigAction',
-  ({ config, walletCode }, { dispatch, getState }) => {
-    try {
-      const {
-        wallet: {
-          config: { walletConfig },
-          currentWallet,
-        },
-      } = getState();
-      const newWalletConfig = walletConfig.map((item) => ({
-        ...item,
-        funds: walletCode === item.code ? config : item.funds,
-      }));
+export const setFundConfigAction = createAsyncThunk<
+  void,
+  { config: Fund.SettingItem[]; walletCode: string },
+  AsyncThunkConfig
+>('fund/setFundConfigAction', ({ config, walletCode }, { dispatch, getState }) => {
+  try {
+    const {
+      wallet: {
+        config: { walletConfig },
+        currentWallet,
+      },
+    } = getState();
+    const newWalletConfig = walletConfig.map((item) => ({
+      ...item,
+      funds: walletCode === item.code ? config : item.funds,
+    }));
 
-      dispatch(setWalletConfigAction(newWalletConfig));
-      dispatch(updateWalletStateAction(currentWallet));
-    } catch (error) {}
-  }
-);
+    dispatch(setWalletConfigAction(newWalletConfig));
+    dispatch(updateWalletStateAction(currentWallet));
+  } catch (error) {}
+});
 
 export const setRemoteFundsAction = createAsyncThunk<void, Fund.RemoteFund[], AsyncThunkConfig>(
   'fund/setRemoteFundsAction',
@@ -75,6 +76,7 @@ export const setRemoteFundsAction = createAsyncThunk<void, Fund.RemoteFund[], As
       const oldRemoteMap = Utils.GetCodeMap(remoteFunds, 0);
       const newRemoteMap = Utils.GetCodeMap(newRemoteFunds, 0);
       const remoteMap = { ...oldRemoteMap, ...newRemoteMap };
+
       dispatch(syncRemoteFundsMapAction(remoteMap));
     } catch (error) {}
   }
@@ -103,24 +105,22 @@ export const addFundAction = createAsyncThunk<void, Fund.SettingItem, AsyncThunk
       const {
         wallet: { currentWalletCode, fundConfig },
       } = getState();
-      const exist = fundConfig.find((item) => fund.code === item.code);
-      if (!exist) {
-        dispatch(setFundConfigAction({ config: fundConfig.concat(fund), walletCode: currentWalletCode }));
-      }
+
+      const config = Helpers.Base.Add({
+        list: Utils.DeepCopy(fundConfig),
+        key: 'code',
+        data: fund,
+      });
+
+      dispatch(setFundConfigAction({ config, walletCode: currentWalletCode }));
     } catch (error) {}
   }
 );
 
 export const updateFundAction = createAsyncThunk<
   void,
-  {
+  Partial<Fund.SettingItem> & {
     code: string;
-    cyfe?: number;
-    name?: string;
-    cbj?: number;
-    zdfRange?: number;
-    jzNotice?: number;
-    memo?: string;
   },
   AsyncThunkConfig
 >('fund/updateFundAction', (fund, { dispatch, getState }) => {
@@ -128,16 +128,14 @@ export const updateFundAction = createAsyncThunk<
     const {
       wallet: { currentWalletCode, fundConfig },
     } = getState();
-    const cloneFundConfig = Utils.DeepCopy(fundConfig);
-    cloneFundConfig.forEach((item) => {
-      if (fund.code === item.code) {
-        Object.keys(fund).forEach((key) => {
-          (item[key as keyof Fund.SettingItem] as any) = fund[key as keyof Fund.SettingItem];
-        });
-      }
+
+    const config = Helpers.Base.Update({
+      list: Utils.DeepCopy(fundConfig),
+      key: 'code',
+      data: fund,
     });
 
-    dispatch(setFundConfigAction({ config: cloneFundConfig, walletCode: currentWalletCode }));
+    dispatch(setFundConfigAction({ config, walletCode: currentWalletCode }));
   } catch (error) {}
 });
 
@@ -148,13 +146,14 @@ export const deleteFundAction = createAsyncThunk<void, string, AsyncThunkConfig>
       const {
         wallet: { currentWalletCode, fundConfig },
       } = getState();
-      fundConfig.forEach((item, index) => {
-        if (code === item.code) {
-          const cloneFundConfig = Utils.DeepCopy(fundConfig);
-          cloneFundConfig.splice(index, 1);
-          dispatch(setFundConfigAction({ config: cloneFundConfig, walletCode: currentWalletCode }));
-        }
+
+      const config = Helpers.Base.Delete({
+        list: Utils.DeepCopy(fundConfig),
+        key: 'code',
+        data: code,
       });
+
+      dispatch(setFundConfigAction({ config, walletCode: currentWalletCode }));
     } catch (error) {}
   }
 );
@@ -189,32 +188,33 @@ export const sortFundsAction = createAsyncThunk<void, string, AsyncThunkConfig>(
   }
 );
 
-export const sortFundsCachedAction = createAsyncThunk<void, { responseFunds: Fund.ResponseItem[]; walletCode: string }, AsyncThunkConfig>(
-  'fund/sortFundsCachedAction',
-  ({ responseFunds, walletCode }, { dispatch, getState }) => {
-    try {
-      const {
-        wallet: {
-          config: { walletConfig },
-          wallets,
-        },
-      } = getState();
-      const { fundConfig } = Helpers.Fund.GetFundConfig(walletCode, walletConfig);
-      const { funds } = Helpers.Wallet.GetCurrentWalletState(walletCode, wallets);
-      const now = dayjs().format('MM-DD HH:mm:ss');
+export const sortFundsCachedAction = createAsyncThunk<
+  void,
+  { responseFunds: Fund.ResponseItem[]; walletCode: string },
+  AsyncThunkConfig
+>('fund/sortFundsCachedAction', ({ responseFunds, walletCode }, { dispatch, getState }) => {
+  try {
+    const {
+      wallet: {
+        config: { walletConfig },
+        wallets,
+      },
+    } = getState();
+    const { fundConfig } = Helpers.Fund.GetFundConfig(walletCode, walletConfig);
+    const { funds } = Helpers.Wallet.GetCurrentWalletState(walletCode, wallets);
+    const now = dayjs().format('MM-DD HH:mm:ss');
 
-      const fundsWithChached = Utils.MergeStateWithResponse({
-        config: fundConfig,
-        configKey: 'code',
-        stateKey: 'fundcode',
-        state: funds,
-        response: responseFunds,
-      });
+    const fundsWithChached = Utils.MergeStateWithResponse({
+      config: fundConfig,
+      configKey: 'code',
+      stateKey: 'fundcode',
+      state: funds,
+      response: responseFunds,
+    });
 
-      dispatch(setWalletStateAction({ code: walletCode, funds: fundsWithChached, updateTime: now }));
-      dispatch(sortFundsAction(walletCode));
-    } catch (error) {}
-  }
-);
+    dispatch(setWalletStateAction({ code: walletCode, funds: fundsWithChached, updateTime: now }));
+    dispatch(sortFundsAction(walletCode));
+  } catch (error) {}
+});
 
 export default fundSlice.reducer;

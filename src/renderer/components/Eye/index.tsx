@@ -1,8 +1,6 @@
 import React from 'react';
 import clsx from 'clsx';
-
-import EyeIcon from '@/static/icon/eye.svg';
-import EyeCloseIcon from '@/static/icon/eye-close.svg';
+import { RiEyeLine, RiEyeCloseLine } from 'react-icons/ri';
 import styles from './index.module.scss';
 
 export interface EyeProps {
@@ -18,9 +16,9 @@ const Eye: React.FC<EyeProps> = (props) => {
     props.onClick?.(!status);
   }
   return status ? (
-    <EyeIcon className={clsx(styles.eye, classNames)} style={style} onClick={toggle} />
+    <RiEyeLine className={clsx(styles.eye, classNames)} style={style} onClick={toggle} />
   ) : (
-    <EyeCloseIcon className={clsx(styles.eye, classNames)} style={style} onClick={toggle} />
+    <RiEyeCloseLine className={clsx(styles.eye, classNames)} style={style} onClick={toggle} />
   );
 };
 export default Eye;

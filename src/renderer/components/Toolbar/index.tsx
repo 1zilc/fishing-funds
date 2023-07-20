@@ -2,9 +2,7 @@ import React, { useRef } from 'react';
 import { Badge } from 'antd';
 import clsx from 'clsx';
 import { useBoolean, useMemoizedFn, useLongPress } from 'ahooks';
-import RefreshIcon from '@/static/icon/refresh.svg';
-import SettingIcon from '@/static/icon/setting.svg';
-import AppsIcon from '@/static/icon/apps.svg';
+import { RiRefreshLine, RiSettingsLine, RiAppsLine } from 'react-icons/ri';
 import CustomDrawer from '@/components/CustomDrawer';
 import {
   useFreshFunds,
@@ -14,6 +12,7 @@ import {
   useFreshCoins,
   useAppSelector,
   useIpcRendererListener,
+  useFreshAll,
 } from '@/utils/hooks';
 import * as Enums from '@/utils/enums';
 import * as CONST from '@/constants';
@@ -32,17 +31,15 @@ const ToolBar: React.FC<ToolBarProps> = () => {
   const updateInfo = useAppSelector((state) => state.updater.updateInfo);
   const tabsActiveKey = useAppSelector((state) => state.tabs.activeKey);
 
-  const freshFunds = useFreshFunds(CONST.DEFAULT.FRESH_BUTTON_THROTTLE_DELAY);
-  const freshZindexs = useFreshZindexs(CONST.DEFAULT.FRESH_BUTTON_THROTTLE_DELAY);
-  const freshQuotations = useFreshQuotations(CONST.DEFAULT.FRESH_BUTTON_THROTTLE_DELAY);
-  const freshStocks = useFreshStocks(CONST.DEFAULT.FRESH_BUTTON_THROTTLE_DELAY);
-  const freshCoins = useFreshCoins(CONST.DEFAULT.FRESH_BUTTON_THROTTLE_DELAY);
+  const freshFunds = useFreshFunds();
+  const freshZindexs = useFreshZindexs();
+  const freshQuotations = useFreshQuotations();
+  const freshStocks = useFreshStocks();
+  const freshCoins = useFreshCoins();
 
   const [openSupport, { setTrue: setOpenSupportTrue, setFalse: setOpenSupportFalse }] = useBoolean(false);
-  const [showSettingContent, { setTrue: openSettingContent, setFalse: closeSettingContent, toggle: ToggleSettingContent }] =
-    useBoolean(false);
-  const [showAppCenterDrawer, { setTrue: openAppCenterDrawer, setFalse: closeAppCenterDrawer, toggle: ToggleAppCenterDrawer }] =
-    useBoolean(false);
+  const [showSettingContent, { setTrue: openSettingContent, setFalse: closeSettingContent }] = useBoolean(false);
+  const [showAppCenterDrawer, { setTrue: openAppCenterDrawer, setFalse: closeAppCenterDrawer }] = useBoolean(false);
 
   useIpcRendererListener('support-author', (e) => {
     try {
@@ -74,13 +71,7 @@ const ToolBar: React.FC<ToolBarProps> = () => {
     }
   });
 
-  const freshAll = useMemoizedFn(() => {
-    freshFunds();
-    freshZindexs();
-    freshQuotations();
-    freshStocks();
-    freshCoins();
-  });
+  const freshAll = useFreshAll();
 
   useLongPress(freshAll, freshRef, {
     onClick: fresh,
@@ -89,12 +80,12 @@ const ToolBar: React.FC<ToolBarProps> = () => {
   return (
     <div className={styles.content}>
       <div className={clsx(styles.bar, 'max-content')}>
-        <AppsIcon style={{ ...iconSize }} onClick={openAppCenterDrawer} />
+        <RiAppsLine style={{ ...iconSize }} onClick={openAppCenterDrawer} />
         <div ref={freshRef}>
-          <RefreshIcon style={{ ...iconSize }} />
+          <RiRefreshLine style={{ ...iconSize }} />
         </div>
         <Badge dot={!!updateInfo.version}>
-          <SettingIcon style={{ ...iconSize }} onClick={openSettingContent} />
+          <RiSettingsLine style={{ ...iconSize }} onClick={openSettingContent} />
         </Badge>
         <CustomDrawer show={showAppCenterDrawer}>
           <AppCenterContent

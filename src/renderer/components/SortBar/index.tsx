@@ -1,16 +1,18 @@
 import React, { useState, useMemo } from 'react';
 import { useScroll, useDebounceFn, useBoolean } from 'ahooks';
-import classsames from 'clsx';
+import clsx from 'clsx';
 import { Dropdown, Menu } from 'antd';
-import SortArrowUpIcon from '@/static/icon/sort-arrow-up.svg';
-import SortArrowDownIcon from '@/static/icon/sort-arrow-down.svg';
-import ArrowDownIcon from '@/static/icon/arrow-down.svg';
-import ArrowUpIcon from '@/static/icon/arrow-up.svg';
-import LayoutListIcon from '@/static/icon/layout-list.svg';
-import LayoutGridIcon from '@/static/icon/layout-grid.svg';
-import LayoutFlowIcon from '@/static/icon/layout-flow.svg';
-import LineCharIcon from '@/static/icon/line-chart.svg';
-import SearchIcon from '@/static/icon/search.svg';
+import {
+  RiArrowDownSLine,
+  RiArrowUpSLine,
+  RiArrowDownSFill,
+  RiArrowUpSFill,
+  RiListUnordered,
+  RiDashboardLine,
+  RiLayout4Line,
+  RiLineChartLine,
+  RiSearchLine,
+} from 'react-icons/ri';
 import {
   setFundSortModeAction,
   troggleFundSortOrderAction,
@@ -31,12 +33,17 @@ import {
 import CustomDrawer from '@/components/CustomDrawer';
 import { toggleAllZindexsCollapseAction } from '@/store/features/zindex';
 import { toggleAllQuotationsCollapseAction } from '@/store/features/quotation';
-import { toggleAllStocksCollapseAction } from '@/store/features/stock';
 import { toggleAllCoinsCollapseAction } from '@/store/features/coin';
-import { toggleAllFundsCollapseAction } from '@/store/features/wallet';
-import { useFreshFunds, useFreshZindexs, useFreshStocks, useFreshCoins, useAppDispatch, useAppSelector } from '@/utils/hooks';
+import { toggleAllFundsCollapseAction, toggleAllStocksCollapseAction } from '@/store/features/wallet';
+import {
+  useFreshFunds,
+  useFreshZindexs,
+  useFreshStocks,
+  useFreshCoins,
+  useAppDispatch,
+  useAppSelector,
+} from '@/utils/hooks';
 import * as Enums from '@/utils/enums';
-import * as CONST from '@/constants';
 import * as Helpers from '@/helpers';
 import styles from './index.module.scss';
 
@@ -68,27 +75,25 @@ function FundsSortBar() {
     fundViewMode: { type: fundViewType },
   } = useAppSelector((state) => state.sort.viewMode);
 
-  const { funds } = useAppSelector((state) => state.wallet.currentWallet);
+  const funds = useAppSelector((state) => state.wallet.currentWallet.funds);
 
   const { fundSortModeOptions, fundSortModeOptionsMap } = Helpers.Sort.GetSortConfig();
 
-  const [showManageFundDrawer, { setTrue: openManageFundDrawer, setFalse: closeManageFundDrawer, toggle: ToggleManageFundDrawer }] =
+  const [showManageFundDrawer, { setTrue: openManageFundDrawer, setFalse: closeManageFundDrawer }] = useBoolean(false);
+  const [showAddFundDrawer, { setTrue: openAddFundDrawer, setFalse: closeAddFundDrawer }] = useBoolean(false);
+  const [showFundRankingDrawer, { setTrue: openFundRankingDrawer, setFalse: closeFundRankingDrawer }] =
     useBoolean(false);
-  const [showAddFundDrawer, { setTrue: openAddFundDrawer, setFalse: closeAddFundDrawer, toggle: ToggleAddFundDrawer }] = useBoolean(false);
-  const [showFundRankingDrawer, { setTrue: openFundRankingDrawer, setFalse: closeFundRankingDrawer }] = useBoolean(false);
 
-  const [expandAllFunds, expandSomeFunds] = useMemo(() => {
-    return [funds.every((_) => _.collapse), funds.some((_) => _.collapse)];
-  }, [funds]);
+  const expandAllFunds = useMemo(() => funds.every((_) => _.collapse), [funds]);
 
-  const freshFunds = useFreshFunds(CONST.DEFAULT.FRESH_BUTTON_THROTTLE_DELAY);
+  const freshFunds = useFreshFunds();
 
   const toggleFundsCollapse = () => dispatch(toggleAllFundsCollapseAction());
 
   return (
     <div className={styles.bar}>
       <div className={styles.arrow} onClick={toggleFundsCollapse}>
-        {expandAllFunds ? <ArrowUpIcon /> : <ArrowDownIcon />}
+        {expandAllFunds ? <RiArrowUpSLine /> : <RiArrowDownSLine />}
       </div>
       <div className={styles.name} onClick={toggleFundsCollapse}>
         <span>基金名称</span>
@@ -109,7 +114,7 @@ function FundsSortBar() {
           榜单
         </a>
         <div className={styles.view}>
-          <SearchIcon
+          <RiSearchLine
             onClick={(e) => {
               openAddFundDrawer();
               e.stopPropagation();
@@ -119,10 +124,10 @@ function FundsSortBar() {
       </div>
       <div className={styles.view}>
         {fundViewType === Enums.FundViewType.List && (
-          <LayoutListIcon onClick={() => dispatch(setFundViewModeAction({ type: Enums.FundViewType.Grid }))} />
+          <RiListUnordered onClick={() => dispatch(setFundViewModeAction({ type: Enums.FundViewType.Grid }))} />
         )}
         {fundViewType === Enums.FundViewType.Grid && (
-          <LayoutGridIcon onClick={() => dispatch(setFundViewModeAction({ type: Enums.FundViewType.List }))} />
+          <RiDashboardLine onClick={() => dispatch(setFundViewModeAction({ type: Enums.FundViewType.List }))} />
         )}
       </div>
       <div className={styles.mode}>
@@ -140,13 +145,13 @@ function FundsSortBar() {
         </Dropdown>
       </div>
       <div className={styles.sort} onClick={() => dispatch(troggleFundSortOrderAction())}>
-        <SortArrowUpIcon
-          className={classsames({
+        <RiArrowUpSFill
+          className={clsx({
             [styles.selectOrder]: fundSortOrder === Enums.SortOrderType.Asc,
           })}
         />
-        <SortArrowDownIcon
-          className={classsames({
+        <RiArrowDownSFill
+          className={clsx({
             [styles.selectOrder]: fundSortOrder === Enums.SortOrderType.Desc,
           })}
         />
@@ -191,24 +196,21 @@ function ZindexSortBar() {
 
   const zindexs = useAppSelector((state) => state.zindex.zindexs);
 
-  const [showManageZindexDrawer, { setTrue: openManageZindexDrawer, setFalse: closeManageZindexDrawer, toggle: ToggleManageZindexDrawer }] =
+  const [showManageZindexDrawer, { setTrue: openManageZindexDrawer, setFalse: closeManageZindexDrawer }] =
     useBoolean(false);
-  const [showAddZindexDrawer, { setTrue: openAddZindexDrawer, setFalse: closeAddZindexDrawer, toggle: ToggleAddZindexDrawer }] =
-    useBoolean(false);
+  const [showAddZindexDrawer, { setTrue: openAddZindexDrawer, setFalse: closeAddZindexDrawer }] = useBoolean(false);
   const [showNewsDrawer, { setTrue: openNewsDrawer, setFalse: closeNewsDrawer }] = useBoolean(false);
 
-  const [expandAllZindexs, expandSomeZindexs] = useMemo(() => {
-    return [zindexs.every((_) => _.collapse), zindexs.some((_) => _.collapse)];
-  }, [zindexs]);
+  const expandAllZindexs = useMemo(() => zindexs.every((_) => _.collapse), [zindexs]);
 
-  const freshZindexs = useFreshZindexs(CONST.DEFAULT.FRESH_BUTTON_THROTTLE_DELAY);
+  const freshZindexs = useFreshZindexs();
 
   const toggleZindexsCollapse = () => dispatch(toggleAllZindexsCollapseAction());
 
   return (
     <div className={styles.bar}>
       <div className={styles.arrow} onClick={toggleZindexsCollapse}>
-        {expandAllZindexs ? <ArrowUpIcon /> : <ArrowDownIcon />}
+        {expandAllZindexs ? <RiArrowUpSLine /> : <RiArrowDownSLine />}
       </div>
       <div className={styles.name} onClick={toggleZindexsCollapse}>
         <span>指数名称</span>
@@ -229,7 +231,7 @@ function ZindexSortBar() {
           新闻
         </a>
         <div className={styles.view}>
-          <SearchIcon
+          <RiSearchLine
             onClick={(e) => {
               openAddZindexDrawer();
               e.stopPropagation();
@@ -239,13 +241,13 @@ function ZindexSortBar() {
       </div>
       <div className={styles.view}>
         {zindexViewType === Enums.ZindexViewType.List && (
-          <LayoutListIcon onClick={() => dispatch(setZindexViewModeAction({ type: Enums.ZindexViewType.Grid }))} />
+          <RiListUnordered onClick={() => dispatch(setZindexViewModeAction({ type: Enums.ZindexViewType.Grid }))} />
         )}
         {zindexViewType === Enums.ZindexViewType.Grid && (
-          <LayoutGridIcon onClick={() => dispatch(setZindexViewModeAction({ type: Enums.ZindexViewType.Chart }))} />
+          <RiDashboardLine onClick={() => dispatch(setZindexViewModeAction({ type: Enums.ZindexViewType.Chart }))} />
         )}
         {zindexViewType === Enums.ZindexViewType.Chart && (
-          <LineCharIcon onClick={() => dispatch(setZindexViewModeAction({ type: Enums.ZindexViewType.List }))} />
+          <RiLineChartLine onClick={() => dispatch(setZindexViewModeAction({ type: Enums.ZindexViewType.List }))} />
         )}
       </div>
       <div className={styles.mode}>
@@ -263,13 +265,13 @@ function ZindexSortBar() {
         </Dropdown>
       </div>
       <div className={styles.sort} onClick={() => dispatch(troggleZindexSortOrderAction())}>
-        <SortArrowUpIcon
-          className={classsames({
+        <RiArrowUpSFill
+          className={clsx({
             [styles.selectOrder]: zindexSortOrder === Enums.SortOrderType.Asc,
           })}
         />
-        <SortArrowDownIcon
-          className={classsames({
+        <RiArrowDownSFill
+          className={clsx({
             [styles.selectOrder]: zindexSortOrder === Enums.SortOrderType.Desc,
           })}
         />
@@ -311,22 +313,21 @@ function QuotationSortBar() {
   } = useAppSelector((state) => state.sort.viewMode);
 
   const [showFundFlowDrawer, { setTrue: openFundFlowDrawer, setFalse: closeFundFlowDrawer }] = useBoolean(false);
-  const [showFundsStatisticsDrawer, { setTrue: openFundStatisticsDrawer, setFalse: closeFundStatisticsDrawer }] = useBoolean(false);
+  const [showFundsStatisticsDrawer, { setTrue: openFundStatisticsDrawer, setFalse: closeFundStatisticsDrawer }] =
+    useBoolean(false);
 
   const { quotationSortModeOptions, quotationSortModeOptionsMap } = Helpers.Sort.GetSortConfig();
 
   const quotations = useAppSelector((state) => state.quotation.quotations);
 
-  const [expandAllQuotations, expandSomeQuotations] = useMemo(() => {
-    return [quotations.every((_) => _.collapse), quotations.some((_) => _.collapse)];
-  }, [quotations]);
+  const expandAllQuotations = useMemo(() => quotations.every((_) => _.collapse), [quotations]);
 
   const toggleQuotationsCollapse = () => dispatch(toggleAllQuotationsCollapseAction());
 
   return (
     <div className={styles.bar}>
       <div className={styles.arrow} onClick={toggleQuotationsCollapse}>
-        {expandAllQuotations ? <ArrowUpIcon /> : <ArrowDownIcon />}
+        {expandAllQuotations ? <RiArrowUpSLine /> : <RiArrowDownSLine />}
       </div>
       <div className={styles.name} onClick={toggleQuotationsCollapse}>
         <span>板块名称</span>
@@ -349,13 +350,17 @@ function QuotationSortBar() {
       </div>
       <div className={styles.view}>
         {quotationViewType === Enums.QuotationViewType.List && (
-          <LayoutListIcon onClick={() => dispatch(setQuotationViewModeAction({ type: Enums.QuotationViewType.Grid }))} />
+          <RiListUnordered
+            onClick={() => dispatch(setQuotationViewModeAction({ type: Enums.QuotationViewType.Grid }))}
+          />
         )}
         {quotationViewType === Enums.QuotationViewType.Grid && (
-          <LayoutGridIcon onClick={() => dispatch(setQuotationViewModeAction({ type: Enums.QuotationViewType.Flow }))} />
+          <RiDashboardLine
+            onClick={() => dispatch(setQuotationViewModeAction({ type: Enums.QuotationViewType.Flow }))}
+          />
         )}
         {quotationViewType === Enums.QuotationViewType.Flow && (
-          <LayoutFlowIcon onClick={() => dispatch(setQuotationViewModeAction({ type: Enums.QuotationViewType.List }))} />
+          <RiLayout4Line onClick={() => dispatch(setQuotationViewModeAction({ type: Enums.QuotationViewType.List }))} />
         )}
       </div>
       <div className={styles.mode}>
@@ -364,7 +369,9 @@ function QuotationSortBar() {
           dropdownRender={() => (
             <Menu
               selectedKeys={[String(quotationSortModeOptionsMap[quotationSortType].key)]}
-              onClick={({ key }) => dispatch(setQuotationSortModeAction({ type: Number(key) as Enums.QuotationSortType }))}
+              onClick={({ key }) =>
+                dispatch(setQuotationSortModeAction({ type: Number(key) as Enums.QuotationSortType }))
+              }
               items={quotationSortModeOptions}
             />
           )}
@@ -373,13 +380,13 @@ function QuotationSortBar() {
         </Dropdown>
       </div>
       <div className={styles.sort} onClick={() => dispatch(troggleQuotationSortOrderAction())}>
-        <SortArrowUpIcon
-          className={classsames({
+        <RiArrowUpSFill
+          className={clsx({
             [styles.selectOrder]: quotationSortOrder === Enums.SortOrderType.Asc,
           })}
         />
-        <SortArrowDownIcon
-          className={classsames({
+        <RiArrowDownSFill
+          className={clsx({
             [styles.selectOrder]: quotationSortOrder === Enums.SortOrderType.Desc,
           })}
         />
@@ -407,26 +414,24 @@ function StockSortBar() {
 
   const { stockSortModeOptions, stockSortModeOptionsMap } = Helpers.Sort.GetSortConfig();
 
-  const stocks = useAppSelector((state) => state.stock.stocks);
+  const stocks = useAppSelector((state) => state.wallet.currentWallet.stocks);
 
-  const [showManageStockDrawer, { setTrue: openManageStockDrawer, setFalse: closeManageStockDrawer, toggle: ToggleManageStockDrawer }] =
+  const [showManageStockDrawer, { setTrue: openManageStockDrawer, setFalse: closeManageStockDrawer }] =
     useBoolean(false);
-  const [showAddStockDrawer, { setTrue: openAddStockDrawer, setFalse: closeAddStockDrawer, toggle: ToggleAddStockDrawer }] =
+  const [showAddStockDrawer, { setTrue: openAddStockDrawer, setFalse: closeAddStockDrawer }] = useBoolean(false);
+  const [showStockRankingDrawer, { setTrue: openStockRankingDrawer, setFalse: closeStockRankingDrawer }] =
     useBoolean(false);
-  const [showStockRankingDrawer, { setTrue: openStockRankingDrawer, setFalse: closeStockRankingDrawer }] = useBoolean(false);
 
-  const [expandAllStocks, expandSomeStocks] = useMemo(() => {
-    return [stocks.every((_) => _.collapse), stocks.some((_) => _.collapse)];
-  }, [stocks]);
+  const expandAllStocks = useMemo(() => stocks.every((_) => _.collapse), [stocks]);
 
-  const freshStocks = useFreshStocks(CONST.DEFAULT.FRESH_BUTTON_THROTTLE_DELAY);
+  const freshStocks = useFreshStocks();
 
   const toggleStocksCollapse = () => dispatch(toggleAllStocksCollapseAction());
 
   return (
     <div className={styles.bar}>
       <div className={styles.arrow} onClick={toggleStocksCollapse}>
-        {expandAllStocks ? <ArrowUpIcon /> : <ArrowDownIcon />}
+        {expandAllStocks ? <RiArrowUpSLine /> : <RiArrowDownSLine />}
       </div>
       <div className={styles.name} onClick={toggleStocksCollapse}>
         <span>股票名称</span>
@@ -447,7 +452,7 @@ function StockSortBar() {
           榜单
         </a>
         <div className={styles.view}>
-          <SearchIcon
+          <RiSearchLine
             onClick={(e) => {
               openAddStockDrawer();
               e.stopPropagation();
@@ -457,13 +462,13 @@ function StockSortBar() {
       </div>
       <div className={styles.view}>
         {stockViewType === Enums.StockViewType.List && (
-          <LayoutListIcon onClick={() => dispatch(setStockViewModeAction({ type: Enums.StockViewType.Grid }))} />
+          <RiListUnordered onClick={() => dispatch(setStockViewModeAction({ type: Enums.StockViewType.Grid }))} />
         )}
         {stockViewType === Enums.StockViewType.Grid && (
-          <LayoutGridIcon onClick={() => dispatch(setStockViewModeAction({ type: Enums.StockViewType.Chart }))} />
+          <RiDashboardLine onClick={() => dispatch(setStockViewModeAction({ type: Enums.StockViewType.Chart }))} />
         )}
         {stockViewType === Enums.StockViewType.Chart && (
-          <LineCharIcon onClick={() => dispatch(setStockViewModeAction({ type: Enums.StockViewType.List }))} />
+          <RiLineChartLine onClick={() => dispatch(setStockViewModeAction({ type: Enums.StockViewType.List }))} />
         )}
       </div>
       <div className={styles.mode}>
@@ -481,13 +486,13 @@ function StockSortBar() {
         </Dropdown>
       </div>
       <div className={styles.sort} onClick={() => dispatch(troggleStockSortOrderAction())}>
-        <SortArrowUpIcon
-          className={classsames({
+        <RiArrowUpSFill
+          className={clsx({
             [styles.selectOrder]: stockSortOrder === Enums.SortOrderType.Asc,
           })}
         />
-        <SortArrowDownIcon
-          className={classsames({
+        <RiArrowDownSFill
+          className={clsx({
             [styles.selectOrder]: stockSortOrder === Enums.SortOrderType.Desc,
           })}
         />
@@ -532,23 +537,21 @@ function CoinSortBar() {
 
   const coins = useAppSelector((state) => state.coin.coins);
 
-  const [showManageCoinDrawer, { setTrue: openManageCoinDrawer, setFalse: closeManageCoinDrawer, toggle: ToggleManageCoinDrawer }] =
+  const [showManageCoinDrawer, { setTrue: openManageCoinDrawer, setFalse: closeManageCoinDrawer }] = useBoolean(false);
+  const [showAddCoinDrawer, { setTrue: openAddCoinDrawer, setFalse: closeAddCoinDrawer }] = useBoolean(false);
+  const [showCoinRankingDrawer, { setTrue: openCoinRankingDrawer, setFalse: closeCoinRankingDrawer }] =
     useBoolean(false);
-  const [showAddCoinDrawer, { setTrue: openAddCoinDrawer, setFalse: closeAddCoinDrawer, toggle: ToggleAddCoinDrawer }] = useBoolean(false);
-  const [showCoinRankingDrawer, { setTrue: openCoinRankingDrawer, setFalse: closeCoinRankingDrawer }] = useBoolean(false);
 
-  const [expandAllCoins, expandSomeCoins] = useMemo(() => {
-    return [coins.every((_) => _.collapse), coins.some((_) => _.collapse)];
-  }, [coins]);
+  const expandAllCoins = useMemo(() => coins.every((_) => _.collapse), [coins]);
 
-  const freshCoins = useFreshCoins(CONST.DEFAULT.FRESH_BUTTON_THROTTLE_DELAY);
+  const freshCoins = useFreshCoins();
 
   const toggleCoinsCollapse = () => dispatch(toggleAllCoinsCollapseAction());
 
   return (
     <div className={styles.bar}>
       <div className={styles.arrow} onClick={toggleCoinsCollapse}>
-        {expandAllCoins ? <ArrowUpIcon /> : <ArrowDownIcon />}
+        {expandAllCoins ? <RiArrowUpSLine /> : <RiArrowDownSLine />}
       </div>
       <div className={styles.name} onClick={toggleCoinsCollapse}>
         <span>货币名称</span>
@@ -569,7 +572,7 @@ function CoinSortBar() {
           榜单
         </a>
         <div className={styles.view}>
-          <SearchIcon
+          <RiSearchLine
             onClick={(e) => {
               openAddCoinDrawer();
               e.stopPropagation();
@@ -579,10 +582,10 @@ function CoinSortBar() {
       </div>
       <div className={styles.view}>
         {coinViewType === Enums.CoinViewType.List && (
-          <LayoutListIcon onClick={() => dispatch(setCoinViewModeAction({ type: Enums.CoinViewType.Grid }))} />
+          <RiListUnordered onClick={() => dispatch(setCoinViewModeAction({ type: Enums.CoinViewType.Grid }))} />
         )}
         {coinViewType === Enums.CoinViewType.Grid && (
-          <LayoutGridIcon onClick={() => dispatch(setCoinViewModeAction({ type: Enums.CoinViewType.List }))} />
+          <RiDashboardLine onClick={() => dispatch(setCoinViewModeAction({ type: Enums.CoinViewType.List }))} />
         )}
       </div>
       <div className={styles.mode}>
@@ -600,13 +603,13 @@ function CoinSortBar() {
         </Dropdown>
       </div>
       <div className={styles.sort} onClick={() => dispatch(troggleCoinSortOrderAction())}>
-        <SortArrowUpIcon
-          className={classsames({
+        <RiArrowUpSFill
+          className={clsx({
             [styles.selectOrder]: coinSortOrder === Enums.SortOrderType.Asc,
           })}
         />
-        <SortArrowDownIcon
-          className={classsames({
+        <RiArrowDownSFill
+          className={clsx({
             [styles.selectOrder]: coinSortOrder === Enums.SortOrderType.Desc,
           })}
         />
@@ -666,7 +669,7 @@ const SortBar: React.FC<SortBarProps> = () => {
     }
   }, [tabsActiveKey]);
 
-  return <div className={classsames(styles.content, { [styles.visible]: visible })}>{renderSortBar}</div>;
+  return <div className={clsx(styles.content, { [styles.visible]: visible })}>{renderSortBar}</div>;
 };
 
 export default SortBar;

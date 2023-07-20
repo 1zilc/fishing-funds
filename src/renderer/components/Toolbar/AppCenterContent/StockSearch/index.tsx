@@ -29,7 +29,7 @@ export const stockTypesConfig = [
   // { name: '英股', code: Enums.StockMarketType.UK },
   { name: '三板', code: Enums.StockMarketType.XSB },
   // { name: '基金', code: Enums.StockMarketType.Fund },
-  { name: '债券', code: Enums.StockMarketType.Bond },
+  // { name: '债券', code: Enums.StockMarketType.Bond },
   { name: '期货', code: Enums.StockMarketType.Futures },
   { name: '外汇', code: Enums.StockMarketType.Exchange },
 ];
@@ -37,19 +37,28 @@ export const stockTypesConfig = [
 const StockSearch: React.FC<StockSearchProps> = (props) => {
   const { groupList } = props;
   const dispatch = useAppDispatch();
-  const { codeMap } = useAppSelector((state) => state.stock.config);
-  const { data: detailData, show: showDetailDrawer, set: setDetailDrawer, close: closeDetailDrawer } = useDrawer({ secid: '', type: 0 });
+  const codeMap = useAppSelector((state) => state.wallet.stockConfigCodeMap);
+
+  const {
+    data: detailData,
+    show: showDetailDrawer,
+    set: setDetailDrawer,
+    close: closeDetailDrawer,
+  } = useDrawer({ secid: '', type: 0 });
 
   const onAdd = useMemoizedFn(async (secid: string, type: number) => {
     const stock = await Helpers.Stock.GetStock(secid);
+
     if (stock) {
       dispatch(
         addStockAction({
-          market: stock.market!,
-          code: stock.code!,
+          market: stock.market,
+          code: stock.code,
           secid: stock.secid,
-          name: stock.name!,
+          name: stock.name,
           type,
+          cbj: undefined,
+          cyfe: 0,
         })
       );
     } else {
@@ -99,7 +108,12 @@ const StockSearch: React.FC<StockSearchProps> = (props) => {
       />
 
       <CustomDrawer show={showDetailDrawer}>
-        <DetailStockContent onEnter={closeDetailDrawer} onClose={closeDetailDrawer} secid={detailData.secid} type={detailData.type} />
+        <DetailStockContent
+          onEnter={closeDetailDrawer}
+          onClose={closeDetailDrawer}
+          secid={detailData.secid}
+          type={detailData.type}
+        />
       </CustomDrawer>
     </div>
   ) : (

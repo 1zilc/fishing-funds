@@ -1,9 +1,6 @@
 import React, { useMemo } from 'react';
 import clsx from 'clsx';
-
-import EditIcon from '@/static/icon/edit.svg';
-import ArrowDownIcon from '@/static/icon/arrow-down.svg';
-import ArrowUpIcon from '@/static/icon/arrow-up.svg';
+import { RiEditLine, RiArrowDownSLine, RiArrowUpSLine } from 'react-icons/ri';
 import Collapse from '@/components/Collapse';
 import MemoNote from '@/components/MemoNote';
 import { toggleFundCollapseAction } from '@/store/features/wallet';
@@ -16,8 +13,8 @@ import styles from './index.module.scss';
 export interface RowProps {
   fund: Fund.ResponseItem & Fund.ExtraRow & Fund.FixData;
   readOnly?: boolean;
-  onEdit?: (fund: Fund.SettingItem, focus: 'cbj' | 'cyfe') => void;
-  onDetail?: (code: string) => void;
+  onEdit?: (fund: Fund.SettingItem) => void;
+  onDetail: (code: string) => void;
 }
 
 const arrowSize = {
@@ -25,14 +22,17 @@ const arrowSize = {
   height: 12,
 };
 
-const FundRow: React.FC<RowProps> = (props) => {
+const FundRow: React.FC<RowProps> = React.memo((props) => {
   const { fund, readOnly } = props;
   const dispatch = useAppDispatch();
-  const { conciseSetting } = useAppSelector((state) => state.setting.systemSetting);
+  const conciseSetting = useAppSelector((state) => state.setting.systemSetting.conciseSetting);
   const fundConfigCodeMap = useAppSelector((state) => state.wallet.fundConfigCodeMap);
   const eyeStatus = useAppSelector((state) => state.wallet.eyeStatus);
-  const calcFundResult = useMemo(() => Helpers.Fund.CalcFund(fund, fundConfigCodeMap), [fund, fundConfigCodeMap]);
+  const calcFundResult = Helpers.Fund.CalcFund(fund, fundConfigCodeMap);
   const { isFix } = calcFundResult;
+
+  const fundConfig = fundConfigCodeMap[fund.fundcode!];
+
   function onRowClick() {
     if (readOnly) {
       onDetailClick();
@@ -42,26 +42,11 @@ const FundRow: React.FC<RowProps> = (props) => {
   }
 
   function onDetailClick() {
-    if (props.onDetail) {
-      props.onDetail(fund.fundcode!);
-    }
+    props.onDetail(fund.fundcode!);
   }
 
-  function onEditClick(focus: 'cbj' | 'cyfe') {
-    if (props.onEdit) {
-      props.onEdit(
-        {
-          name: fund.name!,
-          code: fund.fundcode!,
-          cyfe: Number(calcFundResult.cyfe),
-          cbj: calcFundResult.cbj,
-          zdfRange: fundConfigCodeMap[fund.fundcode!]?.zdfRange,
-          jzNotice: fundConfigCodeMap[fund.fundcode!]?.jzNotice,
-          memo: fundConfigCodeMap[fund.fundcode!]?.memo,
-        },
-        focus
-      );
-    }
+  function onEditClick() {
+    props.onEdit?.(fundConfig);
   }
 
   return (
@@ -69,7 +54,11 @@ const FundRow: React.FC<RowProps> = (props) => {
       <div className={clsx(styles.row)} onClick={onRowClick}>
         {!readOnly && (
           <div className={styles.arrow}>
-            {fund.collapse ? <ArrowUpIcon style={{ ...arrowSize }} /> : <ArrowDownIcon style={{ ...arrowSize }} />}
+            {fund.collapse ? (
+              <RiArrowUpSLine style={{ ...arrowSize }} />
+            ) : (
+              <RiArrowDownSLine style={{ ...arrowSize }} />
+            )}
           </div>
         )}
         <div style={{ flex: 1, width: 0 }}>
@@ -77,7 +66,7 @@ const FundRow: React.FC<RowProps> = (props) => {
             <span className={styles.fundName}>{fund.name}</span>
             {!!calcFundResult.cyfe && <span className={styles.hold}>持有</span>}
             {/* 估算持有收益率 */}
-            {!!calcFundResult.cbj && eyeStatus === Enums.EyeStatus.Open && (
+            {!!calcFundResult.cbj && eyeStatus && (
               <span className={clsx(Utils.GetValueColor(calcFundResult.gscysyl).blockClass, styles.gscysyl)}>
                 {calcFundResult.gscysyl === '' ? `0.00%` : `${Utils.Yang(calcFundResult.gscysyl)}%`}
               </span>
@@ -89,7 +78,7 @@ const FundRow: React.FC<RowProps> = (props) => {
               <div>
                 <span className={styles.code}>{fund.fundcode}</span>
                 <span>{isFix ? calcFundResult.fixDate : calcFundResult.gztime?.slice(5)}</span>
-                {eyeStatus === Enums.EyeStatus.Open && (
+                {eyeStatus && (
                   <span className={clsx(Utils.GetValueColor(calcFundResult.jrsygz).textClass, styles.worth)}>
                     {Utils.Yang(calcFundResult.jrsygz.toFixed(2))}
                   </span>
@@ -117,12 +106,12 @@ const FundRow: React.FC<RowProps> = (props) => {
           </section>
           <section>
             <span>成本价：</span>
-            {calcFundResult.cbj !== undefined ? <span>{calcFundResult.cbj}</span> : <a onClick={() => onEditClick('cbj')}>录入</a>}
+            {calcFundResult.cbj !== undefined ? <span>{calcFundResult.cbj}</span> : <a onClick={onEditClick}>录入</a>}
           </section>
           <section>
             <span>持有份额：</span>
             <span>{calcFundResult.cyfe}</span>
-            <EditIcon className={styles.editor} onClick={() => onEditClick('cyfe')} />
+            <RiEditLine className={styles.editor} onClick={onEditClick} />
           </section>
           <section>
             <span>成本金额：</span>
@@ -158,6 +147,6 @@ const FundRow: React.FC<RowProps> = (props) => {
       </Collapse>
     </>
   );
-};
+});
 
 export default FundRow;

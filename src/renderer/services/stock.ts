@@ -1,12 +1,11 @@
 import dayjs from 'dayjs';
+import { fromUint8Array } from 'js-base64';
 import cheerio from 'cheerio';
 import NP from 'number-precision';
 import request from '@/utils/request';
 import * as Utils from '@/utils';
 import * as Enums from '@/utils/enums';
 import { defaultCompany } from '@/components/Home/StockView/DetailStockContent/Company';
-
-const { base64 } = window.contextModules;
 
 // 天天基金获取股票
 export async function FromEastmoney(secid: string) {
@@ -58,7 +57,16 @@ export async function SearchFromEastmoney(keyword: string) {
           client: 'web',
           clientType: 'wap',
           clientVersion: 'curr',
-          param: { codetableLabelWeb: { pageIndex: 1, pageSize: 100, preTag: '', postTag: '', isHighlight: false, label: 'ALL' } },
+          param: {
+            codetableLabelWeb: {
+              pageIndex: 1,
+              pageSize: 100,
+              preTag: '',
+              postTag: '',
+              isHighlight: false,
+              label: 'ALL',
+            },
+          },
         }),
         cb: 'cb',
       },
@@ -159,7 +167,7 @@ export async function GetPicTrendFromEastmoney(secid: string) {
         token: Utils.MakeHash(),
       },
     });
-    const b64encoded = base64.fromUint8Array(new Uint8Array(rawBody));
+    const b64encoded = fromUint8Array(new Uint8Array(rawBody));
     return `data:image/png;base64,${b64encoded}`;
   } catch (error) {
     return;
@@ -317,20 +325,20 @@ export async function GetDetailFromEastmoney(secid: string) {
       zg: data.f44, // 最高
       zd: data.f45, // 最低
       jk: data.f46, // 今开
-      zss: Number(NP.divide(data.f47, w).toFixed(2)), // 总手数
+      zss: Number(NP.divide(data.f47, w).toFixed(2)) || '-', // 总手数
       zt: data.f51, // 涨停
       dt: data.f52, // 跌停
       zx: data.f43, // 最新
       cjl: data.f47, // 成交量
       lb: data.f50, // 量比
       cje: data.f48, // 成交额
-      wp: Number(NP.divide(data.f49, w).toFixed(2)), // 外盘
+      wp: Number(NP.divide(data.f49, w).toFixed(2)) || '-', // 外盘
       code: data.f57,
       name: data.f58,
       market: data.f62,
       zs: data.f60, // 昨收
       jj: data.f71, // 均价
-      np: Number(NP.divide(data.f161, w).toFixed(2)), // 内盘
+      np: Number(NP.divide(data.f161, w).toFixed(2)) || '-', // 内盘
       hs: data.f168, // 换手
       zdd: data.f169, // 涨跌点
       zdf: data.f170, /// 涨跌幅
@@ -847,7 +855,9 @@ export async function GetUSCompany(secid: string) {
 export async function GetXSBCompany(secid: string) {
   try {
     const [mk, code] = secid.split('.');
-    const { body: html } = await request<string>(`https:xinsanban.eastmoney.com/F10/CompanyInfo/Introduction/${code}.html`);
+    const { body: html } = await request<string>(
+      `https:xinsanban.eastmoney.com/F10/CompanyInfo/Introduction/${code}.html`
+    );
     const $ = cheerio.load(html);
     const gsjs = $("span:contains('公司简介')").next().text();
     const sshy = $("span:contains('行业分类')").next().text();
@@ -947,7 +957,15 @@ export async function GetCloseDayDates() {
   }
 }
 
-export async function GetMeetingData({ startTime, endTime, code }: { startTime: string; endTime: string; code: string }) {
+export async function GetMeetingData({
+  startTime,
+  endTime,
+  code,
+}: {
+  startTime: string;
+  endTime: string;
+  code: string;
+}) {
   try {
     const { body } = await request<{
       version: 'b0ba2c16623998ee2e8c464dd1f32ccd';

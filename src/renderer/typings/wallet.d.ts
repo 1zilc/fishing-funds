@@ -4,10 +4,12 @@ declare namespace Wallet {
     iconIndex: number;
     code: string;
     funds: Fund.SettingItem[];
+    stocks: Stock.SettingItem[];
   }
   export interface StateItem {
     code: string;
     funds: (Fund.ResponseItem & Fund.FixData & Fund.ExtraRow)[];
+    stocks: (Stock.ResponseItem & Stock.ExtraRow)[];
     updateTime: string;
   }
   export interface CodeMap {

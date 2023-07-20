@@ -1,11 +1,8 @@
 import React from 'react';
 import clsx from 'clsx';
-
-import ArrowDownIcon from '@/static/icon/arrow-down.svg';
-import ArrowUpIcon from '@/static/icon/arrow-up.svg';
+import { RiArrowDownSLine, RiArrowUpSLine } from 'react-icons/ri';
 import ArrowLine from '@/components/ArrowLine';
 import Collapse from '@/components/Collapse';
-
 import { toggleCoinCollapseAction } from '@/store/features/coin';
 import { useAppDispatch, useAppSelector } from '@/utils/hooks';
 import colorHash from '@/utils/colorHash';
@@ -22,10 +19,10 @@ const arrowSize = {
   height: 12,
 };
 
-const CoinRow: React.FC<RowProps> = (props) => {
+const CoinRow: React.FC<RowProps> = React.memo((props) => {
   const { coin } = props;
   const dispatch = useAppDispatch();
-  const { conciseSetting } = useAppSelector((state) => state.setting.systemSetting);
+  const conciseSetting = useAppSelector((state) => state.setting.systemSetting.conciseSetting);
   const remoteCoinsMap = useAppSelector((state) => state.coin.remoteCoinsMap);
   const coinColor = colorHash.hex(coin.code);
   const { symbol } = remoteCoinsMap[coin.code];
@@ -37,7 +34,7 @@ const CoinRow: React.FC<RowProps> = (props) => {
     <>
       <div className={clsx(styles.row)} onClick={() => dispatch(toggleCoinCollapseAction(coin))}>
         <div className={styles.arrow}>
-          {coin.collapse ? <ArrowUpIcon style={{ ...arrowSize }} /> : <ArrowDownIcon style={{ ...arrowSize }} />}
+          {coin.collapse ? <RiArrowUpSLine style={{ ...arrowSize }} /> : <RiArrowDownSLine style={{ ...arrowSize }} />}
         </div>
         <div style={{ flex: 1, width: 0 }}>
           <div style={{ display: 'flex', alignItems: 'center' }}>
@@ -66,7 +63,9 @@ const CoinRow: React.FC<RowProps> = (props) => {
           </div>
           {!conciseSetting && (
             <div className={styles.zd}>
-              <div className={clsx(styles.zdf, Utils.GetValueColor(coin.change24h).textClass)}>{Utils.Yang(coin.change24h)} %</div>
+              <div className={clsx(styles.zdf, Utils.GetValueColor(coin.change24h).textClass)}>
+                {Utils.Yang(coin.change24h)} %
+              </div>
             </div>
           )}
         </div>
@@ -84,7 +83,9 @@ const CoinRow: React.FC<RowProps> = (props) => {
           {conciseSetting && (
             <section>
               <span>24H涨跌幅：</span>
-              <span className={clsx(Utils.GetValueColor(coin.change24h).textClass)}>{Utils.Yang(coin.change24h)} %</span>
+              <span className={clsx(Utils.GetValueColor(coin.change24h).textClass)}>
+                {Utils.Yang(coin.change24h)} %
+              </span>
             </section>
           )}
           <div className={styles.view}>
@@ -94,6 +95,6 @@ const CoinRow: React.FC<RowProps> = (props) => {
       </Collapse>
     </>
   );
-};
+});
 
 export default CoinRow;

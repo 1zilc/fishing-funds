@@ -1,17 +1,15 @@
 import React, { useState } from 'react';
 import { useRequest } from 'ahooks';
-
 import ChartCard from '@/components/Card/ChartCard';
-import PictureImage from '@/static/img/picture.svg';
-import PictureFailedImage from '@/static/img/picture-failed.svg';
 import * as Services from '@/services';
 import * as CONST from '@/constants';
+import * as Utils from '@/utils';
 import styles from './index.module.scss';
 
 export interface EstimateProps {
   secid: string;
 }
-const Estimate: React.FC<EstimateProps> = ({ secid }) => {
+const Estimate: React.FC<EstimateProps> = React.memo(({ secid }) => {
   const [estimate, setEstimate] = useState<string | undefined>('');
   const { run: runGetPicTrendFromEastmoney } = useRequest(() => Services.Stock.GetPicTrendFromEastmoney(secid), {
     pollingInterval: CONST.DEFAULT.ESTIMATE_FUND_DELAY,
@@ -23,15 +21,15 @@ const Estimate: React.FC<EstimateProps> = ({ secid }) => {
     <ChartCard onFresh={runGetPicTrendFromEastmoney}>
       <div className={styles.estimate}>
         {estimate === '' ? (
-          <PictureImage />
+          <img src={Utils.ImportStatic('img/picture.svg')} />
         ) : estimate === undefined ? (
-          <PictureFailedImage />
+          <img src={Utils.ImportStatic('img/picture-failed.svg')} />
         ) : (
           <img src={estimate} onError={() => setEstimate(undefined)} />
         )}
       </div>
     </ChartCard>
   );
-};
+});
 
 export default Estimate;

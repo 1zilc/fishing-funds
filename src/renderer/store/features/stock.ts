@@ -1,22 +1,17 @@
+import dayjs from 'dayjs';
 import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
 import { AsyncThunkConfig } from '@/store';
+import { setWalletConfigAction, updateWalletStateAction, setWalletStateAction } from '@/store/features/wallet';
 import * as Utils from '@/utils';
 import * as Helpers from '@/helpers';
 
 export interface StockState {
-  stocks: (Stock.ResponseItem & Stock.ExtraRow)[];
   stocksLoading: boolean;
-  config: {
-    stockConfig: Stock.SettingItem[];
-    codeMap: Stock.CodeMap;
-  };
   industryMap: Record<string, Stock.IndustryItem[]>;
 }
 
 const initialState: StockState = {
-  stocks: [],
   stocksLoading: false,
-  config: { stockConfig: [], codeMap: {} },
   industryMap: {},
 };
 
@@ -24,208 +19,159 @@ const stockSlice = createSlice({
   name: 'stock',
   initialState,
   reducers: {
-    setStocksLoadingAction(state, action: PayloadAction<boolean>) {
-      state.stocksLoading = action.payload;
+    setStocksLoadingAction(state, { payload }: PayloadAction<boolean>) {
+      state.stocksLoading = payload;
     },
-    syncStocksAction(state, action) {
-      state.stocks = action.payload;
-    },
-    syncStocksConfigAction(state, action: PayloadAction<{ stockConfig: Stock.SettingItem[]; codeMap: Stock.CodeMap }>) {
-      state.config = action.payload;
-    },
-    syncIndustryMapAction(state, action) {
-      state.industryMap = action.payload;
+    setIndustryMapAction(state, { payload }: PayloadAction<{ industrys: Stock.IndustryItem[]; secid: string }>) {
+      state.industryMap = { ...state.industryMap, [payload.secid]: payload.industrys };
     },
   },
 });
 
-export const { setStocksLoadingAction, syncStocksAction, syncStocksConfigAction, syncIndustryMapAction } = stockSlice.actions;
+export const { setStocksLoadingAction, setIndustryMapAction } = stockSlice.actions;
 
 export const addStockAction = createAsyncThunk<void, Stock.SettingItem, AsyncThunkConfig>(
   'stock/addStockAction',
   (stock, { dispatch, getState }) => {
     try {
       const {
-        stock: {
-          config: { stockConfig },
-        },
+        wallet: { currentWalletCode, stockConfig },
       } = getState();
-      const cloneStockConfig = Utils.DeepCopy(stockConfig);
-      const exist = cloneStockConfig.find((item) => stock.secid === item.secid);
-      if (!exist) {
-        cloneStockConfig.push(stock);
-      }
-      dispatch(setStockConfigAction(cloneStockConfig));
+
+      const config = Helpers.Base.Add({
+        list: Utils.DeepCopy(stockConfig),
+        key: 'secid',
+        data: stock,
+      });
+
+      dispatch(setStockConfigAction({ config, walletCode: currentWalletCode }));
     } catch (error) {}
   }
 );
 
-export const updateStockAction = createAsyncThunk<void, { secid: string; type?: number }, AsyncThunkConfig>(
-  'stock/updateStockAction',
-  (stock, { dispatch, getState }) => {
-    try {
-      const {
-        stock: {
-          config: { stockConfig },
-        },
-      } = getState();
-      stockConfig.forEach((item) => {
-        if (stock.secid === item.secid) {
-          if (stock.type !== undefined) {
-            item.type = stock.type;
-          }
-        }
-      });
-      dispatch(setStockConfigAction(stockConfig));
-    } catch (error) {}
-  }
-);
+export const updateStockAction = createAsyncThunk<
+  void,
+  Partial<Stock.SettingItem> & {
+    secid: string;
+  },
+  AsyncThunkConfig
+>('stock/updateStockAction', (stock, { dispatch, getState }) => {
+  try {
+    const {
+      wallet: { currentWalletCode, stockConfig },
+    } = getState();
+
+    const config = Helpers.Base.Update({
+      list: Utils.DeepCopy(stockConfig),
+      key: 'secid',
+      data: stock,
+    });
+
+    dispatch(setStockConfigAction({ config, walletCode: currentWalletCode }));
+  } catch (error) {}
+});
 
 export const deleteStockAction = createAsyncThunk<void, string, AsyncThunkConfig>(
   'stock/deleteStockAction',
   (secid, { dispatch, getState }) => {
     try {
       const {
-        stock: {
-          config: { stockConfig },
-        },
+        wallet: { currentWalletCode, stockConfig },
       } = getState();
-      stockConfig.forEach((item, index) => {
-        if (secid === item.secid) {
-          const cloneStockSetting = JSON.parse(JSON.stringify(stockConfig));
-          cloneStockSetting.splice(index, 1);
-          dispatch(setStockConfigAction(cloneStockSetting));
-        }
+
+      const config = Helpers.Base.Delete({
+        list: Utils.DeepCopy(stockConfig),
+        key: 'secid',
+        data: secid,
       });
+
+      dispatch(setStockConfigAction({ config, walletCode: currentWalletCode }));
     } catch (error) {}
   }
 );
 
-export const setStockConfigAction = createAsyncThunk<void, Stock.SettingItem[], AsyncThunkConfig>(
-  'stock/setStockConfigAction',
-  (stockConfig, { getState, dispatch }) => {
+export const sortStocksAction = createAsyncThunk<void, string, AsyncThunkConfig>(
+  'stock/sortStocksAction',
+  (walletCode, { dispatch, getState }) => {
     try {
       const {
-        stock: { stocks },
+        wallet: {
+          wallets,
+          config: { walletConfig },
+        },
+        sort: {
+          sortMode: {
+            stockSortMode: { type, order },
+          },
+        },
       } = getState();
-      const codeMap = Utils.GetCodeMap(stockConfig, 'secid');
-      dispatch(syncStocksConfigAction({ stockConfig, codeMap }));
-      dispatch(syncStocksStateAction(stocks));
+
+      const { stocks, updateTime, code } = Helpers.Wallet.GetCurrentWalletState(walletCode, wallets);
+      const { codeMap } = Helpers.Stock.GetStockConfig(walletCode, walletConfig);
+
+      const sortList = Helpers.Stock.SortStock({
+        codeMap,
+        list: stocks,
+        sortType: type,
+        orderType: order,
+      });
+
+      dispatch(setWalletStateAction({ code, stocks: sortList, updateTime }));
     } catch (error) {}
   }
 );
 
-export const sortStocksAction = createAsyncThunk<void, void, AsyncThunkConfig>('stock/sortStocksAction', (_, { dispatch, getState }) => {
+export const sortStocksCachedAction = createAsyncThunk<
+  void,
+  { responseStocks: Stock.ResponseItem[]; walletCode: string },
+  AsyncThunkConfig
+>('stock/sortStocksCachedAction', ({ responseStocks, walletCode }, { getState, dispatch }) => {
   try {
     const {
-      stock: {
-        stocks,
-        config: { codeMap },
-      },
-      sort: {
-        sortMode: {
-          stockSortMode: { type, order },
-        },
+      wallet: {
+        config: { walletConfig },
+        wallets,
       },
     } = getState();
 
-    const sortList = Helpers.Stock.SortStock({
-      codeMap,
-      list: stocks,
-      sortType: type,
-      orderType: order,
+    const { stockConfig } = Helpers.Stock.GetStockConfig(walletCode, walletConfig);
+    const { stocks } = Helpers.Wallet.GetCurrentWalletState(walletCode, wallets);
+    const now = dayjs().format('MM-DD HH:mm:ss');
+
+    const stocksWithChached = Utils.MergeStateWithResponse({
+      config: stockConfig,
+      configKey: 'secid',
+      stateKey: 'secid',
+      state: stocks,
+      response: responseStocks,
     });
 
-    dispatch(syncStocksStateAction(sortList));
+    dispatch(setWalletStateAction({ code: walletCode, stocks: stocksWithChached, updateTime: now }));
+    dispatch(sortStocksAction(walletCode));
   } catch (error) {}
 });
 
-export const sortStocksCachedAction = createAsyncThunk<void, Stock.ResponseItem[], AsyncThunkConfig>(
-  'stock/sortStocksCachedAction',
-  (responseStocks, { getState, dispatch }) => {
-    try {
-      const {
-        stock: {
-          stocks,
-          config: { stockConfig },
-        },
-      } = getState();
+export const setStockConfigAction = createAsyncThunk<
+  void,
+  { config: Stock.SettingItem[]; walletCode: string },
+  AsyncThunkConfig
+>('stock/setStockConfigAction', ({ config, walletCode }, { dispatch, getState }) => {
+  try {
+    const {
+      wallet: {
+        config: { walletConfig },
+        currentWallet,
+      },
+    } = getState();
 
-      const stocksWithChached = Utils.MergeStateWithResponse({
-        config: stockConfig,
-        configKey: 'secid',
-        stateKey: 'secid',
-        state: stocks,
-        response: responseStocks,
-      });
+    const newWalletConfig = walletConfig.map((item) => ({
+      ...item,
+      stocks: walletCode === item.code ? config : item.stocks,
+    }));
 
-      dispatch(syncStocksStateAction(stocksWithChached));
-      dispatch(sortStocksAction());
-    } catch (error) {}
-  }
-);
-
-export const toggleStockCollapseAction = createAsyncThunk<void, Stock.ResponseItem & Stock.ExtraRow, AsyncThunkConfig>(
-  'stock/toggleStockCollapseAction',
-  (stock, { getState, dispatch }) => {
-    try {
-      const {
-        stock: { stocks },
-      } = getState();
-
-      const cloneStocks = Utils.DeepCopy(stocks);
-      cloneStocks.forEach((_) => {
-        if (_.secid === stock.secid) {
-          _.collapse = !stock.collapse;
-        }
-      });
-      dispatch(syncStocksStateAction(cloneStocks));
-    } catch (error) {}
-  }
-);
-
-export const toggleAllStocksCollapseAction = createAsyncThunk<void, void, AsyncThunkConfig>(
-  'stock/toggleAllStocksCollapseAction',
-  (_, { getState, dispatch }) => {
-    try {
-      const {
-        stock: { stocks },
-      } = getState();
-      const cloneStocks = Utils.DeepCopy(stocks);
-      const expandAllStocks = stocks.every((_) => _.collapse);
-      cloneStocks.forEach((_) => {
-        _.collapse = !expandAllStocks;
-      });
-      dispatch(syncStocksStateAction(cloneStocks));
-    } catch (error) {}
-  }
-);
-
-export const syncStocksStateAction = createAsyncThunk<void, (Stock.ResponseItem & Stock.ExtraRow)[], AsyncThunkConfig>(
-  'stock/syncStocksStateAction',
-  (stocks, { getState, dispatch }) => {
-    try {
-      const {
-        stock: {
-          config: { codeMap },
-        },
-      } = getState();
-      const filterStocks = stocks.filter(({ secid }) => codeMap[secid]);
-      dispatch(syncStocksAction(filterStocks));
-    } catch {}
-  }
-);
-
-export const setIndustryMapAction = createAsyncThunk<void, { industrys: Stock.IndustryItem[]; secid: string }, AsyncThunkConfig>(
-  'stock/setIndustryMapAction',
-  ({ industrys, secid }, { getState, dispatch }) => {
-    try {
-      const {
-        stock: { industryMap },
-      } = getState();
-      dispatch(syncIndustryMapAction({ ...industryMap, [secid]: industrys }));
-    } catch (error) {}
-  }
-);
+    dispatch(setWalletConfigAction(newWalletConfig));
+    dispatch(updateWalletStateAction(currentWallet));
+  } catch (error) {}
+});
 
 export default stockSlice.reducer;

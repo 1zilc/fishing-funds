@@ -1,6 +1,4 @@
 .content {
-  padding: 10px;
-  display: flex;
   border-bottom: 1px solid var(--border-color);
   top: 0;
   z-index: 2;
@@ -11,109 +9,92 @@
   backdrop-filter: saturate(180%) blur(20px);
   height: 100%;
   box-sizing: border-box;
-  align-items: center;
   z-index: 3;
+}
+.walletIcon {
+  cursor: pointer;
+  height: 32px;
+  width: 32px;
+  transition: height 0.2s, width 0.2s;
+  background-color: transparent !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
-  .walletIcon {
-    cursor: pointer;
-    height: calc(var(--base-font-size) * 10 / 3);
-    width: calc(var(--base-font-size) * 10 / 3);
-    transition: height 0.2s, width 0.2s;
-    background-color: transparent !important;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    img {
-      width: 100%;
-      // height: 100%;
-      display: block;
-      object-fit: cover;
-    }
-  }
-
-  .info {
-    flex: 1;
-    box-sizing: border-box;
-    padding: 0 10px;
-    display: flex;
-    justify-content: space-around;
-    flex-direction: column;
-
-    .timeBar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-
-      .last {
-        font-size: var(--base-font-size);
-        font-weight: 500;
-        color: var(--secondary-main-text-color);
-      }
-    }
-
-    .moneyBar {
-      font-size: calc(var(--base-font-size) * 5 / 6);
-      color: var(--main-text-color);
-      display: flex;
-      // justify-content: space-around;
-      width: 100%;
-      align-items: center;
-      transition: all 0.2s;
-
-      i {
-        margin: 0 10px;
-      }
-
-      div {
-        display: flex;
-        align-items: center;
-        word-wrap: break-word;
-        flex-wrap: wrap;
-
-        span {
-          white-space: nowrap;
-        }
-      }
-
-      svg {
-        height: calc(var(--base-font-size) * 1.2);
-        width: calc(var(--base-font-size) * 1.2);
-        fill: var(--svg-icon-color);
-      }
-    }
-  }
-
-  .eye {
-    height: calc(var(--base-font-size) * 5 / 3);
-    width: calc(var(--base-font-size) * 5 / 3);
+  img {
+    width: 100%;
+    // height: 100%;
+    display: block;
+    object-fit: cover;
   }
 }
 
-.miniMode {
-  .walletIcon {
-    height: calc(var(--base-font-size) * 5 / 3);
-    width: calc(var(--base-font-size) * 5 / 3);
+.eye {
+  transition: height 0.2s, width 0.2s;
+  height: 20px;
+  width: 20px;
+}
+.topBar {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 5px 10px 0;
+}
+.timeBar {
+  flex: 1;
+  margin-left: 10px;
+  font-size: 10px;
+  color: var(--secondary-main-text-color);
+  font-weight: 600;
+}
+.numBar {
+  display: flex;
+  padding: 0 10px;
+  align-items: center;
+  height: 30px;
+  cursor: pointer;
+}
+
+.sygz {
+  flex: 1;
+  display: flex;
+  font-size: 10px;
+  transition: all 0.2s;
+}
+.zsygz {
+  font-size: 22px;
+  font-weight: 500;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+.numIndex {
+  width: 60%;
+  max-width: 200px;
+  text-align: center;
+  display: flex;
+  font-size: 10px;
+  padding-left: 10px;
+  box-sizing: border-box;
+  label {
+    color: var(--secondary-main-text-color);
   }
+  & > div {
+    flex: 1;
+    transition: all 0.2s;
+    font-weight: 500;
+  }
+}
+.detailBar {
+  background-color: var(--hover-color);
+  display: flex;
+  flex-direction: column;
+  padding: 5px 10px;
+  box-sizing: border-box;
+  font-weight: 500;
 
-  .info {
-    .timeBar {
-      height: 0;
-      overflow: hidden;
-
-      .last {
-        height: 0;
-        overflow: hidden;
-      }
-    }
-
-    .moneyBar {
-      font-size: var(--base-font-size);
-      font-weight: 600;
-
-      i {
-      }
-    }
+  & > div {
+    display: flex;
+    align-items: center;
   }
 }
 .menuIcon {
@@ -126,4 +107,28 @@
   // height: 20px;
   width: 20px;
   fill: var(--svg-icon-color);
+}
+.tag {
+  margin-right: 5px;
+}
+
+.miniMode {
+  .walletIcon {
+    height: 20px;
+    width: 20px;
+  }
+  .eye {
+    height: 16px;
+    width: 16px;
+  }
+  .timeBar {
+    font-size: 12px;
+  }
+
+  .zsygz {
+    font-size: 18px;
+  }
+  .numIndex {
+    font-size: 14px !important;
+  }
 }

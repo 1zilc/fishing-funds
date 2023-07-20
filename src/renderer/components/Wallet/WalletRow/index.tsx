@@ -1,16 +1,11 @@
 import React from 'react';
 import clsx from 'clsx';
-
+import { RiIndeterminateCircleFill, RiEditFill, RiCheckboxCircleFill } from 'react-icons/ri';
 import StandCard from '@/components/Card/StandCard';
-import RemoveIcon from '@/static/icon/remove.svg';
-import CheckboxIcon from '@/static/icon/checkbox.svg';
-import EditIcon from '@/static/icon/edit.svg';
 import { deleteWalletConfigAction } from '@/store/features/wallet';
 import { walletIcons } from '@/helpers/wallet';
-
 import { useAppDispatch, useAppSelector } from '@/utils/hooks';
 import * as Utils from '@/utils';
-import * as Enums from '@/utils/enums';
 import * as Helpers from '@/helpers';
 import styles from './index.module.scss';
 
@@ -69,12 +64,11 @@ const WalletRow: React.FC<WalletRowProps> = (props) => {
   const { funds, updateTime } = walletState;
   const { codeMap } = Helpers.Fund.GetFundConfig(wallet.code, walletsConfig);
   const { zje, sygz, gssyl, cysy, cysyl } = Helpers.Fund.CalcFunds(funds, codeMap);
-  const eyeOpen = eyeStatus === Enums.EyeStatus.Open;
-  const displayZje = eyeOpen ? zje.toFixed(2) : Utils.Encrypt(zje.toFixed(2));
-  const displaySygz = eyeOpen ? Utils.Yang(sygz.toFixed(2)) : Utils.Encrypt(Utils.Yang(sygz.toFixed(2)));
-  const displayGssyl = eyeOpen ? gssyl.toFixed(2) : Utils.Encrypt(gssyl.toFixed(2));
-  const displayCysy = eyeOpen ? cysy.toFixed(2) : Utils.Encrypt(cysy.toFixed(2));
-  const displayCysyl = eyeOpen ? cysyl.toFixed(2) : Utils.Encrypt(cysyl.toFixed(2));
+  const displayZje = eyeStatus ? zje.toFixed(2) : Utils.Encrypt(zje.toFixed(2));
+  const displaySygz = eyeStatus ? Utils.Yang(sygz.toFixed(2)) : Utils.Encrypt(Utils.Yang(sygz.toFixed(2)));
+  const displayGssyl = eyeStatus ? gssyl.toFixed(2) : Utils.Encrypt(gssyl.toFixed(2));
+  const displayCysy = eyeStatus ? cysy.toFixed(2) : Utils.Encrypt(cysy.toFixed(2));
+  const displayCysyl = eyeStatus ? cysyl.toFixed(2) : Utils.Encrypt(cysyl.toFixed(2));
 
   return (
     <StandCard
@@ -96,17 +90,7 @@ const WalletRow: React.FC<WalletRowProps> = (props) => {
       title={wallet.name}
       extra={
         <div className={styles.extra}>
-          {readonly ? (
-            <i />
-          ) : (
-            <EditIcon
-              className={styles.editor}
-              onClick={(e) => {
-                onEditClick();
-                e.stopPropagation();
-              }}
-            />
-          )}
+          {readonly ? <i /> : <RiEditFill className={styles.editor} onClick={onEditClick} />}
           <div className={styles.time}>{updateTime}</div>
         </div>
       }
@@ -129,7 +113,7 @@ const WalletRow: React.FC<WalletRowProps> = (props) => {
                 marginBottom: 10,
               }}
             >
-              {eyeOpen ? '￥' : ''}
+              {eyeStatus ? '￥' : ''}
               {displayZje}
             </div>
           </div>
@@ -137,26 +121,20 @@ const WalletRow: React.FC<WalletRowProps> = (props) => {
             <div>收益(今)：{displaySygz}</div>
             <div>
               收益率(今)： {displayGssyl}
-              {eyeOpen ? '%' : ''}
+              {eyeStatus ? '%' : ''}
             </div>
           </div>
           <div className={styles.infoRow}>
             <div>持有收益：{displayCysy}</div>
             <div>
               持有收益率： {displayCysyl}
-              {eyeOpen ? '%' : ''}
+              {eyeStatus ? '%' : ''}
             </div>
           </div>
         </div>
-        {!readonly && selected && <CheckboxIcon className={styles.checkbox} />}
+        {!readonly && selected && <RiCheckboxCircleFill className={styles.checkbox} />}
         {!readonly && !selected && (
-          <RemoveIcon
-            className={styles.remove}
-            onClick={(e) => {
-              onRemoveClick(wallet);
-              e.stopPropagation();
-            }}
-          />
+          <RiIndeterminateCircleFill className={styles.remove} onClick={() => onRemoveClick(wallet)} />
         )}
       </div>
     </StandCard>

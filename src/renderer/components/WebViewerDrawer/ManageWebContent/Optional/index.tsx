@@ -3,11 +3,8 @@ import React, { useMemo, useState, useRef } from 'react';
 import { ReactSortable } from 'react-sortablejs';
 import { Input, InputRef, Button } from 'antd';
 import clsx from 'clsx';
-
+import { RiSearchLine, RiMenuLine, RiIndeterminateCircleFill } from 'react-icons/ri';
 import PureCard from '@/components/Card/PureCard';
-import SearchIcon from '@/static/icon/search.svg';
-import MenuIcon from '@/static/icon/menu.svg';
-import RemoveIcon from '@/static/icon/remove.svg';
 import Empty from '@/components/Empty';
 import QuickSearch from '@/components/Toolbar/AppCenterContent/QuickSearch';
 import { deleteWebAction, setWebConfigAction } from '@/store/features/web';
@@ -85,17 +82,9 @@ const Optional: React.FC<OptionalProps> = () => {
           {sortWebConfig.map((web) => {
             return (
               <PureCard key={web.url} className={clsx(styles.row, 'hoverable')}>
-                <RemoveIcon
-                  className={styles.remove}
-                  onClick={(e) => {
-                    onRemoveCoin(web);
-                    e.stopPropagation();
-                  }}
-                />
-                <div className={styles.inner}>
-                  <div className={styles.name}>{web.title}</div>
-                </div>
-                <MenuIcon className={styles.menu} />
+                <RiIndeterminateCircleFill className={styles.remove} onClick={() => onRemoveCoin(web)} />
+                <div className={styles.name}>{web.title}</div>
+                <RiMenuLine className={styles.function} />
               </PureCard>
             );
           })}
@@ -108,7 +97,7 @@ const Optional: React.FC<OptionalProps> = () => {
         shape="circle"
         type="primary"
         size="large"
-        icon={<SearchIcon />}
+        icon={<RiSearchLine />}
         onClick={(e) => {
           searchRef.current?.focus();
           e.stopPropagation();

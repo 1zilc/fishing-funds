@@ -13,17 +13,6 @@
   justify-content: space-between;
   align-items: center;
 
-  .menu {
-    justify-self: flex-end;
-    fill: var(--svg-icon-color);
-    height: 16px;
-    width: 16px;
-    margin-left: var(--base-padding);
-
-    &:hover {
-      cursor: pointer;
-    }
-  }
   .function {
     justify-self: flex-end;
     fill: var(--svg-icon-color);
@@ -37,27 +26,24 @@
   }
 
   .remove {
+    fill: red;
     &:hover {
       cursor: pointer;
     }
   }
 }
 
-.inner {
-  display: flex;
-  justify-content: flex-start;
+.name {
   flex: 1;
   flex-direction: column;
-  margin: 0 10px;
-}
-
-.name {
+  margin-left: var(--base-padding);
   font-size: calc(var(--base-font-size) * 1.2);
   font-weight: 600;
-}
-
-.code {
-  font-size: var(--base-font-size);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  word-break: break-all;
+  max-width: 100%;
 }
 
 .dragItem {

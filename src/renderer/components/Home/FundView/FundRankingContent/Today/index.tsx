@@ -98,7 +98,7 @@ const Today: React.FC<PropsWithChildren<TodayProps>> = () => {
           colspan={4}
         />
         <Table
-          rowKey="code"
+          rowKey="bzdm"
           size="small"
           columns={columns}
           dataSource={data}

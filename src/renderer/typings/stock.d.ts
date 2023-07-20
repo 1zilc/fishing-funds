@@ -5,6 +5,11 @@ declare namespace Stock {
     secid: string;
     name: string;
     type: number;
+    cyfe: number;
+    cbj?: number;
+    zdfRange?: number;
+    jzNotice?: number;
+    memo?: string;
   }
 
   export interface CodeMap {

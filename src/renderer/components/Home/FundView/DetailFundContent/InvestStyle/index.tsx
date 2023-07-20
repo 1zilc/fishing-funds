@@ -1,18 +1,17 @@
 import React, { useState } from 'react';
 import { useRequest } from 'ahooks';
-
 import ChartCard from '@/components/Card/ChartCard';
-import PictureImage from '@/static/img/picture.svg';
-import PictureFailedImage from '@/static/img/picture-failed.svg';
 import * as Services from '@/services';
 import * as CONST from '@/constants';
+import * as Utils from '@/utils';
 import styles from './index.module.scss';
 
 export interface InvestStyleProps {
   code: string;
 }
-const InvestStyle: React.FC<InvestStyleProps> = ({ code }) => {
+const InvestStyle: React.FC<InvestStyleProps> = React.memo(({ code }) => {
   const [estimate, setEstimate] = useState<string | undefined>('');
+
   const { run: runGetInverstStyleFromEastmoney } = useRequest(() => Services.Fund.GetInverstStyleFromEastmoney(code), {
     pollingInterval: CONST.DEFAULT.ESTIMATE_FUND_DELAY,
     onSuccess: setEstimate,
@@ -23,15 +22,15 @@ const InvestStyle: React.FC<InvestStyleProps> = ({ code }) => {
     <ChartCard onFresh={runGetInverstStyleFromEastmoney}>
       <div className={styles.estimate}>
         {estimate === '' ? (
-          <PictureImage />
+          <img src={Utils.ImportStatic('img/picture.svg')} />
         ) : estimate === undefined ? (
-          <PictureFailedImage />
+          <img src={Utils.ImportStatic('img/picture-failed.svg')} />
         ) : (
           <img src={estimate} onError={() => setEstimate(undefined)} />
         )}
       </div>
     </ChartCard>
   );
-};
+});
 
 export default InvestStyle;

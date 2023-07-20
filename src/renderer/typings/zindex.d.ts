@@ -2,6 +2,9 @@ declare namespace Zindex {
   export interface SettingItem {
     code: string;
     name?: string;
+    zdfRange?: number;
+    jzNotice?: number;
+    memo?: string;
   }
   export interface CodeMap {
     [index: string]: Zindex.SettingItem & { originSort: number };

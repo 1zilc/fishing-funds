@@ -16,7 +16,7 @@
 <a href="https://qm.qq.com/cgi-bin/qm/qr?k=Su4GnbsicHvsPrbLMwNu557LyZQO19KZ&jump_from=webapi"><img src="https://img.shields.io/badge/QQ%E7%BE%A4-732268738-red" alt="QQ群" /></a>
 ![GitHub](https://img.shields.io/github/license/1zilc/fishing-funds)
 
-> 基金,大盘,股票,虚拟货币状态栏显示小应用,基于 Electron 开发,支持 MacOS,Windows,Linux 客户端,数据源来自天天基金,蚂蚁基金,爱基金,腾讯证券,新浪基金等
+> 基金,大盘,股票,虚拟货币状态栏显示小应用,基于 Electron 开发,支持 MacOS,Windows,Linux 客户端,数据源来自天天基金,蚂蚁基金,同花顺-爱基金,腾讯证券等
 
 ## 软件截图
 
@@ -34,8 +34,6 @@
 
 ## 项目介绍
 
-- 本项目参考[electron-react-boilerplate-menubar](https://github.com/3on/electron-react-boilerplate-menubar)，基于[Electron React Boilerplate](https://github.com/electron-react-boilerplate/electron-react-boilerplate)
-  和[menubar](https://github.com/maxogden/menubar)开发
 - 采用天天基金等数据源接口，实时显示当前基金涨跌情况，计算显示收益，大盘实时数据，板块行情，股票走势，加密虚拟货币等
 - 软件中所有的数据仅供参考，一切收益或是亏损按当天实际为准，任何走势，排行数据均来自于第三方网站不代表作者观点
 - 本项目是个人自用状态栏小插件，完全开源免费，仅供学习交流
@@ -49,10 +47,6 @@
 - [支付宝-蚂蚁基金](https://www.fund123.cn/) ★★★★☆
 - [同花顺-爱基金](http://fund.10jqka.com.cn/) ★★★★☆
 - [腾讯证券](https://stockapp.finance.qq.com/mstats/) ★★★★☆
-- [新浪基金](https://finance.sina.com.cn/fund/) ★★★★☆
-- [基金速查网](https://www.dayfund.cn/) ★★★☆☆
-- [好买基金](https://www.howbuy.com/fund/) ★★★☆☆
-- [易天富](http://www.etf88.com/) ★★★☆☆
 
 ## 下载使用
 
@@ -149,7 +143,7 @@ interface FundSetting {
 ## 感谢
 
 - [Jr Prévost](https://github.com/3on)
-- [Electron React Boilerplate](https://github.com/electron-react-boilerplate/electron-react-boilerplate)
+- [electron-vite](https://github.com/alex8088/electron-vite)
 - [menubar](https://github.com/maxogden/menubar)
 - [Ant Design](https://github.com/ant-design/ant-design/)
 - [ahooks](https://github.com/alibaba/hooks)

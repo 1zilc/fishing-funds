@@ -10,8 +10,12 @@ import {
   syncDarkMode,
   loadSyncConfigAction,
 } from '@/store/features/setting';
-import { setWalletConfigAction, syncEyeStatusAction, changeCurrentWalletCodeAction, defaultWallet } from '@/store/features/wallet';
-import { setStockConfigAction } from '@/store/features/stock';
+import {
+  setWalletConfigAction,
+  syncEyeStatusAction,
+  changeCurrentWalletCodeAction,
+  defaultWallet,
+} from '@/store/features/wallet';
 import { setCoinConfigAction, setRemoteCoinsAction } from '@/store/features/coin';
 import { syncSortModeAction, setViewModeAction, initialState as sortInitialState } from '@/store/features/sort';
 import { syncTabsActiveKeyAction } from '@/store/features/tabs';
@@ -19,7 +23,7 @@ import { setWebConfigAction, defaultWebConfig } from '@/store/features/web';
 import { syncVersion } from '@/store/features/updater';
 import { syncTranslateSettingAction, defaultTranslateSetting } from '@/store/features/translate';
 import { syncChatGPTSettingAction, defaultChatGPTSetting } from '@/store/features/chatGPT';
-import { useDrawer, useAppDispatch, useRouterParams } from '@/utils/hooks';
+import { useDrawer, useAppDispatch } from '@/utils/hooks';
 import { syncFavoriteQuotationMapAction } from '@/store/features/quotation';
 import * as CONST from '@/constants';
 import * as Utils from '@/utils';
@@ -43,7 +47,6 @@ async function checkLocalStorage() {
     }, {});
     await electronStore.cover('config', config);
     localStorage.clear();
-  } else {
   }
 }
 
@@ -71,6 +74,18 @@ async function checkRedundanceStorage() {
   });
 }
 
+async function migrateStock(data: Wallet.SettingItem[]) {
+  // 8.0.0 将股票配置迁移到钱包
+  const allConfigStorage = await electronStore.all('config');
+  const stockConfig = allConfigStorage[CONST.STORAGE.STOCK_SETTING];
+  if (stockConfig) {
+    data[0]!.stocks = stockConfig;
+    await electronStore.set('config', CONST.STORAGE.WALLET_SETTING, data);
+    electronStore.delete('config', CONST.STORAGE.STOCK_SETTING);
+  }
+  return data;
+}
+
 const InitPage = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
@@ -89,19 +104,21 @@ const InitPage = () => {
     const allConfigStorage = await electronStore.all('config');
     // 系统设置加载完成
     dispatch(setSystemSettingAction(allConfigStorage[CONST.STORAGE.SYSTEM_SETTING] || defaultSystemSetting));
-    dispatch(updateAdjustmentNotificationDateAction(allConfigStorage[CONST.STORAGE.ADJUSTMENT_NOTIFICATION_DATE] || ''));
+    dispatch(
+      updateAdjustmentNotificationDateAction(allConfigStorage[CONST.STORAGE.ADJUSTMENT_NOTIFICATION_DATE] || '')
+    );
     //web配置加载完成
     dispatch(setZindexConfigAction(allConfigStorage[CONST.STORAGE.ZINDEX_SETTING] || defaultZindexConfig));
     // 关注板块配置加载完成
     dispatch(syncFavoriteQuotationMapAction(allConfigStorage[CONST.STORAGE.FAVORITE_QUOTATION_MAP] || {}));
-    // 股票配置加载完成
-    dispatch(setStockConfigAction(allConfigStorage[CONST.STORAGE.STOCK_SETTING] || []));
     // 货币配置加载完成
     dispatch(setCoinConfigAction(allConfigStorage[CONST.STORAGE.COIN_SETTING] || []));
     // web配置加载完成
     dispatch(setWebConfigAction(allConfigStorage[CONST.STORAGE.WEB_SETTING] || defaultWebConfig));
     // 钱包配置加载完成
-    dispatch(setWalletConfigAction(allConfigStorage[CONST.STORAGE.WALLET_SETTING] || [defaultWallet]));
+    dispatch(
+      setWalletConfigAction(await migrateStock(allConfigStorage[CONST.STORAGE.WALLET_SETTING] || [defaultWallet]))
+    );
     dispatch(changeCurrentWalletCodeAction(allConfigStorage[CONST.STORAGE.CURRENT_WALLET_CODE] || defaultWallet.code));
     // 翻译配置加载完成
     dispatch(syncTranslateSettingAction(allConfigStorage[CONST.STORAGE.TRANSLATE_SETTING] || defaultTranslateSetting));
@@ -118,7 +135,7 @@ const InitPage = () => {
     // 视图配置加载完成
     dispatch(setViewModeAction(allStateStorage[CONST.STORAGE.VIEW_MODE] || sortInitialState.viewMode));
     // 保密状态加载完成
-    dispatch(syncEyeStatusAction(allStateStorage[CONST.STORAGE.EYE_STATUS] || Enums.EyeStatus.Open));
+    dispatch(syncEyeStatusAction(allStateStorage[CONST.STORAGE.EYE_STATUS] || true));
     /**
      * cache部分
      */

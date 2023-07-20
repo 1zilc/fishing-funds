@@ -49,7 +49,8 @@ export function DeepCopy<T>(object: T): T {
 }
 
 export function Encrypt(s: string) {
-  return s.replace(/[+-]/g, '').replace(/[0-9]/g, '✱');
+  // return s.replace(/[+-]/g, '').replace(/[0-9]/g, '✱');
+  return '✱✱✱✱';
 }
 
 export async function Sleep<T>(time: number, F?: T): Promise<T | undefined> {
@@ -242,7 +243,11 @@ export function GetValueColor(number?: number | string) {
   const varibleColors = GetVariblesColor();
   return {
     color:
-      value > 0 ? varibleColors['--increase-color'] : value < 0 ? varibleColors['--reduce-color'] : varibleColors['--reverse-text-color'],
+      value > 0
+        ? varibleColors['--increase-color']
+        : value < 0
+        ? varibleColors['--reduce-color']
+        : varibleColors['--reverse-text-color'],
     textClass: value > 0 ? 'text-up' : value < 0 ? 'text-down' : 'text-none',
     blockClass: value > 0 ? 'block-up' : value < 0 ? 'block-down' : 'block-none',
     bgClass: value > 0 ? 'bg-up' : value < 0 ? 'bg-down' : 'bg-none',
@@ -416,4 +421,8 @@ export function MergeStateWithResponse<C, CK extends keyof C, SK extends keyof S
   });
 
   return stateWithChached;
+}
+
+export function ImportStatic(path: string) {
+  return new URL(`../static/${path}`, import.meta.url).href;
 }

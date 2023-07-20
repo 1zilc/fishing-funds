@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
 import { Tabs, Radio, Input, Switch } from 'antd';
 import clsx from 'clsx';
-import TranslateIcon from '@/static/icon/translate.svg';
-import SettingIcon from '@/static/icon/setting.svg';
-import LineCharIcon from '@/static/icon/line-chart.svg';
+import { RiTreasureMapFill, RiLineChartLine, RiSettingsLine } from 'react-icons/ri';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
 import WebAppIcon from '@/components/Toolbar/AppCenterContent/WebAppIcon';
 import StandCard from '@/components/Card/StandCard';
@@ -46,10 +44,17 @@ export const APIOptions = [
 
 const TranslateSettingContent: React.FC<TranslateSettingContentProps> = (props) => {
   const dispatch = useAppDispatch();
-  const { translateApiTypeSetting, readClipboardSetting, hotkeySetting } = useAppSelector((state) => state.translate.translateSetting);
+  const { translateApiTypeSetting, readClipboardSetting, hotkeySetting } = useAppSelector(
+    (state) => state.translate.translateSetting
+  );
 
   const [translateApiType, setTranslateApiType] = useState(translateApiTypeSetting);
-  const { hotkey, onBlur: hotkeyInputOnBlur, onFocus: hotkeyInputOnFocus, reset: resetHotkey } = useInputShortcut(hotkeySetting);
+  const {
+    hotkey,
+    onBlur: hotkeyInputOnBlur,
+    onFocus: hotkeyInputOnFocus,
+    reset: resetHotkey,
+  } = useInputShortcut(hotkeySetting);
   const [readClipboard, setReadClipboard] = useState(readClipboardSetting);
 
   function onSave() {
@@ -67,7 +72,7 @@ const TranslateSettingContent: React.FC<TranslateSettingContentProps> = (props) 
     <CustomDrawerContent title={appName} enterText="保存" onClose={props.onClose} onEnter={onSave}>
       <div className={styles.content}>
         <PureCard className={clsx(styles.logoContent, 'card-body')}>
-          <WebAppIcon title={appName} iconType={Enums.WebIconType.Svg} svg={<TranslateIcon />} />
+          <WebAppIcon title={appName} iconType={Enums.WebIconType.Svg} svg={<RiTreasureMapFill />} />
         </PureCard>
         <div className={styles.container}>
           <Tabs
@@ -79,7 +84,7 @@ const TranslateSettingContent: React.FC<TranslateSettingContentProps> = (props) 
                 label: '翻译设置',
                 children: (
                   <>
-                    <StandCard icon={<LineCharIcon />} title="数据来源">
+                    <StandCard icon={<RiLineChartLine />} title="数据来源">
                       <div className={clsx(styles.setting, 'card-body')}>
                         <Radio.Group value={translateApiType} onChange={(e) => setTranslateApiType(e.target.value)}>
                           {APIOptions.map((api) => (
@@ -91,7 +96,7 @@ const TranslateSettingContent: React.FC<TranslateSettingContentProps> = (props) 
                       </div>
                     </StandCard>
                     <StandCard
-                      icon={<SettingIcon />}
+                      icon={<RiSettingsLine />}
                       title="基础设置"
                       extra={
                         <div className={styles.guide}>

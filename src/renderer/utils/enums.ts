@@ -4,18 +4,9 @@ export enum ToolBarDwawerType {
   Setting,
 }
 
-export enum EyeStatus {
-  Close,
-  Open,
-}
-
 export enum FundApiType {
   Eastmoney, // 东方财富-天天基金
-  Dayfund, // 基金速查网
   Tencent, // 腾讯证券
-  Sina, // 新浪基金
-  Howbuy, // 好买基金
-  Etf, // 易天富
   Ant, // 支付宝-蚂蚁基金
   Fund10jqka, // 同花顺-爱基金
 }
@@ -52,9 +43,13 @@ export enum QuotationSortType {
 
 export enum StockSortType {
   Custom, // 自定义
-  Zdd, // 涨跌点
   Zdf, // 涨跌幅
   Zx, // 指数值
+  Cost, // 成本
+  Money, // 收益
+  Estimate, // 估值
+  Income, // 收益
+  IncomeRate, // 收益率
   Name, // a-z
 }
 

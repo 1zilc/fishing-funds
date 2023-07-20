@@ -1,24 +1,25 @@
 import React, { useState, useMemo } from 'react';
 import { useBoolean, useMemoizedFn } from 'ahooks';
 import { Input } from 'antd';
-
-import WalletIcon from '@/static/icon/wallet.svg';
-import NewsIcon from '@/static/icon/news.svg';
-import ExchangeIcon from '@/static/icon/exchange.svg';
-import BubbleIcon from '@/static/icon/bubble.svg';
-import OrderIcon from '@/static/icon/order.svg';
-import PieIcon from '@/static/icon/pie.svg';
-import FundsBoxIcon from '@/static/icon/funds-box.svg';
-import BarChartIcon from '@/static/icon/bar-chart.svg';
-import StockIcon from '@/static/icon/stock.svg';
-import CoinIcon from '@/static/icon/coin.svg';
-import CalendarCheckIcon from '@/static/icon/calendar-check.svg';
-import LayoutIcon from '@/static/icon/layout.svg';
-import FundsIcon from '@/static/icon/funds.svg';
-import CalculatorIcon from '@/static/icon/calculator.svg';
-import GlobalFillIcon from '@/static/icon/global-fill.svg';
-import TranslateIcon from '@/static/icon/translate.svg';
-import OpenAIIcon from '@/static/icon/openai.svg';
+import {
+  RiWalletFill,
+  RiGlobalFill,
+  RiNewspaperFill,
+  RiOpenaiFill,
+  RiTranslate,
+  RiCalculatorFill,
+  RiBubbleChartFill,
+  RiPieChartFill,
+  RiBarChartGroupedFill,
+  RiStockFill,
+  RiCalendarCheckFill,
+  RiFundsBoxFill,
+  RiExchangeCnyFill,
+  RiListOrdered,
+  RiCoinFill,
+  RiLayoutMasonryFill,
+  RiExchangeFill,
+} from 'react-icons/ri';
 
 import CustomDrawer from '@/components/CustomDrawer';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
@@ -172,13 +173,13 @@ const AppCenterContent: React.FC<AppCenterContentProps> = (props) => {
               {
                 title: '钱包管理',
                 iconType: Enums.WebIconType.Svg,
-                icon: <WalletIcon style={{ ...iconSize }} />,
+                icon: <RiWalletFill style={{ ...iconSize }} />,
                 click: openManageWalletDrawer,
               },
               {
                 title: 'H5管理',
                 iconType: Enums.WebIconType.Svg,
-                icon: <GlobalFillIcon style={{ ...iconSize }} />,
+                icon: <RiGlobalFill style={{ ...iconSize }} />,
                 click: openManageWebDrawer,
               },
             ],
@@ -189,26 +190,26 @@ const AppCenterContent: React.FC<AppCenterContentProps> = (props) => {
               {
                 title: '基金统计',
                 iconType: Enums.WebIconType.Svg,
-                icon: <PieIcon style={{ ...iconSize }} />,
+                icon: <RiPieChartFill style={{ ...iconSize }} />,
                 click: openFundStatisticsDrawer,
               },
               {
                 title: '货币计算器',
                 iconType: Enums.WebIconType.Svg,
-                icon: <CalculatorIcon style={{ ...iconSize }} />,
+                icon: <RiCalculatorFill style={{ ...iconSize }} />,
                 click: openCalculatorDrawer,
               },
               {
                 title: '快捷翻译',
                 iconType: Enums.WebIconType.Svg,
-                icon: <TranslateIcon style={{ ...iconSize }} />,
+                icon: <RiTranslate style={{ ...iconSize }} />,
                 click: openTranslateSettingDrawer,
               },
               {
                 title: 'ChatGPT',
                 iconType: Enums.WebIconType.Svg,
                 color: '#80A89C',
-                icon: <OpenAIIcon style={{ ...iconSize }} />,
+                icon: <RiOpenaiFill style={{ ...iconSize }} />,
                 click: openChatGPTSettingDrawer,
               },
             ],
@@ -219,67 +220,67 @@ const AppCenterContent: React.FC<AppCenterContentProps> = (props) => {
               {
                 title: '新闻动态',
                 iconType: Enums.WebIconType.Svg,
-                icon: <NewsIcon style={{ ...iconSize }} />,
+                icon: <RiNewspaperFill style={{ ...iconSize }} />,
                 click: openNewsDrawer,
               },
               {
                 title: '沪深港通股',
                 iconType: Enums.WebIconType.Svg,
-                icon: <FundsIcon style={{ ...iconSize }} />,
+                icon: <RiExchangeFill style={{ ...iconSize }} />,
                 click: openHoldingDrawer,
               },
               {
                 title: '板块资金流',
                 iconType: Enums.WebIconType.Svg,
-                icon: <LayoutIcon style={{ ...iconSize }} />,
+                icon: <RiLayoutMasonryFill style={{ ...iconSize }} />,
                 click: openFundFlowDrawer,
               },
               {
                 title: '外汇债券',
                 iconType: Enums.WebIconType.Svg,
-                icon: <ExchangeIcon style={{ ...iconSize }} />,
+                icon: <RiExchangeCnyFill style={{ ...iconSize }} />,
                 click: openExchangeDrawer,
               },
               {
                 title: '行情中心',
                 iconType: Enums.WebIconType.Svg,
-                icon: <BubbleIcon style={{ ...iconSize }} />,
+                icon: <RiBubbleChartFill style={{ ...iconSize }} />,
                 click: openQuoteCenterDrawer,
               },
               {
                 title: '经济数据',
                 iconType: Enums.WebIconType.Svg,
-                icon: <BarChartIcon style={{ ...iconSize }} />,
+                icon: <RiBarChartGroupedFill style={{ ...iconSize }} />,
                 click: openEconomicDataDrawer,
               },
               {
                 title: '基金榜',
                 iconType: Enums.WebIconType.Svg,
-                icon: <FundsBoxIcon style={{ ...iconSize }} />,
+                icon: <RiFundsBoxFill style={{ ...iconSize }} />,
                 click: openFundRankingDrawer,
               },
               {
                 title: '股票榜',
                 iconType: Enums.WebIconType.Svg,
-                icon: <StockIcon style={{ ...iconSize }} />,
+                icon: <RiStockFill style={{ ...iconSize }} />,
                 click: openStockRankingDrawer,
               },
               {
                 title: '货币榜',
                 iconType: Enums.WebIconType.Svg,
-                icon: <OrderIcon style={{ ...iconSize }} />,
+                icon: <RiListOrdered style={{ ...iconSize }} />,
                 click: openCoinRankingDrawer,
               },
               {
                 title: '财经日历',
                 iconType: Enums.WebIconType.Svg,
-                icon: <CalendarCheckIcon style={{ ...iconSize }} />,
+                icon: <RiCalendarCheckFill style={{ ...iconSize }} />,
                 click: openEconomicCalendarDrawer,
               },
               {
                 title: '黄金市场',
                 iconType: Enums.WebIconType.Svg,
-                icon: <CoinIcon style={{ ...iconSize }} />,
+                icon: <RiCoinFill style={{ ...iconSize }} />,
                 click: openGoldMarketDrawer,
               },
             ],
