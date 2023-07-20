@@ -284,10 +284,13 @@ export const setWalletStateAction = createAsyncThunk<
       wallet: { wallets },
     } = getState();
 
+    const currentWallet = Helpers.Wallet.GetCurrentWalletState(state.code, wallets);
+    const mergedWallet = Helpers.Base.Merge({ data: Utils.DeepCopy(currentWallet), overide: state });
+
     const config = Helpers.Base.Update({
       list: Utils.DeepCopy(wallets),
       key: 'code',
-      data: state,
+      data: mergedWallet,
     });
 
     dispatch(syncWalletsAction(config));

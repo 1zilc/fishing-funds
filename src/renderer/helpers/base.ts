@@ -31,6 +31,16 @@ export function Update<T extends {}>(config: { key: keyof T; list: T[]; data: T 
   return list as Required<T>[];
 }
 
+export function Merge<T extends {}>(config: { data: T; overide: Partial<T> }) {
+  const { overide, data } = config;
+
+  Object.keys(overide).forEach((k) => {
+    (data[k as keyof T] as any) = overide[k as keyof T];
+  });
+
+  return data;
+}
+
 export function Delete<T extends {}>(config: { key: keyof T; list: T[]; data: string }) {
   const { list, key, data } = config;
 
