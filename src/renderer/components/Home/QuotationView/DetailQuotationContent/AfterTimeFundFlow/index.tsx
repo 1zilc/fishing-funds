@@ -31,6 +31,11 @@ const AfterTimeFundFlow: React.FC<AfterTimeFundFlowProps> = ({ code = '' }) => {
         lineStyle: {
           width: 1,
         },
+        areaStyle: {
+          opacity: 0.8,
+        },
+        smooth: true,
+        stack: '流入',
       };
       chartInstance?.setOption({
         title: {
