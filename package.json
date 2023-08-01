@@ -156,7 +156,7 @@
     "@vitejs/plugin-react": "^4.0.3",
     "electron": "^25.3.0",
     "electron-builder": "^24.4.0",
-    "electron-vite": "^1.0.25",
+    "electron-vite": "^1.0.26",
     "generate-react-cli": "^8.3.0",
     "sass": "^1.63.6",
     "typescript": "^5.1.6",
