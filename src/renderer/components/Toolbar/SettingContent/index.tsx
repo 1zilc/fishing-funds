@@ -292,7 +292,30 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
                       </Radio.Group>
                     </div>
                   </StandCard>
-                  <StandCard icon={<RiTShirtLine />} title="外观设置">
+                  <StandCard
+                    icon={<RiTShirtLine />}
+                    title="外观设置"
+                    extra={
+                      <div className={styles.guide}>
+                        <Guide
+                          list={[
+                            {
+                              name: '简洁模式',
+                              text: '简化界面显示数据，展示更多关键信息',
+                            },
+                            {
+                              name: '低调模式',
+                              text: '增强软件隐蔽性',
+                            },
+                            {
+                              name: '低调程度',
+                              text: '调节灰度和软件透明度（Linux不支持透明度设置）',
+                            },
+                          ]}
+                        />
+                      </div>
+                    }
+                  >
                     <div className={clsx(styles.setting, 'card-body')}>
                       <section>
                         <label>主题色：</label>

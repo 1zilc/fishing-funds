@@ -384,6 +384,7 @@ export function useMappingLocalToSystemSetting() {
     systemThemeSetting,
     autoStartSetting,
     lowKeySetting,
+    lowKeyDegreeSetting,
     adjustmentNotificationTimeSetting,
     proxyTypeSetting,
     proxyHostSetting,
@@ -441,6 +442,16 @@ export function useMappingLocalToSystemSetting() {
   useEffect(() => {
     ipcRenderer.invoke('set-chatGPT-hotkey', chatGPTHotkey);
   }, [chatGPTHotkey]);
+  useEffect(() => {
+    if (lowKeySetting) {
+      // lowKeyDegreeSetting 0-100
+      // opacity 0.4-0.8
+      const opacity = lowKeyDegreeSetting * -0.004 + 0.8;
+      ipcRenderer.invoke('set-opacity', opacity);
+    } else {
+      ipcRenderer.invoke('set-opacity', 1);
+    }
+  }, [lowKeySetting, lowKeyDegreeSetting]);
 }
 
 export function useTrayContent() {

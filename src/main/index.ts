@@ -166,6 +166,11 @@ function main() {
   ipcMain.handle('get-version', async (event, config) => {
     return app.getVersion();
   });
+  ipcMain.handle('set-opacity', async (event, config) => {
+    getOtherWindows(windowIds).forEach((win) => {
+      win?.setOpacity(config);
+    });
+  });
   // touchbar 相关监听
   ipcMain.handle('update-touchbar-zindex', async (event, config) => {
     touchBarManager.updateZindexItems(config);
