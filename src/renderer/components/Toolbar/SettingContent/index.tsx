@@ -98,6 +98,7 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
     fundApiTypeSetting,
     themeColorTypeSetting,
     customThemeColorSetting,
+    alwaysOnTopSetting,
     conciseSetting,
     lowKeySetting,
     lowKeyDegreeSetting,
@@ -131,6 +132,7 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
   const [themeColorType, setThemeColorType] = useState(themeColorTypeSetting);
   const [customThemeColor, setCustomThemeColor] = useState(customThemeColorSetting);
   const [concise, setConcise] = useState(conciseSetting);
+  const [alwaysOnTop, setAlwaysOnTop] = useState(alwaysOnTopSetting);
   const [lowKey, setLowKey] = useState(lowKeySetting);
   const [lowKeyDegree, setLowKeyDegree] = useState(lowKeyDegreeSetting);
   const [baseFontSize, setBaseFontSize] = useState(baseFontSizeSetting);
@@ -177,6 +179,7 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
         fundApiTypeSetting: fundapiType,
         themeColorTypeSetting: themeColorType,
         customThemeColorSetting: customThemeColor || originPrimaryColor,
+        alwaysOnTopSetting: alwaysOnTop,
         conciseSetting: concise,
         lowKeySetting: lowKey,
         lowKeyDegreeSetting: lowKeyDegree,
@@ -300,6 +303,10 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
                         <Guide
                           list={[
                             {
+                              name: '总是置顶',
+                              text: '始终显示在所有界面的最上层',
+                            },
+                            {
                               name: '简洁模式',
                               text: '简化界面显示数据，展示更多关键信息',
                             },
@@ -348,6 +355,10 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
                             <div className={styles.colorPicker} style={{ backgroundColor: themeColor }} />
                           </ColorPicker>
                         </div>
+                      </section>
+                      <section>
+                        <label>总是置顶：</label>
+                        <Switch size="small" checked={alwaysOnTop} onChange={setAlwaysOnTop} />
                       </section>
                       <section>
                         <label>简洁模式：</label>

@@ -4,6 +4,7 @@ declare namespace System {
 
     themeColorTypeSetting: import('@/utils/enums').ThemeColorType;
     customThemeColorSetting: string;
+    alwaysOnTopSetting: boolean; // 总是置顶
     conciseSetting: boolean; // 简洁模式
     lowKeySetting: boolean; // 低调模式
     lowKeyDegreeSetting: number; // 低调程度

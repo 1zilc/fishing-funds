@@ -171,6 +171,11 @@ function main() {
       win?.setOpacity(config);
     });
   });
+  ipcMain.handle('set-alwaysOnTop', async (event, config) => {
+    getOtherWindows(windowIds).forEach((win) => {
+      win?.setAlwaysOnTop(config);
+    });
+  });
   // touchbar 相关监听
   ipcMain.handle('update-touchbar-zindex', async (event, config) => {
     touchBarManager.updateZindexItems(config);

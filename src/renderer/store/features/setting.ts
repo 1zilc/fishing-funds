@@ -25,6 +25,7 @@ export const defaultSystemSetting: System.Setting = {
 
   themeColorTypeSetting: Enums.ThemeColorType.Default,
   customThemeColorSetting: '',
+  alwaysOnTopSetting: false,
   conciseSetting: false,
   lowKeySetting: false,
   lowKeyDegreeSetting: 80,

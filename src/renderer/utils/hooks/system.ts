@@ -383,6 +383,7 @@ export function useMappingLocalToSystemSetting() {
   const {
     systemThemeSetting,
     autoStartSetting,
+    alwaysOnTopSetting,
     lowKeySetting,
     lowKeyDegreeSetting,
     adjustmentNotificationTimeSetting,
@@ -452,6 +453,10 @@ export function useMappingLocalToSystemSetting() {
       ipcRenderer.invoke('set-opacity', 1);
     }
   }, [lowKeySetting, lowKeyDegreeSetting]);
+
+  useEffect(() => {
+    ipcRenderer.invoke('set-alwaysOnTop', alwaysOnTopSetting);
+  }, [alwaysOnTopSetting]);
 }
 
 export function useTrayContent() {
