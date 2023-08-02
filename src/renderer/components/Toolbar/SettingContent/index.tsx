@@ -423,8 +423,6 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
                           <Select.Option value={Enums.TrayContent.Syl}>选中钱包收益率</Select.Option>
                           <Select.Option value={Enums.TrayContent.Zsy}>所有钱包收益</Select.Option>
                           <Select.Option value={Enums.TrayContent.Zsyl}>所有钱包收益率</Select.Option>
-                          <Select.Option value={Enums.TrayContent.StockSy}>股票收益</Select.Option>
-                          <Select.Option value={Enums.TrayContent.StockSyl}>股票收益率</Select.Option>
                         </Select>
                       </section>
                     </div>
