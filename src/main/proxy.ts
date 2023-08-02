@@ -40,24 +40,18 @@ export default class Proxy {
 
   constructAgents() {
     if (this.type === 'SOCKS' || this.type === 'SOCKS5') {
-      const agent = new SocksProxyAgent({
-        hostname: this.host,
-        port: this.port,
-      });
+      const proxyURL = `socks:${this.host}:${this.port}`;
+      const agent = new SocksProxyAgent(proxyURL);
 
       this.httpAgent = agent;
       this.httpsAgent = agent;
     } else if (this.type === 'PROXY' || this.type === 'HTTPS') {
+      const proxyURL = `http:${this.host}:${this.port}`;
+
       if (this.url.startsWith('https://')) {
-        this.httpsAgent = new HttpsProxyAgent({
-          hostname: this.host,
-          port: this.port,
-        });
+        this.httpsAgent = new HttpsProxyAgent(proxyURL);
       } else {
-        this.httpAgent = new HttpProxyAgent({
-          hostname: this.host,
-          port: this.port,
-        });
+        this.httpAgent = new HttpProxyAgent(proxyURL);
       }
     } else {
       // DIRECT do nothing
