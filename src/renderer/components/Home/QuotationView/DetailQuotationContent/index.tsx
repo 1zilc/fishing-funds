@@ -10,6 +10,9 @@ import Funds from '@/components/Home/QuotationView/DetailQuotationContent/Funds'
 import Recent from '@/components/Home/NewsList/Recent';
 import RealTimeTransaction from '@/components/Home/QuotationView/DetailQuotationContent/RealTimeTransaction';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
+import K from '@/components/Home/StockView/DetailStockContent/K';
+import Trend from '@/components/Home/StockView/DetailStockContent/Trend';
+import Estimate from '@/components/Home/StockView/DetailStockContent/Estimate';
 import GuBa from '@/components/Home/NewsList/GuBa';
 import { RedirectSearchParams } from '@/containers/InitPage';
 import { DetailQuotationPageParams } from '@/components/Home/QuotationView/DetailQuotationPage';
@@ -63,7 +66,10 @@ export const DetailQuotation: React.FC<DetailQuotationProps> = (props) => {
                 已关注
               </a>
             ) : (
-              <a className={styles.selfAdd} onClick={() => dispatch(setFavoriteQuotationMapAction({ code: quotation.code, status: true }))}>
+              <a
+                className={styles.selfAdd}
+                onClick={() => dispatch(setFavoriteQuotationMapAction({ code: quotation.code, status: true }))}
+              >
                 未关注
               </a>
             )}
@@ -76,7 +82,9 @@ export const DetailQuotation: React.FC<DetailQuotationProps> = (props) => {
         </div>
         <div className={styles.detail}>
           <div className={styles.detailItem}>
-            <div className={clsx(styles.zdf, Utils.GetValueColor(quotation.zdd).textClass)}>{Utils.Yang(quotation.zdf)}%</div>
+            <div className={clsx(styles.zdf, Utils.GetValueColor(quotation.zdd).textClass)}>
+              {Utils.Yang(quotation.zdf)}%
+            </div>
             <div className={styles.detailItemLabel}>涨跌幅</div>
           </div>
           <div className={clsx(styles.detailItem, 'text-center')}>
@@ -96,13 +104,13 @@ export const DetailQuotation: React.FC<DetailQuotationProps> = (props) => {
           items={[
             {
               key: String(0),
-              label: '实时资金流向',
-              children: <RealTimeFundFlow code={code} />,
+              label: '板块走势',
+              children: <Trend secid={`90.${quotation.code}`} zs={quotation.zs} name={quotation.name} />,
             },
             {
               key: String(1),
-              label: '盘后资金流向',
-              children: <AfterTimeFundFlow code={code} />,
+              label: '走势详情',
+              children: <Estimate secid={`90.${quotation.code}`} />,
             },
             {
               key: String(2),
@@ -124,8 +132,31 @@ export const DetailQuotation: React.FC<DetailQuotationProps> = (props) => {
           items={[
             {
               key: String(0),
+              label: 'K线',
+              children: <K secid={`90.${quotation.code}`} />,
+            },
+            {
+              key: String(1),
               label: '实时成交分布',
               children: <RealTimeTransaction code={code} />,
+            },
+          ]}
+        />
+      </div>
+      <div className={styles.container}>
+        <Tabs
+          animated={{ tabPane: true }}
+          tabBarGutter={15}
+          items={[
+            {
+              key: String(0),
+              label: '实时资金',
+              children: <RealTimeFundFlow code={code} />,
+            },
+            {
+              key: String(1),
+              label: '盘后资金',
+              children: <AfterTimeFundFlow code={code} />,
             },
           ]}
         />

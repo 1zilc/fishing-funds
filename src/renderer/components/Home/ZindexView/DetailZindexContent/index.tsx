@@ -35,9 +35,12 @@ export const DetailZindex: React.FC<DetailFundProps> = (props) => {
     cacheKey: Utils.GenerateRequestKey('Zindex.FromEastmoney', code),
   });
 
-  const { data: kdata = [], run: runGetKFromEastmoney } = useRequest(() => Services.Zindex.GetKFromEastmoney(code, 10, 101), {
-    cacheKey: Utils.GenerateRequestKey('Zindex.GetKFromEastmoney', [code, 10, 101]),
-  });
+  const { data: kdata = [], run: runGetKFromEastmoney } = useRequest(
+    () => Services.Zindex.GetKFromEastmoney(code, 10, 101),
+    {
+      cacheKey: Utils.GenerateRequestKey('Zindex.GetKFromEastmoney', [code, 10, 101]),
+    }
+  );
 
   return (
     <div className={styles.content}>
@@ -124,7 +127,9 @@ export const DetailZindex: React.FC<DetailFundProps> = (props) => {
             {
               key: String(1),
               label: '周期回报',
-              children: <CycleReturn onFresh={runGetKFromEastmoney} data={kdata.map(({ date: x, sp: y }) => ({ x, y }))} />,
+              children: (
+                <CycleReturn onFresh={runGetKFromEastmoney} data={kdata.map(({ date: x, sp: y }) => ({ x, y }))} />
+              ),
             },
           ]}
         />
