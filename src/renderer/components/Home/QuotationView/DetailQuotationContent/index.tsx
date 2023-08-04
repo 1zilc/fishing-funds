@@ -140,23 +140,15 @@ export const DetailQuotation: React.FC<DetailQuotationProps> = (props) => {
               label: '实时成交分布',
               children: <RealTimeTransaction code={code} />,
             },
-          ]}
-        />
-      </div>
-      <div className={styles.container}>
-        <Tabs
-          animated={{ tabPane: true }}
-          tabBarGutter={15}
-          items={[
             {
-              key: String(0),
+              key: String(2),
               label: '实时资金',
-              children: <RealTimeFundFlow code={code} />,
+              children: <RealTimeFundFlow secid={`90.${code}`} />,
             },
             {
-              key: String(1),
+              key: String(3),
               label: '盘后资金',
-              children: <AfterTimeFundFlow code={code} />,
+              children: <AfterTimeFundFlow secid={`90.${code}`} />,
             },
           ]}
         />

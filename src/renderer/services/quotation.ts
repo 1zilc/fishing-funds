@@ -140,7 +140,7 @@ export async function GetQuotationDetailFromEastmoney(code: string) {
  * @param code 板块代码: BK0428
  * 从天天基金获取板块资金流向
  */
-export async function GetRealTimeFundFlowFromEasymoney(code: string) {
+export async function GetRealTimeFundFlowFromEasymoney(secid: string) {
   try {
     const {
       body: { data },
@@ -150,7 +150,7 @@ export async function GetRealTimeFundFlowFromEasymoney(code: string) {
         klt: 1,
         fields1: 'f1,f2,f3,f7',
         fields2: 'f51,f52,f53,f54,f55,f56,f57,f58,f59,f60,f61,f62,f63,f64,f65',
-        secid: `90.${code}`,
+        secid: secid,
         _: Date.now(),
       },
       responseType: 'json',
@@ -325,7 +325,7 @@ export async function GetTransactionFromEasymoney(code: string) {
  * @param code 板块代码: BK0428
  * 从天天基金获取板盘后资金走向
  */
-export async function GetAfterTimeFundFlowFromEasymoney(code: string) {
+export async function GetAfterTimeFundFlowFromEasymoney(secid: string) {
   try {
     const {
       body: { data },
@@ -349,7 +349,7 @@ export async function GetAfterTimeFundFlowFromEasymoney(code: string) {
         klt: 101,
         fields1: 'f1,f2,f3,f7',
         fields2: 'f51,f52,f53,f54,f55,f56,f57,f58,f59,f60,f61,f62,f63,f64,f65',
-        secid: `90.${code}`,
+        secid: secid,
         _: Date.now(),
       },
       responseType: 'json',

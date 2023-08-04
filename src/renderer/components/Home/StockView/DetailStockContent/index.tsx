@@ -14,6 +14,8 @@ import Recent from '@/components/Home/NewsList/Recent';
 import CycleReturn from '@/components/Home/FundView/DetailFundContent/CycleReturn';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
 import GuBa from '@/components/Home/NewsList/GuBa';
+import AfterTimeFundFlow from '@/components/Home/QuotationView/DetailQuotationContent/AfterTimeFundFlow';
+import RealTimeFundFlow from '@/components/Home/QuotationView/DetailQuotationContent/RealTimeFundFlow';
 import { RedirectSearchParams } from '@/containers/InitPage';
 import { DetailStockPageParams } from '@/components/Home/StockView/DetailStockPage';
 import { addStockAction } from '@/store/features/stock';
@@ -211,6 +213,16 @@ export const DetailStock: React.FC<DetailStockProps> = (props) => {
             },
             {
               key: String(1),
+              label: '实时资金',
+              children: <RealTimeFundFlow secid={secid} />,
+            },
+            {
+              key: String(2),
+              label: '盘后资金',
+              children: <AfterTimeFundFlow secid={secid} />,
+            },
+            {
+              key: String(3),
               label: '周期回报',
               children: (
                 <CycleReturn onFresh={runGetKFromEastmoney} data={kdata.map(({ date: x, sp: y }) => ({ x, y }))} />
