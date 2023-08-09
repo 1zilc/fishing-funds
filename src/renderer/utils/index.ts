@@ -68,8 +68,8 @@ export function JudgeWorkDayTime(timestamp: number) {
   const minute = now.get('minute');
   const minites = hour * 60 + minute;
   const isWorkDay = day >= 1 && day <= 5;
-  const isMorningWorkTime = minites >= 9 * 60 + 30 && minites <= 11 * 60 + 30;
-  const isAfternoonWorkTime = minites >= 13 * 60 && minites <= 15 * 60;
+  const isMorningWorkTime = minites >= 9 * 60 + 15 && minites <= 11 * 60 + 45; // 9:15 - 11:45
+  const isAfternoonWorkTime = minites >= 13 * 60 && minites <= 15 * 60 + 15; // 13:00 - 15:15
   return isWorkDay && (isMorningWorkTime || isAfternoonWorkTime);
 }
 
@@ -80,7 +80,7 @@ export function JudgeFixTime(timestamp: number) {
   const minute = now.get('minute');
   const minites = hour * 60 + minute;
   const isWorkDay = day >= 1 && day <= 5;
-  const isFixTime = minites <= 9 * 60 + 30 || minites >= 18 * 60;
+  const isFixTime = minites <= 9 * 60 + 30 || minites >= 19 * 60 + 30; // 19:30 - 9:30
   return (isWorkDay && isFixTime) || !isWorkDay;
 }
 
