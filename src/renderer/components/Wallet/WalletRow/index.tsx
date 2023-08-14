@@ -59,6 +59,7 @@ const WalletRow: React.FC<WalletRowProps> = (props) => {
   const walletState: Wallet.StateItem = wallets.find(({ code }) => code === wallet.code) || {
     code: wallet.code,
     funds: [],
+    stocks: [],
     updateTime: '还没有刷新过哦~',
   };
   const { funds, updateTime } = walletState;
@@ -90,7 +91,17 @@ const WalletRow: React.FC<WalletRowProps> = (props) => {
       title={wallet.name}
       extra={
         <div className={styles.extra}>
-          {readonly ? <i /> : <RiEditFill className={styles.editor} onClick={onEditClick} />}
+          {readonly ? (
+            <i />
+          ) : (
+            <RiEditFill
+              className={styles.editor}
+              onClick={(e) => {
+                onEditClick();
+                e.stopPropagation();
+              }}
+            />
+          )}
           <div className={styles.time}>{updateTime}</div>
         </div>
       }
@@ -134,7 +145,13 @@ const WalletRow: React.FC<WalletRowProps> = (props) => {
         </div>
         {!readonly && selected && <RiCheckboxCircleFill className={styles.checkbox} />}
         {!readonly && !selected && (
-          <RiIndeterminateCircleFill className={styles.remove} onClick={() => onRemoveClick(wallet)} />
+          <RiIndeterminateCircleFill
+            className={styles.remove}
+            onClick={(e) => {
+              onRemoveClick(wallet);
+              e.stopPropagation();
+            }}
+          />
         )}
       </div>
     </StandCard>
