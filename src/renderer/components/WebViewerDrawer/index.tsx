@@ -5,7 +5,7 @@ import { useBoolean, useMemoizedFn, useEventListener } from 'ahooks';
 import {
   RiStarFill,
   RiStarLine,
-  RiFileCopyFill,
+  RiFileCopyLine,
   RiRefreshLine,
   RiToolsLine,
   RiArrowLeftLine,
@@ -234,7 +234,7 @@ export const WebViewer: React.FC<WebViewerProps> = (props) => {
                 </div>
                 <div className={styles.menuItem} onClick={onCopyUrl}>
                   <label>复制链接</label>
-                  <RiFileCopyFill {...menuItemSize} />
+                  <RiFileCopyLine {...menuItemSize} />
                 </div>
                 <div className={styles.menuItem}>
                   <label>移动端标识</label>
@@ -282,7 +282,13 @@ export const WebViewerContent: React.FC<WebViewerContentProps> = () => {
 
   return (
     <CustomDrawerContent title={currentTitle} enterText="多窗" onClose={onClose} onEnter={onOpenChildWindow}>
-      <WebViewer url={view.url} phone={view.phone} title={view.title} updateTitle={setCurrentTitle} updateUrl={setCurrentUrl} />
+      <WebViewer
+        url={view.url}
+        phone={view.phone}
+        title={view.title}
+        updateTitle={setCurrentTitle}
+        updateUrl={setCurrentUrl}
+      />
     </CustomDrawerContent>
   );
 };

@@ -98,6 +98,7 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
     fundApiTypeSetting,
     themeColorTypeSetting,
     customThemeColorSetting,
+    alwaysOnTopSetting,
     conciseSetting,
     lowKeySetting,
     lowKeyDegreeSetting,
@@ -131,6 +132,7 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
   const [themeColorType, setThemeColorType] = useState(themeColorTypeSetting);
   const [customThemeColor, setCustomThemeColor] = useState(customThemeColorSetting);
   const [concise, setConcise] = useState(conciseSetting);
+  const [alwaysOnTop, setAlwaysOnTop] = useState(alwaysOnTopSetting);
   const [lowKey, setLowKey] = useState(lowKeySetting);
   const [lowKeyDegree, setLowKeyDegree] = useState(lowKeyDegreeSetting);
   const [baseFontSize, setBaseFontSize] = useState(baseFontSizeSetting);
@@ -177,6 +179,7 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
         fundApiTypeSetting: fundapiType,
         themeColorTypeSetting: themeColorType,
         customThemeColorSetting: customThemeColor || originPrimaryColor,
+        alwaysOnTopSetting: alwaysOnTop,
         conciseSetting: concise,
         lowKeySetting: lowKey,
         lowKeyDegreeSetting: lowKeyDegree,
@@ -292,7 +295,34 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
                       </Radio.Group>
                     </div>
                   </StandCard>
-                  <StandCard icon={<RiTShirtLine />} title="外观设置">
+                  <StandCard
+                    icon={<RiTShirtLine />}
+                    title="外观设置"
+                    extra={
+                      <div className={styles.guide}>
+                        <Guide
+                          list={[
+                            {
+                              name: '总是置顶',
+                              text: '始终显示在所有界面的最上层',
+                            },
+                            {
+                              name: '简洁模式',
+                              text: '简化界面显示数据，展示更多关键信息',
+                            },
+                            {
+                              name: '低调模式',
+                              text: '增强软件隐蔽性',
+                            },
+                            {
+                              name: '低调程度',
+                              text: '调节灰度和软件透明度（Linux不支持透明度设置）',
+                            },
+                          ]}
+                        />
+                      </div>
+                    }
+                  >
                     <div className={clsx(styles.setting, 'card-body')}>
                       <section>
                         <label>主题色：</label>
@@ -325,6 +355,10 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
                             <div className={styles.colorPicker} style={{ backgroundColor: themeColor }} />
                           </ColorPicker>
                         </div>
+                      </section>
+                      <section>
+                        <label>总是置顶：</label>
+                        <Switch size="small" checked={alwaysOnTop} onChange={setAlwaysOnTop} />
                       </section>
                       <section>
                         <label>简洁模式：</label>
@@ -423,8 +457,6 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
                           <Select.Option value={Enums.TrayContent.Syl}>选中钱包收益率</Select.Option>
                           <Select.Option value={Enums.TrayContent.Zsy}>所有钱包收益</Select.Option>
                           <Select.Option value={Enums.TrayContent.Zsyl}>所有钱包收益率</Select.Option>
-                          <Select.Option value={Enums.TrayContent.StockSy}>股票收益</Select.Option>
-                          <Select.Option value={Enums.TrayContent.StockSyl}>股票收益率</Select.Option>
                         </Select>
                       </section>
                     </div>

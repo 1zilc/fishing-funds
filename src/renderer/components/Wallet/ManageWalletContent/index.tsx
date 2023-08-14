@@ -38,6 +38,7 @@ const ManageWalletContent: React.FC<ManageWalletContentProps> = (props) => {
     iconIndex: 0,
     code: '',
     funds: [],
+    stocks: [],
   });
 
   async function onSelectWallet(wallet: Wallet.SettingItem) {
@@ -54,7 +55,14 @@ const ManageWalletContent: React.FC<ManageWalletContentProps> = (props) => {
     <CustomDrawerContent title="管理钱包" enterText="确定" onEnter={props.onEnter} onClose={props.onClose}>
       <div className={styles.content}>
         {sortWalletConfig.length ? (
-          <ReactSortable ref={sortableRef} animation={200} delay={2} list={sortWalletConfig} setList={onSortWalletConfig} swap>
+          <ReactSortable
+            ref={sortableRef}
+            animation={200}
+            delay={2}
+            list={sortWalletConfig}
+            setList={onSortWalletConfig}
+            swap
+          >
             {sortWalletConfig.map((wallet) => (
               <WalletRow
                 key={wallet.code}

@@ -33,7 +33,6 @@ import { createChildWindow } from './childWindow';
 import Proxy from './proxy';
 import HotkeyManager from './hotkey';
 import ContextMenuManager from './contextMenu';
-import { createAppMenu } from './menu';
 import { saveImage, saveJsonToCsv, saveString, readFile } from './io';
 import {
   lockSingleInstance,
@@ -166,6 +165,16 @@ function main() {
   ipcMain.handle('get-version', async (event, config) => {
     return app.getVersion();
   });
+  ipcMain.handle('set-opacity', async (event, config) => {
+    getOtherWindows(windowIds).forEach((win) => {
+      win?.setOpacity(config);
+    });
+  });
+  ipcMain.handle('set-alwaysOnTop', async (event, config) => {
+    getOtherWindows(windowIds).forEach((win) => {
+      win?.setAlwaysOnTop(config);
+    });
+  });
   // touchbar 相关监听
   ipcMain.handle('update-touchbar-zindex', async (event, config) => {
     touchBarManager.updateZindexItems(config);
@@ -289,9 +298,6 @@ function main() {
     });
     // 存储窗口大小
     mainWindowState.manage(mb.window!);
-    // 生成应用菜单
-    const appMenu = createAppMenu();
-    Menu.setApplicationMenu(appMenu);
     // 是否打开备份文件
     if (openBackupFilePath) {
       sendMessageToRenderer(mb.window, 'open-backup-file', openBackupFilePath);

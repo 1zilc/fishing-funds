@@ -81,7 +81,7 @@ async function migrateStock(data: Wallet.SettingItem[]) {
   if (stockConfig) {
     data[0]!.stocks = stockConfig;
     await electronStore.set('config', CONST.STORAGE.WALLET_SETTING, data);
-    electronStore.delete('config', CONST.STORAGE.STOCK_SETTING);
+    await electronStore.delete('config', CONST.STORAGE.STOCK_SETTING);
   }
   return data;
 }

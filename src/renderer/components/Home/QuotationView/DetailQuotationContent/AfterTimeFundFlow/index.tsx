@@ -8,16 +8,16 @@ import * as Services from '@/services';
 import styles from './index.module.scss';
 
 export interface AfterTimeFundFlowProps {
-  code: string;
+  secid: string;
 }
 
-const AfterTimeFundFlow: React.FC<AfterTimeFundFlowProps> = ({ code = '' }) => {
+const AfterTimeFundFlow: React.FC<AfterTimeFundFlowProps> = ({ secid = '' }) => {
   const { ref: chartRef, chartInstance } = useResizeEchart(CONST.DEFAULT.ECHARTS_SCALE);
   const { data: result = [], run: runGetAfterTimeFundFlowFromEasymoney } = useRequest(
-    () => Services.Quotation.GetAfterTimeFundFlowFromEasymoney(code),
+    () => Services.Quotation.GetAfterTimeFundFlowFromEasymoney(secid),
     {
       pollingInterval: 1000 * 60,
-      refreshDeps: [code],
+      refreshDeps: [secid],
       ready: !!chartInstance,
     }
   );
@@ -31,6 +31,11 @@ const AfterTimeFundFlow: React.FC<AfterTimeFundFlowProps> = ({ code = '' }) => {
         lineStyle: {
           width: 1,
         },
+        areaStyle: {
+          opacity: 0.8,
+        },
+        smooth: true,
+        stack: '流入',
       };
       chartInstance?.setOption({
         title: {

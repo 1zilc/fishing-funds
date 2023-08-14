@@ -128,6 +128,7 @@ export async function GetQuotationDetailFromEastmoney(code: string) {
       zdf: data.f170,
       zdd: data.f169,
       hsl: data.f168,
+      zs: data.f60,
     };
   } catch (error) {
     return;
@@ -139,7 +140,7 @@ export async function GetQuotationDetailFromEastmoney(code: string) {
  * @param code 板块代码: BK0428
  * 从天天基金获取板块资金流向
  */
-export async function GetRealTimeFundFlowFromEasymoney(code: string) {
+export async function GetRealTimeFundFlowFromEasymoney(secid: string) {
   try {
     const {
       body: { data },
@@ -149,7 +150,7 @@ export async function GetRealTimeFundFlowFromEasymoney(code: string) {
         klt: 1,
         fields1: 'f1,f2,f3,f7',
         fields2: 'f51,f52,f53,f54,f55,f56,f57,f58,f59,f60,f61,f62,f63,f64,f65',
-        secid: `90.${code}`,
+        secid: secid,
         _: Date.now(),
       },
       responseType: 'json',
@@ -324,7 +325,7 @@ export async function GetTransactionFromEasymoney(code: string) {
  * @param code 板块代码: BK0428
  * 从天天基金获取板盘后资金走向
  */
-export async function GetAfterTimeFundFlowFromEasymoney(code: string) {
+export async function GetAfterTimeFundFlowFromEasymoney(secid: string) {
   try {
     const {
       body: { data },
@@ -348,7 +349,7 @@ export async function GetAfterTimeFundFlowFromEasymoney(code: string) {
         klt: 101,
         fields1: 'f1,f2,f3,f7',
         fields2: 'f51,f52,f53,f54,f55,f56,f57,f58,f59,f60,f61,f62,f63,f64,f65',
-        secid: `90.${code}`,
+        secid: secid,
         _: Date.now(),
       },
       responseType: 'json',
@@ -490,8 +491,12 @@ export async function GetNorthDayFromEastmoney(fields1: string, fields2: string)
     });
 
     return {
-      hk2sh: body.data.hk2sh.map((_) => _.split(',')).map(([date, value]) => [date, NP.divide(value, 10 ** 4).toFixed(2)]),
-      hk2sz: body.data.hk2sz.map((_) => _.split(',')).map(([date, value]) => [date, NP.divide(value, 10 ** 4).toFixed(2)]),
+      hk2sh: body.data.hk2sh
+        .map((_) => _.split(','))
+        .map(([date, value]) => [date, NP.divide(value, 10 ** 4).toFixed(2)]),
+      hk2sz: body.data.hk2sz
+        .map((_) => _.split(','))
+        .map(([date, value]) => [date, NP.divide(value, 10 ** 4).toFixed(2)]),
       s2n: body.data.s2n.map((_) => _.split(',')).map(([date, value]) => [date, NP.divide(value, 10 ** 4).toFixed(2)]),
     };
   } catch (error) {
@@ -528,8 +533,12 @@ export async function GetSouthDayFromEastmoney(fields1: string, fields2: string)
     });
 
     return {
-      sh2hk: body.data.sh2hk.map((_) => _.split(',')).map(([date, value]) => [date, NP.divide(value, 10 ** 4).toFixed(2)]),
-      sz2hk: body.data.sz2hk.map((_) => _.split(',')).map(([date, value]) => [date, NP.divide(value, 10 ** 4).toFixed(2)]),
+      sh2hk: body.data.sh2hk
+        .map((_) => _.split(','))
+        .map(([date, value]) => [date, NP.divide(value, 10 ** 4).toFixed(2)]),
+      sz2hk: body.data.sz2hk
+        .map((_) => _.split(','))
+        .map(([date, value]) => [date, NP.divide(value, 10 ** 4).toFixed(2)]),
       n2s: body.data.n2s.map((_) => _.split(',')).map(([date, value]) => [date, NP.divide(value, 10 ** 4).toFixed(2)]),
     };
   } catch (error) {
@@ -888,7 +897,17 @@ export async function GetHotThemeFromEastmoney() {
       responseType: 'json',
     });
     const result = body.result[0].Data.map((item) => {
-      const [CategoryCode, CategoryName, ParentCode, ParentName, CategoryPchg, SecuCode, SecuName, IsImportant, Market] = item.split('|');
+      const [
+        CategoryCode,
+        CategoryName,
+        ParentCode,
+        ParentName,
+        CategoryPchg,
+        SecuCode,
+        SecuName,
+        IsImportant,
+        Market,
+      ] = item.split('|');
 
       return {
         zdf: CategoryPchg,
@@ -925,7 +944,8 @@ export async function GetRecentHotFromEastmoney() {
       responseType: 'json',
     });
     const result = body.result[0].Data.map((item) => {
-      const [CategoryCode, CategoryName, IsImportant, ParentCode, ParentName, SecuCode, SecuName, Market, IsFocused] = item.split('|');
+      const [CategoryCode, CategoryName, IsImportant, ParentCode, ParentName, SecuCode, SecuName, Market, IsFocused] =
+        item.split('|');
 
       return {
         name: CategoryName,
@@ -1333,7 +1353,9 @@ export async function GetShanghaiGoldGoodsFromEastmoney() {
 }
 export async function GetMainFundFromEastmoney(code: string) {
   try {
-    const { rawBody } = await request(`https://webquotepic.eastmoney.com/GetPic.aspx?nid=${code}&imageType=FFRS1&type=FFR`);
+    const { rawBody } = await request(
+      `https://webquotepic.eastmoney.com/GetPic.aspx?nid=${code}&imageType=FFRS1&type=FFR`
+    );
     const b64encoded = fromUint8Array(new Uint8Array(rawBody));
     return `data:image/png;base64,${b64encoded}`;
   } catch (error) {

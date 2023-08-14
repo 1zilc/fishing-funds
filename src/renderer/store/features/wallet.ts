@@ -75,7 +75,10 @@ const walletSlice = createSlice({
       state,
       { payload }: PayloadAction<{ walletConfig: Wallet.SettingItem[]; codeMap: Wallet.CodeMap }>
     ) {
-      const { codeMap, fundConfig } = Helpers.Fund.GetFundConfig(state.currentWalletCode, payload.walletConfig);
+      const { codeMap: fundConfigCodeMap, fundConfig } = Helpers.Fund.GetFundConfig(
+        state.currentWalletCode,
+        payload.walletConfig
+      );
       const { codeMap: stockConfigCodeMap, stockConfig } = Helpers.Stock.GetStockConfig(
         state.currentWalletCode,
         payload.walletConfig
@@ -83,7 +86,7 @@ const walletSlice = createSlice({
 
       state.config = payload;
       state.fundConfig = fundConfig;
-      state.fundConfigCodeMap = codeMap;
+      state.fundConfigCodeMap = fundConfigCodeMap;
       state.stockConfig = stockConfig;
       state.stockConfigCodeMap = stockConfigCodeMap;
     },
@@ -311,13 +314,13 @@ export const setWalletStateAction = createAsyncThunk<
     const currentWallet = Helpers.Wallet.GetCurrentWalletState(state.code, wallets);
     const mergedWallet = Helpers.Base.Merge({ data: Utils.DeepCopy(currentWallet), overide: state });
 
-    const config = Helpers.Base.Update({
+    const walletState = Helpers.Base.Update({
       list: Utils.DeepCopy(wallets),
       key: 'code',
       data: mergedWallet,
     });
 
-    dispatch(syncWalletsAction(config));
+    dispatch(syncWalletsAction(walletState));
   } catch (error) {}
 });
 

@@ -39,6 +39,7 @@ const chartTypeList = [
   { name: 'KDJ', type: 2, code: 2 },
   { name: 'RSI', type: 3, code: 3 },
   { name: 'BIAS', type: 4, code: 4 },
+  { name: 'BOLL', type: 5, code: 5 },
 ];
 
 const K: React.FC<KProps> = ({ code = '', name }) => {
@@ -46,11 +47,14 @@ const K: React.FC<KProps> = ({ code = '', name }) => {
   const [k, setKType] = useState(kTypeList[0]);
   const [chart, setChartType] = useState(chartTypeList[0]);
   const [year, setYearType] = useState(yearTypeList[0]);
-  const { data: result = [], run: runGetKFromEastmoney } = useRequest(() => Services.Zindex.GetKFromEastmoney(code, year.code, k.code), {
-    refreshDeps: [code, year.code, k.code],
-    ready: !!chartInstance,
-    cacheKey: Utils.GenerateRequestKey('Zindex.GetKFromEastmoney', [code, year.code, k.code]),
-  });
+  const { data: result = [], run: runGetKFromEastmoney } = useRequest(
+    () => Services.Zindex.GetKFromEastmoney(code, year.code, k.code),
+    {
+      refreshDeps: [code, year.code, k.code],
+      ready: !!chartInstance,
+      cacheKey: Utils.GenerateRequestKey('Zindex.GetKFromEastmoney', [code, year.code, k.code]),
+    }
+  );
 
   useRenderEcharts(
     ({ varibleColors }) => {
@@ -187,6 +191,38 @@ const K: React.FC<KProps> = ({ code = '', name }) => {
             xAxisIndex: 2,
             yAxisIndex: 2,
             data: biasData.map((_) => _.BIAS3),
+            symbol: 'none',
+          },
+        ]);
+      }
+      if (chart.type === 5) {
+        const BOLL = IndicatorFormula.getClass('boll');
+        const bollIndicator = new BOLL();
+        const bollData: any[] = bollIndicator.calculate(standData);
+        Array.prototype.push.apply(chartConfig, [
+          {
+            name: 'UPPER',
+            type: 'line',
+            xAxisIndex: 0,
+            yAxisIndex: 0,
+            data: bollData.map((_) => _.UPPER),
+            symbol: 'none',
+          },
+          {
+            name: 'MID',
+            type: 'line',
+            xAxisIndex: 0,
+            yAxisIndex: 0,
+            data: bollData.map((_) => _.MID),
+            symbol: 'none',
+          },
+
+          {
+            name: 'LOWER',
+            type: 'line',
+            xAxisIndex: 0,
+            yAxisIndex: 0,
+            data: bollData.map((_) => _.LOWER),
             symbol: 'none',
           },
         ]);
@@ -452,7 +488,7 @@ const K: React.FC<KProps> = ({ code = '', name }) => {
       <div className={styles.content}>
         <TypeSelection types={kTypeList} activeType={k.type} onSelected={setKType} colspan={6} />
         <div ref={chartRef} style={{ width: '100%' }} />
-        <TypeSelection types={chartTypeList} activeType={chart.type} onSelected={setChartType} colspan={6} />
+        <TypeSelection types={chartTypeList} activeType={chart.type} onSelected={setChartType} flex />
         <TypeSelection types={yearTypeList} activeType={year.type} onSelected={setYearType} flex />
       </div>
     </ChartCard>

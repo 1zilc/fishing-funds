@@ -9,16 +9,16 @@ import * as Services from '@/services';
 import styles from './index.module.scss';
 
 export interface RealTimeFundFlowProps {
-  code: string;
+  secid: string;
 }
 
-const RealTimeFundFlow: React.FC<RealTimeFundFlowProps> = ({ code = '' }) => {
+const RealTimeFundFlow: React.FC<RealTimeFundFlowProps> = ({ secid = '' }) => {
   const { ref: chartRef, chartInstance } = useResizeEchart(CONST.DEFAULT.ECHARTS_SCALE);
   const { data: result = [], run: runGetRealTimeFundFlowFromEasymoney } = useRequest(
-    () => Services.Quotation.GetRealTimeFundFlowFromEasymoney(code),
+    () => Services.Quotation.GetRealTimeFundFlowFromEasymoney(secid),
     {
       pollingInterval: 1000 * 60,
-      refreshDeps: [code],
+      refreshDeps: [secid],
       ready: !!chartInstance,
     }
   );
@@ -32,6 +32,11 @@ const RealTimeFundFlow: React.FC<RealTimeFundFlowProps> = ({ code = '' }) => {
         lineStyle: {
           width: 1,
         },
+        areaStyle: {
+          opacity: 0.8,
+        },
+        smooth: true,
+        stack: '流入',
       };
       chartInstance?.setOption({
         title: {

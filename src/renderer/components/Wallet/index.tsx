@@ -90,7 +90,7 @@ const Wallet: React.FC<WalletProps> = () => {
           )}
         >
           <div className={styles.walletIcon}>
-            <img src={walletIcons[currentWalletConfig.iconIndex || 0]} />
+            <img src={walletIcons[currentWalletConfig?.iconIndex || 0]} />
           </div>
         </Dropdown>
         <div className={styles.timeBar}>刷新时间：{updateTime || '还没有刷新过哦~'}</div>
