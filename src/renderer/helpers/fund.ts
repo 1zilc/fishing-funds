@@ -78,7 +78,7 @@ export function CalcFund(fund: Fund.ResponseItem & Fund.FixData, codeMap: Fund.C
   const isFix = fund.fixDate && fund.fixDate === gzrq;
   const gsz = isFix ? fund.fixDwjz! : fund.gsz!;
   const dwjz = isFix ? fund.fixDwjz! : fund.dwjz!;
-  const bjz = NP.minus(gsz!, fund.dwjz!);
+  const bjz = NP.minus(gsz!, fund.dwjz!) || 0;
   const jrsygz = NP.times(cyfe, bjz);
   const gszz = NP.times(gsz!, cyfe);
   const cyje = NP.times(fund.dwjz!, cyfe);

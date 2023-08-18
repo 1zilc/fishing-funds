@@ -20,7 +20,7 @@ export function CalcStock(stock: Stock.ResponseItem, codeMap: Stock.CodeMap) {
 
   const gsz = stock.zx;
   const dwjz = stock.zs;
-  const bjz = NP.minus(gsz, dwjz);
+  const bjz = NP.minus(gsz, dwjz) || 0;
   const jrsygz = NP.times(cyfe, bjz);
   const gszz = NP.times(gsz!, cyfe);
   const cyje = NP.times(dwjz, cyfe);
