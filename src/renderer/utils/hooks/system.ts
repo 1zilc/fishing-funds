@@ -45,6 +45,7 @@ import * as Enums from '@/utils/enums';
 import * as Enhancement from '@/utils/enhancement';
 
 const { dialog, ipcRenderer, clipboard, app } = window.contextModules.electron;
+const { production } = window.contextModules.process;
 const { saveString, readFile } = window.contextModules.io;
 const { useToken } = theme;
 
@@ -404,7 +405,9 @@ export function useMappingLocalToSystemSetting() {
     Enhancement.UpdateSystemTheme(systemThemeSetting);
   }, [systemThemeSetting]);
   useEffect(() => {
-    app.setLoginItemSettings({ openAtLogin: autoStartSetting });
+    if (production) {
+      app.setLoginItemSettings({ openAtLogin: autoStartSetting });
+    }
   }, [autoStartSetting]);
   useLayoutEffect(() => {
     if (lowKeySetting) {
