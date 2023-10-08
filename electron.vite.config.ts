@@ -1,6 +1,7 @@
 import path from 'path';
 import mkcert from 'vite-plugin-mkcert';
 import react from '@vitejs/plugin-react';
+import tsconfigPaths from 'vite-tsconfig-paths';
 import { defineConfig, splitVendorChunkPlugin } from 'electron-vite';
 
 export default defineConfig(({ command }) => {
@@ -31,12 +32,7 @@ export default defineConfig(({ command }) => {
         strictPort: true,
         https: true,
       },
-      plugins: [react(), mkcert(), splitVendorChunkPlugin()],
-      resolve: {
-        alias: {
-          '@': path.resolve('src/renderer'),
-        },
-      },
+      plugins: [react(), mkcert(), tsconfigPaths(), splitVendorChunkPlugin()],
     },
   };
 });
