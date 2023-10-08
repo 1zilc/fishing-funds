@@ -161,8 +161,7 @@
     "sass": "^1.63.6",
     "typescript": "^5.1.6",
     "vite": "^4.4.4",
-    "vite-plugin-mkcert": "^1.16.0",
-    "vite-tsconfig-paths": "^4.2.1"
+    "vite-plugin-mkcert": "^1.16.0"
   },
   "dependencies": {
     "@json2csv/plainjs": "^7.0.1",
