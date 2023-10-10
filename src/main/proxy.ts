@@ -10,15 +10,13 @@ export default class Proxy {
 
   private port: string;
 
-  private url: string;
-
   private type: ConnectionType;
 
   httpAgent?: Agent;
 
   httpsAgent?: Agent;
 
-  constructor(proxyContent = 'DIRECT', url: string) {
+  constructor(proxyContent = 'DIRECT', private url: string) {
     // default to "DIRECT" if a falsey value was returned (or nothing)
 
     const proxies = String(proxyContent)

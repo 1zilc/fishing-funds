@@ -50,7 +50,7 @@
 
 ## 下载使用
 
-> 注意 ⚠️：由于 MacOS 不允许打开未签名的程序，如果出现软件无法打开请进行以下操作 或[参考这里](https://github.com/1zilc/fishing-funds/issues/149)
+> 注意 ⚠️：由于 macOS 不允许打开未签名的程序，如果出现软件无法打开请进行以下操作 或[参考这里](https://github.com/1zilc/fishing-funds/issues/149)
 
 
 ```bash
@@ -66,6 +66,11 @@ sudo xattr -d com.apple.quarantine "/Applications/Fishing Funds.app"
 - [官网下载](https://ff.1zilc.top)
 - [Homebrew 安装](https://formulae.brew.sh/cask/fishing-funds#default) `brew install --cask fishing-funds`
 - WinGet 安装 `winget install Fishing Funds`
+
+> 旧版系统
+
+- [windows 7/8 下载](https://github.com/1zilc/fishing-funds/releases/tag/v7.0.2)
+- [macOS 10.13/10.14 下载](https://github.com/1zilc/fishing-funds/releases/tag/v8.1.0)
 
 ## 讨论交流
 

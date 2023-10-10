@@ -1,11 +1,8 @@
 import PromiseWorker from 'promise-worker';
 
 export class BasicWorker extends PromiseWorker {
-  private worker: Worker;
-
-  constructor(worker: Worker) {
+  constructor(private worker: Worker) {
     super(worker);
-    this.worker = worker;
   }
 
   terminate() {

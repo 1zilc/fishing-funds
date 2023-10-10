@@ -18,10 +18,6 @@ type Item =
   | Electron.TouchBarSpacer;
 
 export default class TouchBarManager {
-  items: Item[];
-
-  mb: Menubar;
-
   walletItems: Item[] = [];
 
   zindexItems: Electron.TouchBarButton[] = [];
@@ -30,10 +26,7 @@ export default class TouchBarManager {
 
   eyeStatusItems: Electron.TouchBarButton[] = [];
 
-  constructor(items: Item[], mb: Menubar) {
-    this.items = items;
-    this.mb = mb;
-  }
+  constructor(public items: Item[], public mb: Menubar) {}
 
   updateZindexItems(configs: Electron.TouchBarButtonConstructorOptions[]) {
     this.zindexItems = configs.map((config) => new TouchBarButton(config));

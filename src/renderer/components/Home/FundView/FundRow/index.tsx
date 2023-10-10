@@ -99,18 +99,11 @@ const FundRow: React.FC<RowProps> = React.memo((props) => {
       </div>
       <Collapse isOpened={fund.collapse}>
         <div className={styles.collapseContent}>
-          {isFix ? (
-            <section>
-              <span>净值：</span>
-              <span>{calcFundResult.dwjz}</span>
-              <span>（{calcFundResult.jzrq}）</span>
-            </section>
-          ) : (
-            <section>
-              <span>估算净值：</span>
-              {calcFundResult.gsz}
-            </section>
-          )}
+          <section>
+            <span>净值：</span>
+            <span>{calcFundResult.dwjz}</span>
+            <span>（{calcFundResult.jzrq}）</span>
+          </section>
           <section>
             <span>成本价：</span>
             {calcFundResult.cbj !== undefined ? <span>{calcFundResult.cbj}</span> : <a onClick={onEditClick}>录入</a>}

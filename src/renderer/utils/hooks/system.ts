@@ -45,6 +45,7 @@ import * as Enums from '@/utils/enums';
 import * as Enhancement from '@/utils/enhancement';
 
 const { dialog, ipcRenderer, clipboard, app } = window.contextModules.electron;
+const { production } = window.contextModules.process;
 const { saveString, readFile } = window.contextModules.io;
 const { useToken } = theme;
 
@@ -200,7 +201,7 @@ export function useRiskNotification() {
     const { zdf, preset, key, content } = data;
     const noticed = noticeMapRef.current[key];
 
-    if (preset && Math.abs(preset) < Math.abs(Number(zdf)) && !noticed) {
+    if (!noticed && preset && Math.abs(preset) < Math.abs(Number(zdf))) {
       const notification = new Notification('涨跌提醒', {
         body: content,
       });
@@ -215,9 +216,10 @@ export function useRiskNotification() {
     const { dwjz, gsz, preset, key, content } = data;
     const noticed = noticeMapRef.current[key];
     if (
+      !noticed &&
+      !!Number(gsz) &&
       preset &&
-      ((Number(dwjz) <= preset && Number(gsz) >= preset) || (Number(dwjz) >= preset && Number(gsz) <= preset)) &&
-      !noticed
+      ((Number(dwjz) <= preset && Number(gsz) >= preset) || (Number(dwjz) >= preset && Number(gsz) <= preset))
     ) {
       const notification = new Notification('净值提醒', {
         body: content,
@@ -403,7 +405,9 @@ export function useMappingLocalToSystemSetting() {
     Enhancement.UpdateSystemTheme(systemThemeSetting);
   }, [systemThemeSetting]);
   useEffect(() => {
-    app.setLoginItemSettings({ openAtLogin: autoStartSetting });
+    if (production) {
+      app.setLoginItemSettings({ openAtLogin: autoStartSetting });
+    }
   }, [autoStartSetting]);
   useLayoutEffect(() => {
     if (lowKeySetting) {
