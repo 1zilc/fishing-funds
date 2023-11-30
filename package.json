@@ -182,7 +182,7 @@
     "electron-store": "^8.1.0",
     "electron-updater": "^6.1.1",
     "electron-window-state": "^5.0.3",
-    "got": "^13.0.0",
+    "got": "^14.0.0",
     "http-proxy-agent": "^7.0.0",
     "https-proxy-agent": "^7.0.1",
     "hxc3-indicator-formula": "^1.0.9",
