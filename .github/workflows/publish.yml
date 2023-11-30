@@ -22,6 +22,11 @@ jobs:
       - name: Install Snapcraft
         uses: samuelmeuli/action-snapcraft@v1
 
+      - name: Install Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20
+
       - name: Install pnpm
         uses: pnpm/action-setup@v2
         with:
