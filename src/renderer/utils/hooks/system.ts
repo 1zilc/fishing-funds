@@ -2,7 +2,7 @@ import { useLayoutEffect, useEffect, useMemo, useRef } from 'react';
 import { flushSync } from 'react-dom';
 import { useInterval } from 'ahooks';
 import { theme } from 'antd';
-import { AnyAction } from 'redux';
+import { UnknownAction } from 'redux';
 import dayjs from 'dayjs';
 import NP from 'number-precision';
 import { startListening } from '@/store/listeners';
@@ -708,7 +708,7 @@ export function useShareStoreState() {
     startListening();
   }, []);
 
-  useIpcRendererListener('sync-store-data', (event, action: AnyAction) => {
+  useIpcRendererListener('sync-store-data', (event, action: UnknownAction) => {
     dispatch(action);
   });
 }
