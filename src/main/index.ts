@@ -307,21 +307,6 @@ function main() {
       shell.openExternal(url);
       return { action: 'deny' };
     });
-    // FIXME: hack 关闭dock.icon,尝试3次
-    let count = 0;
-    let timer: NodeJS.Timer;
-    function hideDockIcon() {
-      if (count < 3 && app.dock?.isVisible()) {
-        timer = setInterval(() => {
-          app.dock?.hide();
-          count++;
-          hideDockIcon();
-        }, 1000);
-      } else {
-        timer && clearInterval(timer);
-      }
-    }
-    hideDockIcon();
 
     // 打开开发者工具
     if (!app.isPackaged) {
