@@ -6,7 +6,7 @@
  * When running `yarn build` or `yarn build:main`, this file is compiled to
  * `./src/main.prod.js` using webpack. This gives us some performance wins.
  */
-
+import url from 'url';
 import {
   app,
   globalShortcut,
@@ -48,6 +48,10 @@ let mb: Menubar;
 let openBackupFilePath = '';
 let ua = '';
 let fakeUA = '';
+
+// FIXME: 部分库缺少对ESM的支持
+global.__filename = url.fileURLToPath(import.meta.url);
+global.__dirname = url.fileURLToPath(new URL('.', import.meta.url));
 
 async function init() {
   // 单例

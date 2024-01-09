@@ -6,7 +6,7 @@ import * as Enums from '../renderer/utils/enums';
 
 export const processPath = process.cwd();
 export const assetsPath = path.join(processPath, 'assets');
-export const appPath = path.resolve(fileURLToPath(import.meta.url), '../');
+export const appPath = path.resolve(fileURLToPath(import.meta.url), '../../');
 export const mainPath = path.join(appPath, 'main');
 export const preloadPath = path.join(appPath, 'preload');
 export const rendererPath = path.join(appPath, 'renderer');
@@ -68,7 +68,7 @@ export function setNativeTheme(theme: Enums.SystemThemeType) {
 }
 
 export function getPreloadPath() {
-  return path.join(preloadPath, 'index.js');
+  return path.join(preloadPath, 'index.cjs');
 }
 
 export function getOtherWindows(windowIds: number[], current?: number) {
