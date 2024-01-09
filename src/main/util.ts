@@ -68,7 +68,7 @@ export function setNativeTheme(theme: Enums.SystemThemeType) {
 }
 
 export function getPreloadPath() {
-  return path.join(preloadPath, 'index.cjs');
+  return path.join(preloadPath, 'index.js');
 }
 
 export function getOtherWindows(windowIds: number[], current?: number) {
