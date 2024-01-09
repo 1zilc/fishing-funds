@@ -25,7 +25,7 @@ const CustomDrawer: React.FC<PropsWithChildren<CustomDrawerProps>> = React.memo(
         width="100%"
         keyboard={false}
         afterOpenChange={setDrawerOpened}
-        bodyStyle={{ padding: 0 }}
+        styles={{ body: { padding: 0 } }}
         push={false}
         zIndex={CONST.DEFAULT.DRAWER_ZINDEX_DEFAULT}
         {...config}
