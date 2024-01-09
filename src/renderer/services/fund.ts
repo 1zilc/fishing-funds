@@ -925,7 +925,7 @@ export async function GetQDIIFundFromFund10jqka(code: string) {
           updatetime: '211003024536';
           hqcode: 'JSH123';
           name: '华夏能源革新股票A';
-          fundtype: '股票型';
+          fundtype: string;
           clrq: '2017-06-07';
           manager: '郑泽鸿';
           orgname: '华夏基金管理有限公司';
@@ -997,13 +997,14 @@ export async function GetQDIIFundFromFund10jqka(code: string) {
       responseType: 'json',
     });
     const data = body.data.pop()!;
+
     return {
       name: data.name,
       fundcode: data.code,
       gztime: `${new Date().getFullYear()}-暂无估值`,
       gszzl: '',
       jzrq: data.enddate,
-      dwjz: data.net,
+      dwjz: data.fundtype === '货币型' ? '1.0000' : data.net, // FIXME:货币基金无法获取单位净值 https://github.com/1zilc/fishing-funds/issues/672
       gsz: data.net,
     };
   } catch (error) {
@@ -1099,7 +1100,8 @@ export async function GetFundRatingFromEasemoney() {
     })()`);
     const result: Fund.RantingItem[] = fundinfos.split('_').map((item: string) => {
       // 270007|广发大盘成长混合|混合型-偏股|苗宇|30331916|广发|80000248|2|4|0|3|0|5|0|1|0|5|1|0.15%|1|1|002|211|GFDPCZHH|GFJJ|30331916
-      const [code, name, type, manager, v1, jj, v2, totalFullStar, v3, v4, zsStar, v5, szStar, v6, v7, v8, jaStar] = item.split('|');
+      const [code, name, type, manager, v1, jj, v2, totalFullStar, v3, v4, zsStar, v5, szStar, v6, v7, v8, jaStar] =
+        item.split('|');
       const total = 0 + Number(szStar || 0) + Number(zsStar || 0) + Number(jaStar || 0);
       return { code, name, type, szStar, zsStar, jaStar, total };
     });
