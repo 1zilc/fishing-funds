@@ -21,6 +21,8 @@ export function createChildWindow(config: { search: string; parentId: number }) 
         devTools: !app.isPackaged,
         preload: getPreloadPath(),
         v8CacheOptions: 'bypassHeatCheck',
+        enableWebSQL: false,
+        spellcheck: false,
       },
     });
     win.loadURL(index);
