@@ -102,6 +102,7 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
     conciseSetting,
     lowKeySetting,
     lowKeyDegreeSetting,
+    opacitySetting,
     baseFontSizeSetting,
     systemThemeSetting,
     bottomTabsSetting,
@@ -135,6 +136,7 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
   const [alwaysOnTop, setAlwaysOnTop] = useState(alwaysOnTopSetting);
   const [lowKey, setLowKey] = useState(lowKeySetting);
   const [lowKeyDegree, setLowKeyDegree] = useState(lowKeyDegreeSetting);
+  const [opacity, setOpacity] = useState(opacitySetting);
   const [baseFontSize, setBaseFontSize] = useState(baseFontSizeSetting);
   const [systemTheme, setSystemTheme] = useState(systemThemeSetting);
   // 底栏设置
@@ -183,6 +185,7 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
         conciseSetting: concise,
         lowKeySetting: lowKey,
         lowKeyDegreeSetting: lowKeyDegree,
+        opacitySetting: opacity,
         baseFontSizeSetting: baseFontSize,
         systemThemeSetting: systemTheme,
         bottomTabsSetting: bottomTabs.map((tab) => ({ key: tab.key, name: tab.name, show: tab.show })),
@@ -368,17 +371,32 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
                         <label>低调模式：</label>
                         <Switch size="small" checked={lowKey} onChange={setLowKey} />
                       </section>
-                      <section>
-                        <label>低调程度：</label>
-                        <Slider
-                          min={0}
-                          max={100}
-                          style={{ flex: 0.5 }}
-                          defaultValue={lowKeyDegree}
-                          onChange={setLowKeyDegree}
-                          step={1}
-                        />
-                      </section>
+                      {lowKey && (
+                        <section>
+                          <label>灰度：</label>
+                          <Slider
+                            min={0}
+                            max={100}
+                            style={{ flex: 0.5 }}
+                            defaultValue={lowKeyDegree}
+                            onChange={setLowKeyDegree}
+                            step={1}
+                          />
+                        </section>
+                      )}
+                      {lowKey && (
+                        <section>
+                          <label>透明度：</label>
+                          <Slider
+                            min={0.4}
+                            max={1}
+                            style={{ flex: 0.5 }}
+                            defaultValue={opacity}
+                            onChange={setOpacity}
+                            step={0.01}
+                          />
+                        </section>
+                      )}
                       <section>
                         <label>字体大小：</label>
                         <Slider
