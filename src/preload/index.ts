@@ -11,6 +11,7 @@ contextBridge.exposeInMainWorld('contextModules', {
     chrome: process.versions.chrome,
     arch: process.arch,
     buildDate: __BUILD_DATE__,
+    sandboxed: !!process.sandboxed,
   },
   electron: {
     shell: {

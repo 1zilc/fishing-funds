@@ -14,6 +14,7 @@ declare global {
         chrome: string;
         arch: NodeJS.Architecture;
         buildDate: string;
+        sandboxed: boolean;
       };
       electron: {
         shell: Shell;
