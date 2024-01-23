@@ -698,9 +698,6 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
             退出程序
           </Button>
         </div>
-        <div className={styles.version}>
-          <div>Based on Electron v{electron}</div>
-        </div>
       </CustomDrawerContent>
     </ThemeProvider>
   );

@@ -28,6 +28,9 @@ export default defineConfig(({ command }) => {
           },
         },
       },
+      define: {
+        __BUILD_DATE__: Date.now(),
+      },
     },
     renderer: {
       build: {

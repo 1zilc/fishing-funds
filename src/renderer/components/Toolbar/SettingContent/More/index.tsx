@@ -1,6 +1,7 @@
 import React from 'react';
 import clsx from 'clsx';
-import { RiLink, RiWindowLine, RiGroupLine } from 'react-icons/ri';
+import dayjs from 'dayjs';
+import { RiLink, RiWindowLine, RiGroupLine, RiTerminalBoxLine } from 'react-icons/ri';
 import StandCard from '@/components/Card/StandCard';
 import PayCarousel from '@/components/PayCarousel';
 import Guide from '@/components/Guide';
@@ -10,6 +11,7 @@ import styles from '../index.module.scss';
 interface MoreProps {}
 
 const { shell, clipboard, dialog } = window.contextModules.electron;
+const process = window.contextModules.process;
 
 const linksGroup = Utils.Group(
   [
@@ -143,6 +145,36 @@ const More: React.FC<MoreProps> = () => {
               ))}
             </div>
           ))}
+        </div>
+      </StandCard>
+      <StandCard icon={<RiTerminalBoxLine />} title="构建信息">
+        <div className={clsx(styles.buildGroup, 'card-body')}>
+          <section>
+            <label>Electron：</label>
+            <div>{process.electron}</div>
+          </section>
+          <section>
+            <label>Node.js：</label>
+            <div>{process.node}</div>
+          </section>
+          <section>
+            <label>Chromium：</label>
+            <div>{process.chrome}</div>
+          </section>
+          <section>
+            <label>V8：</label>
+            <div>{process.v8}</div>
+          </section>
+          <section>
+            <label>OS：</label>
+            <div>
+              {process.platform} {process.arch}
+            </div>
+          </section>
+          <section>
+            <label>构建时间：</label>
+            <div>{dayjs(process.buildDate).format('YYYYMMDDHHmmss')}</div>
+          </section>
         </div>
       </StandCard>
     </div>
