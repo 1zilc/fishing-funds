@@ -388,7 +388,7 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
                         <section>
                           <label>透明度：</label>
                           <Slider
-                            min={0.4}
+                            min={0.2}
                             max={1}
                             style={{ flex: 0.5 }}
                             defaultValue={opacity}
