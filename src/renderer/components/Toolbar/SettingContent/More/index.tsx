@@ -176,7 +176,7 @@ const More: React.FC<MoreProps> = () => {
             <div>{String(process.sandboxed)}</div>
           </section>
           <section>
-            <label>构建时间：</label>
+            <label>构建日期：</label>
             <div>{dayjs(process.buildDate).format('YYYYMMDDHHmmss')}</div>
           </section>
         </div>
