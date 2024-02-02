@@ -172,8 +172,8 @@ const More: React.FC<MoreProps> = () => {
             </div>
           </section>
           <section>
-            <label>沙盒化：</label>
-            <div>{process.sandboxed ? '是' : '否'}</div>
+            <label>Sandboxed：</label>
+            <div>{String(process.sandboxed)}</div>
           </section>
           <section>
             <label>构建日期：</label>
