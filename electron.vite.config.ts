@@ -10,7 +10,7 @@ export default defineConfig(({ command }) => {
     main: {
       plugins: [externalizeDepsPlugin()],
       build: {
-        outDir: 'release/app/dist/main',
+        outDir: 'dist/main',
         minify: prod,
         rollupOptions: {
           output: {
@@ -22,7 +22,7 @@ export default defineConfig(({ command }) => {
     preload: {
       build: {
         plugins: [externalizeDepsPlugin()],
-        outDir: 'release/app/dist/preload',
+        outDir: 'dist/preload',
         minify: prod,
         rollupOptions: {
           output: {
@@ -36,7 +36,7 @@ export default defineConfig(({ command }) => {
     },
     renderer: {
       build: {
-        outDir: 'release/app/dist/renderer',
+        outDir: 'dist/renderer',
         minify: prod,
         cssCodeSplit: false,
         assetsInlineLimit: 1024 * 20,
