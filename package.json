@@ -26,6 +26,7 @@
     "copyright": "Copyright © 2023 1zilc",
     "files": [
       "dist",
+      "node_modules",
       "package.json"
     ],
     "directories": {
