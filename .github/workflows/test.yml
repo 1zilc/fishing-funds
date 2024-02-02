@@ -31,29 +31,12 @@ jobs:
         with:
           node-version: latest
 
-      - name: Install pnpm
-        uses: pnpm/action-setup@v2
-        with:
-          version: latest
-
-      - name: Get pnpm store directory
-        id: pnpm-cache
-        shell: bash
-        run: |
-          echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_OUTPUT
-
-      - name: Cache pnpm
-        uses: actions/cache@v4
-        with:
-          key: ${{ runner.os }}-pnpm-dep
-          path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
-
       - name: Install dependencies
-        run: pnpm i
+        run: npm i
 
       - name: Run test
         run: |
-          pnpm package
+          npm run package
         env:
           USE_HARD_LINKS: false
           # DEBUG: electron-builder
