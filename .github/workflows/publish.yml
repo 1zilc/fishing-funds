@@ -28,7 +28,7 @@ jobs:
           node-version: latest
 
       - name: Install dependencies
-        run: npm i
+        run: npm i --force
 
       - name: Run build
         run: npm run release-all
