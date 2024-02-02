@@ -23,7 +23,7 @@
       "assets/**",
       "**\\*.{node,dll}"
     ],
-    "copyright": "Copyright © 2023 1zilc",
+    "copyright": "Copyright © 2024 1zilc",
     "files": [
       "dist",
       "node_modules",
