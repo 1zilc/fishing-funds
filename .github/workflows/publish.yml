@@ -27,11 +27,28 @@ jobs:
         with:
           node-version: latest
 
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: latest
+
+      - name: Get pnpm store directory
+        id: pnpm-cache
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_OUTPUT
+
+      - name: Cache pnpm
+        uses: actions/cache@v4
+        with:
+          key: ${{ runner.os }}-pnpm-dep
+          path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
+
       - name: Install dependencies
-        run: npm i --force
+        run: pnpm i
 
       - name: Run build
-        run: npm run release-all
+        run: pnpm release-all
         env:
           USE_HARD_LINKS: false
           GH_TOKEN: ${{ github.token }}
