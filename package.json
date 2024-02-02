@@ -182,7 +182,8 @@
     "sass": "^1.70.0",
     "typescript": "^5.3.3",
     "vite": "^5.0.12",
-    "vite-plugin-mkcert": "^1.17.3"
+    "vite-plugin-mkcert": "^1.17.3",
+    "sortablejs": "^1.15.2"
   },
   "dependencies": {
     "@json2csv/plainjs": "^7.0.5",
@@ -196,8 +197,7 @@
     "http-proxy-agent": "^7.0.0",
     "https-proxy-agent": "^7.0.2",
     "menubar": "^9.4.0",
-    "socks-proxy-agent": "^8.0.2",
-    "sortablejs": "^1.15.2"
+    "socks-proxy-agent": "^8.0.2"
   },
   "devEngines": {
     "node": ">=18.x",
