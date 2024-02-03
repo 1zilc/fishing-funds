@@ -197,7 +197,7 @@
     "socks-proxy-agent": "^8.0.2"
   },
   "devEngines": {
-    "node": ">=18.x",
-    "npm": ">=8.x"
+    "node": ">=20.x",
+    "npm": ">=10.x"
   }
 }
