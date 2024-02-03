@@ -34,5 +34,5 @@ package-lock.json
 /src/**/*.js
 
 # 构建
-dist
-build
+release/app/dist
+release/build

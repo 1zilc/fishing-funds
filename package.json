@@ -2,10 +2,8 @@
   "name": "fishing-funds",
   "productName": "Fishing Funds",
   "description": "基金,大盘,股票,虚拟货币状态栏显示小应用,基于Electron开发,支持 MacOS,Windows,Linux客户端,数据源来自天天基金,蚂蚁基金,爱基金,腾讯证券,新浪基金等",
-  "version": "8.1.2",
-  "main": "dist/main/index.mjs",
+  "main": "release/app/dist/main/index.mjs",
   "scripts": {
-    "postinstall": "electron-builder install-app-deps",
     "dev": "electron-vite dev",
     "build": "electron-vite build",
     "preview": "electron-vite preview",
@@ -21,21 +19,19 @@
     "appId": "com.electron.1zilc.fishing-funds",
     "asar": true,
     "asarUnpack": [
-      "assets/**",
-      "**\\*.{node,dll}"
+      "assets/**"
     ],
     "copyright": "Copyright © 2024 1zilc",
     "files": [
-      "dist",
-      "node_modules",
-      "package.json"
+      "dist"
     ],
     "directories": {
-      "buildResources": "assets",
-      "output": "build"
+      "app": "release/app",
+      "output": "release/build",
+      "buildResources": "assets"
     },
     "extraResources": [
-      "./assets/**"
+      "assets"
     ],
     "fileAssociations": [
       {

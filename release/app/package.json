@@ -1,0 +1,7 @@
+{
+    "name": "fishing-funds",
+    "productName": "Fishing Funds",
+    "version": "8.1.2",
+    "main": "./dist/main/index.mjs",
+    "dependencies": {}
+}

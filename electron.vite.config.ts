@@ -1,16 +1,15 @@
 import path from 'path';
 import mkcert from 'vite-plugin-mkcert';
 import react from '@vitejs/plugin-react';
-import { defineConfig, splitVendorChunkPlugin, externalizeDepsPlugin } from 'electron-vite';
+import { defineConfig, splitVendorChunkPlugin } from 'electron-vite';
 
 export default defineConfig(({ command }) => {
   const prod = command === 'build';
 
   return {
     main: {
-      plugins: [externalizeDepsPlugin()],
       build: {
-        outDir: 'dist/main',
+        outDir: 'release/app/dist/main',
         minify: prod,
         rollupOptions: {
           output: {
@@ -21,8 +20,7 @@ export default defineConfig(({ command }) => {
     },
     preload: {
       build: {
-        plugins: [externalizeDepsPlugin()],
-        outDir: 'dist/preload',
+        outDir: 'release/app/dist/preload',
         minify: prod,
         rollupOptions: {
           output: {
@@ -36,7 +34,7 @@ export default defineConfig(({ command }) => {
     },
     renderer: {
       build: {
-        outDir: 'dist/renderer',
+        outDir: 'release/app/dist/renderer',
         minify: prod,
         cssCodeSplit: false,
         assetsInlineLimit: 1024 * 20,
