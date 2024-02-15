@@ -42,7 +42,6 @@ export const DetailZindex: React.FC<DetailFundProps> = (props) => {
       cacheKey: Utils.GenerateRequestKey('Zindex.GetKFromEastmoney', [code, 10, 101]),
     }
   );
-  console.log(zindex);
   return (
     <div className={styles.content}>
       <div className={styles.container}>
