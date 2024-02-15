@@ -22,7 +22,7 @@ const ZindexView: React.FC<ZindexViewProps> = (props) => {
   const zindexsLoading = useAppSelector((state) => state.zindex.zindexsLoading);
   const zindexViewMode = useAppSelector((state) => state.sort.viewMode.zindexViewMode);
 
-  const freshZindexs = useFreshZindexs(0);
+  const freshZindexs = useFreshZindexs();
 
   const {
     data: detailZindexCode,
