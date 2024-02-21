@@ -1559,3 +1559,41 @@ export async function GetGBTrendFromEastmoney() {
     return [];
   }
 }
+/**
+ * 获取两市成交量
+ * @returns
+ */
+export async function Get2MarketVolume() {
+  try {
+    const { body: data } = await request<{
+      rc: 0;
+      rt: 11;
+      svr: 182482404;
+      lt: 1;
+      full: 1;
+      dlmkts: '';
+      data: {
+        total: 2;
+        diff: [
+          {
+            f6: 450922050718.1;
+          },
+          {
+            f6: 529328781472.5544;
+          }
+        ];
+      };
+    }>('https://push2.eastmoney.com/api/qt/ulist.np/get', {
+      searchParams: {
+        secids: '1.000001,0.399001',
+        fields: 'f6',
+        fltt: 2,
+        _: Date.now(),
+      },
+      responseType: 'json',
+    });
+    return data.data.diff.map((item) => item.f6);
+  } catch (error) {
+    return [];
+  }
+}
