@@ -1,6 +1,9 @@
-import React from 'react';
-import { useRequest } from 'ahooks';
+import React, { useRef } from 'react';
+import { useRequest, useMemoizedFn } from 'ahooks';
 import ChartCard from '@/components/Card/ChartCard';
+import MarketVolume, {
+  type MarketVolumeRef,
+} from '@/components/Home/QuotationView/FundFlowContent/Distribution/MarketVolume';
 import { useResizeEchart, useRenderEcharts } from '@/utils/hooks';
 import * as CONST from '@/constants';
 import * as Services from '@/services';
@@ -12,11 +15,15 @@ interface DistributionProps {}
 const categorys = new Array(21).fill('').map((_, i) => `${-10 + i}%`);
 
 const Distribution: React.FC<DistributionProps> = () => {
+  const marketVolumeRef = useRef<MarketVolumeRef>(null);
   const { ref: chartRef, chartInstance } = useResizeEchart(CONST.DEFAULT.ECHARTS_SCALE);
 
-  const { data: result = [], run: runQuotationGetDistributionFromEastmoney } = useRequest(Services.Quotation.GetDistributionFromEastmoney, {
-    ready: !!chartInstance,
-  });
+  const { data: result = [], run: runQuotationGetDistributionFromEastmoney } = useRequest(
+    Services.Quotation.GetDistributionFromEastmoney,
+    {
+      ready: !!chartInstance,
+    }
+  );
   useRenderEcharts(
     ({ varibleColors }) => {
       chartInstance?.setOption({
@@ -170,9 +177,15 @@ const Distribution: React.FC<DistributionProps> = () => {
     [result]
   );
 
+  const refresh = useMemoizedFn(() => {
+    runQuotationGetDistributionFromEastmoney();
+    marketVolumeRef.current?.refresh();
+  });
+
   return (
-    <ChartCard className={styles.content} onFresh={runQuotationGetDistributionFromEastmoney}>
+    <ChartCard className={styles.content} onFresh={refresh}>
       <div ref={chartRef} style={{ width: '100%' }} />
+      <MarketVolume ref={marketVolumeRef} />
     </ChartCard>
   );
 };

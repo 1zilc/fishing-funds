@@ -11,12 +11,25 @@ export default defineConfig(({ command }) => {
       build: {
         outDir: 'release/app/dist/main',
         minify: prod,
+        rollupOptions: {
+          output: {
+            format: 'es',
+          },
+        },
       },
     },
     preload: {
       build: {
         outDir: 'release/app/dist/preload',
         minify: prod,
+        rollupOptions: {
+          output: {
+            format: 'cjs',
+          },
+        },
+      },
+      define: {
+        __BUILD_DATE__: Date.now(),
       },
     },
     renderer: {
@@ -29,7 +42,7 @@ export default defineConfig(({ command }) => {
       server: {
         port: 3456,
         strictPort: true,
-        https: true,
+        https: {},
       },
       plugins: [react(), mkcert(), splitVendorChunkPlugin()],
       resolve: {

@@ -4,8 +4,14 @@ contextBridge.exposeInMainWorld('contextModules', {
   got: async (url: string, config: any) => ipcRenderer.invoke('got', { url, config }),
   process: {
     production: import.meta.env.PROD,
-    electron: process.versions.electron,
     platform: process.platform,
+    electron: process.versions.electron,
+    node: process.versions.node,
+    v8: process.versions.v8,
+    chrome: process.versions.chrome,
+    arch: process.arch,
+    buildDate: __BUILD_DATE__,
+    sandboxed: !!process.sandboxed,
   },
   electron: {
     shell: {

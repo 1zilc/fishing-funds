@@ -1,6 +1,9 @@
 import dayjs from 'dayjs';
 import NP from 'number-precision';
+import { fromUint8Array } from 'js-base64';
+
 import request from '@/utils/request';
+import * as Utils from '@/utils';
 
 /**
  *
@@ -457,4 +460,25 @@ export async function GetRemoteZindexConfig() {
   const a3 = eval(b3);
   const result = [...a1, ...a2, ...a3];
   return result;
+}
+
+/**
+ *
+ * @param secid 1.000001 上证指数 nid
+ * @returns
+ */
+export async function GetPicTrendFromEastmoney(secid: string) {
+  try {
+    const { rawBody } = await request('https://webquotepic.eastmoney.com/GetPic.aspx', {
+      searchParams: {
+        nid: secid,
+        imageType: 'r',
+        token: Utils.MakeHash(),
+      },
+    });
+    const b64encoded = fromUint8Array(new Uint8Array(rawBody));
+    return `data:image/png;base64,${b64encoded}`;
+  } catch (error) {
+    return;
+  }
 }

@@ -6,7 +6,7 @@
  * When running `yarn build` or `yarn build:main`, this file is compiled to
  * `./src/main.prod.js` using webpack. This gives us some performance wins.
  */
-
+import url from 'url';
 import {
   app,
   globalShortcut,
@@ -48,6 +48,10 @@ let mb: Menubar;
 let openBackupFilePath = '';
 let ua = '';
 let fakeUA = '';
+
+// FIXME: 部分库缺少对ESM的支持
+global.__filename = url.fileURLToPath(import.meta.url);
+global.__dirname = url.fileURLToPath(new URL('.', import.meta.url));
 
 async function init() {
   // 单例
@@ -307,21 +311,6 @@ function main() {
       shell.openExternal(url);
       return { action: 'deny' };
     });
-    // FIXME: hack 关闭dock.icon,尝试3次
-    let count = 0;
-    let timer: NodeJS.Timer;
-    function hideDockIcon() {
-      if (count < 3 && app.dock?.isVisible()) {
-        timer = setInterval(() => {
-          app.dock?.hide();
-          count++;
-          hideDockIcon();
-        }, 1000);
-      } else {
-        timer && clearInterval(timer);
-      }
-    }
-    hideDockIcon();
 
     // 打开开发者工具
     if (!app.isPackaged) {

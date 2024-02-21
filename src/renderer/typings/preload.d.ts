@@ -7,8 +7,14 @@ declare global {
       got: GotRequestFunction;
       process: {
         production: boolean;
+        platform: NodeJS.Platform;
         electron: string;
-        platform: 'aix' | 'darwin' | 'freebsd' | 'linux' | 'openbsd' | 'sunos' | 'win32';
+        node: string;
+        v8: string;
+        chrome: string;
+        arch: NodeJS.Architecture;
+        buildDate: string;
+        sandboxed: boolean;
       };
       electron: {
         shell: Shell;

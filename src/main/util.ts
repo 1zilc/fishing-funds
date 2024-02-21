@@ -1,11 +1,12 @@
+import path from 'path';
+import { fileURLToPath } from 'url';
 import log from 'electron-log';
 import { app, BrowserWindow, nativeTheme } from 'electron';
-import * as path from 'path';
 import * as Enums from '../renderer/utils/enums';
 
 export const processPath = process.cwd();
 export const assetsPath = path.join(processPath, 'assets');
-export const appPath = path.resolve(__dirname, '../');
+export const appPath = path.resolve(fileURLToPath(import.meta.url), '../../');
 export const mainPath = path.join(appPath, 'main');
 export const preloadPath = path.join(appPath, 'preload');
 export const rendererPath = path.join(appPath, 'renderer');
@@ -41,7 +42,7 @@ export async function checkEnvTool() {
   }
 
   if (isDebug) {
-    require('electron-debug')();
+    await (await import('electron-debug')).default();
     // 关闭自签ca错误
     app.commandLine.appendSwitch('ignore-certificate-errors');
   }

@@ -5,6 +5,7 @@ import { Tabs } from 'antd';
 
 import Trend from '@/components/Home/ZindexView/DetailZindexContent/Trend';
 import K from '@/components/Home/ZindexView/DetailZindexContent/K';
+import Estimate from '@/components/Home/ZindexView/DetailZindexContent/Estimate';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
 import Recent from '@/components/Home/NewsList/Recent';
 import CycleReturn from '@/components/Home/FundView/DetailFundContent/CycleReturn';
@@ -41,7 +42,6 @@ export const DetailZindex: React.FC<DetailFundProps> = (props) => {
       cacheKey: Utils.GenerateRequestKey('Zindex.GetKFromEastmoney', [code, 10, 101]),
     }
   );
-
   return (
     <div className={styles.content}>
       <div className={styles.container}>
@@ -103,11 +103,16 @@ export const DetailZindex: React.FC<DetailFundProps> = (props) => {
             },
             {
               key: String(1),
+              label: '走势详情',
+              children: <Estimate secid={zindex.code} />,
+            },
+            {
+              key: String(2),
               label: '近期资讯',
               children: <Recent keyword={zindex.name} filter={Enums.NewsFilterType.Title} />,
             },
             {
-              key: String(2),
+              key: String(3),
               label: '股吧',
               children: <GuBa keyword={zindex.zindexCode} type="102" />,
             },

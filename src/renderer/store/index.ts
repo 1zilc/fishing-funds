@@ -1,4 +1,4 @@
-import { configureStore, AnyAction, ThunkAction, ThunkDispatch, Middleware } from '@reduxjs/toolkit';
+import { configureStore, UnknownAction, ThunkAction, ThunkDispatch, Middleware } from '@reduxjs/toolkit';
 import listenerMiddleware from '@/store/listeners';
 import coinReducer, { CoinState } from '@/store/features/coin';
 import fundReducer, { FundState } from '@/store/features/fund';
@@ -60,8 +60,8 @@ export type StoreState = {
 };
 
 export type AppDispatch = typeof store.dispatch;
-export type TypedDispatch = ThunkDispatch<StoreState, any, AnyAction>;
-export type TypedThunk<ReturnType = void> = ThunkAction<ReturnType, StoreState, unknown, AnyAction>;
+export type TypedDispatch = ThunkDispatch<StoreState, any, UnknownAction>;
+export type TypedThunk<ReturnType = void> = ThunkAction<ReturnType, StoreState, unknown, UnknownAction>;
 export type AsyncThunkConfig = {
   /** return type for `thunkApi.getState` */
   state: StoreState;
@@ -80,7 +80,7 @@ export type AsyncThunkConfig = {
   /** type to be passed into the second argument of `rejectWithValue` to finally be merged into `rejectedAction.meta` */
   rejectedMeta?: unknown;
 };
-export interface ShareAction extends AnyAction {
+export interface ShareAction extends UnknownAction {
   readonly _share?: boolean;
   payload: any;
 }

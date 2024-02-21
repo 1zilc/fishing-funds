@@ -107,7 +107,7 @@
   width: 100%;
   justify-content: center;
   align-items: center;
-  padding-bottom: 56px;
+  padding-bottom: 16px;
   margin-top: var(--base-padding);
 
   button {
@@ -124,21 +124,6 @@
   font-weight: 500;
   text-indent: calc(var(--base-font-size) * 2);
   margin-bottom: var(--base-padding);
-}
-
-.version {
-  text-align: center;
-  height: 36px;
-  line-height: 36px;
-  background-color: var(--inner-color);
-  color: var(--inner-text-color);
-  font-size: calc(var(--base-font-size) * 5 / 6);
-  position: fixed;
-  bottom: 0;
-  width: 100%;
-  box-sizing: border-box;
-  // border-top: 1px solid var(--border-color);
-  z-index: 100;
 }
 
 .group {
@@ -206,4 +191,14 @@
   border-radius: 2px;
   background-color: var(--primary-color);
   transition: background 0.2s;
+}
+.buildGroup {
+  section {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    label {
+      text-align: right;
+    }
+  }
 }

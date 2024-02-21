@@ -1,8 +1,10 @@
 import { NativeImage, dialog, shell, app } from 'electron';
 import { Menubar } from 'menubar';
-import { autoUpdater } from 'electron-updater';
+import ElectronUpdater from 'electron-updater';
 import log from 'electron-log';
 import { sendMessageToRenderer } from './util';
+
+const { autoUpdater } = ElectronUpdater;
 
 export default class AppUpdater {
   process = '';

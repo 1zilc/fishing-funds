@@ -2,7 +2,7 @@ import { useLayoutEffect, useEffect, useMemo, useRef } from 'react';
 import { flushSync } from 'react-dom';
 import { useInterval } from 'ahooks';
 import { theme } from 'antd';
-import { AnyAction } from 'redux';
+import { UnknownAction } from 'redux';
 import dayjs from 'dayjs';
 import NP from 'number-precision';
 import { startListening } from '@/store/listeners';
@@ -387,7 +387,7 @@ export function useMappingLocalToSystemSetting() {
     autoStartSetting,
     alwaysOnTopSetting,
     lowKeySetting,
-    lowKeyDegreeSetting,
+    opacitySetting,
     adjustmentNotificationTimeSetting,
     proxyTypeSetting,
     proxyHostSetting,
@@ -449,14 +449,11 @@ export function useMappingLocalToSystemSetting() {
   }, [chatGPTHotkey]);
   useEffect(() => {
     if (lowKeySetting) {
-      // lowKeyDegreeSetting 0-100
-      // opacity 0.4-0.8
-      const opacity = lowKeyDegreeSetting * -0.004 + 0.8;
-      ipcRenderer.invoke('set-opacity', opacity);
+      ipcRenderer.invoke('set-opacity', opacitySetting);
     } else {
       ipcRenderer.invoke('set-opacity', 1);
     }
-  }, [lowKeySetting, lowKeyDegreeSetting]);
+  }, [lowKeySetting, opacitySetting]);
 
   useEffect(() => {
     ipcRenderer.invoke('set-alwaysOnTop', alwaysOnTopSetting);
@@ -708,7 +705,7 @@ export function useShareStoreState() {
     startListening();
   }, []);
 
-  useIpcRendererListener('sync-store-data', (event, action: AnyAction) => {
+  useIpcRendererListener('sync-store-data', (event, action: UnknownAction) => {
     dispatch(action);
   });
 }
