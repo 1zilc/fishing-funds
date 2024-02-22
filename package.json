@@ -95,6 +95,7 @@
       "summary": "Display real-time trends of Chinese funds in the menubar.",
       "publish": {
         "provider": "snapStore",
+        "repo": "fishing-funds",
         "channels": [
           "stable"
         ]
@@ -160,7 +161,7 @@
     "dayjs": "^1.11.10",
     "echarts": "^5.4.3",
     "electron": "^29.0.0",
-    "electron-builder": "^24.9.1",
+    "electron-builder": "24.9.1",
     "electron-icon-builder": "^2.0.1",
     "electron-vite": "^2.0.0",
     "generate-react-cli": "^8.4.0",
