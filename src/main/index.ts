@@ -1,11 +1,3 @@
-/**
- * This module executes inside of electron's main process. You can start
- * electron renderer process from here and communicate with the other processes
- * through IPC.
- *
- * When running `yarn build` or `yarn build:main`, this file is compiled to
- * `./src/main.prod.js` using webpack. This gives us some performance wins.
- */
 import url from 'url';
 import {
   app,
@@ -58,7 +50,51 @@ async function init() {
   lockSingleInstance();
   await app.whenReady();
   await checkEnvTool();
+  appEmits();
   main();
+}
+
+function appEmits() {
+  // app 相关监听
+  app.on('window-all-closed', () => {
+    // Respect the OSX convention of having the application in memory even
+    // after all windows have been closed
+    if (process.platform !== 'darwin') {
+      app.quit();
+    }
+  });
+  app.on('browser-window-focus', () => {
+    if (app.isPackaged) {
+      globalShortcut.register('CommandOrControl+Shift+R', () => {});
+      globalShortcut.register('CommandOrControl+R', () => {});
+      globalShortcut.register('F5', () => {});
+    }
+  });
+  app.on('browser-window-blur', () => {
+    if (app.isPackaged) {
+      globalShortcut.unregister('CommandOrControl+R');
+      globalShortcut.unregister('F5');
+      globalShortcut.unregister('CommandOrControl+Shift+R');
+    }
+  });
+  app.on('second-instance', (event, argv, cwd) => {
+    // Someone tried to run a second instance, we should focus our window.
+    if (mb.window) {
+      if (mb.window.isMinimized()) mb.window.restore();
+      mb.window.focus();
+    }
+  });
+  app.on('open-file', (even, path: string) => {
+    if (mb?.window) {
+      sendMessageToRenderer(mb.window, 'open-backup-file', path);
+    } else {
+      openBackupFilePath = path;
+    }
+  });
+  app.on('will-quit', () => {
+    // Unregister all shortcuts.
+    globalShortcut.unregisterAll();
+  });
 }
 
 function main() {
@@ -320,44 +356,5 @@ function main() {
 
   // new AppUpdater({ icon: nativeIcon, win: mb.window });
 }
-// app 相关监听
-app.on('window-all-closed', () => {
-  // Respect the OSX convention of having the application in memory even
-  // after all windows have been closed
-  if (process.platform !== 'darwin') {
-    app.quit();
-  }
-});
-app.on('browser-window-focus', () => {
-  if (app.isPackaged) {
-    globalShortcut.register('CommandOrControl+Shift+R', () => {});
-    globalShortcut.register('CommandOrControl+R', () => {});
-    globalShortcut.register('F5', () => {});
-  }
-});
-app.on('browser-window-blur', () => {
-  if (app.isPackaged) {
-    globalShortcut.unregister('CommandOrControl+R');
-    globalShortcut.unregister('F5');
-    globalShortcut.unregister('CommandOrControl+Shift+R');
-  }
-});
-app.on('second-instance', (event, argv, cwd) => {
-  // Someone tried to run a second instance, we should focus our window.
-  if (mb.window) {
-    if (mb.window.isMinimized()) mb.window.restore();
-    mb.window.focus();
-  }
-});
-app.on('open-file', (even, path: string) => {
-  if (mb?.window) {
-    sendMessageToRenderer(mb.window, 'open-backup-file', path);
-  } else {
-    openBackupFilePath = path;
-  }
-});
-app.on('will-quit', () => {
-  // Unregister all shortcuts.
-  globalShortcut.unregisterAll();
-});
+
 init().catch(console.log);
