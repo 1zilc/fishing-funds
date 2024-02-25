@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Tabs, Radio, Input, Switch } from 'antd';
 import clsx from 'clsx';
-import { RiTreasureMapFill, RiLineChartLine, RiSettingsLine } from 'react-icons/ri';
+import { RiTranslate, RiLineChartLine, RiSettingsLine } from 'react-icons/ri';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
 import WebAppIcon from '@/components/Toolbar/AppCenterContent/WebAppIcon';
 import StandCard from '@/components/Card/StandCard';
@@ -72,7 +72,7 @@ const TranslateSettingContent: React.FC<TranslateSettingContentProps> = (props) 
     <CustomDrawerContent title={appName} enterText="保存" onClose={props.onClose} onEnter={onSave}>
       <div className={styles.content}>
         <PureCard className={clsx(styles.logoContent, 'card-body')}>
-          <WebAppIcon title={appName} iconType={Enums.WebIconType.Svg} svg={<RiTreasureMapFill />} />
+          <WebAppIcon title={appName} iconType={Enums.WebIconType.Svg} svg={<RiTranslate />} />
         </PureCard>
         <div className={styles.container}>
           <Tabs
