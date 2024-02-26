@@ -1,6 +1,6 @@
 import path from 'path';
 import { fileURLToPath } from 'url';
-import log from 'electron-log';
+import log from 'electron-log/main';
 import { app, BrowserWindow, nativeTheme } from 'electron';
 import * as Enums from '../renderer/utils/enums';
 
