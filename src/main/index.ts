@@ -9,7 +9,6 @@ import {
   dialog,
   webContents,
   shell,
-  Menu,
   BrowserWindow,
 } from 'electron';
 import got from 'got';
