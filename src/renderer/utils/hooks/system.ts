@@ -584,7 +584,7 @@ export function useAllConfigBackup() {
       }
       const encodeBackupConfig = await readFile(filePath);
       const backupConfig: Backup.Config = await decryptFF(encodeBackupConfig);
-      Enhancement.CoverBackupConfig(backupConfig);
+      await Enhancement.CoverBackupConfig(backupConfig);
       const { response } = await dialog.showMessageBox({
         type: 'info',
         title: `导入成功`,
@@ -616,7 +616,7 @@ export function useAllConfigBackup() {
         buttons: ['确定', '取消'],
       });
       if (response === 0) {
-        Enhancement.CoverBackupConfig(backupConfig);
+        await Enhancement.CoverBackupConfig(backupConfig);
         const { response } = await dialog.showMessageBox({
           type: 'info',
           title: `恢复成功`,

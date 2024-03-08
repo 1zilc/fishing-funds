@@ -167,6 +167,7 @@
     "generate-react-cli": "^8.4.0",
     "hxc3-indicator-formula": "^1.0.9",
     "js-base64": "^3.7.7",
+    "million": "^3.0.4",
     "number-precision": "^1.6.0",
     "promise-worker": "^2.0.1",
     "query-string": "^8.2.0",
