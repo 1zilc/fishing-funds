@@ -19,11 +19,22 @@ export function Yang(num: string | number | undefined) {
   }
 }
 
-export function ConvertBigNum(n: number) {
-  return n.toFixed(0).replace(/(\d{1,4})((\d{4})*)$/, (a, b, c) => {
-    const t = ['', '万', '亿', '万亿'][c.length / 4];
-    return t ? `${b}${t}` : b;
-  });
+export function ConvertBigNum(value: number, precision: number = 0) {
+  const param = {
+    value: '',
+    unit: '',
+  };
+  const k = 10000;
+  const sizes = ['', '万', '亿', '万亿'];
+  if (value < k) {
+    param.value = String(value);
+    param.unit = '';
+  } else {
+    const i = Math.floor(Math.log(value) / Math.log(k));
+    param.value = (value / Math.pow(k, i)).toFixed(precision);
+    param.unit = sizes[i];
+  }
+  return `${param.value}${param.unit}`;
 }
 
 export function DeepCopy<T>(object: T): T {

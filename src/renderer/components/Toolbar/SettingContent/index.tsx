@@ -666,7 +666,7 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
                       </section>
                       <section>
                         <label>
-                          同步路径{' '}
+                          同步路径
                           {!!syncConfigPath ? (
                             <a onClick={() => setSyncConfigPath('')}>(清除)</a>
                           ) : (

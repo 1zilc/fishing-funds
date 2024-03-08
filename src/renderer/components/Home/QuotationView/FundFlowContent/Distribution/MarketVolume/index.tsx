@@ -26,9 +26,9 @@ const MarketVolume = React.forwardRef<MarketVolumeRef, MarketVolumeProps>((props
 
   return (
     <div className={styles.content}>
-      <div>上证: {Utils.ConvertBigNum(shangzheng)}</div>
-      <div>深证: {Utils.ConvertBigNum(shenzheng)}</div>
-      <div>合计: {Utils.ConvertBigNum(total)}</div>
+      <div>上证: {Utils.ConvertBigNum(shangzheng, 2)}</div>
+      <div>深证: {Utils.ConvertBigNum(shenzheng, 2)}</div>
+      <div>合计: {Utils.ConvertBigNum(total, 2)}</div>
     </div>
   );
 });
