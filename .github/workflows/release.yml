@@ -13,6 +13,7 @@ jobs:
       - name: Homebrew Cask Bumper
         run: |
           LATEST_VERSION=$(gh release view -R 1zilc/fishing-funds --json name -q '.name')
+          brew update
           brew bump-cask-pr --version "$LATEST_VERSION" fishing-funds
         env:
           GH_TOKEN: ${{ secrets.HOMEBREW_GH_TOKEN }}
