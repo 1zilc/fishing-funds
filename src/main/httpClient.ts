@@ -22,15 +22,18 @@ export default class HttpClient {
   public async request<Res = unknown>(url: string, config?: RequestConfig & { responseType: 'json' }): Promise<HttpResponse<Res>>;
   public async request(url: string, config?: RequestConfig) {
     try {
-      const res = await request(url, {
+      const uri = new URL(url);
+      uri.search = new URLSearchParams(config?.searchParams).toString();
+
+      const res = await request(uri, {
         headers: {
-          'user-agent': this.userAgent,
+          'User-Agent': this.userAgent,
+          'Host': uri.host,
           ...config?.headers,
         },
         body: config?.body,
         method: config?.method,
         dispatcher: this.dispatcher,
-        query: config?.searchParams,
       });
       if (config?.responseType === 'json') {
         return {
