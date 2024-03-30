@@ -42,7 +42,11 @@ export default class Proxy {
         });
       } else if (this.type === 'PROXY' || this.type === 'HTTPS') {
         const proxyURL = `http://${this.host}:${this.port}`;
-        this.agent = new ProxyAgent(proxyURL);
+        this.agent = new ProxyAgent({
+          uri: proxyURL,
+          allowH2: true,
+          connect: { keepAlive: true },
+        });
       } else {
         // DIRECT do nothing
       }

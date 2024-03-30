@@ -1,4 +1,4 @@
-import { request, Dispatcher } from 'undici';
+import { Agent, request, Dispatcher } from 'undici';
 
 export type RequestConfig = {
   responseType?: 'json' | 'text' | 'arraybuffer';
@@ -13,8 +13,16 @@ export type HttpResponse<T> = {
 };
 
 export default class HttpClient {
+  private agent: Agent;
   public userAgent?: string;
   public dispatcher?: Dispatcher;
+
+  constructor() {
+    this.agent = new Agent({
+      allowH2: true,
+      connect: { keepAlive: true },
+    });
+  }
 
   public async request(url: string, config?: Omit<RequestConfig, 'responseType'>): Promise<HttpResponse<string>>;
   public async request(url: string, config?: RequestConfig & { responseType: 'text' }): Promise<HttpResponse<string>>;
@@ -33,7 +41,7 @@ export default class HttpClient {
         },
         body: config?.body,
         method: config?.method,
-        dispatcher: this.dispatcher,
+        dispatcher: this.dispatcher || this.agent,
       });
       if (config?.responseType === 'json') {
         return {
