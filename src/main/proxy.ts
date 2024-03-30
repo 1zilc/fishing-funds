@@ -1,7 +1,5 @@
-import { SocksProxyAgent } from 'socks-proxy-agent';
-import { HttpProxyAgent } from 'http-proxy-agent';
-import { HttpsProxyAgent } from 'https-proxy-agent';
-import { Agent } from 'http';
+import { Dispatcher, ProxyAgent } from 'undici';
+import { socksDispatcher } from 'fetch-socks';
 
 type ConnectionType = 'DIRECT' | 'SOCKS' | 'SOCKS5' | 'PROXY' | 'HTTPS';
 
@@ -12,9 +10,7 @@ export default class Proxy {
 
   private type: ConnectionType;
 
-  httpAgent?: Agent;
-
-  httpsAgent?: Agent;
+  agent?: Dispatcher;
 
   constructor(proxyContent = 'DIRECT', private url: string) {
     // default to "DIRECT" if a falsey value was returned (or nothing)
@@ -37,22 +33,19 @@ export default class Proxy {
   }
 
   constructAgents() {
-    if (this.type === 'SOCKS' || this.type === 'SOCKS5') {
-      const proxyURL = `socks:${this.host}:${this.port}`;
-      const agent = new SocksProxyAgent(proxyURL);
-
-      this.httpAgent = agent;
-      this.httpsAgent = agent;
-    } else if (this.type === 'PROXY' || this.type === 'HTTPS') {
-      const proxyURL = `http:${this.host}:${this.port}`;
-
-      if (this.url.startsWith('https://')) {
-        this.httpsAgent = new HttpsProxyAgent(proxyURL);
+    try {
+      if (this.type === 'SOCKS' || this.type === 'SOCKS5') {
+        this.agent = socksDispatcher({
+          host: this.host,
+          port: Number(this.port),
+          type: 5,
+        });
+      } else if (this.type === 'PROXY' || this.type === 'HTTPS') {
+        const proxyURL = `http://${this.host}:${this.port}`;
+        this.agent = new ProxyAgent(proxyURL);
       } else {
-        this.httpAgent = new HttpProxyAgent(proxyURL);
+        // DIRECT do nothing
       }
-    } else {
-      // DIRECT do nothing
-    }
+    } catch {}
   }
 }

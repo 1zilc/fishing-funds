@@ -209,7 +209,7 @@ export async function FromFund123(code: string) {
         'assets.url': 'https://gw.alipayobjects.com/a';
       };
     } = context;
-    const cookies = headers['set-cookie'];
+    const cookies = headers as Record<string, string[]>['set-cookie'];
     const now = dayjs();
     const res = await request<{
       success: true;
@@ -396,8 +396,10 @@ export async function FromFund10jqka(code: string) {
 // 从天天基金获取估值图片
 export async function GetEstimatedFromEastmoney(code: string) {
   try {
-    const { rawBody } = await request(`https://j4.dfcfw.com/charts/pic6/${code}.png`);
-    const b64encoded = fromUint8Array(new Uint8Array(rawBody));
+    const { body } = await request(`https://j4.dfcfw.com/charts/pic6/${code}.png`, {
+      responseType: 'arraybuffer',
+    });
+    const b64encoded = fromUint8Array(new Uint8Array(body));
     return `data:image/png;base64,${b64encoded}`;
   } catch (error) {
     return;
@@ -407,8 +409,10 @@ export async function GetEstimatedFromEastmoney(code: string) {
 // 从天天基金获取投资风格图片
 export async function GetInverstStyleFromEastmoney(code: string) {
   try {
-    const { rawBody } = await request(`https://j3.dfcfw.com/images/InvestStyle/${code}.png`);
-    const b64encoded = fromUint8Array(new Uint8Array(rawBody));
+    const { body } = await request(`https://j3.dfcfw.com/images/InvestStyle/${code}.png`, {
+      responseType: 'arraybuffer',
+    });
+    const b64encoded = fromUint8Array(new Uint8Array(body));
     return `data:image/png;base64,${b64encoded}`;
   } catch (error) {
     return;

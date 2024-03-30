@@ -469,14 +469,15 @@ export async function GetRemoteZindexConfig() {
  */
 export async function GetPicTrendFromEastmoney(secid: string) {
   try {
-    const { rawBody } = await request('https://webquotepic.eastmoney.com/GetPic.aspx', {
+    const { body } = await request('https://webquotepic.eastmoney.com/GetPic.aspx', {
       searchParams: {
         nid: secid,
         imageType: 'r',
         token: Utils.MakeHash(),
       },
+      responseType: 'arraybuffer',
     });
-    const b64encoded = fromUint8Array(new Uint8Array(rawBody));
+    const b64encoded = fromUint8Array(new Uint8Array(body));
     return `data:image/png;base64,${b64encoded}`;
   } catch (error) {
     return;
