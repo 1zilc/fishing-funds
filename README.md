@@ -52,7 +52,6 @@
 
 > 注意 ⚠️：由于 macOS 不允许打开未签名的程序，如果出现软件无法打开请进行以下操作 或[参考这里](https://github.com/1zilc/fishing-funds/issues/149)
 
-
 ```bash
 # 终端执行
 sudo xattr -d com.apple.quarantine "/Applications/Fishing Funds.app"
@@ -80,7 +79,7 @@ sudo xattr -d com.apple.quarantine "/Applications/Fishing Funds.app"
 ## 系统代理
 
 - 由于众所周知的原因，部分货币接口无法访问，Fishing Funds 已适配系统代理访问
-- 支持 http 代理、https 代理、socks 代理
+- 支持 http 代理、socks 代理
 - 自行将以下货币接口加入自己的代理软件规则中，并重启 Fishing Funds
 
 ```
