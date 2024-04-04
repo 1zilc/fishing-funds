@@ -21,7 +21,7 @@ import { createMenubar } from './menubar';
 import TouchBarManager from './touchbar';
 import LocalStore from './store';
 import { createChildWindow } from './childWindow';
-import Proxy from './proxy';
+import { ProxyManager } from './proxy';
 import HotkeyManager from './hotkey';
 import ContextMenuManager from './contextMenu';
 import { saveImage, saveJsonToCsv, saveString, readFile } from './io';
@@ -33,6 +33,7 @@ let mb: Menubar;
 let openBackupFilePath = '';
 let ua = '';
 let fakeUA = '';
+let proxyMode = '';
 
 // FIXME: 部分库缺少对ESM的支持
 global.__filename = url.fileURLToPath(import.meta.url);
@@ -103,6 +104,7 @@ function main() {
   const appUpdater = new AppUpdater({ icon: appIcon, mb });
   const touchBarManager = new TouchBarManager([], mb);
   const contextMenuManager = new ContextMenuManager({ mb, updater: appUpdater });
+  const proxyManager = new ProxyManager();
   let windowIds: number[] = [];
   const defaultTheme = localStore.get(
     'config',
@@ -180,8 +182,11 @@ function main() {
       return { action: 'deny' };
     });
   });
-  ipcMain.handle('set-proxy', (event, config) => {
-    return event.sender.session.setProxy(config);
+  ipcMain.handle('set-proxy', async (event, config) => {
+    await event.sender.session.setProxy(config);
+    const proxyConent = await event.sender.session.resolveProxy('localhost');
+    proxyManager.updateAgentByParseProxyConent(proxyConent);
+    proxyMode = config.mode;
   });
   ipcMain.handle('get-fakeUA', (event, config) => {
     return fakeUA;
@@ -262,11 +267,14 @@ function main() {
     });
   });
   ipcMain.handle('request', async (event, { url, config }) => {
-    const proxyConent = await event.sender.session.resolveProxy(url);
-    const proxy = new Proxy(proxyConent, url);
     const httpClient = new HttpClient();
+    // 系统代理需要实时检测代理地址
+    if (proxyMode === 'system') {
+      const proxyConent = await event.sender.session.resolveProxy('localhost');
+      proxyManager.updateAgentByParseProxyConent(proxyConent);
+    }
     httpClient.userAgent = fakeUA;
-    httpClient.dispatcher = proxy.agent;
+    httpClient.dispatcher = proxyManager.agent;
     return httpClient.request(url, config);
   });
   // io操作

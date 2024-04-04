@@ -13,16 +13,12 @@ export type HttpResponse<T> = {
 };
 
 export default class HttpClient {
-  private agent: Agent;
+  private static agent = new Agent({
+    allowH2: true,
+    connect: { keepAlive: true },
+  });
   public userAgent?: string;
   public dispatcher?: Dispatcher;
-
-  constructor() {
-    this.agent = new Agent({
-      allowH2: true,
-      connect: { keepAlive: true },
-    });
-  }
 
   public async request(url: string, config?: Omit<RequestConfig, 'responseType'>): Promise<HttpResponse<string>>;
   public async request(url: string, config?: RequestConfig & { responseType: 'text' }): Promise<HttpResponse<string>>;
@@ -39,7 +35,7 @@ export default class HttpClient {
         body: config?.body,
         method: config?.method,
         query: config?.searchParams,
-        dispatcher: this.dispatcher || this.agent,
+        dispatcher: this.dispatcher || HttpClient.agent,
       });
       if (config?.responseType === 'json') {
         return {
