@@ -33,7 +33,7 @@ export async function FromEastmoney(secid: string) {
         f170: number; // 涨跌幅
         f171: number; // 振幅
       };
-    }>('https://push2.eastmoney.com/api/qt/stock/get?=', {
+    }>('https://push2.eastmoney.com/api/qt/stock/get', {
       searchParams: {
         fields: 'f43,f44,f45,f46,f57,f58,f60,f86,f107,f168,f169,f170,f171',
         secid, // 1.000001
