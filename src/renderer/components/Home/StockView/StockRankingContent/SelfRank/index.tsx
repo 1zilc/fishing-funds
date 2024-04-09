@@ -43,13 +43,13 @@ const SelfRank: React.FC<PropsWithChildren<SelfRankProps>> = () => {
       render: (text: string) => <a>{text}</a>,
     },
     {
-      title: `日涨跌`,
+      title: `涨跌`,
       dataIndex: 'zdf',
       render: (text: string) => <div className={Utils.GetValueColor(text).textClass}>{text}%</div>,
       sorter: (a: any, b: any) => a.zdf - b.zdf,
     },
     {
-      title: `主力流入`,
+      title: `主力`,
       dataIndex: 'zllr',
       render: (text: string) => <RenderColorCol value={text} />,
       sorter: (a: any, b: any) => a.zllr - b.zllr,

@@ -23,7 +23,7 @@ const StockRankingContent: React.FC<StockRankingContentProps> = (props) => {
           items={[
             {
               key: String(0),
-              label: '个股资金流',
+              label: '个股',
               children: (
                 <PureCard>
                   <SelfRank />
@@ -32,7 +32,7 @@ const StockRankingContent: React.FC<StockRankingContentProps> = (props) => {
             },
             {
               key: String(1),
-              label: '北向排名',
+              label: '北向',
               children: (
                 <PureCard>
                   <NorthRank />
@@ -41,7 +41,7 @@ const StockRankingContent: React.FC<StockRankingContentProps> = (props) => {
             },
             {
               key: String(2),
-              label: '主力排名',
+              label: '主力',
               children: (
                 <PureCard>
                   <MainRank />

@@ -41,13 +41,13 @@ const MainRank: React.FC<PropsWithChildren<MainRankProps>> = () => {
       render: (text: string) => <a>{text}</a>,
     },
     {
-      title: `日涨跌`,
+      title: `涨跌`,
       dataIndex: 'zdf',
       render: (text: string) => <div className={Utils.GetValueColor(text).textClass}>{text}%</div>,
       sorter: (a: any, b: any) => a.zdf - b.zdf,
     },
     {
-      title: `主力净占比`,
+      title: `占比`,
       dataIndex: 'zljzb',
       render: (text: string) => <RenderColorCol value={text} />,
       sorter: (a: any, b: any) => a.zljzb - b.zljzb,
