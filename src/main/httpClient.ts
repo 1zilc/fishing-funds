@@ -15,7 +15,6 @@ export type HttpResponse<T> = {
 export default class HttpClient {
   private static agent = new Agent({
     allowH2: true,
-    connect: { keepAlive: true },
   });
   public userAgent?: string;
   public dispatcher?: Dispatcher;
