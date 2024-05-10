@@ -43,7 +43,6 @@ export class ProxyParser {
         const proxyURL = `http://${this.host}:${this.port}`;
         this.agent = new ProxyAgent({
           uri: proxyURL,
-          allowH2: true,
           connect: { keepAlive: true },
         });
       } else {
