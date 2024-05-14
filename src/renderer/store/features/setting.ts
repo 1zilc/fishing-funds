@@ -75,7 +75,7 @@ export const defaultSystemSetting: System.Setting = {
   hotkeySetting: '',
   autoStartSetting: true,
   autoFreshSetting: true,
-  freshDelaySetting: 1,
+  freshDelaySetting: 5,
   autoCheckUpdateSetting: true,
   timestampSetting: Enums.TimestampType.Local,
 
