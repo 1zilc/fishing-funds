@@ -44,7 +44,15 @@ export default defineConfig(({ command }) => {
         strictPort: true,
         https: {},
       },
-      plugins: [react(), mkcert(), splitVendorChunkPlugin()],
+      plugins: [
+        react({
+          babel: {
+            plugins: ['babel-plugin-react-compiler'],
+          },
+        }),
+        mkcert(),
+        splitVendorChunkPlugin(),
+      ],
       resolve: {
         alias: {
           '@': path.resolve('src/renderer'),
