@@ -74,7 +74,7 @@ const ThemeProvider: React.FC<PropsWithChildren<ThemeProviderProps>> = (props) =
         },
         algorithm: config.darkMode ? [...baseAlgorithm, theme.darkAlgorithm] : baseAlgorithm,
       }}
-      autoInsertSpaceInButton={false}
+      button={{ autoInsertSpace: false }}
       componentSize="small"
       space={{ size: 'small' }}
     >

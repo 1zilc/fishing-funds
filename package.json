@@ -152,7 +152,7 @@
     "@types/react-dom": "^18.2.19",
     "@vitejs/plugin-react": "^4.2.1",
     "ahooks": "^3.7.10",
-    "antd": "^5.14.2",
+    "antd": "^5.17.3",
     "babel-plugin-react-compiler": "0.0.0-experimental-c23de8d-20240515",
     "cheerio": "1.0.0-rc.12",
     "clsx": "^2.1.0",
