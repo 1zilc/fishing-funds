@@ -20,7 +20,6 @@ export function createChildWindow(config: { search: string; parentId: number }) 
         webviewTag: true,
         devTools: !app.isPackaged,
         preload: getPreloadPath(),
-        enableWebSQL: false,
         spellcheck: false,
       },
     });
