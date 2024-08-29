@@ -4,6 +4,7 @@ import { Button } from 'antd';
 import { useKeyPress } from 'ahooks';
 import Collect from '@/components/Collect';
 import styles from './index.module.scss';
+import { useDrawerPopBack } from '@/utils/hooks';
 
 export interface CustomDrawerContentProps {
   onEnter: () => void;
@@ -28,8 +29,10 @@ const CustomDrawerContent: React.FC<PropsWithChildren<CustomDrawerContentProps>>
       }
     });
 
+    const drawerContentRef = useDrawerPopBack(onClose);
+
     return (
-      <div className={styles.content}>
+      <div className={styles.content} ref={drawerContentRef}>
         <div className={styles.header}>
           <Button type="text" onClick={onClose}>
             {closeText || '关闭'}

@@ -366,9 +366,7 @@ export function useLoadWalletsFunds() {
           responseMap[response.fundcode!] = response;
         });
         // 用code去取已经获取到的结果
-        const finalResponseFunds = fundsConfig
-          .filter(({ code }) => !!responseMap[code])
-          .map(({ code }) => responseMap[code]);
+        const finalResponseFunds = fundsConfig.filter(({ code }) => !!responseMap[code]).map(({ code }) => responseMap[code]);
         const now = dayjs().format('MM-DD HH:mm:ss');
         dispatch(updateWalletStateAction({ code: walletCode, funds: finalResponseFunds, updateTime: now }));
         return responseFunds;
@@ -397,9 +395,7 @@ export function useLoadFixWalletsFunds() {
         return async () => {
           const fixFunds = await Adapters.ChokeGroupAdapter(collectors, 5, 100);
           const now = dayjs().format('MM-DD HH:mm:ss');
-          dispatch(
-            syncFixWalletStateAction({ code: wallet.code, funds: fixFunds.filter(Utils.NotEmpty), updateTime: now })
-          );
+          dispatch(syncFixWalletStateAction({ code: wallet.code, funds: fixFunds.filter(Utils.NotEmpty), updateTime: now }));
           return fixFunds;
         };
       });
@@ -691,10 +687,7 @@ export function useFundConfigMap(codes: string[]) {
   return codeMaps;
 }
 
-export function useIpcRendererListener(
-  channel: string,
-  listener: (event: Electron.IpcRendererEvent, ...args: any[]) => void
-) {
+export function useIpcRendererListener(channel: string, listener: (event: Electron.IpcRendererEvent, ...args: any[]) => void) {
   const callback = useMemoizedFn(listener);
 
   useEffect(() => {
@@ -771,4 +764,26 @@ export function useFakeUA(phone: boolean) {
   });
 
   return phone ? phoneFakeUA : fakeUA;
+}
+
+export function useDrawerPopBack(onClose?: () => void) {
+  const domRef = useRef<HTMLDivElement>(null);
+
+  useEventListener(
+    'mouseup',
+    (e) => {
+      switch (e.button) {
+        case 3:
+          onClose?.();
+          e.preventDefault();
+          e.stopPropagation();
+          break;
+      }
+    },
+    {
+      target: domRef,
+    }
+  );
+
+  return domRef;
 }
