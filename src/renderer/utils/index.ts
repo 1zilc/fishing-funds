@@ -80,7 +80,7 @@ export function JudgeWorkDayTime(timestamp: number) {
   const minites = hour * 60 + minute;
   const isWorkDay = day >= 1 && day <= 5;
   const isMorningWorkTime = minites >= 9 * 60 + 15 && minites <= 11 * 60 + 45; // 9:15 - 11:45
-  const isAfternoonWorkTime = minites >= 13 * 60 && minites <= 15 * 60 + 15; // 13:00 - 15:15
+  const isAfternoonWorkTime = minites >= 13 * 60 && minites <= 15 * 60 + 16; // 13:00 - 16:15
   return isWorkDay && (isMorningWorkTime || isAfternoonWorkTime);
 }
 
