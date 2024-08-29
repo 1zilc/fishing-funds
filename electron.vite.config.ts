@@ -1,7 +1,7 @@
 import path from 'path';
 import mkcert from 'vite-plugin-mkcert';
 import react from '@vitejs/plugin-react';
-import { defineConfig, splitVendorChunkPlugin } from 'electron-vite';
+import { defineConfig } from 'electron-vite';
 
 export default defineConfig(({ command }) => {
   const prod = command === 'build';
@@ -51,7 +51,6 @@ export default defineConfig(({ command }) => {
           },
         }),
         mkcert(),
-        splitVendorChunkPlugin(),
       ],
       resolve: {
         alias: {
