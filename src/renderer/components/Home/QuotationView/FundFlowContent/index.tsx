@@ -91,16 +91,11 @@ const FundFlowContent: React.FC<DetailFundContentProps> = (props) => {
             animated={{ tabPane: true }}
             tabBarGutter={15}
             items={[
-              {
-                key: String(0),
-                label: '北向资金',
-                children: <NorthFlow />,
-              },
-              {
-                key: String(1),
-                label: '北向日线',
-                children: <NorthDay />,
-              },
+              // {
+              //   key: String(0),
+              //   label: '北向资金',
+              //   children: <NorthFlow />,
+              // },
               {
                 key: String(2),
                 label: '南向资金',
@@ -110,6 +105,11 @@ const FundFlowContent: React.FC<DetailFundContentProps> = (props) => {
                 key: String(3),
                 label: '南向日线',
                 children: <SouthDay />,
+              },
+              {
+                key: String(1),
+                label: '北向日线',
+                children: <NorthDay />,
               },
             ]}
           />
