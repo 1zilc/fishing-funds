@@ -1,6 +1,7 @@
 import path from 'path';
 import mkcert from 'vite-plugin-mkcert';
 import react from '@vitejs/plugin-react';
+import reactSWC from '@vitejs/plugin-react-swc';
 import { defineConfig } from 'electron-vite';
 
 export default defineConfig(({ command }) => {
@@ -45,11 +46,13 @@ export default defineConfig(({ command }) => {
         https: {},
       },
       plugins: [
-        react({
-          babel: {
-            plugins: ['babel-plugin-react-compiler'],
-          },
-        }),
+        prod
+          ? react({
+              babel: {
+                plugins: ['babel-plugin-react-compiler'],
+              },
+            })
+          : reactSWC(),
         mkcert(),
       ],
       resolve: {
