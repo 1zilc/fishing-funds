@@ -18,7 +18,6 @@ import {
   RiListOrdered,
   RiCoinFill,
   RiLayoutMasonryFill,
-  RiExchangeFill,
 } from 'react-icons/ri';
 
 import CustomDrawer from '@/components/CustomDrawer';
@@ -41,7 +40,6 @@ const ManageWalletContent = React.lazy(() => import('@/components/Wallet/ManageW
 const ManageWebContent = React.lazy(() => import('@/components/WebViewerDrawer/ManageWebContent'));
 const FundStatisticsContent = React.lazy(() => import('@/components/Home/FundView/FundStatisticsContent'));
 const NewsContent = React.lazy(() => import('@/components/Home/NewsList/NewsContent'));
-const HoldingContent = React.lazy(() => import('@/components/Home/QuotationView/HoldingContent'));
 const FundFlowContent = React.lazy(() => import('@/components/Home/QuotationView/FundFlowContent'));
 const ExchangeContent = React.lazy(() => import('@/components/Home/ZindexView/ExchangeContent'));
 const QuoteCenterContent = React.lazy(() => import('@/components/Home/QuotationView/QuoteCenterContent'));
@@ -118,9 +116,9 @@ const AppCenterContent: React.FC<AppCenterContentProps> = (props) => {
   const [showManageStockDrawer, { setTrue: openManageStockDrawer, setFalse: closeManageStockDrawer }] = useBoolean(false);
   const [showManageCoinDrawer, { setTrue: openManageCoinDrawer, setFalse: closeManageCoinDrawer }] = useBoolean(false);
   const [showManageWebDrawer, { setTrue: openManageWebDrawer, setFalse: closeManageWebDrawer }] = useBoolean(false);
-  const [showFundsStatisticsDrawer, { setTrue: openFundStatisticsDrawer, setFalse: closeFundStatisticsDrawer }] = useBoolean(false);
+  const [showFundsStatisticsDrawer, { setTrue: openFundStatisticsDrawer, setFalse: closeFundStatisticsDrawer }] =
+    useBoolean(false);
   const [showNewsDrawer, { setTrue: openNewsDrawer, setFalse: closeNewsDrawer }] = useBoolean(false);
-  const [showHoldingDrawer, { setTrue: openHoldingDrawer, setFalse: closeHoldingDrawer }] = useBoolean(false);
   const [showFundFlowDrawer, { setTrue: openFundFlowDrawer, setFalse: closeFundFlowDrawer }] = useBoolean(false);
   const [showExchangeDrawer, { setTrue: openExchangeDrawer, setFalse: closeExchangeDrawer }] = useBoolean(false);
   const [showQuoteCenterDrawer, { setTrue: openQuoteCenterDrawer, setFalse: closeQuoteCenterDrawer }] = useBoolean(false);
@@ -128,11 +126,14 @@ const AppCenterContent: React.FC<AppCenterContentProps> = (props) => {
   const [showFundRankingDrawer, { setTrue: openFundRankingDrawer, setFalse: closeFundRankingDrawer }] = useBoolean(false);
   const [showStockRankingDrawer, { setTrue: openStockRankingDrawer, setFalse: closeStockRankingDrawer }] = useBoolean(false);
   const [showCoinRankingDrawer, { setTrue: openCoinRankingDrawer, setFalse: closeCoinRankingDrawer }] = useBoolean(false);
-  const [showEconomicCalendarDrawer, { setTrue: openEconomicCalendarDrawer, setFalse: closeEconomicCalendarDrawer }] = useBoolean(false);
+  const [showEconomicCalendarDrawer, { setTrue: openEconomicCalendarDrawer, setFalse: closeEconomicCalendarDrawer }] =
+    useBoolean(false);
   const [showGoldMarketDrawer, { setTrue: openGoldMarketDrawer, setFalse: closeGoldMarketDrawer }] = useBoolean(false);
   const [showCalculatorDrawer, { setTrue: openCalculatorDrawer, setFalse: closeCalculatorDrawer }] = useBoolean(false);
-  const [showTranslateSettingDrawer, { setTrue: openTranslateSettingDrawer, setFalse: closeTranslateSettingDrawer }] = useBoolean(false);
-  const [showChatGPTSettingDrawer, { setTrue: openChatGPTSettingDrawer, setFalse: closeChatGPTSettingDrawer }] = useBoolean(false);
+  const [showTranslateSettingDrawer, { setTrue: openTranslateSettingDrawer, setFalse: closeTranslateSettingDrawer }] =
+    useBoolean(false);
+  const [showChatGPTSettingDrawer, { setTrue: openChatGPTSettingDrawer, setFalse: closeChatGPTSettingDrawer }] =
+    useBoolean(false);
 
   const openWebView = useOpenWebView();
 
@@ -222,12 +223,6 @@ const AppCenterContent: React.FC<AppCenterContentProps> = (props) => {
                 iconType: Enums.WebIconType.Svg,
                 icon: <RiNewspaperFill style={{ ...iconSize }} />,
                 click: openNewsDrawer,
-              },
-              {
-                title: '沪深港通股',
-                iconType: Enums.WebIconType.Svg,
-                icon: <RiExchangeFill style={{ ...iconSize }} />,
-                click: openHoldingDrawer,
               },
               {
                 title: '板块资金流',
@@ -362,9 +357,6 @@ const AppCenterContent: React.FC<AppCenterContentProps> = (props) => {
         </CustomDrawer>
         <CustomDrawer show={showQuoteCenterDrawer}>
           <QuoteCenterContent onClose={closeQuoteCenterDrawer} onEnter={closeQuoteCenterDrawer} />
-        </CustomDrawer>
-        <CustomDrawer show={showHoldingDrawer}>
-          <HoldingContent onClose={closeHoldingDrawer} onEnter={closeHoldingDrawer} />
         </CustomDrawer>
         <CustomDrawer show={showEconomicDataDrawer}>
           <EconomicDataContent onClose={closeEconomicDataDrawer} onEnter={closeEconomicDataDrawer} />
