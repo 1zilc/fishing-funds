@@ -37,3 +37,10 @@
 .ant-slider {
   margin: 0;
 }
+// tabs去除hover导航栏
+.ant-tabs-nav-operations {
+  display: none !important;
+}
+.ant-tabs-nav {
+  padding-right: 8px;
+}

@@ -112,7 +112,6 @@ function main() {
     Enums.SystemThemeType.Auto
   ) as Enums.SystemThemeType;
   // mb.app.commandLine.appendSwitch('disable-backgrounding-occluded-windows', 'true');
-
   // ipcMain 主进程相关监听
   ipcMain.handle('show-message-box', (event, config) => {
     return dialog.showMessageBox(config);
