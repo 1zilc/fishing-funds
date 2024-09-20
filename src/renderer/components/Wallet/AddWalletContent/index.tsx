@@ -35,7 +35,7 @@ const AddWalletContent: React.FC<AddFundContentProps> = (props) => {
       return;
     }
     setFieldNameMessageTip({ show: false, text: '' });
-    await dispatch(addWalletConfigAction({ name, iconIndex, code, funds: [] }));
+    await dispatch(addWalletConfigAction({ name, iconIndex, code, funds: [], stocks: [] }));
     props.onEnter();
   };
 

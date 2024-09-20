@@ -34,7 +34,7 @@ const Recent: React.FC<RecentProps> = (props) => {
   return (
     <ChartCard auto onFresh={runNewsGetBondList}>
       <div className={styles.content}>
-        <Table
+        <Table<typeof data.list>
           rowKey="code"
           size="small"
           columns={[
