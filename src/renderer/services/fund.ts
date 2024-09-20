@@ -1,6 +1,6 @@
 import { fromUint8Array } from 'js-base64';
 import NP from 'number-precision';
-import cheerio from 'cheerio';
+import * as cheerio from 'cheerio';
 import dayjs from 'dayjs';
 import request from '@/utils/request';
 import * as Utils from '@/utils';

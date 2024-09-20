@@ -1,6 +1,6 @@
 import dayjs from 'dayjs';
 import { fromUint8Array } from 'js-base64';
-import cheerio from 'cheerio';
+import * as cheerio from 'cheerio';
 import NP from 'number-precision';
 import request from '@/utils/request';
 import * as Utils from '@/utils';
@@ -856,9 +856,7 @@ export async function GetUSCompany(secid: string) {
 export async function GetXSBCompany(secid: string) {
   try {
     const [mk, code] = secid.split('.');
-    const { body: html } = await request<string>(
-      `https:xinsanban.eastmoney.com/F10/CompanyInfo/Introduction/${code}.html`
-    );
+    const { body: html } = await request<string>(`https:xinsanban.eastmoney.com/F10/CompanyInfo/Introduction/${code}.html`);
     const $ = cheerio.load(html);
     const gsjs = $("span:contains('公司简介')").next().text();
     const sshy = $("span:contains('行业分类')").next().text();
@@ -958,15 +956,7 @@ export async function GetCloseDayDates() {
   }
 }
 
-export async function GetMeetingData({
-  startTime,
-  endTime,
-  code,
-}: {
-  startTime: string;
-  endTime: string;
-  code: string;
-}) {
+export async function GetMeetingData({ startTime, endTime, code }: { startTime: string; endTime: string; code: string }) {
   try {
     const { body } = await request<{
       version: 'b0ba2c16623998ee2e8c464dd1f32ccd';

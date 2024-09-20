@@ -1,6 +1,6 @@
 import dayjs from 'dayjs';
 import request from '@/utils/request';
-import cheerio from 'cheerio';
+import * as cheerio from 'cheerio';
 import * as Enums from '@/utils/enums';
 
 // 获取股市直播
