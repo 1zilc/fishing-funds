@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useRef } from 'react';
 import { useBoolean, useMemoizedFn } from 'ahooks';
 import { Input } from 'antd';
 import {
@@ -26,6 +26,7 @@ import StandCard from '@/components/Card/StandCard';
 import QuickSearch from '@/components/Toolbar/AppCenterContent/QuickSearch';
 import WebAppIcon from '@/components/Toolbar/AppCenterContent/WebAppIcon';
 import SearchGroup from '@/components/Toolbar/AppCenterContent/SearchGroup';
+import SearchHistory, { type SearchHistoryRef } from '@/components/SearchHistory';
 
 import * as Enums from '@/utils/enums';
 import * as Utils from '@/utils';
@@ -110,6 +111,8 @@ const searchPlaceholders = ['输入网站地址', '搜索股票、基金、板�
 const AppCenterContent: React.FC<AppCenterContentProps> = (props) => {
   const [keyword, setKeyword] = useState('');
   const { webConfig } = useAppSelector((state) => state.web.config);
+  const searchHistoryRef = useRef<SearchHistoryRef>(null);
+
   const [showManageFundDrawer, { setTrue: openManageFundDrawer, setFalse: closeManageFundDrawer }] = useBoolean(false);
   const [showManageWalletDrawer, { setTrue: openManageWalletDrawer, setFalse: closeManageWalletDrawer }] = useBoolean(false);
   const [showManageZindexDrawer, { setTrue: openManageZindexDrawer, setFalse: closeManageZindexDrawer }] = useBoolean(false);
@@ -139,6 +142,7 @@ const AppCenterContent: React.FC<AppCenterContentProps> = (props) => {
 
   const onSearch = useMemoizedFn((value: string) => {
     const { valid, url } = Utils.CheckUrlValid(value);
+    searchHistoryRef.current?.addSearchHistory(value);
     if (valid) {
       openWebView({ title: '', url });
     }
@@ -320,6 +324,7 @@ const AppCenterContent: React.FC<AppCenterContentProps> = (props) => {
             enterButton
             allowClear
           />
+          <SearchHistory storageKey="allSearchHistory" ref={searchHistoryRef} onClickRecord={setKeyword} />
         </div>
         <QuickSearch value={keyword} />
         {apps}

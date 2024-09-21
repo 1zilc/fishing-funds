@@ -19,6 +19,7 @@ const SearchGroup: React.FC<SearchGroupProps> = React.memo((props) => {
     manual: true,
     ready: !!keyword,
     onSuccess: setGroupList,
+    debounceWait: 500,
   });
 
   const { run: onSearch } = useDebounceFn(runSearch);

@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useDebounceFn } from 'ahooks';
 import { Input, message, Button } from 'antd';
 import CustomDrawer from '@/components/CustomDrawer';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
+import SearchHistory, { type SearchHistoryRef } from '@/components/SearchHistory';
 import Empty from '@/components/Empty';
 import { addCoinAction } from '@/store/features/coin';
 import { SearchPromiseWorker } from '@/workers';
@@ -24,12 +25,14 @@ const { Search } = Input;
 
 const AddCoinContent: React.FC<AddCoinContentProps> = (props) => {
   const { defaultName } = props;
+  const [keyword, setKeyword] = useState(defaultName);
   const dispatch = useAppDispatch();
   const [coins, setCoins] = useState<Coin.RemoteCoin[]>([]);
   const { codeMap } = useAppSelector((state) => state.coin.config);
   const remoteCoins = useAppSelector((state) => state.coin.remoteCoins);
   const remoteCoinsMap = useAppSelector((state) => state.coin.remoteCoinsMap);
   const { data: detailCode, show: showDetailDrawer, set: setDetailDrawer, close: closeDetailDrawer } = useDrawer('');
+  const searchHistoryRef = useRef<SearchHistoryRef>(null);
 
   async function onAdd(code: string) {
     const coin = await Helpers.Coin.GetCoin(code);
@@ -59,6 +62,7 @@ const AddCoinContent: React.FC<AddCoinContentProps> = (props) => {
           value,
         })
         .finally(() => searchPromiseWorker.terminate());
+      searchHistoryRef.current?.addSearchHistory(value);
       setCoins(searchList);
     }
   });
@@ -74,7 +78,24 @@ const AddCoinContent: React.FC<AddCoinContentProps> = (props) => {
       <div className={styles.content}>
         <section>
           <label>关键字：</label>
-          <Search defaultValue={defaultName} type="text" placeholder="货币代码或名称关键字" enterButton onSearch={onSearch} size="small" />
+          <Search
+            value={keyword}
+            onChange={(e) => setKeyword(e.target.value)}
+            defaultValue={defaultName}
+            type="text"
+            placeholder="货币代码或名称关键字"
+            enterButton
+            onSearch={onSearch}
+            size="small"
+          />
+          <SearchHistory
+            storageKey="coinSearchHistory"
+            ref={searchHistoryRef}
+            onClickRecord={(record) => {
+              setKeyword(record);
+              onSearch(record);
+            }}
+          />
         </section>
       </div>
       {coins.length ? (
