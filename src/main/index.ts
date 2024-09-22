@@ -15,7 +15,6 @@ import {
 import windowStateKeeper from 'electron-window-state';
 import { Menubar } from 'menubar';
 import AppUpdater from './autoUpdater';
-import { appIcon } from './icon';
 import { createTray } from './tray';
 import { createMenubar } from './menubar';
 import TouchBarManager from './touchbar';
@@ -101,7 +100,7 @@ function main() {
     fullScreen: false,
   });
   mb = createMenubar({ tray, mainWindowState });
-  const appUpdater = new AppUpdater({ icon: appIcon, mb });
+  const appUpdater = new AppUpdater({ mb });
   const touchBarManager = new TouchBarManager([], mb);
   const contextMenuManager = new ContextMenuManager({ mb, updater: appUpdater });
   const proxyManager = new ProxyManager();
@@ -192,9 +191,6 @@ function main() {
   });
   ipcMain.handle('update-tray-context-menu-wallets', (event, config) => {
     contextMenuManager.updateWalletMenu(config);
-  });
-  ipcMain.handle('get-app-icon', (event, config) => {
-    return appIcon.toDataURL();
   });
   ipcMain.handle('get-version', (event, config) => {
     return app.getVersion();

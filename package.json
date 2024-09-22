@@ -7,7 +7,7 @@
     "dev": "electron-vite dev",
     "build": "electron-vite build",
     "preview": "electron-vite preview",
-    "build:icon": "electron-icon-builder --input=./assets/icon.png --output=./icon-build",
+    "build:icon": "electron-icon-builder --input=./build/icon.png --output=./icon-build",
     "package": "npm run build && electron-builder build -p never",
     "package-mac": "npm run build && electron-builder build -m -p never",
     "package-all": "npm run build && electron-builder build -mwl -p never",
@@ -18,9 +18,6 @@
     "productName": "Fishing Funds",
     "appId": "com.electron.1zilc.fishing-funds",
     "asar": true,
-    "asarUnpack": [
-      "assets/**"
-    ],
     "copyright": "Copyright © 2024 1zilc",
     "files": [
       "dist"
@@ -28,7 +25,7 @@
     "directories": {
       "app": "release/app",
       "output": "release/build",
-      "buildResources": "assets"
+      "buildResources": "build"
     },
     "extraResources": [
       "assets"
@@ -38,7 +35,7 @@
         "ext": "ff",
         "role": "Editor",
         "description": "Fishing Funds 备份文件",
-        "icon": "assets/icon"
+        "icon": "build/icon"
       }
     ],
     "mac": {
@@ -56,8 +53,8 @@
       ],
       "type": "distribution",
       "hardenedRuntime": true,
-      "entitlements": "assets/entitlements.mac.plist",
-      "entitlementsInherit": "assets/entitlements.mac.plist",
+      "entitlements": "build/entitlements.mac.plist",
+      "entitlementsInherit": "build/entitlements.mac.plist",
       "gatekeeperAssess": false
     },
     "dmg": {
