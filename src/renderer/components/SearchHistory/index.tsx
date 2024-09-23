@@ -21,7 +21,7 @@ const SearchHistory = React.forwardRef<SearchHistoryRef, SearchHistoryProps>((pr
     setSearchList((list) => {
       const newList = list!.filter((item) => item !== text);
       newList.unshift(text);
-      return newList;
+      return newList.slice(0, 15);
     });
   });
 
