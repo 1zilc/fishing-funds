@@ -425,7 +425,7 @@ export function useMappingLocalToSystemSetting() {
         ipcRenderer.invoke('set-proxy', { mode: 'system' });
         break;
       case Enums.ProxyType.Http:
-        ipcRenderer.invoke('set-proxy', { proxyRules: `http=${proxyHostSetting}:${proxyPortSetting}` });
+        ipcRenderer.invoke('set-proxy', { proxyRules: `${proxyHostSetting}:${proxyPortSetting}` });
         break;
       case Enums.ProxyType.Socks:
         ipcRenderer.invoke('set-proxy', { proxyRules: `socks=${proxyHostSetting}:${proxyPortSetting}` });
@@ -610,9 +610,7 @@ export function useAllConfigBackup() {
       const backupConfig: Backup.Config = await decryptFF(encodeBackupConfig);
       const { response } = await dialog.showMessageBox({
         title: `确认从备份文件恢复`,
-        message: `备份时间：${dayjs(backupConfig.timestamp).format(
-          'YYYY-MM-DD HH:mm:ss'
-        )} ，当前数据将被覆盖，请谨慎操作`,
+        message: `备份时间：${dayjs(backupConfig.timestamp).format('YYYY-MM-DD HH:mm:ss')} ，当前数据将被覆盖，请谨慎操作`,
         buttons: ['确定', '取消'],
       });
       if (response === 0) {

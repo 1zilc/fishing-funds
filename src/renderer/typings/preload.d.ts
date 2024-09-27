@@ -1,10 +1,10 @@
-import { GotRequestFunction } from 'got';
 import { Shell, Dialog, App, IpcRenderer, Clipboard } from 'electron';
+import type HttpClient from '../../main/httpClient';
 
 declare global {
   interface Window {
     contextModules: {
-      got: GotRequestFunction;
+      request: HttpClient['request'];
       process: {
         production: boolean;
         platform: NodeJS.Platform;

@@ -15,6 +15,9 @@
 ![Sandbox](https://img.shields.io/badge/sandbox-yes-blueviolet)
 <a href="https://qm.qq.com/cgi-bin/qm/qr?k=Su4GnbsicHvsPrbLMwNu557LyZQO19KZ&jump_from=webapi"><img src="https://img.shields.io/badge/QQ%E7%BE%A4-732268738-red" alt="QQ群" /></a>
 ![GitHub](https://img.shields.io/github/license/1zilc/fishing-funds)
+![Windows](https://img.shields.io/badge/-Windows-blue?logo=windows&logoColor=white)
+![MacOS](https://img.shields.io/badge/-macOS-black?&logo=apple&logoColor=white)
+![Linux](https://img.shields.io/badge/-Linux-yellow?logo=linux&logoColor=white)
 
 > 基金,大盘,股票,虚拟货币状态栏显示小应用,基于 Electron 开发,支持 MacOS,Windows,Linux 客户端,数据源来自天天基金,蚂蚁基金,同花顺-爱基金,腾讯证券等
 
@@ -52,7 +55,6 @@
 
 > 注意 ⚠️：由于 macOS 不允许打开未签名的程序，如果出现软件无法打开请进行以下操作 或[参考这里](https://github.com/1zilc/fishing-funds/issues/149)
 
-
 ```bash
 # 终端执行
 sudo xattr -d com.apple.quarantine "/Applications/Fishing Funds.app"
@@ -80,7 +82,7 @@ sudo xattr -d com.apple.quarantine "/Applications/Fishing Funds.app"
 ## 系统代理
 
 - 由于众所周知的原因，部分货币接口无法访问，Fishing Funds 已适配系统代理访问
-- 支持 http 代理、https 代理、socks 代理
+- 支持 http 代理、socks 代理
 - 自行将以下货币接口加入自己的代理软件规则中，并重启 Fishing Funds
 
 ```

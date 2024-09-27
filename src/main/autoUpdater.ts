@@ -9,7 +9,7 @@ const { autoUpdater } = ElectronUpdater;
 export default class AppUpdater {
   process = '';
 
-  constructor(conf: { icon?: NativeImage; mb: Menubar }) {
+  constructor(conf: { mb: Menubar }) {
     autoUpdater.autoDownload = false;
     // log.transports.file.level = 'info';
     // Object.defineProperty(app, 'isPackaged', {
@@ -34,7 +34,6 @@ export default class AppUpdater {
       switch (this.process) {
         case 'mainer':
           dialog.showMessageBox({
-            icon: conf.icon,
             type: 'info',
             title: `无可用更新`,
             message: `当前为最新版本！`,
@@ -59,7 +58,6 @@ export default class AppUpdater {
         case 'mainer':
           dialog
             .showMessageBox({
-              icon: conf.icon,
               type: 'info',
               title: `发现新版本 v${data.version}`,
               message: `您现在要更新 v${data.version} 吗？`,

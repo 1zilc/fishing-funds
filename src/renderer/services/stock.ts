@@ -1,6 +1,6 @@
 import dayjs from 'dayjs';
 import { fromUint8Array } from 'js-base64';
-import cheerio from 'cheerio';
+import * as cheerio from 'cheerio';
 import NP from 'number-precision';
 import request from '@/utils/request';
 import * as Utils from '@/utils';
@@ -160,14 +160,15 @@ export async function GetTrendFromEastmoney(secid: string) {
 
 export async function GetPicTrendFromEastmoney(secid: string) {
   try {
-    const { rawBody } = await request('https://webquotepic.eastmoney.com/GetPic.aspx', {
+    const { body } = await request('https://webquotepic.eastmoney.com/GetPic.aspx', {
       searchParams: {
         nid: secid,
         imageType: 'GNR',
         token: Utils.MakeHash(),
       },
+      responseType: 'arraybuffer',
     });
-    const b64encoded = fromUint8Array(new Uint8Array(rawBody));
+    const b64encoded = fromUint8Array(new Uint8Array(body));
     return `data:image/png;base64,${b64encoded}`;
   } catch (error) {
     return;
@@ -606,6 +607,80 @@ export async function GetNorthRankFromEastmoney(code: string) {
     return [];
   }
 }
+export async function GetStockRank(code: string) {
+  try {
+    const { body } = await request<{
+      rc: 0;
+      rt: 6;
+      svr: 177617634;
+      lt: 1;
+      full: 1;
+      dlmkts: '';
+      data: {
+        total: 5648;
+        diff: {
+          f1: 2;
+          f2: '-';
+          f3: '-';
+          f4: '-';
+          f5: '-';
+          f6: '-';
+          f7: '-';
+          f8: 0.0;
+          f9: 11.32;
+          f10: '-';
+          f11: '-';
+          f12: '920118';
+          f13: 0;
+          f14: '太湖远大';
+          f15: '-';
+          f16: '-';
+          f17: '-';
+          f18: 16.96;
+          f20: 863196160;
+          f21: 225137216;
+          f22: '-';
+          f23: 1.54;
+          f24: -0.24;
+          f25: -0.24;
+          f62: '-';
+          f115: 11.1;
+          f128: '-';
+          f140: '-';
+          f141: '-';
+          f136: '-';
+          f152: 2;
+        }[];
+      };
+    }>('https://80.push2.eastmoney.com/api/qt/clist/get', {
+      searchParams: {
+        pn: 1,
+        pz: 100,
+        po: 1,
+        np: 1,
+        fltt: 2,
+        invt: 2,
+        dect: 1,
+        wbp2u: '|0|0|0|web',
+        fid: 'f3',
+        fs: code,
+        fields: 'f1,f2,f3,f4,f5,f6,f7,f8,f9,f10,f12,f13,f14,f15,f16,f17,f18,f20,f21,f23,f24,f25,f22,f11,f62,f128,f136,f115,f152',
+        _: Date.now(),
+      },
+      responseType: 'json',
+    });
+
+    return (body?.data?.diff || []).map((_) => ({
+      market: _.f13,
+      code: _.f12,
+      name: _.f14,
+      secid: `${_.f13}.${_.f12}`,
+      zdf: _.f3,
+    }));
+  } catch (error) {
+    return [];
+  }
+}
 
 export async function GetABCompany(secid: string) {
   try {
@@ -855,9 +930,7 @@ export async function GetUSCompany(secid: string) {
 export async function GetXSBCompany(secid: string) {
   try {
     const [mk, code] = secid.split('.');
-    const { body: html } = await request<string>(
-      `https:xinsanban.eastmoney.com/F10/CompanyInfo/Introduction/${code}.html`
-    );
+    const { body: html } = await request<string>(`https:xinsanban.eastmoney.com/F10/CompanyInfo/Introduction/${code}.html`);
     const $ = cheerio.load(html);
     const gsjs = $("span:contains('公司简介')").next().text();
     const sshy = $("span:contains('行业分类')").next().text();
@@ -957,15 +1030,7 @@ export async function GetCloseDayDates() {
   }
 }
 
-export async function GetMeetingData({
-  startTime,
-  endTime,
-  code,
-}: {
-  startTime: string;
-  endTime: string;
-  code: string;
-}) {
+export async function GetMeetingData({ startTime, endTime, code }: { startTime: string; endTime: string; code: string }) {
   try {
     const { body } = await request<{
       version: 'b0ba2c16623998ee2e8c464dd1f32ccd';

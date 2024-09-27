@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useDebounceFn, useRequest } from 'ahooks';
 import { Input } from 'antd';
 
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
 import Empty from '@/components/Empty';
 import StockSearch, { stockTypesConfig } from '@/components/Toolbar/AppCenterContent/StockSearch';
+import SearchHistory, { type SearchHistoryRef } from '@/components/SearchHistory';
 import * as Services from '@/services';
 
 import styles from './index.module.scss';
@@ -19,7 +20,9 @@ const { Search } = Input;
 
 const AddStockContent: React.FC<AddStockContentProps> = (props) => {
   const { defaultName } = props;
+  const [keyword, setKeyword] = useState(defaultName);
   const [groupList, setGroupList] = useState<Stock.SearchResult[]>([]);
+  const searchHistoryRef = useRef<SearchHistoryRef>(null);
 
   const { run: runSearch, loading: loadingSearchFromEastmoney } = useRequest(Services.Stock.SearchFromEastmoney, {
     manual: true,
@@ -32,6 +35,7 @@ const AddStockContent: React.FC<AddStockContentProps> = (props) => {
       setGroupList([]);
     } else {
       runSearch(value);
+      searchHistoryRef.current?.addSearchHistory(value);
     }
   });
 
@@ -47,6 +51,8 @@ const AddStockContent: React.FC<AddStockContentProps> = (props) => {
         <section>
           <label>关键字：</label>
           <Search
+            value={keyword}
+            onChange={(e) => setKeyword(e.target.value)}
             defaultValue={defaultName}
             type="text"
             placeholder="股票代码或名称关键字"
@@ -54,6 +60,14 @@ const AddStockContent: React.FC<AddStockContentProps> = (props) => {
             onSearch={onSearch}
             size="small"
             loading={loadingSearchFromEastmoney}
+          />
+          <SearchHistory
+            storageKey="stockSearchHistory"
+            ref={searchHistoryRef}
+            onClickRecord={(record) => {
+              setKeyword(record);
+              runSearch(record);
+            }}
           />
         </section>
         {groupList.length ? <StockSearch groupList={groupList} /> : <Empty text="暂无相关数据~" />}

@@ -37,13 +37,13 @@ const NorthRank: React.FC<PropsWithChildren<NorthRankProps>> = () => {
       render: (text: string, record: any) => <a>{text}</a>,
     },
     {
-      title: `日涨跌`,
+      title: `涨跌`,
       dataIndex: 'CHANGE_RATE',
       render: (text: string) => <div className={Utils.GetValueColor(text).textClass}>{text}%</div>,
       sorter: (a: any, b: any) => a.CHANGE_RATE - b.CHANGE_RATE,
     },
     {
-      title: `市值增持`,
+      title: `增持`,
       dataIndex: 'ADD_MARKET_CAP',
       render: (text: string) => <div>{text}亿</div>,
       sorter: (a: any, b: any) => a.ADD_MARKET_CAP - b.ADD_MARKET_CAP,

@@ -42,7 +42,6 @@ export async function checkEnvTool() {
   }
 
   if (isDebug) {
-    await (await import('electron-debug')).default();
     // 关闭自签ca错误
     app.commandLine.appendSwitch('ignore-certificate-errors');
   }

@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useRef } from 'react';
 import { useBoolean, useMemoizedFn } from 'ahooks';
 import { Input } from 'antd';
 import {
@@ -18,7 +18,6 @@ import {
   RiListOrdered,
   RiCoinFill,
   RiLayoutMasonryFill,
-  RiExchangeFill,
 } from 'react-icons/ri';
 
 import CustomDrawer from '@/components/CustomDrawer';
@@ -27,6 +26,7 @@ import StandCard from '@/components/Card/StandCard';
 import QuickSearch from '@/components/Toolbar/AppCenterContent/QuickSearch';
 import WebAppIcon from '@/components/Toolbar/AppCenterContent/WebAppIcon';
 import SearchGroup from '@/components/Toolbar/AppCenterContent/SearchGroup';
+import SearchHistory, { type SearchHistoryRef } from '@/components/SearchHistory';
 
 import * as Enums from '@/utils/enums';
 import * as Utils from '@/utils';
@@ -41,7 +41,6 @@ const ManageWalletContent = React.lazy(() => import('@/components/Wallet/ManageW
 const ManageWebContent = React.lazy(() => import('@/components/WebViewerDrawer/ManageWebContent'));
 const FundStatisticsContent = React.lazy(() => import('@/components/Home/FundView/FundStatisticsContent'));
 const NewsContent = React.lazy(() => import('@/components/Home/NewsList/NewsContent'));
-const HoldingContent = React.lazy(() => import('@/components/Home/QuotationView/HoldingContent'));
 const FundFlowContent = React.lazy(() => import('@/components/Home/QuotationView/FundFlowContent'));
 const ExchangeContent = React.lazy(() => import('@/components/Home/ZindexView/ExchangeContent'));
 const QuoteCenterContent = React.lazy(() => import('@/components/Home/QuotationView/QuoteCenterContent'));
@@ -112,15 +111,17 @@ const searchPlaceholders = ['输入网站地址', '搜索股票、基金、板�
 const AppCenterContent: React.FC<AppCenterContentProps> = (props) => {
   const [keyword, setKeyword] = useState('');
   const { webConfig } = useAppSelector((state) => state.web.config);
+  const searchHistoryRef = useRef<SearchHistoryRef>(null);
+
   const [showManageFundDrawer, { setTrue: openManageFundDrawer, setFalse: closeManageFundDrawer }] = useBoolean(false);
   const [showManageWalletDrawer, { setTrue: openManageWalletDrawer, setFalse: closeManageWalletDrawer }] = useBoolean(false);
   const [showManageZindexDrawer, { setTrue: openManageZindexDrawer, setFalse: closeManageZindexDrawer }] = useBoolean(false);
   const [showManageStockDrawer, { setTrue: openManageStockDrawer, setFalse: closeManageStockDrawer }] = useBoolean(false);
   const [showManageCoinDrawer, { setTrue: openManageCoinDrawer, setFalse: closeManageCoinDrawer }] = useBoolean(false);
   const [showManageWebDrawer, { setTrue: openManageWebDrawer, setFalse: closeManageWebDrawer }] = useBoolean(false);
-  const [showFundsStatisticsDrawer, { setTrue: openFundStatisticsDrawer, setFalse: closeFundStatisticsDrawer }] = useBoolean(false);
+  const [showFundsStatisticsDrawer, { setTrue: openFundStatisticsDrawer, setFalse: closeFundStatisticsDrawer }] =
+    useBoolean(false);
   const [showNewsDrawer, { setTrue: openNewsDrawer, setFalse: closeNewsDrawer }] = useBoolean(false);
-  const [showHoldingDrawer, { setTrue: openHoldingDrawer, setFalse: closeHoldingDrawer }] = useBoolean(false);
   const [showFundFlowDrawer, { setTrue: openFundFlowDrawer, setFalse: closeFundFlowDrawer }] = useBoolean(false);
   const [showExchangeDrawer, { setTrue: openExchangeDrawer, setFalse: closeExchangeDrawer }] = useBoolean(false);
   const [showQuoteCenterDrawer, { setTrue: openQuoteCenterDrawer, setFalse: closeQuoteCenterDrawer }] = useBoolean(false);
@@ -128,16 +129,20 @@ const AppCenterContent: React.FC<AppCenterContentProps> = (props) => {
   const [showFundRankingDrawer, { setTrue: openFundRankingDrawer, setFalse: closeFundRankingDrawer }] = useBoolean(false);
   const [showStockRankingDrawer, { setTrue: openStockRankingDrawer, setFalse: closeStockRankingDrawer }] = useBoolean(false);
   const [showCoinRankingDrawer, { setTrue: openCoinRankingDrawer, setFalse: closeCoinRankingDrawer }] = useBoolean(false);
-  const [showEconomicCalendarDrawer, { setTrue: openEconomicCalendarDrawer, setFalse: closeEconomicCalendarDrawer }] = useBoolean(false);
+  const [showEconomicCalendarDrawer, { setTrue: openEconomicCalendarDrawer, setFalse: closeEconomicCalendarDrawer }] =
+    useBoolean(false);
   const [showGoldMarketDrawer, { setTrue: openGoldMarketDrawer, setFalse: closeGoldMarketDrawer }] = useBoolean(false);
   const [showCalculatorDrawer, { setTrue: openCalculatorDrawer, setFalse: closeCalculatorDrawer }] = useBoolean(false);
-  const [showTranslateSettingDrawer, { setTrue: openTranslateSettingDrawer, setFalse: closeTranslateSettingDrawer }] = useBoolean(false);
-  const [showChatGPTSettingDrawer, { setTrue: openChatGPTSettingDrawer, setFalse: closeChatGPTSettingDrawer }] = useBoolean(false);
+  const [showTranslateSettingDrawer, { setTrue: openTranslateSettingDrawer, setFalse: closeTranslateSettingDrawer }] =
+    useBoolean(false);
+  const [showChatGPTSettingDrawer, { setTrue: openChatGPTSettingDrawer, setFalse: closeChatGPTSettingDrawer }] =
+    useBoolean(false);
 
   const openWebView = useOpenWebView();
 
   const onSearch = useMemoizedFn((value: string) => {
     const { valid, url } = Utils.CheckUrlValid(value);
+    searchHistoryRef.current?.addSearchHistory(value);
     if (valid) {
       openWebView({ title: '', url });
     }
@@ -222,12 +227,6 @@ const AppCenterContent: React.FC<AppCenterContentProps> = (props) => {
                 iconType: Enums.WebIconType.Svg,
                 icon: <RiNewspaperFill style={{ ...iconSize }} />,
                 click: openNewsDrawer,
-              },
-              {
-                title: '沪深港通股',
-                iconType: Enums.WebIconType.Svg,
-                icon: <RiExchangeFill style={{ ...iconSize }} />,
-                click: openHoldingDrawer,
               },
               {
                 title: '板块资金流',
@@ -325,6 +324,7 @@ const AppCenterContent: React.FC<AppCenterContentProps> = (props) => {
             enterButton
             allowClear
           />
+          <SearchHistory storageKey="allSearchHistory" ref={searchHistoryRef} onClickRecord={setKeyword} />
         </div>
         <QuickSearch value={keyword} />
         {apps}
@@ -362,9 +362,6 @@ const AppCenterContent: React.FC<AppCenterContentProps> = (props) => {
         </CustomDrawer>
         <CustomDrawer show={showQuoteCenterDrawer}>
           <QuoteCenterContent onClose={closeQuoteCenterDrawer} onEnter={closeQuoteCenterDrawer} />
-        </CustomDrawer>
-        <CustomDrawer show={showHoldingDrawer}>
-          <HoldingContent onClose={closeHoldingDrawer} onEnter={closeHoldingDrawer} />
         </CustomDrawer>
         <CustomDrawer show={showEconomicDataDrawer}>
           <EconomicDataContent onClose={closeEconomicDataDrawer} onEnter={closeEconomicDataDrawer} />

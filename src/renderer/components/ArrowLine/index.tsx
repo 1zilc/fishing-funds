@@ -6,7 +6,7 @@ export interface ArrowLineProps {
 }
 const ArrowLine: React.FC<ArrowLineProps> = React.memo(({ value }) =>
   Number(value) > 0 ? (
-    <RiArrowUpSFill className="svg-up" style={{ fintSize: 20 }} />
+    <RiArrowUpSFill className="svg-up" />
   ) : Number(value) ? (
     <RiArrowDownSFill className="svg-down" />
   ) : (

@@ -1353,10 +1353,13 @@ export async function GetShanghaiGoldGoodsFromEastmoney() {
 }
 export async function GetMainFundFromEastmoney(code: string) {
   try {
-    const { rawBody } = await request(
-      `https://webquotepic.eastmoney.com/GetPic.aspx?nid=${code}&imageType=FFRS1&type=FFR`
+    const { body } = await request(
+      `https://webquotepic.eastmoney.com/GetPic.aspx?nid=${code}&imageType=FFRS1&type=FFR`,
+      {
+        responseType: 'arraybuffer',
+      }
     );
-    const b64encoded = fromUint8Array(new Uint8Array(rawBody));
+    const b64encoded = fromUint8Array(new Uint8Array(body));
     return `data:image/png;base64,${b64encoded}`;
   } catch (error) {
     return;

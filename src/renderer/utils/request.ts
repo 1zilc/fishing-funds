@@ -1,1 +1,1 @@
-export default window.contextModules.got;
+export default window.contextModules.request;

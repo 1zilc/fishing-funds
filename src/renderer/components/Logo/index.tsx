@@ -1,16 +1,11 @@
 import React from 'react';
-import { useRequest } from 'ahooks';
+import appIcon from '@/static/img/icon.ico';
 import styles from './index.module.scss';
-const { ipcRenderer } = window.contextModules.electron;
 
 export interface LogoProps {
   size?: number;
 }
 const Logo: React.FC<LogoProps> = React.memo((props) => {
-  const { data } = useRequest(ipcRenderer.invoke.bind(null, 'get-app-icon'), {
-    cacheKey: 'get-app-icon',
-    cacheTime: -1,
-  });
   return (
     <div
       className={styles.content}
@@ -19,7 +14,7 @@ const Logo: React.FC<LogoProps> = React.memo((props) => {
         width: props.size,
       }}
     >
-      <img src={data} draggable={false} />
+      <img src={appIcon} draggable={false} />
     </div>
   );
 });

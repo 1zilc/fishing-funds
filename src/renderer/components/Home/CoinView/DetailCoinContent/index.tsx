@@ -44,13 +44,13 @@ export const DetailCoin: React.FC<DetailCoinProps> = (props) => {
 
   return (
     <div className={styles.content} ref={ref}>
-      <div className={clsx(styles.avatarContent)} style={{ backgroundImage: `url(${coin?.image.large})` }}>
+      <div className={clsx(styles.avatarContent)} style={{ backgroundImage: `url(${coin?.image?.large})` }}>
         <div
           className={clsx(styles.avatar, {
             [styles.avatarMiniMode]: miniMode,
           })}
         >
-          <img src={coin?.image.large} />
+          <img src={coin?.image?.large} />
         </div>
       </div>
       <div className={styles.container}>
@@ -104,7 +104,12 @@ export const DetailCoin: React.FC<DetailCoinProps> = (props) => {
               children: (
                 <ChartCard onFresh={runGetDetailFromCoingecko}>
                   <Appraise
-                    data={[coin?.coingecko_score || 0, coin?.developer_score || 0, coin?.community_score || 0, coin?.liquidity_score || 0]}
+                    data={[
+                      coin?.coingecko_score || 0,
+                      coin?.developer_score || 0,
+                      coin?.community_score || 0,
+                      coin?.liquidity_score || 0,
+                    ]}
                   />
                 </ChartCard>
               ),
@@ -150,7 +155,9 @@ export const DetailCoin: React.FC<DetailCoinProps> = (props) => {
               children: (
                 <ChartCard onFresh={runGetDetailFromCoingecko}>
                   <div
-                    dangerouslySetInnerHTML={{ __html: coin?.description?.en?.replace(/<a/g, '<a target="_blank"') || '暂无信息' }}
+                    dangerouslySetInnerHTML={{
+                      __html: coin?.description?.en?.replace(/<a/g, '<a target="_blank"') || '暂无信息',
+                    }}
                   ></div>
                 </ChartCard>
               ),

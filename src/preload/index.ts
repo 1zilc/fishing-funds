@@ -1,7 +1,7 @@
 import { contextBridge, ipcRenderer } from 'electron';
 
 contextBridge.exposeInMainWorld('contextModules', {
-  got: async (url: string, config: any) => ipcRenderer.invoke('got', { url, config }),
+  request: async (url: string, config: any) => ipcRenderer.invoke('request', { url, config }),
   process: {
     production: import.meta.env.PROD,
     platform: process.platform,

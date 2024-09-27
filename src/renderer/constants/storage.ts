@@ -21,4 +21,5 @@ export default {
   FUND_RATING_MAP: 'FUND_RATING_MAP', // 基金评级code -> map
   REMOTE_COIN_MAP: 'REMOTE_COIN_MAP', // 远程货币code -> map
   // other
+  SEARCH_HISTORY: 'SEARCH_HISTORY', // 搜索历史
 };

@@ -33,7 +33,7 @@ export async function FromEastmoney(secid: string) {
         f170: number; // 涨跌幅
         f171: number; // 振幅
       };
-    }>('https://push2.eastmoney.com/api/qt/stock/get?=', {
+    }>('https://push2.eastmoney.com/api/qt/stock/get', {
       searchParams: {
         fields: 'f43,f44,f45,f46,f57,f58,f60,f86,f107,f168,f169,f170,f171',
         secid, // 1.000001
@@ -469,14 +469,15 @@ export async function GetRemoteZindexConfig() {
  */
 export async function GetPicTrendFromEastmoney(secid: string) {
   try {
-    const { rawBody } = await request('https://webquotepic.eastmoney.com/GetPic.aspx', {
+    const { body } = await request('https://webquotepic.eastmoney.com/GetPic.aspx', {
       searchParams: {
         nid: secid,
         imageType: 'r',
         token: Utils.MakeHash(),
       },
+      responseType: 'arraybuffer',
     });
-    const b64encoded = fromUint8Array(new Uint8Array(rawBody));
+    const b64encoded = fromUint8Array(new Uint8Array(body));
     return `data:image/png;base64,${b64encoded}`;
   } catch (error) {
     return;

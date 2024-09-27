@@ -11,34 +11,28 @@ import {
   shell,
   BrowserWindow,
 } from 'electron';
-import got from 'got';
+
 import windowStateKeeper from 'electron-window-state';
 import { Menubar } from 'menubar';
 import AppUpdater from './autoUpdater';
-import { appIcon } from './icon';
 import { createTray } from './tray';
 import { createMenubar } from './menubar';
 import TouchBarManager from './touchbar';
 import LocalStore from './store';
 import { createChildWindow } from './childWindow';
-import Proxy from './proxy';
+import { ProxyManager } from './proxy';
 import HotkeyManager from './hotkey';
 import ContextMenuManager from './contextMenu';
 import { saveImage, saveJsonToCsv, saveString, readFile } from './io';
-import {
-  lockSingleInstance,
-  checkEnvTool,
-  sendMessageToRenderer,
-  setNativeTheme,
-  getOtherWindows,
-  makeFakeUA,
-} from './util';
+import { lockSingleInstance, checkEnvTool, sendMessageToRenderer, setNativeTheme, getOtherWindows, makeFakeUA } from './util';
+import HttpClient from './httpClient';
 import * as Enums from '../renderer/utils/enums';
 
 let mb: Menubar;
 let openBackupFilePath = '';
 let ua = '';
 let fakeUA = '';
+let proxyMode = '';
 
 // FIXME: 部分库缺少对ESM的支持
 global.__filename = url.fileURLToPath(import.meta.url);
@@ -106,9 +100,10 @@ function main() {
     fullScreen: false,
   });
   mb = createMenubar({ tray, mainWindowState });
-  const appUpdater = new AppUpdater({ icon: appIcon, mb });
+  const appUpdater = new AppUpdater({ mb });
   const touchBarManager = new TouchBarManager([], mb);
   const contextMenuManager = new ContextMenuManager({ mb, updater: appUpdater });
+  const proxyManager = new ProxyManager();
   let windowIds: number[] = [];
   const defaultTheme = localStore.get(
     'config',
@@ -116,46 +111,45 @@ function main() {
     Enums.SystemThemeType.Auto
   ) as Enums.SystemThemeType;
   // mb.app.commandLine.appendSwitch('disable-backgrounding-occluded-windows', 'true');
-
   // ipcMain 主进程相关监听
-  ipcMain.handle('show-message-box', async (event, config) => {
+  ipcMain.handle('show-message-box', (event, config) => {
     return dialog.showMessageBox(config);
   });
-  ipcMain.handle('show-save-dialog', async (event, config) => {
+  ipcMain.handle('show-save-dialog', (event, config) => {
     return dialog.showSaveDialog(config);
   });
-  ipcMain.handle('show-open-dialog', async (event, config) => {
+  ipcMain.handle('show-open-dialog', (event, config) => {
     return dialog.showOpenDialog(config);
   });
-  ipcMain.handle('show-current-window', async (event, config) => {
+  ipcMain.handle('show-current-window', (event, config) => {
     mb.window?.show();
   });
-  ipcMain.handle('get-should-use-dark-colors', async (event, config) => {
+  ipcMain.handle('get-should-use-dark-colors', (event, config) => {
     return nativeTheme.shouldUseDarkColors;
   });
-  ipcMain.handle('set-native-theme-source', async (event, config) => {
+  ipcMain.handle('set-native-theme-source', (event, config) => {
     setNativeTheme(config);
   });
-  ipcMain.handle('set-login-item-settings', async (event, config) => {
+  ipcMain.handle('set-login-item-settings', (event, config) => {
     app.setLoginItemSettings(config);
   });
-  ipcMain.handle('app-quit', async (event, config) => {
+  ipcMain.handle('app-quit', (event, config) => {
     app.quit();
   });
-  ipcMain.handle('app-relaunch', async (event, config) => {
+  ipcMain.handle('app-relaunch', (event, config) => {
     app.relaunch();
     app.exit();
   });
-  ipcMain.handle('set-tray-content', async (event, config) => {
+  ipcMain.handle('set-tray-content', (event, config) => {
     tray.setTitle(config);
   });
-  ipcMain.handle('check-update', async (event) => {
+  ipcMain.handle('check-update', (event) => {
     appUpdater.checkUpdate('renderer');
   });
-  ipcMain.handle('shell-openExternal', async (event, config) => {
+  ipcMain.handle('shell-openExternal', (event, config) => {
     shell.openExternal(config);
   });
-  ipcMain.handle('set-menubar-visible', async (event, config) => {
+  ipcMain.handle('set-menubar-visible', (event, config) => {
     if (config) {
       mb.showWindow();
     } else {
@@ -163,22 +157,22 @@ function main() {
     }
   });
   // store相关
-  ipcMain.handle('get-storage-config', async (event, config) => {
+  ipcMain.handle('get-storage-config', (event, config) => {
     return localStore.get(config.type, config.key, config.init);
   });
-  ipcMain.handle('set-storage-config', async (event, config) => {
+  ipcMain.handle('set-storage-config', (event, config) => {
     localStore.set(config.type, config.key, config.value);
   });
-  ipcMain.handle('delete-storage-config', async (event, config) => {
+  ipcMain.handle('delete-storage-config', (event, config) => {
     localStore.delete(config.type, config.key);
   });
-  ipcMain.handle('cover-storage-config', async (event, config) => {
+  ipcMain.handle('cover-storage-config', (event, config) => {
     localStore.cover(config.type, config.value);
   });
-  ipcMain.handle('all-storage-config', async (event, config) => {
+  ipcMain.handle('all-storage-config', (event, config) => {
     return localStore.getStore(config.type);
   });
-  ipcMain.handle('registry-webview', async (event, config) => {
+  ipcMain.handle('registry-webview', (event, config) => {
     const contents = webContents.fromId(config)!;
     const win = BrowserWindow.fromWebContents(contents);
     contents.setWindowOpenHandler(({ url }) => {
@@ -186,45 +180,42 @@ function main() {
       return { action: 'deny' };
     });
   });
-  ipcMain.handle('resolve-proxy', async (event, url) => {
-    return event.sender.session.resolveProxy(url);
-  });
   ipcMain.handle('set-proxy', async (event, config) => {
-    return event.sender.session.setProxy(config);
+    await event.sender.session.setProxy(config);
+    const proxyConent = await event.sender.session.resolveProxy('localhost');
+    proxyManager.updateAgentByParseProxyConent(proxyConent);
+    proxyMode = config.mode;
   });
-  ipcMain.handle('get-fakeUA', async (event, config) => {
+  ipcMain.handle('get-fakeUA', (event, config) => {
     return fakeUA;
   });
-  ipcMain.handle('update-tray-context-menu-wallets', async (event, config) => {
+  ipcMain.handle('update-tray-context-menu-wallets', (event, config) => {
     contextMenuManager.updateWalletMenu(config);
   });
-  ipcMain.handle('get-app-icon', async (event, config) => {
-    return appIcon.toDataURL();
-  });
-  ipcMain.handle('get-version', async (event, config) => {
+  ipcMain.handle('get-version', (event, config) => {
     return app.getVersion();
   });
-  ipcMain.handle('set-opacity', async (event, config) => {
+  ipcMain.handle('set-opacity', (event, config) => {
     getOtherWindows(windowIds).forEach((win) => {
       win?.setOpacity(config);
     });
   });
-  ipcMain.handle('set-alwaysOnTop', async (event, config) => {
+  ipcMain.handle('set-alwaysOnTop', (event, config) => {
     getOtherWindows(windowIds).forEach((win) => {
       win?.setAlwaysOnTop(config);
     });
   });
   // touchbar 相关监听
-  ipcMain.handle('update-touchbar-zindex', async (event, config) => {
+  ipcMain.handle('update-touchbar-zindex', (event, config) => {
     touchBarManager.updateZindexItems(config);
   });
-  ipcMain.handle('update-touchbar-wallet', async (event, config) => {
+  ipcMain.handle('update-touchbar-wallet', (event, config) => {
     touchBarManager.updateWalletItems(config);
   });
-  ipcMain.handle('update-touchbar-tab', async (event, config) => {
+  ipcMain.handle('update-touchbar-tab', (event, config) => {
     touchBarManager.updateTabItems(config);
   });
-  ipcMain.handle('update-touchbar-eye-status', async (event, config) => {
+  ipcMain.handle('update-touchbar-eye-status', (event, config) => {
     touchBarManager.updateEysStatusItems(config);
     contextMenuManager.updateEyeMenu(config);
   });
@@ -232,7 +223,7 @@ function main() {
   const visibleHotkeyManager = new HotkeyManager({ mb });
   const translateHotkeyManager = new HotkeyManager({ mb });
   const chatGPTHotkeyManager = new HotkeyManager({ mb });
-  ipcMain.handle('set-visible-hotkey', async (event, keys: string) => {
+  ipcMain.handle('set-visible-hotkey', (event, keys: string) => {
     visibleHotkeyManager.registryHotkey(keys, ({ visible }) => {
       if (visible) {
         mb.hideWindow();
@@ -241,18 +232,18 @@ function main() {
       }
     });
   });
-  ipcMain.handle('set-translate-hotkey', async (event, keys: string) => {
+  ipcMain.handle('set-translate-hotkey', (event, keys: string) => {
     translateHotkeyManager.registryHotkey(keys, ({ visible }) => {
       sendMessageToRenderer(mb.window, 'trigger-translate', visible);
     });
   });
-  ipcMain.handle('set-chatGPT-hotkey', async (event, keys: string) => {
+  ipcMain.handle('set-chatGPT-hotkey', (event, keys: string) => {
     chatGPTHotkeyManager.registryHotkey(keys, ({ visible }) => {
       sendMessageToRenderer(mb.window, 'trigger-chatGPT', visible);
     });
   });
   // 多窗口相关
-  ipcMain.handle('open-child-window', async (event, config) => {
+  ipcMain.handle('open-child-window', (event, config) => {
     const parentWin = BrowserWindow.fromWebContents(event.sender);
     const win = createChildWindow({ search: config.search, parentId: parentWin!.id });
     if (win) {
@@ -263,55 +254,33 @@ function main() {
       });
     }
   });
-  ipcMain.handle('sync-multi-window-store', async (event, config) => {
+  ipcMain.handle('sync-multi-window-store', (event, config) => {
     const fromWin = BrowserWindow.fromWebContents(event.sender);
     config._share = true;
     getOtherWindows(windowIds, fromWin?.id).forEach((win) => {
       win?.webContents.send('sync-store-data', config);
     });
   });
-  // got
-  ipcMain.handle('got', async (event, { url, config }) => {
-    try {
-      const proxyConent = await event.sender.session.resolveProxy(url);
-      const { httpAgent, httpsAgent } = new Proxy(proxyConent, url);
-      const res = await got(url, {
-        ...config,
-        headers: {
-          'user-agent': fakeUA,
-          ...config?.headers,
-        },
-        retry: {
-          limit: 2,
-        },
-        timeout: {
-          request: 10000,
-        },
-        agent: {
-          http: httpAgent,
-          https: httpsAgent,
-        },
-      });
-      return {
-        body: res.body,
-        rawBody: res.rawBody,
-        headers: res.headers,
-      };
-    } catch {
-      return {};
+  ipcMain.handle('request', async (event, { url, config }) => {
+    const httpClient = new HttpClient();
+    // 系统代理需要实时检测代理地址
+    if (proxyMode === 'system') {
+      const proxyConent = await event.sender.session.resolveProxy('localhost');
+      proxyManager.updateAgentByParseProxyConent(proxyConent);
     }
+    httpClient.userAgent = fakeUA;
+    httpClient.dispatcher = proxyManager.agent;
+    return httpClient.request(url, config);
   });
   // io操作
-  ipcMain.handle('io-saveImage', async (event, { path, content }) => saveImage(path, content));
-  ipcMain.handle('io-saveJsonToCsv', async (event, { path, content }) => saveJsonToCsv(path, content));
-  ipcMain.handle('io-saveString', async (event, { path, content }) => saveString(path, content));
-  ipcMain.handle('io-readFile', async (event, { path }) => readFile(path));
+  ipcMain.handle('io-saveImage', (event, { path, content }) => saveImage(path, content));
+  ipcMain.handle('io-saveJsonToCsv', (event, { path, content }) => saveJsonToCsv(path, content));
+  ipcMain.handle('io-saveString', (event, { path, content }) => saveString(path, content));
+  ipcMain.handle('io-readFile', (event, { path }) => readFile(path));
   // 剪贴板相关
-  ipcMain.handle('clipboard-readText', async (event) => clipboard.readText());
-  ipcMain.handle('clipboard-writeText', async (event, text) => clipboard.writeText(text));
-  ipcMain.handle('clipboard-writeImage', async (event, dataUrl) =>
-    clipboard.writeImage(nativeImage.createFromDataURL(dataUrl))
-  );
+  ipcMain.handle('clipboard-readText', (event) => clipboard.readText());
+  ipcMain.handle('clipboard-writeText', (event, text) => clipboard.writeText(text));
+  ipcMain.handle('clipboard-writeImage', (event, dataUrl) => clipboard.writeImage(nativeImage.createFromDataURL(dataUrl)));
   // menubar 相关监听
   mb.on('before-load', () => {
     // 生成fakeUA

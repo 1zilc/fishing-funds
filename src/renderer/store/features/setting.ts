@@ -68,14 +68,14 @@ export const defaultSystemSetting: System.Setting = {
 
   coinUnitSetting: Enums.CoinUnitType.Usd,
 
-  proxyTypeSetting: Enums.ProxyType.System,
+  proxyTypeSetting: Enums.ProxyType.None,
   proxyHostSetting: '127.0.0.1',
   proxyPortSetting: '1080',
 
   hotkeySetting: '',
   autoStartSetting: true,
   autoFreshSetting: true,
-  freshDelaySetting: 1,
+  freshDelaySetting: 5,
   autoCheckUpdateSetting: true,
   timestampSetting: Enums.TimestampType.Local,
 
