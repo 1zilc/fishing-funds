@@ -58,10 +58,6 @@ const recordSiteGroup = Utils.Group(
       name: 'MacWk',
     },
     {
-      url: 'https://snapcraft.io/fishing-funds',
-      name: 'SnapStore',
-    },
-    {
       url: 'https://formulae.brew.sh/cask/fishing-funds#default',
       name: 'Homebrew',
     },

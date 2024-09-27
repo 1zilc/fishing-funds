@@ -82,21 +82,9 @@
     },
     "linux": {
       "target": [
-        "AppImage",
-        "snap"
+        "AppImage"
       ],
       "category": "Financial"
-    },
-    "snap": {
-      "confinement": "strict",
-      "summary": "Display real-time trends of Chinese funds in the menubar.",
-      "publish": {
-        "provider": "snapStore",
-        "repo": "fishing-funds",
-        "channels": [
-          "stable"
-        ]
-      }
     },
     "publish": [
       {
@@ -136,8 +124,7 @@
     "chinese",
     "antd",
     "echarts",
-    "funds",
-    "snapcraft"
+    "funds"
   ],
   "homepage": "https://github.com/1zilc",
   "devDependencies": {
@@ -160,7 +147,7 @@
     "dayjs": "^1.11.13",
     "echarts": "^5.5.1",
     "electron": "33.0.0-beta.4",
-    "electron-builder": "25.0.5",
+    "electron-builder": "^25.0.5",
     "electron-icon-builder": "^2.0.1",
     "electron-vite": "^2.3.0",
     "generate-react-cli": "^8.4.8",
