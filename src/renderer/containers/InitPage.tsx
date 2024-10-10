@@ -46,7 +46,6 @@ async function checkLocalStorage() {
       return data;
     }, {});
     await electronStore.cover('config', config);
-    localStorage.clear();
   }
 }
 
@@ -104,9 +103,7 @@ const InitPage = () => {
     const allConfigStorage = await electronStore.all('config');
     // 系统设置加载完成
     dispatch(setSystemSettingAction(allConfigStorage[CONST.STORAGE.SYSTEM_SETTING] || defaultSystemSetting));
-    dispatch(
-      updateAdjustmentNotificationDateAction(allConfigStorage[CONST.STORAGE.ADJUSTMENT_NOTIFICATION_DATE] || '')
-    );
+    dispatch(updateAdjustmentNotificationDateAction(allConfigStorage[CONST.STORAGE.ADJUSTMENT_NOTIFICATION_DATE] || ''));
     //web配置加载完成
     dispatch(setZindexConfigAction(allConfigStorage[CONST.STORAGE.ZINDEX_SETTING] || defaultZindexConfig));
     // 关注板块配置加载完成
@@ -116,9 +113,7 @@ const InitPage = () => {
     // web配置加载完成
     dispatch(setWebConfigAction(allConfigStorage[CONST.STORAGE.WEB_SETTING] || defaultWebConfig));
     // 钱包配置加载完成
-    dispatch(
-      setWalletConfigAction(await migrateStock(allConfigStorage[CONST.STORAGE.WALLET_SETTING] || [defaultWallet]))
-    );
+    dispatch(setWalletConfigAction(await migrateStock(allConfigStorage[CONST.STORAGE.WALLET_SETTING] || [defaultWallet])));
     dispatch(changeCurrentWalletCodeAction(allConfigStorage[CONST.STORAGE.CURRENT_WALLET_CODE] || defaultWallet.code));
     // 翻译配置加载完成
     dispatch(syncTranslateSettingAction(allConfigStorage[CONST.STORAGE.TRANSLATE_SETTING] || defaultTranslateSetting));
