@@ -36,19 +36,6 @@ export type RedirectSearchParams = {
   _redirect: string;
 };
 
-async function checkLocalStorage() {
-  if (localStorage.length) {
-    const config = Object.keys(CONST.STORAGE).reduce<Record<string, any>>((data, key) => {
-      const content = localStorage.getItem(key);
-      if (content !== undefined && content !== null) {
-        data[key] = JSON.parse(content);
-      }
-      return data;
-    }, {});
-    await electronStore.cover('config', config);
-  }
-}
-
 async function checkRedundanceStorage() {
   const allConfigStorage = await electronStore.all('config');
   [
@@ -91,11 +78,6 @@ const InitPage = () => {
   const { data: loadingText, show: showLoading, set: setLoading } = useDrawer('加载本地配置中...');
 
   async function init() {
-    setLoading('迁移旧版本配置...');
-    await checkLocalStorage();
-    setLoading('清理冗余配置...');
-    await checkRedundanceStorage();
-
     setLoading('加载中...');
     /**
      * config部分
