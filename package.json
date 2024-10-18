@@ -4,7 +4,7 @@
   "description": "基金,大盘,股票,虚拟货币状态栏显示小应用,基于Electron开发,支持 MacOS,Windows,Linux客户端,数据源来自天天基金,蚂蚁基金,爱基金,腾讯证券,新浪基金等",
   "main": "release/app/dist/main/index.mjs",
   "scripts": {
-    "dev": "electron-vite dev",
+    "dev": "bunx --bun electron-vite dev",
     "build": "electron-vite build",
     "preview": "electron-vite preview",
     "build:icon": "electron-icon-builder --input=./build/icon.png --output=./icon-build",
@@ -152,7 +152,7 @@
     "compare-versions": "^6.1.1",
     "dayjs": "^1.11.13",
     "echarts": "^5.5.1",
-    "electron": "^33.0.0",
+    "electron": "^33.0.1",
     "electron-builder": "^25.1.8",
     "electron-icon-builder": "^2.0.1",
     "electron-vite": "^2.3.0",
@@ -169,11 +169,10 @@
     "react-router-dom": "^6.27.0",
     "react-sortablejs": "^6.1.4",
     "redux": "^5.0.1",
-    "sass": "^1.79.5",
+    "sass": "^1.80.2",
     "sortablejs": "^1.15.3",
     "typescript": "^5.6.3",
-    "vite": "^5.4.9",
-    "vite-plugin-mkcert": "^1.17.6"
+    "vite": "^5.4.9"
   },
   "dependencies": {
     "@json2csv/plainjs": "^7.0.6",
