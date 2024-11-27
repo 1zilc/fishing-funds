@@ -185,7 +185,15 @@
     "undici": "^6.21.0"
   },
   "devEngines": {
-    "node": ">=20.x",
-    "npm": ">=10.x"
+    "runtime": {
+      "name": "node",
+      "version": ">=20.x",
+      "onFail": "error"
+    },
+    "packageManager": {
+      "name": "npm",
+      "version": ">=10.9.x",
+      "onFail": "error"
+    }
   }
 }
