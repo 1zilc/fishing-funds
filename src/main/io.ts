@@ -5,7 +5,7 @@ export async function saveImage(filePath: string, dataUrl: string) {
   const data = dataUrl.match(/^data:([A-Za-z-+/]+);base64,(.+)$/);
   const imageBuffer = Buffer.from(data![2], 'base64');
   return new Promise((resolve, reject) => {
-    fs.writeFile(filePath, imageBuffer, resolve);
+    fs.writeFile(filePath, new Uint8Array(imageBuffer), resolve);
   });
 }
 
