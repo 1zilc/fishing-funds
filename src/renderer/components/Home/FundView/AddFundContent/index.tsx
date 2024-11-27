@@ -5,8 +5,7 @@ import CustomDrawer from '@/components/CustomDrawer';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
 import { addFundAction } from '@/store/features/fund';
 import { useDrawer, useAppDispatch, useAppSelector } from '@/utils/hooks';
-import { SearchPromiseWorker } from '@/workers';
-import { SearchRemoteFundParams } from '@/workers/search.worker';
+import { searchWorkerWarp } from '@/workers';
 import * as Enums from '@/utils/enums';
 import * as Helpers from '@/helpers';
 import styles from './index.module.scss';
@@ -60,15 +59,11 @@ const AddFundContent: React.FC<AddFundContentProps> = (props) => {
     if (!value) {
       setFundlist([]);
     } else {
-      const searchPromiseWorker = new SearchPromiseWorker();
-      const searchList = await searchPromiseWorker
-        .postMessage<typeof remoteFunds, SearchRemoteFundParams>({
-          module: Enums.TabKeyType.Fund,
-          list: remoteFunds,
-          type,
-          value,
-        })
-        .finally(() => searchPromiseWorker.terminate());
+      const searchList = await searchWorkerWarp.searchRemoteFund({
+        list: remoteFunds,
+        type,
+        value,
+      });
       setFundlist(searchList);
     }
   });
