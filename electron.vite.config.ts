@@ -57,13 +57,6 @@ export default defineConfig(({ command }) => {
           '@': path.resolve('src/renderer'),
         },
       },
-      css: {
-        preprocessorOptions: {
-          scss: {
-            api: 'modern-compiler',
-          },
-        },
-      },
     },
   };
 });

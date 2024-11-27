@@ -169,7 +169,7 @@
     "react-router-dom": "^6.28.0",
     "react-sortablejs": "^6.1.4",
     "redux": "^5.0.1",
-    "sass": "^1.81.0",
+    "sass-embedded": "^1.81.0",
     "sortablejs": "^1.15.4",
     "typescript": "^5.7.2",
     "vite": "^6.0.0"
