@@ -9,21 +9,21 @@ import SortBar from '@/components/SortBar';
 import TabsBar from '@/components/TabsBar';
 import Collect from '@/components/Collect';
 import GroupTab from '@/components/GroupTab';
+import FundView from '@/components/Home/FundView';
+import ZindexView from '@/components/Home/ZindexView';
+import QuotationView from '@/components/Home/QuotationView';
+import StockView from '@/components/Home/StockView';
+import CoinView from '@/components/Home/CoinView';
 import WebViewerDrawer from '@/components/WebViewerDrawer';
 import TranslateDrawer from '@/components/TranslateDrawer';
 import ChatGPTDrawer from '@/components/ChatGPTDrawer';
 import { stockTypesConfig } from '@/components/Toolbar/AppCenterContent/StockSearch';
-
 import { useAppSelector } from '@/utils/hooks';
 import * as Enums from '@/utils/enums';
 import * as Helpers from '@/helpers';
 import styles from './index.module.scss';
 
-const FundView = React.lazy(() => import('@/components/Home/FundView'));
-const ZindexView = React.lazy(() => import('@/components/Home/ZindexView'));
-const QuotationView = React.lazy(() => import('@/components/Home/QuotationView'));
-const StockView = React.lazy(() => import('@/components/Home/StockView'));
-const CoinView = React.lazy(() => import('@/components/Home/CoinView'));
+
 
 const tabsKeyMap = {
   [Enums.TabKeyType.Fund]: FundGroup,
