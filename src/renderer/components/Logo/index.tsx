@@ -1,5 +1,4 @@
 import React from 'react';
-import appIcon from '@/static/img/icon.ico';
 import styles from './index.module.scss';
 
 export interface LogoProps {
@@ -14,7 +13,7 @@ const Logo: React.FC<LogoProps> = React.memo((props) => {
         width: props.size,
       }}
     >
-      <img src={appIcon} draggable={false} />
+      <img src="img/icon.ico" draggable={false} />
     </div>
   );
 });

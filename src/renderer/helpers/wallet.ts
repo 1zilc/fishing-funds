@@ -1,9 +1,8 @@
 import NP from 'number-precision';
 import { defaultWallet } from '@/store/features/wallet';
-import * as Utils from '@/utils';
 import * as Helpers from '@/helpers';
 
-export const walletIcons = new Array(40).fill('').map((_, index) => Utils.ImportStatic(`wallet/${index}.png`));
+export const walletIcons = new Array(40).fill('').map((_, index) => `wallet/${index}.png`);
 
 export function GetCurrentWalletState(walletCode: string, wallets: Wallet.StateItem[]) {
   return (
