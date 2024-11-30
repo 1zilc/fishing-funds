@@ -2,15 +2,6 @@ import React, { Suspense } from 'react';
 import { createMemoryRouter, RouterProvider } from 'react-router-dom';
 import LoadingScreen from '@/components/LoadingScreen';
 import ThemeProvider from '@/components/ThemeProvider';
-import HomePage from '@/containers/HomePage';
-import InitPage from '@/containers/InitPage';
-import DetailPage from '@/containers/DetailPage';
-import DetailFundPage from '@/components/Home/FundView/DetailFundPage';
-import DetailZindexPage from '@/components/Home/ZindexView/DetailZindexPage';
-import DetailStockPage from '@/components/Home/StockView/DetailStockPage';
-import DetailQuotationPage from '@/components/Home/QuotationView/DetailQuotationPage';
-import DetailCoinPage from '@/components/Home/CoinView/DetailCoinPage';
-import WebViewerPage from '@/components/WebViewerDrawer/WebViewerPage';
 import { useAppSelector, useThemeColor } from '@/utils/hooks';
 import * as CONST from '@/constants';
 
@@ -21,6 +12,15 @@ import '@/styles/color.scss';
 import '@/styles/common.scss';
 import '@/app.scss';
 
+const HomePage = React.lazy(() => import('@/containers/HomePage'));
+const InitPage = React.lazy(() => import('@/containers/InitPage'));
+const DetailPage = React.lazy(() => import('@/containers/DetailPage'));
+const DetailFundPage = React.lazy(() => import('@/components/Home/FundView/DetailFundPage'));
+const DetailZindexPage = React.lazy(() => import('@/components/Home/ZindexView/DetailZindexPage'));
+const DetailStockPage = React.lazy(() => import('@/components/Home/StockView/DetailStockPage'));
+const DetailQuotationPage = React.lazy(() => import('@/components/Home/QuotationView/DetailQuotationPage'));
+const DetailCoinPage = React.lazy(() => import('@/components/Home/CoinView/DetailCoinPage'));
+const WebViewerPage = React.lazy(() => import('@/components/WebViewerDrawer/WebViewerPage'));
 
 const router = createMemoryRouter(
   [
