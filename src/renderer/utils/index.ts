@@ -4,8 +4,6 @@ import Color from 'color';
 import dayjs from 'dayjs';
 import * as CONST from '@/constants';
 
-const metaUrl = import.meta.url;
-
 export function Yang(num: string | number | undefined) {
   try {
     if (num === undefined) {
@@ -437,5 +435,5 @@ export function MergeStateWithResponse<C, CK extends keyof C, SK extends keyof S
 }
 
 export function ImportStatic(path: string) {
-  return new URL(`../static/${path}`, metaUrl).href;
+  return new URL(`../static/${path}`, import.meta.url).href;
 }
