@@ -1,9 +1,7 @@
 import React, { useRef } from 'react';
 import { useRequest, useMemoizedFn } from 'ahooks';
 import ChartCard from '@/components/Card/ChartCard';
-import MarketVolume, {
-  type MarketVolumeRef,
-} from '@/components/Home/QuotationView/FundFlowContent/Distribution/MarketVolume';
+import MarketVolume, { type MarketVolumeRef } from '@/components/Home/QuotationView/FundFlowContent/Distribution/MarketVolume';
 import { useResizeEchart, useRenderEcharts } from '@/utils/hooks';
 import * as CONST from '@/constants';
 import * as Services from '@/services';

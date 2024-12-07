@@ -1,18 +1,19 @@
 import { Flex, Tag } from 'antd';
-import React, { useImperativeHandle } from 'react';
+import React, { RefObject, useImperativeHandle } from 'react';
 import { useLocalStorageState, useMemoizedFn } from 'ahooks';
 import * as CONST from '@/constants';
 import styles from './index.module.scss';
 
-export interface SearchHistoryProps {
+export type SearchHistoryProps = {
+  ref: RefObject<SearchHistoryRef | null>;
   onClickRecord?: (text: string) => void;
   storageKey: string;
-}
-export interface SearchHistoryRef {
+};
+export type SearchHistoryRef = {
   addSearchHistory: (trst: string) => void;
-}
+};
 
-const SearchHistory = React.forwardRef<SearchHistoryRef, SearchHistoryProps>((props, ref) => {
+const SearchHistory: React.FC<SearchHistoryProps> = ({ ref, ...props }) => {
   const [searchList, setSearchList] = useLocalStorageState<string[]>(`${CONST.STORAGE.SEARCH_HISTORY}:${props.storageKey}`, {
     defaultValue: [],
   });
@@ -46,6 +47,6 @@ const SearchHistory = React.forwardRef<SearchHistoryRef, SearchHistoryProps>((pr
       </div>
     )
   );
-});
+};
 
 export default SearchHistory;
