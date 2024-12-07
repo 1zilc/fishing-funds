@@ -30,7 +30,7 @@ const Wallet: React.FC<WalletProps> = () => {
   const currentWalletConfig = walletConfigCodeMap[currentWalletCode];
 
   const calcResult = useMemo(() => {
-    const { zje, sygz, gssyl, ...reset } = Helpers.Wallet.CalcWallet({
+    const { zje, sygz, gssyl, cysy, cysyl, ...reset } = Helpers.Wallet.CalcWallet({
       code: currentWalletCode,
       walletConfig,
       wallets,
@@ -38,10 +38,15 @@ const Wallet: React.FC<WalletProps> = () => {
     const displayZje = eyeStatus ? zje.toFixed(2) : Utils.Encrypt(zje.toFixed(2));
     const displaySygz = eyeStatus ? sygz.toFixed(2) : Utils.Encrypt(Utils.Yang(sygz.toFixed(2)));
     const displayGssyl = eyeStatus ? gssyl.toFixed(2) : Utils.Encrypt(Utils.Yang(gssyl.toFixed(2)));
+    const displayCysy = eyeStatus ? cysy.toFixed(2) : Utils.Encrypt(Utils.Yang(cysy.toFixed(2)));
+    const displayCysyl = eyeStatus ? cysyl.toFixed(2) : Utils.Encrypt(Utils.Yang(cysyl.toFixed(2)));
+
     return {
       displayZje,
       displaySygz,
       displayGssyl,
+      displayCysy,
+      displayCysyl,
       ...reset,
     };
   }, [wallets, eyeStatus, walletConfig, currentWalletCode]);
@@ -93,7 +98,21 @@ const Wallet: React.FC<WalletProps> = () => {
             <img src={walletIcons[currentWalletConfig?.iconIndex || 0]} />
           </div>
         </Dropdown>
-        <div className={styles.timeBar}>刷新时间：{updateTime || '还没有刷新过哦~'}</div>
+        <div className={styles.slogan}>
+          <div className={styles.timeBar}>刷新时间：{updateTime || '还没有刷新过哦~'}</div>
+          {eyeStatus && !miniMode && Number(calcResult.displayCysy) > 0 && (
+            <div className={styles.pal}>
+              已经盈利：
+              <div className={clsx(Utils.GetValueColor(calcResult.displayCysy).textClass)}>{`${calcResult.displayCysyl}% `}</div>
+            </div>
+          )}
+          {eyeStatus && !miniMode && Number(calcResult.displayCysy) < 0 && (
+            <div className={styles.pal}>
+              已经亏损：
+              <div className={clsx(Utils.GetValueColor(calcResult.displayCysy).textClass)}>{`${calcResult.displayCysyl}% `}</div>
+            </div>
+          )}
+        </div>
         <Eye classNames={styles.eye} status={eyeStatus} onClick={onToggleEye} />
       </div>
       <Dropdown
@@ -133,13 +152,13 @@ const Wallet: React.FC<WalletProps> = () => {
       >
         <div className={styles.numBar}>
           <div className={clsx(styles.sygz, styles.zsygz, Utils.GetValueColor(calcResult.displaySygz).textClass)}>
-            {eyeStatus ? `¥ ${Utils.Yang(calcResult.displaySygz)}` : `${Utils.Yang(calcResult.displaySygz)}`}
+            {eyeStatus ? `¥ ${Utils.Yang(calcResult.displaySygz)}` : calcResult.displaySygz}
           </div>
           <div className={styles.numIndex}>
             <div>
               {!miniMode && <label>今日收益率</label>}
               <div className={clsx(Utils.GetValueColor(calcResult.displayGssyl).textClass)}>
-                {eyeStatus ? `${Utils.Yang(calcResult.displayGssyl)}%` : `${Utils.Yang(calcResult.displayGssyl)}`}
+                {eyeStatus ? `${Utils.Yang(calcResult.displayGssyl)}%` : calcResult.displayGssyl}
               </div>
             </div>
             <div>

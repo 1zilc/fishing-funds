@@ -32,12 +32,16 @@ export function CalcWallet(option: { wallets: Wallet.StateItem[]; walletConfig: 
   const sygz = NP.plus(calcFundResult.sygz || 0, calcStockResult.sygz || 0);
   const gszje = NP.plus(calcFundResult.gszje || 0, calcStockResult.gszje || 0);
   const gssyl = zje ? NP.times(NP.divide(sygz, zje), 100) : 0;
+  const cysy = NP.plus(calcFundResult.cysy || 0, calcStockResult.cysy || 0);
+  const cysyl = zje ? NP.times(NP.divide(cysy, zje - cysy), 100) : 0;
 
   return {
     zje, // 总金额
     sygz, // 收益估值
     gszje, // 估算总金额
     gssyl, // 估算收益率
+    cysy, // 持有收益
+    cysyl, // 持有收益率
     calcFundResult,
     calcStockResult,
   };

@@ -40,8 +40,25 @@
   width: 100%;
   padding: 5px 10px 0;
 }
-.timeBar {
+.slogan {
   flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100%;
+}
+.pal {
+  display: flex;
+  width: 100%;
+  font-size: 10px;
+  margin-left: 10px;
+  color: var(--secondary-main-text-color);
+  margin-top: 3px;
+  white-space: pre;
+  font-weight: 600;
+}
+.timeBar {
+  width: 100%;
   margin-left: 10px;
   font-size: 10px;
   color: var(--secondary-main-text-color);
