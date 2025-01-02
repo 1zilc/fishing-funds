@@ -37,6 +37,7 @@ import chinaMap from '@/static/map/china.json';
 import store from '@/store';
 import App from '@/app';
 import * as Enhancement from '@/utils/enhancement';
+import '@ant-design/v5-patch-for-react-19';
 import 'dayjs/locale/zh-cn';
 import '@/utils/window';
 

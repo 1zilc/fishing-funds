@@ -138,7 +138,7 @@
     "@vitejs/plugin-react": "^4.3.4",
     "@vitejs/plugin-react-swc": "^3.7.2",
     "ahooks": "^3.8.4",
-    "antd": "^5.22.6",
+    "antd": "^5.22.7",
     "babel-plugin-react-compiler": "19.0.0-beta-df7b47d-20241124",
     "cheerio": "1.0.0",
     "clsx": "^2.1.1",
@@ -147,8 +147,8 @@
     "comlink": "^4.4.2",
     "compare-versions": "^6.1.1",
     "dayjs": "^1.11.13",
-    "echarts": "^5.5.1",
-    "electron": "^33.2.1",
+    "echarts": "^5.6.0",
+    "electron": "34.0.0-beta.14",
     "electron-builder": "^25.1.8",
     "electron-icon-builder": "^2.0.1",
     "electron-vite": "^2.3.0",
@@ -167,9 +167,10 @@
     "sass-embedded": "^1.83.0",
     "sortablejs": "^1.15.6",
     "typescript": "^5.7.2",
-    "vite": "^6.0.5"
+    "vite": "^6.0.6"
   },
   "dependencies": {
+    "@ant-design/v5-patch-for-react-19": "^1.0.3",
     "@json2csv/plainjs": "^7.0.6",
     "electron-log": "^5.2.4",
     "electron-store": "^10.0.0",

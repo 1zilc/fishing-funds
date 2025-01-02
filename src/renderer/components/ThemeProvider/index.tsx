@@ -65,6 +65,8 @@ const ThemeProvider: React.FC<PropsWithChildren<ThemeProviderProps>> = (props) =
   return (
     <ConfigProvider
       theme={{
+        cssVar: true,
+        hashed: false,
         token: {
           colorPrimary: config.primaryColor,
           fontSize: config.baseFontSize,
