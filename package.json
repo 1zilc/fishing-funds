@@ -139,7 +139,7 @@
     "@vitejs/plugin-react-swc": "^3.7.2",
     "ahooks": "^3.8.4",
     "antd": "^5.22.7",
-    "babel-plugin-react-compiler": "19.0.0-beta-df7b47d-20241124",
+    "babel-plugin-react-compiler": "19.0.0-beta-55955c9-20241229",
     "cheerio": "1.0.0",
     "clsx": "^2.1.1",
     "color": "^4.2.3",
