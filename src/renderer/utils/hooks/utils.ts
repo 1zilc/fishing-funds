@@ -98,7 +98,7 @@ export function useScrollToTop(config: {
 
 export function useResizeEchart(scale = 1, unlimited?: boolean) {
   const chartRef = useRef<HTMLDivElement>(null);
-  const chartInstanceRef = useRef<echarts.ECharts>();
+  const chartInstanceRef = useRef<echarts.ECharts>(null);
   const chartWidth = useSize(chartRef)?.width;
   // const chartWidth = useDeferredValue(size?.width);
 
@@ -127,7 +127,7 @@ export function useResizeEchart(scale = 1, unlimited?: boolean) {
 
 export function useAutoSizeEchart() {
   const chartRef = useRef<HTMLDivElement>(null);
-  const chartInstanceRef = useRef<echarts.ECharts>();
+  const chartInstanceRef = useRef<echarts.ECharts>(null);
   const chartWidth = useSize(chartRef)?.width;
   const chartHeight = useSize(chartRef)?.height;
 
@@ -153,9 +153,9 @@ export function useAutoSizeEchart() {
   return { ref: chartRef, chartInstance: chartInstanceRef.current, chartInstanceRef };
 }
 
-export function useEchartEventEffect(fn: () => void | (() => void), instance?: echarts.ECharts) {
+export function useEchartEventEffect(fn: () => void | (() => void), instance: echarts.ECharts | null) {
   const initRef = useRef(false);
-  const unMountRef = useRef<any>();
+  const unMountRef = useRef<any>(null);
 
   useEffect(() => {
     if (instance && !initRef.current) {
@@ -176,7 +176,7 @@ export function useEchartEventEffect(fn: () => void | (() => void), instance?: e
 
 export function useRenderEcharts(
   callback: (data: { varibleColors: Record<keyof typeof CONST.VARIBLES, string> }) => void,
-  instance?: echarts.ECharts,
+  instance: echarts.ECharts | null,
   dep: any[] = []
 ) {
   const varibleColors = useAppSelector((state) => state.setting.varibleColors);

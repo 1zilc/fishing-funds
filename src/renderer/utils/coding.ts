@@ -1,27 +1,14 @@
-import { CodingPromiseWorker } from '@/workers';
-import { WorkerRecieveParams as CodingWorkerRecieveParams } from '@/workers/coding.worker';
+import { codingWorkerWarp } from '@/workers';
 
 export function encryptFF(content: any) {
-  const codingPromiseWorker = new CodingPromiseWorker();
-  return codingPromiseWorker
-    .postMessage<string, CodingWorkerRecieveParams>({ module: 'encryptFF', data: content })
-    .finally(() => codingPromiseWorker.terminate());
+  return codingWorkerWarp.encryptFF(content);
 }
 export function decryptFF<T = unknown>(content: string) {
-  const codingPromiseWorker = new CodingPromiseWorker();
-  return codingPromiseWorker
-    .postMessage<T, CodingWorkerRecieveParams>({ module: 'decryptFF', data: content })
-    .finally(() => codingPromiseWorker.terminate());
+  return codingWorkerWarp.decryptFF(content) as T;
 }
 export function encodeFF(content: any) {
-  const codingPromiseWorker = new CodingPromiseWorker();
-  return codingPromiseWorker
-    .postMessage<string, CodingWorkerRecieveParams>({ module: 'encodeFF', data: content })
-    .finally(() => codingPromiseWorker.terminate());
+  return codingWorkerWarp.encodeFF(content);
 }
 export function decodeFF<T = unknown>(content: string) {
-  const codingPromiseWorker = new CodingPromiseWorker();
-  return codingPromiseWorker
-    .postMessage<T, CodingWorkerRecieveParams>({ module: 'decodeFF', data: content })
-    .finally(() => codingPromiseWorker.terminate());
+  return codingWorkerWarp.decodeFF(content) as T;
 }

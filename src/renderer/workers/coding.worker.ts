@@ -1,26 +1,6 @@
 import { compose } from 'redux';
 import { encode, decode } from 'js-base64';
-import registerPromiseWorker from 'promise-worker/register';
-
-type RecieveModule = 'encryptFF' | 'decryptFF' | 'encodeFF' | 'decodeFF';
-
-export interface WorkerRecieveParams {
-  module: RecieveModule;
-  data: any;
-}
-
-registerPromiseWorker((params: WorkerRecieveParams) => {
-  switch (params.module) {
-    case 'encryptFF':
-      return encryptFF(params.data);
-    case 'decryptFF':
-      return decryptFF(params.data);
-    case 'encodeFF':
-      return encodeFF(params.data);
-    case 'decodeFF':
-      return decodeFF(params.data);
-  }
-});
+import * as Comlink from 'comlink';
 
 function encodeFF(content: any) {
   const ffprotocol = 'ff://'; // FF协议
@@ -49,3 +29,14 @@ function encryptFF(content: string) {
 function decryptFF(content: string) {
   return compose(decodeFF, decode)(content);
 }
+
+const exposes = {
+  encodeFF,
+  decodeFF,
+  encryptFF,
+  decryptFF,
+};
+
+export type ExposesType = typeof exposes;
+
+Comlink.expose(exposes);

@@ -1,31 +1,15 @@
-import PromiseWorker from 'promise-worker';
+import * as Comlink from 'comlink';
+import { type ExposesType as SearchWorker } from './search.worker';
+import { type ExposesType as CodingWorker } from './coding.worker';
 
-export class BasicWorker extends PromiseWorker {
-  constructor(private worker: Worker) {
-    super(worker);
-  }
+export const searchWorkerWarp = Comlink.wrap<SearchWorker>(
+  new Worker(new URL('./search.worker', import.meta.url), {
+    type: 'module',
+  })
+);
 
-  terminate() {
-    this.worker.terminate();
-  }
-}
-
-export class SearchPromiseWorker extends BasicWorker {
-  constructor() {
-    super(
-      new Worker(new URL('./search.worker', import.meta.url), {
-        type: 'module',
-      })
-    );
-  }
-}
-
-export class CodingPromiseWorker extends BasicWorker {
-  constructor() {
-    super(
-      new Worker(new URL('./coding.worker', import.meta.url), {
-        type: 'module',
-      })
-    );
-  }
-}
+export const codingWorkerWarp = Comlink.wrap<CodingWorker>(
+  new Worker(new URL('./coding.worker', import.meta.url), {
+    type: 'module',
+  })
+);

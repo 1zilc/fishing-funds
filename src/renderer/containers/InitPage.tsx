@@ -36,20 +36,6 @@ export type RedirectSearchParams = {
   _redirect: string;
 };
 
-async function checkLocalStorage() {
-  if (localStorage.length) {
-    const config = Object.keys(CONST.STORAGE).reduce<Record<string, any>>((data, key) => {
-      const content = localStorage.getItem(key);
-      if (content !== undefined && content !== null) {
-        data[key] = JSON.parse(content);
-      }
-      return data;
-    }, {});
-    await electronStore.cover('config', config);
-    localStorage.clear();
-  }
-}
-
 async function checkRedundanceStorage() {
   const allConfigStorage = await electronStore.all('config');
   [
@@ -92,11 +78,6 @@ const InitPage = () => {
   const { data: loadingText, show: showLoading, set: setLoading } = useDrawer('加载本地配置中...');
 
   async function init() {
-    setLoading('迁移旧版本配置...');
-    await checkLocalStorage();
-    setLoading('清理冗余配置...');
-    await checkRedundanceStorage();
-
     setLoading('加载中...');
     /**
      * config部分
@@ -104,9 +85,7 @@ const InitPage = () => {
     const allConfigStorage = await electronStore.all('config');
     // 系统设置加载完成
     dispatch(setSystemSettingAction(allConfigStorage[CONST.STORAGE.SYSTEM_SETTING] || defaultSystemSetting));
-    dispatch(
-      updateAdjustmentNotificationDateAction(allConfigStorage[CONST.STORAGE.ADJUSTMENT_NOTIFICATION_DATE] || '')
-    );
+    dispatch(updateAdjustmentNotificationDateAction(allConfigStorage[CONST.STORAGE.ADJUSTMENT_NOTIFICATION_DATE] || ''));
     //web配置加载完成
     dispatch(setZindexConfigAction(allConfigStorage[CONST.STORAGE.ZINDEX_SETTING] || defaultZindexConfig));
     // 关注板块配置加载完成
@@ -116,9 +95,7 @@ const InitPage = () => {
     // web配置加载完成
     dispatch(setWebConfigAction(allConfigStorage[CONST.STORAGE.WEB_SETTING] || defaultWebConfig));
     // 钱包配置加载完成
-    dispatch(
-      setWalletConfigAction(await migrateStock(allConfigStorage[CONST.STORAGE.WALLET_SETTING] || [defaultWallet]))
-    );
+    dispatch(setWalletConfigAction(await migrateStock(allConfigStorage[CONST.STORAGE.WALLET_SETTING] || [defaultWallet])));
     dispatch(changeCurrentWalletCodeAction(allConfigStorage[CONST.STORAGE.CURRENT_WALLET_CODE] || defaultWallet.code));
     // 翻译配置加载完成
     dispatch(syncTranslateSettingAction(allConfigStorage[CONST.STORAGE.TRANSLATE_SETTING] || defaultTranslateSetting));

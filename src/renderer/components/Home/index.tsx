@@ -150,7 +150,7 @@ function StockGroup() {
         },
         ...stockTypesConfig.map((type) => ({
           key: String(type.code),
-          label: type.name.slice(0, 2),
+          label: type.name,
           children: <StockView filter={(stock) => codeMap[stock.secid].type === type.code} />,
         })),
       ]}
@@ -201,13 +201,7 @@ const Body = () => {
   );
 
   return (
-    <Tabs
-      renderTabBar={() => <></>}
-      activeKey={String(tabsActiveKey)}
-      animated={true}
-      destroyInactiveTabPane
-      items={items}
-    />
+    <Tabs renderTabBar={() => <></>} activeKey={String(tabsActiveKey)} animated={true} destroyInactiveTabPane items={items} />
   );
 };
 

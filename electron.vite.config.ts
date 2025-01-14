@@ -1,5 +1,4 @@
 import path from 'path';
-import mkcert from 'vite-plugin-mkcert';
 import react from '@vitejs/plugin-react';
 import reactSWC from '@vitejs/plugin-react-swc';
 import { defineConfig } from 'electron-vite';
@@ -43,7 +42,6 @@ export default defineConfig(({ command }) => {
       server: {
         port: 3456,
         strictPort: true,
-        https: {},
       },
       plugins: [
         prod
@@ -53,18 +51,10 @@ export default defineConfig(({ command }) => {
               },
             })
           : reactSWC(),
-        mkcert(),
       ],
       resolve: {
         alias: {
           '@': path.resolve('src/renderer'),
-        },
-      },
-      css: {
-        preprocessorOptions: {
-          scss: {
-            api: 'modern-compiler',
-          },
         },
       },
     },

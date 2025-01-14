@@ -1,34 +1,7 @@
-import registerPromiseWorker from 'promise-worker/register';
 import * as Enums from '@/utils/enums';
+import * as Comlink from 'comlink';
 
-interface WorkerRecieveParams {
-  module?: Enums.TabKeyType;
-  list: any[];
-  [index: string]: any;
-}
-
-export interface SearchRemoteFundParams extends WorkerRecieveParams {
-  list: Fund.RemoteFund[];
-  type: Enums.SearchType;
-  value: string;
-}
-export interface SearchRemoteCoinParams extends WorkerRecieveParams {
-  list: Coin.RemoteCoin[];
-  value: string;
-}
-
-registerPromiseWorker((params: WorkerRecieveParams) => {
-  switch (params.module) {
-    case Enums.TabKeyType.Fund:
-      return searchRemoteFund({ list: params.list, type: params.type, value: params.value });
-    case Enums.TabKeyType.Coin:
-      return searchRemoteCoin({ list: params.list, value: params.value });
-    default:
-      return params.list;
-  }
-});
-
-function searchRemoteFund(params: SearchRemoteFundParams) {
+function searchRemoteFund(params: { list: Fund.RemoteFund[]; type: Enums.SearchType; value: string }) {
   const { list, type, value } = params;
   const upperCaseValue = value.toLocaleUpperCase();
   switch (type) {
@@ -47,7 +20,7 @@ function searchRemoteFund(params: SearchRemoteFundParams) {
   }
 }
 
-function searchRemoteCoin(params: SearchRemoteCoinParams) {
+function searchRemoteCoin(params: { list: Coin.RemoteCoin[]; value: string }) {
   const { list, value } = params;
   const upperCaseValue = value.toLocaleUpperCase();
 
@@ -56,3 +29,12 @@ function searchRemoteCoin(params: SearchRemoteCoinParams) {
     return symbol.toLocaleUpperCase().indexOf(upperCaseValue) !== -1 || code.toLocaleUpperCase() === upperCaseValue;
   });
 }
+
+const exposes = {
+  searchRemoteFund,
+  searchRemoteCoin,
+};
+
+export type ExposesType = typeof exposes;
+
+Comlink.expose(exposes);

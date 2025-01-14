@@ -6,8 +6,7 @@ import CustomDrawerContent from '@/components/CustomDrawer/Content';
 import SearchHistory, { type SearchHistoryRef } from '@/components/SearchHistory';
 import Empty from '@/components/Empty';
 import { addCoinAction } from '@/store/features/coin';
-import { SearchPromiseWorker } from '@/workers';
-import { SearchRemoteCoinParams } from '@/workers/search.worker';
+import { searchWorkerWarp } from '@/workers';
 import { useDrawer, useAppDispatch, useAppSelector } from '@/utils/hooks';
 import * as Helpers from '@/helpers';
 import * as Enums from '@/utils/enums';
@@ -54,14 +53,10 @@ const AddCoinContent: React.FC<AddCoinContentProps> = (props) => {
     if (!value) {
       setCoins([]);
     } else {
-      const searchPromiseWorker = new SearchPromiseWorker();
-      const searchList = await searchPromiseWorker
-        .postMessage<typeof remoteCoins, SearchRemoteCoinParams>({
-          module: Enums.TabKeyType.Coin,
-          list: remoteCoins,
-          value,
-        })
-        .finally(() => searchPromiseWorker.terminate());
+      const searchList = await searchWorkerWarp.searchRemoteCoin({
+        list: remoteCoins,
+        value,
+      });
       searchHistoryRef.current?.addSearchHistory(value);
       setCoins(searchList);
     }

@@ -20,9 +20,9 @@ const Estimate: React.FC<EstimateProps> = React.memo(({ code }) => {
     <ChartCard onFresh={runGetEstimatedFromEastmoney} auto>
       <div className={styles.estimate}>
         {estimate === '' ? (
-          <img src={Utils.ImportStatic('img/picture.svg')} />
+          <img src="img/picture.svg" />
         ) : estimate === undefined ? (
-          <img src={Utils.ImportStatic('img/picture-failed.svg')} />
+          <img src="img/picture-failed.svg" />
         ) : (
           <img src={estimate} onError={() => setEstimate(undefined)} />
         )}

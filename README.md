@@ -72,6 +72,7 @@ sudo xattr -d com.apple.quarantine "/Applications/Fishing Funds.app"
 
 - [windows 7/8 下载](https://github.com/1zilc/fishing-funds/releases/tag/v7.0.2)
 - [macOS 10.13/10.14 下载](https://github.com/1zilc/fishing-funds/releases/tag/v8.1.0)
+- [macOS 10.15 下载](https://github.com/1zilc/fishing-funds/releases/tag/v8.2.3)
 
 ## 讨论交流
 

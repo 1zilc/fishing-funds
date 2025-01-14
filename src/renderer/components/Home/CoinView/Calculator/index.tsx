@@ -7,8 +7,7 @@ import CustomDrawer from '@/components/CustomDrawer';
 import WebAppIcon from '@/components/Toolbar/AppCenterContent/WebAppIcon';
 import PureCard from '@/components/Card/PureCard';
 import ChartCard from '@/components/Card/ChartCard';
-import { SearchPromiseWorker } from '@/workers';
-import { SearchRemoteCoinParams } from '@/workers/search.worker';
+import { searchWorkerWarp } from '@/workers';
 import { useDrawer, useAppSelector } from '@/utils/hooks';
 import * as Helpers from '@/helpers';
 import * as Enums from '@/utils/enums';
@@ -32,26 +31,17 @@ const Calculator: React.FC<CalculatorProps> = (props) => {
   const [coins, setCoins] = useState<Coin.RemoteCoin[]>(remoteCoins);
   const [price, setPrice] = useState({ cny: 0, btc: 0, usd: 0 });
 
-  const {
-    data: detailCoinCode,
-    show: showDetailDrawer,
-    set: setDetailDrawer,
-    close: closeDetailDrawer,
-  } = useDrawer('');
+  const { data: detailCoinCode, show: showDetailDrawer, set: setDetailDrawer, close: closeDetailDrawer } = useDrawer('');
 
   const { run: onSearch } = useDebounceFn(async (_value: string) => {
     const value = _value.trim();
     if (!value) {
       setCoins(remoteCoins);
     } else {
-      const searchPromiseWorker = new SearchPromiseWorker();
-      const searchList = await searchPromiseWorker
-        .postMessage<typeof remoteCoins, SearchRemoteCoinParams>({
-          module: Enums.TabKeyType.Coin,
-          list: remoteCoins,
-          value,
-        })
-        .finally(() => searchPromiseWorker.terminate());
+      const searchList = await searchWorkerWarp.searchRemoteCoin({
+        list: remoteCoins,
+        value,
+      });
       setCoins(searchList);
     }
   });

@@ -14,7 +14,7 @@ export const rendererPath = path.join(appPath, 'renderer');
 export function resolveHtmlPath() {
   if (import.meta.env.DEV) {
     const port = 3456;
-    return `https://localhost:${port}`;
+    return `http://localhost:${port}`;
   } else {
     return `file://${path.resolve(rendererPath, 'index.html')}`;
   }
