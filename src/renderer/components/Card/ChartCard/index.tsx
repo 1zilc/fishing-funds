@@ -59,7 +59,7 @@ export const ChartCard: React.FC<PropsWithChildren<ChartCardProps>> = ({
         {onFresh && <RiRefreshLine onClick={onFresh} />}
         {showCollapse && (isOpened ? <RiArrowUpSLine onClick={setFalse} /> : <RiArrowDownSLine onClick={setTrue} />)}
         {describe && (
-          <Tooltip placement="bottomRight" title={describe} overlayClassName={styles.describe} color={'var(--primary-color)'}>
+          <Tooltip placement="bottomRight" title={describe} classNames={{ root: styles.describe }} color={'var(--primary-color)'}>
             <RiQuestionLine />
           </Tooltip>
         )}

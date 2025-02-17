@@ -2,7 +2,7 @@ import NP from 'number-precision';
 import { fromUint8Array } from 'js-base64';
 import request from '@/utils/request';
 
-export async function GetQuotationsFromEastmoney() {
+export async function GetQuotationsFromEastmoney(pn: number = 1) {
   try {
     const { body: data } = await request<{
       rc: 0;
@@ -33,21 +33,22 @@ export async function GetQuotationsFromEastmoney() {
           f222: number; // 领跌股票zdf
         }[];
       };
-    }>('https://77.push2.eastmoney.com/api/qt/clist/get', {
+    }>('https://push2.eastmoney.com/api/qt/clist/get', {
       searchParams: {
         fs: 'm:90',
-        fid: 'f3',
+        fid: 'f14',
         invt: 2,
         fltt: 2,
         np: 1,
-        po: 1,
-        pn: 1,
-        pz: 1000,
-        fields: 'f2,f3,f4,f8,f12,f14,f19,f20,f128,f136,f104,f105,f140,f207,f208,f222',
+        po: 0,
+        pn,
+        pz: 200,
+        fields: 'f12,f13,f14,f1,f2,f4,f3,f152,f20,f8,f104,f105,f128,f140,f141,f207,f208,f209,f136,f222,f19',
         _: Date.now(),
       },
       responseType: 'json',
     });
+
     const result: Quotation.ResponseItem[] = data.data.diff.map((i) => {
       i.f3 = Number(i.f3) || 0;
 
@@ -491,12 +492,8 @@ export async function GetNorthDayFromEastmoney(fields1: string, fields2: string)
     });
 
     return {
-      hk2sh: body.data.hk2sh
-        .map((_) => _.split(','))
-        .map(([date, value]) => [date, NP.divide(value, 10 ** 4).toFixed(2)]),
-      hk2sz: body.data.hk2sz
-        .map((_) => _.split(','))
-        .map(([date, value]) => [date, NP.divide(value, 10 ** 4).toFixed(2)]),
+      hk2sh: body.data.hk2sh.map((_) => _.split(',')).map(([date, value]) => [date, NP.divide(value, 10 ** 4).toFixed(2)]),
+      hk2sz: body.data.hk2sz.map((_) => _.split(',')).map(([date, value]) => [date, NP.divide(value, 10 ** 4).toFixed(2)]),
       s2n: body.data.s2n.map((_) => _.split(',')).map(([date, value]) => [date, NP.divide(value, 10 ** 4).toFixed(2)]),
     };
   } catch (error) {
@@ -533,12 +530,8 @@ export async function GetSouthDayFromEastmoney(fields1: string, fields2: string)
     });
 
     return {
-      sh2hk: body.data.sh2hk
-        .map((_) => _.split(','))
-        .map(([date, value]) => [date, NP.divide(value, 10 ** 4).toFixed(2)]),
-      sz2hk: body.data.sz2hk
-        .map((_) => _.split(','))
-        .map(([date, value]) => [date, NP.divide(value, 10 ** 4).toFixed(2)]),
+      sh2hk: body.data.sh2hk.map((_) => _.split(',')).map(([date, value]) => [date, NP.divide(value, 10 ** 4).toFixed(2)]),
+      sz2hk: body.data.sz2hk.map((_) => _.split(',')).map(([date, value]) => [date, NP.divide(value, 10 ** 4).toFixed(2)]),
       n2s: body.data.n2s.map((_) => _.split(',')).map(([date, value]) => [date, NP.divide(value, 10 ** 4).toFixed(2)]),
     };
   } catch (error) {
@@ -897,17 +890,8 @@ export async function GetHotThemeFromEastmoney() {
       responseType: 'json',
     });
     const result = body.result[0].Data.map((item) => {
-      const [
-        CategoryCode,
-        CategoryName,
-        ParentCode,
-        ParentName,
-        CategoryPchg,
-        SecuCode,
-        SecuName,
-        IsImportant,
-        Market,
-      ] = item.split('|');
+      const [CategoryCode, CategoryName, ParentCode, ParentName, CategoryPchg, SecuCode, SecuName, IsImportant, Market] =
+        item.split('|');
 
       return {
         zdf: CategoryPchg,
@@ -1353,12 +1337,9 @@ export async function GetShanghaiGoldGoodsFromEastmoney() {
 }
 export async function GetMainFundFromEastmoney(code: string) {
   try {
-    const { body } = await request(
-      `https://webquotepic.eastmoney.com/GetPic.aspx?nid=${code}&imageType=FFRS1&type=FFR`,
-      {
-        responseType: 'arraybuffer',
-      }
-    );
+    const { body } = await request(`https://webquotepic.eastmoney.com/GetPic.aspx?nid=${code}&imageType=FFRS1&type=FFR`, {
+      responseType: 'arraybuffer',
+    });
     const b64encoded = fromUint8Array(new Uint8Array(body));
     return `data:image/png;base64,${b64encoded}`;
   } catch (error) {

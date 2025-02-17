@@ -25,7 +25,7 @@ const Guide: React.FC<GuideProps> = (props) => {
           ))}
         </div>
       }
-      overlayClassName={styles.content}
+      classNames={{ root: styles.content }}
       color="var(--primary-color)"
     >
       <RiQuestionLine {...iconSize} style={{ fill: 'var(--svg-icon-color)' }} />
