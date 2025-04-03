@@ -196,7 +196,7 @@ export const DetailStock: React.FC<DetailStockProps> = (props) => {
             {
               key: String(3),
               label: '股吧',
-              children: <GuBa keyword={stock.code} type="100" />,
+              children: <GuBa keyword={stock.name} type="100" />,
             },
           ]}
         />

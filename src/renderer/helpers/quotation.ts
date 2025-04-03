@@ -2,10 +2,12 @@ import * as Services from '@/services';
 import * as Enums from '@/utils/enums';
 
 export async function GetQuotations() {
-  // TODO: 由于东财接口变动，一次性最多返回200条记录，所以需要发起3个请求，截止2025-2-17，一共是578个概念板块
-  const page1 = await Services.Quotation.GetQuotationsFromEastmoney(1);
-  const page2 = await Services.Quotation.GetQuotationsFromEastmoney(2);
-  const page3 = await Services.Quotation.GetQuotationsFromEastmoney(3);
+  // TODO:
+  // 由于东财接口变动，一次性最多返回200条记录，所以需要发起3个请求，截止2025-2-17，一共是578个概念板块
+  // 截止2025-2-17，暂时按类型查询
+  const page1 = await Services.Quotation.GetQuotationsFromEastmoney('t:1');
+  const page2 = await Services.Quotation.GetQuotationsFromEastmoney('t:2');
+  const page3 = await Services.Quotation.GetQuotationsFromEastmoney('t:3');
   return [...page1, ...page2, ...page3];
 }
 
