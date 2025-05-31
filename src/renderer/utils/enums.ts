@@ -110,6 +110,7 @@ export enum SimilarCompareType {
   Rank,
   Proportion,
   Evaluation,
+  SameRank,
 }
 
 // 经理能力类型

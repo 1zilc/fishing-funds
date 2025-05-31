@@ -391,17 +391,9 @@ export const DetailFund: React.FC<DetailFundProps> = (props) => {
                   </ChartCard>
                 ),
               },
-            ]}
-          />
-        </div>
-        <div className={styles.container}>
-          <Tabs
-            animated={{ tabPane: true }}
-            tabBarGutter={15}
-            items={[
               {
-                key: String(0),
-                label: '同类型基金涨幅榜',
+                key: String(Enums.SimilarCompareType.SameRank),
+                label: '同类基金',
                 children: (
                   <PureCard>
                     <SameFundList swithSameType={pingzhongdata.swithSameType} />
