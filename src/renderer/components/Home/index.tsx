@@ -200,9 +200,7 @@ const Body = () => {
     [bottomTabsSetting]
   );
 
-  return (
-    <Tabs renderTabBar={() => <></>} activeKey={String(tabsActiveKey)} animated={true} destroyInactiveTabPane items={items} />
-  );
+  return <Tabs renderTabBar={() => <></>} activeKey={String(tabsActiveKey)} animated={true} destroyOnHidden items={items} />;
 };
 
 const Home: React.FC<HomeProps> = () => {

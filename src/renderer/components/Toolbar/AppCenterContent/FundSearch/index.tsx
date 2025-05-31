@@ -40,7 +40,7 @@ const FundSearch: React.FC<FundSearchProps> = (props) => {
       <Tabs
         animated={{ tabPane: true }}
         tabBarGutter={15}
-        destroyInactiveTabPane
+        destroyOnHidden
         items={list.map(({ Datas, Name, Type }) => ({
           key: String(Type),
           label: Name,

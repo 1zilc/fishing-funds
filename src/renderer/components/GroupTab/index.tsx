@@ -31,9 +31,7 @@ const GroupTab = (props: GroupTabProps) => {
     [props.items]
   );
 
-  const onTagChange = useMemoizedFn((e: string) =>
-    dispatch(syncTabsKeyMapAction({ key: tabKey, activeKey: Number(e) }))
-  );
+  const onTagChange = useMemoizedFn((e: string) => dispatch(syncTabsKeyMapAction({ key: tabKey, activeKey: Number(e) })));
 
   return (
     <Tabs
@@ -42,7 +40,7 @@ const GroupTab = (props: GroupTabProps) => {
       animated={{ tabPane: true, inkBar: true }}
       tabBarGutter={15}
       tabBarStyle={groupBarStyle}
-      destroyInactiveTabPane
+      destroyOnHidden
       items={items}
       onChange={onTagChange}
     />

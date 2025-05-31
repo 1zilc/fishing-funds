@@ -125,7 +125,7 @@ function FundsSortBar() {
       <div className={styles.mode}>
         <Dropdown
           placement="bottomRight"
-          dropdownRender={() => (
+          popupRender={() => (
             <Menu
               selectedKeys={[String(fundSortModeOptionsMap[fundSortType].key)]}
               onClick={({ key }) => dispatch(setFundSortModeAction({ type: Number(key) as Enums.FundSortType }))}
@@ -244,7 +244,7 @@ function ZindexSortBar() {
       <div className={styles.mode}>
         <Dropdown
           placement="bottomRight"
-          dropdownRender={() => (
+          popupRender={() => (
             <Menu
               selectedKeys={[String(zindexSortModeOptionsMap[zindexSortType].key)]}
               onClick={({ key }) => dispatch(setZindexSortModeAction({ type: Number(key) as Enums.ZindexSortType }))}

@@ -73,7 +73,7 @@ const StockSearch: React.FC<StockSearchProps> = (props) => {
       <Tabs
         animated={{ tabPane: true }}
         tabBarGutter={15}
-        destroyInactiveTabPane
+        destroyOnHidden
         items={list.map(({ Datas, Name, Type }) => ({
           key: String(Type),
           label: Name,

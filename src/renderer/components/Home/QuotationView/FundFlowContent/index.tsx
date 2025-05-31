@@ -118,7 +118,7 @@ const FundFlowContent: React.FC<DetailFundContentProps> = (props) => {
           <Tabs
             animated={{ tabPane: true }}
             tabBarGutter={15}
-            destroyInactiveTabPane
+            destroyOnHidden
             items={[
               {
                 key: String(0),
