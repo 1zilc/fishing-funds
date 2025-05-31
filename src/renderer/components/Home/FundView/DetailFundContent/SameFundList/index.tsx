@@ -6,6 +6,7 @@ import CustomDrawer from '@/components/CustomDrawer';
 import { useDrawer, useAppSelector } from '@/utils/hooks';
 import * as Helpers from '@/helpers';
 import styles from './index.module.css';
+import { Spin } from 'antd';
 
 const DetailFundContent = React.lazy(() => import('@/components/Home/FundView/DetailFundContent'));
 
@@ -21,22 +22,27 @@ const SameFundList: React.FC<SameFundListProps> = ({ swithSameType = [] }) => {
     return { code, name, cyfe: 0 };
   });
 
-  const { data: sameFunds = [] } = useRequest(() => Helpers.Fund.GetFunds(fundsConfig, fundApiTypeSetting), {
-    ready: !!swithSameType?.length,
-  });
+  const { data: sameFunds = [], loading: sameFundsLoading } = useRequest(
+    () => Helpers.Fund.GetFunds(fundsConfig, fundApiTypeSetting),
+    {
+      ready: !!swithSameType?.length,
+    }
+  );
 
   const sortSameFunds = sameFunds.filter(Boolean).sort((a, b) => Number(b.gszzl) - Number(a.gszzl));
 
   return (
     <div className={styles.content}>
-      {sameFunds.length ? (
-        sortSameFunds.map((fund) => <FundRow key={fund.fundcode} readOnly fund={fund} onDetail={setDetailDrawer} />)
-      ) : (
-        <Empty text="暂无同类型基金数据~" />
-      )}
-      <CustomDrawer show={showDetailDrawer}>
-        <DetailFundContent onEnter={closeDetailDrawer} onClose={closeDetailDrawer} code={detailFundCode} />
-      </CustomDrawer>
+      <Spin tip="加载中..." size="small" spinning={sameFundsLoading}>
+        {sameFunds.length ? (
+          sortSameFunds.map((fund) => <FundRow key={fund.fundcode} readOnly fund={fund} onDetail={setDetailDrawer} />)
+        ) : (
+          <Empty text="暂无同类型基金数据~" />
+        )}
+        <CustomDrawer show={showDetailDrawer}>
+          <DetailFundContent onEnter={closeDetailDrawer} onClose={closeDetailDrawer} code={detailFundCode} />
+        </CustomDrawer>
+      </Spin>
     </div>
   );
 };
