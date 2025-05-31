@@ -8,7 +8,7 @@ import { useAppDispatch, useAppSelector } from '@/utils/hooks';
 import * as Utils from '@/utils';
 import * as Helpers from '@/helpers';
 import * as Enums from '@/utils/enums';
-import styles from './index.module.scss';
+import styles from './index.module.css';
 
 export interface RowProps {
   fund: Fund.ResponseItem & Fund.ExtraRow & Fund.FixData;
@@ -54,11 +54,7 @@ const FundRow: React.FC<RowProps> = React.memo((props) => {
       <div className={clsx(styles.row)} onClick={onRowClick}>
         {!readOnly && (
           <div className={styles.arrow}>
-            {fund.collapse ? (
-              <RiArrowUpSLine style={{ ...arrowSize }} />
-            ) : (
-              <RiArrowDownSLine style={{ ...arrowSize }} />
-            )}
+            {fund.collapse ? <RiArrowUpSLine style={{ ...arrowSize }} /> : <RiArrowDownSLine style={{ ...arrowSize }} />}
           </div>
         )}
         <div style={{ flex: 1, width: 0 }}>

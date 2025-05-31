@@ -6,11 +6,11 @@ import { useAppSelector, useThemeColor } from '@/utils/hooks';
 import * as CONST from '@/constants';
 
 import 'antd/dist/reset.css';
-import '@/styles/antd.scss';
-import '@/styles/button.scss';
-import '@/styles/color.scss';
-import '@/styles/common.scss';
-import '@/app.scss';
+import '@/styles/antd.css';
+import '@/styles/button.css';
+import '@/styles/color.css';
+import '@/styles/common.css';
+import '@/app.css';
 
 const HomePage = React.lazy(() => import('@/containers/HomePage'));
 const InitPage = React.lazy(() => import('@/containers/InitPage'));

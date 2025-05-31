@@ -31,7 +31,7 @@ import SearchHistory, { type SearchHistoryRef } from '@/components/SearchHistory
 import * as Enums from '@/utils/enums';
 import * as Utils from '@/utils';
 import { useOpenWebView, useAppSelector } from '@/utils/hooks';
-import styles from './index.module.scss';
+import styles from './index.module.css';
 
 const ManageFundContent = React.lazy(() => import('@/components/Home/FundView/ManageFundContent'));
 const ManageZindexContent = React.lazy(() => import('@/components/Home/ZindexView/ManageZindexContent'));

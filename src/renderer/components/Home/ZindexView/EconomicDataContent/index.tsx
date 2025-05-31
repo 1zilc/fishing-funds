@@ -6,7 +6,7 @@ import FinancialStatistics from '@/components/Home/ZindexView/EconomicDataConten
 import TreasuryYield from '@/components/Home/ZindexView/EconomicDataContent/TreasuryYield';
 import NationalTeam from '@/components/Home/ZindexView/EconomicDataContent/NationalTeam';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
-import styles from './index.module.scss';
+import styles from './index.module.css';
 
 export interface EconomicDataContentProps {
   onEnter: () => void;

@@ -37,7 +37,7 @@ import * as Services from '@/services';
 import * as Utils from '@/utils';
 import * as Enums from '@/utils/enums';
 import * as CONST from '@/constants';
-import styles from './index.module.scss';
+import styles from './index.module.css';
 
 const FundManagerContent = React.lazy(() => import('@/components/Home/FundView/FundManagerContent'));
 const AddFundContent = React.lazy(() => import('@/components/Home/FundView/AddFundContent'));
@@ -90,12 +90,14 @@ export const DetailFund: React.FC<DetailFundProps> = (props) => {
   const [showManagerDrawer, { setTrue: openManagerDrawer, setFalse: closeManagerDrawer }] = useBoolean(false);
 
   const { data: fund = {} } = useRequest(() => Services.Fund.GetFixFromEastMoney(code));
-  const { data: pingzhongdata = {} as Fund.PingzhongData | Record<string, any>, run: runGetFundDetailFromEastmoney } =
-    useRequest(() => Services.Fund.GetFundDetailFromEastmoney(code), {
+  const { data: pingzhongdata = {} as Fund.PingzhongData | Record<string, any>, run: runGetFundDetailFromEastmoney } = useRequest(
+    () => Services.Fund.GetFundDetailFromEastmoney(code),
+    {
       refreshDeps: [code],
       cacheKey: Utils.GenerateRequestKey('Fund.GetFundDetailFromEastmoney', code),
       staleTime: CONST.DEFAULT.SWR_STALE_DELAY,
-    });
+    }
+  );
   const { data: industryData = { stocks: [], expansion: '' }, run: runGetIndustryRateFromEaseMoney } = useRequest(
     () => Services.Fund.GetIndustryRateFromEaseMoney(code),
     {
@@ -117,9 +119,7 @@ export const DetailFund: React.FC<DetailFundProps> = (props) => {
   })();
   // 连续
   const continuous = (() => {
-    const continuousDay = getContinuous(
-      (pingzhongdata.Data_netWorthTrend || []).map(({ equityReturn }: any) => equityReturn)
-    );
+    const continuousDay = getContinuous((pingzhongdata.Data_netWorthTrend || []).map(({ equityReturn }: any) => equityReturn));
     if (continuousDay === undefined) {
       return;
     }
@@ -262,9 +262,7 @@ export const DetailFund: React.FC<DetailFundProps> = (props) => {
               {
                 key: String(2),
                 label: '周期回报',
-                children: (
-                  <CycleReturn onFresh={runGetFundDetailFromEastmoney} data={pingzhongdata.Data_netWorthTrend} />
-                ),
+                children: <CycleReturn onFresh={runGetFundDetailFromEastmoney} data={pingzhongdata.Data_netWorthTrend} />,
               },
               {
                 key: String(3),

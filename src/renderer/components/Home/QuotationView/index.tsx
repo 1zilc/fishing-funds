@@ -9,7 +9,7 @@ import GridView from '@/components/GridView';
 
 import { useDrawer, useAppSelector } from '@/utils/hooks';
 import * as Enums from '@/utils/enums';
-import styles from './index.module.scss';
+import styles from './index.module.css';
 
 const DetailQuotationContent = React.lazy(() => import('@/components/Home/QuotationView/DetailQuotationContent'));
 const DetailStockContent = React.lazy(() => import('@/components/Home/StockView/DetailStockContent'));
@@ -29,7 +29,12 @@ const QuotationView: React.FC<QuotationViewProps> = (props) => {
     close: closeDetailQuodationDrawer,
   } = useDrawer('');
 
-  const { data: stockSecid, show: showDetailStockDrawer, set: setDetailStockDrawer, close: closeDetailStockDrawer } = useDrawer('');
+  const {
+    data: stockSecid,
+    show: showDetailStockDrawer,
+    set: setDetailStockDrawer,
+    close: closeDetailStockDrawer,
+  } = useDrawer('');
 
   const list = quotations.filter(props.filter);
 

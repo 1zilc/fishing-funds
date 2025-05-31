@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import { useBoolean } from 'ahooks';
 import colorHash from '@/utils/colorHash';
 import * as Enums from '@/utils/enums';
-import styles from './index.module.scss';
+import styles from './index.module.css';
 
 interface WebAppIconProps {
   title: string;

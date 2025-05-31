@@ -6,7 +6,7 @@ import * as CONST from '@/constants';
 import * as Enums from '@/utils/enums';
 import * as Utils from '@/utils';
 import * as Helpers from '@/helpers';
-import styles from './index.module.scss';
+import styles from './index.module.css';
 
 interface FundRankProps {
   funds: (Fund.ResponseItem & Fund.FixData)[];
@@ -60,7 +60,8 @@ const FundRank: React.FC<FundRankProps> = ({ funds = [], codes = [] }) => {
           type: 'value',
           axisLabel: {
             fontSize: 10,
-            formatter: rankType.type === Enums.FundRankType.Sy || rankType.type === Enums.FundRankType.Cysy ? `{value}元` : `{value}%`,
+            formatter:
+              rankType.type === Enums.FundRankType.Sy || rankType.type === Enums.FundRankType.Cysy ? `{value}元` : `{value}%`,
           },
           splitLine: {
             lineStyle: {

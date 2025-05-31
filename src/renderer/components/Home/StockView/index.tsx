@@ -8,7 +8,7 @@ import GridView from '@/components/GridView';
 
 import { useDrawer, useAppSelector, useFreshStocks } from '@/utils/hooks';
 import * as Enums from '@/utils/enums';
-import styles from './index.module.scss';
+import styles from './index.module.css';
 
 const EditStockContent = React.lazy(() => import('@/components/Home/StockView/EditStockContent'));
 const DetailStockContent = React.lazy(() => import('@/components/Home/StockView/DetailStockContent'));
@@ -24,31 +24,16 @@ const StockView: React.FC<StockListProps> = (props) => {
 
   const freshStocks = useFreshStocks();
 
-  const {
-    data: detailStockSecid,
-    show: showDetailDrawer,
-    set: setDetailDrawer,
-    close: closeDetailDrawer,
-  } = useDrawer('');
+  const { data: detailStockSecid, show: showDetailDrawer, set: setDetailDrawer, close: closeDetailDrawer } = useDrawer('');
 
-  const {
-    data: editData,
-    show: showEditDrawer,
-    set: setEditDrawer,
-    close: closeEditDrawer,
-  } = useDrawer({} as Stock.SettingItem);
+  const { data: editData, show: showEditDrawer, set: setEditDrawer, close: closeEditDrawer } = useDrawer({} as Stock.SettingItem);
 
   const list = stocks.filter(props.filter);
 
   const view = useMemo(() => {
     switch (stockViewMode.type) {
       case Enums.StockViewType.Grid:
-        return (
-          <GridView
-            list={list.map((item) => ({ ...item, value: item.zx, code: item.secid }))}
-            onDetail={setDetailDrawer}
-          />
-        );
+        return <GridView list={list.map((item) => ({ ...item, value: item.zx, code: item.secid }))} onDetail={setDetailDrawer} />;
       case Enums.StockViewType.List:
       default:
         return list.map((stock) => (

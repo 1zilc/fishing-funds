@@ -1,9 +1,7 @@
 .content {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-  // background-color: var(--border-color);
-  // padding: 5px;
-  // grid-gap: 1px;
+
   border-left: 1px solid var(--border-color);
 }
 .item {

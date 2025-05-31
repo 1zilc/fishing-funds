@@ -1,7 +1,7 @@
 import React from 'react';
 import { Tooltip } from 'antd';
 import { RiQuestionLine } from 'react-icons/ri';
-import styles from './index.module.scss';
+import styles from './index.module.css';
 
 export interface GuideProps {
   list: { name: string; text: string }[];

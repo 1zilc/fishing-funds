@@ -3,7 +3,7 @@ import clsx from 'clsx';
 import Distributed from '@/components/Home/ZindexView/EconomicDataContent/NationalTeam/Distributed';
 import Trend from '@/components/Home/ZindexView/EconomicDataContent/NationalTeam/Trend';
 import Details from '@/components/Home/ZindexView/EconomicDataContent/NationalTeam/Details';
-import styles from './index.module.scss';
+import styles from './index.module.css';
 
 interface NationalTeamProps {}
 

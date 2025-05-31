@@ -8,7 +8,7 @@ import { syncChatGPTShowAction, setChatGPTSettingAction } from '@/store/features
 import { useAppDispatch, useAppSelector, useFakeUA } from '@/utils/hooks';
 import * as CONST from '@/constants';
 import * as Utils from '@/utils';
-import styles from './index.module.scss';
+import styles from './index.module.css';
 
 interface ChatGPTDrawerProps {}
 
@@ -58,7 +58,13 @@ const ChatGPTContent: React.FC<ChatGPTContentProps> = () => {
   );
 
   return (
-    <CustomDrawerContent classNames={styles.content} title="ChatGPT" enterText="多窗" onClose={onClose} onEnter={onOpenChildWindow}>
+    <CustomDrawerContent
+      classNames={styles.content}
+      title="ChatGPT"
+      enterText="多窗"
+      onClose={onClose}
+      onEnter={onOpenChildWindow}
+    >
       {ready && <webview ref={viewRef} src={chatUrl} style={{ width: '100%', flex: '1' }} useragent={fakeUA} />}
     </CustomDrawerContent>
   );
@@ -70,7 +76,12 @@ const ChatGPTDrawer: React.FC<ChatGPTDrawerProps> = () => {
   const cachedSetting = useAppSelector((state) => state.chatGPT.chatGPTSetting.cachedSetting);
 
   return (
-    <CustomDrawer show={show} zIndex={CONST.DEFAULT.DRAWER_ZINDEX_HEIGHT} closeImmediately={!cachedSetting} cached={cachedSetting}>
+    <CustomDrawer
+      show={show}
+      zIndex={CONST.DEFAULT.DRAWER_ZINDEX_HEIGHT}
+      closeImmediately={!cachedSetting}
+      cached={cachedSetting}
+    >
       <ChatGPTContent />
     </CustomDrawer>
   );

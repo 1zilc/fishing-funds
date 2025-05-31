@@ -2,7 +2,7 @@ import React from 'react';
 
 import Optional from '@/components/WebViewerDrawer/ManageWebContent/Optional';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
-import styles from './index.module.scss';
+import styles from './index.module.css';
 
 export interface ManageWebContentProps {
   onEnter: () => void;

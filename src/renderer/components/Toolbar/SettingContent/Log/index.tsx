@@ -10,7 +10,7 @@ import Empty from '@/components/Empty';
 import { useAppSelector } from '@/utils/hooks';
 import * as Services from '@/services';
 import * as Utils from '@/utils';
-import styles from './index.module.scss';
+import styles from './index.module.css';
 
 interface LogProps {}
 

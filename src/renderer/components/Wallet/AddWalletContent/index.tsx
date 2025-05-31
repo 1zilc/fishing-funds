@@ -8,7 +8,7 @@ import { addWalletConfigAction } from '@/store/features/wallet';
 
 import { useAppDispatch, useAppSelector } from '@/utils/hooks';
 import * as Utils from '@/utils';
-import styles from './index.module.scss';
+import styles from './index.module.css';
 
 export interface AddFundContentProps {
   onEnter: () => void;

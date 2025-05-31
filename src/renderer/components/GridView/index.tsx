@@ -3,7 +3,7 @@ import clsx from 'clsx';
 import ArrowLine from '@/components/ArrowLine';
 import { useAppSelector } from '@/utils/hooks';
 import * as Utils from '@/utils';
-import styles from './index.module.scss';
+import styles from './index.module.css';
 
 interface ViewItem {
   name: string;
@@ -35,7 +35,11 @@ const GridView: React.FC<GridViewProps> = (props) => {
           >
             <div className={styles.header}>
               <div>{item.name}</div>
-              {!conciseSetting ? <ArrowLine value={item.zdf} /> : <div className={zdfColor.textClass}>{Utils.Yang(item.zdf)}%</div>}
+              {!conciseSetting ? (
+                <ArrowLine value={item.zdf} />
+              ) : (
+                <div className={zdfColor.textClass}>{Utils.Yang(item.zdf)}%</div>
+              )}
             </div>
             {!conciseSetting && (
               <>

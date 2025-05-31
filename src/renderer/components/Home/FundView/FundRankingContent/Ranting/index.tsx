@@ -9,7 +9,7 @@ import { useDrawer, useAppDispatch, useAppSelector } from '@/utils/hooks';
 import { setFundRatingAction } from '@/store/features/fund';
 
 import * as Services from '@/services';
-import styles from './index.module.scss';
+import styles from './index.module.css';
 
 const AddFundContent = React.lazy(() => import('@/components/Home/FundView/AddFundContent'));
 const DetailFundContent = React.lazy(() => import('@/components/Home/FundView/DetailFundContent'));

@@ -35,17 +35,10 @@ import { toggleAllZindexsCollapseAction } from '@/store/features/zindex';
 import { toggleAllQuotationsCollapseAction } from '@/store/features/quotation';
 import { toggleAllCoinsCollapseAction } from '@/store/features/coin';
 import { toggleAllFundsCollapseAction, toggleAllStocksCollapseAction } from '@/store/features/wallet';
-import {
-  useFreshFunds,
-  useFreshZindexs,
-  useFreshStocks,
-  useFreshCoins,
-  useAppDispatch,
-  useAppSelector,
-} from '@/utils/hooks';
+import { useFreshFunds, useFreshZindexs, useFreshStocks, useFreshCoins, useAppDispatch, useAppSelector } from '@/utils/hooks';
 import * as Enums from '@/utils/enums';
 import * as Helpers from '@/helpers';
-import styles from './index.module.scss';
+import styles from './index.module.css';
 
 const ManageFundContent = React.lazy(() => import('@/components/Home/FundView/ManageFundContent'));
 const AddFundContent = React.lazy(() => import('@/components/Home/FundView/AddFundContent'));
@@ -81,8 +74,7 @@ function FundsSortBar() {
 
   const [showManageFundDrawer, { setTrue: openManageFundDrawer, setFalse: closeManageFundDrawer }] = useBoolean(false);
   const [showAddFundDrawer, { setTrue: openAddFundDrawer, setFalse: closeAddFundDrawer }] = useBoolean(false);
-  const [showFundRankingDrawer, { setTrue: openFundRankingDrawer, setFalse: closeFundRankingDrawer }] =
-    useBoolean(false);
+  const [showFundRankingDrawer, { setTrue: openFundRankingDrawer, setFalse: closeFundRankingDrawer }] = useBoolean(false);
 
   const expandAllFunds = useMemo(() => funds.every((_) => _.collapse), [funds]);
 
@@ -196,8 +188,7 @@ function ZindexSortBar() {
 
   const zindexs = useAppSelector((state) => state.zindex.zindexs);
 
-  const [showManageZindexDrawer, { setTrue: openManageZindexDrawer, setFalse: closeManageZindexDrawer }] =
-    useBoolean(false);
+  const [showManageZindexDrawer, { setTrue: openManageZindexDrawer, setFalse: closeManageZindexDrawer }] = useBoolean(false);
   const [showAddZindexDrawer, { setTrue: openAddZindexDrawer, setFalse: closeAddZindexDrawer }] = useBoolean(false);
   const [showNewsDrawer, { setTrue: openNewsDrawer, setFalse: closeNewsDrawer }] = useBoolean(false);
 
@@ -350,14 +341,10 @@ function QuotationSortBar() {
       </div>
       <div className={styles.view}>
         {quotationViewType === Enums.QuotationViewType.List && (
-          <RiListUnordered
-            onClick={() => dispatch(setQuotationViewModeAction({ type: Enums.QuotationViewType.Grid }))}
-          />
+          <RiListUnordered onClick={() => dispatch(setQuotationViewModeAction({ type: Enums.QuotationViewType.Grid }))} />
         )}
         {quotationViewType === Enums.QuotationViewType.Grid && (
-          <RiDashboardLine
-            onClick={() => dispatch(setQuotationViewModeAction({ type: Enums.QuotationViewType.Flow }))}
-          />
+          <RiDashboardLine onClick={() => dispatch(setQuotationViewModeAction({ type: Enums.QuotationViewType.Flow }))} />
         )}
         {quotationViewType === Enums.QuotationViewType.Flow && (
           <RiLayout4Line onClick={() => dispatch(setQuotationViewModeAction({ type: Enums.QuotationViewType.List }))} />
@@ -369,9 +356,7 @@ function QuotationSortBar() {
           dropdownRender={() => (
             <Menu
               selectedKeys={[String(quotationSortModeOptionsMap[quotationSortType].key)]}
-              onClick={({ key }) =>
-                dispatch(setQuotationSortModeAction({ type: Number(key) as Enums.QuotationSortType }))
-              }
+              onClick={({ key }) => dispatch(setQuotationSortModeAction({ type: Number(key) as Enums.QuotationSortType }))}
               items={quotationSortModeOptions}
             />
           )}
@@ -416,11 +401,9 @@ function StockSortBar() {
 
   const stocks = useAppSelector((state) => state.wallet.currentWallet.stocks);
 
-  const [showManageStockDrawer, { setTrue: openManageStockDrawer, setFalse: closeManageStockDrawer }] =
-    useBoolean(false);
+  const [showManageStockDrawer, { setTrue: openManageStockDrawer, setFalse: closeManageStockDrawer }] = useBoolean(false);
   const [showAddStockDrawer, { setTrue: openAddStockDrawer, setFalse: closeAddStockDrawer }] = useBoolean(false);
-  const [showStockRankingDrawer, { setTrue: openStockRankingDrawer, setFalse: closeStockRankingDrawer }] =
-    useBoolean(false);
+  const [showStockRankingDrawer, { setTrue: openStockRankingDrawer, setFalse: closeStockRankingDrawer }] = useBoolean(false);
 
   const expandAllStocks = useMemo(() => stocks.every((_) => _.collapse), [stocks]);
 
@@ -539,8 +522,7 @@ function CoinSortBar() {
 
   const [showManageCoinDrawer, { setTrue: openManageCoinDrawer, setFalse: closeManageCoinDrawer }] = useBoolean(false);
   const [showAddCoinDrawer, { setTrue: openAddCoinDrawer, setFalse: closeAddCoinDrawer }] = useBoolean(false);
-  const [showCoinRankingDrawer, { setTrue: openCoinRankingDrawer, setFalse: closeCoinRankingDrawer }] =
-    useBoolean(false);
+  const [showCoinRankingDrawer, { setTrue: openCoinRankingDrawer, setFalse: closeCoinRankingDrawer }] = useBoolean(false);
 
   const expandAllCoins = useMemo(() => coins.every((_) => _.collapse), [coins]);
 

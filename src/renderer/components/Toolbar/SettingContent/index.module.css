@@ -34,7 +34,6 @@
     padding: 5px 28px;
 
     label {
-      // height: 20px;
       line-height: 20px;
       margin: 0;
     }
@@ -113,7 +112,7 @@
   button {
     color: var(--inner-text-color);
     background-color: transparent;
-    // border: 1px solid var(--border-color);
+
     font-size: var(--base-font-size);
   }
 }
@@ -143,12 +142,7 @@
     justify-content: center;
     width: 50%;
 
-    // &:nth-child(3) {
-    //   width: 100%;
-    // }
-
     label {
-      // height: 20px;
       line-height: 20px;
       margin: 0;
     }

@@ -6,7 +6,7 @@ import { useRequest } from 'ahooks';
 import ChartCard from '@/components/Card/ChartCard';
 import * as Services from '@/services';
 import * as Utils from '@/utils';
-import styles from './index.module.scss';
+import styles from './index.module.css';
 
 interface BaseExchangeProps {}
 
@@ -36,7 +36,11 @@ const BaseExchange: React.FC<PropsWithChildren<BaseExchangeProps>> = () => {
     },
   ];
 
-  const { data = [], run: runGetListFromEastmoney, loading } = useRequest(() => Services.Exchange.GetListFromEastmoney('0', 'b:MK0300'));
+  const {
+    data = [],
+    run: runGetListFromEastmoney,
+    loading,
+  } = useRequest(() => Services.Exchange.GetListFromEastmoney('0', 'b:MK0300'));
 
   return (
     <ChartCard auto onFresh={runGetListFromEastmoney}>

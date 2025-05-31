@@ -12,7 +12,7 @@ import { useDrawer, useAppDispatch, useAppSelector } from '@/utils/hooks';
 import * as Helpers from '@/helpers';
 import * as Enums from '@/utils/enums';
 
-import styles from './index.module.scss';
+import styles from './index.module.css';
 
 const DetailStockContent = React.lazy(() => import('@/components/Home/StockView/DetailStockContent'));
 

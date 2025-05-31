@@ -3,7 +3,7 @@ import { renderToString } from 'react-dom/server';
 
 import { useResizeEchart, useRenderEcharts } from '@/utils/hooks';
 import * as CONST from '@/constants';
-import styles from './index.module.scss';
+import styles from './index.module.css';
 
 interface ScaleProps {
   Data_fluctuationScale: {

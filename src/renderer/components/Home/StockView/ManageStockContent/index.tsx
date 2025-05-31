@@ -4,7 +4,7 @@ import { Tabs } from 'antd';
 import PureCard from '@/components/Card/PureCard';
 import Optional from '@/components/Home/StockView/ManageStockContent/Optional';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
-import styles from './index.module.scss';
+import styles from './index.module.css';
 
 export interface ManageStockContentProps {
   onEnter: () => void;

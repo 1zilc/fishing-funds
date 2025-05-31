@@ -1,7 +1,7 @@
 import React from 'react';
 import { Progress } from 'antd';
 import clsx from 'clsx';
-import styles from './index.module.scss';
+import styles from './index.module.css';
 
 interface CapacityProps {
   TopText: {

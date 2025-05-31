@@ -1,26 +1,26 @@
-// tab去除线条
+/*  tab去除线条 */
 .ant-tabs-nav::before {
   border: none !important;
 }
-// 抽屉背景
+/*  抽屉背景 */
 .ant-drawer-content {
   background-color: initial;
 }
-// 抽屉无滚动条
+/*  抽屉无滚动条 */
 .ant-drawer-body::-webkit-scrollbar {
   width: 0;
   height: 0;
 }
-// 走马灯dots
+/* 走马灯dots */
 .ant-carousel .slick-dots li {
   background: var(--cancel-color);
 }
 .ant-carousel .slick-dots li.slick-active button {
   background: var(--primary-color);
 }
-// 进度条
+/* 进度条 */
 .ant-progress {
-  // width: 100%;
+  /* width: 100%; */
   line-height: 2px;
   display: flex;
   align-items: center;
@@ -29,18 +29,18 @@
 .ant-progress-circle {
   margin: 0;
 }
-// spin
+/* spin */
 .ant-spin-text {
   text-shadow: none !important;
 }
-// slider
+/*  slider */
 .ant-slider {
   margin: 0;
 }
-// tabs去除hover导航栏
+/* tabs去除hover导航栏 */
 .ant-tabs-nav-operations {
   display: none !important;
 }
 .ant-tabs-nav {
-  // padding-right: 8px;
+  /* padding-right: 8px; */
 }

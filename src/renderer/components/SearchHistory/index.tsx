@@ -2,7 +2,7 @@ import { Flex, Tag } from 'antd';
 import React, { RefObject, useImperativeHandle } from 'react';
 import { useLocalStorageState, useMemoizedFn } from 'ahooks';
 import * as CONST from '@/constants';
-import styles from './index.module.scss';
+import styles from './index.module.css';
 
 export type SearchHistoryProps = {
   ref: RefObject<SearchHistoryRef | null>;

@@ -10,7 +10,7 @@ import QuickSearch from '@/components/Toolbar/AppCenterContent/QuickSearch';
 import { deleteWebAction, setWebConfigAction } from '@/store/features/web';
 import { useAutoDestroySortableRef, useAppDispatch, useAppSelector } from '@/utils/hooks';
 import * as Utils from '@/utils';
-import styles from './index.module.scss';
+import styles from './index.module.css';
 
 export interface OptionalProps {}
 

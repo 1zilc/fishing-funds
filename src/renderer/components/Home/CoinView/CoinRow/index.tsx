@@ -7,7 +7,7 @@ import { toggleCoinCollapseAction } from '@/store/features/coin';
 import { useAppDispatch, useAppSelector } from '@/utils/hooks';
 import colorHash from '@/utils/colorHash';
 import * as Utils from '@/utils';
-import styles from './index.module.scss';
+import styles from './index.module.css';
 
 export interface RowProps {
   coin: Coin.ResponseItem & Coin.ExtraRow;
@@ -83,9 +83,7 @@ const CoinRow: React.FC<RowProps> = React.memo((props) => {
           {conciseSetting && (
             <section>
               <span>24H涨跌幅：</span>
-              <span className={clsx(Utils.GetValueColor(coin.change24h).textClass)}>
-                {Utils.Yang(coin.change24h)} %
-              </span>
+              <span className={clsx(Utils.GetValueColor(coin.change24h).textClass)}>{Utils.Yang(coin.change24h)} %</span>
             </section>
           )}
           <div className={styles.view}>

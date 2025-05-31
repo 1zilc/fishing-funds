@@ -4,7 +4,7 @@ import clsx from 'clsx';
 import { syncTabsActiveKeyAction } from '@/store/features/tabs';
 import { useAppDispatch, useAppSelector } from '@/utils/hooks';
 import * as Enums from '@/utils/enums';
-import styles from './index.module.scss';
+import styles from './index.module.css';
 
 export interface TabsBarProps {}
 export interface Tab {

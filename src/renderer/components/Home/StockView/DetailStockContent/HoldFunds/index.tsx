@@ -7,7 +7,7 @@ import CustomDrawer from '@/components/CustomDrawer';
 import { useDrawer, useAppSelector } from '@/utils/hooks';
 import * as Services from '@/services';
 import * as Utils from '@/utils';
-import styles from './index.module.scss';
+import styles from './index.module.css';
 
 const AddFundContent = React.lazy(() => import('@/components/Home/FundView/AddFundContent'));
 const DetailFundContent = React.lazy(() => import('@/components/Home/FundView/DetailFundContent'));

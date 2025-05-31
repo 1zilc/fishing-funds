@@ -16,7 +16,7 @@ import * as Services from '@/services';
 import * as Utils from '@/utils';
 import * as CONST from '@/constants';
 
-import styles from './index.module.scss';
+import styles from './index.module.css';
 
 export type DetailCoinProps = {
   code: string;

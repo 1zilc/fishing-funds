@@ -1,6 +1,6 @@
 import React from 'react';
 import colorHash from '@/utils/colorHash';
-import styles from './index.module.scss';
+import styles from './index.module.css';
 
 interface ColorfulTagsProps {
   tags: string[];

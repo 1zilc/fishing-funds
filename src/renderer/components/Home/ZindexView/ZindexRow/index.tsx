@@ -9,7 +9,7 @@ import { toggleZindexCollapseAction } from '@/store/features/zindex';
 import { useAppDispatch, useAppSelector, useRenderEcharts, useResizeEchart } from '@/utils/hooks';
 import * as Utils from '@/utils';
 import * as Enums from '@/utils/enums';
-import styles from './index.module.scss';
+import styles from './index.module.css';
 
 export interface RowProps {
   zindex: Zindex.ResponseItem & Zindex.ExtraRow;
@@ -121,11 +121,7 @@ const ZindexRow: React.FC<RowProps> = React.memo((props) => {
         }}
       >
         <div className={styles.arrow}>
-          {zindex.collapse ? (
-            <RiArrowUpSLine style={{ ...arrowSize }} />
-          ) : (
-            <RiArrowDownSLine style={{ ...arrowSize }} />
-          )}
+          {zindex.collapse ? <RiArrowUpSLine style={{ ...arrowSize }} /> : <RiArrowDownSLine style={{ ...arrowSize }} />}
         </div>
         <div style={{ flex: 1 }}>
           <div style={{ display: 'flex', alignItems: 'center' }}>
@@ -156,13 +152,9 @@ const ZindexRow: React.FC<RowProps> = React.memo((props) => {
               {zindexViewMode.type === Enums.ZindexViewType.Chart ? (
                 <div className={clsx(styles.zdd)}>{zindex.zsz}</div>
               ) : (
-                <div className={clsx(styles.zdd, Utils.GetValueColor(zindex.zdd).textClass)}>
-                  {Utils.Yang(zindex.zdd)}
-                </div>
+                <div className={clsx(styles.zdd, Utils.GetValueColor(zindex.zdd).textClass)}>{Utils.Yang(zindex.zdd)}</div>
               )}
-              <div className={clsx(styles.zdf, Utils.GetValueColor(zindex.zdf).textClass)}>
-                {Utils.Yang(zindex.zdf)} %
-              </div>
+              <div className={clsx(styles.zdf, Utils.GetValueColor(zindex.zdf).textClass)}>{Utils.Yang(zindex.zdf)} %</div>
             </div>
           )}
         </div>

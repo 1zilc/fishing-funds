@@ -19,7 +19,7 @@ import SealPlate from '@/components/Home/QuotationView/FundFlowContent/SealPlate
 import LeekTrend from '@/components/Home/QuotationView/FundFlowContent/LeekTrend';
 
 import * as Enums from '@/utils/enums';
-import styles from './index.module.scss';
+import styles from './index.module.css';
 
 export interface DetailFundContentProps {
   onEnter: () => void;

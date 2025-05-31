@@ -5,7 +5,7 @@ import ChartCard from '@/components/Card/ChartCard';
 import { useResizeEchart, useRenderEcharts } from '@/utils/hooks';
 import * as Services from '@/services';
 import * as CONST from '@/constants';
-import styles from './index.module.scss';
+import styles from './index.module.css';
 
 interface GoldTrendsProps {
   secid: string;
@@ -15,9 +15,12 @@ interface GoldTrendsProps {
 const GoldTrends: React.FC<GoldTrendsProps> = (props) => {
   const { ref: chartRef, chartInstance } = useResizeEchart(CONST.DEFAULT.ECHARTS_SCALE);
 
-  const { data: result = [], run: runGetAumFromEastmoney } = useRequest(() => Services.Quotation.GetGoldTrendsFromEastmoney(props.secid), {
-    ready: !!chartInstance,
-  });
+  const { data: result = [], run: runGetAumFromEastmoney } = useRequest(
+    () => Services.Quotation.GetGoldTrendsFromEastmoney(props.secid),
+    {
+      ready: !!chartInstance,
+    }
+  );
 
   useRenderEcharts(
     () => {
@@ -78,7 +81,11 @@ const GoldTrends: React.FC<GoldTrendsProps> = (props) => {
   );
 
   return (
-    <ChartCard className={styles.content} onFresh={runGetAumFromEastmoney} TitleBar={<div className={styles.titleBar}>{props.title}</div>}>
+    <ChartCard
+      className={styles.content}
+      onFresh={runGetAumFromEastmoney}
+      TitleBar={<div className={styles.titleBar}>{props.title}</div>}
+    >
       <div ref={chartRef} style={{ width: '100%' }} />
     </ChartCard>
   );

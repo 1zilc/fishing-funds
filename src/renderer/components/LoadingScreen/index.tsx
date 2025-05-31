@@ -2,7 +2,7 @@ import React from 'react';
 import { Spin } from 'antd';
 import clsx from 'clsx';
 import Logo from '@/components/Logo';
-import styles from './index.module.scss';
+import styles from './index.module.css';
 
 export interface LoadingScreenProps {
   loading: boolean;

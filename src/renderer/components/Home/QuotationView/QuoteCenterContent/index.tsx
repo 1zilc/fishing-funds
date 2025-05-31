@@ -11,7 +11,7 @@ import TodayHot from '@/components/Home/QuotationView/QuoteCenterContent/TodayHo
 import HotTheme from '@/components/Home/QuotationView/QuoteCenterContent/HotTheme';
 import RecentHot from '@/components/Home/QuotationView/QuoteCenterContent/RecentHot';
 import * as Services from '@/services';
-import styles from './index.module.scss';
+import styles from './index.module.css';
 
 interface QuoteCenterContentProps {
   onEnter: () => void;

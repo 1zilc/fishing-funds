@@ -6,7 +6,7 @@ import ChartCard from '@/components/Card/ChartCard';
 import * as Services from '@/services';
 import * as Utils from '@/utils';
 import * as CONST from '@/constants';
-import styles from './index.module.scss';
+import styles from './index.module.css';
 
 interface EuListProps {
   onView: (url: string) => void;

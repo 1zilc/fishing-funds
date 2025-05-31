@@ -7,7 +7,7 @@ import { useResizeEchart, useRenderEcharts } from '@/utils/hooks';
 import * as CONST from '@/constants';
 import * as Services from '@/services';
 import * as Utils from '@/utils';
-import styles from './index.module.scss';
+import styles from './index.module.css';
 
 export interface PerformanceProps {
   secid: string;
@@ -16,12 +16,15 @@ export interface PerformanceProps {
 }
 const Trend: React.FC<PerformanceProps> = ({ secid, zs = 0, name }) => {
   const { ref: chartRef, chartInstance } = useResizeEchart(CONST.DEFAULT.ECHARTS_SCALE);
-  const { data: result = { trends: [] }, run: runGetTrendFromEastmoney } = useRequest(() => Services.Stock.GetTrendFromEastmoney(secid), {
-    pollingInterval: CONST.DEFAULT.ESTIMATE_FUND_DELAY,
-    refreshDeps: [secid, zs],
-    ready: !!chartInstance,
-    cacheKey: Utils.GenerateRequestKey('Stock.GetTrendFromEastmoney', secid),
-  });
+  const { data: result = { trends: [] }, run: runGetTrendFromEastmoney } = useRequest(
+    () => Services.Stock.GetTrendFromEastmoney(secid),
+    {
+      pollingInterval: CONST.DEFAULT.ESTIMATE_FUND_DELAY,
+      refreshDeps: [secid, zs],
+      ready: !!chartInstance,
+      cacheKey: Utils.GenerateRequestKey('Stock.GetTrendFromEastmoney', secid),
+    }
+  );
 
   useRenderEcharts(
     () => {

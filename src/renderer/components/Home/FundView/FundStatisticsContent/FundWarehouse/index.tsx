@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { useResizeEchart, useRenderEcharts, useAppSelector } from '@/utils/hooks';
 import * as CONST from '@/constants';
 import * as Helpers from '@/helpers';
-import styles from './index.module.scss';
+import styles from './index.module.css';
 
 interface FundWarehouseProps {
   funds: (Fund.ResponseItem & Fund.FixData)[];

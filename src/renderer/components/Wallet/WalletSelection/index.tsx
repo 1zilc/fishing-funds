@@ -1,7 +1,7 @@
 import React from 'react';
 import clsx from 'clsx';
 import { walletIcons } from '@/helpers/wallet';
-import styles from './index.module.scss';
+import styles from './index.module.css';
 
 const size = {
   width: 24,

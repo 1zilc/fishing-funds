@@ -6,7 +6,7 @@ import CustomDrawer from '@/components/CustomDrawer';
 import { useDrawer } from '@/utils/hooks';
 import * as Services from '@/services';
 import * as Utils from '@/utils';
-import styles from './index.module.scss';
+import styles from './index.module.css';
 
 const AddStockContent = React.lazy(() => import('@/components/Home/StockView/AddStockContent'));
 
@@ -15,7 +15,11 @@ interface RecentHotProps {}
 const RecentHot: React.FC<RecentHotProps> = () => {
   const { data: stockName, show: showAddStockDrawer, set: setAddStockDrawer, close: closeAddStockDrawer } = useDrawer('');
 
-  const { data = [], loading, run: runQuotationGetRecentHotFromEastmoney } = useRequest(Services.Quotation.GetRecentHotFromEastmoney);
+  const {
+    data = [],
+    loading,
+    run: runQuotationGetRecentHotFromEastmoney,
+  } = useRequest(Services.Quotation.GetRecentHotFromEastmoney);
 
   return (
     <ChartCard auto onFresh={runQuotationGetRecentHotFromEastmoney}>

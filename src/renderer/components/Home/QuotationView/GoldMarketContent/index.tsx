@@ -8,7 +8,7 @@ import InternationalMetalFutures from '@/components/Home/QuotationView/GoldMarke
 import InternationalMetalGoods from '@/components/Home/QuotationView/GoldMarketContent/InternationalMetalGoods';
 import ShanghaiGoldFutures from '@/components/Home/QuotationView/GoldMarketContent/ShanghaiGoldFutures';
 import ShanghaiGoldGoods from '@/components/Home/QuotationView/GoldMarketContent/ShanghaiGoldGoods';
-import styles from './index.module.scss';
+import styles from './index.module.css';
 
 interface GoldMarketContentProps {
   onEnter: () => void;

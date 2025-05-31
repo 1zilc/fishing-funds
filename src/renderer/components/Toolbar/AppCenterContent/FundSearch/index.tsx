@@ -7,7 +7,7 @@ import ChartCard from '@/components/Card/ChartCard';
 import { useDrawer, useAppSelector } from '@/utils/hooks';
 import * as Enums from '@/utils/enums';
 
-import styles from './index.module.scss';
+import styles from './index.module.css';
 
 const AddFundContent = React.lazy(() => import('@/components/Home/FundView/AddFundContent'));
 const DetailFundContent = React.lazy(() => import('@/components/Home/FundView/DetailFundContent'));

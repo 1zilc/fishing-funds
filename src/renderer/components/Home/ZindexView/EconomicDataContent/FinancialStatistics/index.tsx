@@ -5,7 +5,7 @@ import Revenue from '@/components/Home/ZindexView/EconomicDataContent/FinancialS
 import DepositReserveRatio from '@/components/Home/ZindexView/EconomicDataContent/FinancialStatistics/DepositReserveRatio';
 import ForeignExchangeAndGold from '@/components/Home/ZindexView/EconomicDataContent/FinancialStatistics/ForeignExchangeAndGold';
 import OilPrice from '@/components/Home/ZindexView/EconomicDataContent/FinancialStatistics/OilPrice';
-import styles from './index.module.scss';
+import styles from './index.module.css';
 
 interface FinancialStatisticsProps {}
 

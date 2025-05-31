@@ -1,5 +1,5 @@
 .content {
-  padding: var(--base-padding) 0;
+  padding: 0 0 var(--base-padding);
 
   h3 {
     color: var(--main-text-color);
@@ -33,7 +33,6 @@
 }
 
 .detailItem {
-  // flex: 1;
   display: flex;
   flex-direction: column;
 }
@@ -42,31 +41,15 @@
   color: var(--inner-text-color);
 }
 
-.zdf {
+.syl_1n {
   font-size: calc(var(--base-font-size) * 5 / 3);
   font-size: 600;
 }
-.titleRow {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-  span {
-    word-break: break-all;
 
-    &:nth-child(2) {
-      word-break: keep-all;
-      margin-left: 10px;
-    }
-  }
-}
 .subTitleRow {
   display: flex;
   align-items: center;
   justify-content: space-between;
   font-size: calc(var(--base-font-size) * 11 / 12);
   margin-bottom: 5px;
-}
-.selfAdd {
-  margin-left: var(--base-padding);
 }

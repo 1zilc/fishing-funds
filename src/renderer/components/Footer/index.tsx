@@ -1,5 +1,5 @@
 import React, { PropsWithChildren } from 'react';
-import styles from './index.module.scss';
+import styles from './index.module.css';
 
 const Footer: React.FC<PropsWithChildren<Record<string, unknown>>> = ({ children }) => {
   return (

@@ -1,7 +1,7 @@
 import React from 'react';
 import clsx from 'clsx';
 import { RiEyeLine, RiEyeCloseLine } from 'react-icons/ri';
-import styles from './index.module.scss';
+import styles from './index.module.css';
 
 export interface EyeProps {
   style?: Record<string, any>;

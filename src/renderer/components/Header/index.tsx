@@ -1,7 +1,7 @@
 import React, { PropsWithChildren, createContext, useContext, useDeferredValue } from 'react';
 import { useScroll } from 'ahooks';
 import clsx from 'clsx';
-import styles from './index.module.scss';
+import styles from './index.module.css';
 
 export interface HeaderContextType {
   miniMode: boolean;

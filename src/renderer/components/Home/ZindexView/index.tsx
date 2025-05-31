@@ -8,7 +8,7 @@ import GridView from '@/components/GridView';
 
 import { useDrawer, useAppSelector, useFreshZindexs } from '@/utils/hooks';
 import * as Enums from '@/utils/enums';
-import styles from './index.module.scss';
+import styles from './index.module.css';
 
 const EditZindexContent = React.lazy(() => import('@/components/Home/ZindexView/EditZindexContent'));
 const DetailZindexContent = React.lazy(() => import('@/components/Home/ZindexView/DetailZindexContent'));
@@ -24,12 +24,7 @@ const ZindexView: React.FC<ZindexViewProps> = (props) => {
 
   const freshZindexs = useFreshZindexs();
 
-  const {
-    data: detailZindexCode,
-    show: showDetailDrawer,
-    set: setDetailDrawer,
-    close: closeDetailDrawer,
-  } = useDrawer('');
+  const { data: detailZindexCode, show: showDetailDrawer, set: setDetailDrawer, close: closeDetailDrawer } = useDrawer('');
 
   const {
     data: editData,

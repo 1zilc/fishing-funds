@@ -2,7 +2,7 @@ import React from 'react';
 
 import { useAutoSizeEchart, useRenderEcharts, useEchartEventEffect } from '@/utils/hooks';
 import * as Utils from '@/utils';
-import styles from './index.module.scss';
+import styles from './index.module.css';
 
 interface QuotationFlowProps {
   onDetail: (code: string) => void;

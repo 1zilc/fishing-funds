@@ -6,7 +6,7 @@ import CustomDrawerContent from '@/components/CustomDrawer/Content';
 import { updateWalletConfigAction } from '@/store/features/wallet';
 import { useAppDispatch, useAppSelector } from '@/utils/hooks';
 
-import styles from './index.module.scss';
+import styles from './index.module.css';
 
 export interface AddFundContentProps {
   onEnter: () => void;

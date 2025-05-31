@@ -4,7 +4,7 @@ import clsx from 'clsx';
 import colorHash from '@/utils/colorHash';
 import * as Utils from '@/utils';
 import { useOpenWebView } from '@/utils/hooks';
-import styles from './index.module.scss';
+import styles from './index.module.css';
 
 interface QuickSearchProps {
   value: string;

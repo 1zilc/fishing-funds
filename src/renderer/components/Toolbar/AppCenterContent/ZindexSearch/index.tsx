@@ -11,7 +11,7 @@ import { addZindexAction } from '@/store/features/zindex';
 import { useDrawer, useAppDispatch, useAppSelector } from '@/utils/hooks';
 import * as Helpers from '@/helpers';
 import * as Enums from '@/utils/enums';
-import styles from './index.module.scss';
+import styles from './index.module.css';
 
 const DetailZindexContent = React.lazy(() => import('@/components/Home/ZindexView/DetailZindexContent'));
 

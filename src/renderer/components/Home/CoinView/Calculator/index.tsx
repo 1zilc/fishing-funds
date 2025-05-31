@@ -12,7 +12,7 @@ import { useDrawer, useAppSelector } from '@/utils/hooks';
 import * as Helpers from '@/helpers';
 import * as Enums from '@/utils/enums';
 import * as Services from '@/services';
-import styles from './index.module.scss';
+import styles from './index.module.css';
 
 const DetailCoinContent = React.lazy(() => import('@/components/Home/CoinView/DetailCoinContent'));
 interface CalculatorProps {

@@ -9,7 +9,7 @@ import * as Services from '@/services';
 import * as Enums from '@/utils/enums';
 import * as Utils from '@/utils';
 
-import styles from './index.module.scss';
+import styles from './index.module.css';
 
 export interface PerformanceProps {
   code: string;

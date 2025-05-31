@@ -3,7 +3,7 @@ import clsx from 'clsx';
 import { Button } from 'antd';
 import { useKeyPress } from 'ahooks';
 import Collect from '@/components/Collect';
-import styles from './index.module.scss';
+import styles from './index.module.css';
 import { useDrawerPopBack } from '@/utils/hooks';
 
 export interface CustomDrawerContentProps {

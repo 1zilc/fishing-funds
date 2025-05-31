@@ -10,7 +10,7 @@ import { useAppDispatch, useAppSelector, useDrawer } from '@/utils/hooks';
 import { walletIcons } from '@/helpers/wallet';
 import * as Utils from '@/utils';
 import * as Helpers from '@/helpers';
-import styles from './index.module.scss';
+import styles from './index.module.css';
 import { useMemoizedFn } from 'ahooks';
 
 const AddWalletContent = React.lazy(() => import('@/components/Wallet/AddWalletContent'));

@@ -10,7 +10,7 @@ import Empty from '@/components/Empty';
 import { deleteCoinAction, setCoinConfigAction } from '@/store/features/coin';
 import { useDrawer, useAutoDestroySortableRef, useAppDispatch, useAppSelector } from '@/utils/hooks';
 import * as Utils from '@/utils';
-import styles from './index.module.scss';
+import styles from './index.module.css';
 
 const AddCoinContent = React.lazy(() => import('@/components/Home/CoinView/AddCoinContent'));
 

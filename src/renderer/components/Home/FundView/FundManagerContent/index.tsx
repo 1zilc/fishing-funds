@@ -11,7 +11,7 @@ import CustomDrawerContent from '@/components/CustomDrawer/Content';
 import ManageHistoryFundList from '@/components/Home/FundView/FundManagerContent/ManageHistoryFundList';
 import * as Services from '@/services';
 import * as Enums from '@/utils/enums';
-import styles from './index.module.scss';
+import styles from './index.module.css';
 
 export interface FundManagerContentProps {
   onEnter: () => void;

@@ -5,7 +5,7 @@ import WebAppIcon from '@/components/Toolbar/AppCenterContent/WebAppIcon';
 import StandCard from '@/components/Card/StandCard';
 import colorHash from '@/utils/colorHash';
 import * as Enums from '@/utils/enums';
-import styles from './index.module.scss';
+import styles from './index.module.css';
 
 interface AddWebContentProps {
   onEnter: (web: Web.SettingItem) => void;

@@ -6,7 +6,7 @@ import CustomDrawer from '@/components/CustomDrawer';
 import Avatar from '@/components/Avatar';
 import { useDrawer } from '@/utils/hooks';
 import * as Services from '@/services';
-import styles from './index.module.scss';
+import styles from './index.module.css';
 
 const AddStockContent = React.lazy(() => import('@/components/Home/StockView/AddStockContent'));
 

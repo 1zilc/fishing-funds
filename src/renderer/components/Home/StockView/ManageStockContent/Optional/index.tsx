@@ -17,7 +17,7 @@ import Empty from '@/components/Empty';
 import { deleteStockAction, setStockConfigAction, updateStockAction } from '@/store/features/stock';
 import { useDrawer, useAutoDestroySortableRef, useAppDispatch, useAppSelector } from '@/utils/hooks';
 import * as Utils from '@/utils';
-import styles from './index.module.scss';
+import styles from './index.module.css';
 
 const AddStockContent = React.lazy(() => import('@/components/Home/StockView/AddStockContent'));
 const EditStockContent = React.lazy(() => import('@/components/Home/StockView/EditStockContent'));
@@ -36,12 +36,7 @@ const Optional: React.FC<OptionalProps> = () => {
 
   const { show: showAddDrawer, set: setAddDrawer, close: closeAddDrawer } = useDrawer(null);
 
-  const {
-    data: editData,
-    show: showEditDrawer,
-    set: setEditDrawer,
-    close: closeEditDrawer,
-  } = useDrawer({} as Stock.SettingItem);
+  const { data: editData, show: showEditDrawer, set: setEditDrawer, close: closeEditDrawer } = useDrawer({} as Stock.SettingItem);
 
   function onSortStockConfig(sortList: Stock.SettingItem[]) {
     const hasChanged = Utils.CheckListOrderHasChanged(stockConfig, sortList, 'secid');

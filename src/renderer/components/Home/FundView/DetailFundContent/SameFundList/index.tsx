@@ -5,7 +5,7 @@ import FundRow from '@/components/Home/FundView/FundRow';
 import CustomDrawer from '@/components/CustomDrawer';
 import { useDrawer, useAppSelector } from '@/utils/hooks';
 import * as Helpers from '@/helpers';
-import styles from './index.module.scss';
+import styles from './index.module.css';
 
 const DetailFundContent = React.lazy(() => import('@/components/Home/FundView/DetailFundContent'));
 
@@ -14,12 +14,7 @@ export interface SameFundListProps {
 }
 const SameFundList: React.FC<SameFundListProps> = ({ swithSameType = [] }) => {
   const { fundApiTypeSetting } = useAppSelector((state) => state.setting.systemSetting);
-  const {
-    data: detailFundCode,
-    show: showDetailDrawer,
-    set: setDetailDrawer,
-    close: closeDetailDrawer,
-  } = useDrawer('');
+  const { data: detailFundCode, show: showDetailDrawer, set: setDetailDrawer, close: closeDetailDrawer } = useDrawer('');
 
   const fundsConfig = swithSameType.flat().map((item) => {
     const [code, name, value] = item.split('_');

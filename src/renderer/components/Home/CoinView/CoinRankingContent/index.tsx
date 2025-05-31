@@ -3,7 +3,7 @@ import { Tabs } from 'antd';
 
 import MainRank from '@/components/Home/CoinView/CoinRankingContent/MainRank';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
-import styles from './index.module.scss';
+import styles from './index.module.css';
 
 export interface CoinRankingContentProps {
   onEnter: () => void;

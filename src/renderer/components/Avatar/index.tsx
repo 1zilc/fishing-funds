@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import clsx from 'clsx';
 import colorHash from '@/utils/colorHash';
-import styles from './index.module.scss';
+import styles from './index.module.css';
 
 interface AvatarProps {
   url?: string;

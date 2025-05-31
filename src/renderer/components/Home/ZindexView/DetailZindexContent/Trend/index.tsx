@@ -8,7 +8,7 @@ import { useResizeEchart, useRenderEcharts } from '@/utils/hooks';
 import * as CONST from '@/constants';
 import * as Services from '@/services';
 import * as Utils from '@/utils';
-import styles from './index.module.scss';
+import styles from './index.module.css';
 
 export interface PerformanceProps {
   code: string;
@@ -25,11 +25,14 @@ const trendTypeList = [
 const Trend: React.FC<PerformanceProps> = ({ code, zs = 0, name }) => {
   const { ref: chartRef, chartInstance } = useResizeEchart(CONST.DEFAULT.ECHARTS_SCALE);
   const [trend, setTrendType] = useState(trendTypeList[0]);
-  const { data: result = [], run: runGetTrendFromEastmoney } = useRequest(() => Services.Zindex.GetTrendFromEastmoney(code, trend.code), {
-    refreshDeps: [code, trend.code, zs],
-    ready: !!chartInstance,
-    cacheKey: Utils.GenerateRequestKey('Zindex.GetTrendFromEastmoney', [code, trend.code]),
-  });
+  const { data: result = [], run: runGetTrendFromEastmoney } = useRequest(
+    () => Services.Zindex.GetTrendFromEastmoney(code, trend.code),
+    {
+      refreshDeps: [code, trend.code, zs],
+      ready: !!chartInstance,
+      cacheKey: Utils.GenerateRequestKey('Zindex.GetTrendFromEastmoney', [code, trend.code]),
+    }
+  );
 
   useRenderEcharts(
     () => {

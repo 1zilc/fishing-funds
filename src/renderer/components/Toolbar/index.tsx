@@ -16,7 +16,7 @@ import {
 } from '@/utils/hooks';
 import * as Enums from '@/utils/enums';
 import * as CONST from '@/constants';
-import styles from './index.module.scss';
+import styles from './index.module.css';
 
 const AppCenterContent = React.lazy(() => import('@/components/Toolbar/AppCenterContent'));
 const SettingContent = React.lazy(() => import('@/components/Toolbar/SettingContent'));
