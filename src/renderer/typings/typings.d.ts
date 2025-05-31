@@ -1,5 +1,3 @@
-declare module '*.css';
-declare module '*.css';
 declare module '*.png';
 declare module '*.svg' {
   const ReactComponent: React.FC<React.SVGProps<SVGSVGElement>>;
