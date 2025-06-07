@@ -76,7 +76,6 @@ export async function GetQuotationsFromEastmoney(type = 't:2', pn = 1, pz = 100)
         ldgpZdf: i.f222, // 领跌股票涨跌幅
       };
     });
-    console.log(result, type);
     return result;
   } catch (error) {
     return [];

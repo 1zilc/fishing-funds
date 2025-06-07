@@ -15,6 +15,7 @@ import {
   useSyncConfig,
   useTranslate,
   useChatGPT,
+  useForceReloadApp,
 } from '@/utils/hooks';
 
 function GlobalTask() {
@@ -31,6 +32,7 @@ function GlobalTask() {
   useSyncConfig();
   useTranslate();
   useChatGPT();
+  useForceReloadApp();
   useBootStrap();
   return null;
 }
