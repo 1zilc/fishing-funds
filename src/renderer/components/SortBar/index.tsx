@@ -353,7 +353,7 @@ function QuotationSortBar() {
       <div className={styles.mode}>
         <Dropdown
           placement="bottomRight"
-          dropdownRender={() => (
+          popupRender={() => (
             <Menu
               selectedKeys={[String(quotationSortModeOptionsMap[quotationSortType].key)]}
               onClick={({ key }) => dispatch(setQuotationSortModeAction({ type: Number(key) as Enums.QuotationSortType }))}
@@ -457,7 +457,7 @@ function StockSortBar() {
       <div className={styles.mode}>
         <Dropdown
           placement="bottomRight"
-          dropdownRender={() => (
+          popupRender={() => (
             <Menu
               selectedKeys={[String(stockSortModeOptionsMap[stockSortType].key)]}
               onClick={({ key }) => dispatch(setStockSortModeAction({ type: Number(key) as Enums.StockSortType }))}
@@ -573,7 +573,7 @@ function CoinSortBar() {
       <div className={styles.mode}>
         <Dropdown
           placement="bottomRight"
-          dropdownRender={() => (
+          popupRender={() => (
             <Menu
               selectedKeys={[String(coinSortModeOptionsMap[coinSortType].key)]}
               onClick={({ key }) => dispatch(setCoinSortModeAction({ type: Number(key) as Enums.CoinSortType }))}

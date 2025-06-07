@@ -80,7 +80,7 @@ const Wallet: React.FC<WalletProps> = () => {
       <div className={styles.topBar}>
         <Dropdown
           placement="bottomRight"
-          dropdownRender={() => (
+          popupRender={() => (
             <Menu
               selectedKeys={[currentWalletCode]}
               items={walletMenuItems}
@@ -117,7 +117,7 @@ const Wallet: React.FC<WalletProps> = () => {
       </div>
       <Dropdown
         placement="bottom"
-        dropdownRender={() => (
+        popupRender={() => (
           <div className={styles.detailBar}>
             <div>
               <div className={styles.sygz}>

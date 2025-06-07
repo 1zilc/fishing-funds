@@ -226,7 +226,7 @@ export const WebViewer: React.FC<WebViewerProps> = (props) => {
         />
         <div className={clsx(styles.nav, 'max-content')}>
           <Dropdown
-            dropdownRender={() => (
+            popupRender={() => (
               <div className={styles.menu}>
                 <div className={styles.menuItem} onClick={onVisit}>
                   <label>浏览器打开</label>
