@@ -13,7 +13,7 @@ import * as Services from '@/services';
 import * as Utils from '@/utils';
 import * as Enums from '@/utils/enums';
 import * as Helpers from '@/helpers';
-import styles from './index.module.scss';
+import styles from './index.module.css';
 
 export interface RowProps {
   stock: Stock.ResponseItem & Stock.ExtraRow;
@@ -178,13 +178,9 @@ const StockRow: React.FC<RowProps> = React.memo((props) => {
               {stockViewMode.type === Enums.StockViewType.Chart ? (
                 <div className={clsx(styles.zdd)}>{stock.zx}</div>
               ) : (
-                <div className={clsx(styles.zdd, Utils.GetValueColor(stock.zdd).textClass)}>
-                  {Utils.Yang(stock.zdd)}
-                </div>
+                <div className={clsx(styles.zdd, Utils.GetValueColor(stock.zdd).textClass)}>{Utils.Yang(stock.zdd)}</div>
               )}
-              <div className={clsx(styles.zdf, Utils.GetValueColor(stock.zdf).textClass)}>
-                {Utils.Yang(stock.zdf)} %
-              </div>
+              <div className={clsx(styles.zdf, Utils.GetValueColor(stock.zdf).textClass)}>{Utils.Yang(stock.zdf)} %</div>
             </div>
           )}
         </div>

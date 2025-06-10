@@ -6,7 +6,7 @@ import ChartCard from '@/components/Card/ChartCard';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
 import HistoryBar from '@/components/Home/FundView/FundHistoryValueContent/HistoryBar';
 import * as Utils from '@/utils';
-import styles from './index.module.scss';
+import styles from './index.module.css';
 
 export interface HistoryValueProps {
   data?: { x: number; y: number; equityReturn: number; unitMoney: 0 }[];

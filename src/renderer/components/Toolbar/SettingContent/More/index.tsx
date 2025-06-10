@@ -6,7 +6,7 @@ import StandCard from '@/components/Card/StandCard';
 import PayCarousel from '@/components/PayCarousel';
 import Guide from '@/components/Guide';
 import * as Utils from '@/utils';
-import styles from '../index.module.scss';
+import styles from '../index.module.css';
 
 interface MoreProps {}
 

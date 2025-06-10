@@ -7,7 +7,7 @@ import MainRank from '@/components/Home/StockView/StockRankingContent/MainRank';
 import NorthRank from '@/components/Home/StockView/StockRankingContent/NorthRank';
 import StockRank from '@/components/Home/StockView/StockRankingContent/StockRank';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
-import styles from './index.module.scss';
+import styles from './index.module.css';
 
 export interface StockRankingContentProps {
   onEnter: () => void;

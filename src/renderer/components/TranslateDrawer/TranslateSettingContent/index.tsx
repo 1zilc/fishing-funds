@@ -10,7 +10,7 @@ import Guide from '@/components/Guide';
 import { setTranslateSettingAction } from '@/store/features/translate';
 import { useAppDispatch, useAppSelector, useInputShortcut } from '@/utils/hooks';
 import * as Enums from '@/utils/enums';
-import styles from './index.module.scss';
+import styles from './index.module.css';
 
 interface TranslateSettingContentProps {
   onEnter: () => void;
@@ -49,12 +49,7 @@ const TranslateSettingContent: React.FC<TranslateSettingContentProps> = (props) 
   );
 
   const [translateApiType, setTranslateApiType] = useState(translateApiTypeSetting);
-  const {
-    hotkey,
-    onBlur: hotkeyInputOnBlur,
-    onFocus: hotkeyInputOnFocus,
-    reset: resetHotkey,
-  } = useInputShortcut(hotkeySetting);
+  const { hotkey, onBlur: hotkeyInputOnBlur, onFocus: hotkeyInputOnFocus, reset: resetHotkey } = useInputShortcut(hotkeySetting);
   const [readClipboard, setReadClipboard] = useState(readClipboardSetting);
 
   function onSave() {

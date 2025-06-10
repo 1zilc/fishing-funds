@@ -4,7 +4,7 @@ import { useRequest } from 'ahooks';
 import ChartCard from '@/components/Card/ChartCard';
 import { useRenderEcharts, useResizeEchart } from '@/utils/hooks';
 import * as Services from '@/services';
-import styles from './index.module.scss';
+import styles from './index.module.css';
 
 interface DistributedProps {}
 

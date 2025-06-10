@@ -10,7 +10,7 @@ import { syncTranslateShowAction } from '@/store/features/translate';
 import { useAppDispatch, useAppSelector, useFakeUA } from '@/utils/hooks';
 import * as CONST from '@/constants';
 import * as Utils from '@/utils';
-import styles from './index.module.scss';
+import styles from './index.module.css';
 
 interface TranslateDrawerProps {}
 
@@ -57,7 +57,13 @@ const TranslateContent: React.FC<TranslateContentProps> = () => {
   }, [readClipboardSetting]);
 
   return (
-    <CustomDrawerContent classNames={styles.content} title="快捷翻译" enterText="多窗" onClose={onClose} onEnter={onOpenChildWindow}>
+    <CustomDrawerContent
+      classNames={styles.content}
+      title="快捷翻译"
+      enterText="多窗"
+      onClose={onClose}
+      onEnter={onOpenChildWindow}
+    >
       {ready && <webview ref={viewRef} src={url} style={{ width: '100%', flex: '1' }} useragent={fakeUA} />}
     </CustomDrawerContent>
   );

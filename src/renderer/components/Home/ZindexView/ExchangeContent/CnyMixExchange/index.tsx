@@ -6,7 +6,7 @@ import { useRequest } from 'ahooks';
 import ChartCard from '@/components/Card/ChartCard';
 import * as Services from '@/services';
 import * as Utils from '@/utils';
-import styles from './index.module.scss';
+import styles from './index.module.css';
 
 interface CnyMixExchangeProps {}
 
@@ -36,7 +36,11 @@ const CnyMixExchange: React.FC<PropsWithChildren<CnyMixExchangeProps>> = () => {
     },
   ];
 
-  const { data = [], run: runGetListFromEastmoney, loading } = useRequest(() => Services.Exchange.GetListFromEastmoney('1', 'm:121 t:1'));
+  const {
+    data = [],
+    run: runGetListFromEastmoney,
+    loading,
+  } = useRequest(() => Services.Exchange.GetListFromEastmoney('1', 'm:121 t:1'));
 
   return (
     <ChartCard auto onFresh={runGetListFromEastmoney}>

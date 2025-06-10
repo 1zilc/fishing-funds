@@ -10,7 +10,7 @@ import Guide from '@/components/Guide';
 import { setChatGPTSettingAction } from '@/store/features/chatGPT';
 import { useAppDispatch, useAppSelector, useInputShortcut } from '@/utils/hooks';
 import * as Enums from '@/utils/enums';
-import styles from './index.module.scss';
+import styles from './index.module.css';
 
 interface ChatGPTSettingContentProps {
   onEnter: () => void;

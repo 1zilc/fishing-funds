@@ -6,7 +6,7 @@ import { useResizeEchart, useRenderEcharts, useAppSelector } from '@/utils/hooks
 import * as CONST from '@/constants';
 import * as Enums from '@/utils/enums';
 import * as Utils from '@/utils';
-import styles from './index.module.scss';
+import styles from './index.module.css';
 
 interface QuotationMapProps {
   type: Enums.QuotationType;

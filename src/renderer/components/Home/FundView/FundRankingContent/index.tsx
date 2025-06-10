@@ -6,7 +6,7 @@ import Rank from '@/components/Home/FundView/FundRankingContent/Rank';
 import Ranting from '@/components/Home/FundView/FundRankingContent/Ranting';
 import Today from '@/components/Home/FundView/FundRankingContent/Today';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
-import styles from './index.module.scss';
+import styles from './index.module.css';
 
 export interface FundRankingContentProps {
   onEnter: () => void;

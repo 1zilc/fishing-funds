@@ -8,7 +8,7 @@ import { useDrawer, useAppDispatch, useAppSelector } from '@/utils/hooks';
 import { searchWorkerWarp } from '@/workers';
 import * as Enums from '@/utils/enums';
 import * as Helpers from '@/helpers';
-import styles from './index.module.scss';
+import styles from './index.module.css';
 
 const DetailFundContent = React.lazy(() => import('@/components/Home/FundView/DetailFundContent'));
 export interface AddFundContentProps {

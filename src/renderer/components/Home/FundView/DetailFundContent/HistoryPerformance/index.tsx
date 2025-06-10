@@ -4,7 +4,7 @@ import { Table } from 'antd';
 
 import CustomDrawer from '@/components/CustomDrawer';
 import * as Utils from '@/utils';
-import styles from './index.module.scss';
+import styles from './index.module.css';
 
 const FundHistoryValueContent = React.lazy(() => import('@/components/Home/FundView/FundHistoryValueContent'));
 

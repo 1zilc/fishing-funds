@@ -1,7 +1,7 @@
 import React from 'react';
 import clsx from 'clsx';
 import * as Utils from '@/utils';
-import styles from './index.module.scss';
+import styles from './index.module.css';
 
 interface ExportTitleBarProps {
   data: any[];

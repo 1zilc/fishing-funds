@@ -6,7 +6,7 @@ import CustomDrawer from '@/components/CustomDrawer';
 import GridView from '@/components/GridView';
 import { useDrawer, useAppSelector } from '@/utils/hooks';
 import * as Enums from '@/utils/enums';
-import styles from './index.module.scss';
+import styles from './index.module.css';
 
 const DetailCoinContent = React.lazy(() => import('@/components/Home/CoinView/DetailCoinContent'));
 
@@ -20,12 +20,7 @@ const CoinView: React.FC<CoinListProps> = (props) => {
   const coinsLoading = useAppSelector((state) => state.coin.coinsLoading);
   const coinViewMode = useAppSelector((state) => state.sort.viewMode.coinViewMode);
 
-  const {
-    data: detailCoinCode,
-    show: showDetailDrawer,
-    set: setDetailDrawer,
-    close: closeDetailDrawer,
-  } = useDrawer('');
+  const { data: detailCoinCode, show: showDetailDrawer, set: setDetailDrawer, close: closeDetailDrawer } = useDrawer('');
 
   const list = coins.filter(props.filter);
 
@@ -40,9 +35,7 @@ const CoinView: React.FC<CoinListProps> = (props) => {
               value: Number(item.price),
               zdf: Number(item.change24h),
               zdd: Number(
-                (Number(item.change24h) * Number(item.price) * 0.01).toFixed(
-                  item.price?.toString().split('.')[1]?.length ?? 0
-                )
+                (Number(item.change24h) * Number(item.price) * 0.01).toFixed(item.price?.toString().split('.')[1]?.length ?? 0)
               ),
             }))}
             onDetail={setDetailDrawer}

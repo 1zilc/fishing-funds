@@ -8,7 +8,7 @@ import { useResizeEchart, useDrawer, useRenderEcharts, useEchartEventEffect } fr
 import * as CONST from '@/constants';
 import * as Services from '@/services';
 import * as Utils from '@/utils';
-import styles from './index.module.scss';
+import styles from './index.module.css';
 
 const DetailStockContent = React.lazy(() => import('@/components/Home/StockView/DetailStockContent'));
 
@@ -34,7 +34,12 @@ const Tooltip: React.FC<TooltipProps> = (props) => {
 
 const StockWareHouse: React.FC<StockWareHouseProps> = ({ code, stockCodes }) => {
   const { ref: chartRef, chartInstance } = useResizeEchart(CONST.DEFAULT.ECHARTS_SCALE);
-  const { data: stockSecid, show: showDetailStockDrawer, set: setDetailStockDrawer, close: closeDetailStockDrawer } = useDrawer('');
+  const {
+    data: stockSecid,
+    show: showDetailStockDrawer,
+    set: setDetailStockDrawer,
+    close: closeDetailStockDrawer,
+  } = useDrawer('');
 
   const { data: result = [], run: runGetStockWareHouseFromEastmoney } = useRequest(
     () => Services.Fund.GetStockWareHouseFromEastmoney(code, stockCodes),

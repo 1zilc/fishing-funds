@@ -38,6 +38,7 @@ contextBridge.exposeInMainWorld('contextModules', {
           'trigger-translate',
           'trigger-chatGPT',
           'support-author',
+          'force-reload-app',
         ];
         if (validChannels.includes(channel)) {
           return ipcRenderer.on(channel, func);

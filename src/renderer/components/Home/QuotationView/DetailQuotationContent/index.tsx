@@ -21,7 +21,7 @@ import { useAppDispatch, useAppSelector } from '@/utils/hooks';
 import * as Services from '@/services';
 import * as Utils from '@/utils';
 import * as CONST from '@/constants';
-import styles from './index.module.scss';
+import styles from './index.module.css';
 
 export type DetailQuotationProps = {
   code: string;
@@ -82,9 +82,7 @@ export const DetailQuotation: React.FC<DetailQuotationProps> = (props) => {
         </div>
         <div className={styles.detail}>
           <div className={styles.detailItem}>
-            <div className={clsx(styles.zdf, Utils.GetValueColor(quotation.zdd).textClass)}>
-              {Utils.Yang(quotation.zdf)}%
-            </div>
+            <div className={clsx(styles.zdf, Utils.GetValueColor(quotation.zdd).textClass)}>{Utils.Yang(quotation.zdf)}%</div>
             <div className={styles.detailItemLabel}>涨跌幅</div>
           </div>
           <div className={clsx(styles.detailItem, 'text-center')}>

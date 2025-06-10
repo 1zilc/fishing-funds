@@ -7,7 +7,7 @@ import { walletIcons } from '@/helpers/wallet';
 import { useAppDispatch, useAppSelector } from '@/utils/hooks';
 import * as Utils from '@/utils';
 import * as Helpers from '@/helpers';
-import styles from './index.module.scss';
+import styles from './index.module.css';
 
 export interface WalletRowProps {
   wallet: Wallet.SettingItem;

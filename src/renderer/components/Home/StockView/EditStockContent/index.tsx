@@ -4,7 +4,7 @@ import { InputNumber, Input } from 'antd';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
 import { updateStockAction } from '@/store/features/stock';
 import { useAppDispatch } from '@/utils/hooks';
-import styles from './index.module.scss';
+import styles from './index.module.css';
 
 export interface EditStockContentProps {
   onEnter: () => void;

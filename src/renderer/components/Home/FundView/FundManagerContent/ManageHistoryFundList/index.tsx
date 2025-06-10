@@ -7,7 +7,7 @@ import CustomDrawer from '@/components/CustomDrawer';
 
 import { useFixTimeToDo, useDrawer, useAppSelector } from '@/utils/hooks';
 import * as Helpers from '@/helpers';
-import styles from './index.module.scss';
+import styles from './index.module.css';
 
 const DetailFundContent = React.lazy(() => import('@/components/Home/FundView/DetailFundContent'));
 

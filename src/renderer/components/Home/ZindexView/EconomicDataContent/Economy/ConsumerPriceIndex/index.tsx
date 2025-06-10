@@ -5,7 +5,7 @@ import ChartCard from '@/components/Card/ChartCard';
 import { useResizeEchart, useRenderEcharts } from '@/utils/hooks';
 import * as CONST from '@/constants';
 import * as Services from '@/services';
-import styles from './index.module.scss';
+import styles from './index.module.css';
 
 interface ConsumerPriceIndexProps {}
 
@@ -94,7 +94,11 @@ const ConsumerPriceIndex: React.FC<ConsumerPriceIndexProps> = () => {
   );
 
   return (
-    <ChartCard auto onFresh={runGetEconomyIndexFromEastmoney} TitleBar={<div className={styles.title}>居民消费价格指数(CPI)</div>}>
+    <ChartCard
+      auto
+      onFresh={runGetEconomyIndexFromEastmoney}
+      TitleBar={<div className={styles.title}>居民消费价格指数(CPI)</div>}
+    >
       <div className={styles.content}>
         <div ref={chartRef} style={{ width: '100%' }} />
       </div>

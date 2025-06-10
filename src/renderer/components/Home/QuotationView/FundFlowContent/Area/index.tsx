@@ -7,7 +7,7 @@ import { useRenderEcharts, useResizeEchart } from '@/utils/hooks';
 import * as CONST from '@/constants';
 import * as Services from '@/services';
 import * as Utils from '@/utils';
-import styles from './index.module.scss';
+import styles from './index.module.css';
 
 interface IndustryProps {}
 

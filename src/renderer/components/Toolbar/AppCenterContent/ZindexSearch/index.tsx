@@ -11,7 +11,7 @@ import { addZindexAction } from '@/store/features/zindex';
 import { useDrawer, useAppDispatch, useAppSelector } from '@/utils/hooks';
 import * as Helpers from '@/helpers';
 import * as Enums from '@/utils/enums';
-import styles from './index.module.scss';
+import styles from './index.module.css';
 
 const DetailZindexContent = React.lazy(() => import('@/components/Home/ZindexView/DetailZindexContent'));
 
@@ -58,7 +58,7 @@ const ZindexSearch: React.FC<ZindexSearchProps> = (props) => {
       <Tabs
         animated={{ tabPane: true }}
         tabBarGutter={15}
-        destroyInactiveTabPane
+        destroyOnHidden
         items={list.map(({ Datas, Name, Type }) => ({
           key: String(Type),
           label: Name,

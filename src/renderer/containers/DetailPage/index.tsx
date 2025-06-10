@@ -2,7 +2,7 @@ import { Outlet, useLocation } from 'react-router-dom';
 
 import Collect from '@/components/Collect';
 import { useShareStoreState, useMappingLocalToSystemSetting } from '@/utils/hooks';
-import styles from './index.module.scss';
+import styles from './index.module.css';
 
 function GlobalTask() {
   useMappingLocalToSystemSetting();

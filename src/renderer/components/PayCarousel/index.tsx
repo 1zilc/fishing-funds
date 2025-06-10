@@ -4,7 +4,7 @@ import clsx from 'clsx';
 import { RiAlipayFill, RiWechatFill } from 'react-icons/ri';
 import StandCard from '@/components/Card/StandCard';
 
-import styles from './index.module.scss';
+import styles from './index.module.css';
 
 export interface PayCarouselProps {}
 

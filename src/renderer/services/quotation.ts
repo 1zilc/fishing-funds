@@ -2,7 +2,7 @@ import NP from 'number-precision';
 import { fromUint8Array } from 'js-base64';
 import request from '@/utils/request';
 
-export async function GetQuotationsFromEastmoney(type = 't:2') {
+export async function GetQuotationsFromEastmoney(type = 't:2', pn = 1, pz = 100) {
   try {
     const { body: data } = await request<{
       rc: 0;
@@ -43,8 +43,8 @@ export async function GetQuotationsFromEastmoney(type = 't:2') {
         po: 1,
         dect: 1,
         wbp2u: '|0|0|0|web',
-        pn: 1,
-        pz: 300,
+        pn,
+        pz,
         fields: 'f12,f13,f14,f1,f2,f4,f3,f152,f20,f8,f104,f105,f128,f140,f141,f207,f208,f209,f136,f222,f19',
         _: Date.now(),
       },
@@ -76,7 +76,6 @@ export async function GetQuotationsFromEastmoney(type = 't:2') {
         ldgpZdf: i.f222, // 领跌股票涨跌幅
       };
     });
-
     return result;
   } catch (error) {
     return [];

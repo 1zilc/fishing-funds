@@ -5,7 +5,7 @@ import dayjs from 'dayjs';
 import weekday from 'dayjs/plugin/weekday';
 import CustomDrawer from '@/components/CustomDrawer';
 import * as Utils from '@/utils';
-import styles from './index.module.scss';
+import styles from './index.module.css';
 
 dayjs.extend(weekday);
 

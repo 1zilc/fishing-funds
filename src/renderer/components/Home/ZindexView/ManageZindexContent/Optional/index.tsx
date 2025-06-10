@@ -5,19 +5,13 @@ import clsx from 'clsx';
 import { Button } from 'antd';
 
 import PureCard from '@/components/Card/PureCard';
-import {
-  RiAddLine,
-  RiMenuLine,
-  RiIndeterminateCircleFill,
-  RiNotification2Line,
-  RiNotification2Fill,
-} from 'react-icons/ri';
+import { RiAddLine, RiMenuLine, RiIndeterminateCircleFill, RiNotification2Line, RiNotification2Fill } from 'react-icons/ri';
 import CustomDrawer from '@/components/CustomDrawer';
 import Empty from '@/components/Empty';
 import { deleteZindexAction, setZindexConfigAction, updateZindexAction } from '@/store/features/zindex';
 import { useDrawer, useAutoDestroySortableRef, useAppDispatch, useAppSelector } from '@/utils/hooks';
 import * as Utils from '@/utils';
-import styles from './index.module.scss';
+import styles from './index.module.css';
 
 const AddZindexContent = React.lazy(() => import('@/components/Home/ZindexView/AddZindexContent'));
 const EditZindexContent = React.lazy(() => import('@/components/Home/ZindexView/EditZindexContent'));

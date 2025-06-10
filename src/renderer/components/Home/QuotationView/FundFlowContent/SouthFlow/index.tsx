@@ -6,7 +6,7 @@ import { useRenderEcharts, useResizeEchart } from '@/utils/hooks';
 import * as CONST from '@/constants';
 import * as Services from '@/services';
 
-import styles from './index.module.scss';
+import styles from './index.module.css';
 
 export interface SouthFlowProps {}
 
@@ -16,11 +16,14 @@ const code = 'n2s';
 const SouthFlow: React.FC<SouthFlowProps> = () => {
   const { ref: chartRef, chartInstance } = useResizeEchart(CONST.DEFAULT.ECHARTS_SCALE);
 
-  const { data: result = [], run: runGetFlowFromEastmoney } = useRequest(() => Services.Quotation.GetFlowFromEastmoney(fields1, code), {
-    pollingInterval: 1000 * 60,
-    refreshDeps: [code],
-    ready: !!chartInstance,
-  });
+  const { data: result = [], run: runGetFlowFromEastmoney } = useRequest(
+    () => Services.Quotation.GetFlowFromEastmoney(fields1, code),
+    {
+      pollingInterval: 1000 * 60,
+      refreshDeps: [code],
+      ready: !!chartInstance,
+    }
+  );
 
   useRenderEcharts(
     () => {

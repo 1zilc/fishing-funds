@@ -9,7 +9,7 @@ import { useDrawer, useAppSelector } from '@/utils/hooks';
 
 import * as Services from '@/services';
 import * as Utils from '@/utils';
-import styles from './index.module.scss';
+import styles from './index.module.css';
 
 const DetailCoinContent = React.lazy(() => import('@/components/Home/CoinView/DetailCoinContent'));
 const AddCoinContent = React.lazy(() => import('@/components/Home/CoinView/AddCoinContent'));

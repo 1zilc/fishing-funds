@@ -1,7 +1,7 @@
 import React, { PropsWithChildren, useLayoutEffect, useRef, useState } from 'react';
 import { useMemoizedFn } from 'ahooks';
 import clsx from 'clsx';
-import styles from './index.module.scss';
+import styles from './index.module.css';
 
 interface CollapseProps {
   isOpened?: boolean;

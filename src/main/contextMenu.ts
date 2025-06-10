@@ -3,7 +3,6 @@ import { Menubar } from 'menubar';
 import { generateIconFromDataURL } from './icon';
 import { sendMessageToRenderer } from './util';
 import AppUpdater from './autoUpdater';
-import * as Enums from '../renderer/utils/enums';
 
 export type WalletMenuConfig = {
   label: string;
@@ -75,6 +74,13 @@ export default class ContextMenuManager {
           this.updater.checkUpdate('mainer');
         },
         label: '检查更新',
+      },
+      {
+        click: () => {
+          sendMessageToRenderer(this.win, 'force-reload-app');
+        },
+        label: '崩溃重载',
+        toolTip: '程序出错导致页面崩溃时使用',
       },
       {
         click: () => {

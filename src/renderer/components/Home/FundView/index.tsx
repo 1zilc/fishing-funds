@@ -8,7 +8,7 @@ import GridView from '@/components/GridView';
 import { useDrawer, useFreshFunds, useAppSelector } from '@/utils/hooks';
 import * as Enums from '@/utils/enums';
 import * as Helpers from '@/helpers';
-import styles from './index.module.scss';
+import styles from './index.module.css';
 
 const EditFundContent = React.lazy(() => import('@/components/Home/FundView/EditFundContent'));
 const DetailFundContent = React.lazy(() => import('@/components/Home/FundView/DetailFundContent'));
@@ -25,19 +25,9 @@ const FundView: React.FC<FundListProps> = (props) => {
 
   const freshFunds = useFreshFunds();
 
-  const {
-    data: editData,
-    show: showEditDrawer,
-    set: setEditDrawer,
-    close: closeEditDrawer,
-  } = useDrawer({} as Fund.SettingItem);
+  const { data: editData, show: showEditDrawer, set: setEditDrawer, close: closeEditDrawer } = useDrawer({} as Fund.SettingItem);
 
-  const {
-    data: detailFundCode,
-    show: showDetailDrawer,
-    set: setDetailDrawer,
-    close: closeDetailDrawer,
-  } = useDrawer('');
+  const { data: detailFundCode, show: showDetailDrawer, set: setDetailDrawer, close: closeDetailDrawer } = useDrawer('');
 
   const list = funds.filter(props.filter);
 
@@ -61,9 +51,7 @@ const FundView: React.FC<FundListProps> = (props) => {
         );
       case Enums.FundViewType.List:
       default:
-        return list.map((fund) => (
-          <FundRow key={fund.fundcode} fund={fund} onEdit={setEditDrawer} onDetail={setDetailDrawer} />
-        ));
+        return list.map((fund) => <FundRow key={fund.fundcode} fund={fund} onEdit={setEditDrawer} onDetail={setDetailDrawer} />);
     }
   }, [list, fundViewMode, fundConfigCodeMap]);
 

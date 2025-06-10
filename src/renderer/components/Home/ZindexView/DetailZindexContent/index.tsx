@@ -17,7 +17,7 @@ import * as Utils from '@/utils';
 import * as Enums from '@/utils/enums';
 import * as CONST from '@/constants';
 
-import styles from './index.module.scss';
+import styles from './index.module.css';
 
 export type DetailFundProps = {
   code: string;
@@ -36,12 +36,9 @@ export const DetailZindex: React.FC<DetailFundProps> = (props) => {
     cacheKey: Utils.GenerateRequestKey('Zindex.FromEastmoney', code),
   });
 
-  const { data: kdata = [], run: runGetKFromEastmoney } = useRequest(
-    () => Services.Zindex.GetKFromEastmoney(code, 10, 101),
-    {
-      cacheKey: Utils.GenerateRequestKey('Zindex.GetKFromEastmoney', [code, 10, 101]),
-    }
-  );
+  const { data: kdata = [], run: runGetKFromEastmoney } = useRequest(() => Services.Zindex.GetKFromEastmoney(code, 10, 101), {
+    cacheKey: Utils.GenerateRequestKey('Zindex.GetKFromEastmoney', [code, 10, 101]),
+  });
   return (
     <div className={styles.content}>
       <div className={styles.container}>
@@ -132,9 +129,7 @@ export const DetailZindex: React.FC<DetailFundProps> = (props) => {
             {
               key: String(1),
               label: '周期回报',
-              children: (
-                <CycleReturn onFresh={runGetKFromEastmoney} data={kdata.map(({ date: x, sp: y }) => ({ x, y }))} />
-              ),
+              children: <CycleReturn onFresh={runGetKFromEastmoney} data={kdata.map(({ date: x, sp: y }) => ({ x, y }))} />,
             },
           ]}
         />

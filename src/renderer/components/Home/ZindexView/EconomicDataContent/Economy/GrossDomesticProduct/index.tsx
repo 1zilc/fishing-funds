@@ -4,7 +4,7 @@ import { useRequest } from 'ahooks';
 import ChartCard from '@/components/Card/ChartCard';
 import { useResizeEchart, useRenderEcharts } from '@/utils/hooks';
 import * as Services from '@/services';
-import styles from './index.module.scss';
+import styles from './index.module.css';
 
 interface GrossDomesticProductProps {}
 
@@ -12,7 +12,8 @@ const GrossDomesticProduct: React.FC<GrossDomesticProductProps> = () => {
   const { ref: chartRef, chartInstance } = useResizeEchart(0.4);
 
   const { data: result = [], run: runGetEconomyIndexFromEastmoney } = useRequest(
-    () => Services.Zindex.GetEconomyIndexFromEastmoney('RPT_ECONOMY_GDP', 'REPORT_DATE,SUM_SAME,FIRST_SAME,SECOND_SAME,THIRD_SAME'),
+    () =>
+      Services.Zindex.GetEconomyIndexFromEastmoney('RPT_ECONOMY_GDP', 'REPORT_DATE,SUM_SAME,FIRST_SAME,SECOND_SAME,THIRD_SAME'),
     {
       ready: !!chartInstance,
     }

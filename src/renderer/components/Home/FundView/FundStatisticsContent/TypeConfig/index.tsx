@@ -5,7 +5,7 @@ import { useResizeEchart, useRenderEcharts, useAppSelector } from '@/utils/hooks
 import * as CONST from '@/constants';
 import * as Utils from '@/utils';
 import * as Helpers from '@/helpers';
-import styles from './index.module.scss';
+import styles from './index.module.css';
 
 interface TypeConfigProps {
   funds: (Fund.ResponseItem & Fund.FixData)[];

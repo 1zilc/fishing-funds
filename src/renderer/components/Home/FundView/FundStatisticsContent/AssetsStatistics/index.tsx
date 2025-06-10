@@ -11,7 +11,7 @@ import { useAppDispatch, useAppSelector, useFundConfigMap } from '@/utils/hooks'
 import * as Enums from '@/utils/enums';
 import * as Utils from '@/utils';
 import * as Helpers from '@/helpers';
-import styles from './index.module.scss';
+import styles from './index.module.css';
 
 interface AssetsStatisticsProps {
   funds: (Fund.ResponseItem & Fund.FixData)[];

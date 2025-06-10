@@ -9,7 +9,7 @@ import Collapse from '@/components/Collapse';
 import { setFavoriteQuotationMapAction, toggleQuotationCollapseAction } from '@/store/features/quotation';
 import { useAppDispatch, useAppSelector } from '@/utils/hooks';
 import * as Utils from '@/utils';
-import styles from './index.module.scss';
+import styles from './index.module.css';
 
 export interface RowProps {
   quotation: Quotation.ResponseItem & Quotation.ExtraRow;
@@ -37,11 +37,7 @@ const QuotationRow: React.FC<RowProps> = React.memo((props) => {
     <>
       <div className={clsx(styles.row)} onClick={() => dispatch(toggleQuotationCollapseAction(quotation))}>
         <div className={styles.arrow}>
-          {quotation.collapse ? (
-            <RiArrowUpSLine style={{ ...arrowSize }} />
-          ) : (
-            <RiArrowDownSLine style={{ ...arrowSize }} />
-          )}
+          {quotation.collapse ? <RiArrowUpSLine style={{ ...arrowSize }} /> : <RiArrowDownSLine style={{ ...arrowSize }} />}
         </div>
         <div style={{ flex: 1, width: 0 }}>
           <div style={{ display: 'flex', alignItems: 'center' }}>
@@ -77,12 +73,8 @@ const QuotationRow: React.FC<RowProps> = React.memo((props) => {
           </div>
           {!conciseSetting && (
             <div className={styles.zd}>
-              <div className={clsx(styles.zdd, Utils.GetValueColor(quotation.zdf).textClass)}>
-                {Utils.Yang(quotation.zdd)}
-              </div>
-              <div className={clsx(styles.zdf, Utils.GetValueColor(quotation.zdf).textClass)}>
-                {Utils.Yang(quotation.zdf)} %
-              </div>
+              <div className={clsx(styles.zdd, Utils.GetValueColor(quotation.zdf).textClass)}>{Utils.Yang(quotation.zdd)}</div>
+              <div className={clsx(styles.zdf, Utils.GetValueColor(quotation.zdf).textClass)}>{Utils.Yang(quotation.zdf)} %</div>
             </div>
           )}
         </div>
@@ -109,20 +101,12 @@ const QuotationRow: React.FC<RowProps> = React.memo((props) => {
             <span className="text-down">{quotation.xdjs}</span>
           </section>
           <section>
-            <a onClick={() => props.onStockDetail(`${quotation.lzgpMarket}.${quotation.lzgpCode}`)}>
-              {quotation.lzgpName}：
-            </a>
-            <span className={clsx(Utils.GetValueColor(quotation.lzgpZdf).textClass)}>
-              {Utils.Yang(quotation.lzgpZdf)} %
-            </span>
+            <a onClick={() => props.onStockDetail(`${quotation.lzgpMarket}.${quotation.lzgpCode}`)}>{quotation.lzgpName}：</a>
+            <span className={clsx(Utils.GetValueColor(quotation.lzgpZdf).textClass)}>{Utils.Yang(quotation.lzgpZdf)} %</span>
           </section>
           <section>
-            <a onClick={() => props.onStockDetail(`${quotation.ldgpMarket}.${quotation.ldgpCode}`)}>
-              {quotation.ldgpName}：
-            </a>
-            <span className={clsx(Utils.GetValueColor(quotation.ldgpZdf).textClass)}>
-              {Utils.Yang(quotation.ldgpZdf)} %
-            </span>
+            <a onClick={() => props.onStockDetail(`${quotation.ldgpMarket}.${quotation.ldgpCode}`)}>{quotation.ldgpName}：</a>
+            <span className={clsx(Utils.GetValueColor(quotation.ldgpZdf).textClass)}>{Utils.Yang(quotation.ldgpZdf)} %</span>
           </section>
           <section>
             <span>换手率：</span>
@@ -137,13 +121,9 @@ const QuotationRow: React.FC<RowProps> = React.memo((props) => {
           <section>
             <span>特别关注：</span>
             {favorited ? (
-              <a onClick={() => dispatch(setFavoriteQuotationMapAction({ code: quotation.code, status: false }))}>
-                已关注
-              </a>
+              <a onClick={() => dispatch(setFavoriteQuotationMapAction({ code: quotation.code, status: false }))}>已关注</a>
             ) : (
-              <a onClick={() => dispatch(setFavoriteQuotationMapAction({ code: quotation.code, status: true }))}>
-                未关注
-              </a>
+              <a onClick={() => dispatch(setFavoriteQuotationMapAction({ code: quotation.code, status: true }))}>未关注</a>
             )}
           </section>
           <div className={styles.view}>

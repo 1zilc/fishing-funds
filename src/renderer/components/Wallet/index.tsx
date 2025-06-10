@@ -10,7 +10,7 @@ import { useAppDispatch, useAppSelector, useDrawer } from '@/utils/hooks';
 import { walletIcons } from '@/helpers/wallet';
 import * as Utils from '@/utils';
 import * as Helpers from '@/helpers';
-import styles from './index.module.scss';
+import styles from './index.module.css';
 import { useMemoizedFn } from 'ahooks';
 
 const AddWalletContent = React.lazy(() => import('@/components/Wallet/AddWalletContent'));
@@ -80,7 +80,7 @@ const Wallet: React.FC<WalletProps> = () => {
       <div className={styles.topBar}>
         <Dropdown
           placement="bottomRight"
-          dropdownRender={() => (
+          popupRender={() => (
             <Menu
               selectedKeys={[currentWalletCode]}
               items={walletMenuItems}
@@ -117,7 +117,7 @@ const Wallet: React.FC<WalletProps> = () => {
       </div>
       <Dropdown
         placement="bottom"
-        dropdownRender={() => (
+        popupRender={() => (
           <div className={styles.detailBar}>
             <div>
               <div className={styles.sygz}>

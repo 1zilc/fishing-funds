@@ -6,7 +6,6 @@
   padding-bottom: 80px;
 }
 .row {
-  // height: 70px;
   overflow: hidden;
   display: flex;
   align-items: center;
@@ -77,5 +76,4 @@
 .checkbox {
   fill: var(--primary-color);
   z-index: 2;
-  // background-color: var(--primary-color);
 }

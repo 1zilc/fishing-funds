@@ -17,7 +17,7 @@ import { stockTypesConfig } from '@/components/Toolbar/AppCenterContent/StockSea
 import { useAppSelector } from '@/utils/hooks';
 import * as Enums from '@/utils/enums';
 import * as Helpers from '@/helpers';
-import styles from './index.module.scss';
+import styles from './index.module.css';
 
 const FundView = React.lazy(() => import('@/components/Home/FundView'));
 const ZindexView = React.lazy(() => import('@/components/Home/ZindexView'));
@@ -200,9 +200,7 @@ const Body = () => {
     [bottomTabsSetting]
   );
 
-  return (
-    <Tabs renderTabBar={() => <></>} activeKey={String(tabsActiveKey)} animated={true} destroyInactiveTabPane items={items} />
-  );
+  return <Tabs renderTabBar={() => <></>} activeKey={String(tabsActiveKey)} animated={true} destroyOnHidden items={items} />;
 };
 
 const Home: React.FC<HomeProps> = () => {

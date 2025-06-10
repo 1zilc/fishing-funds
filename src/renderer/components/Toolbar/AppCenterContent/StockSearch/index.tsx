@@ -12,7 +12,7 @@ import { useDrawer, useAppDispatch, useAppSelector } from '@/utils/hooks';
 import * as Helpers from '@/helpers';
 import * as Enums from '@/utils/enums';
 
-import styles from './index.module.scss';
+import styles from './index.module.css';
 
 const DetailStockContent = React.lazy(() => import('@/components/Home/StockView/DetailStockContent'));
 
@@ -73,7 +73,7 @@ const StockSearch: React.FC<StockSearchProps> = (props) => {
       <Tabs
         animated={{ tabPane: true }}
         tabBarGutter={15}
-        destroyInactiveTabPane
+        destroyOnHidden
         items={list.map(({ Datas, Name, Type }) => ({
           key: String(Type),
           label: Name,

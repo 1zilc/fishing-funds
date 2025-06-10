@@ -1,19 +1,6 @@
 import React, { useState, startTransition } from 'react';
 import clsx from 'clsx';
-import {
-  InputNumber,
-  Radio,
-  Badge,
-  Switch,
-  Slider,
-  TimePicker,
-  Input,
-  Tabs,
-  Select,
-  Checkbox,
-  Button,
-  ColorPicker,
-} from 'antd';
+import { InputNumber, Radio, Badge, Switch, Slider, TimePicker, Input, Tabs, Select, Checkbox, Button, ColorPicker } from 'antd';
 import dayjs from 'dayjs';
 import { ReactSortable } from 'react-sortablejs';
 import {
@@ -35,15 +22,9 @@ import Log from '@/components/Toolbar/SettingContent/Log';
 import ThemeProvider from '@/components/ThemeProvider';
 import More from '@/components/Toolbar/SettingContent/More';
 import { setSystemSettingAction, defaultSystemSetting } from '@/store/features/setting';
-import {
-  useAppDispatch,
-  useAppSelector,
-  useAutoDestroySortableRef,
-  useInputShortcut,
-  useThemeColor,
-} from '@/utils/hooks';
+import { useAppDispatch, useAppSelector, useAutoDestroySortableRef, useInputShortcut, useThemeColor } from '@/utils/hooks';
 import * as Enums from '@/utils/enums';
-import styles from './index.module.scss';
+import styles from './index.module.css';
 
 export interface SettingContentProps {
   themeWrapperClass: string;
@@ -153,12 +134,7 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
   const [proxyHost, setProxyHost] = useState(proxyHostSetting);
   const [proxyPort, setProxyPort] = useState(proxyPortSetting);
   // 通用设置
-  const {
-    hotkey,
-    onBlur: hotkeyInputOnBlur,
-    onFocus: hotkeyInputOnFocus,
-    reset: resetHotkey,
-  } = useInputShortcut(hotkeySetting);
+  const { hotkey, onBlur: hotkeyInputOnBlur, onFocus: hotkeyInputOnFocus, reset: resetHotkey } = useInputShortcut(hotkeySetting);
   const [autoStart, setAutoStart] = useState(autoStartSetting);
   const [autoFresh, setAutoFresh] = useState(autoFreshSetting);
   const [freshDelay, setFreshDelay] = useState(freshDelaySetting);
@@ -190,8 +166,7 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
         systemThemeSetting: systemTheme,
         bottomTabsSetting: bottomTabs.map((tab) => ({ key: tab.key, name: tab.name, show: tab.show })),
         adjustmentNotificationSetting: adjustmentNotification,
-        adjustmentNotificationTimeSetting:
-          adjustmentNotificationTime || defaultSystemSetting.adjustmentNotificationTimeSetting,
+        adjustmentNotificationTimeSetting: adjustmentNotificationTime || defaultSystemSetting.adjustmentNotificationTimeSetting,
         riskNotificationSetting: riskNotification,
         trayContentSetting: trayContent,
         coinUnitSetting: coinUnit,

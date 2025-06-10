@@ -15,15 +15,9 @@ import PureCard from '@/components/Card/PureCard';
 import CustomDrawer from '@/components/CustomDrawer';
 import Empty from '@/components/Empty';
 import { deleteFundAction, setFundConfigAction, updateFundAction } from '@/store/features/fund';
-import {
-  useSyncFixFundSetting,
-  useDrawer,
-  useAutoDestroySortableRef,
-  useAppDispatch,
-  useAppSelector,
-} from '@/utils/hooks';
+import { useSyncFixFundSetting, useDrawer, useAutoDestroySortableRef, useAppDispatch, useAppSelector } from '@/utils/hooks';
 import * as Utils from '@/utils';
-import styles from './index.module.scss';
+import styles from './index.module.css';
 
 const AddFundContent = React.lazy(() => import('@/components/Home/FundView/AddFundContent'));
 const EditFundContent = React.lazy(() => import('@/components/Home/FundView/EditFundContent'));
@@ -42,12 +36,7 @@ const Optional: React.FC<OptionalProps> = () => {
 
   const { show: showAddDrawer, set: setAddDrawer, close: closeAddDrawer } = useDrawer(null);
 
-  const {
-    data: editData,
-    show: showEditDrawer,
-    set: setEditDrawer,
-    close: closeEditDrawer,
-  } = useDrawer({} as Fund.SettingItem);
+  const { data: editData, show: showEditDrawer, set: setEditDrawer, close: closeEditDrawer } = useDrawer({} as Fund.SettingItem);
 
   const { done: syncFundSettingDone } = useSyncFixFundSetting();
 

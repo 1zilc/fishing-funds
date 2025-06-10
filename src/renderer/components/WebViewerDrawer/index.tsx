@@ -23,7 +23,7 @@ import { useDrawer, useAppDispatch, useAppSelector, useIpcRendererListener, useF
 import * as CONST from '@/constants';
 import * as Enums from '@/utils/enums';
 import * as Utils from '@/utils';
-import styles from './index.module.scss';
+import styles from './index.module.css';
 
 const AddWebContent = React.lazy(() => import('@/components/WebViewerDrawer/AddWebContent'));
 
@@ -226,7 +226,7 @@ export const WebViewer: React.FC<WebViewerProps> = (props) => {
         />
         <div className={clsx(styles.nav, 'max-content')}>
           <Dropdown
-            dropdownRender={() => (
+            popupRender={() => (
               <div className={styles.menu}>
                 <div className={styles.menuItem} onClick={onVisit}>
                   <label>浏览器打开</label>
@@ -282,13 +282,7 @@ export const WebViewerContent: React.FC<WebViewerContentProps> = () => {
 
   return (
     <CustomDrawerContent title={currentTitle} enterText="多窗" onClose={onClose} onEnter={onOpenChildWindow}>
-      <WebViewer
-        url={view.url}
-        phone={view.phone}
-        title={view.title}
-        updateTitle={setCurrentTitle}
-        updateUrl={setCurrentUrl}
-      />
+      <WebViewer url={view.url} phone={view.phone} title={view.title} updateTitle={setCurrentTitle} updateUrl={setCurrentUrl} />
     </CustomDrawerContent>
   );
 };

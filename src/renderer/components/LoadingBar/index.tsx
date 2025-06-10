@@ -2,7 +2,7 @@ import React from 'react';
 import clsx from 'clsx';
 import { Spin } from 'antd';
 
-import styles from './index.module.scss';
+import styles from './index.module.css';
 
 export interface LoadingBarProps {
   show: boolean;

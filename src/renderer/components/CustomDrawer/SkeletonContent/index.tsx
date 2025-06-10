@@ -3,7 +3,7 @@ import { Skeleton } from 'antd';
 
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
 import PureCard from '@/components/Card/PureCard';
-import styles from './index.module.scss';
+import styles from './index.module.css';
 
 interface SkeletonContentProps {}
 

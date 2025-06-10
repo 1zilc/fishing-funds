@@ -6,7 +6,7 @@ import ZindexSearch from '@/components/Toolbar/AppCenterContent/ZindexSearch';
 import FundSearch from '@/components/Toolbar/AppCenterContent/FundSearch';
 import RecentSearch from '@/components/Toolbar/AppCenterContent/RecentSearch';
 import * as Services from '@/services';
-import styles from './index.module.scss';
+import styles from './index.module.css';
 
 interface SearchGroupProps {
   keyword: string;

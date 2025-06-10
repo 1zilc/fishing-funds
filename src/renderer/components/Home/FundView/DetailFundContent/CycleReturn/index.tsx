@@ -4,7 +4,7 @@ import dayjs from 'dayjs';
 import ChartCard from '@/components/Card/ChartCard';
 import { useResizeEchart, useRenderEcharts } from '@/utils/hooks';
 import * as CONST from '@/constants';
-import styles from './index.module.scss';
+import styles from './index.module.css';
 
 export type CycleReturnProps = {
   data: { x: number | string; y: number }[];

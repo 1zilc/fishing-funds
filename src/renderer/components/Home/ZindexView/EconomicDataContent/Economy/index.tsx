@@ -5,7 +5,7 @@ import ProducerPriceIndex from '@/components/Home/ZindexView/EconomicDataContent
 import GrossDomesticProduct from '@/components/Home/ZindexView/EconomicDataContent/Economy/GrossDomesticProduct';
 import PurchasingManagerIndex from '@/components/Home/ZindexView/EconomicDataContent/Economy/PurchasingManagerIndex';
 import ConsumerConfidenceIndex from '@/components/Home/ZindexView/EconomicDataContent/Economy/ConsumerConfidenceIndex';
-import styles from './index.module.scss';
+import styles from './index.module.css';
 
 interface EconomyProps {}
 

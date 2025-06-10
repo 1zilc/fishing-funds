@@ -769,3 +769,17 @@ export function useChatGPT() {
     }
   });
 }
+
+export function useForceReloadApp() {
+  useIpcRendererListener('force-reload-app', async (event) => {
+    const { response } = await dialog.showMessageBox({
+      type: 'info',
+      title: `崩溃重载`,
+      message: `程序将重新加载`,
+      buttons: ['确定', '取消'],
+    });
+    if (response === 0) {
+      window.location.reload();
+    }
+  });
+}

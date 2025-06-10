@@ -4,7 +4,7 @@ import { useRequest } from 'ahooks';
 import ChartCard from '@/components/Card/ChartCard';
 import { useResizeEchart, useRenderEcharts } from '@/utils/hooks';
 import * as Services from '@/services';
-import styles from './index.module.scss';
+import styles from './index.module.css';
 
 interface ProducerPriceIndexProps {}
 
@@ -86,7 +86,11 @@ const ProducerPriceIndex: React.FC<ProducerPriceIndexProps> = () => {
   );
 
   return (
-    <ChartCard auto onFresh={runGetEconomyIndexFromEastmoney} TitleBar={<div className={styles.title}>工业品出厂价格指数(PPI)</div>}>
+    <ChartCard
+      auto
+      onFresh={runGetEconomyIndexFromEastmoney}
+      TitleBar={<div className={styles.title}>工业品出厂价格指数(PPI)</div>}
+    >
       <div className={styles.content}>
         <div ref={chartRef} style={{ width: '100%' }} />
       </div>

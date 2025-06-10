@@ -1,6 +1,6 @@
 import React, { PropsWithChildren, ReactNode } from 'react';
 import clsx from 'clsx';
-import styles from './index.module.scss';
+import styles from './index.module.css';
 
 export interface StandCardProps {
   icon?: ReactNode;

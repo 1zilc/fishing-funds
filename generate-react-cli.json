@@ -13,7 +13,7 @@
       "withTest": false,
       "customTemplates": {
         "component": "templates/component/index.tsx",
-        "style": "templates/component/index.module.scss"
+        "style": "templates/component/index.module.css"
       }
     },
     "chart": {
@@ -25,7 +25,7 @@
       "withTest": false,
       "customTemplates": {
         "component": "templates/chart/index.tsx",
-        "style": "templates/chart/index.module.scss"
+        "style": "templates/chart/index.module.css"
       }
     },
     "content": {
@@ -37,7 +37,7 @@
       "withTest": false,
       "customTemplates": {
         "component": "templates/content/index.tsx",
-        "style": "templates/content/index.module.scss"
+        "style": "templates/content/index.module.css"
       }
     }
   }

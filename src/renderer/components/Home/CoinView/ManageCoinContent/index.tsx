@@ -2,7 +2,7 @@ import React from 'react';
 
 import Optional from '@/components/Home/CoinView/ManageCoinContent/Optional';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
-import styles from './index.module.scss';
+import styles from './index.module.css';
 
 export interface ManageStockContentProps {
   onEnter: () => void;

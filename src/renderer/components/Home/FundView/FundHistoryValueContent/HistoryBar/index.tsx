@@ -4,7 +4,7 @@ import dayjs from 'dayjs';
 import { useResizeEchart, useRenderEcharts } from '@/utils/hooks';
 import * as CONST from '@/constants';
 import * as Utils from '@/utils';
-import styles from './index.module.scss';
+import styles from './index.module.css';
 
 interface HistoryBarProps {
   data?: { x: number; y: number; equityReturn: number; unitMoney: 0 }[];

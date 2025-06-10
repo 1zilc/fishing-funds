@@ -5,7 +5,6 @@
   padding: var(--base-padding);
   padding-bottom: 0;
   align-items: center;
-  // justify-content: space-between;
 }
 .icon {
   height: 18px;

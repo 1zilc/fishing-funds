@@ -4,7 +4,7 @@ import { useBoolean } from 'ahooks';
 import clsx from 'clsx';
 import { RiRefreshLine, RiArrowDownSLine, RiArrowUpSLine, RiQuestionLine } from 'react-icons/ri';
 import Collapse from '@/components/Collapse';
-import styles from './index.module.scss';
+import styles from './index.module.css';
 
 export interface ChartCardProps {
   className?: string;

@@ -22,7 +22,7 @@ import * as Adpters from '@/utils/adpters';
 import * as CONST from '@/constants';
 
 import { useAllCyFunds, useAppSelector } from '@/utils/hooks/utils';
-import styles from './index.module.scss';
+import styles from './index.module.css';
 
 export interface FundStatisticsContentProps {
   onEnter: () => void;

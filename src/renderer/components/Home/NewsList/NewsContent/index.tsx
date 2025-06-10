@@ -16,7 +16,7 @@ import UkList from '@/components/Home/NewsList/NewsContent/UkList';
 import JpList from '@/components/Home/NewsList/NewsContent/JpList';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
 import { useOpenWebView } from '@/utils/hooks';
-import styles from './index.module.scss';
+import styles from './index.module.css';
 
 interface NewsContentProps {
   onEnter: () => void;

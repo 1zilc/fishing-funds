@@ -5,7 +5,7 @@ import CustomDrawerContent from '@/components/CustomDrawer/Content';
 
 import ClosedCalendar from '@/components/Home/StockView/EconomicCalendarContent/ClosedCalendar';
 import Metting from '@/components/Home/StockView/EconomicCalendarContent/Metting';
-import styles from './index.module.scss';
+import styles from './index.module.css';
 
 interface EconomicCalendarContentProps {
   onEnter: () => void;

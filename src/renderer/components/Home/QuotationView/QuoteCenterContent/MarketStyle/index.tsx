@@ -3,7 +3,7 @@ import React from 'react';
 import { useResizeEchart, useRenderEcharts } from '@/utils/hooks';
 import * as CONST from '@/constants';
 import * as Utils from '@/utils';
-import styles from './index.module.scss';
+import styles from './index.module.css';
 
 interface MarketStyleProps {
   ThemeList: {

@@ -6,7 +6,7 @@ import PureCard from '@/components/Card/PureCard';
 import CustomDrawer from '@/components/CustomDrawer';
 import { useDrawer } from '@/utils/hooks';
 import * as Utils from '@/utils';
-import styles from './index.module.scss';
+import styles from './index.module.css';
 
 const AddStockContent = React.lazy(() => import('@/components/Home/StockView/AddStockContent'));
 interface RecommendProps {

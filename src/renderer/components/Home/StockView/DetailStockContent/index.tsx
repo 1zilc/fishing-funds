@@ -24,7 +24,7 @@ import * as Services from '@/services';
 import * as Utils from '@/utils';
 import * as CONST from '@/constants';
 
-import styles from './index.module.scss';
+import styles from './index.module.css';
 
 export type DetailStockProps = {
   secid: string;
@@ -55,12 +55,9 @@ export const DetailStock: React.FC<DetailStockProps> = (props) => {
     staleTime: CONST.DEFAULT.SWR_STALE_DELAY,
   });
 
-  const { data: kdata = [], run: runGetKFromEastmoney } = useRequest(
-    () => Services.Stock.GetKFromEastmoney(secid, 101, 3600),
-    {
-      cacheKey: Utils.GenerateRequestKey('Stock.GetKFromEastmoney', [secid, 101, 3600]),
-    }
-  );
+  const { data: kdata = [], run: runGetKFromEastmoney } = useRequest(() => Services.Stock.GetKFromEastmoney(secid, 101, 3600), {
+    cacheKey: Utils.GenerateRequestKey('Stock.GetKFromEastmoney', [secid, 101, 3600]),
+  });
 
   async function onAdd() {
     try {
@@ -224,9 +221,7 @@ export const DetailStock: React.FC<DetailStockProps> = (props) => {
             {
               key: String(3),
               label: '周期回报',
-              children: (
-                <CycleReturn onFresh={runGetKFromEastmoney} data={kdata.map(({ date: x, sp: y }) => ({ x, y }))} />
-              ),
+              children: <CycleReturn onFresh={runGetKFromEastmoney} data={kdata.map(({ date: x, sp: y }) => ({ x, y }))} />,
             },
           ]}
         />
