@@ -1,3 +1,7 @@
+* {
+  -electron-corner-smoothing: system-ui;
+}
+
 body {
   position: relative;
   margin: 0;
