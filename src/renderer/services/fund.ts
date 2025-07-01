@@ -13,7 +13,7 @@ export async function FromEastmoney(code: string) {
     });
     if (body.startsWith('jsonpgz')) {
       const fund: Fund.ResponseItem = eval(body);
-      if (fund === undefined) {
+      if (fund === undefined || fund.gsz === '' || Number.isNaN(Number(fund.gszzl))) {
         return await GetEtfFundHourFromEastMoney(code);
       } else {
         return fund;
