@@ -65,6 +65,7 @@ export const defaultSystemSetting: System.Setting = {
   adjustmentNotificationTimeSetting: dayjs().hour(14).minute(30).format(),
   riskNotificationSetting: true,
   trayContentSetting: [Enums.TrayContent.Sy],
+  traySimpleIncomeSetting: false,
 
   coinUnitSetting: Enums.CoinUnitType.Usd,
 

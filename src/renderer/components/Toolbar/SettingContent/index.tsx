@@ -34,7 +34,7 @@ export interface SettingContentProps {
 }
 
 const { shell, app, dialog } = window.contextModules.electron;
-const { electron } = window.contextModules.process;
+const { platform } = window.contextModules.process;
 
 export const APIOptions = [
   {
@@ -91,6 +91,7 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
     adjustmentNotificationTimeSetting,
     riskNotificationSetting,
     trayContentSetting,
+    traySimpleIncomeSetting,
     coinUnitSetting,
     proxyTypeSetting,
     proxyHostSetting,
@@ -127,6 +128,8 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
   const [adjustmentNotificationTime, setAdjustmentNotifitationTime] = useState(adjustmentNotificationTimeSetting);
   const [riskNotification, setRiskNotification] = useState(riskNotificationSetting);
   const [trayContent, setTrayContent] = useState(trayContentSetting);
+  const [traySimpleIncome, setTraySimpleIncome] = useState(traySimpleIncomeSetting);
+
   // 货币单位
   const [coinUnit, setCoinUnit] = useState(coinUnitSetting);
   // 代理设置
@@ -169,6 +172,7 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
         adjustmentNotificationTimeSetting: adjustmentNotificationTime || defaultSystemSetting.adjustmentNotificationTimeSetting,
         riskNotificationSetting: riskNotification,
         trayContentSetting: trayContent,
+        traySimpleIncomeSetting: traySimpleIncome,
         coinUnitSetting: coinUnit,
         proxyTypeSetting: proxyType,
         proxyHostSetting: proxyHost,
@@ -435,23 +439,31 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
                         <label>基金提醒：</label>
                         <Switch size="small" checked={riskNotification} onChange={setRiskNotification} />
                       </section>
-                      <section>
-                        <label>托盘内容：</label>
-                        <Select
-                          mode="multiple"
-                          size="small"
-                          allowClear
-                          style={{ width: '50%' }}
-                          placeholder="无"
-                          value={trayContent}
-                          onChange={setTrayContent}
-                        >
-                          <Select.Option value={Enums.TrayContent.Sy}>选中钱包收益</Select.Option>
-                          <Select.Option value={Enums.TrayContent.Syl}>选中钱包收益率</Select.Option>
-                          <Select.Option value={Enums.TrayContent.Zsy}>所有钱包收益</Select.Option>
-                          <Select.Option value={Enums.TrayContent.Zsyl}>所有钱包收益率</Select.Option>
-                        </Select>
-                      </section>
+                      {platform == 'darwin' && (
+                        <section>
+                          <label>托盘内容：</label>
+                          <Select
+                            mode="multiple"
+                            size="small"
+                            allowClear
+                            style={{ width: '50%' }}
+                            placeholder="无"
+                            value={trayContent}
+                            onChange={setTrayContent}
+                          >
+                            <Select.Option value={Enums.TrayContent.Sy}>选中钱包收益</Select.Option>
+                            <Select.Option value={Enums.TrayContent.Syl}>选中钱包收益率</Select.Option>
+                            <Select.Option value={Enums.TrayContent.Zsy}>所有钱包收益</Select.Option>
+                            <Select.Option value={Enums.TrayContent.Zsyl}>所有钱包收益率</Select.Option>
+                          </Select>
+                        </section>
+                      )}
+                      {platform == 'darwin' && (
+                        <section>
+                          <label>简略收益：</label>
+                          <Switch size="small" checked={traySimpleIncome} onChange={setTraySimpleIncome} />
+                        </section>
+                      )}
                     </div>
                   </StandCard>
                   <StandCard

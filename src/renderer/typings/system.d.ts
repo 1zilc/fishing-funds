@@ -18,6 +18,7 @@ declare namespace System {
     adjustmentNotificationTimeSetting: string; // 调仓时间
     riskNotificationSetting: boolean; // 风险提醒
     trayContentSetting: import('@/utils/enums').TrayContent[]; // 托盘内容
+    traySimpleIncomeSetting: boolean; // 简略收益
 
     coinUnitSetting: import('@/utils/enums').CoinUnitType; // 货币单位
 
