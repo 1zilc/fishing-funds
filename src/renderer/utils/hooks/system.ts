@@ -462,6 +462,7 @@ export function useMappingLocalToSystemSetting() {
 
 export function useTrayContent() {
   const trayContentSetting = useAppSelector((state) => state.setting.systemSetting.trayContentSetting);
+  const traySimpleIncomeSetting = useAppSelector((state) => state.setting.systemSetting.traySimpleIncomeSetting);
   const walletConfig = useAppSelector((state) => state.wallet.config.walletConfig);
   const wallets = useAppSelector((state) => state.wallet.wallets);
   const currentWalletCode = useAppSelector((state) => state.wallet.currentWalletCode);
@@ -493,11 +494,13 @@ export function useTrayContent() {
       .map((trayContentType: Enums.TrayContent) => {
         switch (trayContentType) {
           case Enums.TrayContent.Sy:
-            return `${Utils.Yang(sygz.toFixed(2))}`;
+            return traySimpleIncomeSetting ? `${Utils.Yang(Utils.formatNumberAbbr(sygz))}` : `${Utils.Yang(sygz.toFixed(2))}`;
           case Enums.TrayContent.Syl:
             return `${Utils.Yang(gssyl.toFixed(2))}%`;
           case Enums.TrayContent.Zsy:
-            return `${Utils.Yang(allCalcResult.sygz.toFixed(2))}`;
+            return traySimpleIncomeSetting
+              ? `${Utils.Yang(Utils.formatNumberAbbr(allCalcResult.sygz))}`
+              : `${Utils.Yang(allCalcResult.sygz.toFixed(2))}`;
           case Enums.TrayContent.Zsyl:
             return `${Utils.Yang(allCalcResult.gssyl.toFixed(2))}%`;
           default:
