@@ -225,25 +225,29 @@ export function UnitTransform(value: number) {
 }
 
 export function FormatNumberAbbr(num: number) {
-  if (num === 0) return '0';
+  try {
+    if (num === 0) return '0';
 
-  const absNum = Math.abs(num);
-  const sign = num < 0 ? '-' : '';
+    const absNum = Math.abs(num);
+    const sign = num < 0 ? '-' : '';
 
-  if (absNum < 1_000) {
-    return num.toFixed(2);
-  } else if (absNum < 10_000) {
-    // k: 千，保留2位小数
-    return sign + (absNum / 1_000).toFixed(1) + 'k';
-  } else if (absNum < 1_000_000) {
-    // w: 万，保留3位小数
-    return sign + (absNum / 10_000).toFixed(2) + 'w';
-  } else if (absNum < 1_000_000_000) {
-    // m: 百万，保留3位小数
-    return sign + (absNum / 1_000_000).toFixed(3) + 'm';
-  } else {
-    // b: 十亿，保留3位小数
-    return sign + (absNum / 1_000_000_000).toFixed(3) + 'b';
+    if (absNum < 1_000) {
+      return num.toFixed(2);
+    } else if (absNum < 10_000) {
+      // k: 千，保留2位小数
+      return sign + (absNum / 1_000).toFixed(1) + 'k';
+    } else if (absNum < 1_000_000) {
+      // w: 万，保留3位小数
+      return sign + (absNum / 10_000).toFixed(2) + 'w';
+    } else if (absNum < 1_000_000_000) {
+      // m: 百万，保留3位小数
+      return sign + (absNum / 1_000_000).toFixed(3) + 'm';
+    } else {
+      // b: 十亿，保留3位小数
+      return sign + (absNum / 1_000_000_000).toFixed(3) + 'b';
+    }
+  } catch {
+    return String(num);
   }
 }
 
