@@ -27,8 +27,8 @@ npm-debug.log.*
 yarn.lock
 yarn-error.log
 .yarnrc
-pnpm-lock.yaml
-package-lock.json
+# pnpm-lock.yaml
+# package-lock.json
 
 # src js
 /src/**/*.js
