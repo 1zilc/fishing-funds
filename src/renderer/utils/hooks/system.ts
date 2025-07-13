@@ -494,12 +494,12 @@ export function useTrayContent() {
       .map((trayContentType: Enums.TrayContent) => {
         switch (trayContentType) {
           case Enums.TrayContent.Sy:
-            return traySimpleIncomeSetting ? `${Utils.Yang(Utils.formatNumberAbbr(sygz))}` : `${Utils.Yang(sygz.toFixed(2))}`;
+            return traySimpleIncomeSetting ? `${Utils.Yang(Utils.FormatNumberAbbr(sygz))}` : `${Utils.Yang(sygz.toFixed(2))}`;
           case Enums.TrayContent.Syl:
             return `${Utils.Yang(gssyl.toFixed(2))}%`;
           case Enums.TrayContent.Zsy:
             return traySimpleIncomeSetting
-              ? `${Utils.Yang(Utils.formatNumberAbbr(allCalcResult.sygz))}`
+              ? `${Utils.Yang(Utils.FormatNumberAbbr(allCalcResult.sygz))}`
               : `${Utils.Yang(allCalcResult.sygz.toFixed(2))}`;
           case Enums.TrayContent.Zsyl:
             return `${Utils.Yang(allCalcResult.gssyl.toFixed(2))}%`;

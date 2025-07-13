@@ -224,7 +224,7 @@ export function UnitTransform(value: number) {
   return newValue.join('');
 }
 
-export function formatNumberAbbr(num: number) {
+export function FormatNumberAbbr(num: number) {
   if (num === 0) return '0';
 
   const absNum = Math.abs(num);
