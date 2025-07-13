@@ -19,27 +19,16 @@ jobs:
       - name: Setup repo
         uses: actions/checkout@v4
 
-      - name: Install Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: latest
-
       - name: Install pnpm
         uses: pnpm/action-setup@v4
         with:
           version: latest
 
-      - name: Get pnpm store directory
-        id: pnpm-cache
-        shell: bash
-        run: |
-          echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_OUTPUT
-
-      - name: Cache pnpm
-        uses: actions/cache@v4
+      - name: Install Node.js
+        uses: actions/setup-node@v4
         with:
-          key: ${{ runner.os }}-pnpm-dep
-          path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
+          node-version: 22
+          cache: 'pnpm'
 
       - name: Install dependencies
         run: pnpm i
