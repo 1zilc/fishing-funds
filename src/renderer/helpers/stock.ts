@@ -20,13 +20,18 @@ export function CalcStock(stock: Stock.ResponseItem, codeMap: Stock.CodeMap) {
 
   const gsz = stock.zx;
   const dwjz = stock.zs;
-  const bjz = NP.minus(gsz, dwjz) || 0;
+  // 判断 gsz 是否为有效数字（先转为字符串再比较）
+  const gszStr = String(gsz);
+  const isValidGsz = gsz !== undefined && gsz !== null && gszStr !== '' && gszStr !== 'None' && !isNaN(Number(gsz));
+  const priceForCalc = isValidGsz ? Number(gsz) : Number(dwjz);
+
+  const bjz = NP.minus(priceForCalc, dwjz) || 0;
   const jrsygz = NP.times(cyfe, bjz);
-  const gszz = NP.times(gsz!, cyfe);
+  const gszz = NP.times(priceForCalc, cyfe);
   const cyje = NP.times(dwjz, cyfe);
   const cbje = cbj && NP.times(cbj, cyfe);
-  const cysyl = cbj && NP.divide(NP.minus(gsz, cbj), cbj, 0.01);
-  const cysy = cbj && NP.times(NP.minus(gsz, cbj), cyfe);
+  const cysyl = cbj && NP.divide(NP.minus(priceForCalc, cbj), cbj, 0.01);
+  const cysy = cbj && NP.times(NP.minus(priceForCalc, cbj), cyfe);
   const gszzl = stock.zdf; // 估算收益率
   const gscysyl = cbj && cbj > 0 ? cysyl?.toFixed(2) : '';
 
