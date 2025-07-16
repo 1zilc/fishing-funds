@@ -25,8 +25,8 @@ export function CalcStock(stock: Stock.ResponseItem, codeMap: Stock.CodeMap) {
   const gszz = NP.times(gsz!, cyfe);
   const cyje = NP.times(dwjz, cyfe);
   const cbje = cbj && NP.times(cbj, cyfe);
-  const cysyl = cbj && NP.divide(NP.minus(dwjz, cbj), cbj, 0.01);
-  const cysy = cbj && NP.times(NP.minus(dwjz, cbj), cyfe);
+  const cysyl = cbj && NP.divide(NP.minus(gsz, cbj), cbj, 0.01);
+  const cysy = cbj && NP.times(NP.minus(gsz, cbj), cyfe);
   const gszzl = stock.zdf; // 估算收益率
   const gscysyl = cbj && cbj > 0 ? cysyl?.toFixed(2) : '';
 
