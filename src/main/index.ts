@@ -183,7 +183,7 @@ function main() {
   ipcMain.handle('set-proxy', async (event, config) => {
     await event.sender.session.setProxy(config);
     const proxyConent = await event.sender.session.resolveProxy('localhost');
-    proxyManager.updateAgentByParseProxyConent(proxyConent);
+    proxyManager.updateAgentByParseProxyContent(proxyConent);
     proxyMode = config.mode;
   });
   ipcMain.handle('get-fakeUA', (event, config) => {
@@ -265,8 +265,8 @@ function main() {
     const httpClient = new HttpClient();
     // 系统代理需要实时检测代理地址
     if (proxyMode === 'system') {
-      const proxyConent = await event.sender.session.resolveProxy('localhost');
-      proxyManager.updateAgentByParseProxyConent(proxyConent);
+      const proxyContent = await event.sender.session.resolveProxy('localhost');
+      proxyManager.updateAgentByParseProxyContent(proxyContent);
     }
     httpClient.userAgent = fakeUA;
     httpClient.dispatcher = proxyManager.agent;
