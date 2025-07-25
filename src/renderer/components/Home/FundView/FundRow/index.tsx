@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import clsx from 'clsx';
-import { RiEditLine, RiArrowDownSLine, RiArrowUpSLine } from 'react-icons/ri';
+import { RiEditLine, RiArrowDownSLine, RiArrowUpSLine, RiDeleteBin6Line } from 'react-icons/ri';
 import Collapse from '@/components/Collapse';
 import MemoNote from '@/components/MemoNote';
 import { toggleFundCollapseAction } from '@/store/features/wallet';
@@ -14,6 +14,7 @@ export interface RowProps {
   fund: Fund.ResponseItem & Fund.ExtraRow & Fund.FixData;
   readOnly?: boolean;
   onEdit?: (fund: Fund.SettingItem) => void;
+  onDelete?: (fund: Fund.SettingItem) => void;
   onDetail: (code: string) => void;
 }
 
@@ -47,6 +48,10 @@ const FundRow: React.FC<RowProps> = React.memo((props) => {
 
   function onEditClick() {
     props.onEdit?.(fundConfig);
+  }
+
+  function onDeleteClick() {
+    props.onDelete?.(fundConfig);
   }
 
   return (
@@ -108,6 +113,7 @@ const FundRow: React.FC<RowProps> = React.memo((props) => {
             <span>持有份额：</span>
             <span>{calcFundResult.cyfe}</span>
             <RiEditLine className={styles.editor} onClick={onEditClick} />
+            <RiDeleteBin6Line className={styles.editor} onClick={onDeleteClick} />
           </section>
           <section>
             <span>成本金额：</span>
