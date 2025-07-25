@@ -74,6 +74,7 @@ const FundView: React.FC<FundListProps> = (props) => {
     });
     if (response === 0) {
       dispatch(deleteFundAction(fund.code));
+      freshFunds();
     }
   }
 

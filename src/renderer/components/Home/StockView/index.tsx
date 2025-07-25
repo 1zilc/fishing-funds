@@ -60,6 +60,7 @@ const StockView: React.FC<StockListProps> = (props) => {
     });
     if (response === 0) {
       dispatch(deleteStockAction(stock.secid));
+      freshStocks();
     }
   }
 
