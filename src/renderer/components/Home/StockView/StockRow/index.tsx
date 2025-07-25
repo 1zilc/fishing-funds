@@ -1,7 +1,7 @@
 import React from 'react';
 import clsx from 'clsx';
 import { useRequest } from 'ahooks';
-import { RiArrowDownSLine, RiArrowUpSLine, RiEditLine } from 'react-icons/ri';
+import { RiArrowDownSLine, RiArrowUpSLine, RiEditLine, RiDeleteBin6Line } from 'react-icons/ri';
 import Collapse from '@/components/Collapse';
 import ArrowLine from '@/components/ArrowLine';
 import MemoNote from '@/components/MemoNote';
@@ -18,6 +18,7 @@ import styles from './index.module.css';
 export interface RowProps {
   stock: Stock.ResponseItem & Stock.ExtraRow;
   onEdit?: (fund: Stock.SettingItem) => void;
+  onDelete?: (fund: Stock.SettingItem) => void;
   onDetail: (code: string) => void;
 }
 
@@ -124,6 +125,10 @@ const StockRow: React.FC<RowProps> = React.memo((props) => {
     props.onEdit?.(stockConfig);
   }
 
+  function onDeleteClick() {
+    props.onDelete?.(stockConfig);
+  }
+
   return (
     <>
       <div className={clsx(styles.row)} onClick={() => dispatch(toggleStockCollapseAction(stock))}>
@@ -219,6 +224,7 @@ const StockRow: React.FC<RowProps> = React.memo((props) => {
             <span>持股数：</span>
             <span>{stockConfig.cyfe || 0}</span>
             <RiEditLine className={styles.editor} onClick={onEditClick} />
+            <RiDeleteBin6Line className={styles.editor} onClick={onDeleteClick} />
           </section>
           <section>
             <span>成本金额：</span>
