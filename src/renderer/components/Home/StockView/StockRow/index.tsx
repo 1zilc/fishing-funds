@@ -217,7 +217,7 @@ const StockRow: React.FC<RowProps> = React.memo((props) => {
           </section>
           <section>
             <span>持股数：</span>
-            <span>{stockConfig.cyfe}</span>
+            <span>{stockConfig.cyfe || 0}</span>
             <RiEditLine className={styles.editor} onClick={onEditClick} />
           </section>
           <section>
