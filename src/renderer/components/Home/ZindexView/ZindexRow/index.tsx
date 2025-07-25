@@ -1,6 +1,6 @@
 import React from 'react';
 import clsx from 'clsx';
-import { RiArrowDownSLine, RiArrowUpSLine, RiEditLine } from 'react-icons/ri';
+import { RiArrowDownSLine, RiArrowUpSLine, RiEditLine, RiDeleteBin6Line } from 'react-icons/ri';
 import Collapse from '@/components/Collapse';
 import ArrowLine from '@/components/ArrowLine';
 import MemoNote from '@/components/MemoNote';
@@ -14,6 +14,7 @@ import styles from './index.module.css';
 export interface RowProps {
   zindex: Zindex.ResponseItem & Zindex.ExtraRow;
   onEdit?: (fund: Zindex.SettingItem) => void;
+  onDelete?: (fund: Zindex.SettingItem) => void;
   onDetail: (code: string) => void;
 }
 
@@ -111,6 +112,9 @@ const ZindexRow: React.FC<RowProps> = React.memo((props) => {
   function onEditClick() {
     props.onEdit?.(zindexConfig);
   }
+  function onDeleteClick() {
+    props.onDelete?.(zindexConfig);
+  }
 
   return (
     <>
@@ -177,6 +181,7 @@ const ZindexRow: React.FC<RowProps> = React.memo((props) => {
             <span>昨收：</span>
             <span>{zindex.zs}</span>
             <RiEditLine className={styles.editor} onClick={onEditClick} />
+            <RiDeleteBin6Line className={styles.editor} onClick={onDeleteClick} />
           </section>
           <section>
             <span>今开：</span>

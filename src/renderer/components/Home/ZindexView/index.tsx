@@ -6,7 +6,8 @@ import LoadingBar from '@/components/LoadingBar';
 import CustomDrawer from '@/components/CustomDrawer';
 import GridView from '@/components/GridView';
 
-import { useDrawer, useAppSelector, useFreshZindexs } from '@/utils/hooks';
+import { deleteZindexAction } from '@/store/features/zindex';
+import { useDrawer, useAppSelector, useFreshZindexs, useAppDispatch } from '@/utils/hooks';
 import * as Enums from '@/utils/enums';
 import styles from './index.module.css';
 
@@ -17,7 +18,10 @@ interface ZindexViewProps {
   filter: (zindex: Zindex.ResponseItem & Zindex.ExtraRow) => boolean;
 }
 
+const { dialog } = window.contextModules.electron;
+
 const ZindexView: React.FC<ZindexViewProps> = (props) => {
+  const dispatch = useAppDispatch();
   const zindexs = useAppSelector((state) => state.zindex.zindexs);
   const zindexsLoading = useAppSelector((state) => state.zindex.zindexsLoading);
   const zindexViewMode = useAppSelector((state) => state.sort.viewMode.zindexViewMode);
@@ -42,7 +46,13 @@ const ZindexView: React.FC<ZindexViewProps> = (props) => {
       case Enums.ZindexViewType.List:
       default:
         return list.map((zindex) => (
-          <ZindexRow key={zindex.code} zindex={zindex} onEdit={setEditDrawer} onDetail={setDetailDrawer} />
+          <ZindexRow
+            key={zindex.code}
+            zindex={zindex}
+            onEdit={setEditDrawer}
+            onDetail={setDetailDrawer}
+            onDelete={onRemoveZindex}
+          />
         ));
     }
   }, [list, zindexViewMode]);
@@ -50,6 +60,19 @@ const ZindexView: React.FC<ZindexViewProps> = (props) => {
   function enterEditDrawer() {
     freshZindexs();
     closeEditDrawer();
+  }
+
+  async function onRemoveZindex(zindex: Zindex.SettingItem) {
+    const { response } = await dialog.showMessageBox({
+      title: '删除指数',
+      type: 'info',
+      message: `确认删除 ${zindex.name || ''} ${zindex.code}`,
+      buttons: ['确定', '取消'],
+    });
+    if (response === 0) {
+      dispatch(deleteZindexAction(zindex.code));
+      freshZindexs();
+    }
   }
 
   return (
