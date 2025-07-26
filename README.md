@@ -1,5 +1,5 @@
 <p align="center">
-<img src="https://download.1zilc.top/ff/icon.png" width="108">
+<img src="https://github.com/1zilc/fishing-funds/blob/main/build/icon.png?raw=true" width="128">
 </p>
 
 # Fishing Funds
