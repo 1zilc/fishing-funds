@@ -38,6 +38,16 @@ export default defineConfig(({ command }) => {
         minify: prod,
         cssCodeSplit: false,
         assetsInlineLimit: 1024 * 20,
+        rollupOptions: {
+          output: {
+            manualChunks(id) {
+              if (id.includes('node_modules')) {
+                return 'vendor';
+              }
+              return null;
+            },
+          },
+        },
       },
       server: {
         port: 3456,
