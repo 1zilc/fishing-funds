@@ -12,7 +12,6 @@ import walletReducer, { WalletState } from '@/store/features/wallet';
 import webReducer, { WebState } from '@/store/features/web';
 import zindexReducer, { ZindexState } from '@/store/features/zindex';
 import translateReducer, { TranslateState } from '@/store/features/translate';
-import chatGPTReducer, { ChatGPTState } from '@/store/features/chatGPT';
 
 const { production } = window.contextModules.process;
 
@@ -36,7 +35,6 @@ const store = configureStore({
     web: webReducer,
     zindex: zindexReducer,
     translate: translateReducer,
-    chatGPT: chatGPTReducer,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(middleware),
   devTools: !production,
@@ -56,7 +54,6 @@ export type StoreState = {
   coin: CoinState;
   web: WebState;
   translate: TranslateState;
-  chatGPT: ChatGPTState;
 };
 
 export type AppDispatch = typeof store.dispatch;

@@ -6,7 +6,6 @@ import { syncZindexesConfigAction } from '@/store/features/zindex';
 import { syncWebConfigAction } from '@/store/features/web';
 import { changeCurrentWalletCodeAction, syncWalletsConfigAction } from '@/store/features/wallet';
 import { syncTranslateSettingAction } from '@/store/features/translate';
-import { syncChatGPTSettingAction } from '@/store/features/chatGPT';
 import * as CONST from '@/constants';
 
 const electronStore = window.contextModules.electronStore;
@@ -58,12 +57,6 @@ const configListener = () => {
     actionCreator: syncTranslateSettingAction,
     effect: async (action) => {
       electronStore.set('config', CONST.STORAGE.TRANSLATE_SETTING, action.payload);
-    },
-  });
-  listenerMiddleware.startListening({
-    actionCreator: syncChatGPTSettingAction,
-    effect: async (action) => {
-      electronStore.set('config', CONST.STORAGE.CHATGPT_SETTING, action.payload);
     },
   });
 };
