@@ -147,7 +147,6 @@ export const saveSyncConfigAction = createAsyncThunk<void, void, AsyncThunkConfi
           config: { webConfig },
         },
         translate: { translateSetting },
-        chatGPT: { chatGPTSetting },
         setting: {
           systemSetting: { syncConfigPathSetting },
         },
@@ -161,7 +160,6 @@ export const saveSyncConfigAction = createAsyncThunk<void, void, AsyncThunkConfi
         [CONST.STORAGE.WEB_SETTING]: webConfig,
         [CONST.STORAGE.CURRENT_WALLET_CODE]: currentWalletCode,
         [CONST.STORAGE.TRANSLATE_SETTING]: translateSetting,
-        [CONST.STORAGE.CHATGPT_SETTING]: chatGPTSetting,
       };
       const syncConfig = await Enhancement.GenerateSyncConfig(config);
       await Enhancement.SaveSyncConfig(syncConfigPathSetting, syncConfig);

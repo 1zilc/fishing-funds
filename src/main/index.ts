@@ -222,7 +222,6 @@ function main() {
   // 快捷键
   const visibleHotkeyManager = new HotkeyManager({ mb });
   const translateHotkeyManager = new HotkeyManager({ mb });
-  const chatGPTHotkeyManager = new HotkeyManager({ mb });
   ipcMain.handle('set-visible-hotkey', (event, keys: string) => {
     visibleHotkeyManager.registryHotkey(keys, ({ visible }) => {
       if (visible) {
@@ -235,11 +234,6 @@ function main() {
   ipcMain.handle('set-translate-hotkey', (event, keys: string) => {
     translateHotkeyManager.registryHotkey(keys, ({ visible }) => {
       sendMessageToRenderer(mb.window, 'trigger-translate', visible);
-    });
-  });
-  ipcMain.handle('set-chatGPT-hotkey', (event, keys: string) => {
-    chatGPTHotkeyManager.registryHotkey(keys, ({ visible }) => {
-      sendMessageToRenderer(mb.window, 'trigger-chatGPT', visible);
     });
   });
   // 多窗口相关

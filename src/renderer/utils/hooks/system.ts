@@ -17,7 +17,6 @@ import {
   syncVaribleColors,
 } from '@/store/features/setting';
 import { syncTranslateShowAction } from '@/store/features/translate';
-import { syncChatGPTShowAction } from '@/store/features/chatGPT';
 import {
   useWorkDayTimeToDo,
   useFixTimeToDo,
@@ -395,7 +394,6 @@ export function useMappingLocalToSystemSetting() {
     hotkeySetting: visibleHotkey,
   } = useAppSelector((state) => state.setting.systemSetting);
   const { hotkeySetting: translateHotkey } = useAppSelector((state) => state.translate.translateSetting);
-  const { hotkeySetting: chatGPTHotkey } = useAppSelector((state) => state.chatGPT.chatGPTSetting);
 
   useIpcRendererListener('nativeTheme-updated', (e, data) => {
     dispatch(syncDarkMode(!!data?.darkMode));
@@ -444,9 +442,7 @@ export function useMappingLocalToSystemSetting() {
   useEffect(() => {
     ipcRenderer.invoke('set-translate-hotkey', translateHotkey);
   }, [translateHotkey]);
-  useEffect(() => {
-    ipcRenderer.invoke('set-chatGPT-hotkey', chatGPTHotkey);
-  }, [chatGPTHotkey]);
+
   useEffect(() => {
     if (lowKeySetting) {
       ipcRenderer.invoke('set-opacity', opacitySetting);
@@ -743,31 +739,6 @@ export function useTranslate() {
         });
       }
       dispatch(syncTranslateShowAction(true));
-      ipcRenderer.invoke('set-menubar-visible', true);
-    }
-  });
-}
-
-export function useChatGPT() {
-  const dispatch = useAppDispatch();
-  const show = useAppSelector((state) => state.chatGPT.show); // chatgpt当前显示状态
-
-  useIpcRendererListener('trigger-chatGPT', (event, visible: boolean) => {
-    // menubar 当前显示状态
-    if (visible) {
-      if (show) {
-        ipcRenderer.invoke('set-menubar-visible', false);
-        dispatch(syncChatGPTShowAction(false));
-      } else {
-        dispatch(syncChatGPTShowAction(true));
-      }
-    } else {
-      if (show) {
-        flushSync(() => {
-          dispatch(syncChatGPTShowAction(false));
-        });
-      }
-      dispatch(syncChatGPTShowAction(true));
       ipcRenderer.invoke('set-menubar-visible', true);
     }
   });

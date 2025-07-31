@@ -22,7 +22,6 @@ import { syncTabsActiveKeyAction } from '@/store/features/tabs';
 import { setWebConfigAction, defaultWebConfig } from '@/store/features/web';
 import { syncVersion } from '@/store/features/updater';
 import { syncTranslateSettingAction, defaultTranslateSetting } from '@/store/features/translate';
-import { syncChatGPTSettingAction, defaultChatGPTSetting } from '@/store/features/chatGPT';
 import { useDrawer, useAppDispatch } from '@/utils/hooks';
 import { syncFavoriteQuotationMapAction } from '@/store/features/quotation';
 import * as CONST from '@/constants';
@@ -99,8 +98,6 @@ const InitPage = () => {
     dispatch(changeCurrentWalletCodeAction(allConfigStorage[CONST.STORAGE.CURRENT_WALLET_CODE] || defaultWallet.code));
     // 翻译配置加载完成
     dispatch(syncTranslateSettingAction(allConfigStorage[CONST.STORAGE.TRANSLATE_SETTING] || defaultTranslateSetting));
-    // chatGPT配置加载完成
-    dispatch(syncChatGPTSettingAction(allConfigStorage[CONST.STORAGE.CHATGPT_SETTING] || defaultChatGPTSetting));
     /**
      * state部分
      */

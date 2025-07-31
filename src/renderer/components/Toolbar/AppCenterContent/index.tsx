@@ -52,7 +52,6 @@ const EconomicCalendarContent = React.lazy(() => import('@/components/Home/Stock
 const GoldMarketContent = React.lazy(() => import('@/components/Home/QuotationView/GoldMarketContent'));
 const Calculator = React.lazy(() => import('@/components/Home/CoinView/Calculator'));
 const TranslateSettingContent = React.lazy(() => import('@/components/TranslateDrawer/TranslateSettingContent'));
-const ChatGPTSettingContent = React.lazy(() => import('@/components/ChatGPTDrawer/ChatGPTSettingContent'));
 
 const { Search } = Input;
 const iconSize = { height: 18, width: 18 };
@@ -135,8 +134,6 @@ const AppCenterContent: React.FC<AppCenterContentProps> = (props) => {
   const [showCalculatorDrawer, { setTrue: openCalculatorDrawer, setFalse: closeCalculatorDrawer }] = useBoolean(false);
   const [showTranslateSettingDrawer, { setTrue: openTranslateSettingDrawer, setFalse: closeTranslateSettingDrawer }] =
     useBoolean(false);
-  const [showChatGPTSettingDrawer, { setTrue: openChatGPTSettingDrawer, setFalse: closeChatGPTSettingDrawer }] =
-    useBoolean(false);
 
   const openWebView = useOpenWebView();
 
@@ -209,13 +206,6 @@ const AppCenterContent: React.FC<AppCenterContentProps> = (props) => {
                 iconType: Enums.WebIconType.Svg,
                 icon: <RiTranslate style={{ ...iconSize }} />,
                 click: openTranslateSettingDrawer,
-              },
-              {
-                title: 'ChatGPT',
-                iconType: Enums.WebIconType.Svg,
-                color: '#80A89C',
-                icon: <RiOpenaiFill style={{ ...iconSize }} />,
-                click: openChatGPTSettingDrawer,
               },
             ],
           },
@@ -386,9 +376,6 @@ const AppCenterContent: React.FC<AppCenterContentProps> = (props) => {
         </CustomDrawer>
         <CustomDrawer show={showTranslateSettingDrawer}>
           <TranslateSettingContent onClose={closeTranslateSettingDrawer} onEnter={closeTranslateSettingDrawer} />
-        </CustomDrawer>
-        <CustomDrawer show={showChatGPTSettingDrawer}>
-          <ChatGPTSettingContent onClose={closeChatGPTSettingDrawer} onEnter={closeChatGPTSettingDrawer} />
         </CustomDrawer>
       </div>
     </CustomDrawerContent>
