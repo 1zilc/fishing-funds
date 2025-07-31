@@ -1,7 +1,7 @@
 import windowStateKeeper from 'electron-window-state';
 import { menubar } from 'menubar';
 import { app, Tray } from 'electron';
-import { resolveHtmlPath, getPreloadPath } from './util';
+import { resolveHtmlPath, getPreloadPath, isSupportBlurBg } from './util';
 
 export function createMenubar({ tray, mainWindowState }: { tray: Tray; mainWindowState: windowStateKeeper.State }) {
   return menubar({
@@ -13,7 +13,7 @@ export function createMenubar({ tray, mainWindowState }: { tray: Tray; mainWindo
     // showDockIcon: false,
 
     browserWindow: {
-      backgroundColor: process.platform === 'darwin' ? 'rgba(0, 0, 0, 0)' : '#fff',
+      backgroundColor: isSupportBlurBg() ? 'rgba(0, 0, 0, 0)' : '#fff',
       width: mainWindowState.width,
       height: mainWindowState.height,
 
@@ -22,6 +22,7 @@ export function createMenubar({ tray, mainWindowState }: { tray: Tray; mainWindo
       maxWidth: 800,
       vibrancy: 'sidebar',
       visualEffectState: 'active',
+      backgroundMaterial: 'tabbed',
       webPreferences: {
         webviewTag: true,
         devTools: !app.isPackaged,

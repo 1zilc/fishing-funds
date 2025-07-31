@@ -24,7 +24,15 @@ import { ProxyManager } from './proxy';
 import HotkeyManager from './hotkey';
 import ContextMenuManager from './contextMenu';
 import { saveImage, saveJsonToCsv, saveString, readFile } from './io';
-import { lockSingleInstance, checkEnvTool, sendMessageToRenderer, setNativeTheme, getOtherWindows, makeFakeUA } from './util';
+import {
+  lockSingleInstance,
+  checkEnvTool,
+  sendMessageToRenderer,
+  setNativeTheme,
+  getOtherWindows,
+  makeFakeUA,
+  isSupportBlurBg,
+} from './util';
 import HttpClient from './httpClient';
 import * as Enums from '../renderer/utils/enums';
 
@@ -194,6 +202,9 @@ function main() {
   });
   ipcMain.handle('get-version', (event, config) => {
     return app.getVersion();
+  });
+  ipcMain.handle('is-support-blur-bg', (event) => {
+    return isSupportBlurBg();
   });
   ipcMain.handle('set-opacity', (event, config) => {
     getOtherWindows(windowIds).forEach((win) => {

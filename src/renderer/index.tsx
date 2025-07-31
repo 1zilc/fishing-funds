@@ -76,13 +76,14 @@ echarts.registerMap('china', chinaMap as any);
 // np检测
 NP.enableBoundaryChecking(false);
 
-const { platform } = window.contextModules.process;
+const { ipcRenderer } = window.contextModules.electron;
+const isSupportBlurBg = await ipcRenderer.invoke('is-support-blur-bg');
 
 createRoot(document.getElementById('root')!).render(
   <ConfigProvider locale={zhCN}>
     <style>
       {`:root{
-        background-color: ${platform === 'darwin' ? 'initial' : 'var(--inner-color)'};
+        background-color: ${isSupportBlurBg ? 'initial' : 'var(--inner-color)'};
       }`}
     </style>
     <Provider store={store}>
