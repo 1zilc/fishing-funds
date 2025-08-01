@@ -23,11 +23,13 @@ export function createMenubar({ tray, mainWindowState }: { tray: Tray; mainWindo
       vibrancy: 'sidebar',
       visualEffectState: 'active',
       backgroundMaterial: 'tabbed',
+
       webPreferences: {
         webviewTag: true,
         devTools: !app.isPackaged,
         preload: getPreloadPath(),
         spellcheck: false,
+        scrollBounce: true,
       },
     },
   });

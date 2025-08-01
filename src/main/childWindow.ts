@@ -22,6 +22,7 @@ export function createChildWindow(config: { search: string; parentId: number }) 
         devTools: !app.isPackaged,
         preload: getPreloadPath(),
         spellcheck: false,
+        scrollBounce: true,
       },
     });
     win.loadURL(index);
