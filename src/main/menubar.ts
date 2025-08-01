@@ -19,7 +19,6 @@ export function createMenubar({ tray, mainWindowState }: { tray: Tray; mainWindo
 
       minHeight: 400,
       minWidth: 300,
-      maxWidth: 800,
       vibrancy: 'sidebar',
       visualEffectState: 'active',
       backgroundMaterial: 'tabbed',
