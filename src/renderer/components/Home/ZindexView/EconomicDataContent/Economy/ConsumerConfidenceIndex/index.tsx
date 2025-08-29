@@ -35,6 +35,7 @@ const ConsumerConfidenceIndex: React.FC<ConsumerConfidenceIndexProps> = () => {
             position: 'inside',
           },
           legend: {
+            top: 0,
             data: ['信心指数', '满意指数', '预期指数'],
             textStyle: {
               color: 'var(--main-text-color)',

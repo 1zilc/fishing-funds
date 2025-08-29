@@ -29,6 +29,7 @@ const ForeignExchangeAndGold: React.FC<ForeignExchangeAndGoldProps> = () => {
             position: 'inside',
           },
           legend: {
+            top: 0,
             data: ['外汇储备', '黄金储备'],
             textStyle: {
               color: 'var(--main-text-color)',

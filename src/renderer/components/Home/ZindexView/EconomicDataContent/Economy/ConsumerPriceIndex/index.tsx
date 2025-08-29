@@ -31,6 +31,7 @@ const ConsumerPriceIndex: React.FC<ConsumerPriceIndexProps> = () => {
             position: 'inside',
           },
           legend: {
+            top: 0,
             data: ['全国', '城市', '农村'],
             textStyle: {
               color: 'var(--main-text-color)',

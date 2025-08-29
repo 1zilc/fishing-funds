@@ -37,6 +37,7 @@ const Trend: React.FC<TrendProps> = () => {
           position: 'inside',
         },
         legend: {
+          top: 0,
           data: [trendType.name, '沪深300'],
           textStyle: {
             color: 'var(--main-text-color)',

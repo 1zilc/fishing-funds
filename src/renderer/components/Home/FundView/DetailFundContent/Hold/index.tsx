@@ -35,6 +35,7 @@ const Hold: React.FC<HoldProps> = ({
           },
         },
         legend: {
+          top: 0,
           data: Data_holderStructure.series.map((item) => item.name),
           textStyle: {
             color: 'var(--main-text-color)',

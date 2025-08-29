@@ -28,6 +28,7 @@ const TreasuryYield: React.FC<TreasuryYieldProps> = () => {
           position: 'inside',
         },
         legend: {
+          top: 0,
           data: ['中国国债收益率:10年', '美国国债收益率:10年'],
           textStyle: {
             color: 'var(--main-text-color)',

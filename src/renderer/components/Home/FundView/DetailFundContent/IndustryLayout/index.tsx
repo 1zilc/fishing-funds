@@ -31,6 +31,8 @@ const IndustryLayout: React.FC<IndustryLayoutProps> = ({ stocks }) => {
             breadcrumb: { show: false },
             roam: false,
             nodeClick: false,
+            top: 0,
+            left: 0,
             data: Object.entries(groupMap).map(([key, datas]) => ({
               name: key,
               value: datas.reduce((r, c) => r + Number(c.JZBL), 0),

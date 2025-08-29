@@ -39,6 +39,7 @@ const Details: React.FC<DetailsProps> = () => {
           },
         },
         legend: {
+          top: 0,
           data: ['证金持股', '汇金持股', '证金资管持股'],
           textStyle: {
             color: 'var(--main-text-color)',

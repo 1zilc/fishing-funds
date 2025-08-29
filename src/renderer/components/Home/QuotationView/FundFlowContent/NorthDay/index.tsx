@@ -42,6 +42,7 @@ const NorthDay: React.FC<NorthDayProps> = () => {
           position: 'inside',
         },
         legend: {
+          top: 0,
           data: ['沪股通', '深股通', '北向'],
           textStyle: {
             color: 'var(--main-text-color)',

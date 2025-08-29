@@ -34,6 +34,7 @@ const DepositReserveRatio: React.FC<DepositReserveRatioProps> = () => {
             position: 'inside',
           },
           legend: {
+            top: 0,
             data: ['大型金融机构', '中小金融机构'],
             textStyle: {
               color: 'var(--main-text-color)',

@@ -26,7 +26,7 @@ const WalletConfig: React.FC<WalletConfigProps> = ({ funds, codes }) => {
             },
           },
           legend: {
-            show: true,
+            top: 0,
             data: funds.map(({ name }) => name),
             textStyle: {
               color: 'var(--main-text-color)',

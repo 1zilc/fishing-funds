@@ -30,6 +30,8 @@ const QuotationMap: React.FC<QuotationMapProps> = ({ type }) => {
             height: '100%',
             width: '100%',
             type: 'treemap',
+            top: 0,
+            left: 0,
             breadcrumb: { show: false },
             data: quotations
               .filter((quotation) => quotation.type === type)

@@ -30,6 +30,7 @@ const PurchasingManagerIndex: React.FC<PurchasingManagerIndexProps> = () => {
             position: 'inside',
           },
           legend: {
+            top: 0,
             data: ['制造业', '非制造业'],
             textStyle: {
               color: 'var(--main-text-color)',

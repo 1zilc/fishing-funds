@@ -25,6 +25,7 @@ const SealPlate: React.FC<SealPlateProps> = () => {
           trigger: 'axis',
         },
         legend: {
+          top: 0,
           textStyle: {
             color: 'var(--main-text-color)',
             fontSize: 10,

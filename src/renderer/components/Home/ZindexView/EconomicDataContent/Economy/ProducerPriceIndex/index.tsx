@@ -30,6 +30,7 @@ const ProducerPriceIndex: React.FC<ProducerPriceIndexProps> = () => {
             position: 'inside',
           },
           legend: {
+            top: 0,
             data: ['当月', '累计'],
             textStyle: {
               color: 'var(--main-text-color)',

@@ -46,6 +46,7 @@ const AfterTimeFundFlow: React.FC<AfterTimeFundFlowProps> = ({ secid = '' }) => 
           position: 'inside',
         },
         legend: {
+          top: 0,
           data: ['主力净流入', '超大单净流入', '大单净流入', '中单净流入', '小单净流入'],
           textStyle: {
             color: 'var(--main-text-color)',

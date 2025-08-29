@@ -32,6 +32,7 @@ const K: React.FC<KProps> = () => {
           },
         },
         legend: {
+          top: 0,
           data: ['日K', 'MA5', 'MA10'],
           textStyle: {
             color: 'var(--main-text-color)',

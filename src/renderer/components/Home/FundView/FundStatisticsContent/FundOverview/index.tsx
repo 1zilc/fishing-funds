@@ -30,6 +30,8 @@ const FundOverview: React.FC<FundOverviewProps> = (props) => {
             height: '100%',
             width: '100%',
             type: 'treemap',
+            top: 0,
+            left: 0,
             breadcrumb: { show: false },
             data: funds.map((fund) => {
               const calcWalletsFundResult = Helpers.Fund.CalcWalletsFund(fund, fundConfigMap);
