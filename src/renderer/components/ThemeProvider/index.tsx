@@ -54,6 +54,7 @@ const Styles: React.FC<StylesProps> = (props) => {
             --alipay-color: #156dff;
             --wechat-color: #1fa131;
             --blur-color: ${config.darkMode ? 'rgba(0,0,0,0.72)' : 'rgba(255,255,255,0.72)'};
+            --block-border-color: ${config.darkMode ? 'rgba(255,255,255,0.25)' : 'rgba(255,255,255,0.5)'};
       }`}
     </style>
   );
@@ -70,6 +71,8 @@ const ThemeProvider: React.FC<PropsWithChildren<ThemeProviderProps>> = (props) =
         token: {
           colorPrimary: config.primaryColor,
           fontSize: config.baseFontSize,
+          borderRadius: 8,
+          borderRadiusLG: 12,
           colorSuccess: '#00b578',
           colorWarning: '#ff8f1f',
           colorError: '#ff3141',

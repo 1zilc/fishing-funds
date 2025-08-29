@@ -27,7 +27,6 @@ const WebAppIcon: React.FC<WebAppIconProps> = (props) => {
             className={styles.app}
             style={{
               background: color,
-              boxShadow: `0 2px 5px ${color}`,
             }}
             onClick={props.onClick}
           >
@@ -52,7 +51,6 @@ const WebAppIcon: React.FC<WebAppIconProps> = (props) => {
             className={styles.app}
             style={{
               background: color,
-              boxShadow: `0 2px 5px ${color}`,
             }}
             onClick={props.onClick}
           >

@@ -65,7 +65,6 @@ const QuickSearch: React.FC<QuickSearchProps> = React.memo((props) => {
             className={clsx(styles.item, 'brightness')}
             style={{
               background: color,
-              boxShadow: `0 2px 5px ${color}`,
             }}
             onClick={() => openWebView(site.url)}
           >

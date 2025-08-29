@@ -125,6 +125,7 @@
   width: 8px;
   margin-left: var(--base-padding);
   border-radius: 50%;
+  border: 1px solid var(--block-border-color);
   box-sizing: border-box;
   display: block;
 }

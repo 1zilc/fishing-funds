@@ -16,7 +16,6 @@ const Avatar: React.FC<AvatarProps> = (props) => {
       className={clsx(styles.content)}
       style={{
         backgroundColor: color,
-        boxShadow: `0 2px 5px ${color}`,
       }}
     >
       {url ? <img /> : <span>{name?.slice(0, 1)}</span>}

@@ -43,7 +43,6 @@ const CoinRow: React.FC<RowProps> = React.memo((props) => {
               className={styles.coin}
               style={{
                 background: coinColor,
-                boxShadow: `0 2px 5px ${coinColor}`,
               }}
             />
           </div>
