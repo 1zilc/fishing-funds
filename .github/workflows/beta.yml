@@ -33,7 +33,9 @@ jobs:
           cache: 'pnpm'
 
       - name: Install dependencies
-        run: pnpm i
+        run: |
+          pnpm update
+          pnpm i
 
       - name: Run build
         run: pnpm beta-mac
