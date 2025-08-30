@@ -1,5 +1,6 @@
 import React from 'react';
 import clsx from 'clsx';
+import * as echarts from 'echarts/core';
 import { useRequest } from 'ahooks';
 import { RiArrowDownSLine, RiArrowUpSLine, RiEditLine, RiDeleteBin6Line } from 'react-icons/ri';
 import Collapse from '@/components/Collapse';
@@ -35,7 +36,7 @@ const TrendChart: React.FC<{
 
   useRenderEcharts(
     () => {
-      const { color } = Utils.GetValueColor(Number(trends[trends.length - 1]?.last) - zs);
+      const { color, bgColor } = Utils.GetValueColor(Number(trends[trends.length - 1]?.last) - zs);
       chartInstance?.setOption({
         title: {
           text: '',
@@ -76,7 +77,20 @@ const TrendChart: React.FC<{
             symbol: 'none',
             smooth: true,
             silent: true,
-            lineStyle: { width: 2, color },
+            lineStyle: { width: 2, color: color },
+            areaStyle: {
+              opacity: 0.8,
+              color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                {
+                  offset: 0,
+                  color: color,
+                },
+                {
+                  offset: 1,
+                  color: bgColor,
+                },
+              ]),
+            },
             markLine: {
               symbol: 'none',
               label: {

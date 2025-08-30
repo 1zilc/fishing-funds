@@ -286,6 +286,12 @@ export function GetValueColor(number?: number | string) {
         : value < 0
         ? varibleColors['--reduce-color']
         : varibleColors['--reverse-text-color'],
+    bgColor:
+      value > 0
+        ? varibleColors['--increase-bg-color']
+        : value < 0
+        ? varibleColors['--reduce-bg-color']
+        : varibleColors['--background-color'],
     textClass: value > 0 ? 'text-up' : value < 0 ? 'text-down' : 'text-none',
     blockClass: value > 0 ? 'block-up' : value < 0 ? 'block-down' : 'block-none',
     bgClass: value > 0 ? 'bg-up' : value < 0 ? 'bg-down' : 'bg-none',
