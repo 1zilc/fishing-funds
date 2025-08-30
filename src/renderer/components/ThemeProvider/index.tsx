@@ -73,9 +73,9 @@ const ThemeProvider: React.FC<PropsWithChildren<ThemeProviderProps>> = (props) =
           fontSize: config.baseFontSize,
           borderRadius: 8,
           borderRadiusLG: 12,
-          colorSuccess: '#00b578',
-          colorWarning: '#ff8f1f',
-          colorError: '#ff3141',
+          colorSuccess: '#2EBD85',
+          colorWarning: '#F0B90B',
+          colorError: '#F6465D',
         },
         algorithm: config.darkMode ? [...baseAlgorithm, theme.darkAlgorithm] : baseAlgorithm,
       }}

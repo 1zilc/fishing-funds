@@ -733,7 +733,7 @@ export function useInputShortcut(initial: string) {
 }
 
 export function useThemeColor() {
-  const originPrimaryColor = '#1677ff';
+  const originPrimaryColor = '#2c7df5';
   const themeColorTypeSetting = useAppSelector((state) => state.setting.systemSetting.themeColorTypeSetting);
   const customThemeColorSetting = useAppSelector((state) => state.setting.systemSetting.customThemeColorSetting);
   const customThemeColorEnable = themeColorTypeSetting === Enums.ThemeColorType.Custom;
