@@ -12,7 +12,8 @@
     "package-mac": "npm run build && electron-builder build -m -p never",
     "package-all": "npm run build && electron-builder build -mwl -p never",
     "release-all": "npm run build && electron-builder build -mwl -p always",
-    "beta-mac": "npm run build && electron-builder build -m -p always"
+    "beta-mac": "npm run build && electron-builder build -m -p always",
+    "beta-all": "npm run build && electron-builder build -mw -p always"
   },
   "build": {
     "productName": "Fishing Funds",
