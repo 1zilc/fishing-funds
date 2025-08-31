@@ -26,6 +26,7 @@ contextBridge.exposeInMainWorld('contextModules', {
           'nativeTheme-updated',
           'clipboard-funds-copy',
           'clipboard-funds-import',
+          'ai-funds-import',
           'backup-all-config-export',
           'backup-all-config-import',
           'update-available',

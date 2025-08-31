@@ -13,18 +13,22 @@ import {
   useAppSelector,
   useIpcRendererListener,
   useFreshAll,
+  useAIImportFunds,
 } from '@/utils/hooks';
+import * as Utils from '@/utils';
 import * as Enums from '@/utils/enums';
 import * as CONST from '@/constants';
 import styles from './index.module.css';
 
 const AppCenterContent = React.lazy(() => import('@/components/Toolbar/AppCenterContent'));
 const SettingContent = React.lazy(() => import('@/components/Toolbar/SettingContent'));
+const FundsImportContent = React.lazy(() => import('@/components/Toolbar/FundsImportContent'));
 
 export interface ToolBarProps {}
 
 const iconSize = { height: 18, width: 18 };
-const { ipcRenderer } = window.contextModules.electron;
+const { ipcRenderer, dialog } = window.contextModules.electron;
+const { readFile } = window.contextModules.io;
 
 const ToolBar: React.FC<ToolBarProps> = () => {
   const freshRef = useRef<HTMLDivElement>(null);
@@ -40,6 +44,7 @@ const ToolBar: React.FC<ToolBarProps> = () => {
   const [openSupport, { setTrue: setOpenSupportTrue, setFalse: setOpenSupportFalse }] = useBoolean(false);
   const [showSettingContent, { setTrue: openSettingContent, setFalse: closeSettingContent }] = useBoolean(false);
   const [showAppCenterDrawer, { setTrue: openAppCenterDrawer, setFalse: closeAppCenterDrawer }] = useBoolean(false);
+  const [showFundsImportContent, { setTrue: openFundsImportContent, setFalse: closeFundsImportContent }] = useBoolean(false);
 
   useIpcRendererListener('support-author', (e) => {
     try {
@@ -49,7 +54,36 @@ const ToolBar: React.FC<ToolBarProps> = () => {
     } catch {}
   });
 
-  const fresh = () => {
+  const { aiParseFunds, loading: importFundsLoading, funds: aiImportFunds } = useAIImportFunds();
+  useIpcRendererListener('ai-funds-import', async (e) => {
+    try {
+      ipcRenderer.invoke('set-menubar-visible', true);
+      const { filePaths, canceled } = await dialog.showOpenDialog({
+        title: '选择图片',
+        filters: [{ name: '', extensions: ['jpg', 'png', 'jpeg', 'webp'] }],
+      });
+      const filePath = filePaths[0];
+      if (canceled || !filePath) {
+        return;
+      }
+      const fmt = filePath.split('.').pop() || 'png';
+      const data = await readFile(filePath);
+      const img = await Utils.ToBase64(new Blob([data], { type: `image/${fmt}` }));
+      const res = await aiParseFunds(img);
+
+      if (res) {
+        openFundsImportContent();
+      }
+    } catch {
+      dialog.showMessageBox({
+        type: 'info',
+        title: `导入失败`,
+        message: `导入基金失败`,
+      });
+    }
+  });
+
+  const fresh = useMemoizedFn(() => {
     switch (tabsActiveKey) {
       case Enums.TabKeyType.Fund:
         freshFunds();
@@ -107,6 +141,17 @@ const ToolBar: React.FC<ToolBarProps> = () => {
             onEnter={() => {
               setOpenSupportFalse();
               closeSettingContent();
+            }}
+          />
+        </CustomDrawer>
+        <CustomDrawer show={showFundsImportContent}>
+          <FundsImportContent
+            loading={importFundsLoading}
+            funds={aiImportFunds}
+            onClose={closeFundsImportContent}
+            onEnter={() => {
+              freshFunds();
+              closeFundsImportContent();
             }}
           />
         </CustomDrawer>
