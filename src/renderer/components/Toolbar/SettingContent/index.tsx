@@ -12,6 +12,8 @@ import {
   RiInboxLine,
   RiGlobalLine,
   RiFolderSettingsLine,
+  RiOpenaiFill,
+  RiErrorWarningLine,
 } from 'react-icons/ri';
 import PureCard from '@/components/Card/PureCard';
 import StandCard from '@/components/Card/StandCard';
@@ -104,6 +106,10 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
     timestampSetting,
     syncConfigSetting,
     syncConfigPathSetting,
+    openaiBaseURLSetting,
+    openaiApiKeySetting,
+    openaiBaseModelSetting,
+    openaiImportFundsModelSetting,
   } = useAppSelector((state) => state.setting.systemSetting);
   const darkMode = useAppSelector((state) => state.setting.darkMode);
   const { updateInfo, currentVersion } = useAppSelector((state) => state.updater);
@@ -152,6 +158,12 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
   const darkModeEnable = systemTheme === Enums.SystemThemeType.Dark;
   const themeColor = customThemeColorEnable ? customThemeColor || originPrimaryColor : originPrimaryColor;
 
+  // openai
+  const [openaiBaseURL, setOpenaiBaseURL] = useState(openaiBaseURLSetting);
+  const [openaiApiKey, setOpenaiApiKey] = useState(openaiApiKeySetting);
+  const [openaiBaseModel, setOpenaiBaseModel] = useState(openaiBaseModelSetting);
+  const [openaiImportFundsModel, setOpenaiImportFundsModel] = useState(openaiImportFundsModelSetting);
+
   const defaultActiveKey = props.openSupport ? '2' : '0';
 
   function onSave() {
@@ -185,6 +197,10 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
         timestampSetting: timestamp,
         syncConfigSetting: syncConfig,
         syncConfigPathSetting: syncConfigPath,
+        openaiBaseURLSetting: openaiBaseURL,
+        openaiApiKeySetting: openaiApiKey,
+        openaiBaseModelSetting: openaiBaseModel,
+        openaiImportFundsModelSetting: openaiImportFundsModel,
       })
     );
     props.onEnter();
@@ -670,11 +686,75 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
             },
             {
               key: String(1),
+              label: 'AI',
+              children: (
+                <div className={styles.content}>
+                  <StandCard icon={<RiErrorWarningLine />} title="声明">
+                    <div className={clsx('card-body')}>
+                      Fishing Funds不搜集上传用户apikey，请确保软件从官方渠道获取，如有疑问请忽略ai相关功能
+                    </div>
+                  </StandCard>
+                  <StandCard
+                    icon={<RiOpenaiFill />}
+                    title="OpenAI"
+                    extra={
+                      <div className={styles.guide}>
+                        <Guide
+                          list={[
+                            {
+                              name: 'BaseURL',
+                              text: `openai api 地址 如
+                              https://api.openai.com/v1/、
+                              https://generativelanguage.googleapis.com/v1beta/openai/、
+                              http://127.0.0.1:11434/v1/ 等`,
+                            },
+                            {
+                              name: 'ApiKey',
+                              text: 'openai api 密钥',
+                            },
+                            { name: '基础模型', text: '默认基础模型' },
+                            {
+                              name: '基金导入模型',
+                              text: '专用于基金导入的模型，确保模型具有vision功能，推荐gpt-4o、qwen2.5vl:7b及以上，为空时使用基础模型。',
+                            },
+                          ]}
+                        />
+                      </div>
+                    }
+                  >
+                    <div className={clsx(styles.setting, 'card-body')}>
+                      <section>
+                        <label>BaseURL：</label>
+                        <Input size="small" value={openaiBaseURL} onChange={(e) => setOpenaiBaseURL(e.target.value)} />
+                      </section>
+                      <section>
+                        <label>ApiKey：</label>
+                        <Input size="small" value={openaiApiKey} onChange={(e) => setOpenaiApiKey(e.target.value)} />
+                      </section>
+                      <section>
+                        <label>基础模型：</label>
+                        <Input size="small" value={openaiBaseModel} onChange={(e) => setOpenaiBaseModel(e.target.value)} />
+                      </section>
+                      <section>
+                        <label>基金导入模型：</label>
+                        <Input
+                          size="small"
+                          value={openaiImportFundsModel}
+                          onChange={(e) => setOpenaiImportFundsModel(e.target.value)}
+                        />
+                      </section>
+                    </div>
+                  </StandCard>
+                </div>
+              ),
+            },
+            {
+              key: String(2),
               label: '更新日志',
               children: <Log />,
             },
             {
-              key: String(2),
+              key: String(3),
               label: '更多信息',
               children: <More />,
             },
