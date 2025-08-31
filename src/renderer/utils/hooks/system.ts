@@ -368,6 +368,14 @@ export function useAIImportFunds() {
         }[];
 
         // setFunds(json);
+        // TODO 未来需要通过当前净值也就是dwjz去计算持有份额和成本价，
+        /***
+         * zje / dwjz = 持有份额
+         * 持有收益 / 持有收益率 = 持仓成本总金额
+         * 持仓成本总金额 / 持有份额 = cbj
+         * 还需要处理 持有收益率是百分制
+         * 还需要一个根据名字查询dwjz的基金接口
+         * */
 
         return true;
       } catch {
