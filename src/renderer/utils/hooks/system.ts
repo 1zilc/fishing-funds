@@ -1,6 +1,6 @@
-import { useLayoutEffect, useEffect, useRef } from 'react';
+import { useLayoutEffect, useEffect, useMemo, useRef, useState } from 'react';
 import { flushSync } from 'react-dom';
-import { useInterval } from 'ahooks';
+import { useInterval, useRequest } from 'ahooks';
 import { theme } from 'antd';
 import { UnknownAction } from 'redux';
 import dayjs from 'dayjs';
@@ -33,6 +33,7 @@ import {
   useLoadQuotations,
   useLoadZindexs,
   useIpcRendererListener,
+  useOpenAI,
 } from '@/utils/hooks';
 import { walletIcons } from '@/helpers/wallet';
 import { encryptFF, decryptFF } from '@/utils/coding';
@@ -42,10 +43,11 @@ import * as Adapters from '@/utils/adpters';
 import * as Helpers from '@/helpers';
 import * as Enums from '@/utils/enums';
 import * as Enhancement from '@/utils/enhancement';
+import { FundConfigItem } from '@/components/Toolbar/FundsImportContent';
 
 const { dialog, ipcRenderer, clipboard, app } = window.contextModules.electron;
 const { production } = window.contextModules.process;
-const { saveString, readStringFile } = window.contextModules.io;
+const { saveString, readStringFile, readFile } = window.contextModules.io;
 const { useToken } = theme;
 
 export function useUpdater() {
@@ -231,7 +233,7 @@ export function useRiskNotification() {
   }
 }
 
-export function useFundsClipboard() {
+export function useClipboardImportFunds() {
   const dispatch = useAppDispatch();
   const currentWalletCode = useAppSelector((state) => state.wallet.currentWalletCode);
   const walletsConfig = useAppSelector((state) => state.wallet.config.walletConfig);
@@ -312,6 +314,77 @@ export function useFundsClipboard() {
       });
     }
   });
+}
+
+export function useAIImportFunds() {
+  const openai = useOpenAI();
+  const openaiBaseModelSetting = useAppSelector((state) => state.setting.systemSetting.openaiBaseModelSetting);
+  const openaiImportFundsModelSetting = useAppSelector((state) => state.setting.systemSetting.openaiImportFundsModelSetting);
+  const [funds, setFunds] = useState<FundConfigItem[]>([]);
+
+  const { runAsync: aiParseFunds, loading } = useRequest(
+    async (img: string) => {
+      const response = await openai.chat.completions.create({
+        model: openaiImportFundsModelSetting || openaiBaseModelSetting,
+        temperature: 0.1,
+        messages: [
+          {
+            role: 'system',
+            content: `你是ocr程序，需要将支付宝基金界面的数据导出为json格式,
+          请按照下面的结构直接返回严谨的json数组：
+    interface Fund {
+      name: string; // 名称
+      zje: string; // 总金额
+      rsy: string; // 日收益
+      cysy: string; // 持有收益
+      cysyl: string; // 持有收益率
+      ljsy: string; // 累计收益
+    }
+    `,
+          },
+          {
+            role: 'user',
+            content: [
+              {
+                type: 'image_url',
+                image_url: {
+                  url: img,
+                },
+              },
+            ],
+          },
+        ],
+      });
+
+      try {
+        const jsonString = response.choices[0]?.message.content?.match(/\[.*\]/gs)?.[0];
+        const json = JSON.parse(jsonString!.replace(/(?<=\d),(?=\d)/g, '')) as unknown as {
+          name: string; // 名称
+          zje: string; // 总金额
+          rsy: string; // 日收益
+          cysy: string; // 持有收益
+          cysyl: string; // 持有收益率
+          ljsy: string; // 累计收益
+        }[];
+
+        // setFunds(json);
+
+        return true;
+      } catch {
+        dialog.showMessageBox({
+          type: 'info',
+          title: `解析失败`,
+          message: `当前ai无法返回正确的配置，请更换模型或重试`,
+        });
+        return false;
+      }
+    },
+    {
+      manual: true,
+    }
+  );
+
+  return { aiParseFunds, loading, funds };
 }
 
 export function useBootStrap() {

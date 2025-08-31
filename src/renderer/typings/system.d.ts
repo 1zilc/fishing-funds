@@ -35,5 +35,10 @@ declare namespace System {
 
     syncConfigSetting: boolean; // 同步配置文件
     syncConfigPathSetting: string; // 同步配置文件路径
+
+    openaiBaseURLSetting: string;
+    openaiApiKeySetting: string;
+    openaiBaseModelSetting: string; // 基础模型
+    openaiImportFundsModelSetting: string; // 基金导入模型
   }
 }
