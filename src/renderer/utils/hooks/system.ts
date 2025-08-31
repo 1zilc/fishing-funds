@@ -45,7 +45,7 @@ import * as Enhancement from '@/utils/enhancement';
 
 const { dialog, ipcRenderer, clipboard, app } = window.contextModules.electron;
 const { production } = window.contextModules.process;
-const { saveString, readFile } = window.contextModules.io;
+const { saveString, readStringFile } = window.contextModules.io;
 const { useToken } = theme;
 
 export function useUpdater() {
@@ -581,7 +581,7 @@ export function useAllConfigBackup() {
       if (canceled || !filePath) {
         return;
       }
-      const encodeBackupConfig = await readFile(filePath);
+      const encodeBackupConfig = await readStringFile(filePath);
       const backupConfig: Backup.Config = await decryptFF(encodeBackupConfig);
       await Enhancement.CoverBackupConfig(backupConfig);
       const { response } = await dialog.showMessageBox({
@@ -605,7 +605,7 @@ export function useAllConfigBackup() {
   });
   useIpcRendererListener('open-backup-file', async (e, filePath) => {
     try {
-      const encodeBackupConfig = await readFile(filePath);
+      const encodeBackupConfig = await readStringFile(filePath);
       const backupConfig: Backup.Config = await decryptFF(encodeBackupConfig);
       const { response } = await dialog.showMessageBox({
         title: `确认从备份文件恢复`,

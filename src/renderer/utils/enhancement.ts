@@ -5,7 +5,7 @@ import log from 'electron-log/renderer';
 import { encodeFF, decodeFF, encryptFF, decryptFF } from '@/utils/coding';
 import * as Enums from '@/utils/enums';
 const { ipcRenderer, app } = window.contextModules.electron;
-const { saveString, readFile } = window.contextModules.io;
+const { saveString, readStringFile } = window.contextModules.io;
 const electronStore = window.contextModules.electronStore;
 const { production } = window.contextModules.process;
 
@@ -59,7 +59,7 @@ export async function SaveSyncConfig(path: string, config: Backup.Config) {
 }
 
 export async function loadSyncConfig<T = unknown>(path: string) {
-  const encodeSyncConfig = await readFile(path);
+  const encodeSyncConfig = await readStringFile(path);
   const syncConfig: Backup.Config = await decryptFF(encodeSyncConfig);
   const content = await decodeFF<T>(syncConfig.content);
   return content;

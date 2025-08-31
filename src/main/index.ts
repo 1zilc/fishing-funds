@@ -23,7 +23,7 @@ import { createChildWindow } from './childWindow';
 import { ProxyManager } from './proxy';
 import HotkeyManager from './hotkey';
 import ContextMenuManager from './contextMenu';
-import { saveImage, saveJsonToCsv, saveString, readFile } from './io';
+import { saveImage, saveJsonToCsv, saveString, readStringFile, readFile } from './io';
 import {
   lockSingleInstance,
   checkEnvTool,
@@ -281,6 +281,7 @@ function main() {
   ipcMain.handle('io-saveImage', (event, { path, content }) => saveImage(path, content));
   ipcMain.handle('io-saveJsonToCsv', (event, { path, content }) => saveJsonToCsv(path, content));
   ipcMain.handle('io-saveString', (event, { path, content }) => saveString(path, content));
+  ipcMain.handle('io-readStringFile', (event, { path }) => readStringFile(path));
   ipcMain.handle('io-readFile', (event, { path }) => readFile(path));
   // 剪贴板相关
   ipcMain.handle('clipboard-readText', (event) => clipboard.readText());
