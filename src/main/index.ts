@@ -34,6 +34,7 @@ import {
   isSupportBlurBg,
 } from './util';
 import HttpClient from './httpClient';
+// import { TesseractOCR } from './ocr';
 import * as Enums from '../renderer/utils/enums';
 
 let mb: Menubar;
@@ -112,6 +113,7 @@ function main() {
   const touchBarManager = new TouchBarManager([], mb);
   const contextMenuManager = new ContextMenuManager({ mb, updater: appUpdater });
   const proxyManager = new ProxyManager();
+  // const tesseractOCR = new TesseractOCR();
   let windowIds: number[] = [];
   const defaultTheme = localStore.get(
     'config',
@@ -287,6 +289,8 @@ function main() {
   ipcMain.handle('clipboard-readText', (event) => clipboard.readText());
   ipcMain.handle('clipboard-writeText', (event, text) => clipboard.writeText(text));
   ipcMain.handle('clipboard-writeImage', (event, dataUrl) => clipboard.writeImage(nativeImage.createFromDataURL(dataUrl)));
+  // ocr识别基金
+  // ipcMain.handle('ocr-funds', (event, imgUrl: string) => tesseractOCR.funds(imgUrl));
   // menubar 相关监听
   mb.on('before-load', () => {
     // 生成fakeUA

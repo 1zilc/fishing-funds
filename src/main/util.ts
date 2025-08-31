@@ -11,6 +11,7 @@ export const appPath = path.resolve(fileURLToPath(import.meta.url), '../../');
 export const mainPath = path.join(appPath, 'main');
 export const preloadPath = path.join(appPath, 'preload');
 export const rendererPath = path.join(appPath, 'renderer');
+export const tesseractLangPath = getAssetPath('traineddata');
 
 export function resolveHtmlPath() {
   if (import.meta.env.DEV) {
