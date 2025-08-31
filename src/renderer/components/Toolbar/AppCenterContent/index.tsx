@@ -284,7 +284,7 @@ const AppCenterContent: React.FC<AppCenterContentProps> = (props) => {
       renderApps(
         [
           {
-            title: 'H5专区',
+            title: '网页书签',
             config: webConfig.map((web) => ({
               title: web.title,
               favicon: web.icon,
