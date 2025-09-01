@@ -755,7 +755,7 @@ export function useRouterParams<T = Record<string, unknown>>() {
 
 export function useFakeUA(phone: boolean) {
   const phoneFakeUA =
-    'Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1';
+    'Mozilla/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.6 Mobile/15E148 Safari/604.1';
 
   const { data: fakeUA } = useRequest((): Promise<string> => ipcRenderer.invoke('get-fakeUA'), {
     cacheKey: 'invoke-get-fakeUA',
