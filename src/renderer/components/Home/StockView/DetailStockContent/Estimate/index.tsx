@@ -9,7 +9,7 @@ import styles from './index.module.css';
 export interface EstimateProps {
   secid: string;
 }
-const Estimate: React.FC<EstimateProps> = React.memo(({ secid }) => {
+const Estimate: React.FC<EstimateProps> = ({ secid }) => {
   const [estimate, setEstimate] = useState<string | undefined>('');
   const { run: runGetPicTrendFromEastmoney } = useRequest(() => Services.Stock.GetPicTrendFromEastmoney(secid), {
     pollingInterval: CONST.DEFAULT.ESTIMATE_FUND_DELAY,
@@ -30,6 +30,6 @@ const Estimate: React.FC<EstimateProps> = React.memo(({ secid }) => {
       </div>
     </ChartCard>
   );
-});
+};
 
 export default Estimate;

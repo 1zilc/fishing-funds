@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect } from 'react';
 
 import StockRow from '@/components/Home/StockView/StockRow';
 import Empty from '@/components/Empty';
@@ -34,7 +34,7 @@ const StockView: React.FC<StockListProps> = (props) => {
 
   const list = stocks.filter(props.filter);
 
-  const view = useMemo(() => {
+  const view = (() => {
     switch (stockViewMode.type) {
       case Enums.StockViewType.Grid:
         return <GridView list={list.map((item) => ({ ...item, value: item.zx, code: item.secid }))} onDetail={setDetailDrawer} />;
@@ -44,7 +44,7 @@ const StockView: React.FC<StockListProps> = (props) => {
           <StockRow key={stock.secid} stock={stock} onEdit={setEditDrawer} onDetail={setDetailDrawer} onDelete={onRemoveStock} />
         ));
     }
-  }, [list, stockViewMode]);
+  })();
 
   function enterEditDrawer() {
     freshStocks();

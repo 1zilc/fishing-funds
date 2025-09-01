@@ -1,7 +1,7 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import clsx from 'clsx';
 import { Dropdown, Menu } from 'antd';
-import { RiAddFill, RiMoneyCnyCircleLine } from 'react-icons/ri';
+import { RiAddFill } from 'react-icons/ri';
 import Eye from '@/components/Eye';
 import CustomDrawer from '@/components/CustomDrawer';
 import { useHeaderContext } from '@/components/Header';
@@ -11,7 +11,6 @@ import { walletIcons } from '@/helpers/wallet';
 import * as Utils from '@/utils';
 import * as Helpers from '@/helpers';
 import styles from './index.module.css';
-import { useMemoizedFn } from 'ahooks';
 
 const AddWalletContent = React.lazy(() => import('@/components/Wallet/AddWalletContent'));
 
@@ -29,7 +28,7 @@ const Wallet: React.FC<WalletProps> = () => {
   const walletConfigCodeMap = useAppSelector((state) => state.wallet.config.codeMap);
   const currentWalletConfig = walletConfigCodeMap[currentWalletCode];
 
-  const calcResult = useMemo(() => {
+  const calcResult = (() => {
     const { zje, sygz, gssyl, cysy, cysyl, ...reset } = Helpers.Wallet.CalcWallet({
       code: currentWalletCode,
       walletConfig,
@@ -49,31 +48,27 @@ const Wallet: React.FC<WalletProps> = () => {
       displayCysyl,
       ...reset,
     };
-  }, [wallets, eyeStatus, walletConfig, currentWalletCode]);
+  })();
 
-  const walletMenuItems = useMemo(
-    () =>
-      walletConfig
-        .map((config) => ({
-          key: config.code,
-          label: config.name,
-          icon: <img className={styles.menuIcon} src={walletIcons[config.iconIndex || 0]} />,
-        }))
-        .concat({
-          key: '',
-          label: '添加',
-          icon: <RiAddFill className={styles.addIcon} />,
-        }),
-    [walletConfig]
-  );
+  const walletMenuItems = walletConfig
+    .map((config) => ({
+      key: config.code,
+      label: config.name,
+      icon: <img className={styles.menuIcon} src={walletIcons[config.iconIndex || 0]} />,
+    }))
+    .concat({
+      key: '',
+      label: '添加',
+      icon: <RiAddFill className={styles.addIcon} />,
+    });
 
   const { show: showAddWalletDrawer, open: openAddWalletDrawer, close: closeAddWalletDrawer } = useDrawer('');
 
-  const onSelectWallet = useMemoizedFn((code: string) => {
+  const onSelectWallet = (code: string) => {
     dispatch(changeCurrentWalletCodeAction(code));
-  });
+  };
 
-  const onToggleEye = useMemoizedFn(() => dispatch(toggleEyeStatusAction()));
+  const onToggleEye = () => dispatch(toggleEyeStatusAction());
 
   return (
     <div className={clsx(styles.content, { [styles.miniMode]: miniMode })}>

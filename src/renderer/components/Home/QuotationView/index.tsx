@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, from 'react';
 
 import QuotationRow from '@/components/Home/QuotationView/QuotationRow';
 import QuotationFlow from '@/components/Home/QuotationView/QuotationFlow';
@@ -38,7 +38,7 @@ const QuotationView: React.FC<QuotationViewProps> = (props) => {
 
   const list = quotations.filter(props.filter);
 
-  const view = useMemo(() => {
+  const view = (() => {
     switch (quotationViewMode.type) {
       case Enums.QuotationViewType.Grid:
         return <GridView list={list.map((item) => ({ ...item, value: item.zxj }))} onDetail={setDetailQuodationDrawer} />;
@@ -55,7 +55,7 @@ const QuotationView: React.FC<QuotationViewProps> = (props) => {
       default:
         return <QuotationFlow list={list} onDetail={setDetailQuodationDrawer} />;
     }
-  }, [list, quotationViewMode]);
+  })();
 
   return (
     <div className={styles.container}>

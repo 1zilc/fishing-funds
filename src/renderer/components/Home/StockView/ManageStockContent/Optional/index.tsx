@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 
 import { ReactSortable } from 'react-sortablejs';
 import clsx from 'clsx';
@@ -32,7 +32,7 @@ const Optional: React.FC<OptionalProps> = () => {
   const currentWalletCode = useAppSelector((state) => state.wallet.currentWalletCode);
   const stockConfig = useAppSelector((state) => state.wallet.stockConfig);
   const codeMap = useAppSelector((state) => state.wallet.stockConfigCodeMap);
-  const sortStockConfig = useMemo(() => stockConfig.map((_) => ({ ..._, id: _.secid })), [stockConfig]);
+  const sortStockConfig = stockConfig.map((_) => ({ ..._, id: _.secid }));
 
   const { show: showAddDrawer, set: setAddDrawer, close: closeAddDrawer } = useDrawer(null);
 

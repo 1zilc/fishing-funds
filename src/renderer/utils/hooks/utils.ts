@@ -1,8 +1,8 @@
-import React, { useLayoutEffect, useState, useEffect, useRef, useMemo } from 'react';
+import React, { useLayoutEffect, useState, useEffect, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
 import queryString from 'query-string';
 import { useRequest } from 'ahooks';
-import { useInterval, useBoolean, useThrottleFn, useSize, useMemoizedFn, useEventListener } from 'ahooks';
+import { useInterval, useBoolean, useThrottleFn, useSize, useEventListener } from 'ahooks';
 import { useDispatch, useSelector, TypedUseSelectorHook } from 'react-redux';
 import dayjs from 'dayjs';
 import * as echarts from 'echarts/core';
@@ -80,7 +80,7 @@ export function useScrollToTop(config: {
     top?: number;
   };
 }) {
-  return useMemoizedFn(async () => {
+  return async () => {
     const { before, after, option } = config;
     if (before) {
       await before();
@@ -93,7 +93,7 @@ export function useScrollToTop(config: {
     if (after) {
       await after();
     }
-  });
+  };
 }
 
 export function useResizeEchart(scale = 1, unlimited?: boolean) {
@@ -283,7 +283,7 @@ export function useLoadFunds(config?: {
   const fundApiTypeSetting = useAppSelector((state) => state.setting.systemSetting.fundApiTypeSetting);
   const loadFixFunds = useLoadFixFunds();
 
-  const load = useMemoizedFn(async () => {
+  const load = async () => {
     try {
       dispatch(setFundsLoadingAction(!!config?.enableLoading));
       const responseFunds = await Helpers.Fund.GetFunds(fundConfig, fundApiTypeSetting);
@@ -298,7 +298,7 @@ export function useLoadFunds(config?: {
     } finally {
       dispatch(setFundsLoadingAction(false));
     }
-  });
+  };
 
   const fn = useTabsFreshFn(Enums.TabKeyType.Fund, load);
   return fn;
@@ -308,14 +308,14 @@ export function useLoadFixFunds() {
   const dispatch = useAppDispatch();
   const currentWallet = useAppSelector((state) => state.wallet.currentWallet);
 
-  const load = useMemoizedFn(async () => {
+  const load = async () => {
     try {
       const { funds, code } = currentWallet;
       const fixFunds = (await Helpers.Fund.GetFixFunds(funds)).filter(Utils.NotEmpty);
       const now = dayjs().format('MM-DD HH:mm:ss');
       dispatch(syncFixWalletStateAction({ code, funds: fixFunds, updateTime: now }));
     } catch (error) {}
-  });
+  };
   const fn = useTabsFreshFn(Enums.TabKeyType.Fund, load);
   return fn;
 }
@@ -323,7 +323,7 @@ export function useLoadFixFunds() {
 export function useLoadRemoteFunds() {
   const dispatch = useAppDispatch();
 
-  const load = useMemoizedFn(async () => {
+  const load = async () => {
     try {
       dispatch(setRemoteFundsLoadingAction(true));
       const remoteFunds = await Services.Fund.GetRemoteFundsFromEastmoney();
@@ -331,7 +331,7 @@ export function useLoadRemoteFunds() {
     } finally {
       dispatch(setRemoteFundsLoadingAction(false));
     }
-  });
+  };
 
   return load;
 }
@@ -339,12 +339,12 @@ export function useLoadRemoteFunds() {
 export function useLoadFundRatingMap() {
   const dispatch = useAppDispatch();
 
-  const load = useMemoizedFn(async () => {
+  const load = async () => {
     try {
       const remoteRantings = await Services.Fund.GetFundRatingFromEasemoney();
       dispatch(setFundRatingAction(remoteRantings));
     } catch (error) {}
-  });
+  };
 
   return load;
 }
@@ -354,7 +354,7 @@ export function useLoadWalletsFunds() {
   const { walletConfig } = useAppSelector((state) => state.wallet.config);
   const fundApiTypeSetting = useAppSelector((state) => state.setting.systemSetting.fundApiTypeSetting);
 
-  const load = useMemoizedFn(async () => {
+  const load = async () => {
     // 优化多钱包同一支基金重复获取
     const responseMap = {} as Record<string, Awaited<ReturnType<typeof Helpers.Fund.GetFunds>>[number]>;
     try {
@@ -373,7 +373,7 @@ export function useLoadWalletsFunds() {
       });
       await Adapters.ChokeAllAdapter(collects, CONST.DEFAULT.LOAD_WALLET_DELAY);
     } catch (error) {}
-  });
+  };
 
   const fn = useTabsFreshFn(Enums.TabKeyType.Fund, load);
   return fn;
@@ -382,7 +382,7 @@ export function useLoadWalletsFunds() {
 export function useLoadFixWalletsFunds() {
   const dispatch = useAppDispatch();
   const wallets = useAppSelector((state) => state.wallet.wallets);
-  const load = useMemoizedFn(async () => {
+  const load = async () => {
     try {
       const fixCollects = wallets.map((wallet) => {
         const collectors = (wallet.funds || [])
@@ -402,7 +402,7 @@ export function useLoadFixWalletsFunds() {
 
       await Adapters.ChokeAllAdapter(fixCollects, CONST.DEFAULT.LOAD_WALLET_DELAY);
     } catch (error) {}
-  });
+  };
 
   return load;
 }
@@ -423,7 +423,7 @@ export function useLoadZindexs(config?: {
 }) {
   const dispatch = useAppDispatch();
   const zindexConfig = useAppSelector((state) => state.zindex.config.zindexConfig);
-  const load = useMemoizedFn(async () => {
+  const load = async () => {
     try {
       dispatch(setZindexesLoadingAction(!!config?.enableLoading));
       const responseZindexs = await Helpers.Zindex.GetZindexs(zindexConfig);
@@ -431,7 +431,7 @@ export function useLoadZindexs(config?: {
     } finally {
       dispatch(setZindexesLoadingAction(false));
     }
-  });
+  };
   const fn = useTabsFreshFn(Enums.TabKeyType.Zindex, load);
   return fn;
 }
@@ -452,7 +452,7 @@ export function useLoadQuotations(config?: {
 }) {
   const dispatch = useAppDispatch();
 
-  const load = useMemoizedFn(async () => {
+  const load = async () => {
     try {
       dispatch(setQuotationsLoadingAction(!!config?.enableLoading));
       const responseQuotations = await Helpers.Quotation.GetQuotations();
@@ -460,7 +460,7 @@ export function useLoadQuotations(config?: {
     } finally {
       dispatch(setQuotationsLoadingAction(false));
     }
-  });
+  };
   const fn = useTabsFreshFn(Enums.TabKeyType.Quotation, load);
   return fn;
 }
@@ -483,7 +483,7 @@ export function useLoadStocks(config?: {
   const currentWalletCode = useAppSelector((state) => state.wallet.currentWalletCode);
   const stockConfig = useAppSelector((state) => state.wallet.stockConfig);
 
-  const load = useMemoizedFn(async () => {
+  const load = async () => {
     try {
       dispatch(setStocksLoadingAction(!!config?.enableLoading));
       const responseStocks = await Helpers.Stock.GetStocks(stockConfig);
@@ -491,7 +491,7 @@ export function useLoadStocks(config?: {
     } finally {
       dispatch(setStocksLoadingAction(false));
     }
-  });
+  };
   const fn = useTabsFreshFn(Enums.TabKeyType.Stock, load);
   return fn;
 }
@@ -500,7 +500,7 @@ export function useLoadWalletsStocks() {
   const dispatch = useAppDispatch();
   const { walletConfig } = useAppSelector((state) => state.wallet.config);
 
-  const load = useMemoizedFn(async () => {
+  const load = async () => {
     const responseMap = {} as Record<string, Awaited<ReturnType<typeof Helpers.Stock.GetStocks>>[number]>;
     try {
       const collects = walletConfig.map(({ stocks: stocksConfig, code: walletCode }) => async () => {
@@ -520,7 +520,7 @@ export function useLoadWalletsStocks() {
       });
       await Adapters.ChokeAllAdapter(collects, CONST.DEFAULT.LOAD_WALLET_DELAY);
     } catch (error) {}
-  });
+  };
 
   const fn = useTabsFreshFn(Enums.TabKeyType.Stock, load);
   return fn;
@@ -544,7 +544,7 @@ export function useLoadCoins(config?: {
   const coinConfig = useAppSelector((state) => state.coin.config.coinConfig);
   const coinUnitSetting = useAppSelector((state) => state.setting.systemSetting.coinUnitSetting);
 
-  const load = useMemoizedFn(async () => {
+  const load = async () => {
     try {
       dispatch(setCoinsLoadingAction(!!config?.enableLoading));
       const responseCoins = await Helpers.Coin.GetCoins(coinConfig, coinUnitSetting);
@@ -552,14 +552,14 @@ export function useLoadCoins(config?: {
     } finally {
       dispatch(setCoinsLoadingAction(false));
     }
-  });
+  };
   const fn = useTabsFreshFn(Enums.TabKeyType.Coin, load);
   return fn;
 }
 
 export function useLoadRemoteCoins() {
   const dispatch = useAppDispatch();
-  const load = useMemoizedFn(async () => {
+  const load = async () => {
     try {
       dispatch(setRemoteCoinsLoadingAction(true));
       const remoteCoins = await Services.Coin.GetRemoteCoinsFromCoingecko();
@@ -567,7 +567,7 @@ export function useLoadRemoteCoins() {
     } finally {
       dispatch(setRemoteCoinsLoadingAction(false));
     }
-  });
+  };
   return load;
 }
 
@@ -577,9 +577,9 @@ export function useDrawer<T>(initialData: T) {
     show: false,
   });
 
-  const set = useMemoizedFn((data: T) => setDrawer({ show: true, data }));
-  const close = useMemoizedFn(() => setDrawer({ show: false, data: initialData }));
-  const open = useMemoizedFn(() => setDrawer((_) => ({ ..._, show: true })));
+  const set = (data: T) => setDrawer({ show: true, data });
+  const close = () => setDrawer({ show: false, data: initialData });
+  const open = () => setDrawer((_) => ({ ..._, show: true }));
 
   return {
     data: drawer.data,
@@ -656,7 +656,7 @@ export function useAllCyFunds(statusMap: Record<string, boolean>) {
   const walletsConfig = useAppSelector((state) => state.wallet.config.walletConfig);
 
   // 持有份额的基金，response数组
-  const funds = useMemo(() => {
+  const funds = (() => {
     const allFunds: (Fund.ResponseItem & Fund.FixData)[] = [];
     const fundCodeMap = new Map();
     wallets.forEach(({ code, funds }) => {
@@ -667,28 +667,28 @@ export function useAllCyFunds(statusMap: Record<string, boolean>) {
       }
     });
     return allFunds.filter((fund) => !fundCodeMap.has(fund.fundcode!) && fundCodeMap.set(fund.fundcode!, true));
-  }, [statusMap, wallets]);
+  })();
 
   return funds;
 }
 
 export function useOpenWebView(params: any = {}) {
   const dispatch = useAppDispatch();
-  const openWebView = useMemoizedFn((args) => {
+  const openWebView = (args: any) => {
     const obj = typeof args === 'string' ? { url: args } : args;
     dispatch(openWebAction({ ...params, ...obj }));
-  });
+  };
   return openWebView;
 }
 
 export function useFundConfigMap(codes: string[]) {
   const walletsConfig = useAppSelector((state) => state.wallet.config.walletConfig);
-  const codeMaps = useMemo(() => Helpers.Fund.GetFundConfigMaps(codes, walletsConfig), [codes, walletsConfig]);
+  const codeMaps = Helpers.Fund.GetFundConfigMaps(codes, walletsConfig);
   return codeMaps;
 }
 
 export function useIpcRendererListener(channel: string, listener: (event: Electron.IpcRendererEvent, ...args: any[]) => void) {
-  const callback = useMemoizedFn(listener);
+  const callback = listener;
 
   useEffect(() => {
     ipcRenderer.on(channel, callback);
@@ -701,7 +701,7 @@ export function useIpcRendererListener(channel: string, listener: (event: Electr
 export function useTabsFreshFn<T>(key: Enums.TabKeyType, fn: T) {
   const bottomTabsSetting = useAppSelector((state) => state.setting.systemSetting.bottomTabsSetting);
   const bottomTabsSettingKeyMap = Utils.GetCodeMap(bottomTabsSetting, 'key');
-  const temp = useMemoizedFn(async () => {});
+  const temp = async () => {};
   return bottomTabsSettingKeyMap[key].show ? fn : temp;
 }
 

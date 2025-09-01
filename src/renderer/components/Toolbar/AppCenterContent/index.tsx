@@ -1,5 +1,5 @@
-import React, { useState, useMemo, useRef } from 'react';
-import { useBoolean, useMemoizedFn } from 'ahooks';
+import React, { useState, useRef } from 'react';
+import { useBoolean } from 'ahooks';
 import { Input } from 'antd';
 import {
   RiWalletFill,
@@ -137,167 +137,159 @@ const AppCenterContent: React.FC<AppCenterContentProps> = (props) => {
 
   const openWebView = useOpenWebView();
 
-  const onSearch = useMemoizedFn((value: string) => {
+  const onSearch = (value: string) => {
     const { valid, url } = Utils.CheckUrlValid(value);
     searchHistoryRef.current?.addSearchHistory(value);
     if (valid) {
       openWebView({ title: '', url });
     }
-  });
+  };
 
-  const apps = useMemo(
-    () =>
-      renderApps(
-        [
+  const apps = renderApps(
+    [
+      {
+        title: '数据管理',
+        config: [
           {
-            title: '数据管理',
-            config: [
-              {
-                title: '基金管理',
-                iconType: Enums.WebIconType.First,
-                click: openManageFundDrawer,
-              },
-              {
-                title: '指数管理',
-                iconType: Enums.WebIconType.First,
-                click: openManageZindexDrawer,
-              },
-              {
-                title: '股票管理',
-                iconType: Enums.WebIconType.First,
-                click: openManageStockDrawer,
-              },
-              {
-                title: '货币管理',
-                iconType: Enums.WebIconType.First,
-                click: openManageCoinDrawer,
-              },
-              {
-                title: '钱包管理',
-                iconType: Enums.WebIconType.Svg,
-                icon: <RiWalletFill style={{ ...iconSize }} />,
-                click: openManageWalletDrawer,
-              },
-              {
-                title: 'H5管理',
-                iconType: Enums.WebIconType.Svg,
-                icon: <RiGlobalFill style={{ ...iconSize }} />,
-                click: openManageWebDrawer,
-              },
-            ],
+            title: '基金管理',
+            iconType: Enums.WebIconType.First,
+            click: openManageFundDrawer,
           },
           {
-            title: '特色功能',
-            config: [
-              {
-                title: '基金统计',
-                iconType: Enums.WebIconType.Svg,
-                icon: <RiPieChartFill style={{ ...iconSize }} />,
-                click: openFundStatisticsDrawer,
-              },
-              {
-                title: '货币计算器',
-                iconType: Enums.WebIconType.Svg,
-                icon: <RiCalculatorFill style={{ ...iconSize }} />,
-                click: openCalculatorDrawer,
-              },
-              {
-                title: '快捷翻译',
-                iconType: Enums.WebIconType.Svg,
-                icon: <RiTranslate style={{ ...iconSize }} />,
-                click: openTranslateSettingDrawer,
-              },
-            ],
+            title: '指数管理',
+            iconType: Enums.WebIconType.First,
+            click: openManageZindexDrawer,
           },
           {
-            title: '拓展功能',
-            config: [
-              {
-                title: '新闻动态',
-                iconType: Enums.WebIconType.Svg,
-                icon: <RiNewspaperFill style={{ ...iconSize }} />,
-                click: openNewsDrawer,
-              },
-              {
-                title: '板块资金流',
-                iconType: Enums.WebIconType.Svg,
-                icon: <RiLayoutMasonryFill style={{ ...iconSize }} />,
-                click: openFundFlowDrawer,
-              },
-              {
-                title: '外汇债券',
-                iconType: Enums.WebIconType.Svg,
-                icon: <RiExchangeCnyFill style={{ ...iconSize }} />,
-                click: openExchangeDrawer,
-              },
-              {
-                title: '行情中心',
-                iconType: Enums.WebIconType.Svg,
-                icon: <RiBubbleChartFill style={{ ...iconSize }} />,
-                click: openQuoteCenterDrawer,
-              },
-              {
-                title: '经济数据',
-                iconType: Enums.WebIconType.Svg,
-                icon: <RiBarChartGroupedFill style={{ ...iconSize }} />,
-                click: openEconomicDataDrawer,
-              },
-              {
-                title: '基金榜',
-                iconType: Enums.WebIconType.Svg,
-                icon: <RiFundsBoxFill style={{ ...iconSize }} />,
-                click: openFundRankingDrawer,
-              },
-              {
-                title: '股票榜',
-                iconType: Enums.WebIconType.Svg,
-                icon: <RiStockFill style={{ ...iconSize }} />,
-                click: openStockRankingDrawer,
-              },
-              {
-                title: '货币榜',
-                iconType: Enums.WebIconType.Svg,
-                icon: <RiListOrdered style={{ ...iconSize }} />,
-                click: openCoinRankingDrawer,
-              },
-              {
-                title: '财经日历',
-                iconType: Enums.WebIconType.Svg,
-                icon: <RiCalendarCheckFill style={{ ...iconSize }} />,
-                click: openEconomicCalendarDrawer,
-              },
-              {
-                title: '黄金市场',
-                iconType: Enums.WebIconType.Svg,
-                icon: <RiCoinFill style={{ ...iconSize }} />,
-                click: openGoldMarketDrawer,
-              },
-            ],
+            title: '股票管理',
+            iconType: Enums.WebIconType.First,
+            click: openManageStockDrawer,
+          },
+          {
+            title: '货币管理',
+            iconType: Enums.WebIconType.First,
+            click: openManageCoinDrawer,
+          },
+          {
+            title: '钱包管理',
+            iconType: Enums.WebIconType.Svg,
+            icon: <RiWalletFill style={{ ...iconSize }} />,
+            click: openManageWalletDrawer,
+          },
+          {
+            title: 'H5管理',
+            iconType: Enums.WebIconType.Svg,
+            icon: <RiGlobalFill style={{ ...iconSize }} />,
+            click: openManageWebDrawer,
           },
         ],
-        keyword
-      ),
-    [keyword]
+      },
+      {
+        title: '特色功能',
+        config: [
+          {
+            title: '基金统计',
+            iconType: Enums.WebIconType.Svg,
+            icon: <RiPieChartFill style={{ ...iconSize }} />,
+            click: openFundStatisticsDrawer,
+          },
+          {
+            title: '货币计算器',
+            iconType: Enums.WebIconType.Svg,
+            icon: <RiCalculatorFill style={{ ...iconSize }} />,
+            click: openCalculatorDrawer,
+          },
+          {
+            title: '快捷翻译',
+            iconType: Enums.WebIconType.Svg,
+            icon: <RiTranslate style={{ ...iconSize }} />,
+            click: openTranslateSettingDrawer,
+          },
+        ],
+      },
+      {
+        title: '拓展功能',
+        config: [
+          {
+            title: '新闻动态',
+            iconType: Enums.WebIconType.Svg,
+            icon: <RiNewspaperFill style={{ ...iconSize }} />,
+            click: openNewsDrawer,
+          },
+          {
+            title: '板块资金流',
+            iconType: Enums.WebIconType.Svg,
+            icon: <RiLayoutMasonryFill style={{ ...iconSize }} />,
+            click: openFundFlowDrawer,
+          },
+          {
+            title: '外汇债券',
+            iconType: Enums.WebIconType.Svg,
+            icon: <RiExchangeCnyFill style={{ ...iconSize }} />,
+            click: openExchangeDrawer,
+          },
+          {
+            title: '行情中心',
+            iconType: Enums.WebIconType.Svg,
+            icon: <RiBubbleChartFill style={{ ...iconSize }} />,
+            click: openQuoteCenterDrawer,
+          },
+          {
+            title: '经济数据',
+            iconType: Enums.WebIconType.Svg,
+            icon: <RiBarChartGroupedFill style={{ ...iconSize }} />,
+            click: openEconomicDataDrawer,
+          },
+          {
+            title: '基金榜',
+            iconType: Enums.WebIconType.Svg,
+            icon: <RiFundsBoxFill style={{ ...iconSize }} />,
+            click: openFundRankingDrawer,
+          },
+          {
+            title: '股票榜',
+            iconType: Enums.WebIconType.Svg,
+            icon: <RiStockFill style={{ ...iconSize }} />,
+            click: openStockRankingDrawer,
+          },
+          {
+            title: '货币榜',
+            iconType: Enums.WebIconType.Svg,
+            icon: <RiListOrdered style={{ ...iconSize }} />,
+            click: openCoinRankingDrawer,
+          },
+          {
+            title: '财经日历',
+            iconType: Enums.WebIconType.Svg,
+            icon: <RiCalendarCheckFill style={{ ...iconSize }} />,
+            click: openEconomicCalendarDrawer,
+          },
+          {
+            title: '黄金市场',
+            iconType: Enums.WebIconType.Svg,
+            icon: <RiCoinFill style={{ ...iconSize }} />,
+            click: openGoldMarketDrawer,
+          },
+        ],
+      },
+    ],
+    keyword
   );
-  const h5s = useMemo(
-    () =>
-      renderApps(
-        [
-          {
-            title: '网页书签',
-            config: webConfig.map((web) => ({
-              title: web.title,
-              favicon: web.icon,
-              color: web.color,
-              iconType: web.iconType,
-              url: web.url,
-              click: () => openWebView({ title: web.title, url: web.url }),
-            })),
-          },
-        ],
-        keyword
-      ),
-    [keyword, webConfig]
+  const h5s = renderApps(
+    [
+      {
+        title: '网页书签',
+        config: webConfig.map((web) => ({
+          title: web.title,
+          favicon: web.icon,
+          color: web.color,
+          iconType: web.iconType,
+          url: web.url,
+          click: () => openWebView({ title: web.title, url: web.url }),
+        })),
+      },
+    ],
+    keyword
   );
 
   return (

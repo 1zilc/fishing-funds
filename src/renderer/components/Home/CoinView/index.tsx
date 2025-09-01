@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import CoinRow from '@/components/Home/CoinView/CoinRow';
 import Empty from '@/components/Empty';
 import LoadingBar from '@/components/LoadingBar';
@@ -24,7 +24,7 @@ const CoinView: React.FC<CoinListProps> = (props) => {
 
   const list = coins.filter(props.filter);
 
-  const view = useMemo(() => {
+  const view = (() => {
     switch (coinViewMode.type) {
       case Enums.CoinViewType.Grid:
         return (
@@ -45,7 +45,7 @@ const CoinView: React.FC<CoinListProps> = (props) => {
       default:
         return list.map((coin) => <CoinRow key={coin.code} coin={coin} onDetail={setDetailDrawer} />);
     }
-  }, [list, coinViewMode]);
+  })();
 
   return (
     <div className={styles.container}>

@@ -1,5 +1,5 @@
 import { Suspense } from 'react';
-import { useCreation, useMemoizedFn } from 'ahooks';
+import { useCreation } from 'ahooks';
 import { Tabs, TabsProps } from 'antd';
 import Empty from '@/components/Empty';
 import { syncTabsKeyMapAction } from '@/store/features/tabs';
@@ -31,7 +31,7 @@ const GroupTab = (props: GroupTabProps) => {
     [props.items]
   );
 
-  const onTagChange = useMemoizedFn((e: string) => dispatch(syncTabsKeyMapAction({ key: tabKey, activeKey: Number(e) })));
+  const onTagChange = (e: string) => dispatch(syncTabsKeyMapAction({ key: tabKey, activeKey: Number(e) }));
 
   return (
     <Tabs
