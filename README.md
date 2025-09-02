@@ -20,20 +20,6 @@
 
 > 基金,大盘,股票,虚拟货币状态栏显示小应用,基于 Electron 开发,支持 MacOS,Windows,Linux 客户端,数据源来自天天基金,蚂蚁基金,同花顺-爱基金,腾讯证券等
 
-## 软件截图
-
-<figure class="half">
-
-<img src="https://download.1zilc.top/ff/screenshots/1.png" width="25%"  /><img src="https://download.1zilc.top/ff/screenshots/2.png" width="25%"  /><img src="https://download.1zilc.top/ff/screenshots/3.png" width="25%"  /><img src="https://download.1zilc.top/ff/screenshots/4.png" width="25%"  />
-
-</figure>
-
-<figure class="half">
-
-<img src="https://download.1zilc.top/ff/screenshots/5.png" width="25%"  /><img src="https://download.1zilc.top/ff/screenshots/6.png" width="25%"  /><img src="https://download.1zilc.top/ff/screenshots/7.png" width="25%"  /><img src="https://download.1zilc.top/ff/screenshots/8.png" width="25%"  />
-
-</figure>
-
 ## 项目介绍
 
 - 采用天天基金等数据源接口，实时显示当前基金涨跌情况，计算显示收益，大盘实时数据，板块行情，股票走势，加密虚拟货币等
@@ -73,6 +59,7 @@ sudo xattr -d com.apple.quarantine "/Applications/Fishing Funds.app"
 - [windows 7/8 下载](https://github.com/1zilc/fishing-funds/releases/tag/v7.0.2)
 - [macOS 10.13/10.14 下载](https://github.com/1zilc/fishing-funds/releases/tag/v8.1.0)
 - [macOS 10.15 下载](https://github.com/1zilc/fishing-funds/releases/tag/v8.2.3)
+- [macOS 11 下载](https://github.com/1zilc/fishing-funds/releases/tag/v8.5.1)
 
 ## 讨论交流
 
