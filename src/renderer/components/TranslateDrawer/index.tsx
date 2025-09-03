@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useMemo } from 'react';
 import { useBoolean, useAsyncEffect } from 'ahooks';
 
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
@@ -27,10 +27,10 @@ const TranslateContent: React.FC<TranslateContentProps> = () => {
 
   const fakeUA = useFakeUA(true);
 
-  const url = (() => {
+  const url = useMemo(() => {
     const api = Utils.GetCodeMap(APIOptions, 'code')[translateApiTypeSetting];
     return api.onTrans(keyword || '');
-  })();
+  }, [translateApiTypeSetting, keyword]);
 
   function onClose() {
     dispatch(syncTranslateShowAction(false));

@@ -10,7 +10,7 @@ interface QuickSearchProps {
   value: string;
 }
 
-const QuickSearch: React.FC<QuickSearchProps> = (props) => {
+const QuickSearch: React.FC<QuickSearchProps> = React.memo((props) => {
   const { value } = props;
   const { valid, url } = Utils.CheckUrlValid(value);
 
@@ -77,6 +77,6 @@ const QuickSearch: React.FC<QuickSearchProps> = (props) => {
   ) : (
     <></>
   );
-};
+});
 
 export default QuickSearch;

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import clsx from 'clsx';
 import colorHash from '@/utils/colorHash';
 import styles from './index.module.css';
@@ -10,7 +10,7 @@ interface AvatarProps {
 
 const Avatar: React.FC<AvatarProps> = (props) => {
   const { url, name } = props;
-  const color = colorHash.hex(name || 'ff');
+  const color = useMemo(() => colorHash.hex(name || 'ff'), [name]);
   return (
     <div
       className={clsx(styles.content)}

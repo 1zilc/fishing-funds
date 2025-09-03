@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useMemo, useState, useRef } from 'react';
 
 import { ReactSortable } from 'react-sortablejs';
 import { Input, InputRef, Button } from 'antd';
@@ -23,7 +23,7 @@ const Optional: React.FC<OptionalProps> = () => {
   const sortableRef = useAutoDestroySortableRef();
   const [keyword, setKeyword] = useState('');
   const { codeMap, webConfig } = useAppSelector((state) => state.web.config);
-  const sortWebConfig = webConfig.map((_) => ({ ..._, id: _.url }));
+  const sortWebConfig = useMemo(() => webConfig.map((_) => ({ ..._, id: _.url })), [webConfig]);
 
   function onSortWebConfig(sortList: Web.SettingItem[]) {
     const hasChanged = Utils.CheckListOrderHasChanged(webConfig, sortList, 'url');

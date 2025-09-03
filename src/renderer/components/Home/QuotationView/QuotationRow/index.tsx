@@ -22,7 +22,7 @@ const arrowSize = {
   height: 12,
 };
 
-const QuotationRow: React.FC<RowProps> = (props) => {
+const QuotationRow: React.FC<RowProps> = React.memo((props) => {
   const { quotation } = props;
   const dispatch = useAppDispatch();
   const favoriteQuotationMap = useAppSelector((state) => state.quotation.favoriteQuotationMap);
@@ -133,6 +133,6 @@ const QuotationRow: React.FC<RowProps> = (props) => {
       </Collapse>
     </>
   );
-};
+});
 
 export default QuotationRow;

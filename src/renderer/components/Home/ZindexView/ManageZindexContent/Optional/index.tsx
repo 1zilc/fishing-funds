@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 
 import { ReactSortable } from 'react-sortablejs';
 import clsx from 'clsx';
@@ -25,7 +25,7 @@ const Optional: React.FC<OptionalProps> = () => {
   const sortableRef = useAutoDestroySortableRef();
   const { codeMap, zindexConfig } = useAppSelector((state) => state.zindex.config);
   const { show: showAddDrawer, set: setAddDrawer, close: closeAddDrawer } = useDrawer(null);
-  const sortZindexConfig = zindexConfig.map((_) => ({ ..._, id: _.code }));
+  const sortZindexConfig = useMemo(() => zindexConfig.map((_) => ({ ..._, id: _.code })), [zindexConfig]);
 
   const {
     data: editData,

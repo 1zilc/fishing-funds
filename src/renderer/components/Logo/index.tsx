@@ -4,7 +4,7 @@ import styles from './index.module.css';
 export interface LogoProps {
   size?: number;
 }
-const Logo: React.FC<LogoProps> = (props) => {
+const Logo: React.FC<LogoProps> = React.memo((props) => {
   return (
     <div
       className={styles.content}
@@ -16,5 +16,5 @@ const Logo: React.FC<LogoProps> = (props) => {
       <img src="img/icon.ico" draggable={false} />
     </div>
   );
-};
+});
 export default Logo;

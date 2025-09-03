@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Tabs } from 'antd';
 import { useRequest } from 'ahooks';
 
@@ -41,7 +41,7 @@ const FundStatisticsContent: React.FC<FundStatisticsContentProps> = (props) => {
 
   const allCyFunds = useAllCyFunds(statusMap);
 
-  const codes = Object.keys(statusMap).filter((key) => statusMap[key]);
+  const codes = useMemo(() => Object.keys(statusMap).filter((key) => statusMap[key]), [statusMap]);
 
   const collectors = allCyFunds.map((fund) => async () => {
     const { stocks } = await Services.Fund.GetIndustryRateFromEaseMoney(fund.fundcode!);

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { useScroll, useDebounceFn, useBoolean } from 'ahooks';
 import clsx from 'clsx';
 import { Dropdown, Menu } from 'antd';
@@ -76,7 +76,7 @@ function FundsSortBar() {
   const [showAddFundDrawer, { setTrue: openAddFundDrawer, setFalse: closeAddFundDrawer }] = useBoolean(false);
   const [showFundRankingDrawer, { setTrue: openFundRankingDrawer, setFalse: closeFundRankingDrawer }] = useBoolean(false);
 
-  const expandAllFunds = funds.every((_) => _.collapse);
+  const expandAllFunds = useMemo(() => funds.every((_) => _.collapse), [funds]);
 
   const freshFunds = useFreshFunds();
 
@@ -192,7 +192,7 @@ function ZindexSortBar() {
   const [showAddZindexDrawer, { setTrue: openAddZindexDrawer, setFalse: closeAddZindexDrawer }] = useBoolean(false);
   const [showNewsDrawer, { setTrue: openNewsDrawer, setFalse: closeNewsDrawer }] = useBoolean(false);
 
-  const expandAllZindexs = zindexs.every((_) => _.collapse);
+  const expandAllZindexs = useMemo(() => zindexs.every((_) => _.collapse), [zindexs]);
 
   const freshZindexs = useFreshZindexs();
 
@@ -311,7 +311,7 @@ function QuotationSortBar() {
 
   const quotations = useAppSelector((state) => state.quotation.quotations);
 
-  const expandAllQuotations = quotations.every((_) => _.collapse);
+  const expandAllQuotations = useMemo(() => quotations.every((_) => _.collapse), [quotations]);
 
   const toggleQuotationsCollapse = () => dispatch(toggleAllQuotationsCollapseAction());
 
@@ -405,7 +405,7 @@ function StockSortBar() {
   const [showAddStockDrawer, { setTrue: openAddStockDrawer, setFalse: closeAddStockDrawer }] = useBoolean(false);
   const [showStockRankingDrawer, { setTrue: openStockRankingDrawer, setFalse: closeStockRankingDrawer }] = useBoolean(false);
 
-  const expandAllStocks = stocks.every((_) => _.collapse);
+  const expandAllStocks = useMemo(() => stocks.every((_) => _.collapse), [stocks]);
 
   const freshStocks = useFreshStocks();
 
@@ -524,7 +524,7 @@ function CoinSortBar() {
   const [showAddCoinDrawer, { setTrue: openAddCoinDrawer, setFalse: closeAddCoinDrawer }] = useBoolean(false);
   const [showCoinRankingDrawer, { setTrue: openCoinRankingDrawer, setFalse: closeCoinRankingDrawer }] = useBoolean(false);
 
-  const expandAllCoins = coins.every((_) => _.collapse);
+  const expandAllCoins = useMemo(() => coins.every((_) => _.collapse), [coins]);
 
   const freshCoins = useFreshCoins();
 
@@ -634,7 +634,7 @@ const SortBar: React.FC<SortBarProps> = () => {
     return true;
   });
 
-  const renderSortBar = (() => {
+  const renderSortBar = useMemo(() => {
     switch (tabsActiveKey) {
       case Enums.TabKeyType.Fund:
         return <FundsSortBar />;
@@ -649,7 +649,7 @@ const SortBar: React.FC<SortBarProps> = () => {
       default:
         return <></>;
     }
-  })();
+  }, [tabsActiveKey]);
 
   return <div className={clsx(styles.content, { [styles.visible]: visible })}>{renderSortBar}</div>;
 };

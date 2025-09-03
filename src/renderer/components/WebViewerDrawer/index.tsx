@@ -1,7 +1,7 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { Dropdown, Progress, Switch } from 'antd';
 import clsx from 'clsx';
-import { useBoolean, useEventListener } from 'ahooks';
+import { useBoolean, useMemoizedFn, useEventListener } from 'ahooks';
 import {
   RiStarFill,
   RiStarLine,
@@ -71,7 +71,7 @@ export const WebViewer: React.FC<WebViewerProps> = (props) => {
     iconType: Enums.WebIconType.First,
   });
 
-  const onCopyUrl = () => {
+  const onCopyUrl = useMemoizedFn(() => {
     const url = viewRef.current?.getURL();
     if (url) {
       clipboard.writeText(url);
@@ -81,16 +81,16 @@ export const WebViewer: React.FC<WebViewerProps> = (props) => {
         message: `已复制到粘贴板`,
       });
     }
-  };
+  });
 
-  const onVisit = () => {
+  const onVisit = useMemoizedFn(() => {
     const url = viewRef.current?.getURL();
     if (url) {
       shell.openExternal(url);
     }
-  };
+  });
 
-  const onSetWeb = () => {
+  const onSetWeb = useMemoizedFn(() => {
     if (currentUrl) {
       setAddWebContent({
         title: currentTitle,
@@ -98,18 +98,18 @@ export const WebViewer: React.FC<WebViewerProps> = (props) => {
         iconType: Enums.WebIconType.First,
       });
     }
-  };
+  });
 
-  const onAddWeb = async (web: Web.SettingItem) => {
+  const onAddWeb = useMemoizedFn(async (web: Web.SettingItem) => {
     await dispatch(addWebAction(web));
     closeAddWebContent();
-  };
+  });
 
-  const onRemoveWeb = () => {
+  const onRemoveWeb = useMemoizedFn(() => {
     dispatch(deleteWebAction(currentUrl));
-  };
+  });
 
-  const onPhoneChange = (phone: boolean) => dispatch(syncWebPhoneAction(phone));
+  const onPhoneChange = useMemoizedFn((phone) => dispatch(syncWebPhoneAction(phone)));
 
   useEventListener(
     'dom-ready',

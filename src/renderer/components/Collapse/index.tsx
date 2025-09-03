@@ -1,4 +1,5 @@
 import React, { PropsWithChildren, useLayoutEffect, useRef, useState } from 'react';
+import { useMemoizedFn } from 'ahooks';
 import clsx from 'clsx';
 import styles from './index.module.css';
 
@@ -7,7 +8,7 @@ interface CollapseProps {
   style?: React.CSSProperties;
 }
 
-const Collapse: React.FC<PropsWithChildren<CollapseProps>> = (props) => {
+const Collapse: React.FC<PropsWithChildren<CollapseProps>> = React.memo((props) => {
   const contentRef = useRef<HTMLDivElement>(null);
   const montedRef = useRef(false);
   const [wrapStyle, setWrapStyle] = useState<React.CSSProperties>({
@@ -15,7 +16,7 @@ const Collapse: React.FC<PropsWithChildren<CollapseProps>> = (props) => {
     display: props.isOpened ? undefined : 'none',
   });
 
-  const onTransitionEnd = () => {
+  const onTransitionEnd = useMemoizedFn(() => {
     if (props.isOpened) {
       setWrapStyle({});
     } else {
@@ -23,7 +24,7 @@ const Collapse: React.FC<PropsWithChildren<CollapseProps>> = (props) => {
         display: 'none',
       });
     }
-  };
+  });
 
   useLayoutEffect(() => {
     if (!montedRef.current) {
@@ -63,6 +64,6 @@ const Collapse: React.FC<PropsWithChildren<CollapseProps>> = (props) => {
       <div ref={contentRef}>{props.children}</div>
     </div>
   );
-};
+});
 
 export default Collapse;

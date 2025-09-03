@@ -9,7 +9,7 @@ import styles from './index.module.css';
 export interface EstimateProps {
   code: string;
 }
-const Estimate: React.FC<EstimateProps> = ({ code }) => {
+const Estimate: React.FC<EstimateProps> = React.memo(({ code }) => {
   const [estimate, setEstimate] = useState<string | undefined>('');
   const { run: runGetEstimatedFromEastmoney } = useRequest(() => Services.Quotation.GetMainFundFromEastmoney(code), {
     pollingInterval: CONST.DEFAULT.ESTIMATE_FUND_DELAY,
@@ -29,6 +29,6 @@ const Estimate: React.FC<EstimateProps> = ({ code }) => {
       </div>
     </ChartCard>
   );
-};
+});
 
 export default Estimate;

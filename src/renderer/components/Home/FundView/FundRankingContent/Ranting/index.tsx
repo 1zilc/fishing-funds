@@ -1,4 +1,4 @@
-import React, { PropsWithChildren } from 'react';
+import React, { PropsWithChildren, useMemo } from 'react';
 import { Table } from 'antd';
 
 import { useRequest } from 'ahooks';
@@ -22,7 +22,7 @@ const Ranting: React.FC<PropsWithChildren<RantingProps>> = () => {
   const { data: detailCode, show: showDetailDrawer, set: setDetailDrawer, close: closeDetailDrawer } = useDrawer('');
   const { data: addCode, show: showAddDrawer, set: setAddDrawer, close: closeAddDrawer } = useDrawer('');
   const fundRatingMap = useAppSelector((state) => state.fund.fundRatingMap);
-  const fundRating = Object.values(fundRatingMap).sort((a, b) => (a.total > b.total ? -1 : 1));
+  const fundRating = useMemo(() => Object.values(fundRatingMap).sort((a, b) => (a.total > b.total ? -1 : 1)), [fundRatingMap]);
   const columns = [
     {
       title: '名称',

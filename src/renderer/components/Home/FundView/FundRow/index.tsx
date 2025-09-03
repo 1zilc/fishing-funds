@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import clsx from 'clsx';
 import { RiEditLine, RiArrowDownSLine, RiArrowUpSLine, RiDeleteBin6Line } from 'react-icons/ri';
 import Collapse from '@/components/Collapse';
@@ -23,7 +23,7 @@ const arrowSize = {
   height: 12,
 };
 
-const FundRow: React.FC<RowProps> = (props) => {
+const FundRow: React.FC<RowProps> = React.memo((props) => {
   const { fund, readOnly } = props;
   const dispatch = useAppDispatch();
   const conciseSetting = useAppSelector((state) => state.setting.systemSetting.conciseSetting);
@@ -149,6 +149,6 @@ const FundRow: React.FC<RowProps> = (props) => {
       </Collapse>
     </>
   );
-};
+});
 
 export default FundRow;

@@ -2,6 +2,7 @@ import React from 'react';
 import clsx from 'clsx';
 
 import { Tabs, message, Button } from 'antd';
+import { useMemoizedFn } from 'ahooks';
 
 import CustomDrawer from '@/components/CustomDrawer';
 import ChartCard from '@/components/Card/ChartCard';
@@ -45,7 +46,7 @@ const StockSearch: React.FC<StockSearchProps> = (props) => {
     close: closeDetailDrawer,
   } = useDrawer({ secid: '', type: 0 });
 
-  const onAdd = async (secid: string, type: number) => {
+  const onAdd = useMemoizedFn(async (secid: string, type: number) => {
     const stock = await Helpers.Stock.GetStock(secid);
 
     if (stock) {
@@ -63,7 +64,7 @@ const StockSearch: React.FC<StockSearchProps> = (props) => {
     } else {
       message.error('添加股票失败，未找到或数据出错~');
     }
-  };
+  });
 
   const list = groupList.filter(({ Type }) => stockTypesConfig.map(({ code }) => code).includes(Type));
 

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 
 import { ReactSortable } from 'react-sortablejs';
 import { Button } from 'antd';
@@ -26,7 +26,7 @@ const ManageWalletContent: React.FC<ManageWalletContentProps> = (props) => {
   const currentWalletCode = useAppSelector((state) => state.wallet.currentWalletCode);
   const { codeMap, walletConfig } = useAppSelector((state) => state.wallet.config);
   const { show: showAddWalletDrawer, open: openAddWalletDrawer, close: closeAddWalletDrawer } = useDrawer('');
-  const sortWalletConfig = walletConfig.map((_) => ({ ..._, id: _.code }));
+  const sortWalletConfig = useMemo(() => walletConfig.map((_) => ({ ..._, id: _.code })), [walletConfig]);
 
   const {
     data: editWalletData,

@@ -1,5 +1,5 @@
 import React, { useRef } from 'react';
-import { useRequest } from 'ahooks';
+import { useRequest, useMemoizedFn } from 'ahooks';
 import ChartCard from '@/components/Card/ChartCard';
 import MarketVolume, { type MarketVolumeRef } from '@/components/Home/QuotationView/FundFlowContent/Distribution/MarketVolume';
 import { useResizeEchart, useRenderEcharts } from '@/utils/hooks';
@@ -175,10 +175,10 @@ const Distribution: React.FC<DistributionProps> = () => {
     [result]
   );
 
-  const refresh = () => {
+  const refresh = useMemoizedFn(() => {
     runQuotationGetDistributionFromEastmoney();
     marketVolumeRef.current?.refresh();
-  };
+  });
 
   return (
     <ChartCard className={styles.content} onFresh={refresh}>

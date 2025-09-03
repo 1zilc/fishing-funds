@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import FundRow from '@/components/Home/FundView/FundRow';
 import Empty from '@/components/Empty';
 import LoadingBar from '@/components/LoadingBar';
@@ -34,7 +34,7 @@ const FundView: React.FC<FundListProps> = (props) => {
 
   const list = funds.filter(props.filter);
 
-  const view = (() => {
+  const view = useMemo(() => {
     switch (fundViewMode.type) {
       case Enums.FundViewType.Grid:
         return (
@@ -58,7 +58,7 @@ const FundView: React.FC<FundListProps> = (props) => {
           <FundRow key={fund.fundcode} fund={fund} onEdit={setEditDrawer} onDetail={setDetailDrawer} onDelete={onRemoveFund} />
         ));
     }
-  })();
+  }, [list, fundViewMode, fundConfigCodeMap]);
 
   function enterEditDrawer() {
     freshFunds();

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 
 import ZindexRow from '@/components/Home/ZindexView/ZindexRow';
 import Empty from '@/components/Empty';
@@ -39,7 +39,7 @@ const ZindexView: React.FC<ZindexViewProps> = (props) => {
 
   const list = zindexs.filter(props.filter);
 
-  const view = (() => {
+  const view = useMemo(() => {
     switch (zindexViewMode.type) {
       case Enums.ZindexViewType.Grid:
         return <GridView list={list.map((item) => ({ ...item, value: item.zsz }))} onDetail={setDetailDrawer} />;
@@ -55,7 +55,7 @@ const ZindexView: React.FC<ZindexViewProps> = (props) => {
           />
         ));
     }
-  })();
+  }, [list, zindexViewMode]);
 
   function enterEditDrawer() {
     freshZindexs();
