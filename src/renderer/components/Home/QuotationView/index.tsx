@@ -1,4 +1,4 @@
-import React, from 'react';
+import React from 'react';
 
 import QuotationRow from '@/components/Home/QuotationView/QuotationRow';
 import QuotationFlow from '@/components/Home/QuotationView/QuotationFlow';
