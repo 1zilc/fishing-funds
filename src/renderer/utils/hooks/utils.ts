@@ -674,7 +674,7 @@ export function useAllCyFunds(statusMap: Record<string, boolean>) {
 
 export function useOpenWebView(params: any = {}) {
   const dispatch = useAppDispatch();
-  const openWebView = (args: any[]) => {
+  const openWebView = (args: any) => {
     const obj = typeof args === 'string' ? { url: args } : args;
     dispatch(openWebAction({ ...params, ...obj }));
   };
