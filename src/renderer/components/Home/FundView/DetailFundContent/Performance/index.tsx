@@ -45,6 +45,7 @@ const Performance: React.FC<PerformanceProps> = ({ code }) => {
           position: 'inside',
         },
         legend: {
+          top: 0,
           data: result?.map(({ name }) => name) || [],
           textStyle: {
             color: 'var(--main-text-color)',

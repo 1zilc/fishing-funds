@@ -31,6 +31,7 @@ const GrossDomesticProduct: React.FC<GrossDomesticProductProps> = () => {
             position: 'inside',
           },
           legend: {
+            top: 0,
             data: ['第一产业', '第二产业', '第三产业'],
             textStyle: {
               color: 'var(--main-text-color)',

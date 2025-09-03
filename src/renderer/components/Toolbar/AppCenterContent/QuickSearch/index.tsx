@@ -10,7 +10,7 @@ interface QuickSearchProps {
   value: string;
 }
 
-const QuickSearch: React.FC<QuickSearchProps> = React.memo((props) => {
+const QuickSearch: React.FC<QuickSearchProps> = (props) => {
   const { value } = props;
   const { valid, url } = Utils.CheckUrlValid(value);
 
@@ -65,7 +65,6 @@ const QuickSearch: React.FC<QuickSearchProps> = React.memo((props) => {
             className={clsx(styles.item, 'brightness')}
             style={{
               background: color,
-              boxShadow: `0 2px 5px ${color}`,
             }}
             onClick={() => openWebView(site.url)}
           >
@@ -78,6 +77,6 @@ const QuickSearch: React.FC<QuickSearchProps> = React.memo((props) => {
   ) : (
     <></>
   );
-});
+};
 
 export default QuickSearch;

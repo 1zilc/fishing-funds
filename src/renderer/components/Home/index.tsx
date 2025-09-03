@@ -11,7 +11,6 @@ import Collect from '@/components/Collect';
 import GroupTab from '@/components/GroupTab';
 import WebViewerDrawer from '@/components/WebViewerDrawer';
 import TranslateDrawer from '@/components/TranslateDrawer';
-import ChatGPTDrawer from '@/components/ChatGPTDrawer';
 import { stockTypesConfig } from '@/components/Toolbar/AppCenterContent/StockSearch';
 
 import { useAppSelector } from '@/utils/hooks';
@@ -86,11 +85,21 @@ function ZindexGroup() {
         },
         {
           key: String(1),
+          label: 'A股',
+          children: <ZindexView filter={(zindex) => /^\d{6}$/.test(zindex.zindexCode)} />,
+        },
+        {
+          key: String(2),
+          label: '国际',
+          children: <ZindexView filter={(zindex) => !/^\d{6}$/.test(zindex.zindexCode)} />,
+        },
+        {
+          key: String(3),
           label: '上涨',
           children: <ZindexView filter={(zindex) => zindex.zdd >= 0} />,
         },
         {
-          key: String(2),
+          key: String(4),
           label: '下跌',
           children: <ZindexView filter={(zindex) => zindex.zdd < 0} />,
         },
@@ -216,7 +225,6 @@ const Home: React.FC<HomeProps> = () => {
         <TabsBar />
       </Footer>
       <WebViewerDrawer />
-      <ChatGPTDrawer />
       <TranslateDrawer />
       <Collect title="home" />
     </div>

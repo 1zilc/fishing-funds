@@ -1,7 +1,8 @@
 import React from 'react';
 import clsx from 'clsx';
+import * as echarts from 'echarts/core';
 import { useRequest } from 'ahooks';
-import { RiArrowDownSLine, RiArrowUpSLine, RiEditLine } from 'react-icons/ri';
+import { RiArrowDownSLine, RiArrowUpSLine, RiEditLine, RiDeleteBin6Line } from 'react-icons/ri';
 import Collapse from '@/components/Collapse';
 import ArrowLine from '@/components/ArrowLine';
 import MemoNote from '@/components/MemoNote';
@@ -18,6 +19,7 @@ import styles from './index.module.css';
 export interface RowProps {
   stock: Stock.ResponseItem & Stock.ExtraRow;
   onEdit?: (fund: Stock.SettingItem) => void;
+  onDelete?: (fund: Stock.SettingItem) => void;
   onDetail: (code: string) => void;
 }
 
@@ -34,7 +36,7 @@ const TrendChart: React.FC<{
 
   useRenderEcharts(
     () => {
-      const { color } = Utils.GetValueColor(Number(trends[trends.length - 1]?.last) - zs);
+      const { color, bgColor } = Utils.GetValueColor(Number(trends[trends.length - 1]?.last) - zs);
       chartInstance?.setOption({
         title: {
           text: '',
@@ -75,7 +77,20 @@ const TrendChart: React.FC<{
             symbol: 'none',
             smooth: true,
             silent: true,
-            lineStyle: { width: 2, color },
+            lineStyle: { width: 2, color: color },
+            areaStyle: {
+              opacity: 0.8,
+              color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                {
+                  offset: 0,
+                  color: color,
+                },
+                {
+                  offset: 1,
+                  color: bgColor,
+                },
+              ]),
+            },
             markLine: {
               symbol: 'none',
               label: {
@@ -99,7 +114,7 @@ const TrendChart: React.FC<{
   return <div ref={chartRef} style={{ width: 72 }} />;
 };
 
-const StockRow: React.FC<RowProps> = React.memo((props) => {
+const StockRow: React.FC<RowProps> = (props) => {
   const { stock } = props;
   const dispatch = useAppDispatch();
   const eyeStatus = useAppSelector((state) => state.wallet.eyeStatus);
@@ -122,6 +137,10 @@ const StockRow: React.FC<RowProps> = React.memo((props) => {
 
   function onEditClick() {
     props.onEdit?.(stockConfig);
+  }
+
+  function onDeleteClick() {
+    props.onDelete?.(stockConfig);
   }
 
   return (
@@ -217,8 +236,9 @@ const StockRow: React.FC<RowProps> = React.memo((props) => {
           </section>
           <section>
             <span>持股数：</span>
-            <span>{stockConfig.cyfe}</span>
+            <span>{stockConfig.cyfe || 0}</span>
             <RiEditLine className={styles.editor} onClick={onEditClick} />
+            <RiDeleteBin6Line className={styles.editor} onClick={onDeleteClick} />
           </section>
           <section>
             <span>成本金额：</span>
@@ -258,6 +278,6 @@ const StockRow: React.FC<RowProps> = React.memo((props) => {
       </Collapse>
     </>
   );
-});
+};
 
 export default StockRow;

@@ -11,7 +11,7 @@ function callback() {}
 
 const cards = new Array(6).fill('');
 
-const SkeletonContent: React.FC<SkeletonContentProps> = React.memo(() => {
+const SkeletonContent: React.FC<SkeletonContentProps> = () => {
   return (
     <CustomDrawerContent title="" enterText="..." onClose={callback} onEnter={callback}>
       <div className={styles.content}>
@@ -23,6 +23,6 @@ const SkeletonContent: React.FC<SkeletonContentProps> = React.memo(() => {
       </div>
     </CustomDrawerContent>
   );
-});
+};
 
 export default SkeletonContent;

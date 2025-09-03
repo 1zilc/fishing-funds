@@ -33,7 +33,7 @@ const GuBa: React.FC<GuBaProps> = (props) => {
     <ChartCard auto onFresh={runNewsGetBondList}>
       <div className={styles.content}>
         <Table<typeof data>
-          rowKey="code"
+          rowKey="title"
           size="small"
           columns={[
             {

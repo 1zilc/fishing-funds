@@ -224,8 +224,35 @@ export function UnitTransform(value: number) {
   return newValue.join('');
 }
 
+export function FormatNumberAbbr(num: number) {
+  try {
+    if (num === 0) return '0';
+
+    const absNum = Math.abs(num);
+    const sign = num < 0 ? '-' : '';
+
+    if (absNum < 1_000) {
+      return num.toFixed(2);
+    } else if (absNum < 10_000) {
+      // k: 千，保留2位小数
+      return sign + (absNum / 1_000).toFixed(1) + 'k';
+    } else if (absNum < 1_000_000) {
+      // w: 万，保留3位小数
+      return sign + (absNum / 10_000).toFixed(2) + 'w';
+    } else if (absNum < 1_000_000_000) {
+      // m: 百万，保留3位小数
+      return sign + (absNum / 1_000_000).toFixed(3) + 'm';
+    } else {
+      // b: 十亿，保留3位小数
+      return sign + (absNum / 1_000_000_000).toFixed(3) + 'b';
+    }
+  } catch {
+    return String(num);
+  }
+}
+
 export function MakeHash() {
-  return Math.random().toString(36).substr(2);
+  return Math.random().toString(36).slice(2);
 }
 
 export function Group<T>(array: T[], num: number) {
@@ -259,6 +286,12 @@ export function GetValueColor(number?: number | string) {
         : value < 0
         ? varibleColors['--reduce-color']
         : varibleColors['--reverse-text-color'],
+    bgColor:
+      value > 0
+        ? varibleColors['--increase-bg-color']
+        : value < 0
+        ? varibleColors['--reduce-bg-color']
+        : varibleColors['--background-color'],
     textClass: value > 0 ? 'text-up' : value < 0 ? 'text-down' : 'text-none',
     blockClass: value > 0 ? 'block-up' : value < 0 ? 'block-down' : 'block-none',
     bgClass: value > 0 ? 'bg-up' : value < 0 ? 'bg-down' : 'bg-none',

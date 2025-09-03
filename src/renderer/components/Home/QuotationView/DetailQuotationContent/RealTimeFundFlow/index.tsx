@@ -47,6 +47,7 @@ const RealTimeFundFlow: React.FC<RealTimeFundFlowProps> = ({ secid = '' }) => {
           position: 'inside',
         },
         legend: {
+          top: 0,
           data: ['今日主力净流入', '今日超大单净流入', '今日大单净流入', '今日中单净流入', '今日小单净流入'],
           textStyle: {
             color: 'var(--main-text-color)',

@@ -53,11 +53,11 @@ export class ProxyParser {
 }
 export class ProxyManager {
   agent?: Dispatcher;
-  private proxyConent: string = '';
+  private proxyContent: string = '';
 
-  updateAgentByParseProxyConent(content: string) {
-    if (this.proxyConent !== content) {
-      this.proxyConent = content;
+  updateAgentByParseProxyContent(content: string) {
+    if (this.proxyContent !== content) {
+      this.proxyContent = content;
       this.agent = new ProxyParser(content).agent;
     }
   }

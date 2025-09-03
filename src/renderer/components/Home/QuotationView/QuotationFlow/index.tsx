@@ -27,6 +27,8 @@ const QuotationFlow: React.FC<QuotationFlowProps> = (props) => {
             height: '100%',
             width: '100%',
             type: 'treemap',
+            top: 0,
+            left: 0,
             breadcrumb: { show: false },
             nodeClick: false,
             roam: false,

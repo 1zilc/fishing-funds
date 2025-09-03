@@ -1,4 +1,4 @@
-import { useLayoutEffect, useEffect, useMemo, useRef } from 'react';
+import { useLayoutEffect, useEffect, useRef } from 'react';
 import { flushSync } from 'react-dom';
 import { useInterval } from 'ahooks';
 import { theme } from 'antd';
@@ -17,7 +17,6 @@ import {
   syncVaribleColors,
 } from '@/store/features/setting';
 import { syncTranslateShowAction } from '@/store/features/translate';
-import { syncChatGPTShowAction } from '@/store/features/chatGPT';
 import {
   useWorkDayTimeToDo,
   useFixTimeToDo,
@@ -46,7 +45,7 @@ import * as Enhancement from '@/utils/enhancement';
 
 const { dialog, ipcRenderer, clipboard, app } = window.contextModules.electron;
 const { production } = window.contextModules.process;
-const { saveString, readFile } = window.contextModules.io;
+const { saveString, readStringFile } = window.contextModules.io;
 const { useToken } = theme;
 
 export function useUpdater() {
@@ -395,7 +394,6 @@ export function useMappingLocalToSystemSetting() {
     hotkeySetting: visibleHotkey,
   } = useAppSelector((state) => state.setting.systemSetting);
   const { hotkeySetting: translateHotkey } = useAppSelector((state) => state.translate.translateSetting);
-  const { hotkeySetting: chatGPTHotkey } = useAppSelector((state) => state.chatGPT.chatGPTSetting);
 
   useIpcRendererListener('nativeTheme-updated', (e, data) => {
     dispatch(syncDarkMode(!!data?.darkMode));
@@ -444,9 +442,7 @@ export function useMappingLocalToSystemSetting() {
   useEffect(() => {
     ipcRenderer.invoke('set-translate-hotkey', translateHotkey);
   }, [translateHotkey]);
-  useEffect(() => {
-    ipcRenderer.invoke('set-chatGPT-hotkey', chatGPTHotkey);
-  }, [chatGPTHotkey]);
+
   useEffect(() => {
     if (lowKeySetting) {
       ipcRenderer.invoke('set-opacity', opacitySetting);
@@ -462,6 +458,7 @@ export function useMappingLocalToSystemSetting() {
 
 export function useTrayContent() {
   const trayContentSetting = useAppSelector((state) => state.setting.systemSetting.trayContentSetting);
+  const traySimpleIncomeSetting = useAppSelector((state) => state.setting.systemSetting.traySimpleIncomeSetting);
   const walletConfig = useAppSelector((state) => state.wallet.config.walletConfig);
   const wallets = useAppSelector((state) => state.wallet.wallets);
   const currentWalletCode = useAppSelector((state) => state.wallet.currentWalletCode);
@@ -493,11 +490,13 @@ export function useTrayContent() {
       .map((trayContentType: Enums.TrayContent) => {
         switch (trayContentType) {
           case Enums.TrayContent.Sy:
-            return `${Utils.Yang(sygz.toFixed(2))}`;
+            return traySimpleIncomeSetting ? `${Utils.Yang(Utils.FormatNumberAbbr(sygz))}` : `${Utils.Yang(sygz.toFixed(2))}`;
           case Enums.TrayContent.Syl:
             return `${Utils.Yang(gssyl.toFixed(2))}%`;
           case Enums.TrayContent.Zsy:
-            return `${Utils.Yang(allCalcResult.sygz.toFixed(2))}`;
+            return traySimpleIncomeSetting
+              ? `${Utils.Yang(Utils.FormatNumberAbbr(allCalcResult.sygz))}`
+              : `${Utils.Yang(allCalcResult.sygz.toFixed(2))}`;
           case Enums.TrayContent.Zsyl:
             return `${Utils.Yang(allCalcResult.gssyl.toFixed(2))}%`;
           default:
@@ -582,7 +581,7 @@ export function useAllConfigBackup() {
       if (canceled || !filePath) {
         return;
       }
-      const encodeBackupConfig = await readFile(filePath);
+      const encodeBackupConfig = await readStringFile(filePath);
       const backupConfig: Backup.Config = await decryptFF(encodeBackupConfig);
       await Enhancement.CoverBackupConfig(backupConfig);
       const { response } = await dialog.showMessageBox({
@@ -606,7 +605,7 @@ export function useAllConfigBackup() {
   });
   useIpcRendererListener('open-backup-file', async (e, filePath) => {
     try {
-      const encodeBackupConfig = await readFile(filePath);
+      const encodeBackupConfig = await readStringFile(filePath);
       const backupConfig: Backup.Config = await decryptFF(encodeBackupConfig);
       const { response } = await dialog.showMessageBox({
         title: `确认从备份文件恢复`,
@@ -740,31 +739,6 @@ export function useTranslate() {
         });
       }
       dispatch(syncTranslateShowAction(true));
-      ipcRenderer.invoke('set-menubar-visible', true);
-    }
-  });
-}
-
-export function useChatGPT() {
-  const dispatch = useAppDispatch();
-  const show = useAppSelector((state) => state.chatGPT.show); // chatgpt当前显示状态
-
-  useIpcRendererListener('trigger-chatGPT', (event, visible: boolean) => {
-    // menubar 当前显示状态
-    if (visible) {
-      if (show) {
-        ipcRenderer.invoke('set-menubar-visible', false);
-        dispatch(syncChatGPTShowAction(false));
-      } else {
-        dispatch(syncChatGPTShowAction(true));
-      }
-    } else {
-      if (show) {
-        flushSync(() => {
-          dispatch(syncChatGPTShowAction(false));
-        });
-      }
-      dispatch(syncChatGPTShowAction(true));
       ipcRenderer.invoke('set-menubar-visible', true);
     }
   });

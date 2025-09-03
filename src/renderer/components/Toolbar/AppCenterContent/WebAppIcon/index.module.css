@@ -10,6 +10,7 @@
     align-items: center;
     justify-content: center;
     border-radius: 50%;
+    border: 1px solid var(--block-border-color);
     background-color: #fff;
     transition: all 0.2s;
     box-sizing: border-box;

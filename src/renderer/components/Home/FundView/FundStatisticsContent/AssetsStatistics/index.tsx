@@ -1,7 +1,6 @@
 import React from 'react';
 import NP from 'number-precision';
 import clsx from 'clsx';
-import { useMemoizedFn } from 'ahooks';
 import PureCard from '@/components/Card/PureCard';
 import Score from '@/components/Home/FundView/FundStatisticsContent/AssetsStatistics/Score';
 import Eye from '@/components/Eye';
@@ -57,7 +56,7 @@ const AssetsStatistics: React.FC<AssetsStatisticsProps> = ({ funds, codes }) => 
   const displayCysy = eyeStatus ? Utils.Yang(cysy.toFixed(2)) : Utils.Encrypt(Utils.Yang(cysy.toFixed(2)));
   const displayCysyl = eyeStatus ? cysyl.toFixed(2) : Utils.Encrypt(cysyl.toFixed(2));
 
-  const onToggleEye = useMemoizedFn(() => dispatch(toggleEyeStatusAction()));
+  const onToggleEye = () => dispatch(toggleEyeStatusAction());
 
   return (
     <>

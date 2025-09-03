@@ -26,6 +26,7 @@ const OilPrice: React.FC<OilPriceProps> = () => {
             position: 'inside',
           },
           legend: {
+            top: 0,
             data: ['NYMEX原油', '汽油', '柴油'],
             textStyle: {
               color: 'var(--main-text-color)',

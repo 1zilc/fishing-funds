@@ -36,7 +36,6 @@ contextBridge.exposeInMainWorld('contextModules', {
           'change-eye-status',
           'sync-store-data',
           'trigger-translate',
-          'trigger-chatGPT',
           'support-author',
           'force-reload-app',
         ];
@@ -68,6 +67,7 @@ contextBridge.exposeInMainWorld('contextModules', {
     saveImage: (path: string, content: string) => ipcRenderer.invoke('io-saveImage', { path, content }),
     saveJsonToCsv: (path: string, content: any[]) => ipcRenderer.invoke('io-saveJsonToCsv', { path, content }),
     saveString: (path: string, content: string) => ipcRenderer.invoke('io-saveString', { path, content }),
+    readStringFile: (path: string) => ipcRenderer.invoke('io-readStringFile', { path }),
     readFile: (path: string) => ipcRenderer.invoke('io-readFile', { path }),
   },
   electronStore: {

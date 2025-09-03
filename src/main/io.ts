@@ -23,9 +23,21 @@ export async function saveJsonToCsv(filePath: string, json: any[]) {
   });
 }
 
-export async function readFile(path: string) {
+export async function readStringFile(path: string) {
   return new Promise((resolve, reject) => {
     fs.readFile(path, 'utf-8', (err, data) => {
+      if (err) {
+        reject();
+      } else {
+        resolve(data);
+      }
+    });
+  });
+}
+
+export async function readFile(path: string) {
+  return new Promise((resolve, reject) => {
+    fs.readFile(path, (err, data) => {
       if (err) {
         reject();
       } else {

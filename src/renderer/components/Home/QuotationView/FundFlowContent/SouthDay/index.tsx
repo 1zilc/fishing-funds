@@ -42,6 +42,7 @@ const SouthDay: React.FC<SouthDayProps> = () => {
           position: 'inside',
         },
         legend: {
+          top: 0,
           data: ['港股通(沪)', '港股通(深)', '南向'],
           textStyle: {
             color: 'var(--main-text-color)',

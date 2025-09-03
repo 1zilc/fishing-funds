@@ -34,6 +34,7 @@ const NationalStockTradingStatistics: React.FC<NationalStockTradingStatisticsPro
             position: 'inside',
           },
           legend: {
+            top: 0,
             data: ['上海成交', '深圳成交'],
             textStyle: {
               color: 'var(--main-text-color)',

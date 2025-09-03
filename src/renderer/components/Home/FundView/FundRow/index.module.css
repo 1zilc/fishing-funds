@@ -57,7 +57,7 @@
   float: right;
   color: var(--tag-text-color);
   padding: 2px 10px;
-  border-radius: 5px;
+  border-radius: 7px;
   min-width: 64px;
   margin-left: 5px;
   text-align: center;
@@ -65,11 +65,25 @@
   box-sizing: border-box;
 }
 
+.hold {
+  color: var(--tag-text-color);
+  border-radius: 4px;
+  font-size: 8px;
+  background-color: var(--primary-color);
+  border: 1px solid var(--block-border-color);
+  padding: 0 3px;
+  text-align: center;
+  word-break: keep-all;
+  margin-left: 5px;
+  transition: 0.2s;
+}
+
 .warn {
   color: var(--tag-text-color);
   background-color: var(--warn-color);
+  border: 1px solid var(--block-border-color);
   font-size: 8px;
-  border-radius: 3px;
+  border-radius: 4px;
   padding: 0px 3px;
   margin-left: 5px;
   white-space: nowrap;
@@ -77,7 +91,8 @@
 
 .gscysyl {
   font-size: 8px;
-  border-radius: 3px;
+  border-radius: 4px;
+  border: 1px solid var(--block-border-color);
   padding: 0px 3px;
   margin-left: 5px;
   white-space: nowrap;
@@ -151,17 +166,7 @@
 .unuseText {
   text-decoration: line-through;
 }
-.hold {
-  color: var(--tag-text-color);
-  border-radius: 3px;
-  font-size: 8px;
-  background-color: var(--primary-color);
-  padding: 0 3px;
-  text-align: center;
-  word-break: keep-all;
-  margin-left: 5px;
-  transition: 0.2s;
-}
+
 .worth {
   margin-left: 10px;
 }

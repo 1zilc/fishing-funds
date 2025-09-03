@@ -23,8 +23,16 @@ import { createChildWindow } from './childWindow';
 import { ProxyManager } from './proxy';
 import HotkeyManager from './hotkey';
 import ContextMenuManager from './contextMenu';
-import { saveImage, saveJsonToCsv, saveString, readFile } from './io';
-import { lockSingleInstance, checkEnvTool, sendMessageToRenderer, setNativeTheme, getOtherWindows, makeFakeUA } from './util';
+import { saveImage, saveJsonToCsv, saveString, readStringFile, readFile } from './io';
+import {
+  lockSingleInstance,
+  checkEnvTool,
+  sendMessageToRenderer,
+  setNativeTheme,
+  getOtherWindows,
+  makeFakeUA,
+  isSupportBlurBg,
+} from './util';
 import HttpClient from './httpClient';
 import * as Enums from '../renderer/utils/enums';
 
@@ -183,7 +191,7 @@ function main() {
   ipcMain.handle('set-proxy', async (event, config) => {
     await event.sender.session.setProxy(config);
     const proxyConent = await event.sender.session.resolveProxy('localhost');
-    proxyManager.updateAgentByParseProxyConent(proxyConent);
+    proxyManager.updateAgentByParseProxyContent(proxyConent);
     proxyMode = config.mode;
   });
   ipcMain.handle('get-fakeUA', (event, config) => {
@@ -194,6 +202,9 @@ function main() {
   });
   ipcMain.handle('get-version', (event, config) => {
     return app.getVersion();
+  });
+  ipcMain.handle('is-support-blur-bg', (event) => {
+    return isSupportBlurBg();
   });
   ipcMain.handle('set-opacity', (event, config) => {
     getOtherWindows(windowIds).forEach((win) => {
@@ -222,7 +233,6 @@ function main() {
   // 快捷键
   const visibleHotkeyManager = new HotkeyManager({ mb });
   const translateHotkeyManager = new HotkeyManager({ mb });
-  const chatGPTHotkeyManager = new HotkeyManager({ mb });
   ipcMain.handle('set-visible-hotkey', (event, keys: string) => {
     visibleHotkeyManager.registryHotkey(keys, ({ visible }) => {
       if (visible) {
@@ -235,11 +245,6 @@ function main() {
   ipcMain.handle('set-translate-hotkey', (event, keys: string) => {
     translateHotkeyManager.registryHotkey(keys, ({ visible }) => {
       sendMessageToRenderer(mb.window, 'trigger-translate', visible);
-    });
-  });
-  ipcMain.handle('set-chatGPT-hotkey', (event, keys: string) => {
-    chatGPTHotkeyManager.registryHotkey(keys, ({ visible }) => {
-      sendMessageToRenderer(mb.window, 'trigger-chatGPT', visible);
     });
   });
   // 多窗口相关
@@ -265,8 +270,8 @@ function main() {
     const httpClient = new HttpClient();
     // 系统代理需要实时检测代理地址
     if (proxyMode === 'system') {
-      const proxyConent = await event.sender.session.resolveProxy('localhost');
-      proxyManager.updateAgentByParseProxyConent(proxyConent);
+      const proxyContent = await event.sender.session.resolveProxy('localhost');
+      proxyManager.updateAgentByParseProxyContent(proxyContent);
     }
     httpClient.userAgent = fakeUA;
     httpClient.dispatcher = proxyManager.agent;
@@ -276,6 +281,7 @@ function main() {
   ipcMain.handle('io-saveImage', (event, { path, content }) => saveImage(path, content));
   ipcMain.handle('io-saveJsonToCsv', (event, { path, content }) => saveJsonToCsv(path, content));
   ipcMain.handle('io-saveString', (event, { path, content }) => saveString(path, content));
+  ipcMain.handle('io-readStringFile', (event, { path }) => readStringFile(path));
   ipcMain.handle('io-readFile', (event, { path }) => readFile(path));
   // 剪贴板相关
   ipcMain.handle('clipboard-readText', (event) => clipboard.readText());

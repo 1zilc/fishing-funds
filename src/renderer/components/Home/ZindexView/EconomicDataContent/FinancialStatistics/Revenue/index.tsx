@@ -30,6 +30,7 @@ const Revenue: React.FC<RevenueProps> = () => {
             position: 'inside',
           },
           legend: {
+            top: 0,
             data: ['当月'],
             textStyle: {
               color: 'var(--main-text-color)',

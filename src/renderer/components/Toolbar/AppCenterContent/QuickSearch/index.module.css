@@ -4,8 +4,9 @@
 }
 .item {
   text-align: center;
-  border-radius: 10px;
-  padding: 2px 10px;
+  border-radius: 7px;
+  border: 1px solid var(--block-border-color);
+  padding: 3px 8px;
   cursor: pointer;
   display: flex;
   align-items: center;

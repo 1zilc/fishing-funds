@@ -19,7 +19,7 @@ const arrowSize = {
   height: 12,
 };
 
-const CoinRow: React.FC<RowProps> = React.memo((props) => {
+const CoinRow: React.FC<RowProps> = (props) => {
   const { coin } = props;
   const dispatch = useAppDispatch();
   const conciseSetting = useAppSelector((state) => state.setting.systemSetting.conciseSetting);
@@ -43,7 +43,6 @@ const CoinRow: React.FC<RowProps> = React.memo((props) => {
               className={styles.coin}
               style={{
                 background: coinColor,
-                boxShadow: `0 2px 5px ${coinColor}`,
               }}
             />
           </div>
@@ -93,6 +92,6 @@ const CoinRow: React.FC<RowProps> = React.memo((props) => {
       </Collapse>
     </>
   );
-});
+};
 
 export default CoinRow;

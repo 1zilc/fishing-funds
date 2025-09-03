@@ -33,10 +33,12 @@ jobs:
           cache: 'pnpm'
 
       - name: Install dependencies
-        run: pnpm i
+        run: |
+          pnpm update
+          pnpm i
 
       - name: Run build
-        run: pnpm beta-mac
+        run: pnpm beta-all
         env:
           USE_HARD_LINKS: false
           GH_TOKEN: ${{ github.token }}

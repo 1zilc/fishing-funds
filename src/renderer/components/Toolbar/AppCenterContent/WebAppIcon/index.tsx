@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import { useBoolean } from 'ahooks';
 import colorHash from '@/utils/colorHash';
 import * as Enums from '@/utils/enums';
@@ -17,7 +17,7 @@ const WebAppIcon: React.FC<WebAppIconProps> = (props) => {
   const { iconType, title, favicon } = props;
   const [success, { setFalse }] = useBoolean(true);
 
-  const icon = useMemo(() => {
+  const icon = (() => {
     const color = props.color || colorHash.hex(title);
 
     switch (iconType) {
@@ -27,7 +27,6 @@ const WebAppIcon: React.FC<WebAppIconProps> = (props) => {
             className={styles.app}
             style={{
               background: color,
-              boxShadow: `0 2px 5px ${color}`,
             }}
             onClick={props.onClick}
           >
@@ -52,7 +51,6 @@ const WebAppIcon: React.FC<WebAppIconProps> = (props) => {
             className={styles.app}
             style={{
               background: color,
-              boxShadow: `0 2px 5px ${color}`,
             }}
             onClick={props.onClick}
           >
@@ -60,7 +58,7 @@ const WebAppIcon: React.FC<WebAppIconProps> = (props) => {
           </div>
         );
     }
-  }, [iconType, title, favicon, success]);
+  })();
 
   return (
     <div className={styles.content}>

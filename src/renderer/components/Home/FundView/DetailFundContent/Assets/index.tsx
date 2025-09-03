@@ -29,6 +29,7 @@ const Assets: React.FC<AssetsProps> = ({ Data_assetAllocation = {} }) => {
           },
         },
         legend: {
+          top: 0,
           data: Data_assetAllocation?.series?.map((item) => item.name) || [],
           textStyle: {
             color: 'var(--main-text-color)',

@@ -36,7 +36,8 @@ declare global {
         saveImage: (filePath: string, dataUrl: string) => Promise<unknown>;
         saveString: (filePath: string, content: string) => Promise<unknown>;
         saveJsonToCsv: (filePath: string, json: any[]) => Promise<unknown>;
-        readFile: (content: string) => Promise<string>;
+        readStringFile: (content: string) => Promise<string>;
+        readFile: (content: string) => Promise<ArrayBuffer>;
       };
       electronStore: {
         get: <T = unknown>(type: Store.StoreType, key: string, init?: T) => Promise<T>;

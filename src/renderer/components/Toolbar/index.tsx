@@ -1,7 +1,7 @@
 import React, { useRef } from 'react';
 import { Badge } from 'antd';
 import clsx from 'clsx';
-import { useBoolean, useMemoizedFn, useLongPress } from 'ahooks';
+import { useBoolean, useLongPress } from 'ahooks';
 import { RiRefreshLine, RiSettingsLine, RiAppsLine } from 'react-icons/ri';
 import CustomDrawer from '@/components/CustomDrawer';
 import {
@@ -49,7 +49,7 @@ const ToolBar: React.FC<ToolBarProps> = () => {
     } catch {}
   });
 
-  const fresh = useMemoizedFn(() => {
+  const fresh = () => {
     switch (tabsActiveKey) {
       case Enums.TabKeyType.Fund:
         freshFunds();
@@ -69,7 +69,7 @@ const ToolBar: React.FC<ToolBarProps> = () => {
       default:
         break;
     }
-  });
+  };
 
   const freshAll = useFreshAll();
 

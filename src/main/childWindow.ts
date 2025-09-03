@@ -1,5 +1,5 @@
 import { app, BrowserWindow } from 'electron';
-import { getPreloadPath, resolveHtmlPath } from './util';
+import { getPreloadPath, resolveHtmlPath, isSupportBlurBg } from './util';
 
 export function createChildWindow(config: { search: string; parentId: number }) {
   const index = resolveHtmlPath() + config.search;
@@ -10,17 +10,19 @@ export function createChildWindow(config: { search: string; parentId: number }) 
       width,
       height,
       title: app.getName(),
-      backgroundColor: process.platform === 'darwin' ? 'rgba(0, 0, 0, 0)' : '#fff',
+      backgroundColor: isSupportBlurBg() ? 'rgba(0, 0, 0, 0)' : '#fff',
       minHeight: 400,
       minWidth: 300,
       vibrancy: 'sidebar',
       visualEffectState: 'active',
+      backgroundMaterial: 'tabbed',
       fullscreenable: false,
       webPreferences: {
         webviewTag: true,
         devTools: !app.isPackaged,
         preload: getPreloadPath(),
         spellcheck: false,
+        scrollBounce: true,
       },
     });
     win.loadURL(index);

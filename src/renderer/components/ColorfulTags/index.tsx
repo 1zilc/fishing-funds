@@ -12,7 +12,7 @@ const ColorfulTags: React.FC<ColorfulTagsProps> = ({ tags }) => {
       {tags.map((tag) => {
         const color = colorHash.hex(tag);
         return (
-          <div key={tag} className={styles.tag} style={{ background: color, boxShadow: `0 2px 5px ${color}` }}>
+          <div key={tag} className={styles.tag} style={{ background: color }}>
             {tag}
           </div>
         );

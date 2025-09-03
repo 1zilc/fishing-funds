@@ -2,6 +2,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import log from 'electron-log/main';
 import { app, BrowserWindow, nativeTheme } from 'electron';
+import { release } from 'node:os';
 import * as Enums from '../renderer/utils/enums';
 
 export const processPath = process.cwd();
@@ -80,4 +81,24 @@ export function makeFakeUA(ua: string) {
   } else {
     return ua;
   }
+}
+
+export function isSupportBlurBg() {
+  // macOS
+  const isDarwin = process.platform === 'darwin';
+
+  if (isDarwin) {
+    return true;
+  }
+  // Windows 11
+  const isWindows = process.platform === 'win32';
+  if (isWindows) {
+    const version = release().split('.');
+    // https://learn.microsoft.com/en-us/windows/win32/api/dwmapi/ne-dwmapi-dwm_systembackdrop_type
+    if (parseInt(version[2], 10) >= 22621) {
+      return true;
+    }
+  }
+
+  return false;
 }
