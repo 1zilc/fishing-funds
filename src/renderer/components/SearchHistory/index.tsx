@@ -1,6 +1,6 @@
 import { Flex, Tag } from 'antd';
 import React, { RefObject, useImperativeHandle } from 'react';
-import { useLocalStorageState, useMemoizedFn } from 'ahooks';
+import { useLocalStorageState } from 'ahooks';
 import * as CONST from '@/constants';
 import styles from './index.module.css';
 
@@ -18,17 +18,17 @@ const SearchHistory: React.FC<SearchHistoryProps> = ({ ref, ...props }) => {
     defaultValue: [],
   });
 
-  const addSearchHistory = useMemoizedFn((text: string) => {
+  const addSearchHistory = (text: string) => {
     setSearchList((list) => {
       const newList = list!.filter((item) => item !== text);
       newList.unshift(text);
       return newList.slice(0, 15);
     });
-  });
+  };
 
-  const onDelete = useMemoizedFn((text: string) => {
+  const onDelete = (text: string) => {
     setSearchList((list) => list!.filter((item) => item !== text));
-  });
+  };
 
   useImperativeHandle(ref, () => ({
     addSearchHistory,

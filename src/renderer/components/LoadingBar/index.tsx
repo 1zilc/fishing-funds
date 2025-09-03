@@ -7,7 +7,7 @@ import styles from './index.module.css';
 export interface LoadingBarProps {
   show: boolean;
 }
-const LoadingBar: React.FC<LoadingBarProps> = React.memo(({ show }) => {
+const LoadingBar: React.FC<LoadingBarProps> = ({ show }) => {
   return (
     <div
       className={clsx(styles.content, {
@@ -19,6 +19,6 @@ const LoadingBar: React.FC<LoadingBarProps> = React.memo(({ show }) => {
       </Spin>
     </div>
   );
-});
+};
 
 export default LoadingBar;

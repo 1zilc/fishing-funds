@@ -1,6 +1,6 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState } from 'react';
 import { Select, Input, Button } from 'antd';
-import { useDebounceFn, useRequest, useMemoizedFn } from 'ahooks';
+import { useDebounceFn, useRequest } from 'ahooks';
 import * as NP from 'number-precision';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
 import CustomDrawer from '@/components/CustomDrawer';
@@ -52,14 +52,14 @@ const Calculator: React.FC<CalculatorProps> = (props) => {
     ready: !!coin?.id,
   });
 
-  const onSelect = useMemoizedFn(async (code) => {
+  const onSelect = async (code: string) => {
     const coin = await Helpers.Coin.GetCoin(code);
     if (coin) {
       setCoin(coin);
     }
-  });
+  };
 
-  const result = useMemo(() => {
+  const result = (() => {
     try {
       return {
         cny: NP.times(price.cny, num),
@@ -69,7 +69,7 @@ const Calculator: React.FC<CalculatorProps> = (props) => {
     } catch {
       return;
     }
-  }, [price, num]);
+  })();
 
   return (
     <CustomDrawerContent title="货币计算器" enterText="确定" onClose={props.onClose} onEnter={props.onEnter}>

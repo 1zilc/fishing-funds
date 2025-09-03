@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 
 import { ReactSortable } from 'react-sortablejs';
 import clsx from 'clsx';
@@ -23,7 +23,7 @@ const Optional: React.FC<OptionalProps> = () => {
   const sortableRef = useAutoDestroySortableRef();
   const { codeMap, coinConfig } = useAppSelector((state) => state.coin.config);
   const { show: showAddDrawer, set: setAddDrawer, close: closeAddDrawer } = useDrawer(null);
-  const sortCoinConfig = useMemo(() => coinConfig.map((_) => ({ ..._, id: _.code })), [coinConfig]);
+  const sortCoinConfig = coinConfig.map((_) => ({ ..._, id: _.code }));
 
   function onSortCoinConfig(sortList: Coin.SettingItem[]) {
     const hasChanged = Utils.CheckListOrderHasChanged(coinConfig, sortList, 'code');

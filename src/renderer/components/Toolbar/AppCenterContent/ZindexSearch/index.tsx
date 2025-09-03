@@ -2,7 +2,6 @@ import React from 'react';
 import clsx from 'clsx';
 
 import { Button, Tabs, message } from 'antd';
-import { useMemoizedFn } from 'ahooks';
 
 import CustomDrawer from '@/components/CustomDrawer';
 import ChartCard from '@/components/Card/ChartCard';
@@ -37,7 +36,7 @@ const ZindexSearch: React.FC<ZindexSearchProps> = (props) => {
   const { codeMap } = useAppSelector((state) => state.zindex.config);
   const { data: detailSecid, show: showDetailDrawer, set: setDetailDrawer, close: closeDetailDrawer } = useDrawer('');
 
-  const onAdd = useMemoizedFn(async (secid: string) => {
+  const onAdd = async (secid: string) => {
     const zindex = await Helpers.Zindex.GetZindex(secid);
     if (zindex) {
       dispatch(
@@ -49,7 +48,7 @@ const ZindexSearch: React.FC<ZindexSearchProps> = (props) => {
     } else {
       message.error('添加指数失败，未找到或数据出错~');
     }
-  });
+  };
 
   const list = groupList.filter(({ Type }) => zindexTypesConfig.map(({ code }) => code).includes(Type));
 

@@ -114,7 +114,7 @@ const TrendChart: React.FC<{
   return <div ref={chartRef} style={{ width: 72 }} />;
 };
 
-const StockRow: React.FC<RowProps> = React.memo((props) => {
+const StockRow: React.FC<RowProps> = (props) => {
   const { stock } = props;
   const dispatch = useAppDispatch();
   const eyeStatus = useAppSelector((state) => state.wallet.eyeStatus);
@@ -278,6 +278,6 @@ const StockRow: React.FC<RowProps> = React.memo((props) => {
       </Collapse>
     </>
   );
-});
+};
 
 export default StockRow;
