@@ -2,7 +2,7 @@ import React, { useLayoutEffect, useState, useEffect, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
 import queryString from 'query-string';
 import { useRequest } from 'ahooks';
-import { useInterval, useBoolean, useThrottleFn, useSize, useEventListener } from 'ahooks';
+import { useInterval, useBoolean, useThrottleFn, useSize, useMemoizedFn, useEventListener } from 'ahooks';
 import { useDispatch, useSelector, TypedUseSelectorHook } from 'react-redux';
 import dayjs from 'dayjs';
 import * as echarts from 'echarts/core';
@@ -688,7 +688,7 @@ export function useFundConfigMap(codes: string[]) {
 }
 
 export function useIpcRendererListener(channel: string, listener: (event: Electron.IpcRendererEvent, ...args: any[]) => void) {
-  const callback = listener;
+  const callback = useMemoizedFn(listener);
 
   useEffect(() => {
     ipcRenderer.on(channel, callback);
