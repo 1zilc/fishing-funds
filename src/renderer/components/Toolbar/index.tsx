@@ -44,7 +44,7 @@ const ToolBar: React.FC<ToolBarProps> = () => {
   const [openSupport, { setTrue: setOpenSupportTrue, setFalse: setOpenSupportFalse }] = useBoolean(false);
   const [showSettingContent, { setTrue: openSettingContent, setFalse: closeSettingContent }] = useBoolean(false);
   const [showAppCenterDrawer, { setTrue: openAppCenterDrawer, setFalse: closeAppCenterDrawer }] = useBoolean(false);
-  const [showFundsImportContent, { setTrue: openFundsImportContent, setFalse: closeFundsImportContent }] = useBoolean(false);
+  const [showFundsImportContent, { setTrue: openFundsImportContent, setFalse: closeFundsImportContent }] = useBoolean(true);
 
   useIpcRendererListener('support-author', (e) => {
     try {
@@ -57,7 +57,7 @@ const ToolBar: React.FC<ToolBarProps> = () => {
   const { aiParseFunds, loading: importFundsLoading, funds: aiImportFunds } = useAIImportFunds();
   useIpcRendererListener('ai-funds-import', async (e) => {
     try {
-      ipcRenderer.invoke('set-menubar-visible', true);
+      if (importFundsLoading) return;
       const { filePaths, canceled } = await dialog.showOpenDialog({
         title: '选择图片',
         filters: [{ name: '', extensions: ['jpg', 'png', 'jpeg', 'webp'] }],
@@ -72,6 +72,7 @@ const ToolBar: React.FC<ToolBarProps> = () => {
       const res = await aiParseFunds(img);
 
       if (res) {
+        await ipcRenderer.invoke('set-menubar-visible', true);
         openFundsImportContent();
       }
     } catch {

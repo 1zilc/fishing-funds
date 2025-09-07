@@ -1,7 +1,47 @@
 .content {
   display: block;
-  padding: 0 0 var(--base-padding);
+  padding: var(--base-padding);
 }
-.container {
-  padding: 0 var(--base-padding);
+.nameBar {
+  display: flex;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  font-size: calc(var(--base-font-size) + 2px);
+}
+.arrowBar {
+  display: flex;
+  justify-content: flex-start;
+  padding: var(--base-padding);
+}
+.infoBar {
+  display: flex;
+  flex-wrap: nowrap;
+  text-overflow: ellipsis;
+  padding: var(--base-padding) 0 0;
+  gap: var(--base-padding);
+}
+.tag {
+  color: var(--tag-text-color);
+  border-radius: 4px;
+  font-size: 8px;
+  background-color: var(--primary-color);
+  border: 1px solid var(--block-border-color);
+  padding: 0 3px;
+  text-align: center;
+  word-break: keep-all;
+  margin-left: 5px;
+  transition: 0.2s;
+}
+.income {
+  color: var(--tag-text-color);
+  border-radius: 4px;
+  font-size: 8px;
+  background-color: var(--warn-color);
+  border: 1px solid var(--block-border-color);
+  padding: 0 3px;
+  text-align: center;
+  word-break: keep-all;
+  margin-left: 5px;
+  transition: 0.2s;
 }

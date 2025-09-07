@@ -715,7 +715,7 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
                             { name: '基础模型', text: '默认基础模型' },
                             {
                               name: '基金导入模型',
-                              text: '专用于基金导入的模型，确保模型具有vision功能，推荐gpt-4o、qwen2.5vl:7b及以上，为空时使用基础模型。',
+                              text: '专用于基金导入的模型，确保模型具有vision功能，推荐gpt-4o、qwen2.5vl:32b及以上，为空时使用基础模型。',
                             },
                           ]}
                         />
