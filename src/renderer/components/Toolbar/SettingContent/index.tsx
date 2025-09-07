@@ -691,7 +691,7 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
                 <div className={styles.content}>
                   <StandCard icon={<RiErrorWarningLine />} title="声明">
                     <div className={clsx('card-body')}>
-                      Fishing Funds不搜集上传用户apikey，请确保软件从官方渠道获取，如有疑问请忽略ai相关功能
+                      Fishing Funds不收集上传用户apikey，请确保软件从官方渠道获取，如有疑问请忽略ai相关功能
                     </div>
                   </StandCard>
                   <StandCard
