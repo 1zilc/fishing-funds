@@ -466,3 +466,12 @@ export function MergeStateWithResponse<C, CK extends keyof C, SK extends keyof S
 
   return stateWithChached;
 }
+
+export function ToBase64(file: Blob): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file); // 直接转成 Base64
+    reader.onload = () => resolve(reader.result as string);
+    reader.onerror = (error) => reject(error);
+  });
+}
