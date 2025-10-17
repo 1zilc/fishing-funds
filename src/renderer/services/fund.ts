@@ -1241,3 +1241,99 @@ export async function GetTodayListFromEastmoney(type: number) {
     return [];
   }
 }
+
+// 根据名称从天天基金获取基金信息
+export async function GetFundInfoByNameFromEaseMoney(name: string) {
+  // ?callback=jQuery18305749822041299978_1757244568639&m=1&key=%E8%AF%BA%E5%AE%89%E6%88%90%E9%95%BF&_=1757245522994
+  try {
+    const { body } = await request<{
+      ErrCode: 0;
+      ErrMsg: 'fromcache';
+      Datas: [
+        {
+          _id: '025333';
+          CODE: '025333';
+          NAME: '诺安成长混合C';
+          JP: 'NACZHHC';
+          CATEGORY: 700;
+          CATEGORYDESC: '基金';
+          STOCKMARKET: null;
+          BACKCODE: '025333';
+          MatchCount: 1;
+          FundBaseInfo: {
+            _id: '025333';
+            FCODE: '025333';
+            FUNDTYPE: '002';
+            ISBUY: '';
+            JJGS: '诺安基金';
+            JJGSBID: 40.0;
+            JJGSID: '80049689';
+            JJJL: '刘慧影';
+            JJJLID: '30775155';
+            MINSG: 1.0;
+            OTHERNAME: '';
+            RSFUNDTYPE: '002';
+            SHORTNAME: '诺安成长混合C';
+            FTYPE: '混合型-偏股';
+            DWJZ: 1.591;
+            FSRQ: '2025-09-05';
+            NAVURL: 'http://fund.eastmoney.com/HH_jzzzl.html';
+          };
+          StockHolder: null;
+          ZTJJInfo: [{ TTYPE: 'BK000054'; TTYPENAME: '半导体' }, { TTYPE: 'BK000239'; TTYPENAME: '第三代半导体' }];
+          SEARCHWEIGHT: 0.0;
+          NEWTEXCH: '';
+        },
+        {
+          _id: '320007';
+          CODE: '320007';
+          NAME: '诺安成长混合A';
+          JP: 'NACZHHA';
+          CATEGORY: 700;
+          CATEGORYDESC: '基金';
+          STOCKMARKET: null;
+          BACKCODE: '320007';
+          MatchCount: 1;
+          FundBaseInfo: {
+            _id: '320007';
+            DWJZ: 1.592;
+            FCODE: '320007';
+            FSRQ: '2025-09-05';
+            FTYPE: '混合型-偏股';
+            FUNDTYPE: '002';
+            ISBUY: '1';
+            JJGS: '诺安基金';
+            JJGSBID: 40.0;
+            JJGSID: '80049689';
+            JJJL: '刘慧影';
+            JJJLID: '30775155';
+            MINSG: 10.0;
+            OTHERNAME: '诺安成长股票,诺安成长混合';
+            SHORTNAME: '诺安成长混合A';
+            RSFUNDTYPE: '002';
+            NAVURL: 'http://fund.eastmoney.com/HH_jzzzl.html';
+          };
+          StockHolder: null;
+          ZTJJInfo: [{ TTYPE: 'BK000054'; TTYPENAME: '半导体' }, { TTYPE: 'BK000239'; TTYPENAME: '第三代半导体' }];
+          SEARCHWEIGHT: 0.0;
+          NEWTEXCH: '';
+        }
+      ];
+    }>(`https://fundsuggest.eastmoney.com/FundSearch/api/FundSearchAPI.ashx`, {
+      searchParams: {
+        m: '1',
+        key: name,
+        _: Date.now(),
+      },
+      responseType: 'json',
+    });
+
+    return {
+      name: body.Datas[0].NAME,
+      code: body.Datas[0].CODE,
+      dwjz: body.Datas[0].FundBaseInfo.DWJZ,
+    };
+  } catch {
+    return;
+  }
+}
