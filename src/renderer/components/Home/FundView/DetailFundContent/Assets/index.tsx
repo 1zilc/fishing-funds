@@ -40,7 +40,8 @@ const Assets: React.FC<AssetsProps> = ({ Data_assetAllocation = {} }) => {
           left: 0,
           right: 0,
           bottom: 0,
-          containLabel: true,
+          outerBoundsMode: 'same',
+          outerBoundsContain: 'axisLabel',
         },
         xAxis: [
           {

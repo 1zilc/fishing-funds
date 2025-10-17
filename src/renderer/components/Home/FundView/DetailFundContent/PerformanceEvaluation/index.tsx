@@ -31,7 +31,8 @@ const PerformanceEvaluation: React.FC<PerformanceEvaluationProps> = ({
           left: 0,
           right: 0,
           bottom: 0,
-          containLabel: true,
+          outerBoundsMode: 'same',
+          outerBoundsContain: 'axisLabel',
         },
         tooltip: {
           trigger: 'item',

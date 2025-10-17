@@ -71,7 +71,8 @@ const Distribution: React.FC<DistributionProps> = () => {
             left: 0,
             right: 0,
             bottom: '25%',
-            containLabel: true,
+            outerBoundsMode: 'same',
+            outerBoundsContain: 'axisLabel',
           },
           {
             top: '80%',

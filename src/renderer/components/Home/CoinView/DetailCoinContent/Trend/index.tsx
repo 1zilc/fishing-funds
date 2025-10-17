@@ -53,7 +53,8 @@ const Trend: React.FC<PerformanceProps> = ({ code, name }) => {
           right: 5,
           bottom: 0,
           top: 20,
-          containLabel: true,
+          outerBoundsMode: 'same',
+          outerBoundsContain: 'axisLabel',
         },
         xAxis: {
           type: 'time',

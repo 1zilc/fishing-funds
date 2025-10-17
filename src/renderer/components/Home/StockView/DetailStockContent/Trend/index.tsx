@@ -42,7 +42,8 @@ const Trend: React.FC<PerformanceProps> = ({ secid, zs = 0, name }) => {
           right: 0,
           bottom: 0,
           top: 25,
-          containLabel: true,
+          outerBoundsMode: 'same',
+          outerBoundsContain: 'axisLabel',
         },
         xAxis: {
           type: 'category',

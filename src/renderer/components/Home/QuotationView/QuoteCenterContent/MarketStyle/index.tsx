@@ -30,7 +30,7 @@ const MarketStyle: React.FC<MarketStyleProps> = (props) => {
           trigger: 'axis',
           axisPointer: { type: 'cross' },
         },
-        grid: { top: 32, left: 0, right: 0, bottom: 0, containLabel: true },
+        grid: { top: 32, left: 0, right: 0, bottom: 0, outerBoundsMode: 'same', outerBoundsContain: 'axisLabel' },
         legend: {
           show: false,
         },

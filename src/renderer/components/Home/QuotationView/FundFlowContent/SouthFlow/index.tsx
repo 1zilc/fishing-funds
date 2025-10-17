@@ -48,7 +48,8 @@ const SouthFlow: React.FC<SouthFlowProps> = () => {
           right: 0,
           bottom: 0,
           top: 24,
-          containLabel: true,
+          outerBoundsMode: 'same',
+          outerBoundsContain: 'axisLabel',
         },
         xAxis: {
           type: 'category',

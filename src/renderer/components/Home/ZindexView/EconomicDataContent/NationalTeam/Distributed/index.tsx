@@ -34,7 +34,8 @@ const Distributed: React.FC<DistributedProps> = () => {
           left: 0,
           right: 5,
           bottom: 0,
-          containLabel: true,
+          outerBoundsMode: 'same',
+          outerBoundsContain: 'axisLabel',
         },
         tooltip: {
           trigger: 'item',

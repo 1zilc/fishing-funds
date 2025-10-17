@@ -23,7 +23,8 @@ const Sentiment: React.FC<SentimentProps> = ({ up = 0, down = 0 }) => {
           left: 0,
           right: 5,
           bottom: 0,
-          containLabel: true,
+          outerBoundsMode: 'same',
+          outerBoundsContain: 'axisLabel',
         },
         tooltip: {
           trigger: 'item',

@@ -42,7 +42,8 @@ const PurchasingManagerIndex: React.FC<PurchasingManagerIndexProps> = () => {
             right: 0,
             bottom: 0,
             top: 32,
-            containLabel: true,
+            outerBoundsMode: 'same',
+            outerBoundsContain: 'axisLabel',
           },
           xAxis: {
             type: 'time',

@@ -35,7 +35,8 @@ const SimilarProportion: React.FC<SimilarProportionProps> = ({ rateInSimilarPers
           left: 0,
           right: 5,
           bottom: 0,
-          containLabel: true,
+          outerBoundsMode: 'same',
+          outerBoundsContain: 'axisLabel',
         },
         xAxis: {
           type: 'time',

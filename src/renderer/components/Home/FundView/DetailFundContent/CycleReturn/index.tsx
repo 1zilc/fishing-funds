@@ -72,7 +72,8 @@ const CycleReturn: React.FC<CycleReturnProps> = (props) => {
           right: 10,
           bottom: 0,
           top: 10,
-          containLabel: true,
+          outerBoundsMode: 'same',
+          outerBoundsContain: 'axisLabel',
         },
         series: [
           {
