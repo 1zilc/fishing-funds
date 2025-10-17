@@ -344,7 +344,7 @@ export async function GetGuBaList(code: string, category: '' | '100' | '102' | '
       searchId: '3b5b60e7-a060-4faa-bc24-9ee6fe89d5d5';
     } = eval(script);
 
-    const url = data.result.gubaCodetableWeb[0].url;
+    const url = data.result.gubaCodetableWeb[0].url.replace('http://', 'https://');
     const { body: html } = await request(url, {
       responseType: 'text',
     });
