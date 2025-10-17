@@ -10,7 +10,7 @@ importers:
     dependencies:
       '@ant-design/v5-patch-for-react-19':
         specifier: ^1.0.3
-        version: 1.0.3(antd@5.27.4(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
+        version: 1.0.3(antd@5.27.5(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
       '@json2csv/plainjs':
         specifier: ^7.0.6
         version: 7.0.6
@@ -30,8 +30,8 @@ importers:
         specifier: ^1.3.2
         version: 1.3.2
       menubar:
-        specifier: ^9.5.1
-        version: 9.5.1(electron@38.2.2)
+        specifier: ^9.5.2
+        version: 9.5.2(electron@38.3.0)
       postcss-nesting:
         specifier: ^13.0.2
         version: 13.0.2(postcss@8.5.6)
@@ -40,8 +40,8 @@ importers:
         version: 7.16.0
     devDependencies:
       '@reduxjs/toolkit':
-        specifier: ^2.9.0
-        version: 2.9.0(react-redux@9.2.0(@types/react@19.2.2)(react@19.2.0)(redux@5.0.1))(react@19.2.0)
+        specifier: ^2.9.1
+        version: 2.9.1(react-redux@9.2.0(@types/react@19.2.2)(react@19.2.0)(redux@5.0.1))(react@19.2.0)
       '@types/color':
         specifier: ^4.2.0
         version: 4.2.0
@@ -55,20 +55,20 @@ importers:
         specifier: ^19.2.2
         version: 19.2.2
       '@types/react-dom':
-        specifier: ^19.2.1
-        version: 19.2.1(@types/react@19.2.2)
+        specifier: ^19.2.2
+        version: 19.2.2(@types/react@19.2.2)
       '@vitejs/plugin-react':
         specifier: ^5.0.4
-        version: 5.0.4(vite@7.1.9(@types/node@22.18.7))
+        version: 5.0.4(vite@7.1.10(@types/node@22.18.7))
       '@vitejs/plugin-react-swc':
         specifier: ^4.1.0
-        version: 4.1.0(vite@7.1.9(@types/node@22.18.7))
+        version: 4.1.0(vite@7.1.10(@types/node@22.18.7))
       ahooks:
         specifier: ^3.9.5
         version: 3.9.5(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
       antd:
-        specifier: ^5.27.4
-        version: 5.27.4(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
+        specifier: ^5.27.5
+        version: 5.27.5(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
       babel-plugin-react-compiler:
         specifier: ^1.0.0
         version: 1.0.0
@@ -97,8 +97,8 @@ importers:
         specifier: ^6.0.0
         version: 6.0.0
       electron:
-        specifier: ^38.2.2
-        version: 38.2.2
+        specifier: ^38.3.0
+        version: 38.3.0
       electron-builder:
         specifier: ^26.0.12
         version: 26.0.12(electron-builder-squirrel-windows@26.0.12)
@@ -107,10 +107,10 @@ importers:
         version: 2.0.1
       electron-vite:
         specifier: 4.0.1
-        version: 4.0.1(@swc/core@1.13.5)(vite@7.1.9(@types/node@22.18.7))
+        version: 4.0.1(@swc/core@1.13.5)(vite@7.1.10(@types/node@22.18.7))
       generate-react-cli:
-        specifier: ^9.0.1
-        version: 9.0.1(@types/node@22.18.7)
+        specifier: ^9.1.0
+        version: 9.1.0(@types/node@22.18.7)
       hxc3-indicator-formula:
         specifier: ^1.0.9
         version: 1.0.9
@@ -151,8 +151,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^7.1.9
-        version: 7.1.9(@types/node@22.18.7)
+        specifier: ^7.1.10
+        version: 7.1.10(@types/node@22.18.7)
 
 packages:
 
@@ -943,8 +943,8 @@ packages:
       react: '>=16.9.0'
       react-dom: '>=16.9.0'
 
-  '@reduxjs/toolkit@2.9.0':
-    resolution: {integrity: sha512-fSfQlSRu9Z5yBkvsNhYF2rPS8cGXn/TZVrlwN1948QyZ8xMZ0JvP50S2acZNaf+o63u6aEeMjipFyksjIcWrog==}
+  '@reduxjs/toolkit@2.9.1':
+    resolution: {integrity: sha512-sETJ3qO72y7L7WiR5K54UFLT3jRzAtqeBPVO15xC3bGA6kDqCH8m/v7BKCPH4czydXzz/1lPEGLvew7GjOO3Qw==}
     peerDependencies:
       react: ^16.9.0 || ^17.0.0 || ^18 || ^19
       react-redux: ^7.2.1 || ^8.1.3 || ^9.0.0
@@ -1226,8 +1226,8 @@ packages:
   '@types/plist@3.0.5':
     resolution: {integrity: sha512-E6OCaRmAe4WDmWNsL/9RMqdkkzDCY1etutkflWk4c+AcjDU07Pcz1fQwTX0TQz+Pxqn9i4L1TU3UFpjnrcDgxA==}
 
-  '@types/react-dom@19.2.1':
-    resolution: {integrity: sha512-/EEvYBdT3BflCWvTMO7YkYBHVE9Ci6XdqZciZANQgKpaiDRGOLIlRo91jbTNRQjgPFWVaRxcYc0luVNFitz57A==}
+  '@types/react-dom@19.2.2':
+    resolution: {integrity: sha512-9KQPoO6mZCi7jcIStSnlOWn2nEF3mNmyr3rIAsGnAbQKYbRLyqmeSc39EVgtxXVia+LMT8j3knZLAZAh+xLmrw==}
     peerDependencies:
       '@types/react': ^19.2.0
 
@@ -1342,8 +1342,8 @@ packages:
     resolution: {integrity: sha512-4Dj6M28JB+oAH8kFkTLUo+a2jwOFkuqb3yucU0CANcRRUbxS0cP0nZYCGjcc3BNXwRIsUVmDGgzawme7zvJHvg==}
     engines: {node: '>=12'}
 
-  antd@5.27.4:
-    resolution: {integrity: sha512-rhArohoAUCxhkPjGI/BXthOrrjaElL4Fb7d4vEHnIR3DpxFXfegd4rN21IgGdiF+Iz4EFuUZu8MdS8NuJHLSVQ==}
+  antd@5.27.5:
+    resolution: {integrity: sha512-Ehd9mqtHvJ1clon1yJ/1BTV6eX/3SH2YXZZPTHUk8XdzXFwUioI+Lht47s+MaHIUBY77RnZrmtKwwR+VVu0l7A==}
     peerDependencies:
       react: '>=16.9.0'
       react-dom: '>=16.9.0'
@@ -1914,8 +1914,8 @@ packages:
     resolution: {integrity: sha512-bO3y10YikuUwUuDUQRM4KfwNkKhnpVO7IPdbsrejwN9/AABJzzTQ4GeHwyzNSrVO+tEH3/Np255a3sVZpZDjvg==}
     engines: {node: '>=8.0.0'}
 
-  electron@38.2.2:
-    resolution: {integrity: sha512-OXSaVNXDlonXDjMRsFNQo1j5tzTKwKXh5/m46IjAFccBcZJZMISI+EjSI07oexIuhvKM8AZLuFuihVn4YjWWrA==}
+  electron@38.3.0:
+    resolution: {integrity: sha512-Wij4AzX4SAV0X/ktq+NrWrp5piTCSS8F6YWh1KAcG+QRtNzyns9XLKERP68nFHIwfprhxF2YCN2uj7nx9DaeJw==}
     engines: {node: '>= 12.20.55'}
     hasBin: true
 
@@ -2153,8 +2153,8 @@ packages:
   function-bind@1.1.2:
     resolution: {integrity: sha512-7XHNxH7qX9xG5mIwxkhumTox/MIRNcOgDrxWsMt2pAr23WHp6MrRlN7FBSFpCpr+oVO0F744iUgR82nJMfG2SA==}
 
-  generate-react-cli@9.0.1:
-    resolution: {integrity: sha512-G3ShFJBn+eLBwEY3/8BATBPK4KvvIZ37qhskURBfoPgCTUrFsxDLmWSWIjZCV1PcwpyrDtSTlK0XczduQ1vbhw==}
+  generate-react-cli@9.1.0:
+    resolution: {integrity: sha512-HWFH/FSVDjFOq4+srI6JMX1e7DOJS8k2gg/NLONhsXGYDhbtCLn9EfKWfxDp6fQJpNpo+rLSsX0UhPyTc6zmjQ==}
     engines: {node: '>=10.x', npm: '>= 6.x'}
     hasBin: true
 
@@ -2615,10 +2615,10 @@ packages:
     resolution: {integrity: sha512-/IXtbwEk5HTPyEwyKX6hGkYXxM9nbj64B+ilVJnC/R6B0pH5G4V3b0pVbL7DBj4tkhBAppbQUlf6F6Xl9LHu1g==}
     engines: {node: '>= 0.4'}
 
-  menubar@9.5.1:
-    resolution: {integrity: sha512-swfgKal+DTgJINay36X+LGBSqyFKS4d9FyJ2w0s/4MtO7/UGplEZqluLTnq4xgLNxNjMWhXycOELP+rRYpTagA==}
+  menubar@9.5.2:
+    resolution: {integrity: sha512-yUn4jCMPOiNuqxplEE+SITlTX+Wy92ZNZaG5tsTczEvVT1El8plHR3kinOTfUPwfQcAYcWE0SLiBM41z/hS6pg==}
     peerDependencies:
-      electron: '>=9.0.0 <33.0.0'
+      electron: '>=9.0.0 <35.0.0'
 
   merge2@1.4.1:
     resolution: {integrity: sha512-8q7VEgMJW4J8tcfVPy8g09NcQwZdbwFEqhe/WZkoIzjn/3TGDwtOCYtXGxA3O8tPzpczCCDgv+P2P5y00ZJOOg==}
@@ -3214,8 +3214,8 @@ packages:
       react: '>=16.9.0'
       react-dom: '>=16.9.0'
 
-  rc-table@7.53.1:
-    resolution: {integrity: sha512-firAd7Z+liqIDS5TubJ1qqcoBd6YcANLKWQDZhFf3rfoOTt/UNPj4n3O+2vhl+z4QMqwPEUVAil661WHA8H8Aw==}
+  rc-table@7.54.0:
+    resolution: {integrity: sha512-/wDTkki6wBTjwylwAGjpLKYklKo9YgjZwAU77+7ME5mBoS32Q4nAwoqhA2lSge6fobLW3Tap6uc5xfwaL2p0Sw==}
     engines: {node: '>=8.x'}
     peerDependencies:
       react: '>=16.9.0'
@@ -3831,8 +3831,8 @@ packages:
     resolution: {integrity: sha512-veufcmxri4e3XSrT0xwfUR7kguIkaxBeosDg00yDWhk49wdwkSUrvvsm7nc75e1PUyvIeZj6nS8VQRYz2/S4Xg==}
     engines: {node: '>=0.6.0'}
 
-  vite@7.1.9:
-    resolution: {integrity: sha512-4nVGliEpxmhCL8DslSAUdxlB6+SMrhB0a1v5ijlh1xB1nEPuy1mxaHxysVucLHuWryAxLWg6a5ei+U4TLn/rFg==}
+  vite@7.1.10:
+    resolution: {integrity: sha512-CmuvUBzVJ/e3HGxhg6cYk88NGgTnBoOo7ogtfJJ0fefUWAxN/WDSUa50o+oVBxuIhO8FoEZW0j2eW7sfjs5EtA==}
     engines: {node: ^20.19.0 || >=22.12.0}
     hasBin: true
     peerDependencies:
@@ -4046,9 +4046,9 @@ snapshots:
       resize-observer-polyfill: 1.5.1
       throttle-debounce: 5.0.2
 
-  '@ant-design/v5-patch-for-react-19@1.0.3(antd@5.27.4(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(react-dom@19.2.0(react@19.2.0))(react@19.2.0)':
+  '@ant-design/v5-patch-for-react-19@1.0.3(antd@5.27.5(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(react-dom@19.2.0(react@19.2.0))(react@19.2.0)':
     dependencies:
-      antd: 5.27.4(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
+      antd: 5.27.5(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
       react: 19.2.0
       react-dom: 19.2.0(react@19.2.0)
 
@@ -4899,7 +4899,7 @@ snapshots:
       react: 19.2.0
       react-dom: 19.2.0(react@19.2.0)
 
-  '@reduxjs/toolkit@2.9.0(react-redux@9.2.0(@types/react@19.2.2)(react@19.2.0)(redux@5.0.1))(react@19.2.0)':
+  '@reduxjs/toolkit@2.9.1(react-redux@9.2.0(@types/react@19.2.2)(react@19.2.0)(redux@5.0.1))(react@19.2.0)':
     dependencies:
       '@standard-schema/spec': 1.0.0
       '@standard-schema/utils': 0.3.0
@@ -5121,7 +5121,7 @@ snapshots:
       xmlbuilder: 15.1.1
     optional: true
 
-  '@types/react-dom@19.2.1(@types/react@19.2.2)':
+  '@types/react-dom@19.2.2(@types/react@19.2.2)':
     dependencies:
       '@types/react': 19.2.2
 
@@ -5145,15 +5145,15 @@ snapshots:
       '@types/node': 22.18.7
     optional: true
 
-  '@vitejs/plugin-react-swc@4.1.0(vite@7.1.9(@types/node@22.18.7))':
+  '@vitejs/plugin-react-swc@4.1.0(vite@7.1.10(@types/node@22.18.7))':
     dependencies:
       '@rolldown/pluginutils': 1.0.0-beta.35
       '@swc/core': 1.13.5
-      vite: 7.1.9(@types/node@22.18.7)
+      vite: 7.1.10(@types/node@22.18.7)
     transitivePeerDependencies:
       - '@swc/helpers'
 
-  '@vitejs/plugin-react@5.0.4(vite@7.1.9(@types/node@22.18.7))':
+  '@vitejs/plugin-react@5.0.4(vite@7.1.10(@types/node@22.18.7))':
     dependencies:
       '@babel/core': 7.28.4
       '@babel/plugin-transform-react-jsx-self': 7.27.1(@babel/core@7.28.4)
@@ -5161,7 +5161,7 @@ snapshots:
       '@rolldown/pluginutils': 1.0.0-beta.38
       '@types/babel__core': 7.20.5
       react-refresh: 0.17.0
-      vite: 7.1.9(@types/node@22.18.7)
+      vite: 7.1.10(@types/node@22.18.7)
     transitivePeerDependencies:
       - supports-color
 
@@ -5247,7 +5247,7 @@ snapshots:
 
   ansi-styles@6.2.3: {}
 
-  antd@5.27.4(react-dom@19.2.0(react@19.2.0))(react@19.2.0):
+  antd@5.27.5(react-dom@19.2.0(react@19.2.0))(react@19.2.0):
     dependencies:
       '@ant-design/colors': 7.2.1
       '@ant-design/cssinjs': 1.24.0(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
@@ -5288,7 +5288,7 @@ snapshots:
       rc-slider: 11.1.9(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
       rc-steps: 6.0.1(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
       rc-switch: 4.1.0(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
-      rc-table: 7.53.1(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
+      rc-table: 7.54.0(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
       rc-tabs: 15.7.0(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
       rc-textarea: 1.10.2(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
       rc-tooltip: 6.4.0(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
@@ -5977,7 +5977,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  electron-vite@4.0.1(@swc/core@1.13.5)(vite@7.1.9(@types/node@22.18.7)):
+  electron-vite@4.0.1(@swc/core@1.13.5)(vite@7.1.10(@types/node@22.18.7)):
     dependencies:
       '@babel/core': 7.28.4
       '@babel/plugin-transform-arrow-functions': 7.27.1(@babel/core@7.28.4)
@@ -5985,7 +5985,7 @@ snapshots:
       esbuild: 0.25.10
       magic-string: 0.30.19
       picocolors: 1.1.1
-      vite: 7.1.9(@types/node@22.18.7)
+      vite: 7.1.10(@types/node@22.18.7)
     optionalDependencies:
       '@swc/core': 1.13.5
     transitivePeerDependencies:
@@ -6008,7 +6008,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  electron@38.2.2:
+  electron@38.3.0:
     dependencies:
       '@electron/get': 2.0.3
       '@types/node': 22.18.7
@@ -6274,7 +6274,7 @@ snapshots:
 
   function-bind@1.1.2: {}
 
-  generate-react-cli@9.0.1(@types/node@22.18.7):
+  generate-react-cli@9.1.0(@types/node@22.18.7):
     dependencies:
       chalk: 5.6.2
       commander: 14.0.0
@@ -6795,9 +6795,9 @@ snapshots:
 
   math-intrinsics@1.1.0: {}
 
-  menubar@9.5.1(electron@38.2.2):
+  menubar@9.5.2(electron@38.3.0):
     dependencies:
-      electron: 38.2.2
+      electron: 38.3.0
       electron-positioner: 4.1.0
 
   merge2@1.4.1: {}
@@ -7404,7 +7404,7 @@ snapshots:
       react: 19.2.0
       react-dom: 19.2.0(react@19.2.0)
 
-  rc-table@7.53.1(react-dom@19.2.0(react@19.2.0))(react@19.2.0):
+  rc-table@7.54.0(react-dom@19.2.0(react@19.2.0))(react@19.2.0):
     dependencies:
       '@babel/runtime': 7.28.4
       '@rc-component/context': 1.4.0(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
@@ -8073,7 +8073,7 @@ snapshots:
       extsprintf: 1.4.1
     optional: true
 
-  vite@7.1.9(@types/node@22.18.7):
+  vite@7.1.10(@types/node@22.18.7):
     dependencies:
       esbuild: 0.25.10
       fdir: 6.5.0(picomatch@4.0.3)
