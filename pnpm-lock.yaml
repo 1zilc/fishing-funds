@@ -14,6 +14,9 @@ importers:
       '@json2csv/plainjs':
         specifier: ^7.0.6
         version: 7.0.6
+      '@nivalis/string-similarity':
+        specifier: ^5.0.0
+        version: 5.0.0(typescript@5.9.2)
       electron-log:
         specifier: ^5.4.3
         version: 5.4.3
@@ -862,6 +865,11 @@ packages:
   '@malept/flatpak-bundler@0.4.0':
     resolution: {integrity: sha512-9QOtNffcOF/c1seMCDnjckb3R9WHcG34tky+FHpNKKCW0wc/scYLwMtO+ptyGUfMW0/b/n4qRiALlaFHc9Oj7Q==}
     engines: {node: '>= 10.0.0'}
+
+  '@nivalis/string-similarity@5.0.0':
+    resolution: {integrity: sha512-IgSPo3+5a+FZyNeSeSg6Wnidli9n9rMOFd6EwuiWrLqb4y4h9omQ45aYsBmm38lZAh9bZE40+yiughf+o5CKJg==}
+    peerDependencies:
+      typescript: ^5
 
   '@nodelib/fs.scandir@2.1.5':
     resolution: {integrity: sha512-vq24Bq3ym5HEQm2NKCr3yXDwjc7vTsEThRDnkp2DK9p1uqLR+DHurm/NOTo0KG7HYHU7eppKZj3MyqYuMBf62g==}
@@ -4817,6 +4825,10 @@ snapshots:
       tmp-promise: 3.0.3
     transitivePeerDependencies:
       - supports-color
+
+  '@nivalis/string-similarity@5.0.0(typescript@5.9.2)':
+    dependencies:
+      typescript: 5.9.2
 
   '@nodelib/fs.scandir@2.1.5':
     dependencies:
