@@ -16,7 +16,7 @@ importers:
         version: 7.0.6
       '@nivalis/string-similarity':
         specifier: ^5.0.0
-        version: 5.0.0(typescript@5.9.2)
+        version: 5.0.0(typescript@5.9.3)
       electron-log:
         specifier: ^5.4.3
         version: 5.4.3
@@ -35,6 +35,9 @@ importers:
       menubar:
         specifier: ^9.5.2
         version: 9.5.2(electron@38.3.0)
+      openai:
+        specifier: ^6.5.0
+        version: 6.5.0
       postcss-nesting:
         specifier: ^13.0.2
         version: 13.0.2(postcss@8.5.6)
@@ -2814,12 +2817,12 @@ packages:
     resolution: {integrity: sha512-kbpaSSGJTWdAY5KPVeMOKXSrPtr8C8C7wodJbcsd51jRnmD+GZu8Y0VoU6Dm5Z4vWr0Ig/1NKuWRKf7j5aaYSg==}
     engines: {node: '>=6'}
 
-  openai@5.16.0:
-    resolution: {integrity: sha512-hoEH8ZNvg1HXjU9mp88L/ZH8O082Z8r6FHCXGiWAzVRrEv443aI57qhch4snu07yQydj+AUAWLenAiBXhu89Tw==}
+  openai@6.5.0:
+    resolution: {integrity: sha512-bNqJ15Ijbs41KuJ2iYz/mGAruFHzQQt7zXo4EvjNLoB64aJdgn1jlMeDTsXjEg+idVYafg57QB/5Rd16oqvZ6A==}
     hasBin: true
     peerDependencies:
       ws: ^8.18.0
-      zod: ^3.23.8
+      zod: ^3.25 || ^4.0
     peerDependenciesMeta:
       ws:
         optional: true
@@ -3769,8 +3772,8 @@ packages:
     resolution: {integrity: sha512-t0rzBq87m3fVcduHDUFhKmyyX+9eo6WQjZvf51Ea/M0Q7+T374Jp1aUiyUl0GKxp8M/OETVHSDvmkyPgvX+X2w==}
     engines: {node: '>=10'}
 
-  type-fest@5.0.1:
-    resolution: {integrity: sha512-9MpwAI52m8H6ssA542UxSLnSiSD2dsC3/L85g6hVubLSXd82wdI80eZwTWhdOfN67NlA+D+oipAs1MlcTcu3KA==}
+  type-fest@5.1.0:
+    resolution: {integrity: sha512-wQ531tuWvB6oK+pchHIu5lHe5f5wpSCqB8Kf4dWQRbOYc9HTge7JL0G4Qd44bh6QuJCccIzL3bugb8GI0MwHrg==}
     engines: {node: '>=20'}
 
   typedarray@0.0.6:
@@ -4826,9 +4829,9 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@nivalis/string-similarity@5.0.0(typescript@5.9.2)':
+  '@nivalis/string-similarity@5.0.0(typescript@5.9.3)':
     dependencies:
-      typescript: 5.9.2
+      typescript: 5.9.3
 
   '@nodelib/fs.scandir@2.1.5':
     dependencies:
@@ -5898,7 +5901,7 @@ snapshots:
 
   dot-prop@10.1.0:
     dependencies:
-      type-fest: 5.0.1
+      type-fest: 5.1.0
 
   dotenv-expand@11.0.7:
     dependencies:
@@ -5984,7 +5987,7 @@ snapshots:
   electron-store@11.0.2:
     dependencies:
       conf: 15.0.2
-      type-fest: 5.0.1
+      type-fest: 5.1.0
 
   electron-to-chromium@1.5.227: {}
 
@@ -6979,7 +6982,7 @@ snapshots:
     dependencies:
       mimic-fn: 2.1.0
 
-  openai@5.16.0: {}
+  openai@6.5.0: {}
 
   ora@5.4.1:
     dependencies:
@@ -8029,7 +8032,7 @@ snapshots:
 
   type-fest@0.21.3: {}
 
-  type-fest@5.0.1:
+  type-fest@5.1.0:
     dependencies:
       tagged-tag: 1.0.0
 
