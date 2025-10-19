@@ -235,70 +235,8 @@ export function useRiskNotification() {
   }
 }
 
-export function useClipboardImportFunds() {
-  const dispatch = useAppDispatch();
-  const currentWalletCode = useAppSelector((state) => state.wallet.currentWalletCode);
-  const walletsConfig = useAppSelector((state) => state.wallet.config.walletConfig);
+export function useClipboardCopyFunds() {
   const fundConfig = useAppSelector((state) => state.wallet.fundConfig);
-  const fundApiTypeSetting = useAppSelector((state) => state.setting.systemSetting.fundApiTypeSetting);
-  const loadFunds = useLoadFunds({
-    enableLoading: true,
-    autoFix: true,
-  });
-
-  useIpcRendererListener('clipboard-funds-import', async (e: Electron.IpcRendererEvent, data) => {
-    try {
-      const limit = 99;
-      const text = await clipboard.readText();
-      const json: any[] = JSON.parse(text);
-      if (json.length > limit) {
-        dialog.showMessageBox({
-          type: 'info',
-          title: `超过最大限制`,
-          message: `最大${limit}个`,
-        });
-        return;
-      }
-      const { codeMap: oldCodeMap } = Helpers.Fund.GetFundConfig(currentWalletCode, walletsConfig);
-      const jsonFundConfig = json
-        .map((fund) => ({
-          name: '',
-          cyfe: Number(fund.cyfe) < 0 ? 0 : Number(fund.cyfe) || 0,
-          code: fund.code && String(fund.code),
-          cbj: Utils.NotEmpty(fund.cbj) ? (Number(fund.cbj) < 0 ? undefined : Number(fund.cbj)) : undefined,
-        }))
-        .filter(({ code }) => code);
-      const jsonCodeMap = Utils.GetCodeMap(jsonFundConfig, 'code');
-      // 去重复
-      const fundConfigSet = Object.entries(jsonCodeMap).map(([code, fund]) => fund);
-      const responseFunds = await Helpers.Fund.GetFunds(fundConfigSet, fundApiTypeSetting);
-      const newFundConfig = responseFunds.map((fund) => ({
-        name: fund!.name!,
-        code: fund!.fundcode!,
-        cyfe: jsonCodeMap[fund!.fundcode!].cyfe,
-        cbj: jsonCodeMap[fund!.fundcode!].cbj,
-      }));
-      const newCodeMap = Utils.GetCodeMap(newFundConfig, 'code');
-      const allCodeMap = {
-        ...oldCodeMap,
-        ...newCodeMap,
-      };
-      const allFundConfig = Object.entries(allCodeMap).map(([code, fund]) => fund);
-      await dispatch(setFundConfigAction({ config: allFundConfig, walletCode: currentWalletCode }));
-      dialog.showMessageBox({
-        type: 'info',
-        title: `导入完成`,
-        message: `更新：${newFundConfig.length}个，总共：${json.length}个`,
-      });
-      loadFunds();
-    } catch (error) {
-      dialog.showMessageBox({
-        type: 'info',
-        title: `解析失败`,
-        message: `请检查JSON格式`,
-      });
-    }
-  });
 
   useIpcRendererListener('clipboard-funds-copy', async (e: Electron.IpcRendererEvent, data) => {
     try {
@@ -433,7 +371,7 @@ interface Fund {
     }
   );
 
-  return { aiParseFunds, loading, funds };
+  return { aiParseFunds, loading, funds, setFunds };
 }
 
 export function useBootStrap() {

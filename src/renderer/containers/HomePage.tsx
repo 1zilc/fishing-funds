@@ -4,7 +4,7 @@ import {
   useUpdater,
   useAdjustmentNotification,
   useRiskNotification,
-  useClipboardImportFunds,
+  useClipboardCopyFunds,
   useBootStrap,
   useTrayContent,
   useAllConfigBackup,
@@ -21,7 +21,7 @@ function GlobalTask() {
   useUpdater();
   useAdjustmentNotification();
   useRiskNotification();
-  useClipboardImportFunds();
+  useClipboardCopyFunds();
   useAllConfigBackup();
   useTrayContent();
   useUpdateContextMenuWalletsState();
