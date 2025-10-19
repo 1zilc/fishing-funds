@@ -82,6 +82,11 @@ export const defaultSystemSetting: System.Setting = {
 
   syncConfigSetting: false,
   syncConfigPathSetting: '',
+
+  openaiBaseURLSetting: 'https://api.openai.com/v1/',
+  openaiApiKeySetting: '',
+  openaiBaseModelSetting: 'gpt-4o',
+  openaiImportFundsModelSetting: '',
 };
 
 const initialState: SettingState = {

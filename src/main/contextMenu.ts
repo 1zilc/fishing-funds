@@ -93,6 +93,12 @@ export default class ContextMenuManager {
       { type: 'separator' },
       {
         click: () => {
+          sendMessageToRenderer(this.win, 'ai-funds-import');
+        },
+        label: 'AI录入基金配置',
+      },
+      {
+        click: () => {
           sendMessageToRenderer(this.win, 'clipboard-funds-import');
         },
         label: '录入基金JSON配置',

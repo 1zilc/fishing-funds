@@ -26,6 +26,9 @@
 .text-down {
   color: var(--reduce-color);
 }
+.text-warn {
+  color: var(--warn-color);
+}
 
 .text-none {
   color: var(--reverse-text-color);
