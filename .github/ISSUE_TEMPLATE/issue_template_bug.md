@@ -11,5 +11,6 @@ about: 使用此模版反馈使用中遇见的问题.
 
 ### 详细描述
 
+- [ ] 已完整阅读 https://github.com/1zilc/fishing-funds/blob/main/README.md
 - [ ] 该问题, 已在 https://github.com/1zilc/fishing-funds/issues 中搜索和查找，确保没有重复
 - [ ] 该问题, 打算提供 PR 修复

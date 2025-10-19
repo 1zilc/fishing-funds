@@ -49,7 +49,8 @@ const Trend: React.FC<TrendProps> = () => {
           left: 0,
           right: 0,
           bottom: 0,
-          containLabel: true,
+          outerBoundsMode: 'same',
+          outerBoundsContain: 'axisLabel',
         },
         xAxis: {
           type: 'category',

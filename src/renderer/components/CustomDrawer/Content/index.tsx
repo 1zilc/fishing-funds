@@ -9,6 +9,8 @@ import { useDrawerPopBack } from '@/utils/hooks';
 export interface CustomDrawerContentProps {
   onEnter: () => void;
   onClose: () => void;
+  enterLoading?: boolean;
+  closeLoading?: boolean;
   title: string;
   closeText?: string;
   enterText?: string;
@@ -23,6 +25,8 @@ const CustomDrawerContent: React.FC<PropsWithChildren<CustomDrawerContentProps>>
   enterText,
   children,
   classNames,
+  enterLoading,
+  closeLoading,
 }) => {
   useKeyPress(['Escape'], (e) => {
     switch (e.key) {
@@ -41,11 +45,11 @@ const CustomDrawerContent: React.FC<PropsWithChildren<CustomDrawerContentProps>>
   return (
     <div className={styles.content} ref={drawerContentRef}>
       <div className={styles.header}>
-        <Button type="text" onClick={onClose}>
+        <Button type="text" onClick={onClose} loading={closeLoading}>
           {closeText || '关闭'}
         </Button>
         <h3>{title}</h3>
-        <Button type="primary" onClick={onEnter}>
+        <Button type="primary" onClick={onEnter} loading={enterLoading}>
           {enterText || '确定'}
         </Button>
       </div>

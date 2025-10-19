@@ -30,7 +30,8 @@ const RealTimeTransaction: React.FC<RealTimeTransactionProps> = ({ code = '' }) 
           show: false,
         },
         grid: {
-          containLabel: true,
+          outerBoundsMode: 'same',
+          outerBoundsContain: 'axisLabel',
         },
         tooltip: {
           trigger: 'item',
