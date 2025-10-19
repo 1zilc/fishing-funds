@@ -7,6 +7,7 @@ about: 使用此模版将你的网站加入Fishing Funds关联收录网站中.
 
 ### 收录条件
 
+- [ ] 已完整阅读 https://github.com/1zilc/fishing-funds/blob/main/README.md
 - [ ] 收录页面已添加开源地址 `https://github.com/1zilc/fishing-funds` 并标注 Fishing Funds 为开源免费软件
 - [ ] 收录网站为用户免费提供 Fishing Funds 下载
 
