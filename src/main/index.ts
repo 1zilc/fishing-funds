@@ -11,7 +11,7 @@ import {
   shell,
   BrowserWindow,
 } from 'electron';
-
+import OpenAI from 'openai';
 import windowStateKeeper from 'electron-window-state';
 import { Menubar } from 'menubar';
 import AppUpdater from './autoUpdater';
@@ -41,6 +41,7 @@ let openBackupFilePath = '';
 let ua = '';
 let fakeUA = '';
 let proxyMode = '';
+let openai: OpenAI;
 
 // FIXME: 部分库缺少对ESM的支持
 global.__filename = url.fileURLToPath(import.meta.url);
@@ -287,6 +288,18 @@ function main() {
   ipcMain.handle('clipboard-readText', (event) => clipboard.readText());
   ipcMain.handle('clipboard-writeText', (event, text) => clipboard.writeText(text));
   ipcMain.handle('clipboard-writeImage', (event, dataUrl) => clipboard.writeImage(nativeImage.createFromDataURL(dataUrl)));
+  // openai
+  ipcMain.handle('openai-chat', async (event, params) => {
+    try {
+      const res = await openai?.chat.completions.create(params);
+      return res.choices[0].message.content;
+    } catch (err) {
+      return `Error: ${err}`;
+    }
+  });
+  ipcMain.handle('openai-update-config', (event, { apiKey, baseURL }) => {
+    openai = new OpenAI({ apiKey, baseURL });
+  });
   // menubar 相关监听
   mb.on('before-load', () => {
     // 生成fakeUA

@@ -1,20 +1,10 @@
-import OpenAI from 'openai';
-import { useMemo } from 'react';
-import { useAppSelector } from '@/utils/hooks';
+import type OpenAI from 'openai';
 
+const { ipcRenderer } = window.contextModules.electron;
 export function useOpenAI() {
-  const openaiBaseURLSetting = useAppSelector((state) => state.setting.systemSetting.openaiBaseURLSetting);
-  const openaiApiKeySetting = useAppSelector((state) => state.setting.systemSetting.openaiApiKeySetting);
+  function chat(params: OpenAI.ChatCompletionCreateParams): Promise<string> {
+    return ipcRenderer.invoke('openai-chat', params);
+  }
 
-  const client = useMemo(
-    () =>
-      new OpenAI({
-        baseURL: openaiBaseURLSetting,
-        apiKey: openaiApiKeySetting,
-        dangerouslyAllowBrowser: true,
-      }),
-    [openaiBaseURLSetting, openaiApiKeySetting]
-  );
-
-  return client;
+  return { chat };
 }
