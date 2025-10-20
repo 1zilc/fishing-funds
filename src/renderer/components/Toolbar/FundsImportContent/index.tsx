@@ -141,8 +141,8 @@ const Merge: React.FC<{ data: Partial<FundConfigItem>[] }> = (props) => {
           {localFund && (
             <div className={clsx(styles.infoBar)}>
               <div>{localFund?.code}</div>
-              <div>持有份额: {localFund?.cyfe}</div>
-              <div>成本价: {localFund?.cbj}</div>
+              <div>持有份额: {localFund?.cyfe?.toFixed(2)}</div>
+              <div>成本价: {localFund?.cbj?.toFixed(4)}</div>
             </div>
           )}
           <div className={clsx(styles.arrowBar)}>
@@ -171,8 +171,9 @@ const JsonEditor: React.FC<{
   return (
     <TextArea
       rows={rows}
-      value={json}
+      defaultValue={json}
       onChange={(e) => {
+
         try {
           const value: FundConfigItem[] = JSON.parse(e.target.value);
           // 不能修改code和名字
