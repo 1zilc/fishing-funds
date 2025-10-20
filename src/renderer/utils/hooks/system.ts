@@ -318,7 +318,7 @@ interface Fund {
          * */
         for (const item of json) {
           const localFund = currentWallet.funds.find(
-            (fundConfig) => StringSimilarity.compareTwoStrings(item.name, fundConfig.name!) > 0.5
+            (fundConfig) => StringSimilarity.compareTwoStrings(item.name, fundConfig.name!) > 0.8
           );
           // 如果钱包内包含该基金，则使用当前本地的数据
           if (localFund) {

@@ -4,7 +4,7 @@ import { useAppSelector } from '@/utils/hooks';
 
 export function useOpenAI() {
   const openaiBaseURLSetting = useAppSelector((state) => state.setting.systemSetting.openaiBaseURLSetting);
-  const openaiApiKeySetting = useAppSelector((state) => state.setting.systemSetting.openaiBaseURLSetting);
+  const openaiApiKeySetting = useAppSelector((state) => state.setting.systemSetting.openaiApiKeySetting);
 
   const client = useMemo(
     () =>

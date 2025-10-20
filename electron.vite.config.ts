@@ -52,6 +52,16 @@ export default defineConfig(({ command }) => {
       server: {
         port: 3456,
         strictPort: true,
+        proxy: {
+          // Dev-only proxy to avoid CORS when calling Google Generative Language OpenAI-compatible endpoints
+          // Usage in dev: set baseURL to http://localhost:3456/ai
+          '/ai': {
+            target: 'https://generativelanguage.googleapis.com/',
+            changeOrigin: true,
+            secure: true,
+            rewrite: (p) => p.replace(/^\/ai/, ''),
+          },
+        },
       },
       plugins: [
         prod
