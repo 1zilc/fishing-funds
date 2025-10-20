@@ -2,7 +2,7 @@
   "name": "fishing-funds",
   "productName": "Fishing Funds",
   "description": "基金,大盘,股票,虚拟货币状态栏显示小应用,基于Electron开发,支持 MacOS,Windows,Linux客户端,数据源来自天天基金,蚂蚁基金,爱基金,腾讯证券,新浪基金等",
-  "version": "8.7.0",
+  "version": "8.7.1",
   "main": "./dist/main/index.mjs",
   "dependencies": {}
 }

@@ -266,7 +266,7 @@ export function useAIImportFunds() {
   const { runAsync: aiParseFunds, loading } = useRequest(
     async (img: string) => {
       const fundConfigs: FundConfigItem[] = [];
-      const response = await openai.chat.completions.create({
+      const response = await openai.chat({
         model: openaiImportFundsModelSetting || openaiBaseModelSetting,
         temperature: 0.1,
         messages: [
@@ -299,7 +299,7 @@ interface Fund {
       });
 
       try {
-        const jsonString = response.choices[0]?.message.content?.match(/\[.*\]/gs)?.[0];
+        const jsonString = response.match(/\[.*\]/gs)?.[0];
         const json = JSON.parse(jsonString!.replace(/(?<=\d),(?=\d)/g, '')) as unknown as {
           name: string; // 名称
           zje: number; // 总金额
@@ -452,6 +452,8 @@ export function useMappingLocalToSystemSetting() {
     proxyHostSetting,
     proxyPortSetting,
     hotkeySetting: visibleHotkey,
+    openaiBaseURLSetting,
+    openaiApiKeySetting,
   } = useAppSelector((state) => state.setting.systemSetting);
   const { hotkeySetting: translateHotkey } = useAppSelector((state) => state.translate.translateSetting);
 
@@ -514,6 +516,13 @@ export function useMappingLocalToSystemSetting() {
   useEffect(() => {
     ipcRenderer.invoke('set-alwaysOnTop', alwaysOnTopSetting);
   }, [alwaysOnTopSetting]);
+
+  useEffect(() => {
+    ipcRenderer.invoke('openai-update-config', {
+      baseURL: openaiBaseURLSetting,
+      apiKey: openaiApiKeySetting,
+    });
+  }, [openaiBaseURLSetting, openaiApiKeySetting]);
 }
 
 export function useTrayContent() {
