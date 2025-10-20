@@ -83,7 +83,7 @@ const ToolBar: React.FC<ToolBarProps> = () => {
       dialog.showMessageBox({
         type: 'info',
         title: `导入失败`,
-        message: `导入基金失败`,
+        message: `导入基金失败:${e}`,
       });
     }
   });
@@ -102,7 +102,7 @@ const ToolBar: React.FC<ToolBarProps> = () => {
       dialog.showMessageBox({
         type: 'info',
         title: `解析失败`,
-        message: `请检查JSON格式`,
+        message: `请检查JSON格式:${e}`,
       });
     }
   });
