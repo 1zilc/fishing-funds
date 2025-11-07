@@ -41,15 +41,15 @@ export default class HttpClient {
         method: config?.method,
         query: config?.searchParams,
         dispatcher: dispatcher.compose(
-          // interceptors.cache({
-          //   store: new cacheStores.MemoryCacheStore({
-          //     maxSize: 50 * 1024 * 1024,
-          //     maxCount: 1000,
-          //     maxEntrySize: 2 * 1024 * 1024,
-          //   }),
-          //   methods: ['GET'],
-          // }),
-          enhInterceptors
+          interceptors.cache({
+            store: new cacheStores.MemoryCacheStore({
+              maxSize: 50 * 1024 * 1024,
+              maxCount: 1000,
+              maxEntrySize: 2 * 1024 * 1024,
+            }),
+            methods: ['GET'],
+          }),
+          ...enhInterceptors
         ),
       });
       if (config?.responseType === 'json') {
