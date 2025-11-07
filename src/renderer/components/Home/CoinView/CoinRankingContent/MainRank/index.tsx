@@ -7,7 +7,7 @@ import ChartCard from '@/components/Card/ChartCard';
 import CustomDrawer from '@/components/CustomDrawer';
 import { useDrawer, useAppSelector } from '@/utils/hooks';
 
-import * as Services from '@lib/services';
+import * as Services from '@lib/enh/services';
 import * as Utils from '@/utils';
 import styles from './index.module.css';
 
