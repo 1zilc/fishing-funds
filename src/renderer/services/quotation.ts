@@ -48,6 +48,9 @@ export async function GetQuotationsFromEastmoney(type = 't:2', pn = 1, pz = 100)
         fields: 'f12,f13,f14,f1,f2,f4,f3,f152,f20,f8,f104,f105,f128,f140,f141,f207,f208,f209,f136,f222,f19',
         _: Date.now(),
       },
+      headers: {
+        Referer: 'https://quote.eastmoney.com/center/gridlist.html',
+      },
       responseType: 'json',
     });
 
