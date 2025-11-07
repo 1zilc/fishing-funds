@@ -1,5 +1,5 @@
 import * as Adapter from '@/utils/adpters';
-import * as Services from '@/services';
+import * as Services from '@lib/enh/services';
 import * as Utils from '@/utils';
 import * as Enums from '@/utils/enums';
 

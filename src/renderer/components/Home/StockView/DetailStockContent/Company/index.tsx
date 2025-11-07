@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import ChartCard from '@/components/Card/ChartCard';
 import { useAppSelector } from '@/utils/hooks';
 
-import * as Services from '@/services';
+import * as Services from '@lib/enh/services';
 import * as Enums from '@/utils/enums';
 import styles from './index.module.css';
 

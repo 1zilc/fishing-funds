@@ -20,7 +20,7 @@ import { RedirectSearchParams } from '@/containers/InitPage';
 import { DetailStockPageParams } from '@/components/Home/StockView/DetailStockPage';
 import { addStockAction } from '@/store/features/stock';
 import { useAppDispatch, useAppSelector } from '@/utils/hooks';
-import * as Services from '@/services';
+import * as Services from '@lib/enh/services';
 import * as Utils from '@/utils';
 import * as CONST from '@/constants';
 

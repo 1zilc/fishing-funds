@@ -44,7 +44,7 @@ import * as Adapters from '@/utils/adpters';
 import * as Helpers from '@/helpers';
 import * as Enums from '@/utils/enums';
 import * as Enhancement from '@/utils/enhancement';
-import * as Services from '@/services';
+import * as Services from '@lib/enh/services';
 import { FundConfigItem } from '@/components/Toolbar/FundsImportContent';
 
 const { dialog, ipcRenderer, clipboard, app } = window.contextModules.electron;

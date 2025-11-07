@@ -12,7 +12,7 @@ import Sentiment from '@/components/Home/CoinView/DetailCoinContent/Sentiment';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
 import { RedirectSearchParams } from '@/containers/InitPage';
 import { DetailCoinPageParams } from '@/components/Home/CoinView/DetailCoinPage';
-import * as Services from '@/services';
+import * as Services from '@lib/enh/services';
 import * as Utils from '@/utils';
 import * as CONST from '@/constants';
 

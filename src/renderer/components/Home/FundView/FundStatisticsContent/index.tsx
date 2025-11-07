@@ -16,7 +16,7 @@ import AssetsConfig from '@/components/Home/FundView/FundStatisticsContent/Asset
 import FundWarehouse from '@/components/Home/FundView/FundStatisticsContent/FundWarehouse';
 import FundOverview from '@/components/Home/FundView/FundStatisticsContent/FundOverview';
 import { walletIcons } from '@/helpers/wallet';
-import * as Services from '@/services';
+import * as Services from '@lib/enh/services';
 import * as Utils from '@/utils';
 import * as Adpters from '@/utils/adpters';
 import * as CONST from '@/constants';

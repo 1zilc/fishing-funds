@@ -6,7 +6,7 @@ import CustomDrawerContent from '@/components/CustomDrawer/Content';
 import Empty from '@/components/Empty';
 import StockSearch, { stockTypesConfig } from '@/components/Toolbar/AppCenterContent/StockSearch';
 import SearchHistory, { type SearchHistoryRef } from '@/components/SearchHistory';
-import * as Services from '@/services';
+import * as Services from '@lib/enh/services';
 
 import styles from './index.module.css';
 

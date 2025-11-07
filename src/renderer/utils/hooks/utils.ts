@@ -32,7 +32,7 @@ import * as Utils from '@/utils';
 import * as Enums from '@/utils/enums';
 import * as CONST from '@/constants';
 import * as Adapters from '@/utils/adpters';
-import * as Services from '@/services';
+import * as Services from '@lib/enh/services';
 import * as Helpers from '@/helpers';
 
 const { ipcRenderer } = window.contextModules.electron;

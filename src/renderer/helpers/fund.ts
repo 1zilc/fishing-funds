@@ -1,6 +1,6 @@
 import NP from 'number-precision';
 import { defaultWallet } from '@/store/features/wallet';
-import * as Services from '@/services';
+import * as Services from '@lib/enh/services';
 import * as Enums from '@/utils/enums';
 import * as Utils from '@/utils';
 import * as Adapter from '@/utils/adpters';
