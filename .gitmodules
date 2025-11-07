@@ -1,0 +1,3 @@
+[submodule "src/lib/enh"]
+	path = src/lib/enh
+	url = git@github.com:1zilc/fishing-funds-enh.git
