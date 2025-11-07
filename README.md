@@ -18,24 +18,18 @@
 ![MacOS](https://img.shields.io/badge/-macOS-black?&logo=apple&logoColor=white)
 ![Linux](https://img.shields.io/badge/-Linux-yellow?logo=linux&logoColor=white)
 
-> 基金,大盘,股票,虚拟货币状态栏显示小应用,基于 Electron 开发,支持 MacOS,Windows,Linux 客户端,数据源来自天天基金,蚂蚁基金,同花顺-爱基金,腾讯证券等
+> 基金,大盘,股票,虚拟货币状态栏显示小应用,基于 Electron 开发,支持 MacOS,Windows,Linux 客户端
 
 ## 项目介绍
 
-- 采用天天基金等数据源接口，实时显示当前基金涨跌情况，计算显示收益，大盘实时数据，板块行情，股票走势，加密虚拟货币等
+- 实时显示当前基金涨跌情况，计算显示收益，大盘实时数据，板块行情，股票走势，加密虚拟货币等
 - 软件中所有的数据仅供参考，一切收益或是亏损按当天实际为准，任何走势，排行数据均来自于第三方网站不代表作者观点
 - 软件不收集上传 ai 相关功能的用户 apikey，如有疑问请忽略 ai 功能
 - 本项目是个人自用状态栏小插件，完全开源免费，仅供学习交流
 
 ## 数据源
 
-> 注意 ⚠️：不同的数据源可能会有反爬机制，刷新时的请求速度会有所差异
-> 强烈建议使用天天基金的数据源，最快同时估值也最准确
-
-- [东方财富-天天基金](https://fund.eastmoney.com/) ★★★★★ (推荐)
-- [支付宝-蚂蚁基金](https://www.fund123.cn/) ★★★☆☆
-- [同花顺-爱基金](http://fund.10jqka.com.cn/) ★★★☆☆
-- [腾讯证券](https://stockapp.finance.qq.com/mstats/) ★★★☆☆
+> 注意 ⚠️：为了项目的长期可用性，请求以及部分绕过机制暂时闭源
 
 ## 下载使用
 
