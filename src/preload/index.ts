@@ -21,31 +21,7 @@ contextBridge.exposeInMainWorld('contextModules', {
       invoke: ipcRenderer.invoke,
       removeAllListeners: ipcRenderer.removeAllListeners,
       removeListener: ipcRenderer.removeListener,
-      on(channel: string, func: any) {
-        const validChannels = [
-          'nativeTheme-updated',
-          'clipboard-funds-copy',
-          'clipboard-funds-import',
-          'ai-funds-import',
-          'backup-all-config-export',
-          'backup-all-config-import',
-          'update-available',
-          'open-backup-file',
-          'change-current-wallet-code',
-          'webview-new-window',
-          'change-tab-active-key',
-          'change-eye-status',
-          'sync-store-data',
-          'trigger-translate',
-          'support-author',
-          'force-reload-app',
-        ];
-        if (validChannels.includes(channel)) {
-          return ipcRenderer.on(channel, func);
-        } else {
-          return null;
-        }
-      },
+      on: ipcRenderer.on,
     },
     dialog: {
       showMessageBox: ipcRenderer.invoke.bind(null, 'show-message-box'),
