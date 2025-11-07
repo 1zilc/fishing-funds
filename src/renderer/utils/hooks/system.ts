@@ -411,7 +411,7 @@ export function useBootStrap() {
         () => Adapters.ChokeAllAdapter([runLoadZindexs, runLoadQuotations]),
       ]);
     }
-  }, freshDelaySetting * 1000 * 60);
+  }, Math.max(freshDelaySetting, 5) * 1000 * 60);
 
   // 间隔时间检查最新净值
   useFixTimeToDo(() => {

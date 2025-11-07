@@ -619,7 +619,7 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
                           onChange={(v) => setFreshDelay(v as number)}
                           placeholder="1~60分钟"
                           precision={0}
-                          min={1}
+                          min={5}
                           max={60}
                           size="small"
                         />
@@ -703,10 +703,7 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
                           list={[
                             {
                               name: 'BaseURL',
-                              text: `openai api 地址 如
-                              https://api.openai.com/v1/、
-                              https://generativelanguage.googleapis.com/v1beta/openai/、
-                              http://127.0.0.1:11434/v1/ 等`,
+                              text: `openai api 地址`,
                             },
                             {
                               name: 'ApiKey',
