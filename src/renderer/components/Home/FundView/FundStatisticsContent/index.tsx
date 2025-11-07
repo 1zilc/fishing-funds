@@ -51,7 +51,7 @@ const FundStatisticsContent: React.FC<FundStatisticsContentProps> = (props) => {
     };
   });
 
-  const { data: sankeyResult = [] } = useRequest(() => Adpters.ChokeGroupAdapter(collectors, 5, 500), {
+  const { data: sankeyResult = [] } = useRequest(() => Adpters.ChokeGroupAdapter(collectors, 3, 800), {
     refreshDeps: [allCyFunds],
     cacheKey: Utils.GenerateRequestKey(
       'Fund.GetIndustryRateFromEaseMoney',

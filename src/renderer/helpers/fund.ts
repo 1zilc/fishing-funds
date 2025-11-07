@@ -24,7 +24,7 @@ export async function GetFixFunds(funds: (Fund.ResponseItem & Fund.FixData)[]) {
         () =>
           Services.Fund.GetFixFromEastMoney(fundcode!)
     );
-  const list = await Adapter.ChokeGroupAdapter(collectors, 3, 500);
+  const list = await Adapter.ChokeGroupAdapter(collectors, 3, 800);
   return list.filter(Utils.NotEmpty);
 }
 
@@ -37,14 +37,14 @@ export async function GetFunds(config: Fund.SettingItem[], fundApiTypeSetting: E
   const load = () => {
     switch (fundApiTypeSetting) {
       case Enums.FundApiType.Tencent:
-        return Adapter.ChokeGroupAdapter(collectors, 3, 300);
+        return Adapter.ChokeGroupAdapter(collectors, 3, 500);
       case Enums.FundApiType.Ant:
-        return Adapter.ChokeGroupAdapter(collectors, 4, 400);
+        return Adapter.ChokeGroupAdapter(collectors, 3, 800);
       case Enums.FundApiType.Fund10jqka:
-        return Adapter.ChokeGroupAdapter(collectors, 5, 500);
+        return Adapter.ChokeGroupAdapter(collectors, 3, 800);
       case Enums.FundApiType.Eastmoney:
       default:
-        return Adapter.ChokeGroupAdapter(collectors, 5, 500);
+        return Adapter.ChokeGroupAdapter(collectors, 3, 800);
     }
   };
   const list = await load();
