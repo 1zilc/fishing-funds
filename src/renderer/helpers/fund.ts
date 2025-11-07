@@ -3,7 +3,7 @@ import { defaultWallet } from '@/store/features/wallet';
 import * as Services from '@lib/enh/services';
 import * as Enums from '@/utils/enums';
 import * as Utils from '@/utils';
-import * as Adapter from '@/utils/adpters';
+import * as Adapters from '@/utils/adpters';
 
 export function GetFundConfig(walletCode: string, walletsConfig: Wallet.SettingItem[]) {
   const walletConfig = walletsConfig.find(({ code }) => code === walletCode) || defaultWallet;
@@ -24,7 +24,7 @@ export async function GetFixFunds(funds: (Fund.ResponseItem & Fund.FixData)[]) {
         () =>
           Services.Fund.GetFixFromEastMoney(fundcode!)
     );
-  const list = await Adapter.ChokeGroupAdapter(collectors, 3, 800);
+  const list = await Adapters.ChokeGroupAdapter(collectors, 3, 800);
   return list.filter(Utils.NotEmpty);
 }
 
@@ -37,14 +37,14 @@ export async function GetFunds(config: Fund.SettingItem[], fundApiTypeSetting: E
   const load = () => {
     switch (fundApiTypeSetting) {
       case Enums.FundApiType.Tencent:
-        return Adapter.ChokeGroupAdapter(collectors, 3, 500);
+        return Adapters.ChokeGroupAdapter(collectors, 3, 500);
       case Enums.FundApiType.Ant:
-        return Adapter.ChokeGroupAdapter(collectors, 3, 800);
+        return Adapters.ChokeGroupAdapter(collectors, 3, 800);
       case Enums.FundApiType.Fund10jqka:
-        return Adapter.ChokeGroupAdapter(collectors, 3, 800);
+        return Adapters.ChokeGroupAdapter(collectors, 3, 800);
       case Enums.FundApiType.Eastmoney:
       default:
-        return Adapter.ChokeGroupAdapter(collectors, 3, 800);
+        return Adapters.ChokeGroupAdapter(collectors, 3, 800);
     }
   };
   const list = await load();
