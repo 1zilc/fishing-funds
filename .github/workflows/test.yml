@@ -66,4 +66,6 @@ jobs:
         with:
           name: electron-build-${{ runner.os }}
           path: |
-            release/build/**
+            release/build/*.dmg
+            release/build/*.exe
+            release/build/*.AppImage
