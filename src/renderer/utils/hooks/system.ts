@@ -405,7 +405,7 @@ export function useBootStrap() {
   // 间隔时间刷新基金,指数，板块，钱包
   useWorkDayTimeToDo(() => {
     if (autoFreshSetting) {
-      Adapters.ConCurrencyAllAdapter([
+      Adapters.ChokeAllAdapter([
         () => Adapters.ChokeAllAdapter([runLoadWalletsFunds]),
         () => Adapters.ChokeAllAdapter([runLoadWalletsStocks]),
         () => Adapters.ChokeAllAdapter([runLoadZindexs, runLoadQuotations]),
@@ -429,7 +429,7 @@ export function useBootStrap() {
 
   // 第一次刷新所有数据
   useEffect(() => {
-    Adapters.ConCurrencyAllAdapter([
+    Adapters.ChokeAllAdapter([
       () => Adapters.ChokeAllAdapter([runLoadRemoteFunds, runLoadRemoteCoins, runLoadFundRatingMap]),
       () => Adapters.ChokeAllAdapter([runLoadWalletsFunds, runLoadFixWalletsFunds]),
       () => Adapters.ChokeAllAdapter([runLoadWalletsStocks]),
