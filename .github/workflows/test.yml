@@ -61,10 +61,17 @@ jobs:
           USE_HARD_LINKS: false
           # DEBUG: electron-builder
 
+      - name: Gen version
+        run: |
+          VERSION=$(node -p "require('./release/app/package.json').version")
+          SHORT_HASH=$(git rev-parse --short HEAD)
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+          echo "HASH=$SHORT_HASH" >> $GITHUB_ENV
+
       - name: Upload build artifact
         uses: actions/upload-artifact@v4
         with:
-          name: electron-build-${{ runner.os }}
+          name: Fishing-Funds-${{ env.VERSION }}-${{ runner.os }}-${{ env.HASH }}
           path: |
             release/build/*.dmg
             release/build/*.exe
