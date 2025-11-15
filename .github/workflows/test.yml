@@ -60,3 +60,10 @@ jobs:
         env:
           USE_HARD_LINKS: false
           # DEBUG: electron-builder
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: electron-build-${{ runner.os }}
+          path: |
+            release/build/**
