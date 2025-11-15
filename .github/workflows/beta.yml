@@ -22,8 +22,16 @@ jobs:
         with:
           ssh-key: ${{ secrets.SSH_KEY }}
           submodules: recursive
-
       - run: git push --delete origin beta
+
+      - name: Cache electron-builder
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/Library/Caches/electron
+          key: ${{ runner.os }}-electron-${{ hashFiles('package.json') }}
+          restore-keys: |
+            ${{ runner.os }}-electron-
 
       - name: Install pnpm
         uses: pnpm/action-setup@v4
