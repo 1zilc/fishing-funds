@@ -76,3 +76,4 @@ jobs:
             release/build/*.dmg
             release/build/*.exe
             release/build/*.AppImage
+          retention-days: 3
