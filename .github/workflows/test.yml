@@ -65,6 +65,7 @@ jobs:
         run: |
           SHORT_HASH=$(git rev-parse --short HEAD)
           echo "HASH=$SHORT_HASH" >> $GITHUB_ENV
+        shell: bash
 
       - name: Upload build artifact
         uses: actions/upload-artifact@v4
