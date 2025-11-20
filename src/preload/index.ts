@@ -21,7 +21,7 @@ contextBridge.exposeInMainWorld('contextModules', {
       invoke: ipcRenderer.invoke,
       removeAllListeners: ipcRenderer.removeAllListeners,
       removeListener: ipcRenderer.removeListener,
-      on: ipcRenderer.on,
+      on: (channel: string, func: any) => ipcRenderer.on(channel, func),
     },
     dialog: {
       showMessageBox: ipcRenderer.invoke.bind(null, 'show-message-box'),
