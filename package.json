@@ -149,7 +149,7 @@
     "compare-versions": "^6.1.1",
     "dayjs": "^1.11.19",
     "echarts": "^6.0.0",
-    "electron": "^39.2.0",
+    "electron": "^39.2.3",
     "electron-builder": "^26.0.12",
     "electron-icon-builder": "^2.0.1",
     "electron-vite": "4.0.1",
