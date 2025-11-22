@@ -5,6 +5,7 @@ import { syncTabsActiveKeyAction } from '@/store/features/tabs';
 import { useAppDispatch, useAppSelector } from '@/utils/hooks';
 import * as Enums from '@/utils/enums';
 import styles from './index.module.css';
+import { Segmented } from 'antd';
 
 export interface TabsBarProps {}
 export interface Tab {
@@ -27,22 +28,15 @@ const TabsBar: React.FC<TabsBarProps> = () => {
 
   return (
     <div className={styles.layout}>
-      <div className={clsx(styles.content, 'max-content')}>
-        {bottomTabsSetting
-          .filter(({ show }) => show)
-          .map((tab) => (
-            <React.Fragment key={tab.key}>
-              <div
-                className={clsx(styles.tab, {
-                  [styles.active]: tabsActiveKey === tab.key,
-                })}
-                onClick={() => dispatch(syncTabsActiveKeyAction(tab.key))}
-              >
-                {tab.name}
-              </div>
-            </React.Fragment>
-          ))}
-      </div>
+      <Segmented
+        block
+        size="large"
+        style={{ background: 'none' }}
+        styles={{ label: { fontSize: 'var(--base-font-size)' } }}
+        defaultValue={tabsActiveKey}
+        options={bottomTabsSetting.filter(({ show }) => show).map((item) => ({ label: item.name, value: item.key }))}
+        onChange={(value) => dispatch(syncTabsActiveKeyAction(value))}
+      />
     </div>
   );
 };

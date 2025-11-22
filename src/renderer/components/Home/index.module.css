@@ -3,4 +3,10 @@
   min-height: 100vh;
   box-sizing: border-box;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+.body {
+  flex: 1;
+  background-color: var(--inner-color);
 }
