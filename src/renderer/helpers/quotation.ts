@@ -15,7 +15,7 @@ export async function GetQuotations() {
       () => Services.Quotation.GetQuotationsFromEastmoney('t:3', 2),
       () => Services.Quotation.GetQuotationsFromEastmoney('t:3', 3),
     ],
-    800
+    1000
   );
   return result.flat();
 }

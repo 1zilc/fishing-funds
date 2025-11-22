@@ -72,13 +72,15 @@ export const sortQuotationsCachedAction = createAsyncThunk<void, Quotation.Respo
         quotation: { quotations },
       } = getState();
 
-      const quotationsCodeToMap = Utils.GetCodeMap(quotations, 'name');
-      const quotationsWithCollapseChached = responseQuotations.filter(Boolean).map((_) => ({
-        ...(quotationsCodeToMap[_.name] || {}),
-        ..._,
-      }));
+      const quotationsWithChached = Utils.MergeStateWithResponse({
+        config: quotations,
+        configKey: 'name',
+        stateKey: 'name',
+        state: quotations,
+        response: responseQuotations,
+      });
 
-      dispatch(sortQuotationsAction(quotationsWithCollapseChached));
+      dispatch(sortQuotationsAction(quotationsWithChached));
     } catch (error) {}
   }
 );
