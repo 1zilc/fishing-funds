@@ -72,13 +72,12 @@ export const sortQuotationsCachedAction = createAsyncThunk<void, Quotation.Respo
         quotation: { quotations },
       } = getState();
 
-      const quotationsWithChached = Utils.MergeStateWithResponse({
-        config: quotations,
-        configKey: 'name',
-        stateKey: 'name',
-        state: quotations,
-        response: responseQuotations,
-      });
+      const quotationsWithChached = Object.values(
+        [...quotations, ...responseQuotations].filter(Boolean).reduce((map, item) => {
+          map[item.name] = item;
+          return map;
+        }, {} as Record<string, (typeof quotations)[number]>)
+      );
 
       dispatch(sortQuotationsAction(quotationsWithChached));
     } catch (error) {}
