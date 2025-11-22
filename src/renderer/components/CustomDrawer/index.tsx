@@ -27,11 +27,9 @@ const CustomDrawer: React.FC<PropsWithChildren<CustomDrawerProps>> = ({
       open={show}
       closable={false}
       placement="bottom"
-      height="100%"
-      width="100%"
       keyboard={false}
       afterOpenChange={setDrawerOpened}
-      styles={{ body: { padding: 0 } }}
+      styles={{ body: { padding: 0 }, wrapper: { height: '100%', width: '100%' } }}
       push={false}
       zIndex={CONST.DEFAULT.DRAWER_ZINDEX_DEFAULT}
       {...config}

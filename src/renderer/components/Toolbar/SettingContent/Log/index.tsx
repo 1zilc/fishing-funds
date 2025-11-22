@@ -52,7 +52,7 @@ const Log: React.FC<LogProps> = () => {
                   const compare = compareVersions(log.version.slice(1), currentVersion);
                   return {
                     color: compare === 0 ? 'blue' : compare > 1 ? 'green' : 'gray',
-                    children: (
+                    content: (
                       <>
                         <div className={clsx(styles.item, styles.title)}>
                           <div>{log.version}</div>

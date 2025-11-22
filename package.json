@@ -139,7 +139,7 @@
     "@vitejs/plugin-react": "^5.1.1",
     "@vitejs/plugin-react-swc": "^4.2.2",
     "ahooks": "^3.9.6",
-    "antd": "^5.28.1",
+    "antd": "^6.0.0",
     "babel-plugin-react-compiler": "^1.0.0",
     "cheerio": "^1.1.2",
     "clsx": "^2.1.1",
@@ -170,7 +170,6 @@
     "vite": "^7.2.2"
   },
   "dependencies": {
-    "@ant-design/v5-patch-for-react-19": "^1.0.3",
     "@json2csv/plainjs": "^7.0.6",
     "@nivalis/string-similarity": "^5.0.0",
     "electron-log": "^5.4.3",
