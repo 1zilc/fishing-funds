@@ -93,7 +93,7 @@ const MainRank: React.FC<PropsWithChildren<MainRankProps>> = () => {
         pagination={{
           defaultPageSize: 20,
           hideOnSinglePage: true,
-          position: ['bottomCenter'],
+          placement: ['bottomCenter'],
         }}
         onRow={(record) => ({
           onClick: () => setDetailDrawer(record.secid),

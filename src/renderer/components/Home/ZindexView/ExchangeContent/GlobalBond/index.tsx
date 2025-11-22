@@ -46,7 +46,7 @@ const GlobalBond: React.FC<PropsWithChildren<GlobalBondProps>> = () => {
           pagination={{
             defaultPageSize: 20,
             hideOnSinglePage: true,
-            position: ['bottomCenter'],
+            placement: ['bottomCenter'],
           }}
         />
       </div>

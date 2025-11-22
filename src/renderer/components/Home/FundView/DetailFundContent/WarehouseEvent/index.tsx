@@ -53,7 +53,7 @@ const WarehouseEvent: React.FC<PropsWithChildren<WarehouseEventProps>> = ({ stoc
         pagination={{
           defaultPageSize: 20,
           hideOnSinglePage: true,
-          position: ['bottomCenter'],
+          placement: ['bottomCenter'],
         }}
         onRow={(record) => ({
           onClick: () => setDetailDrawer(`${record.NEWTEXCH}.${record.GPDM}`),

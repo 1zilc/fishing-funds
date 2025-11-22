@@ -90,7 +90,7 @@ const Ranting: React.FC<PropsWithChildren<RantingProps>> = () => {
           pagination={{
             defaultPageSize: 20,
             hideOnSinglePage: true,
-            position: ['bottomCenter'],
+            placement: ['bottomCenter'],
           }}
           onRow={(record) => ({
             onClick: () => setDetailDrawer(record.code),

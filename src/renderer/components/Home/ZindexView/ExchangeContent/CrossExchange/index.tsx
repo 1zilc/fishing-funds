@@ -54,7 +54,7 @@ const CrossExchange: React.FC<PropsWithChildren<CrossExchangeProps>> = () => {
           pagination={{
             defaultPageSize: 20,
             hideOnSinglePage: true,
-            position: ['bottomCenter'],
+            placement: ['bottomCenter'],
           }}
         />
       </div>

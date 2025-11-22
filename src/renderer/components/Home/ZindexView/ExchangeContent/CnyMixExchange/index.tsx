@@ -54,7 +54,7 @@ const CnyMixExchange: React.FC<PropsWithChildren<CnyMixExchangeProps>> = () => {
           pagination={{
             defaultPageSize: 20,
             hideOnSinglePage: true,
-            position: ['bottomCenter'],
+            placement: ['bottomCenter'],
           }}
         />
       </div>

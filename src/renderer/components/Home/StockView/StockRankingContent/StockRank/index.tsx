@@ -69,7 +69,7 @@ const StockRank: React.FC<PropsWithChildren<StockRankProps>> = (props) => {
         pagination={{
           defaultPageSize: 20,
           hideOnSinglePage: true,
-          position: ['bottomCenter'],
+          placement: ['bottomCenter'],
         }}
         onRow={(record) => ({
           onClick: () => setDetailDrawer(record.secid),

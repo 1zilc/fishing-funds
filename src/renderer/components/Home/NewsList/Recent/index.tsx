@@ -56,7 +56,7 @@ const Recent: React.FC<RecentProps> = (props) => {
           pagination={{
             defaultPageSize: 10,
             hideOnSinglePage: true,
-            position: ['bottomCenter'],
+            placement: ['bottomCenter'],
             total: data.total,
             onChange(page) {
               setPageIndex(page);

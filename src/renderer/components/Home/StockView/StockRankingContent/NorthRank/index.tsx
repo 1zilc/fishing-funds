@@ -81,7 +81,7 @@ const NorthRank: React.FC<PropsWithChildren<NorthRankProps>> = () => {
         pagination={{
           defaultPageSize: 20,
           hideOnSinglePage: true,
-          position: ['bottomCenter'],
+          placement: ['bottomCenter'],
         }}
         onRow={(record) => ({
           onClick: () => setAddDrawer(record.SECURITY_NAME),

@@ -57,7 +57,7 @@ const InternationalMetalFutures: React.FC<PropsWithChildren<InternationalMetalFu
           pagination={{
             defaultPageSize: 20,
             hideOnSinglePage: true,
-            position: ['bottomCenter'],
+            placement: ['bottomCenter'],
           }}
           // onRow={(record) => ({
           //   onClick: () => setDetailDrawer(record.bzdm),

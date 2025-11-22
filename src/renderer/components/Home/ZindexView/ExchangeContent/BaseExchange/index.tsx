@@ -54,7 +54,7 @@ const BaseExchange: React.FC<PropsWithChildren<BaseExchangeProps>> = () => {
           pagination={{
             defaultPageSize: 20,
             hideOnSinglePage: true,
-            position: ['bottomCenter'],
+            placement: ['bottomCenter'],
           }}
         />
       </div>

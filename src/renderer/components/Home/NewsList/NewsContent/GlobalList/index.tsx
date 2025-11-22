@@ -47,7 +47,7 @@ const GlobalList: React.FC<PropsWithChildren<GlobalListProps>> = (props) => {
           pagination={{
             defaultPageSize: 10,
             hideOnSinglePage: true,
-            position: ['bottomCenter'],
+            placement: ['bottomCenter'],
           }}
           onRow={(record) => ({
             onClick: () => props.onView(record.url_unique),

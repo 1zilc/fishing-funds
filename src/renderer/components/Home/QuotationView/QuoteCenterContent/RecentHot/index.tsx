@@ -47,7 +47,7 @@ const RecentHot: React.FC<RecentHotProps> = () => {
           pagination={{
             defaultPageSize: 20,
             hideOnSinglePage: true,
-            position: ['bottomCenter'],
+            placement: ['bottomCenter'],
           }}
           onRow={(record) => ({
             onClick: () => setAddStockDrawer(record.stockName),

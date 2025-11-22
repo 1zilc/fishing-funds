@@ -117,7 +117,7 @@ const Automatic: React.FC<PropsWithChildren<AutomaticProps>> = () => {
           pagination={{
             defaultPageSize: 20,
             hideOnSinglePage: true,
-            position: ['bottomCenter'],
+            placement: ['bottomCenter'],
           }}
           onRow={(record) => ({
             onClick: () => setDetailDrawer(record.code),

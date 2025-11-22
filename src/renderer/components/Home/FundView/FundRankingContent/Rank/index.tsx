@@ -119,7 +119,7 @@ const Rank: React.FC<PropsWithChildren<RankProps>> = () => {
           pagination={{
             defaultPageSize: 20,
             hideOnSinglePage: true,
-            position: ['bottomCenter'],
+            placement: ['bottomCenter'],
           }}
           onRow={(record) => ({
             onClick: () => setDetailDrawer(record.code),

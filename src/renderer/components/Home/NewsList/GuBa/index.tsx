@@ -53,7 +53,7 @@ const GuBa: React.FC<GuBaProps> = (props) => {
           pagination={{
             defaultPageSize: 10,
             hideOnSinglePage: true,
-            position: ['bottomCenter'],
+            placement: ['bottomCenter'],
             total: data?.length,
           }}
           onRow={(record) => ({

@@ -60,7 +60,7 @@ const Metting: React.FC<PropsWithChildren<MettingProps>> = (props) => {
           pagination={{
             defaultPageSize: 10,
             hideOnSinglePage: true,
-            position: ['bottomCenter'],
+            placement: ['bottomCenter'],
           }}
         />
       </div>
