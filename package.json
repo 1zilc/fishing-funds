@@ -171,7 +171,7 @@
   },
   "dependencies": {
     "@json2csv/plainjs": "^7.0.6",
-    "@nivalis/string-similarity": "^5.2.0",
+    "@nivalis/string-similarity": "5.0.0",
     "electron-log": "^5.4.3",
     "electron-store": "^10.0.1",
     "electron-updater": "^6.6.2",

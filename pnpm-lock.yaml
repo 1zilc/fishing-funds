@@ -12,8 +12,8 @@ importers:
         specifier: ^7.0.6
         version: 7.0.6
       '@nivalis/string-similarity':
-        specifier: ^5.2.0
-        version: 5.2.0(typescript@5.9.3)
+        specifier: 5.0.0
+        version: 5.0.0(typescript@5.9.3)
       electron-log:
         specifier: ^5.4.3
         version: 5.4.3
@@ -1035,8 +1035,8 @@ packages:
     resolution: {integrity: sha512-9QOtNffcOF/c1seMCDnjckb3R9WHcG34tky+FHpNKKCW0wc/scYLwMtO+ptyGUfMW0/b/n4qRiALlaFHc9Oj7Q==}
     engines: {node: '>= 10.0.0'}
 
-  '@nivalis/string-similarity@5.2.0':
-    resolution: {integrity: sha512-MfsJuN8abaIcDnw6kiVIVsnSvMNb4O24pGHUvvxo5XY0JUsPOOf6T+RbxDx8q5MivYDymv4ZrcLWSfOfU8EEKQ==}
+  '@nivalis/string-similarity@5.0.0':
+    resolution: {integrity: sha512-IgSPo3+5a+FZyNeSeSg6Wnidli9n9rMOFd6EwuiWrLqb4y4h9omQ45aYsBmm38lZAh9bZE40+yiughf+o5CKJg==}
     peerDependencies:
       typescript: ^5
 
@@ -5111,7 +5111,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@nivalis/string-similarity@5.2.0(typescript@5.9.3)':
+  '@nivalis/string-similarity@5.0.0(typescript@5.9.3)':
     dependencies:
       typescript: 5.9.3
 
