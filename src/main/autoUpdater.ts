@@ -1,7 +1,7 @@
 import { NativeImage, dialog, shell, app } from 'electron';
 import { Menubar } from 'menubar';
 import ElectronUpdater from 'electron-updater';
-import log from 'electron-log';
+import log from 'electron-log/main.js';
 import { sendMessageToRenderer } from './util';
 
 const { autoUpdater } = ElectronUpdater;
