@@ -2,6 +2,10 @@
   -electron-corner-smoothing: system-ui;
 }
 
+*:focus {
+  outline: none !important;
+}
+
 body {
   position: relative;
   margin: 0;
