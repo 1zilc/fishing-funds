@@ -23,11 +23,10 @@ const PurchasingManagerIndex: React.FC<PurchasingManagerIndexProps> = () => {
       try {
         chartInstance?.setOption({
           title: {
-            text: '',
+            show: false,
           },
           tooltip: {
             trigger: 'axis',
-            position: 'inside',
           },
           legend: {
             top: 0,

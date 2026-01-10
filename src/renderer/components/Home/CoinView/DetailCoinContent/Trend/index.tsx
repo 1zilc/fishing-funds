@@ -46,7 +46,6 @@ const Trend: React.FC<PerformanceProps> = ({ code, name }) => {
         },
         tooltip: {
           trigger: 'axis',
-          position: 'inside',
         },
         grid: {
           left: 0,

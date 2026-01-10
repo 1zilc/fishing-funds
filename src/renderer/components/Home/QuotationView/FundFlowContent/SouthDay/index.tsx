@@ -39,7 +39,6 @@ const SouthDay: React.FC<SouthDayProps> = () => {
         },
         tooltip: {
           trigger: 'axis',
-          position: 'inside',
         },
         legend: {
           top: 0,

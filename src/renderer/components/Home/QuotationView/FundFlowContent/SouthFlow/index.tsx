@@ -33,7 +33,6 @@ const SouthFlow: React.FC<SouthFlowProps> = () => {
         },
         tooltip: {
           trigger: 'axis',
-          position: 'inside',
         },
         legend: {
           top: 0,

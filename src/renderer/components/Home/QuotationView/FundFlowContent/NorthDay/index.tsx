@@ -39,7 +39,6 @@ const NorthDay: React.FC<NorthDayProps> = () => {
         },
         tooltip: {
           trigger: 'axis',
-          position: 'inside',
         },
         legend: {
           top: 0,

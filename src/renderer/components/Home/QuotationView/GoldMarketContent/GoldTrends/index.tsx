@@ -31,7 +31,6 @@ const GoldTrends: React.FC<GoldTrendsProps> = (props) => {
         },
         tooltip: {
           trigger: 'axis',
-          position: 'inside',
         },
         legend: {
           show: false,

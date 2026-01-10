@@ -32,7 +32,6 @@ const NorthFlow: React.FC<NorthFlowProps> = () => {
         },
         tooltip: {
           trigger: 'axis',
-          position: 'inside',
         },
         legend: {
           top: 0,

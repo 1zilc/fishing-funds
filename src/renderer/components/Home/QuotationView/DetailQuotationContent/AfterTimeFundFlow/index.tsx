@@ -43,7 +43,6 @@ const AfterTimeFundFlow: React.FC<AfterTimeFundFlowProps> = ({ secid = '' }) => 
         },
         tooltip: {
           trigger: 'axis',
-          position: 'inside',
         },
         legend: {
           top: 0,

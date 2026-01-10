@@ -34,7 +34,6 @@ const Trend: React.FC<TrendProps> = () => {
         },
         tooltip: {
           trigger: 'axis',
-          position: 'inside',
         },
         legend: {
           top: 0,

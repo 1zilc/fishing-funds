@@ -44,7 +44,6 @@ const RealTimeFundFlow: React.FC<RealTimeFundFlowProps> = ({ secid = '' }) => {
         },
         tooltip: {
           trigger: 'axis',
-          position: 'inside',
         },
         legend: {
           top: 0,

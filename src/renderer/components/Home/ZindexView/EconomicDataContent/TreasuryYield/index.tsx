@@ -25,7 +25,6 @@ const TreasuryYield: React.FC<TreasuryYieldProps> = () => {
         },
         tooltip: {
           trigger: 'axis',
-          position: 'inside',
         },
         legend: {
           top: 0,
