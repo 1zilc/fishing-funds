@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-import clsx from 'clsx';
 
 import { syncTabsActiveKeyAction } from '@/store/features/tabs';
 import { useAppDispatch, useAppSelector } from '@/utils/hooks';

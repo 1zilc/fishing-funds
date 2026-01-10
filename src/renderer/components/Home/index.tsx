@@ -216,7 +216,7 @@ const Body = () => {
   );
 
   return (
-    <div className={styles.body}>
+    <div className={styles.main}>
       <Tabs renderTabBar={() => <></>} activeKey={String(tabsActiveKey)} animated={true} destroyOnHidden items={items} />
     </div>
   );
@@ -227,13 +227,15 @@ const Home: React.FC<HomeProps> = () => {
     <div className={styles.layout}>
       <Header>
         <Wallet />
-        <SortBar />
       </Header>
-      <Body />
-      <Footer>
-        <Toolbar />
-        <TabsBar />
-      </Footer>
+      <div className={styles.body}>
+        <SortBar />
+        <Body />
+        <Footer>
+          <Toolbar />
+          <TabsBar />
+        </Footer>
+      </div>
       <WebViewerDrawer />
       <TranslateDrawer />
       <Collect title="home" />

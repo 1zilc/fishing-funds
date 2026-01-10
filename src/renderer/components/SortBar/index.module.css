@@ -1,14 +1,10 @@
 .content {
-  padding: 0 4px 0 8px;
+  padding: 2px 8px;
   border-bottom: 1px solid var(--border-color);
   background-color: var(--background-color);
-  transition: transform 0.1s;
-  position: absolute;
+  position: sticky;
   width: 100%;
-  bottom: -32px;
-  height: 32px;
-  z-index: 0;
-  transform: translateY(-32px);
+  top: 0;
   box-sizing: border-box;
 }
 
