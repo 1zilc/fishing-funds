@@ -21,6 +21,7 @@ import styles from './index.module.css';
 const FundView = React.lazy(() => import('@/components/Home/FundView'));
 const ZindexView = React.lazy(() => import('@/components/Home/ZindexView'));
 const QuotationView = React.lazy(() => import('@/components/Home/QuotationView'));
+const DaPanYunTu = React.lazy(() => import('@/components/Home/QuotationView/DaPanYunTu'));
 const StockView = React.lazy(() => import('@/components/Home/StockView'));
 const CoinView = React.lazy(() => import('@/components/Home/CoinView'));
 
@@ -134,6 +135,11 @@ function QuotationGroup() {
           key: String(3),
           label: '关注',
           children: <QuotationView filter={(quotaion) => favoriteQuotationMap[quotaion.code]} />,
+        },
+        {
+          key: String(4),
+          label: '大盘云图',
+          children: <DaPanYunTu />,
         },
       ]}
     />
