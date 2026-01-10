@@ -35,17 +35,18 @@ export async function GetFunds(config: Fund.SettingItem[], fundApiTypeSetting: E
         GetFund(code, fundApiTypeSetting)
   );
   const load = () => {
-    switch (fundApiTypeSetting) {
-      case Enums.FundApiType.Tencent:
-        return Adapters.ChokeGroupAdapter(collectors, 3, 500);
-      case Enums.FundApiType.Ant:
-        return Adapters.ChokeGroupAdapter(collectors, 3, 800);
-      case Enums.FundApiType.Fund10jqka:
-        return Adapters.ChokeGroupAdapter(collectors, 3, 800);
-      case Enums.FundApiType.Eastmoney:
-      default:
-        return Adapters.ChokeGroupAdapter(collectors, 3, 800);
-    }
+    // switch (fundApiTypeSetting) {
+    //   case Enums.FundApiType.Tencent:
+    //     return Adapters.ChokeGroupAdapter(collectors, 3, 500);
+    //   case Enums.FundApiType.Ant:
+    //     return Adapters.ChokeGroupAdapter(collectors, 3, 800);
+    //   case Enums.FundApiType.Fund10jqka:
+    //     return Adapters.ChokeGroupAdapter(collectors, 3, 800);
+    //   case Enums.FundApiType.Eastmoney:
+    //   default:
+    //     return Adapters.ChokeGroupAdapter(collectors, 3, 800);
+    // }
+    return Adapters.ChokeGroupAdapter(collectors, 3, 500);
   };
   const list = await load();
 
@@ -53,18 +54,19 @@ export async function GetFunds(config: Fund.SettingItem[], fundApiTypeSetting: E
 }
 
 export async function GetFund(code: string, fundApiTypeSetting: Enums.FundApiType) {
-  switch (fundApiTypeSetting) {
-    case Enums.FundApiType.Tencent:
-      return Services.Fund.FromTencent(code);
-    case Enums.FundApiType.Ant:
-      return Services.Fund.FromFund123(code);
-    case Enums.FundApiType.Fund10jqka:
-      return Services.Fund.FromFund10jqka(code);
-    case Enums.FundApiType.Eastmoney:
-    default:
-      // 默认请求天天基金
-      return Services.Fund.FromEastmoney(code);
-  }
+  // switch (fundApiTypeSetting) {
+  //   case Enums.FundApiType.Tencent:
+  //     return Services.Fund.FromTencent(code);
+  //   case Enums.FundApiType.Ant:
+  //     return Services.Fund.FromFund123(code);
+  //   case Enums.FundApiType.Fund10jqka:
+  //     return Services.Fund.FromFund10jqka(code);
+  //   case Enums.FundApiType.Eastmoney:
+  //   default:
+  //     // 默认请求天天基金
+  //     return Services.Fund.FromEastmoney(code);
+  // }
+  return Services.Fund.FromEastmoney(code);
 }
 
 export function CalcFund(fund: Fund.ResponseItem & Fund.FixData, codeMap: Fund.CodeMap) {

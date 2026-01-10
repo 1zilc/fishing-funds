@@ -274,7 +274,7 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
               label: '基础设置',
               children: (
                 <div className={styles.content}>
-                  <StandCard
+                  {/* <StandCard
                     icon={<RiLineChartLine />}
                     title="数据来源"
                     extra={
@@ -292,7 +292,7 @@ const SettingContent: React.FC<SettingContentProps> = (props) => {
                         ))}
                       </Radio.Group>
                     </div>
-                  </StandCard>
+                  </StandCard> */}
                   <StandCard
                     icon={<RiTShirtLine />}
                     title="外观设置"
