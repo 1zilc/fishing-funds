@@ -220,7 +220,7 @@ export const WebViewer: React.FC<WebViewerProps> = (props) => {
           percent={percent}
           status={loading ? 'active' : 'success'}
           size={['100%', 2]}
-          trailColor="transparent"
+          railColor="transparent"
           showInfo={false}
           strokeColor={done ? 'transparent' : 'var(--primary-color)'}
         />
