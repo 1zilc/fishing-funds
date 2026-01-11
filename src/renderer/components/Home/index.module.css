@@ -11,9 +11,8 @@
 .body {
   flex: 1;
   height: 0;
-  margin: 0 4px 4px;
   overflow: hidden;
-  border-radius: var(--base-radius) !important;
+  border-radius: var(--base-radius);
   position: relative;
   display: flex;
   flex-direction: column;
@@ -24,7 +23,9 @@
 .main {
   flex: 1;
   height: 0;
-  overflow: auto;
+  overflow-y: auto;
   background-color: var(--background-color);
   padding-bottom: 80px;
+  border-radius: 0 0 var(--base-radius) var(--base-radius);
+  position: relative;
 }

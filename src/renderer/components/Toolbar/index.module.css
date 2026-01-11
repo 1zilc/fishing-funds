@@ -1,5 +1,6 @@
 .content {
   background-color: var(--background-color);
+  border-radius: var(--base-radius) var(--base-radius) 0 0;
 }
 .bar {
   display: flex;
