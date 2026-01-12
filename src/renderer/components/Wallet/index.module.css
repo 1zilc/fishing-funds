@@ -119,24 +119,3 @@
 .tag {
   margin-right: 5px;
 }
-
-.miniMode {
-  .walletIcon {
-    height: 20px;
-    width: 20px;
-  }
-  .eye {
-    height: 16px;
-    width: 16px;
-  }
-  .timeBar {
-    font-size: 12px;
-  }
-
-  .zsygz {
-    font-size: 18px;
-  }
-  .numIndex {
-    font-size: 14px !important;
-  }
-}

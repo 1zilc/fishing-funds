@@ -8,8 +8,3 @@
   height: 72px;
   z-index: 3;
 }
-
-.miniMode {
-  height: 56px !important;
-  box-shadow: 0 20px 20px rgba(0, 0, 0, 0.1);
-}

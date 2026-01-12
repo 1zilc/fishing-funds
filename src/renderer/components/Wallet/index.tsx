@@ -4,7 +4,6 @@ import { Dropdown, Menu } from 'antd';
 import { RiAddFill } from 'react-icons/ri';
 import Eye from '@/components/Eye';
 import CustomDrawer from '@/components/CustomDrawer';
-import { useHeaderContext } from '@/components/Header';
 import { changeCurrentWalletCodeAction, toggleEyeStatusAction } from '@/store/features/wallet';
 import { useAppDispatch, useAppSelector, useDrawer } from '@/utils/hooks';
 import { walletIcons } from '@/helpers/wallet';
@@ -18,7 +17,6 @@ export interface WalletProps {}
 
 const Wallet: React.FC<WalletProps> = () => {
   const dispatch = useAppDispatch();
-  const { miniMode } = useHeaderContext();
 
   const updateTime = useAppSelector((state) => state.wallet.currentWallet.updateTime);
   const eyeStatus = useAppSelector((state) => state.wallet.eyeStatus);
@@ -71,7 +69,7 @@ const Wallet: React.FC<WalletProps> = () => {
   const onToggleEye = () => dispatch(toggleEyeStatusAction());
 
   return (
-    <div className={clsx(styles.content, { [styles.miniMode]: miniMode })}>
+    <div className={clsx(styles.content)}>
       <div className={styles.topBar}>
         <Dropdown
           placement="bottomRight"
@@ -95,13 +93,13 @@ const Wallet: React.FC<WalletProps> = () => {
         </Dropdown>
         <div className={styles.slogan}>
           <div className={styles.timeBar}>刷新时间：{updateTime || '还没有刷新过哦~'}</div>
-          {eyeStatus && !miniMode && Number(calcResult.displayCysy) > 0 && (
+          {eyeStatus && Number(calcResult.displayCysy) > 0 && (
             <div className={styles.pal}>
               已经盈利：
               <div className={clsx(Utils.GetValueColor(calcResult.displayCysy).textClass)}>{`${calcResult.displayCysyl}% `}</div>
             </div>
           )}
-          {eyeStatus && !miniMode && Number(calcResult.displayCysy) < 0 && (
+          {eyeStatus && Number(calcResult.displayCysy) < 0 && (
             <div className={styles.pal}>
               已经亏损：
               <div className={clsx(Utils.GetValueColor(calcResult.displayCysy).textClass)}>{`${calcResult.displayCysyl}% `}</div>
@@ -151,13 +149,13 @@ const Wallet: React.FC<WalletProps> = () => {
           </div>
           <div className={styles.numIndex}>
             <div>
-              {!miniMode && <label>今日收益率</label>}
+              {<label>今日收益率</label>}
               <div className={clsx(Utils.GetValueColor(calcResult.displayGssyl).textClass)}>
                 {eyeStatus ? `${Utils.Yang(calcResult.displayGssyl)}%` : calcResult.displayGssyl}
               </div>
             </div>
             <div>
-              {!miniMode && <label>持有金额</label>}
+              {<label>持有金额</label>}
               <div>{calcResult.displayZje}</div>
             </div>
           </div>
