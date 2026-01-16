@@ -44,7 +44,7 @@ import * as Adapters from '@/utils/adpters';
 import * as Helpers from '@/helpers';
 import * as Enums from '@/utils/enums';
 import * as Enhancement from '@/utils/enhancement';
-import * as Services from '@/services';
+import * as Services from '@lib/enh/services';
 import { FundConfigItem } from '@/components/Toolbar/FundsImportContent';
 
 const { dialog, ipcRenderer, clipboard, app } = window.contextModules.electron;
@@ -405,13 +405,13 @@ export function useBootStrap() {
   // 间隔时间刷新基金,指数，板块，钱包
   useWorkDayTimeToDo(() => {
     if (autoFreshSetting) {
-      Adapters.ConCurrencyAllAdapter([
+      Adapters.ChokeAllAdapter([
         () => Adapters.ChokeAllAdapter([runLoadWalletsFunds]),
         () => Adapters.ChokeAllAdapter([runLoadWalletsStocks]),
         () => Adapters.ChokeAllAdapter([runLoadZindexs, runLoadQuotations]),
       ]);
     }
-  }, freshDelaySetting * 1000 * 60);
+  }, Math.max(freshDelaySetting, 5) * 1000 * 60);
 
   // 间隔时间检查最新净值
   useFixTimeToDo(() => {
@@ -429,7 +429,7 @@ export function useBootStrap() {
 
   // 第一次刷新所有数据
   useEffect(() => {
-    Adapters.ConCurrencyAllAdapter([
+    Adapters.ChokeAllAdapter([
       () => Adapters.ChokeAllAdapter([runLoadRemoteFunds, runLoadRemoteCoins, runLoadFundRatingMap]),
       () => Adapters.ChokeAllAdapter([runLoadWalletsFunds, runLoadFixWalletsFunds]),
       () => Adapters.ChokeAllAdapter([runLoadWalletsStocks]),

@@ -18,7 +18,7 @@ import { RedirectSearchParams } from '@/containers/InitPage';
 import { DetailQuotationPageParams } from '@/components/Home/QuotationView/DetailQuotationPage';
 import { setFavoriteQuotationMapAction } from '@/store/features/quotation';
 import { useAppDispatch, useAppSelector } from '@/utils/hooks';
-import * as Services from '@/services';
+import * as Services from '@lib/enh/services';
 import * as Utils from '@/utils';
 import * as CONST from '@/constants';
 import styles from './index.module.css';

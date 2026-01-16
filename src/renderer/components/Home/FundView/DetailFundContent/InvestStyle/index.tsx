@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useRequest } from 'ahooks';
 import ChartCard from '@/components/Card/ChartCard';
-import * as Services from '@/services';
+import * as Services from '@lib/enh/services';
 import * as CONST from '@/constants';
 import * as Utils from '@/utils';
 import styles from './index.module.css';

@@ -7,7 +7,7 @@ import ChartCard from '@/components/Card/ChartCard';
 import { useResizeEchart, useAppSelector, useRenderEcharts } from '@/utils/hooks';
 
 import * as CONST from '@/constants';
-import * as Services from '@/services';
+import * as Services from '@lib/enh/services';
 import styles from './index.module.css';
 
 export interface PerformanceProps {
@@ -46,7 +46,6 @@ const Trend: React.FC<PerformanceProps> = ({ code, name }) => {
         },
         tooltip: {
           trigger: 'axis',
-          position: 'inside',
         },
         grid: {
           left: 0,

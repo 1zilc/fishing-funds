@@ -1,17 +1,23 @@
-import * as Services from '@/services';
+import * as Services from '@lib/enh/services';
 import * as Enums from '@/utils/enums';
+import * as Adpters from '@/utils/adpters';
 
 export async function GetQuotations() {
   // TODO:
   // 由于东财接口变动，一次性最多返回200条记录，所以需要发起3个请求，截止2025-2-17，一共是578个概念板块
   // 截止2025-2-17，暂时按类型查询
   // 截止2025-6-7，暂时按类型查询,加上分页，一次性最多返回100条记录
-  const page1 = await Services.Quotation.GetQuotationsFromEastmoney('t:1');
-  const page2 = await Services.Quotation.GetQuotationsFromEastmoney('t:2');
-  const page3 = await Services.Quotation.GetQuotationsFromEastmoney('t:3', 1);
-  const page4 = await Services.Quotation.GetQuotationsFromEastmoney('t:3', 2);
-  const page5 = await Services.Quotation.GetQuotationsFromEastmoney('t:3', 3);
-  return [...page1, ...page2, ...page3, ...page4, ...page5];
+  const result = await Adpters.ChokeAllAdapter(
+    [
+      () => Services.Quotation.GetQuotationsFromEastmoney('t:1'),
+      () => Services.Quotation.GetQuotationsFromEastmoney('t:2'),
+      () => Services.Quotation.GetQuotationsFromEastmoney('t:3', 1),
+      () => Services.Quotation.GetQuotationsFromEastmoney('t:3', 2),
+      () => Services.Quotation.GetQuotationsFromEastmoney('t:3', 3),
+    ],
+    1000
+  );
+  return result.flat();
 }
 
 export function SortQuotation({

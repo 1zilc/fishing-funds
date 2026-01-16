@@ -48,7 +48,7 @@ const Origin: React.FC<OriginProps> = ({ code }) => {
       pagination={{
         defaultPageSize: 5,
         hideOnSinglePage: true,
-        position: ['bottomCenter'],
+        placement: ['bottomCenter'],
       }}
       onRow={(record) => ({
         onClick: () => onMore(record.code),

@@ -70,7 +70,7 @@ const Recommend: React.FC<RecommendProps> = (props) => {
                 pagination={{
                   defaultPageSize: 5,
                   hideOnSinglePage: true,
-                  position: ['bottomCenter'],
+                  placement: ['bottomCenter'],
                 }}
                 onRow={(record) => ({
                   onClick: () => setAddStockDrawer(record.Name),

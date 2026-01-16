@@ -5,7 +5,7 @@ import ChartCard from '@/components/Card/ChartCard';
 import ExportTitleBar from '@/components/ExportTitleBar';
 import { useResizeEchart, useRenderEcharts } from '@/utils/hooks';
 import * as CONST from '@/constants';
-import * as Services from '@/services';
+import * as Services from '@lib/enh/services';
 import * as Utils from '@/utils';
 import styles from './index.module.css';
 
@@ -35,7 +35,6 @@ const Trend: React.FC<PerformanceProps> = ({ secid, zs = 0, name }) => {
         },
         tooltip: {
           trigger: 'axis',
-          position: 'inside',
         },
         grid: {
           left: 0,

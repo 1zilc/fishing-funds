@@ -50,7 +50,7 @@ const FundHistoryValueContent: React.FC<HistoryValueProps> = (props) => {
             pagination={{
               defaultPageSize: 20,
               hideOnSinglePage: true,
-              position: ['bottomCenter'],
+              placement: ['bottomCenter'],
             }}
           />
         </ChartCard>

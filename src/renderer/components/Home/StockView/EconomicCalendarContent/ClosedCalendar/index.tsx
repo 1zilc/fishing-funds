@@ -7,7 +7,7 @@ import dayjs from 'dayjs';
 import ChartCard from '@/components/Card/ChartCard';
 import TypeSelection from '@/components/TypeSelection';
 
-import * as Services from '@/services';
+import * as Services from '@lib/enh/services';
 import styles from './index.module.css';
 
 const marketTypeList = [

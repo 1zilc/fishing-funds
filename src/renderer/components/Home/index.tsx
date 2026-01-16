@@ -21,6 +21,7 @@ import styles from './index.module.css';
 const FundView = React.lazy(() => import('@/components/Home/FundView'));
 const ZindexView = React.lazy(() => import('@/components/Home/ZindexView'));
 const QuotationView = React.lazy(() => import('@/components/Home/QuotationView'));
+const DaPanYunTu = React.lazy(() => import('@/components/Home/QuotationView/DaPanYunTu'));
 const StockView = React.lazy(() => import('@/components/Home/StockView'));
 const CoinView = React.lazy(() => import('@/components/Home/CoinView'));
 
@@ -135,6 +136,11 @@ function QuotationGroup() {
           label: '关注',
           children: <QuotationView filter={(quotaion) => favoriteQuotationMap[quotaion.code]} />,
         },
+        {
+          key: String(4),
+          label: '大盘云图',
+          children: <DaPanYunTu />,
+        },
       ]}
     />
   );
@@ -209,7 +215,11 @@ const Body = () => {
     [bottomTabsSetting]
   );
 
-  return <Tabs renderTabBar={() => <></>} activeKey={String(tabsActiveKey)} animated={true} destroyOnHidden items={items} />;
+  return (
+    <div className={styles.main}>
+      <Tabs renderTabBar={() => <></>} activeKey={String(tabsActiveKey)} animated={true} destroyOnHidden items={items} />
+    </div>
+  );
 };
 
 const Home: React.FC<HomeProps> = () => {
@@ -217,13 +227,15 @@ const Home: React.FC<HomeProps> = () => {
     <div className={styles.layout}>
       <Header>
         <Wallet />
-        <SortBar />
       </Header>
-      <Body />
-      <Footer>
-        <Toolbar />
-        <TabsBar />
-      </Footer>
+      <div className={styles.body}>
+        <SortBar />
+        <Body />
+        <Footer>
+          <Toolbar />
+          <TabsBar />
+        </Footer>
+      </div>
       <WebViewerDrawer />
       <TranslateDrawer />
       <Collect title="home" />

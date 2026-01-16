@@ -72,13 +72,14 @@ export const sortQuotationsCachedAction = createAsyncThunk<void, Quotation.Respo
         quotation: { quotations },
       } = getState();
 
-      const quotationsCodeToMap = Utils.GetCodeMap(quotations, 'name');
-      const quotationsWithCollapseChached = responseQuotations.filter(Boolean).map((_) => ({
-        ...(quotationsCodeToMap[_.name] || {}),
-        ..._,
-      }));
+      const quotationsWithChached = Object.values(
+        [...quotations, ...responseQuotations].filter(Boolean).reduce((map, item) => {
+          map[item.name] = item;
+          return map;
+        }, {} as Record<string, (typeof quotations)[number]>)
+      );
 
-      dispatch(sortQuotationsAction(quotationsWithCollapseChached));
+      dispatch(sortQuotationsAction(quotationsWithChached));
     } catch (error) {}
   }
 );

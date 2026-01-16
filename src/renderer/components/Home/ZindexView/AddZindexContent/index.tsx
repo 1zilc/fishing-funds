@@ -6,7 +6,7 @@ import CustomDrawerContent from '@/components/CustomDrawer/Content';
 import Empty from '@/components/Empty';
 import ZindexSearch, { zindexTypesConfig } from '@/components/Toolbar/AppCenterContent/ZindexSearch';
 import SearchHistory, { type SearchHistoryRef } from '@/components/SearchHistory';
-import * as Services from '@/services';
+import * as Services from '@lib/enh/services';
 import styles from './index.module.css';
 
 export interface AddZindexContentProps {

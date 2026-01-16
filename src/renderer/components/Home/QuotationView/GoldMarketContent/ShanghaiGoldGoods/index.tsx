@@ -5,7 +5,7 @@ import { useRequest } from 'ahooks';
 import ChartCard from '@/components/Card/ChartCard';
 import CustomDrawer from '@/components/CustomDrawer';
 import { useDrawer } from '@/utils/hooks';
-import * as Services from '@/services';
+import * as Services from '@lib/enh/services';
 import * as Utils from '@/utils';
 import styles from './index.module.css';
 
@@ -57,7 +57,7 @@ const ShanghaiGoldGoods: React.FC<PropsWithChildren<ShanghaiGoldGoodsProps>> = (
           pagination={{
             defaultPageSize: 20,
             hideOnSinglePage: true,
-            position: ['bottomCenter'],
+            placement: ['bottomCenter'],
           }}
           // onRow={(record) => ({
           //   onClick: () => setDetailDrawer(record.bzdm),

@@ -8,7 +8,7 @@ import CustomDrawer from '@/components/CustomDrawer';
 import { useDrawer, useAppDispatch, useAppSelector } from '@/utils/hooks';
 import { setFundRatingAction } from '@/store/features/fund';
 
-import * as Services from '@/services';
+import * as Services from '@lib/enh/services';
 import styles from './index.module.css';
 
 const AddFundContent = React.lazy(() => import('@/components/Home/FundView/AddFundContent'));
@@ -90,7 +90,7 @@ const Ranting: React.FC<PropsWithChildren<RantingProps>> = () => {
           pagination={{
             defaultPageSize: 20,
             hideOnSinglePage: true,
-            position: ['bottomCenter'],
+            placement: ['bottomCenter'],
           }}
           onRow={(record) => ({
             onClick: () => setDetailDrawer(record.code),

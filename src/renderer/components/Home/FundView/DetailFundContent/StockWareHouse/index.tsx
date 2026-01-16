@@ -6,7 +6,7 @@ import ChartCard from '@/components/Card/ChartCard';
 import CustomDrawer from '@/components/CustomDrawer';
 import { useResizeEchart, useDrawer, useRenderEcharts, useEchartEventEffect } from '@/utils/hooks';
 import * as CONST from '@/constants';
-import * as Services from '@/services';
+import * as Services from '@lib/enh/services';
 import * as Utils from '@/utils';
 import styles from './index.module.css';
 

@@ -4,7 +4,7 @@ import { Table } from 'antd';
 import { useRequest } from 'ahooks';
 import ChartCard from '@/components/Card/ChartCard';
 import { useOpenWebView } from '@/utils/hooks';
-import * as Services from '@/services';
+import * as Services from '@lib/enh/services';
 import styles from './index.module.css';
 
 interface GuBaProps {
@@ -53,7 +53,7 @@ const GuBa: React.FC<GuBaProps> = (props) => {
           pagination={{
             defaultPageSize: 10,
             hideOnSinglePage: true,
-            position: ['bottomCenter'],
+            placement: ['bottomCenter'],
             total: data?.length,
           }}
           onRow={(record) => ({

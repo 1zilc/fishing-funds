@@ -6,7 +6,7 @@ import TypeSelection from '@/components/TypeSelection';
 
 import { useRenderEcharts, useResizeEchart } from '@/utils/hooks';
 import * as CONST from '@/constants';
-import * as Services from '@/services';
+import * as Services from '@lib/enh/services';
 import styles from './index.module.css';
 
 interface TrendProps {}
@@ -34,7 +34,6 @@ const Trend: React.FC<TrendProps> = () => {
         },
         tooltip: {
           trigger: 'axis',
-          position: 'inside',
         },
         legend: {
           top: 0,

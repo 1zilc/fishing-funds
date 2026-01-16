@@ -11,7 +11,7 @@ import { searchWorkerWarp } from '@/workers';
 import { useDrawer, useAppSelector } from '@/utils/hooks';
 import * as Helpers from '@/helpers';
 import * as Enums from '@/utils/enums';
-import * as Services from '@/services';
+import * as Services from '@lib/enh/services';
 import styles from './index.module.css';
 
 const DetailCoinContent = React.lazy(() => import('@/components/Home/CoinView/DetailCoinContent'));

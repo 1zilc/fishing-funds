@@ -1,42 +1,12 @@
-import React, { PropsWithChildren, createContext, useContext, useDeferredValue } from 'react';
-import { useScroll } from 'ahooks';
+import React, { PropsWithChildren } from 'react';
 import clsx from 'clsx';
 import styles from './index.module.css';
 
-export interface HeaderContextType {
-  miniMode: boolean;
-}
-
-export const HeaderContext = createContext<HeaderContextType>({
-  miniMode: false,
-});
-
-export function useHeaderContext() {
-  const context = useContext(HeaderContext);
-  return context;
-}
-
 const Header: React.FC<PropsWithChildren<{}>> = (props) => {
-  const position = useScroll(document, (val) => val.top <= 520);
-  const deferredTop = useDeferredValue(position?.top);
-  const miniMode = !!(deferredTop && deferredTop > 40);
-
   return (
-    <HeaderContext.Provider
-      value={{
-        miniMode,
-      }}
-    >
-      <div className={clsx(styles.layout)}>
-        <div
-          className={clsx(styles.content, {
-            [styles.miniMode]: miniMode,
-          })}
-        >
-          {props.children}
-        </div>
-      </div>
-    </HeaderContext.Provider>
+    <div className={clsx(styles.layout)}>
+      <div className={clsx(styles.content)}>{props.children}</div>
+    </div>
   );
 };
 export default Header;

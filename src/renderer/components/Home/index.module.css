@@ -1,6 +1,31 @@
 .layout {
   position: relative;
-  min-height: 100vh;
+  height: 100vh;
   box-sizing: border-box;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--blur-color);
+  backdrop-filter: saturate(180%) blur(20px);
+}
+.body {
+  flex: 1;
+  height: 0;
+  overflow: hidden;
+  border-radius: var(--base-radius);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+.main::-webkit-scrollbar {
+  width: 0;
+}
+.main {
+  flex: 1;
+  height: 0;
+  overflow-y: auto;
+  background-color: var(--background-color);
+  padding-bottom: 80px;
+  border-radius: 0 0 var(--base-radius) var(--base-radius);
+  position: relative;
 }

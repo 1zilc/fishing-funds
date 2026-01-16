@@ -10,7 +10,7 @@ import Recommend from '@/components/Home/QuotationView/QuoteCenterContent/Recomm
 import TodayHot from '@/components/Home/QuotationView/QuoteCenterContent/TodayHot';
 import HotTheme from '@/components/Home/QuotationView/QuoteCenterContent/HotTheme';
 import RecentHot from '@/components/Home/QuotationView/QuoteCenterContent/RecentHot';
-import * as Services from '@/services';
+import * as Services from '@lib/enh/services';
 import styles from './index.module.css';
 
 interface QuoteCenterContentProps {

@@ -8,7 +8,7 @@ import { RiLink, RiRefreshLine, RiCalendar2Line } from 'react-icons/ri';
 import StandCard from '@/components/Card/StandCard';
 import Empty from '@/components/Empty';
 import { useAppSelector } from '@/utils/hooks';
-import * as Services from '@/services';
+import * as Services from '@lib/enh/services';
 import * as Utils from '@/utils';
 import styles from './index.module.css';
 
@@ -52,7 +52,7 @@ const Log: React.FC<LogProps> = () => {
                   const compare = compareVersions(log.version.slice(1), currentVersion);
                   return {
                     color: compare === 0 ? 'blue' : compare > 1 ? 'green' : 'gray',
-                    children: (
+                    content: (
                       <>
                         <div className={clsx(styles.item, styles.title)}>
                           <div>{log.version}</div>

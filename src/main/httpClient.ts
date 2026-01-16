@@ -1,6 +1,6 @@
-import { Agent, request, Dispatcher } from 'undici';
-import { createHash, randomBytes } from 'crypto';
-import dayjs from 'dayjs';
+// @ts-expect-error: cacheStores should exist--it does not
+import { Agent, request, Dispatcher, interceptors, cacheStores } from 'undici';
+import enhInterceptors from '@lib/enh/httpInterceptors';
 
 export type RequestConfig = {
   responseType?: 'json' | 'text' | 'arraybuffer';
@@ -20,7 +20,6 @@ export default class HttpClient {
   });
   public userAgent?: string;
   public dispatcher?: Dispatcher;
-  private static secret = randomBytes(16).toString('hex');
 
   public async request(url: string, config?: Omit<RequestConfig, 'responseType'>): Promise<HttpResponse<string>>;
   public async request(url: string, config?: RequestConfig & { responseType: 'text' }): Promise<HttpResponse<string>>;
@@ -28,26 +27,30 @@ export default class HttpClient {
   public async request<Res = unknown>(url: string, config?: RequestConfig & { responseType: 'json' }): Promise<HttpResponse<Res>>;
   public async request(url: string, config?: RequestConfig) {
     try {
-      const host = new URL(url).host;
       const headers = {
         'User-Agent': this.userAgent,
-        'Host': host,
+        'Host': new URL(url).host,
         ...config?.headers,
       } as Record<string, string>;
 
-      // FIXME // 此处为东方财富添加的cookie验证逻辑，未来随时可能会变更
-      if (host.includes('eastmoney.com')) {
-        const key = dayjs().format('YYYY-MM-DD-HH'); // 每小时更换一次
-        const nid = createHash('md5').update(`${HttpClient.secret}-${key}`).digest('hex');
-        headers['Cookie'] = `nid=${nid}`;
-      }
+      const dispatcher = this.dispatcher || HttpClient.agent;
 
       const res = await request(url, {
         headers,
         body: config?.body,
         method: config?.method,
         query: config?.searchParams,
-        dispatcher: this.dispatcher || HttpClient.agent,
+        dispatcher: dispatcher.compose(
+          interceptors.cache({
+            store: new cacheStores.MemoryCacheStore({
+              maxSize: 50 * 1024 * 1024,
+              maxCount: 1000,
+              maxEntrySize: 2 * 1024 * 1024,
+            }),
+            methods: ['GET'],
+          }),
+          ...enhInterceptors
+        ),
       });
       if (config?.responseType === 'json') {
         return {

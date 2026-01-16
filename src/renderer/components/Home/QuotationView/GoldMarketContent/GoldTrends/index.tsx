@@ -3,7 +3,7 @@ import { useRequest } from 'ahooks';
 
 import ChartCard from '@/components/Card/ChartCard';
 import { useResizeEchart, useRenderEcharts } from '@/utils/hooks';
-import * as Services from '@/services';
+import * as Services from '@lib/enh/services';
 import * as CONST from '@/constants';
 import styles from './index.module.css';
 
@@ -31,7 +31,6 @@ const GoldTrends: React.FC<GoldTrendsProps> = (props) => {
         },
         tooltip: {
           trigger: 'axis',
-          position: 'inside',
         },
         legend: {
           show: false,

@@ -10,7 +10,7 @@ import { setIndustryMapAction } from '@/store/features/stock';
 import { toggleStockCollapseAction } from '@/store/features/wallet';
 import { useResizeEchart, useRenderEcharts, useAppDispatch, useAppSelector } from '@/utils/hooks';
 import colorHash from '@/utils/colorHash';
-import * as Services from '@/services';
+import * as Services from '@lib/enh/services';
 import * as Utils from '@/utils';
 import * as Enums from '@/utils/enums';
 import * as Helpers from '@/helpers';

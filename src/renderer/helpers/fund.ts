@@ -1,9 +1,9 @@
 import NP from 'number-precision';
 import { defaultWallet } from '@/store/features/wallet';
-import * as Services from '@/services';
+import * as Services from '@lib/enh/services';
 import * as Enums from '@/utils/enums';
 import * as Utils from '@/utils';
-import * as Adapter from '@/utils/adpters';
+import * as Adapters from '@/utils/adpters';
 
 export function GetFundConfig(walletCode: string, walletsConfig: Wallet.SettingItem[]) {
   const walletConfig = walletsConfig.find(({ code }) => code === walletCode) || defaultWallet;
@@ -24,7 +24,7 @@ export async function GetFixFunds(funds: (Fund.ResponseItem & Fund.FixData)[]) {
         () =>
           Services.Fund.GetFixFromEastMoney(fundcode!)
     );
-  const list = await Adapter.ChokeGroupAdapter(collectors, 3, 500);
+  const list = await Adapters.ChokeGroupAdapter(collectors, 3, 800);
   return list.filter(Utils.NotEmpty);
 }
 
@@ -35,17 +35,18 @@ export async function GetFunds(config: Fund.SettingItem[], fundApiTypeSetting: E
         GetFund(code, fundApiTypeSetting)
   );
   const load = () => {
-    switch (fundApiTypeSetting) {
-      case Enums.FundApiType.Tencent:
-        return Adapter.ChokeGroupAdapter(collectors, 3, 300);
-      case Enums.FundApiType.Ant:
-        return Adapter.ChokeGroupAdapter(collectors, 4, 400);
-      case Enums.FundApiType.Fund10jqka:
-        return Adapter.ChokeGroupAdapter(collectors, 5, 500);
-      case Enums.FundApiType.Eastmoney:
-      default:
-        return Adapter.ChokeGroupAdapter(collectors, 5, 500);
-    }
+    // switch (fundApiTypeSetting) {
+    //   case Enums.FundApiType.Tencent:
+    //     return Adapters.ChokeGroupAdapter(collectors, 3, 500);
+    //   case Enums.FundApiType.Ant:
+    //     return Adapters.ChokeGroupAdapter(collectors, 3, 800);
+    //   case Enums.FundApiType.Fund10jqka:
+    //     return Adapters.ChokeGroupAdapter(collectors, 3, 800);
+    //   case Enums.FundApiType.Eastmoney:
+    //   default:
+    //     return Adapters.ChokeGroupAdapter(collectors, 3, 800);
+    // }
+    return Adapters.ChokeGroupAdapter(collectors, 3, 500);
   };
   const list = await load();
 
@@ -53,18 +54,19 @@ export async function GetFunds(config: Fund.SettingItem[], fundApiTypeSetting: E
 }
 
 export async function GetFund(code: string, fundApiTypeSetting: Enums.FundApiType) {
-  switch (fundApiTypeSetting) {
-    case Enums.FundApiType.Tencent:
-      return Services.Fund.FromTencent(code);
-    case Enums.FundApiType.Ant:
-      return Services.Fund.FromFund123(code);
-    case Enums.FundApiType.Fund10jqka:
-      return Services.Fund.FromFund10jqka(code);
-    case Enums.FundApiType.Eastmoney:
-    default:
-      // 默认请求天天基金
-      return Services.Fund.FromEastmoney(code);
-  }
+  // switch (fundApiTypeSetting) {
+  //   case Enums.FundApiType.Tencent:
+  //     return Services.Fund.FromTencent(code);
+  //   case Enums.FundApiType.Ant:
+  //     return Services.Fund.FromFund123(code);
+  //   case Enums.FundApiType.Fund10jqka:
+  //     return Services.Fund.FromFund10jqka(code);
+  //   case Enums.FundApiType.Eastmoney:
+  //   default:
+  //     // 默认请求天天基金
+  //     return Services.Fund.FromEastmoney(code);
+  // }
+  return Services.Fund.FromEastmoney(code);
 }
 
 export function CalcFund(fund: Fund.ResponseItem & Fund.FixData, codeMap: Fund.CodeMap) {

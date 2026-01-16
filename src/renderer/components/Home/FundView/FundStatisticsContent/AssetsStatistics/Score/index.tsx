@@ -8,7 +8,7 @@ import ChartCard from '@/components/Card/ChartCard';
 import { useResizeEchart, useAppSelector, useRenderEcharts } from '@/utils/hooks';
 
 import * as Enums from '@/utils/enums';
-import * as Services from '@/services';
+import * as Services from '@lib/enh/services';
 import * as Utils from '@/utils';
 import styles from './index.module.css';
 

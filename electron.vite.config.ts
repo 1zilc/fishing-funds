@@ -6,6 +6,12 @@ import { defineConfig } from 'electron-vite';
 export default defineConfig(({ command }) => {
   const prod = command === 'build';
 
+  const alias = {
+    '@': path.resolve('src/renderer'),
+    '@main': path.resolve('src/main'),
+    '@lib': path.resolve('src/lib'),
+  };
+
   return {
     main: {
       build: {
@@ -17,6 +23,7 @@ export default defineConfig(({ command }) => {
           },
         },
       },
+      resolve: { alias },
     },
     preload: {
       build: {
@@ -72,11 +79,7 @@ export default defineConfig(({ command }) => {
             })
           : reactSWC(),
       ],
-      resolve: {
-        alias: {
-          '@': path.resolve('src/renderer'),
-        },
-      },
+      resolve: { alias },
     },
   };
 });

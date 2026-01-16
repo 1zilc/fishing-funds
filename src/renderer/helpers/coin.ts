@@ -1,4 +1,4 @@
-import * as Services from '@/services';
+import * as Services from '@lib/enh/services';
 import * as Enums from '@/utils/enums';
 import * as Utils from '@/utils';
 

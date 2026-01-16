@@ -3,7 +3,7 @@ import dayjs from 'dayjs';
 import { Table } from 'antd';
 import { useRequest } from 'ahooks';
 import ChartCard from '@/components/Card/ChartCard';
-import * as Services from '@/services';
+import * as Services from '@lib/enh/services';
 import * as Utils from '@/utils';
 import * as CONST from '@/constants';
 import styles from './index.module.css';
@@ -47,7 +47,7 @@ const FundView: React.FC<PropsWithChildren<FundListProps>> = (props) => {
           pagination={{
             defaultPageSize: 10,
             hideOnSinglePage: true,
-            position: ['bottomCenter'],
+            placement: ['bottomCenter'],
           }}
           onRow={(record) => ({
             onClick: () => props.onView(record.url_unique),

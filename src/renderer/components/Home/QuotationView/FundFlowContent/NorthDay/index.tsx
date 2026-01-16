@@ -5,7 +5,7 @@ import ChartCard from '@/components/Card/ChartCard';
 import TypeSelection from '@/components/TypeSelection';
 import { useResizeEchart, useRenderEcharts } from '@/utils/hooks';
 import * as CONST from '@/constants';
-import * as Services from '@/services';
+import * as Services from '@lib/enh/services';
 
 import styles from './index.module.css';
 
@@ -39,7 +39,6 @@ const NorthDay: React.FC<NorthDayProps> = () => {
         },
         tooltip: {
           trigger: 'axis',
-          position: 'inside',
         },
         legend: {
           top: 0,

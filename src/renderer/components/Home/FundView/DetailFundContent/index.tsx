@@ -33,7 +33,7 @@ import GuBa from '@/components/Home/NewsList/GuBa';
 import { RedirectSearchParams } from '@/containers/InitPage';
 import { DetailFundPageParams } from '@/components/Home/FundView/DetailFundPage';
 import { useFundRating, useDrawer, useAppSelector } from '@/utils/hooks';
-import * as Services from '@/services';
+import * as Services from '@lib/enh/services';
 import * as Utils from '@/utils';
 import * as Enums from '@/utils/enums';
 import * as CONST from '@/constants';

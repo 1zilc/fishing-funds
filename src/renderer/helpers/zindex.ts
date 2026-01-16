@@ -1,5 +1,5 @@
-import * as Adapter from '@/utils/adpters';
-import * as Services from '@/services';
+import * as Adapters from '@/utils/adpters';
+import * as Services from '@lib/enh/services';
 import * as Utils from '@/utils';
 import * as Enums from '@/utils/enums';
 
@@ -9,7 +9,7 @@ export async function GetZindexs(config: Zindex.SettingItem[]) {
       () =>
         GetZindex(code)
   );
-  const list = await Adapter.ChokeGroupAdapter(collectors, 5, 500);
+  const list = await Adapters.ChokeGroupAdapter(collectors, 3, 800);
   return list.filter(Utils.NotEmpty);
 }
 

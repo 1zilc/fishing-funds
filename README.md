@@ -18,24 +18,18 @@
 ![MacOS](https://img.shields.io/badge/-macOS-black?&logo=apple&logoColor=white)
 ![Linux](https://img.shields.io/badge/-Linux-yellow?logo=linux&logoColor=white)
 
-> 基金,大盘,股票,虚拟货币状态栏显示小应用,基于 Electron 开发,支持 MacOS,Windows,Linux 客户端,数据源来自天天基金,蚂蚁基金,同花顺-爱基金,腾讯证券等
+> 基金,大盘,股票,虚拟货币状态栏显示小应用,基于 Electron 开发,支持 MacOS,Windows,Linux 客户端
 
 ## 项目介绍
 
-- 采用天天基金等数据源接口，实时显示当前基金涨跌情况，计算显示收益，大盘实时数据，板块行情，股票走势，加密虚拟货币等
+- 实时显示当前基金涨跌情况，计算显示收益，大盘实时数据，板块行情，股票走势，加密虚拟货币等
 - 软件中所有的数据仅供参考，一切收益或是亏损按当天实际为准，任何走势，排行数据均来自于第三方网站不代表作者观点
-- 软件不收集上传ai相关功能的用户apikey，如有疑问请忽略ai功能
+- 软件不收集上传 ai 相关功能的用户 apikey，如有疑问请忽略 ai 功能
 - 本项目是个人自用状态栏小插件，完全开源免费，仅供学习交流
 
 ## 数据源
 
-> 注意 ⚠️：不同的数据源可能会有反爬机制，刷新时的请求速度会有所差异
-> 强烈建议使用天天基金的数据源，最快同时估值也最准确
-
-- [东方财富-天天基金](https://fund.eastmoney.com/) ★★★★★ (推荐)
-- [支付宝-蚂蚁基金](https://www.fund123.cn/) ★★★☆☆
-- [同花顺-爱基金](http://fund.10jqka.com.cn/) ★★★☆☆
-- [腾讯证券](https://stockapp.finance.qq.com/mstats/) ★★★☆☆
+> 注意 ⚠️：为了项目的长期可用性，请求以及部分绕过机制暂时闭源
 
 ## 下载使用
 
@@ -66,12 +60,6 @@ sudo xattr -d com.apple.quarantine "/Applications/Fishing Funds.app"
 
 - QQ 群: [732268738](https://download.1zilc.top/ff/screenshots/group1.jpg)
 - Issue: [#106](https://github.com/1zilc/fishing-funds/issues/106)
-
-## AI
-
-FIshing Funds 支持 OpenAI Compatibility 接口用于基金一键录入等，不会收集上传用户 apikey，如有疑问请忽略 ai 相关功能
-
-- 基金导入（推荐模型 Grok4、Gemini 2.5 pro、 Qwen2.5vl:32b 及以上）
 
 ## 系统代理
 
@@ -118,13 +106,14 @@ interface FundSetting {
 ```
 
 ## AI 识别录入
-Fishing Funds支持AI识别截图导入数据，确保模型具有vision功能，推荐gpt-4o、grok4、gemini2.5-pro、qwen2.5vl:32b及更好的大模型。
+
+Fishing Funds 支持 AI 识别截图导入数据，确保模型具有 vision 功能，推荐 gpt-4o、grok4、gemini2.5-pro、qwen2.5vl:32b 及更好的大模型。
+
 > 注意 ⚠️：请确保接口地址的安全性，本软件不保证识别过程中的数据不会泄露至第三方，使用时请确保完全了解该功能
 
-- 使用openai兼容接口，在设置-AI中配置请求地址与apikey
+- 使用 openai 兼容接口，在设置-AI 中配置请求地址与 apikey
 - 进入某宝-理财-总资产-我的资产-全部持有
 - 长截图，保证暴露基金名称、持有收益、累计收益三项数据
-  
 
 ## 配置同步
 

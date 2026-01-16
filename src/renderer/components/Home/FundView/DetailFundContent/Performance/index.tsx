@@ -5,7 +5,7 @@ import ChartCard from '@/components/Card/ChartCard';
 import TypeSelection from '@/components/TypeSelection';
 import { useResizeEchart, useRenderEcharts } from '@/utils/hooks';
 import * as CONST from '@/constants';
-import * as Services from '@/services';
+import * as Services from '@lib/enh/services';
 import * as Enums from '@/utils/enums';
 import * as Utils from '@/utils';
 
@@ -38,11 +38,10 @@ const Performance: React.FC<PerformanceProps> = ({ code }) => {
     () => {
       chartInstance?.setOption({
         title: {
-          text: '',
+          show: false,
         },
         tooltip: {
           trigger: 'axis',
-          position: 'inside',
         },
         legend: {
           top: 0,

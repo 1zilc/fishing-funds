@@ -3,7 +3,7 @@ import { useRequest } from 'ahooks';
 
 import ChartCard from '@/components/Card/ChartCard';
 import { useResizeEchart, useRenderEcharts } from '@/utils/hooks';
-import * as Services from '@/services';
+import * as Services from '@lib/enh/services';
 import styles from './index.module.css';
 
 interface PurchasingManagerIndexProps {}
@@ -23,11 +23,10 @@ const PurchasingManagerIndex: React.FC<PurchasingManagerIndexProps> = () => {
       try {
         chartInstance?.setOption({
           title: {
-            text: '',
+            show: false,
           },
           tooltip: {
             trigger: 'axis',
-            position: 'inside',
           },
           legend: {
             top: 0,

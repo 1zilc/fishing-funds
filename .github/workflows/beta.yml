@@ -19,7 +19,21 @@ jobs:
     steps:
       - name: Setup repo
         uses: actions/checkout@v4
+        with:
+          ssh-key: ${{ secrets.SSH_KEY }}
+          submodules: recursive
       - run: git push --delete origin beta
+
+      - name: Cache electron-builder
+        uses: actions/cache@v4
+        with:
+          path: |
+            ${{ runner.os == 'macOS' && '~/Library/Caches/electron' || '' }}
+            ${{ runner.os == 'Linux' && '~/.cache/electron' || '' }}
+            ${{ runner.os == 'Windows' && '~/AppData/Local/electron' || '' }}
+          key: ${{ runner.os }}-electron-${{ hashFiles('package.json') }}
+          restore-keys: |
+            ${{ runner.os }}-electron-
 
       - name: Install pnpm
         uses: pnpm/action-setup@v4
@@ -29,8 +43,8 @@ jobs:
       - name: Install Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 22
-          cache: 'pnpm'
+          node-version: 24
+          cache: "pnpm"
 
       - name: Install dependencies
         run: |

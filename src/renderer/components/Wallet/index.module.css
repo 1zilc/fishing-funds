@@ -1,13 +1,7 @@
 .content {
-  border-bottom: 1px solid var(--border-color);
   top: 0;
   z-index: 2;
-  transition: height 0.2s;
-  position: absolute;
   width: 100%;
-  background-color: var(--blur-color);
-  backdrop-filter: saturate(180%) blur(20px);
-  height: 100%;
   box-sizing: border-box;
   z-index: 3;
 }
@@ -124,25 +118,4 @@
 }
 .tag {
   margin-right: 5px;
-}
-
-.miniMode {
-  .walletIcon {
-    height: 20px;
-    width: 20px;
-  }
-  .eye {
-    height: 16px;
-    width: 16px;
-  }
-  .timeBar {
-    font-size: 12px;
-  }
-
-  .zsygz {
-    font-size: 18px;
-  }
-  .numIndex {
-    font-size: 14px !important;
-  }
 }

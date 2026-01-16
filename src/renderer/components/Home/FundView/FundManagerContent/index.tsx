@@ -9,7 +9,7 @@ import Appraise from '@/components/Home/FundView/FundManagerContent/Appraise';
 import Profit from '@/components/Home/FundView/FundManagerContent/Profit';
 import CustomDrawerContent from '@/components/CustomDrawer/Content';
 import ManageHistoryFundList from '@/components/Home/FundView/FundManagerContent/ManageHistoryFundList';
-import * as Services from '@/services';
+import * as Services from '@lib/enh/services';
 import * as Enums from '@/utils/enums';
 import styles from './index.module.css';
 

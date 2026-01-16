@@ -1,5 +1,5 @@
-import * as Adapter from '@/utils/adpters';
-import * as Services from '@/services';
+import * as Adapters from '@/utils/adpters';
+import * as Services from '@lib/enh/services';
 import * as Enums from '@/utils/enums';
 
 export async function GetCurrentHours(timestampSetting: Enums.TimestampType) {
@@ -11,7 +11,7 @@ export async function GetCurrentHours(timestampSetting: Enums.TimestampType) {
         return now;
       case Enums.TimestampType.Network:
       default:
-        return (await Adapter.ChokePreemptiveAdapter(collectors)) || now;
+        return (await Adapters.ChokePreemptiveAdapter(collectors)) || now;
     }
   } catch (error) {
     return now;

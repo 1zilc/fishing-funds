@@ -32,7 +32,7 @@ import * as Utils from '@/utils';
 import * as Enums from '@/utils/enums';
 import * as CONST from '@/constants';
 import * as Adapters from '@/utils/adpters';
-import * as Services from '@/services';
+import * as Services from '@lib/enh/services';
 import * as Helpers from '@/helpers';
 
 const { ipcRenderer } = window.contextModules.electron;
@@ -393,7 +393,7 @@ export function useLoadFixWalletsFunds() {
                 Services.Fund.GetFixFromEastMoney(fundcode!)
           );
         return async () => {
-          const fixFunds = await Adapters.ChokeGroupAdapter(collectors, 5, 100);
+          const fixFunds = await Adapters.ChokeGroupAdapter(collectors, 3, 800);
           const now = dayjs().format('MM-DD HH:mm:ss');
           dispatch(syncFixWalletStateAction({ code: wallet.code, funds: fixFunds.filter(Utils.NotEmpty), updateTime: now }));
           return fixFunds;

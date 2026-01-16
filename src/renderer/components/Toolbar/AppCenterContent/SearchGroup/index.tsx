@@ -5,7 +5,7 @@ import StockSearch from '@/components/Toolbar/AppCenterContent/StockSearch';
 import ZindexSearch from '@/components/Toolbar/AppCenterContent/ZindexSearch';
 import FundSearch from '@/components/Toolbar/AppCenterContent/FundSearch';
 import RecentSearch from '@/components/Toolbar/AppCenterContent/RecentSearch';
-import * as Services from '@/services';
+import * as Services from '@lib/enh/services';
 import styles from './index.module.css';
 
 interface SearchGroupProps {

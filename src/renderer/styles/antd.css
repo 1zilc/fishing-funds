@@ -44,3 +44,6 @@
 .ant-tabs-nav {
   /* padding-right: 8px; */
 }
+.ant-segmented-item-selected {
+  font-weight: 600 !important;
+}
